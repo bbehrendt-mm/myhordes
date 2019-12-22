@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="de" x-ajax-landing="{{ ajax_landing }}">
+<head>
+    {% block html_head %}
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <meta charset="UTF-8" />
+
+        <!-- Keep the robots out -->
+        <meta name="robots" content="noindex, nofollow">
+
+        <!-- Tell mobile devices not to perform desktop scaling -->
+        <meta name="viewport" content="width=device-width, user-scalable=no">
+
+        <!-- Set the base URL to account for virtual mod_rewrite URLs -->
+        <base target="_blank" href="{{ app.request.getBaseURL() }}">
+
+        <!-- Load CSS -->
+        {{ encore_entry_link_tags('app') }}
+
+        <!-- Load JS -->
+        {{ encore_entry_script_tags('app') }}
+
+        <!-- Set Favicon -->
+        <link rel="shortcut icon" href="{{ asset('build/images/favicon.ico') }}" sizes="310x310">
+
+        <!-- Set page title -->
+        {% if block('title') is defined %}
+            <title>{{ block('title') }} - MyHordes</title>
+        {% else %}
+            <title>MyHordes</title>
+        {% endif %}
+    {% endblock %}
+</head>
+<body>
+<div id="wrapper">
+    <div id="header">
+        {% block header %}{% endblock %}
+    </div>
+
+    <div id="content">
+        <noscript>
+            <div class="row">
+                <div class="cell padded rw-12">
+                    <h1>JavaScript required</h1>
+                    <p>This website requires JavaScript to work. You are seeing this page because JavaScript is either disabled or blocked in your browser.</p>
+                    <p>If you are using Adblockers or Scriptblockers, please disable them to use this website.</p>
+                </div>
+            </div>
+        </noscript>
+    </div>
+
+    <div id="footer"></div>
+</div>
+<footer>
+    {% block footer %}
+        <div class="copyright">&copy; Copyright 2019 by MYHORDES.</div>
+    {% endblock %}
+</footer>
+</body>
+</html>

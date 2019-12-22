@@ -1,0 +1,98 @@
+@import (once) "grid";
+
+@myhordes-font: 'Open Sans',sans-serif;
+
+@myhordes-background: url(../img/bg_colored.jpg) top center no-repeat, #100C0B;
+
+@myhordes-content-width: 950px;
+@myhordes-content-background: url(../img/bg_content.jpg) left repeat-y;
+
+@myhordes-content-header-background: url(../img/bg_content_header.jpg) left no-repeat;
+@myhordes-content-header-height: 305px;
+@myhordes-content-header-margin: -95px;
+
+@myhordes-content-footer-background: url(../img/bg_content_footer.gif) left no-repeat;
+@myhordes-content-footer-height: 15px;
+@myhordes-content-footer-margin: 15px;
+
+@myhordes-panel-color: white;
+@myhordes-panel-bg: #7e4d2a;
+@myhordes-panel-border: url("../img/panel_00.gif") top left no-repeat, url("../img/panel_02.gif") top right no-repeat,
+                        url("../img/panel_20.gif") bottom left no-repeat, url("../img/panel_22.gif") bottom right no-repeat,
+                        url("../img/panel_01.gif") top left repeat-x, url("../img/panel_10.gif") top left repeat-y,
+                        url("../img/panel_12.gif") top right repeat-y, url("../img/panel_21.gif") bottom left repeat-x;
+
+@myhordes-cell-header-background-color: #552012;
+@myhordes-cell-header-text-color: #EFA168;
+
+@myhordes-button-background: url('../img/bg_button.gif') center repeat;
+@myhordes-button-color: #F0D79E;
+@myhordes-button-border: black;
+
+@myhordes-input-background: url('../img/bg_input.jpg') bottom center repeat;
+@myhordes-input-color: #3B3249;
+@myhordes-input-border: #EFDBA8;
+
+@myhordes-smalltext: #DDAB76;
+
+body {
+  font-family: @myhordes-font; background: @myhordes-background; margin: 0;
+}
+
+#wrapper {
+  position: relative; margin: 0 auto; padding: 0; width: @myhordes-content-width; overflow: visible;
+  background: @myhordes-content-background; box-shadow: 0 0 20px black;
+
+  &>#header {
+    background: @myhordes-content-header-background; height: @myhordes-content-header-height;
+    margin: 0 0 @myhordes-content-header-margin;
+  }
+
+  &>#content {
+    margin: 0 5px 0 17px;
+    &>.row>.cell,&>noscript>.row>.cell {
+
+      &.header>h4:first-child {
+        &+*::before { content: " "; display: block; height: 24px; }
+        position: absolute; left: 0; top: 0; right: 0; background: @myhordes-cell-header-background-color; margin: 0;
+        color: @myhordes-cell-header-text-color; padding: 5px;
+        box-shadow: 0 0 3px black, inset 0 0 3px lighten(@myhordes-cell-header-background-color, 20%);
+        font-variant: small-caps;
+      }
+
+      &.padded       { padding: 12px + @myhordes-grid-padsize; }
+      &.padded-small { padding: 12px + @myhordes-grid-padsize-small; }
+      &.padded-none, &:not(.padded):not(.padded-small)  { padding: 12px; }
+
+      background: @myhordes-panel-border, @myhordes-panel-bg; color: @myhordes-panel-color;
+    }
+  }
+
+  &::after {
+    content: " "; display: block; position: relative;
+    bottom: -@myhordes-content-footer-height;
+    background: @myhordes-content-footer-background; height: @myhordes-content-footer-height;
+  }
+}
+
+button {
+  height: 25px; background: @myhordes-button-background; color: @myhordes-button-color; font-weight: bold;
+  border: 1px solid @myhordes-button-border; border-bottom-width: 2px; outline: 1px solid rgba(0,0,0,0);
+  transition: outline-color 0.5s; box-shadow: 0 0 2px black; padding: 0 24px 0;
+
+  &:hover,&:focus { outline-color: @myhordes-button-color; color: lighten(@myhordes-button-color, 50%); }
+  &:active { border-bottom-width: 1px; border-top-width: 2px; }
+  &.inline { padding: 0 24px 0; }
+  &:not(.inline) { display: block; width: 100%; }
+}
+
+input[type='text'],input[type='password'],input[type='email'] {
+  transition: outline-color 0.5s; outline: 1px solid rgba(0,0,0,0);
+  background: @myhordes-input-background; border: 1px solid @myhordes-input-border; height: 25px;
+
+  &:not(.inline) { display: block; width: 100%; }
+  &:focus { outline-color: @myhordes-input-border; }
+  &:invalid,&.invalid { box-shadow: 0 0 4px red; }
+}
+
+a { color: @myhordes-smalltext; font-weight: bold; }

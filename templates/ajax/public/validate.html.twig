@@ -1,0 +1,70 @@
+{% extends "ajax/ajax.html.twig" %}
+{% block ajax %}
+    <div class="row">
+        <div class="cell padded header rw-8 ro-2 rw-lg-12 ro-lg-0">
+            <h4>{% trans from 'login' %}E-Mail Adresse validieren{% endtrans %}</h4>
+            <p class="justify">
+                {% if is_granted('ROLE_REGISTERED') %}
+                    <b>{% trans with {'%name%': app.user.username} from 'login' %}Hallo %name%!{% endtrans %}</b>
+                    {% trans from 'login' %}Bevor du loslegen kannst, musst du noch deine E-Mail Adresse validieren.{% endtrans %}<br /><br />
+                {% endif %}
+                {% trans from 'login' %}Bitte gib den Validierungscode ein, den du via E-Mail erhalten hast.{% endtrans %}
+            </p>
+            <form id="validate-form">
+                <div class="row">
+                    <div class="cell padded-small rw-6 rw-md-12"><b><label for="validate-token">{% trans from 'login' %}Validierungscode{% endtrans %}</label></b></div>
+                    <div class="cell padded-small rw-6 rw-md-12"><input name="validate" id="validate-token" type="text" /></div>
+                </div>
+                <div class="row">
+                    <div class="cell padded-small rw-6 ro-6 rw-md-12 ro-md-0">
+                        <button id="validate_button">{% trans from 'login' %}Prüfen{% endtrans %}</button>
+                    </div>
+                </div>
+            </form>
+            <p class="right small">
+                {% if is_granted('ROLE_REGISTERED') %}
+                    <a href="" x-ajax-href="{{ path('auto_logout') }}">{% trans from 'login' %}Ausloggen{% endtrans %}</a><br />
+                {% else %}
+                    {% trans from 'login' %}Du hast noch keinen Account?{% endtrans %}
+                    <a href="" x-ajax-href="{{ path('public_register') }}">{% trans from 'login' %}Registrieren!{% endtrans %}</a><br />
+                    {% trans from 'login' %}Du hast deine E-Mail Adresse schon validiert?{% endtrans %}
+                    <a href="" x-ajax-href="{{ path('public_login') }}">{% trans from 'login' %}Einloggen!{% endtrans %}</a><br />
+                {% endif %}
+            </p>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script>
+        document.getElementById('validate_button').addEventListener('click', function(e) {
+            e.preventDefault();
+            $.ajax.send( '{{ path('api_validate') }}', $.html.serializeForm(document.getElementById('validate-form')),
+                function (data,code) {
+                    if (code < 200 || code >= 300)
+                        $.html.error('{% trans from 'login' %}Kommunikationsfehler.{% endtrans %}');
+                    else if (data.error) switch (data.error) {
+                        case 'db_error':
+                            $.html.error('{% trans from 'login' %}Datenbank-Fehler beim Aktualisieren des Profils.{% endtrans %}');
+                            break;
+                        case 'json_malformed':
+                            $.html.error('{% trans from 'login' %}Bitte fülle alle Felder aus.{% endtrans %}');
+                            break;
+                        case 'token_invalid':
+                            $.html.error('{% trans from 'login' %}Der angegebene Validierungscode ist nicht gültig.{% endtrans %}');
+                            break;
+                        case 'invalid_fields':
+                            let message = '{% trans from 'login' %}Einige Felder sind nicht korrekt ausgefüllt. Bitte prüfe eine Eingaben.{% endtrans %}' + "\n";
+                            for (let i = 0; i < data.fields.length; ++i)
+                                message += "\n" + data.fields[i];
+                            $.html.error(message);
+                            break;
+                        default:
+                            $.html.error('{% trans from 'login' %}Allgemeiner Fehler.{% endtrans %}');
+                    } else if (data.success)
+                        $.ajax.load(null, '{{ path('initial_landing') }}');
+                    else $.html.error('{% trans from 'login' %}Validierung fehlgeschlagen. Bitte prüfe deine Eingaben.{% endtrans %}');
+                } )
+        });
+    </script>
+{% endblock %}

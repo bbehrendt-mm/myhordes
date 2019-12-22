@@ -1,0 +1,41 @@
+@import (once) "grid";
+
+@screen-large:  lg; @screen-large-threshold: 950px;
+@screen-medium: md; @screen-medium-threshold: 600px;
+@screen-small:  sm; @screen-small-threshold: 480px;
+
+// Visual Controls
+@media (min-width: @screen-large-threshold) {
+  .hide-desktop {display: none !important;};
+}
+@media (max-width: (@screen-large-threshold - 1)) {
+  .hide-mobile {display: none !important;};
+  body {background: black;}
+  #wrapper { width: 100%; }
+}
+@media (max-width: (@screen-large-threshold - 1)) and (min-width: @screen-medium-threshold) {
+  .hide-@{screen-large} {display: none !important;};
+}
+@media (max-width: (@screen-medium-threshold - 1)) and (min-width: @screen-small-threshold) {
+  .hide-@{screen-medium} {display: none !important;};
+}
+@media (max-width: (@screen-small-threshold - 1)) {
+  .hide-@{screen-small} {display: none !important;};
+}
+
+.postfix(@threshold, @postfix) {
+  @media (max-width: (@threshold - 1)) {
+    .row {
+      >.cell{.grid(12,@postfix)}>.cell-small{.grid(24,@postfix)}
+      >.cell, >.cell-small {
+        &.padded-@{postfix} {padding: 5px;}
+        &.smallpad-@{postfix} {padding: 2px;}
+        &.nopad-@{postfix} {padding: 0}
+      }
+    }
+  }
+}
+
+.postfix(@screen-large-threshold, @screen-large);
+.postfix(@screen-medium-threshold, @screen-medium);
+.postfix(@screen-small-threshold, @screen-small);

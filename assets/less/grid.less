@@ -1,0 +1,48 @@
+// Variables
+@myhordes-grid-columns: 12;
+
+@myhordes-grid-padsize: 5px;
+@myhordes-grid-padsize-small: 2px;
+
+// Grid Classes
+* {
+  box-sizing: border-box;
+  &::before,&::after {box-sizing: border-box;}
+}
+
+.grid(@n;@class:'';@i:0) when (@i = 0) and (@class = '') {
+  &.rw-@{i} {display: none}
+  &.ro-@{i} {margin-left: 0;}
+  .grid(@n, @class, (@i + 1))
+}
+.grid(@n;@class:'';@i:0) when (@i <= @n) and (@class = '') {
+  &.rw-@{i} {width: (@i * 100% / @n);}
+  &.ro-@{i} {margin-left: (@i * 100% / @n);}
+  .grid(@n, @class, (@i + 1))
+}
+.grid(@n;@class:'';@i:0) when (@i = 0) and not (@class = '') {
+  &.rw-@{class}-@{i} {display: none}
+  &.ro-@{class}-@{i} {margin-left: 0;}
+  .grid(@n, @class, (@i + 1))
+}
+.grid(@n;@class:'';@i:0) when (@i <= @n) and not (@class = '') {
+  &.rw-@{class}-@{i} {width: (@i * 100% / @n);}
+  &.ro-@{class}-@{i} {margin-left: (@i * 100% / @n);}
+  .grid(@n, @class, (@i + 1))
+}
+
+.row {
+  &::before, &::after {content: " "; clear: both;}
+  &::before { display: table;}
+  &::after {display: block; height: 0;}
+  >.cell,.cell-small {
+    display: inline-block; float: left; position: relative;
+    &.padded {padding: @myhordes-grid-padsize;}
+    &.padded-small {padding: @myhordes-grid-padsize-small;}
+    &.padded-none {padding: 0}
+    &::before, &::after {clear: both;}
+    &::before {content: " "; display: table;}
+  }
+  >.cell {.grid(@myhordes-grid-columns)}
+  >.cell-small {.grid(@myhordes-grid-columns * 2)}
+}

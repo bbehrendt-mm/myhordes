@@ -1,0 +1,94 @@
+{% extends "ajax/ajax.html.twig" %}
+{% block ajax %}
+    <div class="row">
+        <div class="cell padded header rw-8 ro-2 rw-lg-12 ro-lg-0">
+            <h4>{% trans from 'login' %}Registrieren{% endtrans %}</h4>
+            <form id="register-form">
+                <div class="row">
+                    <div class="cell padded-small rw-6 rw-md-12"><b><label for="register-user">{% trans from 'login' %}Spielername{% endtrans %}</label></b></div>
+                    <div class="cell padded-small rw-6 rw-md-12"><input name="user" id="register-user" type="text" /></div>
+                </div>
+
+                <br /><br />
+
+                <div class="row">
+                    <div class="cell padded-small rw-6 rw-md-12"><b><label for="register-email">{% trans from 'login' %}E-Mail Adresse{% endtrans %}</label></b></div>
+                    <div class="cell padded-small rw-6 rw-md-12"><input name="mail1" id="register-email" type="email" /></div>
+                </div>
+                <div class="row">
+                    <div class="cell padded-small rw-6 rw-md-12"><b><label for="register-email-2">{% trans from 'login' %}E-Mail Adresse{% endtrans %} ({% trans from 'login' %}wiederholen{% endtrans %})</label></b></div>
+                    <div class="cell padded-small rw-6 rw-md-12"><input name="mail2" id="register-email-2" type="email" /></div>
+                </div>
+
+                <br /><br />
+
+                <div class="row">
+                    <div class="cell padded-small rw-6 rw-md-12"><b><label for="register-password">{% trans from 'login' %}Passwort{% endtrans %}</label></b></div>
+                    <div class="cell padded-small rw-6 rw-md-12"><input name="pass1"  id="register-password" type="password" /></div>
+                </div>
+                <div class="row">
+                    <div class="cell padded-small rw-6 rw-md-12"><b><label for="register-password-2">{% trans from 'login' %}Passwort{% endtrans %} ({% trans from 'login' %}wiederholen{% endtrans %})</label></b></div>
+                    <div class="cell padded-small rw-6 rw-md-12"><input name="pass2"  id="register-password-2" type="password" /></div>
+                </div>
+
+                <p class="justify">
+                    {% trans from 'login' %}
+                        Um die Registrierung abzuschließen und deinen Account zu aktivieren, musst du auf einen
+                        Aktivierungslink klicken, der dir an die angegebene E-Mail Adresse geschickt wird.
+                    {% endtrans %}
+                </p>
+
+                <div class="row">
+                    <div class="cell padded-small rw-6 ro-6 rw-md-12 ro-md-0">
+                        <button id="register_button">{% trans from 'login' %}Registrieren{% endtrans %}</button>
+                    </div>
+                </div>
+            </form>
+            <p class="right small">
+                {% trans from 'login' %}Du hast schon einen Account?{% endtrans %}
+                <a href="" x-ajax-href="{{ path('public_login') }}">{% trans from 'login' %}Einloggen!{% endtrans %}</a>
+            </p>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script>
+        let inputs = document.querySelectorAll('#register-form input');
+        for (let i = 0; i < inputs.length; ++i)
+            inputs[i].addEventListener('input', function() {
+                this.classList.remove('invalid');
+            });
+
+        document.getElementById('register_button').addEventListener('click', function(e) {
+            e.preventDefault();
+            $.ajax.send( '{{ path('api_register') }}', $.html.serializeForm(document.getElementById('register-form')),
+                function (data,code) {
+                    if (code < 200 || code >= 300)
+                        $.html.error('{% trans from 'login' %}Kommunikationsfehler.{% endtrans %}');
+                    else if (data.error) switch (data.error) {
+                        case 'db_error':
+                            $.html.error('{% trans from 'login' %}Datenbank-Fehler beim Anlegen des Profils.{% endtrans %}');
+                            break;
+                        case 'json_malformed':
+                            $.html.error('{% trans from 'login' %}Bitte fülle alle Felder aus.{% endtrans %}');
+                            break;
+                        case 'user_exists':
+                            $.html.error('{% trans from 'login' %}Der angegebene Name existiert bereits im Spiel.{% endtrans %}');
+                            break;
+                        case 'mail_exists':
+                            $.html.error('{% trans from 'login' %}Die angegebene E-Mail Adresse wird bereits von einem anderen Profil verwendet.{% endtrans %}');
+                            break;
+                        case 'invalid_fields':
+                            let message = '{% trans from 'login' %}Einige Felder sind nicht korrekt ausgefüllt. Bitte prüfe eine Eingaben.{% endtrans %}' + "\n";
+                            for (let i = 0; i < data.fields.length; ++i)
+                                message += "\n" + data.fields[i];
+                            $.html.error(message);
+                            break;
+                        default:
+                            $.html.error('{% trans from 'login' %}Allgemeiner Fehler.{% endtrans %}');
+                    } else $.ajax.load( null, '{{ path('initial_landing') }}', true );
+                } )
+        });
+    </script>
+{% endblock %}

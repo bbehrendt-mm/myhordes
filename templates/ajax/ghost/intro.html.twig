@@ -1,0 +1,27 @@
+{% extends "ajax/ajax.html.twig" %}
+{% block ajax %}
+    <div class="row">
+        <div class="cell padded header rw-8 ro-2 rw-lg-12 ro-lg-0">
+            <h4>{% trans from 'welcome' %}Willkommen bei MyHordes{% endtrans %}</h4>
+            <p class="justify">
+                {% trans with {'%motiontwin%':'<b>MotionTwin</b>'} from 'welcome' %}
+                    MyHordes ist eine von der Community entwickelte offene Implementierung des Browser-Spiels
+                    "Die Verdammten" von %motiontwin%.
+                {% endtrans %}
+                <br />
+                {% trans from 'welcome' %}
+                    Ziel des Projektes ist es, einer Version von "Die Verdammten" zu erschaffen, die nicht nur nach der
+                    Flash-Abschaltung im Jahr 2020 funktionsfähig ist, sondern auch weiterentwickelt und mit neuen
+                    Inhalten versorgt werden kann.
+                {% endtrans %}
+            </p>
+
+            <p>
+                {% trans with {'%motiontwin%':'<b>MotionTwin</b>'} from 'welcome' %}
+                    Alle Grafiken stammen, wenn nicht ausdrücklich anders angegeben, ebenfalls aus "Die Verdammten" und sind
+                    damit Eigentum von %motiontwin%.
+                {% endtrans %}
+            </p>
+        </div>
+    </div>
+{% endblock %}
