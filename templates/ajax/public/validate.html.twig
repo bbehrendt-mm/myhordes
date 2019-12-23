@@ -62,7 +62,7 @@
                         default:
                             $.html.error('{% trans from 'login' %}Allgemeiner Fehler.{% endtrans %}');
                     } else if (data.success)
-                        $.ajax.load(null, '{{ path('initial_landing') }}');
+                        $.ajax.load(null, '{{ path('initial_landing') }}', true);
                     else $.html.error('{% trans from 'login' %}Validierung fehlgeschlagen. Bitte prüfe deine Eingaben.{% endtrans %}');
                 } )
         });

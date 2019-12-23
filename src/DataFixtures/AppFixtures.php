@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 use App\Entity\CitizenProfession;
 use App\Entity\ItemCategory;
 use App\Entity\ItemPrototype;
+use App\Entity\TownClass;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -370,6 +371,13 @@ class AppFixtures extends Fixture
         ['name'=>'shaman'  ,'label'=>'Schamane' ],
     ];
 
+    public static $town_class_data = [
+        ['name'=>'small'  ,'label'=>'Kleine Stadt' ],
+        ['name'=>'remote' ,'label'=>'Entfernte Regionen' ],
+        ['name'=>'panda'  ,'label'=>'Pandämonium' ],
+        ['name'=>'custom' ,'label'=>'Private Stadt' ],
+    ];
+
     private $entityManager;
 
     public function __construct(EntityManagerInterface $em)
@@ -534,6 +542,36 @@ class AppFixtures extends Fixture
         $table->render();
     }
 
+    protected function insert_town_classes(ObjectManager $manager, ConsoleOutputInterface $out) {
+        $out->writeln( '<comment>Town classes: ' . count(static::$town_class_data) . ' fixture entries available.</comment>' );
+
+        // Set up console
+        $table = new Table( $out->section() );
+        $table->setHeaders( ['ID','Name','Label'] );
+        $progress = new ProgressBar( $out->section() );
+        $progress->start( count(static::$town_class_data) );
+
+        // Iterate over all entries
+        foreach (static::$town_class_data as $entry) {
+            // Get existing entry, or create new one
+            $entity = $this->entityManager->getRepository(TownClass::class)->findOneByName( $entry['name'] );
+            if ($entity === null) $entity = new TownClass();
+
+            // Set property
+            $entity->setName( $entry['name'] );
+            $entity->setLabel( $entry['label'] );
+
+            $manager->persist( $entity );
+
+            // Set table entry
+            $table->addRow( [$entity->getId(),$entity->getName(),$entity->getLabel()] );
+            $progress->advance();
+        }
+
+        $manager->flush();
+        $table->render();
+    }
+
     public function load(ObjectManager $manager) {
 
         $output = new ConsoleOutput();
@@ -549,6 +587,12 @@ class AppFixtures extends Fixture
         $output->writeln("");
 
         $this->insert_professions( $manager, $output );
+        $output->writeln("");
+
+        $output->writeln( '<info>Installing fixtures: Town Content Database</info>' );
+        $output->writeln("");
+
+        $this->insert_town_classes( $manager, $output );
         $output->writeln("");
     }
 }

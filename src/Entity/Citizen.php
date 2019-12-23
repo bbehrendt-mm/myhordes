@@ -56,6 +56,18 @@ class Citizen
      */
     private $inventory;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Town", inversedBy="citizens")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $town;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\CitizenHome", inversedBy="citizen", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $home;
+
     public function __construct()
     {
         $this->status = new ArrayCollection();
@@ -160,6 +172,30 @@ class Citizen
     public function setInventory(Inventory $inventory): self
     {
         $this->inventory = $inventory;
+
+        return $this;
+    }
+
+    public function getTown(): ?Town
+    {
+        return $this->town;
+    }
+
+    public function setTown(?Town $town): self
+    {
+        $this->town = $town;
+
+        return $this;
+    }
+
+    public function getHome(): ?CitizenHome
+    {
+        return $this->home;
+    }
+
+    public function setHome(CitizenHome $home): self
+    {
+        $this->home = $home;
 
         return $this;
     }
