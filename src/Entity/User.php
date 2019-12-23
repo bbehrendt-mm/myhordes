@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Table;
 use Doctrine\ORM\Mapping\UniqueConstraint;
@@ -51,6 +53,16 @@ class User implements UserInterface, EquatableInterface
      * @ORM\OneToOne(targetEntity="App\Entity\UserPendingValidation", mappedBy="user", cascade={"persist", "remove"})
      */
     private $pendingValidation;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Citizen", mappedBy="user")
+     */
+    private $citizens;
+
+    public function __construct()
+    {
+        $this->citizens = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -152,5 +164,36 @@ class User implements UserInterface, EquatableInterface
             $this->getUsername() === $user->getUsername() &&
             $this->getPassword() === $user->getPassword() &&
             $this->getRoles() === $user->getRoles();
+    }
+
+    /**
+     * @return Collection|Citizen[]
+     */
+    public function getCitizens(): Collection
+    {
+        return $this->citizens;
+    }
+
+    public function addCitizen(Citizen $citizen): self
+    {
+        if (!$this->citizens->contains($citizen)) {
+            $this->citizens[] = $citizen;
+            $citizen->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCitizen(Citizen $citizen): self
+    {
+        if ($this->citizens->contains($citizen)) {
+            $this->citizens->removeElement($citizen);
+            // set the owning side to null (unless already changed)
+            if ($citizen->getUser() === $this) {
+                $citizen->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }
