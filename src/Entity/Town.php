@@ -84,6 +84,14 @@ class Town
         return $this;
     }
 
+    public function getCitizenCount(): int {
+        return count($this->getCitizens());
+    }
+
+    public function isOpen(): bool {
+        return $this->getDay() === 0 && $this->getCitizenCount() < $this->getPopulation();
+    }
+
     /**
      * @return Collection|Citizen[]
      */

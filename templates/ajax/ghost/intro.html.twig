@@ -6,17 +6,25 @@
             <div class="row">
                 <div class="cell rw-8 rw-md-12">
                     {% for townClass in townClasses %}
-                        <p>
-                            <b>{{ townClass.getLabel }}</b><br />
-                            {% for town in townClass.towns %}
-                                <i>{{ town.getName }}</i>
-                            {% endfor %}
-                            {% if townClass.towns|length == 0 %}
-                                <span class="small">{% trans from 'ghost' %}Aktuell gibt es keine Stadt diesen Typs.{% endtrans %}</span>
-                            {% endif %}
+                        <h5>{{ townClass.getLabel }}</h5>
+                        {% if townClass.towns|length > 0 %}
+                            <div class="row-table">
+                                <div class="row header">
+                                    <div class="padded cell rw-8">{% trans from 'ghost' %}Stadtname{% endtrans %}</div>
+                                    <div class="padded cell rw-4">{% trans from 'ghost' %}Aktionen{% endtrans %}</div>
+                                </div>
+                                {% for town in townClass.towns %}
+                                    <div class="row">
+                                        <div class="padded cell rw-8">{{ town.getName }}</div>
+                                        <div class="padded cell rw-1 center"><img class="pointer" alt="+" src="{{ asset('build/images/small_more.gif') }}" /></div>
+                                        <div class="padded cell rw-3"><button>Beitreten</button></div>
+                                    </div>
+                                {% endfor %}
+                            </div>
 
-                        </p>
-
+                        {% else %}
+                            <span class="small">{% trans from 'ghost' %}Aktuell gibt es keine Stadt diesen Typs.{% endtrans %}</span>
+                        {% endif %}
                     {% endfor %}
                 </div>
                 <div class="cell rw-4 rw-md-12">

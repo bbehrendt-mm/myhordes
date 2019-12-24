@@ -60,9 +60,9 @@ class TownInfoCommand extends Command
         foreach ($towns as $town) {
             $table->addRow([
                 $town->getId(),
-                count($town->getCitizens()) < $town->getPopulation(),
+                $town->isOpen(),
                 $town->getName(),
-                count($town->getCitizens()) . '/' . $town->getPopulation(),
+                $town->getCitizenCount() . '/' . $town->getPopulation(),
                 $town->getType()->getLabel(),
                 $town->getDay()
             ]);

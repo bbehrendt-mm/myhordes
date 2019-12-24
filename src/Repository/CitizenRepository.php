@@ -3,8 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Citizen;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\NonUniqueResultException;
 
 /**
  * @method Citizen|null find($id, $lockMode = null, $lockVersion = null)
@@ -17,6 +19,21 @@ class CitizenRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Citizen::class);
+    }
+
+    public function findActiveByUser(User $user): ?Citizen
+    {
+        try {
+            return $this->createQueryBuilder('c')
+                ->andWhere('c.user = :user')
+                ->andWhere('c.active = :active')
+                ->setParameter('user', $user)
+                ->setParameter('active', true)
+                ->getQuery()
+                ->getOneOrNullResult();
+        } catch (NonUniqueResultException $e) {
+            return null;
+        }
     }
 
     // /**

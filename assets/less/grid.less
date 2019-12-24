@@ -1,3 +1,5 @@
+@import (once) "mixins";
+
 // Variables
 @myhordes-grid-columns: 12;
 
@@ -45,4 +47,17 @@
   }
   >.cell {.grid(@myhordes-grid-columns)}
   >.cell-small {.grid(@myhordes-grid-columns * 2)}
+}
+
+.row-table {
+  &>.row.header {
+    font-variant: small-caps; font-weight: bold;
+    background: linear-gradient(to top, #643b25 0%, rgba(100, 59, 37, 0) 50%, rgba(100, 59, 37, 0) 100%);
+  }
+  &>.row:not(.header) {
+    &:nth-child(2n+0) { background: #5c2b20; }
+    &:nth-child(2n+1) { background: #663024; }
+  }
+
+
 }
