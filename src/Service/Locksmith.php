@@ -5,6 +5,7 @@ namespace App\Service;
 
 use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Lock\LockInterface;
+use Symfony\Component\Lock\Store\FlockStore;
 use Symfony\Component\Lock\Store\SemaphoreStore;
 
 class Locksmith {
@@ -12,7 +13,8 @@ class Locksmith {
     private $lock_factory = null;
 
     public function __construct() {
-        $this->lock_factory = new LockFactory( new SemaphoreStore() );
+        $this->lock_factory = new LockFactory(
+            extension_loaded('sysvmsg') ? new SemaphoreStore() : new FlockStore() );
     }
 
     public function getLock( string $name ): LockInterface {

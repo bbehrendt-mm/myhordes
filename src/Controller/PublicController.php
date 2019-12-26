@@ -6,7 +6,9 @@ use App\Entity\User;
 use App\Entity\UserPendingValidation;
 use App\Service\JSONRequestParser;
 use App\Service\Locksmith;
+use App\Service\UserFactory;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -57,56 +59,19 @@ class PublicController extends AbstractController
         return $this->render( 'ajax/public/validate.html.twig' );
     }
 
-    protected function create_user(UserPasswordEncoderInterface $passwordEncoder, string $name, string $mail, string $pass, bool $validate = true): ?User {
-        $validator = Validation::createValidator();
-
-        $manager = $this->getDoctrine()->getManager();
-
-        $new_user = new User();
-        $new_user->setName( $name )->setEmail( $mail )->setPassword( $passwordEncoder->encodePassword($new_user, $pass) )->setValidated( !$validate );
-
-        if ($validator->validate($new_user)->count() > 0)
-            return null;
-
-        $manager->persist( $new_user );
-
-        if ($validate) {
-            $source = 'abcdefghijklmnopqrstuvwxyz0123456789';
-            $key = "";
-            for ($i = 0; $i < 16; $i++) $key .= $source[ mt_rand(0, strlen($source) - 1) ];
-
-            $new_validation = new UserPendingValidation();
-            $new_validation->setPkey( $key );
-            $new_validation->setUser( $new_user );
-
-            if ($validator->validate($new_validation)->count() > 0)
-                return null;
-
-            $manager->persist( $new_validation );
-        }
-
-        try {
-            $manager->flush();
-        } catch (\Exception $e) {
-            return null;
-        }
-
-        return $new_user;
-    }
-
     /**
      * @Route("api/public/register", name="api_register")
      * @param JSONRequestParser $parser
      * @param TranslatorInterface $translator
-     * @param Locksmith $locks
-     * @param UserPasswordEncoderInterface $passwordEncoder
+     * @param UserFactory $factory
+     * @param EntityManagerInterface $entityManager
      * @return Response
      */
     public function register_api(
         JSONRequestParser $parser,
         TranslatorInterface $translator,
-        Locksmith $locks,
-        UserPasswordEncoderInterface $passwordEncoder
+        UserFactory $factory,
+        EntityManagerInterface $entityManager
     ): Response
     {
         if (!$parser->valid()) return new JsonResponse( ['error' => 'json_malformed'] );
@@ -131,25 +96,32 @@ class PublicController extends AbstractController
 
         if ($violations->count() === 0) {
 
-            $lock = $locks->waitForLock( 'user-creation' );
-
-            if ($this->getDoctrine()->getRepository(User::class)->findOneByName( $parser->trimmed('user') ))
-                return new JsonResponse( ['error' => 'user_exists'] );
-            if ($this->getDoctrine()->getRepository(User::class)->findOneByMail( $parser->trimmed('mail1') ))
-                return new JsonResponse( ['error' => 'mail_exists'] );
-
-            if (!($user = $this->create_user(
-                $passwordEncoder,
+            $user = $factory->createUser(
                 $parser->trimmed('user'),
                 $parser->trimmed('mail1'),
                 $parser->trimmed('pass1'),
-                true
-            ))) return new JsonResponse( ['error' => 'db_error'] );
+                false,
+                $error
+            );
 
-            $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
-            $this->get('security.token_storage')->setToken($token);
+            switch ($error) {
+                case UserFactory::ErrorNone:
+                    try {
+                        $entityManager->persist( $user );
+                        $entityManager->flush();
+                    } catch (Exception $e) {
+                        return new JsonResponse( ['error' => 'db_error'] );
+                    }
+                    $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
+                    $this->get('security.token_storage')->setToken($token);
 
-            return new JsonResponse( ['success' => 'validation'] );
+                    return new JsonResponse( ['success' => 'validation'] );
+
+                case UserFactory::ErrorUserExists: return new JsonResponse( ['error' => 'user_exists'] );
+                case UserFactory::ErrorMailExists: return new JsonResponse( ['error' => 'mail_exists'] );
+                case UserFactory::ErrorInvalidParams: return new JsonResponse( ['error' => 'json_malformed'] );
+                default: return new JsonResponse( ['error' => 'unknown_error'] );
+            }
 
         } else {
             $v = [];
@@ -182,13 +154,13 @@ class PublicController extends AbstractController
      * @Route("api/public/validate", name="api_validate")
      * @param JSONRequestParser $parser
      * @param TranslatorInterface $translator
-     * @param Locksmith $locks
+     * @param UserFactory $factory
      * @return Response
      */
     public function validate_api(
         JSONRequestParser $parser,
         TranslatorInterface $translator,
-        Locksmith $locks
+        UserFactory $factory
     ): Response
     {
         if (!$parser->valid()) return new JsonResponse( ['error' => 'json_malformed'] );
@@ -204,27 +176,10 @@ class PublicController extends AbstractController
 
         if ($violations->count() === 0) {
 
-            $lock = $locks->waitForLock( 'user-creation' );
-
             /** @var User $user */
             $user = $this->getUser();
 
-            if (($pending = $this->getDoctrine()->getRepository(UserPendingValidation::class)->findOneByTokenAndUser(
-                $parser->trimmed('validate'), $user
-            )) === null) return new JsonResponse( ['error' => 'token_invalid'] );
-
-            if ($pending->getUser() === null || ($user !== null && !$user->isEqualTo( $pending->getUser() )))
-                return new JsonResponse( ['error' => 'token_invalid'] );
-
-            if ($user === null) $user = $pending->getUser();
-
-            try {
-                $entityManager = $this->getDoctrine()->getManager();
-
-                $user->setValidated( true );
-                $entityManager->persist( $user );
-                $entityManager->remove( $pending );
-                $entityManager->flush();
+            if ($factory->validateUser( $user, $parser->trimmed('validate'), $error )) {
 
                 if ($this->getUser()) {
                     $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
@@ -232,8 +187,10 @@ class PublicController extends AbstractController
                 }
 
                 return new JsonResponse( ['success' => true] );
-            } catch (Exception $e) {
-                return new JsonResponse( ['error' => 'db_error'] );
+            } else switch ($error) {
+                case UserFactory::ErrorInvalidParams: return new JsonResponse( ['error' => 'token_invalid'] );
+                case UserFactory::ErrorDatabaseException: return new JsonResponse( ['error' => 'db_error'] );
+                default: return new JsonResponse( ['error' => 'unknown_error'] );
             }
 
         } else {
