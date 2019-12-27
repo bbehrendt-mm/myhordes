@@ -65,9 +65,9 @@ class PublicController extends AbstractController
         EntityManagerInterface $entityManager
     ): Response
     {
-        if (!$parser->valid()) return new AjaxResponse( ['error' => 'json_malformed'] );
+        if (!$parser->valid()) return AjaxResponse::error('json_malformed');
         if (!$parser->has_all( ['user','mail1','mail2','pass1','pass2'], true ))
-            return new AjaxResponse( ['error' => 'json_malformed'] );
+            return AjaxResponse::error('json_malformed');
 
         $violations = Validation::createValidator()->validate( $parser->all( true ), new Constraints\Collection([
             'user'  => new Constraints\Length(
@@ -101,17 +101,17 @@ class PublicController extends AbstractController
                         $entityManager->persist( $user );
                         $entityManager->flush();
                     } catch (Exception $e) {
-                        return new AjaxResponse( ['error' => 'db_error'] );
+                        return AjaxResponse::error('db_error');
                     }
                     $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
                     $this->get('security.token_storage')->setToken($token);
 
-                    return new AjaxResponse( ['success' => 'validation'] );
+                    return AjaxResponse::success( 'validation');
 
-                case UserFactory::ErrorUserExists: return new AjaxResponse( ['error' => 'user_exists'] );
-                case UserFactory::ErrorMailExists: return new AjaxResponse( ['error' => 'mail_exists'] );
-                case UserFactory::ErrorInvalidParams: return new AjaxResponse( ['error' => 'json_malformed'] );
-                default: return new AjaxResponse( ['error' => 'unknown_error'] );
+                case UserFactory::ErrorUserExists: return AjaxResponse::error('user_exists');
+                case UserFactory::ErrorMailExists: return AjaxResponse::error('mail_exists');
+                case UserFactory::ErrorInvalidParams: return AjaxResponse::error('json_malformed');
+                default: return AjaxResponse::error('unknown_error');
             }
 
         } else {

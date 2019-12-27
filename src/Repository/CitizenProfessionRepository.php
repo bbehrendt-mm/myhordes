@@ -21,6 +21,22 @@ class CitizenProfessionRepository extends ServiceEntityRepository
         parent::__construct($registry, CitizenProfession::class);
     }
 
+    public function findDefault(): ?CitizenProfession {
+        return $this->findOneByName(CitizenProfession::DEFAULT);
+    }
+
+    /**
+     * @return CitizenProfession[]
+     */
+    public function findSelectable(): array
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.name != :val')
+            ->setParameter('val', CitizenProfession::DEFAULT)
+            ->getQuery()
+            ->getResult();
+    }
+
     public function findOneByName(string $value): ?CitizenProfession
     {
         try {

@@ -1,0 +1,10 @@
+{% extends "ajax/game/town/town.html.twig" %}
+{% block content %}
+    <b>{{ town.name }}</b><br />
+    <i>{% trans with {'%day%':town.day} from 'game' %}Tag %day%{% endtrans %}</i>
+{% endblock %}
+{% block js %}
+    {{ parent() }}
+    <script>
+    </script>
+{% endblock %}

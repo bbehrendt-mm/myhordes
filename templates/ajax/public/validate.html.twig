@@ -42,25 +42,19 @@
             $.ajax.send( '{{ path('api_validate') }}', $.html.serializeForm(document.getElementById('validate-form')),
                 function (data,code) {
                     if (code < 200 || code >= 300)
-                        $.html.error('{% trans from 'login' %}Kommunikationsfehler.{% endtrans %}');
-                    else if (data.error) switch (data.error) {
-                        case 'db_error':
-                            $.html.error('{% trans from 'login' %}Datenbank-Fehler beim Aktualisieren des Profils.{% endtrans %}');
-                            break;
-                        case 'json_malformed':
-                            $.html.error('{% trans from 'login' %}Bitte fülle alle Felder aus.{% endtrans %}');
-                            break;
-                        case 'token_invalid':
-                            $.html.error('{% trans from 'login' %}Der angegebene Validierungscode ist nicht gültig.{% endtrans %}');
-                            break;
-                        case 'invalid_fields':
-                            let message = '{% trans from 'login' %}Einige Felder sind nicht korrekt ausgefüllt. Bitte prüfe eine Eingaben.{% endtrans %}' + "\n";
-                            for (let i = 0; i < data.fields.length; ++i)
-                                message += "\n" + data.fields[i];
-                            $.html.error(message);
-                            break;
-                        default:
-                            $.html.error('{% trans from 'login' %}Allgemeiner Fehler.{% endtrans %}');
+                        $.html.error('{% trans from 'global' %}Kommunikationsfehler.{% endtrans %}');
+                    else if (data.error) {
+                        $.html.selectErrorMessage( data.error, {
+                            'db_error':       '{% trans from 'login' %}Datenbank-Fehler beim Aktualisieren des Profils.{% endtrans %}',
+                            'json_malformed': '{% trans from 'login' %}Bitte fülle alle Felder aus.{% endtrans %}',
+                            'token_invalid':  '{% trans from 'login' %}Der angegebene Validierungscode ist nicht gültig.{% endtrans %}',
+                            'invalid_fields': function() {
+                                let message = '{% trans from 'login' %}Einige Felder sind nicht korrekt ausgefüllt. Bitte prüfe eine Eingaben.{% endtrans %}' + "\n";
+                                for (let i = 0; i < data.fields.length; ++i)
+                                    message += "\n" + data.fields[i];
+                                return message;
+                            }
+                        }, '{% trans from 'login' %}Allgemeiner Fehler.{% endtrans %}' )
                     } else if (data.success)
                         $.ajax.load(null, '{{ path('initial_landing') }}', true);
                     else $.html.error('{% trans from 'login' %}Validierung fehlgeschlagen. Bitte prüfe deine Eingaben.{% endtrans %}');

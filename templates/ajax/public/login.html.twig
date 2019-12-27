@@ -36,7 +36,7 @@
             $.ajax.send( '{{ path('api_login') }}', $.html.serializeForm(document.getElementById('login-form')),
                 function (data,code) {
                     if (code < 200 || code >= 300)
-                        $.html.error('{% trans from 'login' %}Kommunikationsfehler.{% endtrans %}');
+                        $.html.error('{% trans from 'global' %}Kommunikationsfehler.{% endtrans %}');
                     else if (data.success) {
                         if (data.require_validation) $.ajax.load(null, '{{ path('public_validate') }}', true);
                         else $.ajax.load(null, '{{ path('initial_landing') }}', true);

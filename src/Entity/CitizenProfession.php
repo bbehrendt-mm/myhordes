@@ -9,6 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class CitizenProfession
 {
+    const DEFAULT = 'none';
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()

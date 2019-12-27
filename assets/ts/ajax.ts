@@ -57,7 +57,7 @@ export default class Ajax {
             for (let i = 0; i < style_source.length; i++)
                 target.appendChild( style_source[i] );
             for (let i = 0; i < content_source.length; i++) {
-                let buttons = content_source[i].querySelectorAll('button[x-ajax-href],a[x-ajax-href]');
+                let buttons = content_source[i].querySelectorAll('*[x-ajax-href]');
                 for (let b = 0; b < buttons.length; b++)
                     buttons[b].addEventListener('click', function(e) {
                         e.preventDefault();

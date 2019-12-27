@@ -19,6 +19,12 @@ class GameFactory
     private $validator;
     private $locksmith;
 
+    const ErrorNone = 0;
+    const ErrorTownClosed = 1;
+    const ErrorUserAlreadyInGame = 2;
+    const ErrorUserAlreadyInTown = 3;
+    const ErrorNoDefaultProfession = 4;
+
     public function __construct( EntityManagerInterface $em, GameValidator $v, Locksmith $l)
     {
         $this->entity_manager = $em;
@@ -65,20 +71,31 @@ class GameFactory
         return $town;
     }
 
-    public function createCitizen( Town &$town, User &$user ): ?Citizen {
-
+    public function createCitizen( Town &$town, User &$user, ?int &$error ): ?Citizen {
+        $error = self::ErrorNone;
         $lock = $this->locksmith->waitForLock('join-town');
 
         $active_citizen = $this->entity_manager->getRepository(Citizen::class)->findActiveByUser( $user );
-        if ($active_citizen !== null) return null;
+        if ($active_citizen !== null) {
+            $error = self::ErrorUserAlreadyInGame;
+            return null;
+        }
 
-        if (!$town->isOpen()) return null;
+        if (!$town->isOpen()) {
+            $error = self::ErrorTownClosed;
+            return null;
+        }
         foreach ($town->getCitizens() as $existing_citizen)
-            if ($existing_citizen->getUser()->getId() === $user->getId())
+            if ($existing_citizen->getUser()->getId() === $user->getId()) {
+                $error = self::ErrorUserAlreadyInTown;
                 return null;
+            }
 
-        $base_profession = $this->entity_manager->getRepository(CitizenProfession::class)->findOneByName( 'none' );
-        if ($base_profession === null) return null;
+        $base_profession = $this->entity_manager->getRepository(CitizenProfession::class)->findDefault();
+        if ($base_profession === null) {
+            $error = self::ErrorNoDefaultProfession;
+            return null;
+        }
 
         $citizen = new Citizen();
         $citizen->setUser( $user );

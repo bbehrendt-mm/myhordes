@@ -1,0 +1,40 @@
+{% extends "ajax/ajax.html.twig" %}
+{% block ajax %}
+    <div class="row">
+        <div class="cell padded rw-4 rw-md-12"></div>
+        <div class="cell padded header rw-8 rw-md-12">
+            <h4>{% trans from 'game' %}Wähle einen Beruf{% endtrans %}</h4>
+            <div class="row">
+                {% for job in professions %}
+                    <div class="padded cell rw-6">
+                        <b>{{ job.label|trans({}, 'entities') }}</b><br />
+                        <button x-job-id="{{ job.id }}">{% trans from 'global' %}Auswählen{% endtrans %}</button>
+                    </div>
+                {% endfor %}
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    <script>
+        let jobButtons = document.querySelectorAll('button[x-job-id]');
+        for (let i = 0; i < jobButtons.length; i++)
+            jobButtons[i].addEventListener('click', function (e) {
+                e.preventDefault();
+                $.ajax.send( '{{ path('api_jobcenter') }}', {job: this.getAttribute('x-job-id')},
+                    function (data,code) {
+                        if (code < 200 || code >= 300)
+                            $.html.error('{% trans from 'global' %}Kommunikationsfehler.{% endtrans %}');
+                        else if (data.error) {
+                            $.html.selectErrorMessage( data.error, {
+                                'already_selected': '{% trans from 'game' %}Du hast bereits einen Beruf gewählt.{% endtrans %}',
+                                'invalid_job':      '{% trans from 'game' %}Ungültige Auswahl.{% endtrans %}'
+                            }, '{% trans from 'login' %}Allgemeiner Fehler.{% endtrans %}' )
+                        } else if (data.success)
+                            $.ajax.load(null, '{{ path('game_landing') }}', true);
+                        else $.html.error('{% trans from 'global' %}Allgemeiner Fehler.{% endtrans %}');
+                    } )
+            })
+    </script>
+{% endblock %}

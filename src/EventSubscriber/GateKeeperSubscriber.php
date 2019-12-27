@@ -5,11 +5,13 @@ namespace App\EventSubscriber;
 
 
 use App\Controller\GameInterfaceController;
+use App\Controller\GameProfessionInterfaceController;
 use App\Controller\GhostInterfaceController;
 use App\Entity\Citizen;
 use App\Entity\User;
 use App\Exception\DynamicAjaxResetException;
 use Doctrine\ORM\EntityManagerInterface;
+use Proxies\__CG__\App\Entity\CitizenProfession;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -44,8 +46,16 @@ class GateKeeperSubscriber implements EventSubscriberInterface
 
         if ($controller instanceof GameInterfaceController) {
             // This is a game controller; it is not available to players outside of a game
-            if (!$user || !$this->em->getRepository(Citizen::class)->findActiveByUser($user))
+            if (!$user || !$citizen = $this->em->getRepository(Citizen::class)->findActiveByUser($user))
                 throw new DynamicAjaxResetException($event->getRequest());
+
+            if ($controller instanceof GameProfessionInterfaceController) {
+                // This is a game profession controller; it is not available to players who have not chosen a profession
+                // yet.
+                if ($citizen->getProfession()->getName() === CitizenProfession::DEFAULT)
+                    throw new DynamicAjaxResetException($event->getRequest());
+            }
+
         }
     }
 

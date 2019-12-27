@@ -17,6 +17,15 @@ export default class HTML {
         return data;
     }
 
+    selectErrorMessage( code: string, messages: object, default_message: string ) {
+        if (code && messages.hasOwnProperty(code)) {
+            if (typeof messages[code] === 'function')
+                this.error( messages[code]() );
+            else this.error( messages[code] );
+        }
+        else this.error( default_message );
+    }
+
     error(message: string): void {
         alert('ERROR' + "\n" + message);
     }
