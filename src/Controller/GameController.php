@@ -28,7 +28,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * @Route("/",condition="request.isXmlHttpRequest()")
  */
-class GameController extends AbstractController
+class GameController extends AbstractController implements GameInterfaceController
 {
 
     /**

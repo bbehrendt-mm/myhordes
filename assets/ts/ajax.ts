@@ -32,6 +32,12 @@ export default class Ajax {
         let request = new XMLHttpRequest();
         request.responseType = 'document';
         request.addEventListener('load', function(e) {
+            // Check if a reset header is set
+            if (this.getResponseHeader('X-AJAX-Control') === 'reset') {
+                window.location.href = ajax_instance.base;
+                return;
+            }
+
             // Get URL
             if (push_history) history.replaceState( this.responseURL, '', this.responseURL );
 
@@ -89,7 +95,7 @@ export default class Ajax {
         request.addEventListener('load', function(e) {
             switch ( this.getResponseHeader('X-AJAX-Control') ) {
                 case 'reset':
-                    window.location.href = '/' + base;
+                    window.location.href = base;
                     return;
                 case 'cancel':
                     return;
