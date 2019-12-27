@@ -82,10 +82,19 @@ export default class Ajax {
 
     send( url: string, data: object, callback: ajaxCallback ) {
         url = this.prepareURL(url);
+        const base = this.base;
 
         let request = new XMLHttpRequest();
         request.responseType = 'json';
         request.addEventListener('load', function(e) {
+            switch ( this.getResponseHeader('X-AJAX-Control') ) {
+                case 'reset':
+                    window.location.href = '/' + base;
+                    return;
+                case 'cancel':
+                    return;
+                case 'process': default: break;
+            }
             callback( this.response, this.status );
         });
         request.addEventListener('error', function(e) {

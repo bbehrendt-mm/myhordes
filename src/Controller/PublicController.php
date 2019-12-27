@@ -3,24 +3,15 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Entity\UserPendingValidation;
 use App\Service\JSONRequestParser;
-use App\Service\Locksmith;
 use App\Service\UserFactory;
-use Doctrine\Common\Collections\Collection;
+use App\Response\AjaxResponse;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Lock\LockFactory;
-use Symfony\Component\Lock\Store\MemcachedStore;
-use Symfony\Component\Lock\Store\SemaphoreStore;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints;
 use Symfony\Component\Validator\ConstraintViolationInterface;
 use Symfony\Component\Validator\Validation;
@@ -74,9 +65,9 @@ class PublicController extends AbstractController
         EntityManagerInterface $entityManager
     ): Response
     {
-        if (!$parser->valid()) return new JsonResponse( ['error' => 'json_malformed'] );
+        if (!$parser->valid()) return new AjaxResponse( ['error' => 'json_malformed'] );
         if (!$parser->has_all( ['user','mail1','mail2','pass1','pass2'], true ))
-            return new JsonResponse( ['error' => 'json_malformed'] );
+            return new AjaxResponse( ['error' => 'json_malformed'] );
 
         $violations = Validation::createValidator()->validate( $parser->all( true ), new Constraints\Collection([
             'user'  => new Constraints\Length(
@@ -110,17 +101,17 @@ class PublicController extends AbstractController
                         $entityManager->persist( $user );
                         $entityManager->flush();
                     } catch (Exception $e) {
-                        return new JsonResponse( ['error' => 'db_error'] );
+                        return new AjaxResponse( ['error' => 'db_error'] );
                     }
                     $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
                     $this->get('security.token_storage')->setToken($token);
 
-                    return new JsonResponse( ['success' => 'validation'] );
+                    return new AjaxResponse( ['success' => 'validation'] );
 
-                case UserFactory::ErrorUserExists: return new JsonResponse( ['error' => 'user_exists'] );
-                case UserFactory::ErrorMailExists: return new JsonResponse( ['error' => 'mail_exists'] );
-                case UserFactory::ErrorInvalidParams: return new JsonResponse( ['error' => 'json_malformed'] );
-                default: return new JsonResponse( ['error' => 'unknown_error'] );
+                case UserFactory::ErrorUserExists: return new AjaxResponse( ['error' => 'user_exists'] );
+                case UserFactory::ErrorMailExists: return new AjaxResponse( ['error' => 'mail_exists'] );
+                case UserFactory::ErrorInvalidParams: return new AjaxResponse( ['error' => 'json_malformed'] );
+                default: return new AjaxResponse( ['error' => 'unknown_error'] );
             }
 
         } else {
@@ -129,7 +120,7 @@ class PublicController extends AbstractController
                 /** @var ConstraintViolationInterface $violation */
                 $v[] = $violation->getMessage();
 
-            return new JsonResponse( ['error' => 'invalid_fields', 'fields' => $v] );
+            return new AjaxResponse( ['error' => 'invalid_fields', 'fields' => $v] );
         }
     }
 
@@ -144,10 +135,10 @@ class PublicController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
         if (!$user)
-            return new JsonResponse( ['success' => false ] );
+            return new AjaxResponse( ['success' => false ] );
         if (!$user->getValidated())
-            return new JsonResponse( ['success' => true, 'require_validation' => true ] );
-        else return new JsonResponse( ['success' => true, 'require_validation' => false ] );
+            return new AjaxResponse( ['success' => true, 'require_validation' => true ] );
+        else return new AjaxResponse( ['success' => true, 'require_validation' => false ] );
     }
 
     /**
@@ -163,9 +154,9 @@ class PublicController extends AbstractController
         UserFactory $factory
     ): Response
     {
-        if (!$parser->valid()) return new JsonResponse( ['error' => 'json_malformed'] );
+        if (!$parser->valid()) return new AjaxResponse( ['error' => 'json_malformed'] );
         if (!$parser->has_all( ['validate'], true ))
-            return new JsonResponse( ['error' => 'json_malformed'] );
+            return new AjaxResponse( ['error' => 'json_malformed'] );
 
         $violations = Validation::createValidator()->validate( $parser->all( true ), new Constraints\Collection([
             'validate'  => new Constraints\Length(
@@ -186,11 +177,11 @@ class PublicController extends AbstractController
                     $this->get('security.token_storage')->setToken($token);
                 }
 
-                return new JsonResponse( ['success' => true] );
+                return new AjaxResponse( ['success' => true] );
             } else switch ($error) {
-                case UserFactory::ErrorInvalidParams: return new JsonResponse( ['error' => 'token_invalid'] );
-                case UserFactory::ErrorDatabaseException: return new JsonResponse( ['error' => 'db_error'] );
-                default: return new JsonResponse( ['error' => 'unknown_error'] );
+                case UserFactory::ErrorInvalidParams: return new AjaxResponse( ['error' => 'token_invalid'] );
+                case UserFactory::ErrorDatabaseException: return new AjaxResponse( ['error' => 'db_error'] );
+                default: return new AjaxResponse( ['error' => 'unknown_error'] );
             }
 
         } else {
@@ -199,7 +190,7 @@ class PublicController extends AbstractController
                 /** @var ConstraintViolationInterface $violation */
                 $v[] = $violation->getMessage();
 
-            return new JsonResponse( ['error' => 'invalid_fields', 'fields' => $v] );
+            return new AjaxResponse( ['error' => 'invalid_fields', 'fields' => $v] );
         }
     }
 

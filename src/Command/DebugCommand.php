@@ -56,5 +56,7 @@ class DebugCommand extends Command
             return 0;
 
         }
+
+        return 1;
     }
 }
