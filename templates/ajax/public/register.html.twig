@@ -78,7 +78,7 @@
                                     message += "\n" + data.fields[i];
                                 return message;
                             }
-                        }, '{% trans from 'login' %}Allgemeiner Fehler.{% endtrans %}' );
+                        }, '{% trans from 'global' %}Allgemeiner Fehler.{% endtrans %}' );
                     } else $.ajax.load( null, '{{ path('initial_landing') }}', true );
                 } )
         });

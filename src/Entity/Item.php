@@ -38,6 +38,11 @@ class Item
      */
     private $inventory;
 
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
     public function getBroken(): ?bool
     {
         return $this->broken;

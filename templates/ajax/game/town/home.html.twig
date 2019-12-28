@@ -1,0 +1,55 @@
+{% extends "ajax/game/town/town.html.twig" %}
+{% block content %}
+    <div class="row">
+        <div class="padded cell rw-6">
+            <h5>{% trans from 'game' %}Meine Spezialaktionen{% endtrans %}</h5>
+
+            <h5>{% trans from 'game' %}Meine Aktionen{% endtrans %}</h5>
+        </div>
+
+        <div class="padded cell rw-6">
+            {% embed "ajax/game/inventory.html.twig" with {'size': rucksack_size, 'fake_items': [], 'items': rucksack.items} %}
+                {% block class %}rucksack{% endblock %}
+                {% block title %}{% trans from 'game' %}Rucksack{% endtrans %}{% endblock %}
+            {% endembed %}
+
+            <button>{% trans from 'game' %}Rucksack ausleeren{% endtrans %}</button>
+
+            {% embed "ajax/game/inventory.html.twig" with {'size': chest_size, 'fake_items': [], 'items': chest.items} %}
+                {% block class %}chest{% endblock %}
+                {% block title %}{% trans from 'game' %}Truhe{% endtrans %}{% endblock %}
+            {% endembed %}
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    {{ parent() }}
+    <script>
+        const item_transfer = function( id, dir ) {
+            $.ajax.send( '{{ path('town_house_item_controller') }}', {
+                    item: id, direction: dir
+                },
+                function (data,code) {
+                    if (code < 200 || code >= 300)
+                        $.html.error('{% trans from 'global' %}Kommunikationsfehler.{% endtrans %}');
+                    else if (data.error) {
+                        $.html.selectErrorMessage( data.error, {
+                            'invalid_transfer': '{% trans from 'game' %}Dieser Gegenstand ist außerhalb deiner Reichweite.{% endtrans %}'
+                        }, '{% trans from 'global' %}Allgemeiner Fehler.{% endtrans %}' )
+                    } else if (data.success)
+                        $.ajax.load(null, '{{ path('town_house') }}', true);
+                    else $.html.error('{% trans from 'global' %}Allgemeiner Fehler.{% endtrans %}');
+                } );
+        };
+        let itemsInRucksack = document.querySelectorAll('.rucksack>.item:not(.locked)');
+        let itemsInChest    = document.querySelectorAll('.chest>.item:not(.locked)');
+        for (let i = 0; i < itemsInRucksack.length; i++)
+            itemsInRucksack[i].addEventListener('click', function() {
+                item_transfer( this.getAttribute('x-item-id'), 'down' );
+            });
+        for (let i = 0; i < itemsInChest.length; i++)
+            itemsInChest[i].addEventListener('click', function() {
+                item_transfer( this.getAttribute('x-item-id'), 'up' );
+            });
+    </script>
+{% endblock %}

@@ -17,7 +17,7 @@ class CitizenHome
     private $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Inventory", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="App\Entity\Inventory", inversedBy="home", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $chest;

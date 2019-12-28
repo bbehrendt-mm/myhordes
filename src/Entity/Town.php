@@ -34,7 +34,7 @@ class Town
     private $citizens;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Inventory", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="App\Entity\Inventory", inversedBy="town", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $bank;

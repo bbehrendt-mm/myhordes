@@ -28,6 +28,16 @@ class Inventory
      */
     private $citizen;
 
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\CitizenHome", mappedBy="chest", cascade={"persist", "remove"})
+     */
+    private $home;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Town", mappedBy="bank", cascade={"persist", "remove"})
+     */
+    private $town;
+
     public function __construct()
     {
         $this->items = new ArrayCollection();
@@ -81,6 +91,40 @@ class Inventory
         // set the owning side of the relation if necessary
         if ($citizen->getInventory() !== $this) {
             $citizen->setInventory($this);
+        }
+
+        return $this;
+    }
+
+    public function getHome(): ?CitizenHome
+    {
+        return $this->home;
+    }
+
+    public function setHome(CitizenHome $home): self
+    {
+        $this->home = $home;
+
+        // set the owning side of the relation if necessary
+        if ($home->getChest() !== $this) {
+            $home->setChest($this);
+        }
+
+        return $this;
+    }
+
+    public function getTown(): ?Town
+    {
+        return $this->town;
+    }
+
+    public function setTown(Town $town): self
+    {
+        $this->town = $town;
+
+        // set the owning side of the relation if necessary
+        if ($town->getBank() !== $this) {
+            $town->setBank($this);
         }
 
         return $this;

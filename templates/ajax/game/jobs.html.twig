@@ -30,7 +30,7 @@
                             $.html.selectErrorMessage( data.error, {
                                 'already_selected': '{% trans from 'game' %}Du hast bereits einen Beruf gewählt.{% endtrans %}',
                                 'invalid_job':      '{% trans from 'game' %}Ungültige Auswahl.{% endtrans %}'
-                            }, '{% trans from 'login' %}Allgemeiner Fehler.{% endtrans %}' )
+                            }, '{% trans from 'global' %}Allgemeiner Fehler.{% endtrans %}' )
                         } else if (data.success)
                             $.ajax.load(null, '{{ path('game_landing') }}', true);
                         else $.html.error('{% trans from 'global' %}Allgemeiner Fehler.{% endtrans %}');
