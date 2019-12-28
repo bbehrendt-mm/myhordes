@@ -21,17 +21,17 @@ class Citizen
     /**
      * @ORM\Column(type="boolean")
      */
-    private $alive;
+    private $alive = true;
 
     /**
      * @ORM\Column(type="smallint")
      */
-    private $ap;
+    private $ap = 6;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $active;
+    private $active = true;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="citizens")
@@ -67,6 +67,11 @@ class Citizen
      * @ORM\JoinColumn(nullable=false)
      */
     private $home;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\WellCounter", mappedBy="citizen", cascade={"persist", "remove"})
+     */
+    private $wellCounter;
 
     public function __construct()
     {
@@ -196,6 +201,23 @@ class Citizen
     public function setHome(CitizenHome $home): self
     {
         $this->home = $home;
+
+        return $this;
+    }
+
+    public function getWellCounter(): ?WellCounter
+    {
+        return $this->wellCounter;
+    }
+
+    public function setWellCounter(WellCounter $wellCounter): self
+    {
+        $this->wellCounter = $wellCounter;
+
+        // set the owning side of the relation if necessary
+        if ($wellCounter->getCitizen() !== $this) {
+            $wellCounter->setCitizen($this);
+        }
 
         return $this;
     }

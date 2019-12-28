@@ -11,6 +11,7 @@ use App\Entity\Inventory;
 use App\Entity\Town;
 use App\Entity\TownClass;
 use App\Entity\User;
+use App\Entity\WellCounter;
 use Doctrine\ORM\EntityManagerInterface;
 
 class GameFactory
@@ -18,6 +19,7 @@ class GameFactory
     private $entity_manager;
     private $validator;
     private $locksmith;
+    private $item_factory;
 
     const ErrorNone = 0;
     const ErrorTownClosed = 1;
@@ -25,11 +27,12 @@ class GameFactory
     const ErrorUserAlreadyInTown = 3;
     const ErrorNoDefaultProfession = 4;
 
-    public function __construct( EntityManagerInterface $em, GameValidator $v, Locksmith $l)
+    public function __construct( EntityManagerInterface $em, GameValidator $v, Locksmith $l, ItemFactory $if)
     {
         $this->entity_manager = $em;
         $this->validator = $v;
         $this->locksmith = $l;
+        $this->item_factory = $if;
     }
 
     private static $town_name_snippets = [
@@ -62,11 +65,12 @@ class GameFactory
             return null;
 
         $town = new Town();
-        $town->setType( $this->entity_manager->getRepository(TownClass::class)->findOneByName( $type ) );
-        $town->setPopulation( $population );
-        $town->setName( $name ?: $this->createTownName() );
-        $town->setDay( 0 );
-        $town->setBank( new Inventory() );
+        $town
+            ->setType( $this->entity_manager->getRepository(TownClass::class)->findOneByName( $type ) )
+            ->setPopulation( $population )
+            ->setName( $name ?: $this->createTownName() )
+            ->setBank( new Inventory() )
+            ->setWell( $type === TownClass::HARD ? mt_rand( 60, 90 ) : mt_rand( 90, 180 ) );
 
         return $town;
     }
@@ -97,18 +101,20 @@ class GameFactory
             return null;
         }
 
-        $citizen = new Citizen();
-        $citizen->setUser( $user );
-        $citizen->setActive( true );
-        $citizen->setAlive( true );
-        $citizen->setAp( 6 );
-        $citizen->setTown( $town );
-        $citizen->setProfession( $base_profession );
-        $citizen->setInventory( new Inventory() );
-
         $home = new CitizenHome();
-        $home->setChest( new Inventory() );
-        $citizen->setHome( $home );
+        $home->setChest( $chest = new Inventory() );
+
+        $citizen = new Citizen();
+        $citizen->setUser( $user )
+            ->setTown( $town )
+            ->setProfession( $base_profession )
+            ->setInventory( new Inventory() )
+            ->setHome( $home )
+            ->setWellCounter( new WellCounter() );
+
+        $chest
+            ->addItem( $this->item_factory->createItem( 'chest_citizen_#00' ) )
+            ->addItem( $this->item_factory->createItem( 'food_bag_#00' ) );
 
         return $citizen;
     }

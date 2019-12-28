@@ -19,7 +19,7 @@ class Inventory
     private $id;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Item", mappedBy="inventory")
+     * @ORM\OneToMany(targetEntity="App\Entity\Item", mappedBy="inventory", cascade={"persist", "remove"})
      */
     private $items;
 

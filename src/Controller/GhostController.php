@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Town;
+use App\Entity\TownClass;
 use App\Response\AjaxResponse;
 use App\Service\GameFactory;
 use App\Service\JSONRequestParser;
@@ -54,13 +55,13 @@ class GhostController extends AbstractController implements GhostInterfaceContro
             default: return AjaxResponse::error();
         }
 
-        try {
+        //try {
             $em->persist($town);
             $em->persist($citizen);
             $em->flush();
-        } catch (Exception $e) {
-            return AjaxResponse::error('db_error');
-        }
+        //} catch (Exception $e) {
+        //    return AjaxResponse::error('db_error');
+        //}
 
         return AjaxResponse::success();
     }

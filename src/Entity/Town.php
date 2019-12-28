@@ -48,7 +48,12 @@ class Town
     /**
      * @ORM\Column(type="integer")
      */
-    private $day;
+    private $day = 1;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $well;
 
     public function __construct()
     {
@@ -89,7 +94,7 @@ class Town
     }
 
     public function isOpen(): bool {
-        return $this->getDay() === 0 && $this->getCitizenCount() < $this->getPopulation();
+        return $this->getDay() === 1 && $this->getCitizenCount() < $this->getPopulation();
     }
 
     /**
@@ -155,6 +160,18 @@ class Town
     public function setDay(int $day): self
     {
         $this->day = $day;
+
+        return $this;
+    }
+
+    public function getWell(): ?int
+    {
+        return $this->well;
+    }
+
+    public function setWell(int $well): self
+    {
+        $this->well = $well;
 
         return $this;
     }
