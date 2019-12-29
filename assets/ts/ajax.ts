@@ -121,35 +121,4 @@ export default class Ajax {
         request.setRequestHeader('Content-Type', 'application/json');
         request.send( JSON.stringify(data) );
     }
-
-    sendAndLoad( target: Node, url: string, data: object, push_history: boolean = false ) {
-        url = this.prepareURL(url);
-        if (!(target = this.prepareTarget( target ))) return;
-
-        let ajax_instance = this;
-
-        let request = new XMLHttpRequest();
-        request.responseType = 'document';
-        request.addEventListener('load', function(e) {
-            // Check if a reset header is set
-            if (this.getResponseHeader('X-AJAX-Control') === 'reset') {
-                window.location.href = ajax_instance.base;
-                return;
-            }
-
-            let show_url = this.getResponseHeader('X-AJAX-Render-URL');
-            ajax_instance.render( show_url, target, this.responseXML, push_history && show_url != null, false );
-        });
-        request.addEventListener('error', function(e) {
-            alert('Error transferring data.');
-        });
-        request.open('POST', url);
-        request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-        request.setRequestHeader('X-Request-Intent', 'JSONDataExchangeNavigation');
-        request.setRequestHeader('Content-Type', 'application/json');
-        request.addEventListener('error', function(e) {
-            alert('Error loading page.');
-        });
-        request.send( JSON.stringify(data) );
-    }
 }

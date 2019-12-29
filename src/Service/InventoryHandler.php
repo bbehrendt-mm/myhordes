@@ -93,17 +93,23 @@ class InventoryHandler
         return $this->validateTransferTypes($target_type, $source_type);
     }
 
-    public function transferItem( ?Citizen &$actor, Item &$item, ?Inventory &$from, ?Inventory &$to ): bool {
+    const ErrorNone = 0;
+    const ErrorInvalidTransfer = 1;
+    const ErrorInventoryFull = 2;
+    const ErrorHeavyLimitHit = 3;
+    const ErrorBankLimitHit = 4;
+    const ErrorStealLimitHit = 5;
+
+    public function transferItem( ?Citizen &$actor, Item &$item, ?Inventory &$from, ?Inventory &$to ): int {
         // Check if the source is valid
         if ($item->getInventory() && ( !$from || $from->getId() !== $item->getInventory()->getId() ) )
-            return false;
+            return self::ErrorInvalidTransfer;
 
-        if (!$this->transferType( $actor, $to, $from, $type_to, $type_from )) {
-            var_dump($type_from,$type_to); die;
-        }
+        if (!$this->transferType( $actor, $to, $from, $type_to, $type_from ))
+            return self::ErrorInvalidTransfer;
 
         // Check inventory size
-        if (($max_size = $this->getSize($to)) > 0 && count($to->getItems()) >= $max_size ) die('C');
+        if ($to && ($max_size = $this->getSize($to)) > 0 && count($to->getItems()) >= $max_size ) return self::ErrorInventoryFull;
 
         //ToDo Check Heavy item limit
         //if ($type_from === self::TransferTypeRucksack) {}
@@ -115,7 +121,7 @@ class InventoryHandler
         //if ($type_from === self::TransferTypeSteal) {}
 
         $item->setInventory( $to );
-        return true;
+        return self::ErrorNone;
     }
 
 }

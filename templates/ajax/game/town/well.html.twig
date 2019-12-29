@@ -13,12 +13,12 @@
         </div>
         <div class="cell padded rw-9 rw-lg-8 rw-md-12">
             {% if first_take %}
-                <button x-well-confirm="0" {% if not allow_take %}disabled{% endif %}>{% trans from 'game' %}Deine Ration Wasser erhalten{% endtrans %}</button>
+                <button x-well-confirm="0" x-well-direction="up" {% if not allow_take %}disabled{% endif %}>{% trans from 'game' %}Deine Ration Wasser erhalten{% endtrans %}</button>
             {% else %}
-                <button x-well-confirm="1" {% if not allow_take %}disabled{% endif %}>{% trans from 'game' %}Eine weitere Ration erhalten{% endtrans %}</button>
+                <button x-well-confirm="1" x-well-direction="up" {% if not allow_take %}disabled{% endif %}>{% trans from 'game' %}Eine weitere Ration erhalten{% endtrans %}</button>
             {% endif %}
             <br />
-            <button>{% trans from 'game' %}Wasser hinzufügen{% endtrans %}</button>
+            <button x-well-confirm="1" x-well-direction="down">{% trans from 'game' %}Wasser hinzufügen{% endtrans %}</button>
         </div>
     </div>
 {% endblock %}
@@ -34,8 +34,9 @@
                         $.html.error('{% trans from 'global' %}Kommunikationsfehler.{% endtrans %}');
                     else if (data.error) {
                         $.html.selectErrorMessage( data.error, {
-                            'empty': '{% trans from 'game' %}Der Brunnen ist leer!{% endtrans %}',
-                            'locked': '{% trans from 'game' %}Du kannst heute keine weiteren Rationen entnehmen.{% endtrans %}'
+                            'empty':    '{% trans from 'game' %}Der Brunnen ist leer!{% endtrans %}',
+                            'locked':   '{% trans from 'game' %}Du kannst heute keine weiteren Rationen entnehmen.{% endtrans %}',
+                            'no_water': '{% trans from 'game' %}Hierfür brauchst du klares Wasser (keine Kanister)!{% endtrans %}'
                         }, '{% trans from 'global' %}Allgemeiner Fehler.{% endtrans %}' )
                     } else if (data.success)
                         $.ajax.load(null, '{{ path('town_well') }}', true);
@@ -49,7 +50,7 @@
                     if (!confirm( '{% trans from 'global' %}Bestätigen?{% endtrans %}' ))
                         return;
 
-                take_water( 'up' );
+                take_water( this.getAttribute('x-well-direction') );
             });
     </script>
 {% endblock %}

@@ -121,7 +121,9 @@ a { color: @myhordes-smalltext; font-weight: bold; }
 ul.inventory {
   border: 1px solid @myhordes-input-border; padding: 6px; font-size: small; font-variant: small-caps;
   &>li {
-    list-style: none; display: inline-block; margin: 2px; border: 1px solid @myhordes-input-border;
+    &:not(.category) { display: inline-block; border: 1px solid @myhordes-input-border;}
+    &.category { font-size: 10px; font-weight: bold; border-bottom: 1px solid @myhordes-input-border; }
+    list-style: none;  margin: 2px;
     vertical-align: text-bottom;
     &.title:first-child {
       &:empty {display: none}
@@ -129,10 +131,16 @@ ul.inventory {
     }
     &.item { border-color: rgba(0,0,0,0); }
     &.item:not(.locked) { cursor: pointer; }
-    &.free, &.item { width: 18px; height: 18px; }
+    &.free, &.item { height: 18px; }
+    &.free, &.item:not(.counted) { width: 18px; }
+    &.item.counted{
+      font-size: 0;
+      &>span { font-size: 9px; position: relative; }
+    }
   }
   &.rucksack { background: url("../img/inv_bag.gif") no-repeat top left;}
   &.chest { background: url("../img/inv_home.gif") repeat center;}
+  &.bank { background: url("../img/inv_bank.gif") repeat center; min-height: 100px;}
 }
 
 div.well {

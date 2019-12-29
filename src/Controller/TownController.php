@@ -13,6 +13,7 @@ use App\Service\InventoryHandler;
 use App\Service\ItemFactory;
 use App\Service\JSONRequestParser;
 use App\Service\Locksmith;
+use App\Structures\ItemRequest;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -35,19 +36,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * @Route("/",condition="request.isXmlHttpRequest()")
  */
-class TownController extends AbstractController implements GameInterfaceController, GameProfessionInterfaceController
+class TownController extends InventoryAwareController
 {
-    protected $entity_manager;
-
-    public function __construct(EntityManagerInterface $em)
-    {
-        $this->entity_manager = $em;
-    }
-
-    protected function getActiveCitizen(): Citizen {
-        return $this->entity_manager->getRepository(Citizen::class)->findActiveByUser($this->getUser());
-    }
-
     protected function addDefaultTwigArgs( ?string $section = null, ?array $data = null ): array {
         $data = $data ?? [];
         $data['menu_section'] = $section;
@@ -86,28 +76,9 @@ class TownController extends AbstractController implements GameInterfaceControll
      * @return Response
      */
     public function item_house_api(JSONRequestParser $parser, InventoryHandler $handler): Response {
-        $item_id = (int)$parser->get('item', -1);
-        $direction = $parser->get('direction', '');
-
-        $item = $this->entity_manager->getRepository(Item::class)->find( $item_id );
-        if ($item && $item->getInventory() && in_array($direction, ['up','down'])) {
-            $citizen = $this->getActiveCitizen();
-            $inv_source = $direction === 'up'   ? $this->getActiveCitizen()->getHome()->getChest() : $this->getActiveCitizen()->getInventory();
-            $inv_target = $direction === 'down' ? $this->getActiveCitizen()->getHome()->getChest() : $this->getActiveCitizen()->getInventory();
-            if ($handler->transferItem(
-                $citizen,
-                $item,$inv_source, $inv_target
-            )) {
-                try {
-                    $this->entity_manager->persist($item);
-                    $this->entity_manager->flush();
-                } catch (Exception $e) {
-                    return AjaxResponse::error('db_error');
-                }
-                return AjaxResponse::success();
-            }
-        }
-        return AjaxResponse::error('invalid_transfer');
+        $up_inv   = $this->getActiveCitizen()->getInventory();
+        $down_inv = $this->getActiveCitizen()->getHome()->getChest();
+        return $this->generic_item_api( $up_inv, $down_inv, true, $parser, $handler);
     }
 
     /**
@@ -148,10 +119,10 @@ class TownController extends AbstractController implements GameInterfaceControll
                 $inv_source = null;
                 $item = $factory->createItem( 'water_#00' );
 
-                if ($handler->transferItem(
+                if (($error = $handler->transferItem(
                     $citizen,
                     $item,$inv_source, $inv_target
-                )) {
+                )) === InventoryHandler::ErrorNone) {
                     $wellLock->setTaken( $wellLock->getTaken()+1 );
                     $town->setWell( $town->getWell()-1 );
                     try {
@@ -163,27 +134,32 @@ class TownController extends AbstractController implements GameInterfaceControll
                         return AjaxResponse::error('db_error');
                     }
                     return AjaxResponse::success();
-                }
+                } else return AjaxResponse::error('invalid_transfer');
+            } else {
 
-            }
+                $items = $this->fetchSpecificItems( $citizen->getInventory(), [new ItemRequest('water_#00')] );
+                if (empty($items)) return AjaxResponse::error('no_water');
 
-            // ToDo Sent water back
+                $inv_target = null;
+                $inv_source = $citizen->getInventory();
 
-            $inv_source = $direction === 'up'   ? $this->getActiveCitizen()->getHome()->getChest() : $this->getActiveCitizen()->getInventory();
-            $inv_target = $direction === 'down' ? $this->getActiveCitizen()->getHome()->getChest() : $this->getActiveCitizen()->getInventory();
-            if ($handler->transferItem(
-                $citizen,
-                $item,$inv_source, $inv_target
-            )) {
-                try {
-                    $this->entity_manager->persist($item);
-                    $this->entity_manager->flush();
-                } catch (Exception $e) {
-                    return AjaxResponse::error('db_error');
-                }
-                return AjaxResponse::success();
+                if (($error = $handler->transferItem(
+                        $citizen,
+                        $items[0],$inv_source, $inv_target
+                    )) === InventoryHandler::ErrorNone) {
+                    $town->setWell( $town->getWell()+1 );
+                    try {
+                        $this->entity_manager->remove($items[0]);
+                        $this->entity_manager->persist($town);
+                        $this->entity_manager->flush();
+                    } catch (Exception $e) {
+                        return AjaxResponse::error('db_error');
+                    }
+                    return AjaxResponse::success();
+                } else return AjaxResponse::error('invalid_transfer');
             }
         }
+
         return AjaxResponse::error('invalid_transfer');
     }
 
@@ -194,9 +170,23 @@ class TownController extends AbstractController implements GameInterfaceControll
      */
     public function bank(): Response
     {
-        return $this->render( 'ajax/game/town/dashboard.html.twig', $this->addDefaultTwigArgs('bank', [
-            'town' => $this->getActiveCitizen()->getTown()
+        return $this->render( 'ajax/game/town/bank.html.twig', $this->addDefaultTwigArgs('bank', [
+            'rucksack' => $this->getActiveCitizen()->getInventory(),
+            'rucksack_size' => 4,
+            'bank' => $this->renderInventoryAsBank( $this->getActiveCitizen()->getTown()->getBank() ),
         ]) );
+    }
+
+    /**
+     * @Route("api/town/bank/item", name="town_bank_item_controller")
+     * @param JSONRequestParser $parser
+     * @param InventoryHandler $handler
+     * @return Response
+     */
+    public function item_bank_api(JSONRequestParser $parser, InventoryHandler $handler): Response {
+        $up_inv   = $this->getActiveCitizen()->getInventory();
+        $down_inv = $this->getActiveCitizen()->getTown()->getBank();
+        return $this->generic_item_api( $up_inv, $down_inv, true, $parser, $handler);
     }
 
     /**
