@@ -28,12 +28,6 @@ class TownInfoCommand extends Command
         parent::__construct();
     }
 
-    protected function getValidTownTypes(): array {
-        return array_map(function(TownClass $entry) {
-            return $entry->getName();
-        }, $this->entityManager->getRepository(TownClass::class)->findAll());
-    }
-
     protected function configure()
     {
         $this

@@ -28,20 +28,12 @@ class TownInspectorCommand extends Command
         parent::__construct();
     }
 
-    protected function getValidTownTypes(): array {
-        return array_map(function(TownClass $entry) {
-            return $entry->getName();
-        }, $this->entityManager->getRepository(TownClass::class)->findAll());
-    }
-
     protected function configure()
     {
         $this
             ->setDescription('Manipulates and lists information about a single town.')
             ->setHelp('This command allows you work on single towns.')
-            ->addArgument('TownID', InputArgument::REQUIRED, 'The town ID')
-
-            ->addOption('type', 't', InputOption::VALUE_REQUIRED, 'Town type [all, ' . implode(', ', $this->getValidTownTypes()) . '], default is \'all\'');
+            ->addArgument('TownID', InputArgument::REQUIRED, 'The town ID');
     }
 
     protected function info(Town $town, OutputInterface $output) {
