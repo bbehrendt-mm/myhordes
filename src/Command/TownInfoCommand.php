@@ -38,7 +38,7 @@ class TownInfoCommand extends Command
     {
         $this
             ->setDescription('Lists information about towns.')
-            ->setHelp('This command allows you list towns, or get information about a specific town')
+            ->setHelp('This command allows you list towns.')
 
             ->addOption('type', 't', InputOption::VALUE_REQUIRED, 'Town type [all, ' . implode(', ', $this->getValidTownTypes()) . '], default is \'all\'');
     }
