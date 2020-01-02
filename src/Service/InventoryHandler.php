@@ -154,7 +154,7 @@ class InventoryHandler
         // Check inventory size
         if ($to && ($max_size = $this->getSize($to)) > 0 && count($to->getItems()) >= $max_size ) return self::ErrorInventoryFull;
 
-        //ToDo Check Heavy item limit
+        // Check Heavy item limit
         if ($item->getPrototype()->getHeavy() &&
             ($type_to === self::TransferTypeRucksack || $type_to === self::TransferTypeEscort) &&
             !empty($this->fetchHeavyItems($to))
