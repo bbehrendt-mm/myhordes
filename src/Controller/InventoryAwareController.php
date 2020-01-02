@@ -50,34 +50,6 @@ class InventoryAwareController extends AbstractController implements GameInterfa
         return $this->entity_manager->getRepository(Citizen::class)->findActiveByUser($this->getUser());
     }
 
-    /**
-     * @param Inventory $inventory
-     * @param ItemRequest[] $requests
-     * @return Item[]
-     */
-    protected function fetchSpecificItems(Inventory $inventory, array $requests): array {
-        $return = [];
-        foreach ($requests as $request) {
-            $qb = $this->entity_manager->createQueryBuilder();
-            $qb
-                ->select('i.id')->from('App:Item','i')
-                ->leftJoin('App:ItemPrototype', 'p', Join::WITH, 'i.prototype = p.id')
-                ->where('i.inventory = :inv')->setParameter('inv', $inventory)
-                ->andWhere('p.name = :type')->setParameter('type', $request->getItemPrototypeName())
-                ->setMaxResults( $request->getCount() );
-            if (!empty($return)) $qb->andWhere('i.id NOT IN (:found)')->setParameter('found', $return);
-            if ($request->filterBroken()) $qb->andWhere('i.broken = :isb')->setParameter('isb', $request->getBroken());
-            if ($request->filterPoison()) $qb->andWhere('i.poison = :isp')->setParameter('isp', $request->getPoison());
-
-            $result = $qb->getQuery()->getResult(AbstractQuery::HYDRATE_SCALAR);
-            if (count($result) !== $request->getCount()) return [];
-            else $return = array_merge($return, array_map(function(array $a): int { return $a['id']; }, $result));
-        }
-        return array_map(function(int $id): Item {
-            return $this->entity_manager->getRepository(Item::class)->find( $id );
-        }, $return);
-    }
-
     protected function renderInventoryAsBank( Inventory $inventory ) {
         $qb = $this->entity_manager->createQueryBuilder();
         $data = $qb

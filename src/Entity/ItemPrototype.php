@@ -56,6 +56,11 @@ class ItemPrototype
      */
     private $name;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $heavy;
+
     public function __construct()
     {
         $this->properties = new ArrayCollection();
@@ -148,6 +153,18 @@ class ItemPrototype
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getHeavy(): ?bool
+    {
+        return $this->heavy;
+    }
+
+    public function setHeavy(bool $heavy): self
+    {
+        $this->heavy = $heavy;
 
         return $this;
     }

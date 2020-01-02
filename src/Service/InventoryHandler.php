@@ -13,7 +13,10 @@ use App\Entity\Town;
 use App\Entity\TownClass;
 use App\Entity\User;
 use App\Entity\WellCounter;
+use App\Structures\ItemRequest;
+use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query\Expr\Join;
 
 class InventoryHandler
 {
@@ -34,6 +37,46 @@ class InventoryHandler
             return 4;
 
         return 0;
+    }
+
+    /**
+     * @param Inventory $inventory
+     * @param ItemRequest[] $requests
+     * @return Item[]
+     */
+    public function fetchSpecificItems(Inventory $inventory, array $requests): array {
+        $return = [];
+        foreach ($requests as $request) {
+            $qb = $this->entity_manager->createQueryBuilder();
+            $qb
+                ->select('i.id')->from('App:Item','i')
+                ->leftJoin('App:ItemPrototype', 'p', Join::WITH, 'i.prototype = p.id')
+                ->where('i.inventory = :inv')->setParameter('inv', $inventory)
+                ->andWhere('p.name = :type')->setParameter('type', $request->getItemPrototypeName())
+                ->setMaxResults( $request->getCount() );
+            if (!empty($return)) $qb->andWhere('i.id NOT IN (:found)')->setParameter('found', $return);
+            if ($request->filterBroken()) $qb->andWhere('i.broken = :isb')->setParameter('isb', $request->getBroken());
+            if ($request->filterPoison()) $qb->andWhere('i.poison = :isp')->setParameter('isp', $request->getPoison());
+
+            $result = $qb->getQuery()->getResult(AbstractQuery::HYDRATE_SCALAR);
+            if (count($result) !== $request->getCount()) return [];
+            else $return = array_merge($return, array_map(function(array $a): int { return $a['id']; }, $result));
+        }
+        return array_map(function(int $id): Item {
+            return $this->entity_manager->getRepository(Item::class)->find( $id );
+        }, $return);
+    }
+
+    public function fetchHeavyItems(Inventory $inventory) {
+        $qb = $this->entity_manager->createQueryBuilder();
+        $qb
+            ->select('i.id')->from('App:Item','i')
+            ->leftJoin('App:ItemPrototype', 'p', Join::WITH, 'i.prototype = p.id')
+            ->where('i.inventory = :inv')->setParameter('inv', $inventory)
+            ->andWhere('p.heavy = :hv')->setParameter('hv', true);
+
+        $result = $qb->getQuery()->getResult(AbstractQuery::HYDRATE_SCALAR);
+        return array_map(function(array $a): Item { return $this->entity_manager->getRepository(Item::class)->find( $a['id'] ); }, $result);
     }
 
     const TransferTypeUnknown = 0;
@@ -112,7 +155,10 @@ class InventoryHandler
         if ($to && ($max_size = $this->getSize($to)) > 0 && count($to->getItems()) >= $max_size ) return self::ErrorInventoryFull;
 
         //ToDo Check Heavy item limit
-        //if ($type_from === self::TransferTypeRucksack) {}
+        if ($item->getPrototype()->getHeavy() &&
+            ($type_to === self::TransferTypeRucksack || $type_to === self::TransferTypeEscort) &&
+            !empty($this->fetchHeavyItems($to))
+        ) return self::ErrorHeavyLimitHit;
 
         //ToDo Check Bank lock
         //if ($type_from === self::TransferTypeBank) {}
