@@ -32,3 +32,34 @@ document.addEventListener('DOMContentLoaded', function() {
 window.addEventListener('popstate', function(event) {
     $.ajax.load( document.getElementById('content'), event.state, false );
 });
+
+const resizer = function() {
+    let game_menu = document.querySelector('#gma');
+    let game_menu_elems = document.querySelectorAll('#gma>div.game-bar>ul');
+    let game_menu_burger = document.querySelector('#gma>div.game-bar>ul.text-menu>li.burger-button');
+    let game_menu_hide = document.querySelectorAll('#gma>div.game-bar>ul.text-menu>li:not(.burger-button)');
+
+    game_menu_burger.style.display = 'none';
+    for (let i = 0; i < game_menu_hide.length; i++)
+        game_menu_hide[i].style.display = null;
+
+    let content_width = 0;
+    for (let i = 0; i < game_menu_elems.length; i++)
+        content_width += game_menu_elems[i].offsetWidth;
+
+    if (game_menu.offsetWidth - content_width < 80) {
+        game_menu_burger.style.display = null;
+        for (let i = 0; i < game_menu_hide.length; i++)
+            game_menu_hide[i].style.display = 'none';
+    } else {
+        let dropdown = document.querySelector('#gma>.game-dropdown');
+        if (dropdown) {
+            dropdown.classList.add('hidden');
+            dropdown.style.height = '0px'
+        }
+    }
+
+
+    //console.log(game_menu.offsetWidth, content_width, game_menu.offsetWidth - content_width);
+};
+window.addEventListener("resize", resizer);

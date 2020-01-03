@@ -41,6 +41,10 @@ class TownController extends InventoryAwareController
     protected function addDefaultTwigArgs( ?string $section = null, ?array $data = null ): array {
         $data = $data ?? [];
         $data['menu_section'] = $section;
+
+        $data['ap'] = $this->getActiveCitizen()->getAp();
+        $data['rucksack'] = $this->getActiveCitizen()->getInventory();
+        $data['rucksack_size'] = $this->inventory_handler->getSize( $this->getActiveCitizen()->getInventory() );
         return $data;
     }
 
@@ -62,10 +66,8 @@ class TownController extends InventoryAwareController
     public function house(): Response
     {
         return $this->render( 'ajax/game/town/home.html.twig', $this->addDefaultTwigArgs('house', [
-            'rucksack' => $this->getActiveCitizen()->getInventory(),
-            'rucksack_size' => 4,
             'chest' => $this->getActiveCitizen()->getHome()->getChest(),
-            'chest_size' => 4,
+            'chest_size' => $this->inventory_handler->getSize($this->getActiveCitizen()->getHome()->getChest()),
         ]) );
     }
 
@@ -171,8 +173,6 @@ class TownController extends InventoryAwareController
     public function bank(): Response
     {
         return $this->render( 'ajax/game/town/bank.html.twig', $this->addDefaultTwigArgs('bank', [
-            'rucksack' => $this->getActiveCitizen()->getInventory(),
-            'rucksack_size' => 4,
             'bank' => $this->renderInventoryAsBank( $this->getActiveCitizen()->getTown()->getBank() ),
         ]) );
     }

@@ -1,13 +1,13 @@
 {% extends "ajax/game/town/town.html.twig" %}
 {% block content %}
     <div class="row">
-        <div class="padded cell rw-6">
+        <div class="padded cell rw-6 rw-md-12">
             <h5>{% trans from 'game' %}Meine Spezialaktionen{% endtrans %}</h5>
 
             <h5>{% trans from 'game' %}Meine Aktionen{% endtrans %}</h5>
         </div>
 
-        <div class="padded cell rw-6">
+        <div class="padded cell rw-6 rw-md-12">
             {% embed "ajax/game/inventory.html.twig" with {'size': rucksack_size, 'fake_items': [], 'items': rucksack.items} %}
                 {% block class %}rucksack{% endblock %}
                 {% block title %}{% trans from 'game' %}Rucksack{% endtrans %}{% endblock %}

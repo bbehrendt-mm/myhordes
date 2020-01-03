@@ -1,0 +1,29 @@
+{% extends "ajax/ajax.html.twig" %}
+{% block menu_text %}
+    <li class="town-news">{% trans from 'game' %}Zeitung{% endtrans %}</li>
+{% endblock %}
+{% block menu_bar %}
+    <ul class="status">
+
+    </ul>
+    <ul class="rucksack">
+        {% for item in rucksack.items %}
+            <li class="item"><img src="{{ asset('build/images/item/item_' ~ item.prototype.icon ~ '.gif') }}" alt="{{ item.prototype.label|trans({},'items') }}"></li>
+        {% endfor %}
+        {% if rucksack.items|length < rucksack_size %}
+            {% for i in range(0, rucksack_size - rucksack.items|length - 1) %}
+                <li class="free"></li>
+            {% endfor %}
+        {% endif %}
+    </ul>
+    <ul class="ap">
+        <li>{{ ap }}</li>
+        <li>/</li>
+        <li>6</li>
+    </ul>
+{% endblock %}
+{% block js %}
+    {{ parent() }}
+    <script>
+    </script>
+{% endblock %}

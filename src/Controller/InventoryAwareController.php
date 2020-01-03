@@ -40,10 +40,12 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class InventoryAwareController extends AbstractController implements GameInterfaceController, GameProfessionInterfaceController
 {
     protected $entity_manager;
+    protected $inventory_handler;
 
-    public function __construct(EntityManagerInterface $em)
+    public function __construct(EntityManagerInterface $em, InventoryHandler $ih)
     {
         $this->entity_manager = $em;
+        $this->inventory_handler = $ih;
     }
 
     protected function getActiveCitizen(): Citizen {

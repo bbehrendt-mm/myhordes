@@ -66,6 +66,9 @@ export default class Ajax {
             window.document.dispatchEvent(new Event("DOMContentLoaded", {
                 bubbles: true, cancelable: true
             }));
+        window.dispatchEvent(new Event("resize", {
+            bubbles: true, cancelable: true
+        }));
     }
 
     load( target: Node, url: string, push_history: boolean = false ) {
