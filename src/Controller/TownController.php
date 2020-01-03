@@ -136,7 +136,7 @@ class TownController extends InventoryAwareController
                         return AjaxResponse::error('db_error');
                     }
                     return AjaxResponse::success();
-                } else return AjaxResponse::error('invalid_transfer');
+                } else return AjaxResponse::error($error === InventoryHandler::ErrorInventoryFull ? 'full' : 'invalid_transfer');
             } else {
 
                 $items = $handler->fetchSpecificItems( $citizen->getInventory(), [new ItemRequest('water_#00')] );
