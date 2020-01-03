@@ -166,7 +166,7 @@ class InventoryHandler
         //ToDo Check Steal lock
         //if ($type_from === self::TransferTypeSteal) {}
 
-        $item->setInventory( $to );
+        $to->addItem( $item );
         return self::ErrorNone;
     }
 
