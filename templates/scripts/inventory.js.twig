@@ -2,23 +2,11 @@ const handleItems = function( items, api_path, direction, return_path ) {
     for (let i = 0; i < items.length; i++)
         items[i].addEventListener('click', function() {
             const item_id = this.getAttribute('x-item-id');
-            $.ajax.send( api_path, {
+            $.ajax.easySend( api_path, {
                     item: item_id, direction: direction
                 },
-                function (data,code) {
-                    if (code < 200 || code >= 300)
-                        $.html.error('{% trans from 'global' %}Kommunikationsfehler.{% endtrans %}');
-                    else if (data.error) {
-                        $.html.selectErrorMessage( data.error, {
-                            'invalid_transfer': '{% trans from 'game' %}Dieser Gegenstand ist außerhalb deiner Reichweite.{% endtrans %}',
-                            'full':             '{% trans from 'game' %}Du hast keinen Platz mehr für diesen Gegenstand!{% endtrans %}',
-                            'too_heavy':        '{% trans from 'game' %}Du kannst keinen weiteren schweren Gegenstand tragen!{% endtrans %}',
-                            'bank_limit':       '{% trans from 'game' %}Du kannst für eine Weile keine weiteren Gegenstände aus der Bank entnehmen.{% endtrans %}',
-                            'steal_limit':      '{% trans from 'game' %}Du kannst heute keinen weiteren Gegenstand stehlen.{% endtrans %}'
-                        }, '{% trans from 'global' %}Allgemeiner Fehler.{% endtrans %}' )
-                    } else if (data.success)
-                        $.ajax.load(null, return_path, true);
-                    else $.html.error('{% trans from 'global' %}Allgemeiner Fehler.{% endtrans %}');
+                function () {
+                    $.ajax.load(null, return_path, true);
                 } );
         });
 };

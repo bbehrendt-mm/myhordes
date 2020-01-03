@@ -10,6 +10,7 @@ use App\Entity\TownClass;
 use App\Entity\User;
 use App\Entity\UserPendingValidation;
 use App\Response\AjaxResponse;
+use App\Service\ErrorHelper;
 use App\Service\InventoryHandler;
 use App\Service\ItemFactory;
 use App\Service\JSONRequestParser;
@@ -104,20 +105,13 @@ class InventoryAwareController extends AbstractController implements GameInterfa
                 try {
                     $this->entity_manager->flush();
                 } catch (Exception $e) {
-                    return AjaxResponse::error('db_error');
+                    return AjaxResponse::error(ErrorHelper::ErrorDatabaseException);
                 }
             }
 
             if (count($errors) !== 1) return AjaxResponse::success();
-            else switch ($errors[0]) {
-                case InventoryHandler::ErrorInvalidTransfer: return AjaxResponse::error('invalid_transfer');
-                case InventoryHandler::ErrorInventoryFull:   return AjaxResponse::error('full');
-                case InventoryHandler::ErrorHeavyLimitHit:   return AjaxResponse::error('too_heavy');
-                case InventoryHandler::ErrorBankLimitHit:    return AjaxResponse::error('bank_limit');
-                case InventoryHandler::ErrorStealLimitHit:   return AjaxResponse::error('steal_limit');
-                default: return AjaxResponse::error();
-            }
+            else return AjaxResponse::error($errors[0]);
         }
-        return AjaxResponse::error('invalid_transfer');
+        return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
     }
 }

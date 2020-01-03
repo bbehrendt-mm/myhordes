@@ -22,10 +22,10 @@ class GameFactory
     private $item_factory;
 
     const ErrorNone = 0;
-    const ErrorTownClosed = 1;
-    const ErrorUserAlreadyInGame = 2;
-    const ErrorUserAlreadyInTown = 3;
-    const ErrorNoDefaultProfession = 4;
+    const ErrorTownClosed          = ErrorHelper::BaseTownSelectionErrors + 1;
+    const ErrorUserAlreadyInGame   = ErrorHelper::BaseTownSelectionErrors + 2;
+    const ErrorUserAlreadyInTown   = ErrorHelper::BaseTownSelectionErrors + 3;
+    const ErrorNoDefaultProfession = ErrorHelper::BaseTownSelectionErrors + 4;
 
     public function __construct( EntityManagerInterface $em, GameValidator $v, Locksmith $l, ItemFactory $if)
     {

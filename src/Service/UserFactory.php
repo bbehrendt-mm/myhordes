@@ -24,10 +24,10 @@ class UserFactory
     private $locksmith;
 
     const ErrorNone = 0;
-    const ErrorUserExists = 1;
-    const ErrorMailExists = 2;
-    const ErrorInvalidParams = 3;
-    const ErrorDatabaseException = 4;
+    const ErrorUserExists        = ErrorHelper::BaseUserErrors + 1;
+    const ErrorMailExists        = ErrorHelper::BaseUserErrors + 2;
+    const ErrorInvalidParams     = ErrorHelper::BaseUserErrors + 3;
+    const ErrorDatabaseException = ErrorHelper::BaseUserErrors + 4;
 
     public function __construct( EntityManagerInterface $em, UserPasswordEncoderInterface $passwordEncoder, Locksmith $l)
     {

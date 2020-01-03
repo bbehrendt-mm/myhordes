@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Citizen;
 use App\Entity\CitizenProfession;
 use App\Response\AjaxResponse;
+use App\Service\ErrorHelper;
 use App\Service\GameFactory;
 use App\Service\JSONRequestParser;
 use App\Service\Locksmith;
@@ -56,6 +57,9 @@ class GameController extends AbstractController implements GameInterfaceControll
         ] );
     }
 
+    const ErrorJobAlreadySelected = ErrorHelper::BaseJobErrors + 1;
+    const ErrorJobInvalid         = ErrorHelper::BaseJobErrors + 2;
+
     /**
      * @Route("api/game/job", name="api_jobcenter")
      * @param JSONRequestParser $parser
@@ -66,21 +70,21 @@ class GameController extends AbstractController implements GameInterfaceControll
 
         $citizen = $this->getActiveCitizen();
         if ($citizen->getProfession()->getName() !== CitizenProfession::DEFAULT)
-            return AjaxResponse::error('already_selected');
+            return AjaxResponse::error(self::ErrorJobAlreadySelected);
 
-        if (!$parser->has('job')) return AjaxResponse::error('invalid_job');
+        if (!$parser->has('job')) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
         $job_id = (int)$parser->get('job', -1);
-        if ($job_id <= 0) return AjaxResponse::error('invalid_job');
+        if ($job_id <= 0) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
 
         $new_profession = $this->entity_manager->getRepository(CitizenProfession::class)->find( $job_id );
-        if (!$new_profession) return AjaxResponse::error('invalid_job');
+        if (!$new_profession) return AjaxResponse::error(self::ErrorJobInvalid);
 
         try {
             $citizen->setProfession( $new_profession );
             $this->entity_manager->persist( $citizen );
             $this->entity_manager->flush();
         } catch (Exception $e) {
-            return AjaxResponse::error('db_error');
+            return AjaxResponse::error(ErrorHelper::ErrorDatabaseException);
         }
 
         return AjaxResponse::success();

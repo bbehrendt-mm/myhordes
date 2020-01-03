@@ -41,20 +41,9 @@
         for (let i = 0; i < joinButtons.length; i++)
             joinButtons[i].addEventListener('click', function (e) {
                 e.preventDefault();
-                $.ajax.send( '{{ path('api_join') }}', {town: this.getAttribute('x-town-id')},
-                    function (data,code) {
-                        if (code < 200 || code >= 300)
-                            $.html.error('{% trans from 'global' %}Kommunikationsfehler.{% endtrans %}');
-                        else if (data.error) {
-                            $.html.selectErrorMessage( data.error, {
-                                'no_town':        '{% trans from 'ghost' %}Die gewählte Stadt wurde nicht gefunden.{% endtrans %}',
-                                'town_closed':    '{% trans from 'ghost' %}Die gewählte Stadt ist bereits voll.{% endtrans %}',
-                                'no_ghost':       '{% trans from 'ghost' %}Du kannst nicht mehr als einer Stadt gleichzeitig beitreten.{% endtrans %}',
-                                'in_town':        '{% trans from 'ghost' %}Du bist dieser Stadt bereits beigetreten.{% endtrans %}',
-                            }, '{% trans from 'global' %}Allgemeiner Fehler.{% endtrans %}' )
-                        } else if (data.success)
-                            $.ajax.load(null, '{{ path('game_landing') }}', true);
-                        else $.html.error('{% trans from 'ghost' %}Beitritt fehlgeschlagen. Bitte versuche es später erneut.{% endtrans %}');
+                $.ajax.easySend( '{{ path('api_join') }}', {town: this.getAttribute('x-town-id')},
+                    function () {
+                        $.ajax.load(null, '{{ path('game_landing') }}', true);
                     } )
             })
     </script>

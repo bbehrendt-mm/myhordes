@@ -39,26 +39,18 @@
     <script>
         document.getElementById('validate_button').addEventListener('click', function(e) {
             e.preventDefault();
-            $.ajax.send( '{{ path('api_validate') }}', $.html.serializeForm(document.getElementById('validate-form')),
+            $.ajax.easySend( '{{ path('api_validate') }}', $.html.serializeForm(document.getElementById('validate-form')),
                 function (data,code) {
-                    if (code < 200 || code >= 300)
-                        $.html.error('{% trans from 'global' %}Kommunikationsfehler.{% endtrans %}');
-                    else if (data.error) {
-                        $.html.selectErrorMessage( data.error, {
-                            'db_error':       '{% trans from 'login' %}Datenbank-Fehler beim Aktualisieren des Profils.{% endtrans %}',
-                            'json_malformed': '{% trans from 'login' %}Bitte fülle alle Felder aus.{% endtrans %}',
-                            'token_invalid':  '{% trans from 'login' %}Der angegebene Validierungscode ist nicht gültig.{% endtrans %}',
-                            'invalid_fields': function() {
-                                let message = '{% trans from 'login' %}Einige Felder sind nicht korrekt ausgefüllt. Bitte prüfe eine Eingaben.{% endtrans %}' + "\n";
-                                for (let i = 0; i < data.fields.length; ++i)
-                                    message += "\n" + data.fields[i];
-                                return message;
-                            }
-                        }, '{% trans from 'global' %}Allgemeiner Fehler.{% endtrans %}' )
-                    } else if (data.success)
-                        $.ajax.load(null, '{{ path('initial_landing') }}', true);
-                    else $.html.error('{% trans from 'login' %}Validierung fehlgeschlagen. Bitte prüfe deine Eingaben.{% endtrans %}');
-                } )
+                    $.ajax.load(null, '{{ path('initial_landing') }}', true);
+                }, {
+                    'default': '{% trans from 'login' %}Validierung fehlgeschlagen. Bitte prüfe deine Eingaben.{% endtrans %}',
+                    'invalid_fields': function() {
+                        let message = '{% trans from 'login' %}Einige Felder sind nicht korrekt ausgefüllt. Bitte prüfe eine Eingaben.{% endtrans %}' + "\n";
+                        for (let i = 0; i < data.fields.length; ++i)
+                            message += "\n" + data.fields[i];
+                        return message;
+                    }
+                } );
         });
     </script>
 {% endblock %}

@@ -19,8 +19,10 @@ class AjaxResponse extends JsonResponse
         return $this->update();
     }
 
-    public static function error(?string $code = null): AjaxResponse {
-        return new AjaxResponse(['error' => $code ?? 'unknown_error' ]);
+    public static function error(?string $code = null, ?array $additional = []): AjaxResponse {
+        if (!is_array($additional)) $additional = [];
+        $additional['error'] = $code ?? 'unknown_error';
+        return new AjaxResponse($additional);
     }
 
     public static function success($data = true, ?array $additional = []): AjaxResponse {

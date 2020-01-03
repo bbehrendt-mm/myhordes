@@ -17,13 +17,14 @@ export default class HTML {
         return data;
     }
 
-    selectErrorMessage( code: string, messages: object, default_message: string ) {
-        if (code && messages.hasOwnProperty(code)) {
+    selectErrorMessage( code: string, messages: object, base: object ) {
+        if (!code) code = 'default';
+        if (messages && messages.hasOwnProperty(code)) {
             if (typeof messages[code] === 'function')
                 this.error( messages[code]() );
             else this.error( messages[code] );
-        }
-        else this.error( default_message );
+        } else if ( base.hasOwnProperty(code) ) this.error( base[code] );
+        else this.error( 'An error occurred. No further details are available.' );
     }
 
     error(message: string): void {

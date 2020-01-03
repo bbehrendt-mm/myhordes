@@ -56,5 +56,18 @@
         <div class="copyright">&copy; Copyright 2019 by MYHORDES.</div>
     {% endblock %}
 </footer>
+<script>
+    (function() {
+        window.c = {
+            'errors': {
+                'default': '{% trans from 'global' %}Allgemeiner Fehler.{% endtrans %}',
+                {{ include('scripts/errors/generic.txt.twig') }}
+                {{ include('scripts/errors/profile.txt.twig') }}
+                {{ include('scripts/errors/town.txt.twig') }}
+                {{ include('scripts/errors/inventory.txt.twig') }}
+            }
+        };
+    })();
+</script>
 </body>
 </html>

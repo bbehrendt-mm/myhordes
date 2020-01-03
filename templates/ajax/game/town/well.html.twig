@@ -26,22 +26,11 @@
     {{ parent() }}
     <script>
         const take_water = function( dir ) {
-            $.ajax.send( '{{ path('town_well_item_controller') }}', {
+            $.ajax.easySend( '{{ path('town_well_item_controller') }}', {
                     direction: dir
                 },
-                function (data,code) {
-                    if (code < 200 || code >= 300)
-                        $.html.error('{% trans from 'global' %}Kommunikationsfehler.{% endtrans %}');
-                    else if (data.error) {
-                        $.html.selectErrorMessage( data.error, {
-                            'empty':    '{% trans from 'game' %}Der Brunnen ist leer!{% endtrans %}',
-                            'full':     '{% trans from 'game' %}Du hast keinen Platz mehr für diesen Gegenstand!{% endtrans %}',
-                            'locked':   '{% trans from 'game' %}Du kannst heute keine weiteren Rationen entnehmen.{% endtrans %}',
-                            'no_water': '{% trans from 'game' %}Hierfür brauchst du klares Wasser (keine Kanister)!{% endtrans %}'
-                        }, '{% trans from 'global' %}Allgemeiner Fehler.{% endtrans %}' )
-                    } else if (data.success)
-                        $.ajax.load(null, '{{ path('town_well') }}', true);
-                    else $.html.error('{% trans from 'global' %}Allgemeiner Fehler.{% endtrans %}');
+                function () {
+                    $.ajax.load(null, '{{ path('town_well') }}', true);
                 } );
         };
         let wellButtons = document.querySelectorAll('*[x-well-confirm]:not([disabled])');

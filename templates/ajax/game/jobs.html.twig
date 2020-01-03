@@ -22,19 +22,10 @@
         for (let i = 0; i < jobButtons.length; i++)
             jobButtons[i].addEventListener('click', function (e) {
                 e.preventDefault();
-                $.ajax.send( '{{ path('api_jobcenter') }}', {job: this.getAttribute('x-job-id')},
-                    function (data,code) {
-                        if (code < 200 || code >= 300)
-                            $.html.error('{% trans from 'global' %}Kommunikationsfehler.{% endtrans %}');
-                        else if (data.error) {
-                            $.html.selectErrorMessage( data.error, {
-                                'already_selected': '{% trans from 'game' %}Du hast bereits einen Beruf gewählt.{% endtrans %}',
-                                'invalid_job':      '{% trans from 'game' %}Ungültige Auswahl.{% endtrans %}'
-                            }, '{% trans from 'global' %}Allgemeiner Fehler.{% endtrans %}' )
-                        } else if (data.success)
-                            $.ajax.load(null, '{{ path('game_landing') }}', true);
-                        else $.html.error('{% trans from 'global' %}Allgemeiner Fehler.{% endtrans %}');
-                    } )
+                $.ajax.easySend( '{{ path('api_jobcenter') }}', {job: this.getAttribute('x-job-id')},
+                    function () {
+                        $.ajax.load(null, '{{ path('game_landing') }}', true);
+                    } );
             })
     </script>
 {% endblock %}

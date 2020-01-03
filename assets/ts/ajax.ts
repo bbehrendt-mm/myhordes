@@ -1,4 +1,10 @@
-interface ajaxCallback { (data: object, code: number): void }
+import {Const, Global} from "./defaults";
+
+interface ajaxResponse { error: string, success: any }
+interface ajaxCallback { (data: ajaxResponse, code: number): void }
+
+declare var c: Const;
+declare var $: Global;
 
 export default class Ajax {
 
@@ -123,5 +129,17 @@ export default class Ajax {
         request.setRequestHeader('X-Request-Intent', 'JSONDataExchange');
         request.setRequestHeader('Content-Type', 'application/json');
         request.send( JSON.stringify(data) );
+    };
+
+    easySend( url: string, data: object, success: ajaxCallback, errors: object = null ) {
+        this.send( url, data,function (data: ajaxResponse, code) {
+            if (code < 200 || code >= 300)
+                $.html.selectErrorMessage( 'com', {}, c.errors );
+            else if (data.error)
+                $.html.selectErrorMessage( data.error, errors, c.errors );
+            else if (data.success)
+                success(data,code);
+            else $.html.selectErrorMessage( 'default', errors, c.errors );
+        } );
     }
 }

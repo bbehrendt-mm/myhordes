@@ -137,11 +137,11 @@ class InventoryHandler
     }
 
     const ErrorNone = 0;
-    const ErrorInvalidTransfer = 1;
-    const ErrorInventoryFull = 2;
-    const ErrorHeavyLimitHit = 3;
-    const ErrorBankLimitHit = 4;
-    const ErrorStealLimitHit = 5;
+    const ErrorInvalidTransfer = ErrorHelper::BaseInventoryErrors + 1;
+    const ErrorInventoryFull   = ErrorHelper::BaseInventoryErrors + 2;
+    const ErrorHeavyLimitHit   = ErrorHelper::BaseInventoryErrors + 3;
+    const ErrorBankLimitHit    = ErrorHelper::BaseInventoryErrors + 4;
+    const ErrorStealLimitHit   = ErrorHelper::BaseInventoryErrors + 5;
 
     public function transferItem( ?Citizen &$actor, Item &$item, ?Inventory &$from, ?Inventory &$to ): int {
         // Check if the source is valid

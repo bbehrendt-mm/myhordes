@@ -9,6 +9,7 @@ use App\Entity\TownClass;
 use App\Entity\User;
 use App\Entity\UserPendingValidation;
 use App\Response\AjaxResponse;
+use App\Service\ErrorHelper;
 use App\Service\InventoryHandler;
 use App\Service\ItemFactory;
 use App\Service\JSONRequestParser;
@@ -96,6 +97,10 @@ class TownController extends InventoryAwareController
         ]) );
     }
 
+    const ErrorWellEmpty   = ErrorHelper::BaseWellErrors + 1;
+    const ErrorWellLimitHit= ErrorHelper::BaseWellErrors + 2;
+    const ErrorWellNoWater = ErrorHelper::BaseWellErrors + 3;
+
     /**
      * @Route("api/well/item", name="town_well_item_controller")
      * @param JSONRequestParser $parser
@@ -114,8 +119,8 @@ class TownController extends InventoryAwareController
 
             if ($direction == 'up') {
 
-                if ($town->getWell() <= 0) return AjaxResponse::error('empty');
-                if ($wellLock->getTaken() >= 2) return AjaxResponse::error('locked'); //ToDo: Fix the count!
+                if ($town->getWell() <= 0) return AjaxResponse::error(self::ErrorWellEmpty);
+                if ($wellLock->getTaken() >= 2) return AjaxResponse::error(self::ErrorWellLimitHit); //ToDo: Fix the count!
 
                 $inv_target = $citizen->getInventory();
                 $inv_source = null;
@@ -133,14 +138,14 @@ class TownController extends InventoryAwareController
                         $this->entity_manager->persist($wellLock);
                         $this->entity_manager->flush();
                     } catch (Exception $e) {
-                        return AjaxResponse::error('db_error');
+                        return AjaxResponse::error(ErrorHelper::ErrorDatabaseException);
                     }
                     return AjaxResponse::success();
-                } else return AjaxResponse::error($error === InventoryHandler::ErrorInventoryFull ? 'full' : 'invalid_transfer');
+                } else return AjaxResponse::error($error);
             } else {
 
                 $items = $handler->fetchSpecificItems( $citizen->getInventory(), [new ItemRequest('water_#00')] );
-                if (empty($items)) return AjaxResponse::error('no_water');
+                if (empty($items)) return AjaxResponse::error(self::ErrorWellNoWater);
 
                 $inv_target = null;
                 $inv_source = $citizen->getInventory();
@@ -155,14 +160,14 @@ class TownController extends InventoryAwareController
                         $this->entity_manager->persist($town);
                         $this->entity_manager->flush();
                     } catch (Exception $e) {
-                        return AjaxResponse::error('db_error');
+                        return AjaxResponse::error(ErrorHelper::ErrorDatabaseException);
                     }
                     return AjaxResponse::success();
-                } else return AjaxResponse::error('invalid_transfer');
+                } else return AjaxResponse::error($error);
             }
         }
 
-        return AjaxResponse::error('invalid_transfer');
+        return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
     }
 
 

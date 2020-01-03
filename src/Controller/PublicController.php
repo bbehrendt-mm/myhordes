@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Service\ErrorHelper;
 use App\Service\JSONRequestParser;
 use App\Service\UserFactory;
 use App\Response\AjaxResponse;
@@ -65,9 +66,9 @@ class PublicController extends AbstractController
         EntityManagerInterface $entityManager
     ): Response
     {
-        if (!$parser->valid()) return AjaxResponse::error('json_malformed');
+        if (!$parser->valid()) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
         if (!$parser->has_all( ['user','mail1','mail2','pass1','pass2'], true ))
-            return AjaxResponse::error('json_malformed');
+            return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
 
         $violations = Validation::createValidator()->validate( $parser->all( true ), new Constraints\Collection([
             'user'  => new Constraints\Length(
@@ -101,17 +102,16 @@ class PublicController extends AbstractController
                         $entityManager->persist( $user );
                         $entityManager->flush();
                     } catch (Exception $e) {
-                        return AjaxResponse::error('db_error');
+                        return AjaxResponse::error(ErrorHelper::ErrorDatabaseException);
                     }
                     $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
                     $this->get('security.token_storage')->setToken($token);
 
                     return AjaxResponse::success( 'validation');
 
-                case UserFactory::ErrorUserExists: return AjaxResponse::error('user_exists');
-                case UserFactory::ErrorMailExists: return AjaxResponse::error('mail_exists');
-                case UserFactory::ErrorInvalidParams: return AjaxResponse::error('json_malformed');
-                default: return AjaxResponse::error('unknown_error');
+                case UserFactory::ErrorInvalidParams: return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
+
+                default: return AjaxResponse::error($error);
             }
 
         } else {
@@ -120,7 +120,7 @@ class PublicController extends AbstractController
                 /** @var ConstraintViolationInterface $violation */
                 $v[] = $violation->getMessage();
 
-            return new AjaxResponse( ['error' => 'invalid_fields', 'fields' => $v] );
+            return AjaxResponse::error( 'invalid_fields', ['fields' => $v] );
         }
     }
 
@@ -154,9 +154,9 @@ class PublicController extends AbstractController
         UserFactory $factory
     ): Response
     {
-        if (!$parser->valid()) return new AjaxResponse( ['error' => 'json_malformed'] );
+        if (!$parser->valid()) return new AjaxResponse( ['error' => ErrorHelper::ErrorInvalidRequest] );
         if (!$parser->has_all( ['validate'], true ))
-            return new AjaxResponse( ['error' => 'json_malformed'] );
+            return new AjaxResponse( ['error' => ErrorHelper::ErrorInvalidRequest] );
 
         $violations = Validation::createValidator()->validate( $parser->all( true ), new Constraints\Collection([
             'validate'  => new Constraints\Length(
@@ -179,9 +179,8 @@ class PublicController extends AbstractController
 
                 return new AjaxResponse( ['success' => true] );
             } else switch ($error) {
-                case UserFactory::ErrorInvalidParams: return new AjaxResponse( ['error' => 'token_invalid'] );
-                case UserFactory::ErrorDatabaseException: return new AjaxResponse( ['error' => 'db_error'] );
-                default: return new AjaxResponse( ['error' => 'unknown_error'] );
+                case UserFactory::ErrorDatabaseException: return AjaxResponse::error( ErrorHelper::ErrorDatabaseException );
+                default: return AjaxResponse::error($error);
             }
 
         } else {
@@ -190,7 +189,7 @@ class PublicController extends AbstractController
                 /** @var ConstraintViolationInterface $violation */
                 $v[] = $violation->getMessage();
 
-            return new AjaxResponse( ['error' => 'invalid_fields', 'fields' => $v] );
+            return AjaxResponse::error( 'invalid_fields', ['fields' => $v] );
         }
     }
 
