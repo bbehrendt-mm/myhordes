@@ -98,7 +98,7 @@ class AppFixtures extends Fixture
         ["label"=>"Großer knuddeliger Kater","icon"=>"pet_cat","category"=>"weapon","deco"=>5,"heavy"=>false],                              // --
         ["label"=>"Zwei-Meter Schlange","icon"=>"pet_snake","category"=>"food_n","deco"=>0,"heavy"=>true],                                  // --
         ["label"=>"Vibrator (geladen)","icon"=>"vibr","category"=>"imp","deco"=>0,"heavy"=>false],                                          //
-        ["label"=>"Anaboles Steroid","icon"=>"drug","category"=>"drug_d","deco"=>0,"heavy"=>false],                                         //
+        ["label"=>"Anaboles Steroid","icon"=>"drug","category"=>"drug_d","deco"=>0,"heavy"=>false],                                         // In Out
         ["label"=>"Leckeres Steak","icon"=>"meat","category"=>"food_7","deco"=>0,"heavy"=>false],                                           // In Out
         ["label"=>"Undefinierbares Fleisch","icon"=>"undef","category"=>"food","deco"=>0,"heavy"=>false],                                   // In Out
         ["label"=>"Zeltplane","icon"=>"sheet","category"=>"camp","deco"=>0,"heavy"=>false],                                                 // --
@@ -125,7 +125,7 @@ class AppFixtures extends Fixture
         ["label"=>"Kupferrohr","icon"=>"tube","category"=>"rsc","deco"=>0,"heavy"=>false],                                                  // --
         ["label"=>"Wackliger Einkaufswagen","icon"=>"cart_part","category"=>"imp","deco"=>0,"heavy"=>true],                                 // --
         ["label"=>"Gürtel mit Tasche","icon"=>"pocket_belt","category"=>"exp_b","deco"=>0,"heavy"=>false],                                  // --
-        ["label"=>"Twinoid 500mg","icon"=>"drug_hero","category"=>"drug_d","deco"=>0,"heavy"=>false],                                       //
+        ["label"=>"Twinoid 500mg","icon"=>"drug_hero","category"=>"drug_d","deco"=>0,"heavy"=>false],                                       // In Out
         ["label"=>"Metallkiste","icon"=>"chest","category"=>"box","deco"=>0,"heavy"=>true],                                                 //
         ["label"=>"Großer Metallkoffer","icon"=>"chest_xl","category"=>"box","deco"=>0,"heavy"=>true],                                      //
         ["label"=>"Werkzeugkiste","icon"=>"chest_tools","category"=>"box","deco"=>0,"heavy"=>true],                                         //
@@ -170,7 +170,7 @@ class AppFixtures extends Fixture
         ["label"=>"Zementsack","icon"=>"concrete","category"=>"imp","deco"=>0,"heavy"=>true],                                               //
         ["label"=>"Unförmige Zementblöcke","icon"=>"concrete_wall","category"=>"armor","deco"=>0,"heavy"=>true],                            // --
         ["label"=>"Etikettenloses Medikament","icon"=>"drug_random","category"=>"drug_d","deco"=>0,"heavy"=>false],                         //
-        ["label"=>"Paracetoid 7g","icon"=>"disinfect","category"=>"drug_d","deco"=>0,"heavy"=>false],                                       //
+        ["label"=>"Paracetoid 7g","icon"=>"disinfect","category"=>"drug_d","deco"=>0,"heavy"=>false],                                       // In Out
         ["label"=>"Unkrautbekämpfungsmittel Ness-Quick","icon"=>"digger","category"=>"exp_s","deco"=>0,"heavy"=>false],                     // --
         ["label"=>"Nahrungsmittelkiste","icon"=>"chest_food","category"=>"box","deco"=>0,"heavy"=>true],                                    //
         ["label"=>"Doggybag","icon"=>"food_bag","category"=>"food","deco"=>0,"heavy"=>false],                                               //
@@ -429,7 +429,11 @@ class AppFixtures extends Fixture
             'drink_ap_1'  => [ 'type' => Requirement::CrossOnFail, 'collection' => [ 'status' => 'has_not_drunken' ]],
             'drink_ap_2'  => [ 'type' => Requirement::HideOnFail,  'collection' => [ 'status' => 'not_dehydrated' ]],
             'drink_no_ap' => [ 'type' => Requirement::HideOnFail,  'collection' => [ 'status' => 'dehydrated' ]],
+
             'eat_ap'      => [ 'type' => Requirement::CrossOnFail, 'collection' => [ 'status' => 'has_not_eaten' ]],
+
+            'drug_1'  => [ 'type' => Requirement::HideOnFail, 'collection' => [ 'status' => 'not_drugged' ]],
+            'drug_2'  => [ 'type' => Requirement::HideOnFail, 'collection' => [ 'status' => 'drugged' ]],
 
             'have_can_opener' => [ 'type' => Requirement::MessageOnFail, 'collection' => [ 'item' => 'have_can_opener' ],  'text' => 'Du brauchst ein Werkzeug, um diesen Gegenstand zu öffnen...' ]
         ],
@@ -438,8 +442,13 @@ class AppFixtures extends Fixture
             'status' => [
                 'has_not_drunken' => [ 'enabled' => false, 'status' => 'hasdrunk' ],
                 'has_not_eaten'   => [ 'enabled' => false, 'status' => 'haseaten' ],
+
                 'not_dehydrated'  => [ 'enabled' => false, 'status' => 'thirst2' ],
                 'dehydrated'      => [ 'enabled' => true,  'status' => 'thirst2' ],
+
+                'not_drugged'  => [ 'enabled' => false, 'status' => 'drugged' ],
+                'drugged'      => [ 'enabled' => true,  'status' => 'drugged' ],
+
             ],
             'item' => [
                 'have_can_opener' => [ 'item' => null, 'prop' => 'can_opener' ],
@@ -452,8 +461,19 @@ class AppFixtures extends Fixture
             'drink_ap_1'  => [ 'collection' => [ 'status' => 'add_has_drunk', 'ap' => 'to_max_plus_0' ]],
             'drink_ap_2'  => [ 'collection' => [ 'status' => 'remove_thirst' ]],
             'drink_no_ap' => [ 'collection' => [ 'status' => 'replace_dehydration' ]],
+
             'eat_ap6'     => [ 'collection' => [ 'status' => 'add_has_eaten', 'ap' => 'to_max_plus_0' ]],
             'eat_ap7'     => [ 'collection' => [ 'status' => 'add_has_eaten', 'ap' => 'to_max_plus_1' ]],
+
+            'drug_any_1'   => [ 'collection' => [ 'status' => 'remove_clean' ]],
+            'drug_any_2'   => [ 'collection' => [ 'status' => 'add_is_drugged' ]],
+            'drug_addict'  => [ 'collection' => [ 'status' => 'add_addicted' ]],
+
+            'disinfect'    => [ 'collection' => [ 'status' => 'remove_infection' ]],
+
+            'just_ap6'     => [ 'collection' => [ 'ap' => 'to_max_plus_0' ]],
+            'just_ap7'     => [ 'collection' => [ 'ap' => 'to_max_plus_1' ]],
+            'just_ap8'     => [ 'collection' => [ 'ap' => 'to_max_plus_2' ]],
 
             'produce_open_can' =>  [ 'collection' => [ 'item' => 'produce_open_can' ]],
             'produce_watercan2' => [ 'collection' => [ 'item' => 'produce_watercan2' ]],
@@ -471,8 +491,15 @@ class AppFixtures extends Fixture
             'status' => [
                 'replace_dehydration' => [ 'from' => 'thirst2', 'to' => 'thirst1' ],
                 'add_has_drunk' => [ 'from' => null, 'to' => 'hasdrunk' ],
-                'add_has_eaten' => [ 'from' => null, 'to' => 'haseaten' ],
-                'remove_thirst' => [ 'from' => 'thirst1', 'to' => null ]
+                'remove_thirst' => [ 'from' => 'thirst1', 'to' => null ],
+
+                'remove_clean'    => [ 'from' => 'clean', 'to' => null ],
+                'remove_infection'=> [ 'from' => 'infection', 'to' => null ],
+
+                'add_has_eaten'  => [ 'from' => null, 'to' => 'haseaten' ],
+                'add_is_drugged' => [ 'from' => null, 'to' => 'drugged' ],
+                'add_addicted'   => [ 'from' => null, 'to' => 'addict' ],
+
             ],
             'item' => [
                 'consume' => [ 'consume' => true, 'morph' => null ],
@@ -499,6 +526,16 @@ class AppFixtures extends Fixture
 
             'eat_6ap'   => [ 'label' => 'Essen',   'meta' => [ 'eat_ap' ], 'result' => [ 'eat_ap6', 'consume_item' ] ],
             'eat_7ap'   => [ 'label' => 'Essen',   'meta' => [ 'eat_ap' ], 'result' => [ 'eat_ap7', 'consume_item' ] ],
+
+            'drug_par_1'   => [ 'label' => 'Einnehmen', 'meta' => [ 'drug_1' ], 'result' => [ 'drug_any_1', 'drug_any_2', 'disinfect', 'consume_item' ] ],
+            'drug_par_2'   => [ 'label' => 'Einnehmen', 'meta' => [ 'drug_2' ], 'result' => [ 'drug_addict', 'disinfect', 'consume_item' ] ],
+            'drug_6ap_1'   => [ 'label' => 'Einnehmen', 'meta' => [ 'drug_1' ], 'result' => [ 'drug_any_1', 'drug_any_2', 'just_ap6', 'consume_item' ] ],
+            'drug_6ap_2'   => [ 'label' => 'Einnehmen', 'meta' => [ 'drug_2' ], 'result' => [ 'drug_addict', 'just_ap6', 'consume_item' ] ],
+            'drug_7ap_1'   => [ 'label' => 'Einnehmen', 'meta' => [ 'drug_1' ], 'result' => [ 'drug_any_1', 'drug_any_2', 'just_ap7', 'consume_item' ] ],
+            'drug_7ap_2'   => [ 'label' => 'Einnehmen', 'meta' => [ 'drug_2' ], 'result' => [ 'drug_addict', 'just_ap7', 'consume_item' ] ],
+            'drug_8ap_1'   => [ 'label' => 'Einnehmen', 'meta' => [ 'drug_1' ], 'result' => [ 'drug_any_1', 'drug_any_2', 'just_ap8', 'consume_item' ] ],
+            'drug_8ap_2'   => [ 'label' => 'Einnehmen', 'meta' => [ 'drug_2' ], 'result' => [ 'drug_addict', 'just_ap8', 'consume_item' ] ],
+
         ],
         'items' => [
             'water_#00'           => [ 'water_6ap', 'water_0ap' ],
@@ -531,6 +568,9 @@ class AppFixtures extends Fixture
             'woodsteak_#00'       => [ 'eat_7ap'],
             'egg_#00'             => [ 'eat_7ap'],
             'apple_#00'           => [ 'eat_7ap'],
+            'disinfect_#00'       => [ 'drug_par_1', 'drug_par_2' ],
+            'drug_#00'            => [ 'drug_6ap_1', 'drug_6ap_2' ],
+            'drug_hero_#00'       => [ 'drug_8ap_1', 'drug_8ap_2' ],
         ]
 
     ];
