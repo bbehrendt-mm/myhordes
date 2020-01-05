@@ -5,6 +5,8 @@
             <h5>{% trans from 'game' %}Meine Spezialaktionen{% endtrans %}</h5>
 
             <h5>{% trans from 'game' %}Meine Aktionen{% endtrans %}</h5>
+            {% embed "ajax/game/actions.html.twig" with {'list': actions} %}
+            {% endembed %}
         </div>
 
         <div class="padded cell rw-6 rw-md-12">
@@ -26,6 +28,7 @@
     {{ parent() }}
     <script>
         {% embed "scripts/inventory.js.twig" %}{% endembed %}
+        {% embed "scripts/actions.js.twig" %}{% endembed %}
 
         handleItems(
             document.querySelectorAll('.rucksack>.item:not(.locked)'),
@@ -44,5 +47,10 @@
             '{{ path('town_house_item_controller') }}',
             'up', '{{ path('town_house') }}'
         );
+
+        handleActions(
+            document.querySelectorAll('ul.actions>li[x-action-id][x-provoking-id]:not([disabled])'),
+            '{{ path('town_house_action_controller') }}', '{{ path('town_house') }}'
+        )
     </script>
 {% endblock %}

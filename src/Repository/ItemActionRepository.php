@@ -2,29 +2,29 @@
 
 namespace App\Repository;
 
-use App\Entity\ItemProperty;
+use App\Entity\ItemAction;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\NonUniqueResultException;
 
 /**
- * @method ItemProperty|null find($id, $lockMode = null, $lockVersion = null)
- * @method ItemProperty|null findOneBy(array $criteria, array $orderBy = null)
- * @method ItemProperty[]    findAll()
- * @method ItemProperty[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method ItemAction|null find($id, $lockMode = null, $lockVersion = null)
+ * @method ItemAction|null findOneBy(array $criteria, array $orderBy = null)
+ * @method ItemAction[]    findAll()
+ * @method ItemAction[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ItemPropertyRepository extends ServiceEntityRepository
+class ItemActionRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, ItemProperty::class);
+        parent::__construct($registry, ItemAction::class);
     }
 
-    public function findOneByName(string $value): ?ItemProperty
+    public function findOneByName(string $value): ?ItemAction
     {
         try {
-            return $this->createQueryBuilder('c')
-                ->andWhere('c.name = :val')
+            return $this->createQueryBuilder('i')
+                ->andWhere('i.name = :val')
                 ->setParameter('val', $value)
                 ->getQuery()
                 ->getOneOrNullResult();
@@ -34,7 +34,7 @@ class ItemPropertyRepository extends ServiceEntityRepository
     }
 
     // /**
-    //  * @return ItemProperty[] Returns an array of ItemProperty objects
+    //  * @return ItemAction[] Returns an array of ItemAction objects
     //  */
     /*
     public function findByExampleField($value)
@@ -51,7 +51,7 @@ class ItemPropertyRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?ItemProperty
+    public function findOneBySomeField($value): ?ItemAction
     {
         return $this->createQueryBuilder('i')
             ->andWhere('i.exampleField = :val')

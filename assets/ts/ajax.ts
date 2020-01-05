@@ -136,10 +136,10 @@ export default class Ajax {
             if (code < 200 || code >= 300)
                 $.html.selectErrorMessage( 'com', {}, c.errors );
             else if (data.error)
-                $.html.selectErrorMessage( data.error, errors, c.errors );
+                $.html.selectErrorMessage( data.error, errors, c.errors, data );
             else if (data.success)
                 success(data,code);
-            else $.html.selectErrorMessage( 'default', errors, c.errors );
+            else $.html.selectErrorMessage( 'default', errors, c.errors, data );
         } );
     }
 }

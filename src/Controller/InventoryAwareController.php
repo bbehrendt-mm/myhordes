@@ -6,10 +6,13 @@ use App\Entity\Citizen;
 use App\Entity\CitizenProfession;
 use App\Entity\Inventory;
 use App\Entity\Item;
+use App\Entity\ItemAction;
 use App\Entity\TownClass;
 use App\Entity\User;
 use App\Entity\UserPendingValidation;
 use App\Response\AjaxResponse;
+use App\Service\ActionHandler;
+use App\Service\CitizenHandler;
 use App\Service\ErrorHelper;
 use App\Service\InventoryHandler;
 use App\Service\ItemFactory;
@@ -42,15 +45,49 @@ class InventoryAwareController extends AbstractController implements GameInterfa
 {
     protected $entity_manager;
     protected $inventory_handler;
+    protected $citizen_handler;
+    protected $action_handler;
+    protected $translator;
 
-    public function __construct(EntityManagerInterface $em, InventoryHandler $ih)
+    public function __construct(
+        EntityManagerInterface $em, InventoryHandler $ih, CitizenHandler $ch, ActionHandler $ah,
+        TranslatorInterface $translator)
     {
         $this->entity_manager = $em;
         $this->inventory_handler = $ih;
+        $this->citizen_handler = $ch;
+        $this->action_handler = $ah;
+        $this->translator = $translator;
+    }
+
+    protected function addDefaultTwigArgs( ?string $section = null, ?array $data = null ): array {
+        $data = $data ?? [];
+        $data['menu_section'] = $section;
+
+        $data['ap'] = $this->getActiveCitizen()->getAp();
+        $data['max_ap'] = $this->citizen_handler->getMaxAP( $this->getActiveCitizen() );
+        $data['status'] = $this->getActiveCitizen()->getStatus();
+        $data['rucksack'] = $this->getActiveCitizen()->getInventory();
+        $data['rucksack_size'] = $this->inventory_handler->getSize( $this->getActiveCitizen()->getInventory() );
+        return $data;
     }
 
     protected function getActiveCitizen(): Citizen {
         return $this->entity_manager->getRepository(Citizen::class)->findActiveByUser($this->getUser());
+    }
+
+    protected function getItemActions(): array {
+        $ret = [];
+        foreach ($this->getActiveCitizen()->getInventory()->getItems() as $item) {
+
+            $this->action_handler->getAvailableItemActions( $this->getActiveCitizen(), $item, $available, $crossed );
+            if (empty($available) && empty($crossed)) continue;
+
+            foreach ($available as $a) $ret[] = [ 'item' => $item, 'action' => $a, 'crossed' => false ];
+            foreach ($crossed as $c)   $ret[] = [ 'item' => $item, 'action' => $c, 'crossed' => true ];
+        }
+
+        return $ret;
     }
 
     protected function renderInventoryAsBank( Inventory $inventory ) {
@@ -111,5 +148,34 @@ class InventoryAwareController extends AbstractController implements GameInterfa
             } else return AjaxResponse::error($errors[0]);
         }
         return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
+    }
+
+    public function generic_action_api(JSONRequestParser $parser, InventoryHandler $handler): Response {
+        $item_id = (int)$parser->get('item', -1);
+        $action_id = (int)$parser->get('action', -1);
+
+        $item   = ($item_id < 0)   ? null : $this->entity_manager->getRepository(Item::class)->find( $item_id );
+        $action = ($action_id < 0) ? null : $this->entity_manager->getRepository(ItemAction::class)->find( $action_id );
+
+        if ( !$item || !$action ) return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
+        $citizen = $this->getActiveCitizen();
+
+        if (($error = $this->action_handler->execute( $citizen, $item, $action, $msg )) === ActionHandler::ErrorNone) {
+            $this->entity_manager->persist($citizen);
+            if ($item->getInventory())
+                $this->entity_manager->persist($item);
+            else $this->entity_manager->remove($item);
+            try {
+                $this->entity_manager->flush();
+            } catch (Exception $e) {
+                return AjaxResponse::error( ErrorHelper::ErrorDatabaseException );
+            }
+        } elseif ($error === ActionHandler::ErrorActionForbidden) {
+            if (!empty($msg)) $msg = $this->translator->trans($msg, [], 'game');
+            return AjaxResponse::error($error, ['message' => $msg]);
+        }
+        else return AjaxResponse::error( $error );
+
+        return AjaxResponse::success();
     }
 }

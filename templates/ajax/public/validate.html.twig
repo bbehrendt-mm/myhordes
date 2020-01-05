@@ -44,7 +44,7 @@
                     $.ajax.load(null, '{{ path('initial_landing') }}', true);
                 }, {
                     'default': '{% trans from 'login' %}Validierung fehlgeschlagen. Bitte prüfe deine Eingaben.{% endtrans %}',
-                    'invalid_fields': function() {
+                    'invalid_fields': function(data) {
                         let message = '{% trans from 'login' %}Einige Felder sind nicht korrekt ausgefüllt. Bitte prüfe eine Eingaben.{% endtrans %}' + "\n";
                         for (let i = 0; i < data.fields.length; ++i)
                             message += "\n" + data.fields[i];

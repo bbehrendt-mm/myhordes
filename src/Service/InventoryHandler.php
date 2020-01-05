@@ -9,6 +9,8 @@ use App\Entity\CitizenHome;
 use App\Entity\CitizenProfession;
 use App\Entity\Inventory;
 use App\Entity\Item;
+use App\Entity\ItemProperty;
+use App\Entity\ItemPrototype;
 use App\Entity\Town;
 use App\Entity\TownClass;
 use App\Entity\User;
@@ -47,13 +49,28 @@ class InventoryHandler
     public function fetchSpecificItems(Inventory $inventory, array $requests): array {
         $return = [];
         foreach ($requests as $request) {
+            $id_list = [];
+            if ($request->isProperty()) {
+                $prop = $this->entity_manager->getRepository(ItemProperty::class)->findOneByName( $request->getItemPropertyName() );
+                if ($prop) $id_list = array_map(function(ItemPrototype $p): int {
+                    return $p->getId();
+                }, $prop->getItemPrototypes()->getValues() );
+            }
+
+
             $qb = $this->entity_manager->createQueryBuilder();
             $qb
                 ->select('i.id')->from('App:Item','i')
                 ->leftJoin('App:ItemPrototype', 'p', Join::WITH, 'i.prototype = p.id')
                 ->where('i.inventory = :inv')->setParameter('inv', $inventory)
-                ->andWhere('p.name = :type')->setParameter('type', $request->getItemPrototypeName())
                 ->setMaxResults( $request->getCount() );
+
+            if ($request->isProperty())
+                $qb
+                    ->andWhere('p.id IN (:type)')->setParameter('type', $id_list);
+            else $qb
+                    ->andWhere('p.name = :type')->setParameter('type', $request->getItemPrototypeName());
+
             if (!empty($return)) $qb->andWhere('i.id NOT IN (:found)')->setParameter('found', $return);
             if ($request->filterBroken()) $qb->andWhere('i.broken = :isb')->setParameter('isb', $request->getBroken());
             if ($request->filterPoison()) $qb->andWhere('i.poison = :isp')->setParameter('isp', $request->getPoison());

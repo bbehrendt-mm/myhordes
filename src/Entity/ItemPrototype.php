@@ -61,9 +61,15 @@ class ItemPrototype
      */
     private $heavy;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\ItemAction")
+     */
+    private $actions;
+
     public function __construct()
     {
         $this->properties = new ArrayCollection();
+        $this->actions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -165,6 +171,32 @@ class ItemPrototype
     public function setHeavy(bool $heavy): self
     {
         $this->heavy = $heavy;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ItemAction[]
+     */
+    public function getActions(): Collection
+    {
+        return $this->actions;
+    }
+
+    public function addAction(ItemAction $action): self
+    {
+        if (!$this->actions->contains($action)) {
+            $this->actions[] = $action;
+        }
+
+        return $this;
+    }
+
+    public function removeAction(ItemAction $action): self
+    {
+        if ($this->actions->contains($action)) {
+            $this->actions->removeElement($action);
+        }
 
         return $this;
     }

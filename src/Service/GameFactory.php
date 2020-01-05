@@ -20,6 +20,7 @@ class GameFactory
     private $validator;
     private $locksmith;
     private $item_factory;
+    private $status_factory;
 
     const ErrorNone = 0;
     const ErrorTownClosed          = ErrorHelper::BaseTownSelectionErrors + 1;
@@ -27,12 +28,13 @@ class GameFactory
     const ErrorUserAlreadyInTown   = ErrorHelper::BaseTownSelectionErrors + 3;
     const ErrorNoDefaultProfession = ErrorHelper::BaseTownSelectionErrors + 4;
 
-    public function __construct( EntityManagerInterface $em, GameValidator $v, Locksmith $l, ItemFactory $if)
+    public function __construct( EntityManagerInterface $em, GameValidator $v, Locksmith $l, ItemFactory $if, StatusFactory $sf)
     {
         $this->entity_manager = $em;
         $this->validator = $v;
         $this->locksmith = $l;
         $this->item_factory = $if;
+        $this->status_factory = $sf;
     }
 
     private static $town_name_snippets = [
@@ -110,7 +112,8 @@ class GameFactory
             ->setProfession( $base_profession )
             ->setInventory( new Inventory() )
             ->setHome( $home )
-            ->setWellCounter( new WellCounter() );
+            ->setWellCounter( new WellCounter() )
+            ->addStatus( $this->status_factory->createStatus( 'clean' ) );
 
         $chest
             ->addItem( $this->item_factory->createItem( 'chest_citizen_#00' ) )

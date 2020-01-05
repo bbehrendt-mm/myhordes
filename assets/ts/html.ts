@@ -17,11 +17,11 @@ export default class HTML {
         return data;
     }
 
-    selectErrorMessage( code: string, messages: object, base: object ) {
+    selectErrorMessage( code: string, messages: object, base: object, data: object = null ) {
         if (!code) code = 'default';
         if (messages && messages.hasOwnProperty(code)) {
             if (typeof messages[code] === 'function')
-                this.error( messages[code]() );
+                this.error( messages[code](data) );
             else this.error( messages[code] );
         } else if ( base.hasOwnProperty(code) ) this.error( base[code] );
         else this.error( 'An error occurred. No further details are available.' );

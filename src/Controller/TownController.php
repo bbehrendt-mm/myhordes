@@ -39,16 +39,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class TownController extends InventoryAwareController
 {
-    protected function addDefaultTwigArgs( ?string $section = null, ?array $data = null ): array {
-        $data = $data ?? [];
-        $data['menu_section'] = $section;
-
-        $data['ap'] = $this->getActiveCitizen()->getAp();
-        $data['rucksack'] = $this->getActiveCitizen()->getInventory();
-        $data['rucksack_size'] = $this->inventory_handler->getSize( $this->getActiveCitizen()->getInventory() );
-        return $data;
-    }
-
     /**
      * @Route("jx/town/dashboard", name="town_dashboard")
      * @return Response
@@ -67,6 +57,7 @@ class TownController extends InventoryAwareController
     public function house(): Response
     {
         return $this->render( 'ajax/game/town/home.html.twig', $this->addDefaultTwigArgs('house', [
+            'actions' => $this->getItemActions(),
             'chest' => $this->getActiveCitizen()->getHome()->getChest(),
             'chest_size' => $this->inventory_handler->getSize($this->getActiveCitizen()->getHome()->getChest()),
         ]) );
@@ -82,6 +73,16 @@ class TownController extends InventoryAwareController
         $up_inv   = $this->getActiveCitizen()->getInventory();
         $down_inv = $this->getActiveCitizen()->getHome()->getChest();
         return $this->generic_item_api( $up_inv, $down_inv, true, $parser, $handler);
+    }
+
+    /**
+     * @Route("api/town/house/action", name="town_house_action_controller")
+     * @param JSONRequestParser $parser
+     * @param InventoryHandler $handler
+     * @return Response
+     */
+    public function action_house_api(JSONRequestParser $parser, InventoryHandler $handler): Response {
+        return $this->generic_action_api( $parser, $handler);
     }
 
     /**

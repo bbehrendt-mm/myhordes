@@ -144,6 +144,17 @@ ul.inventory {
   &.bank { background: url("../img/inv_bank.gif") repeat center; min-height: 100px;}
 }
 
+ul.actions {
+  padding: 5px 2px; background: @myhordes-cell-header-background-color; border: 1px solid @myhordes-input-border;
+  &>li {
+    list-style: none; padding: 2px 2px 2px 10px; font-size: 12px; font-variant: small-caps; cursor: pointer;
+    color: @myhordes-smalltext;
+    &:hover { color: white; background: lighten(@myhordes-cell-header-background-color, 10%) }
+    &>span { vertical-align: top; }
+    &[disabled]>span { text-decoration: line-through; }
+  }
+}
+
 div.well {
   width: 100%; padding-top: 118.699187%; background: url("../img/well_bg.gif") no-repeat center/cover;
   position: relative;

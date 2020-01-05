@@ -8,16 +8,14 @@ use Doctrine\ORM\Mapping\UniqueConstraint;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\CitizenProfessionRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\AffectOriginalItemRepository")
  * @UniqueEntity("name")
  * @Table(uniqueConstraints={
  *     @UniqueConstraint(name="name_unique",columns={"name"})
  * })
  */
-class CitizenProfession
+class AffectOriginalItem
 {
-    const DEFAULT = 'none';
-
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -26,14 +24,19 @@ class CitizenProfession
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=16)
+     * @ORM\Column(type="string", length=32)
      */
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="boolean")
      */
-    private $label;
+    private $consume;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\ItemPrototype")
+     */
+    private $morph;
 
     public function getId(): ?int
     {
@@ -52,14 +55,26 @@ class CitizenProfession
         return $this;
     }
 
-    public function getLabel(): ?string
+    public function getConsume(): ?bool
     {
-        return $this->label;
+        return $this->consume;
     }
 
-    public function setLabel(string $label): self
+    public function setConsume(bool $consume): self
     {
-        $this->label = $label;
+        $this->consume = $consume;
+
+        return $this;
+    }
+
+    public function getMorph(): ?ItemPrototype
+    {
+        return $this->morph;
+    }
+
+    public function setMorph(?ItemPrototype $morph): self
+    {
+        $this->morph = $morph;
 
         return $this;
     }

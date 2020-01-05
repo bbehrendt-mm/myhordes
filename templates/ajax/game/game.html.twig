@@ -4,7 +4,9 @@
 {% endblock %}
 {% block menu_bar %}
     <ul class="status">
-
+        {% for stat in status %}
+            <li class="status"><img src="{{ asset('build/images/status/status_' ~ stat.name ~ '.gif') }}" alt="{{ stat.label|trans({},'status') }}"></li>
+        {% endfor %}
     </ul>
     <ul class="rucksack">
         {% for item in rucksack.items %}
@@ -19,7 +21,7 @@
     <ul class="ap">
         <li>{{ ap }}</li>
         <li>/</li>
-        <li>6</li>
+        <li>{{ max_ap }}</li>
     </ul>
 {% endblock %}
 {% block js %}

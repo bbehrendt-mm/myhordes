@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\CitizenStatus;
+use App\Entity\AffectAP;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\NonUniqueResultException;
 
 /**
- * @method CitizenStatus|null find($id, $lockMode = null, $lockVersion = null)
- * @method CitizenStatus|null findOneBy(array $criteria, array $orderBy = null)
- * @method CitizenStatus[]    findAll()
- * @method CitizenStatus[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method AffectAP|null find($id, $lockMode = null, $lockVersion = null)
+ * @method AffectAP|null findOneBy(array $criteria, array $orderBy = null)
+ * @method AffectAP[]    findAll()
+ * @method AffectAP[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CitizenStatusRepository extends ServiceEntityRepository
+class AffectAPRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, CitizenStatus::class);
+        parent::__construct($registry, AffectAP::class);
     }
 
-    public function findOneByName(string $value): ?CitizenStatus
+    public function findOneByName(string $value): ?AffectAP
     {
         try {
             return $this->createQueryBuilder('i')
@@ -34,15 +34,15 @@ class CitizenStatusRepository extends ServiceEntityRepository
     }
 
     // /**
-    //  * @return CitizenStatus[] Returns an array of CitizenStatus objects
+    //  * @return AffectAP[] Returns an array of AffectAP objects
     //  */
     /*
     public function findByExampleField($value)
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.exampleField = :val')
             ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
+            ->orderBy('a.id', 'ASC')
             ->setMaxResults(10)
             ->getQuery()
             ->getResult()
@@ -51,10 +51,10 @@ class CitizenStatusRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?CitizenStatus
+    public function findOneBySomeField($value): ?AffectAP
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.exampleField = :val')
             ->setParameter('val', $value)
             ->getQuery()
             ->getOneOrNullResult()

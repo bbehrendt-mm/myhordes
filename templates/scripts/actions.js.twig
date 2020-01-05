@@ -1,0 +1,18 @@
+const handleActions = function( actions, api_path, return_path ) {
+    for (let i = 0; i < actions.length; i++) {
+        actions[i].addEventListener('click', function() {
+            const item_id   = this.getAttribute('x-provoking-id');
+            const action_id = this.getAttribute('x-action-id');
+            $.ajax.easySend( api_path, {
+                    item: item_id, action: action_id
+                },
+                function () {
+                    $.ajax.load(null, return_path, true);
+                }, {
+                    '{{ constant('App\\Service\\ActionHandler::ErrorActionForbidden') }}': function(data) {
+                        return data.message ? data.message : '{% trans from 'game' %}Das kannst du zur Zeit nicht tun.{% endtrans %}'
+                    }
+                } );
+        });
+    }
+}
