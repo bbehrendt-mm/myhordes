@@ -63,7 +63,7 @@ class Town
     /**
      * @ORM\Column(type="boolean")
      */
-    private $door;
+    private $door = false;
 
     public function __construct()
     {
