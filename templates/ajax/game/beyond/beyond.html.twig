@@ -1,0 +1,19 @@
+{% extends "ajax/game/game.html.twig" %}
+{% block ajax %}
+    {{ parent() }}
+    <div class="row">
+        <div class="padded-small cell rw-4 rw-sm-12">
+            {% embed "ajax/game/map.html.twig" %}{% endembed %}
+        </div>
+        <div class="padded cell rw-8 rw-sm-12">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    {{ parent() }}
+    <script>
+        {% embed "scripts/map.js.twig" %}{% endembed %}
+    </script>
+{% endblock %}

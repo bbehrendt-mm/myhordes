@@ -1,0 +1,77 @@
+{% extends "ajax/game/beyond/beyond.html.twig" %}
+{% block content %}
+    <div class="row">
+        <div class="padded cell rw-6 rw-md-12">
+            <h5>{% trans from 'game' %}Meine Aktionen{% endtrans %}</h5>
+
+            {% if allow_enter_town %}
+                <button id="town-enter">
+                    {% if zone.x == 0 and zone.y == 0 %}
+                        {% trans from 'game' %}Stadt betreten{% endtrans %}
+                    {% else %}
+                        {% trans from 'game' %}In dei Stadt zurückkehren{% endtrans %}
+                    {% endif %}
+                </button>
+            {% endif %}
+
+            {% embed "ajax/game/actions.html.twig" with {'list': actions} %}
+            {% endembed %}
+        </div>
+
+        <div class="padded cell rw-6 rw-md-12">
+            {% embed "ajax/game/inventory.html.twig" with {'size': rucksack_size, 'fake_items': [], 'items': rucksack.items} %}
+                {% block class %}rucksack{% endblock %}
+                {% block title %}{% trans from 'game' %}Rucksack{% endtrans %}{% endblock %}
+            {% endembed %}
+
+            {% if allow_floor_access %}
+                <button id="drop-all-button" {% if rucksack.items|length == 0 %}disabled{% endif %}>{% trans from 'game' %}Rucksack ausleeren{% endtrans %}</button>
+                {% embed "ajax/game/inventory.html.twig" with {'size': 0, 'fake_items': [], 'items': floor.items} %}
+                    {% block class %}desert{% endblock %}
+                {% endembed %}
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    {{ parent() }}
+    <script>
+        {% embed "scripts/actions.js.twig" %}{% endembed %}
+
+        {% if allow_floor_access %}
+            {% embed "scripts/inventory.js.twig" %}{% endembed %}
+            handleItems(
+                document.querySelectorAll('.rucksack>.item:not(.locked)'),
+                '{{ path('town_house_item_controller') }}',
+                'down', '{{ path('town_house') }}'
+            );
+
+            handleItems(
+                document.querySelectorAll('#drop-all-button'),
+                '{{ path('town_house_item_controller') }}',
+                'down-all', '{{ path('town_house') }}'
+            );
+
+            handleItems(
+                document.querySelectorAll('.desert>.item:not(.locked)'),
+                '{{ path('town_house_item_controller') }}',
+                'up', '{{ path('town_house') }}'
+            );
+
+            handleActions(
+                document.querySelectorAll('ul.actions>li[x-action-id][x-provoking-id]:not([disabled])'),
+                '{{ path('town_house_action_controller') }}', '{{ path('town_house') }}'
+            );
+        {% endif %}
+        {% if allow_enter_town %}
+            document.getElementById('town-enter').addEventListener('click', function() {
+                if (!confirm( '{% trans from 'global' %}Bestätigen?{% endtrans %}' ))
+                    return;
+                $.ajax.easySend( '{{ path('beyond_door_exit_controller') }}', {},
+                    function () {
+                        $.ajax.load(null, '{{ path('game_landing') }}', true);
+                    } );
+            });
+        {% endif %}
+    </script>
+{% endblock %}

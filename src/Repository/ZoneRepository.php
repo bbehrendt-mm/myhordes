@@ -2,9 +2,11 @@
 
 namespace App\Repository;
 
+use App\Entity\Town;
 use App\Entity\Zone;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\NonUniqueResultException;
 
 /**
  * @method Zone|null find($id, $lockMode = null, $lockVersion = null)
@@ -17,6 +19,20 @@ class ZoneRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Zone::class);
+    }
+
+    public function findOneByPosition(Town $town, int $x, int $y): ?Zone
+    {
+        try {
+            return $this->createQueryBuilder('z')
+                ->andWhere('z.town = :t')->setParameter('t', $town)
+                ->andWhere('z.x = :px')->setParameter('px', $x)
+                ->andWhere('z.y = :py')->setParameter('py', $y)
+                ->getQuery()
+                ->getOneOrNullResult();
+        } catch (NonUniqueResultException $e) {
+            return null;
+        }
     }
 
     // /**

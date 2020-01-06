@@ -40,6 +40,7 @@ class GameController extends AbstractController implements GameInterfaceControll
     {
         if ($this->getActiveCitizen()->getProfession()->getName() === CitizenProfession::DEFAULT)
             return $this->redirect($this->generateUrl('game_jobs'));
+        elseif ($this->getActiveCitizen()->getZone()) return $this->redirect($this->generateUrl('beyond_dashboard'));
         else return $this->redirect($this->generateUrl('town_dashboard'));
     }
 

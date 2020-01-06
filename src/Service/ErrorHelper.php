@@ -16,6 +16,7 @@ class ErrorHelper
     const BaseTownSelectionErrors = 400;
     const BaseUserErrors          = 500;
     const BaseActionErrors        = 600;
+    const BaseBeyondErrors        = 700;
 
     const ErrorInvalidRequest    = 1;
     const ErrorDatabaseException = 2;

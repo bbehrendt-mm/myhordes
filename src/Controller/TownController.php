@@ -8,6 +8,7 @@ use App\Entity\Item;
 use App\Entity\TownClass;
 use App\Entity\User;
 use App\Entity\UserPendingValidation;
+use App\Entity\Zone;
 use App\Response\AjaxResponse;
 use App\Service\ErrorHelper;
 use App\Service\InventoryHandler;
@@ -19,6 +20,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Monolog\ErrorHandler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -37,13 +39,14 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * @Route("/",condition="request.isXmlHttpRequest()")
  */
-class TownController extends InventoryAwareController
+class TownController extends InventoryAwareController implements TownInterfaceController
 {
     const ErrorWellEmpty         = ErrorHelper::BaseTownErrors + 1;
     const ErrorWellLimitHit      = ErrorHelper::BaseTownErrors + 2;
     const ErrorWellNoWater       = ErrorHelper::BaseTownErrors + 3;
     const ErrorDoorAlreadyClosed = ErrorHelper::BaseTownErrors + 4;
     const ErrorDoorAlreadyOpen   = ErrorHelper::BaseTownErrors + 5;
+
 
     /**
      * @Route("jx/town/dashboard", name="town_dashboard")
@@ -222,10 +225,9 @@ class TownController extends InventoryAwareController
     /**
      * @Route("api/town/door/control", name="town_door_control_controller")
      * @param JSONRequestParser $parser
-     * @param InventoryHandler $handler
      * @return Response
      */
-    public function door_control_api(JSONRequestParser $parser, InventoryHandler $handler): Response {
+    public function door_control_api(JSONRequestParser $parser): Response {
         $citizen = $this->getActiveCitizen();
         $town = $citizen->getTown();
 
@@ -246,6 +248,30 @@ class TownController extends InventoryAwareController
         try {
             $this->entity_manager->persist($citizen);
             $this->entity_manager->persist($town);
+            $this->entity_manager->flush();
+        } catch (Exception $e) {
+            return AjaxResponse::error( ErrorHelper::ErrorDatabaseException );
+        }
+
+        return AjaxResponse::success();
+    }
+
+    /**
+     * @Route("api/town/door/exit", name="town_door_exit_controller")
+     * @param JSONRequestParser $parser
+     * @return Response
+     */
+    public function door_exit_api(JSONRequestParser $parser): Response {
+        $citizen = $this->getActiveCitizen();
+        $zone = $this->entity_manager->getRepository(Zone::class)->findOneByPosition($citizen->getTown(), 0, 0);
+
+        if (!$zone)
+            return AjaxResponse::error( ErrorHelper::ErrorInternalError );
+
+        $citizen->setZone( $zone );
+
+        try {
+            $this->entity_manager->persist($citizen);
             $this->entity_manager->flush();
         } catch (Exception $e) {
             return AjaxResponse::error( ErrorHelper::ErrorDatabaseException );
