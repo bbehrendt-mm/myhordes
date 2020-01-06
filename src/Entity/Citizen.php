@@ -73,6 +73,11 @@ class Citizen
      */
     private $wellCounter;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Zone", inversedBy="citizens")
+     */
+    private $zone;
+
     public function __construct()
     {
         $this->status = new ArrayCollection();
@@ -218,6 +223,18 @@ class Citizen
         if ($wellCounter->getCitizen() !== $this) {
             $wellCounter->setCitizen($this);
         }
+
+        return $this;
+    }
+
+    public function getZone(): ?Zone
+    {
+        return $this->zone;
+    }
+
+    public function setZone(?Zone $zone): self
+    {
+        $this->zone = $zone;
 
         return $this;
     }

@@ -60,6 +60,10 @@ class InventoryInspectorCommand extends Command
             $output->writeln("<comment>backpack</comment> " .
                 "for citizen <info>'{$inventory->getCitizen()->getUser()->getUsername()}' ({$inventory->getCitizen()->getId()})</info> " .
                 "in town <info>'{$inventory->getCitizen()->getTown()->getName()}' ({$inventory->getCitizen()->getTown()->getId()})</info>.\n");
+        if ($inventory->getZone())
+            $output->writeln("<comment>floor</comment> " .
+                "for zone <info>'{$inventory->getZone()->getX()}/{$inventory->getZone()->getY()}' ({$inventory->getZone()->getId()})</info> " .
+                "in town <info>'{$inventory->getZone()->getTown()->getName()}' ({$inventory->getZone()->getTown()->getId()})</info>.\n");
 
         $output->writeln('<comment>Inventory content</comment>');
         $table = new Table( $output );

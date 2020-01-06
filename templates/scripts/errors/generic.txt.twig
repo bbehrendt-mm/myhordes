@@ -2,3 +2,5 @@
 {{ constant('App\\Service\\ErrorHelper::ErrorInvalidRequest') }}   : '{% trans from 'global' %}Die Aktion kann nicht ausgeführt werden, da deine Anfrage unvollständig oder fehlerhaft ist.{% endtrans %}',
 {{ constant('App\\Service\\ErrorHelper::ErrorDatabaseException') }}: '{% trans from 'global' %}Beim Ausführen der Aktion ist ein Datenbankfehler aufgetreten. Bitte versuche es später erneut.{% endtrans %}',
 {{ constant('App\\Service\\ErrorHelper::ErrorInternalError') }}: '{% trans from 'global' %}Beim Ausführen der Aktion ist ein interner Fehler aufgetreten. Bitte versuche es später erneut.{% endtrans %}',
+
+{{ constant('App\\Service\\ErrorHelper::ErrorNoAP') }}: '{% trans from 'global' %}Für diese Aktion hast du nicht genug AP.{% endtrans %}',

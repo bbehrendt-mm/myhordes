@@ -142,7 +142,10 @@ class InventoryHandler
         if ($inventory->getCitizen() && $inventory->getCitizen()->getId() === $citizen->getId())
             return self::TransferTypeRucksack;
 
-        //ToDo: Check local
+        // Check if the inventory belongs to the citizens current zone
+        if ($inventory->getZone() && $citizen->getZone() && $inventory->getZone()->getId() === $citizen->getZone()->getId())
+            return self::TransferTypeLocal;
+
         //ToDo: Check escort
         return self::TransferTypeUnknown;
     }

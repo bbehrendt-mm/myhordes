@@ -1,0 +1,40 @@
+let scroll_areas = document.querySelectorAll('.map>.scroll-plane');
+for (let i = 0; i < scroll_areas.length; i++) {
+    let scroll_area = scroll_areas[i];
+    let map_area = scroll_area.parentNode;
+
+    map_area.addEventListener('x-center', function() {
+
+        let scroll_pos_x = 0;
+        let scroll_pos_y = 0;
+
+        let current_zone = scroll_area.querySelector('.zone.active');
+        if (current_zone) {
+            scroll_pos_x = Math.min(Math.max(0,(current_zone.offsetLeft + current_zone.clientWidth/2 ) - map_area.clientWidth /2), parseInt(scroll_area.getAttribute('x-scroll-range-x')));
+            scroll_pos_y = Math.min(Math.max(0,(current_zone.offsetTop  + current_zone.clientHeight/2) - map_area.clientHeight/2), parseInt(scroll_area.getAttribute('x-scroll-range-y')));
+        }
+
+        scroll_area.setAttribute('x-scroll-pos-x', "" + scroll_pos_x);
+        scroll_area.setAttribute('x-scroll-pos-y', "" + scroll_pos_y);
+        scroll_area.style.top  = -scroll_pos_y + 'px';
+        scroll_area.style.left = -scroll_pos_x + 'px';
+    });
+
+    map_area.addEventListener('mousemove', function(e) {
+        const scroll_range_x = parseInt(scroll_area.getAttribute('x-scroll-range-x'));
+        const scroll_range_y = parseInt(scroll_area.getAttribute('x-scroll-range-y'));
+        let scroll_pos_x = parseInt(scroll_area.getAttribute('x-scroll-pos-x'));
+        let scroll_pos_y = parseInt(scroll_area.getAttribute('x-scroll-pos-y'));
+
+        if (scroll_range_x <= 0 || scroll_range_y <= 0) return;
+        if (e.buttons === 1) {
+
+            scroll_pos_x = Math.max(Math.min(scroll_range_x, scroll_pos_x - e.movementX), 0);
+            scroll_pos_y = Math.max(Math.min(scroll_range_y, scroll_pos_y - e.movementY), 0);
+            scroll_area.setAttribute('x-scroll-pos-x', "" + scroll_pos_x);
+            scroll_area.setAttribute('x-scroll-pos-y', "" + scroll_pos_y);
+            scroll_area.style.top  = -scroll_pos_y + 'px';
+            scroll_area.style.left = -scroll_pos_x + 'px';
+        }
+    });
+}

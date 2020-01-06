@@ -12,6 +12,7 @@ use App\Entity\Town;
 use App\Entity\TownClass;
 use App\Entity\User;
 use App\Entity\WellCounter;
+use App\Entity\Zone;
 use Doctrine\ORM\EntityManagerInterface;
 
 class GameFactory
@@ -62,6 +63,20 @@ class GameFactory
         }, static::$town_name_snippets[array_rand( static::$town_name_snippets )]));
     }
 
+    private function getDefaultWell(string $town_type): int {
+        return $town_type === TownClass::HARD ? mt_rand( 60, 90 ) : mt_rand( 90, 180 );
+    }
+
+    private function getDefaultZoneResolution( string $town_type, ?int &$offset_x, ?int &$offset_y ): int {
+        $resolution = $town_type === TownClass::EASY ? mt_rand( 12, 14 ) : mt_rand( 25, 27 );
+        $safe_border = ceil($resolution/4.0);
+        $offset_x = $safe_border + mt_rand(0, $resolution - 2*$safe_border);
+        $offset_y = $safe_border + mt_rand(0, $resolution - 2*$safe_border);
+        return $resolution;
+    }
+
+
+
     public function createTown( ?string $name, int $population, string $type ): ?Town {
         if (!$this->validator->validateTownType($type) || !$this->validator->validateTownPopulation( $population, $type ))
             return null;
@@ -72,7 +87,19 @@ class GameFactory
             ->setPopulation( $population )
             ->setName( $name ?: $this->createTownName() )
             ->setBank( new Inventory() )
-            ->setWell( $type === TownClass::HARD ? mt_rand( 60, 90 ) : mt_rand( 90, 180 ) );
+            ->setWell( $this->getDefaultWell($type) );
+
+        $map_resolution = $this->getDefaultZoneResolution( $type, $ox, $oy );
+        for ($x = 0; $x < $map_resolution; $x++)
+            for ($y = 0; $y < $map_resolution; $y++) {
+                $zone = new Zone();
+                $zone
+                    ->setX( $x - $ox )
+                    ->setY( $y - $oy )
+                    ->setFloor( new Inventory() )
+                    ->setZombies( 0 );
+                $town->addZone( $zone );
+            }
 
         return $town;
     }

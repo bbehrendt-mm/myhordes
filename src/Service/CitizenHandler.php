@@ -36,6 +36,12 @@ class CitizenHandler
         return false;
     }
 
+    public function isTired(Citizen $citizen) {
+        foreach ($citizen->getStatus() as $status)
+            if ($status->getName() === 'tired') return true;
+        return false;
+    }
+
     public function getMaxAP(Citizen $citizen) {
         return $this->isWounded($citizen) ? 5 : 6;
     }

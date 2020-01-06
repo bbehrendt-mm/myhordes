@@ -1,0 +1,44 @@
+{% extends "ajax/game/town/town.html.twig" %}
+{% block content %}
+
+    {% set cellnum = 1+map_x1-map_x0 %}
+    {% set size = 100.0/cellnum %}
+    <div class="row">
+        <div class="padded cell rw-6">
+            <h5>{% trans from 'game' %}Meine Aktionen{% endtrans %}</h5>
+            {% if town.door %}
+            <button id="door_closer">{% trans from 'game' %}Tor schließen{% endtrans %} (<div class="ap">1</div>)</button>
+            {% else %}
+                <button id="door_opener">{% trans from 'game' %}Tor öffnen{% endtrans %} (<div class="ap">1</div>)</button>
+            {% endif %}<br />
+            <button {% if not town.door %}disabled{% endif %}>{% trans from 'game' %}Stadt verlassen{% endtrans %}</button>
+        </div>
+        <div class="padded cell rw-6">
+            {% embed "ajax/game/map.html.twig" %}
+            {% endembed %}
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    {{ parent() }}
+    <script>
+        {% embed "scripts/map.js.twig" %}{% endembed %}
+
+        const handleDoor = function(element, action) {
+            if (!element) return;
+            element.addEventListener('click', function() {
+                if (!confirm( '{% trans from 'global' %}Bestätigen?{% endtrans %}' ))
+                    return;
+                $.ajax.easySend( '{{ path('town_door_control_controller') }}', {
+                        action: action
+                    },
+                    function () {
+                        $.ajax.load(null, '{{ path('town_door') }}', true);
+                    } );
+            });
+        };
+
+        handleDoor( document.getElementById('door_opener'), 'open' );
+        handleDoor( document.getElementById('door_closer'), 'close' );
+    </script>
+{% endblock %}

@@ -37,13 +37,14 @@ class TownInspectorCommand extends Command
             ->setHelp('This command allows you work on single towns.')
             ->addArgument('TownID', InputArgument::REQUIRED, 'The town ID')
 
+            ->addOption('show-zones', null, InputOption::VALUE_NONE, 'Lists zone information.')
             ->addOption('reset-well-lock', null, InputOption::VALUE_NONE, 'Resets the well lock.')
 
             ->addOption('citizen', 'c', InputOption::VALUE_REQUIRED, 'When used together with --reset-well-lock, only the lock of the given citizen is released.', -1)
             ;
     }
 
-    protected function info(Town $town, OutputInterface $output) {
+    protected function info(Town $town, OutputInterface $output, bool $zones) {
         $output->writeln('<comment>Common town data</comment>');
         $table = new Table( $output );
         $table->setHeaders( ['ID', 'Open?', 'Name', 'Population', 'Type', 'Day'] );
@@ -73,6 +74,23 @@ class TownInspectorCommand extends Command
             ]);
         }
         $table->render();
+
+        if ($zones) {
+            $output->writeln('<comment>Zone list</comment>');
+            $table = new Table( $output );
+            $table->setHeaders( ['ID', 'X', 'Y', 'Zombies', 'Citizens','InvIDs'] );
+            foreach ($town->getZones() as $zone) {
+                $table->addRow([
+                    $zone->getId(),
+                    $zone->getX(),
+                    $zone->getY(),
+                    $zone->getZombies(),
+                    implode("\n", array_map(function(Citizen $c): string { return $c->getUser()->getUsername(); }, $zone->getCitizens()->getValues())),
+                    $zone->getFloor()->getId()
+                ]);
+            }
+            $table->render();
+        }
 
         return 0;
     }
@@ -117,6 +135,6 @@ class TownInspectorCommand extends Command
 
         if ($changes) $this->entityManager->flush();
 
-        return $this->info($town, $output);
+        return $this->info($town, $output, $input->getOption('show-zones'));
     }
 }

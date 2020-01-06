@@ -29,7 +29,7 @@ class Town
     private $population;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Citizen", mappedBy="town", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Citizen", mappedBy="town", orphanRemoval=true, cascade={"persist", "remove"})
      */
     private $citizens;
 
@@ -55,9 +55,20 @@ class Town
      */
     private $well;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Zone", mappedBy="town", orphanRemoval=true, cascade={"persist", "remove"})
+     */
+    private $zones;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $door;
+
     public function __construct()
     {
         $this->citizens = new ArrayCollection();
+        $this->zones = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -172,6 +183,49 @@ class Town
     public function setWell(int $well): self
     {
         $this->well = $well;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Zone[]
+     */
+    public function getZones(): Collection
+    {
+        return $this->zones;
+    }
+
+    public function addZone(Zone $zone): self
+    {
+        if (!$this->zones->contains($zone)) {
+            $this->zones[] = $zone;
+            $zone->setTown($this);
+        }
+
+        return $this;
+    }
+
+    public function removeZone(Zone $zone): self
+    {
+        if ($this->zones->contains($zone)) {
+            $this->zones->removeElement($zone);
+            // set the owning side to null (unless already changed)
+            if ($zone->getTown() === $this) {
+                $zone->setTown(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getDoor(): ?bool
+    {
+        return $this->door;
+    }
+
+    public function setDoor(bool $door): self
+    {
+        $this->door = $door;
 
         return $this;
     }

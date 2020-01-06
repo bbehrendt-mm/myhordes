@@ -38,6 +38,11 @@ class Inventory
      */
     private $town;
 
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Zone", mappedBy="floor", cascade={"persist", "remove"})
+     */
+    private $zone;
+
     public function __construct()
     {
         $this->items = new ArrayCollection();
@@ -125,6 +130,23 @@ class Inventory
         // set the owning side of the relation if necessary
         if ($town->getBank() !== $this) {
             $town->setBank($this);
+        }
+
+        return $this;
+    }
+
+    public function getZone(): ?Zone
+    {
+        return $this->zone;
+    }
+
+    public function setZone(Zone $zone): self
+    {
+        $this->zone = $zone;
+
+        // set the owning side of the relation if necessary
+        if ($zone->getFloor() !== $this) {
+            $zone->setFloor($this);
         }
 
         return $this;

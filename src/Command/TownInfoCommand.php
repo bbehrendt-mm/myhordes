@@ -7,6 +7,7 @@ namespace App\Command;
 use App\Entity\Inventory;
 use App\Entity\Town;
 use App\Entity\TownClass;
+use App\Service\GameValidator;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\Console\Command\Command;
@@ -21,10 +22,12 @@ class TownInfoCommand extends Command
     protected static $defaultName = 'app:towns';
 
     private $entityManager;
+    private $gameValidator;
 
-    public function __construct(EntityManagerInterface $em)
+    public function __construct(EntityManagerInterface $em, GameValidator $v)
     {
         $this->entityManager = $em;
+        $this->gameValidator = $v;
         parent::__construct();
     }
 
@@ -34,7 +37,7 @@ class TownInfoCommand extends Command
             ->setDescription('Lists information about towns.')
             ->setHelp('This command allows you list towns.')
 
-            ->addOption('type', 't', InputOption::VALUE_REQUIRED, 'Town type [all, ' . implode(', ', $this->getValidTownTypes()) . '], default is \'all\'');
+            ->addOption('type', 't', InputOption::VALUE_REQUIRED, 'Town type [all, ' . implode(', ', $this->gameValidator->getValidTownTypes()) . '], default is \'all\'');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

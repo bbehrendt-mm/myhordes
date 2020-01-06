@@ -1,0 +1,18 @@
+<div class="map">
+
+    {% set cellnum = 1+map_x1-map_x0 %}
+    {% set size = 100.0/cellnum %}
+
+    <div class="scroll-plane" style="min-width: {{ cellnum*20 }}px">
+        {% for x in map_x0..map_x1 %}
+            {% for y in map_y0..map_y1 %}
+                {% if zones[x] and zones[x][y] %}
+                    <div class="zone {% if x == pos_x and y == pos_y %}active{% endif %}" style="width: {{ size }}%; padding-top: {{ size }}%" x-zone-x="{{ x }}" x-zone-y="{{ y }}"></div>
+                {% else %}
+                    <div class="void" style="width: {{ size }}%; padding-top: {{ size }}%"></div>
+                {% endif %}
+
+            {% endfor %}
+        {% endfor %}
+    </div>
+</div>

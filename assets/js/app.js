@@ -33,7 +33,7 @@ window.addEventListener('popstate', function(event) {
     $.ajax.load( document.getElementById('content'), event.state, false );
 });
 
-const resizer = function() {
+const resize_game_menu = function() {
     let game_menu = document.querySelector('#gma');
     let game_menu_elems = document.querySelectorAll('#gma>div.game-bar>ul');
     let game_menu_burger = document.querySelector('#gma>div.game-bar>ul.text-menu>li.burger-button');
@@ -58,7 +58,29 @@ const resizer = function() {
             dropdown.style.height = '0px'
         }
     }
+};
 
+const resize_map = function() {
+    let outer_maps = document.querySelectorAll('.map');
+    for (let i = 0; i < outer_maps.length; i++) {
+        let map = outer_maps[i];
+        let scroll_area = map.querySelector('.scroll-plane');
+        if (!scroll_area) continue;
+
+        const scroll_range_x = Math.max(0,scroll_area.clientWidth - map.clientWidth);
+        const scroll_range_y = Math.max(0,scroll_area.clientHeight - map.clientHeight);
+
+        scroll_area.setAttribute('x-scroll-range-x', "" + scroll_range_x);
+        scroll_area.setAttribute('x-scroll-range-y', "" + scroll_range_y);
+        map.dispatchEvent(new Event("x-center", {
+            bubbles: false, cancelable: true
+        }));
+    }
+};
+
+const resizer = function() {
+    resize_game_menu();
+    resize_map();
 
     //console.log(game_menu.offsetWidth, content_width, game_menu.offsetWidth - content_width);
 };

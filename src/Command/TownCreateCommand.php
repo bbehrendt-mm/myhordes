@@ -5,6 +5,7 @@ namespace App\Command;
 
 use App\Entity\TownClass;
 use App\Service\GameFactory;
+use App\Service\GameValidator;
 use App\Service\Locksmith;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -20,18 +21,14 @@ class TownCreateCommand extends Command
 
     private $entityManager;
     private $gameFactory;
+    private $gameValidator;
 
-    public function __construct(EntityManagerInterface $em, GameFactory $f)
+    public function __construct(EntityManagerInterface $em, GameFactory $f, GameValidator $v)
     {
         $this->entityManager = $em;
         $this->gameFactory = $f;
+        $this->gameValidator = $v;
         parent::__construct();
-    }
-
-    protected function getValidTownTypes(): array {
-        return array_map(function(TownClass $entry) {
-            return $entry->getName();
-        }, $this->entityManager->getRepository(TownClass::class)->findAll());
     }
 
     protected function configure()
@@ -40,7 +37,7 @@ class TownCreateCommand extends Command
             ->setDescription('Creates a new town.')
             ->setHelp('This command allows you to create a new, empty town.')
 
-            ->addArgument('townClass', InputArgument::REQUIRED, 'Town type [' . implode(', ', $this->getValidTownTypes()) . ']')
+            ->addArgument('townClass', InputArgument::REQUIRED, 'Town type [' . implode(', ', $this->gameValidator->getValidTownTypes()) . ']')
             ->addArgument('citizens', InputArgument::REQUIRED, 'Number of citizens [1 - 40]')
             ->addArgument('name', InputArgument::OPTIONAL, 'Town name');
     }
@@ -77,6 +74,11 @@ class TownCreateCommand extends Command
         $table->setHeaders(['Class','Property','ID']);
         $table->addRow( ['Town',      'town',      $town->getId()] );
         $table->addRow( ['Inventory', 'town.bank', $town->getBank()->getId()] );
+        foreach ( $town->getZones() as $zone ) {
+            $table->addRow( ['Zone', "town.zone[{$zone->getX()},{$zone->getY()}]", $zone->getId()] );
+            $table->addRow( ['Zone Inventory', "town.zone[{$zone->getX()},{$zone->getY()}].floor", $zone->getFloor()->getId()] );
+        }
+
         $table->render();
 
         return 0;

@@ -39,6 +39,12 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class TownController extends InventoryAwareController
 {
+    const ErrorWellEmpty         = ErrorHelper::BaseTownErrors + 1;
+    const ErrorWellLimitHit      = ErrorHelper::BaseTownErrors + 2;
+    const ErrorWellNoWater       = ErrorHelper::BaseTownErrors + 3;
+    const ErrorDoorAlreadyClosed = ErrorHelper::BaseTownErrors + 4;
+    const ErrorDoorAlreadyOpen   = ErrorHelper::BaseTownErrors + 5;
+
     /**
      * @Route("jx/town/dashboard", name="town_dashboard")
      * @return Response
@@ -97,10 +103,6 @@ class TownController extends InventoryAwareController
             'allow_take' => $this->getActiveCitizen()->getWellCounter()->getTaken() < 2, //ToDo: Fix the count!
         ]) );
     }
-
-    const ErrorWellEmpty   = ErrorHelper::BaseWellErrors + 1;
-    const ErrorWellLimitHit= ErrorHelper::BaseWellErrors + 2;
-    const ErrorWellNoWater = ErrorHelper::BaseWellErrors + 3;
 
     /**
      * @Route("api/well/item", name="town_well_item_controller")
@@ -218,13 +220,67 @@ class TownController extends InventoryAwareController
     }
 
     /**
+     * @Route("api/town/door/control", name="town_door_control_controller")
+     * @param JSONRequestParser $parser
+     * @param InventoryHandler $handler
+     * @return Response
+     */
+    public function door_control_api(JSONRequestParser $parser, InventoryHandler $handler): Response {
+        $citizen = $this->getActiveCitizen();
+        $town = $citizen->getTown();
+
+        if (!($action = $parser->get('action')) || !in_array($action, ['open','close']))
+            return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
+
+        if ($action === 'open'  && $town->getDoor())
+            return AjaxResponse::error( self::ErrorDoorAlreadyClosed );
+        if ($action === 'close' && !$town->getDoor())
+            return AjaxResponse::error( self::ErrorDoorAlreadyClosed );
+
+        if ($citizen->getAp() < 1 || $this->citizen_handler->isTired( $citizen ))
+            return AjaxResponse::error( ErrorHelper::ErrorNoAP );
+
+        $this->citizen_handler->setAP($citizen, true, -1);
+        $town->setDoor( $action === 'open' );
+
+        try {
+            $this->entity_manager->persist($citizen);
+            $this->entity_manager->persist($town);
+            $this->entity_manager->flush();
+        } catch (Exception $e) {
+            return AjaxResponse::error( ErrorHelper::ErrorDatabaseException );
+        }
+
+        return AjaxResponse::success();
+    }
+
+    /**
      * @Route("jx/town/door", name="town_door")
      * @return Response
      */
     public function door(): Response
     {
-        return $this->render( 'ajax/game/town/dashboard.html.twig', $this->addDefaultTwigArgs('door', [
-            'town' => $this->getActiveCitizen()->getTown()
+        $zones = []; $range_x = [PHP_INT_MAX,PHP_INT_MIN]; $range_y = [PHP_INT_MAX,PHP_INT_MIN];
+        foreach ($this->getActiveCitizen()->getTown()->getZones() as $zone) {
+            $x = $zone->getX();
+            $y = $zone->getY();
+
+            $range_x = [ min($range_x[0], $x), max($range_x[1], $x) ];
+            $range_y = [ min($range_y[0], $y), max($range_y[1], $y) ];
+
+            if (!isset($zones[$x])) $zones[$x] = [];
+            $zones[$x][$y] = $zone;
+
+        }
+        return $this->render( 'ajax/game/town/door.html.twig', $this->addDefaultTwigArgs('door', [
+            'town'  =>  $this->getActiveCitizen()->getTown(),
+            'zones' =>  $zones,
+            'pos_x'  => $this->getActiveCitizen()->getZone() ? $this->getActiveCitizen()->getZone()->getX() : 0,
+            'pos_y'  => $this->getActiveCitizen()->getZone() ? $this->getActiveCitizen()->getZone()->getY() : 0,
+            'map_x0' => $range_x[0],
+            'map_x1' => $range_x[1],
+            'map_y0' => $range_y[0],
+            'map_y1' => $range_y[1],
         ]) );
     }
 }
