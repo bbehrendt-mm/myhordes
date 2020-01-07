@@ -4,7 +4,7 @@
     {% set cellnum = 1+map_x1-map_x0 %}
     {% set size = 100.0/cellnum %}
     <div class="row">
-        <div class="padded cell rw-6">
+        <div class="padded cell rw-6 rw-md-12">
             <h5>{% trans from 'game' %}Meine Aktionen{% endtrans %}</h5>
             {% if town.door %}
             <button id="door_closer">{% trans from 'game' %}Tor schließen{% endtrans %} (<div class="ap">1</div>)</button>
@@ -13,8 +13,8 @@
             {% endif %}<br />
             <button id="door_exit" {% if not town.door %}disabled{% endif %}>{% trans from 'game' %}Stadt verlassen{% endtrans %}</button>
         </div>
-        <div class="padded cell rw-6">
-            {% embed "ajax/game/map.html.twig" %}
+        <div class="padded cell rw-6 rw-md-12">
+            {% embed "ajax/game/map.html.twig" with {'default_zoom': 0, 'default_show_zone': false, 'allow_zone_view': false} %}
             {% endembed %}
         </div>
     </div>

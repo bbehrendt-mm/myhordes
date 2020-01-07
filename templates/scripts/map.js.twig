@@ -2,6 +2,16 @@ let scroll_areas = document.querySelectorAll('.map>.scroll-plane');
 for (let i = 0; i < scroll_areas.length; i++) {
     let scroll_area = scroll_areas[i];
     let map_area = scroll_area.parentNode;
+    let map = map_area.parentNode;
+    let map_controls = map.querySelector('.controls');
+
+    map_area.addEventListener('x-resize', function() {
+        scroll_area.style.minWidth
+            = (parseFloat(scroll_area.getAttribute('x-current-scroll-level')) * parseFloat(scroll_area.getAttribute('x-default-size'))) + 'px';
+        scroll_area.setAttribute('x-scroll-range-x', "" + Math.max(0,scroll_area.clientWidth - map_area.clientWidth));
+        scroll_area.setAttribute('x-scroll-range-y', "" + Math.max(0,scroll_area.clientHeight - map_area.clientHeight));
+        map_area.dispatchEvent(new Event("x-center", { bubbles: false, cancelable: true }));
+    })
 
     map_area.addEventListener('x-center', function() {
 
@@ -20,21 +30,125 @@ for (let i = 0; i < scroll_areas.length; i++) {
         scroll_area.style.left = -scroll_pos_x + 'px';
     });
 
-    map_area.addEventListener('mousemove', function(e) {
+    let touch_coords = []; let touch_id = null;
+    scroll_area.addEventListener('touchstart', function(e) {
+        if (touch_id !== null) return;
+        let touches = e.changedTouches;
+        if (touches.length == 0) return;
+        touch_id = touches[0].identifier;
+        touch_coords = [ touches[0].clientX, touches[0].clientY ];
+    });
+
+    scroll_area.addEventListener('touchend', function(e) {
+        if (touch_id === null) return;
+        let touches = e.changedTouches;
+        for (let i = 0; i < touches.length; i++)
+            if (touches[i].identifier === touch_id) {
+                touch_id = null;
+                return;
+            }
+    });
+
+    const map_move = function(x,y) {
         const scroll_range_x = parseInt(scroll_area.getAttribute('x-scroll-range-x'));
         const scroll_range_y = parseInt(scroll_area.getAttribute('x-scroll-range-y'));
         let scroll_pos_x = parseInt(scroll_area.getAttribute('x-scroll-pos-x'));
         let scroll_pos_y = parseInt(scroll_area.getAttribute('x-scroll-pos-y'));
 
         if (scroll_range_x <= 0 || scroll_range_y <= 0) return;
-        if (e.buttons === 1) {
+        scroll_pos_x = Math.max(Math.min(scroll_range_x, scroll_pos_x - x), 0);
+        scroll_pos_y = Math.max(Math.min(scroll_range_y, scroll_pos_y - y), 0);
+        scroll_area.setAttribute('x-scroll-pos-x', "" + scroll_pos_x);
+        scroll_area.setAttribute('x-scroll-pos-y', "" + scroll_pos_y);
+        scroll_area.style.top  = -scroll_pos_y + 'px';
+        scroll_area.style.left = -scroll_pos_x + 'px';
+    };
 
-            scroll_pos_x = Math.max(Math.min(scroll_range_x, scroll_pos_x - e.movementX), 0);
-            scroll_pos_y = Math.max(Math.min(scroll_range_y, scroll_pos_y - e.movementY), 0);
-            scroll_area.setAttribute('x-scroll-pos-x', "" + scroll_pos_x);
-            scroll_area.setAttribute('x-scroll-pos-y', "" + scroll_pos_y);
-            scroll_area.style.top  = -scroll_pos_y + 'px';
-            scroll_area.style.left = -scroll_pos_x + 'px';
-        }
+    scroll_area.addEventListener('touchmove', function(e) {
+        if (touch_id === null) return;
+        let touches = e.changedTouches;
+        for (let i = 0; i < touches.length; i++)
+            if (touches[i].identifier === touch_id) {
+                map_move( touches[i].clientX - touch_coords[0], touches[i].clientY - touch_coords[1] );
+                touch_coords = [ touches[0].clientX, touches[0].clientY ];
+                e.preventDefault();
+                return;
+            }
     });
+
+    scroll_area.addEventListener('mousemove', function(e) {
+        if (e.buttons === 1)
+            map_move( e.movementX, e.movementY );
+    });
+
+    if (map_controls) {
+
+        let plus_button  = map_controls.querySelector('[x-control="plus"]');
+        let minus_button = map_controls.querySelector('[x-control="minus"]');
+        let center_button = map_controls.querySelector('[x-control="center"]');
+
+        let map_button  = map_controls.querySelector('[x-control="map"]');
+        let zone_button = map_controls.querySelector('[x-control="zone"]');
+
+        if (plus_button)
+            plus_button.addEventListener('click', function() {
+                let current_level = parseFloat(scroll_area.getAttribute('x-current-scroll-level'));
+                if (minus_button)  minus_button.removeAttribute('disabled');
+                if (center_button) center_button.removeAttribute('disabled');
+                if (current_level <= 0) current_level = 1;
+                else {
+                    plus_button.setAttribute('disabled','');
+                    current_level = 1.5;
+                }
+                scroll_area.setAttribute('x-current-scroll-level', '' + current_level);
+                map_area.dispatchEvent(new Event("x-resize", { bubbles: false, cancelable: true }));
+            })
+        if (minus_button)
+            minus_button.addEventListener('click', function() {
+                let current_level = parseFloat(scroll_area.getAttribute('x-current-scroll-level'));
+                if (plus_button) plus_button.removeAttribute('disabled');
+                if (current_level > 1) current_level = 1;
+                else {
+                    minus_button.setAttribute('disabled','');
+                    if (center_button) center_button.setAttribute('disabled','');
+                    current_level = 0;
+                }
+                scroll_area.setAttribute('x-current-scroll-level', '' + current_level);
+                map_area.dispatchEvent(new Event("x-resize", { bubbles: false, cancelable: true }));
+            })
+        if (center_button)
+            center_button.addEventListener('click', function() {
+                map_area.dispatchEvent(new Event("x-center", { bubbles: false, cancelable: true }));
+            })
+        if (zone_button)
+            zone_button.addEventListener('click', function() {
+                map.classList.add('zone-viewer-mode');
+            });
+        if (map_button)
+            map_button.addEventListener('click', function() {
+                map.classList.remove('zone-viewer-mode');
+            })
+    }
+
+    map_area.dispatchEvent(new Event("x-resize", { bubbles: false, cancelable: true }));
+
+    const add_move_handler = function( element ) {
+        if (element)
+            element.addEventListener('click', function() {
+                const px = parseInt(element.getAttribute('x-target-x'));
+                const py = parseInt(element.getAttribute('x-target-y'));
+
+                $.ajax.easySend( '{{ path('beyond_desert_move_controller') }}', {
+                        x: px, y: py
+                    },
+                    function () {
+                        $.ajax.load(null, '{{ path('beyond_dashboard') }}', true);
+                    } );
+            });
+    }
+
+    add_move_handler( map_area.querySelector('.zone-plane-controls>.action-move-north') );
+    add_move_handler( map_area.querySelector('.zone-plane-controls>.action-move-south') );
+    add_move_handler( map_area.querySelector('.zone-plane-controls>.action-move-east')  );
+    add_move_handler( map_area.querySelector('.zone-plane-controls>.action-move-west')  );
 }

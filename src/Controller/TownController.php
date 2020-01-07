@@ -268,7 +268,7 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
         if (!$zone)
             return AjaxResponse::error( ErrorHelper::ErrorInternalError );
 
-        $citizen->setZone( $zone );
+        $zone->addCitizen( $citizen );
 
         try {
             $this->entity_manager->persist($citizen);

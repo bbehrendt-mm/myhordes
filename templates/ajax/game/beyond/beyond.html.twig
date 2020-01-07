@@ -2,10 +2,15 @@
 {% block ajax %}
     {{ parent() }}
     <div class="row">
-        <div class="padded-small cell rw-4 rw-sm-12">
-            {% embed "ajax/game/map.html.twig" %}{% endembed %}
+        <div class="padded-small cell rw-4 rw-lg-6 rw-md-12">
+            {% embed "ajax/game/map.html.twig" with {
+                'default_zoom': 1,
+                'default_show_zone': true,
+                'allow_zone_view': true,
+                'move': allow_movement
+            } %}{% endembed %}
         </div>
-        <div class="padded cell rw-8 rw-sm-12">
+        <div class="padded cell rw-8 rw-lg-6 rw-md-12">
             {% block content %}
             {% endblock %}
         </div>

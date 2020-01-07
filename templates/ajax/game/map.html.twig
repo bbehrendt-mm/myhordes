@@ -1,18 +1,79 @@
-<div class="map">
+<div class="map_area {% if default_show_zone %}zone-viewer-mode{% endif %}">
+    <div class="map">
+        {% set cellnum = 1+map_x1-map_x0 %}
+        {% set size = 100.0/cellnum %}
 
-    {% set cellnum = 1+map_x1-map_x0 %}
-    {% set size = 100.0/cellnum %}
-
-    <div class="scroll-plane" style="min-width: {{ cellnum*20 }}px">
-        {% for x in map_x0..map_x1 %}
+        <div class="scroll-plane" x-default-size="{{ cellnum*20 }}" x-current-scroll-level="{{ default_zoom }}" style="min-width: {{ cellnum*20 }}px">
             {% for y in map_y0..map_y1 %}
-                {% if zones[x] and zones[x][y] %}
-                    <div class="zone {% if x == pos_x and y == pos_y %}active{% endif %}" style="width: {{ size }}%; padding-top: {{ size }}%" x-zone-x="{{ x }}" x-zone-y="{{ y }}"></div>
-                {% else %}
-                    <div class="void" style="width: {{ size }}%; padding-top: {{ size }}%"></div>
-                {% endif %}
+                {% for x in map_x0..map_x1 %}
+                    {% if zones[x] and zones[x][y] %}
+                        <div class="zone {% if x == 0 and y == 0 %}town{% endif %} {% if x == pos_x and y == pos_y %}active{% endif %}" style="width: {{ size }}%; padding-top: {{ size }}%" x-zone-x="{{ x }}" x-zone-y="{{ y }}"></div>
+                    {% else %}
+                        <div class="void" style="width: {{ size }}%; padding-top: {{ size }}%"></div>
+                    {% endif %}
 
+                {% endfor %}
             {% endfor %}
-        {% endfor %}
+        </div>
+
+        {% if allow_zone_view %}
+            <div class="zone-plane">
+                {% if zone_players > 0 %}
+                    {% for n in 1..zone_players %}
+                        <div class="actor citizen" style="left: {{ random(45,55) }}%; top: {{ random(45,55) }}%"></div>
+                    {% endfor %}
+                {% endif %}
+                {% if zone_zombies > 0 %}
+                    {% for n in 1..zone_zombies %}
+                        <div class="actor zombie" style="left: {{ random([random(25,45),random(55,75)]) }}%; top: {{ random([random(25,45),random(55,75)]) }}%"></div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+            <div class="zone-plane-controls">
+                {% if move %}
+                    {% if zone.x < map_x1 %}<div x-target-x="{{ zone.x + 1 }}" x-target-y="{{ zone.y }}" class="action-move action-move-east"></div>{% endif %}
+                    {% if zone.x > map_x0 %}<div x-target-x="{{ zone.x - 1 }}" x-target-y="{{ zone.y }}" class="action-move action-move-west"></div>{% endif %}
+                    {% if zone.y > map_y0 %}<div x-target-x="{{ zone.x }}" x-target-y="{{ zone.y - 1 }}" class="action-move action-move-north"></div>{% endif %}
+                    {% if zone.y < map_y1 %}<div x-target-x="{{ zone.x }}" x-target-y="{{ zone.y + 1 }}" class="action-move action-move-south"></div>{% endif %}
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+    <div class="controls">
+        <div class="tilemap_controls">
+            <div class="row">
+                <div class="cell rw-4">
+                    <button x-control="plus"   class="small inline"><i class="fa fa-plus"></i></button>
+                    <button x-control="center" {% if default_zoom == 0 %}disabled{% endif %} class="small inline"><i class="fa fa-map-marker-alt"></i></button>
+                    <button x-control="minus"  {% if default_zoom == 0 %}disabled{% endif %} class="small inline"><i class="fa fa-minus"></i></button>
+                </div>
+                <div class="cell rw-4">&nbsp;</div>
+                <div class="cell rw-4 right">
+                    {% if allow_zone_view %}
+                        <button x-control="zone" class="small inline">{% trans from 'game' %}Zone{% endtrans %}</button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% if allow_zone_view %}
+            <div class="zonemap_controls">
+                <div class="row">
+                    <div class="cell rw-4">&nbsp;</div>
+                    <div class="cell rw-4 center">
+                        <span class="small">
+                        {% if zone.x == 0 and zone.y == 0 %}
+                            {% trans from 'game' %}Stadttor{% endtrans %}
+                        {% else %}
+                            {{ zone.x }} / {{ zone.y }}
+                        {% endif %}
+                        </span>
+                    </div>
+                    <div class="cell rw-4 right">
+                        <button x-control="map" class="small inline">{% trans from 'game' %}Karte{% endtrans %}</button>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
     </div>
 </div>

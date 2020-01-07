@@ -41,7 +41,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class BeyondController extends InventoryAwareController implements BeyondInterfaceController
 {
 
-    const ErrorNoReturnFromHere = ErrorHelper::BaseBeyondErrors + 1;
+    const ErrorNoReturnFromHere     = ErrorHelper::BaseBeyondErrors + 1;
+    const ErrorNotReachableFromHere = ErrorHelper::BaseBeyondErrors + 2;
 
     protected function addDefaultTwigArgs( ?string $section = null, ?array $data = null ): array {
         $zones = []; $range_x = [PHP_INT_MAX,PHP_INT_MIN]; $range_y = [PHP_INT_MAX,PHP_INT_MIN];
@@ -58,8 +59,11 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
         }
 
         return parent::addDefaultTwigArgs( $section,array_merge( [
+            'zone_players' => count($this->getActiveCitizen()->getZone()->getCitizens()),
+            'zone_zombies' => $this->getActiveCitizen()->getZone()->getZombies(),
             'zone'  =>  $this->getActiveCitizen()->getZone(),
             'zones' =>  $zones,
+            'allow_movement' => $this->getActiveCitizen()->getAp() >= 1 && !$this->citizen_handler->isTired( $this->getActiveCitizen() ),
             'pos_x'  => $this->getActiveCitizen()->getZone()->getX(),
             'pos_y'  => $this->getActiveCitizen()->getZone()->getY(),
             'map_x0' => $range_x[0],
@@ -87,11 +91,10 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
     }
 
     /**
-     * @Route("api/beyond/desert/exit", name="beyond_door_exit_controller")
-     * @param JSONRequestParser $parser
+     * @Route("api/beyond/desert/exit", name="beyond_desert_exit_controller")
      * @return Response
      */
-    public function door_exit_api(JSONRequestParser $parser): Response {
+    public function desert_exit_api(): Response {
         $citizen = $this->getActiveCitizen();
         $zone = $citizen->getZone();
 
@@ -110,6 +113,55 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
         }
 
         return AjaxResponse::success();
+    }
+
+    /**
+     * @Route("api/beyond/desert/move", name="beyond_desert_move_controller")
+     * @param JSONRequestParser $parser
+     * @return Response
+     */
+    public function desert_move_api(JSONRequestParser $parser): Response {
+        $citizen = $this->getActiveCitizen();
+        $zone = $citizen->getZone();
+
+        $px = $parser->get('x', PHP_INT_MAX);
+        $py = $parser->get('y', PHP_INT_MAX);
+
+
+        if (abs($px - $zone->getX()) + abs($py - $zone->getY()) !== 1) return AjaxResponse::error( self::ErrorNotReachableFromHere );
+
+        $new_zone = $this->entity_manager->getRepository(Zone::class)->findOneByPosition( $citizen->getTown(), $px, $py );
+        if (!$new_zone) return AjaxResponse::error( self::ErrorNotReachableFromHere );
+
+        // ToDo: Check zone control points
+
+        if ($citizen->getAp() < 1 || $this->citizen_handler->isTired( $citizen ))
+            return AjaxResponse::error( ErrorHelper::ErrorNoAP );
+
+        $this->citizen_handler->setAP($citizen, true, -1);
+        $zone->removeCitizen( $citizen );
+        $new_zone->addCitizen( $citizen );
+
+        try {
+            $this->entity_manager->persist($citizen);
+            $this->entity_manager->persist($zone);
+            $this->entity_manager->persist($new_zone);
+            $this->entity_manager->flush();
+        } catch (Exception $e) {
+            return AjaxResponse::error( ErrorHelper::ErrorDatabaseException );
+        }
+
+        return AjaxResponse::success();
+    }
+
+    /**
+     * @Route("api/beyond/desert/action", name="beyond_desert_action_controller")
+     * @param JSONRequestParser $parser
+     * @param InventoryHandler $handler
+     * @return Response
+     */
+    public function action_desert_api(JSONRequestParser $parser, InventoryHandler $handler): Response {
+        return $this->generic_action_api( $parser, $handler);
     }
 
 }

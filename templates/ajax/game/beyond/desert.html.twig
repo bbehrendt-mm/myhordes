@@ -9,7 +9,7 @@
                     {% if zone.x == 0 and zone.y == 0 %}
                         {% trans from 'game' %}Stadt betreten{% endtrans %}
                     {% else %}
-                        {% trans from 'game' %}In dei Stadt zurückkehren{% endtrans %}
+                        {% trans from 'game' %}In die Stadt zurückkehren{% endtrans %}
                     {% endif %}
                 </button>
             {% endif %}
@@ -60,14 +60,14 @@
 
             handleActions(
                 document.querySelectorAll('ul.actions>li[x-action-id][x-provoking-id]:not([disabled])'),
-                '{{ path('town_house_action_controller') }}', '{{ path('town_house') }}'
+                '{{ path('beyond_desert_action_controller') }}', '{{ path('beyond_dashboard') }}'
             );
         {% endif %}
         {% if allow_enter_town %}
             document.getElementById('town-enter').addEventListener('click', function() {
                 if (!confirm( '{% trans from 'global' %}Bestätigen?{% endtrans %}' ))
                     return;
-                $.ajax.easySend( '{{ path('beyond_door_exit_controller') }}', {},
+                $.ajax.easySend( '{{ path('beyond_desert_exit_controller') }}', {},
                     function () {
                         $.ajax.load(null, '{{ path('game_landing') }}', true);
                     } );
