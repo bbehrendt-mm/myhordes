@@ -2,30 +2,18 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\AffectAP;
-use App\Entity\AffectOriginalItem;
-use App\Entity\AffectStatus;
-use App\Entity\CitizenProfession;
-use App\Entity\CitizenStatus;
-use App\Entity\ItemAction;
 use App\Entity\ItemCategory;
 use App\Entity\ItemProperty;
 use App\Entity\ItemPrototype;
-use App\Entity\RequireItem;
-use App\Entity\Requirement;
-use App\Entity\RequireStatus;
-use App\Entity\Result;
-use App\Entity\TownClass;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
 
-class AppFixtures extends Fixture
+class ItemFixtures extends Fixture
 {
     public static $item_category_data = [
         ["name"=>"root_rsc" ,"label"=>"Baustoffe"               ,"parent"=>null,"ordering"=>0],
@@ -380,199 +368,150 @@ class AppFixtures extends Fixture
         'swiss_knife_#00' => [ 'can_opener' ],
     ];
 
-    public static $profession_data = [
-        ['name'=>'none'    ,'label'=>'Gammler' ],
-        ['name'=>'basic'   ,'label'=>'Einwohner' ],
-        ['name'=>'collec'  ,'label'=>'Buddler' ],
-        ['name'=>'guardian','label'=>'Wächter' ],
-        ['name'=>'hunter'  ,'label'=>'Aufklärer' ],
-        ['name'=>'tamer'   ,'label'=>'Dompteur' ],
-        ['name'=>'tech'    ,'label'=>'Techniker' ],
-        ['name'=>'shaman'  ,'label'=>'Schamane' ],
-    ];
-
-    public static $town_class_data = [
-        ['name'=>'small'  ,'label'=>'Kleine Stadt' ],
-        ['name'=>'remote' ,'label'=>'Entfernte Regionen' ],
-        ['name'=>'panda'  ,'label'=>'Pandämonium' ],
-        ['name'=>'custom' ,'label'=>'Private Stadt' ],
-    ];
-
-    public static $citizen_status = [
-        ['name' => 'clean', 'label' => 'Clean'],
-        ['name' => 'hasdrunk', 'label' => 'Getrunken'],
-        ['name' => 'haseaten', 'label' => 'Satt'],
-        ['name' => 'camper', 'label' => 'Umsichtiger Camper'],
-        ['name' => 'immune', 'label' => 'Immunisiert'],
-        ['name' => 'hsurvive', 'label' => 'Den Tod besiegen'],
-        ['name' => 'tired', 'label' => 'Erschöpfung'],
-        ['name' => 'terror', 'label' => 'Angststarre'],
-        ['name' => 'thirst1', 'label' => 'Durst'],
-        ['name' => 'thirst2', 'label' => 'Dehydriert'],
-        ['name' => 'drugged', 'label' => 'Rauschzustand'],
-        ['name' => 'addict', 'label' => 'Drogenabhängig'],
-        ['name' => 'infection', 'label' => 'Infektion'],
-        ['name' => 'drunk', 'label' => 'Trunkenheit'],
-        ['name' => 'hungover', 'label' => 'Kater'],
-        ['name' => 'wound1', 'label' => 'Verwundung - Kopf'],
-        ['name' => 'wound2', 'label' => 'Verwundung - Hände'],
-        ['name' => 'wound3', 'label' => 'Verwundung - Arme'],
-        ['name' => 'wound4', 'label' => 'Verwundung - Bein'],
-        ['name' => 'wound5', 'label' => 'Verwundung - Auge'],
-        ['name' => 'wound6', 'label' => 'Verwundung - Fuß'],
-        ['name' => 'ghul', 'label' => 'Ghul'],
-        ['name' => 'healed', 'label' => 'Bandagiert'],
-    ];
-
-    public static $item_actions = [
-        'meta_requirements' => [
-            'drink_ap_1'  => [ 'type' => Requirement::CrossOnFail, 'collection' => [ 'status' => 'has_not_drunken' ]],
-            'drink_ap_2'  => [ 'type' => Requirement::HideOnFail,  'collection' => [ 'status' => 'not_dehydrated' ]],
-            'drink_no_ap' => [ 'type' => Requirement::HideOnFail,  'collection' => [ 'status' => 'dehydrated' ]],
-
-            'eat_ap'      => [ 'type' => Requirement::CrossOnFail, 'collection' => [ 'status' => 'has_not_eaten' ]],
-
-            'drug_1'  => [ 'type' => Requirement::HideOnFail, 'collection' => [ 'status' => 'not_drugged' ]],
-            'drug_2'  => [ 'type' => Requirement::HideOnFail, 'collection' => [ 'status' => 'drugged' ]],
-
-            'have_can_opener' => [ 'type' => Requirement::MessageOnFail, 'collection' => [ 'item' => 'have_can_opener' ],  'text' => 'Du brauchst ein Werkzeug, um diesen Gegenstand zu öffnen...' ]
-        ],
-
-        'requirements' => [
-            'status' => [
-                'has_not_drunken' => [ 'enabled' => false, 'status' => 'hasdrunk' ],
-                'has_not_eaten'   => [ 'enabled' => false, 'status' => 'haseaten' ],
-
-                'not_dehydrated'  => [ 'enabled' => false, 'status' => 'thirst2' ],
-                'dehydrated'      => [ 'enabled' => true,  'status' => 'thirst2' ],
-
-                'not_drugged'  => [ 'enabled' => false, 'status' => 'drugged' ],
-                'drugged'      => [ 'enabled' => true,  'status' => 'drugged' ],
-
-            ],
-            'item' => [
-                'have_can_opener' => [ 'item' => null, 'prop' => 'can_opener' ],
-            ]
-        ],
-
-        'meta_results' => [
-            'consume_item'=> [ 'collection' => [ 'item' => 'consume' ]],
-
-            'drink_ap_1'  => [ 'collection' => [ 'status' => 'add_has_drunk', 'ap' => 'to_max_plus_0' ]],
-            'drink_ap_2'  => [ 'collection' => [ 'status' => 'remove_thirst' ]],
-            'drink_no_ap' => [ 'collection' => [ 'status' => 'replace_dehydration' ]],
-
-            'eat_ap6'     => [ 'collection' => [ 'status' => 'add_has_eaten', 'ap' => 'to_max_plus_0' ]],
-            'eat_ap7'     => [ 'collection' => [ 'status' => 'add_has_eaten', 'ap' => 'to_max_plus_1' ]],
-
-            'drug_any_1'   => [ 'collection' => [ 'status' => 'remove_clean' ]],
-            'drug_any_2'   => [ 'collection' => [ 'status' => 'add_is_drugged' ]],
-            'drug_addict'  => [ 'collection' => [ 'status' => 'add_addicted' ]],
-
-            'disinfect'    => [ 'collection' => [ 'status' => 'remove_infection' ]],
-
-            'just_ap6'     => [ 'collection' => [ 'ap' => 'to_max_plus_0' ]],
-            'just_ap7'     => [ 'collection' => [ 'ap' => 'to_max_plus_1' ]],
-            'just_ap8'     => [ 'collection' => [ 'ap' => 'to_max_plus_2' ]],
-
-            'produce_open_can' =>  [ 'collection' => [ 'item' => 'produce_open_can' ]],
-            'produce_watercan2' => [ 'collection' => [ 'item' => 'produce_watercan2' ]],
-            'produce_watercan1' => [ 'collection' => [ 'item' => 'produce_watercan1' ]],
-            'produce_watercan0' => [ 'collection' => [ 'item' => 'produce_watercan0' ]],
-        ],
-
-        'results' => [
-            'ap' => [
-                'to_max_plus_0' => [ 'max' => true, 'num' => 0 ],
-                'to_max_plus_1' => [ 'max' => true, 'num' => 1 ],
-                'to_max_plus_2' => [ 'max' => true, 'num' => 2 ],
-                'to_max_plus_3' => [ 'max' => true, 'num' => 3 ],
-            ],
-            'status' => [
-                'replace_dehydration' => [ 'from' => 'thirst2', 'to' => 'thirst1' ],
-                'add_has_drunk' => [ 'from' => null, 'to' => 'hasdrunk' ],
-                'remove_thirst' => [ 'from' => 'thirst1', 'to' => null ],
-
-                'remove_clean'    => [ 'from' => 'clean', 'to' => null ],
-                'remove_infection'=> [ 'from' => 'infection', 'to' => null ],
-
-                'add_has_eaten'  => [ 'from' => null, 'to' => 'haseaten' ],
-                'add_is_drugged' => [ 'from' => null, 'to' => 'drugged' ],
-                'add_addicted'   => [ 'from' => null, 'to' => 'addict' ],
-
-            ],
-            'item' => [
-                'consume' => [ 'consume' => true, 'morph' => null ],
-
-                'produce_open_can' =>  [ 'consume' => false, 'morph' => 'can_open_#00' ],
-                'produce_watercan2' => [ 'consume' => false, 'morph' => 'water_can_2_#00' ],
-                'produce_watercan1' => [ 'consume' => false, 'morph' => 'water_can_1_#00' ],
-                'produce_watercan0' => [ 'consume' => false, 'morph' => 'water_can_empty_#00' ],
-            ]
-        ],
-
-        'actions' => [
-            'water_6ap' => [ 'label' => 'Trinken', 'meta' => [ 'drink_ap_1', 'drink_ap_2' ], 'result' => [ 'drink_ap_1', 'drink_ap_2', 'consume_item' ] ],
-            'water_0ap' => [ 'label' => 'Trinken', 'meta' => [ 'drink_no_ap' ], 'result' => [ 'drink_no_ap', 'consume_item' ] ],
-
-            'watercan3_6ap' => [ 'label' => 'Trinken', 'meta' => [ 'drink_ap_1', 'drink_ap_2' ], 'result' => [ 'drink_ap_1', 'drink_ap_2', 'produce_watercan2' ] ],
-            'watercan3_0ap' => [ 'label' => 'Trinken', 'meta' => [ 'drink_no_ap' ], 'result' => [ 'drink_no_ap', 'produce_watercan2' ] ],
-            'watercan2_6ap' => [ 'label' => 'Trinken', 'meta' => [ 'drink_ap_1', 'drink_ap_2' ], 'result' => [ 'drink_ap_1', 'drink_ap_2', 'produce_watercan1' ] ],
-            'watercan2_0ap' => [ 'label' => 'Trinken', 'meta' => [ 'drink_no_ap' ], 'result' => [ 'drink_no_ap', 'produce_watercan1' ] ],
-            'watercan1_6ap' => [ 'label' => 'Trinken', 'meta' => [ 'drink_ap_1', 'drink_ap_2' ], 'result' => [ 'drink_ap_1', 'drink_ap_2', 'produce_watercan0' ] ],
-            'watercan1_0ap' => [ 'label' => 'Trinken', 'meta' => [ 'drink_no_ap' ], 'result' => [ 'drink_no_ap', 'produce_watercan0' ] ],
-
-            'can'       => [ 'label' => 'Öffnen',  'meta' => [ 'have_can_opener' ], 'result' => [ 'produce_open_can' ] ],
-
-            'eat_6ap'   => [ 'label' => 'Essen',   'meta' => [ 'eat_ap' ], 'result' => [ 'eat_ap6', 'consume_item' ] ],
-            'eat_7ap'   => [ 'label' => 'Essen',   'meta' => [ 'eat_ap' ], 'result' => [ 'eat_ap7', 'consume_item' ] ],
-
-            'drug_par_1'   => [ 'label' => 'Einnehmen', 'meta' => [ 'drug_1' ], 'result' => [ 'drug_any_1', 'drug_any_2', 'disinfect', 'consume_item' ] ],
-            'drug_par_2'   => [ 'label' => 'Einnehmen', 'meta' => [ 'drug_2' ], 'result' => [ 'drug_addict', 'disinfect', 'consume_item' ] ],
-            'drug_6ap_1'   => [ 'label' => 'Einnehmen', 'meta' => [ 'drug_1' ], 'result' => [ 'drug_any_1', 'drug_any_2', 'just_ap6', 'consume_item' ] ],
-            'drug_6ap_2'   => [ 'label' => 'Einnehmen', 'meta' => [ 'drug_2' ], 'result' => [ 'drug_addict', 'just_ap6', 'consume_item' ] ],
-            'drug_7ap_1'   => [ 'label' => 'Einnehmen', 'meta' => [ 'drug_1' ], 'result' => [ 'drug_any_1', 'drug_any_2', 'just_ap7', 'consume_item' ] ],
-            'drug_7ap_2'   => [ 'label' => 'Einnehmen', 'meta' => [ 'drug_2' ], 'result' => [ 'drug_addict', 'just_ap7', 'consume_item' ] ],
-            'drug_8ap_1'   => [ 'label' => 'Einnehmen', 'meta' => [ 'drug_1' ], 'result' => [ 'drug_any_1', 'drug_any_2', 'just_ap8', 'consume_item' ] ],
-            'drug_8ap_2'   => [ 'label' => 'Einnehmen', 'meta' => [ 'drug_2' ], 'result' => [ 'drug_addict', 'just_ap8', 'consume_item' ] ],
-
-        ],
-        'items' => [
-            'water_#00'           => [ 'water_6ap', 'water_0ap' ],
-            'water_cup_#00'       => [ 'water_6ap', 'water_0ap' ],
-            'water_can_3_#00'     => [ 'watercan3_6ap', 'watercan3_0ap' ],
-            'water_can_2_#00'     => [ 'watercan2_6ap', 'watercan2_0ap' ],
-            'water_can_1_#00'     => [ 'watercan1_6ap', 'watercan1_0ap' ],
-            'can_#00'             => [ 'can' ],
-            'can_open_#00'        => [ 'eat_6ap'],
-            'fruit_#00'           => [ 'eat_6ap'],
-            'bretz_#00'           => [ 'eat_6ap'],
-            'undef_#00'           => [ 'eat_6ap'],
-            'dish_#00'            => [ 'eat_6ap'],
-            'vegetable_#00'       => [ 'eat_6ap'],
-            'food_bar1_#00'       => [ 'eat_6ap'],
-            'food_bar2_#00'       => [ 'eat_6ap'],
-            'food_bar3_#00'       => [ 'eat_6ap'],
-            'food_biscuit_#00'    => [ 'eat_6ap'],
-            'food_chick_#00'      => [ 'eat_6ap'],
-            'food_pims_#00'       => [ 'eat_6ap'],
-            'food_tarte_#00'      => [ 'eat_6ap'],
-            'food_sandw_#00'      => [ 'eat_6ap'],
-            'food_noodles_#00'    => [ 'eat_6ap'],
-            'food_noodles_hot_#00'=> [ 'eat_7ap'],
-            'meat_#00'            => [ 'eat_7ap'],
-            'vegetable_tasty_#00' => [ 'eat_7ap'],
-            'dish_tasty_#00'      => [ 'eat_7ap'],
-            'food_candies_#00'    => [ 'eat_7ap'],
-            'chama_tasty_#00'     => [ 'eat_7ap'],
-            'woodsteak_#00'       => [ 'eat_7ap'],
-            'egg_#00'             => [ 'eat_7ap'],
-            'apple_#00'           => [ 'eat_7ap'],
-            'disinfect_#00'       => [ 'drug_par_1', 'drug_par_2' ],
-            'drug_#00'            => [ 'drug_6ap_1', 'drug_6ap_2' ],
-            'drug_hero_#00'       => [ 'drug_8ap_1', 'drug_8ap_2' ],
-        ]
-
+    public static $item_groups = [
+        'base_dig' => array(
+            array('item' => 'wood_bad_#00','count' => '41306'),
+            array('item' => 'metal_bad_#00','count' => '22856'),
+            array('item' => 'wood2_#00','count' => '16764'),
+            array('item' => 'metal_#00','count' => '10124'),
+            array('item' => 'grenade_empty_#00','count' => '6915'),
+            array('item' => 'food_bag_#00','count' => '4845'),
+            array('item' => 'pile_#00','count' => '4766'),
+            array('item' => 'pharma_#00','count' => '3935'),
+            array('item' => 'rustine_#00','count' => '2578'),
+            array('item' => 'can_#00','count' => '2445'),
+            array('item' => 'concrete_#00','count' => '1689'),
+            array('item' => 'wood_plate_part_#00','count' => '1529'),
+            array('item' => 'jerrycan_#00','count' => '1456'),
+            array('item' => 'chest_tools_#00','count' => '1390'),
+            array('item' => 'deco_box_#00','count' => '1309'),
+            array('item' => 'bplan_drop_#00','count' => '1232'),
+            array('item' => 'digger_#00','count' => '1231'),
+            array('item' => 'tube_#00','count' => '1184'),
+            array('item' => 'wood_beam_#00','count' => '1176'),
+            array('item' => 'powder_#00','count' => '1159'),
+            array('item' => 'staff_#00','count' => '1138'),
+            array('item' => 'oilcan_#00','count' => '1100'),
+            array('item' => 'mecanism_#00','count' => '1063'),
+            array('item' => 'drug_#00','count' => '965'),
+            array('item' => 'fest_#00','count' => '964'),
+            array('item' => 'meca_parts_#00','count' => '964'),
+            array('item' => 'plate_raw_#00','count' => '963'),
+            array('item' => 'watergun_empty_#00','count' => '953'),
+            array('item' => 'deto_#00','count' => '935'),
+            array('item' => 'repair_one_#00','count' => '907'),
+            array('item' => 'pet_snake_#00','count' => '877'),
+            array('item' => 'electro_box_#00','count' => '854'),
+            array('item' => 'tekel_#00','count' => '845'),
+            array('item' => 'door_#00','count' => '841'),
+            array('item' => 'drug_random_#00','count' => '818'),
+            array('item' => 'smoke_bomb_#00','count' => '814'),
+            array('item' => 'bag_#00','count' => '808'),
+            array('item' => 'water_cleaner_#00','count' => '803'),
+            array('item' => 'tagger_#00','count' => '794'),
+            array('item' => 'machine_3_#00','count' => '794'),
+            array('item' => 'trestle_#00','count' => '790'),
+            array('item' => 'pilegun_empty_#00','count' => '784'),
+            array('item' => 'machine_1_#00','count' => '777'),
+            array('item' => 'bretz_#00','count' => '775'),
+            array('item' => 'explo_#00','count' => '771'),
+            array('item' => 'food_noodles_#00','count' => '763'),
+            array('item' => 'chest_#00','count' => '734'),
+            array('item' => 'machine_2_#00','count' => '729'),
+            array('item' => 'pet_rat_#00','count' => '710'),
+            array('item' => 'wire_#00','count' => '691'),
+            array('item' => 'drug_hero_#00','count' => '634'),
+            array('item' => 'metal_beam_#00','count' => '592'),
+            array('item' => 'ryebag_#00','count' => '541'),
+            array('item' => 'spices_#00','count' => '508'),
+            array('item' => 'small_knife_#00','count' => '501'),
+            array('item' => 'bed_#00','count' => '501'),
+            array('item' => 'rhum_#00','count' => '499'),
+            array('item' => 'chain_#00','count' => '493'),
+            array('item' => 'pet_chick_#00','count' => '491'),
+            array('item' => 'cutter_#00','count' => '476'),
+            array('item' => 'pet_pig_#00','count' => '474'),
+            array('item' => 'meat_#00','count' => '474'),
+            array('item' => 'can_opener_#00','count' => '469'),
+            array('item' => 'lilboo_#00','count' => '458'),
+            array('item' => 'electro_#00','count' => '427'),
+            array('item' => 'chair_basic_#00','count' => '423'),
+            array('item' => 'xanax_#00','count' => '418'),
+            array('item' => 'diode_#00','count' => '416'),
+            array('item' => 'pet_cat_#00','count' => '396'),
+            array('item' => 'lights_#00','count' => '381'),
+            array('item' => 'sport_elec_empty_#00','count' => '376'),
+            array('item' => 'lock_#00','count' => '369'),
+            array('item' => 'lens_#00','count' => '366'),
+            array('item' => 'chest_food_#00','count' => '364'),
+            array('item' => 'chudol_#00','count' => '347'),
+            array('item' => 'angryc_#00','count' => '342'),
+            array('item' => 'home_box_#00','count' => '302'),
+            array('item' => 'home_def_#00','count' => '294'),
+            array('item' => 'fence_#00','count' => '293'),
+            array('item' => 'repair_kit_part_raw_#00','count' => '293'),
+            array('item' => 'rsc_pack_2_#00','count' => '290'),
+            array('item' => 'lamp_#00','count' => '288'),
+            array('item' => 'disinfect_#00','count' => '288'),
+            array('item' => 'book_gen_letter_#00','count' => '286'),
+            array('item' => 'bandage_#00','count' => '284'),
+            array('item' => 'plate_#00','count' => '283'),
+            array('item' => 'chest_citizen_#00','count' => '282'),
+            array('item' => 'cart_part_#00','count' => '274'),
+            array('item' => 'chair_#00','count' => '273'),
+            array('item' => 'bquies_#00','count' => '257'),
+            array('item' => 'screw_#00','count' => '240'),
+            array('item' => 'badge_#00','count' => '238'),
+            array('item' => 'pc_#00','count' => '215'),
+            array('item' => 'music_part_#00','count' => '210'),
+            array('item' => 'book_gen_box_#00','count' => '209'),
+            array('item' => 'paques_#00','count' => '207'),
+            array('item' => 'cyanure_#00','count' => '206'),
+            array('item' => 'hmeat_#00','count' => '195'),
+            array('item' => 'knife_#00','count' => '194'),
+            array('item' => 'engine_part_#00','count' => '193'),
+            array('item' => 'game_box_#00','count' => '192'),
+            array('item' => 'wood_log_#00','count' => '190'),
+            array('item' => 'vibr_empty_#00','count' => '189'),
+            array('item' => 'cigs_#00','count' => '181'),
+            array('item' => 'out_def_#00','count' => '180'),
+            array('item' => 'courroie_#00','count' => '179'),
+            array('item' => 'catbox_#00','count' => '170'),
+            array('item' => 'sheet_#00','count' => '115'),
+            array('item' => 'iphone_#00','count' => '112'),
+            array('item' => 'money_#00','count' => '110'),
+            array('item' => 'home_box_xl_#00','count' => '109'),
+            array('item' => 'coffee_machine_part_#00','count' => '103'),
+            array('item' => 'cadaver_#00','count' => '102'),
+            array('item' => 'smelly_meat_#00','count' => '102'),
+            array('item' => 'postal_box_#00','count' => '98'),
+            array('item' => 'big_pgun_part_#00','count' => '95'),
+            array('item' => 'car_door_part_#00','count' => '95'),
+            array('item' => 'chama_#00','count' => '94'),
+            array('item' => 'water_can_empty_#00','count' => '93'),
+            array('item' => 'cdbrit_#00','count' => '92'),
+            array('item' => 'pilegun_upkit_#00','count' => '90'),
+            array('item' => 'saw_tool_part_#00','count' => '90'),
+            array('item' => 'beta_drug_bad_#00','count' => '90'),
+            array('item' => 'rp_book_#00','count' => '90'),
+            array('item' => 'chest_xl_#00','count' => '90'),
+            array('item' => 'poison_part_#00','count' => '90'),
+            array('item' => 'gun_#00','count' => '90'),
+            array('item' => 'rsc_pack_3_#00','count' => '89'),
+            array('item' => 'safe_#00','count' => '88'),
+            array('item' => 'rp_twin_#00','count' => '87'),
+            array('item' => 'food_armag_#00','count' => '87'),
+            array('item' => 'cdelvi_#00','count' => '82'),
+            array('item' => 'cdphil_#00','count' => '67'),
+            array('item' => 'cinema_#00','count' => '53'),
+            array('item' => 'maglite_off_#00','count' => '24'),
+            array('item' => 'renne_#00','count' => '14'),
+            array('item' => 'sand_ball_#00','count' => '8'),
+            array('item' => 'vodka_de_#00','count' => '6'),
+            array('item' => 'christmas_suit_3_#00','count' => '4'),
+            array('item' => 'christmas_suit_1_#00','count' => '3'),
+            array('item' => 'christmas_suit_2_#00','count' => '1'),
+        )
     ];
 
     private $entityManager;
@@ -729,425 +668,15 @@ class AppFixtures extends Fixture
         $table->render();
     }
 
-    protected function insert_professions(ObjectManager $manager, ConsoleOutputInterface $out) {
-        $out->writeln( '<comment>Citizen professions: ' . count(static::$profession_data) . ' fixture entries available.</comment>' );
+    public function insert_default_item_groups( ObjectManager $manager, ConsoleOutputInterface $out ) {
+        $out->writeln( '<comment>Default item groups: ' . count(static::$item_groups) . ' fixture entries available.</comment>' );
 
-        // Set up console
-        $table = new Table( $out );
-        $table->setHeaders( ['ID','Name','Label'] );
-        $progress = new ProgressBar( $out->section() );
-        $progress->start( count(static::$profession_data) );
-
-        // Iterate over all entries
-        foreach (static::$profession_data as $entry) {
-            // Get existing entry, or create new one
-            $entity = $this->entityManager->getRepository(CitizenProfession::class)->findOneByName( $entry['name'] );
-            if ($entity === null) $entity = new CitizenProfession();
-
-            // Set property
-            $entity->setName( $entry['name'] );
-            $entity->setLabel( $entry['label'] );
-
-            $manager->persist( $entity );
-
-            // Set table entry
-            $table->addRow( [$entity->getId(),$entity->getName(),$entity->getLabel()] );
-            $progress->advance();
-        }
+        foreach (static::$item_groups as $name => $group)
+            $manager->persist( FixtureHelper::createItemGroup( $manager, $name, $group ) );
 
         $manager->flush();
-        $progress->finish();
-        $table->render();
-    }
 
-    protected function insert_town_classes(ObjectManager $manager, ConsoleOutputInterface $out) {
-        $out->writeln( '<comment>Town classes: ' . count(static::$town_class_data) . ' fixture entries available.</comment>' );
-
-        // Set up console
-        $table = new Table( $out );
-        $table->setHeaders( ['ID','Name','Label'] );
-        $progress = new ProgressBar( $out->section() );
-        $progress->start( count(static::$town_class_data) );
-
-        // Iterate over all entries
-        foreach (static::$town_class_data as $entry) {
-            // Get existing entry, or create new one
-            $entity = $this->entityManager->getRepository(TownClass::class)->findOneByName( $entry['name'] );
-            if ($entity === null) $entity = new TownClass();
-
-            // Set property
-            $entity->setName( $entry['name'] );
-            $entity->setLabel( $entry['label'] );
-
-            $manager->persist( $entity );
-
-            // Set table entry
-            $table->addRow( [$entity->getId(),$entity->getName(),$entity->getLabel()] );
-            $progress->advance();
-        }
-
-        $manager->flush();
-        $progress->finish();
-        $table->render();
-    }
-
-    protected function insert_status_types(ObjectManager $manager, ConsoleOutputInterface $out) {
-        $out->writeln( '<comment>Status: ' . count(static::$citizen_status) . ' fixture entries available.</comment>' );
-
-        // Set up console
-        $table = new Table( $out );
-        $table->setHeaders( ['ID','Name','Label'] );
-        $progress = new ProgressBar( $out->section() );
-        $progress->start( count(static::$citizen_status) );
-
-        // Iterate over all entries
-        foreach (static::$citizen_status as $entry) {
-            // Get existing entry, or create new one
-            $entity = $this->entityManager->getRepository(CitizenStatus::class)->findOneByName( $entry['name'] );
-            if ($entity === null) $entity = new CitizenStatus();
-
-            // Set property
-            $entity->setName( $entry['name'] );
-            $entity->setLabel( $entry['label'] );
-
-            $manager->persist( $entity );
-
-            // Set table entry
-            $table->addRow( [$entity->getId(),$entity->getName(),$entity->getLabel()] );
-            $progress->advance();
-        }
-
-        $manager->flush();
-        $progress->finish();
-        $table->render();
-    }
-
-    /**
-     * @param ObjectManager $manager
-     * @param ConsoleOutputInterface $out
-     * @param array $cache
-     * @param string $id
-     * @param array $sub_cache
-     * @return Requirement
-     * @throws Exception
-     */
-    private function process_meta_requirement(        
-        ObjectManager $manager, ConsoleOutputInterface $out,
-        array &$cache, string $id, array &$sub_cache): Requirement
-    {
-        if (!isset($cache[$id])) {
-            if (!isset(static::$item_actions['meta_requirements'][$id])) throw new Exception('Requirement definition not found: ' . $id);
-
-            $data = static::$item_actions['meta_requirements'][$id];
-            $requirement = $manager->getRepository(Requirement::class)->findOneByName( $id );
-            if ($requirement) $out->writeln( "\t\t<comment>Update</comment> meta condition <info>$id</info>" );
-            else {
-                $requirement = new Requirement();
-                $out->writeln( "\t\t<comment>Create</comment> meta condition <info>$id</info>" );
-            }
-
-            $requirement
-                ->setName( $id )
-                ->setFailureMode( $data['type'] )
-                ->setFailureText( isset($data['text']) ? $data['text'] : null );
-
-            foreach ($data['collection'] as $sub_id => $sub_req) {
-                if (!isset( static::$item_actions['requirements'][$sub_id] ))
-                    throw new Exception('Requirement type definition not found: ' . $sub_id);
-                if (!isset( static::$item_actions['requirements'][$sub_id][$sub_req] ))
-                    throw new Exception('Requirement entry definition not found: ' . $sub_id . '/' . $sub_req);
-
-                $sub_data = static::$item_actions['requirements'][$sub_id][$sub_req];
-                if (!isset($sub_cache[$sub_id])) $sub_cache[$sub_id] = [];
-                                
-                switch ($sub_id) {
-                    case 'status':
-                        $requirement->setStatusRequirement( $this->process_status_requirement( $manager, $out, $sub_cache[$sub_id], $sub_req, $sub_data ) );
-                        break;
-                    case 'item':
-                        $requirement->setItem( $this->process_item_requirement($manager, $out, $sub_cache[$sub_id], $sub_req, $sub_data ) );
-                        break;
-                    default:
-                        throw new Exception('No handler for requirement type ' . $sub_id);
-                }
-            }
-
-            $manager->persist( $cache[$id] = $requirement );
-        } else $out->writeln( "\t\t<comment>Skip</comment> meta condition <info>$id</info>" );
-        
-        return $cache[$id];
-    }
-
-    /**
-     * @param ObjectManager $manager
-     * @param ConsoleOutputInterface $out
-     * @param array $cache
-     * @param string $id
-     * @param array $data
-     * @return RequireStatus
-     * @throws Exception
-     */
-    private function process_status_requirement(
-        ObjectManager $manager, ConsoleOutputInterface $out, 
-        array &$cache, string $id, array $data): RequireStatus
-    {
-        if (!isset($cache[$id])) {
-            $requirement = $manager->getRepository(RequireStatus::class)->findOneByName( $id );
-            if ($requirement) $out->writeln( "\t\t\t<comment>Update</comment> condition <info>status/{$id}</info>" );
-            else {
-                $requirement = new RequireStatus();
-                $out->writeln( "\t\t\t<comment>Create</comment> condition <info>status/{$id}</info>" );
-            }
-            $status = $manager->getRepository(CitizenStatus::class)->findOneByName( $data['status'] );
-            if (!$status)
-                throw new Exception('Status condition not found: ' . $data['status']);
-
-            $requirement->setName( $id )->setEnabled( $data['enabled'] )->setStatus( $status );
-            $manager->persist( $cache[$id] = $requirement );
-        } else $out->writeln( "\t\t\t<comment>Skip</comment> condition <info>status/{$id}</info>" );
-        
-        return $cache[$id];
-    }
-
-    /**
-     * @param ObjectManager $manager
-     * @param ConsoleOutputInterface $out
-     * @param array $cache
-     * @param string $id
-     * @param array $data
-     * @return RequireItem
-     * @throws Exception
-     */
-    private function process_item_requirement(
-        ObjectManager $manager, ConsoleOutputInterface $out,
-        array &$cache, string $id, array $data): RequireItem
-    {
-        if (!isset($cache[$id])) {
-            $requirement = $manager->getRepository(RequireItem::class)->findOneByName( $id );
-            if ($requirement) $out->writeln( "\t\t\t<comment>Update</comment> condition <info>item/{$id}</info>" );
-            else {
-                $requirement = new RequireItem();
-                $out->writeln( "\t\t\t<comment>Create</comment> condition <info>item/{$id}</info>" );
-            }
-            $prototype = empty($data['item']) ? null : $manager->getRepository(ItemPrototype::class)->findOneByName( $data['item'] );
-            if (!empty($data['item']) && ! $prototype)
-                throw new Exception('Item prototype not found: ' . $data['item']);
-
-            $property  = empty($data['prop']) ? null : $manager->getRepository(ItemProperty::class )->findOneByName( $data['prop'] );
-            if (!empty($data['prop']) && ! $property)
-                throw new Exception('Item property not found: ' . $data['prop']);
-
-            if (!$prototype && !$property)
-                throw new Exception('Item condition must have a prototype or property attached. not found: ' . $data['status']);
-
-            $requirement->setName( $id )->setPrototype( $prototype )->setProperty( $property );
-            $manager->persist( $cache[$id] = $requirement );
-        } else $out->writeln( "\t\t\t<comment>Skip</comment> condition <info>item/{$id}</info>" );
-
-        return $cache[$id];
-    }
-
-    /**
-     * @param ObjectManager $manager
-     * @param ConsoleOutputInterface $out
-     * @param array $cache
-     * @param string $id
-     * @param array $sub_cache
-     * @return Result
-     * @throws Exception
-     */
-    private function process_meta_effect(
-        ObjectManager $manager, ConsoleOutputInterface $out,
-        array &$cache, string $id, array &$sub_cache): Result
-    {
-        if (!isset($cache[$id])) {
-            if (!isset(static::$item_actions['meta_results'][$id])) throw new Exception('Result definition not found: ' . $id);
-
-            $data = static::$item_actions['meta_results'][$id];
-            $result = $manager->getRepository(Result::class)->findOneByName( $id );
-            if ($result) $out->writeln( "\t\t<comment>Update</comment> meta effect <info>$id</info>" );
-            else {
-                $result = new Result();
-                $out->writeln( "\t\t<comment>Create</comment> meta effect <info>$id</info>" );
-            }
-
-            $result->setName( $id );
-
-            foreach ($data['collection'] as $sub_id => $sub_res) {
-                if (!isset( static::$item_actions['results'][$sub_id] ))
-                    throw new Exception('Result type definition not found: ' . $sub_id);
-                if (!isset( static::$item_actions['results'][$sub_id][$sub_res] ))
-                    throw new Exception('Result entry definition not found: ' . $sub_id . '/' . $sub_res);
-
-                $sub_data = static::$item_actions['results'][$sub_id][$sub_res];
-                if (!isset($sub_cache[$sub_id])) $sub_cache[$sub_id] = [];
-
-                switch ($sub_id) {
-                    case 'status':
-                        $result->setStatus( $this->process_status_effect($manager,$out,$sub_cache[$sub_id], $sub_res, $sub_data) );
-                        break;
-                    case 'ap':
-                        $result->setAp( $this->process_ap_effect($manager,$out, $sub_cache[$sub_id], $sub_res, $sub_data) );
-                        break;
-                    case 'item':
-                        $result->setItem( $this->process_item_effect($manager, $out, $sub_cache[$sub_id], $sub_res, $sub_data) );
-                        break;
-                    default:
-                        throw new Exception('No handler for effect type ' . $sub_id);
-                }
-            }
-
-            $manager->persist( $cache[$id] = $result );
-        } else $out->writeln( "\t\t<comment>Skip</comment> meta effect <info>$id</info>" );
-
-        return $cache[$id];
-    }
-    
-    /**
-     * @param ObjectManager $manager
-     * @param ConsoleOutputInterface $out
-     * @param array $cache
-     * @param string $id
-     * @param array $data
-     * @return AffectStatus
-     * @throws Exception
-     */
-    private function process_status_effect(
-        ObjectManager $manager, ConsoleOutputInterface $out,
-        array &$cache, string $id, array $data): AffectStatus
-    {
-        if (!isset($cache[$id])) {
-            $result = $manager->getRepository(AffectStatus::class)->findOneByName( $id );
-            if ($result) $out->writeln( "\t\t\t<comment>Update</comment> effect <info>status/{$id}</info>" );
-            else {
-                $result = new AffectStatus();
-                $out->writeln( "\t\t\t<comment>Create</comment> effect <info>status/{$id}</info>" );
-            }
-            $status_from = empty($data['from']) ? null : $manager->getRepository(CitizenStatus::class)->findOneByName( $data['from'] );
-            if (!$status_from && !empty($data['from'])) throw new Exception('Status effect not found: ' . $data['from']);
-            $status_to = empty($data['to']) ? null : $manager->getRepository(CitizenStatus::class)->findOneByName( $data['to'] );
-            if (!$status_to && !empty($data['to'])) throw new Exception('Status effect not found: ' . $data['to']);
-
-            if (!$status_from && !$status_to) throw new Exception('Status effects must have at least one attached status.');
-
-            $result->setName( $id )->setInitial( $status_from )->setResult( $status_to );
-            $manager->persist( $cache[$id] = $result );
-        } else $out->writeln( "\t\t\t<comment>Skip</comment> condition <info>status/{$id}</info>" );
-        
-        return $cache[$id];
-    }
-
-    /**
-     * @param ObjectManager $manager
-     * @param ConsoleOutputInterface $out
-     * @param array $cache
-     * @param string $id
-     * @param array $data
-     * @return AffectAP
-     */
-    private function process_ap_effect(
-        ObjectManager $manager, ConsoleOutputInterface $out,
-        array &$cache, string $id, array $data): AffectAP
-    {
-        if (!isset($cache[$id])) {
-            $result = $manager->getRepository(AffectAP::class)->findOneByName( $id );
-            if ($result) $out->writeln( "\t\t\t<comment>Update</comment> effect <info>ap/{$id}</info>" );
-            else {
-                $result = new AffectAP();
-                $out->writeln( "\t\t\t<comment>Create</comment> effect <info>ap/{$id}</info>" );
-            }
-
-            $result->setName( $id )->setMax( $data['max'] )->setAp( $data['num'] );
-            $manager->persist( $cache[$id] = $result );
-        } else $out->writeln( "\t\t\t<comment>Skip</comment> condition <info>ap/{$id}</info>" );
-        
-        return $cache[$id];
-    }
-
-    /**
-     * @param ObjectManager $manager
-     * @param ConsoleOutputInterface $out
-     * @param array $cache
-     * @param string $id
-     * @param array $data
-     * @return AffectOriginalItem
-     * @throws Exception
-     */
-    private function process_item_effect(
-        ObjectManager $manager, ConsoleOutputInterface $out,
-        array &$cache, string $id, array $data): AffectOriginalItem 
-    {
-        if (!isset($cache[$id])) {
-            $result = $manager->getRepository(AffectOriginalItem::class)->findOneByName( $id );
-            if ($result) $out->writeln( "\t\t\t<comment>Update</comment> effect <info>item/{$id}</info>" );
-            else {
-                $result = new AffectOriginalItem();
-                $out->writeln( "\t\t\t<comment>Create</comment> effect <info>item/{$id}</info>" );
-            }
-            $morph_to = empty($data['morph']) ? null : $manager->getRepository(ItemPrototype::class)->findOneByName( $data['morph'] );
-            if (!$morph_to && !empty($data['morph'])) throw new Exception('Item prototype not found: ' . $data['morph']);
-
-            if ($morph_to && $data['consume']) throw new Exception('Item effects cannot morph and consume at the same time!');
-
-            $result->setName( $id )->setConsume( $data['consume'] )->setMorph( $morph_to );
-            $manager->persist( $cache[$id] = $result );
-        } else $out->writeln( "\t\t\t<comment>Skip</comment> condition <info>item/{$id}</info>" );
-        
-        return $cache[$id];
-    } 
-    
-    /**
-     * @param ObjectManager $manager
-     * @param ConsoleOutputInterface $out
-     * @throws Exception
-     */
-    public function insert_item_actions(ObjectManager $manager, ConsoleOutputInterface $out) {
-
-        $out->writeln( '<comment>Compiling item action fixtures.</comment>' );
-
-        $set_meta_requirements = [];
-        $set_sub_requirements = [];
-
-        $set_meta_results = [];
-        $set_sub_results = [];
-
-        $set_actions = [];
-
-        foreach (static::$item_actions['items'] as $item_name => $actions) {
-
-            $item = $manager->getRepository(ItemPrototype::class)->findOneByName( $item_name );
-            if (!$item) throw new Exception('Item prototype not found: ' . $item_name);
-            $out->writeln( "Compiling action set for item <info>{$item->getLabel()}</info>..." );
-
-            foreach ($actions as $action) {
-
-                if (!isset($set_actions[$action])) {
-                    if (!isset(static::$item_actions['actions'][$action])) throw new Exception('Action definition not found: ' . $action);
-
-                    $data = static::$item_actions['actions'][$action];
-                    $new_action = $manager->getRepository(ItemAction::class)->findOneByName( $action );
-                    if ($new_action) $out->writeln( "\t<comment>Update</comment> action <info>$action</info> ('<info>{$data['label']}</info>')" );
-                    else {
-                        $new_action = new ItemAction();
-                        $out->writeln( "\t<comment>Create</comment> action <info>$action</info> ('<info>{$data['label']}</info>')" );
-                    }
-
-                    $new_action->setName( $action )->setLabel( $data['label'] )->clearRequirements();
-
-                    foreach ( $data['meta'] as $requirement )
-                        $new_action->addRequirement( $this->process_meta_requirement( $manager, $out, $set_meta_requirements, $requirement, $set_sub_requirements ) );
-
-                    foreach ( $data['result'] as $result )
-                        $new_action->addResult( $this->process_meta_effect($manager,$out, $set_meta_results, $result, $set_sub_results) );
-
-                    $manager->persist( $set_actions[$action] = $new_action );
-                } else $out->writeln( "\t<comment>Skip</comment> action <info>$action</info> ('<info>{$set_actions[$action]->getLabel()}</info>')" );
-
-                $item->addAction( $set_actions[$action] );
-            }
-            $manager->persist( $item );
-        }
-        $manager->flush();
+        $out->writeln('<info>Done!</info>');
     }
 
     public function load(ObjectManager $manager) {
@@ -1160,30 +689,7 @@ class AppFixtures extends Fixture
         $output->writeln("");
         $this->insert_item_prototypes( $manager, $output );
         $output->writeln("");
-
-        $output->writeln( '<info>Installing fixtures: Citizen Database</info>' );
-        $output->writeln("");
-
-        $this->insert_professions( $manager, $output );
-        $output->writeln("");
-        $this->insert_status_types( $manager, $output );
-        $output->writeln("");
-
-        $output->writeln( '<info>Installing fixtures: Town Content Database</info>' );
-        $output->writeln("");
-
-        $this->insert_town_classes( $manager, $output );
-        $output->writeln("");
-
-        $output->writeln( '<info>Installing fixtures: Actions</info>' );
-        $output->writeln("");
-
-        try {
-            $this->insert_item_actions( $manager, $output );
-        } catch (Exception $e) {
-            $output->writeln("<error>{$e->getMessage()}</error>");
-        }
-
+        $this->insert_default_item_groups( $manager, $output );
         $output->writeln("");
     }
 }

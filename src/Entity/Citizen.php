@@ -78,9 +78,15 @@ class Citizen
      */
     private $zone;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\DigTimer", mappedBy="citizen", orphanRemoval=true)
+     */
+    private $digTimers;
+
     public function __construct()
     {
         $this->status = new ArrayCollection();
+        $this->digTimers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -235,6 +241,37 @@ class Citizen
     public function setZone(?Zone $zone): self
     {
         $this->zone = $zone;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|DigTimer[]
+     */
+    public function getDigTimers(): Collection
+    {
+        return $this->digTimers;
+    }
+
+    public function addDigTimer(DigTimer $digTimer): self
+    {
+        if (!$this->digTimers->contains($digTimer)) {
+            $this->digTimers[] = $digTimer;
+            $digTimer->setCitizen($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDigTimer(DigTimer $digTimer): self
+    {
+        if ($this->digTimers->contains($digTimer)) {
+            $this->digTimers->removeElement($digTimer);
+            // set the owning side to null (unless already changed)
+            if ($digTimer->getCitizen() === $this) {
+                $digTimer->setCitizen(null);
+            }
+        }
 
         return $this;
     }

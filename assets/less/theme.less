@@ -297,7 +297,17 @@ div.map_area {
       };
 
       &>.zone {
-        &.town { background: url("../img/map_zone_town.svg") center/contain no-repeat; }
+
+        &.danger-0 { background: none; }
+        &.danger-1 { background: #4e6208; }
+        &.danger-2 { background: #8a7127; }
+        &.danger-3 { background: #8f3a13; }
+        &.danger-4 { background: #004182; }
+
+        &>div { position: absolute; display: block; top: 0; left: 0; width: 100%; z-index: 1; height: 100%; }
+        &>div.count { font-size: 5px; color: white; font-weight: bold; text-align: center; padding-top: 2px; text-shadow: 0 0 1px black, 0 0 2px black, 0 0 3px black; }
+        &.town>div.icon { background: url("../img/map_zone_town.svg") center/contain no-repeat; }
+        &.ruin>div.icon { background: url("../img/map_zone_ruin.svg") center/contain no-repeat; }
       }
     }
   }

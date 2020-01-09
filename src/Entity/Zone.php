@@ -57,9 +57,30 @@ class Zone
      */
     private $citizens;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $initialZombies;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\ZonePrototype")
+     */
+    private $prototype;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $digs = 10;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\DigTimer", mappedBy="zone", orphanRemoval=true)
+     */
+    private $digTimers;
+
     public function __construct()
     {
         $this->citizens = new ArrayCollection();
+        $this->digTimers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -152,6 +173,73 @@ class Zone
             // set the owning side to null (unless already changed)
             if ($citizen->getZone() === $this) {
                 $citizen->setZone(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getInitialZombies(): ?int
+    {
+        return $this->initialZombies;
+    }
+
+    public function setInitialZombies(int $initialZombies): self
+    {
+        $this->initialZombies = $initialZombies;
+
+        return $this;
+    }
+
+    public function getPrototype(): ?ZonePrototype
+    {
+        return $this->prototype;
+    }
+
+    public function setPrototype(?ZonePrototype $prototype): self
+    {
+        $this->prototype = $prototype;
+
+        return $this;
+    }
+
+    public function getDigs(): ?int
+    {
+        return $this->digs;
+    }
+
+    public function setDigs(int $digs): self
+    {
+        $this->digs = $digs;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|DigTimer[]
+     */
+    public function getDigTimers(): Collection
+    {
+        return $this->digTimers;
+    }
+
+    public function addDigTimer(DigTimer $digTimer): self
+    {
+        if (!$this->digTimers->contains($digTimer)) {
+            $this->digTimers[] = $digTimer;
+            $digTimer->setZone($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDigTimer(DigTimer $digTimer): self
+    {
+        if ($this->digTimers->contains($digTimer)) {
+            $this->digTimers->removeElement($digTimer);
+            // set the owning side to null (unless already changed)
+            if ($digTimer->getZone() === $this) {
+                $digTimer->setZone(null);
             }
         }
 

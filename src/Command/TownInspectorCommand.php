@@ -9,6 +9,7 @@ use App\Entity\Inventory;
 use App\Entity\Town;
 use App\Entity\TownClass;
 use App\Entity\WellCounter;
+use App\Service\GameFactory;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\Console\Command\Command;
@@ -23,10 +24,12 @@ class TownInspectorCommand extends Command
     protected static $defaultName = 'app:town';
 
     private $entityManager;
+    private $gameFactory;
 
-    public function __construct(EntityManagerInterface $em)
+    public function __construct(EntityManagerInterface $em, GameFactory $gf)
     {
         $this->entityManager = $em;
+        $this->gameFactory = $gf;
         parent::__construct();
     }
 
@@ -39,6 +42,7 @@ class TownInspectorCommand extends Command
 
             ->addOption('show-zones', null, InputOption::VALUE_NONE, 'Lists zone information.')
             ->addOption('reset-well-lock', null, InputOption::VALUE_NONE, 'Resets the well lock.')
+            ->addOption('zombies', null, InputOption::VALUE_REQUIRED, 'Controls the zombie spawn; set to "reset" to clear all zombies, "daily" to perform a single daily spread or "global" to force a global respawn.')
 
             ->addOption('citizen', 'c', InputOption::VALUE_REQUIRED, 'When used together with --reset-well-lock, only the lock of the given citizen is released.', -1)
             ;
@@ -132,6 +136,28 @@ class TownInspectorCommand extends Command
             $changes = $num > 0;
             $output->writeln("<comment>{$num}</comment> well counter/s have been reset.");
         }
+
+        if ($spawn = $input->getOption('zombies'))
+            switch ($spawn) {
+                case 'reset':
+                    foreach ($town->getZones() as $zone) $zone->setInitialZombies(0)->setZombies(0);
+                    $changes = true;
+                    $output->writeln("<comment>Zombies</comment> have been removed.");
+                    break;
+                case 'daily':
+                    $this->gameFactory->dailyZombieSpawn( $town, 1, GameFactory::RespawnModeAuto );
+                    $changes = true;
+                    $output->writeln("<comment>Daily Zombie spawn</comment> has been executed.");
+                    break;
+                case 'global':
+                    $this->gameFactory->dailyZombieSpawn( $town, 0, GameFactory::RespawnModeForce );
+                    $changes = true;
+                    $output->writeln("<comment>Global Zombie respawn</comment> has been executed.");
+                    break;
+                default:
+                    $output->writeln("<error>Invalid value for --zombies option.</error>");
+                    break;
+            }
 
         if ($changes) $this->entityManager->flush();
 

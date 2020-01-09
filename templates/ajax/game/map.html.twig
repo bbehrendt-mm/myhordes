@@ -7,7 +7,20 @@
             {% for y in map_y0..map_y1 %}
                 {% for x in map_x0..map_x1 %}
                     {% if zones[x] and zones[x][y] %}
-                        <div class="zone {% if x == 0 and y == 0 %}town{% endif %} {% if x == pos_x and y == pos_y %}active{% endif %}" style="width: {{ size }}%; padding-top: {{ size }}%" x-zone-x="{{ x }}" x-zone-y="{{ y }}"></div>
+                        <div
+                                class="zone
+                                    {% if x == 0 and y == 0 %}town{% endif %}
+                                    {% if x == pos_x and y == pos_y %}active{% endif %}
+                                    {% if zones[x][y].prototype %}ruin{% endif %}
+                                    {% if zones[x][y].zombies == 0 %}danger-0
+                                    {% elseif zones[x][y].zombies <= 2 %}danger-1
+                                    {% elseif zones[x][y].zombies <= 5 %}danger-2
+                                    {% else %}danger-3{% endif %}
+                                "
+                                style="width: {{ size }}%; padding-top: {{ size }}%" x-zone-x="{{ x }}" x-zone-y="{{ y }}">
+                                <div class="icon"></div>
+                                <div class="count">{% if zones[x][y].zombies > 0 %}{{ zones[x][y].zombies }}{% endif %}</div>
+                        </div>
                     {% else %}
                         <div class="void" style="width: {{ size }}%; padding-top: {{ size }}%"></div>
                     {% endif %}
