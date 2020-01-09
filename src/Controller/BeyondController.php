@@ -164,4 +164,16 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
         return $this->generic_action_api( $parser, $handler);
     }
 
+    /**
+     * @Route("api/beyond/desert/item", name="beyond_desert_item_controller")
+     * @param JSONRequestParser $parser
+     * @param InventoryHandler $handler
+     * @return Response
+     */
+    public function item_desert_api(JSONRequestParser $parser, InventoryHandler $handler): Response {
+        $up_inv   = $this->getActiveCitizen()->getInventory();
+        $down_inv = $this->getActiveCitizen()->getZone()->getFloor();
+        return $this->generic_item_api( $up_inv, $down_inv, true, $parser, $handler);
+    }
+
 }
