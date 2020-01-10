@@ -39,9 +39,9 @@ export default class HTML {
             const seconds = Math.floor((timeout.getTime() - (new Date()).getTime())/1000);
             if (seconds < 0) return;
 
-            const h = Math.floor(seconds/1800);
-            const m = Math.floor((seconds - h*1800)/60);
-            const s = seconds - h*1800 - m*60;
+            const h = Math.floor(seconds/3600);
+            const m = Math.floor((seconds - h*3600)/60);
+            const s = seconds - h*3600 - m*60;
             element.innerHTML =
                 (h > 0 ? (h + ':') : '') +
                 (h > 0 ? (m > 9 ? (m + ':') : ('0' + m + ':')) : (m + ':')) +

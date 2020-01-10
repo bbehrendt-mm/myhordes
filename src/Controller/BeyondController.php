@@ -4,14 +4,20 @@ namespace App\Controller;
 
 use App\Entity\Citizen;
 use App\Entity\CitizenProfession;
+use App\Entity\DigRuinMarker;
+use App\Entity\DigTimer;
 use App\Entity\EscapeTimer;
 use App\Entity\Item;
 use App\Entity\TownClass;
 use App\Entity\User;
 use App\Entity\UserPendingValidation;
 use App\Entity\Zone;
+use App\Repository\DigRuinMarkerRepository;
 use App\Response\AjaxResponse;
+use App\Service\ActionHandler;
+use App\Service\CitizenHandler;
 use App\Service\ErrorHelper;
+use App\Service\GameFactory;
 use App\Service\InventoryHandler;
 use App\Service\ItemFactory;
 use App\Service\JSONRequestParser;
@@ -49,6 +55,36 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
     const ErrorZoneBlocked          = ErrorHelper::BaseBeyondErrors + 3;
     const ErrorZoneUnderControl     = ErrorHelper::BaseBeyondErrors + 4;
     const ErrorAlreadyWounded       = ErrorHelper::BaseBeyondErrors + 5;
+    const ErrorNotDiggable          = ErrorHelper::BaseBeyondErrors + 6;
+
+    protected $game_factory;
+    protected $random_generator;
+    protected $item_factory;
+
+    /**
+     * BeyondController constructor.
+     * @param EntityManagerInterface $em
+     * @param InventoryHandler $ih
+     * @param CitizenHandler $ch
+     * @param ActionHandler $ah
+     * @param TranslatorInterface $translator
+     * @param GameFactory $gf
+     * @param RandomGenerator $rg
+     * @param ItemFactory $if
+     */
+    public function __construct(
+        EntityManagerInterface $em, InventoryHandler $ih, CitizenHandler $ch, ActionHandler $ah,
+        TranslatorInterface $translator, GameFactory $gf, RandomGenerator $rg, ItemFactory $if)
+    {
+        parent::__construct($em, $ih, $ch, $ah, $translator);
+        $this->game_factory = $gf;
+        $this->random_generator = $rg;
+        $this->item_factory = $if;
+    }
+
+    protected function deferZoneUpdate() {
+        $this->game_factory->updateZone( $this->getActiveCitizen()->getZone() );
+    }
 
     protected function addDefaultTwigArgs( ?string $section = null, ?array $data = null ): array {
         $zones = []; $range_x = [PHP_INT_MAX,PHP_INT_MIN]; $range_y = [PHP_INT_MAX,PHP_INT_MIN];
@@ -72,11 +108,7 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
         return parent::addDefaultTwigArgs( $section,array_merge( [
             'zone_players' => count($zone->getCitizens()),
             'zone_zombies' => max(0,$zone->getZombies()),
-            'zone_blocked' => $blocked,
-            'zone_escape' => $escape,
             'zone_cp' => $cp,
-            'can_escape' => !$this->citizen_handler->isWounded( $this->getActiveCitizen() ),
-            'can_attack' => !$citizen_tired,
             'zone'  =>  $zone,
             'zones' =>  $zones,
             'allow_movement' => (!$blocked || $escape > 0) && !$citizen_tired,
@@ -102,17 +134,39 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
         return $active_timer ? ($active_timer->getTime()->getTimestamp() - (new DateTime())->getTimestamp()) : -1;
     }
 
+    public function get_dig_timeout(Citizen $c, ?bool &$active = null): int {
+        $active_timer = $this->entity_manager->getRepository(DigTimer::class)->findActiveByCitizen( $c );
+        if (!$active_timer) return -1;
+        $active = !$active_timer->getPassive();
+        return $active_timer->getTimestamp()->getTimestamp() - (new DateTime())->getTimestamp();
+    }
+
     /**
      * @Route("jx/beyond/desert", name="beyond_dashboard")
      * @return Response
      */
     public function desert(): Response
     {
+        $this->deferZoneUpdate();
+
         $is_on_zero = $this->getActiveCitizen()->getZone()->getX() == 0 && $this->getActiveCitizen()->getZone()->getY() == 0;
+
+        $citizen_tired = $this->getActiveCitizen()->getAp() <= 0 || $this->citizen_handler->isTired( $this->getActiveCitizen());
+        $dig_timeout = $this->get_dig_timeout( $this->getActiveCitizen(), $dig_active );
+
+        $blocked = !$this->check_cp($this->getActiveCitizen()->getZone(), $cp);
+        $escape = $this->get_escape_timeout( $this->getActiveCitizen() );
 
         return $this->render( 'ajax/game/beyond/desert.html.twig', $this->addDefaultTwigArgs(null, [
             'allow_enter_town' => $is_on_zero,
             'allow_floor_access' => !$is_on_zero,
+            'can_escape' => !$this->citizen_handler->isWounded( $this->getActiveCitizen() ),
+            'can_attack' => !$citizen_tired,
+            'zone_blocked' => $blocked,
+            'zone_escape' => $escape,
+            'digging' => $dig_timeout >= 0 && $dig_active,
+            'dig_ruin' => empty($this->entity_manager->getRepository(DigRuinMarker::class)->findByCitizen( $this->getActiveCitizen() )),
+            'dig_timeout' => $dig_timeout,
             'actions' => $this->getItemActions(),
             'floor' => $this->getActiveCitizen()->getZone()->getFloor(),
         ]) );
@@ -123,6 +177,8 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
      * @return Response
      */
     public function desert_exit_api(): Response {
+        $this->deferZoneUpdate();
+
         $citizen = $this->getActiveCitizen();
         $zone = $citizen->getZone();
 
@@ -151,6 +207,8 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
      * @return Response
      */
     public function desert_move_api(JSONRequestParser $parser): Response {
+        $this->deferZoneUpdate();
+
         $citizen = $this->getActiveCitizen();
         $zone = $citizen->getZone();
 
@@ -167,6 +225,12 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
 
         if ($citizen->getAp() < 1 || $this->citizen_handler->isTired( $citizen ))
             return AjaxResponse::error( ErrorHelper::ErrorNoAP );
+
+        // Moving disables the dig timer
+        if ($dig_timer = $this->entity_manager->getRepository(DigTimer::class)->findActiveByCitizen($citizen)) {
+            $dig_timer->setPassive(true);
+            $this->entity_manager->persist( $dig_timer );
+        }
 
         // Moving invalidates any escape timer the user may have had
         foreach ($this->entity_manager->getRepository(EscapeTimer::class)->findAllByCitizen($citizen) as $et)
@@ -210,6 +274,7 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
      * @return Response
      */
     public function action_desert_api(JSONRequestParser $parser, InventoryHandler $handler): Response {
+        $this->deferZoneUpdate();
         return $this->generic_action_api( $parser, $handler);
     }
 
@@ -220,6 +285,7 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
      * @return Response
      */
     public function item_desert_api(JSONRequestParser $parser, InventoryHandler $handler): Response {
+        $this->deferZoneUpdate();
         $up_inv   = $this->getActiveCitizen()->getInventory();
         $down_inv = $this->getActiveCitizen()->getZone()->getFloor();
         return $this->generic_item_api( $up_inv, $down_inv, true, $parser, $handler);
@@ -230,6 +296,8 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
      * @return Response
      */
     public function escape_desert_api(): Response {
+        $this->deferZoneUpdate();
+
         $citizen = $this->getActiveCitizen();
         if ($this->check_cp( $citizen->getZone() ) || $this->get_escape_timeout( $citizen ) > 0)
             return AjaxResponse::error( self::ErrorZoneUnderControl );
@@ -260,6 +328,7 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
      * @return Response
      */
     public function attack_desert_api(RandomGenerator $generator): Response {
+        $this->deferZoneUpdate();
 
         $citizen = $this->getActiveCitizen();
         $zone = $citizen->getZone();
@@ -277,6 +346,90 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
         try {
             $this->entity_manager->persist( $citizen );
             $this->entity_manager->persist( $zone );
+            $this->entity_manager->flush();
+        } catch (Exception $e) {
+            return AjaxResponse::error( ErrorHelper::ErrorInternalError );
+        }
+
+        return AjaxResponse::success();
+    }
+
+    /**
+     * @Route("api/beyond/desert/dig", name="beyond_desert_dig_controller")
+     * @return Response
+     */
+    public function attack_dig_api(): Response {
+        $this->deferZoneUpdate();
+
+        $citizen = $this->getActiveCitizen();
+        $zone = $citizen->getZone();
+
+        if (!$this->check_cp( $zone ))
+            return AjaxResponse::error( self::ErrorZoneBlocked );
+        if ($zone->getX() === 0 && $zone->getY() === 0)
+            return AjaxResponse::error( self::ErrorNotDiggable );
+
+        try {
+            $timer = $this->entity_manager->getRepository(DigTimer::class)->findActiveByCitizen( $citizen );
+            if (!$timer) $timer = (new DigTimer())->setZone( $zone )->setCitizen( $citizen );
+            else if ($timer->getTimestamp() > new DateTime())
+                return AjaxResponse::error( self::ErrorNotDiggable );
+
+            $timer->setPassive( false )->setTimestamp( new DateTime('-1sec') );
+        } catch (Exception $e) {
+            return AjaxResponse::error( ErrorHelper::ErrorInternalError );
+        }
+
+        try {
+            $this->entity_manager->persist( $citizen );
+            $this->entity_manager->persist( $zone );
+            $this->entity_manager->persist( $timer );
+            $this->entity_manager->flush();
+        } catch (Exception $e) {
+            return AjaxResponse::error( ErrorHelper::ErrorInternalError );
+        }
+
+        return AjaxResponse::success();
+    }
+
+    /**
+     * @Route("api/beyond/desert/scavenge", name="beyond_desert_scavenge_controller")
+     * @return Response
+     */
+    public function attack_scavenge_api(): Response {
+        $this->deferZoneUpdate();
+
+        $citizen = $this->getActiveCitizen();
+        $zone = $citizen->getZone();
+
+        if (!$this->check_cp( $zone ))
+            return AjaxResponse::error( self::ErrorZoneBlocked );
+        if ($zone->getX() === 0 && $zone->getY() === 0)
+            return AjaxResponse::error( self::ErrorNotDiggable );
+
+        if ($this->entity_manager->getRepository(DigRuinMarker::class)->findByCitizen( $citizen ))
+            return AjaxResponse::error( self::ErrorNotDiggable );
+
+        $dm = (new DigRuinMarker())->setCitizen( $citizen )->setZone( $zone );
+
+        if ($zone->getRuinDigs() > 0) {
+            $zone->setRuinDigs( $zone->getRuinDigs() - 1 );
+            $group = $zone->getPrototype()->getDrops();
+            $prototype = $group ? $this->random_generator->pickItemPrototypeFromGroup( $group ) : null;
+            if ($prototype) {
+                $item = $this->item_factory->createItem( $prototype );
+                if ($item) {
+                    $this->inventory_handler->placeItem( $citizen, $item, [ $citizen->getInventory(), $zone->getFloor() ] );
+                    $this->entity_manager->persist( $item );
+                    $this->entity_manager->persist( $citizen->getInventory() );
+                    $this->entity_manager->persist( $zone->getFloor() );
+                }
+            }
+        }
+
+        try {
+            $this->entity_manager->persist($dm);
+            $this->entity_manager->persist($zone);
             $this->entity_manager->flush();
         } catch (Exception $e) {
             return AjaxResponse::error( ErrorHelper::ErrorInternalError );

@@ -82,11 +82,22 @@ class Zone
      */
     private $escapeTimers;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\DigRuinMarker", mappedBy="zone", orphanRemoval=true)
+     */
+    private $digRuinMarkers;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $ruinDigs = 10;
+
     public function __construct()
     {
         $this->citizens = new ArrayCollection();
         $this->digTimers = new ArrayCollection();
         $this->escapeTimers = new ArrayCollection();
+        $this->digRuinMarkers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -279,6 +290,49 @@ class Zone
                 $escapeTimer->setZone(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|DigRuinMarker[]
+     */
+    public function getDigRuinMarkers(): Collection
+    {
+        return $this->digRuinMarkers;
+    }
+
+    public function addDigRuinMarker(DigRuinMarker $digRuinMarker): self
+    {
+        if (!$this->digRuinMarkers->contains($digRuinMarker)) {
+            $this->digRuinMarkers[] = $digRuinMarker;
+            $digRuinMarker->setZone($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDigRuinMarker(DigRuinMarker $digRuinMarker): self
+    {
+        if ($this->digRuinMarkers->contains($digRuinMarker)) {
+            $this->digRuinMarkers->removeElement($digRuinMarker);
+            // set the owning side to null (unless already changed)
+            if ($digRuinMarker->getZone() === $this) {
+                $digRuinMarker->setZone(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getRuinDigs(): ?int
+    {
+        return $this->ruinDigs;
+    }
+
+    public function setRuinDigs(int $ruinDigs): self
+    {
+        $this->ruinDigs = $ruinDigs;
 
         return $this;
     }

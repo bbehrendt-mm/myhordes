@@ -80,6 +80,14 @@ body {
   }
 }
 
+.box() {
+  background: @myhordes-cell-header-background-color; border: 1px solid @myhordes-input-border;
+}
+
+div.note {
+  .box(); padding: 5px; font-size: 12px; margin: 5px 0;
+}
+
 button {
   min-height: 25px; background: @myhordes-button-background center/cover no-repeat; color: @myhordes-button-color; font-weight: bold;
   border: 1px solid @myhordes-button-border; border-bottom-width: 2px; outline: 1px solid rgba(0,0,0,0);
@@ -94,9 +102,12 @@ button {
     background: @myhordes-button-static-background; font-size: 10px; padding: 2px 6px; display: inline-block; min-height: 0;
   }
 
-  &:not(.small)>img {
-    &:not(.right) { float: left; }
-    &.right { float: right; }
+  &:not(.small) {
+    &+& { margin-top: 5px; }
+    >img {
+      &:not(.right) { float: left; }
+      &.right { float: right; }
+    }
   }
 }
 
@@ -153,13 +164,13 @@ ul.inventory {
     }
   }
   &.rucksack { background: url("../img/inv_bag.gif") no-repeat top left;}
-  &.desert { background: url("../img/inv_ground.gif") no-repeat top left;}
+  &.desert { background: url("../img/inv_ground.gif") repeat top left;}
   &.chest { background: url("../img/inv_home.gif") repeat center;}
   &.bank { background: url("../img/inv_bank.gif") repeat center; min-height: 100px;}
 }
 
 ul.actions {
-  padding: 5px 2px; background: @myhordes-cell-header-background-color; border: 1px solid @myhordes-input-border;
+  padding: 5px 2px; .box();
   &>li {
     list-style: none; padding: 2px 2px 2px 10px; font-size: 12px; font-variant: small-caps; cursor: pointer;
     color: @myhordes-smalltext;

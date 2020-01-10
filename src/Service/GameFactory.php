@@ -7,14 +7,18 @@ namespace App\Service;
 use App\Entity\Citizen;
 use App\Entity\CitizenHome;
 use App\Entity\CitizenProfession;
+use App\Entity\DigTimer;
 use App\Entity\Inventory;
+use App\Entity\ItemGroup;
 use App\Entity\Town;
 use App\Entity\TownClass;
 use App\Entity\User;
 use App\Entity\WellCounter;
 use App\Entity\Zone;
 use App\Entity\ZonePrototype;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 
 class GameFactory
 {
@@ -23,6 +27,8 @@ class GameFactory
     private $locksmith;
     private $item_factory;
     private $status_factory;
+    private $random_generator;
+    private $inventory_handler;
 
     const ErrorNone = 0;
     const ErrorTownClosed          = ErrorHelper::BaseTownSelectionErrors + 1;
@@ -30,13 +36,17 @@ class GameFactory
     const ErrorUserAlreadyInTown   = ErrorHelper::BaseTownSelectionErrors + 3;
     const ErrorNoDefaultProfession = ErrorHelper::BaseTownSelectionErrors + 4;
 
-    public function __construct( EntityManagerInterface $em, GameValidator $v, Locksmith $l, ItemFactory $if, StatusFactory $sf)
+    public function __construct(
+        EntityManagerInterface $em, GameValidator $v, Locksmith $l, ItemFactory $if,
+        StatusFactory $sf, RandomGenerator $rg, InventoryHandler $ih)
     {
         $this->entity_manager = $em;
         $this->validator = $v;
         $this->locksmith = $l;
         $this->item_factory = $if;
         $this->status_factory = $sf;
+        $this->random_generator = $rg;
+        $this->inventory_handler = $ih;
     }
 
     private static $town_name_snippets = [
@@ -78,6 +88,70 @@ class GameFactory
         $offset_x = $safe_border + mt_rand(0, $resolution - 2*$safe_border);
         $offset_y = $safe_border + mt_rand(0, $resolution - 2*$safe_border);
         return $resolution;
+    }
+
+    public function updateZone( Zone $zone, ?DateTime $up_to = null ) {
+
+        $now = new DateTime();
+        if ($up_to === null || $up_to > $now) $up_to = $now;
+
+        /** @var DigTimer[] $dig_timers */
+        $dig_timers = [];
+        foreach ($zone->getCitizens() as $citizen) {
+            $timer = $this->entity_manager->getRepository(DigTimer::class)->findActiveByCitizen( $citizen );
+            if ($timer && !$timer->getPassive() && $timer->getTimestamp() < $up_to)
+                $dig_timers[] = $timer;
+        }
+
+        $sort_func = function(DigTimer $a, DigTimer $b): int {
+            return $a->getTimestamp()->getTimestamp() == $b->getTimestamp()->getTimestamp() ? 0 :
+                ($a->getTimestamp() < $b->getTimestamp() ? -1 : 1);
+        };
+
+        $empty_group = $this->entity_manager->getRepository(ItemGroup::class)->findOneByName('empty_dig');
+        $base_group = $this->entity_manager->getRepository(ItemGroup::class)->findOneByName('base_dig');
+
+        $zone_update = false;
+        $not_up_to_date = !empty($dig_timers);
+        while ($not_up_to_date) {
+
+            usort( $dig_timers, $sort_func );
+
+            foreach ($dig_timers as &$timer)
+                if ($timer->getTimestamp() <= $up_to) {
+
+                    $item_prototype = $this->random_generator->chance($zone->getDigs() > 0 ? 0.333 : 0.25)
+                        ? $this->random_generator->pickItemPrototypeFromGroup( $zone->getDigs() > 0 ? $base_group : $empty_group )
+                        : null;
+
+                    if ($item_prototype) {
+                        $item = $this->item_factory->createItem($item_prototype);
+                        if ($this->inventory_handler->placeItem( $timer->getCitizen(), $item, [ $timer->getCitizen()->getInventory(), $timer->getZone()->getFloor() ] )) {
+                            $this->entity_manager->persist( $item );
+                            $this->entity_manager->persist( $timer->getCitizen()->getInventory() );
+                            $this->entity_manager->persist( $timer->getZone()->getFloor() );
+                        }
+                    }
+
+                    $zone->setDigs( max(0, $zone->getDigs() - 1) );
+                    $zone_update = true;
+
+                    try {
+                        $timer->setTimestamp(
+                            (new DateTime())->setTimestamp(
+                                $timer->getTimestamp()->getTimestamp()
+                            )->modify($timer->getCitizen()->getProfession()->getName() === 'collec' ? '+1hour30min' : '+2hour') );
+
+                    } catch (Exception $e) {
+                        $timer->setTimestamp( new DateTime('+1min') );
+                    }
+                }
+            $not_up_to_date = $dig_timers[0]->getTimestamp() < $up_to;
+        }
+
+        if ($zone_update) $this->entity_manager->persist($zone);
+        foreach ($dig_timers as $timer) $this->entity_manager->persist( $timer );
+        $this->entity_manager->flush();
     }
 
     const RespawnModeNone = 0;

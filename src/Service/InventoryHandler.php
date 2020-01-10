@@ -123,8 +123,7 @@ class InventoryHandler
     protected function singularTransferType( ?Citizen $citizen, ?Inventory $inventory ): int {
         if (!$citizen || !$inventory) return self::TransferTypeUnknown;
 
-        // ToDo: Actually check this!
-        $citizen_is_at_home = true;
+        $citizen_is_at_home = $citizen->getZone() === null;
 
         // Check if the inventory belongs to a town, and if the town is the same town as that of the citizen
         if ($inventory->getTown() && $inventory->getTown()->getId() === $citizen->getTown()->getId())
@@ -143,7 +142,7 @@ class InventoryHandler
             return self::TransferTypeRucksack;
 
         // Check if the inventory belongs to the citizens current zone
-        if ($inventory->getZone() && $citizen->getZone() && $inventory->getZone()->getId() === $citizen->getZone()->getId())
+        if ($inventory->getZone() && !$citizen_is_at_home && $inventory->getZone()->getId() === $citizen->getZone()->getId())
             return self::TransferTypeLocal;
 
         //ToDo: Check escort
@@ -188,6 +187,20 @@ class InventoryHandler
 
         $to->addItem( $item );
         return self::ErrorNone;
+    }
+
+    /**
+     * @param Citizen $citizen
+     * @param Item $item
+     * @param Inventory[] $inventories
+     * @return bool
+     */
+    public function placeItem( Citizen $citizen, Item $item, array $inventories ): bool {
+        $source = null;
+        foreach ($inventories as $inventory)
+            if ($this->transferItem( $citizen, $item, $source, $inventory ) == self::ErrorNone)
+                return true;
+        return false;
     }
 
 }

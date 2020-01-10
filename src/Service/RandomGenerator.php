@@ -9,6 +9,9 @@ use App\Entity\CitizenHome;
 use App\Entity\CitizenProfession;
 use App\Entity\Inventory;
 use App\Entity\Item;
+use App\Entity\ItemGroup;
+use App\Entity\ItemGroupEntry;
+use App\Entity\ItemPrototype;
 use App\Entity\Town;
 use App\Entity\TownClass;
 use App\Entity\User;
@@ -36,6 +39,25 @@ class RandomGenerator
         if     ($num <=  0) return null;
         elseif ($num === 1) return $a[ array_rand($a, 1) ];
         else return array_map( function($k) use (&$a) { return $a[$k]; }, array_rand( $a, $num ) );
+    }
+
+    function pickItemPrototypeFromGroup(ItemGroup $g): ?ItemPrototype {
+        if (!$g->getEntries()->count()) return null;
+        $sum = 0;
+        foreach ( $g->getEntries() as $entry )
+            $sum += abs($entry->getChance());
+        if ($sum === 0) {
+            /** @var ItemGroupEntry $pe */
+            $pe = $this->pick( $g->getEntries()->getValues() );
+            return $pe->getPrototype();
+        }
+        $random = mt_rand(0,$sum-1);
+        $sum = 0;
+        foreach ( $g->getEntries() as $entry ) {
+            $sum += abs($entry->getChance());
+            if ($sum > $random) return $entry->getPrototype();
+        }
+        return $g->getEntries()->last()->getPrototype();
     }
 
 }

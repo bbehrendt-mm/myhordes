@@ -369,9 +369,11 @@ class ItemFixtures extends Fixture
     ];
 
     public static $item_groups = [
-        'base_dig' => array(
+        'empty_dig' => array(
             array('item' => 'wood_bad_#00','count' => '41306'),
             array('item' => 'metal_bad_#00','count' => '22856'),
+        ),
+        'base_dig' => array(
             array('item' => 'wood2_#00','count' => '16764'),
             array('item' => 'metal_#00','count' => '10124'),
             array('item' => 'grenade_empty_#00','count' => '6915'),

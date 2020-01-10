@@ -17,9 +17,17 @@ class ItemFactory
         $this->entity_manager = $em;
     }
 
-    public function createItem( string $name, bool $broken = false, bool $poison = false ) {
+    /**
+     * @param string|ItemPrototype $prototype
+     * @param bool $broken
+     * @param bool $poison
+     * @return Item|null
+     */
+    public function createItem( $prototype, bool $broken = false, bool $poison = false ) {
 
-        $prototype = $this->entity_manager->getRepository( ItemPrototype::class )->findOneByName( $name );
+        $prototype = is_string( $prototype )
+            ? $this->entity_manager->getRepository( ItemPrototype::class )->findOneByName( $prototype )
+            : ( is_a( $prototype, ItemPrototype::class ) ? $prototype : null );
         if (!$prototype) return null;
 
         $item = new Item();
