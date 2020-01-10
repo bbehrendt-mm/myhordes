@@ -60,6 +60,13 @@ export default class Ajax {
                     e.preventDefault();
                     ajax_instance.load( target, buttons[b].getAttribute('x-ajax-href'), push_history )
                 }, {once: true, capture: true});
+            let countdowns = content_source[i].querySelectorAll('*[x-countdown]');
+            for (let c = 0; c < countdowns.length; c++) {
+                if ( countdowns[c].getAttribute('x-on-expire') === 'reload' )
+                    countdowns[c].addEventListener('expire', function() { ajax_instance.load( target, url ) });
+                $.html.handleCountdown( countdowns[c] );
+            }
+
             target.appendChild( content_source[i] );
         }
 

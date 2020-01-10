@@ -73,14 +73,20 @@ class Zone
     private $digs = 10;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\DigTimer", mappedBy="zone", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\DigTimer", mappedBy="zone", orphanRemoval=true, cascade={"persist","remove"})
      */
     private $digTimers;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\EscapeTimer", mappedBy="zone", orphanRemoval=true, cascade={"persist","remove"})
+     */
+    private $escapeTimers;
 
     public function __construct()
     {
         $this->citizens = new ArrayCollection();
         $this->digTimers = new ArrayCollection();
+        $this->escapeTimers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -240,6 +246,37 @@ class Zone
             // set the owning side to null (unless already changed)
             if ($digTimer->getZone() === $this) {
                 $digTimer->setZone(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|EscapeTimer[]
+     */
+    public function getEscapeTimers(): Collection
+    {
+        return $this->escapeTimers;
+    }
+
+    public function addEscapeTimer(EscapeTimer $escapeTimer): self
+    {
+        if (!$this->escapeTimers->contains($escapeTimer)) {
+            $this->escapeTimers[] = $escapeTimer;
+            $escapeTimer->setZone($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEscapeTimer(EscapeTimer $escapeTimer): self
+    {
+        if ($this->escapeTimers->contains($escapeTimer)) {
+            $this->escapeTimers->removeElement($escapeTimer);
+            // set the owning side to null (unless already changed)
+            if ($escapeTimer->getZone() === $this) {
+                $escapeTimer->setZone(null);
             }
         }
 

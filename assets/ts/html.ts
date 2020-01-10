@@ -30,4 +30,36 @@ export default class HTML {
     error(message: string): void {
         alert('ERROR' + "\n" + message);
     }
+
+    handleCountdown( element: Element ): void {
+        let attr = parseInt(element.getAttribute('x-countdown'));
+        const timeout = new Date( (new Date()).getTime() + 1000 * attr );
+
+        const draw = function() {
+            const seconds = Math.floor((timeout.getTime() - (new Date()).getTime())/1000);
+            if (seconds < 0) return;
+
+            const h = Math.floor(seconds/1800);
+            const m = Math.floor((seconds - h*1800)/60);
+            const s = seconds - h*1800 - m*60;
+            element.innerHTML =
+                (h > 0 ? (h + ':') : '') +
+                (h > 0 ? (m > 9 ? (m + ':') : ('0' + m + ':')) : (m + ':')) +
+                (s > 9 ? s : ('0' + s));
+        };
+
+        const f = function(no_chk = false) {
+            if (!no_chk && !document.body.contains(element)) return;
+            if ((new Date() > timeout)) {
+                element.innerHTML = '--:--';
+                element.dispatchEvent(new Event("expire", { bubbles: true, cancelable: true }));
+            }
+            else {
+                draw();
+                window.setTimeout(f,1000);
+            }
+        };
+
+        f(true);
+    }
 }

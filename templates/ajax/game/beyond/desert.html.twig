@@ -1,5 +1,42 @@
 {% extends "ajax/game/beyond/beyond.html.twig" %}
 {% block content %}
+    {% if zone_blocked %}
+        <div>
+            <div class="cell rw-12">
+                <div class="zone-blocked-warning">
+                    <b>
+                        {% if zone_escape > 0 %}
+                            {% trans from 'game' %}Temporäre Zonenkontrolle{% endtrans %}
+                        {% else %}
+                            {% trans with { '%z%': zone_zombies } from 'game' %}%z% Zombies kontrollieren diese Zone!{% endtrans %}
+                        {% endif %}
+                    </b><br />
+                    <span>
+                        {% if zone_escape > 0 %}
+                            {% trans from 'game' %}
+                                Das ist deine Chance - ergreife sie und fliehe! In Kürze werden die Zombies die Kontrolle über die Zone zurückerlangen. Dir verbleiden:
+                            {% endtrans %}
+                            <span x-countdown="{{ zone_escape }}" x-on-expire="reload">{{ zone_escape }}</span>
+                        {% else %}
+                            {% trans from 'game' %}
+                                Du wurdest überrascht und bist jetzt von den Zombies umzingelt! Wenn du nichts unternimmst und dir niemand zu Hilfe eilt, wirst du ohne Zweifel heute Abend hier verrecken ...
+                            {% endtrans %}
+                        {% endif %}
+                    </span>
+                    {% if zone_escape <= 0 %}
+                        <div class="row">
+                            <div class="padded-small cell rw-6"><button><img alt="" src="{{ asset('build/images/attacked.gif') }}" />{% trans from 'game' %}Hilfe rufen!{% endtrans %}</button></div>
+                            <div {% if not can_escape %}disabled{% endif %} class="padded-small cell rw-6"><button id="escape-btn"><img alt="" src="{{ asset('build/images/death.gif') }}" />{% trans from 'game' %}Die Flucht wagen!{% endtrans %}</button></div>
+                        </div>
+                        <div class="row">
+                            <div {% if not can_attack %}disabled{% endif %} class="padded-small cell rw-8"><button id="attack-btn"><img alt="" src="{{ asset('build/images/fist.gif') }}" />{% trans from 'game' %}Gegen einen Zombie kämpfen!{% endtrans %} (<div class="ap">1</div>)</button></div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+    {% endif %}
     <div class="row">
         <div class="padded cell rw-6 rw-md-12">
             <h5>{% trans from 'game' %}Meine Aktionen{% endtrans %}</h5>
@@ -38,6 +75,25 @@
     {{ parent() }}
     <script>
         {% embed "scripts/actions.js.twig" %}{% endembed %}
+
+        {% if zone_blocked and zone_escape < 0 %}
+            document.getElementById('escape-btn').addEventListener('click', function () {
+                if (!confirm( '{% trans from 'global' %}Bestätigen?{% endtrans %}' ))
+                    return;
+                $.ajax.easySend( '{{ path('beyond_desert_escape_controller') }}', {},
+                    function () {
+                        $.ajax.load(null, '{{ path('beyond_dashboard') }}', true);
+                    } );
+            });
+            document.getElementById('attack-btn').addEventListener('click', function () {
+                if (!confirm( '{% trans from 'global' %}Bestätigen?{% endtrans %}' ))
+                    return;
+                $.ajax.easySend( '{{ path('beyond_desert_attack_controller') }}', {},
+                    function () {
+                        $.ajax.load(null, '{{ path('beyond_dashboard') }}', true);
+                    } );
+            });
+        {% endif %}
 
         {% if allow_floor_access %}
             {% embed "scripts/inventory.js.twig" %}{% endembed %}

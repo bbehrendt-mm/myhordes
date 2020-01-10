@@ -1,1 +1,5 @@
 {{ constant('App\\Controller\\BeyondController::ErrorNoReturnFromHere') }}    : '{% trans from 'game' %}Du kannst die Stadt von hier aus nicht betreten.{% endtrans %}',
+{{ constant('App\\Controller\\BeyondController::ErrorNotReachableFromHere') }}: '{% trans from 'game' %}Du kannst diese Zone von hier aus nicht betreten.{% endtrans %}',
+{{ constant('App\\Controller\\BeyondController::ErrorZoneBlocked') }}         : '{% trans from 'game' %}Zombies blockieren deine Zone!{% endtrans %}',
+{{ constant('App\\Controller\\BeyondController::ErrorZoneUnderControl') }}    : '{% trans from 'game' %}Diese Aktion kann nur in Zonen ausgeführt werden, die von Zombies kontrolliert werden.{% endtrans %}',
+{{ constant('App\\Controller\\BeyondController::ErrorAlreadyWounded') }}      : '{% trans from 'game' %}Du kannst nicht angreifen wenn du bereits verwundet bist.{% endtrans %}',

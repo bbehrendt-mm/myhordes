@@ -14,10 +14,10 @@ use Symfony\Component\Console\Output\ConsoleOutputInterface;
 class TownFixtures extends Fixture
 {
     public static $town_class_data = [
-        ['name'=>'small'  ,'label'=>'Kleine Stadt',       'well' => [90,180], 'map' => [12,14], 'ruins' => [ 7,10] ],
-        ['name'=>'remote' ,'label'=>'Entfernte Regionen', 'well' => [90,180], 'map' => [25,27], 'ruins' => [17,20] ],
-        ['name'=>'panda'  ,'label'=>'Pandämonium',        'well' => [60, 90], 'map' => [25,27], 'ruins' => [15,20] ],
-        ['name'=>'custom' ,'label'=>'Private Stadt',      'well' => [90,180], 'map' => [25,27], 'ruins' => [17,20] ],
+        ['name'=>'small'  ,'label'=>'Kleine Stadt',       'well' => [90,180], 'map' => [12,14], 'ruins' => [10,10] ],
+        ['name'=>'remote' ,'label'=>'Entfernte Regionen', 'well' => [90,180], 'map' => [25,27], 'ruins' => [20,20] ],
+        ['name'=>'panda'  ,'label'=>'Pandämonium',        'well' => [60, 90], 'map' => [25,27], 'ruins' => [20,20] ],
+        ['name'=>'custom' ,'label'=>'Private Stadt',      'well' => [90,180], 'map' => [25,27], 'ruins' => [20,20] ],
     ];
 
     private $entityManager;

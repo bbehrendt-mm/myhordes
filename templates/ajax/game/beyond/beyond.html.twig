@@ -9,6 +9,12 @@
                 'allow_zone_view': true,
                 'move': allow_movement
             } %}{% endembed %}
+            <div class="zone-info">
+                <div class="row zone-cp">
+                    <div class="padded cell rw-6 left"><img src="{{ asset('build/images/small_human.gif') }}" alt="CP" /> <span>{{ zone_cp }} {% trans from 'game' %}Punkt(e){% endtrans %}</span></div>
+                    <div class="padded cell rw-6 right"><span>{{ zone_zombies }} {% trans from 'game' %}Punkt(e){% endtrans %}</span> <img src="{{ asset('build/images/small_zombie.gif') }}" alt="ZP" /></div>
+                </div>
+            </div>
         </div>
         <div class="padded cell rw-8 rw-lg-6 rw-md-12">
             {% block content %}

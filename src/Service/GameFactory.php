@@ -88,17 +88,18 @@ class GameFactory
 
         /** @var Zone[] $zones */
         $zones = $town->getZones()->getValues();
-        $zone_db = []; $empty_zones = [];
+        $zone_db = []; $empty_zones = []; $despair_db = [];
         foreach ($zones as &$zone) {
             $despair = max(0,( $zone->getInitialZombies() - $zone->getZombies() - 1 ) / 2);
             if (!isset($zone_db[$zone->getX()])) $zone_db[$zone->getX()] = [];
-            $zone_db[$zone->getX()][$zone->getY()] = max(0,$zone->getZombies() - $despair);
+            $zone_db[$zone->getX()][$zone->getY()] = $zone->getZombies();
+            $despair_db[$zone->getX()][$zone->getY()] = $despair;
             if ($zone_db[$zone->getX()][$zone->getY()] == 0) $empty_zones[] = $zone;
         }
 
         // Respawn
-        if ($mode === self::RespawnModeForce || ($mode === self::RespawnModeAuto && count($empty_zones) > (count($zones)* 18/20))) {
-            $d = $town->getDay();
+        $d = $town->getDay();
+        if ($mode === self::RespawnModeForce || ($mode === self::RespawnModeAuto && $d < 3 && count($empty_zones) > (count($zones)* 18/20))) {
             $keys = $d == 1 ? [array_rand($empty_zones)] : array_rand($empty_zones, $d);
             foreach ($keys as $spawn_zone_id)
                 /** @var Zone $spawn_zone */
@@ -128,7 +129,7 @@ class GameFactory
 
                     if ($adj_zones_infected > 0) {
 
-                        $spread_chance = 1 - pow($zone_original_db[$x][$y] == 0 ? 0.875 : 0.875, $zone_zed_difference);
+                        $spread_chance = 1 - pow(0.875, $zone_zed_difference);
                         if (mt_rand(0,100) > (100*$spread_chance)) continue;
 
                         $max_zeds = ceil($zone_zed_difference/$adj_zones_total);
@@ -141,14 +142,14 @@ class GameFactory
             foreach ($zone_db as $x => &$zone_row)
                 foreach ($zone_row as $y => &$current_zone_zombies) {
                     if ($x === 0 && $y === 0) continue;
-                    if ($current_zone_zombies > 0) $current_zone_zombies += max(0,mt_rand(-1, 2));
+                    if ($current_zone_zombies > 0) $current_zone_zombies += max(0,mt_rand(-2, 1));
                 }
         }
 
         foreach ($town->getZones() as &$zone) {
             if ($zone->getX() === 0 && $zone->getY() === 0) continue;
 
-            $zombies = $zone_db[$zone->getX()][$zone->getY()];
+            $zombies = $zone_db[$zone->getX()][$zone->getY()] - $despair_db[$zone->getX()][$zone->getY()];
             $zone->setZombies( $zombies );
             $zone->setInitialZombies( $zombies );
         }
@@ -188,7 +189,7 @@ class GameFactory
         for ($i = 0; $i < min($spawn_ruins+2,count($zone_list)); $i++) {
             $zombies_base = 0;
             if ($i < $spawn_ruins) {
-                $zombies_base = 1 + floor(min(1,sqrt( pow($zone_list[$i]->getX(),2) + pow($zone_list[$i]->getY(),2) )/18) * 9);
+                $zombies_base = 1 + floor(min(1,sqrt( pow($zone_list[$i]->getX(),2) + pow($zone_list[$i]->getY(),2) )/18) * 18);
                 $zone_list[$i]->setPrototype( $ruin_types[array_rand($ruin_types)] );
             } else
                 $zombies_base = 1 + floor(min(1,sqrt( pow($zone_list[$i]->getX(),2) + pow($zone_list[$i]->getY(),2) )/18) * 3);
@@ -199,7 +200,7 @@ class GameFactory
             }
         }
 
-        $this->dailyZombieSpawn( $town, 2, self::RespawnModeNone );
+        $this->dailyZombieSpawn( $town, 1, self::RespawnModeNone );
         return $town;
     }
 
