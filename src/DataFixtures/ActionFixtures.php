@@ -74,10 +74,9 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'just_ap7'     => [ 'collection' => [ 'ap' => 'to_max_plus_1' ]],
             'just_ap8'     => [ 'collection' => [ 'ap' => 'to_max_plus_2' ]],
 
-            'produce_open_can' =>  [ 'collection' => [ 'item' => 'produce_open_can' ]],
-            'produce_watercan2' => [ 'collection' => [ 'item' => 'produce_watercan2' ]],
-            'produce_watercan1' => [ 'collection' => [ 'item' => 'produce_watercan1' ]],
-            'produce_watercan0' => [ 'collection' => [ 'item' => 'produce_watercan0' ]],
+            'produce_watercan2' => [ 'collection' => [ 'item' => [ 'consume' => false, 'morph' => 'water_can_2_#00' ] ]],
+            'produce_watercan1' => [ 'collection' => [ 'item' => [ 'consume' => false, 'morph' => 'water_can_1_#00' ] ]],
+            'produce_watercan0' => [ 'collection' => [ 'item' => [ 'consume' => false, 'morph' => 'water_can_empty_#00' ] ]],
         ],
 
         'results' => [
@@ -102,11 +101,6 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             ],
             'item' => [
                 'consume' => [ 'consume' => true, 'morph' => null ],
-
-                'produce_open_can' =>  [ 'consume' => false, 'morph' => 'can_open_#00' ],
-                'produce_watercan2' => [ 'consume' => false, 'morph' => 'water_can_2_#00' ],
-                'produce_watercan1' => [ 'consume' => false, 'morph' => 'water_can_1_#00' ],
-                'produce_watercan0' => [ 'consume' => false, 'morph' => 'water_can_empty_#00' ],
             ]
         ],
 
@@ -121,7 +115,7 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'watercan1_6ap' => [ 'label' => 'Trinken', 'meta' => [ 'drink_ap_1', 'drink_ap_2' ], 'result' => [ 'drink_ap_1', 'drink_ap_2', 'produce_watercan0' ] ],
             'watercan1_0ap' => [ 'label' => 'Trinken', 'meta' => [ 'drink_no_ap' ], 'result' => [ 'drink_no_ap', 'produce_watercan0' ] ],
 
-            'can'       => [ 'label' => 'Öffnen',  'meta' => [ 'have_can_opener' ], 'result' => [ 'produce_open_can' ] ],
+            'can'       => [ 'label' => 'Öffnen',  'meta' => [ 'have_can_opener' ], 'result' => [ [ 'collection' => [ 'item' => [ 'consume' => false, 'morph' => 'can_open_#00' ] ]] ] ],
 
             'eat_6ap'   => [ 'label' => 'Essen',   'meta' => [ 'eat_ap' ], 'result' => [ 'eat_ap6', 'consume_item' ] ],
             'eat_7ap'   => [ 'label' => 'Essen',   'meta' => [ 'eat_ap' ], 'result' => [ 'eat_ap7', 'consume_item' ] ],
@@ -187,17 +181,18 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
      * @param array $cache
      * @param string $id
      * @param array $sub_cache
+     * @param array|null $data
      * @return Requirement
      * @throws Exception
      */
     private function process_meta_requirement(        
         ObjectManager $manager, ConsoleOutputInterface $out,
-        array &$cache, string $id, array &$sub_cache): Requirement
+        array &$cache, string $id, array &$sub_cache, ?array &$data = null): Requirement
     {
         if (!isset($cache[$id])) {
-            if (!isset(static::$item_actions['meta_requirements'][$id])) throw new Exception('Requirement definition not found: ' . $id);
+            if ($data === null && !isset(static::$item_actions['meta_requirements'][$id])) throw new Exception('Requirement definition not found: ' . $id);
 
-            $data = static::$item_actions['meta_requirements'][$id];
+            $data = $data ?: static::$item_actions['meta_requirements'][$id];
             $requirement = $manager->getRepository(Requirement::class)->findOneByName( $id );
             if ($requirement) $out->writeln( "\t\t<comment>Update</comment> meta condition <info>$id</info>" );
             else {
@@ -211,12 +206,20 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
                 ->setFailureText( isset($data['text']) ? $data['text'] : null );
 
             foreach ($data['collection'] as $sub_id => $sub_req) {
-                if (!isset( static::$item_actions['requirements'][$sub_id] ))
-                    throw new Exception('Requirement type definition not found: ' . $sub_id);
-                if (!isset( static::$item_actions['requirements'][$sub_id][$sub_req] ))
-                    throw new Exception('Requirement entry definition not found: ' . $sub_id . '/' . $sub_req);
+                if (is_array($sub_req)) {
+                    $sub_data = $sub_req;
+                    $sub_req = "{$id}_inline_{$sub_id}";
+                }
 
-                $sub_data = static::$item_actions['requirements'][$sub_id][$sub_req];
+                else {
+                    if (!isset( static::$item_actions['requirements'][$sub_id] ))
+                        throw new Exception('Requirement type definition not found: ' . $sub_id);
+                    if (!isset( static::$item_actions['requirements'][$sub_id][$sub_req] ))
+                        throw new Exception('Requirement entry definition not found: ' . $sub_id . '/' . $sub_req);
+
+                    $sub_data = static::$item_actions['requirements'][$sub_id][$sub_req];
+                }
+
                 if (!isset($sub_cache[$sub_id])) $sub_cache[$sub_id] = [];
                                 
                 switch ($sub_id) {
@@ -312,17 +315,18 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
      * @param array $cache
      * @param string $id
      * @param array $sub_cache
+     * @param array|null $data
      * @return Result
      * @throws Exception
      */
     private function process_meta_effect(
         ObjectManager $manager, ConsoleOutputInterface $out,
-        array &$cache, string $id, array &$sub_cache): Result
+        array &$cache, string $id, array &$sub_cache, ?array &$data = null): Result
     {
         if (!isset($cache[$id])) {
-            if (!isset(static::$item_actions['meta_results'][$id])) throw new Exception('Result definition not found: ' . $id);
+            if ($data === null && !isset(static::$item_actions['meta_results'][$id])) throw new Exception('Result definition not found: ' . $id);
+            $data = $data ?: static::$item_actions['meta_results'][$id];
 
-            $data = static::$item_actions['meta_results'][$id];
             $result = $manager->getRepository(Result::class)->findOneByName( $id );
             if ($result) $out->writeln( "\t\t<comment>Update</comment> meta effect <info>$id</info>" );
             else {
@@ -333,12 +337,18 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             $result->setName( $id );
 
             foreach ($data['collection'] as $sub_id => $sub_res) {
-                if (!isset( static::$item_actions['results'][$sub_id] ))
-                    throw new Exception('Result type definition not found: ' . $sub_id);
-                if (!isset( static::$item_actions['results'][$sub_id][$sub_res] ))
-                    throw new Exception('Result entry definition not found: ' . $sub_id . '/' . $sub_res);
+                if (is_array($sub_res)) {
+                    $sub_data = $sub_res;
+                    $sub_res = "{$id}_inline_{$sub_id}";
+                } else {
+                    if (!isset( static::$item_actions['results'][$sub_id] ))
+                        throw new Exception('Result type definition not found: ' . $sub_id);
+                    if (!isset( static::$item_actions['results'][$sub_id][$sub_res] ))
+                        throw new Exception('Result entry definition not found: ' . $sub_id . '/' . $sub_res);
 
-                $sub_data = static::$item_actions['results'][$sub_id][$sub_res];
+                    $sub_data = static::$item_actions['results'][$sub_id][$sub_res];
+                }
+
                 if (!isset($sub_cache[$sub_id])) $sub_cache[$sub_id] = [];
 
                 switch ($sub_id) {
@@ -493,11 +503,17 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
 
                     $new_action->setName( $action )->setLabel( $data['label'] )->clearRequirements();
 
-                    foreach ( $data['meta'] as $requirement )
-                        $new_action->addRequirement( $this->process_meta_requirement( $manager, $out, $set_meta_requirements, $requirement, $set_sub_requirements ) );
+                    foreach ( $data['meta'] as $num => $requirement ) {
+                        if (is_array($requirement))
+                            $new_action->addRequirement( $this->process_meta_requirement( $manager, $out, $set_meta_requirements, "{$action}_{$num}", $set_sub_requirements, $requirement ) );
+                        else $new_action->addRequirement( $this->process_meta_requirement( $manager, $out, $set_meta_requirements, $requirement, $set_sub_requirements ) );
+                    }
 
-                    foreach ( $data['result'] as $result )
-                        $new_action->addResult( $this->process_meta_effect($manager,$out, $set_meta_results, $result, $set_sub_results) );
+                    foreach ( $data['result'] as $num => $result ) {
+                        if (is_array($result))
+                            $new_action->addResult( $this->process_meta_effect($manager,$out, $set_meta_results, "{$action}_{$num}", $set_sub_results, $result) );
+                        else $new_action->addResult( $this->process_meta_effect($manager,$out, $set_meta_results, $result, $set_sub_results) );
+                    }
 
                     $manager->persist( $set_actions[$action] = $new_action );
                 } else $out->writeln( "\t<comment>Skip</comment> action <info>$action</info> ('<info>{$set_actions[$action]->getLabel()}</info>')" );
