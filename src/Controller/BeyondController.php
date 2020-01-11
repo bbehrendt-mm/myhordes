@@ -246,7 +246,7 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
                 $this->entity_manager->remove( $et );
             // If zombies can take control after leaving the zone and there are citizens remaining, install a grace escape timer
             elseif ( $cp_ok && !$this->check_cp( $zone ) )
-                $zone->addEscapeTimer( (new EscapeTimer())->setTime( new DateTime('+15min') ) );
+                $zone->addEscapeTimer( (new EscapeTimer())->setTime( new DateTime('+30min') ) );
         } catch (Exception $e) {
             return AjaxResponse::error( ErrorHelper::ErrorInternalError );
         }

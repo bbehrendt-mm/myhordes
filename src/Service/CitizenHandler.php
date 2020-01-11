@@ -24,30 +24,50 @@ class CitizenHandler
     private $entity_manager;
     private $status_factory;
     private $random_generator;
+    private $inventory_handler;
 
-    public function __construct( EntityManagerInterface $em, StatusFactory $sf, RandomGenerator $g)
+    public function __construct(
+        EntityManagerInterface $em, StatusFactory $sf, RandomGenerator $g, InventoryHandler $ih)
     {
         $this->entity_manager = $em;
         $this->status_factory = $sf;
         $this->random_generator = $g;
+        $this->inventory_handler = $ih;
+    }
+
+    /**
+     * @param Citizen $citizen
+     * @param string|CitizenStatus|string[]|CitizenStatus[] $status
+     * @param bool $all
+     * @return bool
+     */
+    public function hasStatusEffect( Citizen $citizen, $status, bool $all = false ): bool {
+        $status = array_map(function($s): string {
+            /** @var $s string|CitizenStatus */
+            if (is_a($s, CitizenStatus::class)) return $s->getName();
+            elseif (is_string($s)) return $s;
+            else return '???';
+        }, is_array($status) ? $status : [$status]);
+
+        if ($all) {
+            foreach ($citizen->getStatus() as $s)
+                if (!in_array($s->getName(), $status)) return false;
+        } else {
+            foreach ($citizen->getStatus() as $s)
+                if (in_array($s->getName(), $status)) return true;
+        }
+        return $all;
     }
 
     public function isWounded(Citizen $citizen) {
-        $wounds = ['wound1','wound2','wound3','wound4','wound5','wound6'];
-        foreach ($citizen->getStatus() as $status)
-            if (in_array($status->getName(), $wounds)) return true;
-        return false;
+        return $this->hasStatusEffect( $citizen, ['wound1','wound2','wound3','wound4','wound5','wound6'], false );
     }
 
     public function inflictWound( Citizen &$citizen ) {
-        $s = [];
-        foreach ($citizen->getStatus() as $status)
-            $s[] = $status->getName();
-        $wounds = array_filter(['wound1','wound2','wound3','wound4','wound5','wound6'], function(string $w) use (&$s) {
-            return !in_array($w,$s);
-        });
-        if (empty($wounds)) return;
-        $citizen->addStatus( $this->entity_manager->getRepository(CitizenStatus::class)->findOneByName( $this->random_generator->pick( $wounds ) ) );
+        if ($this->isWounded($citizen)) return;
+        $citizen->addStatus( $this->entity_manager->getRepository(CitizenStatus::class)->findOneByName(
+            $this->random_generator->pick( ['wound1','wound2','wound3','wound4','wound5','wound6'] )
+        ) );
     }
 
     public function isTired(Citizen $citizen) {
@@ -67,6 +87,13 @@ class CitizenHandler
     }
 
     public function getCP(Citizen &$citizen): int {
-        return $citizen->getProfession()->getName() == 'guardian' ? 4 : 2;
+        if ($this->hasStatusEffect( $citizen, 'terror', false )) $base = 0;
+        else $base = $citizen->getProfession()->getName() == 'guardian' ? 4 : 2;
+
+        if (!empty($this->inventory_handler->fetchSpecificItems(
+            $citizen->getInventory(), [new ItemRequest( 'car_door_#00' )]
+        ))) $base += 1;
+
+        return $base;
     }
 }

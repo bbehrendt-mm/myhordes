@@ -29,6 +29,7 @@ class GameFactory
     private $status_factory;
     private $random_generator;
     private $inventory_handler;
+    private $citizen_handler;
 
     const ErrorNone = 0;
     const ErrorTownClosed          = ErrorHelper::BaseTownSelectionErrors + 1;
@@ -38,7 +39,7 @@ class GameFactory
 
     public function __construct(
         EntityManagerInterface $em, GameValidator $v, Locksmith $l, ItemFactory $if,
-        StatusFactory $sf, RandomGenerator $rg, InventoryHandler $ih)
+        StatusFactory $sf, RandomGenerator $rg, InventoryHandler $ih, CitizenHandler $ch)
     {
         $this->entity_manager = $em;
         $this->validator = $v;
@@ -47,6 +48,7 @@ class GameFactory
         $this->status_factory = $sf;
         $this->random_generator = $rg;
         $this->inventory_handler = $ih;
+        $this->citizen_handler = $ch;
     }
 
     private static $town_name_snippets = [
@@ -97,10 +99,21 @@ class GameFactory
 
         /** @var DigTimer[] $dig_timers */
         $dig_timers = [];
+        $cp = 0;
         foreach ($zone->getCitizens() as $citizen) {
             $timer = $this->entity_manager->getRepository(DigTimer::class)->findActiveByCitizen( $citizen );
             if ($timer && !$timer->getPassive() && $timer->getTimestamp() < $up_to)
                 $dig_timers[] = $timer;
+            $cp += $this->citizen_handler->getCP( $citizen );
+        }
+
+        if ($cp < $zone->getZombies()) {
+            foreach ($dig_timers as $timer) {
+                $timer->setPassive(true);
+                $this->entity_manager->persist($timer);
+            }
+            $this->entity_manager->flush();
+            return;
         }
 
         $sort_func = function(DigTimer $a, DigTimer $b): int {
@@ -206,8 +219,8 @@ class GameFactory
                         $spread_chance = 1 - pow(0.875, $zone_zed_difference);
                         if (mt_rand(0,100) > (100*$spread_chance)) continue;
 
-                        $max_zeds = ceil($zone_zed_difference/$adj_zones_total);
-                        $min_zeds = floor($max_zeds * ($adj_zones_infected / $adj_zones_total));
+                        $max_zeds = ceil($zone_zed_difference / 8 );
+                        $min_zeds = min($max_zeds, floor($max_zeds * ($adj_zones_infected / $adj_zones_total)));
                         $current_zone_zombies += mt_rand($min_zeds, $max_zeds);
                     }
 
@@ -223,8 +236,8 @@ class GameFactory
         foreach ($town->getZones() as &$zone) {
             if ($zone->getX() === 0 && $zone->getY() === 0) continue;
 
-            $zombies = $zone_db[$zone->getX()][$zone->getY()] - $despair_db[$zone->getX()][$zone->getY()];
-            $zone->setZombies( $zombies );
+            $zombies = max( 0, $zone_db[$zone->getX()][$zone->getY()] );
+            $zone->setZombies( max(0, $zombies - $despair_db[$zone->getX()][$zone->getY()] ));
             $zone->setInitialZombies( $zombies );
         }
 
