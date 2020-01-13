@@ -10,7 +10,9 @@ use App\Entity\CitizenProfession;
 use App\Entity\Inventory;
 use App\Entity\Item;
 use App\Entity\ItemAction;
+use App\Entity\RequireLocation;
 use App\Entity\Requirement;
+use App\Entity\Result;
 use App\Entity\Town;
 use App\Entity\TownClass;
 use App\Entity\User;
@@ -27,13 +29,19 @@ class ActionHandler
     private $status_factory;
     private $citizen_handler;
     private $inventory_handler;
+    private $random_generator;
+    private $item_factory;
 
-    public function __construct( EntityManagerInterface $em, StatusFactory $sf, CitizenHandler $ch, InventoryHandler $ih)
+    public function __construct(
+        EntityManagerInterface $em, StatusFactory $sf, CitizenHandler $ch, InventoryHandler $ih,
+        RandomGenerator $rg, ItemFactory $if)
     {
         $this->entity_manager = $em;
         $this->status_factory = $sf;
         $this->citizen_handler = $ch;
         $this->inventory_handler = $ih;
+        $this->random_generator = $rg;
+        $this->item_factory = $if;
     }
 
     const ActionValidityNone = 1;
@@ -73,6 +81,31 @@ class ActionHandler
                 ))) $current_state = min( $current_state, $this_state );
             }
 
+            if ($location_condition = $meta_requirement->getLocation())
+                switch ( $location_condition->getLocation() ) {
+                    case RequireLocation::LocationInTown:
+                        if ( $citizen->getZone() ) $current_state = min( $current_state, $this_state );
+                        break;
+                    case RequireLocation::LocationOutside:
+                        if ( !$citizen->getZone() ) $current_state = min( $current_state, $this_state );
+                        break;
+                    default:
+                        break;
+                }
+
+            if ($zombie_condition = $meta_requirement->getZombies()) {
+                $cp = 0;
+                $current_zeds = $citizen->getZone() ? $citizen->getZone()->getZombies() : 0;
+                if ( $citizen->getZone() ) foreach ( $citizen->getZone()->getCitizens() as $c )
+                    $cp += $this->citizen_handler->getCP( $c );
+
+                if (
+                    ($zombie_condition->getMustBlock() && $cp >= $current_zeds) ||
+                    ($zombie_condition->getNumber() > $current_zeds)
+                ) $current_state = min( $current_state, $this_state );
+            }
+
+
             if ($current_state < $last_state) $message = $meta_requirement->getFailureText();
 
         }
@@ -105,7 +138,9 @@ class ActionHandler
     const ErrorActionForbidden    = ErrorHelper::BaseActionErrors + 2;
     const ErrorActionImpossible   = ErrorHelper::BaseActionErrors + 3;
 
-    public function execute( Citizen &$citizen, Item &$item, ItemAction $action, ?string &$message ): int {
+    public function execute( Citizen &$citizen, Item &$item, ItemAction $action, ?string &$message, ?array &$remove ): int {
+
+        $remove = [];
 
         $mode = $this->evaluate( $citizen, $item, $action, $tx );
         if ($mode <= self::ActionValidityNone)    return self::ErrorActionUnregistered;
@@ -116,8 +151,7 @@ class ActionHandler
         }
         if ($mode != self::ActionValidityFull) return self::ErrorActionUnregistered;
 
-        foreach ($action->getResults() as $result) {
-
+        $execute_result = function(Result &$result) use (&$citizen, &$item, &$action, &$message, &$remove, &$execute_result) {
             if ($status = $result->getStatus()) {
 
                 if ($status->getInitial() && $status->getResult()) {
@@ -135,12 +169,53 @@ class ActionHandler
                 $this->citizen_handler->setAP( $citizen, !$ap->getMax(), $ap->getMax() ? ( $this->citizen_handler->getMaxAP($citizen) + $ap->getAp() ) : $ap->getAp() );
 
             if ($item_result = $result->getItem()) {
+                if ($item_result->getConsume()) {
+                    $citizen->getInventory()->removeItem( $item );
+                    $remove[] = $item;
+                } else {
+                    if ($item_result->getMorph()) $item->setPrototype( $item_result->getMorph() );
+                    if ($item_result->getBreak()  !== null) $item->setBroken( $item_result->getBreak() );
+                    if ($item_result->getPoison() !== null) $item->setPoison( $item_result->getPoison() );
+                }
+            }
 
-                if ($item_result->getMorph()) $item->setPrototype( $item_result->getMorph() );
-                elseif ($item_result->getConsume()) $citizen->getInventory()->removeItem( $item );
+            if ($item_spawn = $result->getSpawn()) {
+                $proto = null;
+                if ($p = $item_spawn->getPrototype())
+                    $proto = $p;
+                elseif ($g = $item_spawn->getItemGroup())
+                    $proto = $this->random_generator->pickItemPrototypeFromGroup( $g );
+
+                if ($proto) $this->inventory_handler->placeItem( $citizen, $this->item_factory->createItem( $proto ),
+                    $citizen->getZone()
+                        ? [ $citizen->getInventory(), $citizen->getZone()->getFloor() ]
+                        : [ $citizen->getInventory(), $citizen->getHome()->getChest(), $citizen->getTown()->getBank() ]
+                );
+            }
+
+            if ($item_consume = $result->getConsume()) {
+                $items = $this->inventory_handler->fetchSpecificItems( $citizen->getInventory(),
+                    [new ItemRequest( $item_consume->getPrototype()->getName(), $item_consume->getCount() )] );
+                foreach ($items as $consume_item) {
+                    $citizen->getInventory()->removeItem( $consume_item );
+                    $remove[] = $consume_item;
+                }
+            }
+
+            if ($zombie_kill = $result->getZombies()) {
+
+                if ($citizen->getZone())
+                    $citizen->getZone()->setZombies( max( 0, $citizen->getZone()->getZombies() - mt_rand( $zombie_kill->getMin(), $zombie_kill->getMax() ) ) );
 
             }
-        }
+
+            if ($result_group = $result->getResultGroup()) {
+                $r = $this->random_generator->pickResultsFromGroup( $result_group );
+                foreach ($r as &$sub_result) $execute_result( $sub_result );
+            }
+        };
+
+        foreach ($action->getResults() as &$result) $execute_result( $result );
 
         return self::ErrorNone;
     }

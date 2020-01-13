@@ -32,8 +32,21 @@ class InventoryHandler
     }
 
     public function getSize( Inventory $inventory ): int {
-        if ($inventory->getCitizen())
-            return 4;
+        if ($inventory->getCitizen()) {
+            $base = 4;
+            if (
+                !empty($this->fetchSpecificItems( $inventory, [ new ItemRequest( 'bagxl_#00' ) ] )) ||
+                !empty($this->fetchSpecificItems( $inventory, [ new ItemRequest( 'cart_#00' ) ] ))
+            )
+                $base += 3;
+            else if (!empty($this->fetchSpecificItems( $inventory, [ new ItemRequest( 'bag_#00' ) ] )))
+                $base += 2;
+
+            if (!empty($this->fetchSpecificItems( $inventory, [ new ItemRequest( 'pocket_belt_#00' ) ] )))
+                $base += 2;
+
+            return $base;
+        }
 
         if ($inventory->getHome())
             return 4;

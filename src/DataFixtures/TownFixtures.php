@@ -31,8 +31,6 @@ class TownFixtures extends Fixture
         $out->writeln( '<comment>Town classes: ' . count(static::$town_class_data) . ' fixture entries available.</comment>' );
 
         // Set up console
-        $table = new Table( $out );
-        $table->setHeaders( ['ID','Name','Label'] );
         $progress = new ProgressBar( $out->section() );
         $progress->start( count(static::$town_class_data) );
 
@@ -55,15 +53,11 @@ class TownFixtures extends Fixture
             ;
 
             $manager->persist( $entity );
-
-            // Set table entry
-            $table->addRow( [$entity->getId(),$entity->getName(),$entity->getLabel()] );
             $progress->advance();
         }
 
         $manager->flush();
         $progress->finish();
-        $table->render();
     }
 
     public function load(ObjectManager $manager) {

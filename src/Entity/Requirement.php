@@ -52,6 +52,16 @@ class Requirement
      */
     private $item;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\RequireZombiePresence")
+     */
+    private $zombies;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\RequireLocation")
+     */
+    private $location;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -113,6 +123,30 @@ class Requirement
     public function setItem(?RequireItem $item): self
     {
         $this->item = $item;
+
+        return $this;
+    }
+
+    public function getZombies(): ?RequireZombiePresence
+    {
+        return $this->zombies;
+    }
+
+    public function setZombies(?RequireZombiePresence $zombies): self
+    {
+        $this->zombies = $zombies;
+
+        return $this;
+    }
+
+    public function getLocation(): ?RequireLocation
+    {
+        return $this->location;
+    }
+
+    public function setLocation(?RequireLocation $location): self
+    {
+        $this->location = $location;
 
         return $this;
     }

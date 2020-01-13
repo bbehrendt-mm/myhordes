@@ -24,7 +24,7 @@ class AffectOriginalItem
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=32)
+     * @ORM\Column(type="string", length=64)
      */
     private $name;
 
@@ -37,6 +37,16 @@ class AffectOriginalItem
      * @ORM\ManyToOne(targetEntity="App\Entity\ItemPrototype")
      */
     private $morph;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $break;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $poison;
 
     public function getId(): ?int
     {
@@ -75,6 +85,30 @@ class AffectOriginalItem
     public function setMorph(?ItemPrototype $morph): self
     {
         $this->morph = $morph;
+
+        return $this;
+    }
+
+    public function getBreak(): ?bool
+    {
+        return $this->break;
+    }
+
+    public function setBreak(?bool $break): self
+    {
+        $this->break = $break;
+
+        return $this;
+    }
+
+    public function getPoison(): ?bool
+    {
+        return $this->poison;
+    }
+
+    public function setPoison(?bool $poison): self
+    {
+        $this->poison = $poison;
 
         return $this;
     }

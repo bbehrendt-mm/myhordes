@@ -8,13 +8,13 @@ use Doctrine\ORM\Mapping\UniqueConstraint;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\AffectStatusRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\AffectZombiesRepository")
  * @UniqueEntity("name")
  * @Table(uniqueConstraints={
  *     @UniqueConstraint(name="name_unique",columns={"name"})
  * })
  */
-class AffectStatus
+class AffectZombies
 {
     /**
      * @ORM\Id()
@@ -29,14 +29,14 @@ class AffectStatus
     private $name;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\CitizenStatus")
+     * @ORM\Column(type="integer")
      */
-    private $initial;
+    private $min;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\CitizenStatus")
+     * @ORM\Column(type="integer")
      */
-    private $result;
+    private $max;
 
     public function getId(): ?int
     {
@@ -55,26 +55,26 @@ class AffectStatus
         return $this;
     }
 
-    public function getInitial(): ?CitizenStatus
+    public function getMin(): ?int
     {
-        return $this->initial;
+        return $this->min;
     }
 
-    public function setInitial(?CitizenStatus $initial): self
+    public function setMin(int $min): self
     {
-        $this->initial = $initial;
+        $this->min = $min;
 
         return $this;
     }
 
-    public function getResult(): ?CitizenStatus
+    public function getMax(): ?int
     {
-        return $this->result;
+        return $this->max;
     }
 
-    public function setResult(?CitizenStatus $result): self
+    public function setMax(int $max): self
     {
-        $this->result = $result;
+        $this->max = $max;
 
         return $this;
     }

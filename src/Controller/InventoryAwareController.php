@@ -78,7 +78,7 @@ class InventoryAwareController extends AbstractController implements GameInterfa
 
     protected function getItemActions(): array {
         $ret = [];
-        foreach ($this->getActiveCitizen()->getInventory()->getItems() as $item) {
+        foreach ($this->getActiveCitizen()->getInventory()->getItems() as $item) if (!$item->getBroken()) {
 
             $this->action_handler->getAvailableItemActions( $this->getActiveCitizen(), $item, $available, $crossed );
             if (empty($available) && empty($crossed)) continue;
@@ -116,6 +116,15 @@ class InventoryAwareController extends AbstractController implements GameInterfa
         $direction = $parser->get('direction', '');
         $allowed_directions = ['up','down'];
         if ($allow_down_all) $allowed_directions[] = 'down-all';
+        $item = $item_id < 0 ? null : $this->entity_manager->getRepository(Item::class)->find( $item_id );
+
+        $carrier_items = ['bag_#00','bagxl_#00','cart_#00','pocket_belt_#00'];
+
+        $drop_carriers = false;
+        if ($direction === 'down' && $allow_down_all && in_array($item->getPrototype()->getName(), $carrier_items)) {
+            $direction = 'down-all';
+            $drop_carriers = true;
+        }
 
         if (in_array($direction, $allowed_directions)) {
             $citizen = $this->getActiveCitizen();
@@ -127,7 +136,9 @@ class InventoryAwareController extends AbstractController implements GameInterfa
                 $item = $this->entity_manager->getRepository(Item::class)->find( $item_id );
                 if ($item && $item->getInventory()) $items = [$item];
             } else
-                $items = $citizen->getInventory()->getItems();
+                $items = $drop_carriers ? $citizen->getInventory()->getItems() : array_filter($citizen->getInventory()->getItems()->getValues(), function(Item $i) use ($carrier_items) {
+                    return !in_array($i->getPrototype()->getName(), $carrier_items);
+                });
 
             $errors = [];
             foreach ($items as &$current_item)
@@ -157,18 +168,19 @@ class InventoryAwareController extends AbstractController implements GameInterfa
         $item   = ($item_id < 0)   ? null : $this->entity_manager->getRepository(Item::class)->find( $item_id );
         $action = ($action_id < 0) ? null : $this->entity_manager->getRepository(ItemAction::class)->find( $action_id );
 
-        if ( !$item || !$action ) return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
+        if ( !$item || !$action || $item->getBroken() ) return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
         $citizen = $this->getActiveCitizen();
 
-        if (($error = $this->action_handler->execute( $citizen, $item, $action, $msg )) === ActionHandler::ErrorNone) {
+        if (($error = $this->action_handler->execute( $citizen, $item, $action, $msg, $remove )) === ActionHandler::ErrorNone) {
             $this->entity_manager->persist($citizen);
             if ($item->getInventory())
                 $this->entity_manager->persist($item);
-            else $this->entity_manager->remove($item);
+            foreach ($remove as $remove_entry)
+                $this->entity_manager->remove($remove_entry);
             try {
                 $this->entity_manager->flush();
             } catch (Exception $e) {
-                return AjaxResponse::error( ErrorHelper::ErrorDatabaseException );
+                return AjaxResponse::error( ErrorHelper::ErrorDatabaseException, ['msg' => $e->getMessage()] );
             }
         } elseif ($error === ActionHandler::ErrorActionForbidden) {
             if (!empty($msg)) $msg = $this->translator->trans($msg, [], 'game');

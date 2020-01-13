@@ -8,14 +8,17 @@ use Doctrine\ORM\Mapping\UniqueConstraint;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\AffectStatusRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\RequireLocationRepository")
  * @UniqueEntity("name")
  * @Table(uniqueConstraints={
  *     @UniqueConstraint(name="name_unique",columns={"name"})
  * })
  */
-class AffectStatus
+class RequireLocation
 {
+    const LocationInTown = 1;
+    const LocationOutside = 2;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -24,19 +27,14 @@ class AffectStatus
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=64)
+     * @ORM\Column(type="string", length=32)
      */
     private $name;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\CitizenStatus")
+     * @ORM\Column(type="integer")
      */
-    private $initial;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\CitizenStatus")
-     */
-    private $result;
+    private $location;
 
     public function getId(): ?int
     {
@@ -55,26 +53,14 @@ class AffectStatus
         return $this;
     }
 
-    public function getInitial(): ?CitizenStatus
+    public function getLocation(): ?int
     {
-        return $this->initial;
+        return $this->location;
     }
 
-    public function setInitial(?CitizenStatus $initial): self
+    public function setLocation(int $location): self
     {
-        $this->initial = $initial;
-
-        return $this;
-    }
-
-    public function getResult(): ?CitizenStatus
-    {
-        return $this->result;
-    }
-
-    public function setResult(?CitizenStatus $result): self
-    {
-        $this->result = $result;
+        $this->location = $location;
 
         return $this;
     }

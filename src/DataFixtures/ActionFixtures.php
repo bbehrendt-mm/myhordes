@@ -3,15 +3,24 @@
 namespace App\DataFixtures;
 
 use App\Entity\AffectAP;
+use App\Entity\AffectItemConsume;
+use App\Entity\AffectItemSpawn;
 use App\Entity\AffectOriginalItem;
+use App\Entity\AffectResultGroup;
+use App\Entity\AffectResultGroupEntry;
 use App\Entity\AffectStatus;
+use App\Entity\AffectZombies;
 use App\Entity\CitizenStatus;
 use App\Entity\ItemAction;
+use App\Entity\ItemGroup;
+use App\Entity\ItemGroupEntry;
 use App\Entity\ItemProperty;
 use App\Entity\ItemPrototype;
 use App\Entity\RequireItem;
+use App\Entity\RequireLocation;
 use App\Entity\Requirement;
 use App\Entity\RequireStatus;
+use App\Entity\RequireZombiePresence;
 use App\Entity\Result;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -34,7 +43,17 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'drug_1'  => [ 'type' => Requirement::HideOnFail, 'collection' => [ 'status' => 'not_drugged' ]],
             'drug_2'  => [ 'type' => Requirement::HideOnFail, 'collection' => [ 'status' => 'drugged' ]],
 
-            'have_can_opener' => [ 'type' => Requirement::MessageOnFail, 'collection' => [ 'item' => 'have_can_opener' ],  'text' => 'Du brauchst ein Werkzeug, um diesen Gegenstand zu öffnen...' ]
+            'not_tired' => [ 'type' => Requirement::CrossOnFail, 'collection' => [ 'status' => 'not_tired' ]],
+
+            'have_can_opener' => [ 'type' => Requirement::MessageOnFail, 'collection' => [ 'item' => 'have_can_opener' ],  'text' => 'Du brauchst ein Werkzeug, um diesen Gegenstand zu öffnen...' ],
+            'have_box_opener' => [ 'type' => Requirement::MessageOnFail, 'collection' => [ 'item' => 'have_box_opener' ],  'text' => 'Du brauchst ein Werkzeug, um diesen Gegenstand zu öffnen...' ],
+            'have_water'      => [ 'type' => Requirement::MessageOnFail, 'collection' => [ 'item' => 'have_water' ],       'text' => 'Hierfür brauchst du eine Ration Wasser.' ],
+            'have_battery'    => [ 'type' => Requirement::MessageOnFail, 'collection' => [ 'item' => 'have_battery' ],     'text' => 'Hierfür brauchst du eine Batterie.' ],
+
+            'must_be_outside' => [ 'type' => Requirement::HideOnFail,  'collection' => [ 'location' => 'must_be_outside' ]],
+            'must_be_inside' =>  [ 'type' => Requirement::HideOnFail,  'collection' => [ 'location' => 'must_be_inside' ]],
+
+            'must_have_zombies' => [ 'type' => Requirement::MessageOnFail, 'collection' => [ 'zombies' => 'must_have_zombies' ], 'text' => 'Zum Glück sind hier keine Zombies...'],
         ],
 
         'requirements' => [
@@ -48,35 +67,54 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
                 'not_drugged'  => [ 'enabled' => false, 'status' => 'drugged' ],
                 'drugged'      => [ 'enabled' => true,  'status' => 'drugged' ],
 
+                'not_tired'    => [ 'enabled' => false, 'status' => 'tired' ],
+
             ],
             'item' => [
                 'have_can_opener' => [ 'item' => null, 'prop' => 'can_opener' ],
+                'have_box_opener' => [ 'item' => null, 'prop' => 'box_opener' ],
+                'have_water'   => [ 'item' => 'water_#00', 'prop' => null ],
+                'have_battery' => [ 'item' => 'pile_#00',  'prop' => null ],
+            ],
+            'location' => [
+                'must_be_outside' => [ RequireLocation::LocationOutside ],
+                'must_be_inside'  => [ RequireLocation::LocationInTown ],
+            ],
+            'zombies' => [
+                'must_have_zombies' => [ 'min' => 1, 'block' => false ]
             ]
         ],
 
         'meta_results' => [
-            'consume_item'=> [ 'collection' => [ 'item' => 'consume' ]],
+            'do_nothing' => [],
 
-            'drink_ap_1'  => [ 'collection' => [ 'status' => 'add_has_drunk', 'ap' => 'to_max_plus_0' ]],
-            'drink_ap_2'  => [ 'collection' => [ 'status' => 'remove_thirst' ]],
-            'drink_no_ap' => [ 'collection' => [ 'status' => 'replace_dehydration' ]],
+            'consume_item'   => [ 'item' => 'consume' ],
+            'consume_water'  => [ 'consume' => 'water'   ],
+            'consume_battery'=> [ 'consume' => 'battery' ],
+            'break_item'     => [ 'item' => 'consume' ],
 
-            'eat_ap6'     => [ 'collection' => [ 'status' => 'add_has_eaten', 'ap' => 'to_max_plus_0' ]],
-            'eat_ap7'     => [ 'collection' => [ 'status' => 'add_has_eaten', 'ap' => 'to_max_plus_1' ]],
+            'drink_ap_1'  => [ 'status' => 'add_has_drunk', 'ap' => 'to_max_plus_0' ],
+            'drink_ap_2'  => [ 'status' => 'remove_thirst' ],
+            'drink_no_ap' => [ 'status' => 'replace_dehydration' ],
 
-            'drug_any_1'   => [ 'collection' => [ 'status' => 'remove_clean' ]],
-            'drug_any_2'   => [ 'collection' => [ 'status' => 'add_is_drugged' ]],
-            'drug_addict'  => [ 'collection' => [ 'status' => 'add_addicted' ]],
+            'eat_ap6'     => [ 'status' => 'add_has_eaten', 'ap' => 'to_max_plus_0' ],
+            'eat_ap7'     => [ 'status' => 'add_has_eaten', 'ap' => 'to_max_plus_1' ],
 
-            'disinfect'    => [ 'collection' => [ 'status' => 'remove_infection' ]],
+            'drug_any_1'   => [ 'status' => 'remove_clean' ],
+            'drug_any_2'   => [ 'status' => 'add_is_drugged' ],
+            'drug_addict'  => [ 'status' => 'add_addicted' ],
+            'terrorize'    => [ 'status' => 'add_terror' ],
 
-            'just_ap6'     => [ 'collection' => [ 'ap' => 'to_max_plus_0' ]],
-            'just_ap7'     => [ 'collection' => [ 'ap' => 'to_max_plus_1' ]],
-            'just_ap8'     => [ 'collection' => [ 'ap' => 'to_max_plus_2' ]],
+            'disinfect'    => [ 'status' => 'remove_infection' ],
 
-            'produce_watercan2' => [ 'collection' => [ 'item' => [ 'consume' => false, 'morph' => 'water_can_2_#00' ] ]],
-            'produce_watercan1' => [ 'collection' => [ 'item' => [ 'consume' => false, 'morph' => 'water_can_1_#00' ] ]],
-            'produce_watercan0' => [ 'collection' => [ 'item' => [ 'consume' => false, 'morph' => 'water_can_empty_#00' ] ]],
+            'just_ap6'     => [ 'ap' => 'to_max_plus_0' ],
+            'just_ap7'     => [ 'ap' => 'to_max_plus_1' ],
+            'just_ap8'     => [ 'ap' => 'to_max_plus_2' ],
+
+            'produce_watercan3' => [ 'item' => [ 'consume' => false, 'morph' => 'water_can_3_#00' ] ],
+            'produce_watercan2' => [ 'item' => [ 'consume' => false, 'morph' => 'water_can_2_#00' ] ],
+            'produce_watercan1' => [ 'item' => [ 'consume' => false, 'morph' => 'water_can_1_#00' ] ],
+            'produce_watercan0' => [ 'item' => [ 'consume' => false, 'morph' => 'water_can_empty_#00' ] ],
         ],
 
         'results' => [
@@ -97,10 +135,33 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
                 'add_has_eaten'  => [ 'from' => null, 'to' => 'haseaten' ],
                 'add_is_drugged' => [ 'from' => null, 'to' => 'drugged' ],
                 'add_addicted'   => [ 'from' => null, 'to' => 'addict' ],
+                'add_terror'     => [ 'from' => null, 'to' => 'terror' ],
 
             ],
             'item' => [
-                'consume' => [ 'consume' => true, 'morph' => null ],
+                'consume' => [ 'consume' => true,  'morph' => null, 'break' => null, 'poison' => null ],
+                'break'   => [ 'consume' => false, 'morph' => null, 'break' => true, 'poison' => null ],
+            ],
+
+            'spawn' => [
+                'xmas'   => [ ['omg_this_will_kill_you_#00', 8], ['pocket_belt_#00', 8], 'rp_scroll_#00', 'rp_manual_#00', 'rp_sheets_#00', 'rp_letter_#00', 'rp_scroll_#00', 'rp_book_#00', 'rp_book_#01', 'rp_book2_#00' ],
+                'matbox' => [ 'wood2_#00', 'metal_#00' ],
+                'empty_battery' => [ 'pile_broken_#00' ],
+            ],
+
+            'consume' => [
+                'water'   => [ 'water_#00' ],
+                'battery' => [ 'pile_#00' ],
+            ],
+
+            'group' => [
+            ],
+
+            'zombies' => [
+                'kill_maybe_1z' => [ 'min' => 0, 'max' => 1 ],
+                'kill_1z' => [ 'num' => 1 ],
+                'kill_2z' => [ 'num' => 2 ],
+                'kill_3z' => [ 'num' => 3 ],
             ]
         ],
 
@@ -115,7 +176,7 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'watercan1_6ap' => [ 'label' => 'Trinken', 'meta' => [ 'drink_ap_1', 'drink_ap_2' ], 'result' => [ 'drink_ap_1', 'drink_ap_2', 'produce_watercan0' ] ],
             'watercan1_0ap' => [ 'label' => 'Trinken', 'meta' => [ 'drink_no_ap' ], 'result' => [ 'drink_no_ap', 'produce_watercan0' ] ],
 
-            'can'       => [ 'label' => 'Öffnen',  'meta' => [ 'have_can_opener' ], 'result' => [ [ 'collection' => [ 'item' => [ 'consume' => false, 'morph' => 'can_open_#00' ] ]] ] ],
+            'can'       => [ 'label' => 'Öffnen',  'meta' => [ 'have_can_opener' ], 'result' => [ [ 'item' => [ 'consume' => false, 'morph' => 'can_open_#00' ] ] ] ],
 
             'eat_6ap'   => [ 'label' => 'Essen',   'meta' => [ 'eat_ap' ], 'result' => [ 'eat_ap6', 'consume_item' ] ],
             'eat_7ap'   => [ 'label' => 'Essen',   'meta' => [ 'eat_ap' ], 'result' => [ 'eat_ap7', 'consume_item' ] ],
@@ -129,14 +190,99 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'drug_8ap_1'   => [ 'label' => 'Einnehmen', 'meta' => [ 'drug_1' ], 'result' => [ 'drug_any_1', 'drug_any_2', 'just_ap8', 'consume_item' ] ],
             'drug_8ap_2'   => [ 'label' => 'Einnehmen', 'meta' => [ 'drug_2' ], 'result' => [ 'drug_addict', 'just_ap8', 'consume_item' ] ],
 
+            'drug_rand_1'  => [ 'label' => 'Einnehmen', 'meta' => [ 'drug_1' ], 'result' => [ 'consume_item', ['group' => [
+                [ ['drug_any_1', 'drug_any_2', 'just_ap6'], 5 ],
+                [ ['drug_any_1', 'drug_any_2', 'terrorize'], 2 ],
+                [ ['drug_any_1', 'drug_any_2', 'drug_addict', 'just_ap7'], 2 ],
+                [ ['do_nothing'], 1 ],
+            ]] ] ] ,
+            'drug_rand_2'  => [ 'label' => 'Einnehmen', 'meta' => [ 'drug_2' ], 'result' => [ 'consume_item', ['group' => [
+                [ ['drug_addict', 'just_ap6'], 5 ],
+                [ ['drug_addict', 'terrorize'], 2 ],
+                [ ['drug_addict', 'just_ap7'], 2 ],
+                [ ['do_nothing'], 1 ],
+            ]] ] ] ,
+
+            'open_doggybag' => [ 'label' => 'Öffnen', 'meta' => [], 'result' => [ 'consume_item', [ 'spawn' => [ 'food_pims_#00', 'food_tarte_#00', 'food_chick_#00', 'food_biscuit_#00', 'food_bar3_#00', 'food_bar1_#00', 'food_sandw_#00', 'food_bar2_#00' ] ] ] ],
+            'open_lunchbag' => [ 'label' => 'Öffnen', 'meta' => [], 'result' => [ 'consume_item', [ 'spawn' => [ 'food_candies_#00', 'food_noodles_hot_#00', 'vegetable_tasty_#00', 'meat_#00' ] ] ] ],
+            'open_c_chest'  => [ 'label' => 'Öffnen', 'meta' => [], 'result' => [ 'consume_item', [ 'spawn' => [ 'pile_#00', 'radio_off_#00', 'pharma_#00', 'lights_#00' ] ] ] ],
+            'open_h_chest'  => [ 'label' => 'Öffnen', 'meta' => [], 'result' => [ 'consume_item', [ 'spawn' => [ 'watergun_empty_#00', 'pilegun_empty_#00', 'flash_#00', 'repair_one_#00', 'smoke_bomb_#00' ] ] ] ],
+            'open_postbox'  => [ 'label' => 'Öffnen', 'meta' => [], 'result' => [ 'consume_item', [ 'spawn' => [ 'money_#00', 'rp_book_#00', 'rp_book_#01', 'rp_sheets_#00' ] ] ] ],
+
+            'open_gamebox'  => [ 'label' => 'Öffnen', 'meta' => [], 'result' => [ 'consume_item', [ 'spawn' => [ 'dice_#00', 'cards_#00' ] ] ] ],
+            'open_abox'     => [ 'label' => 'Öffnen', 'meta' => [], 'result' => [ 'consume_item', [ 'spawn' => [ 'bplan_r_#00' ] ] ] ],
+            'open_cbox'     => [ 'label' => 'Öffnen', 'meta' => [], 'result' => [ 'consume_item', [ 'spawn' => [ 'bplan_c_#00', 'bplan_u_#00', 'bplan_r_#00', 'bplan_e_#00' ] ] ] ],
+
+            'open_matbox3'   => [ 'label' => 'Öffnen', 'meta' => [], 'result' => [ [ 'item' => [ 'consume' => false, 'morph' => 'rsc_pack_2_#00' ],  'spawn' => 'matbox' ] ] ],
+            'open_matbox2'   => [ 'label' => 'Öffnen', 'meta' => [], 'result' => [ [ 'item' => [ 'consume' => false, 'morph' => 'rsc_pack_1_#00' ],  'spawn' => 'matbox' ] ] ],
+            'open_matbox1'   => [ 'label' => 'Öffnen', 'meta' => [], 'result' => [ 'consume_item', [ 'spawn' => 'matbox' ] ] ],
+
+            'open_xmasbox3'  => [ 'label' => 'Öffnen', 'meta' => [], 'result' => [ [ 'item' => [ 'consume' => false, 'morph' => 'chest_christmas_2_#00' ],  'spawn' => 'xmas' ] ] ],
+            'open_xmasbox2'  => [ 'label' => 'Öffnen', 'meta' => [], 'result' => [ [ 'item' => [ 'consume' => false, 'morph' => 'chest_christmas_1_#00' ],  'spawn' => 'xmas' ] ] ],
+            'open_xmasbox1'  => [ 'label' => 'Öffnen', 'meta' => [], 'result' => [ 'consume_item', [ 'spawn' => 'xmas' ] ] ],
+
+            'open_metalbox'  => [ 'label' => 'Öffnen', 'meta' => [ 'have_can_opener' ], 'result' => [ 'consume_item', [ 'spawn' => [ 'drug_#00', 'bandage_#00', 'pile_#00', 'pilegun_empty_#00', 'vodka_de_#00', 'pharma_#00', 'explo_#00', 'lights_#00', 'drug_hero_#00', 'rhum_#00' ] ] ] ],
+            'open_metalbox2' => [ 'label' => 'Öffnen', 'meta' => [ 'have_can_opener' ], 'result' => [ 'consume_item', [ 'spawn' => [ 'watergun_opt_part_#00', 'pilegun_upkit_#00', 'pocket_belt_#00', 'cutcut_#00', 'chainsaw_part_#00', 'mixergun_part_#00', 'big_pgun_part_#00', 'lawn_part_#00' ] ] ] ],
+            'open_catbox'    => [ 'label' => 'Öffnen', 'meta' => [ 'have_can_opener' ], 'result' => [ 'consume_item', [ 'spawn' => [ 'poison_part_#00', 'pet_cat_#00', 'angryc_#00' ] ] ] ],
+
+            'open_toolbox'    => [ 'label' => 'Öffnen', 'meta' => [ 'have_box_opener' ], 'result' => [ 'consume_item', [ 'spawn' => [ 'pile_#00', 'meca_parts_#00', 'rustine_#00', 'tube_#00', 'pharma_#00', 'explo_#00', 'lights_#00' ] ] ] ],
+            'open_foodbox'    => [ 'label' => 'Öffnen', 'meta' => [ 'have_box_opener' ], 'result' => [ 'consume_item', [ 'spawn' => [ 'food_bag_#00', 'can_#00', 'meat_#00', 'hmeat_#00', 'vegetable_#00' ] ] ] ],
+
+            'load_pilegun'   => [ 'label' => 'Laden', 'meta' => [ 'have_battery' ], 'result' => [ 'consume_battery', [ 'item' => [ 'consume' => false, 'morph' => 'pilegun_#00' ] ] ] ],
+            'load_pilegun2'  => [ 'label' => 'Laden', 'meta' => [ 'have_battery' ], 'result' => [ 'consume_battery', [ 'item' => [ 'consume' => false, 'morph' => 'pilegun_up_#00' ] ] ] ],
+            'load_pilegun3'  => [ 'label' => 'Laden', 'meta' => [ 'have_battery' ], 'result' => [ 'consume_battery', [ 'item' => [ 'consume' => false, 'morph' => 'big_pgun_#00' ] ] ] ],
+            'load_mixergun'  => [ 'label' => 'Laden', 'meta' => [ 'have_battery' ], 'result' => [ 'consume_battery', [ 'item' => [ 'consume' => false, 'morph' => 'mixergun_#00' ] ] ] ],
+            'load_chainsaw'  => [ 'label' => 'Laden', 'meta' => [ 'have_battery' ], 'result' => [ 'consume_battery', [ 'item' => [ 'consume' => false, 'morph' => 'chainsaw_#00' ] ] ] ],
+            'load_taser'     => [ 'label' => 'Laden', 'meta' => [ 'have_battery' ], 'result' => [ 'consume_battery', [ 'item' => [ 'consume' => false, 'morph' => 'taser_#00' ] ] ] ],
+            'load_lpointer'  => [ 'label' => 'Laden', 'meta' => [ 'have_battery' ], 'result' => [ 'consume_battery', [ 'item' => [ 'consume' => false, 'morph' => 'lpoint4_#00' ] ] ] ],
+
+            'load_lamp'      => [ 'label' => 'Laden', 'meta' => [ 'have_battery' ], 'result' => [ 'consume_battery', [ 'item' => [ 'consume' => false, 'morph' => 'lamp_on_#00' ] ] ] ],
+            'load_dildo'     => [ 'label' => 'Laden', 'meta' => [ 'have_battery' ], 'result' => [ 'consume_battery', [ 'item' => [ 'consume' => false, 'morph' => 'vibr_#00' ] ] ] ],
+            'load_rmk2'      => [ 'label' => 'Laden', 'meta' => [ 'have_battery' ], 'result' => [ 'consume_battery', [ 'item' => [ 'consume' => false, 'morph' => 'radius_mk2_#00' ] ] ] ],
+            'load_maglite'   => [ 'label' => 'Laden', 'meta' => [ 'have_battery' ], 'result' => [ 'consume_battery', [ 'item' => [ 'consume' => false, 'morph' => 'maglite_2_#00' ] ] ] ],
+
+            'fill_asplash'   => [ 'label' => 'Befüllen', 'meta' => [ 'have_water' ], 'result' => [ 'consume_water', [ 'item' => [ 'consume' => false, 'morph' => 'watergun_opt_5_#00' ] ] ] ],
+            'fill_splash'    => [ 'label' => 'Befüllen', 'meta' => [ 'have_water' ], 'result' => [ 'consume_water', [ 'item' => [ 'consume' => false, 'morph' => 'watergun_3_#00' ] ] ] ],
+            'fill_jsplash'   => [ 'label' => 'Befüllen', 'meta' => [ 'have_water' ], 'result' => [ 'consume_water', [ 'item' => [ 'consume' => false, 'morph' => 'jerrygun_#00' ] ] ] ],
+            'fill_ksplash'   => [ 'label' => 'Befüllen', 'meta' => [ 'have_water' ], 'result' => [ 'consume_water', [ 'item' => [ 'consume' => false, 'morph' => 'kalach_#00' ] ] ] ],
+            'fill_grenade'   => [ 'label' => 'Befüllen', 'meta' => [ 'have_water' ], 'result' => [ 'consume_water', [ 'item' => [ 'consume' => false, 'morph' => 'grenade_#00' ] ] ] ],
+
+            'fill_watercan0' => [ 'label' => 'Befüllen', 'meta' => [ 'have_water' ], 'result' => [ 'consume_water', 'produce_watercan1' ] ],
+            'fill_watercan1' => [ 'label' => 'Befüllen', 'meta' => [ 'have_water' ], 'result' => [ 'consume_water', 'produce_watercan2' ] ],
+            'fill_watercan2' => [ 'label' => 'Befüllen', 'meta' => [ 'have_water' ], 'result' => [ 'consume_water', 'produce_watercan3' ] ],
+
+            'fire_pilegun'   => [ 'label' => 'Waffe einsetzen', 'meta' => [ 'must_be_outside', 'must_have_zombies', 'not_tired' ], 'result' => [ [ 'item' => ['morph' => 'pilegun_empty_#00',    'consume' => false], 'zombies' => 'kill_maybe_1z' ] ] ],
+            'fire_pilegun2'  => [ 'label' => 'Waffe einsetzen', 'meta' => [ 'must_be_outside', 'must_have_zombies', 'not_tired' ], 'result' => [ [ 'group' => [ [['do_nothing'],  8], [[ ['spawn' => 'empty_battery', 'item' => ['morph' => 'pilegun_up_empty_#00', 'consume' => false]] ], 2] ], 'zombies' => 'kill_1z' ] ] ],
+            'fire_pilegun3'  => [ 'label' => 'Waffe einsetzen', 'meta' => [ 'must_be_outside', 'must_have_zombies', 'not_tired' ], 'result' => [ [ 'group' => [ [['do_nothing'],  5], [[ ['spawn' => 'empty_battery', 'item' => ['morph' => 'big_pgun_empty_#00',   'consume' => false]] ], 5] ], 'zombies' => 'kill_2z' ] ] ],
+            'fire_mixergun'  => [ 'label' => 'Waffe einsetzen', 'meta' => [ 'must_be_outside', 'must_have_zombies', 'not_tired' ], 'result' => [ [ 'group' => [ [['do_nothing'],  6], [[ [                            'item' => ['morph' => 'mixergun_empty_#00',   'consume' => false]] ], 4] ], 'zombies' => 'kill_1z' ] ] ],
+            'fire_chainsaw'  => [ 'label' => 'Waffe einsetzen', 'meta' => [ 'must_be_outside', 'must_have_zombies', 'not_tired' ], 'result' => [ [ 'group' => [ [['do_nothing'],  7], [[ [                            'item' => ['morph' => 'chainsaw_empty_#00',   'consume' => false]] ], 3] ], 'zombies' => 'kill_3z' ] ] ],
+            'fire_taser'     => [ 'label' => 'Waffe einsetzen', 'meta' => [ 'must_be_outside', 'must_have_zombies', 'not_tired' ], 'result' => [ [ 'group' => [ [['do_nothing'],  2], [[ [                            'item' => ['morph' => 'taser_empty_#00',      'consume' => false]] ], 8] ], 'zombies' => 'kill_maybe_1z' ] ] ],
+            'fire_lpointer4' => [ 'label' => 'Waffe einsetzen', 'meta' => [ 'must_be_outside', 'must_have_zombies', 'not_tired' ], 'result' => [ [ 'item' => ['morph' => 'lpoint3_#00', 'consume' => false], 'zombies' => 'kill_2z' ] ] ],
+            'fire_lpointer3' => [ 'label' => 'Waffe einsetzen', 'meta' => [ 'must_be_outside', 'must_have_zombies', 'not_tired' ], 'result' => [ [ 'item' => ['morph' => 'lpoint2_#00', 'consume' => false], 'zombies' => 'kill_2z' ] ] ],
+            'fire_lpointer2' => [ 'label' => 'Waffe einsetzen', 'meta' => [ 'must_be_outside', 'must_have_zombies', 'not_tired' ], 'result' => [ [ 'item' => ['morph' => 'lpoint1_#00', 'consume' => false], 'zombies' => 'kill_2z' ] ] ],
+            'fire_lpointer1' => [ 'label' => 'Waffe einsetzen', 'meta' => [ 'must_be_outside', 'must_have_zombies', 'not_tired' ], 'result' => [ [ 'item' => ['morph' => 'lpoint_#00',  'consume' => false], 'zombies' => 'kill_2z' ] ] ],
+
+            'fire_asplash5'   => [ 'label' => 'Waffe einsetzen', 'meta' => [ 'must_be_outside', 'must_have_zombies', 'not_tired' ], 'result' => [ [ 'item' => ['morph' => 'watergun_opt_4_#00',     'consume' => false], 'zombies' => 'kill_1z' ] ] ],
+            'fire_asplash4'   => [ 'label' => 'Waffe einsetzen', 'meta' => [ 'must_be_outside', 'must_have_zombies', 'not_tired' ], 'result' => [ [ 'item' => ['morph' => 'watergun_opt_3_#00',     'consume' => false], 'zombies' => 'kill_1z' ] ] ],
+            'fire_asplash3'   => [ 'label' => 'Waffe einsetzen', 'meta' => [ 'must_be_outside', 'must_have_zombies', 'not_tired' ], 'result' => [ [ 'item' => ['morph' => 'watergun_opt_2_#00',     'consume' => false], 'zombies' => 'kill_1z' ] ] ],
+            'fire_asplash2'   => [ 'label' => 'Waffe einsetzen', 'meta' => [ 'must_be_outside', 'must_have_zombies', 'not_tired' ], 'result' => [ [ 'item' => ['morph' => 'watergun_opt_1_#00',     'consume' => false], 'zombies' => 'kill_1z' ] ] ],
+            'fire_asplash1'   => [ 'label' => 'Waffe einsetzen', 'meta' => [ 'must_be_outside', 'must_have_zombies', 'not_tired' ], 'result' => [ [ 'item' => ['morph' => 'watergun_opt_empty_#00', 'consume' => false], 'zombies' => 'kill_1z' ] ] ],
+            'fire_splash3'    => [ 'label' => 'Waffe einsetzen', 'meta' => [ 'must_be_outside', 'must_have_zombies', 'not_tired' ], 'result' => [ [ 'item' => ['morph' => 'watergun_2_#00',         'consume' => false], 'zombies' => 'kill_1z' ] ] ],
+            'fire_splash2'    => [ 'label' => 'Waffe einsetzen', 'meta' => [ 'must_be_outside', 'must_have_zombies', 'not_tired' ], 'result' => [ [ 'item' => ['morph' => 'watergun_1_#00',         'consume' => false], 'zombies' => 'kill_1z' ] ] ],
+            'fire_splash1'    => [ 'label' => 'Waffe einsetzen', 'meta' => [ 'must_be_outside', 'must_have_zombies', 'not_tired' ], 'result' => [ [ 'item' => ['morph' => 'watergun_empty_#00',     'consume' => false], 'zombies' => 'kill_1z' ] ] ],
+
         ],
         'items' => [
             'water_#00'           => [ 'water_6ap', 'water_0ap' ],
             'water_cup_#00'       => [ 'water_6ap', 'water_0ap' ],
+
             'water_can_3_#00'     => [ 'watercan3_6ap', 'watercan3_0ap' ],
-            'water_can_2_#00'     => [ 'watercan2_6ap', 'watercan2_0ap' ],
-            'water_can_1_#00'     => [ 'watercan1_6ap', 'watercan1_0ap' ],
+            'water_can_2_#00'     => [ 'watercan2_6ap', 'watercan2_0ap', 'fill_watercan2' ],
+            'water_can_1_#00'     => [ 'watercan1_6ap', 'watercan1_0ap', 'fill_watercan1' ],
+            'water_can_empty_#00' => [ 'fill_watercan0' ],
+
             'can_#00'             => [ 'can' ],
+
             'can_open_#00'        => [ 'eat_6ap'],
             'fruit_#00'           => [ 'eat_6ap'],
             'bretz_#00'           => [ 'eat_6ap'],
@@ -152,6 +298,7 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'food_tarte_#00'      => [ 'eat_6ap'],
             'food_sandw_#00'      => [ 'eat_6ap'],
             'food_noodles_#00'    => [ 'eat_6ap'],
+
             'food_noodles_hot_#00'=> [ 'eat_7ap'],
             'meat_#00'            => [ 'eat_7ap'],
             'vegetable_tasty_#00' => [ 'eat_7ap'],
@@ -161,9 +308,73 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'woodsteak_#00'       => [ 'eat_7ap'],
             'egg_#00'             => [ 'eat_7ap'],
             'apple_#00'           => [ 'eat_7ap'],
+
             'disinfect_#00'       => [ 'drug_par_1', 'drug_par_2' ],
             'drug_#00'            => [ 'drug_6ap_1', 'drug_6ap_2' ],
             'drug_hero_#00'       => [ 'drug_8ap_1', 'drug_8ap_2' ],
+            'drug_random_#00'     => [ 'drug_rand_1', 'drug_rand_2' ],
+
+            'food_bag_#00'        => [ 'open_doggybag' ],
+            'food_armag_#00'      => [ 'open_lunchbag' ],
+            'chest_citizen_#00'   => [ 'open_c_chest' ],
+            'chest_hero_#00'      => [ 'open_h_chest' ],
+            'postal_box_#00'      => [ 'open_postbox' ],
+
+            'game_box_#00'        => [ 'open_gamebox' ],
+            'bplan_box_#00'       => [ 'open_abox' ],
+            'bplan_drop_#00'      => [ 'open_cbox' ],
+
+            'rsc_pack_3_#00'         => [ 'open_matbox3' ],
+            'rsc_pack_2_#00'         => [ 'open_matbox2' ],
+            'rsc_pack_1_#00'         => [ 'open_matbox1' ],
+            'chest_christmas_3_#00'  => [ 'open_xmasbox3' ],
+            'chest_christmas_2_#00'  => [ 'open_xmasbox2' ],
+            'chest_christmas_1_#00'  => [ 'open_xmasbox1' ],
+
+            'chest_#00'           => [ 'open_metalbox' ],
+            'chest_xl_#00'        => [ 'open_metalbox2' ],
+            'catbox_#00'          => [ 'open_catbox' ],
+            'chest_tools_#00'     => [ 'open_toolbox' ],
+            'chest_food_#00'      => [ 'open_foodbox' ],
+
+            'pilegun_empty_#00'      => [ 'load_pilegun'  ],
+            'pilegun_up_empty_#00'   => [ 'load_pilegun2' ],
+            'big_pgun_empty_#00'     => [ 'load_pilegun3' ],
+            'mixergun_empty_#00'     => [ 'load_mixergun' ],
+            'chainsaw_empty_#00'     => [ 'load_chainsaw' ],
+            'taser_empty_#00'        => [ 'load_taser' ],
+            'lpoint_#00'             => [ 'load_lpointer' ],
+
+            'lamp_#00'             => [ 'load_lamp' ],
+            'vibr_empty_#00'       => [ 'load_dildo' ],
+            'radius_mk2_part_#00'  => [ 'load_rmk2' ],
+            'maglite_off_#00'      => [ 'load_maglite' ],
+
+            'watergun_opt_empty_#00' => [ 'fill_asplash' ],
+            'watergun_empty_#00'     => [ 'fill_splash' ],
+            'jerrygun_off_#00'       => [ 'fill_jsplash'],
+            'kalach_#01'             => [ 'fill_ksplash'],
+            'grenade_empty_#00'      => [ 'fill_grenade'],
+
+            'pilegun_#00'      => [ 'fire_pilegun'  ],
+            'pilegun_up_#00'   => [ 'fire_pilegun2' ],
+            'big_pgun_#00'     => [ 'fire_pilegun3' ],
+            'mixergun_#00'     => [ 'fire_mixergun' ],
+            'chainsaw_#00'     => [ 'fire_chainsaw' ],
+            'taser_#00'        => [ 'fire_taser' ],
+            'lpoint4_#00'       => [ 'fire_lpointer4' ],
+            'lpoint3_#00'       => [ 'fire_lpointer3' ],
+            'lpoint2_#00'       => [ 'fire_lpointer2' ],
+            'lpoint1_#00'       => [ 'fire_lpointer1' ],
+
+            'watergun_opt_5_#00' => [ 'fire_asplash5' ],
+            'watergun_opt_4_#00' => [ 'fire_asplash4' ],
+            'watergun_opt_3_#00' => [ 'fire_asplash3' ],
+            'watergun_opt_2_#00' => [ 'fire_asplash2' ],
+            'watergun_opt_1_#00' => [ 'fire_asplash1' ],
+            'watergun_3_#00'     => [ 'fire_splash3' ],
+            'watergun_2_#00'     => [ 'fire_splash2' ],
+            'watergun_1_#00'     => [ 'fire_splash1' ],
         ]
 
     ];
@@ -208,7 +419,7 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             foreach ($data['collection'] as $sub_id => $sub_req) {
                 if (is_array($sub_req)) {
                     $sub_data = $sub_req;
-                    $sub_req = "{$id}_inline_{$sub_id}";
+                    $sub_req = "{$id}_i_{$sub_id}";
                 }
 
                 else {
@@ -228,6 +439,12 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
                         break;
                     case 'item':
                         $requirement->setItem( $this->process_item_requirement($manager, $out, $sub_cache[$sub_id], $sub_req, $sub_data ) );
+                        break;
+                    case 'location':
+                        $requirement->setLocation( $this->process_location_requirement($manager, $out, $sub_cache[$sub_id], $sub_req, $sub_data ) );
+                        break;
+                    case 'zombies':
+                        $requirement->setZombies( $this->process_zombie_requirement($manager, $out, $sub_cache[$sub_id], $sub_req, $sub_data ) );
                         break;
                     default:
                         throw new Exception('No handler for requirement type ' . $sub_id);
@@ -314,6 +531,62 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
      * @param ConsoleOutputInterface $out
      * @param array $cache
      * @param string $id
+     * @param array $data
+     * @return RequireLocation
+     * @throws Exception
+     */
+    private function process_location_requirement(
+        ObjectManager $manager, ConsoleOutputInterface $out,
+        array &$cache, string $id, array $data): RequireLocation
+    {
+        if (!isset($cache[$id])) {
+            $requirement = $manager->getRepository(RequireLocation::class)->findOneByName( $id );
+            if ($requirement) $out->writeln( "\t\t\t<comment>Update</comment> condition <info>location/{$id}</info>" );
+            else {
+                $requirement = new RequireLocation();
+                $out->writeln( "\t\t\t<comment>Create</comment> condition <info>location/{$id}</info>" );
+            }
+
+            $requirement->setName( $id )->setLocation( $data[0] );
+            $manager->persist( $cache[$id] = $requirement );
+        } else $out->writeln( "\t\t\t<comment>Skip</comment> condition <info>location/{$id}</info>" );
+
+        return $cache[$id];
+    }
+
+    /**
+     * @param ObjectManager $manager
+     * @param ConsoleOutputInterface $out
+     * @param array $cache
+     * @param string $id
+     * @param array $data
+     * @return RequireZombiePresence
+     * @throws Exception
+     */
+    private function process_zombie_requirement(
+        ObjectManager $manager, ConsoleOutputInterface $out,
+        array &$cache, string $id, array $data): RequireZombiePresence
+    {
+        if (!isset($cache[$id])) {
+            $requirement = $manager->getRepository(RequireZombiePresence::class)->findOneByName( $id );
+            if ($requirement) $out->writeln( "\t\t\t<comment>Update</comment> condition <info>zombies/{$id}</info>" );
+            else {
+                $requirement = new RequireZombiePresence();
+                $out->writeln( "\t\t\t<comment>Create</comment> condition <info>zombies/{$id}</info>" );
+            }
+
+            $requirement->setName( $id )->setNumber( $data['min'] )->setMustBlock( $data['block'] );
+            $manager->persist( $cache[$id] = $requirement );
+        } else $out->writeln( "\t\t\t<comment>Skip</comment> condition <info>zombies/{$id}</info>" );
+
+        return $cache[$id];
+    }
+
+    /**
+     * @param ObjectManager $manager
+     * @param ConsoleOutputInterface $out
+     * @param array $cache
+     * @param string $id
      * @param array $sub_cache
      * @param array|null $data
      * @return Result
@@ -336,10 +609,11 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
 
             $result->setName( $id );
 
-            foreach ($data['collection'] as $sub_id => $sub_res) {
+            $collection = isset($data['collection']) ? $data['collection'] : $data;
+            foreach ($collection as $sub_id => $sub_res) {
                 if (is_array($sub_res)) {
                     $sub_data = $sub_res;
-                    $sub_res = "{$id}_inline_{$sub_id}";
+                    $sub_res = "{$id}_i_{$sub_id}";
                 } else {
                     if (!isset( static::$item_actions['results'][$sub_id] ))
                         throw new Exception('Result type definition not found: ' . $sub_id);
@@ -360,6 +634,18 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
                         break;
                     case 'item':
                         $result->setItem( $this->process_item_effect($manager, $out, $sub_cache[$sub_id], $sub_res, $sub_data) );
+                        break;
+                    case 'spawn':
+                        $result->setSpawn( $this->process_spawn_effect($manager, $out, $sub_cache[$sub_id], $sub_res, $sub_data) );
+                        break;
+                    case 'consume':
+                        $result->setConsume( $this->process_consume_effect($manager, $out, $sub_cache[$sub_id], $sub_res, $sub_data) );
+                        break;
+                    case 'zombies':
+                        $result->setZombies( $this->process_zombie_effect($manager, $out, $sub_cache[$sub_id], $sub_res, $sub_data) );
+                        break;
+                    case 'group':
+                        $result->setResultGroup( $this->process_group_effect($manager, $out, $sub_cache[$sub_id], $cache, $sub_cache, $sub_res, $sub_data) );
                         break;
                     default:
                         throw new Exception('No handler for effect type ' . $sub_id);
@@ -401,7 +687,7 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
 
             $result->setName( $id )->setInitial( $status_from )->setResult( $status_to );
             $manager->persist( $cache[$id] = $result );
-        } else $out->writeln( "\t\t\t<comment>Skip</comment> condition <info>status/{$id}</info>" );
+        } else $out->writeln( "\t\t\t<comment>Skip</comment> effect <info>status/{$id}</info>" );
         
         return $cache[$id];
     }
@@ -428,7 +714,7 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
 
             $result->setName( $id )->setMax( $data['max'] )->setAp( $data['num'] );
             $manager->persist( $cache[$id] = $result );
-        } else $out->writeln( "\t\t\t<comment>Skip</comment> condition <info>ap/{$id}</info>" );
+        } else $out->writeln( "\t\t\t<comment>Skip</comment> effect <info>ap/{$id}</info>" );
         
         return $cache[$id];
     }
@@ -458,13 +744,168 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
 
             if ($morph_to && $data['consume']) throw new Exception('Item effects cannot morph and consume at the same time!');
 
-            $result->setName( $id )->setConsume( $data['consume'] )->setMorph( $morph_to );
+            $result->setName( $id )->setConsume( $data['consume'] )->setMorph( $morph_to )
+                ->setBreak( isset($data['break']) ? $data['break'] : null )
+                ->setPoison( isset($data['poison']) ? $data['poison'] : null );
             $manager->persist( $cache[$id] = $result );
-        } else $out->writeln( "\t\t\t<comment>Skip</comment> condition <info>item/{$id}</info>" );
+        } else $out->writeln( "\t\t\t<comment>Skip</comment> effect <info>item/{$id}</info>" );
         
         return $cache[$id];
-    } 
-    
+    }
+
+    /**
+     * @param ObjectManager $manager
+     * @param ConsoleOutputInterface $out
+     * @param array $cache
+     * @param string $id
+     * @param array $data
+     * @return AffectItemSpawn
+     * @throws Exception
+     */
+    private function process_spawn_effect(
+        ObjectManager $manager, ConsoleOutputInterface $out,
+        array &$cache, string $id, array $data): AffectItemSpawn
+    {
+        if (!isset($cache[$id])) {
+            $result = $manager->getRepository(AffectItemSpawn::class)->findOneByName( $id );
+            if ($result) $out->writeln( "\t\t\t<comment>Update</comment> effect <info>spawn/{$id}</info>" );
+            else {
+                $result = (new AffectItemSpawn())->setName( $id );
+                $out->writeln( "\t\t\t<comment>Create</comment> effect <info>spawn/{$id}</info>" );
+            }
+
+            if (count($data) === 1) {
+                $name = is_array($data[0]) ? $data[0][0] : $data[0];
+                $prototype = $manager->getRepository(ItemPrototype::class)->findOneByName( $name );
+                if (!$prototype) throw new Exception('Item prototype not found: ' . $name);
+                $result->setPrototype( $prototype );
+            } else {
+                $g_name = "efg_{$id}";
+                $group = $manager->getRepository( ItemGroup::class )->findOneByName( $g_name );
+                if ($group) $group->getEntries()->clear();
+                else $group = (new ItemGroup())->setName( $g_name );
+
+                foreach ($data as $entry) {
+                    list($p,$c) = is_array($entry) ? $entry : [$entry,1];
+                    $prototype = $manager->getRepository(ItemPrototype::class)->findOneByName( $p );
+                    if (!$prototype) throw new Exception('Item prototype not found: ' . $p);
+                    $group->addEntry( (new ItemGroupEntry())->setChance($c)->setPrototype( $prototype ) );
+                }
+
+                $result->setItemGroup( $group );
+                $manager->persist( $group );
+            }
+
+            $manager->persist( $cache[$id] = $result );
+        } else $out->writeln( "\t\t\t<comment>Skip</comment> effect <info>spawn/{$id}</info>" );
+
+        return $cache[$id];
+    }
+
+    /**
+     * @param ObjectManager $manager
+     * @param ConsoleOutputInterface $out
+     * @param array $cache
+     * @param string $id
+     * @param array $data
+     * @return AffectItemConsume
+     * @throws Exception
+     */
+    private function process_consume_effect(
+        ObjectManager $manager, ConsoleOutputInterface $out,
+        array &$cache, string $id, array $data): AffectItemConsume
+    {
+        if (!isset($cache[$id])) {
+            $result = $manager->getRepository(AffectItemConsume::class)->findOneByName( $id );
+            if ($result) $out->writeln( "\t\t\t<comment>Update</comment> effect <info>consume/{$id}</info>" );
+            else {
+                $result = (new AffectItemConsume())->setName( $id );
+                $out->writeln( "\t\t\t<comment>Create</comment> effect <info>consume/{$id}</info>" );
+            }
+
+            list($name,$count) = count($data) > 1 ? $data : [$data[0],1];
+            $prototype = $manager->getRepository(ItemPrototype::class)->findOneByName( $name );
+            if (!$prototype) throw new Exception('Item prototype not found: ' . $name);
+            $result->setPrototype( $prototype )->setCount( $count );
+
+            $manager->persist( $cache[$id] = $result );
+        } else $out->writeln( "\t\t\t<comment>Skip</comment> effect <info>consume/{$id}</info>" );
+
+        return $cache[$id];
+    }
+
+    /**
+     * @param ObjectManager $manager
+     * @param ConsoleOutputInterface $out
+     * @param array $cache
+     * @param string $id
+     * @param array $data
+     * @return AffectZombies
+     */
+    private function process_zombie_effect(
+        ObjectManager $manager, ConsoleOutputInterface $out,
+        array &$cache, string $id, array $data): AffectZombies
+    {
+        if (!isset($cache[$id])) {
+            $result = $manager->getRepository(AffectZombies::class)->findOneByName( $id );
+            if ($result) $out->writeln( "\t\t\t<comment>Update</comment> effect <info>zombie/{$id}</info>" );
+            else {
+                $result = new AffectZombies();
+                $out->writeln( "\t\t\t<comment>Create</comment> effect <info>zombie/{$id}</info>" );
+            }
+
+            $result->setName( $id )->setMax( isset($data['max']) ? $data['max'] : $data['num'] )->setMin( isset($data['min']) ? $data['min'] : $data['num'] );
+            $manager->persist( $cache[$id] = $result );
+        } else $out->writeln( "\t\t\t<comment>Skip</comment> effect <info>zombie/{$id}</info>" );
+
+        return $cache[$id];
+    }
+
+    /**
+     * @param ObjectManager $manager
+     * @param ConsoleOutputInterface $out
+     * @param array $cache
+     * @param array $meta_cache
+     * @param array $sub_cache
+     * @param string $id
+     * @param array $data
+     * @return AffectResultGroup
+     * @throws Exception
+     */
+    private function process_group_effect(
+        ObjectManager $manager, ConsoleOutputInterface $out,
+        array &$cache, array &$meta_cache, array &$sub_cache, string $id, array $data): AffectResultGroup
+    {
+        if (!isset($cache[$id])) {
+            $result = $manager->getRepository(AffectResultGroup::class)->findOneByName( $id );
+            if ($result) $out->writeln( "\t\t\t<comment>Update</comment> effect <info>group/{$id}</info>" );
+            else {
+                $result = (new AffectResultGroup())->setName( $id );
+                $out->writeln( "\t\t\t<comment>Create</comment> effect <info>group/{$id}</info>" );
+            }
+
+            foreach ( $result->getEntries() as $entry ) $manager->remove( $entry ); $result->getEntries()->clear();
+            foreach ( $data as $k => $entry ) {
+
+                $entry_obj = new AffectResultGroupEntry();
+                $entry_obj->setCount( $entry[1] );
+
+                if (!is_array($entry[0])) $entry[0] = [$entry[0]];
+                foreach ( $entry[0] as $n => $nested_action )
+                    if (is_array( $nested_action ))
+                        $entry_obj->addResult( $this->process_meta_effect( $manager, $out, $meta_cache, "{$id}_{$k}_{$n}", $sub_cache, $nested_action ) );
+                    else $entry_obj->addResult( $this->process_meta_effect( $manager, $out, $meta_cache, $nested_action, $sub_cache ) );
+
+                $result->addEntry( $entry_obj );
+                $manager->persist( $entry_obj );
+            }
+
+            $manager->persist( $cache[$id] = $result );
+        } else $out->writeln( "\t\t\t<comment>Skip</comment> effect <info>group/{$id}</info>" );
+
+        return $cache[$id];
+    }
+
     /**
      * @param ObjectManager $manager
      * @param ConsoleOutputInterface $out

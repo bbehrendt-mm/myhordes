@@ -8,7 +8,6 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Helper\ProgressBar;
-use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
 
@@ -63,8 +62,6 @@ class CitizenFixtures extends Fixture
         $out->writeln( '<comment>Citizen professions: ' . count(static::$profession_data) . ' fixture entries available.</comment>' );
 
         // Set up console
-        $table = new Table( $out );
-        $table->setHeaders( ['ID','Name','Label'] );
         $progress = new ProgressBar( $out->section() );
         $progress->start( count(static::$profession_data) );
 
@@ -81,21 +78,17 @@ class CitizenFixtures extends Fixture
             $manager->persist( $entity );
 
             // Set table entry
-            $table->addRow( [$entity->getId(),$entity->getName(),$entity->getLabel()] );
             $progress->advance();
         }
 
         $manager->flush();
         $progress->finish();
-        $table->render();
     }
 
     protected function insert_status_types(ObjectManager $manager, ConsoleOutputInterface $out) {
         $out->writeln( '<comment>Status: ' . count(static::$citizen_status) . ' fixture entries available.</comment>' );
 
         // Set up console
-        $table = new Table( $out );
-        $table->setHeaders( ['ID','Name','Label'] );
         $progress = new ProgressBar( $out->section() );
         $progress->start( count(static::$citizen_status) );
 
@@ -112,13 +105,11 @@ class CitizenFixtures extends Fixture
             $manager->persist( $entity );
 
             // Set table entry
-            $table->addRow( [$entity->getId(),$entity->getName(),$entity->getLabel()] );
             $progress->advance();
         }
 
         $manager->flush();
         $progress->finish();
-        $table->render();
     }
 
     public function load(ObjectManager $manager) {

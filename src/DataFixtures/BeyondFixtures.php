@@ -724,8 +724,6 @@ class BeyondFixtures extends Fixture implements DependentFixtureInterface
         $out->writeln( '<comment>Zone prototypes: ' . count(static::$zone_class_data) . ' fixture entries available.</comment>' );
 
         // Set up console
-        $table = new Table( $out );
-        $table->setHeaders( ['ID','Label','Camping Level'] );
         $progress = new ProgressBar( $out->section() );
         $progress->start( count(static::$zone_class_data) );
 
@@ -744,13 +742,11 @@ class BeyondFixtures extends Fixture implements DependentFixtureInterface
             $manager->persist( $entity );
 
             // Set table entry
-            $table->addRow( [$entity->getId(),$entity->getLabel(),$entity->getCampingLevel()] );
             $progress->advance();
         }
 
         $manager->flush();
         $progress->finish();
-        $table->render();
     }
 
     public function load(ObjectManager $manager) {

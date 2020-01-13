@@ -4,6 +4,8 @@
 namespace App\Service;
 
 
+use App\Entity\AffectResultGroup;
+use App\Entity\AffectResultGroupEntry;
 use App\Entity\Citizen;
 use App\Entity\CitizenHome;
 use App\Entity\CitizenProfession;
@@ -12,6 +14,7 @@ use App\Entity\Item;
 use App\Entity\ItemGroup;
 use App\Entity\ItemGroupEntry;
 use App\Entity\ItemPrototype;
+use App\Entity\Result;
 use App\Entity\Town;
 use App\Entity\TownClass;
 use App\Entity\User;
@@ -58,6 +61,29 @@ class RandomGenerator
             if ($sum > $random) return $entry->getPrototype();
         }
         return $g->getEntries()->last()->getPrototype();
+    }
+
+    /**
+     * @param AffectResultGroup $g
+     * @return Result[]
+     */
+    function pickResultsFromGroup(AffectResultGroup $g): array {
+        if (!$g->getEntries()->count()) return null;
+        $sum = 0;
+        foreach ( $g->getEntries() as $entry )
+            $sum += abs($entry->getCount());
+        if ($sum === 0) {
+            /** @var AffectResultGroupEntry $pe */
+            $pe = $this->pick( $g->getEntries()->getValues() );
+            return $pe->getResults()->getValues();
+        }
+        $random = mt_rand(0,$sum-1);
+        $sum = 0;
+        foreach ( $g->getEntries() as $entry ) {
+            $sum += abs($entry->getCount());
+            if ($sum > $random) return $entry->getResults()->getValues();
+        }
+        return $g->getEntries()->last()->getResults()->getValues();
     }
 
 }
