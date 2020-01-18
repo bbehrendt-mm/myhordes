@@ -115,6 +115,9 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'produce_watercan2' => [ 'item' => [ 'consume' => false, 'morph' => 'water_can_2_#00' ] ],
             'produce_watercan1' => [ 'item' => [ 'consume' => false, 'morph' => 'water_can_1_#00' ] ],
             'produce_watercan0' => [ 'item' => [ 'consume' => false, 'morph' => 'water_can_empty_#00' ] ],
+
+            'kill_1_zombie' => [ 'zombies' => 'kill_1z' ],
+            'kill_2_zombie' => [ 'zombies' => 'kill_2z' ],
         ],
 
         'results' => [
@@ -155,6 +158,22 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             ],
 
             'group' => [
+                'g_break_20' => [[['do_nothing'], 80], [['break_item'], 20]],
+                'g_break_25' => [[['do_nothing'], 75], [['break_item'], 25]],
+                'g_break_30' => [[['do_nothing'], 70], [['break_item'], 30]],
+                'g_break_33' => [[['do_nothing'], 67], [['break_item'], 33]],
+                'g_break_40' => [[['do_nothing'], 60], [['break_item'], 40]],
+                'g_break_50' => [[['do_nothing'], 50], [['break_item'], 50]],
+                'g_break_60' => [[['do_nothing'], 40], [['break_item'], 60]],
+                'g_break_66' => [[['do_nothing'], 44], [['break_item'], 66]],
+                'g_break_80' => [[['do_nothing'], 20], [['break_item'], 80]],
+
+                'g_kill_1z_10' => [[['do_nothing'], 90], [['break_item'], 10]],
+                'g_kill_1z_20' => [[['do_nothing'], 80], [['break_item'], 20]],
+                'g_kill_1z_33' => [[['do_nothing'], 67], [['break_item'], 33]],
+                'g_kill_1z_50' => [[['do_nothing'], 50], [['break_item'], 50]],
+                'g_kill_1z_85' => [[['do_nothing'], 15], [['break_item'], 85]],
+
             ],
 
             'zombies' => [
@@ -271,6 +290,31 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'fire_splash2'    => [ 'label' => 'Waffe einsetzen', 'meta' => [ 'must_be_outside', 'must_have_zombies', 'not_tired' ], 'result' => [ [ 'item' => ['morph' => 'watergun_1_#00',         'consume' => false], 'zombies' => 'kill_1z' ] ] ],
             'fire_splash1'    => [ 'label' => 'Waffe einsetzen', 'meta' => [ 'must_be_outside', 'must_have_zombies', 'not_tired' ], 'result' => [ [ 'item' => ['morph' => 'watergun_empty_#00',     'consume' => false], 'zombies' => 'kill_1z' ] ] ],
 
+            'throw_animal'     => [ 'label' => 'Waffe einsetzen', 'meta' => [ 'must_be_outside', 'must_have_zombies', 'not_tired' ], 'result' => [ 'consume_item', 'kill_1_zombie' ] ],
+            'throw_animal_cat' => [ 'label' => 'Waffe einsetzen', 'meta' => [ 'must_be_outside', 'must_have_zombies', 'not_tired' ], 'result' => [ [ 'group' => [ [['do_nothing'],  7], [['consume_item'], 3] ], 'zombies' => 'kill_1z' ] ] ],
+            'throw_animal_dog' => [ 'label' => 'Waffe einsetzen', 'meta' => [ 'must_be_outside', 'must_have_zombies', 'not_tired' ], 'result' => [ [ 'group' => [ [['do_nothing'], 95], [['consume_item'], 5] ], 'zombies' => 'kill_1z' ] ] ],
+
+            'throw_b_machine_1'     => [ 'label' => 'Waffe einsetzen', 'meta' => [ 'must_be_outside', 'must_have_zombies', 'not_tired' ], 'result' => [ ['group' => 'g_break_40'], 'kill_1_zombie' ] ],
+            'throw_b_bone'          => [ 'label' => 'Waffe einsetzen', 'meta' => [ 'must_be_outside', 'must_have_zombies', 'not_tired' ], 'result' => [ ['group' => 'g_break_80'], 'kill_1_zombie' ] ],
+            'throw_b_can_opener'    => [ 'label' => 'Waffe einsetzen', 'meta' => [ 'must_be_outside', 'must_have_zombies', 'not_tired' ], 'result' => [ ['group' => 'g_break_30'], ['group' => 'g_kill_1z_33'] ] ],
+            'throw_b_chair basic'   => [ 'label' => 'Waffe einsetzen', 'meta' => [ 'must_be_outside', 'must_have_zombies', 'not_tired' ], 'result' => [ ['group' => 'g_break_30'], ['group' => 'g_kill_1z_85'] ] ],
+            'throw_b_torch'         => [ 'label' => 'Waffe einsetzen', 'meta' => [ 'must_be_outside', 'must_have_zombies', 'not_tired' ], 'result' => [ ['item' => ['morph' => 'torch_off_#00', 'consume' => false]], 'kill_1_zombie' ] ],
+            'throw_b_chain'         => [ 'label' => 'Waffe einsetzen', 'meta' => [ 'must_be_outside', 'must_have_zombies', 'not_tired' ], 'result' => [ ['group' => 'g_break_25'], ['group' => 'g_kill_1z_50'] ] ],
+            'throw_b_staff'         => [ 'label' => 'Waffe einsetzen', 'meta' => [ 'must_be_outside', 'must_have_zombies', 'not_tired' ], 'result' => [ ['group' => 'g_break_50'], ['group' => 'g_kill_1z_33'] ] ],
+            'throw_b_knife'         => [ 'label' => 'Waffe einsetzen', 'meta' => [ 'must_be_outside', 'must_have_zombies', 'not_tired' ], 'result' => [ ['group' => 'g_break_33'], 'kill_1_zombie' ] ],
+            'throw_b_machine_2'     => [ 'label' => 'Waffe einsetzen', 'meta' => [ 'must_be_outside', 'must_have_zombies', 'not_tired' ], 'result' => [ ['group' => 'g_break_40'], 'kill_1_zombie' ] ],
+            'throw_b_small_knife'   => [ 'label' => 'Waffe einsetzen', 'meta' => [ 'must_be_outside', 'must_have_zombies', 'not_tired' ], 'result' => [ ['group' => 'g_break_50'], ['group' => 'g_kill_1z_33'] ] ],
+            'throw_b_cutcut'        => [ 'label' => 'Waffe einsetzen', 'meta' => [ 'must_be_outside', 'must_have_zombies', 'not_tired' ], 'result' => [ ['group' => 'g_break_25'], 'kill_2_zombie' ] ],
+            'throw_b_machine_3'     => [ 'label' => 'Waffe einsetzen', 'meta' => [ 'must_be_outside', 'must_have_zombies', 'not_tired' ], 'result' => [ ['group' => 'g_break_40'], 'kill_1_zombie' ] ],
+            'throw_b_pc'            => [ 'label' => 'Waffe einsetzen', 'meta' => [ 'must_be_outside', 'must_have_zombies', 'not_tired' ], 'result' => [ ['group' => 'g_break_50'], 'kill_1_zombie' ] ],
+            'throw_b_lawn'          => [ 'label' => 'Waffe einsetzen', 'meta' => [ 'must_be_outside', 'must_have_zombies', 'not_tired' ], 'result' => [ ['group' => 'g_break_20'], 'kill_2_zombie' ] ],
+            'throw_b_screw'         => [ 'label' => 'Waffe einsetzen', 'meta' => [ 'must_be_outside', 'must_have_zombies', 'not_tired' ], 'result' => [ ['group' => 'g_break_66'], ['group' => 'g_kill_1z_33'] ] ],
+            'throw_b_swiss_knife'   => [ 'label' => 'Waffe einsetzen', 'meta' => [ 'must_be_outside', 'must_have_zombies', 'not_tired' ], 'result' => [ ['group' => 'g_break_33'], ['group' => 'g_kill_1z_33'] ] ],
+            'throw_b_cutter'        => [ 'label' => 'Waffe einsetzen', 'meta' => [ 'must_be_outside', 'must_have_zombies', 'not_tired' ], 'result' => [ ['group' => 'g_break_80'], ['group' => 'g_kill_1z_20'] ] ],
+            'throw_b_concrete_wall' => [ 'label' => 'Waffe einsetzen', 'meta' => [ 'must_be_outside', 'must_have_zombies', 'not_tired' ], 'result' => [ ['group' => 'g_break_20'], 'kill_1_zombie' ] ],
+            'throw_b_torch_off'     => [ 'label' => 'Waffe einsetzen', 'meta' => [ 'must_be_outside', 'must_have_zombies', 'not_tired' ], 'result' => [ ['group' => 'g_break_50'], ['group' => 'g_kill_1z_10'] ] ],
+            'throw_b_wrench'        => [ 'label' => 'Waffe einsetzen', 'meta' => [ 'must_be_outside', 'must_have_zombies', 'not_tired' ], 'result' => [ ['group' => 'g_break_33'], ['group' => 'g_kill_1z_50'] ] ],
+['group' => ''],
         ],
         'items' => [
             'water_#00'           => [ 'water_6ap', 'water_0ap' ],
@@ -375,6 +419,35 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'watergun_3_#00'     => [ 'fire_splash3' ],
             'watergun_2_#00'     => [ 'fire_splash2' ],
             'watergun_1_#00'     => [ 'fire_splash1' ],
+
+            'pet_chick_#00' => [ 'throw_animal'     ],
+            'pet_rat_#00'   => [ 'throw_animal'     ],
+            'pet_pig_#00'   => [ 'throw_animal'     ],
+            'pet_snake_#00' => [ 'throw_animal'     ],
+            'pet_cat_#00'   => [ 'throw_animal_cat' ],
+            'tekel_#00'     => [ 'throw_animal_dog' ],
+            'pet_dog_#00'   => [ 'throw_animal_dog' ],
+
+            'machine_1_#00'     => ['throw_b_machine_1'    ],
+            'bone_#00'          => ['throw_b_bone'         ],
+            'can_opener_#00'    => ['throw_b_can_opener'   ],
+            'chair_basic_#00'   => ['throw_b_chair basic'  ],
+            'torch_#00'         => ['throw_b_torch'        ],
+            'chain_#00'         => ['throw_b_chain'        ],
+            'staff_#00'         => ['throw_b_staff'        ],
+            'knife_#00'         => ['throw_b_knife'        ],
+            'machine_2_#00'     => ['throw_b_machine_2'    ],
+            'small_knife_#00'   => ['throw_b_small_knife'  ],
+            'cutcut_#00'        => ['throw_b_cutcut'       ],
+            'machine_3_#00'     => ['throw_b_machine_3'    ],
+            'pc_#00'            => ['throw_b_pc'           ],
+            'lawn_#00'          => ['throw_b_lawn'         ],
+            'screw_#00'         => ['throw_b_screw'        ],
+            'swiss_knife_#00'   => ['throw_b_swiss_knife'  ],
+            'cutter_#00'        => ['throw_b_cutter'       ],
+            'concrete_wall_#00' => ['throw_b_concrete_wall'],
+            'torch_off_#00'     => ['throw_b_torch_off'    ],
+            'wrench_#00'        => ['throw_b_wrench'       ],
         ]
 
     ];

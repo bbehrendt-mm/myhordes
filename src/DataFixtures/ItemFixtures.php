@@ -53,17 +53,17 @@ class ItemFixtures extends Fixture
         ["label"=>"Aqua-Splash (leer)","icon"=>"watergun_opt_empty","category"=>"aud_n","deco"=>0,"heavy"=>false],                          // In Out
         ["label"=>"Handmixer (geladen)","icon"=>"mixergun","category"=>"weapon","deco"=>0,"heavy"=>false],                                  // -- Out
         ["label"=>"Kettensäge (geladen)","icon"=>"chainsaw","category"=>"weapon","deco"=>0,"heavy"=>true],                                  // -- Out
-        ["label"=>"Rasenmäher","icon"=>"lawn","category"=>"weapon","deco"=>0,"heavy"=>true],                                                // --
-        ["label"=>"Verstellbarer Schraubenschlüssel","icon"=>"wrench","category"=>"weapon","deco"=>0,"heavy"=>false],                       // --
-        ["label"=>"Schraubenzieher","icon"=>"screw","category"=>"weapon","deco"=>0,"heavy"=>false],                                         // --
-        ["label"=>"Großer trockener Stock","icon"=>"staff","category"=>"weapon","deco"=>0,"heavy"=>false],                                  // --
-        ["label"=>"Jagdmesser","icon"=>"knife","category"=>"weapon","deco"=>0,"heavy"=>false],                                              // --
-        ["label"=>"Machete","icon"=>"cutcut","category"=>"weapon","deco"=>0,"heavy"=>false],                                                // --
-        ["label"=>"Lächerliches Taschenmesser","icon"=>"small_knife","category"=>"weapon","deco"=>0,"heavy"=>false],                        // --
-        ["label"=>"Schweizer Taschenmesser","icon"=>"swiss_knife","category"=>"weapon","deco"=>0,"heavy"=>false],                           // --
-        ["label"=>"Teppichmesser","icon"=>"cutter","category"=>"weapon","deco"=>0,"heavy"=>false],                                          // --
+        ["label"=>"Rasenmäher","icon"=>"lawn","category"=>"weapon","deco"=>0,"heavy"=>true],                                                // -- Out
+        ["label"=>"Verstellbarer Schraubenschlüssel","icon"=>"wrench","category"=>"weapon","deco"=>0,"heavy"=>false],                       // -- Out
+        ["label"=>"Schraubenzieher","icon"=>"screw","category"=>"weapon","deco"=>0,"heavy"=>false],                                         // -- Out
+        ["label"=>"Großer trockener Stock","icon"=>"staff","category"=>"weapon","deco"=>0,"heavy"=>false],                                  // -- Out
+        ["label"=>"Jagdmesser","icon"=>"knife","category"=>"weapon","deco"=>0,"heavy"=>false],                                              // -- Out
+        ["label"=>"Machete","icon"=>"cutcut","category"=>"weapon","deco"=>0,"heavy"=>false],                                                // -- Out
+        ["label"=>"Lächerliches Taschenmesser","icon"=>"small_knife","category"=>"weapon","deco"=>0,"heavy"=>false],                        // -- Out
+        ["label"=>"Schweizer Taschenmesser","icon"=>"swiss_knife","category"=>"weapon","deco"=>0,"heavy"=>false],                           // -- Out
+        ["label"=>"Teppichmesser","icon"=>"cutter","category"=>"weapon","deco"=>0,"heavy"=>false],                                          // -- Out
         ["label"=>"Einkaufswagen","icon"=>"cart","category"=>"exp_b","deco"=>0,"heavy"=>false],                                             // -- ---
-        ["label"=>"Dosenöffner","icon"=>"can_opener","category"=>"weapon","deco"=>0,"heavy"=>false],                                        // --
+        ["label"=>"Dosenöffner","icon"=>"can_opener","category"=>"weapon","deco"=>0,"heavy"=>false],                                        // -- Out
         ["label"=>"Extra Tasche","icon"=>"bag","category"=>"exp_b","deco"=>0,"heavy"=>false],                                               // -- ---
         ["label"=>"Streichholzschachtel","icon"=>"lights","category"=>"misc","deco"=>0,"heavy"=>false],                                     // -- ---
         ["label"=>"Beruhigungsspritze","icon"=>"xanax","category"=>"drug_d","deco"=>0,"heavy"=>false],                                      //
@@ -73,18 +73,18 @@ class ItemFixtures extends Fixture
         ["label"=>"Ausgeschaltete Nachttischlampe","icon"=>"lamp","category"=>"furniture","deco"=>1,"heavy"=>false],                        // In Out
         ["label"=>"Perser","icon"=>"carpet","category"=>"furniture","deco"=>10,"heavy"=>false],                                             // -- ---
         ["label"=>"Mini Hi-Fi Anlage (defekt)","icon"=>"music_part","category"=>"furniture","deco"=>1,"heavy"=>true],                       // -- ---
-        ["label"=>"Kette + Vorhängeschloss","icon"=>"lock","category"=>"furniture","deco"=>0,"heavy"=>false],                               // --
+        ["label"=>"Kette + Vorhängeschloss","icon"=>"lock","category"=>"furniture","deco"=>0,"heavy"=>false],                               // -- ---
         ["label"=>"Fußabstreifer","icon"=>"door_carpet","category"=>"furniture","deco"=>5,"heavy"=>false],                                  // -- ---
         ["label"=>"Ein paar Würfel","icon"=>"dice","category"=>"imp","deco"=>0,"heavy"=>false],                                             //
         ["label"=>"Motor","icon"=>"engine","category"=>"imp","deco"=>0,"heavy"=>true],                                                      // -- ---
         ["label"=>"Riemen","icon"=>"courroie","category"=>"rsc","deco"=>0,"heavy"=>false],                                                  // -- ---
         ["label"=>"Handvoll Schrauben und Muttern","icon"=>"meca_parts","category"=>"rsc_b","deco"=>0,"heavy"=>false],                      // -- ---
-        ["label"=>"Huhn","icon"=>"pet_chick","category"=>"food_n","deco"=>0,"heavy"=>false],                                                // --
-        ["label"=>"Übelriechendes Schwein","icon"=>"pet_pig","category"=>"food_n","deco"=>0,"heavy"=>true],                                 // --
-        ["label"=>"Riesige Ratte","icon"=>"pet_rat","category"=>"food_n","deco"=>0,"heavy"=>false],                                         // --
-        ["label"=>"Bissiger Hund","icon"=>"pet_dog","category"=>"armor","deco"=>0,"heavy"=>false],                                          // --
-        ["label"=>"Großer knuddeliger Kater","icon"=>"pet_cat","category"=>"weapon","deco"=>5,"heavy"=>false],                              // --
-        ["label"=>"Zwei-Meter Schlange","icon"=>"pet_snake","category"=>"food_n","deco"=>0,"heavy"=>true],                                  // --
+        ["label"=>"Huhn","icon"=>"pet_chick","category"=>"food_n","deco"=>0,"heavy"=>false],                                                // -- Out
+        ["label"=>"Übelriechendes Schwein","icon"=>"pet_pig","category"=>"food_n","deco"=>0,"heavy"=>true],                                 // -- Out
+        ["label"=>"Riesige Ratte","icon"=>"pet_rat","category"=>"food_n","deco"=>0,"heavy"=>false],                                         // -- Out
+        ["label"=>"Bissiger Hund","icon"=>"pet_dog","category"=>"armor","deco"=>0,"heavy"=>false],                                          // -- Out
+        ["label"=>"Großer knuddeliger Kater","icon"=>"pet_cat","category"=>"weapon","deco"=>5,"heavy"=>false],                              // -- Out
+        ["label"=>"Zwei-Meter Schlange","icon"=>"pet_snake","category"=>"food_n","deco"=>0,"heavy"=>true],                                  // -- Out
         ["label"=>"Vibrator (geladen)","icon"=>"vibr","category"=>"imp","deco"=>0,"heavy"=>false],                                          //
         ["label"=>"Anaboles Steroid","icon"=>"drug","category"=>"drug_d","deco"=>0,"heavy"=>false],                                         // In Out
         ["label"=>"Leckeres Steak","icon"=>"meat","category"=>"food_7","deco"=>0,"heavy"=>false],                                           // In Out
@@ -94,7 +94,7 @@ class ItemFixtures extends Fixture
         ["label"=>"Kanister","icon"=>"jerrycan","category"=>"food_n","deco"=>0,"heavy"=>false],                                             //    ---
         ["label"=>"Krummes Holzbrett","icon"=>"wood2","category"=>"rsc_b","deco"=>0,"heavy"=>false],                                        // -- ---
         ["label"=>"Alteisen","icon"=>"metal","category"=>"rsc_b","deco"=>0,"heavy"=>false],                                                 // -- ---
-        ["label"=>"Wasserbombe","icon"=>"grenade","category"=>"weapon","deco"=>0,"heavy"=>false],                                           // --
+        ["label"=>"Wasserbombe","icon"=>"grenade","category"=>"weapon","deco"=>0,"heavy"=>false],                                           // -- Out
         ["label"=>"Blechplatte","icon"=>"plate","category"=>"armor","deco"=>0,"heavy"=>true],                                               // -- ---
         ["label"=>"Kanisterpumpe (zerlegt)","icon"=>"jerrygun_part","category"=>"aud_n","deco"=>0,"heavy"=>false],                          // -- ---
         ["label"=>"Bandage","icon"=>"bandage","category"=>"drug","deco"=>0,"heavy"=>false],                                                 //
@@ -104,7 +104,7 @@ class ItemFixtures extends Fixture
         ["label"=>"Sprengstoff","icon"=>"explo","category"=>"rsc","deco"=>0,"heavy"=>false],                                                // -- ---
         ["label"=>"Menschenfleisch","icon"=>"hmeat","category"=>"food_g","deco"=>0,"heavy"=>false],                                         //
         ["label"=>"Plastiktüte","icon"=>"grenade_empty","category"=>"aud_n","deco"=>0,"heavy"=>false],                                      // In Out
-        ["label"=>"Explodierende Wasserbombe","icon"=>"bgrenade","category"=>"weapon","deco"=>0,"heavy"=>false],                            // --
+        ["label"=>"Explodierende Wasserbombe","icon"=>"bgrenade","category"=>"weapon","deco"=>0,"heavy"=>false],                            // -- Out
         ["label"=>"Plastiktüte mit Sprengstoff","icon"=>"bgrenade_empty","category"=>"aud_n","deco"=>0,"heavy"=>false],                     // -- ---
         ["label"=>"Unvollständige Kettensäge","icon"=>"chainsaw_part","category"=>"aud_n","deco"=>0,"heavy"=>true],                         // -- ---
         ["label"=>"Unvollständiger Handmixer","icon"=>"mixergun_part","category"=>"aud_n","deco"=>0,"heavy"=>false],                        // -- ---
@@ -150,13 +150,13 @@ class ItemFixtures extends Fixture
         ["label"=>"Unvollständiger Zerstörer","icon"=>"big_pgun_part","category"=>"aud_n","deco"=>0,"heavy"=>false],                        // -- ---
         ["label"=>"Zonenmarker 'Radius'","icon"=>"tagger","category"=>"exp_s","deco"=>0,"heavy"=>false],                                    // --
         ["label"=>"Leuchtrakete","icon"=>"flare","category"=>"misc","deco"=>0,"heavy"=>false],                                              // --
-        ["label"=>"Kanisterpumpe (einsatzbereit)","icon"=>"jerrygun","category"=>"weapon","deco"=>0,"heavy"=>false],                        //
-        ["label"=>"Ektorp-Gluten Stuhl","icon"=>"chair_basic","category"=>"furniture","deco"=>2,"heavy"=>true],                             // --
+        ["label"=>"Kanisterpumpe (einsatzbereit)","icon"=>"jerrygun","category"=>"weapon","deco"=>0,"heavy"=>false],                        // -- Out
+        ["label"=>"Ektorp-Gluten Stuhl","icon"=>"chair_basic","category"=>"furniture","deco"=>2,"heavy"=>true],                             // -- Out
         ["label"=>"Revolver (entladen)","icon"=>"gun","category"=>"furniture","deco"=>5,"heavy"=>false],                                    // -- ---
         ["label"=>"Sturmgewehr (entladen)","icon"=>"machine_gun","category"=>"furniture","deco"=>15,"heavy"=>false],                        // -- ---
         ["label"=>"Zünder","icon"=>"deto","category"=>"rsc","deco"=>0,"heavy"=>false],                                                      // -- ---
         ["label"=>"Zementsack","icon"=>"concrete","category"=>"imp","deco"=>0,"heavy"=>true],                                               //
-        ["label"=>"Unförmige Zementblöcke","icon"=>"concrete_wall","category"=>"armor","deco"=>0,"heavy"=>true],                            // --
+        ["label"=>"Unförmige Zementblöcke","icon"=>"concrete_wall","category"=>"armor","deco"=>0,"heavy"=>true],                            // -- Out
         ["label"=>"Etikettenloses Medikament","icon"=>"drug_random","category"=>"drug_d","deco"=>0,"heavy"=>false],                         // In Out
         ["label"=>"Paracetoid 7g","icon"=>"disinfect","category"=>"drug_d","deco"=>0,"heavy"=>false],                                       // In Out
         ["label"=>"Unkrautbekämpfungsmittel Ness-Quick","icon"=>"digger","category"=>"exp_s","deco"=>0,"heavy"=>false],                     // --
@@ -178,12 +178,12 @@ class ItemFixtures extends Fixture
         ["label"=>"Aqua-Splash (zerlegt)","icon"=>"watergun_opt_part","category"=>"aud_n","deco"=>0,"heavy"=>false],                        // -- ---
         ["label"=>"Vibrator (entladen)","icon"=>"vibr_empty","category"=>"imp","deco"=>0,"heavy"=>false],                                   // In Out
         ["label"=>"Knochen mit Fleisch","icon"=>"bone_meat","category"=>"food_g","deco"=>0,"heavy"=>false],                                 //
-        ["label"=>"Angeknackster menschlicher Knochen","icon"=>"bone","category"=>"weapon","deco"=>0,"heavy"=>false],                       // --
+        ["label"=>"Angeknackster menschlicher Knochen","icon"=>"bone","category"=>"weapon","deco"=>0,"heavy"=>false],                       // -- Out
         ["label"=>"Zusammengeschusterter Holzbalken","icon"=>"wood_beam","category"=>"rsc_b","deco"=>0,"heavy"=>true],                      // -- ---
         ["label"=>"Metallstruktur","icon"=>"metal_beam","category"=>"rsc_b","deco"=>0,"heavy"=>true],                                       // -- ---
         ["label"=>"Metalltrümmer","icon"=>"metal_bad","category"=>"rsc_b","deco"=>0,"heavy"=>false],                                        // -- ---
         ["label"=>"Verrotteter Baumstumpf","icon"=>"wood_bad","category"=>"rsc_b","deco"=>0,"heavy"=>false],                                // -- ---
-        ["label"=>"Metallsäge","icon"=>"saw_tool","category"=>"imp","deco"=>0,"heavy"=>false],                                              // --
+        ["label"=>"Metallsäge","icon"=>"saw_tool","category"=>"imp","deco"=>0,"heavy"=>false],                                              // -- ---
         ["label"=>"Gut erhaltener Holzscheit","icon"=>"wood_log","category"=>"rsc_b","deco"=>2,"heavy"=>true],                              // -- ---
         ["label"=>"Defektes Elektrogerät","icon"=>"electro_box","category"=>"misc","deco"=>0,"heavy"=>false],                               // -- ---
         ["label"=>"Möbelpackung","icon"=>"deco_box","category"=>"box","deco"=>0,"heavy"=>true],                                             //    ---
@@ -204,16 +204,16 @@ class ItemFixtures extends Fixture
         ["label"=>"Radius Mark II","icon"=>"radius_mk2","category"=>"exp_s","deco"=>0,"heavy"=>false],                                      // --
         ["label"=>"Reparatur Fix","icon"=>"repair_one","category"=>"imp","deco"=>0,"heavy"=>false],                                         //
         ["label"=>"Unvollständiger Motor","icon"=>"engine_part","category"=>"imp","deco"=>0,"heavy"=>true],                                 // -- ---
-        ["label"=>"Alte Waschmaschine","icon"=>"machine_1","category"=>"imp","deco"=>2,"heavy"=>true],                                      // --
-        ["label"=>"Krebserregender Ofen","icon"=>"machine_2","category"=>"imp","deco"=>2,"heavy"=>true],                                    // --
-        ["label"=>"Minibar","icon"=>"machine_3","category"=>"imp","deco"=>2,"heavy"=>true],                                                 // --
+        ["label"=>"Alte Waschmaschine","icon"=>"machine_1","category"=>"imp","deco"=>2,"heavy"=>true],                                      // -- Out
+        ["label"=>"Krebserregender Ofen","icon"=>"machine_2","category"=>"imp","deco"=>2,"heavy"=>true],                                    // -- Out
+        ["label"=>"Minibar","icon"=>"machine_3","category"=>"imp","deco"=>2,"heavy"=>true],                                                 // -- Out
         ["label"=>"Ein Brief ohne Adresse","icon"=>"rp_letter","category"=>"misc","deco"=>0,"heavy"=>false],                                //
         ["label"=>"Aufgewelltes Blatt","icon"=>"rp_scroll","category"=>"imp","deco"=>0,"heavy"=>false],                                     //
         ["label"=>"Betriebsanleitung","icon"=>"rp_manual","category"=>"misc","deco"=>0,"heavy"=>false],                                     //
         ["label"=>"Unleserliches Notizbuch","icon"=>"rp_book2","category"=>"imp","deco"=>0,"heavy"=>false],                                 //
         ["label"=>"Fotoalbum","icon"=>"rp_book","category"=>"misc","deco"=>0,"heavy"=>false],                                               //
         ["label"=>"Blätterstapel","icon"=>"rp_sheets","category"=>"imp","deco"=>0,"heavy"=>false],                                          //
-        ["label"=>"Große rostige Kette","icon"=>"chain","category"=>"imp","deco"=>0,"heavy"=>false],                                        // --
+        ["label"=>"Große rostige Kette","icon"=>"chain","category"=>"imp","deco"=>0,"heavy"=>false],                                        // -- Out
         ["label"=>"Verdächtige Speise","icon"=>"dish","category"=>"food","deco"=>0,"heavy"=>false],                                         // In Out
         ["label"=>"Leckere Speise","icon"=>"dish_tasty","category"=>"food_7","deco"=>0,"heavy"=>false],                                     // In Out
         ["label"=>"Schrankkoffer","icon"=>"home_box_xl","category"=>"furniture","deco"=>0,"heavy"=>true],                                   // -- ---
@@ -244,11 +244,11 @@ class ItemFixtures extends Fixture
         ["label"=>"Lunch-Box","icon"=>"food_armag","category"=>"food_7","deco"=>0,"heavy"=>false],                                          // In Out
         ["label"=>"Eine Handvoll Bonbons","icon"=>"food_candies","category"=>"food_7","deco"=>0,"heavy"=>false],                            // In Out
         ["label"=>"Sperrholzstück","icon"=>"out_def","category"=>"camp","deco"=>0,"heavy"=>false],                                          // -- ---
-        ["label"=>"Fackel","icon"=>"torch","category"=>"armor","deco"=>0,"heavy"=>false],                                                   // --
-        ["label"=>"Verbrauchte Fackel","icon"=>"torch_off","category"=>"weapon","deco"=>0,"heavy"=>false],                                  // -- ---
+        ["label"=>"Fackel","icon"=>"torch","category"=>"armor","deco"=>0,"heavy"=>false],                                                   // -- Out
+        ["label"=>"Verbrauchte Fackel","icon"=>"torch_off","category"=>"weapon","deco"=>0,"heavy"=>false],                                  // -- Out
         ["label"=>"Getrocknete Marshmallows","icon"=>"chama","category"=>"food_n","deco"=>0,"heavy"=>false],                                // -- ---
         ["label"=>"Geröstete Marshmallows","icon"=>"chama_tasty","category"=>"food_7","deco"=>0,"heavy"=>false],                            // In Out
-        ["label"=>"PC-Gehäuse","icon"=>"pc","category"=>"weapon","deco"=>3,"heavy"=>true],                                                  // --
+        ["label"=>"PC-Gehäuse","icon"=>"pc","category"=>"weapon","deco"=>3,"heavy"=>true],                                                  // -- Out
         ["label"=>"Safe","icon"=>"safe","category"=>"box","deco"=>0,"heavy"=>true],                                                         //
         ["label"=>"Eine Enzyklopädie","icon"=>"rp_twin","category"=>"misc","deco"=>0,"heavy"=>false],                                       //
         ["label"=>"Wasserspender (leer)","icon"=>"water_can_empty","category"=>"exp_s","deco"=>0,"heavy"=>true],                            // -- ---
@@ -312,7 +312,7 @@ class ItemFixtures extends Fixture
         ["label"=>"Schwache Seele","icon"=>"soul_blue","category"=>"imp","deco"=>0,"heavy"=>false],                                         //
         ["label"=>"Bierkrug","icon"=>"fest","category"=>"food_a","deco"=>0,"heavy"=>false],                                                 //
         ["label"=>"Brezel","icon"=>"bretz","category"=>"food","deco"=>0,"heavy"=>false],                                                    // In Out
-        ["label"=>"Dackel","icon"=>"tekel","category"=>"weapon","deco"=>0,"heavy"=>false],                                                  // --
+        ["label"=>"Dackel","icon"=>"tekel","category"=>"weapon","deco"=>0,"heavy"=>false],                                                  // -- Out
         ["label"=>"Pfahlwerfer","icon"=>"rlaunc","category"=>"weapon","deco"=>0,"heavy"=>false],                                            // --
         ["label"=>"Kalaschni-Splash","icon"=>"kalach","category"=>"weapon","deco"=>0,"heavy"=>true],                                        // -- ---
         ["label"=>"Schnellgebauter Tisch","icon"=>"bureau","category"=>"furniture","deco"=>0,"heavy"=>true],                                // -- ---
@@ -327,7 +327,7 @@ class ItemFixtures extends Fixture
         ["label"=>"Wütende Mieze (halb verdaut)","icon"=>"angryc","category"=>"weapon","deco"=>0,"heavy"=>false],                           // --
         ["label"=>"Tretmine","icon"=>"claymo","category"=>"weapon","deco"=>0,"heavy"=>false],                                               // -- ---
         ["label"=>"Laserdiode","icon"=>"diode","category"=>"rsc","deco"=>0,"heavy"=>false],                                                 // -- ---
-        ["label"=>"Selbstgebaute Gitarre","icon"=>"guitar","category"=>"imp","deco"=>0,"heavy"=>false],                                     //
+        ["label"=>"Selbstgebaute Gitarre","icon"=>"guitar","category"=>"imp","deco"=>0,"heavy"=>false],                                     //    ---
         ["label"=>"LSD","icon"=>"lsd","category"=>"drug","deco"=>0,"heavy"=>false],                                                         //
         ["label"=>"Starker Laserpointer (4 Schuss)","icon"=>"lpoint4","category"=>"weapon","deco"=>0,"heavy"=>false],                       // -- Out
         ["label"=>"Starker Laserpointer (3 Schuss)","icon"=>"lpoint3","category"=>"weapon","deco"=>0,"heavy"=>false],                       // -- Out
@@ -344,7 +344,7 @@ class ItemFixtures extends Fixture
         ["label"=>"Verfluchte HiFi","icon"=>"hifiev","category"=>"furniture","deco"=>0,"heavy"=>true],                                      // -- ---
         ["label"=>"Phil Collins CD","icon"=>"cdphil","category"=>"furniture","deco"=>1,"heavy"=>false],                                     // -- ---
         ["label"=>"Ohrstöpsel","icon"=>"bquies","category"=>"rsc","deco"=>0,"heavy"=>false],                                                // -- ---
-        ["label"=>"Kaputter Stock","icon"=>"staff","category"=>"rsc","deco"=>0,"heavy"=>false],                                             // --
+        ["label"=>"Kaputter Stock","icon"=>"staff","category"=>"rsc","deco"=>0,"heavy"=>false],                                             // -- ---
         ["label"=>"Britney Spears CD","icon"=>"cdbrit","category"=>"furniture","deco"=>3,"heavy"=>false],                                   // -- ---
         ["label"=>"Best of The King CD","icon"=>"cdelvi","category"=>"furniture","deco"=>7,"heavy"=>false],                                 // -- ---
         ["label"=>"Rock n Roll HiFi","icon"=>"dfhifi","category"=>"furniture","deco"=>0,"heavy"=>true],                                     // -- ---
