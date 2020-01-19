@@ -51,14 +51,15 @@ class TownInspectorCommand extends Command
     protected function info(Town $town, OutputInterface $output, bool $zones) {
         $output->writeln('<comment>Common town data</comment>');
         $table = new Table( $output );
-        $table->setHeaders( ['ID', 'Open?', 'Name', 'Population', 'Type', 'Day'] );
+        $table->setHeaders( ['ID', 'Open?', 'Name', 'Population', 'Type', 'Day', 'BankID'] );
         $table->addRow([
             $town->getId(),
             $town->isOpen(),
             $town->getName(),
             $town->getCitizenCount() . '/' . $town->getPopulation(),
             $town->getType()->getLabel(),
-            $town->getDay()
+            $town->getDay(),
+            $town->getBank()->getId(),
         ]);
         $table->render();
         $output->writeln("\n");

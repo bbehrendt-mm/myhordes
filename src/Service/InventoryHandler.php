@@ -18,6 +18,8 @@ use App\Entity\WellCounter;
 use App\Structures\ItemRequest;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query\Expr\Join;
 
 class InventoryHandler
@@ -54,6 +56,21 @@ class InventoryHandler
         return 0;
     }
 
+    public function countSpecificItems(Inventory $inventory, ItemPrototype $prototype): int {
+        try {
+            return $this->entity_manager->createQueryBuilder()
+                ->select('count(i.id)')->from('App:Item', 'i')
+                ->leftJoin('App:ItemPrototype', 'p', Join::WITH, 'i.prototype = p.id')
+                ->where('i.inventory = :inv')->setParameter('inv', $inventory)
+                ->andWhere('p.id = :type')->setParameter('type', $prototype)
+                ->getQuery()->getSingleScalarResult();
+        } catch (NoResultException $e) {
+            return 0;
+        } catch (NonUniqueResultException $e) {
+            return 0;
+        }
+    }
+
     /**
      * @param Inventory $inventory
      * @param ItemRequest[] $requests
@@ -69,7 +86,6 @@ class InventoryHandler
                     return $p->getId();
                 }, $prop->getItemPrototypes()->getValues() );
             }
-
 
             $qb = $this->entity_manager->createQueryBuilder();
             $qb

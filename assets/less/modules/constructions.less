@@ -1,0 +1,59 @@
+@import (once) "../theme";
+
+@myhordes-building-row-color: #663024;
+@myhordes-building-complete-row-color: #3b3249;
+
+@myhordes-building-header-color: #b37c4a;
+@myhordes-building-complete-header-color: #696486;
+
+div.buildings {
+  padding: 0; font-size: 12px; margin: 32px 0; border: 1px solid @myhordes-smalltext;
+
+  .lv_list(@max,@n:1) when (@n <= @max) {
+    &.lv-@{n} > div.cell:first-child { padding-left: 16px * @n; }
+    .lv_list(@max,@n+1)
+  }
+  .lv_list(@max,@n:1) when (@n > @max) {}
+
+  &>.row {
+    &:nth-child(2n+0) {background: darken(@myhordes-building-row-color,5%); &>.cell { background: darken(@myhordes-building-row-color,5%); }}
+    &:nth-child(2n+1) {background: @myhordes-building-row-color; &>.cell { background: @myhordes-building-row-color; }}
+    &.root > div.cell:first-child>span { font-weight: bold }
+    overflow: hidden;
+
+    &> div.cell {
+      position: relative; z-index: 2;
+      &>* { position: relative; z-index: 2; }
+      &:first-child {
+        &:before { position: absolute; left: 0; top: -50%; height: 200%; width: 100%; content: " "; background: @myhordes-building-header-color; z-index: 1;  }
+      }
+    }
+
+    &.complete {
+      background: @myhordes-building-complete-row-color; &>.cell { background: @myhordes-building-complete-row-color; }
+      &> div.cell:first-child:before { background: @myhordes-building-complete-header-color; }
+    }
+
+    &.locked { opacity: 0.5}
+    .lv_list(6);
+  }
+
+  .ap-bar {
+    position: absolute; top: 0; left: 0; right: 0; height: 6px; background: linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.2) 100%);
+    border-radius: 2px; overflow: hidden;
+    &>.bar { background: linear-gradient(180deg, #fffb58 0%, #f2c94d 100%); height: 100% }
+  }
+
+  .build-req {
+    img { vertical-align: middle; }
+    display: inline-block; padding: 0 3px; font-weight: bold; font-size: 14px;
+    &+.build-req { border-left: 1px dotted @myhordes-smalltext; }
+    &>span.resource {
+      &.current {
+        font-size: 12px; font-weight: normal;
+        &.low { color: #d04d3f;  }
+        &:not(.low) { color: @myhordes-smalltext; }
+      }
+    }
+  }
+}

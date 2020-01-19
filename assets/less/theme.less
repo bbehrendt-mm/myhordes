@@ -2,6 +2,7 @@
 
 @import (once) "modules/map";
 @import (once) "modules/beyond";
+@import (once) "modules/constructions";
 
 @myhordes-font: 'Open Sans',sans-serif;
 
@@ -263,10 +264,13 @@ div.game-menu-area {
   }
 }
 
-div.ap {
+.icon_div(@url,@align,@left) {
   display: inline-block;
   &:after {
-    content: " "; display: inline-block; height: 16px; width: 16px; background: url("../img/ap_small.gif");
-    vertical-align: bottom;
+    content: " "; display: inline-block; height: 16px; width: 16px; background: url(@url);
+    vertical-align: @align; margin-left: @left;
   }
 }
+
+div.ap      { .icon_div("../img/ap_small.gif", middle, 0); }
+div.defense { .icon_div("../img/small_def.gif", baseline, 2px); }

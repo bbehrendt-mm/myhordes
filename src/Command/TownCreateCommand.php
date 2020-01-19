@@ -74,10 +74,6 @@ class TownCreateCommand extends Command
         $table->setHeaders(['Class','Property','ID']);
         $table->addRow( ['Town',      'town',      $town->getId()] );
         $table->addRow( ['Inventory', 'town.bank', $town->getBank()->getId()] );
-        foreach ( $town->getZones() as $zone ) {
-            $table->addRow( ['Zone', "town.zone[{$zone->getX()},{$zone->getY()}]", $zone->getId()] );
-            $table->addRow( ['Zone Inventory', "town.zone[{$zone->getX()},{$zone->getY()}].floor", $zone->getFloor()->getId()] );
-        }
 
         $table->render();
 

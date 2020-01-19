@@ -2,39 +2,17 @@
 
 namespace App\Controller;
 
-use App\Entity\Citizen;
-use App\Entity\CitizenProfession;
-use App\Entity\Item;
-use App\Entity\TownClass;
-use App\Entity\User;
-use App\Entity\UserPendingValidation;
+use App\Entity\Building;
 use App\Entity\Zone;
 use App\Response\AjaxResponse;
 use App\Service\ErrorHelper;
 use App\Service\InventoryHandler;
 use App\Service\ItemFactory;
 use App\Service\JSONRequestParser;
-use App\Service\Locksmith;
 use App\Structures\ItemRequest;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityManagerInterface;
 use Exception;
-use Monolog\ErrorHandler;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Lock\LockFactory;
-use Symfony\Component\Lock\Store\MemcachedStore;
-use Symfony\Component\Lock\Store\SemaphoreStore;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Validator\Constraints;
-use Symfony\Component\Validator\ConstraintViolationInterface;
-use Symfony\Component\Validator\Validation;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @Route("/",condition="request.isXmlHttpRequest()")
@@ -46,6 +24,7 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
     const ErrorWellNoWater       = ErrorHelper::BaseTownErrors + 3;
     const ErrorDoorAlreadyClosed = ErrorHelper::BaseTownErrors + 4;
     const ErrorDoorAlreadyOpen   = ErrorHelper::BaseTownErrors + 5;
+    const ErrorNotEnoughRes      = ErrorHelper::BaseTownErrors + 6;
 
 
     /**
@@ -212,13 +191,88 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
     }
 
     /**
+     * @Route("api/town/constructions/build", name="town_constructions_build_controller")
+     * @param JSONRequestParser $parser
+     * @return Response
+     */
+    public function construction_build_api(JSONRequestParser $parser): Response {
+        $citizen = $this->getActiveCitizen();
+        $town = $citizen->getTown();
+
+        if (!$parser->has_all(['id','ap'], true))
+            return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
+        $id = (int)$parser->get('id');
+        $ap = (int)$parser->get('ap');
+
+        $building = $this->entity_manager->getRepository(Building::class)->find($id);
+        if (!$building || $building->getTown()->getId() !== $town->getId() || $ap <= 0)
+            return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
+
+        $ap = max(0,min( $ap, $building->getPrototype()->getAp() - $building->getAp() ) );
+        if ($citizen->getAp() < $ap || $this->citizen_handler->isTired( $citizen ))
+            return AjaxResponse::error( ErrorHelper::ErrorNoAP );
+
+        $res = $items = [];
+        if (!$building->getComplete() && $building->getPrototype()->getResources())
+            foreach ($building->getPrototype()->getResources()->getEntries() as $entry)
+                $res[] = new ItemRequest( $entry->getPrototype()->getName(), $entry->getChance() );
+        if (!empty($res)) {
+            $items = $this->inventory_handler->fetchSpecificItems($town->getBank(), $res);
+            if (empty($items)) return AjaxResponse::error( self::ErrorNotEnoughRes );
+        }
+
+        $was_completed = $building->getComplete();
+
+        $this->citizen_handler->setAP($citizen, true, -$ap);
+        $building->setAp( $building->getAp() + $ap );
+        $building->setComplete( $building->getComplete() || $building->getAp() >= $building->getPrototype()->getAp() );
+        if (!$was_completed && $building->getComplete())
+            foreach ($items as $item) {
+                $town->getBank()->removeItem( $item );
+                $this->entity_manager->remove( $item );
+            }
+
+        try {
+            $this->entity_manager->persist($citizen);
+            $this->entity_manager->persist($building);
+            $this->entity_manager->persist($town);
+            $this->entity_manager->flush();
+        } catch (Exception $e) {
+            return AjaxResponse::error( ErrorHelper::ErrorDatabaseException );
+        }
+
+        return AjaxResponse::success();
+    }
+
+    /**
      * @Route("jx/town/constructions", name="town_constructions")
      * @return Response
      */
     public function constructions(): Response
     {
-        return $this->render( 'ajax/game/town/dashboard.html.twig', $this->addDefaultTwigArgs('constructions', [
-            'town' => $this->getActiveCitizen()->getTown()
+        $buildings = $this->getActiveCitizen()->getTown()->getBuildings();
+
+        $root = [];
+        $dict = [];
+        $items = [];
+
+        foreach ($buildings as $building) {
+            $dict[ $building->getPrototype()->getId() ] = [];
+            if (!$building->getPrototype()->getParent()) $root[] = $building;
+            if (!$building->getComplete() && !empty($building->getPrototype()->getResources()))
+                foreach ($building->getPrototype()->getResources()->getEntries() as $ressource)
+                    if (!isset($items[$ressource->getPrototype()->getId()]))
+                        $items[$ressource->getPrototype()->getId()] = $this->inventory_handler->countSpecificItems( $this->getActiveCitizen()->getTown()->getBank(), $ressource->getPrototype() );
+        }
+
+        foreach ($buildings as $building)
+            if ($building->getPrototype()->getParent())
+                $dict[$building->getPrototype()->getParent()->getId()][] = $building;
+
+        return $this->render( 'ajax/game/town/construction.html.twig', $this->addDefaultTwigArgs('constructions', [
+            'root_cats'  => $root,
+            'dictionary' => $dict,
+            'bank' => $items,
         ]) );
     }
 
@@ -235,7 +289,7 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
             return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
 
         if ($action === 'open'  && $town->getDoor())
-            return AjaxResponse::error( self::ErrorDoorAlreadyClosed );
+            return AjaxResponse::error( self::ErrorDoorAlreadyOpen );
         if ($action === 'close' && !$town->getDoor())
             return AjaxResponse::error( self::ErrorDoorAlreadyClosed );
 

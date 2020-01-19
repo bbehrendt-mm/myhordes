@@ -1,0 +1,94 @@
+{% extends "ajax/game/town/town.html.twig" %}
+{% block content %}
+
+    {% macro building_entry(building, buildable, n, dict, items) %}
+        {# @var building \App\Entity\Building #}
+        <div class="row {% if not buildable %}locked{% elseif building.complete %}complete{% endif %} {% if n > 0 %}lv-{{ min(n,6) }}{% else %}root{% endif %}">
+            <div class="padded cell rw-5 rw-lg-12">
+                {% if buildable %}
+                    <img alt="" src="{{ asset('build/images/building/' ~ building.prototype.icon ~ '.gif' ) }}" >
+                {% else %}
+                    <img alt="" src="{{ asset('build/images/lock.gif' ) }}" >
+                {% endif %}
+                <span>{{ building.prototype.label|trans({},'buildings') }}</span>
+                {% if building.prototype.temp %}
+                    <img alt="(!)" src="{{ asset('build/images/small_warning.gif') }}" />
+                {% endif %}
+                {% if building.prototype.defense > 0 %}
+                    <div class="float-right defense">{{ building.prototype.defense }}</div>
+                {% endif %}
+            </div>
+            <div class="padded cell rw-6 rw-lg-10 rw-sm-12 no-ws">
+                {% set res_ok = true %}
+
+                {% if building.ap > 0 and building.ap < building.prototype.ap %}
+                    <div class="ap-bar">
+                        <div class="bar" style="width: {{ 100*(building.ap/building.prototype.ap) }}%"></div>
+                    </div>
+                {% endif %}
+
+                {% if building.ap < building.prototype.ap %}
+                    <div class="build-req">
+                        <div class="ap">{{ building.prototype.ap - building.ap }}</div>
+                    </div>
+                {% endif %}
+                {% if not building.complete and building.prototype.resources is not null %}
+                    {% for itemgroup in building.prototype.resources.entries %}
+                        {% if items[ itemgroup.prototype.id ] < itemgroup.chance %}
+                            {% set res_ok = false %}
+                        {% endif %}
+                        <div class="build-req">
+                            <img alt="" src="{{ asset('build/images/item/item_' ~ itemgroup.prototype.icon ~ '.gif' ) }}" />
+                            <span class="resource current {% if items[ itemgroup.prototype.id ] < itemgroup.chance %}low{% endif %}">{{ items[ itemgroup.prototype.id ] }}/</span><span class="resource needed">{{ itemgroup.chance }}</span>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <div class="padded cell rw-1 rw-lg-2 rw-sm-12">
+                {% if buildable and building.ap < building.prototype.ap %}
+                    <button {% if not res_ok %}disabled{% else %}x-building-id="{{ building.id }}"{% endif %}><i class="fa {% if building.complete %}fa-wrench{% else %}fa-plus{% endif %}"></i></button>
+                {% else %}
+                    &nbsp;
+                {% endif %}
+            </div>
+        </div>
+        {% if n < 20 and dict[building.prototype.id] is not empty %}
+            {% for sub_building in dict[building.prototype.id] %}
+                {{ _self.building_entry(sub_building, buildable and building.complete, n+1, dict, items) }}
+            {% endfor %}
+        {% endif %}
+    {% endmacro %}
+
+    {# @var root_cats \App\Entity\Building[] #}
+    {% for building in root_cats %}
+        <div class="buildings type_{{ building.prototype.icon }}">{{ _self.building_entry(building, true, 0, dictionary, bank) }}</div>
+    {% endfor %}
+
+{% endblock %}
+{% block js %}
+    {{ parent() }}
+    <script>
+        const send_build_request = function(id) {
+            let ap = null, valid = false;
+            do {
+                ap = window.prompt("{% trans from 'game' %}Wie viele Aktionspunkte möchtest du in den Bau investieren?{% endtrans %}", "1");
+                if (ap === null) valid = true;
+                else {
+                    ap = parseInt(ap);
+                    valid = !isNaN(ap) && ap >= 0;
+                }
+            } while (!valid);
+
+            if (!ap) return;
+
+            $.ajax.easySend( '{{ path('town_constructions_build_controller') }}', {id: id, ap: ap},
+                function () {
+                    $.ajax.load(null, '{{ path('town_constructions') }}', true);
+            } );
+        };
+
+        let buttons = document.querySelectorAll('[x-building-id]');
+        for (let i = 0; i < buttons.length; i++)
+            buttons[i].addEventListener('click', function() { send_build_request( this.getAttribute('x-building-id') ); })
+    </script>
+{% endblock %}

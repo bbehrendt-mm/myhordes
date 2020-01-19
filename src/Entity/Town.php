@@ -65,10 +65,16 @@ class Town
      */
     private $door = false;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Building", mappedBy="town", orphanRemoval=true, cascade={"persist", "remove"})
+     */
+    private $buildings;
+
     public function __construct()
     {
         $this->citizens = new ArrayCollection();
         $this->zones = new ArrayCollection();
+        $this->buildings = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -226,6 +232,37 @@ class Town
     public function setDoor(bool $door): self
     {
         $this->door = $door;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Building[]
+     */
+    public function getBuildings(): Collection
+    {
+        return $this->buildings;
+    }
+
+    public function addBuilding(Building $building): self
+    {
+        if (!$this->buildings->contains($building)) {
+            $this->buildings[] = $building;
+            $building->setTown($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBuilding(Building $building): self
+    {
+        if ($this->buildings->contains($building)) {
+            $this->buildings->removeElement($building);
+            // set the owning side to null (unless already changed)
+            if ($building->getTown() === $this) {
+                $building->setTown(null);
+            }
+        }
 
         return $this;
     }
