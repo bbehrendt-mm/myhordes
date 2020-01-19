@@ -27,8 +27,16 @@ export default class HTML {
         else this.error( 'An error occurred. No further details are available.' );
     }
 
-    error(message: string): void {
-        alert('ERROR' + "\n" + message);
+    message(label: string, msg: string ): void {
+        alert(label + ':' + "\n" + msg);
+    }
+
+    error(msg: string): void {
+        this.message('error',msg);
+    }
+
+    notice(msg: string): void {
+        this.message('notice',msg);
     }
 
     handleCountdown( element: Element ): void {

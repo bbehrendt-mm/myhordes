@@ -37,9 +37,10 @@ export default class Ajax {
         if (replace_history) history.replaceState( url, '', url );
 
         // Get content, style and script tags
-        let content_source = result_document.querySelectorAll('html>body>:not(script)');
+        let content_source = result_document.querySelectorAll('html>body>:not(script):not(x-message)');
         let style_source = result_document.querySelectorAll('html>head>style');
         let script_source = result_document.querySelectorAll('script');
+        let flash_source = result_document.querySelectorAll('x-message');
 
         // Get the ajax intention; assume "native" if no intention is given
         let ajax_intention = result_document.querySelector('html').getAttribute('x-ajax-intention');
@@ -72,6 +73,10 @@ export default class Ajax {
 
         for (let i = 0; i < script_source.length; i++) {
             eval(script_source[i].innerText);
+        }
+
+        for (let i = 0; i < flash_source.length; i++) {
+            $.html.message( flash_source[i].getAttribute('x-label'), flash_source[i].innerHTML );
         }
 
         // If ajax intention is 'native', trigger a DOMContentLoaded event on the document

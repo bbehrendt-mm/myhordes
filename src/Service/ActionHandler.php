@@ -10,6 +10,7 @@ use App\Entity\CitizenProfession;
 use App\Entity\Inventory;
 use App\Entity\Item;
 use App\Entity\ItemAction;
+use App\Entity\ItemPrototype;
 use App\Entity\RequireLocation;
 use App\Entity\Requirement;
 use App\Entity\Result;
@@ -22,6 +23,7 @@ use App\Structures\ItemRequest;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\Expr\Join;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ActionHandler
 {
@@ -31,10 +33,12 @@ class ActionHandler
     private $inventory_handler;
     private $random_generator;
     private $item_factory;
+    private $translator;
+
 
     public function __construct(
         EntityManagerInterface $em, StatusFactory $sf, CitizenHandler $ch, InventoryHandler $ih,
-        RandomGenerator $rg, ItemFactory $if)
+        RandomGenerator $rg, ItemFactory $if, TranslatorInterface $ti)
     {
         $this->entity_manager = $em;
         $this->status_factory = $sf;
@@ -42,6 +46,7 @@ class ActionHandler
         $this->inventory_handler = $ih;
         $this->random_generator = $rg;
         $this->item_factory = $if;
+        $this->translator = $ti;
     }
 
     const ActionValidityNone = 1;
@@ -115,6 +120,22 @@ class ActionHandler
     }
 
     /**
+     * @param ItemPrototype[] $list
+     * @return array
+     */
+    private function reformat_prototype_list(array $list): array {
+
+        $cache = [];
+        foreach ( $list as $entry ) {
+            if (!isset( $cache[$entry->getId()] )) $cache[$entry->getId()] = [1,$entry];
+            else $cache[$entry->getId()][0]++;
+        }
+
+        return $cache;
+
+    }
+
+    /**
      * @param Citizen $citizen
      * @param Item $item
      * @param ItemAction[] $available
@@ -151,7 +172,15 @@ class ActionHandler
         }
         if ($mode != self::ActionValidityFull) return self::ErrorActionUnregistered;
 
-        $execute_result = function(Result &$result) use (&$citizen, &$item, &$action, &$message, &$remove, &$execute_result) {
+        $execute_info_cache = [
+            'ap' => 0,
+            'item' => $item->getPrototype(),
+            'item_morph' => [ null, null ],
+            'items_consume' => [],
+            'items_spawn' => [],
+        ];
+
+        $execute_result = function(Result &$result) use (&$citizen, &$item, &$action, &$message, &$remove, &$execute_result, &$execute_info_cache) {
             if ($status = $result->getStatus()) {
 
                 if ($status->getInitial() && $status->getResult()) {
@@ -165,15 +194,21 @@ class ActionHandler
 
             }
 
-            if ($ap = $result->getAp())
+            if ($ap = $result->getAp()) {
+                $old_ap = $citizen->getAp();
                 $this->citizen_handler->setAP( $citizen, !$ap->getMax(), $ap->getMax() ? ( $this->citizen_handler->getMaxAP($citizen) + $ap->getAp() ) : $ap->getAp() );
+                $execute_info_cache['ap'] += ( $citizen->getAp() - $old_ap );
+            }
 
             if ($item_result = $result->getItem()) {
+                if ($execute_info_cache['item_morph'][0] === null) $execute_info_cache['item_morph'][0] = $item->getPrototype();
                 if ($item_result->getConsume()) {
                     $citizen->getInventory()->removeItem( $item );
                     $remove[] = $item;
+                    $execute_info_cache['items_consume'][] = $item->getPrototype();
                 } else {
-                    if ($item_result->getMorph()) $item->setPrototype( $item_result->getMorph() );
+                    if ($item_result->getMorph())
+                        $item->setPrototype( $execute_info_cache['item_morph'][1] = $item_result->getMorph() );
                     if ($item_result->getBreak()  !== null) $item->setBroken( $item_result->getBreak() );
                     if ($item_result->getPoison() !== null) $item->setPoison( $item_result->getPoison() );
                 }
@@ -186,11 +221,11 @@ class ActionHandler
                 elseif ($g = $item_spawn->getItemGroup())
                     $proto = $this->random_generator->pickItemPrototypeFromGroup( $g );
 
-                if ($proto) $this->inventory_handler->placeItem( $citizen, $this->item_factory->createItem( $proto ),
+                if ($proto && $this->inventory_handler->placeItem( $citizen, $this->item_factory->createItem( $proto ),
                     $citizen->getZone()
                         ? [ $citizen->getInventory(), $citizen->getZone()->getFloor() ]
                         : [ $citizen->getInventory(), $citizen->getHome()->getChest(), $citizen->getTown()->getBank() ]
-                );
+                )) $execute_info_cache['items_spawn'][] = $proto;
             }
 
             if ($item_consume = $result->getConsume()) {
@@ -199,6 +234,7 @@ class ActionHandler
                 foreach ($items as $consume_item) {
                     $citizen->getInventory()->removeItem( $consume_item );
                     $remove[] = $consume_item;
+                    $execute_info_cache['items_consume'][] = $consume_item->getPrototype();
                 }
             }
 
@@ -216,6 +252,30 @@ class ActionHandler
         };
 
         foreach ($action->getResults() as &$result) $execute_result( $result );
+
+        if ($action->getMessage()) {
+
+            $trans = function( string $s ): string {
+                return $this->translator->trans( $s, [], 'items' );
+            };
+
+            $concat = function(array $c) use (&$trans) {
+                return implode(', ', array_map(function(array $e) use (&$trans): string {
+                    $s = $trans($e[1]->getLabel());
+                    return $e[0] > 1 ? ("{$e[0]} x {$s}") : $s;
+                }, $this->reformat_prototype_list($c)));
+            };
+
+            $message = $this->translator->trans( $action->getMessage(), [
+                '{ap}'        => $execute_info_cache['ap'],
+                '{item}'      => $execute_info_cache['item']->getLabel(),
+                '{item_from}' => $execute_info_cache['item_morph'][0] ? $trans($execute_info_cache['item_morph'][0]->getLabel()) : "",
+                '{item_to}'   => $execute_info_cache['item_morph'][1] ? $trans($execute_info_cache['item_morph'][1]->getLabel()) : "",
+                '{items_consume}' => $concat($execute_info_cache['items_consume']),
+                '{items_spawn}'   => $concat($execute_info_cache['items_spawn']),
+            ], 'items' );
+        }
+
 
         return self::ErrorNone;
     }

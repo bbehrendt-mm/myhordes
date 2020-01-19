@@ -182,6 +182,8 @@ class InventoryAwareController extends AbstractController implements GameInterfa
             } catch (Exception $e) {
                 return AjaxResponse::error( ErrorHelper::ErrorDatabaseException, ['msg' => $e->getMessage()] );
             }
+
+            if ($msg) $this->addFlash( 'notice', $msg );
         } elseif ($error === ActionHandler::ErrorActionForbidden) {
             if (!empty($msg)) $msg = $this->translator->trans($msg, [], 'game');
             return AjaxResponse::error($error, ['message' => $msg]);

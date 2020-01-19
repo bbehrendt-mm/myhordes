@@ -45,6 +45,11 @@ class ItemAction
      */
     private $results;
 
+    /**
+     * @ORM\Column(type="string", length=511, nullable=true)
+     */
+    private $message;
+
     public function __construct()
     {
         $this->requirements = new ArrayCollection();
@@ -141,6 +146,18 @@ class ItemAction
     public function clearResults(): self
     {
         $this->results->clear();
+        return $this;
+    }
+
+    public function getMessage(): ?string
+    {
+        return $this->message;
+    }
+
+    public function setMessage(?string $message): self
+    {
+        $this->message = $message;
+
         return $this;
     }
 }

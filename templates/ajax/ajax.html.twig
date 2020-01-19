@@ -25,6 +25,11 @@
         {% block ajax %}
         {% endblock %}
     </body>
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <x-message x-label="{{ label }}">{{ message }}</x-message>
+        {% endfor %}
+    {% endfor %}
     {% block js %}
         <script>
             document.querySelector('#gma>.game-bar .burger-button').addEventListener('click', function() {
