@@ -28,11 +28,24 @@ export default class HTML {
     }
 
     message(label: string, msg: string ): void {
-        alert(label + ':' + "\n" + msg);
+        let div = document.createElement('div');
+        div.innerHTML = msg;
+        div.classList.add( label );
+        div.addEventListener('click', function() {
+            div.classList.remove('show');
+            setTimeout( function(node) { node.remove(); }, 500, div );
+        });
+
+        div = document.getElementById('notifications').appendChild( div );
+        setTimeout( function(node) { node.classList.add('show'); }, 100, div );
     }
 
     error(msg: string): void {
         this.message('error',msg);
+    }
+
+    warning(msg: string): void {
+        this.message('warning',msg);
     }
 
     notice(msg: string): void {

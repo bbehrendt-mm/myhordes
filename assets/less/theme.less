@@ -45,6 +45,26 @@ body {
   font-family: @myhordes-font; background: @myhordes-background; margin: 0;
 }
 
+#notifications {
+  position: fixed; top: 0; height: 100%; width: 480px; left: 50%; margin-left: -240px; z-index: 1000; pointer-events: none;
+  &>* {pointer-events: all}
+  &>div {
+    transition: top 0.5s ease, opacity 0.5s ease; top: -50px; opacity: 0;
+    &:before { content: " "; position: absolute; top: 5px; bottom: 5px; left: 3px; width: 4px; }
+    position: relative; margin: 5px 0; box-shadow: 0 0 4px black; cursor: pointer; text-align: justify;
+    padding: 5px 5px 5px 12px; background: #5c2b20; border: 1px solid #b37c4a; outline: 1px solid black; color: @myhordes-smalltext;
+    &.show { top: 0; opacity: 1 }
+    &.notice:before { background: #5eb5e0 }
+    &.warning:before { background: #e09a4f }
+    &.error:before { background: #a90017 }
+    &>span {
+      &>img { margin-right: 3px; }
+      background: rgba(0,0,0,0.15); border: 1px solid rgba(0,0,0,0.15); padding: 0 5px; border-radius: 6px; font-variant: small-caps; color: white;
+    }
+  }
+
+}
+
 #wrapper {
   position: relative; margin: 0 auto; padding: 0; width: @myhordes-content-width; overflow: visible;
   background: @myhordes-content-background; box-shadow: 0 0 20px black;

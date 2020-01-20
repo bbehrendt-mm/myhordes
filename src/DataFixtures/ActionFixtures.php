@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\AffectAP;
+use App\Entity\AffectBlueprint;
 use App\Entity\AffectItemConsume;
 use App\Entity\AffectItemSpawn;
 use App\Entity\AffectOriginalItem;
@@ -10,6 +11,7 @@ use App\Entity\AffectResultGroup;
 use App\Entity\AffectResultGroupEntry;
 use App\Entity\AffectStatus;
 use App\Entity\AffectZombies;
+use App\Entity\BuildingPrototype;
 use App\Entity\CitizenStatus;
 use App\Entity\ItemAction;
 use App\Entity\ItemGroup;
@@ -156,6 +158,8 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
                 'water'   => [ 'water_#00' ],
                 'battery' => [ 'pile_#00' ],
             ],
+
+            'bp' => [],
 
             'group' => [
                 'g_break_20' => [[['do_nothing'], 80], [['break_item'], 20]],
@@ -314,6 +318,11 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'throw_b_concrete_wall' => [ 'label' => 'Waffe einsetzen', 'meta' => [ 'must_be_outside', 'must_have_zombies', 'not_tired' ], 'result' => [ ['group' => 'g_break_20'], 'kill_1_zombie' ] ],
             'throw_b_torch_off'     => [ 'label' => 'Waffe einsetzen', 'meta' => [ 'must_be_outside', 'must_have_zombies', 'not_tired' ], 'result' => [ ['group' => 'g_break_50'], ['group' => 'g_kill_1z_10'] ] ],
             'throw_b_wrench'        => [ 'label' => 'Waffe einsetzen', 'meta' => [ 'must_be_outside', 'must_have_zombies', 'not_tired' ], 'result' => [ ['group' => 'g_break_33'], ['group' => 'g_kill_1z_50'] ] ],
+
+            'bp_generic_1'          => [ 'label' => 'Lesen', 'meta' => [ 'must_be_inside' ], 'result' => [ 'consume_item', ['bp' => [1] ] ], 'message' => '<<bp_ok>>Du ließt den {item} und stellst fest, dass es sich um einen Plan für {bp_spawn} handelt.<</bp_ok>><<bp_fail>>Du versuchst den {item} zu lesen, kannst seinen Inhalt aber nicht verstehen ...<</bp_fail>>' ],
+            'bp_generic_2'          => [ 'label' => 'Lesen', 'meta' => [ 'must_be_inside' ], 'result' => [ 'consume_item', ['bp' => [2] ] ], 'message' => '<<bp_ok>>Du ließt den {item} und stellst fest, dass es sich um einen Plan für {bp_spawn} handelt.<</bp_ok>><<bp_fail>>Du versuchst den {item} zu lesen, kannst seinen Inhalt aber nicht verstehen ...<</bp_fail>>' ],
+            'bp_generic_3'          => [ 'label' => 'Lesen', 'meta' => [ 'must_be_inside' ], 'result' => [ 'consume_item', ['bp' => [3] ] ], 'message' => '<<bp_ok>>Du ließt den {item} und stellst fest, dass es sich um einen Plan für {bp_spawn} handelt.<</bp_ok>><<bp_fail>>Du versuchst den {item} zu lesen, kannst seinen Inhalt aber nicht verstehen ...<</bp_fail>>' ],
+            'bp_generic_4'          => [ 'label' => 'Lesen', 'meta' => [ 'must_be_inside' ], 'result' => [ 'consume_item', ['bp' => [4] ] ], 'message' => '<<bp_ok>>Du ließt den {item} und stellst fest, dass es sich um einen Plan für {bp_spawn} handelt.<</bp_ok>><<bp_fail>>Du versuchst den {item} zu lesen, kannst seinen Inhalt aber nicht verstehen ...<</bp_fail>>' ],
         ],
         'items' => [
             'water_#00'           => [ 'water_6ap', 'water_0ap' ],
@@ -447,6 +456,11 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'concrete_wall_#00' => ['throw_b_concrete_wall'],
             'torch_off_#00'     => ['throw_b_torch_off'    ],
             'wrench_#00'        => ['throw_b_wrench'       ],
+
+            'bplan_c_#00' => [ 'bp_generic_1' ],
+            'bplan_u_#00' => [ 'bp_generic_2' ],
+            'bplan_r_#00' => [ 'bp_generic_3' ],
+            'bplan_e_#00' => [ 'bp_generic_4' ],
         ]
 
     ];
@@ -704,6 +718,9 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
                     case 'ap':
                         $result->setAp( $this->process_ap_effect($manager,$out, $sub_cache[$sub_id], $sub_res, $sub_data) );
                         break;
+                    case 'bp':
+                        $result->setBlueprint( $this->process_blueprint_effect($manager,$out, $sub_cache[$sub_id], $sub_res, $sub_data) );
+                        break;
                     case 'item':
                         $result->setItem( $this->process_item_effect($manager, $out, $sub_cache[$sub_id], $sub_res, $sub_data) );
                         break;
@@ -788,6 +805,48 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             $manager->persist( $cache[$id] = $result );
         } else $out->writeln( "\t\t\t<comment>Skip</comment> effect <info>ap/{$id}</info>" );
         
+        return $cache[$id];
+    }
+
+    /**
+     * @param ObjectManager $manager
+     * @param ConsoleOutputInterface $out
+     * @param array $cache
+     * @param string $id
+     * @param array $data
+     * @return AffectBlueprint
+     * @throws Exception
+     */
+    private function process_blueprint_effect(
+        ObjectManager $manager, ConsoleOutputInterface $out,
+        array &$cache, string $id, array $data): AffectBlueprint
+    {
+        if (!isset($cache[$id])) {
+            $result = $manager->getRepository(AffectBlueprint::class)->findOneByName( $id );
+            if ($result) {
+                $result->getList()->clear();
+                $out->writeln( "\t\t\t<comment>Update</comment> effect <info>blueprint/{$id}</info>" );
+            }
+            else {
+                $result = new AffectBlueprint();
+                $out->writeln("\t\t\t<comment>Create</comment> effect <info>blueprint/{$id}</info>");
+            }
+
+            $result->setName( $id );
+            if (count($data) === 1 && is_numeric( $data[0] ))
+                $result->setType( $data[0] );
+            else foreach ($data as $proto) {
+
+                $bpp = $manager->getRepository(BuildingPrototype::class)->findOneByName( $proto );
+                if (!$bpp) throw new Exception("Building Prototype not found: {$proto}");
+
+                $result->addList( $bpp );
+            }
+
+
+            $manager->persist( $cache[$id] = $result );
+        } else $out->writeln( "\t\t\t<comment>Skip</comment> effect <info>blueprint/{$id}</info>" );
+
         return $cache[$id];
     }
 
@@ -1060,6 +1119,6 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
      */
     public function getDependencies()
     {
-        return [ ItemFixtures::class ];
+        return [ ItemFixtures::class, RecipeFixtures::class ];
     }
 }

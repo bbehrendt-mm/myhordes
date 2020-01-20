@@ -65,6 +65,11 @@ class Result
      */
     private $zombies;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\AffectBlueprint")
+     */
+    private $blueprint;
+
     public function __construct()
     {
     }
@@ -166,6 +171,18 @@ class Result
     public function setZombies(?AffectZombies $zombies): self
     {
         $this->zombies = $zombies;
+
+        return $this;
+    }
+
+    public function getBlueprint(): ?AffectBlueprint
+    {
+        return $this->blueprint;
+    }
+
+    public function setBlueprint(?AffectBlueprint $blueprint): self
+    {
+        $this->blueprint = $blueprint;
 
         return $this;
     }

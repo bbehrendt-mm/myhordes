@@ -4,6 +4,7 @@
 namespace App\Service;
 
 
+use App\Entity\BuildingPrototype;
 use App\Entity\Citizen;
 use App\Entity\CitizenHome;
 use App\Entity\CitizenProfession;
@@ -24,6 +25,7 @@ use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\Expr\Join;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\Asset\Packages;
 
 class ActionHandler
 {
@@ -34,11 +36,13 @@ class ActionHandler
     private $random_generator;
     private $item_factory;
     private $translator;
+    private $game_factory;
+    private $assets;
 
 
     public function __construct(
         EntityManagerInterface $em, StatusFactory $sf, CitizenHandler $ch, InventoryHandler $ih,
-        RandomGenerator $rg, ItemFactory $if, TranslatorInterface $ti)
+        RandomGenerator $rg, ItemFactory $if, TranslatorInterface $ti, GameFactory $gf, Packages $am)
     {
         $this->entity_manager = $em;
         $this->status_factory = $sf;
@@ -47,6 +51,8 @@ class ActionHandler
         $this->random_generator = $rg;
         $this->item_factory = $if;
         $this->translator = $ti;
+        $this->game_factory = $gf;
+        $this->assets = $am;
     }
 
     const ActionValidityNone = 1;
@@ -162,6 +168,7 @@ class ActionHandler
     public function execute( Citizen &$citizen, Item &$item, ItemAction $action, ?string &$message, ?array &$remove ): int {
 
         $remove = [];
+        $tags = [];
 
         $mode = $this->evaluate( $citizen, $item, $action, $tx );
         if ($mode <= self::ActionValidityNone)    return self::ErrorActionUnregistered;
@@ -178,9 +185,10 @@ class ActionHandler
             'item_morph' => [ null, null ],
             'items_consume' => [],
             'items_spawn' => [],
+            'bp_spawn' => [],
         ];
 
-        $execute_result = function(Result &$result) use (&$citizen, &$item, &$action, &$message, &$remove, &$execute_result, &$execute_info_cache) {
+        $execute_result = function(Result &$result) use (&$citizen, &$item, &$action, &$message, &$remove, &$execute_result, &$execute_info_cache, &$tags) {
             if ($status = $result->getStatus()) {
 
                 if ($status->getInitial() && $status->getResult()) {
@@ -198,6 +206,24 @@ class ActionHandler
                 $old_ap = $citizen->getAp();
                 $this->citizen_handler->setAP( $citizen, !$ap->getMax(), $ap->getMax() ? ( $this->citizen_handler->getMaxAP($citizen) + $ap->getAp() ) : $ap->getAp() );
                 $execute_info_cache['ap'] += ( $citizen->getAp() - $old_ap );
+            }
+
+            if ($bp = $result->getBlueprint()) {
+                $possible = $this->entity_manager->getRepository(BuildingPrototype::class)->findProspectivePrototypes( $citizen->getTown() );
+                $filtered = array_filter( $possible, function(BuildingPrototype $proto) use ($bp) {
+                    if ($bp->getType() !== null && $bp->getType() === $proto->getBlueprint() ) return true;
+                    else return $bp->getList()->contains( $proto );
+                } );
+
+                if (!empty($filtered)) {
+                    $pick = $this->random_generator->pick( $filtered );
+                    $town = $citizen->getTown();
+                    if ($this->game_factory->addBuilding( $town, $pick )) {
+                        $tags[] = 'bp_ok';
+                        $execute_info_cache['bp_spawn'][] = $pick;
+                    }
+
+                } else $tags[] = 'bp_fail';
             }
 
             if ($item_result = $result->getItem()) {
@@ -255,25 +281,46 @@ class ActionHandler
 
         if ($action->getMessage()) {
 
-            $trans = function( string $s ): string {
-                return $this->translator->trans( $s, [], 'items' );
+            /**
+             * @param ItemPrototype|BuildingPrototype|string $o
+             * @param $c
+             * @return string
+             */
+            $wrap = function($o, $c=1) :string {
+                $s = ''; $i = null;
+                if (is_a($o, ItemPrototype::class)) {
+                    $s = $this->translator->trans($o->getLabel(), [], 'items');
+                    $i = 'build/images/item/item_' . $o->getIcon() . '.gif';
+                } else if (is_a($o, BuildingPrototype::class)) {
+                    $s =  $this->translator->trans($o->getLabel(), [], 'buildings');
+                    $i = 'build/images/building/' . $o->getIcon() . '.gif';
+                }
+                else if (is_string($o)) $s = $o;
+                else if (is_null($o)) $s = 'NULL';
+                else $s = '_UNKNOWN_';
+
+                if (!empty($i)) $i = $this->assets->getUrl( $i );
+                return '<span>' . ($c > 1 ? "$c x " : '') . ($i ? "<img alt='' src='$i' />" : '') . $s .  '</span>';
             };
 
-            $concat = function(array $c) use (&$trans) {
-                return implode(', ', array_map(function(array $e) use (&$trans): string {
-                    $s = $trans($e[1]->getLabel());
-                    return $e[0] > 1 ? ("{$e[0]} x {$s}") : $s;
+            $concat = function(array $c) use (&$wrap) {
+                return implode(', ', array_map(function(array $e) use (&$wrap): string {
+                    return $wrap( $e[1], $e[0] );
                 }, $this->reformat_prototype_list($c)));
             };
 
-            $message = $this->translator->trans( $action->getMessage(), [
+            $message = preg_replace_callback( '/<<(.*?)>>(.*?)<<\/\1>>/' , function(array $m) use ($tags): string {
+                list(, $tag, $text) = $m;
+                return in_array( $tag, $tags ) ? $text : '';
+            },  $this->translator->trans( $action->getMessage(), [
                 '{ap}'        => $execute_info_cache['ap'],
-                '{item}'      => $execute_info_cache['item']->getLabel(),
-                '{item_from}' => $execute_info_cache['item_morph'][0] ? $trans($execute_info_cache['item_morph'][0]->getLabel()) : "",
-                '{item_to}'   => $execute_info_cache['item_morph'][1] ? $trans($execute_info_cache['item_morph'][1]->getLabel()) : "",
+                '{item}'      => $wrap($execute_info_cache['item']),
+                '{item_from}' => $execute_info_cache['item_morph'][0] ? ($wrap($execute_info_cache['item_morph'][0])) : "-",
+                '{item_to}'   => $execute_info_cache['item_morph'][1] ? ($wrap($execute_info_cache['item_morph'][1])) : "-",
                 '{items_consume}' => $concat($execute_info_cache['items_consume']),
                 '{items_spawn}'   => $concat($execute_info_cache['items_spawn']),
-            ], 'items' );
+                '{bp_spawn}'      => $concat($execute_info_cache['bp_spawn']),
+            ], 'items' ));
         }
 
 
