@@ -298,15 +298,15 @@ class ItemFixtures extends Fixture
         ["label"=>"Abdruck vom Schlagschlüssel","icon"=>"prints","category"=>"exp_s","deco"=>0,"heavy"=>false],                             //
         ["label"=>"Abdruck vom Dosenöffner","icon"=>"prints","category"=>"exp_s","deco"=>0,"heavy"=>false],                                 //
         ["label"=>"Ghul-Serum","icon"=>"vagoul","category"=>"drug_d","deco"=>0,"heavy"=>false],                                             //
-        ["label"=>"Hotel-Bauplan (ungewöhnlich)","icon"=>"hbplan_u","category"=>"imp","deco"=>0,"heavy"=>false],                             //
-        ["label"=>"Hotel-Bauplan (selten)","icon"=>"hbplan_r","category"=>"imp","deco"=>0,"heavy"=>false],                                   //
-        ["label"=>"Hotel-Bauplan (sehr selten!)","icon"=>"hbplan_e","category"=>"imp","deco"=>0,"heavy"=>false],                             //
-        ["label"=>"Bunker-Bauplan (ungewöhnlich)","icon"=>"bbplan_u","category"=>"imp","deco"=>0,"heavy"=>false],                            //
-        ["label"=>"Bunker-Bauplan (selten)","icon"=>"bbplan_r","category"=>"imp","deco"=>0,"heavy"=>false],                                  //
-        ["label"=>"Bunker-Bauplan (sehr selten!)","icon"=>"bbplan_e","category"=>"imp","deco"=>0,"heavy"=>false],                            //
-        ["label"=>"Hospital-Bauplan (ungewöhnlich)","icon"=>"mbplan_u","category"=>"imp","deco"=>0,"heavy"=>false],                          //
-        ["label"=>"Hospital-Bauplan (selten)","icon"=>"mbplan_r","category"=>"imp","deco"=>0,"heavy"=>false],                                //
-        ["label"=>"Hospital-Bauplan (sehr selten!)","icon"=>"mbplan_e","category"=>"imp","deco"=>0,"heavy"=>false],                          //
+        ["label"=>"Hotel-Bauplan (ungewöhnlich)","icon"=>"hbplan_u","category"=>"imp","deco"=>0,"heavy"=>false],                            // In ---
+        ["label"=>"Hotel-Bauplan (selten)","icon"=>"hbplan_r","category"=>"imp","deco"=>0,"heavy"=>false],                                  // In ---
+        ["label"=>"Hotel-Bauplan (sehr selten!)","icon"=>"hbplan_e","category"=>"imp","deco"=>0,"heavy"=>false],                            // In ---
+        ["label"=>"Bunker-Bauplan (ungewöhnlich)","icon"=>"bbplan_u","category"=>"imp","deco"=>0,"heavy"=>false],                           // In ---
+        ["label"=>"Bunker-Bauplan (selten)","icon"=>"bbplan_r","category"=>"imp","deco"=>0,"heavy"=>false],                                 // In ---
+        ["label"=>"Bunker-Bauplan (sehr selten!)","icon"=>"bbplan_e","category"=>"imp","deco"=>0,"heavy"=>false],                           // In ---
+        ["label"=>"Hospital-Bauplan (ungewöhnlich)","icon"=>"mbplan_u","category"=>"imp","deco"=>0,"heavy"=>false],                         // In ---
+        ["label"=>"Hospital-Bauplan (selten)","icon"=>"mbplan_r","category"=>"imp","deco"=>0,"heavy"=>false],                               // In ---
+        ["label"=>"Hospital-Bauplan (sehr selten!)","icon"=>"mbplan_e","category"=>"imp","deco"=>0,"heavy"=>false],                         // In ---
         ["label"=>"Verirrte Seele","icon"=>"soul_blue","category"=>"imp","deco"=>0,"heavy"=>false],                                         //
         ["label"=>"Starke Seele","icon"=>"soul_red","category"=>"imp","deco"=>0,"heavy"=>false],                                            //
         ["label"=>"Schwache Seele","icon"=>"soul_blue","category"=>"imp","deco"=>0,"heavy"=>false],                                         //

@@ -309,10 +309,7 @@ class ActionHandler
                 }, $this->reformat_prototype_list($c)));
             };
 
-            $message = preg_replace_callback( '/<<(.*?)>>(.*?)<<\/\1>>/' , function(array $m) use ($tags): string {
-                list(, $tag, $text) = $m;
-                return in_array( $tag, $tags ) ? $text : '';
-            },  $this->translator->trans( $action->getMessage(), [
+            $message = $this->translator->trans( $action->getMessage(), [
                 '{ap}'        => $execute_info_cache['ap'],
                 '{item}'      => $wrap($execute_info_cache['item']),
                 '{item_from}' => $execute_info_cache['item_morph'][0] ? ($wrap($execute_info_cache['item_morph'][0])) : "-",
@@ -320,7 +317,14 @@ class ActionHandler
                 '{items_consume}' => $concat($execute_info_cache['items_consume']),
                 '{items_spawn}'   => $concat($execute_info_cache['items_spawn']),
                 '{bp_spawn}'      => $concat($execute_info_cache['bp_spawn']),
-            ], 'items' ));
+            ], 'items' );
+
+            do {
+                $message = preg_replace_callback( '/<t-(.*?)>(.*?)<\/t-\1>/' , function(array $m) use ($tags): string {
+                    list(, $tag, $text) = $m;
+                    return in_array( $tag, $tags ) ? $text : '';
+                }, $message, -1, $c);
+            } while ($c > 0);
         }
 
 
