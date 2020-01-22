@@ -120,6 +120,8 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
 
             'kill_1_zombie' => [ 'zombies' => 'kill_1z' ],
             'kill_2_zombie' => [ 'zombies' => 'kill_2z' ],
+
+            'find_rp' => [ 'rp' => [true] ],
         ],
 
         'results' => [
@@ -335,6 +337,8 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'bp_hospital_2' => [ 'label' => 'Lesen', 'meta' => [ 'must_be_inside' ], 'result' => [ 'consume_item', ['bp' => ['small_catapult3_#00', 'item_hmeat_#00', 'item_meat_#00', 'small_tourello_#00', 'small_ikea_#00', 'small_watchmen_#00'] ] ],                                                                            'message' => '<t-bp_ok>Du ließt den {item} und stellst fest, dass es sich um einen Plan für {bp_spawn} handelt.</t-bp_ok><t-bp_fail>Du versuchst den {item} zu lesen, kannst seinen Inhalt aber nicht verstehen ...</t-bp_fail>' ],
             'bp_hospital_3' => [ 'label' => 'Lesen', 'meta' => [ 'must_be_inside' ], 'result' => [ 'consume_item', ['bp' => ['small_lastchance_#00','small_appletree_#00', 'item_digger_#00', 'small_chicken_#00', 'small_infirmary_#00', 'small_sprinkler_#00', 'item_meca_parts_#00', 'item_jerrycan_#01', 'item_shield_#00'] ] ], 'message' => '<t-bp_ok>Du ließt den {item} und stellst fest, dass es sich um einen Plan für {bp_spawn} handelt.</t-bp_ok><t-bp_fail>Du versuchst den {item} zu lesen, kannst seinen Inhalt aber nicht verstehen ...</t-bp_fail>' ],
             'bp_hospital_4' => [ 'label' => 'Lesen', 'meta' => [ 'must_be_inside' ], 'result' => [ 'consume_item', ['bp' => ['small_fireworks_#00','small_balloon_#00', 'small_crow_#00', 'small_pmvbig_#00', 'small_coffin_#00'] ] ],                                                                                               'message' => '<t-bp_ok>Du ließt den {item} und stellst fest, dass es sich um einen Plan für {bp_spawn} handelt.</t-bp_ok><t-bp_fail>Du versuchst den {item} zu lesen, kannst seinen Inhalt aber nicht verstehen ...</t-bp_fail>' ],
+
+            'read_rp' => [ 'label' => 'Lesen', 'meta' => [], 'result' => [ 'consume_item', 'find_rp' ], 'message' => 'Der Text ist überschrieben mit {rp_text}. Du beginnst, ihn zu lesen<t-rp_ok>! Der Text wurde deinem Archiv hinzugefügt.</t-rp_ok><t-rp_fail>... Leider stellst du fest, dass du diesen Text bereits kennst.</t-rp_fail>' ]
         ],
         'items' => [
             'water_#00'           => [ 'water_6ap', 'water_0ap' ],
@@ -482,6 +486,18 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'mbplan_u_#00' => [ 'bp_hospital_2' ],
             'mbplan_r_#00' => [ 'bp_hospital_3' ],
             'mbplan_e_#00' => [ 'bp_hospital_4' ],
+
+            'rp_book_#00'  => ['read_rp'],
+            'rp_book_#01'  => ['read_rp'],
+            'rp_book2_#00' => ['read_rp'],
+            'rp_scroll_#00' => ['read_rp'],
+            'rp_scroll_#01' => ['read_rp'],
+            'rp_sheets_#00' => ['read_rp'],
+            'rp_letter_#00' => ['read_rp'],
+            'rp_manual_#00' => ['read_rp'],
+            'lilboo_#00' => ['read_rp'],
+            'rp_twin_#00' => ['read_rp'],
+
         ]
 
     ];
@@ -756,6 +772,9 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
                         break;
                     case 'group':
                         $result->setResultGroup( $this->process_group_effect($manager, $out, $sub_cache[$sub_id], $cache, $sub_cache, $sub_res, $sub_data) );
+                        break;
+                    case 'rp':
+                        $result->setRolePlayerText( $sub_data[0] );
                         break;
                     default:
                         throw new Exception('No handler for effect type ' . $sub_id);

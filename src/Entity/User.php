@@ -59,9 +59,15 @@ class User implements UserInterface, EquatableInterface
      */
     private $citizens;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\RolePlayerText")
+     */
+    private $foundTexts;
+
     public function __construct()
     {
         $this->citizens = new ArrayCollection();
+        $this->foundTexts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -192,6 +198,32 @@ class User implements UserInterface, EquatableInterface
             if ($citizen->getUser() === $this) {
                 $citizen->setUser(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|RolePlayerText[]
+     */
+    public function getFoundTexts(): Collection
+    {
+        return $this->foundTexts;
+    }
+
+    public function addFoundText(RolePlayerText $foundText): self
+    {
+        if (!$this->foundTexts->contains($foundText)) {
+            $this->foundTexts[] = $foundText;
+        }
+
+        return $this;
+    }
+
+    public function removeFoundText(RolePlayerText $foundText): self
+    {
+        if ($this->foundTexts->contains($foundText)) {
+            $this->foundTexts->removeElement($foundText);
         }
 
         return $this;

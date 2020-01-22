@@ -15,6 +15,7 @@ use App\Entity\ItemPrototype;
 use App\Entity\RequireLocation;
 use App\Entity\Requirement;
 use App\Entity\Result;
+use App\Entity\RolePlayerText;
 use App\Entity\Town;
 use App\Entity\TownClass;
 use App\Entity\User;
@@ -186,6 +187,7 @@ class ActionHandler
             'items_consume' => [],
             'items_spawn' => [],
             'bp_spawn' => [],
+            'rp_text' => '',
         ];
 
         $execute_result = function(Result &$result) use (&$citizen, &$item, &$action, &$message, &$remove, &$execute_result, &$execute_info_cache, &$tags) {
@@ -271,6 +273,18 @@ class ActionHandler
 
             }
 
+            if ($result->getRolePlayerText()) {
+                /** @var RolePlayerText|null $text */
+                $text = $this->random_generator->pick( $this->entity_manager->getRepository(RolePlayerText::class)->findAll() );
+                if ($text && $citizen->getUser()->getFoundTexts()->contains($text))
+                    $tags[] = 'rp_fail';
+                else {
+                    $tags[] = 'rp_ok';
+                    $execute_info_cache['rp_text'] = $text->getTitle();
+                    $citizen->getUser()->getFoundTexts()->add( $text );
+                }
+            }
+
             if ($result_group = $result->getResultGroup()) {
                 $r = $this->random_generator->pickResultsFromGroup( $result_group );
                 foreach ($r as &$sub_result) $execute_result( $sub_result );
@@ -317,6 +331,7 @@ class ActionHandler
                 '{items_consume}' => $concat($execute_info_cache['items_consume']),
                 '{items_spawn}'   => $concat($execute_info_cache['items_spawn']),
                 '{bp_spawn}'      => $concat($execute_info_cache['bp_spawn']),
+                '{rp_text}'       => $wrap( $execute_info_cache['rp_text'] )
             ], 'items' );
 
             do {

@@ -70,6 +70,11 @@ class Result
      */
     private $blueprint;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $rolePlayerText;
+
     public function __construct()
     {
     }
@@ -183,6 +188,18 @@ class Result
     public function setBlueprint(?AffectBlueprint $blueprint): self
     {
         $this->blueprint = $blueprint;
+
+        return $this;
+    }
+
+    public function getRolePlayerText(): ?bool
+    {
+        return $this->rolePlayerText;
+    }
+
+    public function setRolePlayerText(?bool $rolePlayerText): self
+    {
+        $this->rolePlayerText = $rolePlayerText;
 
         return $this;
     }

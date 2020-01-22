@@ -68,7 +68,7 @@ class ItemFixtures extends Fixture
         ["label"=>"Streichholzschachtel","icon"=>"lights","category"=>"misc","deco"=>0,"heavy"=>false],                                     // -- ---
         ["label"=>"Beruhigungsspritze","icon"=>"xanax","category"=>"drug_d","deco"=>0,"heavy"=>false],                                      //
         ["label"=>"Schaukelstuhl","icon"=>"chair","category"=>"furniture","deco"=>5,"heavy"=>true],                                         // -- ---
-        ["label"=>"Staubiges Buch","icon"=>"rp_book","category"=>"imp","deco"=>0,"heavy"=>false],                                           //
+        ["label"=>"Staubiges Buch","icon"=>"rp_book","category"=>"imp","deco"=>0,"heavy"=>false],                                           // In Out
         ["label"=>"Matratze","icon"=>"bed","category"=>"armor","deco"=>3,"heavy"=>true],                                                    // -- ---
         ["label"=>"Ausgeschaltete Nachttischlampe","icon"=>"lamp","category"=>"furniture","deco"=>1,"heavy"=>false],                        // In Out
         ["label"=>"Perser","icon"=>"carpet","category"=>"furniture","deco"=>10,"heavy"=>false],                                             // -- ---
@@ -119,7 +119,7 @@ class ItemFixtures extends Fixture
         ["label"=>"Werkzeugkiste","icon"=>"chest_tools","category"=>"box","deco"=>0,"heavy"=>true],                                         // In Out
         ["label"=>"Nachttischlampe (an)","icon"=>"lamp_on","category"=>"furniture","deco"=>3,"heavy"=>false],                               // -- ---
         ["label"=>"Mini Hi-Fi Anlage (an)","icon"=>"music","category"=>"furniture","deco"=>10,"heavy"=>true],                               // -- ---
-        ["label"=>"Pharmazeutische Substanz","icon"=>"pharma","category"=>"drug","deco"=>0,"heavy"=>false],                                 //
+        ["label"=>"Pharmazeutische Substanz","icon"=>"pharma","category"=>"drug","deco"=>0,"heavy"=>false],                                 // -- ---
         ["label"=>"Unverarbeitete Blechplatten","icon"=>"plate_raw","category"=>"aud_n","deco"=>0,"heavy"=>true],                           // -- ---
         ["label"=>"'Wake The Dead'","icon"=>"rhum","category"=>"food_a","deco"=>0,"heavy"=>false],                                          //
         ["label"=>"Heißer Kaffee","icon"=>"coffee","category"=>"food","deco"=>0,"heavy"=>false],                                            //
@@ -207,12 +207,12 @@ class ItemFixtures extends Fixture
         ["label"=>"Alte Waschmaschine","icon"=>"machine_1","category"=>"imp","deco"=>2,"heavy"=>true],                                      // -- Out
         ["label"=>"Krebserregender Ofen","icon"=>"machine_2","category"=>"imp","deco"=>2,"heavy"=>true],                                    // -- Out
         ["label"=>"Minibar","icon"=>"machine_3","category"=>"imp","deco"=>2,"heavy"=>true],                                                 // -- Out
-        ["label"=>"Ein Brief ohne Adresse","icon"=>"rp_letter","category"=>"misc","deco"=>0,"heavy"=>false],                                //
-        ["label"=>"Aufgewelltes Blatt","icon"=>"rp_scroll","category"=>"imp","deco"=>0,"heavy"=>false],                                     //
-        ["label"=>"Betriebsanleitung","icon"=>"rp_manual","category"=>"misc","deco"=>0,"heavy"=>false],                                     //
-        ["label"=>"Unleserliches Notizbuch","icon"=>"rp_book2","category"=>"imp","deco"=>0,"heavy"=>false],                                 //
-        ["label"=>"Fotoalbum","icon"=>"rp_book","category"=>"misc","deco"=>0,"heavy"=>false],                                               //
-        ["label"=>"Blätterstapel","icon"=>"rp_sheets","category"=>"imp","deco"=>0,"heavy"=>false],                                          //
+        ["label"=>"Ein Brief ohne Adresse","icon"=>"rp_letter","category"=>"misc","deco"=>0,"heavy"=>false],                                // In Out
+        ["label"=>"Aufgewelltes Blatt","icon"=>"rp_scroll","category"=>"imp","deco"=>0,"heavy"=>false],                                     // In Out
+        ["label"=>"Betriebsanleitung","icon"=>"rp_manual","category"=>"misc","deco"=>0,"heavy"=>false],                                     // In Out
+        ["label"=>"Unleserliches Notizbuch","icon"=>"rp_book2","category"=>"imp","deco"=>0,"heavy"=>false],                                 // In Out
+        ["label"=>"Fotoalbum","icon"=>"rp_book","category"=>"misc","deco"=>0,"heavy"=>false],                                               // In Out
+        ["label"=>"Blätterstapel","icon"=>"rp_sheets","category"=>"imp","deco"=>0,"heavy"=>false],                                          // In Out
         ["label"=>"Große rostige Kette","icon"=>"chain","category"=>"imp","deco"=>0,"heavy"=>false],                                        // -- Out
         ["label"=>"Verdächtige Speise","icon"=>"dish","category"=>"food","deco"=>0,"heavy"=>false],                                         // In Out
         ["label"=>"Leckere Speise","icon"=>"dish_tasty","category"=>"food_7","deco"=>0,"heavy"=>false],                                     // In Out
@@ -250,7 +250,7 @@ class ItemFixtures extends Fixture
         ["label"=>"Geröstete Marshmallows","icon"=>"chama_tasty","category"=>"food_7","deco"=>0,"heavy"=>false],                            // In Out
         ["label"=>"PC-Gehäuse","icon"=>"pc","category"=>"weapon","deco"=>3,"heavy"=>true],                                                  // -- Out
         ["label"=>"Safe","icon"=>"safe","category"=>"box","deco"=>0,"heavy"=>true],                                                         //
-        ["label"=>"Eine Enzyklopädie","icon"=>"rp_twin","category"=>"misc","deco"=>0,"heavy"=>false],                                       //
+        ["label"=>"Eine Enzyklopädie","icon"=>"rp_twin","category"=>"misc","deco"=>0,"heavy"=>false],                                       // In Out
         ["label"=>"Wasserspender (leer)","icon"=>"water_can_empty","category"=>"exp_s","deco"=>0,"heavy"=>true],                            // -- ---
         ["label"=>"Wasserspender (1 Ration)","icon"=>"water_can_1","category"=>"food","deco"=>0,"heavy"=>true],                             // In Out
         ["label"=>"Wasserspender (2 Rationen)","icon"=>"water_can_2","category"=>"food","deco"=>0,"heavy"=>true],                           // In Out
@@ -260,7 +260,7 @@ class ItemFixtures extends Fixture
         ["label"=>"Schleimige Kugel","icon"=>"fruit_part","category"=>"misc","deco"=>0,"heavy"=>false],                                     // -- ---
         ["label"=>"Fleischfetzen","icon"=>"flesh_part","category"=>"misc","deco"=>0,"heavy"=>false],                                        // -- ---
         ["label"=>"Makabre Bombe","icon"=>"flesh","category"=>"exp_s","deco"=>0,"heavy"=>false],                                            // --
-        ["label"=>"Dickflüssige Substanz","icon"=>"pharma_part","category"=>"drug","deco"=>0,"heavy"=>false],                               //
+        ["label"=>"Dickflüssige Substanz","icon"=>"pharma_part","category"=>"drug","deco"=>0,"heavy"=>false],                               // -- ---
         ["label"=>"Aasbeerenbrei","icon"=>"fruit","category"=>"food","deco"=>0,"heavy"=>false],                                             // In Out
         ["label"=>"Eisengefäß mit modrigem wasser","icon"=>"water_cup_part","category"=>"food_n","deco"=>0,"heavy"=>false],                 //
         ["label"=>"Gereinigtes modriges Wasser","icon"=>"water_cup","category"=>"food","deco"=>0,"heavy"=>false],                           // In Out
@@ -337,7 +337,7 @@ class ItemFixtures extends Fixture
         ["label"=>"Teleskop","icon"=>"scope","category"=>"imp","deco"=>0,"heavy"=>false],                                                   // -- ---
         ["label"=>"Unpersönliche Explodierende Fußmatte","icon"=>"trapma","category"=>"furniture","deco"=>0,"heavy"=>false],                // -- ---
         ["label"=>"Chuck-Figur","icon"=>"chudol","category"=>"furniture","deco"=>15,"heavy"=>false],                                        // -- ---
-        ["label"=>"Kleine Zen-Fibel","icon"=>"lilboo","category"=>"imp","deco"=>0,"heavy"=>false],                                          //
+        ["label"=>"Kleine Zen-Fibel","icon"=>"lilboo","category"=>"imp","deco"=>0,"heavy"=>false],                                          // -- ---
         ["label"=>"Trockene Kräuter","icon"=>"ryebag","category"=>"rsc","deco"=>0,"heavy"=>false],                                          // -- ---
         ["label"=>"Mutterkorn","icon"=>"fungus","category"=>"food","deco"=>0,"heavy"=>false],                                               // -- ---
         ["label"=>"Korn-Bräu","icon"=>"hmbrew","category"=>"food","deco"=>0,"heavy"=>false],                                                //
@@ -356,6 +356,7 @@ class ItemFixtures extends Fixture
         ["label"=>"Überraschungskiste (2 Geschenke)","icon"=>"chest_christmas_2","category"=>"misc","deco"=>0,"heavy"=>true],               // In Out
         ["label"=>"Überraschungskiste (1 Geschenk)","icon"=>"chest_christmas_1","category"=>"misc","deco"=>0,"heavy"=>true],                // In Out
         ["label"=>"Verdächtiger Traubensaft","icon"=>"omg_this_will_kill_you","category"=>"food","deco"=>0,"heavy"=>false],                 //
+        ["label"=>"Ein Etikett","icon"=>"rp_scroll","category"=>"imp","deco"=>0,"heavy"=>false],                                            // In Out
     ];
     public static $item_prototype_properties = [
         'saw_tool_#00'    => [ 'can_opener' ],
