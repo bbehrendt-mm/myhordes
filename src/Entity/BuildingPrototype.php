@@ -75,6 +75,16 @@ class BuildingPrototype
      */
     private $children;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $maxLevel = 0;
+
+    /**
+     * @ORM\Column(type="json", nullable=true)
+     */
+    private $upgradeTexts = [];
+
     public function __construct()
     {
         $this->children = new ArrayCollection();
@@ -220,6 +230,30 @@ class BuildingPrototype
                 $child->setParent(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getMaxLevel(): ?int
+    {
+        return $this->maxLevel;
+    }
+
+    public function setMaxLevel(int $maxLevel): self
+    {
+        $this->maxLevel = $maxLevel;
+
+        return $this;
+    }
+
+    public function getUpgradeTexts(): ?array
+    {
+        return $this->upgradeTexts;
+    }
+
+    public function setUpgradeTexts(?array $upgradeTexts): self
+    {
+        $this->upgradeTexts = $upgradeTexts;
 
         return $this;
     }

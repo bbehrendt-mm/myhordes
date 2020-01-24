@@ -36,7 +36,14 @@ class RecipeFixtures extends Fixture implements DependentFixtureInterface
 {
     protected static $building_data = [
         ["name"=>"Verstärkte Stadtmauer","temporary"=>0,"img"=>"small_wallimprove","vp"=>30,"ap"=>30,"bp"=>0,"rsc"=>["wood2_#00" => 15,"metal_#00" => 5,], "children" => [
-            ["name"=>"Großer Graben","temporary"=>0,"img"=>"small_gather","vp"=>10,"ap"=>80,"bp"=>0,"rsc"=>[], "children" => [
+            ["name"=>"Großer Graben","maxLevel" => 5,"temporary"=>0,"img"=>"small_gather","vp"=>10,"ap"=>80,"bp"=>0,"rsc"=>[],
+                "upgradeTexts" => [
+                    'Der Verteidigungsbonus des Grabens steigt dauerhaft um 13.',
+                    'Der Verteidigungsbonus des Grabens steigt dauerhaft um 21.',
+                    'Der Verteidigungsbonus des Grabens steigt dauerhaft um 32.',
+                    'Der Verteidigungsbonus des Grabens steigt dauerhaft um 33.',
+                    'Der Verteidigungsbonus des Grabens steigt dauerhaft um 51.',
+                ], "children" => [
                 ["name"=>"Wassergraben","temporary"=>0,"img"=>"small_waterhole","vp"=>65,"ap"=>50,"bp"=>1,"rsc"=>["water_#00" => 20,]],
             ]],
             ["name"=>"Rasierklingenmauer","temporary"=>0,"img"=>"item_plate","vp"=>50,"ap"=>40,"bp"=>1,"rsc"=>["meca_parts_#00" => 2,"metal_#00" => 15,]],
@@ -53,7 +60,14 @@ class RecipeFixtures extends Fixture implements DependentFixtureInterface
                     ["name"=>"Dritte Schicht","temporary"=>0,"img"=>"item_plate","vp"=>100,"ap"=>65,"bp"=>2,"rsc"=>["metal_#00" => 30,"plate_#00" => 5,"metal_beam_#00" => 5,]],
                 ]],
                 ["name"=>"Betonschicht","temporary"=>0,"img"=>"small_wallimprove","vp"=>50,"ap"=>60,"bp"=>1,"rsc"=>["concrete_wall_#00" => 6,"metal_beam_#00" => 2,]],
-                ["name"=>"Entwicklungsfähige Stadtmauer","temporary"=>0,"img"=>"item_home_def","vp"=>55,"ap"=>65,"bp"=>3,"rsc"=>["wood2_#00" => 5,"metal_#00" => 20,"concrete_wall_#00" => 1,]],
+                ["name"=>"Entwicklungsfähige Stadtmauer","maxLevel" => 5,"temporary"=>0,"img"=>"item_home_def","vp"=>55,"ap"=>65,"bp"=>3,"rsc"=>["wood2_#00" => 5,"metal_#00" => 20,"concrete_wall_#00" => 1,],
+                    "upgradeTexts" => [
+                        'Der Verteidigungsbonus der Stadtmauer steigt dauerhaft um 30.',
+                        'Der Verteidigungsbonus der Stadtmauer steigt dauerhaft um 35.',
+                        'Der Verteidigungsbonus der Stadtmauer steigt dauerhaft um 50.',
+                        'Der Verteidigungsbonus der Stadtmauer steigt dauerhaft um 65.',
+                        'Der Verteidigungsbonus der Stadtmauer steigt dauerhaft um 80.',
+                    ]],
             ]],
             ["name"=>"Zombiereibe","temporary"=>0,"img"=>"small_grater","vp"=>55,"ap"=>60,"bp"=>1,"rsc"=>["meca_parts_#00" => 3,"metal_#00" => 20,"plate_#00" => 3,]],
             ["name"=>"Fallgruben","temporary"=>0,"img"=>"small_gather","vp"=>35,"ap"=>50,"bp"=>0,"rsc"=>["wood2_#00" => 10,]],
@@ -71,7 +85,15 @@ class RecipeFixtures extends Fixture implements DependentFixtureInterface
             ]],
         ]],
 
-        ["name"=>"Pumpe","temporary"=>0,"img"=>"small_water","vp"=>0,"ap"=>25,"bp"=>0,"rsc"=>["metal_#00" => 8,"tube_#00" => 1,], "children" => [
+        ["name"=>"Pumpe","maxLevel" => 5,"temporary"=>0,"img"=>"small_water","vp"=>0,"ap"=>25,"bp"=>0,"rsc"=>["metal_#00" => 8,"tube_#00" => 1,],
+            "upgradeTexts" => [
+                'Der Brunnen der Stadt wird einmalig um 5 Rationen Wasser aufgefüllt',
+                'Der Brunnen der Stadt wird einmalig um 20 Rationen Wasser aufgefüllt',
+                'Der Brunnen der Stadt wird einmalig um 20 Rationen Wasser aufgefüllt',
+                'Der Brunnen der Stadt wird einmalig um 30 Rationen Wasser aufgefüllt',
+                'Der Brunnen der Stadt wird einmalig um 30 Rationen Wasser aufgefüllt',
+                'Der Brunnen der Stadt wird einmalig um 40 Rationen Wasser aufgefüllt',
+            ], "children" => [
             ["name"=>"Wasserreiniger","temporary"=>0,"img"=>"item_jerrycan","vp"=>0,"ap"=>75,"bp"=>0,"rsc"=>["meca_parts_#00" => 1,"wood2_#00" => 5,"metal_#00" => 6,"tube_#00" => 3,], "children" => [
                 ["name"=>"Minen","temporary"=>1,"img"=>"item_bgrenade","vp"=>115,"ap"=>50,"bp"=>2,"rsc"=>["water_#00" => 10,"metal_#00" => 3,"explo_#00" => 1,"deto_#00" => 1,]],
                 ["name"=>"Wasserfilter","temporary"=>0,"img"=>"item_jerrycan","vp"=>0,"ap"=>50,"bp"=>3,"rsc"=>["metal_#00" => 10,"electro_#00" => 2,"fence_#00" => 1,]],
@@ -89,7 +111,14 @@ class RecipeFixtures extends Fixture implements DependentFixtureInterface
                 ["name"=>"Sprinkleranlage","temporary"=>0,"img"=>"small_sprinkler","vp"=>150,"ap"=>85,"bp"=>3,"rsc"=>["water_#00" => 20,"tube_#00" => 1,"wood_beam_#00" => 7,"metal_beam_#00" => 15,]],
                 ["name"=>"Dusche","temporary"=>0,"img"=>"small_shower","vp"=>0,"ap"=>25,"bp"=>2,"rsc"=>["water_#00" => 5,"wood2_#00" => 4,"metal_#00" => 1,"tube_#00" => 1,]],
             ]],
-            ["name"=>"Wasserturm","temporary"=>0,"img"=>"item_tube","vp"=>70,"ap"=>60,"bp"=>3,"rsc"=>["water_#00" => 40,"tube_#00" => 7,"metal_beam_#00" => 10,]],
+            ["name"=>"Wasserturm","maxLevel" => 5,"temporary"=>0,"img"=>"item_tube","vp"=>70,"ap"=>60,"bp"=>3,"rsc"=>["water_#00" => 40,"tube_#00" => 7,"metal_beam_#00" => 10,],
+                "upgradeTexts" => [
+                    'Der Wasserturm verbraucht beim nächtlichen Angriff 2 Rationen Wasser und steigert seinen Verteidigungswert dafür um 56.',
+                    'Der Wasserturm verbraucht beim nächtlichen Angriff 4 Rationen Wasser und steigert seinen Verteidigungswert dafür um 112.',
+                    'Der Wasserturm verbraucht beim nächtlichen Angriff 6 Rationen Wasser und steigert seinen Verteidigungswert dafür um 168.',
+                    'Der Wasserturm verbraucht beim nächtlichen Angriff 9 Rationen Wasser und steigert seinen Verteidigungswert dafür um 224.',
+                    'Der Wasserturm verbraucht beim nächtlichen Angriff 12 Rationen Wasser und steigert seinen Verteidigungswert dafür um 280.',
+                ]],
             ["name"=>"Wasserfänger","temporary"=>1,"img"=>"item_tube","vp"=>0,"ap"=>12,"bp"=>1,"rsc"=>["wood2_#00" => 2,"metal_#00" => 2,]],
             ["name"=>"Wasserkanone","temporary"=>0,"img"=>"small_watercanon","vp"=>80,"ap"=>40,"bp"=>2,"rsc"=>["water_#00" => 15,"wood2_#00" => 5,"metal_#00" => 5,"metal_beam_#00" => 5,]],
             ["name"=>"Schleuse","temporary"=>0,"img"=>"small_shower","vp"=>60,"ap"=>50,"bp"=>1,"rsc"=>["water_#00" => 15,"wood2_#00" => 10,]],
@@ -99,11 +128,25 @@ class RecipeFixtures extends Fixture implements DependentFixtureInterface
             ["name"=>"Apfelbaum","temporary"=>0,"img"=>"small_appletree","vp"=>0,"ap"=>30,"bp"=>3,"rsc"=>["water_#00" => 10,"hmeat_#00" => 2,"pharma_#00" => 3,"metal_beam_#00" => 1,]],
         ]],
 
-        ["name"=>"Werkstatt","temporary"=>0,"img"=>"small_refine","vp"=>0,"ap"=>25,"bp"=>0,"rsc"=>["wood2_#00" => 10,"metal_#00" => 8,], "children" => [
+        ["name"=>"Werkstatt","maxLevel" => 5,"temporary"=>0,"img"=>"small_refine","vp"=>0,"ap"=>25,"bp"=>0,"rsc"=>["wood2_#00" => 10,"metal_#00" => 8,],
+            "upgradeTexts" => [
+                'Die AP-Kosten aller Bauprojekte werden um 5% gesenkt.',
+                'Die AP-Kosten aller Bauprojekte werden um 10% gesenkt.',
+                'Die AP-Kosten aller Bauprojekte werden um 15% gesenkt.',
+                'Die AP-Kosten aller Bauprojekte werden um 20% gesenkt.',
+                'Die AP-Kosten aller Bauprojekte werden um 25% gesenkt.',
+            ], "children" => [
             ["name"=>"Metzgerei","temporary"=>0,"img"=>"item_meat","vp"=>0,"ap"=>40,"bp"=>2,"rsc"=>["wood2_#00" => 9,"metal_#00" => 4,], "children" => [
                 ["name"=>"Kremato-Cue","temporary"=>0,"img"=>"item_hmeat","vp"=>0,"ap"=>45,"bp"=>2,"rsc"=>["wood_beam_#00" => 8,"metal_beam_#00" => 1,]],
             ]],
-            ["name"=>"Verteidigungsanlage","temporary"=>0,"img"=>"item_meca_parts","vp"=>0,"ap"=>50,"bp"=>3,"rsc"=>["meca_parts_#00" => 3,"wood_beam_#00" => 7,"metal_beam_#00" => 8,]],
+            ["name"=>"Verteidigungsanlage","maxLevel" => 5,"temporary"=>0,"img"=>"item_meca_parts","vp"=>0,"ap"=>50,"bp"=>3,"rsc"=>["meca_parts_#00" => 3,"wood_beam_#00" => 7,"metal_beam_#00" => 8,],
+                "upgradeTexts" => [
+                    'Der Verteidigungsbonus von Gegenständen in der Bank steigt um 100%.',
+                    'Der Verteidigungsbonus von Gegenständen in der Bank steigt um 150%.',
+                    'Der Verteidigungsbonus von Gegenständen in der Bank steigt um 200%.',
+                    'Der Verteidigungsbonus von Gegenständen in der Bank steigt um 250%.',
+                    'Der Verteidigungsbonus von Gegenständen in der Bank steigt um 300%.',
+                ]],
             ["name"=>"Kanonenhügel","temporary"=>0,"img"=>"small_dig","vp"=>30,"ap"=>50,"bp"=>0,"rsc"=>["concrete_wall_#00" => 1,"wood_beam_#00" => 7,"metal_beam_#00" => 1,], "children" => [
                 ["name"=>"Steinkanone","temporary"=>0,"img"=>"small_canon","vp"=>50,"ap"=>60,"bp"=>1,"rsc"=>["tube_#00" => 1,"electro_#00" => 2,"concrete_wall_#00" => 3,"wood_beam_#00" => 5,"metal_beam_#00" => 5,]],
                 ["name"=>"Selbstgebaute Railgun","temporary"=>0,"img"=>"small_canon","vp"=>50,"ap"=>40,"bp"=>1,"rsc"=>["meca_parts_#00" => 2,"tube_#00" => 1,"electro_#00" => 1,"metal_beam_#00" => 10,]],
@@ -114,7 +157,12 @@ class RecipeFixtures extends Fixture implements DependentFixtureInterface
             ["name"=>"Manufaktur","temporary"=>0,"img"=>"small_factory","vp"=>0,"ap"=>40,"bp"=>0,"rsc"=>["wood_beam_#00" => 5,"metal_beam_#00" => 5,"table_#00" => 1,]],
             ["name"=>"Kreischende Sägen","temporary"=>0,"img"=>"small_saw","vp"=>45,"ap"=>65,"bp"=>0,"rsc"=>["meca_parts_#00" => 3,"metal_#00" => 5,"rustine_#00" => 3,"metal_beam_#00" => 2,]],
             ["name"=>"Baustellenbuch","temporary"=>0,"img"=>"item_rp_book2","vp"=>0,"ap"=>15,"bp"=>0,"rsc"=>["table_#00" => 1,], "children" => [
-                ["name"=>"Bauhaus","temporary"=>0,"img"=>"small_refine","vp"=>0,"ap"=>75,"bp"=>0,"rsc"=>["drug_#00" => 1,"vodka_de_#00" => 1,"wood_beam_#00" => 10,]],
+                ["name"=>"Bauhaus","maxLevel" => 5,"temporary"=>0,"img"=>"small_refine","vp"=>0,"ap"=>75,"bp"=>0,"rsc"=>["drug_#00" => 1,"vodka_de_#00" => 1,"wood_beam_#00" => 10,],
+                "upgradeTexts" => [
+                    'Die Stadt erhält nach dem nächsten Angriff einmalig 4 gewöhnliche Baupläne sowie - möglicherweise - eine nette Überraschung.',
+                    'Die Stadt erhält nach dem nächsten Angriff einmalig 2 gewöhnliche und 2 ungewöhnliche Baupläne sowie - möglicherweise - eine nette Überraschung.',
+                    'Die Stadt erhält nach dem nächsten Angriff einmalig 2 ungewöhnliche und 2 seltene Baupläne sowie - möglicherweise - eine nette Überraschung.',
+                ]],
             ]],
             ["name"=>"Galgen","temporary"=>0,"img"=>"r_dhang","vp"=>0,"ap"=>13,"bp"=>0,"rsc"=>["wood_beam_#00" => 1,"chain_#00" => 1,]],
             ["name"=>"Kleines Cafe","temporary"=>1,"img"=>"small_cafet","vp"=>0,"ap"=>6,"bp"=>0,"rsc"=>["water_#00" => 1,"wood2_#00" => 2,"pharma_#00" => 1,]],
@@ -131,11 +179,25 @@ class RecipeFixtures extends Fixture implements DependentFixtureInterface
             ["name"=>"Labor","temporary"=>0,"img"=>"item_acid","vp"=>0,"ap"=>30,"bp"=>1,"rsc"=>["meca_parts_#00" => 3,"pharma_#00" => 5,"wood_beam_#00" => 3,"metal_beam_#00" => 10,]],
         ]],
 
-        ["name"=>"Wachturm","temporary"=>0,"img"=>"item_tagger","vp"=>0,"ap"=>12,"bp"=>0,"rsc"=>["wood2_#00" => 3,"metal_#00" => 2,], "children" => [
+        ["name"=>"Wachturm","maxLevel" => 5, "temporary"=>0,"img"=>"item_tagger","vp"=>0,"ap"=>12,"bp"=>0,"rsc"=>["wood2_#00" => 3,"metal_#00" => 2,],
+            "upgradeTexts" => [
+                'Erspäht jeden Morgen alle Zombies, die sich im Umkreis von 3km um die Stadt aufhalten.',
+                'Erspäht jeden Morgen alle Zombies, die sich im Umkreis von 6km um die Stadt aufhalten.',
+                'Erspäht jeden Morgen alle Zombies, die sich im Umkreis von 10km um die Stadt aufhalten.',
+                'Erspäht jeden Morgen alle Zombies, die sich im Umkreis von 10km um die Stadt aufhalten. Bürger im Umkreis von 1km um die Stadt können ohne AP-Verbrauch die Stadt betreten.',
+                'Erspäht jeden Morgen alle Zombies, die sich im Umkreis von 10km um die Stadt aufhalten. Bürger im Umkreis von 2km um die Stadt können ohne AP-Verbrauch die Stadt betreten.',
+            ], "children" => [
             ["name"=>"Scanner","temporary"=>0,"img"=>"item_tagger","vp"=>0,"ap"=>20,"bp"=>2,"rsc"=>["pile_#00" => 2,"meca_parts_#00" => 1,"electro_#00" => 1,"cyanure_#00" => 2,]],
             ["name"=>"Verbesserte Karte","temporary"=>0,"img"=>"item_electro","vp"=>0,"ap"=>15,"bp"=>1,"rsc"=>["pile_#00" => 2,"metal_#00" => 1,"electro_#00" => 1,"cyanure_#00" => 2,]],
             ["name"=>"Rechenmaschine","temporary"=>0,"img"=>"item_tagger","vp"=>0,"ap"=>20,"bp"=>1,"rsc"=>["rustine_#00" => 1,"electro_#00" => 1,]],
-            ["name"=>"Forschungsturm","temporary"=>0,"img"=>"small_gather","vp"=>0,"ap"=>30,"bp"=>1,"rsc"=>["electro_#00" => 1,"wood_beam_#00" => 3,"metal_beam_#00" => 1,"table_#00" => 1,]],
+            ["name"=>"Forschungsturm","maxLevel" => 5,"temporary"=>0,"img"=>"small_gather","vp"=>0,"ap"=>30,"bp"=>1,"rsc"=>["electro_#00" => 1,"wood_beam_#00" => 3,"metal_beam_#00" => 1,"table_#00" => 1,],
+                "upgradeTexts" => [
+                    'Die Chance, dass sich die Zonen in Windrichtung regenerieren steigt auf 37%.',
+                    'Die Chance, dass sich die Zonen in Windrichtung regenerieren steigt auf 49%.',
+                    'Die Chance, dass sich die Zonen in Windrichtung regenerieren steigt auf 61%.',
+                    'Die Chance, dass sich die Zonen in Windrichtung regenerieren steigt auf 73%.',
+                    'Die Chance, dass sich die Zonen in Windrichtung regenerieren steigt auf 85%.',
+                ]],
             ["name"=>"Notfallkonstruktion","temporary"=>0,"img"=>"status_terror","vp"=>0,"ap"=>40,"bp"=>0,"rsc"=>["wood2_#00" => 5,"metal_#00" => 7,], "children" => [
                 ["name"=>"Verteidigungspfähle","temporary"=>1,"img"=>"small_trap","vp"=>25,"ap"=>12,"bp"=>0,"rsc"=>["wood2_#00" => 6,]],
                 ["name"=>"Notfallabstützung","temporary"=>1,"img"=>"item_wood_plate","vp"=>40,"ap"=>30,"bp"=>0,"rsc"=>["wood2_#00" => 8,]],
@@ -245,6 +307,11 @@ class RecipeFixtures extends Fixture implements DependentFixtureInterface
             ->setBlueprint( $data['bp'] )
             ->setDefense( $data['vp'] )
             ->setIcon( $data['img'] );
+
+        if (isset($data['maxLevel'])) {
+            $object->setMaxLevel( $data['maxLevel'] );
+            if ($data['upgradeTexts']) $object->setUpgradeTexts( $data['upgradeTexts'] );
+        }
 
         if (!empty($data['rsc'])) {
 

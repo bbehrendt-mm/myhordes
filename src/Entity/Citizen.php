@@ -83,6 +83,12 @@ class Citizen
      */
     private $digTimers;
 
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\DailyUpgradeVote", mappedBy="citizen", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $dailyUpgradeVote;
+
     public function __construct()
     {
         $this->status = new ArrayCollection();
@@ -271,6 +277,23 @@ class Citizen
             if ($digTimer->getCitizen() === $this) {
                 $digTimer->setCitizen(null);
             }
+        }
+
+        return $this;
+    }
+
+    public function getDailyUpgradeVote(): ?DailyUpgradeVote
+    {
+        return $this->dailyUpgradeVote;
+    }
+
+    public function setDailyUpgradeVote(DailyUpgradeVote $dailyUpgradeVote): self
+    {
+        $this->dailyUpgradeVote = $dailyUpgradeVote;
+
+        // set the owning side of the relation if necessary
+        if ($dailyUpgradeVote->getCitizen() !== $this) {
+            $dailyUpgradeVote->setCitizen($this);
         }
 
         return $this;

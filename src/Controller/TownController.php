@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Building;
+use App\Entity\DailyUpgradeVote;
 use App\Entity\Zone;
 use App\Response\AjaxResponse;
 use App\Service\ErrorHelper;
@@ -27,6 +28,21 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
     const ErrorNotEnoughRes      = ErrorHelper::BaseTownErrors + 6;
 
 
+    protected function addDefaultTwigArgs( ?string $section = null, ?array $data = null ): array {
+        $data = $data ?? [];
+
+        $addons = [];
+        $town = $this->getActiveCitizen()->getTown();
+        foreach ($town->getBuildings() as $b) if ($b->getComplete()) {
+
+            if ($b->getPrototype()->getMaxLevel() > 0)
+                $addons['upgrade'] = ['Verbesserung des Tages', 'town_upgrades'];
+        }
+
+        $data['addons'] = $addons;
+        return parent::addDefaultTwigArgs( $section, $data );
+    }
+
     /**
      * @Route("jx/town/dashboard", name="town_dashboard")
      * @return Response
@@ -37,6 +53,62 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
             'town' => $this->getActiveCitizen()->getTown()
         ]) );
     }
+
+    /**
+     * @Route("jx/town/upgrades", name="town_upgrades")
+     * @return Response
+     */
+    public function addon_upgrades(): Response
+    {
+        $town = $this->getActiveCitizen()->getTown();
+        $buildings = [];
+        $max_votes = 0;
+        foreach ($town->getBuildings() as $b) if ($b->getComplete()) {
+            if ($b->getPrototype()->getMaxLevel() > 0)
+                $buildings[] = $b;
+            $max_votes = max($max_votes, $b->getDailyUpgradeVotes()->count());
+        }
+
+        if (empty($buildings)) return $this->redirect( $this->generateUrl('town_dashboard') );
+
+        return $this->render( 'ajax/game/town/upgrades.html.twig', $this->addDefaultTwigArgs('upgrade', [
+            'buildings' => $buildings,
+            'max_votes' => $max_votes,
+            'vote' => $this->getActiveCitizen()->getDailyUpgradeVote() ? $this->getActiveCitizen()->getDailyUpgradeVote()->getBuilding() : null,
+        ]) );
+    }
+
+    /**
+     * @Route("api/town/upgrades/vote", name="town_upgrades_vote_controller")
+     * @param JSONRequestParser $parser
+     * @return Response
+     */
+    public function upgrades_votes_api(JSONRequestParser $parser): Response {
+        $citizen = $this->getActiveCitizen();
+        $town = $citizen->getTown();
+
+        if ($citizen->getDailyUpgradeVote())
+            return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
+
+        if (!$parser->has_all(['id'], true))
+            return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
+        $id = (int)$parser->get('id');
+
+        $building = $this->entity_manager->getRepository(Building::class)->find($id);
+        if (!$building || $building->getTown()->getId() !== $town->getId())
+            return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
+
+        try {
+            $citizen->setDailyUpgradeVote( (new DailyUpgradeVote())->setBuilding( $building ) );
+            $this->entity_manager->persist($citizen);
+            $this->entity_manager->flush();
+        } catch (Exception $e) {
+            return AjaxResponse::error( ErrorHelper::ErrorDatabaseException );
+        }
+
+        return AjaxResponse::success();
+    }
+
 
     /**
      * @Route("jx/town/house", name="town_house")

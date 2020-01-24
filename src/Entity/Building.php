@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Table;
 use Doctrine\ORM\Mapping\UniqueConstraint;
@@ -42,6 +44,26 @@ class Building
      * @ORM\JoinColumn(nullable=false)
      */
     private $town;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\DailyUpgradeVote", mappedBy="building")
+     */
+    private $dailyUpgradeVotes;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $level = 0;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $defenseBonus = 0;
+
+    public function __construct()
+    {
+        $this->dailyUpgradeVotes = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -92,6 +114,61 @@ class Building
     public function setTown(?Town $town): self
     {
         $this->town = $town;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|DailyUpgradeVote[]
+     */
+    public function getDailyUpgradeVotes(): Collection
+    {
+        return $this->dailyUpgradeVotes;
+    }
+
+    public function addDailyUpgradeVote(DailyUpgradeVote $dailyUpgradeVote): self
+    {
+        if (!$this->dailyUpgradeVotes->contains($dailyUpgradeVote)) {
+            $this->dailyUpgradeVotes[] = $dailyUpgradeVote;
+            $dailyUpgradeVote->setBuilding($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDailyUpgradeVote(DailyUpgradeVote $dailyUpgradeVote): self
+    {
+        if ($this->dailyUpgradeVotes->contains($dailyUpgradeVote)) {
+            $this->dailyUpgradeVotes->removeElement($dailyUpgradeVote);
+            // set the owning side to null (unless already changed)
+            if ($dailyUpgradeVote->getBuilding() === $this) {
+                $dailyUpgradeVote->setBuilding(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getLevel(): ?int
+    {
+        return $this->level;
+    }
+
+    public function setLevel(int $level): self
+    {
+        $this->level = $level;
+
+        return $this;
+    }
+
+    public function getDefenseBonus(): ?int
+    {
+        return $this->defenseBonus;
+    }
+
+    public function setDefenseBonus(int $defenseBonus): self
+    {
+        $this->defenseBonus = $defenseBonus;
 
         return $this;
     }

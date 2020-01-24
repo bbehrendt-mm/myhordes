@@ -22,5 +22,6 @@ class ErrorHelper
     const ErrorDatabaseException = 2;
     const ErrorInternalError     = 3;
 
-    const ErrorNoAP              = 51;
+    const ErrorNoAP               = 51;
+    const ErrorActionNotAvailable = 52;
 }

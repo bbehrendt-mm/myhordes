@@ -1,6 +1,7 @@
 @import (once) "grid";
 
 @import (once) "modules/map";
+@import (once) "modules/town";
 @import (once) "modules/beyond";
 @import (once) "modules/constructions";
 
@@ -40,6 +41,8 @@
 @myhordes-input-border: #EFDBA8;
 
 @myhordes-smalltext: #DDAB76;
+
+@myhordes-help-color: #524053;
 
 body {
   font-family: @myhordes-font; background: @myhordes-background; margin: 0;
@@ -101,12 +104,17 @@ body {
   }
 }
 
-.box() {
-  background: @myhordes-cell-header-background-color; border: 1px solid @myhordes-input-border;
+.box(@color: @myhordes-cell-header-background-color) {
+  background: @color; border: 1px solid @myhordes-input-border;
 }
 
 div.note {
   .box(); padding: 5px; font-size: 12px; margin: 5px 0;
+}
+
+div.help {
+  &:before { content: " "; position: absolute; display: block; top: 5px; left: 5px; width: 16px; height: 16px; background: url('../img/small_help.gif') no-repeat; }
+  .box(@myhordes-help-color); padding: 5px 5px 5px 26px; font-size: 12px; margin: 5px 0; text-align: justify; position: relative;
 }
 
 button {
@@ -142,27 +150,6 @@ input[type='text'],input[type='password'],input[type='email'] {
 }
 
 a { color: @myhordes-smalltext; font-weight: bold; }
-
-.town-menu {
-  &>.cell {
-    &>div:first-child { width: 100%; padding-top: 55.1724138% }
-    &>div:last-child { font-size: small; padding: 1px 4px; background: @myhordes-cell-header-background-color }
-    &:not(.selected):hover {
-      &>div:last-child { color: @myhordes-input-border; }
-      outline: 1px solid @myhordes-input-border; cursor: pointer;
-    }
-    &.selected {
-      &>div:first-child { filter: contrast( 120% ) brightness( 120% ); }
-      &>div:last-child { font-weight: bold; background: lighten(@myhordes-cell-header-background-color, 10%) };
-    }
-  }
-  &>.town-menu-house>div:first-child { background: url("../img/menu_home.gif") center/cover no-repeat }
-  &>.town-menu-well>div:first-child { background: url("../img/menu_well.gif") center/cover no-repeat }
-  &>.town-menu-bank>div:first-child { background: url("../img/menu_bank.gif") center/cover no-repeat }
-  &>.town-menu-citizens>div:first-child { background: url("../img/menu_houses.gif") center/cover no-repeat }
-  &>.town-menu-construct>div:first-child { background: url("../img/menu_construction.gif") center/cover no-repeat }
-  &>.town-menu-door>div:first-child { background: url("../img/menu_door.gif") center/cover no-repeat }
-}
 
 ul.inventory {
   border: 1px solid @myhordes-input-border; padding: 6px; font-size: small; font-variant: small-caps;

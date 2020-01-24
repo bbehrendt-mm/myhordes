@@ -15,6 +15,11 @@
                 <div {% if menu_section != 'constructions' %}x-ajax-href="{{ path('town_constructions') }}"{% endif %} class="cell padded-small rw-6 rw-lg-12 rw-sm-6 {% if menu_section == 'constructions' %}selected{% endif %} town-menu-construct"><div></div><div class="hide-sm">{% trans from 'game' %}Konstruktionen{% endtrans %}</div></div>
                 <div {% if menu_section != 'door' %}x-ajax-href="{{ path('town_door') }}"{% endif %} class="cell padded-small rw-6 rw-lg-12 rw-sm-6 {% if menu_section == 'door' %}selected{% endif %} town-menu-door"><div></div><div class="hide-sm">{% trans from 'game' %}Stadttor{% endtrans %}</div></div>
             </div>
+            <div class="row town-addons">
+                {% for name, addon in addons %}
+                    <div x-ajax-href="{{ path(addon[1]) }}" class="cell padded-small rw-12 {% if menu_section == name %}selected{% endif %} town-addon-{{ name }}"><div><div><div></div><span>{{ addon[0]|trans({},'game') }}</span></div></div></div>
+                {% endfor %}
+            </div>
         </div>
         <div class="padded cell rw-8 rw-sm-12">
             {% block content %}

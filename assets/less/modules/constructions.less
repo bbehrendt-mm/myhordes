@@ -6,6 +6,11 @@
 @myhordes-building-header-color: #b37c4a;
 @myhordes-building-complete-header-color: #696486;
 
+.b-table() {
+  &:nth-child(2n+0) {background: darken(@myhordes-building-row-color,5%); &>.cell { background: darken(@myhordes-building-row-color,5%); }}
+  &:nth-child(2n+1) {background: @myhordes-building-row-color; &>.cell { background: @myhordes-building-row-color; }}
+}
+
 div.buildings {
   padding: 0; font-size: 12px; margin: 32px 0; border: 1px solid @myhordes-smalltext;
 
@@ -16,8 +21,7 @@ div.buildings {
   .lv_list(@max,@n:1) when (@n > @max) {}
 
   &>.row {
-    &:nth-child(2n+0) {background: darken(@myhordes-building-row-color,5%); &>.cell { background: darken(@myhordes-building-row-color,5%); }}
-    &:nth-child(2n+1) {background: @myhordes-building-row-color; &>.cell { background: @myhordes-building-row-color; }}
+    .b-table();
     &.root > div.cell:first-child>span { font-weight: bold }
     overflow: hidden;
 
@@ -54,6 +58,22 @@ div.buildings {
         &.low { color: #d04d3f;  }
         &:not(.low) { color: @myhordes-smalltext; }
       }
+    }
+  }
+}
+
+div.town-upgrades {
+  padding: 0; margin: 32px 0; border: 1px solid @myhordes-smalltext;
+
+  &>.row {
+    .b-table();
+    font-size: 12px;
+    strong { font-size: 15px; font-variant: small-caps }
+    b { color: @myhordes-smalltext; }
+
+    &.complete {
+      background: @myhordes-building-complete-row-color; &>.cell { background: @myhordes-building-complete-row-color; }
+      &> div.cell:first-child:before { background: @myhordes-building-complete-header-color; }
     }
   }
 }
