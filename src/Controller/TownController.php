@@ -7,6 +7,7 @@ use App\Entity\DailyUpgradeVote;
 use App\Entity\Zone;
 use App\Response\AjaxResponse;
 use App\Service\ErrorHelper;
+use App\Service\GameFactory;
 use App\Service\InventoryHandler;
 use App\Service\ItemFactory;
 use App\Service\JSONRequestParser;
@@ -147,14 +148,19 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
 
     /**
      * @Route("jx/town/well", name="town_well")
+     * @param GameFactory $gf
      * @return Response
      */
-    public function well(): Response
+    public function well(GameFactory $gf): Response
     {
+        $town = $this->getActiveCitizen()->getTown();
+        $pump = $gf->getBuilding( $town, 'small_water_#00', true );
+
         return $this->render( 'ajax/game/town/well.html.twig', $this->addDefaultTwigArgs('well', [
             'rations_left' => $this->getActiveCitizen()->getTown()->getWell(),
             'first_take' => $this->getActiveCitizen()->getWellCounter()->getTaken() === 0,
-            'allow_take' => $this->getActiveCitizen()->getWellCounter()->getTaken() < 2, //ToDo: Fix the count!
+            'allow_take' => $this->getActiveCitizen()->getWellCounter()->getTaken() < ($pump ? 2 : 1),
+            'pump' => $pump,
         ]) );
     }
 

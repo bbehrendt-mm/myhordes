@@ -12,13 +12,33 @@
             </div>
         </div>
         <div class="cell padded rw-9 rw-lg-8 rw-md-12">
-            {% if first_take %}
-                <button x-well-confirm="0" x-well-direction="up" {% if not allow_take %}disabled{% endif %}>{% trans from 'game' %}Deine Ration Wasser erhalten{% endtrans %}</button>
-            {% else %}
-                <button x-well-confirm="1" x-well-direction="up" {% if not allow_take %}disabled{% endif %}>{% trans from 'game' %}Eine weitere Ration erhalten{% endtrans %}</button>
+            <div class="help">
+                Der Brunnen ist der Ort, an dem sich die Bürger jeden Tag ihre Ration Wasser holen.
+            </div>
+            {% if pump is not null %}
+                {# @var pump \App\Entity\Building #}
+                <div class="note">
+                    {% trans with {'%pumpname%':'<b>' ~ pump.prototype.label ~ '</b>' } from 'game' %}
+                        Die Stadt verfügt über eine %pumpname%.
+                    {% endtrans %}
+                </div>
             {% endif %}
-            <br />
-            <button x-well-confirm="1" x-well-direction="down">{% trans from 'game' %}Wasser hinzufügen{% endtrans %}</button>
+            <p>
+                {% if first_take %}
+                    <button x-well-confirm="0" x-well-direction="up" {% if not allow_take %}disabled{% endif %}><img alt="" src="{{ asset('build/images/item/item_water.gif') }}" />{% trans from 'game' %}Deine Ration Wasser erhalten{% endtrans %}</button>
+                {% else %}
+                    <button x-well-confirm="1" x-well-direction="up" {% if not allow_take %}disabled{% endif %}><img alt="" src="{{ asset('build/images/item/item_water.gif') }}" />{% trans from 'game' %}Eine weitere Ration erhalten{% endtrans %}</button>
+                {% endif %}
+            </p>
+            <p>
+                <button x-well-confirm="1" x-well-direction="down"><img alt="" src="{{ asset('build/images/small_well.gif') }}" />{% trans from 'game' %}Wasser hinzufügen{% endtrans %}</button>
+            </p>
+
+            <div class="small-note">
+                {% trans from 'game' %}
+                    Wasser ist unersetzbar. Es ermöglicht dir einmal pro Tag deine Aktionspunkte durch Trinken wieder aufzufüllen. Des weiteren kann man es auch gegen Zombies einsetzen (reines Wasser zerstört sie).
+                {% endtrans %}
+            </div>
         </div>
     </div>
 {% endblock %}

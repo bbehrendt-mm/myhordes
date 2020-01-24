@@ -272,6 +272,17 @@ class GameFactory
         return true;
     }
 
+    public function getBuilding(Town &$town, $prototype, $finished = true): ?Building {
+        if (is_string($prototype))
+            $prototype = $this->entity_manager->getRepository(BuildingPrototype::class)->findOneByName($prototype);
+
+        if (!$prototype) return null;
+        foreach ($town->getBuildings() as $b)
+            if ($b->getPrototype()->getId() === $prototype->getId())
+                return (!$finished || $b->getComplete()) ? $b : null;
+        return null;
+    }
+
     public function createTown( ?string $name, int $population, string $type ): ?Town {
         if (!$this->validator->validateTownType($type) || !$this->validator->validateTownPopulation( $population, $type ))
             return null;

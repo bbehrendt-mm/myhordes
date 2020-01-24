@@ -1,5 +1,12 @@
 {% extends "ajax/game/town/town.html.twig" %}
 {% block content %}
+
+    <div class="help">
+        {% trans from 'game' %}
+            Hier findest du alle Gegenstände, die gegenwärtig in der Bank aufbewahrt werden. Bei diesen Gegenständen handelt es sich um Spenden der Bürger. Sie sind im Wesentlichen dazu da, Gemeinschaftsgebäude zu bauen und die Stadt gegen die allnächtlichen Zombieattacken zu verteidigen.
+        {% endtrans %}
+    </div>
+
     <div class="row">
         <div class="padded cell rw-6 rw-md-12">
             {% embed "ajax/game/inventory.html.twig" with {'size': rucksack_size, 'fake_items': [], 'items': rucksack.items} %}
