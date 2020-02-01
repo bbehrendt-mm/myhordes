@@ -9,7 +9,7 @@ declare var $: Global;
 export default class Ajax {
 
     base: string;
-    lastNode: Node;
+    lastNode: HTMLElement;
 
     constructor(baseUrl: string) {
         if (baseUrl.length == 0 || baseUrl.slice(-1) != '/')
@@ -22,7 +22,7 @@ export default class Ajax {
         if (url.slice(0,4) !== 'http' && url.slice(0,this.base.length) !== this.base) url = this.base + url;
         return url;
     }
-    prepareTarget(target: Node): Node {
+    prepareTarget(target: HTMLElement): HTMLElement {
         if (target === null) target = this.lastNode;
         if (target === null) {
             alert('ERROR_NO_TARGET_NODE');
@@ -31,7 +31,7 @@ export default class Ajax {
         return target;
     }
 
-    render( url: string, target: Node, result_document: Document, push_history: boolean, replace_history: boolean ) {
+    render( url: string, target: HTMLElement, result_document: Document, push_history: boolean, replace_history: boolean ) {
         // Get URL
         if (push_history) history.pushState( url, '', url );
         if (replace_history) history.replaceState( url, '', url );
@@ -67,8 +67,8 @@ export default class Ajax {
                     countdowns[c].addEventListener('expire', function() { ajax_instance.load( target, url ) });
                 $.html.handleCountdown( countdowns[c] );
             }
-
             target.appendChild( content_source[i] );
+            $.html.handleTabNavigation(target);
         }
 
         for (let i = 0; i < script_source.length; i++) {
@@ -89,7 +89,7 @@ export default class Ajax {
         }));
     }
 
-    load( target: Node, url: string, push_history: boolean = false ) {
+    load( target: HTMLElement, url: string, push_history: boolean = false ) {
         let ajax_instance = this;
         if (!(target = this.prepareTarget( target ))) return;
         url = this.prepareURL(url);

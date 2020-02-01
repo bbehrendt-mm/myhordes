@@ -1,3 +1,7 @@
+import {Global} from "./defaults";
+
+declare var $: Global;
+
 export default class HTML {
 
     constructor() {}
@@ -82,5 +86,51 @@ export default class HTML {
         };
 
         f(true);
+    }
+
+    handleTabNavigation( element: Element ): void {
+
+        const hide_group = function(group: string) {
+
+            let targets = element.querySelectorAll('*[x-tab-target][x-tab-group=' + group + ']');
+            for (let t = 0; t < targets.length; t++)
+                (<HTMLElement>targets[t]).style.display = 'none';
+        };
+
+        let controllers = element.querySelectorAll('*[x-tab-control][x-tab-group]');
+        for (let i = 0; i < controllers.length; i++) {
+
+            const group = controllers[i].getAttribute('x-tab-group');
+
+            hide_group(group);
+
+            let buttons = controllers[i].querySelectorAll( '[x-tab-id]' );
+            for (let b = 0; b < buttons.length; b++) {
+                const id = buttons[b].getAttribute('x-tab-id');
+                buttons[b].addEventListener('click', function () {
+                    hide_group( group );
+                    for (let bi = 0; bi < buttons.length; bi++) buttons[bi].classList.remove('selected');
+                    buttons[b].classList.add('selected');
+                    let targets = element.querySelectorAll('*[x-tab-target][x-tab-group=' + group + '][x-tab-id= ' + id + ']');
+                    for (let t = 0; t < targets.length; t++)
+                        (<HTMLElement>targets[t]).style.display = null;
+                    $.client.set( group, 'tabState', id, true );
+                })
+            }
+
+            if (buttons.length > 0) {
+                const pre_selection = $.client.get( group, 'tabState' );
+                let target: Element | null = null;
+                if (pre_selection !== null)
+                    target = controllers[i].querySelector( '[x-tab-id=' + pre_selection + ']' );
+                if (target === null)
+                    target = buttons[0];
+                if (target !== null) target.dispatchEvent(new Event("click", {
+                    bubbles: true, cancelable: true
+                }));
+            }
+
+        }
+
     }
 }

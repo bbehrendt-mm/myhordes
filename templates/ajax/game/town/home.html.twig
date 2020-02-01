@@ -1,28 +1,58 @@
 {% extends "ajax/game/town/town.html.twig" %}
 {% block content %}
-    <div class="row">
-        <div class="padded cell rw-6 rw-md-12">
-            <h5>{% trans from 'game' %}Meine Spezialaktionen{% endtrans %}</h5>
 
-            <h5>{% trans from 'game' %}Meine Aktionen{% endtrans %}</h5>
-            {% embed "ajax/game/actions.html.twig" with {'list': actions} %}
-            {% endembed %}
+    <ul class="tabs" x-tab-group="home-main" x-tab-control>
+        <li x-tab-id="dash">{% trans from 'game' %}Truhe und Aktionen{% endtrans %}</li>
+        <li x-tab-id="build">{% trans from 'game' %}Bauarbeiten{% endtrans %}</li>
+    </ul>
+
+    <div x-tab-group="home-main" x-tab-id="dash" x-tab-target>
+        <div class="help">
+            {% trans from 'game' %}
+                In der linken Spalte werden alle Aktionen und Handlungen dargestellt, die du mit deinen Gegenständen ausführen kannst. In der rechten Spalte kannst du den Inhalt deines Rucksacks und deiner Truhe ansehen.
+            {% endtrans %}
         </div>
 
-        <div class="padded cell rw-6 rw-md-12">
-            {% embed "ajax/game/inventory.html.twig" with {'size': rucksack_size, 'fake_items': [], 'items': rucksack.items} %}
-                {% block class %}rucksack{% endblock %}
-                {% block title %}{% trans from 'game' %}Rucksack{% endtrans %}{% endblock %}
-            {% endembed %}
+        <div class="row">
+            <div class="padded cell rw-6 rw-md-12">
+                <h5>{% trans from 'game' %}Meine Spezialaktionen{% endtrans %}</h5>
 
-            <button id="drop-all-button" {% if rucksack.items|length == 0 %}disabled{% endif %}>{% trans from 'game' %}Rucksack ausleeren{% endtrans %}</button>
+                <h5>{% trans from 'game' %}Meine Aktionen{% endtrans %}</h5>
+                {% embed "ajax/game/actions.html.twig" with {'list': actions} %}
+                {% endembed %}
+            </div>
 
-            {% embed "ajax/game/inventory.html.twig" with {'size': chest_size, 'fake_items': [], 'items': chest.items} %}
-                {% block class %}chest{% endblock %}
-                {% block title %}{% trans from 'game' %}Truhe{% endtrans %}{% endblock %}
-            {% endembed %}
+            <div class="padded cell rw-6 rw-md-12">
+                {% embed "ajax/game/inventory.html.twig" with {'size': rucksack_size, 'fake_items': [], 'items': rucksack.items} %}
+                    {% block class %}rucksack{% endblock %}
+                    {% block title %}{% trans from 'game' %}Rucksack{% endtrans %}{% endblock %}
+                {% endembed %}
+
+                <button id="drop-all-button" {% if rucksack.items|length == 0 %}disabled{% endif %}>{% trans from 'game' %}Rucksack ausleeren{% endtrans %}</button>
+
+                {% embed "ajax/game/inventory.html.twig" with {'size': chest_size, 'fake_items': [], 'items': chest.items} %}
+                    {% block class %}chest{% endblock %}
+                    {% block title %}{% trans from 'game' %}Truhe{% endtrans %}{% endblock %}
+                {% endembed %}
+            </div>
         </div>
     </div>
+
+    <div x-tab-group="home-main" x-tab-id="build" x-tab-target>
+
+        <h5>{% trans from 'game' %}Mein Haus ausbauen{% endtrans %}</h5>
+
+        <div class="help">
+            {% trans from 'game' %}
+                Du kannst die Widerstandsfähigkeit deines Hauses verbessern, indem du es ausbaust.
+            {% endtrans %}
+            <br /><br />
+            {% trans from 'game' %}
+                Mit der ersten Verbesserungstufe bekommst du die Möglichkeit private Bauarbeiten durchführen zu können.
+            {% endtrans %}
+        </div>
+    </div>
+
 {% endblock %}
 {% block js %}
     {{ parent() }}

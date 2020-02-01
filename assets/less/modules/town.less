@@ -24,11 +24,14 @@
 .town-addons {
   &>.cell {
 
-    &>div { height: 40px; padding: 0; margin: 0; background: @myhordes-cell-header-background-color; }
+    &>div {
+      &:after { clear: both; content: " "; display: block; }
+      padding: 0; margin: 0; background: @myhordes-cell-header-background-color;
+    }
 
     &>div>div:first-child {
       &>div:first-child { width: 40px; height: 40px; display: inline-block; float: left }
-      &>span:last-child { vertical-align: top; padding-left: 4px;}
+      &>span:last-child { display: block; padding: 4px; margin-left: 40px; text-align: center}
       font-size: small; padding: 0; cursor: pointer;
     }
     &:not(.selected):hover>div {

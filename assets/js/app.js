@@ -12,6 +12,7 @@ require('@fortawesome/fontawesome-free/js/all.js');
 require('../css/app.css');
 
 // JavaScript and TypeScript files
+import Client from '../ts/client'
 import Ajax from '../ts/ajax'
 import HTML from '../ts/html'
 
@@ -21,7 +22,8 @@ const url = base_node.length === 0 ? '' : base_node[0].getAttribute('href');
 
 let $ = {
     ajax: new Ajax(url),
-    html: new HTML()
+    html: new HTML(),
+    client: new Client(),
 };
 window.$ = $;
 
