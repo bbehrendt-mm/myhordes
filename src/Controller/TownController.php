@@ -4,8 +4,11 @@ namespace App\Controller;
 
 use App\Entity\Building;
 use App\Entity\DailyUpgradeVote;
+use App\Entity\ItemPrototype;
+use App\Entity\Recipe;
 use App\Entity\Zone;
 use App\Response\AjaxResponse;
+use App\Service\ActionHandler;
 use App\Service\ErrorHelper;
 use App\Service\GameFactory;
 use App\Service\InventoryHandler;
@@ -37,7 +40,10 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
         foreach ($town->getBuildings() as $b) if ($b->getComplete()) {
 
             if ($b->getPrototype()->getMaxLevel() > 0)
-                $addons['upgrade'] = ['Verbesserung des Tages', 'town_upgrades'];
+                $addons['upgrade']  = ['Verbesserung des Tages', 'town_upgrades'];
+
+            if ($b->getPrototype()->getName() === 'small_refine_#00')
+                $addons['workshop'] = ['Werkstatt', 'town_workshop'];
         }
 
         $data['addons'] = $addons;
@@ -110,6 +116,78 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
         return AjaxResponse::success();
     }
 
+    /**
+     * @Route("jx/town/workshop", name="town_workshop")
+     * @param GameFactory $gf
+     * @param InventoryHandler $iv
+     * @return Response
+     */
+    public function addon_workshop(GameFactory $gf, InventoryHandler $iv): Response
+    {
+        $town = $this->getActiveCitizen()->getTown();
+        $c_inv = $this->getActiveCitizen()->getInventory();
+        $t_inv = $town->getBank();
+
+        if (!$gf->getBuilding($town, 'small_refine_#00', true))
+            return $this->redirect($this->generateUrl('town_dashboard'));
+
+        $have_saw  = $iv->countSpecificItems( $c_inv, $this->entity_manager->getRepository( ItemPrototype::class )->findOneByName( 'saw_tool_#00' ) ) > 0;
+        $have_manu = $gf->getBuilding($town, 'small_factory_#00', true) !== null;
+
+        $recipes = $this->entity_manager->getRepository(Recipe::class)->findByType( Recipe::WorkshopType );
+        $source_db = []; $result_db = [];
+        foreach ($recipes as $recipe) {
+            /** @var Recipe $recipe */
+            $min_s = $min_r = PHP_INT_MAX;
+            foreach ($recipe->getProvoking() as $proto)
+                $min_s = min($min_s, $iv->countSpecificItems( $t_inv, $proto ));
+            $source_db[ $recipe->getId() ] = $min_s === PHP_INT_MAX ? 0 : $min_s;
+
+            foreach ($recipe->getResult()->getEntries() as $entry)
+                $min_r = min($min_r, $iv->countSpecificItems( $t_inv, $entry->getPrototype() ));
+            $result_db[ $recipe->getId() ] = $min_r === PHP_INT_MAX ? 0 : $min_r;
+        }
+
+        return $this->render( 'ajax/game/town/workshop.html.twig', $this->addDefaultTwigArgs('workshop', [
+            'recipes' => $recipes,
+            'saw' => $have_saw, 'manu' => $have_manu,
+            'need_ap' => 3 - ($have_saw ? 1 : 0) - ($have_manu ? 1 : 0),
+            'source' => $source_db, 'result' => $result_db,
+        ]) );
+    }
+
+    /**
+     * @Route("api/town/workshop/do", name="town_workshop_do_controller")
+     * @param JSONRequestParser $parser
+     * @param ActionHandler $ah
+     * @return Response
+     */
+    public function workshop_do_api(JSONRequestParser $parser, ActionHandler $ah): Response {
+        $citizen = $this->getActiveCitizen();
+        $town = $citizen->getTown();
+
+        if (!$parser->has_all(['id'], true))
+            return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
+        $id = (int)$parser->get('id');
+
+        /** @var Recipe $recipe */
+        $recipe = $this->entity_manager->getRepository(Recipe::class)->find( $id );
+        if ($recipe === null || $recipe->getType() !== Recipe::WorkshopType)
+            return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
+
+        if (($error = $ah->execute_recipe( $citizen, $recipe, $remove, $message )) !== ActionHandler::ErrorNone )
+            return AjaxResponse::error( $error );
+        else try {
+            $this->entity_manager->persist($town);
+            $this->entity_manager->persist($citizen);
+            foreach ($remove as $e) $this->entity_manager->remove( $e );
+            $this->entity_manager->flush();
+            if ($message) $this->addFlash( 'notice', $message );
+            return AjaxResponse::success();
+        } catch (Exception $e) {
+            return AjaxResponse::error( ErrorHelper::ErrorDatabaseException );
+        }
+    }
 
     /**
      * @Route("jx/town/house", name="town_house")

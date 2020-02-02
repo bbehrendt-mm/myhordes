@@ -6,25 +6,16 @@ namespace App\Service;
 
 use App\Entity\BuildingPrototype;
 use App\Entity\Citizen;
-use App\Entity\CitizenHome;
-use App\Entity\CitizenProfession;
-use App\Entity\Inventory;
 use App\Entity\Item;
 use App\Entity\ItemAction;
 use App\Entity\ItemPrototype;
+use App\Entity\Recipe;
 use App\Entity\RequireLocation;
 use App\Entity\Requirement;
 use App\Entity\Result;
 use App\Entity\RolePlayerText;
-use App\Entity\Town;
-use App\Entity\TownClass;
-use App\Entity\User;
-use App\Entity\WellCounter;
-use App\Response\AjaxResponse;
 use App\Structures\ItemRequest;
-use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Query\Expr\Join;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Asset\Packages;
 
@@ -161,6 +152,34 @@ class ActionHandler
 
     }
 
+    /**
+     * @param ItemPrototype|BuildingPrototype|string $o
+     * @param $c
+     * @return string
+     */
+    private function wrap($o, $c=1) :string {
+        $s = ''; $i = null;
+        if (is_a($o, ItemPrototype::class)) {
+            $s = $this->translator->trans($o->getLabel(), [], 'items');
+            $i = 'build/images/item/item_' . $o->getIcon() . '.gif';
+        } else if (is_a($o, BuildingPrototype::class)) {
+            $s =  $this->translator->trans($o->getLabel(), [], 'buildings');
+            $i = 'build/images/building/' . $o->getIcon() . '.gif';
+        }
+        else if (is_string($o)) $s = $o;
+        else if (is_null($o)) $s = 'NULL';
+        else $s = '_UNKNOWN_';
+
+        if (!empty($i)) $i = $this->assets->getUrl( $i );
+        return '<span>' . ($c > 1 ? "$c x " : '') . ($i ? "<img alt='' src='$i' />" : '') . $s .  '</span>';
+    }
+
+    private function wrap_concat(array $c) {
+        return implode(', ', array_map(function(array $e): string {
+            return $this->wrap( $e[1], $e[0] );
+        }, $this->reformat_prototype_list($c)));
+    }
+
     const ErrorNone = 0;
     const ErrorActionUnregistered = ErrorHelper::BaseActionErrors + 1;
     const ErrorActionForbidden    = ErrorHelper::BaseActionErrors + 2;
@@ -295,43 +314,15 @@ class ActionHandler
 
         if ($action->getMessage()) {
 
-            /**
-             * @param ItemPrototype|BuildingPrototype|string $o
-             * @param $c
-             * @return string
-             */
-            $wrap = function($o, $c=1) :string {
-                $s = ''; $i = null;
-                if (is_a($o, ItemPrototype::class)) {
-                    $s = $this->translator->trans($o->getLabel(), [], 'items');
-                    $i = 'build/images/item/item_' . $o->getIcon() . '.gif';
-                } else if (is_a($o, BuildingPrototype::class)) {
-                    $s =  $this->translator->trans($o->getLabel(), [], 'buildings');
-                    $i = 'build/images/building/' . $o->getIcon() . '.gif';
-                }
-                else if (is_string($o)) $s = $o;
-                else if (is_null($o)) $s = 'NULL';
-                else $s = '_UNKNOWN_';
-
-                if (!empty($i)) $i = $this->assets->getUrl( $i );
-                return '<span>' . ($c > 1 ? "$c x " : '') . ($i ? "<img alt='' src='$i' />" : '') . $s .  '</span>';
-            };
-
-            $concat = function(array $c) use (&$wrap) {
-                return implode(', ', array_map(function(array $e) use (&$wrap): string {
-                    return $wrap( $e[1], $e[0] );
-                }, $this->reformat_prototype_list($c)));
-            };
-
             $message = $this->translator->trans( $action->getMessage(), [
                 '{ap}'        => $execute_info_cache['ap'],
-                '{item}'      => $wrap($execute_info_cache['item']),
-                '{item_from}' => $execute_info_cache['item_morph'][0] ? ($wrap($execute_info_cache['item_morph'][0])) : "-",
-                '{item_to}'   => $execute_info_cache['item_morph'][1] ? ($wrap($execute_info_cache['item_morph'][1])) : "-",
-                '{items_consume}' => $concat($execute_info_cache['items_consume']),
-                '{items_spawn}'   => $concat($execute_info_cache['items_spawn']),
-                '{bp_spawn}'      => $concat($execute_info_cache['bp_spawn']),
-                '{rp_text}'       => $wrap( $execute_info_cache['rp_text'] )
+                '{item}'      => $this->wrap($execute_info_cache['item']),
+                '{item_from}' => $execute_info_cache['item_morph'][0] ? ($this->wrap($execute_info_cache['item_morph'][0])) : "-",
+                '{item_to}'   => $execute_info_cache['item_morph'][1] ? ($this->wrap($execute_info_cache['item_morph'][1])) : "-",
+                '{items_consume}' => $this->wrap_concat($execute_info_cache['items_consume']),
+                '{items_spawn}'   => $this->wrap_concat($execute_info_cache['items_spawn']),
+                '{bp_spawn}'      => $this->wrap_concat($execute_info_cache['bp_spawn']),
+                '{rp_text}'       => $this->wrap( $execute_info_cache['rp_text'] )
             ], 'items' );
 
             do {
@@ -342,6 +333,50 @@ class ActionHandler
             } while ($c > 0);
         }
 
+
+        return self::ErrorNone;
+    }
+
+    public function execute_recipe( Citizen &$citizen, Recipe &$recipe, ?array &$remove, ?string &$message ): int {
+        $town = $citizen->getTown();
+        $c_inv = $citizen->getInventory();
+        $t_inv = $citizen->getTown()->getBank();
+
+        $remove = [];
+
+        $have_saw  = $this->inventory_handler->countSpecificItems( $c_inv, $this->entity_manager->getRepository( ItemPrototype::class )->findOneByName( 'saw_tool_#00' ) ) > 0;
+        $have_manu = $this->game_factory->getBuilding($town, 'small_factory_#00', true) !== null;
+
+        $ap = 3 - ($have_saw ? 1 : 0) - ($have_manu ? 1 : 0);
+
+        if ( $citizen->getAp() < $ap || $this->citizen_handler->isTired( $citizen ) )
+            return ErrorHelper::ErrorNoAP;
+
+        $source_inv = $recipe->getType() === Recipe::WorkshopType ? $t_inv : $c_inv;
+        $target_inv = $recipe->getType() === Recipe::WorkshopType ? [ $t_inv ] : [ $c_inv, $citizen->getZone() ? $citizen->getZone()->getFloor() : $citizen->getHome()->getChest() ];
+
+        $s = [];
+        foreach ($recipe->getSource()->getEntries() as $entry)
+            $s[] = (new ItemRequest($entry->getPrototype()->getName(), $entry->getChance() ));
+        $items = $this->inventory_handler->fetchSpecificItems( $source_inv, $s );
+        if (empty($items)) return ErrorHelper::ErrorItemsMissing;
+
+        $list = [];
+        foreach ($items as $item) {
+            $source_inv->removeItem( $item );
+            $list[] = $item->getPrototype();
+            $remove[] = $item;
+        }
+
+        $this->citizen_handler->setAP( $citizen, true, -$ap);
+
+        $new_item = $this->random_generator->pickItemPrototypeFromGroup( $recipe->getResult() );
+        $this->inventory_handler->placeItem( $citizen, $this->item_factory->createItem( $new_item ) , $target_inv );
+
+        $message = $this->translator->trans( 'Du hast %item_list% in der Werkstatt zu %item% umgewandelt.', [
+            '%item_list%' => $this->wrap_concat( $list ),
+            '%item%' => $this->wrap( $new_item ),
+        ], 'game' );
 
         return self::ErrorNone;
     }

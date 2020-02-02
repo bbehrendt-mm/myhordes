@@ -1,0 +1,96 @@
+{% extends "ajax/game/town/town.html.twig" %}
+{% block content %}
+    <div class="help">
+        {% trans from 'game' %}
+            In der Werkstatt können Materialien zu brauchbaren Hilfsmitteln verarbeitet werden, die für bestimmte Gebäude und Konstruktionen in der Stadt notwendig sind. Alle zu bearbeitenden Gegenstände müssen direkt in der Bank deponiert werden.
+        {% endtrans %}
+    </div>
+
+    <div class="note">
+        {% trans with {'%ap%': '<div class="ap">' ~ need_ap ~ '</div>'} from 'game' %}
+            Jede Verarbeitung kostet %ap% (manche Gegenstände und Konstruktionen können diese Verarbeitungskosten senken).
+        {% endtrans %}
+        {% if saw or manu %}
+            <p><b>
+                {% if saw  %}{% trans from 'game' %}Du trägst eine Säge bei dir.{% endtrans %}{% endif %}
+                {% if manu %}{% trans from 'game' %}Die Stadt verfügt über eine Manufaktur.{% endtrans %}{% endif %}
+            </b></p>
+            <p><b></b></p>
+        {% endif %}
+    </div>
+
+    <div class="row-table">
+        <div class="row header">
+            <div class="padded cell rw-2">
+                <span class="hide-md hide-sm">{% trans from 'game' %}Vorrat{% endtrans %}</span>
+            </div>
+            <div class="padded cell rw-6 center">
+                {% trans from 'game' %}Umwandlung{% endtrans %}
+            </div>
+            <div class="padded cell rw-2">
+                <span class="hide-md hide-sm">{% trans from 'game' %}Anzahl{% endtrans %}</span>
+            </div>
+            <div class="padded cell rw-2 center">
+                <div class="ap">{{ need_ap }}</div>
+            </div>
+        </div>
+        {% for recipe in recipes %}
+            {# @var recipe \App\Entity\Recipe #}
+            {% if source[recipe.id] > 0 %}
+                <div class="row">
+                    <div class="padded cell rw-1">
+                        <span class="small">{{ source[recipe.id] }}</span>
+                    </div>
+                    <div class="padded cell rw-1 right">
+                        {% for entry in recipe.source.entries %}
+                            {# @var entry \App\Entity\ItemGroupEntry #}
+                            <span>
+                                    <img src="{{ asset('build/images/item/item_' ~ entry.prototype.icon ~ '.gif') }}" alt="{{ entry.prototype.label|trans({},'items') }}" />
+                                    {% if entry.chance > 1 %}
+                                        x {{ entry.chance }}
+                                    {% endif %}
+                                </span>
+                        {% endfor %}
+                    </div>
+                    <div class="padded cell rw-1 center">
+                        <img src="{{ asset('build/images/small_move.gif') }}" alt="->" />
+                    </div>
+                    <div class="padded cell rw-6 left">
+                        {% if recipe.result.entries|length > 1 %}
+                            <span class="small hide-desktop hide-lg">?</span>
+                            <span class="small hide-md hide-sm">{% trans from 'game' %}Zufälliger Gegenstand{% endtrans %}</span>
+                        {% else %}
+                            <img class="hide-desktop hide-lg" src="{{ asset('build/images/item/item_' ~ recipe.result.entries[0].prototype.icon ~ '.gif') }}" alt="{{ recipe.result.entries[0].prototype.label|trans({},'items') }}" />
+                            <span class="icon hide-md hide-sm">
+                                    <img src="{{ asset('build/images/item/item_' ~ recipe.result.entries[0].prototype.icon ~ '.gif') }}" alt="{{ recipe.result.entries[0].prototype.label|trans({},'items') }}" />
+                                    {{ recipe.result.entries[0].prototype.label|trans({},'items') }}
+                                </span>
+                        {% endif %}
+                    </div>
+                    <div class="padded cell rw-1">
+                        {% if recipe.result.entries|length == 1 %}
+                            <span class="small">{{ result[recipe.id] }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="padded cell rw-2">
+                        <button x-recipe-id="{{ recipe.id }}"><img src="{{ asset('build/images/small_refine.gif') }}" alt="" /><span class="hide-lg hide-md hide-sm">{% trans from 'game' %}Herst.{% endtrans %}</span></button>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endblock %}
+{% block js %}
+    {{ parent() }}
+    <script>
+        let buttons = document.querySelectorAll('[x-recipe-id]');
+        for (let i = 0; i < buttons.length; i++)
+            buttons[i].addEventListener('click', function() {
+                const id = this.getAttribute('x-recipe-id');
+                $.ajax.easySend( '{{ path('town_workshop_do_controller') }}', {id: id},
+                    function () {
+                        $.ajax.load(null, '{{ path('town_workshop') }}', true);
+                    } );
+            });
+    </script>
+{% endblock %}

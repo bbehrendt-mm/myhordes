@@ -2,27 +2,11 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\AffectAP;
-use App\Entity\AffectItemConsume;
-use App\Entity\AffectItemSpawn;
-use App\Entity\AffectOriginalItem;
-use App\Entity\AffectResultGroup;
-use App\Entity\AffectResultGroupEntry;
-use App\Entity\AffectStatus;
-use App\Entity\AffectZombies;
+use App\Entity\Recipe;
 use App\Entity\BuildingPrototype;
-use App\Entity\CitizenStatus;
-use App\Entity\ItemAction;
 use App\Entity\ItemGroup;
 use App\Entity\ItemGroupEntry;
-use App\Entity\ItemProperty;
 use App\Entity\ItemPrototype;
-use App\Entity\RequireItem;
-use App\Entity\RequireLocation;
-use App\Entity\Requirement;
-use App\Entity\RequireStatus;
-use App\Entity\RequireZombiePresence;
-use App\Entity\Result;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -272,6 +256,26 @@ class RecipeFixtures extends Fixture implements DependentFixtureInterface
         ]],
     ];
 
+    protected static $recipe_data = [
+        'ws001' => ['type' => Recipe::WorkshopType, 'in' => 'repair_kit_part_#00', 'out' => 'repair_kit_#00'],
+        'ws002' => ['type' => Recipe::WorkshopType, 'in' => 'can_#00',             'out' => 'can_open_#00'],
+        'ws003' => ['type' => Recipe::WorkshopType, 'in' => 'plate_raw_#00',       'out' => 'plate_#00'],
+        'ws004' => ['type' => Recipe::WorkshopType, 'in' => 'wood_log_#00',        'out' => 'wood2_#00'],
+        'ws005' => ['type' => Recipe::WorkshopType, 'in' => 'wood_bad_#00',        'out' => 'wood2_#00'],
+        'ws006' => ['type' => Recipe::WorkshopType, 'in' => 'wood2_#00',           'out' => 'wood_beam_#00'],
+        'ws007' => ['type' => Recipe::WorkshopType, 'in' => 'wood_beam_#00',       'out' => 'wood2_#00'],
+        'ws008' => ['type' => Recipe::WorkshopType, 'in' => 'metal_bad_#00',       'out' => 'metal_#00'],
+        'ws009' => ['type' => Recipe::WorkshopType, 'in' => 'metal_#00',           'out' => 'metal_beam_#00'],
+        'ws010' => ['type' => Recipe::WorkshopType, 'in' => 'metal_beam_#00',      'out' => 'metal_#00'],
+        'ws011' => ['type' => Recipe::WorkshopType, 'in' => 'electro_box_#00',     'out' => [ 'pile_#00', 'pilegun_empty_#00', 'electro_#00', 'meca_parts_#00', 'tagger_#00', 'deto_#00' ] ],
+        'ws012' => ['type' => Recipe::WorkshopType, 'in' => 'mecanism_#00',        'out' => [ 'metal_#00', 'tube_#00', 'metal_bad_#00', 'meca_parts_#00' ] ],
+        'ws013' => ['type' => Recipe::WorkshopType, 'in' => 'chest_#00',           'out' => [ 'drug_#00', 'bandage_#00', 'pile_#00', 'pilegun_empty_#00', 'vodka_de_#00', 'pharma_#00', 'explo_#00', 'lights_#00', 'drug_hero_#00', 'rhum_#00' ] ],
+        'ws014' => ['type' => Recipe::WorkshopType, 'in' => 'chest_xl_#00',        'out' => [ 'watergun_opt_part_#00', 'pilegun_upkit_#00', 'pocket_belt_#00', 'cutcut_#00', 'chainsaw_part_#00', 'mixergun_part_#00', 'big_pgun_part_#00', 'lawn_part_#00' ] ],
+        'ws015' => ['type' => Recipe::WorkshopType, 'in' => 'chest_tools_#00',     'out' => [ 'pile_#00', 'meca_parts_#00', 'rustine_#00', 'tube_#00', 'pharma_#00', 'explo_#00', 'lights_#00' ] ],
+        'ws016' => ['type' => Recipe::WorkshopType, 'in' => 'chest_food_#00',      'out' => [ 'food_bag_#00', 'can_#00', 'meat_#00', 'hmeat_#00', 'vegetable_#00' ] ],
+        'ws017' => ['type' => Recipe::WorkshopType, 'in' => 'deco_box_#00',        'out' => [ 'door_#00', 'chair_basic_#00', 'trestle_#00', 'table_#00', 'chair_#00' ] ],
+    ];
+
     private $entityManager;
 
     public function __construct(EntityManagerInterface $em)
@@ -283,7 +287,6 @@ class RecipeFixtures extends Fixture implements DependentFixtureInterface
      * @param ObjectManager $manager
      * @param array $data
      * @param array $cache
-     * @param BuildingPrototype|null $parent
      * @return BuildingPrototype
      * @throws Exception
      */
@@ -355,6 +358,73 @@ class RecipeFixtures extends Fixture implements DependentFixtureInterface
         $progress->finish();
     }
 
+    /**
+     * @param ObjectManager $manager
+     * @param ConsoleOutputInterface $out
+     * @throws Exception
+     */
+    public function insert_recipes(ObjectManager $manager, ConsoleOutputInterface $out) {
+        // Set up console
+        $progress = new ProgressBar( $out->section() );
+        $progress->start( count(static::$building_data) );
+
+        $cache = [];
+        foreach (static::$recipe_data as $name => $recipe_data) {
+            $recipe = $manager->getRepository(Recipe::class)->findOneByName( $name );
+            if ($recipe === null) $recipe = (new Recipe())->setName( $name );
+
+            if ($recipe->getSource()) { $manager->remove( $recipe->getSource() ); $recipe->setSource( null ); }
+            if ($recipe->getResult()) { $manager->remove( $recipe->getResult() ); $recipe->setResult( null ); }
+            $recipe->getProvoking()->clear();
+
+            $unpack = function( $data ): array {
+                if (!is_array($data)) return [ $data => 1 ];
+                $cache = [];
+                foreach ( $data as $entry ) {
+                    if (is_array($entry))
+                        list($id,$count) = $entry;
+                    else {
+                        $id = $entry;
+                        $count = 1;
+                    }
+
+                    if (!isset( $cache[$id] )) $cache[$id] = 0;
+                    $cache[$id] += $count;
+                }
+                return $cache;
+            };
+
+            $in =  $unpack( $recipe_data['in']  );
+            $out = $unpack( $recipe_data['out'] );
+
+            $provoking = null;
+            if (isset($recipe_data['provoking'])) $provoking = is_array( $recipe_data['provoking'] ) ? $recipe_data['provoking'] : [$recipe_data['provoking']];
+            elseif ( count($in) === 1 ) $provoking = [ array_keys($in)[0] ];
+
+            if ($provoking === null || empty($out) || empty($in))
+                throw new Exception("Entry '$name' is incomplete!");
+
+            $in_group = (new ItemGroup())->setName("rc_{$name}_in");
+            foreach ( $in as $id => $count ) $in_group->addEntry( (new ItemGroupEntry())->setChance( $count )->setPrototype( $manager->getRepository(ItemPrototype::class)->findOneByName( $id ) ) );
+            $recipe->setSource($in_group);
+
+            $out_group = (new ItemGroup())->setName("rc_{$name}_out");
+            foreach ( $out as $id => $count ) $out_group->addEntry( (new ItemGroupEntry())->setChance( $count )->setPrototype( $manager->getRepository(ItemPrototype::class)->findOneByName( $id ) ) );
+            $recipe->setResult($out_group);
+
+            foreach ($provoking as $item)
+                $recipe->addProvoking( $manager->getRepository(ItemPrototype::class)->findOneByName( $item ) );
+
+            $recipe->setType( $recipe_data['type'] );
+            $manager->persist($recipe);
+
+            $progress->advance();
+        }
+
+        $manager->flush();
+        $progress->finish();
+    }
+
     public function load(ObjectManager $manager) {
 
         $output = new ConsoleOutput();
@@ -363,9 +433,12 @@ class RecipeFixtures extends Fixture implements DependentFixtureInterface
 
         try {
             $this->insert_buildings( $manager, $output );
+            $this->insert_recipes( $manager, $output );
         } catch (Exception $e) {
             $output->writeln("<error>{$e->getMessage()}</error>");
         }
+
+
 
         $output->writeln("");
     }

@@ -133,7 +133,7 @@ class ItemFixtures extends Fixture
         ["label"=>"Zyanid","icon"=>"cyanure","category"=>"drug","deco"=>0,"heavy"=>false],                                                  //
         ["label"=>"Alte Tür","icon"=>"door","category"=>"armor","deco"=>0,"heavy"=>true],                                                   // -- ---
         ["label"=>"Verdächtiges Gemüse","icon"=>"vegetable","category"=>"food","deco"=>0,"heavy"=>false],                                   // In Out
-        ["label"=>"Reparturset (kaputt)","icon"=>"repair_kit_part","category"=>"imp","deco"=>0,"heavy"=>false],                             // -- ---
+        ["label"=>"Reparaturset (kaputt)","icon"=>"repair_kit_part","category"=>"imp","deco"=>0,"heavy"=>false],                            // -- ---
         ["label"=>"Reparaturset","icon"=>"repair_kit","category"=>"imp","deco"=>0,"heavy"=>false],                                          //
         ["label"=>"Wasserpistole (leer)","icon"=>"watergun_empty","category"=>"aud_n","deco"=>0,"heavy"=>false],                            // In Out
         ["label"=>"Aqua-Splash (3 Ladungen)","icon"=>"watergun_opt_3","category"=>"weapon","deco"=>0,"heavy"=>false],                       // -- Out

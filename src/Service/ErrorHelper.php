@@ -24,4 +24,5 @@ class ErrorHelper
 
     const ErrorNoAP               = 51;
     const ErrorActionNotAvailable = 52;
+    const ErrorItemsMissing       = 53;
 }
