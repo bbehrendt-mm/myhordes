@@ -33,6 +33,16 @@ class CitizenStatus
      */
     private $label;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $hidden = false;
+
+    /**
+     * @ORM\Column(type="string", length=32)
+     */
+    private $icon;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -58,6 +68,30 @@ class CitizenStatus
     public function setLabel(string $label): self
     {
         $this->label = $label;
+
+        return $this;
+    }
+
+    public function getHidden(): ?bool
+    {
+        return $this->hidden;
+    }
+
+    public function setHidden(bool $hidden): self
+    {
+        $this->hidden = $hidden;
+
+        return $this;
+    }
+
+    public function getIcon(): ?string
+    {
+        return $this->icon;
+    }
+
+    public function setIcon(string $icon): self
+    {
+        $this->icon = $icon;
 
         return $this;
     }

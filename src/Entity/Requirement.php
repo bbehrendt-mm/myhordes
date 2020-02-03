@@ -62,6 +62,11 @@ class Requirement
      */
     private $location;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\RequireAP")
+     */
+    private $ap;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -147,6 +152,18 @@ class Requirement
     public function setLocation(?RequireLocation $location): self
     {
         $this->location = $location;
+
+        return $this;
+    }
+
+    public function getAp(): ?RequireAP
+    {
+        return $this->ap;
+    }
+
+    public function setAp(?RequireAP $ap): self
+    {
+        $this->ap = $ap;
 
         return $this;
     }

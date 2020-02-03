@@ -66,7 +66,7 @@ class ItemFixtures extends Fixture
         ["label"=>"Dosenöffner","icon"=>"can_opener","category"=>"weapon","deco"=>0,"heavy"=>false],                                        // -- Out
         ["label"=>"Extra Tasche","icon"=>"bag","category"=>"exp_b","deco"=>0,"heavy"=>false],                                               // -- ---
         ["label"=>"Streichholzschachtel","icon"=>"lights","category"=>"misc","deco"=>0,"heavy"=>false],                                     // -- ---
-        ["label"=>"Beruhigungsspritze","icon"=>"xanax","category"=>"drug_d","deco"=>0,"heavy"=>false],                                      //
+        ["label"=>"Beruhigungsspritze","icon"=>"xanax","category"=>"drug_d","deco"=>0,"heavy"=>false],                                      // In Out
         ["label"=>"Schaukelstuhl","icon"=>"chair","category"=>"furniture","deco"=>5,"heavy"=>true],                                         // -- ---
         ["label"=>"Staubiges Buch","icon"=>"rp_book","category"=>"imp","deco"=>0,"heavy"=>false],                                           // In Out
         ["label"=>"Matratze","icon"=>"bed","category"=>"armor","deco"=>3,"heavy"=>true],                                                    // -- ---
@@ -75,7 +75,7 @@ class ItemFixtures extends Fixture
         ["label"=>"Mini Hi-Fi Anlage (defekt)","icon"=>"music_part","category"=>"furniture","deco"=>1,"heavy"=>true],                       // -- ---
         ["label"=>"Kette + Vorhängeschloss","icon"=>"lock","category"=>"furniture","deco"=>0,"heavy"=>false],                               // -- ---
         ["label"=>"Fußabstreifer","icon"=>"door_carpet","category"=>"furniture","deco"=>5,"heavy"=>false],                                  // -- ---
-        ["label"=>"Ein paar Würfel","icon"=>"dice","category"=>"imp","deco"=>0,"heavy"=>false],                                             //
+        ["label"=>"Ein paar Würfel","icon"=>"dice","category"=>"imp","deco"=>0,"heavy"=>false],                                             // In Out
         ["label"=>"Motor","icon"=>"engine","category"=>"imp","deco"=>0,"heavy"=>true],                                                      // -- ---
         ["label"=>"Riemen","icon"=>"courroie","category"=>"rsc","deco"=>0,"heavy"=>false],                                                  // -- ---
         ["label"=>"Handvoll Schrauben und Muttern","icon"=>"meca_parts","category"=>"rsc_b","deco"=>0,"heavy"=>false],                      // -- ---
@@ -173,7 +173,7 @@ class ItemFixtures extends Fixture
         ["label"=>"Chinesische Nudeln","icon"=>"food_noodles","category"=>"food","deco"=>0,"heavy"=>false],                                 // In Out
         ["label"=>"Starke Gewürze","icon"=>"spices","category"=>"misc","deco"=>0,"heavy"=>false],                                           // -- ---
         ["label"=>"Gewürzte chinesische Nudeln","icon"=>"food_noodles_hot","category"=>"food_7","deco"=>0,"heavy"=>false],                  // In Out
-        ["label"=>"Unvollständiges Kartenspiel","icon"=>"cards","category"=>"imp","deco"=>0,"heavy"=>false],                                //
+        ["label"=>"Unvollständiges Kartenspiel","icon"=>"cards","category"=>"imp","deco"=>0,"heavy"=>false],                                // In Out
         ["label"=>"Gesellschaftsspiel","icon"=>"game_box","category"=>"imp","deco"=>0,"heavy"=>false],                                      // In Out
         ["label"=>"Aqua-Splash (zerlegt)","icon"=>"watergun_opt_part","category"=>"aud_n","deco"=>0,"heavy"=>false],                        // -- ---
         ["label"=>"Vibrator (entladen)","icon"=>"vibr_empty","category"=>"imp","deco"=>0,"heavy"=>false],                                   // In Out

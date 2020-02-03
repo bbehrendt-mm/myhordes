@@ -6,6 +6,7 @@ namespace App\Service;
 
 use App\Entity\BuildingPrototype;
 use App\Entity\Citizen;
+use App\Entity\CitizenStatus;
 use App\Entity\Item;
 use App\Entity\ItemAction;
 use App\Entity\ItemPrototype;
@@ -72,6 +73,11 @@ class ActionHandler
             if ($status = $meta_requirement->getStatusRequirement()) {
                 $status_is_active = $citizen->getStatus()->contains( $status->getStatus() );
                 if ($status_is_active !== $status->getEnabled()) $current_state = min( $current_state, $this_state );
+            }
+
+            if ($ap = $meta_requirement->getAp()) {
+                $max = $ap->getRelativeMax() ? ($this->citizen_handler->getMaxAP( $citizen ) + $ap->getMax()) : $ap->getMax();
+                if ($citizen->getAp() < $ap->getMin() || $citizen->getAp() > $max) $current_state = min( $current_state, $this_state );
             }
 
             if ($item_condition = $meta_requirement->getItem()) {
@@ -207,6 +213,7 @@ class ActionHandler
             'items_spawn' => [],
             'bp_spawn' => [],
             'rp_text' => '',
+            'casino' => '',
         ];
 
         $execute_result = function(Result &$result) use (&$citizen, &$item, &$action, &$message, &$remove, &$execute_result, &$execute_info_cache, &$tags) {
@@ -225,7 +232,7 @@ class ActionHandler
 
             if ($ap = $result->getAp()) {
                 $old_ap = $citizen->getAp();
-                $this->citizen_handler->setAP( $citizen, !$ap->getMax(), $ap->getMax() ? ( $this->citizen_handler->getMaxAP($citizen) + $ap->getAp() ) : $ap->getAp() );
+                $this->citizen_handler->setAP( $citizen, !$ap->getMax(), $ap->getMax() ? ( $this->citizen_handler->getMaxAP($citizen) + $ap->getAp() ) : $ap->getAp(), $ap->getBonus() );
                 $execute_info_cache['ap'] += ( $citizen->getAp() - $old_ap );
             }
 
@@ -304,6 +311,80 @@ class ActionHandler
                 }
             }
 
+            if ($result->getCasino())
+            {
+                $ap     = false;
+                $terror = false;
+                switch ($result->getCasino()) {
+                    case 1:
+                        $dice = [ mt_rand(1, 6), mt_rand(1, 6), mt_rand(1, 6) ];
+                        $cmg = $this->translator->trans('Du hast folgendes gewürfelt: {dc1}, {dc2} und {dc3}.', [
+                            '{dc1}' => "<b>{$dice[0]}</b>",
+                            '{dc2}' => "<b>{$dice[1]}</b>",
+                            '{dc3}' => "<b>{$dice[2]}</b>",
+                        ], 'items');
+                        sort($dice);
+
+                        if ( $dice[0] === $dice[1] && $dice[0] === $dice[2] ) {
+                            $ap = true;
+                            $cmg .= ' ' . $this->translator->trans('Wow, du hast einen Trippel geworfen. Das hat so viel Spaß gemacht, dass du 1AP gewinnst!', [], 'items');
+                        } else if ( $dice[0] === ($dice[1]-1) && $dice[0] === ($dice[2]-2) ) {
+                            $ap = true;
+                            $cmg .= ' ' . $this->translator->trans('Wow, du hast eine Straße geworfen. Das hat so viel Spaß gemacht, dass du 1AP gewinnst!', [], 'items');
+                        } else if ( $dice[0] === 1 && $dice[0] === 2 && $dice[2] === 4 ) {
+                            $ap = true;
+                            $cmg .= ' ' . $this->translator->trans('Wow, du hast beim ersten Versuch eine 4-2-1 geworfen. Das hat so viel Spaß gemacht, dass du 1AP gewinnst!', [], 'items');
+                        } else if ( $dice[0] === $dice[1] || $dice[1] === $dice[2] )
+                            $cmg .= ' ' . $this->translator->trans('Nicht schlecht, du hast einen Pasch geworfen.', [], 'items');
+                        else $cmg .= ' ' . $this->translator->trans('Was für ein Spaß!', [], 'items');
+
+                        $execute_info_cache['casino'] = $cmg;
+                        break;
+                    case 2:
+                        $card = mt_rand(0, 53);
+                        $color = floor($card / 13);
+                        $value = $card - ( $color * 13 );
+
+                        if ( $color > 3 ) {
+                            if ($value === 0) {
+                                $terror = true;
+                                $cmg = $this->translator->trans('Du ziehst eine Karte... und stellst fest, dass dein Name darauf mit Blut geschrieben steht! Du erstarrst vor Schreck!', [], 'items');
+                            } else {
+                                $ap = true;
+                                $cmg = $this->translator->trans('Du ziehst eine Karte... und stellst fest, dass du die Karte mit den Spielregeln gezogen hast! Das erheitert dich so sehr, dass du 1AP gewinnst.', [], 'items');
+                            }
+                        } else {
+
+                            $s_color = $this->translator->trans((['Kreuz','Pik','Herz','Karo'])[$color], [], 'items');
+                            $s_value = $value < 9 ? ('' . ($value+2)) : $this->translator->trans((['Bube','Dame','König','Ass'])[$value-9], [], 'items');
+
+                            $cmg = $this->translator->trans('Du ziehst eine Karte... es ist die {color} {value}.', [
+                                '{color}' => "<b>{$s_color}</b>",
+                                '{value}' => "<b>{$s_value}</b>",
+                            ], 'items');
+
+                            if ( $value === 12 ) {
+                                $ap = true;
+                                $cmg .= ' ' . $this->translator->trans('Das muss ein Zeichen sein! In dieser Welt ist kein Platz für Moral... du erhälst 1AP.', [], 'items');
+                            } else if ($value === 10 && $color === 2) {
+                                $ap = true;
+                                $cmg .= ' ' . $this->translator->trans('Das Symbol der Liebe... dein Herz schmilzt dahin und du erhälst 1AP.', [], 'items');
+                            }
+                        }
+
+                        $execute_info_cache['casino'] = $cmg;
+                        break;
+                }
+
+                if ($ap) {
+                    $this->citizen_handler->setAP( $citizen, true, 1, 1 );
+                    $execute_info_cache['ap'] += 1;
+                }
+
+                if ($terror)
+                    $citizen->getStatus()->add( $this->entity_manager->getRepository( CitizenStatus::class )->findOneByName('terror') );
+            }
+
             if ($result_group = $result->getResultGroup()) {
                 $r = $this->random_generator->pickResultsFromGroup( $result_group );
                 foreach ($r as &$sub_result) $execute_result( $sub_result );
@@ -322,7 +403,8 @@ class ActionHandler
                 '{items_consume}' => $this->wrap_concat($execute_info_cache['items_consume']),
                 '{items_spawn}'   => $this->wrap_concat($execute_info_cache['items_spawn']),
                 '{bp_spawn}'      => $this->wrap_concat($execute_info_cache['bp_spawn']),
-                '{rp_text}'       => $this->wrap( $execute_info_cache['rp_text'] )
+                '{rp_text}'       => $this->wrap( $execute_info_cache['rp_text'] ),
+                '{casino}'        => $execute_info_cache['casino'],
             ], 'items' );
 
             do {

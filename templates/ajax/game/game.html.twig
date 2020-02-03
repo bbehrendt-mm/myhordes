@@ -5,7 +5,10 @@
 {% block menu_bar %}
     <ul class="status">
         {% for stat in status %}
-            <li class="status"><img src="{{ asset('build/images/status/status_' ~ stat.name ~ '.gif') }}" alt="{{ stat.label|trans({},'status') }}"></li>
+            {# @var stat \App\Entity\CitizenStatus #}
+            {% if not stat.hidden %}
+                <li class="status"><img src="{{ asset('build/images/status/status_' ~ stat.name ~ '.gif') }}" alt="{{ stat.label|trans({},'status') }}"></li>
+            {% endif %}
         {% endfor %}
     </ul>
     <ul class="rucksack">

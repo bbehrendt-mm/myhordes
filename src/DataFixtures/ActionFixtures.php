@@ -18,6 +18,7 @@ use App\Entity\ItemGroup;
 use App\Entity\ItemGroupEntry;
 use App\Entity\ItemProperty;
 use App\Entity\ItemPrototype;
+use App\Entity\RequireAP;
 use App\Entity\RequireItem;
 use App\Entity\RequireLocation;
 use App\Entity\Requirement;
@@ -40,6 +41,10 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'drink_ap_2'  => [ 'type' => Requirement::HideOnFail,  'collection' => [ 'status' => 'not_dehydrated' ]],
             'drink_no_ap' => [ 'type' => Requirement::HideOnFail,  'collection' => [ 'status' => 'dehydrated' ]],
 
+            'no_bonus_ap'  => [ 'type' => Requirement::CrossOnFail, 'collection' => [ 'ap' => 'no_bonus_ap' ]],
+            'not_yet_dice' => [ 'type' => Requirement::CrossOnFail, 'collection' => [ 'status' => 'has_not_used_dice' ]],
+            'not_yet_card' => [ 'type' => Requirement::CrossOnFail, 'collection' => [ 'status' => 'has_not_used_card' ]],
+
             'eat_ap'      => [ 'type' => Requirement::CrossOnFail, 'collection' => [ 'status' => 'has_not_eaten' ]],
 
             'drug_1'  => [ 'type' => Requirement::HideOnFail, 'collection' => [ 'status' => 'not_drugged' ]],
@@ -59,6 +64,11 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
         ],
 
         'requirements' => [
+
+            'ap' => [
+                'no_bonus_ap' => [ 'min' => 0, 'max' => 0, 'relative' => true ],
+            ],
+
             'status' => [
                 'has_not_drunken' => [ 'enabled' => false, 'status' => 'hasdrunk' ],
                 'has_not_eaten'   => [ 'enabled' => false, 'status' => 'haseaten' ],
@@ -71,6 +81,8 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
 
                 'not_tired'    => [ 'enabled' => false, 'status' => 'tired' ],
 
+                'has_not_used_dice' => [ 'enabled' => false, 'status' => 'tg_dice' ],
+                'has_not_used_card' => [ 'enabled' => false, 'status' => 'tg_cards' ],
             ],
             'item' => [
                 'have_can_opener' => [ 'item' => null, 'prop' => 'can_opener' ],
@@ -106,6 +118,7 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'drug_any_2'   => [ 'status' => 'add_is_drugged' ],
             'drug_addict'  => [ 'status' => 'add_addicted' ],
             'terrorize'    => [ 'status' => 'add_terror' ],
+            'unterrorize'  => [ 'status' => 'remove_terror' ],
 
             'disinfect'    => [ 'status' => 'remove_infection' ],
 
@@ -122,6 +135,9 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'kill_2_zombie' => [ 'zombies' => 'kill_2z' ],
 
             'find_rp' => [ 'rp' => [true] ],
+
+            'casino_dice' => [ 'casino' => [1], 'status' => [ 'from' => null, 'to' => 'tg_dice' ] ],
+            'casino_card' => [ 'casino' => [2], 'status' => [ 'from' => null, 'to' => 'tg_cards' ] ],
         ],
 
         'results' => [
@@ -143,6 +159,7 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
                 'add_is_drugged' => [ 'from' => null, 'to' => 'drugged' ],
                 'add_addicted'   => [ 'from' => null, 'to' => 'addict' ],
                 'add_terror'     => [ 'from' => null, 'to' => 'terror' ],
+                'remove_terror'  => [ 'from' => 'terror', 'to' => null ],
 
             ],
             'item' => [
@@ -201,11 +218,16 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'watercan1_6ap' => [ 'label' => 'Trinken', 'meta' => [ 'drink_ap_1', 'drink_ap_2' ], 'result' => [ 'drink_ap_1', 'drink_ap_2', 'produce_watercan0' ] ],
             'watercan1_0ap' => [ 'label' => 'Trinken', 'meta' => [ 'drink_no_ap' ], 'result' => [ 'drink_no_ap', 'produce_watercan0' ] ],
 
+            'special_dice' => [ 'label' => 'Werfen',       'meta' => [ 'not_yet_dice', 'no_bonus_ap' ], 'result' => [ 'casino_dice' ], 'message' => '{casino}' ],
+            'special_card' => [ 'label' => 'Karte ziehen', 'meta' => [ 'not_yet_card', 'no_bonus_ap' ], 'result' => [ 'casino_card' ], 'message' => '{casino}' ],
+
             'can'       => [ 'label' => 'Öffnen',  'meta' => [ 'have_can_opener' ], 'result' => [ [ 'item' => [ 'consume' => false, 'morph' => 'can_open_#00' ] ] ] ],
 
             'eat_6ap'   => [ 'label' => 'Essen',   'meta' => [ 'eat_ap' ], 'result' => [ 'eat_ap6', 'consume_item' ] ],
             'eat_7ap'   => [ 'label' => 'Essen',   'meta' => [ 'eat_ap' ], 'result' => [ 'eat_ap7', 'consume_item' ] ],
 
+            'drug_xana1'   => [ 'label' => 'Einsetzen', 'meta' => [ 'drug_1' ], 'result' => [ 'drug_any_1', 'drug_any_2', 'unterrorize', 'consume_item' ] ],
+            'drug_xana2'   => [ 'label' => 'Einsetzen', 'meta' => [ 'drug_2' ], 'result' => [ 'drug_addict', 'unterrorize', 'consume_item' ] ],
             'drug_par_1'   => [ 'label' => 'Einnehmen', 'meta' => [ 'drug_1' ], 'result' => [ 'drug_any_1', 'drug_any_2', 'disinfect', 'consume_item' ] ],
             'drug_par_2'   => [ 'label' => 'Einnehmen', 'meta' => [ 'drug_2' ], 'result' => [ 'drug_addict', 'disinfect', 'consume_item' ] ],
             'drug_6ap_1'   => [ 'label' => 'Einnehmen', 'meta' => [ 'drug_1' ], 'result' => [ 'drug_any_1', 'drug_any_2', 'just_ap6', 'consume_item' ] ],
@@ -381,6 +403,7 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'drug_#00'            => [ 'drug_6ap_1', 'drug_6ap_2' ],
             'drug_hero_#00'       => [ 'drug_8ap_1', 'drug_8ap_2' ],
             'drug_random_#00'     => [ 'drug_rand_1', 'drug_rand_2' ],
+            'xanax_#00'           => [ 'drug_xana1', 'drug_xana2' ],
 
             'food_bag_#00'        => [ 'open_doggybag' ],
             'food_armag_#00'      => [ 'open_lunchbag' ],
@@ -498,6 +521,9 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'lilboo_#00' => ['read_rp'],
             'rp_twin_#00' => ['read_rp'],
 
+            'dice_#00' =>  ['special_dice'],
+            'cards_#00' => ['special_card'],
+
         ]
 
     ];
@@ -557,6 +583,9 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
                 if (!isset($sub_cache[$sub_id])) $sub_cache[$sub_id] = [];
                                 
                 switch ($sub_id) {
+                    case 'ap':
+                        $requirement->setAp( $this->process_ap_requirement( $manager, $out, $sub_cache[$sub_id], $sub_req, $sub_data ) );
+                        break;
                     case 'status':
                         $requirement->setStatusRequirement( $this->process_status_requirement( $manager, $out, $sub_cache[$sub_id], $sub_req, $sub_data ) );
                         break;
@@ -577,6 +606,34 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             $manager->persist( $cache[$id] = $requirement );
         } else $out->writeln( "\t\t<comment>Skip</comment> meta condition <info>$id</info>" );
         
+        return $cache[$id];
+    }
+
+    /**
+     * @param ObjectManager $manager
+     * @param ConsoleOutputInterface $out
+     * @param array $cache
+     * @param string $id
+     * @param array $data
+     * @return RequireAP
+     * @throws Exception
+     */
+    private function process_ap_requirement(
+        ObjectManager $manager, ConsoleOutputInterface $out,
+        array &$cache, string $id, array $data): RequireAP
+    {
+        if (!isset($cache[$id])) {
+            $requirement = $manager->getRepository(RequireAP::class)->findOneByName( $id );
+            if ($requirement) $out->writeln( "\t\t\t<comment>Update</comment> condition <info>ap/{$id}</info>" );
+            else {
+                $requirement = new RequireAP();
+                $out->writeln( "\t\t\t<comment>Create</comment> condition <info>ap/{$id}</info>" );
+            }
+
+            $requirement->setName( $id )->setMin( $data['min'] )->setMax( $data['max'] )->setRelativeMax( $data['relative'] );
+            $manager->persist( $cache[$id] = $requirement );
+        } else $out->writeln( "\t\t\t<comment>Skip</comment> condition <info>ap/{$id}</info>" );
+
         return $cache[$id];
     }
 
@@ -776,6 +833,9 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
                     case 'rp':
                         $result->setRolePlayerText( $sub_data[0] );
                         break;
+                    case 'casino':
+                        $result->setCasino( $sub_data[0] );
+                        break;
                     default:
                         throw new Exception('No handler for effect type ' . $sub_id);
                 }
@@ -842,6 +902,8 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             }
 
             $result->setName( $id )->setMax( $data['max'] )->setAp( $data['num'] );
+            if ($data['max']) $result->setBonus( $data['num'] );
+            else $result->setBonus( isset($data['bonus']) ? $data['bonus'] : 0 );
             $manager->persist( $cache[$id] = $result );
         } else $out->writeln( "\t\t\t<comment>Skip</comment> effect <info>ap/{$id}</info>" );
         

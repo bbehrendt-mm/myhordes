@@ -80,8 +80,8 @@ class CitizenHandler
         return $this->isWounded($citizen) ? 5 : 6;
     }
 
-    public function setAP(Citizen &$citizen, bool $relative, int $num) {
-        $citizen->setAp( $relative ? ($citizen->getAp() + $num) : max(0,$num) );
+    public function setAP(Citizen &$citizen, bool $relative, int $num, int $max_bonus = 0) {
+        $citizen->setAp( max(0, min($this->getMaxAP( $citizen ) + $max_bonus, $relative ? ($citizen->getAp() + $num) : max(0,$num) )) );
         if ($citizen->getAp() == 0) $citizen->addStatus( $this->status_factory->createStatus( 'tired' ) );
         else $citizen->removeStatus( $this->status_factory->createStatus( 'tired' ) );
     }

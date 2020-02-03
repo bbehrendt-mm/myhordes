@@ -75,6 +75,11 @@ class Result
      */
     private $rolePlayerText;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $casino;
+
     public function __construct()
     {
     }
@@ -200,6 +205,18 @@ class Result
     public function setRolePlayerText(?bool $rolePlayerText): self
     {
         $this->rolePlayerText = $rolePlayerText;
+
+        return $this;
+    }
+
+    public function getCasino(): ?int
+    {
+        return $this->casino;
+    }
+
+    public function setCasino(?int $casino): self
+    {
+        $this->casino = $casino;
 
         return $this;
     }

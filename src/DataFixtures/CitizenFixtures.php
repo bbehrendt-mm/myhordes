@@ -49,6 +49,9 @@ class CitizenFixtures extends Fixture
         ['name' => 'wound6', 'label' => 'Verwundung - Fuß'],
         ['name' => 'ghul', 'label' => 'Ghul'],
         ['name' => 'healed', 'label' => 'Bandagiert'],
+
+        ['name' => 'tg_dice' ],
+        ['name' => 'tg_cards'],
     ];
 
     private $entityManager;
@@ -100,7 +103,9 @@ class CitizenFixtures extends Fixture
 
             // Set property
             $entity->setName( $entry['name'] );
-            $entity->setLabel( $entry['label'] );
+            $entity->setLabel( isset($entry['label']) ? $entry['label'] : $entry['name'] );
+            $entity->setIcon( isset($entry['icon']) ? $entry['icon'] : $entry['name'] );
+            $entity->setHidden( !isset($entry['label']) );
 
             $manager->persist( $entity );
 

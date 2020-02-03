@@ -8,13 +8,13 @@ use Doctrine\ORM\Mapping\UniqueConstraint;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\AffectAPRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\RequireAPRepository")
  * @UniqueEntity("name")
  * @Table(uniqueConstraints={
  *     @UniqueConstraint(name="name_unique",columns={"name"})
  * })
  */
-class AffectAP
+class RequireAP
 {
     /**
      * @ORM\Id()
@@ -24,24 +24,24 @@ class AffectAP
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=64)
+     * @ORM\Column(type="string", length=32)
      */
     private $name;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="integer")
      */
-    private $max;
-
-    /**
-     * @ORM\Column(type="smallint")
-     */
-    private $ap;
+    private $min;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private $bonus = 0;
+    private $max;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $relativeMax;
 
     public function getId(): ?int
     {
@@ -60,38 +60,38 @@ class AffectAP
         return $this;
     }
 
-    public function getMax(): ?bool
+    public function getMin(): ?int
+    {
+        return $this->min;
+    }
+
+    public function setMin(int $min): self
+    {
+        $this->min = $min;
+
+        return $this;
+    }
+
+    public function getMax(): ?int
     {
         return $this->max;
     }
 
-    public function setMax(bool $max): self
+    public function setMax(int $max): self
     {
         $this->max = $max;
 
         return $this;
     }
 
-    public function getAp(): ?int
+    public function getRelativeMax(): ?bool
     {
-        return $this->ap;
+        return $this->relativeMax;
     }
 
-    public function setAp(int $ap): self
+    public function setRelativeMax(bool $relativeMax): self
     {
-        $this->ap = $ap;
-
-        return $this;
-    }
-
-    public function getBonus(): ?int
-    {
-        return $this->bonus;
-    }
-
-    public function setBonus(int $bonus): self
-    {
-        $this->bonus = $bonus;
+        $this->relativeMax = $relativeMax;
 
         return $this;
     }
