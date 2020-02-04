@@ -85,7 +85,7 @@ class ItemFixtures extends Fixture
         ["label"=>"Bissiger Hund","icon"=>"pet_dog","category"=>"armor","deco"=>0,"heavy"=>false],                                          // -- Out
         ["label"=>"Großer knuddeliger Kater","icon"=>"pet_cat","category"=>"weapon","deco"=>5,"heavy"=>false],                              // -- Out
         ["label"=>"Zwei-Meter Schlange","icon"=>"pet_snake","category"=>"food_n","deco"=>0,"heavy"=>true],                                  // -- Out
-        ["label"=>"Vibrator (geladen)","icon"=>"vibr","category"=>"imp","deco"=>0,"heavy"=>false],                                          //
+        ["label"=>"Vibrator (geladen)","icon"=>"vibr","category"=>"imp","deco"=>0,"heavy"=>false],                                          // In ---
         ["label"=>"Anaboles Steroid","icon"=>"drug","category"=>"drug_d","deco"=>0,"heavy"=>false],                                         // In Out
         ["label"=>"Leckeres Steak","icon"=>"meat","category"=>"food_7","deco"=>0,"heavy"=>false],                                           // In Out
         ["label"=>"Undefinierbares Fleisch","icon"=>"undef","category"=>"food","deco"=>0,"heavy"=>false],                                   // In Out
@@ -98,7 +98,7 @@ class ItemFixtures extends Fixture
         ["label"=>"Blechplatte","icon"=>"plate","category"=>"armor","deco"=>0,"heavy"=>true],                                               // -- ---
         ["label"=>"Kanisterpumpe (zerlegt)","icon"=>"jerrygun_part","category"=>"aud_n","deco"=>0,"heavy"=>false],                          // -- ---
         ["label"=>"Bandage","icon"=>"bandage","category"=>"drug","deco"=>0,"heavy"=>false],                                                 //
-        ["label"=>"Grüne Bierflasche","icon"=>"vodka_de","category"=>"food_a","deco"=>0,"heavy"=>false],                                    //
+        ["label"=>"Grüne Bierflasche","icon"=>"vodka_de","category"=>"food_a","deco"=>0,"heavy"=>false],                                    // In Out
         ["label"=>"Kanisterpumpe (leer)","icon"=>"jerrygun_off","category"=>"aud_n","deco"=>0,"heavy"=>false],                              // In Out
         ["label"=>"Videoprojektor","icon"=>"cinema","category"=>"furniture","deco"=>0,"heavy"=>true],                                       // -- ---
         ["label"=>"Sprengstoff","icon"=>"explo","category"=>"rsc","deco"=>0,"heavy"=>false],                                                // -- ---
@@ -121,8 +121,8 @@ class ItemFixtures extends Fixture
         ["label"=>"Mini Hi-Fi Anlage (an)","icon"=>"music","category"=>"furniture","deco"=>10,"heavy"=>true],                               // -- ---
         ["label"=>"Pharmazeutische Substanz","icon"=>"pharma","category"=>"drug","deco"=>0,"heavy"=>false],                                 // -- ---
         ["label"=>"Unverarbeitete Blechplatten","icon"=>"plate_raw","category"=>"aud_n","deco"=>0,"heavy"=>true],                           // -- ---
-        ["label"=>"'Wake The Dead'","icon"=>"rhum","category"=>"food_a","deco"=>0,"heavy"=>false],                                          //
-        ["label"=>"Heißer Kaffee","icon"=>"coffee","category"=>"food","deco"=>0,"heavy"=>false],                                            //
+        ["label"=>"'Wake The Dead'","icon"=>"rhum","category"=>"food_a","deco"=>0,"heavy"=>false],                                          // In Out
+        ["label"=>"Heißer Kaffee","icon"=>"coffee","category"=>"food","deco"=>0,"heavy"=>false],                                            // In Out
         ["label"=>"Kaffeekocher","icon"=>"coffee_machine","category"=>"imp","deco"=>5,"heavy"=>true],                                       //
         ["label"=>"Unvollständiger Kaffeekocher","icon"=>"coffee_machine_part","category"=>"imp","deco"=>0,"heavy"=>true],                  // -- ---
         ["label"=>"Elektronisches Bauteil","icon"=>"electro","category"=>"rsc","deco"=>0,"heavy"=>false],                                   // -- ---
@@ -155,7 +155,7 @@ class ItemFixtures extends Fixture
         ["label"=>"Revolver (entladen)","icon"=>"gun","category"=>"furniture","deco"=>5,"heavy"=>false],                                    // -- ---
         ["label"=>"Sturmgewehr (entladen)","icon"=>"machine_gun","category"=>"furniture","deco"=>15,"heavy"=>false],                        // -- ---
         ["label"=>"Zünder","icon"=>"deto","category"=>"rsc","deco"=>0,"heavy"=>false],                                                      // -- ---
-        ["label"=>"Zementsack","icon"=>"concrete","category"=>"imp","deco"=>0,"heavy"=>true],                                               //
+        ["label"=>"Zementsack","icon"=>"concrete","category"=>"imp","deco"=>0,"heavy"=>true],                                               // -- ---
         ["label"=>"Unförmige Zementblöcke","icon"=>"concrete_wall","category"=>"armor","deco"=>0,"heavy"=>true],                            // -- Out
         ["label"=>"Etikettenloses Medikament","icon"=>"drug_random","category"=>"drug_d","deco"=>0,"heavy"=>false],                         // In Out
         ["label"=>"Paracetoid 7g","icon"=>"disinfect","category"=>"drug_d","deco"=>0,"heavy"=>false],                                       // In Out
@@ -310,7 +310,7 @@ class ItemFixtures extends Fixture
         ["label"=>"Verirrte Seele","icon"=>"soul_blue","category"=>"imp","deco"=>0,"heavy"=>false],                                         //
         ["label"=>"Starke Seele","icon"=>"soul_red","category"=>"imp","deco"=>0,"heavy"=>false],                                            //
         ["label"=>"Schwache Seele","icon"=>"soul_blue","category"=>"imp","deco"=>0,"heavy"=>false],                                         //
-        ["label"=>"Bierkrug","icon"=>"fest","category"=>"food_a","deco"=>0,"heavy"=>false],                                                 //
+        ["label"=>"Bierkrug","icon"=>"fest","category"=>"food_a","deco"=>0,"heavy"=>false],                                                 // In Out
         ["label"=>"Brezel","icon"=>"bretz","category"=>"food","deco"=>0,"heavy"=>false],                                                    // In Out
         ["label"=>"Dackel","icon"=>"tekel","category"=>"weapon","deco"=>0,"heavy"=>false],                                                  // -- Out
         ["label"=>"Pfahlwerfer","icon"=>"rlaunc","category"=>"weapon","deco"=>0,"heavy"=>false],                                            // --
@@ -340,7 +340,7 @@ class ItemFixtures extends Fixture
         ["label"=>"Kleine Zen-Fibel","icon"=>"lilboo","category"=>"imp","deco"=>0,"heavy"=>false],                                          // -- ---
         ["label"=>"Trockene Kräuter","icon"=>"ryebag","category"=>"rsc","deco"=>0,"heavy"=>false],                                          // -- ---
         ["label"=>"Mutterkorn","icon"=>"fungus","category"=>"food","deco"=>0,"heavy"=>false],                                               // -- ---
-        ["label"=>"Korn-Bräu","icon"=>"hmbrew","category"=>"food","deco"=>0,"heavy"=>false],                                                //
+        ["label"=>"Korn-Bräu","icon"=>"hmbrew","category"=>"food","deco"=>0,"heavy"=>false],                                                // In Out
         ["label"=>"Verfluchte HiFi","icon"=>"hifiev","category"=>"furniture","deco"=>0,"heavy"=>true],                                      // -- ---
         ["label"=>"Phil Collins CD","icon"=>"cdphil","category"=>"furniture","deco"=>1,"heavy"=>false],                                     // -- ---
         ["label"=>"Ohrstöpsel","icon"=>"bquies","category"=>"rsc","deco"=>0,"heavy"=>false],                                                // -- ---

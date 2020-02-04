@@ -52,10 +52,16 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
 
             'not_tired' => [ 'type' => Requirement::CrossOnFail, 'collection' => [ 'status' => 'not_tired' ]],
 
+            'not_drunk'    => [ 'type' => Requirement::CrossOnFail, 'collection' => [ 'status' => 'not_drunk' ]],
+            'not_hungover' => [ 'type' => Requirement::CrossOnFail, 'collection' => [ 'status' => 'not_hungover' ]],
+
             'have_can_opener' => [ 'type' => Requirement::MessageOnFail, 'collection' => [ 'item' => 'have_can_opener' ],  'text' => 'Du brauchst ein Werkzeug, um diesen Gegenstand zu öffnen...' ],
             'have_box_opener' => [ 'type' => Requirement::MessageOnFail, 'collection' => [ 'item' => 'have_box_opener' ],  'text' => 'Du brauchst ein Werkzeug, um diesen Gegenstand zu öffnen...' ],
             'have_water'      => [ 'type' => Requirement::MessageOnFail, 'collection' => [ 'item' => 'have_water' ],       'text' => 'Hierfür brauchst du eine Ration Wasser.' ],
+            'have_canister'   => [ 'type' => Requirement::MessageOnFail, 'collection' => [ 'item' => 'have_canister' ],    'text' => 'Hierfür brauchst du einen Kanister.' ],
             'have_battery'    => [ 'type' => Requirement::MessageOnFail, 'collection' => [ 'item' => 'have_battery' ],     'text' => 'Hierfür brauchst du eine Batterie.' ],
+
+            'must_be_terrorized' => [ 'type' => Requirement::MessageOnFail, 'collection' => [ 'status' => 'terrorized' ], 'text' => 'Das brauchst du gerade nicht ...' ],
 
             'must_be_outside' => [ 'type' => Requirement::HideOnFail,  'collection' => [ 'location' => 'must_be_outside' ]],
             'must_be_inside' =>  [ 'type' => Requirement::HideOnFail,  'collection' => [ 'location' => 'must_be_inside' ]],
@@ -81,14 +87,20 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
 
                 'not_tired'    => [ 'enabled' => false, 'status' => 'tired' ],
 
+                'terrorized'    => [ 'enabled' => true, 'status' => 'terror' ],
+
+                'not_drunk'    => [ 'enabled' => false, 'status' => 'drunk' ],
+                'not_hungover' => [ 'enabled' => false, 'status' => 'hungover' ],
+
                 'has_not_used_dice' => [ 'enabled' => false, 'status' => 'tg_dice' ],
                 'has_not_used_card' => [ 'enabled' => false, 'status' => 'tg_cards' ],
             ],
             'item' => [
                 'have_can_opener' => [ 'item' => null, 'prop' => 'can_opener' ],
                 'have_box_opener' => [ 'item' => null, 'prop' => 'box_opener' ],
-                'have_water'   => [ 'item' => 'water_#00', 'prop' => null ],
-                'have_battery' => [ 'item' => 'pile_#00',  'prop' => null ],
+                'have_water'    => [ 'item' => 'water_#00', 'prop' => null ],
+                'have_canister' => [ 'item' => 'jerrycan_#00', 'prop' => null ],
+                'have_battery'  => [ 'item' => 'pile_#00',  'prop' => null ],
             ],
             'location' => [
                 'must_be_outside' => [ RequireLocation::LocationOutside ],
@@ -114,6 +126,8 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'eat_ap6'     => [ 'status' => 'add_has_eaten', 'ap' => 'to_max_plus_0' ],
             'eat_ap7'     => [ 'status' => 'add_has_eaten', 'ap' => 'to_max_plus_1' ],
 
+            'drunk' => [ 'status' => 'add_drunk' ],
+
             'drug_any_1'   => [ 'status' => 'remove_clean' ],
             'drug_any_2'   => [ 'status' => 'add_is_drugged' ],
             'drug_addict'  => [ 'status' => 'add_addicted' ],
@@ -122,6 +136,7 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
 
             'disinfect'    => [ 'status' => 'remove_infection' ],
 
+            'plus_4ap'     => [ 'ap' => 'plus_4' ],
             'just_ap6'     => [ 'ap' => 'to_max_plus_0' ],
             'just_ap7'     => [ 'ap' => 'to_max_plus_1' ],
             'just_ap8'     => [ 'ap' => 'to_max_plus_2' ],
@@ -142,10 +157,11 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
 
         'results' => [
             'ap' => [
-                'to_max_plus_0' => [ 'max' => true, 'num' => 0 ],
-                'to_max_plus_1' => [ 'max' => true, 'num' => 1 ],
-                'to_max_plus_2' => [ 'max' => true, 'num' => 2 ],
-                'to_max_plus_3' => [ 'max' => true, 'num' => 3 ],
+                'to_max_plus_0' => [ 'max' => true,  'num' => 0 ],
+                'to_max_plus_1' => [ 'max' => true,  'num' => 1 ],
+                'to_max_plus_2' => [ 'max' => true,  'num' => 2 ],
+                'to_max_plus_3' => [ 'max' => true,  'num' => 3 ],
+                'plus_4'        => [ 'max' => false, 'num' => 4 ],
             ],
             'status' => [
                 'replace_dehydration' => [ 'from' => 'thirst2', 'to' => 'thirst1' ],
@@ -154,6 +170,8 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
 
                 'remove_clean'    => [ 'from' => 'clean', 'to' => null ],
                 'remove_infection'=> [ 'from' => 'infection', 'to' => null ],
+
+                'add_drunk' => [ 'from' => null, 'to' => 'drunk' ],
 
                 'add_has_eaten'  => [ 'from' => null, 'to' => 'haseaten' ],
                 'add_is_drugged' => [ 'from' => null, 'to' => 'drugged' ],
@@ -217,6 +235,11 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'watercan2_0ap' => [ 'label' => 'Trinken', 'meta' => [ 'drink_no_ap' ], 'result' => [ 'drink_no_ap', 'produce_watercan1' ] ],
             'watercan1_6ap' => [ 'label' => 'Trinken', 'meta' => [ 'drink_ap_1', 'drink_ap_2' ], 'result' => [ 'drink_ap_1', 'drink_ap_2', 'produce_watercan0' ] ],
             'watercan1_0ap' => [ 'label' => 'Trinken', 'meta' => [ 'drink_no_ap' ], 'result' => [ 'drink_no_ap', 'produce_watercan0' ] ],
+
+            'alcohol'    => [ 'label' => 'Trinken', 'meta' => [ 'not_drunk', 'not_hungover' ], 'result' => [ 'just_ap6', 'drunk', 'consume_item' ] ],
+            'alcohol_dx' => [ 'label' => 'Trinken', 'meta' => [ 'not_drunk', 'not_hungover' ], 'result' => [ 'just_ap6', 'drunk', 'unterrorize', 'consume_item' ] ],
+
+            'coffee' => [ 'label' => 'Trinken', 'meta' => [ ], 'result' => [ 'plus_4ap', 'drunk', 'consume_item' ] ],
 
             'special_dice' => [ 'label' => 'Werfen',       'meta' => [ 'not_yet_dice', 'no_bonus_ap' ], 'result' => [ 'casino_dice' ], 'message' => '{casino}' ],
             'special_card' => [ 'label' => 'Karte ziehen', 'meta' => [ 'not_yet_card', 'no_bonus_ap' ], 'result' => [ 'casino_card' ], 'message' => '{casino}' ],
@@ -290,7 +313,7 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
 
             'fill_asplash'   => [ 'label' => 'Befüllen', 'meta' => [ 'have_water' ], 'result' => [ 'consume_water', [ 'item' => [ 'consume' => false, 'morph' => 'watergun_opt_5_#00' ] ] ], 'message' => 'Du hast eine {items_consume} in dein/e/n {item_from} gefüllt und {item_to} erhalten!' ],
             'fill_splash'    => [ 'label' => 'Befüllen', 'meta' => [ 'have_water' ], 'result' => [ 'consume_water', [ 'item' => [ 'consume' => false, 'morph' => 'watergun_3_#00' ] ] ], 'message' => 'Du hast eine {items_consume} in dein/e/n {item_from} gefüllt und {item_to} erhalten!' ],
-            'fill_jsplash'   => [ 'label' => 'Befüllen', 'meta' => [ 'have_water' ], 'result' => [ 'consume_water', [ 'item' => [ 'consume' => false, 'morph' => 'jerrygun_#00' ] ] ], 'message' => 'Du hast eine {items_consume} in dein/e/n {item_from} gefüllt und {item_to} erhalten!' ],
+            'fill_jsplash'   => [ 'label' => 'Befüllen', 'meta' => [ 'have_canister' ], 'result' => [ 'consume_water', [ 'item' => [ 'consume' => false, 'morph' => 'jerrygun_#00' ] ] ], 'message' => 'Du hast eine {items_consume} in dein/e/n {item_from} gefüllt und {item_to} erhalten!' ],
             'fill_ksplash'   => [ 'label' => 'Befüllen', 'meta' => [ 'have_water' ], 'result' => [ 'consume_water', [ 'item' => [ 'consume' => false, 'morph' => 'kalach_#00' ] ] ], 'message' => 'Du hast eine {items_consume} in dein/e/n {item_from} gefüllt und {item_to} erhalten!' ],
             'fill_grenade'   => [ 'label' => 'Befüllen', 'meta' => [ 'have_water' ], 'result' => [ 'consume_water', [ 'item' => [ 'consume' => false, 'morph' => 'grenade_#00' ] ] ], 'message' => 'Du hast eine {items_consume} in dein/e/n {item_from} gefüllt und {item_to} erhalten!' ],
 
@@ -360,7 +383,9 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'bp_hospital_3' => [ 'label' => 'Lesen', 'meta' => [ 'must_be_inside' ], 'result' => [ 'consume_item', ['bp' => ['small_lastchance_#00','small_appletree_#00', 'item_digger_#00', 'small_chicken_#00', 'small_infirmary_#00', 'small_sprinkler_#00', 'item_meca_parts_#00', 'item_jerrycan_#01', 'item_shield_#00'] ] ], 'message' => '<t-bp_ok>Du ließt den {item} und stellst fest, dass es sich um einen Plan für {bp_spawn} handelt.</t-bp_ok><t-bp_fail>Du versuchst den {item} zu lesen, kannst seinen Inhalt aber nicht verstehen ...</t-bp_fail>' ],
             'bp_hospital_4' => [ 'label' => 'Lesen', 'meta' => [ 'must_be_inside' ], 'result' => [ 'consume_item', ['bp' => ['small_fireworks_#00','small_balloon_#00', 'small_crow_#00', 'small_pmvbig_#00', 'small_coffin_#00'] ] ],                                                                                               'message' => '<t-bp_ok>Du ließt den {item} und stellst fest, dass es sich um einen Plan für {bp_spawn} handelt.</t-bp_ok><t-bp_fail>Du versuchst den {item} zu lesen, kannst seinen Inhalt aber nicht verstehen ...</t-bp_fail>' ],
 
-            'read_rp' => [ 'label' => 'Lesen', 'meta' => [], 'result' => [ 'consume_item', 'find_rp' ], 'message' => 'Der Text ist überschrieben mit {rp_text}. Du beginnst, ihn zu lesen<t-rp_ok>! Der Text wurde deinem Archiv hinzugefügt.</t-rp_ok><t-rp_fail>... Leider stellst du fest, dass du diesen Text bereits kennst.</t-rp_fail>' ]
+            'read_rp' => [ 'label' => 'Lesen', 'meta' => [], 'result' => [ 'consume_item', 'find_rp' ], 'message' => 'Der Text ist überschrieben mit {rp_text}. Du beginnst, ihn zu lesen<t-rp_ok>! Der Text wurde deinem Archiv hinzugefügt.</t-rp_ok><t-rp_fail>... Leider stellst du fest, dass du diesen Text bereits kennst.</t-rp_fail>' ],
+
+            'vibrator' => [ 'label' => 'Verwenden', 'meta' => [ 'must_be_inside', 'must_be_terrorized' ], 'result' => [ 'unterrorize', ['item' => ['morph' => 'vibr_empty_#00', 'consume' => false]] ], 'message' => 'Du machst es dir daheim gemütlich und entspannst dich... doch dann erlebst du ein böse Überraschung: Dieses Ding ist unglaublich schmerzhaft! Du versuchst es weiter bis du Stück für Stück Gefallen daran findest. Die nach wenige Minuten einsetzende Wirkung ist berauschend! Du schwitzt und zitterst und ein wohlig-warmes Gefühl breitet sich in dir aus...Die Batterie ist komplett leer.' ],
         ],
         'items' => [
             'water_#00'           => [ 'water_6ap', 'water_0ap' ],
@@ -524,6 +549,13 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'dice_#00' =>  ['special_dice'],
             'cards_#00' => ['special_card'],
 
+            'rhum_#00'     => ['alcohol'],
+            'vodka_de_#00' => ['alcohol'],
+            'fest_#00'     => ['alcohol'],
+            'hmbrew_#00'   => ['alcohol_dx'],
+
+            'coffee_#00'   => ['coffee'],
+            'vibr_#00'     => ['vibrator'],
         ]
 
     ];
