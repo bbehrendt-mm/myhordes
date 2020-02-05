@@ -38,6 +38,11 @@ class AffectItemSpawn
      */
     private $name;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $count;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -75,6 +80,18 @@ class AffectItemSpawn
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getCount(): ?int
+    {
+        return $this->count;
+    }
+
+    public function setCount(int $count): self
+    {
+        $this->count = $count;
 
         return $this;
     }

@@ -27,7 +27,7 @@ class RequireItem
     private $property;
 
     /**
-     * @ORM\Column(type="string", length=32)
+     * @ORM\Column(type="string", length=64)
      */
     private $name;
 

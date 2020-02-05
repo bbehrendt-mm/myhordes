@@ -8,17 +8,14 @@ use Doctrine\ORM\Mapping\UniqueConstraint;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\RequireLocationRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\AffectWellRepository")
  * @UniqueEntity("name")
  * @Table(uniqueConstraints={
  *     @UniqueConstraint(name="name_unique",columns={"name"})
  * })
  */
-class RequireLocation
+class AffectWell
 {
-    const LocationInTown = 1;
-    const LocationOutside = 2;
-
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -34,7 +31,12 @@ class RequireLocation
     /**
      * @ORM\Column(type="integer")
      */
-    private $location;
+    private $fillMin;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $fillMax;
 
     public function getId(): ?int
     {
@@ -53,14 +55,26 @@ class RequireLocation
         return $this;
     }
 
-    public function getLocation(): ?int
+    public function getFillMin(): ?int
     {
-        return $this->location;
+        return $this->fillMin;
     }
 
-    public function setLocation(int $location): self
+    public function setFillMin(int $fillMin): self
     {
-        $this->location = $location;
+        $this->fillMin = $fillMin;
+
+        return $this;
+    }
+
+    public function getFillMax(): ?int
+    {
+        return $this->fillMax;
+    }
+
+    public function setFillMax(int $fillMax): self
+    {
+        $this->fillMax = $fillMax;
 
         return $this;
     }

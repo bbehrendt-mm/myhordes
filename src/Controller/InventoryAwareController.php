@@ -146,7 +146,9 @@ class InventoryAwareController extends AbstractController implements GameInterfa
                         $citizen,
                         $current_item,$inv_source, $inv_target
                     )) === InventoryHandler::ErrorNone) {
-                    $this->entity_manager->persist($current_item);
+                    if ($current_item->getInventory())
+                        $this->entity_manager->persist($current_item);
+                    else $this->entity_manager->remove($current_item);
                 } else $errors[] = $error;
 
             if (count($errors) < count($items)) {
@@ -170,6 +172,9 @@ class InventoryAwareController extends AbstractController implements GameInterfa
 
         if ( !$item || !$action || $item->getBroken() ) return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
         $citizen = $this->getActiveCitizen();
+
+        $zone = $citizen->getZone();
+        if ($zone && $zone->getX() === 0 && $zone->getY() === null ) return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
 
         if (($error = $this->action_handler->execute( $citizen, $item, $action, $msg, $remove )) === ActionHandler::ErrorNone) {
             $this->entity_manager->persist($citizen);

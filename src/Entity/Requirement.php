@@ -67,6 +67,11 @@ class Requirement
      */
     private $ap;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\RequireBuilding")
+     */
+    private $building;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -164,6 +169,18 @@ class Requirement
     public function setAp(?RequireAP $ap): self
     {
         $this->ap = $ap;
+
+        return $this;
+    }
+
+    public function getBuilding(): ?RequireBuilding
+    {
+        return $this->building;
+    }
+
+    public function setBuilding(?RequireBuilding $building): self
+    {
+        $this->building = $building;
 
         return $this;
     }

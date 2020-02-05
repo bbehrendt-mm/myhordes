@@ -10,6 +10,7 @@ use App\Entity\AffectOriginalItem;
 use App\Entity\AffectResultGroup;
 use App\Entity\AffectResultGroupEntry;
 use App\Entity\AffectStatus;
+use App\Entity\AffectWell;
 use App\Entity\AffectZombies;
 use App\Entity\BuildingPrototype;
 use App\Entity\CitizenStatus;
@@ -19,6 +20,7 @@ use App\Entity\ItemGroupEntry;
 use App\Entity\ItemProperty;
 use App\Entity\ItemPrototype;
 use App\Entity\RequireAP;
+use App\Entity\RequireBuilding;
 use App\Entity\RequireItem;
 use App\Entity\RequireLocation;
 use App\Entity\Requirement;
@@ -37,87 +39,64 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
 {
     public static $item_actions = [
         'meta_requirements' => [
-            'drink_ap_1'  => [ 'type' => Requirement::CrossOnFail, 'collection' => [ 'status' => 'has_not_drunken' ]],
-            'drink_ap_2'  => [ 'type' => Requirement::HideOnFail,  'collection' => [ 'status' => 'not_dehydrated' ]],
-            'drink_no_ap' => [ 'type' => Requirement::HideOnFail,  'collection' => [ 'status' => 'dehydrated' ]],
+            'drink_ap_1'  => [ 'type' => Requirement::CrossOnFail, 'collection' => [ 'status' => [ 'enabled' => false, 'status' => 'hasdrunk' ] ]],
+            'drink_ap_2'  => [ 'type' => Requirement::HideOnFail,  'collection' => [ 'status' => [ 'enabled' => false, 'status' => 'thirst2' ] ]],
+            'drink_no_ap' => [ 'type' => Requirement::HideOnFail,  'collection' => [ 'status' => [ 'enabled' => true,  'status' => 'thirst2' ] ]],
 
-            'no_bonus_ap'  => [ 'type' => Requirement::CrossOnFail, 'collection' => [ 'ap' => 'no_bonus_ap' ]],
-            'not_yet_dice' => [ 'type' => Requirement::CrossOnFail, 'collection' => [ 'status' => 'has_not_used_dice' ]],
-            'not_yet_card' => [ 'type' => Requirement::CrossOnFail, 'collection' => [ 'status' => 'has_not_used_card' ]],
+            'no_bonus_ap'  => [ 'type' => Requirement::CrossOnFail, 'collection' => [ 'ap' => [ 'min' => 0, 'max' => 0, 'relative' => true ] ]],
+            'not_yet_dice' => [ 'type' => Requirement::CrossOnFail, 'collection' => [ 'status' => [ 'enabled' => false, 'status' => 'tg_dice' ]  ]],
+            'not_yet_card' => [ 'type' => Requirement::CrossOnFail, 'collection' => [ 'status' => [ 'enabled' => false, 'status' => 'tg_cards' ] ]],
 
-            'eat_ap'      => [ 'type' => Requirement::CrossOnFail, 'collection' => [ 'status' => 'has_not_eaten' ]],
+            'eat_ap'      => [ 'type' => Requirement::CrossOnFail, 'collection' => [ 'status' => [ 'enabled' => false, 'status' => 'haseaten' ] ]],
 
-            'drug_1'  => [ 'type' => Requirement::HideOnFail, 'collection' => [ 'status' => 'not_drugged' ]],
-            'drug_2'  => [ 'type' => Requirement::HideOnFail, 'collection' => [ 'status' => 'drugged' ]],
+            'drug_1'  => [ 'type' => Requirement::HideOnFail, 'collection' => [ 'status' => [ 'enabled' => false, 'status' => 'drugged' ] ]],
+            'drug_2'  => [ 'type' => Requirement::HideOnFail, 'collection' => [ 'status' => [ 'enabled' => true,  'status' => 'drugged' ] ]],
 
-            'not_tired' => [ 'type' => Requirement::CrossOnFail, 'collection' => [ 'status' => 'not_tired' ]],
+            'not_tired' => [ 'type' => Requirement::CrossOnFail, 'collection' => [ 'status' => [ 'enabled' => false, 'status' => 'tired' ] ]],
 
-            'not_drunk'    => [ 'type' => Requirement::CrossOnFail, 'collection' => [ 'status' => 'not_drunk' ]],
-            'not_hungover' => [ 'type' => Requirement::CrossOnFail, 'collection' => [ 'status' => 'not_hungover' ]],
+            'not_drunk'    => [ 'type' => Requirement::CrossOnFail, 'collection' => [ 'status' => [ 'enabled' => false, 'status' => 'drunk' ] ]],
+            'not_hungover' => [ 'type' => Requirement::CrossOnFail, 'collection' => [ 'status' => [ 'enabled' => false, 'status' => 'hungover' ] ]],
 
-            'have_can_opener' => [ 'type' => Requirement::MessageOnFail, 'collection' => [ 'item' => 'have_can_opener' ],  'text' => 'Du brauchst ein Werkzeug, um diesen Gegenstand zu öffnen...' ],
-            'have_box_opener' => [ 'type' => Requirement::MessageOnFail, 'collection' => [ 'item' => 'have_box_opener' ],  'text' => 'Du brauchst ein Werkzeug, um diesen Gegenstand zu öffnen...' ],
-            'have_water'      => [ 'type' => Requirement::MessageOnFail, 'collection' => [ 'item' => 'have_water' ],       'text' => 'Hierfür brauchst du eine Ration Wasser.' ],
-            'have_canister'   => [ 'type' => Requirement::MessageOnFail, 'collection' => [ 'item' => 'have_canister' ],    'text' => 'Hierfür brauchst du einen Kanister.' ],
-            'have_battery'    => [ 'type' => Requirement::MessageOnFail, 'collection' => [ 'item' => 'have_battery' ],     'text' => 'Hierfür brauchst du eine Batterie.' ],
+            'have_can_opener' => [ 'type' => Requirement::MessageOnFail, 'collection' => [ 'item' => [ 'item' => null, 'prop' => 'can_opener' ] ],   'text' => 'Du brauchst ein Werkzeug, um diesen Gegenstand zu öffnen...' ],
+            'have_box_opener' => [ 'type' => Requirement::MessageOnFail, 'collection' => [ 'item' => [ 'item' => null, 'prop' => 'box_opener' ] ],   'text' => 'Du brauchst ein Werkzeug, um diesen Gegenstand zu öffnen...' ],
+            'have_water'      => [ 'type' => Requirement::MessageOnFail, 'collection' => [ 'item' => [ 'item' => 'water_#00', 'prop' => null ] ],    'text' => 'Hierfür brauchst du eine Ration Wasser.' ],
+            'have_canister'   => [ 'type' => Requirement::MessageOnFail, 'collection' => [ 'item' => [ 'item' => 'jerrycan_#00', 'prop' => null ] ], 'text' => 'Hierfür brauchst du einen Kanister.' ],
+            'have_battery'    => [ 'type' => Requirement::MessageOnFail, 'collection' => [ 'item' => [ 'item' => 'pile_#00',  'prop' => null ] ],    'text' => 'Hierfür brauchst du eine Batterie.' ],
 
-            'must_be_terrorized' => [ 'type' => Requirement::MessageOnFail, 'collection' => [ 'status' => 'terrorized' ], 'text' => 'Das brauchst du gerade nicht ...' ],
+            'must_be_terrorized' => [ 'type' => Requirement::MessageOnFail, 'collection' => [ 'status' => [ 'enabled' => true, 'status' => 'terror' ] ], 'text' => 'Das brauchst du gerade nicht ...' ],
 
-            'must_be_outside' => [ 'type' => Requirement::HideOnFail,  'collection' => [ 'location' => 'must_be_outside' ]],
-            'must_be_inside' =>  [ 'type' => Requirement::HideOnFail,  'collection' => [ 'location' => 'must_be_inside' ]],
+            'must_be_outside' => [ 'type' => Requirement::HideOnFail,  'collection' => [ 'location' => [ RequireLocation::LocationOutside ] ]],
+            'must_be_inside' =>  [ 'type' => Requirement::HideOnFail,  'collection' => [ 'location' => [ RequireLocation::LocationInTown  ] ]],
 
-            'must_have_zombies' => [ 'type' => Requirement::MessageOnFail, 'collection' => [ 'zombies' => 'must_have_zombies' ], 'text' => 'Zum Glück sind hier keine Zombies...'],
+            'must_have_zombies' => [ 'type' => Requirement::MessageOnFail, 'collection' => [ 'zombies' => [ 'min' => 1, 'block' => false ] ], 'text' => 'Zum Glück sind hier keine Zombies...'],
+
+            'must_have_micropur' => [ 'type' => Requirement::MessageOnFail, 'collection' => [ 'item' => [ 'item' => 'water_cleaner_#00', 'prop' => null ] ], 'text' => 'Hierfür brauchst du eine Micropur Brausetablette.'],
+
+            'must_have_purifier'     => [ 'type' => Requirement::HideOnFail, 'collection' => [ 'building' => [ 'prototype' => 'item_jerrycan_#00', 'complete' => true  ] ] ],
+            'must_not_have_purifier' => [ 'type' => Requirement::HideOnFail, 'collection' => [ 'building' => [ 'prototype' => 'item_jerrycan_#00', 'complete' => false ] ] ],
+            'must_have_filter'       => [ 'type' => Requirement::HideOnFail, 'collection' => [ 'building' => [ 'prototype' => 'item_jerrycan_#01', 'complete' => true  ] ] ],
+            'must_not_have_filter'   => [ 'type' => Requirement::HideOnFail, 'collection' => [ 'building' => [ 'prototype' => 'item_jerrycan_#01', 'complete' => false ] ] ],
         ],
 
         'requirements' => [
 
-            'ap' => [
-                'no_bonus_ap' => [ 'min' => 0, 'max' => 0, 'relative' => true ],
-            ],
+            'ap' => [],
+            'status' => [],
+            'item' => [],
+            'location' => [],
+            'zombies' => [],
+            'building' => [],
 
-            'status' => [
-                'has_not_drunken' => [ 'enabled' => false, 'status' => 'hasdrunk' ],
-                'has_not_eaten'   => [ 'enabled' => false, 'status' => 'haseaten' ],
-
-                'not_dehydrated'  => [ 'enabled' => false, 'status' => 'thirst2' ],
-                'dehydrated'      => [ 'enabled' => true,  'status' => 'thirst2' ],
-
-                'not_drugged'  => [ 'enabled' => false, 'status' => 'drugged' ],
-                'drugged'      => [ 'enabled' => true,  'status' => 'drugged' ],
-
-                'not_tired'    => [ 'enabled' => false, 'status' => 'tired' ],
-
-                'terrorized'    => [ 'enabled' => true, 'status' => 'terror' ],
-
-                'not_drunk'    => [ 'enabled' => false, 'status' => 'drunk' ],
-                'not_hungover' => [ 'enabled' => false, 'status' => 'hungover' ],
-
-                'has_not_used_dice' => [ 'enabled' => false, 'status' => 'tg_dice' ],
-                'has_not_used_card' => [ 'enabled' => false, 'status' => 'tg_cards' ],
-            ],
-            'item' => [
-                'have_can_opener' => [ 'item' => null, 'prop' => 'can_opener' ],
-                'have_box_opener' => [ 'item' => null, 'prop' => 'box_opener' ],
-                'have_water'    => [ 'item' => 'water_#00', 'prop' => null ],
-                'have_canister' => [ 'item' => 'jerrycan_#00', 'prop' => null ],
-                'have_battery'  => [ 'item' => 'pile_#00',  'prop' => null ],
-            ],
-            'location' => [
-                'must_be_outside' => [ RequireLocation::LocationOutside ],
-                'must_be_inside'  => [ RequireLocation::LocationInTown ],
-            ],
-            'zombies' => [
-                'must_have_zombies' => [ 'min' => 1, 'block' => false ]
-            ]
         ],
 
         'meta_results' => [
             'do_nothing' => [],
 
-            'consume_item'   => [ 'item' => 'consume' ],
-            'consume_water'  => [ 'consume' => 'water'   ],
-            'consume_battery'=> [ 'consume' => 'battery' ],
-            'break_item'     => [ 'item' => 'consume' ],
+            'consume_item'    => [ 'item' => [ 'consume' => true,  'morph' => null, 'break' => null, 'poison' => null ] ],
+            'break_item'      => [ 'item' => [ 'consume' => false, 'morph' => null, 'break' => true, 'poison' => null ] ],
+            'consume_water'   => [ 'consume' => [ 'water_#00' ] ],
+            'consume_battery' => [ 'consume' => [ 'pile_#00'  ] ],
+            'consume_micropur'=> [ 'consume' => [ 'water_cleaner_#00'  ] ],
 
             'drink_ap_1'  => [ 'status' => 'add_has_drunk', 'ap' => 'to_max_plus_0' ],
             'drink_ap_2'  => [ 'status' => 'remove_thirst' ],
@@ -178,12 +157,8 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
                 'add_addicted'   => [ 'from' => null, 'to' => 'addict' ],
                 'add_terror'     => [ 'from' => null, 'to' => 'terror' ],
                 'remove_terror'  => [ 'from' => 'terror', 'to' => null ],
-
             ],
-            'item' => [
-                'consume' => [ 'consume' => true,  'morph' => null, 'break' => null, 'poison' => null ],
-                'break'   => [ 'consume' => false, 'morph' => null, 'break' => true, 'poison' => null ],
-            ],
+            'item' => [],
 
             'spawn' => [
                 'xmas'   => [ ['omg_this_will_kill_you_#00', 8], ['pocket_belt_#00', 8], 'rp_scroll_#00', 'rp_manual_#00', 'rp_sheets_#00', 'rp_letter_#00', 'rp_scroll_#00', 'rp_book_#00', 'rp_book_#01', 'rp_book2_#00' ],
@@ -191,10 +166,7 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
                 'empty_battery' => [ 'pile_broken_#00' ],
             ],
 
-            'consume' => [
-                'water'   => [ 'water_#00' ],
-                'battery' => [ 'pile_#00' ],
-            ],
+            'consume' => [],
 
             'bp' => [],
 
@@ -222,7 +194,9 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
                 'kill_1z' => [ 'num' => 1 ],
                 'kill_2z' => [ 'num' => 2 ],
                 'kill_3z' => [ 'num' => 3 ],
-            ]
+            ],
+
+            'well' => []
         ],
 
         'actions' => [
@@ -386,7 +360,20 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'read_rp' => [ 'label' => 'Lesen', 'meta' => [], 'result' => [ 'consume_item', 'find_rp' ], 'message' => 'Der Text ist überschrieben mit {rp_text}. Du beginnst, ihn zu lesen<t-rp_ok>! Der Text wurde deinem Archiv hinzugefügt.</t-rp_ok><t-rp_fail>... Leider stellst du fest, dass du diesen Text bereits kennst.</t-rp_fail>' ],
 
             'vibrator' => [ 'label' => 'Verwenden', 'meta' => [ 'must_be_inside', 'must_be_terrorized' ], 'result' => [ 'unterrorize', ['item' => ['morph' => 'vibr_empty_#00', 'consume' => false]] ], 'message' => 'Du machst es dir daheim gemütlich und entspannst dich... doch dann erlebst du ein böse Überraschung: Dieses Ding ist unglaublich schmerzhaft! Du versuchst es weiter bis du Stück für Stück Gefallen daran findest. Die nach wenige Minuten einsetzende Wirkung ist berauschend! Du schwitzt und zitterst und ein wohlig-warmes Gefühl breitet sich in dir aus...Die Batterie ist komplett leer.' ],
+
+            'watercup_1' => [ 'label' => 'Reinigen', 'meta' => [ 'must_be_inside',  'must_have_micropur', 'must_not_have_purifier', 'must_not_have_filter' ], 'result' => [ 'consume_micropur', 'consume_item', ['spawn' => [ 'water_cup_#00' ] ] ], 'message' => 'Du hast den Inhalt des {item} gereinigt und {items_spawn} erhalten.' ],
+            'watercup_2' => [ 'label' => 'Reinigen', 'meta' => [ 'must_be_outside', 'must_have_micropur' ],                                                   'result' => [ 'consume_micropur', 'consume_item', ['spawn' => [ 'water_cup_#00' ] ] ], 'message' => 'Du hast den Inhalt des {item} gereinigt und {items_spawn} erhalten.' ],
+            'watercup_3' => [ 'label' => 'In den Brunnen schütten', 'meta' => [ 'must_be_inside', 'must_have_purifier' ], 'result' => [ 'consume_item', [ 'well' => [ 'min' => 1, 'max' => 1 ] ] ], 'message' => 'Du hast den Inhalt des {item} in den Brunnen geschüttet. Der Brunnen wurde um {well} Rationen Wasser aufgefüllt.' ],
+            'jerrycan_1' => [ 'label' => 'Reinigen', 'meta' => [ 'must_be_inside', 'must_have_micropur', 'must_not_have_purifier', 'must_not_have_filter' ], 'result' => [ 'consume_micropur', 'consume_item', ['group' => [
+                [ [ ['spawn' => [ ['water_#00', 2] ] ] ], 1 ],
+                [ [ ['spawn' => [ ['water_#00', 3] ] ] ], 1 ]
+            ]] ], 'message' => 'Du hast den Inhalt des {item} gereinigt und {items_spawn} erhalten.' ],
+            'jerrycan_2' => [ 'label' => 'In den Brunnen schütten', 'meta' => [ 'must_be_inside', 'must_have_purifier', 'must_not_have_filter' ], 'result' => [ 'consume_item', [ 'well' => [ 'min' => 1, 'max' => 3 ] ] ], 'message' => 'Du hast den Inhalt des {item} in den Brunnen geschüttet. Der Brunnen wurde um {well} Rationen Wasser aufgefüllt..' ],
+            'jerrycan_3' => [ 'label' => 'In den Brunnen schütten', 'meta' => [ 'must_be_inside', 'must_have_filter' ], 'result' => [ 'consume_item', [ 'well' => [ 'min' => 4, 'max' => 9 ] ] ], 'message' => 'Du hast den Inhalt des {item} in den Brunnen geschüttet. Der Brunnen wurde um {well} Rationen Wasser aufgefüllt.' ],
+
         ],
+
+
         'items' => [
             'water_#00'           => [ 'water_6ap', 'water_0ap' ],
             'water_cup_#00'       => [ 'water_6ap', 'water_0ap' ],
@@ -556,6 +543,9 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
 
             'coffee_#00'   => ['coffee'],
             'vibr_#00'     => ['vibrator'],
+
+            'jerrycan_#00'       => ['jerrycan_1', 'jerrycan_2', 'jerrycan_3'],
+            'water_cup_part_#00' => ['watercup_1', 'watercup_2', 'watercup_3'],
         ]
 
     ];
@@ -629,6 +619,9 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
                         break;
                     case 'zombies':
                         $requirement->setZombies( $this->process_zombie_requirement($manager, $out, $sub_cache[$sub_id], $sub_req, $sub_data ) );
+                        break;
+                    case 'building':
+                        $requirement->setBuilding( $this->process_building_requirement($manager, $out, $sub_cache[$sub_id], $sub_req, $sub_data ) );
                         break;
                     default:
                         throw new Exception('No handler for requirement type ' . $sub_id);
@@ -799,6 +792,44 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
      * @param ConsoleOutputInterface $out
      * @param array $cache
      * @param string $id
+     * @param array $data
+     * @return RequireBuilding
+     * @throws Exception
+     */
+    private function process_building_requirement(
+        ObjectManager $manager, ConsoleOutputInterface $out,
+        array &$cache, string $id, array $data): RequireBuilding
+    {
+        if (!isset($cache[$id])) {
+            $requirement = $manager->getRepository(RequireBuilding::class)->findOneByName( $id );
+            if ($requirement) $out->writeln( "\t\t\t<comment>Update</comment> condition <info>building/{$id}</info>" );
+            else {
+                $requirement = new RequireBuilding();
+                $out->writeln( "\t\t\t<comment>Create</comment> condition <info>building/{$id}</info>" );
+            }
+
+            $prototype = $manager->getRepository(BuildingPrototype::class)->findOneByName( $data['prototype'] );
+            if (!$prototype)
+                throw new Exception('Building prototype not found: ' . $data['item']);
+
+            $requirement->setName( $id )->setBuilding( $prototype )
+                ->setFound( $data['found'] ?? null )
+                ->setComplete( $data['complete'] ?? null )
+                ->setMinLevel( $data['minLevel'] ?? null )
+                ->setMaxLevel( $data['maxLevel'] ?? null )
+                ;
+            $manager->persist( $cache[$id] = $requirement );
+        } else $out->writeln( "\t\t\t<comment>Skip</comment> condition <info>building/{$id}</info>" );
+
+        return $cache[$id];
+    }
+
+
+    /**
+     * @param ObjectManager $manager
+     * @param ConsoleOutputInterface $out
+     * @param array $cache
+     * @param string $id
      * @param array $sub_cache
      * @param array|null $data
      * @return Result
@@ -858,6 +889,9 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
                         break;
                     case 'zombies':
                         $result->setZombies( $this->process_zombie_effect($manager, $out, $sub_cache[$sub_id], $sub_res, $sub_data) );
+                        break;
+                    case 'well':
+                        $result->setWell( $this->process_well_effect($manager, $out, $sub_cache[$sub_id], $sub_res, $sub_data) );
                         break;
                     case 'group':
                         $result->setResultGroup( $this->process_group_effect($manager, $out, $sub_cache[$sub_id], $cache, $sub_cache, $sub_res, $sub_data) );
@@ -1044,9 +1078,10 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
 
             if (count($data) === 1) {
                 $name = is_array($data[0]) ? $data[0][0] : $data[0];
+                $count =  is_array($data[0]) ? $data[0][1] : 1;
                 $prototype = $manager->getRepository(ItemPrototype::class)->findOneByName( $name );
                 if (!$prototype) throw new Exception('Item prototype not found: ' . $name);
-                $result->setPrototype( $prototype );
+                $result->setPrototype( $prototype )->setCount( $count );
             } else {
                 $g_name = "efg_{$id}";
                 $group = $manager->getRepository( ItemGroup::class )->findOneByName( $g_name );
@@ -1060,7 +1095,7 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
                     $group->addEntry( (new ItemGroupEntry())->setChance($c)->setPrototype( $prototype ) );
                 }
 
-                $result->setItemGroup( $group );
+                $result->setItemGroup( $group )->setCount( 1 );
                 $manager->persist( $group );
             }
 
@@ -1125,6 +1160,33 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             $result->setName( $id )->setMax( isset($data['max']) ? $data['max'] : $data['num'] )->setMin( isset($data['min']) ? $data['min'] : $data['num'] );
             $manager->persist( $cache[$id] = $result );
         } else $out->writeln( "\t\t\t<comment>Skip</comment> effect <info>zombie/{$id}</info>" );
+
+        return $cache[$id];
+    }
+
+    /**
+     * @param ObjectManager $manager
+     * @param ConsoleOutputInterface $out
+     * @param array $cache
+     * @param string $id
+     * @param array $data
+     * @return AffectWell
+     */
+    private function process_well_effect(
+        ObjectManager $manager, ConsoleOutputInterface $out,
+        array &$cache, string $id, array $data): AffectWell
+    {
+        if (!isset($cache[$id])) {
+            $result = $manager->getRepository(AffectWell::class)->findOneByName( $id );
+            if ($result) $out->writeln( "\t\t\t<comment>Update</comment> effect <info>well/{$id}</info>" );
+            else {
+                $result = new AffectWell();
+                $out->writeln( "\t\t\t<comment>Create</comment> effect <info>well/{$id}</info>" );
+            }
+
+            $result->setName( $id )->setFillMax( $data['max'] )->setFillMin( $data['min'] );
+            $manager->persist( $cache[$id] = $result );
+        } else $out->writeln( "\t\t\t<comment>Skip</comment> effect <info>well/{$id}</info>" );
 
         return $cache[$id];
     }

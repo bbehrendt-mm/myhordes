@@ -91,7 +91,7 @@ class ItemFixtures extends Fixture
         ["label"=>"Undefinierbares Fleisch","icon"=>"undef","category"=>"food","deco"=>0,"heavy"=>false],                                   // In Out
         ["label"=>"Zeltplane","icon"=>"sheet","category"=>"camp","deco"=>0,"heavy"=>false],                                                 // -- ---
         ["label"=>"Superpraktischer Rucksack","icon"=>"bagxl","category"=>"exp_b","deco"=>0,"heavy"=>false],                                // -- ---
-        ["label"=>"Kanister","icon"=>"jerrycan","category"=>"food_n","deco"=>0,"heavy"=>false],                                             //    ---
+        ["label"=>"Kanister","icon"=>"jerrycan","category"=>"food_n","deco"=>0,"heavy"=>false],                                             // In ---
         ["label"=>"Krummes Holzbrett","icon"=>"wood2","category"=>"rsc_b","deco"=>0,"heavy"=>false],                                        // -- ---
         ["label"=>"Alteisen","icon"=>"metal","category"=>"rsc_b","deco"=>0,"heavy"=>false],                                                 // -- ---
         ["label"=>"Wasserbombe","icon"=>"grenade","category"=>"weapon","deco"=>0,"heavy"=>false],                                           // -- Out
@@ -123,7 +123,7 @@ class ItemFixtures extends Fixture
         ["label"=>"Unverarbeitete Blechplatten","icon"=>"plate_raw","category"=>"aud_n","deco"=>0,"heavy"=>true],                           // -- ---
         ["label"=>"'Wake The Dead'","icon"=>"rhum","category"=>"food_a","deco"=>0,"heavy"=>false],                                          // In Out
         ["label"=>"Heißer Kaffee","icon"=>"coffee","category"=>"food","deco"=>0,"heavy"=>false],                                            // In Out
-        ["label"=>"Kaffeekocher","icon"=>"coffee_machine","category"=>"imp","deco"=>5,"heavy"=>true],                                       //
+        ["label"=>"Kaffeekocher","icon"=>"coffee_machine","category"=>"imp","deco"=>5,"heavy"=>true],                                       // -- ---
         ["label"=>"Unvollständiger Kaffeekocher","icon"=>"coffee_machine_part","category"=>"imp","deco"=>0,"heavy"=>true],                  // -- ---
         ["label"=>"Elektronisches Bauteil","icon"=>"electro","category"=>"rsc","deco"=>0,"heavy"=>false],                                   // -- ---
         ["label"=>"Habseligkeiten eines Bürgers","icon"=>"chest_citizen","category"=>"box","deco"=>0,"heavy"=>true],                        // In Out
@@ -186,12 +186,12 @@ class ItemFixtures extends Fixture
         ["label"=>"Metallsäge","icon"=>"saw_tool","category"=>"imp","deco"=>0,"heavy"=>false],                                              // -- ---
         ["label"=>"Gut erhaltener Holzscheit","icon"=>"wood_log","category"=>"rsc_b","deco"=>2,"heavy"=>true],                              // -- ---
         ["label"=>"Defektes Elektrogerät","icon"=>"electro_box","category"=>"misc","deco"=>0,"heavy"=>false],                               // -- ---
-        ["label"=>"Möbelpackung","icon"=>"deco_box","category"=>"box","deco"=>0,"heavy"=>true],                                             //    ---
+        ["label"=>"Möbelpackung","icon"=>"deco_box","category"=>"box","deco"=>0,"heavy"=>true],                                             // -- ---
         ["label"=>"Beschädigte Metallsäge","icon"=>"saw_tool_part","category"=>"imp","deco"=>0,"heavy"=>false],                             // -- ---
         ["label"=>"Getriebe","icon"=>"mecanism","category"=>"misc","deco"=>0,"heavy"=>false],                                               // -- ---
         ["label"=>"Holzbock","icon"=>"trestle","category"=>"armor","deco"=>1,"heavy"=>true],                                                // -- ---
         ["label"=>"Järpen-Tisch","icon"=>"table","category"=>"armor","deco"=>3,"heavy"=>true],                                              // -- ---
-        ["label"=>"Micropur Brausetablette","icon"=>"water_cleaner","category"=>"drug","deco"=>0,"heavy"=>false],                           //
+        ["label"=>"Micropur Brausetablette","icon"=>"water_cleaner","category"=>"drug","deco"=>0,"heavy"=>false],                           // -- ---
         ["label"=>"Darmmelone","icon"=>"vegetable_tasty","category"=>"food_7","deco"=>0,"heavy"=>false],                                    // In Out
         ["label"=>"Raketenpulver","icon"=>"powder","category"=>"rsc","deco"=>0,"heavy"=>false],                                             // -- ---
         ["label"=>"Schießpulverbombe","icon"=>"flash","category"=>"exp_s","deco"=>0,"heavy"=>false],                                        // --
@@ -262,7 +262,7 @@ class ItemFixtures extends Fixture
         ["label"=>"Makabre Bombe","icon"=>"flesh","category"=>"exp_s","deco"=>0,"heavy"=>false],                                            // --
         ["label"=>"Dickflüssige Substanz","icon"=>"pharma_part","category"=>"drug","deco"=>0,"heavy"=>false],                               // -- ---
         ["label"=>"Aasbeerenbrei","icon"=>"fruit","category"=>"food","deco"=>0,"heavy"=>false],                                             // In Out
-        ["label"=>"Eisengefäß mit modrigem wasser","icon"=>"water_cup_part","category"=>"food_n","deco"=>0,"heavy"=>false],                 //
+        ["label"=>"Eisengefäß mit modrigem wasser","icon"=>"water_cup_part","category"=>"food_n","deco"=>0,"heavy"=>false],                 // In Out
         ["label"=>"Gereinigtes modriges Wasser","icon"=>"water_cup","category"=>"food","deco"=>0,"heavy"=>false],                           // In Out
         ["label"=>"Notizzettel eines Verbannten","icon"=>"banned_note","category"=>"exp_s","deco"=>0,"heavy"=>false],                       //
         ["label"=>"Blutdurchtränkter Verband","icon"=>"infect_poison_part","category"=>"drug","deco"=>0,"heavy"=>false],                    // -- ---

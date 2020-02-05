@@ -80,6 +80,11 @@ class Result
      */
     private $casino;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\AffectWell")
+     */
+    private $well;
+
     public function __construct()
     {
     }
@@ -217,6 +222,18 @@ class Result
     public function setCasino(?int $casino): self
     {
         $this->casino = $casino;
+
+        return $this;
+    }
+
+    public function getWell(): ?AffectWell
+    {
+        return $this->well;
+    }
+
+    public function setWell(?AffectWell $well): self
+    {
+        $this->well = $well;
 
         return $this;
     }

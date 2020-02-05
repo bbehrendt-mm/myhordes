@@ -114,6 +114,25 @@ class ActionHandler
                 ) $current_state = min( $current_state, $this_state );
             }
 
+            if ($building_condition = $meta_requirement->getBuilding()) {
+                $town = $citizen->getTown();
+                $building = $this->game_factory->getBuilding($town, $building_condition->getBuilding(), false);
+
+                $cpl = true;
+                if ($building) {
+                    if ($building_condition->getComplete() !== null && $building_condition->getComplete() !== $building->getComplete()) $current_state = min( $current_state, $this_state );
+                    if ($building->getComplete()) {
+                        if ($building_condition->getMinLevel() > $building->getLevel()) $current_state = min( $current_state, $this_state );
+                        if ($building_condition->getMaxLevel() < $building->getLevel()) $current_state = min( $current_state, $this_state );
+                    }
+                    elseif ($building_condition->getMinLevel() !== null) $current_state = min( $current_state, $this_state );
+                    elseif ($building_condition->getMaxLevel() !== null) $current_state = min( $current_state, $this_state );
+                }
+                elseif ($building_condition->getComplete() === true) $current_state = min( $current_state, $this_state );
+                elseif ($building_condition->getMinLevel() !== null) $current_state = min( $current_state, $this_state );
+                elseif ($building_condition->getMaxLevel() !== null) $current_state = min( $current_state, $this_state );
+            }
+
 
             if ($current_state < $last_state) $message = $meta_requirement->getFailureText();
 
@@ -214,6 +233,7 @@ class ActionHandler
             'bp_spawn' => [],
             'rp_text' => '',
             'casino' => '',
+            'well' => 0,
         ];
 
         $execute_result = function(Result &$result) use (&$citizen, &$item, &$action, &$message, &$remove, &$execute_result, &$execute_info_cache, &$tags) {
@@ -232,7 +252,11 @@ class ActionHandler
 
             if ($ap = $result->getAp()) {
                 $old_ap = $citizen->getAp();
-                $this->citizen_handler->setAP( $citizen, !$ap->getMax(), $ap->getMax() ? ( $this->citizen_handler->getMaxAP($citizen) + $ap->getAp() ) : $ap->getAp(), $ap->getBonus() );
+                if ($ap->getMax()) {
+                    $to = $this->citizen_handler->getMaxAP($citizen) + $ap->getAp();
+                    $this->citizen_handler->setAP( $citizen, false, max( $old_ap, $to ), null );
+                } else $this->citizen_handler->setAP( $citizen, true, $ap->getAp(), $ap->getBonus() );
+
                 $execute_info_cache['ap'] += ( $citizen->getAp() - $old_ap );
             }
 
@@ -269,17 +293,19 @@ class ActionHandler
             }
 
             if ($item_spawn = $result->getSpawn()) {
-                $proto = null;
-                if ($p = $item_spawn->getPrototype())
-                    $proto = $p;
-                elseif ($g = $item_spawn->getItemGroup())
-                    $proto = $this->random_generator->pickItemPrototypeFromGroup( $g );
+                for ($i = 0; $i < $item_spawn->getCount(); $i++ ) {
+                    $proto = null;
+                    if ($p = $item_spawn->getPrototype())
+                        $proto = $p;
+                    elseif ($g = $item_spawn->getItemGroup())
+                        $proto = $this->random_generator->pickItemPrototypeFromGroup( $g );
 
-                if ($proto && $this->inventory_handler->placeItem( $citizen, $this->item_factory->createItem( $proto ),
-                    $citizen->getZone()
-                        ? [ $citizen->getInventory(), $citizen->getZone()->getFloor() ]
-                        : [ $citizen->getInventory(), $citizen->getHome()->getChest(), $citizen->getTown()->getBank() ]
-                )) $execute_info_cache['items_spawn'][] = $proto;
+                    if ($proto && $this->inventory_handler->placeItem( $citizen, $this->item_factory->createItem( $proto ),
+                            $citizen->getZone()
+                                ? [ $citizen->getInventory(), $citizen->getZone()->getFloor() ]
+                                : [ $citizen->getInventory(), $citizen->getHome()->getChest(), $citizen->getTown()->getBank() ]
+                        )) $execute_info_cache['items_spawn'][] = $proto;
+                }
             }
 
             if ($item_consume = $result->getConsume()) {
@@ -297,6 +323,13 @@ class ActionHandler
                 if ($citizen->getZone())
                     $citizen->getZone()->setZombies( max( 0, $citizen->getZone()->getZombies() - mt_rand( $zombie_kill->getMin(), $zombie_kill->getMax() ) ) );
 
+            }
+
+            if ($well = $result->getWell()) {
+
+                $add = mt_rand( $well->getFillMin(), $well->getFillMax() );
+                $citizen->getTown()->setWell( $citizen->getTown()->getWell() + $add );
+                $execute_info_cache['well'] += $add;
             }
 
             if ($result->getRolePlayerText()) {
@@ -397,6 +430,7 @@ class ActionHandler
 
             $message = $this->translator->trans( $action->getMessage(), [
                 '{ap}'        => $execute_info_cache['ap'],
+                '{well}'      => $execute_info_cache['well'],
                 '{item}'      => $this->wrap($execute_info_cache['item']),
                 '{item_from}' => $execute_info_cache['item_morph'][0] ? ($this->wrap($execute_info_cache['item_morph'][0])) : "-",
                 '{item_to}'   => $execute_info_cache['item_morph'][1] ? ($this->wrap($execute_info_cache['item_morph'][1])) : "-",

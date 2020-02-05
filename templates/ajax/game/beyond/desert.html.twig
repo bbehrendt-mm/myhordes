@@ -96,8 +96,10 @@
                 {% endif %}
             {% endif %}
 
-            {% embed "ajax/game/actions.html.twig" with {'list': actions} %}
-            {% endembed %}
+            {% if zone.x != 0 or zone.y != 0 %}
+                {% embed "ajax/game/actions.html.twig" with {'list': actions} %}
+                {% endembed %}
+            {% endif %}
         </div>
 
         <div class="padded cell rw-6 rw-md-12">
