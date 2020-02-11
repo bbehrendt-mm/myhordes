@@ -8,6 +8,7 @@ use App\Entity\Building;
 use App\Entity\BuildingPrototype;
 use App\Entity\Citizen;
 use App\Entity\CitizenHome;
+use App\Entity\CitizenHomePrototype;
 use App\Entity\CitizenProfession;
 use App\Entity\DigTimer;
 use App\Entity\Inventory;
@@ -361,7 +362,10 @@ class GameFactory
         }
 
         $home = new CitizenHome();
-        $home->setChest( $chest = new Inventory() );
+        $home
+            ->setChest( $chest = new Inventory() )
+            ->setPrototype( $this->entity_manager->getRepository( CitizenHomePrototype::class )->findOneByLevel(0) )
+            ;
 
         $citizen = new Citizen();
         $citizen->setUser( $user )

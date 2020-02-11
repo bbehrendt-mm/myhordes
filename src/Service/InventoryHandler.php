@@ -6,9 +6,12 @@ namespace App\Service;
 
 use App\Entity\Citizen;
 use App\Entity\CitizenHome;
+use App\Entity\CitizenHomeUpgrade;
+use App\Entity\CitizenHomeUpgradePrototype;
 use App\Entity\CitizenProfession;
 use App\Entity\Inventory;
 use App\Entity\Item;
+use App\Entity\ItemGroup;
 use App\Entity\ItemProperty;
 use App\Entity\ItemPrototype;
 use App\Entity\Town;
@@ -50,8 +53,20 @@ class InventoryHandler
             return $base;
         }
 
-        if ($inventory->getHome())
-            return 4;
+        if ($inventory->getHome()) {
+            $base = 4;
+
+            // Check upgrades
+            $upgrade = $this->entity_manager->getRepository(CitizenHomeUpgrade::class)->findOneByPrototype(
+                $inventory->getHome(),
+                $this->entity_manager->getRepository( CitizenHomeUpgradePrototype::class )->findOneByName( 'chest' )
+            );
+            /** @var CitizenHomeUpgrade $upgrade */
+            if ($upgrade) $base += $upgrade->getLevel();
+
+            return $base;
+        }
+
 
         return 0;
     }
@@ -72,12 +87,20 @@ class InventoryHandler
     }
 
     /**
-     * @param Inventory $inventory
-     * @param ItemRequest[] $requests
+     * @param Inventory|Inventory[] $inventory
+     * @param ItemGroup|ItemRequest[] $requests
      * @return Item[]
      */
-    public function fetchSpecificItems(Inventory $inventory, array $requests): array {
+    public function fetchSpecificItems($inventory, $requests): array {
         $return = [];
+
+        if (is_a( $requests, ItemGroup::class )) {
+            $tmp = [];
+            foreach ($requests->getEntries() as $entry)
+                $tmp[] = new ItemRequest( $entry->getPrototype()->getName(), $entry->getChance(), false, false, false );
+            $requests = $tmp;
+        }
+
         foreach ($requests as $request) {
             $id_list = [];
             if ($request->isProperty()) {
@@ -91,8 +114,12 @@ class InventoryHandler
             $qb
                 ->select('i.id')->from('App:Item','i')
                 ->leftJoin('App:ItemPrototype', 'p', Join::WITH, 'i.prototype = p.id')
-                ->where('i.inventory = :inv')->setParameter('inv', $inventory)
                 ->setMaxResults( $request->getCount() );
+            if (is_array($inventory))
+                $qb->where('i.inventory IN (:inv)')->setParameter('inv', $inventory);
+            else
+                $qb->where('i.inventory = :inv')->setParameter('inv', $inventory);
+
 
             if ($request->isProperty())
                 $qb

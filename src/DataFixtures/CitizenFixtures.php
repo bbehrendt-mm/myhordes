@@ -2,16 +2,25 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\BuildingPrototype;
+use App\Entity\CitizenHomePrototype;
+use App\Entity\CitizenHomeUpgradeCosts;
+use App\Entity\CitizenHomeUpgradePrototype;
 use App\Entity\CitizenProfession;
 use App\Entity\CitizenStatus;
+use App\Entity\ItemGroup;
+use App\Entity\ItemGroupEntry;
+use App\Entity\ItemPrototype;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
 
-class CitizenFixtures extends Fixture
+class CitizenFixtures extends Fixture implements DependentFixtureInterface
 {
     public static $profession_data = [
         ['name'=>'none'        ,'label'=>'Gammler' ],
@@ -52,6 +61,48 @@ class CitizenFixtures extends Fixture
 
         ['name' => 'tg_dice' ],
         ['name' => 'tg_cards'],
+    ];
+
+    public static $home_levels = [
+        0 => [ 'label' => 'Feldbett',              'icon' => 'home_lv0', 'def' => [  0,  0   ], 'ap' => 0, 'resources' => [], 'building' => null, 'upgrades' => false, 'theft' => false ],
+        1 => [ 'label' => 'Zelt',                  'icon' => 'home_lv1', 'def' => [  1,  0.4 ], 'ap' => 2, 'resources' => [], 'building' => null, 'upgrades' => true,  'theft' => false ],
+        2 => [ 'label' => 'Baracke',               'icon' => 'home_lv2', 'def' => [  3,  1.2 ], 'ap' => 6, 'resources' => [], 'building' => null, 'upgrades' => true,  'theft' => false ],
+        3 => [ 'label' => 'Hütte',                 'icon' => 'home_lv3', 'def' => [  6,  2.4 ], 'ap' => 4, 'resources' => ['wood2_#00' => 1], 'building' => null, 'upgrades' => true,  'theft' => false ],
+        4 => [ 'label' => 'Haus',                  'icon' => 'home_lv4', 'def' => [ 10,  4   ], 'ap' => 6, 'resources' => ['metal_#00' => 1], 'building' => null, 'upgrades' => true,  'theft' => false ],
+        5 => [ 'label' => 'Umzäuntes Haus',        'icon' => 'home_lv5', 'def' => [ 14,  5.6 ], 'ap' => 6, 'resources' => ['wood2_#00' => 3, 'metal_#00' => 2], 'building' => 'small_strategy_#01', 'upgrades' => true, 'theft' => true ],
+        6 => [ 'label' => 'Befestigte Unterkunft', 'icon' => 'home_lv6', 'def' => [ 20,  8   ], 'ap' => 7, 'resources' => ['concrete_wall_#00' => 1, 'wood2_#00' => 3, 'metal_#00' => 4], 'building' => 'small_strategy_#01', 'upgrades' => true, 'theft' => true ],
+        7 => [ 'label' => 'Bunker',                'icon' => 'home_lv7', 'def' => [ 28, 11.2 ], 'ap' => 7, 'resources' => ['meca_parts_#00' => 3, 'concrete_wall_#00' => 2, 'plate_raw_#00' => 1, 'metal_#00' => 6], 'building' => 'small_strategy_#01', 'upgrades' => true, 'theft' => true ],
+        8 => [ 'label' => 'Schloss',               'icon' => 'home_lv8', 'def' => [ 50, 20   ], 'ap' => 7, 'resources' => ['meca_parts_#00' => 5, 'concrete_wall_#00' => 2, 'plate_raw_#00' => 3, 'wood2_#00' => 5, 'metal_#00' => 10], 'building' => 'small_strategy_#01', 'upgrades' => true, 'theft' => true ],
+    ];
+
+    public static $home_upgrades = [
+        [ 'name' => 'curtain', 'label' => 'Großer Vorhang', 'desc' => 'Mit dieser alten, schmutzigen Jutesackleinwand kannst du deine Habseligkeiten vor den neugierigen Blicken deiner Nachbarn schützen.', 'levels' => [
+            1 => [ 4, [] ]
+        ] ],
+        [ 'name' => 'lab', 'label' => 'Hobbylabor', 'desc' => 'Ein in dein Wohnzimmer geschaufeltes Loch dient dir als Versuchsküche für deine pharmazeutischen Experimente.', 'levels' => [
+            1 => [ 6, ['machine_1_#00' => 1] ], 2 => [ 4, ['electro_#00' => 1] ], 3 => [ 4, ['tube_#00' => 1] ], 4 => [ 6, ['engine_#00' => 1] ]
+        ] ],
+        [ 'name' => 'kitchen', 'label' => 'Küche', 'desc' => 'In dieser notdürftig zusammengeschraubten Küche können schmackhafte und \'gesunde\' Speisen zubereitet werden.', 'levels' => [
+            1 => [ 6, [] ], 2 => [ 3, ['small_knife_#00' => 1]], 3 => [ 4, ['machine_2_#00' => 1] ], 4 => [ 4, ['machine_3_#00' => 1]]
+        ] ],
+        [ 'name' => 'alarm', 'label' => 'Primitives Alarmsystem', 'desc' => 'Eisenteile, die an einem Faden hängen - so einfach und so effektiv kann ein Alarmsystem sein. Wenn jemand versuchen sollte, bei dir einzubrechen, wird er zwangsläufig die halbe Stadt aufwecken...', 'levels' => [
+            1 => [ 4, ['metal_#00' => 1] ]
+        ] ],
+        [ 'name' => 'rest', 'label' => 'Ruheecke', 'desc' => 'Was hier als \'Ruhe-Ecke\' bezeichnet wird, ist in Wahrheit nichts anderes als ein mit Kartons gefülltes Loch im Boden... der ideale Ort, wenn deine Kräfte schwinden und du dich für ein Nickerchen zurückziehen willst.', 'levels' => [
+            1 => [ 6, [] ], 2 => [ 3, ['wood2_#00' => 1] ], 3 => [ 4, ['bed_#00' => 1] ]
+        ] ],
+        [ 'name' => 'lock', 'label' => 'Türschloss', 'desc' => 'Dieses rudimentäre Schließsystem schützt dein Haus vor Diebstahl.', 'levels' => [
+            1 => [ 6, ['chain_#00' => 1] ]
+        ] ],
+        [ 'name' => 'fence', 'label' => 'Zaun', 'desc' => 'Wenn dich deine Wände nicht mehr ausreichend schützen, solltest du den Bau eines Zauns erwägen.', 'levels' => [
+            1 => [ 3, ['chain_#00' => 1, 'metal_beam_#00' => 1] ]
+        ] ],
+        [ 'name' => 'chest', 'label' => 'Stauraum', 'desc' => 'Deine persönliche Truhe vergrößert sich. ', 'levels' => [
+            1 => [ 2, [] ], 2 => [ 2, [] ], 3 => [ 2, [] ], 4 => [ 3, [] ], 5 => [ 4, [] ], 6 => [ 6, [] ], 7 => [ 6, [] ], 8 => [ 6, [] ], 9 => [ 6, [] ], 10 => [ 6, [] ], 11 => [ 6, [] ], 12 => [ 6, [] ], 13 => [ 6, [] ]
+        ] ],
+        [ 'name' => 'defense', 'label' => 'Verstärkungen', 'desc' => 'Dein Haus wird mit allen zur Verfügung stehenden Mitteln technisch verstärkt und auf Vordermann gebraucht. Diese Maßnahmen verlängern dein Leben... zumindest ein wenig.', 'levels' => [
+            1 => [ 3, [] ], 2 => [ 3, ['fence_#00' => 1] ], 3 => [ 3, ['fence_#00' => 1] ], 4 => [ 3, ['fence_#00' => 1] ], 5 => [ 6, ['fence_#00' => 1] ], 6 => [ 6, ['fence_#00' => 1] ], 7 => [ 6, ['fence_#00' => 1, 'metal_#00' => 1] ], 8 => [ 6, ['fence_#00' => 1, 'metal_#00' => 1] ], 9 => [ 6, ['fence_#00' => 1, 'metal_#00' => 1] ], 10 => [ 6, ['fence_#00' => 1, 'metal_#00' => 1] ]
+        ] ],
     ];
 
     private $entityManager;
@@ -117,6 +168,128 @@ class CitizenFixtures extends Fixture
         $progress->finish();
     }
 
+    /**
+     * @param ObjectManager $manager
+     * @param ConsoleOutputInterface $out
+     * @throws Exception
+     */
+    protected function insert_home_prototypes(ObjectManager $manager, ConsoleOutputInterface $out)
+    {
+        $out->writeln('<comment>Home Prototypes: ' . count(static::$home_levels) . ' fixture entries available.</comment>');
+
+        // Set up console
+        $progress = new ProgressBar( $out->section() );
+        $progress->start( count(static::$citizen_status) );
+
+        // Iterate over all entries
+        foreach (static::$home_levels as $level => $entry) {
+            // Get existing entry, or create new one
+            $entity = $this->entityManager->getRepository(CitizenHomePrototype::class)->findOneByLevel( $level );
+            if ($entity === null) $entity = new CitizenHomePrototype();
+
+            $entity->setLevel($level)->setAp( $entry['ap'] )->setIcon( $entry['icon'] )->setTownDefense( $entry['def'][1] )
+                ->setAllowSubUpgrades( $entry['upgrades'] )->setDefense( $entry['def'][0] )->setLabel( $entry['label'] )
+                ->setTheftProtection( $entry['theft'] );
+
+            $building = empty($entry['building']) ? null : $manager->getRepository(BuildingPrototype::class)->findOneByName( $entry['building'] );
+            if (!empty($building) && !$building) throw new Exception("Unable to locate building prototype '{$entry['building']}'");
+            $entity->setRequiredBuilding( $building );
+
+            if (empty($entry['resources'])) {
+                if ($entity->getResources()) {
+                    $manager->remove( $entity->getResources() );
+                    $entity->setResources( null );
+                }
+            } else {
+
+                if ($entity->getResources()) $entity->getResources()->getEntries()->clear();
+                else $entity->setResources( (new ItemGroup())->setName( "hu_{$level}_res" ) );
+
+                foreach ( $entry['resources'] as $item => $count ) {
+
+                    $ip = $manager->getRepository(ItemPrototype::class)->findOneByName( $item );
+                    if (!$item) throw new Exception("Unable to locate item prototype '{$item}'");
+                    $entity->getResources()->addEntry( (new ItemGroupEntry())->setPrototype( $ip )->setChance( $count ) );
+
+                }
+
+            }
+            // Persist
+            $manager->persist($entity);
+
+            // Set table entry
+            $progress->advance();
+        }
+
+        $manager->flush();
+        $progress->finish();
+    }
+
+    /**
+     * @param ObjectManager $manager
+     * @param ConsoleOutputInterface $out
+     * @throws Exception
+     */
+    protected function insert_home_upgrades(ObjectManager $manager, ConsoleOutputInterface $out)
+    {
+        $out->writeln('<comment>Home Upgrades: ' . count(static::$home_upgrades) . ' fixture entries available.</comment>');
+
+        // Set up console
+        $progress = new ProgressBar( $out->section() );
+        $progress->start( count(static::$citizen_status) );
+
+        // Iterate over all entries
+        foreach (static::$home_upgrades as $entry) {
+            // Get existing entry, or create new one
+            $entity = $this->entityManager->getRepository(CitizenHomeUpgradePrototype::class)->findOneByName( $entry['name'] );
+            if ($entity === null) $entity = new CitizenHomeUpgradePrototype();
+
+            $entity->setName( $entry['name'] )->setLabel( $entry['label'] )->setDescription( $entry['desc'] )
+                ->setIcon( $entry['icon'] ?? $entry['name'] );
+
+            // Persist & flush
+            $manager->persist($entity);
+            $manager->flush();
+
+            // Refresh
+            $entity = $this->entityManager->getRepository(CitizenHomeUpgradePrototype::class)->findOneByName( $entry['name'] );
+
+            foreach ( $entry['levels'] as $level => $res ) {
+                $lv_entry = $manager->getRepository(CitizenHomeUpgradeCosts::class)->findOneByPrototype( $entity, $level );
+                if (!$lv_entry) $lv_entry = (new CitizenHomeUpgradeCosts())->setPrototype($entity)->setLevel( $level );
+
+                $lv_entry->setAp( $res[0] );
+                if (empty($res[1])) {
+                    if ($lv_entry->getResources()) {
+                        $manager->remove( $lv_entry->getResources() );
+                        $lv_entry->setResources( null );
+                    }
+                } else {
+
+                    if ($lv_entry->getResources()) $lv_entry->getResources()->getEntries()->clear();
+                    else $lv_entry->setResources( (new ItemGroup())->setName( "hu_{$entry['name']}_{$level}_res" ) );
+
+                    foreach ( $res[1] as $item => $count ) {
+
+                        $ip = $manager->getRepository(ItemPrototype::class)->findOneByName( $item );
+                        if (!$item) throw new Exception("Unable to locate item prototype '{$item}'");
+                        $lv_entry->getResources()->addEntry( (new ItemGroupEntry())->setPrototype( $ip )->setChance( $count ) );
+
+                    }
+                }
+
+                $manager->persist( $lv_entry );
+            }
+
+            // Set table entry
+            $progress->advance();
+        }
+
+        $manager->flush();
+        $progress->finish();
+    }
+
+
     public function load(ObjectManager $manager) {
         $output = new ConsoleOutput();
         $output->writeln( '<info>Installing fixtures: Citizen Database</info>' );
@@ -126,5 +299,18 @@ class CitizenFixtures extends Fixture
         $output->writeln("");
         $this->insert_status_types( $manager, $output );
         $output->writeln("");
+        try {
+            $this->insert_home_prototypes($manager, $output);
+            $output->writeln("");
+            $this->insert_home_upgrades($manager, $output);
+        } catch (Exception $e) {
+            $output->writeln('<error>' . $e->getMessage() . '</error>');
+        }
+
+    }
+
+    public function getDependencies()
+    {
+        return [ RecipeFixtures::class ];
     }
 }

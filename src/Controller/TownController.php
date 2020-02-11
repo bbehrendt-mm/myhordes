@@ -3,19 +3,27 @@
 namespace App\Controller;
 
 use App\Entity\Building;
+use App\Entity\CitizenHomePrototype;
+use App\Entity\CitizenHomeUpgrade;
+use App\Entity\CitizenHomeUpgradeCosts;
+use App\Entity\CitizenHomeUpgradePrototype;
 use App\Entity\DailyUpgradeVote;
 use App\Entity\ItemPrototype;
 use App\Entity\Recipe;
 use App\Entity\Zone;
 use App\Response\AjaxResponse;
 use App\Service\ActionHandler;
+use App\Service\CitizenHandler;
 use App\Service\ErrorHelper;
 use App\Service\GameFactory;
 use App\Service\InventoryHandler;
 use App\Service\ItemFactory;
 use App\Service\JSONRequestParser;
 use App\Structures\ItemRequest;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Monolog\ErrorHandler;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -47,6 +55,7 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
         }
 
         $data['addons'] = $addons;
+        $data['home'] = $this->getActiveCitizen()->getHome();
         return parent::addDefaultTwigArgs( $section, $data );
     }
 
@@ -191,14 +200,50 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
 
     /**
      * @Route("jx/town/house", name="town_house")
+     * @param EntityManager $em
+     * @param GameFactory $gf
      * @return Response
      */
-    public function house(): Response
+    public function house(EntityManagerInterface $em, GameFactory $gf): Response
     {
+        $town = $this->getActiveCitizen()->getTown();
+        $home_next_level = $em->getRepository( CitizenHomePrototype::class )->findOneByLevel(
+            $this->getActiveCitizen()->getHome()->getPrototype()->getLevel() + 1
+        );
+        $home_next_level_requirement = null;
+        if ($home_next_level && $home_next_level->getRequiredBuilding())
+            $home_next_level_requirement = $gf->getBuilding( $town, $home_next_level->getRequiredBuilding(), true ) ? null : $home_next_level->getRequiredBuilding();
+
+        $upgrade_proto = [];
+        $upgrade_proto_lv = [];
+        $upgrade_cost = [];
+        if ($this->getActiveCitizen()->getHome()->getPrototype()->getAllowSubUpgrades()) {
+
+            $all_protos = $em->getRepository(CitizenHomeUpgradePrototype::class)->findAll();
+            foreach ($all_protos as $proto) {
+                /**
+                 * @var CitizenHomeUpgradePrototype $proto
+                 * @var CitizenHomeUpgrade $n
+                 */
+                $n = $em->getRepository(CitizenHomeUpgrade::class)->findOneByPrototype( $this->getActiveCitizen()->getHome(), $proto );
+
+                $upgrade_proto[$proto->getId()] = $proto;
+                $upgrade_proto_lv[$proto->getId()] = $n ? $n->getLevel() : 0;
+                $upgrade_cost[$proto->getId()] = $em->getRepository(CitizenHomeUpgradeCosts::class)->findOneByPrototype( $proto, $upgrade_proto_lv[$proto->getId()] + 1 );
+            }
+
+        }
+
         return $this->render( 'ajax/game/town/home.html.twig', $this->addDefaultTwigArgs('house', [
+            'home' => $this->getActiveCitizen()->getHome(),
             'actions' => $this->getItemActions(),
             'chest' => $this->getActiveCitizen()->getHome()->getChest(),
             'chest_size' => $this->inventory_handler->getSize($this->getActiveCitizen()->getHome()->getChest()),
+            'next_level' => $home_next_level,
+            'next_level_req' => $home_next_level_requirement,
+            'upgrades' => $upgrade_proto,
+            'upgrade_levels' => $upgrade_proto_lv,
+            'upgrade_costs' => $upgrade_cost,
         ]) );
     }
 
@@ -222,6 +267,87 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
      */
     public function action_house_api(JSONRequestParser $parser, InventoryHandler $handler): Response {
         return $this->generic_action_api( $parser, $handler);
+    }
+
+    /**
+     * @Route("api/town/house/upgrade", name="town_house_upgrade_controller")
+     * @param EntityManagerInterface $em
+     * @param InventoryHandler $ih
+     * @param CitizenHandler $ch
+     * @return Response
+     */
+    public function upgrade_house_api(EntityManagerInterface $em, InventoryHandler $ih, CitizenHandler $ch): Response {
+        $citizen = $this->getActiveCitizen();
+        $home = $citizen->getHome();
+        $next = $em->getRepository(CitizenHomePrototype::class)->findOneByLevel( $home->getPrototype()->getLevel() + 1 );
+        if (!$next) return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
+
+        if ($ch->isTired( $citizen ) || $citizen->getAp() < $next->getAp()) return AjaxResponse::error( ErrorHelper::ErrorNoAP );
+
+        $items = [];
+        if ($next->getResources()) {
+            $items = $ih->fetchSpecificItems( [$home->getChest(),$citizen->getInventory()], $next->getResources() );
+            if (!$items)  return AjaxResponse::error( ErrorHelper::ErrorItemsMissing );
+        }
+
+        $home->setPrototype($next);
+        $ch->setAP($citizen, true, -$next->getAp());
+        foreach ($items as $item) {
+            $item->getInventory()->removeItem($item);
+            $em->remove($item);
+        }
+        $em->persist($home);
+        $em->persist($citizen);
+        $em->flush();
+
+        return AjaxResponse::success();
+    }
+
+    /**
+     * @Route("api/town/house/extend", name="town_house_extend_controller")
+     * @param EntityManagerInterface $em
+     * @param InventoryHandler $ih
+     * @param CitizenHandler $ch
+     * @param JSONRequestParser $parser
+     * @return Response
+     */
+    public function extend_house_api(EntityManagerInterface $em, InventoryHandler $ih, CitizenHandler $ch, JSONRequestParser $parser): Response {
+        if (!$parser->has('id')) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
+        $id = (int)$parser->get('id');
+        if (!$id) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
+
+        $proto = $em->getRepository(CitizenHomeUpgradePrototype::class)->find( $id );
+        if (!$proto) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
+
+        $citizen = $this->getActiveCitizen();
+        $home = $citizen->getHome();
+
+        $current = $em->getRepository(CitizenHomeUpgrade::class)->findOneByPrototype($home, $proto);
+        $costs = $em->getRepository(CitizenHomeUpgradeCosts::class)->findOneByPrototype( $proto, $current ? $current->getLevel()+1 : 1 );
+
+        if (!$costs) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
+
+        if ($ch->isTired( $citizen ) || $citizen->getAp() < $costs->getAp()) return AjaxResponse::error( ErrorHelper::ErrorNoAP );
+        $items = [];
+        if ($costs->getResources()) {
+            $items = $ih->fetchSpecificItems( [$home->getChest(),$citizen->getInventory()], $costs->getResources() );
+            if (!$items)  return AjaxResponse::error( ErrorHelper::ErrorItemsMissing );
+        }
+
+        if (!$current) $current = (new CitizenHomeUpgrade())->setPrototype($proto)->setHome($home)->setLevel(1);
+        else $current->setLevel( $current->getLevel()+1 );
+
+        $ch->setAP($citizen, true, -$costs->getAp());
+        foreach ($items as $item) {
+            $item->getInventory()->removeItem($item);
+            $em->remove($item);
+        }
+
+        $em->persist($current);
+        $em->persist($citizen);
+        $em->flush();
+
+        return AjaxResponse::success();
     }
 
     /**

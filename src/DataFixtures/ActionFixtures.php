@@ -34,6 +34,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class ActionFixtures extends Fixture implements DependentFixtureInterface
 {
@@ -576,10 +577,10 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
 
             $data = $data ?: static::$item_actions['meta_requirements'][$id];
             $requirement = $manager->getRepository(Requirement::class)->findOneByName( $id );
-            if ($requirement) $out->writeln( "\t\t<comment>Update</comment> meta condition <info>$id</info>" );
+            if ($requirement) $out->writeln( "\t\t<comment>Update</comment> meta condition <info>$id</info>", OutputInterface::VERBOSITY_DEBUG );
             else {
                 $requirement = new Requirement();
-                $out->writeln( "\t\t<comment>Create</comment> meta condition <info>$id</info>" );
+                $out->writeln( "\t\t<comment>Create</comment> meta condition <info>$id</info>", OutputInterface::VERBOSITY_DEBUG );
             }
 
             $requirement
@@ -629,7 +630,7 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             }
 
             $manager->persist( $cache[$id] = $requirement );
-        } else $out->writeln( "\t\t<comment>Skip</comment> meta condition <info>$id</info>" );
+        } else $out->writeln( "\t\t<comment>Skip</comment> meta condition <info>$id</info>", OutputInterface::VERBOSITY_DEBUG );
         
         return $cache[$id];
     }
@@ -649,15 +650,15 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
     {
         if (!isset($cache[$id])) {
             $requirement = $manager->getRepository(RequireAP::class)->findOneByName( $id );
-            if ($requirement) $out->writeln( "\t\t\t<comment>Update</comment> condition <info>ap/{$id}</info>" );
+            if ($requirement) $out->writeln( "\t\t\t<comment>Update</comment> condition <info>ap/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
             else {
                 $requirement = new RequireAP();
-                $out->writeln( "\t\t\t<comment>Create</comment> condition <info>ap/{$id}</info>" );
+                $out->writeln( "\t\t\t<comment>Create</comment> condition <info>ap/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
             }
 
             $requirement->setName( $id )->setMin( $data['min'] )->setMax( $data['max'] )->setRelativeMax( $data['relative'] );
             $manager->persist( $cache[$id] = $requirement );
-        } else $out->writeln( "\t\t\t<comment>Skip</comment> condition <info>ap/{$id}</info>" );
+        } else $out->writeln( "\t\t\t<comment>Skip</comment> condition <info>ap/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
 
         return $cache[$id];
     }
@@ -677,10 +678,10 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
     {
         if (!isset($cache[$id])) {
             $requirement = $manager->getRepository(RequireStatus::class)->findOneByName( $id );
-            if ($requirement) $out->writeln( "\t\t\t<comment>Update</comment> condition <info>status/{$id}</info>" );
+            if ($requirement) $out->writeln( "\t\t\t<comment>Update</comment> condition <info>status/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
             else {
                 $requirement = new RequireStatus();
-                $out->writeln( "\t\t\t<comment>Create</comment> condition <info>status/{$id}</info>" );
+                $out->writeln( "\t\t\t<comment>Create</comment> condition <info>status/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
             }
             $status = $manager->getRepository(CitizenStatus::class)->findOneByName( $data['status'] );
             if (!$status)
@@ -688,7 +689,7 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
 
             $requirement->setName( $id )->setEnabled( $data['enabled'] )->setStatus( $status );
             $manager->persist( $cache[$id] = $requirement );
-        } else $out->writeln( "\t\t\t<comment>Skip</comment> condition <info>status/{$id}</info>" );
+        } else $out->writeln( "\t\t\t<comment>Skip</comment> condition <info>status/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
         
         return $cache[$id];
     }
@@ -708,10 +709,10 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
     {
         if (!isset($cache[$id])) {
             $requirement = $manager->getRepository(RequireItem::class)->findOneByName( $id );
-            if ($requirement) $out->writeln( "\t\t\t<comment>Update</comment> condition <info>item/{$id}</info>" );
+            if ($requirement) $out->writeln( "\t\t\t<comment>Update</comment> condition <info>item/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
             else {
                 $requirement = new RequireItem();
-                $out->writeln( "\t\t\t<comment>Create</comment> condition <info>item/{$id}</info>" );
+                $out->writeln( "\t\t\t<comment>Create</comment> condition <info>item/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
             }
             $prototype = empty($data['item']) ? null : $manager->getRepository(ItemPrototype::class)->findOneByName( $data['item'] );
             if (!empty($data['item']) && ! $prototype)
@@ -726,7 +727,7 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
 
             $requirement->setName( $id )->setPrototype( $prototype )->setProperty( $property );
             $manager->persist( $cache[$id] = $requirement );
-        } else $out->writeln( "\t\t\t<comment>Skip</comment> condition <info>item/{$id}</info>" );
+        } else $out->writeln( "\t\t\t<comment>Skip</comment> condition <info>item/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
 
         return $cache[$id];
     }
@@ -746,15 +747,15 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
     {
         if (!isset($cache[$id])) {
             $requirement = $manager->getRepository(RequireLocation::class)->findOneByName( $id );
-            if ($requirement) $out->writeln( "\t\t\t<comment>Update</comment> condition <info>location/{$id}</info>" );
+            if ($requirement) $out->writeln( "\t\t\t<comment>Update</comment> condition <info>location/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
             else {
                 $requirement = new RequireLocation();
-                $out->writeln( "\t\t\t<comment>Create</comment> condition <info>location/{$id}</info>" );
+                $out->writeln( "\t\t\t<comment>Create</comment> condition <info>location/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
             }
 
             $requirement->setName( $id )->setLocation( $data[0] );
             $manager->persist( $cache[$id] = $requirement );
-        } else $out->writeln( "\t\t\t<comment>Skip</comment> condition <info>location/{$id}</info>" );
+        } else $out->writeln( "\t\t\t<comment>Skip</comment> condition <info>location/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
 
         return $cache[$id];
     }
@@ -774,15 +775,15 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
     {
         if (!isset($cache[$id])) {
             $requirement = $manager->getRepository(RequireZombiePresence::class)->findOneByName( $id );
-            if ($requirement) $out->writeln( "\t\t\t<comment>Update</comment> condition <info>zombies/{$id}</info>" );
+            if ($requirement) $out->writeln( "\t\t\t<comment>Update</comment> condition <info>zombies/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
             else {
                 $requirement = new RequireZombiePresence();
-                $out->writeln( "\t\t\t<comment>Create</comment> condition <info>zombies/{$id}</info>" );
+                $out->writeln( "\t\t\t<comment>Create</comment> condition <info>zombies/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
             }
 
             $requirement->setName( $id )->setNumber( $data['min'] )->setMustBlock( $data['block'] );
             $manager->persist( $cache[$id] = $requirement );
-        } else $out->writeln( "\t\t\t<comment>Skip</comment> condition <info>zombies/{$id}</info>" );
+        } else $out->writeln( "\t\t\t<comment>Skip</comment> condition <info>zombies/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
 
         return $cache[$id];
     }
@@ -802,10 +803,10 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
     {
         if (!isset($cache[$id])) {
             $requirement = $manager->getRepository(RequireBuilding::class)->findOneByName( $id );
-            if ($requirement) $out->writeln( "\t\t\t<comment>Update</comment> condition <info>building/{$id}</info>" );
+            if ($requirement) $out->writeln( "\t\t\t<comment>Update</comment> condition <info>building/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
             else {
                 $requirement = new RequireBuilding();
-                $out->writeln( "\t\t\t<comment>Create</comment> condition <info>building/{$id}</info>" );
+                $out->writeln( "\t\t\t<comment>Create</comment> condition <info>building/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
             }
 
             $prototype = $manager->getRepository(BuildingPrototype::class)->findOneByName( $data['prototype'] );
@@ -819,7 +820,7 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
                 ->setMaxLevel( $data['maxLevel'] ?? null )
                 ;
             $manager->persist( $cache[$id] = $requirement );
-        } else $out->writeln( "\t\t\t<comment>Skip</comment> condition <info>building/{$id}</info>" );
+        } else $out->writeln( "\t\t\t<comment>Skip</comment> condition <info>building/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
 
         return $cache[$id];
     }
@@ -844,10 +845,10 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             $data = $data ?: static::$item_actions['meta_results'][$id];
 
             $result = $manager->getRepository(Result::class)->findOneByName( $id );
-            if ($result) $out->writeln( "\t\t<comment>Update</comment> meta effect <info>$id</info>" );
+            if ($result) $out->writeln( "\t\t<comment>Update</comment> meta effect <info>$id</info>", OutputInterface::VERBOSITY_DEBUG );
             else {
                 $result = new Result();
-                $out->writeln( "\t\t<comment>Create</comment> meta effect <info>$id</info>" );
+                $out->writeln( "\t\t<comment>Create</comment> meta effect <info>$id</info>", OutputInterface::VERBOSITY_DEBUG );
             }
 
             $result->setName( $id );
@@ -908,7 +909,7 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             }
 
             $manager->persist( $cache[$id] = $result );
-        } else $out->writeln( "\t\t<comment>Skip</comment> meta effect <info>$id</info>" );
+        } else $out->writeln( "\t\t<comment>Skip</comment> meta effect <info>$id</info>", OutputInterface::VERBOSITY_DEBUG );
 
         return $cache[$id];
     }
@@ -928,10 +929,10 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
     {
         if (!isset($cache[$id])) {
             $result = $manager->getRepository(AffectStatus::class)->findOneByName( $id );
-            if ($result) $out->writeln( "\t\t\t<comment>Update</comment> effect <info>status/{$id}</info>" );
+            if ($result) $out->writeln( "\t\t\t<comment>Update</comment> effect <info>status/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
             else {
                 $result = new AffectStatus();
-                $out->writeln( "\t\t\t<comment>Create</comment> effect <info>status/{$id}</info>" );
+                $out->writeln( "\t\t\t<comment>Create</comment> effect <info>status/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
             }
             $status_from = empty($data['from']) ? null : $manager->getRepository(CitizenStatus::class)->findOneByName( $data['from'] );
             if (!$status_from && !empty($data['from'])) throw new Exception('Status effect not found: ' . $data['from']);
@@ -942,7 +943,7 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
 
             $result->setName( $id )->setInitial( $status_from )->setResult( $status_to );
             $manager->persist( $cache[$id] = $result );
-        } else $out->writeln( "\t\t\t<comment>Skip</comment> effect <info>status/{$id}</info>" );
+        } else $out->writeln( "\t\t\t<comment>Skip</comment> effect <info>status/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
         
         return $cache[$id];
     }
@@ -961,17 +962,17 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
     {
         if (!isset($cache[$id])) {
             $result = $manager->getRepository(AffectAP::class)->findOneByName( $id );
-            if ($result) $out->writeln( "\t\t\t<comment>Update</comment> effect <info>ap/{$id}</info>" );
+            if ($result) $out->writeln( "\t\t\t<comment>Update</comment> effect <info>ap/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
             else {
                 $result = new AffectAP();
-                $out->writeln( "\t\t\t<comment>Create</comment> effect <info>ap/{$id}</info>" );
+                $out->writeln( "\t\t\t<comment>Create</comment> effect <info>ap/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
             }
 
             $result->setName( $id )->setMax( $data['max'] )->setAp( $data['num'] );
             if ($data['max']) $result->setBonus( $data['num'] );
             else $result->setBonus( isset($data['bonus']) ? $data['bonus'] : 0 );
             $manager->persist( $cache[$id] = $result );
-        } else $out->writeln( "\t\t\t<comment>Skip</comment> effect <info>ap/{$id}</info>" );
+        } else $out->writeln( "\t\t\t<comment>Skip</comment> effect <info>ap/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
         
         return $cache[$id];
     }
@@ -993,11 +994,11 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             $result = $manager->getRepository(AffectBlueprint::class)->findOneByName( $id );
             if ($result) {
                 $result->getList()->clear();
-                $out->writeln( "\t\t\t<comment>Update</comment> effect <info>blueprint/{$id}</info>" );
+                $out->writeln( "\t\t\t<comment>Update</comment> effect <info>blueprint/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
             }
             else {
                 $result = new AffectBlueprint();
-                $out->writeln("\t\t\t<comment>Create</comment> effect <info>blueprint/{$id}</info>");
+                $out->writeln("\t\t\t<comment>Create</comment> effect <info>blueprint/{$id}</info>", OutputInterface::VERBOSITY_DEBUG);
             }
 
             $result->setName( $id );
@@ -1016,7 +1017,7 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
 
 
             $manager->persist( $cache[$id] = $result );
-        } else $out->writeln( "\t\t\t<comment>Skip</comment> effect <info>blueprint/{$id}</info>" );
+        } else $out->writeln( "\t\t\t<comment>Skip</comment> effect <info>blueprint/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
 
         return $cache[$id];
     }
@@ -1036,10 +1037,10 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
     {
         if (!isset($cache[$id])) {
             $result = $manager->getRepository(AffectOriginalItem::class)->findOneByName( $id );
-            if ($result) $out->writeln( "\t\t\t<comment>Update</comment> effect <info>item/{$id}</info>" );
+            if ($result) $out->writeln( "\t\t\t<comment>Update</comment> effect <info>item/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
             else {
                 $result = new AffectOriginalItem();
-                $out->writeln( "\t\t\t<comment>Create</comment> effect <info>item/{$id}</info>" );
+                $out->writeln( "\t\t\t<comment>Create</comment> effect <info>item/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
             }
             $morph_to = empty($data['morph']) ? null : $manager->getRepository(ItemPrototype::class)->findOneByName( $data['morph'] );
             if (!$morph_to && !empty($data['morph'])) throw new Exception('Item prototype not found: ' . $data['morph']);
@@ -1050,7 +1051,7 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
                 ->setBreak( isset($data['break']) ? $data['break'] : null )
                 ->setPoison( isset($data['poison']) ? $data['poison'] : null );
             $manager->persist( $cache[$id] = $result );
-        } else $out->writeln( "\t\t\t<comment>Skip</comment> effect <info>item/{$id}</info>" );
+        } else $out->writeln( "\t\t\t<comment>Skip</comment> effect <info>item/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
         
         return $cache[$id];
     }
@@ -1070,10 +1071,10 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
     {
         if (!isset($cache[$id])) {
             $result = $manager->getRepository(AffectItemSpawn::class)->findOneByName( $id );
-            if ($result) $out->writeln( "\t\t\t<comment>Update</comment> effect <info>spawn/{$id}</info>" );
+            if ($result) $out->writeln( "\t\t\t<comment>Update</comment> effect <info>spawn/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
             else {
                 $result = (new AffectItemSpawn())->setName( $id );
-                $out->writeln( "\t\t\t<comment>Create</comment> effect <info>spawn/{$id}</info>" );
+                $out->writeln( "\t\t\t<comment>Create</comment> effect <info>spawn/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
             }
 
             if (count($data) === 1) {
@@ -1100,7 +1101,7 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             }
 
             $manager->persist( $cache[$id] = $result );
-        } else $out->writeln( "\t\t\t<comment>Skip</comment> effect <info>spawn/{$id}</info>" );
+        } else $out->writeln( "\t\t\t<comment>Skip</comment> effect <info>spawn/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
 
         return $cache[$id];
     }
@@ -1120,10 +1121,10 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
     {
         if (!isset($cache[$id])) {
             $result = $manager->getRepository(AffectItemConsume::class)->findOneByName( $id );
-            if ($result) $out->writeln( "\t\t\t<comment>Update</comment> effect <info>consume/{$id}</info>" );
+            if ($result) $out->writeln( "\t\t\t<comment>Update</comment> effect <info>consume/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
             else {
                 $result = (new AffectItemConsume())->setName( $id );
-                $out->writeln( "\t\t\t<comment>Create</comment> effect <info>consume/{$id}</info>" );
+                $out->writeln( "\t\t\t<comment>Create</comment> effect <info>consume/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
             }
 
             list($name,$count) = count($data) > 1 ? $data : [$data[0],1];
@@ -1132,7 +1133,7 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             $result->setPrototype( $prototype )->setCount( $count );
 
             $manager->persist( $cache[$id] = $result );
-        } else $out->writeln( "\t\t\t<comment>Skip</comment> effect <info>consume/{$id}</info>" );
+        } else $out->writeln( "\t\t\t<comment>Skip</comment> effect <info>consume/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
 
         return $cache[$id];
     }
@@ -1151,15 +1152,15 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
     {
         if (!isset($cache[$id])) {
             $result = $manager->getRepository(AffectZombies::class)->findOneByName( $id );
-            if ($result) $out->writeln( "\t\t\t<comment>Update</comment> effect <info>zombie/{$id}</info>" );
+            if ($result) $out->writeln( "\t\t\t<comment>Update</comment> effect <info>zombie/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
             else {
                 $result = new AffectZombies();
-                $out->writeln( "\t\t\t<comment>Create</comment> effect <info>zombie/{$id}</info>" );
+                $out->writeln( "\t\t\t<comment>Create</comment> effect <info>zombie/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
             }
 
             $result->setName( $id )->setMax( isset($data['max']) ? $data['max'] : $data['num'] )->setMin( isset($data['min']) ? $data['min'] : $data['num'] );
             $manager->persist( $cache[$id] = $result );
-        } else $out->writeln( "\t\t\t<comment>Skip</comment> effect <info>zombie/{$id}</info>" );
+        } else $out->writeln( "\t\t\t<comment>Skip</comment> effect <info>zombie/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
 
         return $cache[$id];
     }
@@ -1178,15 +1179,15 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
     {
         if (!isset($cache[$id])) {
             $result = $manager->getRepository(AffectWell::class)->findOneByName( $id );
-            if ($result) $out->writeln( "\t\t\t<comment>Update</comment> effect <info>well/{$id}</info>" );
+            if ($result) $out->writeln( "\t\t\t<comment>Update</comment> effect <info>well/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
             else {
                 $result = new AffectWell();
-                $out->writeln( "\t\t\t<comment>Create</comment> effect <info>well/{$id}</info>" );
+                $out->writeln( "\t\t\t<comment>Create</comment> effect <info>well/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
             }
 
             $result->setName( $id )->setFillMax( $data['max'] )->setFillMin( $data['min'] );
             $manager->persist( $cache[$id] = $result );
-        } else $out->writeln( "\t\t\t<comment>Skip</comment> effect <info>well/{$id}</info>" );
+        } else $out->writeln( "\t\t\t<comment>Skip</comment> effect <info>well/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
 
         return $cache[$id];
     }
@@ -1208,10 +1209,10 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
     {
         if (!isset($cache[$id])) {
             $result = $manager->getRepository(AffectResultGroup::class)->findOneByName( $id );
-            if ($result) $out->writeln( "\t\t\t<comment>Update</comment> effect <info>group/{$id}</info>" );
+            if ($result) $out->writeln( "\t\t\t<comment>Update</comment> effect <info>group/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
             else {
                 $result = (new AffectResultGroup())->setName( $id );
-                $out->writeln( "\t\t\t<comment>Create</comment> effect <info>group/{$id}</info>" );
+                $out->writeln( "\t\t\t<comment>Create</comment> effect <info>group/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
             }
 
             foreach ( $result->getEntries() as $entry ) $manager->remove( $entry ); $result->getEntries()->clear();
@@ -1231,7 +1232,7 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             }
 
             $manager->persist( $cache[$id] = $result );
-        } else $out->writeln( "\t\t\t<comment>Skip</comment> effect <info>group/{$id}</info>" );
+        } else $out->writeln( "\t\t\t<comment>Skip</comment> effect <info>group/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
 
         return $cache[$id];
     }
@@ -1243,7 +1244,7 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
      */
     public function insert_item_actions(ObjectManager $manager, ConsoleOutputInterface $out) {
 
-        $out->writeln( '<comment>Compiling item action fixtures.</comment>' );
+        $out->writeln( '<comment>Compiling item action fixtures.</comment>', OutputInterface::VERBOSITY_DEBUG );
 
         $set_meta_requirements = [];
         $set_sub_requirements = [];
@@ -1257,7 +1258,7 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
 
             $item = $manager->getRepository(ItemPrototype::class)->findOneByName( $item_name );
             if (!$item) throw new Exception('Item prototype not found: ' . $item_name);
-            $out->writeln( "Compiling action set for item <info>{$item->getLabel()}</info>..." );
+            $out->writeln( "Compiling action set for item <info>{$item->getLabel()}</info>...", OutputInterface::VERBOSITY_DEBUG );
 
             foreach ($actions as $action) {
 
@@ -1266,10 +1267,10 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
 
                     $data = static::$item_actions['actions'][$action];
                     $new_action = $manager->getRepository(ItemAction::class)->findOneByName( $action );
-                    if ($new_action) $out->writeln( "\t<comment>Update</comment> action <info>$action</info> ('<info>{$data['label']}</info>')" );
+                    if ($new_action) $out->writeln( "\t<comment>Update</comment> action <info>$action</info> ('<info>{$data['label']}</info>')", OutputInterface::VERBOSITY_DEBUG );
                     else {
                         $new_action = new ItemAction();
-                        $out->writeln( "\t<comment>Create</comment> action <info>$action</info> ('<info>{$data['label']}</info>')" );
+                        $out->writeln( "\t<comment>Create</comment> action <info>$action</info> ('<info>{$data['label']}</info>')", OutputInterface::VERBOSITY_DEBUG );
                     }
 
                     $new_action->setName( $action )->setLabel( $data['label'] )->clearRequirements();
@@ -1289,7 +1290,7 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
                     }
 
                     $manager->persist( $set_actions[$action] = $new_action );
-                } else $out->writeln( "\t<comment>Skip</comment> action <info>$action</info> ('<info>{$set_actions[$action]->getLabel()}</info>')" );
+                } else $out->writeln( "\t<comment>Skip</comment> action <info>$action</info> ('<info>{$set_actions[$action]->getLabel()}</info>')", OutputInterface::VERBOSITY_DEBUG );
 
                 $item->addAction( $set_actions[$action] );
             }
@@ -1318,6 +1319,6 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
      */
     public function getDependencies()
     {
-        return [ ItemFixtures::class, RecipeFixtures::class ];
+        return [ ItemFixtures::class, RecipeFixtures::class, CitizenFixtures::class ];
     }
 }

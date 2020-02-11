@@ -3,7 +3,10 @@
 .town-menu {
   &>.cell {
     &>div:first-child { width: 100%; padding-top: 55.1724138% }
-    &>div:last-child { font-size: small; padding: 1px 4px; background: @myhordes-cell-header-background-color }
+    &>div:last-child {
+      font-size: small; padding: 1px 4px; background: @myhordes-cell-header-background-color; height: 20px;
+      &>img { vertical-align: bottom };
+    }
     &:not(.selected):hover {
       &>div:last-child { color: @myhordes-input-border; }
       outline: 1px solid @myhordes-input-border; cursor: pointer;

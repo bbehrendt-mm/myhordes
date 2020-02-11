@@ -5,10 +5,11 @@
 {% endblock %}
 {% block ajax %}
     {{ parent() }}
+    {# @var home \App\Entity\CitizenHome #}
     <div class="row">
         <div class="padded-small cell rw-4 rw-sm-12">
             <div class="row town-menu">
-                <div {% if menu_section != 'house' %}x-ajax-href="{{ path('town_house') }}"{% endif %} class="cell padded-small rw-6 rw-lg-12 rw-sm-6 {% if menu_section == 'house' %}selected{% endif %} town-menu-house"><div></div><div class="hide-sm">{% trans from 'game' %}Mein Haus{% endtrans %}</div></div>
+                <div {% if menu_section != 'house' %}x-ajax-href="{{ path('town_house') }}"{% endif %} class="cell padded-small rw-6 rw-lg-12 rw-sm-6 {% if menu_section == 'house' %}selected{% endif %} town-menu-house"><div></div><div class="hide-sm"><img alt="{{ home.prototype.level }}" src="{{ asset('build/images/home/' ~ home.prototype.icon ~ '.gif') }}" />{% trans from 'game' %}Mein Haus{% endtrans %}</div></div>
                 <div {% if menu_section != 'well' %}x-ajax-href="{{ path('town_well') }}"{% endif %} class="cell padded-small rw-6 rw-lg-12 rw-sm-6 {% if menu_section == 'well' %}selected{% endif %} town-menu-well"><div></div><div class="hide-sm">{% trans from 'game' %}Brunnen{% endtrans %}</div></div>
                 <div {% if menu_section != 'bank' %}x-ajax-href="{{ path('town_bank') }}"{% endif %} class="cell padded-small rw-6 rw-lg-12 rw-sm-6 {% if menu_section == 'bank' %}selected{% endif %} town-menu-bank"><div></div><div class="hide-sm">{% trans from 'game' %}Bank{% endtrans %}</div></div>
                 <div {% if menu_section != 'citizens' %}x-ajax-href="{{ path('town_citizens') }}"{% endif %} class="cell padded-small rw-6 rw-lg-12 rw-sm-6 {% if menu_section == 'citizens' %}selected{% endif %} town-menu-citizens"><div></div><div class="hide-sm">{% trans from 'game' %}Bürger{% endtrans %}</div></div>
