@@ -64,10 +64,12 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
      * @Route("jx/town/dashboard", name="town_dashboard")
      * @return Response
      */
-    public function dashboard(): Response
+    public function dashboard(TownHandler $th): Response
     {
+        $town = $this->getActiveCitizen()->getTown();
         return $this->render( 'ajax/game/town/dashboard.html.twig', $this->addDefaultTwigArgs(null, [
-            'town' => $this->getActiveCitizen()->getTown()
+            'town' => $town,
+            'def' => $th->calculate_town_def($town),
         ]) );
     }
 
@@ -476,9 +478,7 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
      */
     public function citizens(): Response
     {
-        return $this->render( 'ajax/game/town/dashboard.html.twig', $this->addDefaultTwigArgs('citizens', [
-            'town' => $this->getActiveCitizen()->getTown()
-        ]) );
+        return $this->dashboard();
     }
 
     /**

@@ -77,7 +77,30 @@ class TownHandler
         return $house_def + $upgrade_def + $item_def;
     }
 
-    public function calculate_home_town_def( CitizenHome $home): float {
-        return $this->calculate_home_def($home) * 0.4;
+    public function calculate_town_def( Town &$town, ?int &$house_def = null, ?int &$citizen_def = null, ?int &$building_def = null, ?int &$item_def = null ): int {
+        $f_house_def = 0.0;
+        $citizen_def = 0;
+        foreach ($town->getCitizens() as $citizen)
+            if ($citizen->getAlive()) {
+                $home = $citizen->getHome();
+                $f_house_def += $this->calculate_home_def( $home ) * 0.4;
+                if (!$citizen->getZone() && $citizen->getProfession()->getName() === 'guardian')
+                    $citizen_def += 5;
+            }
+        $house_def = floor($f_house_def);
+        $building_def = 0;
+        $item_def_factor = 1.0;
+        foreach ($town->getBuildings() as $building)
+            if ($building->getComplete()) {
+                $building_def += ( $building->getDefenseBonus() + $building->getPrototype()->getDefense() );
+                if ($building->getPrototype()->getName() === 'item_meca_parts_#00')
+                    $item_def_factor += (1+$building->getLevel()) * 0.5;
+            }
+
+        $item_def = floor($this->inventory_handler->countSpecificItems( $town->getBank(),
+            $this->inventory_handler->resolveItemProperties( 'defence' )
+        ) * $item_def_factor);
+
+        return $house_def + $citizen_def + $building_def + $item_def;
     }
 }
