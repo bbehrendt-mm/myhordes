@@ -6,31 +6,22 @@ namespace App\Service;
 
 use App\Entity\Building;
 use App\Entity\BuildingPrototype;
-use App\Entity\Citizen;
 use App\Entity\CitizenHome;
-use App\Entity\CitizenHomePrototype;
-use App\Entity\CitizenProfession;
-use App\Entity\DigTimer;
-use App\Entity\Inventory;
-use App\Entity\ItemGroup;
+use App\Entity\CitizenHomeUpgrade;
+use App\Entity\CitizenHomeUpgradePrototype;
 use App\Entity\Town;
-use App\Entity\TownClass;
-use App\Entity\User;
-use App\Entity\WellCounter;
-use App\Entity\Zone;
-use App\Entity\ZonePrototype;
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 
 class TownHandler
 {
     private $entity_manager;
+    private $inventory_handler;
 
     public function __construct(
-        EntityManagerInterface $em)
+        EntityManagerInterface $em, InventoryHandler $ih)
     {
         $this->entity_manager = $em;
+        $this->inventory_handler = $ih;
     }
 
     private function internalAddBuilding( Town &$town, BuildingPrototype $prototype ) {
@@ -69,5 +60,24 @@ class TownHandler
             if ($b->getPrototype()->getId() === $prototype->getId())
                 return (!$finished || $b->getComplete()) ? $b : null;
         return null;
+    }
+
+    public function calculate_home_def( CitizenHome &$home, ?int &$house_def = null, ?int &$upgrade_def = null, ?int &$item_def = null ): int {
+        $house_def = $home->getPrototype()->getDefense();
+
+        /** @var CitizenHomeUpgrade|null $n */
+        $n = $this->entity_manager->getRepository(CitizenHomeUpgrade::class)->findOneByPrototype( $home,
+            $this->entity_manager->getRepository( CitizenHomeUpgradePrototype::class )->findOneByName( 'defense' )
+        );
+        $upgrade_def = $n ? $n->getLevel() : 0;
+        $item_def = $this->inventory_handler->countSpecificItems( $home->getChest(),
+            $this->inventory_handler->resolveItemProperties( 'defence' )
+        );
+
+        return $house_def + $upgrade_def + $item_def;
+    }
+
+    public function calculate_home_town_def( CitizenHome $home): float {
+        return $this->calculate_home_def($home) * 0.4;
     }
 }

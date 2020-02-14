@@ -71,13 +71,37 @@ class InventoryHandler
         return 0;
     }
 
-    public function countSpecificItems(Inventory $inventory, ItemPrototype $prototype): int {
+    /**
+     * @param string|string[]|ItemProperty|ItemProperty[] $props
+     * @return ItemPrototype[]
+     */
+    public function resolveItemProperties( $props ): array {
+        if (!is_array( $props )) $props = [$props];
+        $props = array_map(function($e):ItemProperty {
+            if (!is_string($e)) return $e;
+            return $this->entity_manager->getRepository(ItemProperty::class)->findOneByName( $e );
+        }, $props);
+
+        $tmp = [];
+        foreach ($props as $prop)
+            foreach ($prop->getItemPrototypes() as $itemPrototype)
+                $tmp[$itemPrototype->getId()] = $itemPrototype;
+        return array_values($tmp);
+    }
+
+    /**
+     * @param Inventory $inventory
+     * @param ItemPrototype|ItemPrototype[] $prototype
+     * @return int
+     */
+    public function countSpecificItems(Inventory $inventory, $prototype): int {
+        if (!is_array($prototype)) $prototype = [$prototype];
         try {
             return $this->entity_manager->createQueryBuilder()
                 ->select('count(i.id)')->from('App:Item', 'i')
                 ->leftJoin('App:ItemPrototype', 'p', Join::WITH, 'i.prototype = p.id')
                 ->where('i.inventory = :inv')->setParameter('inv', $inventory)
-                ->andWhere('p.id = :type')->setParameter('type', $prototype)
+                ->andWhere('p.id IN (:type)')->setParameter('type', $prototype)
                 ->getQuery()->getSingleScalarResult();
         } catch (NoResultException $e) {
             return 0;

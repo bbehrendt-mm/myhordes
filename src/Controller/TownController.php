@@ -208,8 +208,9 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
     public function house(EntityManagerInterface $em, TownHandler $th): Response
     {
         $town = $this->getActiveCitizen()->getTown();
+        $home = $this->getActiveCitizen()->getHome();
         $home_next_level = $em->getRepository( CitizenHomePrototype::class )->findOneByLevel(
-            $this->getActiveCitizen()->getHome()->getPrototype()->getLevel() + 1
+            $home->getPrototype()->getLevel() + 1
         );
         $home_next_level_requirement = null;
         if ($home_next_level && $home_next_level->getRequiredBuilding())
@@ -218,7 +219,7 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
         $upgrade_proto = [];
         $upgrade_proto_lv = [];
         $upgrade_cost = [];
-        if ($this->getActiveCitizen()->getHome()->getPrototype()->getAllowSubUpgrades()) {
+        if ($home->getPrototype()->getAllowSubUpgrades()) {
 
             $all_protos = $em->getRepository(CitizenHomeUpgradePrototype::class)->findAll();
             foreach ($all_protos as $proto) {
@@ -226,25 +227,32 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
                  * @var CitizenHomeUpgradePrototype $proto
                  * @var CitizenHomeUpgrade $n
                  */
-                $n = $em->getRepository(CitizenHomeUpgrade::class)->findOneByPrototype( $this->getActiveCitizen()->getHome(), $proto );
+                $n = $em->getRepository(CitizenHomeUpgrade::class)->findOneByPrototype( $home, $proto );
 
                 $upgrade_proto[$proto->getId()] = $proto;
                 $upgrade_proto_lv[$proto->getId()] = $n ? $n->getLevel() : 0;
                 $upgrade_cost[$proto->getId()] = $em->getRepository(CitizenHomeUpgradeCosts::class)->findOneByPrototype( $proto, $upgrade_proto_lv[$proto->getId()] + 1 );
             }
-
         }
 
+        $def = $th->calculate_home_def($home, $def_house, $def_upg, $def_items);
+        $deco = 0;
+        foreach ($home->getChest()->getItems() as $item)
+            $deco += $item->getPrototype()->getDeco();
+
         return $this->render( 'ajax/game/town/home.html.twig', $this->addDefaultTwigArgs('house', [
-            'home' => $this->getActiveCitizen()->getHome(),
+            'home' => $home,
             'actions' => $this->getItemActions(),
-            'chest' => $this->getActiveCitizen()->getHome()->getChest(),
-            'chest_size' => $this->inventory_handler->getSize($this->getActiveCitizen()->getHome()->getChest()),
+            'chest' => $home->getChest(),
+            'chest_size' => $this->inventory_handler->getSize($home->getChest()),
             'next_level' => $home_next_level,
             'next_level_req' => $home_next_level_requirement,
             'upgrades' => $upgrade_proto,
             'upgrade_levels' => $upgrade_proto_lv,
             'upgrade_costs' => $upgrade_cost,
+
+            'def' => $def, 'def_house' => $def_house, 'def_upg' => $def_upg, 'def_items' => $def_items,
+            'deco' => $deco,
         ]) );
     }
 

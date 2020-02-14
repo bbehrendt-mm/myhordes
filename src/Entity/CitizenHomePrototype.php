@@ -44,11 +44,6 @@ class CitizenHomePrototype
     private $defense;
 
     /**
-     * @ORM\Column(type="float")
-     */
-    private $townDefense;
-
-    /**
      * @ORM\Column(type="integer")
      */
     private $ap;
@@ -122,18 +117,6 @@ class CitizenHomePrototype
     public function setDefense(int $defense): self
     {
         $this->defense = $defense;
-
-        return $this;
-    }
-
-    public function getTownDefense(): ?float
-    {
-        return $this->townDefense;
-    }
-
-    public function setTownDefense(float $townDefense): self
-    {
-        $this->townDefense = $townDefense;
 
         return $this;
     }

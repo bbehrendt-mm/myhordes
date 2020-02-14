@@ -11,7 +11,7 @@
 @media (max-width: (@screen-large-threshold - 1)) {
   .hide-mobile {display: none !important;};
   body {background: black;}
-  #wrapper, div.game-menu-area { width: 100%; }
+  #wrapper, div.game-menu-area, footer { width: 100%; }
 }
 @media (max-width: (@screen-large-threshold - 1)) and (min-width: @screen-medium-threshold) {
   .hide-@{screen-large} {display: none !important;};
@@ -22,6 +22,7 @@
 @media (max-width: (@screen-small-threshold - 1)) {
   .hide-@{screen-small} {display: none !important;};
   #notifications { width: 100%; left: 0; margin-left: 0; }
+  button { padding-top: 16px; padding-bottom: 16px; margin-top: 8px; margin-bottom: 8px; }
 }
 
 .postfix(@threshold, @postfix) {

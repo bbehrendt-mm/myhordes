@@ -22,8 +22,9 @@ class CitizenHomeUpgradeRepository extends ServiceEntityRepository
         parent::__construct($registry, CitizenHomeUpgrade::class);
     }
 
-    public function findOneByPrototype(CitizenHome $home, CitizenHomeUpgradePrototype $proto): ?CitizenHomeUpgrade
+    public function findOneByPrototype(CitizenHome $home, ?CitizenHomeUpgradePrototype $proto): ?CitizenHomeUpgrade
     {
+        if ($proto === null) return null;
         try {
             return $this->createQueryBuilder('c')
                 ->andWhere('c.prototype = :val')->setParameter('val', $proto)
