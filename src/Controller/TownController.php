@@ -19,6 +19,7 @@ use App\Service\GameFactory;
 use App\Service\InventoryHandler;
 use App\Service\ItemFactory;
 use App\Service\JSONRequestParser;
+use App\Service\TownHandler;
 use App\Structures\ItemRequest;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -127,21 +128,21 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
 
     /**
      * @Route("jx/town/workshop", name="town_workshop")
-     * @param GameFactory $gf
+     * @param TownHandler $th
      * @param InventoryHandler $iv
      * @return Response
      */
-    public function addon_workshop(GameFactory $gf, InventoryHandler $iv): Response
+    public function addon_workshop(TownHandler $th, InventoryHandler $iv): Response
     {
         $town = $this->getActiveCitizen()->getTown();
         $c_inv = $this->getActiveCitizen()->getInventory();
         $t_inv = $town->getBank();
 
-        if (!$gf->getBuilding($town, 'small_refine_#00', true))
+        if (!$th->getBuilding($town, 'small_refine_#00', true))
             return $this->redirect($this->generateUrl('town_dashboard'));
 
         $have_saw  = $iv->countSpecificItems( $c_inv, $this->entity_manager->getRepository( ItemPrototype::class )->findOneByName( 'saw_tool_#00' ) ) > 0;
-        $have_manu = $gf->getBuilding($town, 'small_factory_#00', true) !== null;
+        $have_manu = $th->getBuilding($town, 'small_factory_#00', true) !== null;
 
         $recipes = $this->entity_manager->getRepository(Recipe::class)->findByType( Recipe::WorkshopType );
         $source_db = []; $result_db = [];
@@ -200,11 +201,11 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
 
     /**
      * @Route("jx/town/house", name="town_house")
-     * @param EntityManager $em
-     * @param GameFactory $gf
+     * @param EntityManagerInterface $em
+     * @param TownHandler $th
      * @return Response
      */
-    public function house(EntityManagerInterface $em, GameFactory $gf): Response
+    public function house(EntityManagerInterface $em, TownHandler $th): Response
     {
         $town = $this->getActiveCitizen()->getTown();
         $home_next_level = $em->getRepository( CitizenHomePrototype::class )->findOneByLevel(
@@ -212,7 +213,7 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
         );
         $home_next_level_requirement = null;
         if ($home_next_level && $home_next_level->getRequiredBuilding())
-            $home_next_level_requirement = $gf->getBuilding( $town, $home_next_level->getRequiredBuilding(), true ) ? null : $home_next_level->getRequiredBuilding();
+            $home_next_level_requirement = $th->getBuilding( $town, $home_next_level->getRequiredBuilding(), true ) ? null : $home_next_level->getRequiredBuilding();
 
         $upgrade_proto = [];
         $upgrade_proto_lv = [];
@@ -352,13 +353,13 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
 
     /**
      * @Route("jx/town/well", name="town_well")
-     * @param GameFactory $gf
+     * @param TownHandler $th
      * @return Response
      */
-    public function well(GameFactory $gf): Response
+    public function well(TownHandler $th): Response
     {
         $town = $this->getActiveCitizen()->getTown();
-        $pump = $gf->getBuilding( $town, 'small_water_#00', true );
+        $pump = $th->getBuilding( $town, 'small_water_#00', true );
 
         return $this->render( 'ajax/game/town/well.html.twig', $this->addDefaultTwigArgs('well', [
             'rations_left' => $this->getActiveCitizen()->getTown()->getWell(),

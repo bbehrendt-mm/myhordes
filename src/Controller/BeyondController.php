@@ -23,6 +23,7 @@ use App\Service\ItemFactory;
 use App\Service\JSONRequestParser;
 use App\Service\Locksmith;
 use App\Service\RandomGenerator;
+use App\Service\ZoneHandler;
 use App\Structures\ItemRequest;
 use DateTime;
 use Doctrine\Common\Collections\Collection;
@@ -58,6 +59,7 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
     const ErrorNotDiggable          = ErrorHelper::BaseBeyondErrors + 6;
 
     protected $game_factory;
+    protected $zone_handler;
     protected $random_generator;
     protected $item_factory;
 
@@ -74,16 +76,17 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
      */
     public function __construct(
         EntityManagerInterface $em, InventoryHandler $ih, CitizenHandler $ch, ActionHandler $ah,
-        TranslatorInterface $translator, GameFactory $gf, RandomGenerator $rg, ItemFactory $if)
+        TranslatorInterface $translator, GameFactory $gf, RandomGenerator $rg, ItemFactory $if, ZoneHandler $zh)
     {
         parent::__construct($em, $ih, $ch, $ah, $translator);
         $this->game_factory = $gf;
         $this->random_generator = $rg;
         $this->item_factory = $if;
+        $this->zone_handler = $zh;
     }
 
     protected function deferZoneUpdate() {
-        $this->game_factory->updateZone( $this->getActiveCitizen()->getZone() );
+        $this->zone_handler->updateZone( $this->getActiveCitizen()->getZone() );
     }
 
     protected function addDefaultTwigArgs( ?string $section = null, ?array $data = null ): array {

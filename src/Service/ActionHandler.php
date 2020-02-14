@@ -30,12 +30,13 @@ class ActionHandler
     private $item_factory;
     private $translator;
     private $game_factory;
+    private $town_handler;
     private $assets;
 
 
     public function __construct(
         EntityManagerInterface $em, StatusFactory $sf, CitizenHandler $ch, InventoryHandler $ih,
-        RandomGenerator $rg, ItemFactory $if, TranslatorInterface $ti, GameFactory $gf, Packages $am)
+        RandomGenerator $rg, ItemFactory $if, TranslatorInterface $ti, GameFactory $gf, Packages $am, TownHandler $th)
     {
         $this->entity_manager = $em;
         $this->status_factory = $sf;
@@ -46,6 +47,7 @@ class ActionHandler
         $this->translator = $ti;
         $this->game_factory = $gf;
         $this->assets = $am;
+        $this->town_handler = $th;
     }
 
     const ActionValidityNone = 1;
@@ -116,7 +118,7 @@ class ActionHandler
 
             if ($building_condition = $meta_requirement->getBuilding()) {
                 $town = $citizen->getTown();
-                $building = $this->game_factory->getBuilding($town, $building_condition->getBuilding(), false);
+                $building = $this->town_handler->getBuilding($town, $building_condition->getBuilding(), false);
 
                 $cpl = true;
                 if ($building) {
@@ -270,7 +272,7 @@ class ActionHandler
                 if (!empty($filtered)) {
                     $pick = $this->random_generator->pick( $filtered );
                     $town = $citizen->getTown();
-                    if ($this->game_factory->addBuilding( $town, $pick )) {
+                    if ($this->town_handler->addBuilding( $town, $pick )) {
                         $tags[] = 'bp_ok';
                         $execute_info_cache['bp_spawn'][] = $pick;
                     }
@@ -461,7 +463,7 @@ class ActionHandler
         $remove = [];
 
         $have_saw  = $this->inventory_handler->countSpecificItems( $c_inv, $this->entity_manager->getRepository( ItemPrototype::class )->findOneByName( 'saw_tool_#00' ) ) > 0;
-        $have_manu = $this->game_factory->getBuilding($town, 'small_factory_#00', true) !== null;
+        $have_manu = $this->town_handler->getBuilding($town, 'small_factory_#00', true) !== null;
 
         $ap = 3 - ($have_saw ? 1 : 0) - ($have_manu ? 1 : 0);
 

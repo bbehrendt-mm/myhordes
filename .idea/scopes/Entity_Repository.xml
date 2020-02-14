@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Entity/Repository" pattern="file[MyHordes]:src/Entity//*||file[MyHordes]:src/Repository//*" />
+</component>

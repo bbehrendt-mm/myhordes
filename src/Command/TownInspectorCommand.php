@@ -10,6 +10,7 @@ use App\Entity\Town;
 use App\Entity\TownClass;
 use App\Entity\WellCounter;
 use App\Service\GameFactory;
+use App\Service\ZoneHandler;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\Console\Command\Command;
@@ -25,11 +26,13 @@ class TownInspectorCommand extends Command
 
     private $entityManager;
     private $gameFactory;
+    private $zonehandler;
 
-    public function __construct(EntityManagerInterface $em, GameFactory $gf)
+    public function __construct(EntityManagerInterface $em, GameFactory $gf, ZoneHandler $zh)
     {
         $this->entityManager = $em;
         $this->gameFactory = $gf;
+        $this->zonehandler = $zh;
         parent::__construct();
     }
 
@@ -146,12 +149,12 @@ class TownInspectorCommand extends Command
                     $output->writeln("<comment>Zombies</comment> have been removed.");
                     break;
                 case 'daily':
-                    $this->gameFactory->dailyZombieSpawn( $town, 1, GameFactory::RespawnModeAuto );
+                    $this->zonehandler->dailyZombieSpawn( $town, 1, ZoneHandler::RespawnModeAuto );
                     $changes = true;
                     $output->writeln("<comment>Daily Zombie spawn</comment> has been executed.");
                     break;
                 case 'global':
-                    $this->gameFactory->dailyZombieSpawn( $town, 0, GameFactory::RespawnModeForce );
+                    $this->zonehandler->dailyZombieSpawn( $town, 0, ZoneHandler::RespawnModeForce );
                     $changes = true;
                     $output->writeln("<comment>Global Zombie respawn</comment> has been executed.");
                     break;
