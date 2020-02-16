@@ -115,6 +115,8 @@ class GameFactory
         foreach ($this->entity_manager->getRepository(BuildingPrototype::class)->findProspectivePrototypes($town, 0) as $prototype)
             $this->town_handler->addBuilding( $town, $prototype );
 
+        $this->town_handler->calculate_zombie_attacks( $town, 3 );
+
         $map_resolution = $this->getDefaultZoneResolution( $townClass, $ox, $oy );
         for ($x = 0; $x < $map_resolution; $x++)
             for ($y = 0; $y < $map_resolution; $y++) {
