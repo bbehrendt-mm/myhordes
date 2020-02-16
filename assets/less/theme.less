@@ -129,6 +129,14 @@ div.help {
   .box(@myhordes-help-color); padding: 5px 5px 5px 26px; font-size: 12px; margin: 5px 0; text-align: justify; position: relative;
 }
 
+@myhordes-box-color: #966437;
+@myhordes-span-color: @myhordes-smalltext;
+
+div.lightbox {
+  background: #966437; border: 1px solid @myhordes-smalltext; margin: 10px 0; padding: 5px;
+  span.highlight { color: @myhordes-span-color; &:first-letter { font-size: 14px; font-weight: bold; } }
+}
+
 button {
   min-height: 25px; background: @myhordes-button-background center/cover no-repeat; color: @myhordes-button-color; font-weight: bold;
   border: 1px solid @myhordes-button-border; border-bottom-width: 2px; outline: 1px solid rgba(0,0,0,0);
@@ -327,3 +335,4 @@ ul.summary {
     &>ul { border-top: 1px solid @myhordes-smalltext; margin-top: 5px; }
   }
 }
+

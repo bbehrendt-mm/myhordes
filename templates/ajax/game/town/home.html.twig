@@ -14,11 +14,15 @@
 
         <div class="dashboard">
             <div class="row">
-                <div class="padded cell rw-6 center">
+                <div class="padded cell rw-4 rw-lg-6 center">
                     {{ def }} <i class="fa fa-shield-alt"></i>
                 </div>
-                <div class="padded cell rw-6 center">
+                <div class="padded cell rw-4 rw-lg-6 center">
                     {{ deco }} <i class="fa fa-couch"></i>
+                </div>
+                <div class="padded cell rw-4 rw-lg-12 left medium">
+                    <input id="desc_edit" type="text" maxlength="64" placeholder="{{ 'Dein Beschreibungstext'|trans({},'game') }}" value="{{ home.description }}">
+                    <div class="small right"><a id="desc_edit_button" href="">{{ 'Speichern'|trans({},'game') }}</a></div>
                 </div>
             </div>
         </div>
@@ -279,5 +283,14 @@
                         $.ajax.load(null, '{{ path('town_house') }}', true);
                     } );
             });
+
+        let desc_chg_button = document.getElementById('desc_edit_button');
+        if (desc_chg_button) desc_chg_button.addEventListener('click', function(e) {
+            e.preventDefault();
+            $.ajax.easySend( '{{ path('town_house_describe_controller') }}', {desc: document.getElementById('desc_edit').value},
+                function () {
+                    $.ajax.load(null, '{{ path('town_house') }}', true);
+                } );
+        })
     </script>
 {% endblock %}

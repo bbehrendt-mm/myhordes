@@ -40,6 +40,11 @@ class CitizenHome
      */
     private $prototype;
 
+    /**
+     * @ORM\Column(type="string", length=64, nullable=true)
+     */
+    private $description;
+
     public function __construct()
     {
         $this->citizenHomeUpgrades = new ArrayCollection();
@@ -118,6 +123,18 @@ class CitizenHome
     public function setPrototype(?CitizenHomePrototype $prototype): self
     {
         $this->prototype = $prototype;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
 
         return $this;
     }

@@ -35,6 +35,11 @@ class CitizenProfession
      */
     private $label;
 
+    /**
+     * @ORM\Column(type="string", length=32)
+     */
+    private $icon;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -60,6 +65,18 @@ class CitizenProfession
     public function setLabel(string $label): self
     {
         $this->label = $label;
+
+        return $this;
+    }
+
+    public function getIcon(): ?string
+    {
+        return $this->icon;
+    }
+
+    public function setIcon(string $icon): self
+    {
+        $this->icon = $icon;
 
         return $this;
     }

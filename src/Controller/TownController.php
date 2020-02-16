@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Building;
+use App\Entity\Citizen;
 use App\Entity\CitizenHomePrototype;
 use App\Entity\CitizenHomeUpgrade;
 use App\Entity\CitizenHomeUpgradeCosts;
@@ -20,6 +21,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Translation\Translator;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @Route("/",condition="request.isXmlHttpRequest()")
@@ -77,6 +80,42 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
             'def' => $th->calculate_town_def($town),
             'zeds_today'    => [ $has_zombie_est_today, $z_today_min, $z_today_max ],
             'zeds_tomorrow' => [ $has_zombie_est_tomorrow, $z_tomorrow_min, $z_tomorrow_max ],
+        ]) );
+    }
+
+    /**
+     * @Route("jx/town/visit/{id}", name="town_visit", requirements={"id"="\d+"})
+     * @param int $id
+     * @param EntityManagerInterface $em
+     * @param TownHandler $th
+     * @return Response
+     */
+    public function visit(int $id, EntityManagerInterface $em, TownHandler $th): Response
+    {
+        if ($id === $this->getActiveCitizen()->getId())
+            return $this->redirect($this->generateUrl('town_house'));
+
+        /** @var Citizen $c */
+        $c = $em->getRepository(Citizen::class)->find( $id );
+        if (!$c || $c->getTown()->getId() !== $this->getActiveCitizen()->getTown()->getId())
+            return $this->redirect($this->generateUrl('town_dashboard'));
+
+        $home = $c->getHome();
+
+        $def = $th->calculate_home_def($home, $def_house, $def_upg, $def_items);
+        $deco = 0;
+        foreach ($home->getChest()->getItems() as $item)
+            $deco += $item->getPrototype()->getDeco();
+
+        return $this->render( 'ajax/game/town/home_foreign.html.twig', $this->addDefaultTwigArgs('citizens', [
+            'citizen' => $c,
+            'home' => $home,
+            'actions' => $this->getItemActions(),
+            'chest' => $home->getChest(),
+            'chest_size' => $this->inventory_handler->getSize($home->getChest()),
+
+            'def' => $def,
+            'deco' => $deco,
         ]) );
     }
 
@@ -190,6 +229,29 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
         $em->persist($citizen);
         $em->flush();
 
+        return AjaxResponse::success();
+    }
+
+    /**
+     * @Route("api/town/house/describe", name="town_house_describe_controller")
+     * @param EntityManagerInterface $em
+     * @param JSONRequestParser $parser
+     * @param Translator $t
+     * @return Response
+     */
+    public function describe_house_api(EntityManagerInterface $em, JSONRequestParser $parser, TranslatorInterface $t): Response {
+        $new_desc = $parser->get('desc');
+        if ($new_desc !== null) $new_desc = mb_substr($new_desc,0,64);
+
+        $this->getActiveCitizen()->getHome()->setDescription( $new_desc );
+        try {
+            $em->persist($this->getActiveCitizen()->getHome());
+            $em->flush();
+        } catch (Exception $e) {
+            return AjaxResponse::error(ErrorHelper::ErrorDatabaseException);
+        }
+
+        $this->addFlash( 'notice', $t->trans('Du hast deine Beschreibung geändert.', [], 'game') );
         return AjaxResponse::success();
     }
 
@@ -353,11 +415,22 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
 
     /**
      * @Route("jx/town/citizens", name="town_citizens")
+     * @param EntityManagerInterface $em
      * @return Response
      */
-    public function citizens(): Response
+    public function citizens(EntityManagerInterface $em): Response
     {
-        return $this->dashboard();
+        $hidden = [];
+        foreach ($this->getActiveCitizen()->getTown()->getCitizens() as $c)
+            $hidden[$c->getId()] = (bool)($em->getRepository(CitizenHomeUpgrade::class)->findOneByPrototype($c->getHome(),
+                $em->getRepository(CitizenHomeUpgradePrototype::class)->findOneByName('curtain')
+            ));
+
+        return $this->render( 'ajax/game/town/citizen.html.twig', $this->addDefaultTwigArgs('citizens', [
+            'citizens' => $this->getActiveCitizen()->getTown()->getCitizens(),
+            'me' => $this->getActiveCitizen(),
+            'hidden' => $hidden,
+        ]) );
     }
 
     /**

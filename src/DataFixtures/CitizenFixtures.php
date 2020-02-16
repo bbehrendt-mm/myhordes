@@ -23,15 +23,15 @@ use Symfony\Component\Console\Output\ConsoleOutputInterface;
 class CitizenFixtures extends Fixture implements DependentFixtureInterface
 {
     public static $profession_data = [
-        ['name'=>'none'        ,'label'=>'Gammler' ],
-        ['name'=>'basic'       ,'label'=>'Einwohner' ],
-        ['name'=>'collec'      ,'label'=>'Buddler' ],
-        ['name'=>'guardian'    ,'label'=>'Wächter' ],
-        ['name'=>'hunter'      ,'label'=>'Aufklärer' ],
-        ['name'=>'tamer'       ,'label'=>'Dompteur' ],
-        ['name'=>'tech'        ,'label'=>'Techniker' ],
-        ['name'=>'shaman'      ,'label'=>'Schamane' ],
-        ['name'=>'survivalist' ,'label'=>'Einsiedler' ],
+        ['icon' => 'looser', 'name'=>'none'        ,'label'=>'Gammler' ],
+        ['icon' => 'basic',  'name'=>'basic'       ,'label'=>'Einwohner' ],
+        ['icon' => 'dig',    'name'=>'collec'      ,'label'=>'Buddler' ],
+        ['icon' => 'shield', 'name'=>'guardian'    ,'label'=>'Wächter' ],
+        ['icon' => 'vest',   'name'=>'hunter'      ,'label'=>'Aufklärer' ],
+        ['icon' => 'tamer',  'name'=>'tamer'       ,'label'=>'Dompteur' ],
+        ['icon' => 'tech',   'name'=>'tech'        ,'label'=>'Techniker' ],
+        ['icon' => 'shaman', 'name'=>'shaman'      ,'label'=>'Schamane' ],
+        ['icon' => 'book',   'name'=>'survivalist' ,'label'=>'Einsiedler' ],
     ];
 
     public static $citizen_status = [
@@ -126,8 +126,10 @@ class CitizenFixtures extends Fixture implements DependentFixtureInterface
             if ($entity === null) $entity = new CitizenProfession();
 
             // Set property
-            $entity->setName( $entry['name'] );
-            $entity->setLabel( $entry['label'] );
+            $entity
+                ->setName( $entry['name'] )
+                ->setLabel( $entry['label'] )
+                ->setIcon( $entry['icon'] );
 
             $manager->persist( $entity );
 

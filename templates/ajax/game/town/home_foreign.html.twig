@@ -1,0 +1,59 @@
+{% extends "ajax/game/town/town.html.twig" %}
+{% block content %}
+
+    {# @var \App\Entity\Citizen citizen #}
+    <h5>
+        <b>{{ citizen.user.username }}</b>
+        ({% if citizen.alive %}
+            <img alt="{{ citizen.profession.label|trans({},'game') }}" src="{{ asset('build/images/professions/' ~ citizen.profession.icon ~ '.gif') }}" />
+        {% else %}
+            <img alt="{{ 'Tot'|trans({},'game') }}" src="{{ asset('build/images/professions/death.gif') }}" />
+        {% endif %})
+    </h5>
+
+    <div class="lightbox">
+        <div class="row">
+            <div class="cell rw-3"><span class="highlight">{{ 'Haus'|trans({},'game') }}:</span></div>
+            <div class="cell rw-9"><img alt="" src="{{ asset('build/images/home/' ~ citizen.home.prototype.icon ~ '.gif') }}"> {{ citizen.home.prototype.label|trans({},'buildings') }}</div>
+        </div>
+        {% if citizen.alive %}
+            <div class="row">
+                <div class="cell rw-3"><span class="highlight">{{ 'Verteidigung'|trans({},'game') }}:</span></div>
+                <div class="cell rw-9"><img alt="" src="{{ asset('build/images/def.gif') }}"> {{ def }}</div>
+            </div>
+            <div class="row">
+                <div class="cell rw-3"><span class="highlight">{{ 'Dekoration'|trans({},'game') }}:</span></div>
+                <div class="cell rw-9"><img alt="" src="{{ asset('build/images/deco.gif') }}"> {{ deco }}</div>
+            </div>
+        {% else %}
+            <div class="row">
+                <div class="cell rw-3"><span class="highlight">{{ 'Todesursache'|trans({},'game') }}:</span></div>
+                <div class="cell rw-9"></div>
+            </div>
+            <div class="row">
+                <div class="cell rw-3"><span class="highlight">{{ 'Letzte Worte'|trans({},'game') }}:</span></div>
+                <div class="cell rw-9"></div>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="row">
+        <div class="padded cell rw-6">&nbsp;</div>
+        <div class="padded cell rw-6">
+            {% embed "ajax/game/inventory.html.twig" with {'size': chest_size, 'fake_items': [], 'items': chest.items} %}
+                {% block class %}chest{% endblock %}
+                {% block title %}{% trans from 'game' %}Truhe{% endtrans %}{% endblock %}
+            {% endembed %}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="cell ro-8 rw-4 ro-md-7 rw-md-5"><button x-ajax-href="{{ path('town_citizens') }}">{{ 'Schließen'|trans({},'game') }}</button></div>
+    </div>
+
+{% endblock %}
+{% block js %}
+    {{ parent() }}
+    <script>
+    </script>
+{% endblock %}
