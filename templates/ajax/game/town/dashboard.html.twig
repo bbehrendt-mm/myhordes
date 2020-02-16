@@ -5,6 +5,18 @@
             <div class="padded cell rw-6 center">
                 {{ def }} <i class="fa fa-shield-alt"></i>
             </div>
+            <div class="padded cell rw-6 center">
+                {% if zeds_today[0] %}
+                    {{ zeds_today[1] }} - {{ zeds_today[2] }} <img alt="" src="{{ asset('build/images/small_zombie.gif') }}" />
+                    {% if zeds_tomorrow[0] %}
+                        <div><span class="small">{{ 'Morgiger Angriff'|trans({},'game') }}</span></div>
+                        {{ zeds_tomorrow[1] }} - {{ zeds_tomorrow[2] }} <img alt="" src="{{ asset('build/images/small_zombie.gif') }}" />
+                    {% endif %}
+                {% else %}
+                    ??? <img alt="" src="{{ asset('build/images/small_zombie.gif') }}" />
+                {% endif %}
+
+            </div>
         </div>
     </div>
 

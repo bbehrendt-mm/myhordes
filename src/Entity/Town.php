@@ -70,11 +70,17 @@ class Town
      */
     private $buildings;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ZombieEstimation", mappedBy="town", orphanRemoval=true, cascade={"persist"})
+     */
+    private $zombieEstimations;
+
     public function __construct()
     {
         $this->citizens = new ArrayCollection();
         $this->zones = new ArrayCollection();
         $this->buildings = new ArrayCollection();
+        $this->zombieEstimations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -261,6 +267,37 @@ class Town
             // set the owning side to null (unless already changed)
             if ($building->getTown() === $this) {
                 $building->setTown(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ZombieEstimation[]
+     */
+    public function getZombieEstimations(): Collection
+    {
+        return $this->zombieEstimations;
+    }
+
+    public function addZombieEstimation(ZombieEstimation $zombieEstimation): self
+    {
+        if (!$this->zombieEstimations->contains($zombieEstimation)) {
+            $this->zombieEstimations[] = $zombieEstimation;
+            $zombieEstimation->setTown($this);
+        }
+
+        return $this;
+    }
+
+    public function removeZombieEstimation(ZombieEstimation $zombieEstimation): self
+    {
+        if ($this->zombieEstimations->contains($zombieEstimation)) {
+            $this->zombieEstimations->removeElement($zombieEstimation);
+            // set the owning side to null (unless already changed)
+            if ($zombieEstimation->getTown() === $this) {
+                $zombieEstimation->setTown(null);
             }
         }
 

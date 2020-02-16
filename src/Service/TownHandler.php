@@ -10,6 +10,7 @@ use App\Entity\CitizenHome;
 use App\Entity\CitizenHomeUpgrade;
 use App\Entity\CitizenHomeUpgradePrototype;
 use App\Entity\Town;
+use App\Entity\ZombieEstimation;
 use Doctrine\ORM\EntityManagerInterface;
 
 class TownHandler
@@ -102,5 +103,36 @@ class TownHandler
         ) * $item_def_factor);
 
         return $house_def + $citizen_def + $building_def + $item_def;
+    }
+
+    public function get_zombie_estimation_quality(Town &$town, int $future = 0, ?int &$min = null, ?int &$max = null): float {
+        $est = $this->entity_manager->getRepository(ZombieEstimation::class)->findOneByTown($town,$town->getDay()+$future);
+        if (!$est) return 0;
+
+        $min = round( $est->getZombies() - $est->getZombies() * $est->getOffsetMin()/100);
+        $max = round( $est->getZombies() + $est->getZombies() * $est->getOffsetMax()/100);
+        return 1 - (($est->getOffsetMin() + $est->getOffsetMax()) - 10) / 24;
+    }
+
+    public function calculate_zombie_attacks(Town &$town, int $future = 2) {
+        if ($future < 0) return;
+        $d = $town->getDay();
+        for ($current_day = $d; $current_day <= ($d+$future); $current_day++)
+            if (!$this->entity_manager->getRepository(ZombieEstimation::class)->findOneByTown($town,$current_day)) {
+                $min = round( ($current_day <= 3 ? 0.66 : 1.0) * pow(max(1,$current_day-1) * 0.75 + 2.5,3) );
+                $max = round( ($current_day <= 3 ? ($current_day <= 1 ? 0.4 : 0.66) : 1.0) * pow($current_day * 0.75 + 3.5,3) );
+
+                $value = mt_rand($min,$max);
+                if ($value > ($min + 0.5 * ($max-$min))) $value = mt_rand($min,$max);
+
+                $off_min = mt_rand( 10, 24 );
+                $off_max = 34 - $off_min;
+
+                $town->addZombieEstimation(
+                    (new ZombieEstimation())->setDay( $current_day )->setZombies( $value )->setOffsetMin( $off_min )
+                    ->setOffsetMax( $off_max )
+                );
+            }
+
     }
 }

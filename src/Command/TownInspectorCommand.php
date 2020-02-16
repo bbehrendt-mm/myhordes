@@ -4,12 +4,14 @@
 namespace App\Command;
 
 
+use App\Entity\BuildingPrototype;
 use App\Entity\Citizen;
 use App\Entity\Inventory;
 use App\Entity\Town;
 use App\Entity\TownClass;
 use App\Entity\WellCounter;
 use App\Service\GameFactory;
+use App\Service\TownHandler;
 use App\Service\ZoneHandler;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -26,13 +28,15 @@ class TownInspectorCommand extends Command
 
     private $entityManager;
     private $gameFactory;
+    private $townHandler;
     private $zonehandler;
 
-    public function __construct(EntityManagerInterface $em, GameFactory $gf, ZoneHandler $zh)
+    public function __construct(EntityManagerInterface $em, GameFactory $gf, ZoneHandler $zh, TownHandler $th)
     {
         $this->entityManager = $em;
         $this->gameFactory = $gf;
         $this->zonehandler = $zh;
+        $this->townHandler = $th;
         parent::__construct();
     }
 
@@ -46,6 +50,8 @@ class TownInspectorCommand extends Command
             ->addOption('show-zones', null, InputOption::VALUE_NONE, 'Lists zone information.')
             ->addOption('reset-well-lock', null, InputOption::VALUE_NONE, 'Resets the well lock.')
             ->addOption('zombies', null, InputOption::VALUE_REQUIRED, 'Controls the zombie spawn; set to "reset" to clear all zombies, "daily" to perform a single daily spread or "global" to force a global respawn.')
+            ->addOption('zombie-estimates', null, InputOption::VALUE_REQUIRED, 'Calculates the zombie estimations for the next days.')
+            ->addOption('unlock-buildings', null, InputOption::VALUE_NONE, 'Unlocks all buildings.')
 
             ->addOption('citizen', 'c', InputOption::VALUE_REQUIRED, 'When used together with --reset-well-lock, only the lock of the given citizen is released.', -1)
             ;
@@ -83,6 +89,20 @@ class TownInspectorCommand extends Command
         }
         $table->render();
 
+        $output->writeln('<comment>Pre-disposed zombie attacks</comment>');
+        $table = new Table( $output );
+        $table->setHeaders( ['Day', 'Est-Min', 'Zombies', 'Est-Max', 'Est-Q'] );
+        foreach ($town->getZombieEstimations() as $estimation) {
+            $table->addRow([
+                $estimation->getDay(),
+                round( $estimation->getZombies() - $estimation->getZombies() * $estimation->getOffsetMin()/100),
+                $estimation->getZombies(),
+                round( $estimation->getZombies() + $estimation->getZombies() * $estimation->getOffsetMax()/100),
+                round((1 - (($estimation->getOffsetMin() + $estimation->getOffsetMax()) - 10) / 24) * 100) . '%'
+            ]);
+        }
+        $table->render();
+
         if ($zones) {
             $output->writeln('<comment>Zone list</comment>');
             $table = new Table( $output );
@@ -105,6 +125,7 @@ class TownInspectorCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        /** @var Town $town */
         $town = $this->entityManager->getRepository(Town::class)->find( (int)$input->getArgument('TownID') );
         if (!$town) {
             $output->writeln("<error>The given town ID is not valid.</error>");
@@ -141,6 +162,16 @@ class TownInspectorCommand extends Command
             $output->writeln("<comment>{$num}</comment> well counter/s have been reset.");
         }
 
+        if ($input->getOption('unlock-buildings')) {
+            do {
+                $possible = $this->entityManager->getRepository(BuildingPrototype::class)->findProspectivePrototypes( $town );
+                $changes |= ($found = !empty($possible));
+                foreach ($possible as $proto) $this->townHandler->addBuilding( $town, $proto );
+                $output->writeln("Added <comment>" . count($possible) . "</comment> buildings.");
+            } while ($found);
+            $this->entityManager->persist( $town );
+        }
+
         if ($spawn = $input->getOption('zombies'))
             switch ($spawn) {
                 case 'reset':
@@ -162,6 +193,12 @@ class TownInspectorCommand extends Command
                     $output->writeln("<error>Invalid value for --zombies option.</error>");
                     break;
             }
+
+        if ($n = $input->getOption('zombie-estimates')) {
+            $this->townHandler->calculate_zombie_attacks( $town, $n );
+            $this->entityManager->persist( $town );
+            $changes = $n > 0;
+        }
 
         if ($changes) $this->entityManager->flush();
 
