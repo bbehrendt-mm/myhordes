@@ -98,4 +98,8 @@ class CitizenHandler
 
         return $base;
     }
+
+    public function applyProfession(Citizen &$citizen, CitizenProfession &$profession) {
+        $citizen->setProfession( $profession );
+    }
 }

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Citizen;
 use App\Entity\CitizenProfession;
 use App\Response\AjaxResponse;
+use App\Service\CitizenHandler;
 use App\Service\ErrorHelper;
 use App\Service\GameFactory;
 use App\Service\JSONRequestParser;
@@ -64,10 +65,10 @@ class GameController extends AbstractController implements GameInterfaceControll
     /**
      * @Route("api/game/job", name="api_jobcenter")
      * @param JSONRequestParser $parser
-     * @param Locksmith $ls
+     * @param CitizenHandler $ch
      * @return Response
      */
-    public function job_select_api(JSONRequestParser $parser, Locksmith $ls): Response {
+    public function job_select_api(JSONRequestParser $parser, CitizenHandler $ch): Response {
 
         $citizen = $this->getActiveCitizen();
         if ($citizen->getProfession()->getName() !== CitizenProfession::DEFAULT)
@@ -77,11 +78,13 @@ class GameController extends AbstractController implements GameInterfaceControll
         $job_id = (int)$parser->get('job', -1);
         if ($job_id <= 0) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
 
+        /** @var CitizenProfession $new_profession */
         $new_profession = $this->entity_manager->getRepository(CitizenProfession::class)->find( $job_id );
         if (!$new_profession) return AjaxResponse::error(self::ErrorJobInvalid);
 
+        $ch->applyProfession( $citizen, $new_profession );
+
         try {
-            $citizen->setProfession( $new_profession );
             $this->entity_manager->persist( $citizen );
             $this->entity_manager->flush();
         } catch (Exception $e) {
