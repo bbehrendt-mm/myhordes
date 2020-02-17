@@ -7,19 +7,34 @@
             {% for y in map_y0..map_y1 %}
                 {% for x in map_x0..map_x1 %}
                     {% if zones[x] and zones[x][y] %}
-                        <div
-                                class="zone
-                                    {% if x == 0 and y == 0 %}town{% endif %}
-                                    {% if x == pos_x and y == pos_y %}active{% endif %}
-                                    {% if zones[x][y].prototype %}ruin{% endif %}
-                                    {% if zones[x][y].zombies == 0 %}danger-0
-                                    {% elseif zones[x][y].zombies <= 2 %}danger-1
-                                    {% elseif zones[x][y].zombies <= 5 %}danger-2
-                                    {% else %}danger-3{% endif %}
-                                "
-                                style="width: {{ size }}%; padding-top: {{ size }}%" x-zone-x="{{ x }}" x-zone-y="{{ y }}">
+
+                        {% set zone_attribs = [] %}
+                        {% if x == 0 and y == 0 %}        {% set zone_attribs = zone_attribs|merge(['town']) %}  {% endif %}
+                        {% if x == pos_x and y == pos_y %}{% set zone_attribs = zone_attribs|merge(['active']) %}{% endif %}
+                        {% if zones[x][y].discoveryStatus == constant('App\\Entity\\Zone::DiscoveryStateNone') %}
+                            {% set zone_attribs = zone_attribs|merge(['unknown']) %}
+                        {% else %}
+                            {% if zones[x][y].discoveryStatus == constant('App\\Entity\\Zone::DiscoveryStateNone') %}
+                                {% set zone_attribs = zone_attribs|merge(['past']) %}
+                            {% endif %}
+
+                            {% if zones[x][y].prototype %}{% set zone_attribs = zone_attribs|merge(['ruin']) %}{% endif %}
+
+                            {% if zones[x][y].zombieStatus >= constant('App\\Entity\\Zone::ZombieStateEstimate') %}
+                                {% if zones[x][y].zombies == 0 %}    {% set zone_attribs = zone_attribs|merge(['danger-0']) %}
+                                {% elseif zones[x][y].zombies <= 2 %}{% set zone_attribs = zone_attribs|merge(['danger-1']) %}
+                                {% elseif zones[x][y].zombies <= 5 %}{% set zone_attribs = zone_attribs|merge(['danger-2']) %}
+                                {% else %}                           {% set zone_attribs = zone_attribs|merge(['danger-3']) %}
+                                {% endif %}
+                            {% endif %}
+
+                        {% endif %}
+                        <div class="zone {{ zone_attribs|join(' ') }}" style="width: {{ size }}%; padding-top: {{ size }}%" x-zone-x="{{ x }}" x-zone-y="{{ y }}">
                                 <div class="icon"></div>
-                                <!--<div class="count">{% if zones[x][y].zombies > 0 %}{{ zones[x][y].zombies }}{% endif %}</div>-->
+                                <div class="overlay"></div>
+                                {% if zones[x][y].zombieStatus == constant('App\\Entity\\Zone::ZombieStateExact') %}
+                                    <div class="count">{% if zones[x][y].zombies > 0 %}{{ zones[x][y].zombies }}{% endif %}</div>
+                                {% endif %}
                         </div>
                     {% else %}
                         <div class="void" style="width: {{ size }}%; padding-top: {{ size }}%"></div>
@@ -45,10 +60,10 @@
 
             <div class="zone-plane-controls">
                 {% if move %}
-                    {% if zone.x < map_x1 %}<div x-target-x="{{ zone.x + 1 }}" x-target-y="{{ zone.y }}" class="action-move action-move-east"></div>{% endif %}
-                    {% if zone.x > map_x0 %}<div x-target-x="{{ zone.x - 1 }}" x-target-y="{{ zone.y }}" class="action-move action-move-west"></div>{% endif %}
-                    {% if zone.y > map_y0 %}<div x-target-x="{{ zone.x }}" x-target-y="{{ zone.y - 1 }}" class="action-move action-move-north"></div>{% endif %}
-                    {% if zone.y < map_y1 %}<div x-target-x="{{ zone.x }}" x-target-y="{{ zone.y + 1 }}" class="action-move action-move-south"></div>{% endif %}
+                    {% if zone.x < map_x1 %}<div x-direction-x="1"  x-direction-y="0"  x-target-x="{{ zone.x + 1 }}" x-target-y="{{ zone.y }}" class="action-move action-move-east"></div>{% endif %}
+                    {% if zone.x > map_x0 %}<div x-direction-x="-1" x-direction-y="0"  x-target-x="{{ zone.x - 1 }}" x-target-y="{{ zone.y }}" class="action-move action-move-west"></div>{% endif %}
+                    {% if zone.y > map_y0 %}<div x-direction-x="0"  x-direction-y="-1" x-target-x="{{ zone.x }}" x-target-y="{{ zone.y - 1 }}" class="action-move action-move-north"></div>{% endif %}
+                    {% if zone.y < map_y1 %}<div x-direction-x="0"  x-direction-y="1"  x-target-x="{{ zone.x }}" x-target-y="{{ zone.y + 1 }}" class="action-move action-move-south"></div>{% endif %}
                 {% endif %}
             </div>
         {% endif %}

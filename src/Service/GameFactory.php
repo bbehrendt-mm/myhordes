@@ -125,7 +125,11 @@ class GameFactory
                     ->setX( $x - $ox )
                     ->setY( $y - $oy )
                     ->setFloor( new Inventory() )
-                    ->setZombies( 0 )->setInitialZombies( 0 );
+                    ->setDiscoveryStatus( ($x - $ox == 0 && $y - $oy == 0) ? Zone::DiscoveryStateCurrent : Zone::DiscoveryStateNone )
+                    ->setZombieStatus( ($x - $ox == 0 && $y - $oy == 0) ? Zone::ZombieStateExact : Zone::ZombieStateUnknown )
+                    ->setZombies( 0 )
+                    ->setInitialZombies( 0 )
+                ;
                 $town->addZone( $zone );
             }
 

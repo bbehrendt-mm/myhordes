@@ -4,6 +4,7 @@ for (let i = 0; i < scroll_areas.length; i++) {
     let map_area = scroll_area.parentNode;
     let map = map_area.parentNode;
     let map_controls = map.querySelector('.controls');
+    let zone_plane = map.querySelector('.zone-plane');
 
     map_area.addEventListener('x-resize', function() {
         scroll_area.style.minWidth
@@ -137,12 +138,19 @@ for (let i = 0; i < scroll_areas.length; i++) {
             element.addEventListener('click', function() {
                 const px = parseInt(element.getAttribute('x-target-x'));
                 const py = parseInt(element.getAttribute('x-target-y'));
+                const dx = parseInt(element.getAttribute('x-direction-x'));
+                const dy = parseInt(element.getAttribute('x-direction-y'));
 
+                map_area.querySelector('.zone-plane-controls').classList.add('hide');
                 $.ajax.easySend( '{{ path('beyond_desert_move_controller') }}', {
                         x: px, y: py
                     },
                     function () {
-                        $.ajax.load(null, '{{ path('beyond_dashboard') }}', true);
+                        zone_plane.style.backgroundPositionX = (dx * -300) + 'px';
+                        zone_plane.style.backgroundPositionY = (dy * -300) + 'px';
+                        setTimeout(function() { $.ajax.load(null, '{{ path('beyond_dashboard') }}', true); }, 1000)
+                    }, null, function() {
+                        map_area.querySelector('.zone-plane-controls').classList.remove('hide');
                     } );
             });
     }

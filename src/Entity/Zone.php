@@ -18,6 +18,14 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  */
 class Zone
 {
+    const DiscoveryStateNone    = 0;
+    const DiscoveryStatePast    = 1;
+    const DiscoveryStateCurrent = 2;
+
+    const ZombieStateUnknown  = 0;
+    const ZombieStateEstimate = 1;
+    const ZombieStateExact    = 2;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -91,6 +99,16 @@ class Zone
      * @ORM\Column(type="integer")
      */
     private $ruinDigs = 10;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $discoveryStatus = self::DiscoveryStateNone;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $zombieStatus = self::ZombieStateUnknown;
 
     public function __construct()
     {
@@ -333,6 +351,30 @@ class Zone
     public function setRuinDigs(int $ruinDigs): self
     {
         $this->ruinDigs = $ruinDigs;
+
+        return $this;
+    }
+
+    public function getDiscoveryStatus(): ?int
+    {
+        return $this->discoveryStatus;
+    }
+
+    public function setDiscoveryStatus(int $discoveryStatus): self
+    {
+        $this->discoveryStatus = $discoveryStatus;
+
+        return $this;
+    }
+
+    public function getZombieStatus(): ?int
+    {
+        return $this->zombieStatus;
+    }
+
+    public function setZombieStatus(int $zombieStatus): self
+    {
+        $this->zombieStatus = $zombieStatus;
 
         return $this;
     }

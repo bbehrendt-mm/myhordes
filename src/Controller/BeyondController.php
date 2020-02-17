@@ -223,6 +223,7 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
         if (abs($px - $zone->getX()) + abs($py - $zone->getY()) !== 1) return AjaxResponse::error( self::ErrorNotReachableFromHere );
         if (!$cp_ok && $this->get_escape_timeout( $citizen ) < 0) return AjaxResponse::error( self::ErrorZoneBlocked );
 
+        /** @var Zone $new_zone */
         $new_zone = $this->entity_manager->getRepository(Zone::class)->findOneByPosition( $citizen->getTown(), $px, $py );
         if (!$new_zone) return AjaxResponse::error( self::ErrorNotReachableFromHere );
 
@@ -241,7 +242,10 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
 
         $this->citizen_handler->setAP($citizen, true, -1);
         $zone->removeCitizen( $citizen );
-        $new_zone->addCitizen( $citizen );
+        $new_zone
+            ->addCitizen( $citizen )
+            ->setDiscoveryStatus( Zone::DiscoveryStateCurrent )
+            ->setZombieStatus( max(Zone::ZombieStateEstimate, $new_zone->getZombieStatus() ) );
 
         try {
             // If no citizens remain in a zone, invalidate all associated escape timers
