@@ -62,7 +62,7 @@ class RecipeFixtures extends Fixture implements DependentFixtureInterface
             ["name"=>"Extramauer","temporary"=>0,"img"=>"item_plate","vp"=>45,"ap"=>30,"bp"=>1,"rsc"=>["wood2_#00" => 15,"metal_#00" => 15,]],
             ["name"=>"Rüstungsplatten","temporary"=>0,"img"=>"item_plate","vp"=>25,"ap"=>30,"bp"=>0,"rsc"=>["wood2_#00" => 10,]],
             ["name"=>"Rüstungsplatten 2.0","temporary"=>0,"img"=>"item_plate","vp"=>25,"ap"=>30,"bp"=>0,"rsc"=>["metal_#00" => 10,]],
-            ["name"=>"Einseifer","temporary"=>0,"img"=>"small_wallimprove","vp"=>60,"ap"=>40,"bp"=>1,"rsc"=>["water_#00" => 10,"pharma_#00" => 6,"concrete_wall_#00" => 1,]],
+            ["name"=>"Einseifer","temporary"=>0,"img"=>"small_wallimprove","vp"=>60,"ap"=>40,"bp"=>1,"rsc"=>["water_#00" => 10,"pharma_#00" => 5,"concrete_wall_#00" => 1,]],
             ["name"=>"Zerstäuber","temporary"=>0,"img"=>"small_waterspray","vp"=>0,"ap"=>50,"bp"=>1,"rsc"=>["meca_parts_#00" => 2,"metal_#00" => 10,"tube_#00" => 1,"metal_beam_#00" => 2,], "children" => [
                 ["name"=>"Spraykanone","temporary"=>1,"img"=>"small_gazspray","vp"=>150,"ap"=>40,"bp"=>2,"rsc"=>["water_#00" => 2,"pharma_#00" => 7,"drug_#00" => 3,]],
                 ["name"=>"Säurespray","temporary"=>1,"img"=>"small_acidspray","vp"=>35,"ap"=>30,"bp"=>1,"rsc"=>["water_#00" => 2,"pharma_#00" => 5,]],
@@ -171,8 +171,8 @@ class RecipeFixtures extends Fixture implements DependentFixtureInterface
                 'Erspäht jeden Morgen alle Zombies, die sich im Umkreis von 10km um die Stadt aufhalten. Bürger im Umkreis von 1km um die Stadt können ohne AP-Verbrauch die Stadt betreten.',
                 'Erspäht jeden Morgen alle Zombies, die sich im Umkreis von 10km um die Stadt aufhalten. Bürger im Umkreis von 2km um die Stadt können ohne AP-Verbrauch die Stadt betreten.',
             ], "children" => [
-            ["name"=>"Scanner","temporary"=>0,"img"=>"item_tagger","vp"=>0,"ap"=>20,"bp"=>2,"rsc"=>["pile_#00" => 2,"meca_parts_#00" => 1,"electro_#00" => 1,"cyanure_#00" => 2,]],
-            ["name"=>"Verbesserte Karte","temporary"=>0,"img"=>"item_electro","vp"=>0,"ap"=>15,"bp"=>1,"rsc"=>["pile_#00" => 2,"metal_#00" => 1,"electro_#00" => 1,"cyanure_#00" => 2,]],
+            ["name"=>"Scanner","temporary"=>0,"img"=>"item_tagger","vp"=>0,"ap"=>20,"bp"=>2,"rsc"=>["pile_#00" => 2,"meca_parts_#00" => 1,"electro_#00" => 1,"radio_on_#00" => 2,]],
+            ["name"=>"Verbesserte Karte","temporary"=>0,"img"=>"item_electro","vp"=>0,"ap"=>15,"bp"=>1,"rsc"=>["pile_#00" => 2,"metal_#00" => 1,"electro_#00" => 1,"radio_on_#00" => 2,]],
             ["name"=>"Rechenmaschine","temporary"=>0,"img"=>"item_tagger","vp"=>0,"ap"=>20,"bp"=>1,"rsc"=>["rustine_#00" => 1,"electro_#00" => 1,]],
             ["name"=>"Forschungsturm","maxLevel" => 5,"temporary"=>0,"img"=>"small_gather","vp"=>0,"ap"=>30,"bp"=>1,"rsc"=>["electro_#00" => 1,"wood_beam_#00" => 3,"metal_beam_#00" => 1,"table_#00" => 1,],
                 "upgradeTexts" => [
@@ -192,7 +192,7 @@ class RecipeFixtures extends Fixture implements DependentFixtureInterface
                 ["name"=>"Wolfsfalle","temporary"=>1,"img"=>"small_trap","vp"=>40,"ap"=>20,"bp"=>0,"rsc"=>["metal_#00" => 2,"hmeat_#00" => 3,]],
                 ["name"=>"Sprengfalle","temporary"=>1,"img"=>"small_tnt","vp"=>35,"ap"=>20,"bp"=>0,"rsc"=>["explo_#00" => 3,]],
                 ["name"=>"Nackte Panik","temporary"=>1,"img"=>"status_terror","vp"=>50,"ap"=>25,"bp"=>0,"rsc"=>["water_#00" => 4,"wood2_#00" => 5,"metal_#00" => 5,]],
-                ["name"=>"Dollhouse","temporary"=>1,"img"=>"small_bamba","vp"=>75,"ap"=>50,"bp"=>2,"rsc"=>["wood2_#00" => 5,"metal_#00" => 5,"cyanure_#00" => 3,]],
+                ["name"=>"Dollhouse","temporary"=>1,"img"=>"small_bamba","vp"=>75,"ap"=>50,"bp"=>2,"rsc"=>["wood2_#00" => 5,"metal_#00" => 5,"radio_on_#00" => 3,]],
                 ["name"=>"Heiliger Regen","temporary"=>1,"img"=>"small_holyrain","vp"=>200,"ap"=>40,"bp"=>0,"rsc"=>["water_#00" => 5,"wood2_#00" => 5,"wood_beam_#00" => 9,"soul_red_#00" => 4,]],
                 ["name"=>"Voodoo-Puppe","temporary"=>0,"img"=>"small_vaudoudoll","vp"=>65,"ap"=>40,"bp"=>0,"rsc"=>["water_#00" => 2,"meca_parts_#00" => 3,"metal_#00" => 2,"plate_#00" => 2,"soul_red_#00" => 2,]],
                 ["name"=>"Spirituelles Wunder","temporary"=>0,"img"=>"small_spiritmirage","vp"=>80,"ap"=>30,"bp"=>0,"rsc"=>["wood2_#00" => 6,"plate_#00" => 2,"wood_beam_#00" => 6,"soul_red_#00" => 2,]],
@@ -250,7 +250,7 @@ class RecipeFixtures extends Fixture implements DependentFixtureInterface
         ["name"=>"Portal","temporary"=>0,"img"=>"small_door_closed","vp"=>0,"ap"=>16,"bp"=>0,"rsc"=>["metal_#00" => 2,], "children" => [
             ["name"=>"Torpanzerung","temporary"=>0,"img"=>"item_plate","vp"=>20,"ap"=>35,"bp"=>0,"rsc"=>["wood2_#00" => 3,]],
             ["name"=>"Kolbenschließmechanismus","temporary"=>0,"img"=>"small_door_closed","vp"=>30,"ap"=>24,"bp"=>1,"rsc"=>["meca_parts_#00" => 2,"wood2_#00" => 10,"tube_#00" => 1,"metal_beam_#00" => 3,], "children" => [
-                ["name"=>"Automatiktür","temporary"=>0,"img"=>"small_door_closed","vp"=>0,"ap"=>24,"bp"=>1,"rsc"=>["meca_parts_#00" => 2,"metal_#00" => 5,"electro_#00" => 2,]],
+                ["name"=>"Automatiktür","temporary"=>0,"img"=>"small_door_closed","vp"=>0,"ap"=>10,"bp"=>1,"rsc"=>[]],
             ]],
             ["name"=>"Ventilationssystem","temporary"=>0,"img"=>"small_ventilation","vp"=>20,"ap"=>24,"bp"=>2,"rsc"=>["meca_parts_#00" => 1,"metal_#00" => 8,]],
         ]],
