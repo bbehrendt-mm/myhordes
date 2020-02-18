@@ -24,6 +24,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query\Expr\Join;
+use Exception;
 
 class InventoryHandler
 {
@@ -38,7 +39,7 @@ class InventoryHandler
 
     public function getSize( Inventory $inventory ): int {
         if ($inventory->getCitizen()) {
-            $base = 4;
+            $base = 4 + $this->countEssentialItems( $inventory );
             if (
                 !empty($this->fetchSpecificItems( $inventory, [ new ItemRequest( 'bagxl_#00' ) ] )) ||
                 !empty($this->fetchSpecificItems( $inventory, [ new ItemRequest( 'cart_#00' ) ] ))
@@ -114,9 +115,16 @@ class InventoryHandler
      * @param Inventory|Inventory[] $inventory
      * @param ItemGroup|ItemRequest[] $requests
      * @return Item[]
+     * @throws Exception
      */
     public function fetchSpecificItems($inventory, $requests): array {
         $return = [];
+
+        if (is_array($inventory)) $inventory = array_filter($inventory, function(Inventory $i) { return $i->getId() !== null; } );
+        elseif ($inventory->getId() === null) {
+            if ($inventory->getItems()->count() > 0) throw new Exception('Cannot query incomplete inventory!');
+            return [];
+        }
 
         if (is_a( $requests, ItemGroup::class )) {
             $tmp = [];
@@ -176,6 +184,31 @@ class InventoryHandler
         return array_map(function(array $a): Item { return $this->entity_manager->getRepository(Item::class)->find( $a['id'] ); }, $result);
     }
 
+    public function countHeavyItems(Inventory $inventory): int {
+        try {
+            return $this->entity_manager->createQueryBuilder()
+                ->select('count(i.id)')->from('App:Item', 'i')
+                ->leftJoin('App:ItemPrototype', 'p', Join::WITH, 'i.prototype = p.id')
+                ->where('i.inventory = :inv')->setParameter('inv', $inventory)
+                ->andWhere('p.heavy = :hv')->setParameter('hv', true)
+                ->getQuery()->getSingleScalarResult();
+        } catch (Exception $e) {
+            return 0;
+        }
+    }
+
+    public function countEssentialItems(Inventory $inventory): int {
+        try {
+            return $this->entity_manager->createQueryBuilder()
+                ->select('count(i.id)')->from('App:Item', 'i')
+                ->where('i.inventory = :inv')->setParameter('inv', $inventory)
+                ->andWhere('i.essential = :ev')->setParameter('ev', true)
+                ->getQuery()->getSingleScalarResult();
+        } catch (Exception $e) {
+            return 0;
+        }
+    }
+
     const TransferTypeUnknown = 0;
     const TransferTypeSpawn = 1;
     const TransferTypeConsume = 2;
@@ -186,16 +219,20 @@ class InventoryHandler
     const TransferTypeLocal = 7;
     const TransferTypeEscort = 8;
 
-    protected function validateTransferTypes( int $target, int $source ): bool {
+    protected function validateTransferTypes( Item &$item, int $target, int $source ): bool {
         $valid_types = [
             self::TransferTypeSpawn => [ self::TransferTypeRucksack, self::TransferTypeBank, self::TransferTypeHome, self::TransferTypeLocal ],
-            self::TransferTypeRucksack => [ self::TransferTypeBank, self::TransferTypeLocal, self::TransferTypeHome, self::TransferTypeConsume ],
+            self::TransferTypeRucksack => [ self::TransferTypeBank, self::TransferTypeLocal, self::TransferTypeHome, self::TransferTypeConsume, self::TransferTypeSteal ],
             self::TransferTypeBank => [ self::TransferTypeRucksack, self::TransferTypeConsume ],
             self::TransferTypeHome => [ self::TransferTypeRucksack, self::TransferTypeConsume ],
             self::TransferTypeSteal => [ self::TransferTypeRucksack ],
             self::TransferTypeLocal => [ self::TransferTypeRucksack, self::TransferTypeEscort, self::TransferTypeConsume ],
             self::TransferTypeEscort => [ self::TransferTypeRucksack, self::TransferTypeConsume ]
         ];
+
+        // Essential items can not be transferred; only allow spawn and consume
+        if ($item->getEssential() && $source !== self::TransferTypeSpawn && $target !== self::TransferTypeConsume)
+            return false;
 
         return isset($valid_types[$source]) && in_array($target, $valid_types[$source]);
     }
@@ -229,10 +266,10 @@ class InventoryHandler
         return self::TransferTypeUnknown;
     }
 
-    protected function transferType( Citizen &$citizen, ?Inventory &$target, ?Inventory &$source, ?int &$target_type, ?int &$source_type): bool {
+    protected function transferType( Item &$item, Citizen &$citizen, ?Inventory &$target, ?Inventory &$source, ?int &$target_type, ?int &$source_type): bool {
         $source_type = !$source ? self::TransferTypeSpawn   : self::singularTransferType( $citizen, $source );
         $target_type = !$target ? self::TransferTypeConsume : self::singularTransferType( $citizen, $target );
-        return $this->validateTransferTypes($target_type, $source_type);
+        return $this->validateTransferTypes($item, $target_type, $source_type);
     }
 
     const ErrorNone = 0;
@@ -247,7 +284,7 @@ class InventoryHandler
         if ($item->getInventory() && ( !$from || $from->getId() !== $item->getInventory()->getId() ) )
             return self::ErrorInvalidTransfer;
 
-        if (!$this->transferType( $actor, $to, $from, $type_to, $type_from ))
+        if (!$this->transferType( $item,$actor, $to, $from, $type_to, $type_from ))
             return self::ErrorInvalidTransfer;
 
         // Check inventory size
@@ -256,7 +293,7 @@ class InventoryHandler
         // Check Heavy item limit
         if ($item->getPrototype()->getHeavy() &&
             ($type_to === self::TransferTypeRucksack || $type_to === self::TransferTypeEscort) &&
-            !empty($this->fetchHeavyItems($to))
+            $this->countHeavyItems($to)
         ) return self::ErrorHeavyLimitHit;
 
         //ToDo Check Bank lock

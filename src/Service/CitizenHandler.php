@@ -23,16 +23,18 @@ class CitizenHandler
 {
     private $entity_manager;
     private $status_factory;
+    private $item_factory;
     private $random_generator;
     private $inventory_handler;
 
     public function __construct(
-        EntityManagerInterface $em, StatusFactory $sf, RandomGenerator $g, InventoryHandler $ih)
+        EntityManagerInterface $em, StatusFactory $sf, RandomGenerator $g, InventoryHandler $ih, ItemFactory $if)
     {
         $this->entity_manager = $em;
         $this->status_factory = $sf;
         $this->random_generator = $g;
         $this->inventory_handler = $ih;
+        $this->item_factory = $if;
     }
 
     /**
@@ -100,6 +102,34 @@ class CitizenHandler
     }
 
     public function applyProfession(Citizen &$citizen, CitizenProfession &$profession) {
+        $item_type_cache = [];
+
+        if ($citizen->getProfession() === $profession) return;
+
+        if ($citizen->getProfession()) {
+            foreach ($citizen->getProfession()->getProfessionItems() as $pi)
+                if (!isset($item_type_cache[$pi->getId()])) $item_type_cache[$pi->getId()] = [-1,$pi];
+            foreach ($citizen->getProfession()->getAltProfessionItems() as $pi)
+                if (!isset($item_type_cache[$pi->getId()])) $item_type_cache[$pi->getId()] = [-1,$pi];
+        }
+
+        foreach ($profession->getProfessionItems() as $pi)
+            if (!isset($item_type_cache[$pi->getId()])) $item_type_cache[$pi->getId()] = [1,$pi];
+            else $item_type_cache[$pi->getId()] = [0,$pi];
+
+        $inventory = $citizen->getInventory(); $null = null;
+        foreach ($item_type_cache as &$entry) {
+            list(&$action,&$proto) = $entry;
+
+            if ($action < 0) foreach ($this->inventory_handler->fetchSpecificItems( $inventory, [new ItemRequest($proto->getName(),1,null,null)] ) as $item)
+                $this->inventory_handler->transferItem($citizen,$item,$inventory,$null);
+            if ($action > 0) {
+                $item = $this->item_factory->createItem( $proto );
+                $item->setEssential(true);
+                $this->inventory_handler->transferItem($citizen,$item,$null,$inventory);
+            }
+        }
+
         $citizen->setProfession( $profession );
     }
 }

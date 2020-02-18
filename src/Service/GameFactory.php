@@ -191,11 +191,13 @@ class GameFactory
         $citizen = new Citizen();
         $citizen->setUser( $user )
             ->setTown( $town )
-            ->setProfession( $base_profession )
             ->setInventory( new Inventory() )
             ->setHome( $home )
             ->setWellCounter( new WellCounter() )
             ->addStatus( $this->status_factory->createStatus( 'clean' ) );
+        (new Inventory())->setCitizen( $citizen );
+
+        $this->citizen_handler->applyProfession( $citizen, $base_profession );
 
         $chest
             ->addItem( $this->item_factory->createItem( 'chest_citizen_#00' ) )

@@ -7,6 +7,7 @@ use App\Entity\ZombieEstimation;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\NonUniqueResultException;
+use Exception;
 
 /**
  * @method ZombieEstimation|null find($id, $lockMode = null, $lockVersion = null)
@@ -29,7 +30,7 @@ class ZombieEstimationRepository extends ServiceEntityRepository
                 ->andWhere('z.day = :d')->setParameter('d', $day)
                 ->getQuery()
                 ->getOneOrNullResult();
-        } catch (NonUniqueResultException $e) {
+        } catch (Exception $e) {
             return null;
         }
     }

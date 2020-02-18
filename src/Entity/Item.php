@@ -38,6 +38,11 @@ class Item
      */
     private $inventory;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $essential = false;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -87,6 +92,18 @@ class Item
     public function setInventory(?Inventory $inventory): self
     {
         $this->inventory = $inventory;
+
+        return $this;
+    }
+
+    public function getEssential(): ?bool
+    {
+        return $this->essential;
+    }
+
+    public function setEssential(bool $essential): self
+    {
+        $this->essential = $essential;
 
         return $this;
     }

@@ -357,6 +357,20 @@ class ItemFixtures extends Fixture
         ["label"=>"Überraschungskiste (1 Geschenk)","icon"=>"chest_christmas_1","category"=>"misc","deco"=>0,"heavy"=>true],                // In Out
         ["label"=>"Verdächtiger Traubensaft","icon"=>"omg_this_will_kill_you","category"=>"food","deco"=>0,"heavy"=>false],                 //
         ["label"=>"Ein Etikett","icon"=>"rp_scroll","category"=>"imp","deco"=>0,"heavy"=>false],                                            // In Out
+
+
+        ["label"=>"Bürgerbekleidung","icon"=>"basic_suit","category"=>"misc","deco"=>0,"heavy"=>false],                                     // -- ---
+        ["label"=>"Dreckige Bürgerbekleidung","icon"=>"basic_suit_dirt","category"=>"misc","deco"=>0,"heavy"=>false],                       // -- ---
+        ["label"=>"Tarnanzug","icon"=>"vest_on","category"=>"misc","deco"=>0,"heavy"=>false],                                               // -- ---
+        ["label"=>"Tarnanzug (abgelegt)","icon"=>"vest_off","category"=>"misc","deco"=>0,"heavy"=>false],                                   //
+        ["label"=>"Kleine Schaufel","icon"=>"pelle","category"=>"misc","deco"=>0,"heavy"=>false],                                           // -- ---
+        ["label"=>"Dreibeiniger Malteser","icon"=>"tamed_pet","category"=>"misc","deco"=>0,"heavy"=>false],                                 // --
+        ["label"=>"Dreibeiniger Malteser (gedopt)","icon"=>"tamed_pet_drug","category"=>"misc","deco"=>0,"heavy"=>false],                   // --
+        ["label"=>"Dreibeiniger Malteser (erschöpft)","icon"=>"tamed_pet_off","category"=>"misc","deco"=>0,"heavy"=>false],                 // -- ---
+        ["label"=>"Survivalbuch","icon"=>"surv_book","category"=>"misc","deco"=>0,"heavy"=>false],                                          // --
+        ["label"=>"Schraubenschlüssel","icon"=>"keymol","category"=>"misc","deco"=>0,"heavy"=>false],                                       // -- ---
+        ["label"=>"Schutzschild","icon"=>"shield","category"=>"misc","deco"=>0,"heavy"=>false],                                             // -- ---
+        ["label"=>"Voodoo-Maske","icon"=>"shaman","category"=>"misc","deco"=>0,"heavy"=>false],                                             // -- ---
     ];
     public static $item_prototype_properties = [
         'saw_tool_#00'     => [ 'can_opener' ],

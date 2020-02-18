@@ -2,7 +2,10 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\JoinTable;
 use Doctrine\ORM\Mapping\Table;
 use Doctrine\ORM\Mapping\UniqueConstraint;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -39,6 +42,23 @@ class CitizenProfession
      * @ORM\Column(type="string", length=32)
      */
     private $icon;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\ItemPrototype")
+     */
+    private $professionItems;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\ItemPrototype")
+     * @JoinTable(name="citizen_profession_item_prototype_alt")
+     */
+    private $altProfessionItems;
+
+    public function __construct()
+    {
+        $this->professionItems = new ArrayCollection();
+        $this->altProfessionItems = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -77,6 +97,58 @@ class CitizenProfession
     public function setIcon(string $icon): self
     {
         $this->icon = $icon;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ItemPrototype[]
+     */
+    public function getProfessionItems(): Collection
+    {
+        return $this->professionItems;
+    }
+
+    public function addProfessionItem(ItemPrototype $professionItem): self
+    {
+        if (!$this->professionItems->contains($professionItem)) {
+            $this->professionItems[] = $professionItem;
+        }
+
+        return $this;
+    }
+
+    public function removeProfessionItem(ItemPrototype $professionItem): self
+    {
+        if ($this->professionItems->contains($professionItem)) {
+            $this->professionItems->removeElement($professionItem);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ItemPrototype[]
+     */
+    public function getAltProfessionItems(): Collection
+    {
+        return $this->altProfessionItems;
+    }
+
+    public function addAltProfessionItem(ItemPrototype $altProfessionItem): self
+    {
+        if (!$this->altProfessionItems->contains($altProfessionItem)) {
+            $this->altProfessionItems[] = $altProfessionItem;
+        }
+
+        return $this;
+    }
+
+    public function removeAltProfessionItem(ItemPrototype $altProfessionItem): self
+    {
+        if ($this->altProfessionItems->contains($altProfessionItem)) {
+            $this->altProfessionItems->removeElement($altProfessionItem);
+        }
 
         return $this;
     }
