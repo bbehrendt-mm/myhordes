@@ -115,16 +115,12 @@ class InventoryHandler
      * @param Inventory|Inventory[] $inventory
      * @param ItemGroup|ItemRequest[] $requests
      * @return Item[]
-     * @throws Exception
      */
     public function fetchSpecificItems($inventory, $requests): array {
         $return = [];
 
         if (is_array($inventory)) $inventory = array_filter($inventory, function(Inventory $i) { return $i->getId() !== null; } );
-        elseif ($inventory->getId() === null) {
-            if ($inventory->getItems()->count() > 0) throw new Exception('Cannot query incomplete inventory!');
-            return [];
-        }
+        elseif ($inventory->getId() === null && $inventory->getItems()->count() == 0) return [];
 
         if (is_a( $requests, ItemGroup::class )) {
             $tmp = [];
