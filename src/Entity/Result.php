@@ -85,6 +85,11 @@ class Result
      */
     private $well;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\AffectHome")
+     */
+    private $home;
+
     public function __construct()
     {
     }
@@ -234,6 +239,18 @@ class Result
     public function setWell(?AffectWell $well): self
     {
         $this->well = $well;
+
+        return $this;
+    }
+
+    public function getHome(): ?AffectHome
+    {
+        return $this->home;
+    }
+
+    public function setHome(?AffectHome $home): self
+    {
+        $this->home = $home;
 
         return $this;
     }

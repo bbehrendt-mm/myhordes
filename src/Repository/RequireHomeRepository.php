@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\RequireLocation;
+use App\Entity\RequireHome;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\NonUniqueResultException;
 
 /**
- * @method RequireLocation|null find($id, $lockMode = null, $lockVersion = null)
- * @method RequireLocation|null findOneBy(array $criteria, array $orderBy = null)
- * @method RequireLocation[]    findAll()
- * @method RequireLocation[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method RequireHome|null find($id, $lockMode = null, $lockVersion = null)
+ * @method RequireHome|null findOneBy(array $criteria, array $orderBy = null)
+ * @method RequireHome[]    findAll()
+ * @method RequireHome[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class RequireLocationRepository extends ServiceEntityRepository
+class RequireHomeRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, RequireLocation::class);
+        parent::__construct($registry, RequireHome::class);
     }
 
-    public function findOneByName(string $value): ?RequireLocation
+    public function findOneByName(string $value): ?RequireHome
     {
         try {
             return $this->createQueryBuilder('i')
@@ -34,7 +34,7 @@ class RequireLocationRepository extends ServiceEntityRepository
     }
 
     // /**
-    //  * @return RequireLocation[] Returns an array of RequireLocation objects
+    //  * @return RequireHome[] Returns an array of RequireHome objects
     //  */
     /*
     public function findByExampleField($value)
@@ -51,7 +51,7 @@ class RequireLocationRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?RequireLocation
+    public function findOneBySomeField($value): ?RequireHome
     {
         return $this->createQueryBuilder('r')
             ->andWhere('r.exampleField = :val')

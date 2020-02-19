@@ -216,11 +216,11 @@ class ItemFixtures extends Fixture
         ["label"=>"Große rostige Kette","icon"=>"chain","category"=>"imp","deco"=>0,"heavy"=>false],                                        // -- Out
         ["label"=>"Verdächtige Speise","icon"=>"dish","category"=>"food","deco"=>0,"heavy"=>false],                                         // In Out
         ["label"=>"Leckere Speise","icon"=>"dish_tasty","category"=>"food_7","deco"=>0,"heavy"=>false],                                     // In Out
-        ["label"=>"Schrankkoffer","icon"=>"home_box_xl","category"=>"furniture","deco"=>0,"heavy"=>true],                                   // -- ---
-        ["label"=>"Kartons","icon"=>"home_box","category"=>"furniture","deco"=>0,"heavy"=>false],                                           // -- ---
-        ["label"=>"Nagelbare Barrikade","icon"=>"home_def","category"=>"furniture","deco"=>0,"heavy"=>true],                                // -- ---
-        ["label"=>"Ein Briefumschlag","icon"=>"book_gen_letter","category"=>"imp","deco"=>0,"heavy"=>false],                                //
-        ["label"=>"Ein Paket","icon"=>"book_gen_box","category"=>"box","deco"=>0,"heavy"=>false],                                           //
+        ["label"=>"Schrankkoffer","icon"=>"home_box_xl","category"=>"furniture","deco"=>0,"heavy"=>true],                                   // In ---
+        ["label"=>"Kartons","icon"=>"home_box","category"=>"furniture","deco"=>0,"heavy"=>false],                                           // In ---
+        ["label"=>"Nagelbare Barrikade","icon"=>"home_def","category"=>"furniture","deco"=>0,"heavy"=>true],                                // In ---
+        ["label"=>"Ein Briefumschlag","icon"=>"book_gen_letter","category"=>"imp","deco"=>0,"heavy"=>false],                                // In Out
+        ["label"=>"Ein Paket","icon"=>"book_gen_box","category"=>"box","deco"=>0,"heavy"=>false],                                           // In Out
         ["label"=>"Maschendrahtzaunstück","icon"=>"fence","category"=>"rsc","deco"=>0,"heavy"=>false],                                      // -- ---
         ["label"=>"Wasserpistole (3 Ladungen)","icon"=>"watergun_3","category"=>"weapon","deco"=>0,"heavy"=>false],                         // -- Out
         ["label"=>"Wasserpistole (2 Ladungen)","icon"=>"watergun_2","category"=>"weapon","deco"=>0,"heavy"=>false],                         // -- Out

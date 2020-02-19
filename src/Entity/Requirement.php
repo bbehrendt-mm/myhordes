@@ -72,6 +72,11 @@ class Requirement
      */
     private $building;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\RequireHome")
+     */
+    private $home;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -181,6 +186,18 @@ class Requirement
     public function setBuilding(?RequireBuilding $building): self
     {
         $this->building = $building;
+
+        return $this;
+    }
+
+    public function getHome(): ?RequireHome
+    {
+        return $this->home;
+    }
+
+    public function setHome(?RequireHome $home): self
+    {
+        $this->home = $home;
 
         return $this;
     }

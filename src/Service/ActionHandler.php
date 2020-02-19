@@ -77,6 +77,10 @@ class ActionHandler
                 if ($status_is_active !== $status->getEnabled()) $current_state = min( $current_state, $this_state );
             }
 
+            if ($home = $meta_requirement->getHome()) {
+                if ($home->getMinLevel() !== null && $citizen->getHome()->getPrototype()->getLevel() < $home->getMinLevel()) $current_state = min( $current_state, $this_state );
+            }
+
             if ($ap = $meta_requirement->getAp()) {
                 $max = $ap->getRelativeMax() ? ($this->citizen_handler->getMaxAP( $citizen ) + $ap->getMax()) : $ap->getMax();
                 if ($citizen->getAp() < $ap->getMin() || $citizen->getAp() > $max) $current_state = min( $current_state, $this_state );
@@ -324,6 +328,13 @@ class ActionHandler
 
                 if ($citizen->getZone())
                     $citizen->getZone()->setZombies( max( 0, $citizen->getZone()->getZombies() - mt_rand( $zombie_kill->getMin(), $zombie_kill->getMax() ) ) );
+
+            }
+
+            if ($home_set = $result->getHome()) {
+
+                $citizen->getHome()->setAdditionalStorage( $citizen->getHome()->getAdditionalStorage() + $home_set->getAdditionalStorage() );
+                $citizen->getHome()->setAdditionalDefense( $citizen->getHome()->getAdditionalDefense() + $home_set->getAdditionalDefense() );
 
             }
 

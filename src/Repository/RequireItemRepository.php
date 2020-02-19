@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\RequireItem;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\NonUniqueResultException;
 
 /**
  * @method RequireItem|null find($id, $lockMode = null, $lockVersion = null)
@@ -17,6 +18,19 @@ class RequireItemRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, RequireItem::class);
+    }
+
+    public function findOneByName(string $value): ?RequireItem
+    {
+        try {
+            return $this->createQueryBuilder('i')
+                ->andWhere('i.name = :val')
+                ->setParameter('val', $value)
+                ->getQuery()
+                ->getOneOrNullResult();
+        } catch (NonUniqueResultException $e) {
+            return null;
+        }
     }
 
     // /**
