@@ -65,6 +65,8 @@ class InventoryHandler
             /** @var CitizenHomeUpgrade $upgrade */
             if ($upgrade) $base += $upgrade->getLevel();
 
+            $base += $inventory->getHome()->getAdditionalStorage();
+
             return $base;
         }
 

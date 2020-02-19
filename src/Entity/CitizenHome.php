@@ -45,6 +45,16 @@ class CitizenHome
      */
     private $description;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $additionalDefense = 0;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $additionalStorage = 0;
+
     public function __construct()
     {
         $this->citizenHomeUpgrades = new ArrayCollection();
@@ -135,6 +145,30 @@ class CitizenHome
     public function setDescription(?string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getAdditionalDefense(): ?int
+    {
+        return $this->additionalDefense;
+    }
+
+    public function setAdditionalDefense(int $additionalDefense): self
+    {
+        $this->additionalDefense = $additionalDefense;
+
+        return $this;
+    }
+
+    public function getAdditionalStorage(): ?int
+    {
+        return $this->additionalStorage;
+    }
+
+    public function setAdditionalStorage(int $additionalStorage): self
+    {
+        $this->additionalStorage = $additionalStorage;
 
         return $this;
     }

@@ -70,7 +70,7 @@ class TownHandler
         $n = $this->entity_manager->getRepository(CitizenHomeUpgrade::class)->findOneByPrototype( $home,
             $this->entity_manager->getRepository( CitizenHomeUpgradePrototype::class )->findOneByName( 'defense' )
         );
-        $upgrade_def = $n ? $n->getLevel() : 0;
+        $upgrade_def = ($n ? $n->getLevel() : 0) + $home->getAdditionalDefense();
         $item_def = $this->inventory_handler->countSpecificItems( $home->getChest(),
             $this->inventory_handler->resolveItemProperties( 'defence' )
         );
@@ -81,10 +81,13 @@ class TownHandler
     public function calculate_town_def( Town &$town, ?int &$house_def = null, ?int &$citizen_def = null, ?int &$building_def = null, ?int &$item_def = null ): int {
         $f_house_def = 0.0;
         $citizen_def = 0;
+
+        $home_def_factor = $this->getBuilding( $town, 'small_strategy_#00', true ) ? 0.8 : 0.4;
+
         foreach ($town->getCitizens() as $citizen)
             if ($citizen->getAlive()) {
                 $home = $citizen->getHome();
-                $f_house_def += $this->calculate_home_def( $home ) * 0.4;
+                $f_house_def += $this->calculate_home_def( $home ) * $home_def_factor;
                 if (!$citizen->getZone() && $citizen->getProfession()->getName() === 'guardian')
                     $citizen_def += 5;
             }
