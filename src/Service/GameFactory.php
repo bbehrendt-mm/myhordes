@@ -193,9 +193,9 @@ class GameFactory
             ->setTown( $town )
             ->setInventory( new Inventory() )
             ->setHome( $home )
-            ->setWellCounter( new WellCounter() )
-            ->addStatus( $this->status_factory->createStatus( 'clean' ) );
+            ->setWellCounter( new WellCounter() );
         (new Inventory())->setCitizen( $citizen );
+        $this->citizen_handler->inflictStatus( $citizen, 'clean' );
 
         $this->citizen_handler->applyProfession( $citizen, $base_profession );
 

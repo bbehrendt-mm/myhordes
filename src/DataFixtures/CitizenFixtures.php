@@ -61,6 +61,7 @@ class CitizenFixtures extends Fixture implements DependentFixtureInterface
 
         ['name' => 'tg_dice' ],
         ['name' => 'tg_cards'],
+        ['name' => 'tg_meta_wound'],
     ];
 
     public static $home_levels = [

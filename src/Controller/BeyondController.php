@@ -8,6 +8,7 @@ use App\Entity\DigRuinMarker;
 use App\Entity\DigTimer;
 use App\Entity\EscapeTimer;
 use App\Entity\Item;
+use App\Entity\ItemPrototype;
 use App\Entity\TownClass;
 use App\Entity\User;
 use App\Entity\UserPendingValidation;
@@ -241,6 +242,14 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
             $this->entity_manager->remove( $et );
 
         $this->citizen_handler->setAP($citizen, true, -1);
+        $citizen->setWalkingDistance( $citizen->getWalkingDistance() + 1 );
+        if ($citizen->getWalkingDistance() > 10) {
+            $this->citizen_handler->increaseThirstLevel( $citizen );
+            $citizen->setWalkingDistance( 0 );
+        }
+        $clothes = $this->inventory_handler->fetchSpecificItems($citizen->getInventory(),[new ItemRequest('basic_suit_#00')]);
+        if (!empty($clothes)) $clothes[0]->setPrototype( $this->entity_manager->getRepository( ItemPrototype::class )->findOneByName( 'basic_suit_dirt_#00' ) );
+
         $zone->removeCitizen( $citizen );
         $new_zone
             ->addCitizen( $citizen )

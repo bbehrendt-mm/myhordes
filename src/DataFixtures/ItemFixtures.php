@@ -97,7 +97,7 @@ class ItemFixtures extends Fixture
         ["label"=>"Wasserbombe","icon"=>"grenade","category"=>"weapon","deco"=>0,"heavy"=>false],                                           // -- Out
         ["label"=>"Blechplatte","icon"=>"plate","category"=>"armor","deco"=>0,"heavy"=>true],                                               // -- ---
         ["label"=>"Kanisterpumpe (zerlegt)","icon"=>"jerrygun_part","category"=>"aud_n","deco"=>0,"heavy"=>false],                          // -- ---
-        ["label"=>"Bandage","icon"=>"bandage","category"=>"drug","deco"=>0,"heavy"=>false],                                                 //
+        ["label"=>"Bandage","icon"=>"bandage","category"=>"drug","deco"=>0,"heavy"=>false],                                                 // In Out
         ["label"=>"Grüne Bierflasche","icon"=>"vodka_de","category"=>"food_a","deco"=>0,"heavy"=>false],                                    // In Out
         ["label"=>"Kanisterpumpe (leer)","icon"=>"jerrygun_off","category"=>"aud_n","deco"=>0,"heavy"=>false],                              // In Out
         ["label"=>"Videoprojektor","icon"=>"cinema","category"=>"furniture","deco"=>0,"heavy"=>true],                                       // -- ---
@@ -127,8 +127,8 @@ class ItemFixtures extends Fixture
         ["label"=>"Unvollständiger Kaffeekocher","icon"=>"coffee_machine_part","category"=>"imp","deco"=>0,"heavy"=>true],                  // -- ---
         ["label"=>"Elektronisches Bauteil","icon"=>"electro","category"=>"rsc","deco"=>0,"heavy"=>false],                                   // -- ---
         ["label"=>"Habseligkeiten eines Bürgers","icon"=>"chest_citizen","category"=>"box","deco"=>0,"heavy"=>true],                        // In Out
-        ["label"=>"Hydraton 100mg","icon"=>"drug_water","category"=>"drug_d","deco"=>0,"heavy"=>false],                                     //
-        ["label"=>"Kassettenradio (ohne Strom)","icon"=>"radio_off","category"=>"furniture","deco"=>0,"heavy"=>false],                      //
+        ["label"=>"Hydraton 100mg","icon"=>"drug_water","category"=>"drug_d","deco"=>0,"heavy"=>false],                                     // In Out
+        ["label"=>"Kassettenradio (ohne Strom)","icon"=>"radio_off","category"=>"furniture","deco"=>0,"heavy"=>false],                      // In Out
         ["label"=>"Kassettenradio","icon"=>"radio_on","category"=>"furniture","deco"=>2,"heavy"=>false],                                    // -- ---
         ["label"=>"Zyanid","icon"=>"cyanure","category"=>"drug","deco"=>0,"heavy"=>false],                                                  //
         ["label"=>"Alte Tür","icon"=>"door","category"=>"armor","deco"=>0,"heavy"=>true],                                                   // -- ---
@@ -143,8 +143,8 @@ class ItemFixtures extends Fixture
         ["label"=>"Kettensäge (ohne Strom)","icon"=>"chainsaw_empty","category"=>"aud_n","deco"=>0,"heavy"=>true],                          // In Out
         ["label"=>"Batteriewerfer 1-PDTG (entladen)","icon"=>"pilegun_empty","category"=>"aud_n","deco"=>0,"heavy"=>false],                 // In Out
         ["label"=>"Taser (ohne Strom)","icon"=>"taser_empty","category"=>"aud_n","deco"=>0,"heavy"=>false],                                 // In Out
-        ["label"=>"Elektrischer Bauchmuskeltrainer (ohne Strom)","icon"=>"sport_elec_empty","category"=>"imp","deco"=>0,"heavy"=>false],    //
-        ["label"=>"Elektrischer Bauchmuskeltrainer (geladen)","icon"=>"sport_elec","category"=>"imp","deco"=>0,"heavy"=>false],             //
+        ["label"=>"Elektrischer Bauchmuskeltrainer (ohne Strom)","icon"=>"sport_elec_empty","category"=>"imp","deco"=>0,"heavy"=>false],    // In Out
+        ["label"=>"Elektrischer Bauchmuskeltrainer (geladen)","icon"=>"sport_elec","category"=>"imp","deco"=>0,"heavy"=>false],             // In Out
         ["label"=>"Zerstörer (entladen)","icon"=>"big_pgun_empty","category"=>"aud_n","deco"=>0,"heavy"=>false],                            // In Out
         ["label"=>"Zerstörer (geladen)","icon"=>"big_pgun","category"=>"weapon","deco"=>0,"heavy"=>false],                                  // -- Out
         ["label"=>"Unvollständiger Zerstörer","icon"=>"big_pgun_part","category"=>"aud_n","deco"=>0,"heavy"=>false],                        // -- ---

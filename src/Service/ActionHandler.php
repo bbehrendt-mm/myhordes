@@ -247,12 +247,12 @@ class ActionHandler
 
                 if ($status->getInitial() && $status->getResult()) {
                     if ($citizen->getStatus()->contains( $status->getInitial() )) {
-                        $citizen->removeStatus( $status->getInitial() );
-                        $citizen->addStatus( $status->getResult() );
+                        $this->citizen_handler->removeStatus( $citizen, $status->getInitial() );
+                        $this->citizen_handler->inflictStatus( $citizen, $status->getResult() );
                     }
                 }
-                elseif ($status->getInitial()) $citizen->removeStatus( $status->getInitial() );
-                elseif ($status->getResult())  $citizen->addStatus( $status->getResult() );
+                elseif ($status->getInitial()) $this->citizen_handler->removeStatus( $citizen, $status->getInitial() );
+                elseif ($status->getResult())  $this->citizen_handler->inflictStatus( $citizen, $status->getResult() );
 
             }
 
@@ -428,7 +428,7 @@ class ActionHandler
                 }
 
                 if ($terror)
-                    $citizen->getStatus()->add( $this->entity_manager->getRepository( CitizenStatus::class )->findOneByName('terror') );
+                    $this->citizen_handler->inflictStatus( $citizen, 'error' );
             }
 
             if ($result_group = $result->getResultGroup()) {

@@ -55,7 +55,11 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'drug_1'  => [ 'type' => Requirement::HideOnFail, 'collection' => [ 'status' => [ 'enabled' => false, 'status' => 'drugged' ] ]],
             'drug_2'  => [ 'type' => Requirement::HideOnFail, 'collection' => [ 'status' => [ 'enabled' => true,  'status' => 'drugged' ] ]],
 
-            'not_tired' => [ 'type' => Requirement::CrossOnFail, 'collection' => [ 'status' => [ 'enabled' => false, 'status' => 'tired' ] ]],
+            'not_tired' =>  [ 'type' => Requirement::CrossOnFail, 'collection' => [ 'status' => [ 'enabled' => false, 'status' => 'tired' ] ]],
+
+            'is_wounded'      => [ 'type' => Requirement::CrossOnFail, 'collection' => [ 'status' => [ 'enabled' => true,  'status' => 'tg_meta_wound' ] ]],
+            'is_not_wounded'  => [ 'type' => Requirement::CrossOnFail, 'collection' => [ 'status' => [ 'enabled' => false, 'status' => 'tg_meta_wound' ] ]],
+            'is_not_bandaged' => [ 'type' => Requirement::CrossOnFail, 'collection' => [ 'status' => [ 'enabled' => false, 'status' => 'healed' ] ]],
 
             'not_drunk'    => [ 'type' => Requirement::CrossOnFail, 'collection' => [ 'status' => [ 'enabled' => false, 'status' => 'drunk' ] ]],
             'not_hungover' => [ 'type' => Requirement::CrossOnFail, 'collection' => [ 'status' => [ 'enabled' => false, 'status' => 'hungover' ] ]],
@@ -112,8 +116,7 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
 
             'drunk' => [ 'status' => 'add_drunk' ],
 
-            'drug_any_1'   => [ 'status' => 'remove_clean' ],
-            'drug_any_2'   => [ 'status' => 'add_is_drugged' ],
+            'drug_any'   => [ 'status' => 'add_is_drugged' ],
             'drug_addict'  => [ 'status' => 'add_addicted' ],
             'terrorize'    => [ 'status' => 'add_terror' ],
             'unterrorize'  => [ 'status' => 'remove_terror' ],
@@ -137,6 +140,10 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
 
             'casino_dice' => [ 'casino' => [1], 'status' => [ 'from' => null, 'to' => 'tg_dice' ] ],
             'casino_card' => [ 'casino' => [2], 'status' => [ 'from' => null, 'to' => 'tg_cards' ] ],
+
+            'heal_wound'  => [ 'status' => 'heal_wound' ],
+            'add_bandage' => [ 'status' => 'add_bandage' ],
+            'inflict_wound' => [ 'status' => 'inflict_wound' ],
         ],
 
         'results' => [
@@ -152,7 +159,6 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
                 'add_has_drunk' => [ 'from' => null, 'to' => 'hasdrunk' ],
                 'remove_thirst' => [ 'from' => 'thirst1', 'to' => null ],
 
-                'remove_clean'    => [ 'from' => 'clean', 'to' => null ],
                 'remove_infection'=> [ 'from' => 'infection', 'to' => null ],
 
                 'add_drunk' => [ 'from' => null, 'to' => 'drunk' ],
@@ -162,6 +168,10 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
                 'add_addicted'   => [ 'from' => null, 'to' => 'addict' ],
                 'add_terror'     => [ 'from' => null, 'to' => 'terror' ],
                 'remove_terror'  => [ 'from' => 'terror', 'to' => null ],
+
+                'inflict_wound' => [ 'from' => null, 'to' => 'tg_meta_wound' ],
+                'heal_wound'    => [ 'from' => 'tg_meta_wound', 'to' => null ],
+                'add_bandage'   => [ 'from' => null, 'to' => 'healed' ],
             ],
             'item' => [],
 
@@ -228,21 +238,28 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'eat_6ap'   => [ 'label' => 'Essen',   'meta' => [ 'eat_ap' ], 'result' => [ 'eat_ap6', 'consume_item' ] ],
             'eat_7ap'   => [ 'label' => 'Essen',   'meta' => [ 'eat_ap' ], 'result' => [ 'eat_ap7', 'consume_item' ] ],
 
-            'drug_xana1'   => [ 'label' => 'Einsetzen', 'meta' => [ 'drug_1' ], 'result' => [ 'drug_any_1', 'drug_any_2', 'unterrorize', 'consume_item' ] ],
-            'drug_xana2'   => [ 'label' => 'Einsetzen', 'meta' => [ 'drug_2' ], 'result' => [ 'drug_addict', 'unterrorize', 'consume_item' ] ],
-            'drug_par_1'   => [ 'label' => 'Einnehmen', 'meta' => [ 'drug_1' ], 'result' => [ 'drug_any_1', 'drug_any_2', 'disinfect', 'consume_item' ] ],
-            'drug_par_2'   => [ 'label' => 'Einnehmen', 'meta' => [ 'drug_2' ], 'result' => [ 'drug_addict', 'disinfect', 'consume_item' ] ],
-            'drug_6ap_1'   => [ 'label' => 'Einnehmen', 'meta' => [ 'drug_1' ], 'result' => [ 'drug_any_1', 'drug_any_2', 'just_ap6', 'consume_item' ] ],
-            'drug_6ap_2'   => [ 'label' => 'Einnehmen', 'meta' => [ 'drug_2' ], 'result' => [ 'drug_addict', 'just_ap6', 'consume_item' ] ],
-            'drug_7ap_1'   => [ 'label' => 'Einnehmen', 'meta' => [ 'drug_1' ], 'result' => [ 'drug_any_1', 'drug_any_2', 'just_ap7', 'consume_item' ] ],
-            'drug_7ap_2'   => [ 'label' => 'Einnehmen', 'meta' => [ 'drug_2' ], 'result' => [ 'drug_addict', 'just_ap7', 'consume_item' ] ],
-            'drug_8ap_1'   => [ 'label' => 'Einnehmen', 'meta' => [ 'drug_1' ], 'result' => [ 'drug_any_1', 'drug_any_2', 'just_ap8', 'consume_item' ] ],
-            'drug_8ap_2'   => [ 'label' => 'Einnehmen', 'meta' => [ 'drug_2' ], 'result' => [ 'drug_addict', 'just_ap8', 'consume_item' ] ],
+            'drug_xana1' => [ 'label' => 'Einsetzen', 'meta' => [ 'drug_1' ], 'result' => [ 'drug_any', 'unterrorize', 'consume_item' ] ],
+            'drug_xana2' => [ 'label' => 'Einsetzen', 'meta' => [ 'drug_2' ], 'result' => [ 'drug_addict', 'unterrorize', 'consume_item' ] ],
+            'drug_par_1' => [ 'label' => 'Einnehmen', 'meta' => [ 'drug_1' ], 'result' => [ 'drug_any', 'disinfect', 'consume_item' ] ],
+            'drug_par_2' => [ 'label' => 'Einnehmen', 'meta' => [ 'drug_2' ], 'result' => [ 'drug_addict', 'disinfect', 'consume_item' ] ],
+            'drug_6ap_1' => [ 'label' => 'Einnehmen', 'meta' => [ 'drug_1' ], 'result' => [ 'drug_any', 'just_ap6', 'consume_item' ] ],
+            'drug_6ap_2' => [ 'label' => 'Einnehmen', 'meta' => [ 'drug_2' ], 'result' => [ 'drug_addict', 'just_ap6', 'consume_item' ] ],
+            'drug_7ap_1' => [ 'label' => 'Einnehmen', 'meta' => [ 'drug_1' ], 'result' => [ 'drug_any', 'just_ap7', 'consume_item' ] ],
+            'drug_7ap_2' => [ 'label' => 'Einnehmen', 'meta' => [ 'drug_2' ], 'result' => [ 'drug_addict', 'just_ap7', 'consume_item' ] ],
+            'drug_8ap_1' => [ 'label' => 'Einnehmen', 'meta' => [ 'drug_1' ], 'result' => [ 'drug_any', 'just_ap8', 'consume_item' ] ],
+            'drug_8ap_2' => [ 'label' => 'Einnehmen', 'meta' => [ 'drug_2' ], 'result' => [ 'drug_addict', 'just_ap8', 'consume_item' ] ],
+            'drug_hyd_1' => [ 'label' => 'Einnehmen', 'meta' => [ 'drug_1', 'drink_ap_2' ], 'result' => [ 'drug_any', 'drink_ap_2', 'consume_item' ] ],
+            'drug_hyd_2' => [ 'label' => 'Einnehmen', 'meta' => [ 'drug_2', 'drink_ap_2' ], 'result' => [ 'drug_addict', 'drink_ap_2', 'consume_item' ] ],
+            'drug_hyd_3' => [ 'label' => 'Einnehmen', 'meta' => [ 'drug_1', 'drink_no_ap' ], 'result' => [ 'drug_any', 'drink_no_ap', 'consume_item' ] ],
+            'drug_hyd_4' => [ 'label' => 'Einnehmen', 'meta' => [ 'drug_2', 'drink_no_ap' ], 'result' => [ 'drug_addict', 'drink_no_ap', 'consume_item' ] ],
+
+            'bandage' => [ 'label' => 'Verbinden', 'meta' => [ 'is_wounded', 'is_not_bandaged' ], 'result' => [ 'heal_wound', 'consume_item', 'add_bandage' ] ],
+            'emt'     => [ 'label' => 'Einsetzen', 'meta' => [ 'is_not_wounded' ], 'result' => [ 'just_ap6', 'inflict_wound', ['item' => [ 'consume' => false, 'morph' => 'sport_elec_empty_#00' ]] ] ],
 
             'drug_rand_1'  => [ 'label' => 'Einnehmen', 'meta' => [ 'drug_1' ], 'result' => [ 'consume_item', ['group' => [
-                [ ['drug_any_1', 'drug_any_2', 'just_ap6'], 5 ],
-                [ ['drug_any_1', 'drug_any_2', 'terrorize'], 2 ],
-                [ ['drug_any_1', 'drug_any_2', 'drug_addict', 'just_ap7'], 2 ],
+                [ ['drug_any', 'just_ap6'], 5 ],
+                [ ['drug_any', 'terrorize'], 2 ],
+                [ ['drug_any', 'drug_addict', 'just_ap7'], 2 ],
                 [ ['do_nothing'], 1 ],
             ]] ] ] ,
             'drug_rand_2'  => [ 'label' => 'Einnehmen', 'meta' => [ 'drug_2' ], 'result' => [ 'consume_item', ['group' => [
@@ -291,6 +308,8 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'load_dildo'     => [ 'label' => 'Laden', 'meta' => [ 'have_battery' ], 'result' => [ 'consume_battery', [ 'item' => [ 'consume' => false, 'morph' => 'vibr_#00' ] ] ], 'message' => 'Du hast eine {items_consume} in dein/e/n {item_from} eingelegt und {item_to} erhalten!' ],
             'load_rmk2'      => [ 'label' => 'Laden', 'meta' => [ 'have_battery' ], 'result' => [ 'consume_battery', [ 'item' => [ 'consume' => false, 'morph' => 'radius_mk2_#00' ] ] ], 'message' => 'Du hast eine {items_consume} in dein/e/n {item_from} eingelegt und {item_to} erhalten!' ],
             'load_maglite'   => [ 'label' => 'Laden', 'meta' => [ 'have_battery' ], 'result' => [ 'consume_battery', [ 'item' => [ 'consume' => false, 'morph' => 'maglite_2_#00' ] ] ], 'message' => 'Du hast eine {items_consume} in dein/e/n {item_from} eingelegt und {item_to} erhalten!' ],
+            'load_radio'     => [ 'label' => 'Laden', 'meta' => [ 'have_battery' ], 'result' => [ 'consume_battery', [ 'item' => [ 'consume' => false, 'morph' => 'radio_on_#00' ] ] ], 'message' => 'Du hast eine {items_consume} in dein/e/n {item_from} eingelegt und {item_to} erhalten!' ],
+            'load_emt'       => [ 'label' => 'Laden', 'meta' => [ 'have_battery' ], 'result' => [ 'consume_battery', [ 'item' => [ 'consume' => false, 'morph' => 'sport_elec_#00' ] ] ], 'message' => 'Du hast eine {items_consume} in dein/e/n {item_from} eingelegt und {item_to} erhalten!' ],
 
             'fill_asplash'   => [ 'label' => 'Befüllen', 'meta' => [ 'have_water' ], 'result' => [ 'consume_water', [ 'item' => [ 'consume' => false, 'morph' => 'watergun_opt_5_#00' ] ] ], 'message' => 'Du hast eine {items_consume} in dein/e/n {item_from} gefüllt und {item_to} erhalten!' ],
             'fill_splash'    => [ 'label' => 'Befüllen', 'meta' => [ 'have_water' ], 'result' => [ 'consume_water', [ 'item' => [ 'consume' => false, 'morph' => 'watergun_3_#00' ] ] ], 'message' => 'Du hast eine {items_consume} in dein/e/n {item_from} gefüllt und {item_to} erhalten!' ],
@@ -426,6 +445,7 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'drug_hero_#00'       => [ 'drug_8ap_1', 'drug_8ap_2' ],
             'drug_random_#00'     => [ 'drug_rand_1', 'drug_rand_2' ],
             'xanax_#00'           => [ 'drug_xana1', 'drug_xana2' ],
+            'drug_water_#00'      => [ 'drug_hyd_1', 'drug_hyd_2', 'drug_hyd_3', 'drug_hyd_4' ],
 
             'food_bag_#00'        => [ 'open_doggybag' ],
             'food_armag_#00'      => [ 'open_lunchbag' ],
@@ -464,6 +484,8 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'vibr_empty_#00'       => [ 'load_dildo' ],
             'radius_mk2_part_#00'  => [ 'load_rmk2' ],
             'maglite_off_#00'      => [ 'load_maglite' ],
+            'radio_off_#00'        => [ 'load_radio' ],
+            'sport_elec_empty_#00' => [ 'load_emt' ],
 
             'watergun_opt_empty_#00' => [ 'fill_asplash' ],
             'watergun_empty_#00'     => [ 'fill_splash' ],
@@ -559,6 +581,9 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'home_def_#00'     => ['home_def_plus'],
             'home_box_#00'  => ['home_store_plus'],
             'home_box_xl_#00'  => ['home_store_plus2'],
+
+            'bandage_#00'  => ['bandage'],
+            'sport_elec_#00'  => ['emt'],
 
             'jerrycan_#00'       => ['jerrycan_1', 'jerrycan_2', 'jerrycan_3'],
             'water_cup_part_#00' => ['watercup_1', 'watercup_2', 'watercup_3'],

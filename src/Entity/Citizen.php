@@ -89,6 +89,11 @@ class Citizen
      */
     private $dailyUpgradeVote;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $walkingDistance;
+
     public function __construct()
     {
         $this->status = new ArrayCollection();
@@ -295,6 +300,18 @@ class Citizen
         if ($dailyUpgradeVote->getCitizen() !== $this) {
             $dailyUpgradeVote->setCitizen($this);
         }
+
+        return $this;
+    }
+
+    public function getWalkingDistance(): ?int
+    {
+        return $this->walkingDistance;
+    }
+
+    public function setWalkingDistance(int $walkingDistance): self
+    {
+        $this->walkingDistance = $walkingDistance;
 
         return $this;
     }

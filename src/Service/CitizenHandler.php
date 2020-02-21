@@ -62,14 +62,71 @@ class CitizenHandler
     }
 
     public function isWounded(Citizen $citizen) {
-        return $this->hasStatusEffect( $citizen, ['wound1','wound2','wound3','wound4','wound5','wound6'], false );
+        return $this->hasStatusEffect( $citizen, ['tg_meta_wound','wound1','wound2','wound3','wound4','wound5','wound6'], false );
     }
 
     public function inflictWound( Citizen &$citizen ) {
         if ($this->isWounded($citizen)) return;
+        $ap_above_6 = $citizen->getAp() - $this->getMaxAP( $citizen );
         $citizen->addStatus( $this->entity_manager->getRepository(CitizenStatus::class)->findOneByName(
             $this->random_generator->pick( ['wound1','wound2','wound3','wound4','wound5','wound6'] )
         ) );
+        $citizen->addStatus($this->entity_manager->getRepository(CitizenStatus::class)->findOneByName('tg_meta_wound'));
+        if ($ap_above_6 >= 0)
+            $citizen->setAp( $this->getMaxAP( $citizen ) + $ap_above_6 );
+    }
+
+    public function healWound( Citizen &$citizen ) {
+        foreach ($citizen->getStatus() as $status)
+            if (in_array( $status->getName(), ['tg_meta_wound','wound1','wound2','wound3','wound4','wound5','wound6'] ))
+                $citizen->removeStatus( $status );
+    }
+
+    /**
+     * @param Citizen $citizen
+     * @param CitizenStatus|string $status
+     */
+    public function inflictStatus( Citizen &$citizen, $status ) {
+        if (is_string( $status )) $status = $this->entity_manager->getRepository(CitizenStatus::class)->findOneByName($status);
+        if (!$status) return;
+
+        if (in_array( $status->getName(), ['tg_meta_wound','wound1','wound2','wound3','wound4','wound5','wound6'] )) {
+            $this->inflictWound($citizen);
+            return;
+        }
+
+        if (in_array($status->getName(), ['drugged','addict']))
+            $this->removeStatus($citizen, 'clean');
+
+        if ( $status->getName() === 'hasdrunk' ) $citizen->setWalkingDistance( 0 );
+
+        $citizen->addStatus( $status );
+    }
+
+    public function removeStatus( Citizen &$citizen, $status ) {
+        if (is_string( $status )) $status = $this->entity_manager->getRepository(CitizenStatus::class)->findOneByName($status);
+        if (!$status) return;
+
+        if (in_array( $status->getName(), ['tg_meta_wound','wound1','wound2','wound3','wound4','wound5','wound6'] )) {
+            $this->healWound($citizen);
+            return;
+        }
+
+        $citizen->removeStatus( $status );
+    }
+
+    public function increaseThirstLevel( Citizen $citizen ) {
+
+        $lv2 = $this->entity_manager->getRepository(CitizenStatus::class)->findOneByName('thirst2');
+        $lv1 = $this->entity_manager->getRepository(CitizenStatus::class)->findOneByName('thirst1');
+
+        if ($citizen->getStatus()->contains( $lv2 )) {
+            // ToDO: Die of thirst
+        } elseif ($citizen->getStatus()->contains( $lv1 )) {
+            $this->removeStatus( $citizen, $lv1 );
+            $this->inflictStatus( $citizen, $lv2 );
+        } else $this->inflictStatus( $citizen, $lv1 );
+
     }
 
     public function isTired(Citizen $citizen) {
@@ -86,8 +143,8 @@ class CitizenHandler
         if ($max_bonus !== null)
             $citizen->setAp( max(0, min(max($this->getMaxAP( $citizen ) + $max_bonus, $citizen->getAp()), $relative ? ($citizen->getAp() + $num) : max(0,$num) )) );
         else $citizen->setAp( max(0, $relative ? ($citizen->getAp() + $num) : max(0,$num) ) );
-        if ($citizen->getAp() == 0) $citizen->addStatus( $this->status_factory->createStatus( 'tired' ) );
-        else $citizen->removeStatus( $this->status_factory->createStatus( 'tired' ) );
+        if ($citizen->getAp() == 0) $this->inflictStatus( $citizen, 'tired' );
+        else $this->removeStatus( $citizen, 'tired' );
     }
 
     public function getCP(Citizen &$citizen): int {
