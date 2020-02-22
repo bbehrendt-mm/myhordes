@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\OrderBy;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TownRepository")
@@ -30,6 +31,7 @@ class Town
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Citizen", mappedBy="town", orphanRemoval=true, cascade={"persist", "remove"})
+     * @OrderBy({"alive" = "DESC", "id" = "ASC"})
      */
     private $citizens;
 

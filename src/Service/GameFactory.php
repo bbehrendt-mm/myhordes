@@ -6,6 +6,7 @@ namespace App\Service;
 
 use App\Entity\Building;
 use App\Entity\BuildingPrototype;
+use App\Entity\CauseOfDeath;
 use App\Entity\Citizen;
 use App\Entity\CitizenHome;
 use App\Entity\CitizenHomePrototype;
@@ -193,6 +194,7 @@ class GameFactory
             ->setTown( $town )
             ->setInventory( new Inventory() )
             ->setHome( $home )
+            ->setCauseOfDeath( $this->entity_manager->getRepository( CauseOfDeath::class )->findOneByRef( CauseOfDeath::Unknown ) )
             ->setWellCounter( new WellCounter() );
         (new Inventory())->setCitizen( $citizen );
         $this->citizen_handler->inflictStatus( $citizen, 'clean' );

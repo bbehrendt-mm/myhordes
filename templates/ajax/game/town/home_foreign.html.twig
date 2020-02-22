@@ -29,7 +29,7 @@
         {% else %}
             <div class="row">
                 <div class="cell rw-3"><span class="highlight">{{ 'Todesursache'|trans({},'game') }}:</span></div>
-                <div class="cell rw-9"></div>
+                <div class="cell rw-9">{{ citizen.causeOfDeath.label|trans({},'game') }}</div>
             </div>
             <div class="row">
                 <div class="cell rw-3"><span class="highlight">{{ 'Letzte Worte'|trans({},'game') }}:</span></div>

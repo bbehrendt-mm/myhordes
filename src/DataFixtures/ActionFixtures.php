@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\AffectAP;
 use App\Entity\AffectBlueprint;
+use App\Entity\AffectDeath;
 use App\Entity\AffectHome;
 use App\Entity\AffectItemConsume;
 use App\Entity\AffectItemSpawn;
@@ -14,6 +15,7 @@ use App\Entity\AffectStatus;
 use App\Entity\AffectWell;
 use App\Entity\AffectZombies;
 use App\Entity\BuildingPrototype;
+use App\Entity\CauseOfDeath;
 use App\Entity\CitizenStatus;
 use App\Entity\ItemAction;
 use App\Entity\ItemGroup;
@@ -144,6 +146,8 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'heal_wound'  => [ 'status' => 'heal_wound' ],
             'add_bandage' => [ 'status' => 'add_bandage' ],
             'inflict_wound' => [ 'status' => 'inflict_wound' ],
+
+            'cyanide' => [ 'death' => [ CauseOfDeath::Cyanide ] ]
         ],
 
         'results' => [
@@ -252,6 +256,7 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'drug_hyd_2' => [ 'label' => 'Einnehmen', 'meta' => [ 'drug_2', 'drink_ap_2' ], 'result' => [ 'drug_addict', 'drink_ap_2', 'consume_item' ] ],
             'drug_hyd_3' => [ 'label' => 'Einnehmen', 'meta' => [ 'drug_1', 'drink_no_ap' ], 'result' => [ 'drug_any', 'drink_no_ap', 'consume_item' ] ],
             'drug_hyd_4' => [ 'label' => 'Einnehmen', 'meta' => [ 'drug_2', 'drink_no_ap' ], 'result' => [ 'drug_addict', 'drink_no_ap', 'consume_item' ] ],
+            'cyanide'    => [ 'label' => 'Einnehmen', 'meta' => [ ], 'result' => [ 'cyanide', 'consume_item' ] ],
 
             'bandage' => [ 'label' => 'Verbinden', 'meta' => [ 'is_wounded', 'is_not_bandaged' ], 'result' => [ 'heal_wound', 'consume_item', 'add_bandage' ] ],
             'emt'     => [ 'label' => 'Einsetzen', 'meta' => [ 'is_not_wounded' ], 'result' => [ 'just_ap6', 'inflict_wound', ['item' => [ 'consume' => false, 'morph' => 'sport_elec_empty_#00' ]] ] ],
@@ -587,6 +592,8 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
 
             'jerrycan_#00'       => ['jerrycan_1', 'jerrycan_2', 'jerrycan_3'],
             'water_cup_part_#00' => ['watercup_1', 'watercup_2', 'watercup_3'],
+
+            'cyanure_#00' => ['cyanide'],
         ]
 
     ];
@@ -951,6 +958,9 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
                     case 'bp':
                         $result->setBlueprint( $this->process_blueprint_effect($manager,$out, $sub_cache[$sub_id], $sub_res, $sub_data) );
                         break;
+                    case 'death':
+                        $result->setDeath( $this->process_death_effect($manager,$out, $sub_cache[$sub_id], $sub_res, $sub_data) );
+                        break;
                     case 'item':
                         $result->setItem( $this->process_item_effect($manager, $out, $sub_cache[$sub_id], $sub_res, $sub_data) );
                         break;
@@ -1049,6 +1059,33 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             $manager->persist( $cache[$id] = $result );
         } else $out->writeln( "\t\t\t<comment>Skip</comment> effect <info>ap/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
         
+        return $cache[$id];
+    }
+
+    /**
+     * @param ObjectManager $manager
+     * @param ConsoleOutputInterface $out
+     * @param array $cache
+     * @param string $id
+     * @param array $data
+     * @return AffectDeath
+     */
+    private function process_death_effect(
+        ObjectManager $manager, ConsoleOutputInterface $out,
+        array &$cache, string $id, array $data): AffectDeath
+    {
+        if (!isset($cache[$id])) {
+            $result = $manager->getRepository(AffectDeath::class)->findOneByName( $id );
+            if ($result) $out->writeln( "\t\t\t<comment>Update</comment> effect <info>death/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
+            else {
+                $result = new AffectDeath();
+                $out->writeln( "\t\t\t<comment>Create</comment> effect <info>death/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
+            }
+
+            $result->setName( $id )->setCause(  $manager->getRepository(CauseOfDeath::class)->findOneByRef( $data[0] ));
+            $manager->persist( $cache[$id] = $result );
+        } else $out->writeln( "\t\t\t<comment>Skip</comment> effect <info>death/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
+
         return $cache[$id];
     }
 

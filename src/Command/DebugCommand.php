@@ -92,6 +92,9 @@ class DebugCommand extends Command
                     else continue;
                     if (!$citizen) continue;
 
+                    $this->entity_manager->persist($citizen);
+                    $this->entity_manager->flush();
+
                     /** @var CitizenProfession $pro */
                     $pro = $this->randomizer->pick( $professions );
                     $this->citizen_handler->applyProfession( $citizen, $pro );

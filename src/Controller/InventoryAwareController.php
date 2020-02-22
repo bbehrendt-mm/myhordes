@@ -41,7 +41,7 @@ use Symfony\Component\Validator\ConstraintViolationInterface;
 use Symfony\Component\Validator\Validation;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class InventoryAwareController extends AbstractController implements GameInterfaceController, GameProfessionInterfaceController
+class InventoryAwareController extends AbstractController implements GameInterfaceController, GameProfessionInterfaceController, GameAliveInterfaceController
 {
     protected $entity_manager;
     protected $inventory_handler;

@@ -4,6 +4,7 @@
 namespace App\Service;
 
 
+use App\Entity\CauseOfDeath;
 use App\Entity\Citizen;
 use App\Entity\CitizenHome;
 use App\Entity\CitizenProfession;
@@ -158,7 +159,7 @@ class CitizenHandler
         return $base;
     }
 
-    public function applyProfession(Citizen &$citizen, CitizenProfession &$profession) {
+    public function applyProfession(Citizen &$citizen, CitizenProfession &$profession): void {
         $item_type_cache = [];
 
         if ($citizen->getProfession() === $profession) return;
@@ -188,5 +189,33 @@ class CitizenHandler
         }
 
         $citizen->setProfession( $profession );
+    }
+
+    /**
+     * @param Citizen $citizen
+     * @param CauseOfDeath|int $cod
+     * @param array $remove
+     */
+    public function kill(Citizen &$citizen, $cod, ?array &$remove = []): void {
+        $remove = [];
+        if (!$citizen->getAlive()) return;
+        if (is_int($cod)) $cod = $this->entity_manager->getRepository(CauseOfDeath::class)->findOneByRef( $cod );
+
+        $rucksack = $citizen->getInventory();
+        foreach ($rucksack->getItems() as $item)
+            if ( !$this->inventory_handler->moveItem($citizen, $rucksack, $item, $citizen->getZone() ? [$citizen->getZone()->getFloor()] : [$citizen->getHome()->getChest(), $citizen->getTown()->getBank()]) ) {
+                $rucksack->removeItem( $item );
+                $remove[] = $item;
+            }
+
+        $citizen->setCauseOfDeath($cod);
+        $citizen->setAlive( false );
+
+        if (!$citizen->getZone()) $citizen->getHome()->setHoldsBody( true );
+    }
+
+    public function getSoulpoints(Citizen $citizen): int {
+        $days = $citizen->getSurvivedDays();
+        return $days * ( $days + 1 ) / 2;
     }
 }

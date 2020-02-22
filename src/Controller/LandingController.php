@@ -14,6 +14,7 @@ class LandingController extends AbstractController
 
     /**
      * @Route("jx/landing", name="initial_landing",condition="request.isXmlHttpRequest()")
+     * @param EntityManagerInterface $em
      * @return Response
      */
     public function main_landing(EntityManagerInterface $em): Response

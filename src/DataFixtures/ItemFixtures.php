@@ -130,7 +130,7 @@ class ItemFixtures extends Fixture
         ["label"=>"Hydraton 100mg","icon"=>"drug_water","category"=>"drug_d","deco"=>0,"heavy"=>false],                                     // In Out
         ["label"=>"Kassettenradio (ohne Strom)","icon"=>"radio_off","category"=>"furniture","deco"=>0,"heavy"=>false],                      // In Out
         ["label"=>"Kassettenradio","icon"=>"radio_on","category"=>"furniture","deco"=>2,"heavy"=>false],                                    // -- ---
-        ["label"=>"Zyanid","icon"=>"cyanure","category"=>"drug","deco"=>0,"heavy"=>false],                                                  //
+        ["label"=>"Zyanid","icon"=>"cyanure","category"=>"drug","deco"=>0,"heavy"=>false],                                                  // In Out
         ["label"=>"Alte Tür","icon"=>"door","category"=>"armor","deco"=>0,"heavy"=>true],                                                   // -- ---
         ["label"=>"Verdächtiges Gemüse","icon"=>"vegetable","category"=>"food","deco"=>0,"heavy"=>false],                                   // In Out
         ["label"=>"Reparaturset (kaputt)","icon"=>"repair_kit_part","category"=>"imp","deco"=>0,"heavy"=>false],                            // -- ---

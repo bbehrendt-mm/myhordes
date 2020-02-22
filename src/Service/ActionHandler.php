@@ -266,6 +266,11 @@ class ActionHandler
                 $execute_info_cache['ap'] += ( $citizen->getAp() - $old_ap );
             }
 
+            if ($death = $result->getDeath()) {
+                $this->citizen_handler->kill( $citizen, $death->getCause(), $r );
+                foreach ($r as $r_entry) $remove[] = $r_entry;
+            }
+
             if ($bp = $result->getBlueprint()) {
                 $possible = $this->entity_manager->getRepository(BuildingPrototype::class)->findProspectivePrototypes( $citizen->getTown() );
                 $filtered = array_filter( $possible, function(BuildingPrototype $proto) use ($bp) {

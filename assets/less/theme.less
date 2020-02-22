@@ -336,3 +336,22 @@ ul.summary {
   }
 }
 
+div.death_header {
+  background: url("../img/deathHeader.gif") no-repeat center bottom/contain;
+  min-height: 55px; margin-top: 24px; text-align: center;
+  &>div:first-child {
+    color: @myhordes-smalltext; font-variant: small-caps; font-size: 12pt; margin-bottom: 6px;
+    &::first-letter { color: lighten(@myhordes-smalltext,10%); }
+  }
+  &>div:last-child {
+    color: lighten(@myhordes-smalltext,10%); font-variant: small-caps; font-size: 14pt; font-weight: bold;
+    &::first-letter { color: lighten(@myhordes-smalltext,20%); }
+  }
+}
+div.death_footer {
+  text-align: center; font-weight: bold; color: #afacc1;
+}
+div.death_list {
+  padding-left: 6px;
+  &>b { color: @myhordes-smalltext }
+}

@@ -92,7 +92,18 @@ class Citizen
     /**
      * @ORM\Column(type="integer")
      */
-    private $walkingDistance;
+    private $walkingDistance = 0;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $survivedDays = 0;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\CauseOfDeath")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $causeOfDeath;
 
     public function __construct()
     {
@@ -312,6 +323,30 @@ class Citizen
     public function setWalkingDistance(int $walkingDistance): self
     {
         $this->walkingDistance = $walkingDistance;
+
+        return $this;
+    }
+
+    public function getSurvivedDays(): ?int
+    {
+        return $this->survivedDays;
+    }
+
+    public function setSurvivedDays(int $survivedDays): self
+    {
+        $this->survivedDays = $survivedDays;
+
+        return $this;
+    }
+
+    public function getCauseOfDeath(): ?CauseOfDeath
+    {
+        return $this->causeOfDeath;
+    }
+
+    public function setCauseOfDeath(?CauseOfDeath $causeOfDeath): self
+    {
+        $this->causeOfDeath = $causeOfDeath;
 
         return $this;
     }

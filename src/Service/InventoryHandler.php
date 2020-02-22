@@ -322,4 +322,18 @@ class InventoryHandler
         return false;
     }
 
+    /**
+     * @param Citizen $citizen
+     * @param Inventory $source
+     * @param Item $item
+     * @param Inventory[] $inventories
+     * @return bool
+     */
+    public function moveItem( Citizen $citizen, Inventory $source, Item $item, array $inventories ): bool {
+        foreach ($inventories as $inventory)
+            if ($this->transferItem( $citizen, $item, $source, $inventory ) == self::ErrorNone)
+                return true;
+        return false;
+    }
+
 }

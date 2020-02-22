@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Citizen;
 use App\Entity\CitizenProfession;
+use App\Entity\User;
 use App\Response\AjaxResponse;
 use App\Service\CitizenHandler;
 use App\Service\ErrorHelper;
@@ -39,7 +40,9 @@ class GameController extends AbstractController implements GameInterfaceControll
      */
     public function landing(): Response
     {
-        if ($this->getActiveCitizen()->getProfession()->getName() === CitizenProfession::DEFAULT)
+        if (!$this->getActiveCitizen()->getAlive())
+            return $this->redirect($this->generateUrl('game_death'));
+        elseif ($this->getActiveCitizen()->getProfession()->getName() === CitizenProfession::DEFAULT)
             return $this->redirect($this->generateUrl('game_jobs'));
         elseif ($this->getActiveCitizen()->getZone()) return $this->redirect($this->generateUrl('beyond_dashboard'));
         else return $this->redirect($this->generateUrl('town_dashboard'));
@@ -56,6 +59,22 @@ class GameController extends AbstractController implements GameInterfaceControll
 
         return $this->render( 'ajax/game/jobs.html.twig', [
             'professions' => $this->entity_manager->getRepository(CitizenProfession::class)->findSelectable()
+        ] );
+    }
+
+    /**
+     * @Route("jx/game/death", name="game_death")
+     * @param CitizenHandler $ch
+     * @return Response
+     */
+    public function death(CitizenHandler $ch): Response
+    {
+        if ($this->getActiveCitizen()->getAlive())
+            return $this->redirect($this->generateUrl('game_landing'));
+
+        return $this->render( 'ajax/game/death.html.twig', [
+            'citizen' => $this->getActiveCitizen(),
+            'sp' => $ch->getSoulpoints( $this->getActiveCitizen() )
         ] );
     }
 
@@ -90,6 +109,29 @@ class GameController extends AbstractController implements GameInterfaceControll
         } catch (Exception $e) {
             return AjaxResponse::error(ErrorHelper::ErrorDatabaseException);
         }
+
+        return AjaxResponse::success();
+    }
+
+    /**
+     * @Route("api/game/unsubscribe", name="api_unsubscribe")
+     * @param EntityManagerInterface $em
+     * @return Response
+     */
+    public function unsubscribe_api(EntityManagerInterface $em): Response {
+        if ($this->getActiveCitizen()->getAlive())
+            return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
+
+        /** @var User|null $user */
+        $user = $this->getUser();
+        $active = $em->getRepository(Citizen::class)->findActiveByUser($user);
+
+        if (!$active || $active->getId() !== $this->getActiveCitizen()->getId())
+            return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
+
+        $active->setActive(false);
+        $this->entity_manager->persist( $active );
+        $this->entity_manager->flush();
 
         return AjaxResponse::success();
     }

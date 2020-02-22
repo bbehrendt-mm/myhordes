@@ -5,6 +5,7 @@ namespace App\EventSubscriber;
 
 
 use App\Controller\BeyondInterfaceController;
+use App\Controller\GameAliveInterfaceController;
 use App\Controller\GameInterfaceController;
 use App\Controller\GameProfessionInterfaceController;
 use App\Controller\GhostInterfaceController;
@@ -51,6 +52,12 @@ class GateKeeperSubscriber implements EventSubscriberInterface
             // This is a game controller; it is not available to players outside of a game
             if (!$user || !$citizen = $this->em->getRepository(Citizen::class)->findActiveByUser($user))
                 throw new DynamicAjaxResetException($event->getRequest());
+
+            if ($controller instanceof GameAliveInterfaceController) {
+                // This is a game action controller; it is not available to players who are dead
+                if (!$citizen->getAlive())
+                    throw new DynamicAjaxResetException($event->getRequest());
+            }
 
             if ($controller instanceof GameProfessionInterfaceController) {
                 // This is a game profession controller; it is not available to players who have not chosen a profession

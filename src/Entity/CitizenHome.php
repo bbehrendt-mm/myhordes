@@ -55,6 +55,11 @@ class CitizenHome
      */
     private $additionalStorage = 0;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $holdsBody = false;
+
     public function __construct()
     {
         $this->citizenHomeUpgrades = new ArrayCollection();
@@ -169,6 +174,18 @@ class CitizenHome
     public function setAdditionalStorage(int $additionalStorage): self
     {
         $this->additionalStorage = $additionalStorage;
+
+        return $this;
+    }
+
+    public function getHoldsBody(): ?bool
+    {
+        return $this->holdsBody;
+    }
+
+    public function setHoldsBody(bool $holdsBody): self
+    {
+        $this->holdsBody = $holdsBody;
 
         return $this;
     }

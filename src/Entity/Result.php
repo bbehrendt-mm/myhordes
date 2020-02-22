@@ -90,6 +90,11 @@ class Result
      */
     private $home;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\AffectDeath")
+     */
+    private $death;
+
     public function __construct()
     {
     }
@@ -251,6 +256,18 @@ class Result
     public function setHome(?AffectHome $home): self
     {
         $this->home = $home;
+
+        return $this;
+    }
+
+    public function getDeath(): ?AffectDeath
+    {
+        return $this->death;
+    }
+
+    public function setDeath(?AffectDeath $death): self
+    {
+        $this->death = $death;
 
         return $this;
     }
