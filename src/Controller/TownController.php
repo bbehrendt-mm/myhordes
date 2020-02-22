@@ -102,7 +102,7 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
 
         $home = $c->getHome();
 
-        $def = $th->calculate_home_def($home, $def_house, $def_upg, $def_items);
+        $th->calculate_home_def($home, $summary);
         $deco = 0;
         foreach ($home->getChest()->getItems() as $item)
             $deco += $item->getPrototype()->getDeco();
@@ -114,7 +114,7 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
             'chest' => $home->getChest(),
             'chest_size' => $this->inventory_handler->getSize($home->getChest()),
 
-            'def' => $def,
+            'def' => $summary,
             'deco' => $deco,
         ]) );
     }
@@ -155,7 +155,7 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
             }
         }
 
-        $def = $th->calculate_home_def($home, $def_house, $def_upg, $def_items);
+        $th->calculate_home_def($home, $summary);
         $deco = 0;
         foreach ($home->getChest()->getItems() as $item)
             $deco += $item->getPrototype()->getDeco();
@@ -171,7 +171,7 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
             'upgrade_levels' => $upgrade_proto_lv,
             'upgrade_costs' => $upgrade_cost,
 
-            'def' => $def, 'def_house' => $def_house, 'def_upg' => $def_upg, 'def_items' => $def_items,
+            'def' => $summary,
             'deco' => $deco,
         ]) );
     }

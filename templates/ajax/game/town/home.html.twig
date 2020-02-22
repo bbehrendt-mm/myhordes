@@ -3,6 +3,7 @@
 
     {# @var home \App\Entity\CitizenHome #}
     {# @var chest \App\Entity\Inventory #}
+    {# @var def \App\Structures\HomeDefenseSummary #}
 
     <ul class="tabs" x-tab-group="home-main" x-tab-control>
         <li x-tab-id="dash">{% trans from 'game' %}Truhe und Aktionen{% endtrans %}</li>
@@ -15,7 +16,7 @@
         <div class="dashboard">
             <div class="row">
                 <div class="padded cell rw-4 rw-lg-6 center">
-                    {{ def }} <i class="fa fa-shield-alt"></i>
+                    {{ def.sum }} <i class="fa fa-shield-alt"></i>
                 </div>
                 <div class="padded cell rw-4 rw-lg-6 center">
                     {{ deco }} <i class="fa fa-couch"></i>
@@ -65,11 +66,11 @@
             <div class="padded cell rw-6 rw-md-12">
                 <ul class="summary">
                     <li>
-                        {{ 'Verteidigung'|trans({},'game') }} <span><img alt="" src="{{ asset('build/images/def.gif') }}"> <b>{{ def }}</b></span>
+                        {{ 'Verteidigung'|trans({},'game') }} <span><img alt="" src="{{ asset('build/images/def.gif') }}"> <b>{{ def.sum }}</b></span>
                         <ul>
-                            <li>{{ 'durch Haus'|trans({},'game') }} <span><img alt="" src="{{ asset('build/images/def.gif') }}"> {{ def_house }}</span></li>
-                            <li>{{ 'durch Ausbauten'|trans({},'game') }} <span><img alt="" src="{{ asset('build/images/def.gif') }}"> {{ def_upg }}</span></li>
-                            <li>{{ 'durch Gegenstände'|trans({},'game') }} <span><img alt="" src="{{ asset('build/images/def.gif') }}"> {{ def_items }}</span></li>
+                            <li>{{ 'durch Haus'|trans({},'game') }} <span><img alt="" src="{{ asset('build/images/def.gif') }}"> {{ def.house_defense }}</span></li>
+                            <li>{{ 'durch Ausbauten'|trans({},'game') }} <span><img alt="" src="{{ asset('build/images/def.gif') }}"> {{ def.upgrades_defense }}</span></li>
+                            <li>{{ 'durch Gegenstände'|trans({},'game') }} <span><img alt="" src="{{ asset('build/images/def.gif') }}"> {{ def.item_defense }}</span></li>
                         </ul>
                     </li>
                 </ul>

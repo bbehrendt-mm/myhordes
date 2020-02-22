@@ -2,6 +2,7 @@
 {% block content %}
 
     {# @var \App\Entity\Citizen citizen #}
+    {# @var \App\Structures\HomeDefenseSummary def #}
     <h5>
         <b>{{ citizen.user.username }}</b>
         ({% if citizen.alive %}
@@ -19,7 +20,7 @@
         {% if citizen.alive %}
             <div class="row">
                 <div class="cell rw-3"><span class="highlight">{{ 'Verteidigung'|trans({},'game') }}:</span></div>
-                <div class="cell rw-9"><img alt="" src="{{ asset('build/images/def.gif') }}"> {{ def }}</div>
+                <div class="cell rw-9"><img alt="" src="{{ asset('build/images/def.gif') }}"> {{ def.sum }}</div>
             </div>
             <div class="row">
                 <div class="cell rw-3"><span class="highlight">{{ 'Dekoration'|trans({},'game') }}:</span></div>

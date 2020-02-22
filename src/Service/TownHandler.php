@@ -11,6 +11,8 @@ use App\Entity\CitizenHomeUpgrade;
 use App\Entity\CitizenHomeUpgradePrototype;
 use App\Entity\Town;
 use App\Entity\ZombieEstimation;
+use App\Structures\HomeDefenseSummary;
+use App\Structures\TownDefenseSummary;
 use Doctrine\ORM\EntityManagerInterface;
 
 class TownHandler
@@ -63,24 +65,27 @@ class TownHandler
         return null;
     }
 
-    public function calculate_home_def( CitizenHome &$home, ?int &$house_def = null, ?int &$upgrade_def = null, ?int &$item_def = null ): int {
-        $house_def = $home->getPrototype()->getDefense();
+    public function calculate_home_def( CitizenHome &$home, ?HomeDefenseSummary &$summary = null): int {
+        $summary = new HomeDefenseSummary();
+        $summary->house_defense = $home->getPrototype()->getDefense();
 
         /** @var CitizenHomeUpgrade|null $n */
         $n = $this->entity_manager->getRepository(CitizenHomeUpgrade::class)->findOneByPrototype( $home,
             $this->entity_manager->getRepository( CitizenHomeUpgradePrototype::class )->findOneByName( 'defense' )
         );
-        $upgrade_def = ($n ? $n->getLevel() : 0) + $home->getAdditionalDefense();
-        $item_def = $this->inventory_handler->countSpecificItems( $home->getChest(),
+        $summary->upgrades_defense = ($n ? $n->getLevel() : 0) + $home->getAdditionalDefense();
+        $summary->item_defense = $this->inventory_handler->countSpecificItems( $home->getChest(),
             $this->inventory_handler->resolveItemProperties( 'defence' )
         );
 
-        return $house_def + $upgrade_def + $item_def;
+        return $summary->sum();
     }
 
-    public function calculate_town_def( Town &$town, ?int &$house_def = null, ?int &$citizen_def = null, ?int &$building_def = null, ?int &$item_def = null ): int {
+    public function calculate_town_def( Town &$town, ?TownDefenseSummary &$summary = null ): int {
+        $summary = new TownDefenseSummary();
+
         $f_house_def = 0.0;
-        $citizen_def = 0;
+        $summary->guardian_defense = 0;
 
         $home_def_factor = $this->getBuilding( $town, 'small_strategy_#00', true ) ? 0.8 : 0.4;
 
@@ -89,23 +94,23 @@ class TownHandler
                 $home = $citizen->getHome();
                 $f_house_def += $this->calculate_home_def( $home ) * $home_def_factor;
                 if (!$citizen->getZone() && $citizen->getProfession()->getName() === 'guardian')
-                    $citizen_def += 5;
+                    $summary->guardian_defense += 5;
             }
-        $house_def = floor($f_house_def);
-        $building_def = 0;
+        $summary->house_defense = floor($f_house_def);
+        $summary->building_defense = 0;
         $item_def_factor = 1.0;
         foreach ($town->getBuildings() as $building)
             if ($building->getComplete()) {
-                $building_def += ( $building->getDefenseBonus() + $building->getPrototype()->getDefense() );
+                $summary->building_defense += ( $building->getDefenseBonus() + $building->getPrototype()->getDefense() );
                 if ($building->getPrototype()->getName() === 'item_meca_parts_#00')
                     $item_def_factor += (1+$building->getLevel()) * 0.5;
             }
 
-        $item_def = floor($this->inventory_handler->countSpecificItems( $town->getBank(),
+        $summary->item_defense = floor($this->inventory_handler->countSpecificItems( $town->getBank(),
             $this->inventory_handler->resolveItemProperties( 'defence' )
         ) * $item_def_factor);
 
-        return $house_def + $citizen_def + $building_def + $item_def;
+        return $summary->sum();
     }
 
     public function get_zombie_estimation_quality(Town &$town, int $future = 0, ?int &$min = null, ?int &$max = null): float {
