@@ -6,19 +6,29 @@
             <div class="row">
                 <div class="cell rw-8 rw-md-12">
                     {% for townClass in townClasses %}
+
+                        {% set found = false %}
+                        {% for town in townClass.towns %}
+                            {% if town.open %}{% set found = true %}{% endif %}
+                        {% endfor %}
+
                         <h5>{{ townClass.getLabel }}</h5>
-                        {% if townClass.towns|length > 0 %}
+                        {% if found %}
                             <div class="row-table">
                                 <div class="row header">
                                     <div class="padded cell rw-8">{% trans from 'ghost' %}Stadtname{% endtrans %}</div>
                                     <div class="padded cell rw-4">{% trans from 'ghost' %}Aktionen{% endtrans %}</div>
                                 </div>
                                 {% for town in townClass.towns %}
-                                    <div class="row">
-                                        <div class="padded cell rw-8">{{ town.getName }}</div>
-                                        <div class="padded cell rw-1 center"><img class="pointer" alt="+" src="{{ asset('build/images/small_more.gif') }}" /></div>
-                                        <div class="padded cell rw-3"><button x-town-id="{{ town.getId }}">Beitreten</button></div>
-                                    </div>
+                                    {# @var town \App\Entity\Town #}
+                                    {% if town.open %}
+                                        {% set found = true %}
+                                        <div class="row">
+                                            <div class="padded cell rw-8">{{ town.getName }}</div>
+                                            <div class="padded cell rw-1 center"><img class="pointer" alt="+" src="{{ asset('build/images/small_more.gif') }}" /></div>
+                                            <div class="padded cell rw-3"><button x-town-id="{{ town.getId }}">Beitreten</button></div>
+                                        </div>
+                                    {% endif %}
                                 {% endfor %}
                             </div>
 

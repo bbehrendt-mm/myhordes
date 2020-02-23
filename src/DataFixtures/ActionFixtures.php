@@ -405,6 +405,8 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'home_def_plus'    => [ 'label' => 'Aufstellen', 'meta' => [ 'must_be_inside', 'must_have_upgraded_home' ], 'result' => [ 'consume_item', ['home' => ['def' => 1]] ] ],
             'home_store_plus'  => [ 'label' => 'Aufstellen', 'meta' => [ 'must_be_inside', 'must_have_upgraded_home' ], 'result' => [ 'consume_item', ['home' => ['store' => 1]] ] ],
             'home_store_plus2' => [ 'label' => 'Aufstellen', 'meta' => [ 'must_be_inside', 'must_have_upgraded_home' ], 'result' => [ 'consume_item', ['home' => ['store' => 2]] ] ],
+
+            'clean_clothes' => [ 'label' => 'Reinigen', 'meta' => [ 'must_be_inside', [ 'type' => Requirement::CrossOnFail, 'collection' => [ 'status' => [ 'enabled' => false, 'status' => 'tg_clothes' ] ]] ], 'result' => [ [ 'status' => [ 'from' => null, 'to' => 'tg_clothes' ], 'item' => ['consume' => false, 'morph' => 'basic_suit_#00'] ] ] ],
         ],
 
 
@@ -594,6 +596,8 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'water_cup_part_#00' => ['watercup_1', 'watercup_2', 'watercup_3'],
 
             'cyanure_#00' => ['cyanide'],
+
+            'basic_suit_dirt_#00' => [ 'clean_clothes' ],
         ]
 
     ];
