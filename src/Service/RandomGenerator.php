@@ -36,12 +36,13 @@ class RandomGenerator
     /**
      * @param array $a
      * @param int $num
+     * @param bool $force_array
      * @return mixed|array|null
      */
-    function pick( array $a, int $num = 1 ) {
-        if     ($num <=  0) return null;
-        elseif ($num === 1) return $a[ array_rand($a, 1) ];
-        else return array_map( function($k) use (&$a) { return $a[$k]; }, array_rand( $a, $num ) );
+    function pick( array $a, int $num = 1, bool $force_array = false ) {
+        if     ($num <=  0) return $force_array ? [] : null;
+        elseif ($num === 1) return $force_array ? [$a[ array_rand($a, 1) ]] : $a[ array_rand($a, 1) ];
+        else return array_map( function($k) use (&$a) { return $a[$k]; }, array_rand( $a, min($num,count($a)) ) );
     }
 
     function pickItemPrototypeFromGroup(ItemGroup $g): ?ItemPrototype {
@@ -67,7 +68,7 @@ class RandomGenerator
      * @param AffectResultGroup $g
      * @return Result[]
      */
-    function pickResultsFromGroup(AffectResultGroup $g): array {
+    function pickResultsFromGroup(AffectResultGroup $g): ?array {
         if (!$g->getEntries()->count()) return null;
         $sum = 0;
         foreach ( $g->getEntries() as $entry )

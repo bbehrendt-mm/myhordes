@@ -17,6 +17,7 @@ use App\Repository\DigRuinMarkerRepository;
 use App\Response\AjaxResponse;
 use App\Service\ActionHandler;
 use App\Service\CitizenHandler;
+use App\Service\DeathHandler;
 use App\Service\ErrorHelper;
 use App\Service\GameFactory;
 use App\Service\InventoryHandler;
@@ -63,6 +64,7 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
     protected $zone_handler;
     protected $random_generator;
     protected $item_factory;
+    protected $death_handler;
 
     /**
      * BeyondController constructor.
@@ -70,16 +72,19 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
      * @param InventoryHandler $ih
      * @param CitizenHandler $ch
      * @param ActionHandler $ah
+     * @param DeathHandler $dh
      * @param TranslatorInterface $translator
      * @param GameFactory $gf
      * @param RandomGenerator $rg
      * @param ItemFactory $if
+     * @param ZoneHandler $zh
      */
     public function __construct(
-        EntityManagerInterface $em, InventoryHandler $ih, CitizenHandler $ch, ActionHandler $ah,
+        EntityManagerInterface $em, InventoryHandler $ih, CitizenHandler $ch, ActionHandler $ah, DeathHandler $dh,
         TranslatorInterface $translator, GameFactory $gf, RandomGenerator $rg, ItemFactory $if, ZoneHandler $zh)
     {
         parent::__construct($em, $ih, $ch, $ah, $translator);
+        $this->citizen_handler->upgrade($dh);
         $this->game_factory = $gf;
         $this->random_generator = $rg;
         $this->item_factory = $if;
@@ -105,7 +110,7 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
         }
 
         $zone = $this->getActiveCitizen()->getZone();
-        $blocked = !$this->check_cp($zone, $cp);
+        $blocked = !$this->zone_handler->check_cp($zone, $cp);
         $escape = $this->get_escape_timeout( $this->getActiveCitizen() );
         $citizen_tired = $this->getActiveCitizen()->getAp() <= 0 || $this->citizen_handler->isTired( $this->getActiveCitizen());
 
@@ -124,13 +129,6 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
             'map_y1' => $range_y[1],
             'actions' => $this->getItemActions(),
         ], $data) );
-    }
-
-    public function check_cp(Zone $zone, ?int &$cp = null): bool {
-        $cp = 0;
-        foreach ($zone->getCitizens() as $c)
-            $cp += $this->citizen_handler->getCP($c);
-        return $cp >= $zone->getZombies();
     }
 
     public function get_escape_timeout(Citizen $c): int {
@@ -158,7 +156,7 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
         $citizen_tired = $this->getActiveCitizen()->getAp() <= 0 || $this->citizen_handler->isTired( $this->getActiveCitizen());
         $dig_timeout = $this->get_dig_timeout( $this->getActiveCitizen(), $dig_active );
 
-        $blocked = !$this->check_cp($this->getActiveCitizen()->getZone(), $cp);
+        $blocked = !$this->zone_handler->check_cp($this->getActiveCitizen()->getZone(), $cp);
         $escape = $this->get_escape_timeout( $this->getActiveCitizen() );
 
         return $this->render( 'ajax/game/beyond/desert.html.twig', $this->addDefaultTwigArgs(null, [
@@ -219,7 +217,7 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
         $px = $parser->get('x', PHP_INT_MAX);
         $py = $parser->get('y', PHP_INT_MAX);
 
-        $cp_ok = $this->check_cp( $zone );
+        $cp_ok = $this->zone_handler->check_cp( $zone );
 
         if (abs($px - $zone->getX()) + abs($py - $zone->getY()) !== 1) return AjaxResponse::error( self::ErrorNotReachableFromHere );
         if (!$cp_ok && $this->get_escape_timeout( $citizen ) < 0) return AjaxResponse::error( self::ErrorZoneBlocked );
@@ -257,18 +255,13 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
             ->setZombieStatus( max(Zone::ZombieStateEstimate, $new_zone->getZombieStatus() ) );
 
         try {
-            // If no citizens remain in a zone, invalidate all associated escape timers
-            if (!count($zone->getCitizens())) foreach ($this->entity_manager->getRepository(EscapeTimer::class)->findAllByZone($zone) as $et)
-                $this->entity_manager->remove( $et );
-            // If zombies can take control after leaving the zone and there are citizens remaining, install a grace escape timer
-            elseif ( $cp_ok && !$this->check_cp( $zone ) )
-                $zone->addEscapeTimer( (new EscapeTimer())->setTime( new DateTime('+30min') ) );
+            $this->zone_handler->handleCitizenCountUpdate($zone, $cp_ok);
         } catch (Exception $e) {
             return AjaxResponse::error( ErrorHelper::ErrorInternalError );
         }
 
         // If the new zone is controlled by citizens, invalidate all escape timers
-        if ($this->check_cp( $new_zone )) foreach ($this->entity_manager->getRepository(EscapeTimer::class)->findAllByZone($new_zone) as $et)
+        if ($this->zone_handler->check_cp( $new_zone )) foreach ($this->entity_manager->getRepository(EscapeTimer::class)->findAllByZone($new_zone) as $et)
             $this->entity_manager->remove( $et );
 
         try {
@@ -315,7 +308,7 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
         $this->deferZoneUpdate();
 
         $citizen = $this->getActiveCitizen();
-        if ($this->check_cp( $citizen->getZone() ) || $this->get_escape_timeout( $citizen ) > 0)
+        if ($this->zone_handler->check_cp( $citizen->getZone() ) || $this->get_escape_timeout( $citizen ) > 0)
             return AjaxResponse::error( self::ErrorZoneUnderControl );
 
         if ($this->citizen_handler->isWounded( $citizen ))
@@ -349,7 +342,7 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
         $citizen = $this->getActiveCitizen();
         $zone = $citizen->getZone();
 
-        if ($this->check_cp( $zone ) || $this->get_escape_timeout( $citizen ) > 0)
+        if ($this->zone_handler->check_cp( $zone ) || $this->get_escape_timeout( $citizen ) > 0)
             return AjaxResponse::error( self::ErrorZoneUnderControl );
 
         if ($citizen->getAp() <= 0 || $this->citizen_handler->isTired( $citizen ))
@@ -380,7 +373,7 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
         $citizen = $this->getActiveCitizen();
         $zone = $citizen->getZone();
 
-        if (!$this->check_cp( $zone ))
+        if (!$this->zone_handler->check_cp( $zone ))
             return AjaxResponse::error( self::ErrorZoneBlocked );
         if ($zone->getX() === 0 && $zone->getY() === 0)
             return AjaxResponse::error( self::ErrorNotDiggable );
@@ -418,7 +411,7 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
         $citizen = $this->getActiveCitizen();
         $zone = $citizen->getZone();
 
-        if (!$this->check_cp( $zone ))
+        if (!$this->zone_handler->check_cp( $zone ))
             return AjaxResponse::error( self::ErrorZoneBlocked );
         if ($zone->getX() === 0 && $zone->getY() === 0)
             return AjaxResponse::error( self::ErrorNotDiggable );

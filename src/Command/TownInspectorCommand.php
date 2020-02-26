@@ -11,6 +11,7 @@ use App\Entity\Town;
 use App\Entity\TownClass;
 use App\Entity\WellCounter;
 use App\Service\GameFactory;
+use App\Service\NightlyHandler;
 use App\Service\TownHandler;
 use App\Service\ZoneHandler;
 use Doctrine\ORM\EntityManagerInterface;
@@ -30,13 +31,15 @@ class TownInspectorCommand extends Command
     private $gameFactory;
     private $townHandler;
     private $zonehandler;
+    private $nighthandler;
 
-    public function __construct(EntityManagerInterface $em, GameFactory $gf, ZoneHandler $zh, TownHandler $th)
+    public function __construct(EntityManagerInterface $em, GameFactory $gf, ZoneHandler $zh, TownHandler $th, NightlyHandler $nh)
     {
         $this->entityManager = $em;
         $this->gameFactory = $gf;
         $this->zonehandler = $zh;
         $this->townHandler = $th;
+        $this->nighthandler = $nh;
         parent::__construct();
     }
 
@@ -53,7 +56,11 @@ class TownInspectorCommand extends Command
             ->addOption('zombie-estimates', null, InputOption::VALUE_REQUIRED, 'Calculates the zombie estimations for the next days.')
             ->addOption('unlock-buildings', null, InputOption::VALUE_NONE, 'Unlocks all buildings.')
 
+            ->addOption('advance-day', null, InputOption::VALUE_NONE, 'Starts the nightly attack.')
+
             ->addOption('citizen', 'c', InputOption::VALUE_REQUIRED, 'When used together with --reset-well-lock, only the lock of the given citizen is released.', -1)
+
+            ->addOption('no-info', '0', InputOption::VALUE_NONE, 'Disables the town summary.')
             ;
     }
 
@@ -172,6 +179,14 @@ class TownInspectorCommand extends Command
             $this->entityManager->persist( $town );
         }
 
+        if ($input->getOption('advance-day')) {
+            if ($this->nighthandler->advance_day($town)) {
+                foreach ($this->nighthandler->get_cleanup_container() as $c) $this->entityManager->remove($c);
+                $this->entityManager->persist( $town );
+            }
+
+        }
+
         if ($spawn = $input->getOption('zombies'))
             switch ($spawn) {
                 case 'reset':
@@ -202,6 +217,6 @@ class TownInspectorCommand extends Command
 
         if ($changes) $this->entityManager->flush();
 
-        return $this->info($town, $output, $input->getOption('show-zones'));
+        return ($input->getOption('no-info')) ? 0 : $this->info($town, $output, $input->getOption('show-zones'));
     }
 }

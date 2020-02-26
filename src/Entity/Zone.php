@@ -26,6 +26,16 @@ class Zone
     const ZombieStateEstimate = 1;
     const ZombieStateExact    = 2;
 
+    const DirectionNorthWest = 1;
+    const DirectionNorth     = 2;
+    const DirectionNorthEast = 3;
+    const DirectionWest      = 4;
+    const DirectionCenter    = 5;
+    const DirectionEast      = 6;
+    const DirectionSouthWest = 7;
+    const DirectionSouth     = 8;
+    const DirectionSouthEast = 9;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -377,5 +387,22 @@ class Zone
         $this->zombieStatus = $zombieStatus;
 
         return $this;
+    }
+
+    public function getDirection(): int {
+
+        if ($this->getX() === 0 && $this->getY() === 0) return self::DirectionCenter;
+        elseif ($this->getX() != 0 && $this->getY() != 0 && (abs(abs($this->getX())-abs($this->getY())) < min(abs($this->getX()),abs($this->getY())))) {
+            if ($this->getX() < 0 && $this->getY() < 0) return self::DirectionNorthWest;
+            if ($this->getX() < 0 && $this->getY() > 0) return self::DirectionNorthEast;
+            if ($this->getX() > 0 && $this->getY() < 0) return self::DirectionSouthWest;
+            if ($this->getX() > 0 && $this->getY() > 0) return self::DirectionSouthEast;
+        } else {
+            if (abs($this->getX()) > abs($this->getY()) && $this->getX() < 0) return self::DirectionNorth;
+            if (abs($this->getX()) > abs($this->getY()) && $this->getX() > 0) return self::DirectionSouth;
+            if (abs($this->getX()) < abs($this->getY()) && $this->getY() < 0) return self::DirectionWest;
+            if (abs($this->getX()) < abs($this->getY()) && $this->getY() > 0) return self::DirectionEast;
+        }
+
     }
 }

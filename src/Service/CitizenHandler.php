@@ -6,19 +6,10 @@ namespace App\Service;
 
 use App\Entity\CauseOfDeath;
 use App\Entity\Citizen;
-use App\Entity\CitizenHome;
 use App\Entity\CitizenProfession;
 use App\Entity\CitizenStatus;
-use App\Entity\Inventory;
-use App\Entity\Item;
-use App\Entity\Town;
-use App\Entity\TownClass;
-use App\Entity\User;
-use App\Entity\WellCounter;
 use App\Structures\ItemRequest;
-use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Query\Expr\Join;
 
 class CitizenHandler
 {
@@ -27,6 +18,8 @@ class CitizenHandler
     private $item_factory;
     private $random_generator;
     private $inventory_handler;
+    /** @var DeathHandler $death_handler */
+    private $death_handler;
 
     public function __construct(
         EntityManagerInterface $em, StatusFactory $sf, RandomGenerator $g, InventoryHandler $ih, ItemFactory $if)
@@ -36,6 +29,11 @@ class CitizenHandler
         $this->random_generator = $g;
         $this->inventory_handler = $ih;
         $this->item_factory = $if;
+    }
+
+    public function upgrade(DeathHandler $dh) {
+        if (!$this->death_handler)
+            $this->death_handler = $dh;
     }
 
     /**
@@ -99,6 +97,7 @@ class CitizenHandler
         if (in_array($status->getName(), ['drugged','addict']))
             $this->removeStatus($citizen, 'clean');
 
+        // ToDO Counter must be reset when drinking without getting the hasdrunk status
         if ( $status->getName() === 'hasdrunk' ) $citizen->setWalkingDistance( 0 );
 
         $citizen->addStatus( $status );
@@ -122,7 +121,7 @@ class CitizenHandler
         $lv1 = $this->entity_manager->getRepository(CitizenStatus::class)->findOneByName('thirst1');
 
         if ($citizen->getStatus()->contains( $lv2 )) {
-            // ToDO: Die of thirst
+            $this->death_handler->kill($citizen, CauseOfDeath::Dehydration);
         } elseif ($citizen->getStatus()->contains( $lv1 )) {
             $this->removeStatus( $citizen, $lv1 );
             $this->inflictStatus( $citizen, $lv2 );
@@ -189,29 +188,6 @@ class CitizenHandler
         }
 
         $citizen->setProfession( $profession );
-    }
-
-    /**
-     * @param Citizen $citizen
-     * @param CauseOfDeath|int $cod
-     * @param array $remove
-     */
-    public function kill(Citizen &$citizen, $cod, ?array &$remove = []): void {
-        $remove = [];
-        if (!$citizen->getAlive()) return;
-        if (is_int($cod)) $cod = $this->entity_manager->getRepository(CauseOfDeath::class)->findOneByRef( $cod );
-
-        $rucksack = $citizen->getInventory();
-        foreach ($rucksack->getItems() as $item)
-            if ( !$this->inventory_handler->moveItem($citizen, $rucksack, $item, $citizen->getZone() ? [$citizen->getZone()->getFloor()] : [$citizen->getHome()->getChest(), $citizen->getTown()->getBank()]) ) {
-                $rucksack->removeItem( $item );
-                $remove[] = $item;
-            }
-
-        $citizen->setCauseOfDeath($cod);
-        $citizen->setAlive( false );
-
-        if (!$citizen->getZone()) $citizen->getHome()->setHoldsBody( true );
     }
 
     public function getSoulpoints(Citizen $citizen): int {

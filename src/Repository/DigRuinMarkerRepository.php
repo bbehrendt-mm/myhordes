@@ -35,6 +35,18 @@ class DigRuinMarkerRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+     * @param Citizen $c
+     * @return DigRuinMarker[]
+     */
+    public function findAllByCitizen(Citizen $c)
+    {
+        return $this->createQueryBuilder('d')
+            ->andWhere('d.citizen = :ctz')->setParameter('ctz', $c)
+            ->getQuery()
+            ->getResult();
+    }
+
     // /**
     //  * @return DigRuinMarker[] Returns an array of DigRuinMarker objects
     //  */

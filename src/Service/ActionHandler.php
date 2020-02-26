@@ -25,6 +25,7 @@ class ActionHandler
     private $entity_manager;
     private $status_factory;
     private $citizen_handler;
+    private $death_handler;
     private $inventory_handler;
     private $random_generator;
     private $item_factory;
@@ -35,7 +36,7 @@ class ActionHandler
 
 
     public function __construct(
-        EntityManagerInterface $em, StatusFactory $sf, CitizenHandler $ch, InventoryHandler $ih,
+        EntityManagerInterface $em, StatusFactory $sf, CitizenHandler $ch, InventoryHandler $ih, DeathHandler $dh,
         RandomGenerator $rg, ItemFactory $if, TranslatorInterface $ti, GameFactory $gf, Packages $am, TownHandler $th)
     {
         $this->entity_manager = $em;
@@ -48,6 +49,7 @@ class ActionHandler
         $this->game_factory = $gf;
         $this->assets = $am;
         $this->town_handler = $th;
+        $this->death_handler = $dh;
     }
 
     const ActionValidityNone = 1;
@@ -267,7 +269,7 @@ class ActionHandler
             }
 
             if ($death = $result->getDeath()) {
-                $this->citizen_handler->kill( $citizen, $death->getCause(), $r );
+                $this->death_handler->kill( $citizen, $death->getCause(), $r );
                 foreach ($r as $r_entry) $remove[] = $r_entry;
             }
 

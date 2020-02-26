@@ -21,6 +21,18 @@ class DigTimerRepository extends ServiceEntityRepository
         parent::__construct($registry, DigTimer::class);
     }
 
+    /**
+     * @param Citizen $c
+     * @return DigTimer[]
+     */
+    public function findAllByCitizen(Citizen $c)
+    {
+        return $this->createQueryBuilder('d')
+            ->andWhere('d.citizen = :ctz')->setParameter('ctz', $c)
+            ->getQuery()
+            ->getResult();
+    }
+
     public function findActiveByCitizen(Citizen $c): ?DigTimer
     {
         if (!$c->getZone()) return null;

@@ -11,6 +11,7 @@ use App\Entity\CitizenHome;
 use App\Entity\CitizenHomePrototype;
 use App\Entity\CitizenProfession;
 use App\Entity\DigTimer;
+use App\Entity\EscapeTimer;
 use App\Entity\Inventory;
 use App\Entity\ItemGroup;
 use App\Entity\Town;
@@ -193,5 +194,22 @@ class ZoneHandler
             $zone->setInitialZombies( $zombies );
         }
 
+    }
+
+    public function check_cp(Zone $zone, ?int &$cp = null): bool {
+        $cp = 0;
+        foreach ($zone->getCitizens() as $c)
+            if ($c->getAlive())
+                $cp += $this->citizen_handler->getCP($c);
+        return $cp >= $zone->getZombies();
+    }
+
+    public function handleCitizenCountUpdate(&$zone, $cp_ok_before) {
+        // If no citizens remain in a zone, invalidate all associated escape timers
+        if (!count($zone->getCitizens())) foreach ($this->entity_manager->getRepository(EscapeTimer::class)->findAllByZone($zone) as $et)
+            $this->entity_manager->remove( $et );
+        // If zombies can take control after leaving the zone and there are citizens remaining, install a grace escape timer
+        elseif ( $cp_ok_before && !$this->check_cp( $zone ) )
+            $zone->addEscapeTimer( (new EscapeTimer())->setTime( new DateTime('+30min') ) );
     }
 }
