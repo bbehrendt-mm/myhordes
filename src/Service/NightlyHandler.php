@@ -10,9 +10,12 @@ use App\Entity\Citizen;
 use App\Entity\CitizenStatus;
 use App\Entity\DigRuinMarker;
 use App\Entity\EscapeTimer;
+use App\Entity\Inventory;
+use App\Entity\ItemPrototype;
 use App\Entity\Town;
 use App\Entity\ZombieEstimation;
 use App\Entity\Zone;
+use App\Structures\ItemRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 
@@ -28,17 +31,21 @@ class NightlyHandler
     private $death_handler;
     private $town_handler;
     private $zone_handler;
+    private $inventory_handler;
+    private $item_factory;
 
-    public function __construct(EntityManagerInterface $em, LoggerInterface $log, CitizenHandler $ch,
-                                RandomGenerator $rg, DeathHandler $dh, TownHandler $th, ZoneHandler $zh)
+    public function __construct(EntityManagerInterface $em, LoggerInterface $log, CitizenHandler $ch, InventoryHandler $ih,
+                                RandomGenerator $rg, DeathHandler $dh, TownHandler $th, ZoneHandler $zh, ItemFactory $if)
     {
         $this->entity_manager = $em;
         $this->citizen_handler = $ch;
         $this->death_handler = $dh;
+        $this->inventory_handler = $ih;
         $this->citizen_handler->upgrade($dh);
         $this->random = $rg;
         $this->town_handler = $th;
         $this->zone_handler = $zh;
+        $this->item_factory = $if;
         $this->log = $log;
     }
 
@@ -47,6 +54,19 @@ class NightlyHandler
             $this->log->debug('The town lobby is <comment>open</comment>!');
             return false;
         }
+
+        $alive = false;
+        foreach ($town->getCitizens() as $citizen)
+            if ($citizen->getAlive()) {
+                $alive = true;
+                break;
+            }
+
+        if (!$alive) {
+            $this->log->debug('The town has <comment>no</comment> living citizen!');
+            return false;
+        }
+
         return true;
     }
 
@@ -215,7 +235,7 @@ class NightlyHandler
         }
 
         $this->log->debug("<info>{$attacking}</info> Zombies are attacking <info>" . count($targets) . "</info> citizens!");
-        $max = ceil(4 * $attacking/count($targets));
+        $max = empty($targets) ? 0 : ceil(4 * $attacking/count($targets));
 
         $left = count($targets);
         foreach ($targets as $target) {
@@ -248,6 +268,11 @@ class NightlyHandler
         ];
 
         foreach ($town->getCitizens() as $citizen) {
+
+            if ($citizen->getDailyUpgradeVote()) {
+                $this->cleanup[] = $citizen->getDailyUpgradeVote();
+                $citizen->setDailyUpgradeVote(null);
+            }
 
             if (!$citizen->getAlive()) continue;
 
@@ -359,12 +384,148 @@ class NightlyHandler
         $this->log->debug("Recovered <info>{$reco_counter[0]}</info>/<info>{$reco_counter[1]}</info> zones." );
     }
 
+    private function stage3_items(Town &$town) {
+        $this->log->info('<info>Processing item changes</info> ...');
+
+        /** @var Inventory[] $inventories */
+        $inventories = [];
+
+        $inventories[] = $town->getBank();
+
+        foreach ($town->getCitizens() as &$citizen) {
+            $inventories[] = $citizen->getInventory();
+            $inventories[] = $citizen->getHome()->getChest();
+        }
+
+        foreach ($town->getZones() as &$zone) {
+            $inventories[] = $zone->getFloor();
+        }
+
+        $c = count($inventories);
+        $this->log->debug( "Number of inventories: <info>{$c}</info>." );
+
+        $morph = [
+            'torch_#00' => $this->entity_manager->getRepository(ItemPrototype::class)->findOneByName('torch_off_#00'),
+            'lamp_on_#00' => $this->entity_manager->getRepository(ItemPrototype::class)->findOneByName('lamp_#00'),
+        ];
+
+        foreach ($morph as $source => $target) {
+            $items = $this->inventory_handler->fetchSpecificItems($inventories, [(new ItemRequest($source))->fetchAll(true)]);
+
+            $c = count($items);
+            $this->log->debug( "Morphing <info>{$c}</info> items to type '<info>{$target->getLabel()}</info>'." );
+
+            foreach ($items as &$item)
+                $item->setPrototype( $target );
+        }
+
+    }
+
+    private function stage3_buildings(Town &$town) {
+        $this->log->info('<info>Processing building functions</info> ...');
+
+        $buildings = []; $max_votes = -1;
+        foreach ($town->getBuildings() as $b) if ($b->getComplete())
+            if ($b->getPrototype()->getMaxLevel() > 0 && $b->getPrototype()->getMaxLevel() > $b->getLevel()) {
+                $v = $b->getDailyUpgradeVotes()->count();
+                $this->log->debug("<info>{$v}</info> citizens voted for <info>{$b->getPrototype()->getLabel()}</info>.");
+                if ($v > $max_votes) {
+                    $buildings = [$b];
+                    $max_votes = $v;
+                } elseif ($v === $max_votes) $buildings[] = $b;
+            }
+
+        $spawn_default_blueprint = $this->town_handler->getBuilding($town, 'small_refine_#01', true) !== null;
+
+        if (!empty($buildings)) {
+            /** @var Building $target_building */
+            $target_building = $this->random->pick( $buildings );
+            $target_building->setLevel( $target_building->getLevel() + 1 );
+            $this->log->debug("Increasing level of <info>{$target_building->getPrototype()->getLabel()}</info> to Level <info>{$target_building->getLevel()}</info>.");
+
+            switch ($target_building->getPrototype()->getName()) {
+                case 'small_gather_#00':
+                    $def_add = [0,13,21,32,33,51];
+                    $target_building->setDefenseBonus( $target_building->getDefenseBonus() + $def_add[ $target_building->getLevel() ] );
+                    $this->log->debug("Leveling up <info>{$target_building->getPrototype()->getLabel()}</info>: Increasing variable defense by <info>{$def_add[ $target_building->getLevel() ] }</info>.");
+                    break;
+                case 'small_water_#00':
+                    $water_add = [5,20,20,30,30,40];
+                    $town->setWell( $town->getWell() + $water_add[$target_building->getLevel()] );
+                    $this->log->debug("Leveling up <info>{$target_building->getPrototype()->getLabel()}</info>: Increasing well count by <info>{$water_add[ $target_building->getLevel() ] }</info>.");
+                    break;
+                case 'small_refine_#01':
+                    $spawn_default_blueprint = false;
+                    $bps = [
+                        ['bplan_c_#00' => 1],
+                        ['bplan_c_#00' => 4],
+                        ['bplan_c_#00' => 2,'bplan_u_#00' => 2],
+                        ['bplan_u_#00' => 2,'bplan_r_#00' => 2],
+                    ];
+                    $opt_bp = [null,'bplan_c_#00','bplan_r_#00','bplan_e_#00'];
+
+                    $plans = [];
+                    foreach ($bps[$target_building->getLevel()] as $id => $count)
+                        for ($i = 0; $i < $count; $i++) $plans[] = $this->item_factory->createItem( $id );
+                    if ( $opt_bp[$target_building->getLevel()] !== null && $this->random->chance( 0.5 ) )
+                        $plans[] = $this->item_factory->createItem( $opt_bp[$target_building->getLevel()] );
+
+                    $tx = [];
+                    foreach ($plans as $plan) {
+                        $town->getBank()->addItem( $plan );
+                        $tx[] = "<info>{$plan->getPrototype()->getLabel()}</info>";
+                    }
+
+                    $this->log->debug("Leveling up <info>{$target_building->getPrototype()->getLabel()}</info>: Placing " . implode(', ', $tx) . " in the bank.");
+                    break;
+            }
+        }
+
+        $watertower = $this->town_handler->getBuilding( $town, 'item_tube_#00', true );
+        if ($watertower && $watertower->getLevel() > 0) {
+            $n = [0,2,4,6,9,12];
+            if ($town->getWell() >= $n[ $watertower->getLevel() ]) {
+                $town->setWell( $town->getWell() - $n[ $watertower->getLevel() ] );
+                $this->log->debug( "Deducting <info>{$n[$watertower->getLevel()]}</info> water from the well to operate the <info>{$watertower->getPrototype()->getLabel()}</info>." );
+            }
+        }
+
+        $daily_items = []; $tx = [];
+        if ($spawn_default_blueprint) $daily_items['bplan_c_#00'] = 1;
+
+        $has_fertilizer = $this->town_handler->getBuilding( $town, 'item_digger_#00', true ) !== null;
+
+        $db = [
+            'small_appletree_#00'      => [ 'apple_#00' => mt_rand(3,5) ],
+            'item_vegetable_tasty_#00' => [ 'vegetable_#00' => !$has_fertilizer ? mt_rand(4,8) : mt_rand(8,14), 'vegetable_tasty_#00' => !$has_fertilizer ? mt_rand(0,2) : mt_rand(2,5) ],
+            'item_bgrenade_#01'        => [ 'boomfruit_#00' => !$has_fertilizer ? mt_rand(3,5) : mt_rand(5,8) ],
+            'small_chicken_#00'        => [ 'egg_#00' => 3 ],
+        ];
+
+        foreach ($db as $b_class => $spawn)
+            if ($this->town_handler->getBuilding( $town, $b_class, true ) !== null)
+                foreach ( $spawn as $item_id => $count ) {
+                    if (!isset($daily_items[$item_id])) $daily_items[$item_id] = $count;
+                    else $daily_items[$item_id] += $count;
+                }
+
+        foreach ($daily_items as $item_id => $count)
+            for ($i = 0; $i < $count; $i++) {
+                $item = $this->item_factory->createItem( $item_id );
+                $town->getBank()->addItem( $item );
+                $tx[] = "<info>{$item->getPrototype()->getLabel()}</info>";
+            }
+
+        if (!empty($daily_items))
+            $this->log->debug("Daily items: Placing " . implode(', ', $tx) . " in the bank.");
+    }
+
     public function advance_day(Town &$town): bool {
         $this->skip_reanimation = [];
 
         $this->log->info( "Nightly attack request received for town <info>{$town->getId()}</info> (<info>{$town->getName()}</info>)." );
         if (!$this->check_town($town)) {
-            $this->log->info("Precondition failed. Attack will is <info>cancelled</info>.");
+            $this->log->info("Precondition failed. Attack is <info>cancelled</info>.");
             return false;
         } else $this->log->info("Precondition checks passed. Attack can <info>commence</info>.");
 
@@ -378,14 +539,18 @@ class NightlyHandler
         $this->stage2_attack($town);
 
         $this->log->info('Entering <comment>Phase 3</comment> - Dawn of a New Day');
+        $this->stage3_buildings($town);
         $this->stage3_status($town);
         $this->stage3_zones($town);
+        $this->stage3_items($town);
 
-        $this->log->info( "<comment>Script complete.</comment>" );
         $c = count($this->cleanup);
+        $town->setDay( $town->getDay() + 1);
+        $this->log->info("It is now <comment>Day {$town->getDay()}</comment> in <info>{$town->getName()}</info>.");
         $this->log->debug( "<info>{$c}</info> entities have been marked for removal." );
+        $this->log->info( "<comment>Script complete.</comment>" );
 
-        return false;
+        return true;
     }
 
     public function get_cleanup_container() {

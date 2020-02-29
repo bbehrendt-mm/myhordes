@@ -46,7 +46,7 @@ class Building
     private $town;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\DailyUpgradeVote", mappedBy="building")
+     * @ORM\OneToMany(targetEntity="App\Entity\DailyUpgradeVote", mappedBy="building", orphanRemoval=true)
      */
     private $dailyUpgradeVotes;
 

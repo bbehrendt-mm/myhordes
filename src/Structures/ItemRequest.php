@@ -13,6 +13,7 @@ class ItemRequest
     private $broken;
     private $poison;
     private $is_property;
+    private $all;
 
     public function __construct(string $name, int $count = 1, ?bool $broken = false, ?bool $poison = false, bool $is_prop = false)
     {
@@ -21,6 +22,12 @@ class ItemRequest
         $this->broken = $broken;
         $this->poison = $poison;
         $this->is_property = $is_prop;
+        $this->all = false;
+    }
+
+    public function fetchAll(bool $b): self {
+        $this->all = $b;
+        return $this;
     }
 
     public function isProperty(): bool {
@@ -37,6 +44,10 @@ class ItemRequest
 
     public function getCount(): int {
         return $this->count;
+    }
+
+    public function getAll(): bool {
+        return $this->all;
     }
 
     public function getBroken(): bool {

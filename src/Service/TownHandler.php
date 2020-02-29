@@ -88,20 +88,38 @@ class TownHandler
         $summary->guardian_defense = 0;
 
         $home_def_factor = $this->getBuilding( $town, 'small_strategy_#00', true ) ? 0.8 : 0.4;
+        $pentagon = $this->getBuilding( $town, 'item_shield_#00', true );
+
+        if ($pentagon) {
+            if     ($pentagon->getLevel() === 2) $summary->overall_scale += 0.14;
+            elseif ($pentagon->getLevel() === 1) $summary->overall_scale += 0.12;
+            else                                 $summary->overall_scale += 0.10;
+        }
+
+        $guardian_bonus = $this->getBuilding($town, 'small_watchmen_#00', true) ? 15 : 5;
 
         foreach ($town->getCitizens() as $citizen)
             if ($citizen->getAlive()) {
                 $home = $citizen->getHome();
                 $f_house_def += $this->calculate_home_def( $home ) * $home_def_factor;
                 if (!$citizen->getZone() && $citizen->getProfession()->getName() === 'guardian')
-                    $summary->guardian_defense += 5;
+                    $summary->guardian_defense += $guardian_bonus;
             }
         $summary->house_defense = floor($f_house_def);
         $summary->building_defense = 0;
         $item_def_factor = 1.0;
         foreach ($town->getBuildings() as $building)
             if ($building->getComplete()) {
-                $summary->building_defense += ( $building->getDefenseBonus() + $building->getPrototype()->getDefense() );
+
+                if ($building->getPrototype()->getName() === 'item_tube_#00' && $building->getLevel() > 0) {
+                    $n = [0,2,4,6,9,12];
+
+                    if ($town->getWell() >= $n[ $building->getLevel() ])
+                        $summary->building_defense += $building->getDefenseBonus();
+                    $summary->building_defense += $building->getPrototype()->getDefense();
+
+                } else $summary->building_defense += ( $building->getDefenseBonus() + $building->getPrototype()->getDefense() );
+
                 if ($building->getPrototype()->getName() === 'item_meca_parts_#00')
                     $item_def_factor += (1+$building->getLevel()) * 0.5;
             }

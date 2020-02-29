@@ -155,7 +155,11 @@ class RecipeFixtures extends Fixture implements DependentFixtureInterface
             ]],
             ["name"=>"Hühnerstall","temporary"=>0,"img"=>"small_chicken","vp"=>0,"ap"=>25,"bp"=>3,"rsc"=>["pet_chick_#00" => 2,"wood2_#00" => 5,"wood_beam_#00" => 5,"fence_#00" => 2,]],
             ["name"=>"Schlachthof","temporary"=>0,"img"=>"small_slaughterhouse","vp"=>35,"ap"=>40,"bp"=>1,"rsc"=>["concrete_wall_#00" => 2,"metal_beam_#00" => 10,]],
-            ["name"=>"Pentagon","temporary"=>0,"img"=>"item_shield","vp"=>8,"ap"=>55,"bp"=>3,"rsc"=>["wood_beam_#00" => 5,"metal_beam_#00" => 10,]],
+            ["name"=>"Pentagon","temporary"=>0,"img"=>"item_shield","vp"=>8,"ap"=>55,"bp"=>3,"rsc"=>["wood_beam_#00" => 5,"metal_beam_#00" => 10,],
+                "upgradeTexts" => [
+                    'Die Verteidigung der Stadt wird um 12% erhöht.',
+                    'Die Verteidigung der Stadt wird um 14% erhöht.'
+                ]],
             ["name"=>"Kantine","temporary"=>0,"img"=>"small_cafet","vp"=>0,"ap"=>20,"bp"=>1,"rsc"=>["pharma_#00" => 1,"wood_beam_#00" => 5,"metal_beam_#00" => 1,"table_#00" => 1,]],
             ["name"=>"Bollwerk","temporary"=>0,"img"=>"small_strategy","vp"=>0,"ap"=>60,"bp"=>3,"rsc"=>["meca_parts_#00" => 3,"wood_beam_#00" => 15,"metal_beam_#00" => 15,]],
             ["name"=>"Baumarkt","temporary"=>0,"img"=>"small_strategy","vp"=>0,"ap"=>30,"bp"=>4,"rsc"=>["meca_parts_#00" => 3,"wood_beam_#00" => 10,"metal_beam_#00" => 10,]],

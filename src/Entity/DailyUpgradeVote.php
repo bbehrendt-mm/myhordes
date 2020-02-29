@@ -23,7 +23,7 @@ class DailyUpgradeVote
     private $building;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Citizen", inversedBy="dailyUpgradeVote", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="App\Entity\Citizen", inversedBy="dailyUpgradeVote", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $citizen;

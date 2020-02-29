@@ -143,8 +143,9 @@ class InventoryHandler
             $qb = $this->entity_manager->createQueryBuilder();
             $qb
                 ->select('i.id')->from('App:Item','i')
-                ->leftJoin('App:ItemPrototype', 'p', Join::WITH, 'i.prototype = p.id')
-                ->setMaxResults( $request->getCount() );
+                ->leftJoin('App:ItemPrototype', 'p', Join::WITH, 'i.prototype = p.id');
+            if (!$request->getAll())
+                $qb->setMaxResults( $request->getCount() );
             if (is_array($inventory))
                 $qb->where('i.inventory IN (:inv)')->setParameter('inv', $inventory);
             else
@@ -162,7 +163,7 @@ class InventoryHandler
             if ($request->filterPoison()) $qb->andWhere('i.poison = :isp')->setParameter('isp', $request->getPoison());
 
             $result = $qb->getQuery()->getResult(AbstractQuery::HYDRATE_SCALAR);
-            if (count($result) !== $request->getCount()) return [];
+            if (!$request->getAll() && count($result) !== $request->getCount()) return [];
             else $return = array_merge($return, array_map(function(array $a): int { return $a['id']; }, $result));
         }
         return array_map(function(int $id): Item {

@@ -57,6 +57,7 @@ class TownInspectorCommand extends Command
             ->addOption('unlock-buildings', null, InputOption::VALUE_NONE, 'Unlocks all buildings.')
 
             ->addOption('advance-day', null, InputOption::VALUE_NONE, 'Starts the nightly attack.')
+            ->addOption('dry', null, InputOption::VALUE_NONE, 'When used together with --advance-day, changes in the DB will not persist.')
 
             ->addOption('citizen', 'c', InputOption::VALUE_REQUIRED, 'When used together with --reset-well-lock, only the lock of the given citizen is released.', -1)
 
@@ -180,9 +181,10 @@ class TownInspectorCommand extends Command
         }
 
         if ($input->getOption('advance-day')) {
-            if ($this->nighthandler->advance_day($town)) {
+            if ($this->nighthandler->advance_day($town) && !$input->getOption('dry')) {
                 foreach ($this->nighthandler->get_cleanup_container() as $c) $this->entityManager->remove($c);
                 $this->entityManager->persist( $town );
+                $changes = true;
             }
 
         }
@@ -215,7 +217,11 @@ class TownInspectorCommand extends Command
             $changes = $n > 0;
         }
 
-        if ($changes) $this->entityManager->flush();
+        if ($changes) {
+            $output->write("<comment>Updating database</comment>... ");
+            $this->entityManager->flush();
+            $output->writeln("<info>OK!</info>");
+        }
 
         return ($input->getOption('no-info')) ? 0 : $this->info($town, $output, $input->getOption('show-zones'));
     }
