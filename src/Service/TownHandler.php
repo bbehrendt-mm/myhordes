@@ -11,6 +11,7 @@ use App\Entity\CitizenHomeUpgrade;
 use App\Entity\CitizenHomeUpgradePrototype;
 use App\Entity\Town;
 use App\Entity\ZombieEstimation;
+use App\Entity\Zone;
 use App\Structures\HomeDefenseSummary;
 use App\Structures\TownDefenseSummary;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,12 +20,14 @@ class TownHandler
 {
     private $entity_manager;
     private $inventory_handler;
+    private $item_factory;
 
     public function __construct(
-        EntityManagerInterface $em, InventoryHandler $ih)
+        EntityManagerInterface $em, InventoryHandler $ih, ItemFactory $if)
     {
         $this->entity_manager = $em;
         $this->inventory_handler = $ih;
+        $this->item_factory = $if;
     }
 
     private function internalAddBuilding( Town &$town, BuildingPrototype $prototype ) {
@@ -35,6 +38,50 @@ class TownHandler
         // Add all children that do not require blueprints
         foreach ( $prototype->getChildren() as $child )
             if ($child->getBlueprint() == 0) $this->internalAddBuilding( $town, $child );
+    }
+
+    public function triggerBuildingCompletion( Town &$town, Building $building ) {
+        $well = 0;
+
+        $water_db = [
+            'small_derrick_#00'      =>  50,
+            'small_water_#01'        =>  40,
+            'small_eden_#00'         =>  70,
+            'small_water_#00'        =>   5,
+            'small_derrick_#01'      => 150,
+            'item_tube_#01'          =>   2,
+            'item_firework_tube_#00' =>  15,
+            'small_rocketperf_#00'   =>  60,
+            'small_waterdetect_#00'  => 100,
+        ];
+
+        if (isset($water_db[$building->getPrototype()->getName()]))
+            $well += $water_db[$building->getPrototype()->getName()];
+
+        $town->setWell( $town->getWell() + $well );
+
+        switch ($building->getPrototype()->getName()) {
+            case 'small_fireworks_#00':case 'small_balloon_#00':
+                $all = $building->getPrototype()->getName() === 'small_balloon_#00';
+                foreach ($town->getZones() as &$zone)
+                    if ($all || $zone->getPrototype()) {
+                        $zone->setDiscoveryStatus( Zone::DiscoveryStateCurrent );
+                        $zone->setZombieStatus( max( $zone->getZombieStatus(), Zone::ZombieStateEstimate ) );
+                    }
+                break;
+            case 'small_rocket_#00':
+                foreach ($town->getZones() as &$zone)
+                    if ($zone->getX() === 0 || $zone->getY() === 0) {
+                        $zone->setZombies(0);
+                        $zone->getEscapeTimers()->clear();
+                    }
+                break;
+            case 'small_cafet_#00':
+                $town->getBank()->addItem( $this->item_factory->createItem( 'woodsteak_#00' ) );
+                $town->getBank()->addItem( $this->item_factory->createItem( 'woodsteak_#00' ) );
+                break;
+            default: break;
+        }
     }
 
     public function addBuilding( Town &$town, BuildingPrototype $prototype ): bool {

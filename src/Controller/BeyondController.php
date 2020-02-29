@@ -25,6 +25,7 @@ use App\Service\ItemFactory;
 use App\Service\JSONRequestParser;
 use App\Service\Locksmith;
 use App\Service\RandomGenerator;
+use App\Service\TownHandler;
 use App\Service\ZoneHandler;
 use App\Structures\ItemRequest;
 use DateTime;
@@ -145,12 +146,22 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
 
     /**
      * @Route("jx/beyond/desert", name="beyond_dashboard")
+     * @param TownHandler $th
      * @return Response
      */
-    public function desert(): Response
+    public function desert(TownHandler $th): Response
     {
         $this->deferZoneUpdate();
 
+        $watchtower = $th->getBuilding($town, 'item_tagger_#00',  true);
+        if ($watchtower) switch ($watchtower->getLevel()) {
+            case 4: $port_distance = 1;  break;
+            case 5: $port_distance = 2;  break;
+            default:$port_distance = 0; break;
+        } else $port_distance = 0;
+        $distance = round(sqrt( pow($this->getActiveCitizen()->getZone()->getX(),2) + pow($this->getActiveCitizen()->getZone()->getY(),2) ));
+
+        $can_enter = $distance <= $port_distance;
         $is_on_zero = $this->getActiveCitizen()->getZone()->getX() == 0 && $this->getActiveCitizen()->getZone()->getY() == 0;
 
         $citizen_tired = $this->getActiveCitizen()->getAp() <= 0 || $this->citizen_handler->isTired( $this->getActiveCitizen());
@@ -160,7 +171,7 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
         $escape = $this->get_escape_timeout( $this->getActiveCitizen() );
 
         return $this->render( 'ajax/game/beyond/desert.html.twig', $this->addDefaultTwigArgs(null, [
-            'allow_enter_town' => $is_on_zero,
+            'allow_enter_town' => $can_enter,
             'allow_floor_access' => !$is_on_zero,
             'can_escape' => !$this->citizen_handler->isWounded( $this->getActiveCitizen() ),
             'can_attack' => !$citizen_tired,
@@ -176,19 +187,32 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
 
     /**
      * @Route("api/beyond/desert/exit", name="beyond_desert_exit_controller")
+     * @param TownHandler $th
      * @return Response
      */
-    public function desert_exit_api(): Response {
+    public function desert_exit_api(TownHandler $th): Response {
         $this->deferZoneUpdate();
 
         $citizen = $this->getActiveCitizen();
         $zone = $citizen->getZone();
+        $town = $citizen->getTown();
 
-        if ($zone->getX() != 0 || $zone->getY() != 0)
+        $watchtower = $th->getBuilding($town, 'item_tagger_#00',  true);
+        if ($watchtower) switch ($watchtower->getLevel()) {
+            case 4: $port_distance = 1;  break;
+            case 5: $port_distance = 2;  break;
+            default:$port_distance = 0; break;
+        } else $port_distance = 0;
+        $distance = round(sqrt( pow($zone->getX(),2) + pow($zone->getY(),2) ));
+
+        if ($distance > $port_distance)
             return AjaxResponse::error( self::ErrorNoReturnFromHere );
 
         $citizen->setZone( null );
         $zone->removeCitizen( $citizen );
+
+        $cp_ok = $this->zone_handler->check_cp( $zone );
+        $this->zone_handler->handleCitizenCountUpdate( $zone, $cp_ok );
 
         try {
             $this->entity_manager->persist($citizen);

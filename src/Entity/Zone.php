@@ -96,7 +96,7 @@ class Zone
     private $digTimers;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\EscapeTimer", mappedBy="zone", orphanRemoval=true, cascade={"persist","remove"})
+     * @ORM\OneToMany(targetEntity="App\Entity\EscapeTimer", mappedBy="zone", orphanRemoval=true, cascade={"persist","remove"}, orphanRemoval=true)
      */
     private $escapeTimers;
 

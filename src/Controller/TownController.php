@@ -436,9 +436,10 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
     /**
      * @Route("api/town/constructions/build", name="town_constructions_build_controller")
      * @param JSONRequestParser $parser
+     * @param TownHandler $th
      * @return Response
      */
-    public function construction_build_api(JSONRequestParser $parser): Response {
+    public function construction_build_api(JSONRequestParser $parser, TownHandler $th): Response {
         $citizen = $this->getActiveCitizen();
         $town = $citizen->getTown();
 
@@ -447,6 +448,7 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
         $id = (int)$parser->get('id');
         $ap = (int)$parser->get('ap');
 
+        /** @var Building|null $building */
         $building = $this->entity_manager->getRepository(Building::class)->find($id);
         if (!$building || $building->getTown()->getId() !== $town->getId() || $ap <= 0)
             return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
@@ -469,11 +471,14 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
         $this->citizen_handler->setAP($citizen, true, -$ap);
         $building->setAp( $building->getAp() + $ap );
         $building->setComplete( $building->getComplete() || $building->getAp() >= $building->getPrototype()->getAp() );
-        if (!$was_completed && $building->getComplete())
+        if (!$was_completed && $building->getComplete()) {
             foreach ($items as $item) {
                 $town->getBank()->removeItem( $item );
                 $this->entity_manager->remove( $item );
             }
+            $th->triggerBuildingCompletion( $town, $building );
+        }
+
 
         try {
             $this->entity_manager->persist($citizen);
