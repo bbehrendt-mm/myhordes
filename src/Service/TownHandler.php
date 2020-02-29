@@ -113,8 +113,13 @@ class TownHandler
     }
 
     public function calculate_home_def( CitizenHome &$home, ?HomeDefenseSummary &$summary = null): int {
+        $town = $home->getCitizen()->getTown();
+
         $summary = new HomeDefenseSummary();
         $summary->house_defense = $home->getPrototype()->getDefense();
+
+        if ($this->getBuilding($town, 'small_city_up_#00', true))
+            $summary->house_defense += 4;
 
         /** @var CitizenHomeUpgrade|null $n */
         $n = $this->entity_manager->getRepository(CitizenHomeUpgrade::class)->findOneByPrototype( $home,
@@ -128,6 +133,28 @@ class TownHandler
         return $summary->sum();
     }
 
+    public function calculate_building_def( Town &$town, Building $building ): int {
+        $d = 0;
+
+        if ($building->getPrototype()->getName() === 'item_tube_#00' && $building->getLevel() > 0) {
+            $n = [0,2,4,6,9,12];
+
+            if ($town->getWell() >= $n[ $building->getLevel() ])
+                $d += $building->getDefenseBonus();
+            $d += $building->getPrototype()->getDefense();
+
+        } elseif ($building->getPrototype()->getName() === 'small_cemetery_#00' || $building->getPrototype()->getName() === 'small_coffin_#00') {
+
+            $c = 0;
+            foreach ($town->getCitizens() as $citizen) if (!$citizen->getAlive()) $c++;
+            $d += ( 10*$c + $building->getDefenseBonus() + $building->getPrototype()->getDefense() );
+
+        }
+        else $d += ( $building->getDefenseBonus() + $building->getPrototype()->getDefense() );
+
+        return $d;
+    }
+
     public function calculate_town_def( Town &$town, ?TownDefenseSummary &$summary = null ): int {
         $summary = new TownDefenseSummary();
 
@@ -135,8 +162,8 @@ class TownHandler
         $summary->guardian_defense = 0;
 
         $home_def_factor = $this->getBuilding( $town, 'small_strategy_#00', true ) ? 0.8 : 0.4;
-        $pentagon = $this->getBuilding( $town, 'item_shield_#00', true );
 
+        $pentagon = $this->getBuilding( $town, 'item_shield_#00', true );
         if ($pentagon) {
             if     ($pentagon->getLevel() === 2) $summary->overall_scale += 0.14;
             elseif ($pentagon->getLevel() === 1) $summary->overall_scale += 0.12;
@@ -158,14 +185,7 @@ class TownHandler
         foreach ($town->getBuildings() as $building)
             if ($building->getComplete()) {
 
-                if ($building->getPrototype()->getName() === 'item_tube_#00' && $building->getLevel() > 0) {
-                    $n = [0,2,4,6,9,12];
-
-                    if ($town->getWell() >= $n[ $building->getLevel() ])
-                        $summary->building_defense += $building->getDefenseBonus();
-                    $summary->building_defense += $building->getPrototype()->getDefense();
-
-                } else $summary->building_defense += ( $building->getDefenseBonus() + $building->getPrototype()->getDefense() );
+                $summary->building_defense += $this->calculate_building_def( $town, $building );
 
                 if ($building->getPrototype()->getName() === 'item_meca_parts_#00')
                     $item_def_factor += (1+$building->getLevel()) * 0.5;

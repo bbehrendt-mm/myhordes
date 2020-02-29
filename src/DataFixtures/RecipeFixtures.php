@@ -93,6 +93,7 @@ class RecipeFixtures extends Fixture implements DependentFixtureInterface
                 ["name"=>"Kärcher","temporary"=>0,"img"=>"small_waterspray","vp"=>50,"ap"=>50,"bp"=>0,"rsc"=>["water_#00" => 10,"meca_parts_#00" => 1,"wood2_#00" => 10,"metal_beam_#00" => 7,]],
                 ["name"=>"Kreischender Rotor","temporary"=>0,"img"=>"small_grinder","vp"=>50,"ap"=>55,"bp"=>1,"rsc"=>["plate_#00" => 2,"tube_#00" => 2,"wood_beam_#00" => 4,"metal_beam_#00" => 10,]],
                 ["name"=>"Sprinkleranlage","temporary"=>0,"img"=>"small_sprinkler","vp"=>150,"ap"=>85,"bp"=>3,"rsc"=>["water_#00" => 20,"tube_#00" => 1,"wood_beam_#00" => 7,"metal_beam_#00" => 15,]],
+                // TODO: Special Action
                 ["name"=>"Dusche","temporary"=>0,"img"=>"small_shower","vp"=>0,"ap"=>25,"bp"=>2,"rsc"=>["water_#00" => 5,"wood2_#00" => 4,"metal_#00" => 1,"tube_#00" => 1,]],
             ]],
             ["name"=>"Wasserturm","maxLevel" => 5,"temporary"=>0,"img"=>"item_tube","vp"=>70,"ap"=>60,"bp"=>3,"rsc"=>["water_#00" => 40,"tube_#00" => 7,"metal_beam_#00" => 10,],
@@ -112,6 +113,7 @@ class RecipeFixtures extends Fixture implements DependentFixtureInterface
             ["name"=>"Apfelbaum","temporary"=>0,"img"=>"small_appletree","vp"=>0,"ap"=>30,"bp"=>3,"rsc"=>["water_#00" => 10,"hmeat_#00" => 2,"pharma_#00" => 3,"metal_beam_#00" => 1,]],
         ]],
 
+        // TODO: Upgrade effect
         ["name"=>"Werkstatt","maxLevel" => 5,"temporary"=>0,"img"=>"small_refine","vp"=>0,"ap"=>25,"bp"=>0,"rsc"=>["wood2_#00" => 10,"metal_#00" => 8,],
             "upgradeTexts" => [
                 'Die AP-Kosten aller Bauprojekte werden um 5% gesenkt.',
@@ -120,6 +122,7 @@ class RecipeFixtures extends Fixture implements DependentFixtureInterface
                 'Die AP-Kosten aller Bauprojekte werden um 20% gesenkt.',
                 'Die AP-Kosten aller Bauprojekte werden um 25% gesenkt.',
             ], "children" => [
+            // TODO: Convert animals
             ["name"=>"Metzgerei","temporary"=>0,"img"=>"item_meat","vp"=>0,"ap"=>40,"bp"=>2,"rsc"=>["wood2_#00" => 9,"metal_#00" => 4,], "children" => [
                 ["name"=>"Kremato-Cue","temporary"=>0,"img"=>"item_hmeat","vp"=>0,"ap"=>45,"bp"=>2,"rsc"=>["wood_beam_#00" => 8,"metal_beam_#00" => 1,]],
             ]],
@@ -140,6 +143,7 @@ class RecipeFixtures extends Fixture implements DependentFixtureInterface
             ["name"=>"Holzbalkendrehkreuz","temporary"=>0,"img"=>"item_wood_beam","vp"=>10,"ap"=>15,"bp"=>0,"rsc"=>["wood_beam_#00" => 2,"metal_beam_#00" => 1,]],
             ["name"=>"Manufaktur","temporary"=>0,"img"=>"small_factory","vp"=>0,"ap"=>40,"bp"=>0,"rsc"=>["wood_beam_#00" => 5,"metal_beam_#00" => 5,"table_#00" => 1,]],
             ["name"=>"Kreischende Sägen","temporary"=>0,"img"=>"small_saw","vp"=>45,"ap"=>65,"bp"=>0,"rsc"=>["meca_parts_#00" => 3,"metal_#00" => 5,"rustine_#00" => 3,"metal_beam_#00" => 2,]],
+            // TODO: Log
             ["name"=>"Baustellenbuch","temporary"=>0,"img"=>"item_rp_book2","vp"=>0,"ap"=>15,"bp"=>0,"rsc"=>["table_#00" => 1,], "children" => [
                 ["name"=>"Bauhaus","maxLevel" => 5,"temporary"=>0,"img"=>"small_refine","vp"=>0,"ap"=>75,"bp"=>0,"rsc"=>["drug_#00" => 1,"vodka_de_#00" => 1,"wood_beam_#00" => 10,],
                 "upgradeTexts" => [
@@ -148,6 +152,7 @@ class RecipeFixtures extends Fixture implements DependentFixtureInterface
                     'Die Stadt erhält nach dem nächsten Angriff einmalig 2 ungewöhnliche und 2 seltene Baupläne sowie - möglicherweise - eine nette Überraschung.',
                 ]],
             ]],
+            // TODO: Banning
             ["name"=>"Galgen","temporary"=>0,"img"=>"r_dhang","vp"=>0,"ap"=>13,"bp"=>0,"rsc"=>["wood_beam_#00" => 1,"chain_#00" => 1,]],
             ["name"=>"Kleines Cafe","temporary"=>1,"img"=>"small_cafet","vp"=>0,"ap"=>6,"bp"=>0,"rsc"=>["water_#00" => 1,"wood2_#00" => 2,"pharma_#00" => 1,]],
             ["name"=>"Kleiner Friedhof","temporary"=>0,"img"=>"small_cemetery","vp"=>0,"ap"=>36,"bp"=>1,"rsc"=>["meca_parts_#00" => 1,"wood2_#00" => 10,], "children" => [
@@ -160,10 +165,14 @@ class RecipeFixtures extends Fixture implements DependentFixtureInterface
                     'Die Verteidigung der Stadt wird um 12% erhöht.',
                     'Die Verteidigung der Stadt wird um 14% erhöht.'
                 ]],
+            // TODO: Home upgrade
             ["name"=>"Kantine","temporary"=>0,"img"=>"small_cafet","vp"=>0,"ap"=>20,"bp"=>1,"rsc"=>["pharma_#00" => 1,"wood_beam_#00" => 5,"metal_beam_#00" => 1,"table_#00" => 1,]],
             ["name"=>"Bollwerk","temporary"=>0,"img"=>"small_strategy","vp"=>0,"ap"=>60,"bp"=>3,"rsc"=>["meca_parts_#00" => 3,"wood_beam_#00" => 15,"metal_beam_#00" => 15,]],
+            // TODO: Skip upgrade limit
             ["name"=>"Baumarkt","temporary"=>0,"img"=>"small_strategy","vp"=>0,"ap"=>30,"bp"=>4,"rsc"=>["meca_parts_#00" => 3,"wood_beam_#00" => 10,"metal_beam_#00" => 10,]],
+            // TODO: Special Action
             ["name"=>"Krankenstation","temporary"=>0,"img"=>"small_infirmary","vp"=>0,"ap"=>40,"bp"=>3,"rsc"=>["pharma_#00" => 6,"disinfect_#00" => 1,"wood_beam_#00" => 5,"metal_beam_#00" => 5,]],
+            // TODO: Home upgrade
             ["name"=>"Labor","temporary"=>0,"img"=>"item_acid","vp"=>0,"ap"=>30,"bp"=>1,"rsc"=>["meca_parts_#00" => 3,"pharma_#00" => 5,"wood_beam_#00" => 3,"metal_beam_#00" => 10,]],
         ]],
 
@@ -176,6 +185,7 @@ class RecipeFixtures extends Fixture implements DependentFixtureInterface
                 'Erspäht jeden Morgen alle Zombies, die sich im Umkreis von 10km um die Stadt aufhalten. Bürger im Umkreis von 2km um die Stadt können ohne AP-Verbrauch die Stadt betreten.',
             ], "children" => [
             ["name"=>"Scanner","temporary"=>0,"img"=>"item_tagger","vp"=>0,"ap"=>20,"bp"=>2,"rsc"=>["pile_#00" => 2,"meca_parts_#00" => 1,"electro_#00" => 1,"radio_on_#00" => 2,]],
+            // TODO: Unveil zombie count
             ["name"=>"Verbesserte Karte","temporary"=>0,"img"=>"item_electro","vp"=>0,"ap"=>15,"bp"=>1,"rsc"=>["pile_#00" => 2,"metal_#00" => 1,"electro_#00" => 1,"radio_on_#00" => 2,]],
             ["name"=>"Rechenmaschine","temporary"=>0,"img"=>"item_tagger","vp"=>0,"ap"=>20,"bp"=>1,"rsc"=>["rustine_#00" => 1,"electro_#00" => 1,]],
             ["name"=>"Forschungsturm","maxLevel" => 5,"temporary"=>0,"img"=>"small_gather","vp"=>0,"ap"=>30,"bp"=>1,"rsc"=>["electro_#00" => 1,"wood_beam_#00" => 3,"metal_beam_#00" => 1,"table_#00" => 1,],
@@ -202,60 +212,90 @@ class RecipeFixtures extends Fixture implements DependentFixtureInterface
                 ["name"=>"Spirituelles Wunder","temporary"=>0,"img"=>"small_spiritmirage","vp"=>80,"ap"=>30,"bp"=>0,"rsc"=>["wood2_#00" => 6,"plate_#00" => 2,"wood_beam_#00" => 6,"soul_red_#00" => 2,]],
                 ["name"=>"Bokors Guillotine","temporary"=>0,"img"=>"small_bokorsword","vp"=>100,"ap"=>60,"bp"=>0,"rsc"=>["plate_#00" => 3,"wood_beam_#00" => 8,"metal_beam_#00" => 5,"soul_red_#00" => 3,]],
             ]],
+            // TODO: UI
             ["name"=>"Katapult","temporary"=>0,"img"=>"item_courroie","vp"=>0,"ap"=>40,"bp"=>1,"rsc"=>["wood2_#00" => 2,"metal_#00" => 1,"wood_beam_#00" => 1,"metal_beam_#00" => 1,], "children" => [
                 ["name"=>"Verbesserter Katapult","temporary"=>0,"img"=>"item_courroie","vp"=>0,"ap"=>30,"bp"=>2,"rsc"=>["courroie_#00" => 1,"wood2_#00" => 2,"metal_#00" => 2,"electro_#00" => 2,]],
             ]],
+            // TODO: Special Action
             ["name"=>"Wächter-Turm","temporary"=>0,"img"=>"small_watchmen","vp"=>15,"ap"=>24,"bp"=>2,"rsc"=>["meca_parts_#00" => 1,"plate_#00" => 1,"wood_beam_#00" => 10,"metal_beam_#00" => 2,], "children" => [
+                // TODO: NW effect
                 ["name"=>"Kleine Waffenschmiede","temporary"=>0,"img"=>"small_armor","vp"=>0,"ap"=>50,"bp"=>2,"rsc"=>["meca_parts_#00" => 3,"wood2_#00" => 10,"metal_#00" => 15,"plate_#00" => 2,"concrete_wall_#00" => 3,"metal_beam_#00" => 5,]],
+                // TODO: NW effect
                 ["name"=>"Schwedische Schreinerei","temporary"=>0,"img"=>"small_ikea","vp"=>0,"ap"=>50,"bp"=>2,"rsc"=>["meca_parts_#00" => 3,"wood2_#00" => 15,"metal_#00" => 10,"plate_#00" => 4,"concrete_wall_#00" => 2,"wood_beam_#00" => 5,]],
+                // TODO: NW effect
                 ["name"=>"Schießstand","temporary"=>0,"img"=>"small_tourello","vp"=>50,"ap"=>25,"bp"=>2,"rsc"=>["water_#00" => 30,"tube_#00" => 2,"wood_beam_#00" => 1,"metal_beam_#00" => 2,]],
+                // TODO: NW effect
                 ["name"=>"Kleiner Tribok","temporary"=>0,"img"=>"small_catapult3","vp"=>0,"ap"=>30,"bp"=>2,"rsc"=>["wood_beam_#00" => 2,"metal_beam_#00" => 4,"meca_parts_#00" => 2,"plate_#00" => 2,"tube_#00" => 1,]],
             ]],
+            // TODO: Special Action
             ["name"=>"Krähennest","temporary"=>0,"img"=>"small_watchmen","vp"=>10,"ap"=>36,"bp"=>2,"rsc"=>["meca_parts_#00" => 1,"wood_beam_#00" => 5,"metal_beam_#00" => 1,]],
         ]],
 
         ["name"=>"Fundament","temporary"=>0,"img"=>"small_building","vp"=>0,"ap"=>30,"bp"=>0,"rsc"=>["wood2_#00" => 10,"metal_#00" => 8,], "children" => [
             ["name"=>"Bohrturm","temporary"=>0,"img"=>"small_derrick","vp"=>0,"ap"=>70,"bp"=>3,"rsc"=>["wood_beam_#00" => 10,"metal_beam_#00" => 15,]],
             ["name"=>"Falsche Stadt","temporary"=>0,"img"=>"small_falsecity","vp"=>400,"ap"=>400,"bp"=>3,"rsc"=>["meca_parts_#00" => 15,"wood2_#00" => 20,"metal_#00" => 20,"wood_beam_#00" => 20,"metal_beam_#00" => 20,]],
+            // TODO: Special Action
             ["name"=>"Wasserhahn","temporary"=>0,"img"=>"small_valve","vp"=>0,"ap"=>130,"bp"=>3,"rsc"=>["engine_#00" => 1,"meca_parts_#00" => 4,"metal_#00" => 10,"wood_beam_#00" => 6,"metal_beam_#00" => 3,]],
             ["name"=>"Großer Umbau","temporary"=>0,"img"=>"small_moving","vp"=>300,"ap"=>300,"bp"=>3,"rsc"=>["wood2_#00" => 20,"metal_#00" => 20,"concrete_wall_#00" => 5,"wood_beam_#00" => 20,"metal_beam_#00" => 20,]],
             ["name"=>"Vogelscheuche","temporary"=>0,"img"=>"small_scarecrow","vp"=>25,"ap"=>35,"bp"=>0,"rsc"=>["wood2_#00" => 10,"rustine_#00" => 2,]],
+            // TODO: Banning
             ["name"=>"Fleischkäfig","temporary"=>0,"img"=>"small_fleshcage","vp"=>0,"ap"=>40,"bp"=>0,"rsc"=>["meca_parts_#00" => 2,"metal_#00" => 8,"chair_basic_#00" => 1,"wood_beam_#00" => 1,]],
+            // TODO: Banning
             ["name"=>"Bürgergericht","temporary"=>0,"img"=>"small_court","vp"=>0,"ap"=>12,"bp"=>2,"rsc"=>["wood2_#00" => 6,"metal_beam_#00" => 15,"table_#00" => 1,]],
             ["name"=>"Befestigungen","temporary"=>0,"img"=>"small_city_up","vp"=>0,"ap"=>50,"bp"=>3,"rsc"=>["concrete_wall_#00" => 2,"wood_beam_#00" => 15,"metal_beam_#00" => 10,]],
+            // TODO: UI
             ["name"=>"Müllhalde","temporary"=>0,"img"=>"small_trash","vp"=>0,"ap"=>70,"bp"=>0,"rsc"=>["concrete_wall_#00" => 5,"wood_beam_#00" => 15,"metal_beam_#00" => 15,], "children" => [
+                // TODO: UI
                 ["name"=>"Holzabfall","temporary"=>0,"img"=>"small_trash","vp"=>0,"ap"=>30,"bp"=>2,"rsc"=>["meca_parts_#00" => 1,"wood2_#00" => 5,"metal_#00" => 5,]],
+                // TODO: UI
                 ["name"=>"Metallabfall","temporary"=>0,"img"=>"small_trash","vp"=>0,"ap"=>30,"bp"=>2,"rsc"=>["wood2_#00" => 5,"metal_#00" => 5,]],
+                // TODO: UI
                 ["name"=>"Tierabfälle","temporary"=>0,"img"=>"small_howlingbait","vp"=>0,"ap"=>30,"bp"=>2,"rsc"=>["wood_beam_#00" => 10,]],
+                // TODO: UI
                 ["name"=>"Müll für Alle","temporary"=>0,"img"=>"small_trashclean","vp"=>0,"ap"=>30,"bp"=>3,"rsc"=>["meca_parts_#00" => 2,"concrete_wall_#00" => 1,"wood_beam_#00" => 10,"metal_beam_#00" => 10,"trestle_#00" => 2,]],
+                // TODO: UI
                 ["name"=>"Waffenabfall","temporary"=>0,"img"=>"small_trash","vp"=>0,"ap"=>20,"bp"=>2,"rsc"=>["meca_parts_#00" => 1,"metal_#00" => 8,]],
+                // TODO: UI
                 ["name"=>"Biomüll","temporary"=>0,"img"=>"small_trash","vp"=>0,"ap"=>20,"bp"=>2,"rsc"=>["wood2_#00" => 15,]],
+                // TODO: UI
                 ["name"=>"Rüstungsabfall","temporary"=>0,"img"=>"small_trash","vp"=>0,"ap"=>40,"bp"=>2,"rsc"=>["metal_beam_#00" => 3,"metal_#00" => 5,]],
+                // TODO: UI
                 ["name"=>"Verbesserte Müllhalde","temporary"=>0,"img"=>"small_trash","vp"=>75,"ap"=>120,"bp"=>4,"rsc"=>["water_#00" => 20,"wood_beam_#00" => 15,"metal_beam_#00" => 15,]],
             ]],
+            // TODO: Camping
             ["name"=>"Leuchtturm","temporary"=>0,"img"=>"small_lighthouse","vp"=>0,"ap"=>30,"bp"=>3,"rsc"=>["electro_#00" => 2,"wood_beam_#00" => 5,"metal_beam_#00" => 5,]],
+            // TODO: Banning
             ["name"=>"Altar","temporary"=>0,"img"=>"small_redemption","vp"=>0,"ap"=>24,"bp"=>2,"rsc"=>["pet_pig_#00" => 1,"wood_beam_#00" => 3,"metal_beam_#00" => 2,]],
             ["name"=>"Riesige Sandburg","temporary"=>0,"img"=>"small_castle","vp"=>0,"ap"=>300,"bp"=>4,"rsc"=>["water_#00" => 30,"wood_beam_#00" => 15,"metal_beam_#00" => 10,]],
             ["name"=>"Leuchtfeuer","temporary"=>1,"img"=>"small_score","vp"=>30,"ap"=>15,"bp"=>2,"rsc"=>["lights_#00" => 1,"wood2_#00" => 5,]],
+            // TODO: Banning
             ["name"=>"Ministerium für Sklaverei","temporary"=>0,"img"=>"small_slave","vp"=>0,"ap"=>45,"bp"=>4,"rsc"=>["wood_beam_#00" => 10,"metal_beam_#00" => 5,"chain_#00" => 2,]],
+            // TODO: Destroyable, kill
             ["name"=>"Reaktor","temporary"=>0,"img"=>"small_arma","vp"=>500,"ap"=>100,"bp"=>4,"rsc"=>["pile_#00" => 10,"engine_#00" => 1,"electro_#00" => 4,"concrete_wall_#00" => 2,"metal_beam_#00" => 15,]],
+            // TODO: 1AP
             ["name"=>"Labyrinth","temporary"=>0,"img"=>"small_labyrinth","vp"=>150,"ap"=>200,"bp"=>3,"rsc"=>["meca_parts_#00" => 2,"wood2_#00" => 20,"metal_#00" => 10,"concrete_wall_#00" => 4,]],
+            // TODO: Temp Def
             ["name"=>"Alles oder nichts","temporary"=>0,"img"=>"small_lastchance","vp"=>55,"ap"=>150,"bp"=>3,"rsc"=>["meca_parts_#00" => 4,"wood_beam_#00" => 15,"metal_beam_#00" => 15,]],
             ["name"=>"Riesiger KVF","temporary"=>0,"img"=>"small_pmvbig","vp"=>0,"ap"=>300,"bp"=>4,"rsc"=>["meca_parts_#00" => 2,"metal_#00" => 30,]],
             ["name"=>"Riesenrad","temporary"=>0,"img"=>"small_wheel","vp"=>0,"ap"=>300,"bp"=>4,"rsc"=>["water_#00" => 20,"meca_parts_#00" => 5,"concrete_wall_#00" => 3,"metal_beam_#00" => 5,]],
             ["name"=>"Feuerwerk","temporary"=>0,"img"=>"small_fireworks","vp"=>0,"ap"=>50,"bp"=>4,"rsc"=>["meca_parts_#00" => 1,"explo_#00" => 4,"deto_#00" => 2,"wood_beam_#00" => 3,"metal_beam_#00" => 3,]],
             ["name"=>"Krähenstatue","temporary"=>0,"img"=>"small_crow","vp"=>0,"ap"=>300,"bp"=>4,"rsc"=>["hmeat_#00" => 3,"wood_beam_#00" => 35,]],
+            // TODO: Special Action
             ["name"=>"Kino","temporary"=>0,"img"=>"small_cinema","vp"=>0,"ap"=>100,"bp"=>4,"rsc"=>["electro_#00" => 3,"wood_beam_#00" => 15,"metal_beam_#00" => 5,"machine_1_#00" => 1,"machine_2_#00" => 1,]],
             ["name"=>"Luftschlag","temporary"=>1,"img"=>"small_rocket","vp"=>0,"ap"=>50,"bp"=>3,"rsc"=>["water_#00" => 10,"meca_parts_#00" => 1,"metal_#00" => 5,"explo_#00" => 1,"deto_#00" => 2,]],
             ["name"=>"Heißluftballon","temporary"=>1,"img"=>"small_balloon","vp"=>0,"ap"=>100,"bp"=>4,"rsc"=>["meca_parts_#00" => 6,"sheet_#00" => 2,"wood_beam_#00" => 5,"metal_beam_#00" => 5,]],
             ["name"=>"Tunnelratte","temporary"=>0,"img"=>"small_derrick","vp"=>0,"ap"=>170,"bp"=>4,"rsc"=>["concrete_wall_#00" => 3,"wood_beam_#00" => 15,"metal_beam_#00" => 15,]],
         ]],
 
+        // TODO: Prevent door opening
         ["name"=>"Portal","temporary"=>0,"img"=>"small_door_closed","vp"=>0,"ap"=>16,"bp"=>0,"rsc"=>["metal_#00" => 2,], "children" => [
             ["name"=>"Torpanzerung","temporary"=>0,"img"=>"item_plate","vp"=>20,"ap"=>35,"bp"=>0,"rsc"=>["wood2_#00" => 3,]],
+            // TODO: Auto close door
             ["name"=>"Kolbenschließmechanismus","temporary"=>0,"img"=>"small_door_closed","vp"=>30,"ap"=>24,"bp"=>1,"rsc"=>["meca_parts_#00" => 2,"wood2_#00" => 10,"tube_#00" => 1,"metal_beam_#00" => 3,], "children" => [
+                // TODO: Auto close door
                 ["name"=>"Automatiktür","temporary"=>0,"img"=>"small_door_closed","vp"=>0,"ap"=>10,"bp"=>1,"rsc"=>[]],
             ]],
+            // TODO: Hero Action
             ["name"=>"Ventilationssystem","temporary"=>0,"img"=>"small_ventilation","vp"=>20,"ap"=>24,"bp"=>2,"rsc"=>["meca_parts_#00" => 1,"metal_#00" => 8,]],
         ]],
     ];

@@ -198,6 +198,8 @@ class NightlyHandler
         $cod = $this->entity_manager->getRepository(CauseOfDeath::class)->findOneByRef(CauseOfDeath::NightlyAttack);
         $status_terror  = $this->entity_manager->getRepository(CitizenStatus::class)->findOneByName( 'terror' );
 
+        $has_kino = $this->town_handler->getBuilding($town, 'small_cinema_#00', true);
+
         $def  = $this->town_handler->calculate_town_def( $town );
         /** @var ZombieEstimation $est */
         $est = $this->entity_manager->getRepository(ZombieEstimation::class)->findOneByTown($town,$town->getDay());
@@ -246,7 +248,7 @@ class NightlyHandler
             $def = $this->town_handler->calculate_home_def($home);
             $this->log->debug("Citizen <info>{$target->getUser()->getUsername()}</info> is attacked by <info>{$force}</info> zombies and protected by <info>{$def}</info> home defense!");
             if ($force > $def) $this->kill_wrap($target, $cod);
-            elseif ($this->random->chance( 0.75 * ($force/max(1,$def)) )) {
+            elseif (!$has_kino && $this->random->chance( 0.75 * ($force/max(1,$def)) )) {
                 $this->citizen_handler->inflictStatus( $target, $status_terror );
                 $this->log->debug("Citizen <info>{$target->getUser()->getUsername()}</info> now suffers from <info>{$status_terror->getLabel()}</info>");
             }
