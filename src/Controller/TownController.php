@@ -10,6 +10,7 @@ use App\Entity\CitizenHomeUpgradeCosts;
 use App\Entity\CitizenHomeUpgradePrototype;
 use App\Entity\Zone;
 use App\Response\AjaxResponse;
+use App\Service\ActionHandler;
 use App\Service\CitizenHandler;
 use App\Service\ErrorHelper;
 use App\Service\InventoryHandler;
@@ -163,6 +164,7 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
         return $this->render( 'ajax/game/town/home.html.twig', $this->addDefaultTwigArgs('house', [
             'home' => $home,
             'actions' => $this->getItemActions(),
+            'recipes' => $this->getItemCombinations(true),
             'chest' => $home->getChest(),
             'chest_size' => $this->inventory_handler->getSize($home->getChest()),
             'next_level' => $home_next_level,
@@ -196,6 +198,16 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
      */
     public function action_house_api(JSONRequestParser $parser, InventoryHandler $handler): Response {
         return $this->generic_action_api( $parser, $handler);
+    }
+
+    /**
+     * @Route("api/town/house/recipe", name="town_house_recipe_controller")
+     * @param JSONRequestParser $parser
+     * @param ActionHandler $handler
+     * @return Response
+     */
+    public function recipe_house_api(JSONRequestParser $parser, ActionHandler $handler): Response {
+        return $this->generic_recipe_api( $parser, $handler);
     }
 
     /**

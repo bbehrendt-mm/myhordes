@@ -321,6 +321,7 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'fill_jsplash'   => [ 'label' => 'Befüllen', 'meta' => [ 'have_canister' ], 'result' => [ 'consume_water', [ 'item' => [ 'consume' => false, 'morph' => 'jerrygun_#00' ] ] ], 'message' => 'Du hast eine {items_consume} in dein/e/n {item_from} gefüllt und {item_to} erhalten!' ],
             'fill_ksplash'   => [ 'label' => 'Befüllen', 'meta' => [ 'have_water' ], 'result' => [ 'consume_water', [ 'item' => [ 'consume' => false, 'morph' => 'kalach_#00' ] ] ], 'message' => 'Du hast eine {items_consume} in dein/e/n {item_from} gefüllt und {item_to} erhalten!' ],
             'fill_grenade'   => [ 'label' => 'Befüllen', 'meta' => [ 'have_water' ], 'result' => [ 'consume_water', [ 'item' => [ 'consume' => false, 'morph' => 'grenade_#00' ] ] ], 'message' => 'Du hast eine {items_consume} in dein/e/n {item_from} gefüllt und {item_to} erhalten!' ],
+            'fill_exgrenade' => [ 'label' => 'Befüllen', 'meta' => [ 'have_water' ], 'result' => [ 'consume_water', [ 'item' => [ 'consume' => false, 'morph' => 'bgrenade_#00' ] ] ], 'message' => 'Du hast eine {items_consume} in dein/e/n {item_from} gefüllt und {item_to} erhalten!' ],
 
             'fill_watercan0' => [ 'label' => 'Befüllen', 'meta' => [ 'have_water' ], 'result' => [ 'consume_water', 'produce_watercan1' ], 'message' => 'Du hast eine {items_consume} in dein/e/n {item_from} gefüllt und {item_to} erhalten!' ],
             'fill_watercan1' => [ 'label' => 'Befüllen', 'meta' => [ 'have_water' ], 'result' => [ 'consume_water', 'produce_watercan2' ], 'message' => 'Du hast eine {items_consume} in dein/e/n {item_from} gefüllt und {item_to} erhalten!' ],
@@ -499,6 +500,7 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'jerrygun_off_#00'       => [ 'fill_jsplash'],
             'kalach_#01'             => [ 'fill_ksplash'],
             'grenade_empty_#00'      => [ 'fill_grenade'],
+            'bgrenade_empty_#00'     => [ 'fill_exgrenade'],
 
             'pilegun_#00'      => [ 'fire_pilegun'  ],
             'pilegun_up_#00'   => [ 'fire_pilegun2' ],

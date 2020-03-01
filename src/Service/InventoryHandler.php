@@ -93,17 +93,18 @@ class InventoryHandler
     }
 
     /**
-     * @param Inventory $inventory
+     * @param Inventory|Inventory[] $inventory
      * @param ItemPrototype|ItemPrototype[] $prototype
      * @return int
      */
-    public function countSpecificItems(Inventory $inventory, $prototype): int {
+    public function countSpecificItems($inventory, $prototype): int {
         if (!is_array($prototype)) $prototype = [$prototype];
+        if (!is_array($inventory)) $inventory = [$inventory];
         try {
             return $this->entity_manager->createQueryBuilder()
                 ->select('count(i.id)')->from('App:Item', 'i')
                 ->leftJoin('App:ItemPrototype', 'p', Join::WITH, 'i.prototype = p.id')
-                ->where('i.inventory = :inv')->setParameter('inv', $inventory)
+                ->where('i.inventory IN (:inv)')->setParameter('inv', $inventory)
                 ->andWhere('p.id IN (:type)')->setParameter('type', $prototype)
                 ->getQuery()->getSingleScalarResult();
         } catch (NoResultException $e) {

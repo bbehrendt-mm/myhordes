@@ -97,7 +97,7 @@
             {% endif %}
 
             {% if zone.x != 0 or zone.y != 0 %}
-                {% embed "ajax/game/actions.html.twig" with {'list': actions} %}
+                {% embed "ajax/game/actions.html.twig" with {'list': actions, 'recipes': recipes} %}
                 {% endembed %}
             {% endif %}
         </div>
@@ -182,6 +182,10 @@
             handleActions(
                 document.querySelectorAll('ul.actions>li[x-action-id][x-provoking-id]:not([disabled])'),
                 '{{ path('beyond_desert_action_controller') }}', '{{ path('beyond_dashboard') }}'
+            );
+            handleRecipes(
+                document.querySelectorAll('ul.actions>li[x-recipe-id]:not([disabled])'),
+                '{{ path('beyond_desert_recipe_controller') }}', '{{ path('beyond_dashboard') }}'
             );
         {% endif %}
         {% if allow_enter_town %}

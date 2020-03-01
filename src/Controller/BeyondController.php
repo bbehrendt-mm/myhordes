@@ -129,6 +129,7 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
             'map_y0' => $range_y[0],
             'map_y1' => $range_y[1],
             'actions' => $this->getItemActions(),
+            'recipes' => $this->getItemCombinations(false),
         ], $data) );
     }
 
@@ -309,6 +310,17 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
     public function action_desert_api(JSONRequestParser $parser, InventoryHandler $handler): Response {
         $this->deferZoneUpdate();
         return $this->generic_action_api( $parser, $handler);
+    }
+
+    /**
+     * @Route("api/beyond/desert/recipe", name="beyond_desert_recipe_controller")
+     * @param JSONRequestParser $parser
+     * @param ActionHandler $handler
+     * @return Response
+     */
+    public function recipe_desert_api(JSONRequestParser $parser, ActionHandler $handler): Response {
+        $this->deferZoneUpdate();
+        return $this->generic_recipe_api( $parser, $handler);
     }
 
     /**

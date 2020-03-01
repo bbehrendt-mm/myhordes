@@ -39,7 +39,7 @@
                 <h5>{% trans from 'game' %}Meine Spezialaktionen{% endtrans %}</h5>
 
                 <h5>{% trans from 'game' %}Meine Aktionen{% endtrans %}</h5>
-                {% embed "ajax/game/actions.html.twig" with {'list': actions} %}
+                {% embed "ajax/game/actions.html.twig" with {'list': actions, 'recipes': recipes} %}
                 {% endembed %}
             </div>
 
@@ -266,6 +266,10 @@
         handleActions(
             document.querySelectorAll('ul.actions>li[x-action-id][x-provoking-id]:not([disabled])'),
             '{{ path('town_house_action_controller') }}', '{{ path('town_house') }}'
+        );
+        handleRecipes(
+            document.querySelectorAll('ul.actions>li[x-recipe-id]:not([disabled])'),
+            '{{ path('town_house_recipe_controller') }}', '{{ path('town_house') }}'
         );
 
         let upgrade_btn = document.getElementById( 'upgrade_home_level' );

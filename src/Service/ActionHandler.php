@@ -478,18 +478,31 @@ class ActionHandler
         $c_inv = $citizen->getInventory();
         $t_inv = $citizen->getTown()->getBank();
 
+        switch ( $recipe->getType() ) {
+            case Recipe::WorkshopType:case Recipe::ManualInside:
+                if ($citizen->getZone()) return ErrorHelper::ErrorActionNotAvailable;
+                break;
+            case Recipe::ManualOutside:
+                if (!$citizen->getZone()) return ErrorHelper::ErrorActionNotAvailable;
+                break;
+            default: break;
+        }
+
         $remove = [];
 
-        $have_saw  = $this->inventory_handler->countSpecificItems( $c_inv, $this->entity_manager->getRepository( ItemPrototype::class )->findOneByName( 'saw_tool_#00' ) ) > 0;
-        $have_manu = $this->town_handler->getBuilding($town, 'small_factory_#00', true) !== null;
+        if ($recipe->getType() === Recipe::WorkshopType) {
+            $have_saw  = $this->inventory_handler->countSpecificItems( $c_inv, $this->entity_manager->getRepository( ItemPrototype::class )->findOneByName( 'saw_tool_#00' ) ) > 0;
+            $have_manu = $this->town_handler->getBuilding($town, 'small_factory_#00', true) !== null;
 
-        $ap = 3 - ($have_saw ? 1 : 0) - ($have_manu ? 1 : 0);
+            $ap = 3 - ($have_saw ? 1 : 0) - ($have_manu ? 1 : 0);
+        } else $ap = 0;
+
 
         if ( $citizen->getAp() < $ap || $this->citizen_handler->isTired( $citizen ) )
             return ErrorHelper::ErrorNoAP;
 
-        $source_inv = $recipe->getType() === Recipe::WorkshopType ? $t_inv : $c_inv;
-        $target_inv = $recipe->getType() === Recipe::WorkshopType ? [ $t_inv ] : [ $c_inv, $citizen->getZone() ? $citizen->getZone()->getFloor() : $citizen->getHome()->getChest() ];
+        $source_inv = $recipe->getType() === Recipe::WorkshopType ? [ $t_inv ] : [$c_inv, $citizen->getZone() ? $citizen->getZone()->getFloor() : $citizen->getHome()->getChest()];
+        $target_inv = $recipe->getType() === Recipe::WorkshopType ? [ $t_inv ] : [$c_inv, $citizen->getZone() ? $citizen->getZone()->getFloor() : $citizen->getHome()->getChest()];
 
         $s = [];
         foreach ($recipe->getSource()->getEntries() as $entry)
@@ -499,7 +512,7 @@ class ActionHandler
 
         $list = [];
         foreach ($items as $item) {
-            $source_inv->removeItem( $item );
+            $item->getInventory()->removeItem( $item );
             $list[] = $item->getPrototype();
             $remove[] = $item;
         }
@@ -509,7 +522,16 @@ class ActionHandler
         $new_item = $this->random_generator->pickItemPrototypeFromGroup( $recipe->getResult() );
         $this->inventory_handler->placeItem( $citizen, $this->item_factory->createItem( $new_item ) , $target_inv );
 
-        $message = $this->translator->trans( 'Du hast %item_list% in der Werkstatt zu %item% umgewandelt.', [
+        switch ( $recipe->getType() ) {
+            case Recipe::WorkshopType:
+                $base = 'Du hast %item_list% in der Werkstatt zu %item% umgewandelt.';
+                break;
+            case Recipe::ManualOutside:case Recipe::ManualInside:case Recipe::ManualAnywhere:default:
+                $base = 'Du hast %item_list% zu %item% umgewandelt.';
+                break;
+        }
+
+        $message = $this->translator->trans( $base, [
             '%item_list%' => $this->wrap_concat( $list ),
             '%item%' => $this->wrap( $new_item ),
         ], 'game' );

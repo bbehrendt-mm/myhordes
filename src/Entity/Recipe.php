@@ -20,9 +20,10 @@ class Recipe
 {
 
     const WorkshopType = 1;
-    const ManualOutside = 2;
-    const ManualInside = 3;
-    const ManualAnywhere = 4;
+
+    const ManualOutside = 11;
+    const ManualInside = 12;
+    const ManualAnywhere = 13;
 
     /**
      * @ORM\Id()

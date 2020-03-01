@@ -34,14 +34,17 @@ class RecipeRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param int $type
+     * @param int|int[] $type
      * @return Recipe[]
      */
-    public function findByType(int $type)
+    public function findByType($type)
     {
-        return $this->createQueryBuilder('r')
-            ->andWhere('r.type = :val')
-            ->setParameter('val', $type)
+        $sql = $this->createQueryBuilder('r');
+        if (is_array($type))
+            $sql->andWhere('r.type IN (:val)');
+        else $sql->andWhere('r.type = :val');
+
+        return $sql->setParameter('val', $type)
             ->getQuery()
             ->getResult()
             ;

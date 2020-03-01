@@ -7,6 +7,9 @@ use App\Entity\CitizenProfession;
 use App\Entity\Inventory;
 use App\Entity\Item;
 use App\Entity\ItemAction;
+use App\Entity\ItemGroupEntry;
+use App\Entity\ItemPrototype;
+use App\Entity\Recipe;
 use App\Entity\TownClass;
 use App\Entity\User;
 use App\Entity\UserPendingValidation;
@@ -90,6 +93,35 @@ class InventoryAwareController extends AbstractController implements GameInterfa
         return $ret;
     }
 
+    protected function getItemCombinations(bool $inside): array {
+        $town = $this->getActiveCitizen()->getTown();
+        $source_inv = [ $this->getActiveCitizen()->getInventory(), $this->getActiveCitizen()->getZone() ? $this->getActiveCitizen()->getZone()->getFloor() : $this->getActiveCitizen()->getHome()->getChest() ];
+
+        $recipes = $this->entity_manager->getRepository(Recipe::class)->findByType( [Recipe::ManualAnywhere, $inside ? Recipe::ManualInside : Recipe::ManualOutside] );
+        $out = [];
+        $source_db = [];
+        foreach ($recipes as $recipe) {
+            /** @var Recipe $recipe */
+            $found_provoking = false;
+            foreach ($recipe->getProvoking() as $proto)
+                if ($this->inventory_handler->countSpecificItems( $source_inv, $proto )) {
+                    $found_provoking = true;
+                    break;
+                }
+
+            if (!$found_provoking) continue;
+            $out[] = $recipe;
+
+            if ($recipe->getSource())
+                foreach ($recipe->getSource()->getEntries() as $entry)
+                    /** @var ItemGroupEntry $entry */
+                    if (!isset( $source_db[ $entry->getPrototype()->getId() ] ))
+                        $source_db[ $entry->getPrototype()->getId() ] = $this->inventory_handler->countSpecificItems( $source_inv, $entry->getPrototype() );
+        }
+
+        return [ 'recipes' => $out, 'source_items' => $source_db ];
+    }
+
     protected function renderInventoryAsBank( Inventory $inventory ) {
         $qb = $this->entity_manager->createQueryBuilder();
         $data = $qb
@@ -161,6 +193,33 @@ class InventoryAwareController extends AbstractController implements GameInterfa
             } else return AjaxResponse::error($errors[0]);
         }
         return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
+    }
+
+    public function generic_recipe_api(JSONRequestParser $parser, ActionHandler $handler): Response {
+        $citizen = $this->getActiveCitizen();
+        $town = $citizen->getTown();
+
+        if (!$parser->has_all(['id'], true))
+            return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
+        $id = (int)$parser->get('id');
+
+        /** @var Recipe $recipe */
+        $recipe = $this->entity_manager->getRepository(Recipe::class)->find( $id );
+        if ($recipe === null || !in_array($recipe->getType(), [Recipe::ManualAnywhere, Recipe::ManualOutside, Recipe::ManualInside]))
+            return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
+
+        if (($error = $handler->execute_recipe( $citizen, $recipe, $remove, $message )) !== ActionHandler::ErrorNone )
+            return AjaxResponse::error( $error );
+        else try {
+            $this->entity_manager->persist($town);
+            $this->entity_manager->persist($citizen);
+            foreach ($remove as $e) $this->entity_manager->remove( $e );
+            $this->entity_manager->flush();
+            if ($message) $this->addFlash( 'notice', $message );
+            return AjaxResponse::success();
+        } catch (Exception $e) {
+            return AjaxResponse::error( ErrorHelper::ErrorDatabaseException );
+        }
     }
 
     public function generic_action_api(JSONRequestParser $parser, InventoryHandler $handler): Response {

@@ -407,8 +407,9 @@ class NightlyHandler
         $this->log->debug( "Number of inventories: <info>{$c}</info>." );
 
         $morph = [
-            'torch_#00' => $this->entity_manager->getRepository(ItemPrototype::class)->findOneByName('torch_off_#00'),
-            'lamp_on_#00' => $this->entity_manager->getRepository(ItemPrototype::class)->findOneByName('lamp_#00'),
+            'torch_#00'    => $this->entity_manager->getRepository(ItemPrototype::class)->findOneByName('torch_off_#00'),
+            'lamp_on_#00'  => $this->entity_manager->getRepository(ItemPrototype::class)->findOneByName('lamp_#00'),
+            'radio_on_#00' => $this->entity_manager->getRepository(ItemPrototype::class)->findOneByName('radio_off_#00'),
         ];
 
         foreach ($morph as $source => $target) {
@@ -549,6 +550,7 @@ class NightlyHandler
         $c = count($this->cleanup);
         $town->setDay( $town->getDay() + 1);
         $this->log->info("It is now <comment>Day {$town->getDay()}</comment> in <info>{$town->getName()}</info>.");
+        $this->town_handler->calculate_zombie_attacks( $town, 3 );
         $this->log->debug( "<info>{$c}</info> entities have been marked for removal." );
         $this->log->info( "<comment>Script complete.</comment>" );
 
