@@ -134,16 +134,30 @@ class GameFactory
                 $town->addZone( $zone );
             }
 
-        $ruin_types = $this->entity_manager->getRepository(ZonePrototype::class)->findAll();
         $spawn_ruins = $this->getDefaultRuinCount( $townClass );
         /** @var Zone[] $zone_list */
         $zone_list = array_filter($town->getZones()->getValues(), function(Zone $z) {return $z->getX() !== 0 || $z->getY() !== 0;});
         shuffle($zone_list);
+
+        $previous = [];
+
         for ($i = 0; $i < min($spawn_ruins+2,count($zone_list)); $i++) {
             $zombies_base = 0;
             if ($i < $spawn_ruins) {
                 $zombies_base = 1 + floor(min(1,sqrt( pow($zone_list[$i]->getX(),2) + pow($zone_list[$i]->getY(),2) )/18) * 18);
-                $zone_list[$i]->setPrototype( $ruin_types[array_rand($ruin_types)] );
+
+                $ruin_types = $this->entity_manager->getRepository(ZonePrototype::class)->findByDistance( abs($zone_list[$i]->getX()) + abs($zone_list[$i]->getY()) );
+
+                $iterations = 0;
+                do {
+                    $target_ruin = $this->random_generator->pickLocationFromList( $ruin_types );
+                    $iterations++;
+                } while ( isset( $previous[$target_ruin->getId()] ) && $iterations <= $previous[$target_ruin->getId()] );
+
+                if (!isset( $previous[$target_ruin->getId()] )) $previous[$target_ruin->getId()] = 1;
+                else $previous[$target_ruin->getId()]++;
+
+                $zone_list[$i]->setPrototype( $target_ruin );
             } else
                 $zombies_base = 1 + floor(min(1,sqrt( pow($zone_list[$i]->getX(),2) + pow($zone_list[$i]->getY(),2) )/18) * 3);
 

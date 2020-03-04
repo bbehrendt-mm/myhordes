@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Interfaces\RandomEntry;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -9,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\AffectResultGroupEntryRepository")
  */
-class AffectResultGroupEntry
+class AffectResultGroupEntry implements RandomEntry
 {
     /**
      * @ORM\Id()
@@ -47,6 +48,11 @@ class AffectResultGroupEntry
     public function getCount(): ?int
     {
         return $this->count;
+    }
+
+    public function getChance(): int
+    {
+        return $this->getCount();
     }
 
     public function setCount(int $count): self

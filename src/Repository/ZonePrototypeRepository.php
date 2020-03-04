@@ -34,6 +34,21 @@ class ZonePrototypeRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+     * @param int $distance
+     * @return ZonePrototype[] Returns an array of ZonePrototype objects
+     */
+    public function findByDistance(int $distance)
+    {
+        return $this->createQueryBuilder('z')
+            ->andWhere('z.minDistance <= :dist')
+            ->andWhere('z.maxDistance >= :dist')
+            ->setParameter('dist', $distance)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     // /**
     //  * @return ZonePrototype[] Returns an array of ZonePrototype objects
     //  */

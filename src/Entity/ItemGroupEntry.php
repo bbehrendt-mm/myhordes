@@ -2,12 +2,13 @@
 
 namespace App\Entity;
 
+use App\Interfaces\RandomEntry;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ItemGroupEntryRepository")
  */
-class ItemGroupEntry
+class ItemGroupEntry implements RandomEntry
 {
     /**
      * @ORM\Id()

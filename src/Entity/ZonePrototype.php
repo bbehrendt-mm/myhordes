@@ -2,12 +2,13 @@
 
 namespace App\Entity;
 
+use App\Interfaces\RandomEntry;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ZonePrototypeRepository")
  */
-class ZonePrototype
+class ZonePrototype implements RandomEntry
 {
     /**
      * @ORM\Id()
@@ -31,6 +32,21 @@ class ZonePrototype
      * @ORM\JoinColumn(nullable=false)
      */
     private $drops;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $minDistance;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $maxDistance;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $chance;
 
     public function getId(): ?int
     {
@@ -69,6 +85,42 @@ class ZonePrototype
     public function setDrops(?ItemGroup $drops): self
     {
         $this->drops = $drops;
+
+        return $this;
+    }
+
+    public function getMinDistance(): ?int
+    {
+        return $this->minDistance;
+    }
+
+    public function setMinDistance(int $minDistance): self
+    {
+        $this->minDistance = $minDistance;
+
+        return $this;
+    }
+
+    public function getMaxDistance(): ?int
+    {
+        return $this->maxDistance;
+    }
+
+    public function setMaxDistance(int $maxDistance): self
+    {
+        $this->maxDistance = $maxDistance;
+
+        return $this;
+    }
+
+    public function getChance(): ?int
+    {
+        return $this->chance;
+    }
+
+    public function setChance(int $chance): self
+    {
+        $this->chance = $chance;
 
         return $this;
     }
