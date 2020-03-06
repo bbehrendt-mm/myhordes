@@ -1,0 +1,11 @@
+{# @var item \App\Entity\Item #}
+<li class="item {% if count is defined and count > 1 %}counted{% endif %}" {% if no_id is not defined or not no_id %}x-item-id="{{ item.id }}"{% endif %}>
+    <img src="{{ asset('build/images/item/item_' ~ item.prototype.icon ~ '.gif') }}" alt="{{ item.prototype.label|trans({},'items') }}">
+    {% if count is defined and count > 1 %}<span>{{ count }}</span>{% endif %}
+    {% if no_tooltip is not defined or not no_tooltip %}
+        <div class="tooltip">
+            <h1>{{ item.prototype.label }}</h1>
+            Add item description here! Hopefully, there will be enough space. Maybe there will, maybe there won't.
+        </div>
+    {% endif %}
+</li>

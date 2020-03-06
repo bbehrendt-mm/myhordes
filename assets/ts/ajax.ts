@@ -67,17 +67,18 @@ export default class Ajax {
                     countdowns[c].addEventListener('expire', function() { ajax_instance.load( target, url ) });
                 $.html.handleCountdown( countdowns[c] );
             }
+            let tooltips = content_source[i].querySelectorAll('div.tooltip');
+            for (let t = 0; t < tooltips.length; t++)
+                $.html.handleTooltip( <HTMLElement>tooltips[t] );
             target.appendChild( content_source[i] );
             $.html.handleTabNavigation(target);
         }
 
-        for (let i = 0; i < script_source.length; i++) {
+        for (let i = 0; i < script_source.length; i++)
             eval(script_source[i].innerText);
-        }
 
-        for (let i = 0; i < flash_source.length; i++) {
+        for (let i = 0; i < flash_source.length; i++)
             $.html.message( flash_source[i].getAttribute('x-label'), flash_source[i].innerHTML );
-        }
 
         // If ajax intention is 'native', trigger a DOMContentLoaded event on the document
         if (ajax_intention === 'native')

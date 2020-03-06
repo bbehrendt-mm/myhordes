@@ -9,7 +9,7 @@
 
     <div class="row">
         <div class="padded cell rw-6 rw-md-12">
-            {% embed "ajax/game/inventory.html.twig" with {'size': rucksack_size, 'fake_items': [], 'items': rucksack.items} %}
+            {% embed "ajax/game/inventory.html.twig" with {'size': rucksack_size, 'items': rucksack.items} %}
                 {% block class %}rucksack{% endblock %}
                 {% block title %}{% trans from 'game' %}Rucksack{% endtrans %}{% endblock %}
             {% endembed %}
@@ -19,7 +19,7 @@
     </div>
     <div class="row">
         <div class="padded cell rw-12">
-            {% embed "ajax/game/inventory.html.twig" with {'size': 0, 'fake_items': [], 'items': bank, 'bankmode': true} %}
+            {% embed "ajax/game/inventory.html.twig" with {'size': 0, 'items': bank, 'bankmode': true} %}
                 {% block class %}bank{% endblock %}
                 {% block title %}{% endblock %}
             {% endembed %}
@@ -32,7 +32,7 @@
         {% embed "scripts/inventory.js.twig" %}{% endembed %}
 
         handleItems(
-            document.querySelectorAll('.rucksack>.item:not(.locked)'),
+            document.querySelectorAll('.rucksack>.item:not(.locked)[x-item-id]'),
             '{{ path('town_bank_item_controller') }}',
             'down', '{{ path('town_bank') }}'
         );
@@ -44,7 +44,7 @@
         );
 
         handleItems(
-            document.querySelectorAll('.bank>.item:not(.locked)'),
+            document.querySelectorAll('.bank>.item:not(.locked)[x-item-id]'),
             '{{ path('town_bank_item_controller') }}',
             'up', '{{ path('town_bank') }}'
         );

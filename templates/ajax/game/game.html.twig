@@ -13,7 +13,7 @@
     </ul>
     <ul class="rucksack">
         {% for item in rucksack.items %}
-            <li class="item"><img src="{{ asset('build/images/item/item_' ~ item.prototype.icon ~ '.gif') }}" alt="{{ item.prototype.label|trans({},'items') }}"></li>
+            {% embed "ajax/game/item.html.twig" with {'item': item, 'no_id': true} %}{% endembed %}
         {% endfor %}
         {% if rucksack.items|length < rucksack_size %}
             {% for i in range(0, rucksack_size - rucksack.items|length - 1) %}

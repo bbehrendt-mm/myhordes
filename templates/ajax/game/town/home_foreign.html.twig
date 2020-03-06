@@ -41,7 +41,7 @@
     <div class="row">
         <div class="padded cell rw-6">&nbsp;</div>
         <div class="padded cell rw-6">
-            {% embed "ajax/game/inventory.html.twig" with {'size': chest_size, 'fake_items': [], 'items': chest.items} %}
+            {% embed "ajax/game/inventory.html.twig" with {'size': chest_size, 'items': chest.items} %}
                 {% block class %}chest{% endblock %}
                 {% block title %}{% trans from 'game' %}Truhe{% endtrans %}{% endblock %}
             {% endembed %}

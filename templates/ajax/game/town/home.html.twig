@@ -44,14 +44,14 @@
             </div>
 
             <div class="padded cell rw-6 rw-md-12">
-                {% embed "ajax/game/inventory.html.twig" with {'size': rucksack_size, 'fake_items': [], 'items': rucksack.items} %}
+                {% embed "ajax/game/inventory.html.twig" with {'size': rucksack_size, 'items': rucksack.items} %}
                     {% block class %}rucksack{% endblock %}
                     {% block title %}{% trans from 'game' %}Rucksack{% endtrans %}{% endblock %}
                 {% endembed %}
 
                 <button id="drop-all-button" {% if rucksack.items|length == 0 %}disabled{% endif %}>{% trans from 'game' %}Rucksack ausleeren{% endtrans %}</button>
 
-                {% embed "ajax/game/inventory.html.twig" with {'size': chest_size, 'fake_items': [], 'items': chest.items} %}
+                {% embed "ajax/game/inventory.html.twig" with {'size': chest_size, 'items': chest.items} %}
                     {% block class %}chest{% endblock %}
                     {% block title %}{% trans from 'game' %}Truhe{% endtrans %}{% endblock %}
                 {% endembed %}
@@ -246,7 +246,7 @@
         {% embed "scripts/actions.js.twig" %}{% endembed %}
 
         handleItems(
-            document.querySelectorAll('.rucksack>.item:not(.locked)'),
+            document.querySelectorAll('.rucksack>.item:not(.locked)[x-item-id]'),
             '{{ path('town_house_item_controller') }}',
             'down', '{{ path('town_house') }}'
         );
@@ -258,7 +258,7 @@
         );
 
         handleItems(
-            document.querySelectorAll('.chest>.item:not(.locked)'),
+            document.querySelectorAll('.chest>.item:not(.locked)[x-item-id]'),
             '{{ path('town_house_item_controller') }}',
             'up', '{{ path('town_house') }}'
         );

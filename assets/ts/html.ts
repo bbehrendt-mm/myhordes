@@ -88,6 +88,27 @@ export default class HTML {
         f(true);
     }
 
+    handleTooltip( element: HTMLElement): void {
+        let parent = element.parentElement;
+        if (!parent) return;
+
+        parent.addEventListener('contextmenu', function(e) {
+           e.preventDefault();
+        }, false);
+        parent.addEventListener('pointerenter', function(e) {
+            element.style.display = 'block';
+        });
+        parent.addEventListener('pointermove', function(e) {
+            element.style.top  = e.clientY + 'px';
+            if (e.clientX + element.clientWidth + 25 > window.innerWidth) {
+                element.style.left = (e.clientX - element.clientWidth - 50) + 'px';
+            } else element.style.left = e.clientX + 'px';
+        });
+        parent.addEventListener('pointerleave', function(e) {
+            element.style.display = 'none';
+        });
+    };
+
     handleTabNavigation( element: Element ): void {
 
         const hide_group = function(group: string) {
