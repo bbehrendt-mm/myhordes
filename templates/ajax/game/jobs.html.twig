@@ -1,31 +1,81 @@
 {% extends "ajax/ajax.html.twig" %}
+
+{% block jobhelp %}
+    <div class="help">
+        <p>{% trans from 'game' %}
+                Je nachdem, welchen Beruf du auswählst, stehen dir unterschiedliche Aktionen und Spielweisen in
+                dieser Stadt zur Verfügung.
+            {% endtrans %}</p>
+        <p>{% trans with { '%hero%': '<b><img alt="" src="' ~ asset('build/images/professions/hero.gif') ~ '"> ' ~ 'Held'|trans({},'game') ~ '</b>' } from 'game'  %}
+                Spielst du als %hero%, wird dir täglich ein Heldentag abgezogen. Gehen dir die Heldentage in der
+                Stadt aus, musst du als einfacher Einwohner weiterspielen.
+            {% endtrans %}</p>
+        <p>{% trans with { '%citizen%': '<b>' ~ 'Einwohner'|trans({},'game') ~ '</b>' } from 'game'  %}
+                Spielst du als %citizen%, verbrauchst du keine Heldentage. Wenn du jedoch über Heldentage
+                verfügst, kannst du einmal pro Stadt auf einen Heldenberuf wechseln.
+            {% endtrans %}</p>
+    </div>
+{% endblock %}
+
 {% block ajax %}
     <div class="row">
-        <div class="cell padded rw-4 rw-md-12"></div>
+        <div class="cell padded rw-4 hide-md hide-sm">
+            <img style="width: 100%" alt="" src="{{ asset('build/images/professions/select/welcome1.jpg') }}">
+            {{ block('jobhelp') }}
+        </div>
         <div class="cell padded header rw-8 rw-md-12">
             <h4>{% trans from 'game' %}Wähle einen Beruf{% endtrans %}</h4>
             <div class="row">
                 {% for job in professions %}
-                    <div class="padded cell rw-6">
-                        <b>{{ job.label|trans({}, 'entities') }}</b><br />
-                        <button x-job-id="{{ job.id }}">{% trans from 'global' %}Auswählen{% endtrans %}</button>
+                    {# @var job \App\Entity\CitizenProfession #}
+                    <div class="padded cell rw-4 rw-lg-6">
+                        <label for="jb_{{ job.name }}">
+                            <img style="width: 100%" alt="{{ job.label|trans({}, 'entities') }}" src="{{ asset('build/images/professions/select/' ~ job.icon ~ '.gif') }}">
+                        </label>
+                        <div>
+                            <input type="radio" id="jb_{{ job.name }}" name="job" value="{{ job.id }}">
+                            <label for="jb_{{ job.name }}">
+                                {% if job.heroic %}
+                                    <img alt="{{ 'Held'|trans({},'game') }}" src="{{ asset('build/images/professions/hero.gif') }}">
+                                {% endif %}
+                                <b>{{ job.label|trans({}, 'entities') }}</b>
+                            </label>
+                        </div>
                     </div>
                 {% endfor %}
+            </div><br /><br />
+            <div class="cell rw-12">
+                <div class="row">
+                    <div class="cell ro-8 rw-4 ro-lg-7 rw-lg-5 ro-md-6 rw-md-6 ro-sm-0 rw-sm-12 right">
+                        <button disabled id="job_confirm">{{ 'Auswahl bestätigen'|trans({},'global') }}</button>
+                    </div>
+                    <div class="cell rw-12 hide-desktop hide-lg">
+                        {{ block('jobhelp') }}
+                    </div>
+                </div>
             </div>
-
         </div>
     </div>
 {% endblock %}
 {% block js %}
     <script>
-        let jobButtons = document.querySelectorAll('button[x-job-id]');
-        for (let i = 0; i < jobButtons.length; i++)
-            jobButtons[i].addEventListener('click', function (e) {
-                e.preventDefault();
-                $.ajax.easySend( '{{ path('api_jobcenter') }}', {job: this.getAttribute('x-job-id')},
+
+        let selected_profession = 0;
+        let jobConfirm = document.getElementById('job_confirm');
+
+        let jobSelect = document.querySelectorAll('input[type=radio][name=job]');
+        for (let i = 0; i < jobSelect.length; i++)
+            jobSelect[i].addEventListener('click', function () {
+                jobConfirm.removeAttribute('disabled')
+                selected_profession = parseInt(this.value);
+            });
+
+        jobConfirm.addEventListener('click', function(e) {
+            e.preventDefault();
+            $.ajax.easySend( '{{ path('api_jobcenter') }}', {job: selected_profession},
                     function () {
                         $.ajax.load(null, '{{ path('game_landing') }}', true);
                     } );
-            })
+        });
     </script>
 {% endblock %}

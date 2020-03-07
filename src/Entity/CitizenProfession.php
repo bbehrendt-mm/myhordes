@@ -54,6 +54,11 @@ class CitizenProfession
      */
     private $altProfessionItems;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $heroic;
+
     public function __construct()
     {
         $this->professionItems = new ArrayCollection();
@@ -149,6 +154,18 @@ class CitizenProfession
         if ($this->altProfessionItems->contains($altProfessionItem)) {
             $this->altProfessionItems->removeElement($altProfessionItem);
         }
+
+        return $this;
+    }
+
+    public function getHeroic(): ?bool
+    {
+        return $this->heroic;
+    }
+
+    public function setHeroic(bool $heroic): self
+    {
+        $this->heroic = $heroic;
 
         return $this;
     }

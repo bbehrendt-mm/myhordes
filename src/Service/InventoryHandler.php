@@ -39,7 +39,8 @@ class InventoryHandler
 
     public function getSize( Inventory $inventory ): int {
         if ($inventory->getCitizen()) {
-            $base = 4 + $this->countEssentialItems( $inventory );
+            $hero = $inventory->getCitizen()->getProfession()->getHeroic();
+            $base = 4 + $this->countEssentialItems( $inventory ) + ($hero ? 1 : 0);
             if (
                 !empty($this->fetchSpecificItems( $inventory, [ new ItemRequest( 'bagxl_#00' ) ] )) ||
                 !empty($this->fetchSpecificItems( $inventory, [ new ItemRequest( 'cart_#00' ) ] ))
@@ -55,7 +56,8 @@ class InventoryHandler
         }
 
         if ($inventory->getHome()) {
-            $base = 4;
+            $hero = $inventory->getHome()->getCitizen()->getProfession()->getHeroic();
+            $base = $hero ? 5 : 4;
 
             // Check upgrades
             $upgrade = $this->entity_manager->getRepository(CitizenHomeUpgrade::class)->findOneByPrototype(

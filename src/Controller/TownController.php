@@ -286,6 +286,9 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
         $citizen = $this->getActiveCitizen();
         $home = $citizen->getHome();
 
+        if (!$citizen->getProfession()->getHeroic())
+            return AjaxResponse::error(ErrorHelper::ErrorMustBeHero);
+
         $current = $em->getRepository(CitizenHomeUpgrade::class)->findOneByPrototype($home, $proto);
         $costs = $em->getRepository(CitizenHomeUpgradeCosts::class)->findOneByPrototype( $proto, $current ? $current->getLevel()+1 : 1 );
 

@@ -116,16 +116,25 @@ class TownHandler
         $town = $home->getCitizen()->getTown();
 
         $summary = new HomeDefenseSummary();
+        if (!$home->getCitizen()->getAlive())
+            return 0;
+
         $summary->house_defense = $home->getPrototype()->getDefense();
+
+        if ($home->getCitizen()->getProfession()->getHeroic())
+            $summary->house_defense += 2;
 
         if ($this->getBuilding($town, 'small_city_up_#00', true))
             $summary->house_defense += 4;
 
-        /** @var CitizenHomeUpgrade|null $n */
-        $n = $this->entity_manager->getRepository(CitizenHomeUpgrade::class)->findOneByPrototype( $home,
-            $this->entity_manager->getRepository( CitizenHomeUpgradePrototype::class )->findOneByName( 'defense' )
-        );
-        $summary->upgrades_defense = ($n ? $n->getLevel() : 0) + $home->getAdditionalDefense();
+        if ($home->getCitizen()->getProfession()->getHeroic()) {
+            /** @var CitizenHomeUpgrade|null $n */
+            $n = $this->entity_manager->getRepository(CitizenHomeUpgrade::class)->findOneByPrototype( $home,
+                $this->entity_manager->getRepository( CitizenHomeUpgradePrototype::class )->findOneByName( 'defense' )
+            );
+            $summary->upgrades_defense = ($n ? $n->getLevel() : 0) + $home->getAdditionalDefense();
+        } else $summary->upgrades_defense = $home->getAdditionalDefense();
+
         $summary->item_defense = $this->inventory_handler->countSpecificItems( $home->getChest(),
             $this->inventory_handler->resolveItemProperties( 'defence' )
         );
