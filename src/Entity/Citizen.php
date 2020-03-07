@@ -105,6 +105,11 @@ class Citizen
      */
     private $causeOfDeath;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $Bp;
+
     public function __construct()
     {
         $this->status = new ArrayCollection();
@@ -347,6 +352,18 @@ class Citizen
     public function setCauseOfDeath(?CauseOfDeath $causeOfDeath): self
     {
         $this->causeOfDeath = $causeOfDeath;
+
+        return $this;
+    }
+
+    public function getBp(): ?int
+    {
+        return $this->Bp;
+    }
+
+    public function setBp(int $Bp): self
+    {
+        $this->Bp = $Bp;
 
         return $this;
     }

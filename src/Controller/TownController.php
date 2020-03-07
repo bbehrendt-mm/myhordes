@@ -469,7 +469,7 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
             return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
 
         $ap = max(0,min( $ap, $building->getPrototype()->getAp() - $building->getAp() ) );
-        if ($citizen->getAp() < $ap || $this->citizen_handler->isTired( $citizen ))
+        if (($citizen->getAp() + $citizen->getBp()) < $ap || $this->citizen_handler->isTired( $citizen ))
             return AjaxResponse::error( ErrorHelper::ErrorNoAP );
 
         $res = $items = [];
@@ -483,7 +483,7 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
 
         $was_completed = $building->getComplete();
 
-        $this->citizen_handler->setAP($citizen, true, -$ap);
+        $this->citizen_handler->deductAPBP( $citizen, $ap );
         $building->setAp( $building->getAp() + $ap );
         $building->setComplete( $building->getComplete() || $building->getAp() >= $building->getPrototype()->getAp() );
         if (!$was_completed && $building->getComplete()) {

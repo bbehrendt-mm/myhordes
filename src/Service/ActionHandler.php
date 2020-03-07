@@ -498,7 +498,7 @@ class ActionHandler
         } else $ap = 0;
 
 
-        if ( $citizen->getAp() < $ap || $this->citizen_handler->isTired( $citizen ) )
+        if ( ($citizen->getAp() + $citizen->getBp()) < $ap || $this->citizen_handler->isTired( $citizen ) )
             return ErrorHelper::ErrorNoAP;
 
         $source_inv = $recipe->getType() === Recipe::WorkshopType ? [ $t_inv ] : [$c_inv, $citizen->getZone() ? $citizen->getZone()->getFloor() : $citizen->getHome()->getChest()];
@@ -517,7 +517,7 @@ class ActionHandler
             $remove[] = $item;
         }
 
-        $this->citizen_handler->setAP( $citizen, true, -$ap);
+        $this->citizen_handler->deductAPBP( $citizen, $ap );
 
         $new_item = $this->random_generator->pickItemPrototypeFromGroup( $recipe->getResult() );
         $this->inventory_handler->placeItem( $citizen, $this->item_factory->createItem( $new_item ) , $target_inv );

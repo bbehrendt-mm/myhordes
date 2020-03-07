@@ -147,6 +147,26 @@ class CitizenHandler
         else $this->removeStatus( $citizen, 'tired' );
     }
 
+    public function getMaxBP(Citizen $citizen) {
+        return $citizen->getProfession()->getName() === 'tech' ? 6 : 0;
+    }
+
+    public function setBP(Citizen &$citizen, bool $relative, int $num, ?int $max_bonus = null) {
+        if ($max_bonus !== null)
+            $citizen->setBp( max(0, min(max($this->getMaxBP( $citizen ) + $max_bonus, $citizen->getBp()), $relative ? ($citizen->getBp() + $num) : max(0,$num) )) );
+        else $citizen->setBp( max(0, $relative ? ($citizen->getBp() + $num) : max(0,$num) ) );
+    }
+
+    public function deductAPBP(Citizen &$citizen, int $ap) {
+        if ($ap <= $citizen->getBp())
+            $this->setBP( $citizen, true, -$ap );
+        else {
+            $ap -= $citizen->getBp();
+            $this->setAP($citizen, true, -$ap);
+            $this->setBP($citizen, false, 0);
+        }
+    }
+
     public function getCP(Citizen &$citizen): int {
         if ($this->hasStatusEffect( $citizen, 'terror', false )) $base = 0;
         else $base = $citizen->getProfession()->getName() == 'guardian' ? 4 : 2;
@@ -188,6 +208,11 @@ class CitizenHandler
         }
 
         $citizen->setProfession( $profession );
+
+        if ($profession->getName() === 'tech')
+            $this->setBP($citizen,false, $this->getMaxBP( $citizen ),0);
+        else $this->setBP($citizen, false, 0);
+
     }
 
     public function getSoulpoints(Citizen $citizen): int {

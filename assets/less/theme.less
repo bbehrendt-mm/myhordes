@@ -261,7 +261,8 @@ div.game-menu-area {
     box-shadow: 0 0 5px black; position: relative; z-index: 20;
     border-top: 1px solid black; border-bottom: 1px solid black;
 
-    &>ul {
+    &>div.ulcont { display: inline-block; padding: 0; margin: 0; float: right }
+    &>ul,&>div.ulcont>ul {
       display: inline-block; padding: 0; margin: 3px;
       &>li {display: inline-block; list-style: none;}
       &.text-menu {
@@ -273,7 +274,7 @@ div.game-menu-area {
         }
       }
 
-      &.status, &.rucksack, &.ap {
+      &.status, &.rucksack, &.ap, &.bp {
         position: relative; padding: 2px 8px; background: rgba(0,0,0,0.5); font-weight: bold;
         color: @myhordes-smalltext; box-shadow: inset 0 0 4px rgba(0,0,0,0.9); border-radius: 4px;
         border: 1px solid rgba(0,0,0,0.3); height: 28px; float: right; font-size: 2px;
@@ -281,7 +282,7 @@ div.game-menu-area {
           display: block; position: absolute; top: -1px; left: 5px; right: 0; font-size: 7px; content: "Status";
           font-variant: small-caps;
         }
-        &:not(.ap) {
+        &:not(.ap):not(.bp) {
           min-width: 64px;
           &>li {
             height: 18px; width: 18px; margin-top: 6px; vertical-align: bottom;
@@ -291,11 +292,12 @@ div.game-menu-area {
         }
 
         &.rucksack:before { content: "Rucksack"}
-        &.ap {
-          &:before { content: "AP"}
+        &.ap,&.bp {
           font-size: medium;
           &>li { margin-top: 3px; }
         }
+        &.ap:before { content: "AP" };
+        &.bp:before { content: "BP" };
       }
     }
   }
@@ -367,7 +369,7 @@ div.death_list {
 }
 
 div.tooltip {
-  display: none; pointer-events: none; font-size: 10px; width: 200px; background: #8a7127; padding: 4px;
+  display: none; pointer-events: none; font-size: 10px; width: 200px; padding: 4px;
   position: fixed; z-index: 2000; color: black; margin: 20px; box-shadow: 0 0 5px black;
   background: @myhordes-smalltext; border: 2px solid darken(@myhordes-smalltext, 20%); text-align: justify;
   outline: 1px solid darken(@myhordes-smalltext, 50%); font-weight: normal; font-variant: normal;

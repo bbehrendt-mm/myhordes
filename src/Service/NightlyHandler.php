@@ -298,7 +298,8 @@ class NightlyHandler
 
             $this->log->debug("Removing volatile counters for citizen <info>{$citizen->getUser()->getUsername()}</info>...");
             $citizen->setWalkingDistance(0);
-            $this->citizen_handler->setAP($citizen,false,6,0);
+            $this->citizen_handler->setAP($citizen,false,$this->citizen_handler->getMaxAP( $citizen ),0);
+            $this->citizen_handler->setBP($citizen,false,$this->citizen_handler->getMaxBP( $citizen ),0);
             $citizen->getWellCounter()->setTaken(0);
             $citizen->getDigTimers()->clear();
             foreach ($this->entity_manager->getRepository( EscapeTimer::class )->findAllByCitizen( $citizen ) as $et)

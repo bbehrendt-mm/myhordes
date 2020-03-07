@@ -21,11 +21,39 @@
             {% endfor %}
         {% endif %}
     </ul>
-    <ul class="ap">
-        <li>{{ ap }}</li>
-        <li>/</li>
-        <li>{{ max_ap }}</li>
-    </ul>
+    <div class="ulcont">
+        <ul class="ap">
+            <li>{{ ap }}</li>
+            <li>/</li>
+            <li>{{ max_ap }}</li>
+        </ul>
+        <div class="tooltip">
+            <b>{{ 'Aktionspunkte'|trans({},'game') }}</b><br />
+            {% trans from 'game' %}
+                Für viele Aktionen, wie beispielsweise die Erkundung der Aussenwelt oder der Arbeit auf einer Baustelle,
+                benötigst du Aktionspunkte. Deine Aktionspunkte werden jede Nacht nach dem Angriff aufgefüllt. Außerdem
+                kannst du sie durch den Einsatz bestimmter Gegenstände sowie einmal pro Tag durch Essen und Trinken neu
+                auffüllen.
+            {% endtrans %}
+        </div>
+    </div>
+    {% if max_bp > 0 %}
+        <div class="ulcont">
+            <ul class="bp">
+                <li>{{ bp }}</li>
+                <li>/</li>
+                <li>{{ max_bp }}</li>
+            </ul>
+            <div class="tooltip">
+                <b>{{ 'Baupunkte'|trans({},'game') }}</b><br />
+                {% trans from 'game' %}
+                    Baupunkte können in der Werkstatt und auf Baustellen verwendet werden, wo sie wie Aktionspunkte
+                    zählen. Wenn möglich werden immer zuerst Baupunkte verbraucht, bevor Aktionspunkte eingesetzt
+                    werden. Bedenke, dass Baupunkte nicht eingesetzt werden können wenn du erschöpft bist!
+                {% endtrans %}
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}
 {% block js %}
     {{ parent() }}
