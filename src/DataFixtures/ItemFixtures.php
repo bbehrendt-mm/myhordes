@@ -134,7 +134,7 @@ class ItemFixtures extends Fixture
         ["label"=>"Alte Tür","icon"=>"door","category"=>"armor","deco"=>0,"heavy"=>true],                                                   // -- ---
         ["label"=>"Verdächtiges Gemüse","icon"=>"vegetable","category"=>"food","deco"=>0,"heavy"=>false],                                   // In Out
         ["label"=>"Reparaturset (kaputt)","icon"=>"repair_kit_part","category"=>"imp","deco"=>0,"heavy"=>false],                            // -- ---
-        ["label"=>"Reparaturset","icon"=>"repair_kit","category"=>"imp","deco"=>0,"heavy"=>false],                                          //
+        ["label"=>"Reparaturset","icon"=>"repair_kit","category"=>"imp","deco"=>0,"heavy"=>false],                                          // In Out
         ["label"=>"Wasserpistole (leer)","icon"=>"watergun_empty","category"=>"aud_n","deco"=>0,"heavy"=>false],                            // In Out
         ["label"=>"Aqua-Splash (3 Ladungen)","icon"=>"watergun_opt_3","category"=>"weapon","deco"=>0,"heavy"=>false],                       // -- Out
         ["label"=>"Aqua-Splash (2 Ladungen)","icon"=>"watergun_opt_2","category"=>"weapon","deco"=>0,"heavy"=>false],                       // -- Out
@@ -202,7 +202,7 @@ class ItemFixtures extends Fixture
         ["label"=>"Loses Werkzeug","icon"=>"repair_kit_part_raw","category"=>"misc","deco"=>0,"heavy"=>false],                              // -- ---
         ["label"=>"Radius Mark II (entladen)","icon"=>"radius_mk2_part","category"=>"exp_s","deco"=>0,"heavy"=>false],                      // -- ---
         ["label"=>"Radius Mark II","icon"=>"radius_mk2","category"=>"exp_s","deco"=>0,"heavy"=>false],                                      // --
-        ["label"=>"Reparatur Fix","icon"=>"repair_one","category"=>"imp","deco"=>0,"heavy"=>false],                                         //
+        ["label"=>"Reparatur Fix","icon"=>"repair_one","category"=>"imp","deco"=>0,"heavy"=>false],                                         // In Out
         ["label"=>"Unvollständiger Motor","icon"=>"engine_part","category"=>"imp","deco"=>0,"heavy"=>true],                                 // -- ---
         ["label"=>"Alte Waschmaschine","icon"=>"machine_1","category"=>"imp","deco"=>2,"heavy"=>true],                                      // -- Out
         ["label"=>"Krebserregender Ofen","icon"=>"machine_2","category"=>"imp","deco"=>2,"heavy"=>true],                                    // -- Out

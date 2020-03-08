@@ -153,6 +153,7 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
     public function desert(TownHandler $th): Response
     {
         $this->deferZoneUpdate();
+        $town = $this->getActiveCitizen()->getTown();
 
         $watchtower = $th->getBuilding($town, 'item_tagger_#00',  true);
         if ($watchtower) switch ($watchtower->getLevel()) {

@@ -22,6 +22,7 @@ use App\Entity\ItemGroup;
 use App\Entity\ItemGroupEntry;
 use App\Entity\ItemProperty;
 use App\Entity\ItemPrototype;
+use App\Entity\ItemTargetDefinition;
 use App\Entity\RequireAP;
 use App\Entity\RequireBuilding;
 use App\Entity\RequireHome;
@@ -49,6 +50,7 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'drink_no_ap' => [ 'type' => Requirement::HideOnFail,  'collection' => [ 'status' => [ 'enabled' => true,  'status' => 'thirst2' ] ]],
 
             'no_bonus_ap'  => [ 'type' => Requirement::CrossOnFail, 'collection' => [ 'ap' => [ 'min' => 0, 'max' => 0, 'relative' => true ] ]],
+            'min_1_ap'     => [ 'type' => Requirement::CrossOnFail, 'collection' => [ 'ap' => [ 'min' => 1, 'max' => 999999, 'relative' => true ] ]],
             'not_yet_dice' => [ 'type' => Requirement::CrossOnFail, 'collection' => [ 'status' => [ 'enabled' => false, 'status' => 'tg_dice' ]  ]],
             'not_yet_card' => [ 'type' => Requirement::CrossOnFail, 'collection' => [ 'status' => [ 'enabled' => false, 'status' => 'tg_cards' ] ]],
 
@@ -109,6 +111,9 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'consume_battery' => [ 'consume' => [ 'pile_#00'  ] ],
             'consume_micropur'=> [ 'consume' => [ 'water_cleaner_#00'  ] ],
 
+            'repair_target'   => [ 'target' => [ 'consume' => false, 'morph' => null, 'break' => false, 'poison' => null ] ],
+            'poison_target'   => [ 'target' => [ 'consume' => false, 'morph' => null, 'break' => null, 'poison' => true  ] ],
+
             'drink_ap_1'  => [ 'status' => 'add_has_drunk', 'ap' => 'to_max_plus_0' ],
             'drink_ap_2'  => [ 'status' => 'remove_thirst' ],
             'drink_no_ap' => [ 'status' => 'replace_dehydration' ],
@@ -125,6 +130,7 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
 
             'disinfect'    => [ 'status' => 'remove_infection' ],
 
+            'minus_1ap'    => [ 'ap' => 'minus_1' ],
             'plus_4ap'     => [ 'ap' => 'plus_4' ],
             'just_ap6'     => [ 'ap' => 'to_max_plus_0' ],
             'just_ap7'     => [ 'ap' => 'to_max_plus_1' ],
@@ -157,6 +163,7 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
                 'to_max_plus_2' => [ 'max' => true,  'num' => 2 ],
                 'to_max_plus_3' => [ 'max' => true,  'num' => 3 ],
                 'plus_4'        => [ 'max' => false, 'num' => 4 ],
+                'minus_1'       => [ 'max' => false, 'num' => -1 ],
             ],
             'status' => [
                 'replace_dehydration' => [ 'from' => 'thirst2', 'to' => 'thirst1' ],
@@ -407,6 +414,9 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'home_store_plus'  => [ 'label' => 'Aufstellen', 'meta' => [ 'must_be_inside', 'must_have_upgraded_home' ], 'result' => [ 'consume_item', ['home' => ['store' => 1]] ] ],
             'home_store_plus2' => [ 'label' => 'Aufstellen', 'meta' => [ 'must_be_inside', 'must_have_upgraded_home' ], 'result' => [ 'consume_item', ['home' => ['store' => 2]] ] ],
 
+            'repair_1' => [ 'label' => 'Reparieren mit', 'target' => ['broken' => true], 'meta' => [ 'min_1_ap', 'not_tired' ], 'result' => [ 'minus_1ap', 'consume_item', 'repair_target' ], 'message' => 'Du hast das {item} verbraucht, um damit {target} zu reparieren. Dabei hast du {minus_ap} AP eingesetzt.' ],
+            'repair_2' => [ 'label' => 'Reparieren mit', 'target' => ['broken' => true], 'meta' => [ 'min_1_ap', 'not_tired' ], 'result' => [ 'minus_1ap', ['item' => ['consume' => false, 'morph' => 'repair_kit_part_#00'] ], 'repair_target' ], 'message' => 'Du hast das {item} verbraucht, um damit {target} zu reparieren. Dabei hast du {minus_ap} AP eingesetzt.' ],
+
             'clean_clothes' => [ 'label' => 'Reinigen', 'meta' => [ 'must_be_inside', [ 'type' => Requirement::CrossOnFail, 'collection' => [ 'status' => [ 'enabled' => false, 'status' => 'tg_clothes' ] ]] ], 'result' => [ [ 'status' => [ 'from' => null, 'to' => 'tg_clothes' ], 'item' => ['consume' => false, 'morph' => 'basic_suit_#00'] ] ] ],
         ],
 
@@ -598,6 +608,9 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'water_cup_part_#00' => ['watercup_1', 'watercup_2', 'watercup_3'],
 
             'cyanure_#00' => ['cyanide'],
+
+            'repair_one_#00' => ['repair_1'],
+            'repair_kit_#00' => ['repair_2'],
 
             'basic_suit_dirt_#00' => [ 'clean_clothes' ],
         ]
@@ -969,6 +982,9 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
                         break;
                     case 'item':
                         $result->setItem( $this->process_item_effect($manager, $out, $sub_cache[$sub_id], $sub_res, $sub_data) );
+                        break;
+                    case 'target':
+                        $result->setTarget( $this->process_item_effect($manager, $out, $sub_cache[$sub_id], $sub_res, $sub_data) );
                         break;
                     case 'spawn':
                         $result->setSpawn( $this->process_spawn_effect($manager, $out, $sub_cache[$sub_id], $sub_res, $sub_data) );
@@ -1424,6 +1440,28 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
                     $new_action->setName( $action )->setLabel( $data['label'] )->clearRequirements();
                     if (!empty($data['message'])) $new_action->setMessage( $data['message'] );
                     else $new_action->setMessage(null);
+
+                    if ($new_action->getTarget() && !isset($data['target'])) {
+                        $manager->remove( $new_action->getTarget() );
+                        $new_action->setTarget(null);
+                    }
+
+                    if (isset($data['target'])) {
+                        if (!$new_action->getTarget()) $new_action->setTarget( new ItemTargetDefinition() );
+                        $new_action->getTarget()->setHeavy( $data['target']['heavy'] ?? null );
+                        $new_action->getTarget()->setPoison( $data['target']['poison'] ?? null );
+                        $new_action->getTarget()->setBroken( $data['target']['broken'] ?? null );
+                        if (isset( $data['target']['property'] )) {
+                            $prop = $manager->getRepository(ItemProperty::class)->findOneByName( $data['target']['property'] );
+                            if (!$prop) throw new Exception("Item property not found: '{$data['target']['property']}'");
+                            $new_action->getTarget()->setTag($prop);
+                        } else $new_action->getTarget()->setTag(null);
+                        if (isset( $data['target']['prototype'] )) {
+                            $proto = $manager->getRepository(ItemPrototype::class)->findOneByName( $data['target']['prototype'] );
+                            if (!$proto) throw new Exception("Item prototype not found: '{$data['target']['prototype']}'");
+                            $new_action->getTarget()->setPrototype($proto);
+                        } else $new_action->getTarget()->setPrototype(null);
+                    }
 
                     foreach ( $data['meta'] as $num => $requirement ) {
                         if (is_array($requirement))

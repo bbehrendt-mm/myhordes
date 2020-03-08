@@ -10,6 +10,7 @@ use App\Entity\Inventory;
 use App\Entity\Town;
 use App\Entity\TownClass;
 use App\Entity\WellCounter;
+use App\Entity\Zone;
 use App\Service\GameFactory;
 use App\Service\NightlyHandler;
 use App\Service\TownHandler;
@@ -55,6 +56,7 @@ class TownInspectorCommand extends Command
             ->addOption('zombies', null, InputOption::VALUE_REQUIRED, 'Controls the zombie spawn; set to "reset" to clear all zombies, "daily" to perform a single daily spread or "global" to force a global respawn.')
             ->addOption('zombie-estimates', null, InputOption::VALUE_REQUIRED, 'Calculates the zombie estimations for the next days.')
             ->addOption('unlock-buildings', null, InputOption::VALUE_NONE, 'Unlocks all buildings.')
+            ->addOption('unveil-map', null, InputOption::VALUE_NONE, 'Uncovers the map')
 
             ->addOption('advance-day', null, InputOption::VALUE_NONE, 'Starts the nightly attack.')
             ->addOption('dry', null, InputOption::VALUE_NONE, 'When used together with --advance-day, changes in the DB will not persist.')
@@ -177,6 +179,15 @@ class TownInspectorCommand extends Command
                 foreach ($possible as $proto) $this->townHandler->addBuilding( $town, $proto );
                 $output->writeln("Added <comment>" . count($possible) . "</comment> buildings.");
             } while ($found);
+            $this->entityManager->persist( $town );
+        }
+
+        if ($input->getOption('unveil-map')) {
+            foreach ($town->getZones() as &$zone) {
+                $zone->setDiscoveryStatus( Zone::DiscoveryStateCurrent );
+                $zone->setZombieStatus( Zone::ZombieStateExact );
+            }
+            $changes = true;
             $this->entityManager->persist( $town );
         }
 

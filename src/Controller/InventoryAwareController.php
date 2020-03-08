@@ -9,6 +9,7 @@ use App\Entity\Item;
 use App\Entity\ItemAction;
 use App\Entity\ItemGroupEntry;
 use App\Entity\ItemPrototype;
+use App\Entity\ItemTargetDefinition;
 use App\Entity\Recipe;
 use App\Entity\TownClass;
 use App\Entity\User;
@@ -83,13 +84,30 @@ class InventoryAwareController extends AbstractController implements GameInterfa
 
     protected function getItemActions(): array {
         $ret = [];
+
+        /**
+         * @param Inventory[] $inventories
+         * @param ItemTargetDefinition $definition
+         * @return array
+         */
+        $get_targets = function ( array $inventories, ItemTargetDefinition $definition ): array {
+            $targets = [];
+            foreach ($inventories as &$inv)
+                foreach ($inv->getItems() as &$item)
+                    if ($this->action_handler->targetDefinitionApplies($item,$definition))
+                        $targets[] = $item;
+            return $targets;
+        };
+
+        $av_inv = [$this->getActiveCitizen()->getInventory(), $this->getActiveCitizen()->getZone() ? $this->getActiveCitizen()->getZone()->getFloor() : $this->getActiveCitizen()->getHome()->getChest()];
+
         foreach ($this->getActiveCitizen()->getInventory()->getItems() as $item) if (!$item->getBroken()) {
 
             $this->action_handler->getAvailableItemActions( $this->getActiveCitizen(), $item, $available, $crossed );
             if (empty($available) && empty($crossed)) continue;
 
-            foreach ($available as $a) $ret[] = [ 'item' => $item, 'action' => $a, 'crossed' => false ];
-            foreach ($crossed as $c)   $ret[] = [ 'item' => $item, 'action' => $c, 'crossed' => true ];
+            foreach ($available as $a) $ret[] = [ 'item' => $item, 'action' => $a, 'targets' => $a->getTarget() ? $get_targets( $av_inv, $a->getTarget() ) : null, 'crossed' => false ];
+            foreach ($crossed as $c)   $ret[] = [ 'item' => $item, 'action' => $c, 'targets' => null, 'crossed' => true ];
         }
 
         return $ret;
@@ -225,19 +243,28 @@ class InventoryAwareController extends AbstractController implements GameInterfa
     }
 
     public function generic_action_api(JSONRequestParser $parser, InventoryHandler $handler): Response {
-        $item_id = (int)$parser->get('item', -1);
+        $item_id =   (int)$parser->get('item',   -1);
+        $target_id = (int)$parser->get('target', -1);
         $action_id = (int)$parser->get('action', -1);
 
+        /** @var Item|null $item */
         $item   = ($item_id < 0)   ? null : $this->entity_manager->getRepository(Item::class)->find( $item_id );
+        /** @var Item|null $target */
+        $target = ($item_id < 0)   ? null : $this->entity_manager->getRepository(Item::class)->find( $target_id );
+        /** @var ItemAction|null $action */
         $action = ($action_id < 0) ? null : $this->entity_manager->getRepository(ItemAction::class)->find( $action_id );
 
-        if ( !$item || !$action || $item->getBroken() ) return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
+        if ( !$item || !$action || $item->getBroken() || ($action->getTarget() && !$target) ) return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
         $citizen = $this->getActiveCitizen();
 
         $zone = $citizen->getZone();
         if ($zone && $zone->getX() === 0 && $zone->getY() === null ) return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
 
-        if (($error = $this->action_handler->execute( $citizen, $item, $action, $msg, $remove )) === ActionHandler::ErrorNone) {
+        $secondary_inv = $zone ? $zone->getFloor() : $citizen->getHome()->getChest();
+        if (!$citizen->getInventory()->getItems()->contains( $item ) && !$secondary_inv->getItems()->contains( $item )) return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
+        if ($target && !$citizen->getInventory()->getItems()->contains( $target ) && !$secondary_inv->getItems()->contains( $target )) return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
+
+        if (($error = $this->action_handler->execute( $citizen, $item, $target, $action, $msg, $remove )) === ActionHandler::ErrorNone) {
             $this->entity_manager->persist($citizen);
             if ($item->getInventory())
                 $this->entity_manager->persist($item);

@@ -10,6 +10,7 @@ use App\Entity\CitizenStatus;
 use App\Entity\Item;
 use App\Entity\ItemAction;
 use App\Entity\ItemPrototype;
+use App\Entity\ItemTargetDefinition;
 use App\Entity\Recipe;
 use App\Entity\RequireLocation;
 use App\Entity\Requirement;
@@ -58,9 +59,11 @@ class ActionHandler
     const ActionValidityAllow = 4;
     const ActionValidityFull = 5;
 
-    protected function evaluate( Citizen $citizen, Item $item, ItemAction $action, ?string &$message ): int {
+    protected function evaluate( Citizen $citizen, Item $item, ?Item $target, ItemAction $action, ?string &$message ): int {
 
         if (!$item->getPrototype()->getActions()->contains( $action )) return self::ActionValidityNone;
+        if ($target && (!$action->getTarget() || !$this->targetDefinitionApplies($target, $action->getTarget())))
+            return self::ActionValidityNone;
 
         $current_state = self::ActionValidityFull;
         foreach ($action->getRequirements() as $meta_requirement) {
@@ -178,11 +181,20 @@ class ActionHandler
         if ($item->getBroken()) return;
 
         foreach ($item->getPrototype()->getActions() as $action) {
-            $mode = $this->evaluate( $citizen, $item, $action, $tx );
+            $mode = $this->evaluate( $citizen, $item, null, $action, $tx );
             if ($mode >= self::ActionValidityAllow) $available[] = $action;
             else if ($mode >= self::ActionValidityCrossed) $crossed[] = $action;
         }
 
+    }
+
+    public function targetDefinitionApplies(Item $item, ItemTargetDefinition $definition): bool {
+        if ($definition->getHeavy() !== null && $item->getPrototype()->getHeavy() !== $definition->getHeavy()) return false;
+        if ($definition->getBroken() !== null && $item->getBroken() !== $definition->getBroken()) return false;
+        if ($definition->getPoison() !== null && $item->getPoison() !== $definition->getPoison()) return false;
+        if ($definition->getPrototype() !== null && $item->getPrototype()->getId() !== $definition->getPrototype()->getId()) return false;
+        if ($definition->getTag() !== null && !$item->getPrototype()->getProperties()->contains($definition->getTag())) return false;
+        return true;
     }
 
     /**
@@ -218,12 +230,12 @@ class ActionHandler
     const ErrorActionForbidden    = ErrorHelper::BaseActionErrors + 2;
     const ErrorActionImpossible   = ErrorHelper::BaseActionErrors + 3;
 
-    public function execute( Citizen &$citizen, Item &$item, ItemAction $action, ?string &$message, ?array &$remove ): int {
+    public function execute( Citizen &$citizen, Item &$item, ?Item &$target, ItemAction $action, ?string &$message, ?array &$remove ): int {
 
         $remove = [];
         $tags = [];
 
-        $mode = $this->evaluate( $citizen, $item, $action, $tx );
+        $mode = $this->evaluate( $citizen, $item, $target, $action, $tx );
         if ($mode <= self::ActionValidityNone)    return self::ErrorActionUnregistered;
         if ($mode <= self::ActionValidityCrossed) return self::ErrorActionImpossible;
         if ($mode <= self::ActionValidityAllow) {
@@ -234,8 +246,10 @@ class ActionHandler
 
         $execute_info_cache = [
             'ap' => 0,
-            'item' => $item->getPrototype(),
+            'item'   => $item->getPrototype(),
+            'target' => $target ? $target->getPrototype() : null,
             'item_morph' => [ null, null ],
+            'item_target_morph' => [ null, null ],
             'items_consume' => [],
             'items_spawn' => [],
             'bp_spawn' => [],
@@ -244,7 +258,7 @@ class ActionHandler
             'well' => 0,
         ];
 
-        $execute_result = function(Result &$result) use (&$citizen, &$item, &$action, &$message, &$remove, &$execute_result, &$execute_info_cache, &$tags) {
+        $execute_result = function(Result &$result) use (&$citizen, &$item, &$target, &$action, &$message, &$remove, &$execute_result, &$execute_info_cache, &$tags) {
             if ($status = $result->getStatus()) {
 
                 if ($status->getInitial() && $status->getResult()) {
@@ -263,7 +277,7 @@ class ActionHandler
                 if ($ap->getMax()) {
                     $to = $this->citizen_handler->getMaxAP($citizen) + $ap->getAp();
                     $this->citizen_handler->setAP( $citizen, false, max( $old_ap, $to ), null );
-                } else $this->citizen_handler->setAP( $citizen, true, $ap->getAp(), $ap->getBonus() );
+                } else $this->citizen_handler->setAP( $citizen, true, $ap->getAp(), $ap->getAp() < 0 ? null :$ap->getBonus() );
 
                 $execute_info_cache['ap'] += ( $citizen->getAp() - $old_ap );
             }
@@ -294,7 +308,7 @@ class ActionHandler
             if ($item_result = $result->getItem()) {
                 if ($execute_info_cache['item_morph'][0] === null) $execute_info_cache['item_morph'][0] = $item->getPrototype();
                 if ($item_result->getConsume()) {
-                    $citizen->getInventory()->removeItem( $item );
+                    $item->getInventory()->removeItem($item);
                     $remove[] = $item;
                     $execute_info_cache['items_consume'][] = $item->getPrototype();
                 } else {
@@ -302,6 +316,20 @@ class ActionHandler
                         $item->setPrototype( $execute_info_cache['item_morph'][1] = $item_result->getMorph() );
                     if ($item_result->getBreak()  !== null) $item->setBroken( $item_result->getBreak() );
                     if ($item_result->getPoison() !== null) $item->setPoison( $item_result->getPoison() );
+                }
+            }
+
+            if ($target_result = $result->getTarget()) {
+                if ($execute_info_cache['item_target_morph'][0] === null) $execute_info_cache['item_target_morph'][0] = $target->getPrototype();
+                if ($target_result->getConsume()) {
+                    $target->getInventory()->removeItem($target);
+                    $remove[] = $target;
+                    $execute_info_cache['items_consume'][] = $target->getPrototype();
+                } else {
+                    if ($target_result->getMorph())
+                        $target->setPrototype( $execute_info_cache['item_target_morph'][1] = $target_result->getMorph() );
+                    if ($target_result->getBreak()  !== null) $target->setBroken( $target_result->getBreak() );
+                    if ($target_result->getPoison() !== null) $target->setPoison( $target_result->getPoison() );
                 }
             }
 
@@ -450,10 +478,14 @@ class ActionHandler
 
             $message = $this->translator->trans( $action->getMessage(), [
                 '{ap}'        => $execute_info_cache['ap'],
+                '{minus_ap}'  => -$execute_info_cache['ap'],
                 '{well}'      => $execute_info_cache['well'],
                 '{item}'      => $this->wrap($execute_info_cache['item']),
+                '{target}'    => $execute_info_cache['target'] ? $this->wrap($execute_info_cache['target']) : "-",
                 '{item_from}' => $execute_info_cache['item_morph'][0] ? ($this->wrap($execute_info_cache['item_morph'][0])) : "-",
                 '{item_to}'   => $execute_info_cache['item_morph'][1] ? ($this->wrap($execute_info_cache['item_morph'][1])) : "-",
+                '{target_from}' => $execute_info_cache['item_target_morph'][0] ? ($this->wrap($execute_info_cache['item_target_morph'][0])) : "-",
+                '{target_to}'   => $execute_info_cache['item_target_morph'][1] ? ($this->wrap($execute_info_cache['item_target_morph'][1])) : "-",
                 '{items_consume}' => $this->wrap_concat($execute_info_cache['items_consume']),
                 '{items_spawn}'   => $this->wrap_concat($execute_info_cache['items_spawn']),
                 '{bp_spawn}'      => $this->wrap_concat($execute_info_cache['bp_spawn']),

@@ -50,6 +50,11 @@ class ItemAction
      */
     private $message;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\ItemTargetDefinition", cascade={"persist", "remove"})
+     */
+    private $target;
+
     public function __construct()
     {
         $this->requirements = new ArrayCollection();
@@ -157,6 +162,18 @@ class ItemAction
     public function setMessage(?string $message): self
     {
         $this->message = $message;
+
+        return $this;
+    }
+
+    public function getTarget(): ?ItemTargetDefinition
+    {
+        return $this->target;
+    }
+
+    public function setTarget(?ItemTargetDefinition $target): self
+    {
+        $this->target = $target;
 
         return $this;
     }

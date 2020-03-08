@@ -2,10 +2,11 @@ const handleActions = function( actions, api_path, return_path ) {
     for (let i = 0; i < actions.length; i++) {
         actions[i].addEventListener('click', function() {
             const item_id   = this.getAttribute('x-provoking-id');
+            const target_id = this.getAttribute('x-target-id');
             const action_id = this.getAttribute('x-action-id');
-            $.ajax.easySend( api_path, {
-                    item: item_id, action: action_id
-                },
+            let obj = { item: item_id, action: action_id };
+            if (target_id) obj.target = target_id;
+            $.ajax.easySend( api_path, obj,
                 function () {
                     $.ajax.load(null, return_path, true);
                 }, {
@@ -13,6 +14,23 @@ const handleActions = function( actions, api_path, return_path ) {
                         return data.message ? data.message : '{% trans from 'game' %}Das kannst du zur Zeit nicht tun.{% endtrans %}'
                     }
                 } );
+        });
+    }
+}
+const handleActionPopups = function( actions ) {
+    for (let i = 0; i < actions.length; i++) {
+        const id = actions[i].getAttribute( 'x-target-definition' );
+        let popup = document.querySelector('[x-target-selection-for="' + id + '"]');
+        popup.addEventListener('click', function(e) { e.stopPropagation(); });
+        actions[i].addEventListener('click', function() {
+            popup.style.display = 'block';
+            actions[i].classList.add('open');
+        })
+        let close_btn = document.querySelector('[x-close-for="' + id + '"]');
+        close_btn.addEventListener('click', function(e) {
+            popup.style.display = "none";
+            actions[i].classList.remove('open');
+            e.stopPropagation();
         });
     }
 }

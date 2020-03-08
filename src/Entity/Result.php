@@ -95,6 +95,11 @@ class Result
      */
     private $death;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\AffectOriginalItem")
+     */
+    private $target;
+
     public function __construct()
     {
     }
@@ -268,6 +273,18 @@ class Result
     public function setDeath(?AffectDeath $death): self
     {
         $this->death = $death;
+
+        return $this;
+    }
+
+    public function getTarget(): ?AffectOriginalItem
+    {
+        return $this->target;
+    }
+
+    public function setTarget(?AffectOriginalItem $target): self
+    {
+        $this->target = $target;
 
         return $this;
     }

@@ -180,7 +180,7 @@
             );
 
             handleActions(
-                document.querySelectorAll('ul.actions>li[x-action-id][x-provoking-id]:not([disabled])'),
+                document.querySelectorAll('ul.actions li[x-action-id][x-provoking-id]:not([disabled])'),
                 '{{ path('beyond_desert_action_controller') }}', '{{ path('beyond_dashboard') }}'
             );
             handleRecipes(

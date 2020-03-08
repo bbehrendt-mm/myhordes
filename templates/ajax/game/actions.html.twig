@@ -1,9 +1,25 @@
 {% if list|length > 0 or recipes.recipes|length > 0  %}
     <ul class="actions">
         {% for entry in list %}
-            <li class="action" {% if entry.crossed %}disabled{% else %}x-action-id="{{ entry.action.id }}" x-provoking-id="{{ entry.item.id }}"{% endif %}>
+            <li class="action" {% if entry.crossed %}disabled{% elseif entry.targets is null %}x-action-id="{{ entry.action.id }}" x-provoking-id="{{ entry.item.id }}"{% else %}x-target-definition="{{ entry.action.id }}-{{ entry.item.id }}"{% endif %}>
                 <img src="{{ asset('build/images/item/item_' ~ entry.item.prototype.icon ~ '.gif') }}" alt="{{ entry.item.prototype.label|trans({},'items') }}">
                 <span>{{ entry.action.label|trans({},'game') }}: <b>{{ entry.item.prototype.label|trans({},'items') }}</b></span>
+                {% if entry.targets is not null and not entry.crossed %}
+                    <div class="targets" x-target-selection-for="{{ entry.action.id }}-{{ entry.item.id }}">
+                        {% if entry.targets|length > 0 %}
+                            <span>{{ 'Bitte wähle einen Gegenstand:'|trans({},'game') }}</span>
+                            <ul>
+                                {% for item in entry.targets %}
+                                    {# @var item \App\Entity\Item #}
+                                    <li x-action-id="{{ entry.action.id }}" x-provoking-id="{{ entry.item.id }}" x-target-id="{{ item.id }}" ><img src="{{ asset('build/images/item/item_' ~ item.prototype.icon ~ '.gif') }}" alt="{{ item.prototype.label|trans({},'items') }}"></li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <span>{{ 'Du verfügst über keine geeigneten Gegenstände'|trans({},'game') }}</span>
+                        {% endif %}
+                        <div class="right"><span x-close-for="{{ entry.action.id }}-{{ entry.item.id }}">{{ 'Schließen'|trans({},'global') }}</span></div>
+                    </div>
+                {% endif %}
             </li>
         {% endfor %}
         {% for recipe in recipes.recipes %}

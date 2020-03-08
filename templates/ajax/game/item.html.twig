@@ -1,5 +1,9 @@
 {# @var item \App\Entity\Item #}
-<li class="item {% if count is defined and count > 1 %}counted{% endif %}" {% if no_id is not defined or not no_id %}x-item-id="{{ item.id }}"{% endif %}>
+{% set classes = ['item'] %}
+{% if item.broken %}{% set classes = classes|merge(['broken']) %}{% endif %}
+{% if count is defined and count > 1 %}{% set classes = classes|merge(['counted']) %}{% endif %}
+
+<li class="{{ classes|join(' ') }}" {% if no_id is not defined or not no_id %}x-item-id="{{ item.id }}"{% endif %}>
     <img src="{{ asset('build/images/item/item_' ~ item.prototype.icon ~ '.gif') }}" alt="{{ item.prototype.label|trans({},'items') }}">
     {% if count is defined and count > 1 %}<span>{{ count }}</span>{% endif %}
     {% if no_tooltip is not defined or not no_tooltip %}
