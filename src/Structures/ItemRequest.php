@@ -15,7 +15,7 @@ class ItemRequest
     private $is_property;
     private $all;
 
-    public function __construct(string $name, int $count = 1, ?bool $broken = false, ?bool $poison = false, bool $is_prop = false)
+    public function __construct(string $name, int $count = 1, ?bool $broken = false, ?bool $poison = null, bool $is_prop = false)
     {
         $this->name = $name;
         $this->count = $count;

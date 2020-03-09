@@ -5,6 +5,7 @@ namespace App\Service;
 
 
 use App\Entity\BuildingPrototype;
+use App\Entity\CauseOfDeath;
 use App\Entity\Citizen;
 use App\Entity\CitizenStatus;
 use App\Entity\Item;
@@ -235,6 +236,9 @@ class ActionHandler
         $remove = [];
         $tags = [];
 
+        $kill_by_poison = $item->getPoison() && ($action->getPoisonHandler() & ItemAction::PoisonHandlerConsume);
+        $spread_poison = false;
+
         $mode = $this->evaluate( $citizen, $item, $target, $action, $tx );
         if ($mode <= self::ActionValidityNone)    return self::ErrorActionUnregistered;
         if ($mode <= self::ActionValidityCrossed) return self::ErrorActionImpossible;
@@ -258,7 +262,7 @@ class ActionHandler
             'well' => 0,
         ];
 
-        $execute_result = function(Result &$result) use (&$citizen, &$item, &$target, &$action, &$message, &$remove, &$execute_result, &$execute_info_cache, &$tags) {
+        $execute_result = function(Result &$result) use (&$citizen, &$item, &$target, &$action, &$message, &$remove, &$execute_result, &$execute_info_cache, &$tags, &$kill_by_poison, &$spread_poison) {
             if ($status = $result->getStatus()) {
 
                 if ($status->getInitial() && $status->getResult()) {
@@ -352,7 +356,14 @@ class ActionHandler
             if ($item_consume = $result->getConsume()) {
                 $items = $this->inventory_handler->fetchSpecificItems( $citizen->getInventory(),
                     [new ItemRequest( $item_consume->getPrototype()->getName(), $item_consume->getCount() )] );
+
                 foreach ($items as $consume_item) {
+
+                    if ($consume_item->getPoison()) {
+                        if ($action->getPoisonHandler() & ItemAction::PoisonHandlerConsume) $kill_by_poison = true;
+                        if ($action->getPoisonHandler() & ItemAction::PoisonHandlerTransgress) $spread_poison = true;
+                    }
+
                     $citizen->getInventory()->removeItem( $consume_item );
                     $remove[] = $consume_item;
                     $execute_info_cache['items_consume'][] = $consume_item->getPrototype();
@@ -474,7 +485,13 @@ class ActionHandler
 
         foreach ($action->getResults() as &$result) $execute_result( $result );
 
-        if ($action->getMessage()) {
+        if ($spread_poison) $item->setPoison( true );
+        if ($kill_by_poison && $citizen->getAlive()) {
+            $this->death_handler->kill( $citizen, CauseOfDeath::Posion, $r );
+            foreach ($r as $r_entry) $remove[] = $r_entry;
+        }
+
+        if ($action->getMessage() && !$kill_by_poison) {
 
             $message = $this->translator->trans( $action->getMessage(), [
                 '{ap}'        => $execute_info_cache['ap'],

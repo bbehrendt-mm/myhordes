@@ -237,7 +237,7 @@ class ItemFixtures extends Fixture
         ["label"=>"Kiste mit Materialien (1)","icon"=>"rsc_pack_1","category"=>"box","deco"=>0,"heavy"=>true],                              // In Out
         ["label"=>"Autotür","icon"=>"car_door","category"=>"armor","deco"=>0,"heavy"=>true],                                                // -- ---
         ["label"=>"Beschädigte Autotür","icon"=>"car_door_part","category"=>"aud_n","deco"=>0,"heavy"=>true],                               // -- ---
-        ["label"=>"Giftfläschchen","icon"=>"poison","category"=>"imp","deco"=>0,"heavy"=>false],                                            //
+        ["label"=>"Giftfläschchen","icon"=>"poison","category"=>"imp","deco"=>0,"heavy"=>false],                                            // In Out
         ["label"=>"Ätzmittel","icon"=>"poison_part","category"=>"imp","deco"=>0,"heavy"=>false],                                            // -- ---
         ["label"=>"Vorräte eines umsichtigen Bürgers","icon"=>"chest_hero","category"=>"box","deco"=>0,"heavy"=>true],                      // In Out
         ["label"=>"Postpaket","icon"=>"postal_box","category"=>"box","deco"=>0,"heavy"=>false],                                             // In Out
@@ -397,6 +397,15 @@ class ItemFixtures extends Fixture
         'bed_#00'          => [ 'defence' ],
         'wood_plate_#00'   => [ 'defence' ],
         'concrete_wall_#00'=> [ 'defence' ],
+        'water_#00'        => [ 'can_poison' ],
+        'drug_#00'         => [ 'can_poison' ],
+        'can_open_#00'     => [ 'can_poison' ],
+        'vegetable_#00'    => [ 'can_poison' ],
+        'fruit_#00'        => [ 'can_poison' ],
+        'water_can_3_#00'  => [ 'can_poison' ],
+        'water_can_2_#00'  => [ 'can_poison' ],
+        'water_can_1_#00'  => [ 'can_poison' ],
+        'cyanure_#00'      => [ 'can_poison' ],
     ];
 
     public static $item_groups = [

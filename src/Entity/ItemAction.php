@@ -18,6 +18,10 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  */
 class ItemAction
 {
+    const PoisonHandlerIgnore = 0;
+    const PoisonHandlerTransgress = 1;
+    const PoisonHandlerConsume = 2;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -54,6 +58,11 @@ class ItemAction
      * @ORM\ManyToOne(targetEntity="App\Entity\ItemTargetDefinition", cascade={"persist", "remove"})
      */
     private $target;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $poisonHandler = self::PoisonHandlerIgnore;
 
     public function __construct()
     {
@@ -174,6 +183,18 @@ class ItemAction
     public function setTarget(?ItemTargetDefinition $target): self
     {
         $this->target = $target;
+
+        return $this;
+    }
+
+    public function getPoisonHandler(): ?int
+    {
+        return $this->poisonHandler;
+    }
+
+    public function setPoisonHandler(int $poisonHandler): self
+    {
+        $this->poisonHandler = $poisonHandler;
 
         return $this;
     }
