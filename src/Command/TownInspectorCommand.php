@@ -56,7 +56,10 @@ class TownInspectorCommand extends Command
             ->addOption('zombies', null, InputOption::VALUE_REQUIRED, 'Controls the zombie spawn; set to "reset" to clear all zombies, "daily" to perform a single daily spread or "global" to force a global respawn.')
             ->addOption('zombie-estimates', null, InputOption::VALUE_REQUIRED, 'Calculates the zombie estimations for the next days.')
             ->addOption('unlock-buildings', null, InputOption::VALUE_NONE, 'Unlocks all buildings.')
+
             ->addOption('unveil-map', null, InputOption::VALUE_NONE, 'Uncovers the map')
+            ->addOption('map-ds', null, InputOption::VALUE_REQUIRED, 'When used together with --unveil-map, sets the discovery state')
+            ->addOption('map-zs', null, InputOption::VALUE_REQUIRED, 'When used together with --unveil-map, sets the zombie state')
 
             ->addOption('advance-day', null, InputOption::VALUE_NONE, 'Starts the nightly attack.')
             ->addOption('dry', null, InputOption::VALUE_NONE, 'When used together with --advance-day, changes in the DB will not persist.')
@@ -183,9 +186,13 @@ class TownInspectorCommand extends Command
         }
 
         if ($input->getOption('unveil-map')) {
-            foreach ($town->getZones() as &$zone) {
-                $zone->setDiscoveryStatus( Zone::DiscoveryStateCurrent );
-                $zone->setZombieStatus( Zone::ZombieStateExact );
+
+            $ds = $input->getOption('map-ds') ?? Zone::DiscoveryStateCurrent;
+            $zs = $input->getOption('map-zs') ?? Zone::ZombieStateExact;
+
+            foreach ($town->getZones() as &$zone) if ($zone->getX() !== 0 || $zone->getY() !== 0) {
+                $zone->setDiscoveryStatus( $ds );
+                $zone->setZombieStatus( $zs );
             }
             $changes = true;
             $this->entityManager->persist( $town );

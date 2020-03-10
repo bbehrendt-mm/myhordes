@@ -14,6 +14,7 @@ use App\Entity\AffectResultGroupEntry;
 use App\Entity\AffectStatus;
 use App\Entity\AffectWell;
 use App\Entity\AffectZombies;
+use App\Entity\AffectZone;
 use App\Entity\BuildingPrototype;
 use App\Entity\CauseOfDeath;
 use App\Entity\CitizenStatus;
@@ -129,6 +130,7 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'terrorize'    => [ 'status' => 'add_terror' ],
             'unterrorize'  => [ 'status' => 'remove_terror' ],
 
+            'infect'       => [ 'status' => 'add_infection' ],
             'disinfect'    => [ 'status' => 'remove_infection' ],
 
             'minus_1ap'    => [ 'ap' => 'minus_1' ],
@@ -154,6 +156,8 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'add_bandage' => [ 'status' => 'add_bandage' ],
             'inflict_wound' => [ 'status' => 'inflict_wound' ],
 
+            'zonemarker' => [ 'zone' => ['scout' => true] ],
+
             'cyanide' => [ 'death' => [ CauseOfDeath::Cyanide ] ]
         ],
 
@@ -171,6 +175,7 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
                 'add_has_drunk' => [ 'from' => null, 'to' => 'hasdrunk' ],
                 'remove_thirst' => [ 'from' => 'thirst1', 'to' => null ],
 
+                'add_infection'   => [ 'from' => null, 'to' => 'infection' ],
                 'remove_infection'=> [ 'from' => 'infection', 'to' => null ],
 
                 'add_drunk' => [ 'from' => null, 'to' => 'drunk' ],
@@ -419,6 +424,12 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'repair_2' => [ 'label' => 'Reparieren mit', 'target' => ['broken' => true], 'meta' => [ 'min_1_ap', 'not_tired' ], 'result' => [ 'minus_1ap', ['item' => ['consume' => false, 'morph' => 'repair_kit_part_#00'] ], 'repair_target' ], 'message' => 'Du hast das {item} verbraucht, um damit {target} zu reparieren. Dabei hast du {minus_ap} AP eingesetzt.' ],
             'poison_1' => [ 'label' => 'Vergiften mit',  'target' => ['property' => 'can_poison'], 'meta' => [ ],               'result' => [ 'consume_item', 'poison_target' ], 'message' => 'Du hast {target} mit {item} vergiftet!' ],
 
+            'zonemarker_1' => [ 'label' => 'Einsetzen', 'meta' => [ 'must_be_outside' ], 'result' => [ 'consume_item', 'zonemarker' ], 'message' => 'Mithilfe des {item} hast du die Umgebung gescannt.' ],
+            'zonemarker_2' => [ 'label' => 'Einsetzen', 'meta' => [ 'must_be_outside' ], 'result' => [ ['group' => [ ['do_nothing', 2], [ [['item' => ['consume' => false, 'morph' => 'radius_mk2_part_#00'] ]], 1 ] ]], 'zonemarker' ], 'message' => 'Mithilfe des {item} hast du die Umgebung gescannt.' ],
+
+            'eat_bone'    => [ 'label' => 'Essen', 'poison' => ItemAction::PoisonHandlerConsume, 'meta' => [ 'eat_ap' ], 'result' => [ 'eat_ap6', ['item' => ['consume' => false, 'morph' => 'bone_#00'] ], ['group' => [ ['do_nothing', 1], [ 'infect', 1 ] ]] ] ],
+            'eat_cadaver' => [ 'label' => 'Essen', 'poison' => ItemAction::PoisonHandlerConsume, 'meta' => [ 'eat_ap' ], 'result' => [ 'eat_ap6', ['item' => ['consume' => false, 'morph' => 'cadaver_remains_#00'] ], ['group' => [ ['do_nothing', 1], [ 'infect', 1 ] ]] ] ],
+
             'clean_clothes' => [ 'label' => 'Reinigen', 'meta' => [ 'must_be_inside', [ 'type' => Requirement::CrossOnFail, 'collection' => [ 'status' => [ 'enabled' => false, 'status' => 'tg_clothes' ] ]] ], 'result' => [ [ 'status' => [ 'from' => null, 'to' => 'tg_clothes' ], 'item' => ['consume' => false, 'morph' => 'basic_suit_#00'] ] ] ],
         ],
 
@@ -449,6 +460,9 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'food_tarte_#00'      => [ 'eat_6ap'],
             'food_sandw_#00'      => [ 'eat_6ap'],
             'food_noodles_#00'    => [ 'eat_6ap'],
+            'hmeat_#00'           => [ 'eat_6ap'],
+            'bone_meat_#00'       => [ 'eat_bone'],
+            'cadaver_#00'         => [ 'eat_cadaver'],
 
             'food_noodles_hot_#00'=> [ 'eat_7ap'],
             'meat_#00'            => [ 'eat_7ap'],
@@ -614,6 +628,9 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'repair_one_#00' => ['repair_1'],
             'repair_kit_#00' => ['repair_2'],
             'poison_#00'     => ['poison_1'],
+
+            'tagger_#00'         => ['zonemarker_1'],
+            'radius_mk2_#00'     => ['zonemarker_2'],
 
             'basic_suit_dirt_#00' => [ 'clean_clothes' ],
         ]
@@ -1001,6 +1018,9 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
                     case 'home':
                         $result->setHome( $this->process_home_effect($manager, $out, $sub_cache[$sub_id], $sub_res, $sub_data) );
                         break;
+                    case 'zone':
+                        $result->setZone( $this->process_zone_effect($manager, $out, $sub_cache[$sub_id], $sub_res, $sub_data) );
+                        break;
                     case 'well':
                         $result->setWell( $this->process_well_effect($manager, $out, $sub_cache[$sub_id], $sub_res, $sub_data) );
                         break;
@@ -1329,7 +1349,6 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
         return $cache[$id];
     }
 
-
     /**
      * @param ObjectManager $manager
      * @param ConsoleOutputInterface $out
@@ -1353,6 +1372,33 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             $result->setName( $id )->setFillMax( $data['max'] )->setFillMin( $data['min'] );
             $manager->persist( $cache[$id] = $result );
         } else $out->writeln( "\t\t\t<comment>Skip</comment> effect <info>well/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
+
+        return $cache[$id];
+    }
+
+    /**
+     * @param ObjectManager $manager
+     * @param ConsoleOutputInterface $out
+     * @param array $cache
+     * @param string $id
+     * @param array $data
+     * @return AffectZone
+     */
+    private function process_zone_effect(
+        ObjectManager $manager, ConsoleOutputInterface $out,
+        array &$cache, string $id, array $data): AffectZone
+    {
+        if (!isset($cache[$id])) {
+            $result = $manager->getRepository(AffectZone::class)->findOneByName( $id );
+            if ($result) $out->writeln( "\t\t\t<comment>Update</comment> effect <info>zone/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
+            else {
+                $result = new AffectZone();
+                $out->writeln( "\t\t\t<comment>Create</comment> effect <info>zone/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
+            }
+
+            $result->setName( $id )->setUncoverZones( $data['scout'] ?? false )->setUncoverRuin( $data['uncover'] ?? false );
+            $manager->persist( $cache[$id] = $result );
+        } else $out->writeln( "\t\t\t<comment>Skip</comment> effect <info>zone/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
 
         return $cache[$id];
     }

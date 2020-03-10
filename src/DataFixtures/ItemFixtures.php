@@ -102,7 +102,7 @@ class ItemFixtures extends Fixture
         ["label"=>"Kanisterpumpe (leer)","icon"=>"jerrygun_off","category"=>"aud_n","deco"=>0,"heavy"=>false],                              // In Out
         ["label"=>"Videoprojektor","icon"=>"cinema","category"=>"furniture","deco"=>0,"heavy"=>true],                                       // -- ---
         ["label"=>"Sprengstoff","icon"=>"explo","category"=>"rsc","deco"=>0,"heavy"=>false],                                                // -- ---
-        ["label"=>"Menschenfleisch","icon"=>"hmeat","category"=>"food_g","deco"=>0,"heavy"=>false],                                         //
+        ["label"=>"Menschenfleisch","icon"=>"hmeat","category"=>"food_g","deco"=>0,"heavy"=>false],                                         // In Out
         ["label"=>"Plastiktüte","icon"=>"grenade_empty","category"=>"aud_n","deco"=>0,"heavy"=>false],                                      // In Out
         ["label"=>"Explodierende Wasserbombe","icon"=>"bgrenade","category"=>"weapon","deco"=>0,"heavy"=>false],                            // -- Out
         ["label"=>"Plastiktüte mit Sprengstoff","icon"=>"bgrenade_empty","category"=>"aud_n","deco"=>0,"heavy"=>false],                     // -- ---
@@ -148,7 +148,7 @@ class ItemFixtures extends Fixture
         ["label"=>"Zerstörer (entladen)","icon"=>"big_pgun_empty","category"=>"aud_n","deco"=>0,"heavy"=>false],                            // In Out
         ["label"=>"Zerstörer (geladen)","icon"=>"big_pgun","category"=>"weapon","deco"=>0,"heavy"=>false],                                  // -- Out
         ["label"=>"Unvollständiger Zerstörer","icon"=>"big_pgun_part","category"=>"aud_n","deco"=>0,"heavy"=>false],                        // -- ---
-        ["label"=>"Zonenmarker 'Radius'","icon"=>"tagger","category"=>"exp_s","deco"=>0,"heavy"=>false],                                    // --
+        ["label"=>"Zonenmarker 'Radius'","icon"=>"tagger","category"=>"exp_s","deco"=>0,"heavy"=>false],                                    // -- Out
         ["label"=>"Leuchtrakete","icon"=>"flare","category"=>"misc","deco"=>0,"heavy"=>false],                                              // --
         ["label"=>"Kanisterpumpe (einsatzbereit)","icon"=>"jerrygun","category"=>"weapon","deco"=>0,"heavy"=>false],                        // -- Out
         ["label"=>"Ektorp-Gluten Stuhl","icon"=>"chair_basic","category"=>"furniture","deco"=>2,"heavy"=>true],                             // -- Out
@@ -177,7 +177,7 @@ class ItemFixtures extends Fixture
         ["label"=>"Gesellschaftsspiel","icon"=>"game_box","category"=>"imp","deco"=>0,"heavy"=>false],                                      // In Out
         ["label"=>"Aqua-Splash (zerlegt)","icon"=>"watergun_opt_part","category"=>"aud_n","deco"=>0,"heavy"=>false],                        // -- ---
         ["label"=>"Vibrator (entladen)","icon"=>"vibr_empty","category"=>"imp","deco"=>0,"heavy"=>false],                                   // In Out
-        ["label"=>"Knochen mit Fleisch","icon"=>"bone_meat","category"=>"food_g","deco"=>0,"heavy"=>false],                                 //
+        ["label"=>"Knochen mit Fleisch","icon"=>"bone_meat","category"=>"food_g","deco"=>0,"heavy"=>false],                                 // In Out
         ["label"=>"Angeknackster menschlicher Knochen","icon"=>"bone","category"=>"weapon","deco"=>0,"heavy"=>false],                       // -- Out
         ["label"=>"Zusammengeschusterter Holzbalken","icon"=>"wood_beam","category"=>"rsc_b","deco"=>0,"heavy"=>true],                      // -- ---
         ["label"=>"Metallstruktur","icon"=>"metal_beam","category"=>"rsc_b","deco"=>0,"heavy"=>true],                                       // -- ---
@@ -201,7 +201,7 @@ class ItemFixtures extends Fixture
         ["label"=>"Geldbündel","icon"=>"money","category"=>"furniture","deco"=>7,"heavy"=>false],                                           // -- ---
         ["label"=>"Loses Werkzeug","icon"=>"repair_kit_part_raw","category"=>"misc","deco"=>0,"heavy"=>false],                              // -- ---
         ["label"=>"Radius Mark II (entladen)","icon"=>"radius_mk2_part","category"=>"exp_s","deco"=>0,"heavy"=>false],                      // -- ---
-        ["label"=>"Radius Mark II","icon"=>"radius_mk2","category"=>"exp_s","deco"=>0,"heavy"=>false],                                      // --
+        ["label"=>"Radius Mark II","icon"=>"radius_mk2","category"=>"exp_s","deco"=>0,"heavy"=>false],                                      // -- Out
         ["label"=>"Reparatur Fix","icon"=>"repair_one","category"=>"imp","deco"=>0,"heavy"=>false],                                         // In Out
         ["label"=>"Unvollständiger Motor","icon"=>"engine_part","category"=>"imp","deco"=>0,"heavy"=>true],                                 // -- ---
         ["label"=>"Alte Waschmaschine","icon"=>"machine_1","category"=>"imp","deco"=>2,"heavy"=>true],                                      // -- Out
@@ -277,7 +277,7 @@ class ItemFixtures extends Fixture
         ["label"=>"MagLite Kinderlampe (aus)","icon"=>"maglite_off","category"=>"furniture","deco"=>5,"heavy"=>false],                      // In Out
         ["label"=>"MagLite Kinderlampe (1 Ladung)","icon"=>"maglite_1","category"=>"exp_s","deco"=>5,"heavy"=>false],                       // -- ---
         ["label"=>"MagLite Kinderlampe (2 Ladungen)","icon"=>"maglite_2","category"=>"exp_s","deco"=>5,"heavy"=>false],                     // -- ---
-        ["label"=>"Leiche eines Reisenden","icon"=>"cadaver","category"=>"food_g","deco"=>0,"heavy"=>true],                                 //
+        ["label"=>"Leiche eines Reisenden","icon"=>"cadaver","category"=>"food_g","deco"=>0,"heavy"=>true],                                 // In Out
         ["label"=>"Angenagte Leiche","icon"=>"cadaver_remains","category"=>"misc","deco"=>0,"heavy"=>true],                                 // -- ---
         ["label"=>"Rauchgranate 'Tannenduft'","icon"=>"smoke_bomb","category"=>"misc","deco"=>0,"heavy"=>false],                            // --
         ["label"=>"Sandball","icon"=>"sand_ball","category"=>"misc","deco"=>0,"heavy"=>false],                                              //

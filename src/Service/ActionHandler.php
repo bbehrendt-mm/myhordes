@@ -4,6 +4,7 @@
 namespace App\Service;
 
 
+use App\Entity\AffectZone;
 use App\Entity\BuildingPrototype;
 use App\Entity\CauseOfDeath;
 use App\Entity\Citizen;
@@ -17,6 +18,7 @@ use App\Entity\RequireLocation;
 use App\Entity\Requirement;
 use App\Entity\Result;
 use App\Entity\RolePlayerText;
+use App\Entity\Zone;
 use App\Structures\ItemRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -34,12 +36,14 @@ class ActionHandler
     private $translator;
     private $game_factory;
     private $town_handler;
+    private $zone_handler;
     private $assets;
 
 
     public function __construct(
         EntityManagerInterface $em, StatusFactory $sf, CitizenHandler $ch, InventoryHandler $ih, DeathHandler $dh,
-        RandomGenerator $rg, ItemFactory $if, TranslatorInterface $ti, GameFactory $gf, Packages $am, TownHandler $th)
+        RandomGenerator $rg, ItemFactory $if, TranslatorInterface $ti, GameFactory $gf, Packages $am, TownHandler $th,
+        ZoneHandler $zh)
     {
         $this->entity_manager = $em;
         $this->status_factory = $sf;
@@ -52,6 +56,7 @@ class ActionHandler
         $this->assets = $am;
         $this->town_handler = $th;
         $this->death_handler = $dh;
+        $this->zone_handler = $zh;
     }
 
     const ActionValidityNone = 1;
@@ -382,6 +387,21 @@ class ActionHandler
                 $citizen->getHome()->setAdditionalStorage( $citizen->getHome()->getAdditionalStorage() + $home_set->getAdditionalStorage() );
                 $citizen->getHome()->setAdditionalDefense( $citizen->getHome()->getAdditionalDefense() + $home_set->getAdditionalDefense() );
 
+            }
+
+            if (($zoneEffect = $result->getZone()) && $base_zone = $citizen->getZone()) {
+                if ($zoneEffect->getUncoverZones())
+                    for ($x = -1; $x <= 1; $x++)
+                        for ($y = -1; $y <= 1; $y++) {
+                            /** @var Zone $zone */
+                            $zone = $this->entity_manager->getRepository(Zone::class)->findOneByPosition($citizen->getTown(), $base_zone->getX() + $x, $base_zone->getY() + $y);
+                            if ($zone) {
+                                $zone->setDiscoveryStatus( Zone::DiscoveryStateCurrent );
+                                $zone->setZombieStatus( max( $zone->getZombieStatus(), Zone::ZombieStateEstimate ) );
+                            }
+                        }
+
+                // ToDO Ness-Quick
             }
 
             if ($well = $result->getWell()) {

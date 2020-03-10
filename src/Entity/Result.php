@@ -100,6 +100,11 @@ class Result
      */
     private $target;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\AffectZone")
+     */
+    private $zone;
+
     public function __construct()
     {
     }
@@ -285,6 +290,18 @@ class Result
     public function setTarget(?AffectOriginalItem $target): self
     {
         $this->target = $target;
+
+        return $this;
+    }
+
+    public function getZone(): ?AffectZone
+    {
+        return $this->zone;
+    }
+
+    public function setZone(?AffectZone $zone): self
+    {
+        $this->zone = $zone;
 
         return $this;
     }
