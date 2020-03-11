@@ -276,6 +276,7 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'drug_hyd_2' => [ 'label' => 'Einnehmen', 'poison' => ItemAction::PoisonHandlerConsume, 'meta' => [ 'drug_2', 'drink_ap_2' ], 'result' => [ 'drug_addict', 'drink_ap_2', 'consume_item' ] ],
             'drug_hyd_3' => [ 'label' => 'Einnehmen', 'poison' => ItemAction::PoisonHandlerConsume, 'meta' => [ 'drug_1', 'drink_no_ap' ], 'result' => [ 'drug_any', 'drink_no_ap', 'consume_item' ] ],
             'drug_hyd_4' => [ 'label' => 'Einnehmen', 'poison' => ItemAction::PoisonHandlerConsume, 'meta' => [ 'drug_2', 'drink_no_ap' ], 'result' => [ 'drug_addict', 'drink_no_ap', 'consume_item' ] ],
+            'drug_beta'  => [ 'label' => 'Einnehmen', 'poison' => ItemAction::PoisonHandlerConsume, 'meta' => [ ], 'result' => [ ['ap' => [ 'max' => true,  'num' => 993 ]] ] ],
             'cyanide'    => [ 'label' => 'Einnehmen', 'poison' => ItemAction::PoisonHandlerConsume, 'meta' => [ ], 'result' => [ 'cyanide', 'consume_item' ] ],
 
             'bandage' => [ 'label' => 'Verbinden', 'meta' => [ 'is_wounded', 'is_not_bandaged' ], 'result' => [ 'heal_wound', 'consume_item', 'add_bandage' ] ],
@@ -492,6 +493,8 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'drug_#00'            => [ 'drug_6ap_1', 'drug_6ap_2' ],
             'drug_hero_#00'       => [ 'drug_8ap_1', 'drug_8ap_2' ],
             'drug_random_#00'     => [ 'drug_rand_1', 'drug_rand_2' ],
+            'beta_drug_bad_#00'   => [ 'drug_rand_1', 'drug_rand_2' ],
+            'beta_drug_#00'       => [ 'drug_beta' ],
             'xanax_#00'           => [ 'drug_xana1', 'drug_xana2' ],
             'drug_water_#00'      => [ 'drug_hyd_1', 'drug_hyd_2', 'drug_hyd_3', 'drug_hyd_4' ],
 

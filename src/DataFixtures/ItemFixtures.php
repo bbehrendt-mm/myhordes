@@ -255,7 +255,8 @@ class ItemFixtures extends Fixture
         ["label"=>"Wasserspender (1 Ration)","icon"=>"water_can_1","category"=>"food","deco"=>0,"heavy"=>true],                             // In Out
         ["label"=>"Wasserspender (2 Rationen)","icon"=>"water_can_2","category"=>"food","deco"=>0,"heavy"=>true],                           // In Out
         ["label"=>"Wasserspender (3 Rationen)","icon"=>"water_can_3","category"=>"food","deco"=>0,"heavy"=>true],                           // In Out
-        ["label"=>"Abgelaufene Betapropin-Tablette 5mg","icon"=>"beta_drug_bad","category"=>"drug_d","deco"=>0,"heavy"=>false],             //
+        ["label"=>"Abgelaufene Betapropin-Tablette 5mg","icon"=>"beta_drug_bad","category"=>"drug_d","deco"=>0,"heavy"=>false],             // In Out
+        ["label"=>"Betapropin-Tablette 5mg","icon"=>"beta_drug","category"=>"drug_d","deco"=>0,"heavy"=>false],                             // In Out
         ["label"=>"Aasbeeren","icon"=>"fruit_sub_part","category"=>"misc","deco"=>0,"heavy"=>false],                                        // -- ---
         ["label"=>"Schleimige Kugel","icon"=>"fruit_part","category"=>"misc","deco"=>0,"heavy"=>false],                                     // -- ---
         ["label"=>"Fleischfetzen","icon"=>"flesh_part","category"=>"misc","deco"=>0,"heavy"=>false],                                        // -- ---
