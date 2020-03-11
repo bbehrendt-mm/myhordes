@@ -38,6 +38,11 @@ class AffectZone
      */
     private $uncoverRuin;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $escape;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -75,6 +80,18 @@ class AffectZone
     public function setUncoverRuin(bool $uncoverRuin): self
     {
         $this->uncoverRuin = $uncoverRuin;
+
+        return $this;
+    }
+
+    public function getEscape(): ?int
+    {
+        return $this->escape;
+    }
+
+    public function setEscape(?int $escape): self
+    {
+        $this->escape = $escape;
 
         return $this;
     }

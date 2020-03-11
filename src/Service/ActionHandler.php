@@ -9,6 +9,7 @@ use App\Entity\BuildingPrototype;
 use App\Entity\CauseOfDeath;
 use App\Entity\Citizen;
 use App\Entity\CitizenStatus;
+use App\Entity\EscapeTimer;
 use App\Entity\Item;
 use App\Entity\ItemAction;
 use App\Entity\ItemPrototype;
@@ -20,6 +21,7 @@ use App\Entity\Result;
 use App\Entity\RolePlayerText;
 use App\Entity\Zone;
 use App\Structures\ItemRequest;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Asset\Packages;
@@ -354,6 +356,8 @@ class ActionHandler
                     elseif ($g = $item_spawn->getItemGroup())
                         $proto = $this->random_generator->pickItemPrototypeFromGroup( $g );
 
+                    if ($proto) $tags[] = 'spawned';
+
                     if ($proto && $this->inventory_handler->placeItem( $citizen, $this->item_factory->createItem( $proto ),
                             $citizen->getZone()
                                 ? [ $citizen->getInventory(), $citizen->getZone()->getFloor() ]
@@ -407,6 +411,9 @@ class ActionHandler
 
                 if ($zoneEffect->getUncoverRuin())
                     $base_zone->setBuryCount( max(0, $base_zone->getBuryCount() - mt_rand(2,3)) );
+
+                if ($zoneEffect->getEscape() !== null && $zoneEffect->getEscape() > 0)
+                    $base_zone->addEscapeTimer( (new EscapeTimer())->setTime( new DateTime("+{$zoneEffect->getEscape()}sec") ) );
             }
 
             if ($well = $result->getWell()) {
@@ -540,7 +547,11 @@ class ActionHandler
                     list(, $tag, $text) = $m;
                     return in_array( $tag, $tags ) ? $text : '';
                 }, $message, -1, $c);
-            } while ($c > 0);
+                $message = preg_replace_callback( '/<nt-(.*?)>(.*?)<\/nt-\1>/' , function(array $m) use ($tags): string {
+                    list(, $tag, $text) = $m;
+                    return !in_array( $tag, $tags ) ? $text : '';
+                }, $message, -1, $d);
+            } while ($c > 0 || $d > 0);
         }
 
 

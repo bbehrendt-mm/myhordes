@@ -83,6 +83,7 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
 
 
             'must_have_zombies'   => [ 'type' => Requirement::MessageOnFail, 'collection' => [ 'zombies' => [ 'min' => 1, 'block' => null  ] ], 'text' => 'Zum Glück sind hier keine Zombies...'],
+            'must_be_blocked'     => [ 'type' => Requirement::MessageOnFail, 'collection' => [ 'zombies' => [ 'min' => 1, 'block' => true ] ], 'text' => 'Das kannst du nicht tun während du umzingelt bist...'],
             'must_not_be_blocked' => [ 'type' => Requirement::MessageOnFail, 'collection' => [ 'zombies' => [ 'min' => 0, 'block' => false ] ], 'text' => 'Das kannst du nicht tun während du umzingelt bist...'],
 
             'must_have_micropur' => [ 'type' => Requirement::MessageOnFail, 'collection' => [ 'item' => [ 'item' => 'water_cleaner_#00', 'prop' => null ] ], 'text' => 'Hierfür brauchst du eine Micropur Brausetablette.'],
@@ -200,6 +201,8 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
                 'xmas'   => [ ['omg_this_will_kill_you_#00', 8], ['pocket_belt_#00', 8], 'rp_scroll_#00', 'rp_manual_#00', 'rp_sheets_#00', 'rp_letter_#00', 'rp_scroll_#00', 'rp_book_#00', 'rp_book_#01', 'rp_book2_#00' ],
                 'matbox' => [ 'wood2_#00', 'metal_#00' ],
                 'empty_battery' => [ 'pile_broken_#00' ],
+                'safe'  => [ 'watergun_opt_part_#00', 'big_pgun_part_#00', 'lawn_part_#00', 'chainsaw_part_#00', 'mixergun_part_#00', 'cutcut_#00', 'pilegun_upkit_#00', 'book_gen_letter_#00', 'pocket_belt_#00', 'drug_hero_#00', 'meca_parts_#00' ],
+                'asafe' => [ 'bplan_e_#00' ],
             ],
 
             'consume' => [],
@@ -318,6 +321,9 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'open_toolbox'    => [ 'label' => 'Öffnen', 'meta' => [ 'have_box_opener' ], 'result' => [ 'consume_item', [ 'spawn' => [ 'pile_#00', 'meca_parts_#00', 'rustine_#00', 'tube_#00', 'pharma_#00', 'explo_#00', 'lights_#00' ] ] ], 'message' => 'Du hast die {item} geöffnet und darin {items_spawn} gefunden!' ],
             'open_foodbox'    => [ 'label' => 'Öffnen', 'meta' => [ 'have_box_opener' ], 'result' => [ 'consume_item', [ 'spawn' => [ 'food_bag_#00', 'can_#00', 'meat_#00', 'hmeat_#00', 'vegetable_#00' ] ] ], 'message' => 'Du hast die {item} geöffnet und darin {items_spawn} gefunden!' ],
 
+            'open_safe'      => [ 'label' => 'Öffnen', 'meta' => [ 'min_1_ap', 'not_tired' ], 'result' => [ 'minus_1ap', ['group' => [ [['do_nothing'], 95], [ ['consume_item', [ 'spawn' =>  'safe' ]], 5 ] ]] ], 'message' => '<nt-spawned>Trotz aller Anstrengungen ist es dir nicht gelungen, den {item} zu öffnen...</nt-spawned><t-spawned>Du hast die {item} geöffnet und darin {items_spawn} gefunden!</t-spawned>' ],
+            'open_asafe'     => [ 'label' => 'Öffnen', 'meta' => [ 'min_1_ap', 'not_tired' ], 'result' => [ 'minus_1ap', ['group' => [ [['do_nothing'], 95], [ ['consume_item', [ 'spawn' => 'asafe' ]], 5 ] ]] ], 'message' => '<nt-spawned>Trotz aller Anstrengungen ist es dir nicht gelungen, den {item} zu öffnen...</nt-spawned><t-spawned>Du hast die {item} geöffnet und darin {items_spawn} gefunden!</t-spawned>' ],
+
             'load_pilegun'   => [ 'label' => 'Laden', 'meta' => [ 'have_battery' ], 'result' => [ 'consume_battery', [ 'item' => [ 'consume' => false, 'morph' => 'pilegun_#00' ] ] ], 'message' => 'Du hast eine {items_consume} in dein/e/n {item_from} eingelegt und {item_to} erhalten!' ],
             'load_pilegun2'  => [ 'label' => 'Laden', 'meta' => [ 'have_battery' ], 'result' => [ 'consume_battery', [ 'item' => [ 'consume' => false, 'morph' => 'pilegun_up_#00' ] ] ], 'message' => 'Du hast eine {items_consume} in dein/e/n {item_from} eingelegt und {item_to} erhalten!' ],
             'load_pilegun3'  => [ 'label' => 'Laden', 'meta' => [ 'have_battery' ], 'result' => [ 'consume_battery', [ 'item' => [ 'consume' => false, 'morph' => 'big_pgun_#00' ] ] ], 'message' => 'Du hast eine {items_consume} in dein/e/n {item_from} eingelegt und {item_to} erhalten!' ],
@@ -432,6 +438,9 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'zonemarker_2' => [ 'label' => 'Einsetzen', 'meta' => [ 'must_be_outside' ], 'result' => [ ['group' => [ ['do_nothing', 2], [ [['item' => ['consume' => false, 'morph' => 'radius_mk2_part_#00'] ]], 1 ] ]], 'zonemarker' ], 'message' => 'Mithilfe des {item} hast du die Umgebung gescannt.' ],
             'nessquick'    => [ 'label' => 'Einsetzen', 'meta' => [ 'must_be_outside', 'must_be_at_buried_ruin', 'must_not_be_blocked' ], 'result' => [ 'consume_item', 'nessquick' ], 'message' => 'Du hast das {item} verwendet, um einen Teil der Ruine freizulegen.' ],
 
+            'bomb_1'    => [ 'label' => 'Werfen', 'meta' => [ 'must_be_outside', 'must_be_blocked' ], 'result' => [ 'consume_item', [ 'zone' => ['escape' =>  40] ] ], 'message' => 'Mithilfe der {item} hast du dir etwas Zeit erkauft ... du solltest diesen Ort schnell verlassen!' ],
+            'bomb_2'    => [ 'label' => 'Werfen', 'meta' => [ 'must_be_outside', 'must_be_blocked' ], 'result' => [ 'consume_item', [ 'zone' => ['escape' => 300] ] ], 'message' => 'Mithilfe der {item} hast du dir etwas Zeit erkauft ... du solltest diesen Ort schnell verlassen!' ],
+
             'eat_bone'    => [ 'label' => 'Essen', 'poison' => ItemAction::PoisonHandlerConsume, 'meta' => [ 'eat_ap' ], 'result' => [ 'eat_ap6', ['item' => ['consume' => false, 'morph' => 'bone_#00'] ], ['group' => [ ['do_nothing', 1], [ 'infect', 1 ] ]] ] ],
             'eat_cadaver' => [ 'label' => 'Essen', 'poison' => ItemAction::PoisonHandlerConsume, 'meta' => [ 'eat_ap' ], 'result' => [ 'eat_ap6', ['item' => ['consume' => false, 'morph' => 'cadaver_remains_#00'] ], ['group' => [ ['do_nothing', 1], [ 'infect', 1 ] ]] ] ],
 
@@ -510,6 +519,9 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'catbox_#00'          => [ 'open_catbox' ],
             'chest_tools_#00'     => [ 'open_toolbox' ],
             'chest_food_#00'      => [ 'open_foodbox' ],
+
+            'safe_#00'             => [ 'open_safe' ],
+            'bplan_box_e_#00'      => [ 'open_asafe' ],
 
             'pilegun_empty_#00'      => [ 'load_pilegun'  ],
             'pilegun_up_empty_#00'   => [ 'load_pilegun2' ],
@@ -637,6 +649,8 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'tagger_#00'         => ['zonemarker_1'],
             'radius_mk2_#00'     => ['zonemarker_2'],
             'digger_#00'         => ['nessquick'],
+            'flesh_#00'          => ['bomb_1'],
+            'flash_#00'          => ['bomb_2'],
 
             'basic_suit_dirt_#00' => [ 'clean_clothes' ],
         ]
@@ -1402,7 +1416,10 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
                 $out->writeln( "\t\t\t<comment>Create</comment> effect <info>zone/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
             }
 
-            $result->setName( $id )->setUncoverZones( $data['scout'] ?? false )->setUncoverRuin( $data['uncover'] ?? false );
+            $result->setName( $id )
+                ->setUncoverZones( $data['scout'] ?? false )
+                ->setUncoverRuin( $data['uncover'] ?? false )
+                ->setEscape( $data['escape'] ?? null );
             $manager->persist( $cache[$id] = $result );
         } else $out->writeln( "\t\t\t<comment>Skip</comment> effect <info>zone/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
 

@@ -159,7 +159,7 @@ class ItemFixtures extends Fixture
         ["label"=>"Unförmige Zementblöcke","icon"=>"concrete_wall","category"=>"armor","deco"=>0,"heavy"=>true],                            // -- Out
         ["label"=>"Etikettenloses Medikament","icon"=>"drug_random","category"=>"drug_d","deco"=>0,"heavy"=>false],                         // In Out
         ["label"=>"Paracetoid 7g","icon"=>"disinfect","category"=>"drug_d","deco"=>0,"heavy"=>false],                                       // In Out
-        ["label"=>"Unkrautbekämpfungsmittel Ness-Quick","icon"=>"digger","category"=>"exp_s","deco"=>0,"heavy"=>false],                     // --
+        ["label"=>"Unkrautbekämpfungsmittel Ness-Quick","icon"=>"digger","category"=>"exp_s","deco"=>0,"heavy"=>false],                     // -- Out
         ["label"=>"Nahrungsmittelkiste","icon"=>"chest_food","category"=>"box","deco"=>0,"heavy"=>true],                                    // In Out
         ["label"=>"Doggybag","icon"=>"food_bag","category"=>"food","deco"=>0,"heavy"=>false],                                               // In Out
         ["label"=>"Tüte mit labbrigen Chips","icon"=>"food_bar1","category"=>"food","deco"=>0,"heavy"=>false],                              // In Out
@@ -194,7 +194,7 @@ class ItemFixtures extends Fixture
         ["label"=>"Micropur Brausetablette","icon"=>"water_cleaner","category"=>"drug","deco"=>0,"heavy"=>false],                           // -- ---
         ["label"=>"Darmmelone","icon"=>"vegetable_tasty","category"=>"food_7","deco"=>0,"heavy"=>false],                                    // In Out
         ["label"=>"Raketenpulver","icon"=>"powder","category"=>"rsc","deco"=>0,"heavy"=>false],                                             // -- ---
-        ["label"=>"Schießpulverbombe","icon"=>"flash","category"=>"exp_s","deco"=>0,"heavy"=>false],                                        // --
+        ["label"=>"Schießpulverbombe","icon"=>"flash","category"=>"exp_s","deco"=>0,"heavy"=>false],                                        // -- Out
         ["label"=>"Teddybär","icon"=>"teddy","category"=>"furniture","deco"=>0,"heavy"=>false],                                             //
         ["label"=>"Holzkistendeckel","icon"=>"wood_plate_part","category"=>"aud_n","deco"=>0,"heavy"=>true],                                // -- ---
         ["label"=>"Solide Holzplatte","icon"=>"wood_plate","category"=>"armor","deco"=>0,"heavy"=>true],                                    // -- ---
@@ -259,7 +259,7 @@ class ItemFixtures extends Fixture
         ["label"=>"Aasbeeren","icon"=>"fruit_sub_part","category"=>"misc","deco"=>0,"heavy"=>false],                                        // -- ---
         ["label"=>"Schleimige Kugel","icon"=>"fruit_part","category"=>"misc","deco"=>0,"heavy"=>false],                                     // -- ---
         ["label"=>"Fleischfetzen","icon"=>"flesh_part","category"=>"misc","deco"=>0,"heavy"=>false],                                        // -- ---
-        ["label"=>"Makabre Bombe","icon"=>"flesh","category"=>"exp_s","deco"=>0,"heavy"=>false],                                            // --
+        ["label"=>"Makabre Bombe","icon"=>"flesh","category"=>"exp_s","deco"=>0,"heavy"=>false],                                            // -- Out
         ["label"=>"Dickflüssige Substanz","icon"=>"pharma_part","category"=>"drug","deco"=>0,"heavy"=>false],                               // -- ---
         ["label"=>"Aasbeerenbrei","icon"=>"fruit","category"=>"food","deco"=>0,"heavy"=>false],                                             // In Out
         ["label"=>"Eisengefäß mit modrigem wasser","icon"=>"water_cup_part","category"=>"food_n","deco"=>0,"heavy"=>false],                 // In Out
