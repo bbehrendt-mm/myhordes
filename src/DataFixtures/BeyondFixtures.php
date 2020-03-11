@@ -15,14 +15,14 @@ use Symfony\Component\Console\Output\ConsoleOutputInterface;
 class BeyondFixtures extends Fixture implements DependentFixtureInterface
 {
     public static $zone_class_data = [
-        ["label"=>"Abgelegenes Haus","camping"=>7,"min_dist" => 1, "max_dist" => 6, "chance" => 686, "drops"=> [
+        ["label"=>"Abgelegenes Haus",'icon' => 'home',"camping"=>7,"min_dist" => 1, "max_dist" => 6, "chance" => 686, "drops"=> [
             array('item' => 'can_#00','count' => 237),
             array('item' => 'chest_citizen_#00','count' => 128),
             array('item' => 'electro_box_#00','count' => 25),
             array('item' => 'chair_basic_#00','count' => 18),
             array('item' => 'lock_#00','count' => 8),
         ]],
-        ["label"=>"Albi Supermarkt","camping"=>7,"min_dist" => 6, "max_dist" => 13, "chance" => 686, "drops"=>[
+        ["label"=>"Albi Supermarkt",'icon' => 'albi',"camping"=>7,"min_dist" => 6, "max_dist" => 13, "chance" => 686, "drops"=>[
             array('item' => 'drug_hero_#00','count' => 91),
             array('item' => 'meat_#00','count' => 91),
             array('item' => 'food_noodles_hot_#00','count' => 83),
@@ -33,7 +33,7 @@ class BeyondFixtures extends Fixture implements DependentFixtureInterface
             array('item' => 'powder_#00','count' => 22),
             array('item' => 'lights_#00','count' => 14),
         ]],
-        ["label"=>"Alte Höhle","camping"=>7,"min_dist" => 16, "max_dist" => 27, "chance" => 184, "drops"=>[
+        ["label"=>"Alte Höhle",'icon' => 'cave',"camping"=>7,"min_dist" => 16, "max_dist" => 27, "chance" => 184, "drops"=>[
             array('item' => 'money_#00','count' => 106),
             array('item' => 'machine_1_#00','count' => 26),
             array('item' => 'machine_3_#00','count' => 25),
@@ -47,7 +47,7 @@ class BeyondFixtures extends Fixture implements DependentFixtureInterface
             array('item' => 'rp_letter_#00','count' => 1),
             array('item' => 'radius_mk2_part_#00','count' => 1),
         ]],
-        ["label"=>"Alte Hydraulikpumpe","camping"=>7,"min_dist" => 3, "max_dist" => 9, "chance" => 401, "drops"=>[
+        ["label"=>"Alte Hydraulikpumpe",'icon' => 'pump',"camping"=>7,"min_dist" => 3, "max_dist" => 9, "chance" => 401, "drops"=>[
             array('item' => 'jerrycan_#00','count' => 331),
             array('item' => 'oilcan_#00','count' => 23),
             array('item' => 'metal_beam_#00','count' => 20),
@@ -55,14 +55,14 @@ class BeyondFixtures extends Fixture implements DependentFixtureInterface
             array('item' => 'jerrygun_part_#00','count' => 8),
             array('item' => 'electro_#00','count' => 8),
         ]],
-        ["label"=>"Alter Fahrradverleih","camping"=>7,"min_dist" => 4, "max_dist" => 10, "chance" => 159, "drops"=>[
+        ["label"=>"Alter Fahrradverleih",'icon' => 'bike',"camping"=>7,"min_dist" => 4, "max_dist" => 10, "chance" => 159, "drops"=>[
             array('item' => 'pocket_belt_#00','count' => 27),
             array('item' => 'tube_#00','count' => 19),
             array('item' => 'courroie_#00','count' => 19),
             array('item' => 'radio_off_#00','count' => 7),
             array('item' => 'meca_parts_#00','count' => 6),
         ]],
-        ["label"=>"Alter Rangierbahnhof","camping"=>7,"min_dist" => 10, "max_dist" => 19, "chance" => 464, "drops"=>[
+        ["label"=>"Alter Rangierbahnhof",'icon' => 'freight',"camping"=>7,"min_dist" => 10, "max_dist" => 19, "chance" => 464, "drops"=>[
             array('item' => 'metal_#00','count' => 114),
             array('item' => 'wood2_#00','count' => 113),
             array('item' => 'chain_#00','count' => 52),
@@ -72,7 +72,7 @@ class BeyondFixtures extends Fixture implements DependentFixtureInterface
             array('item' => 'courroie_#00','count' => 12),
             array('item' => 'coffee_#00','count' => 12),
         ]],
-        ["label"=>"Altes Feldkrankenhaus","camping"=>7,"min_dist" => 16, "max_dist" => 27, "chance" => 205, "drops"=>[
+        ["label"=>"Altes Feldkrankenhaus",'icon' => 'hospital',"camping"=>7,"min_dist" => 16, "max_dist" => 27, "chance" => 205, "drops"=>[
             array('item' => 'drug_random_#00','count' => 67),
             array('item' => 'pharma_#00','count' => 39),
             array('item' => 'beta_drug_bad_#00','count' => 33),
@@ -85,7 +85,7 @@ class BeyondFixtures extends Fixture implements DependentFixtureInterface
             array('item' => 'fungus_#00','count' => 3),
             array('item' => 'vodka_de_#00','count' => 2),
         ]],
-        ["label"=>"Altes Flugfeld","camping"=>7,"min_dist" => 12, "max_dist" => 21, "chance" => 129, "drops"=>[
+        ["label"=>"Altes Flugfeld",'icon' => 'aerodrome',"camping"=>7,"min_dist" => 12, "max_dist" => 21, "chance" => 129, "drops"=>[
             array('item' => 'metal_beam_#00','count' => 62),
             array('item' => 'electro_box_#00','count' => 28),
             array('item' => 'meca_parts_#00','count' => 24),
@@ -100,7 +100,7 @@ class BeyondFixtures extends Fixture implements DependentFixtureInterface
             array('item' => 'tube_#00','count' => 1),
             array('item' => 'engine_part_#00','count' => 1),
         ]],
-        ["label"=>"Altes Polizeipräsidium","camping"=>11,"min_dist" => 6, "max_dist" => 13, "chance" => 640, "drops"=>[
+        ["label"=>"Altes Polizeipräsidium",'icon' => 'police',"camping"=>11,"min_dist" => 6, "max_dist" => 13, "chance" => 640, "drops"=>[
             array('item' => 'drug_hero_#00','count' => 58),
             array('item' => 'taser_empty_#00','count' => 53),
             array('item' => 'repair_kit_#00','count' => 49),
@@ -122,7 +122,7 @@ class BeyondFixtures extends Fixture implements DependentFixtureInterface
             array('item' => 'wire_#00','count' => 6),
             array('item' => 'bagxl_#00','count' => 5),
         ]],
-        ["label"=>"Atombunker","camping"=>15,"min_dist" => 10, "max_dist" => 19, "chance" => 499, "drops"=>[
+        ["label"=>"Atombunker",'icon' => 'bunker',"camping"=>15,"min_dist" => 10, "max_dist" => 19, "chance" => 499, "drops"=>[
             array('item' => 'drug_hero_#00','count' => 127),
             array('item' => 'tagger_#00','count' => 66),
             array('item' => 'chest_#00','count' => 60),
@@ -141,7 +141,7 @@ class BeyondFixtures extends Fixture implements DependentFixtureInterface
             array('item' => 'chainsaw_part_#00','count' => 10),
             array('item' => 'chest_xl_#00','count' => 5),
         ]],
-        ["label"=>"Atomic Cafe","camping"=>7,"min_dist" => 6, "max_dist" => 13, "chance" => 320, "drops"=>[
+        ["label"=>"Atomic Cafe",'icon' => 'cafe',"camping"=>7,"min_dist" => 6, "max_dist" => 13, "chance" => 320, "drops"=>[
             array('item' => 'coffee_#00','count' => 55),
             array('item' => 'food_chick_#00','count' => 55),
             array('item' => 'pet_rat_#00','count' => 30),
@@ -151,7 +151,7 @@ class BeyondFixtures extends Fixture implements DependentFixtureInterface
             array('item' => 'vodka_de_#00','count' => 4),
             array('item' => 'coffee_machine_part_#00','count' => 1),
         ]],
-        ["label"=>"Autobahnraststätte","camping"=>7,"min_dist" => 8, "max_dist" => 16, "chance" => 460, "drops"=>[
+        ["label"=>"Autobahnraststätte",'icon' => 'autobahn',"camping"=>7,"min_dist" => 8, "max_dist" => 16, "chance" => 460, "drops"=>[
             array('item' => 'pet_rat_#00','count' => 32),
             array('item' => 'food_bar2_#00','count' => 25),
             array('item' => 'food_tarte_#00','count' => 23),
@@ -165,7 +165,7 @@ class BeyondFixtures extends Fixture implements DependentFixtureInterface
             array('item' => 'coffee_#00','count' => 4),
             array('item' => 'table_#00','count' => 2),
         ]],
-        ["label"=>"Autowracks","camping"=>7,"min_dist" => 3, "max_dist" => 9, "chance" => 304, "drops"=>[
+        ["label"=>"Autowracks",'icon' => 'cars',"camping"=>7,"min_dist" => 3, "max_dist" => 9, "chance" => 304, "drops"=>[
             array('item' => 'metal_#00','count' => 112),
             array('item' => 'plate_raw_#00','count' => 24),
             array('item' => 'chest_#00','count' => 21),
@@ -179,7 +179,7 @@ class BeyondFixtures extends Fixture implements DependentFixtureInterface
             array('item' => 'engine_part_#00','count' => 2),
             array('item' => 'rhum_#00','count' => 1),
         ]],
-        ["label"=>"Bar der verlorenen Hoffnungen","camping"=>9,"min_dist" => 28, "max_dist" => 100, "chance" => 41, "drops"=>[
+        ["label"=>"Bar der verlorenen Hoffnungen",'icon' => 'bar2',"camping"=>9,"min_dist" => 28, "max_dist" => 100, "chance" => 41, "drops"=>[
             array('item' => 'pet_dog_#00','count' => 10),
             array('item' => 'rhum_#00','count' => 9),
             array('item' => 'rp_book_#00','count' => 7),
@@ -189,7 +189,7 @@ class BeyondFixtures extends Fixture implements DependentFixtureInterface
             array('item' => 'cigs_#00','count' => 3),
             array('item' => 'rp_scroll_#00','count' => 2),
         ]],
-        ["label"=>"Baumarkt","camping"=>7,"min_dist" => 5, "max_dist" => 12, "chance" => 409, "drops"=>[
+        ["label"=>"Baumarkt",'icon' => 'obi',"camping"=>7,"min_dist" => 5, "max_dist" => 12, "chance" => 409, "drops"=>[
             array('item' => 'repair_kit_#00','count' => 74),
             array('item' => 'chest_#00','count' => 36),
             array('item' => 'chest_tools_#00','count' => 33),
@@ -212,7 +212,7 @@ class BeyondFixtures extends Fixture implements DependentFixtureInterface
             array('item' => 'tube_#00','count' => 4),
             array('item' => 'chest_xl_#00','count' => 2),
         ]],
-        ["label"=>"Baustellencontainer","camping"=>7,"min_dist" => 6, "max_dist" => 13, "chance" => 475, "drops"=>[
+        ["label"=>"Baustellencontainer",'icon' => 'container',"camping"=>7,"min_dist" => 6, "max_dist" => 13, "chance" => 475, "drops"=>[
             array('item' => 'mecanism_#00','count' => 31),
             array('item' => 'trestle_#00','count' => 26),
             array('item' => 'jerrycan_#00','count' => 25),
@@ -231,10 +231,10 @@ class BeyondFixtures extends Fixture implements DependentFixtureInterface
             array('item' => 'oilcan_#00','count' => 2),
             array('item' => 'rsc_pack_3_#00','count' => 1),
         ]],
-        ["label"=>"Dönerbude Utsel-Brutzel","camping"=>7,"min_dist" => 3, "max_dist" => 9, "chance" => 181, "drops"=>[
+        ["label"=>"Dönerbude Utsel-Brutzel",'icon' => 'doner',"camping"=>7,"min_dist" => 3, "max_dist" => 9, "chance" => 181, "drops"=>[
             //TODO
         ]],
-        ["label"=>"Dukes Villa","camping"=>7,"min_dist" => 12, "max_dist" => 21, "chance" => 148, "drops"=>[
+        ["label"=>"Dukes Villa",'icon' => 'duke',"camping"=>7,"min_dist" => 12, "max_dist" => 21, "chance" => 148, "drops"=>[
             array('item' => 'drug_hero_#00','count' => 40),
             array('item' => 'rhum_#00','count' => 27),
             array('item' => 'vibr_empty_#00','count' => 24),
@@ -246,7 +246,7 @@ class BeyondFixtures extends Fixture implements DependentFixtureInterface
             array('item' => 'vodka_de_#00','count' => 5),
             array('item' => 'chest_xl_#00','count' => 1),
         ]],
-        ["label"=>"Dunkler Hain","camping"=>7,"min_dist" => 2, "max_dist" => 7, "chance" => 70, "drops"=>[
+        ["label"=>"Dunkler Hain",'icon' => 'woods',"camping"=>7,"min_dist" => 2, "max_dist" => 7, "chance" => 70, "drops"=>[
             array('item' => 'wood_bad_#00','count' => 28),
             array('item' => 'hmeat_#00','count' => 3),
             array('item' => 'pet_rat_#00','count' => 2),
@@ -257,14 +257,14 @@ class BeyondFixtures extends Fixture implements DependentFixtureInterface
             array('item' => 'saw_tool_part_#00','count' => 1),
             array('item' => 'grenade_empty_#00','count' => 1),
         ]],
-        ["label"=>"Eingestürzte Mine","camping"=>7,"min_dist" => 12, "max_dist" => 21, "chance" => 341, "drops"=>[
+        ["label"=>"Eingestürzte Mine",'icon' => 'mine',"camping"=>7,"min_dist" => 12, "max_dist" => 21, "chance" => 341, "drops"=>[
             array('item' => 'powder_#00','count' => 191),
             array('item' => 'explo_#00','count' => 39),
             array('item' => 'deto_#00','count' => 37),
             array('item' => 'mecanism_#00','count' => 30),
             array('item' => 'concrete_wall_#00','count' => 11),
         ]],
-        ["label"=>"Eingestürzter Steinbruch","camping"=>7,"min_dist" => 3, "max_dist" => 9, "chance" => 71, "drops"=>[
+        ["label"=>"Eingestürzter Steinbruch",'icon' => 'quarry',"camping"=>7,"min_dist" => 3, "max_dist" => 9, "chance" => 71, "drops"=>[
             array('item' => 'concrete_#00','count' => 9),
             array('item' => 'chest_tools_#00','count' => 9),
             array('item' => 'plate_raw_#00','count' => 7),
@@ -272,12 +272,12 @@ class BeyondFixtures extends Fixture implements DependentFixtureInterface
             array('item' => 'chest_#00','count' => 4),
             array('item' => 'hmeat_#00','count' => 3),
         ]],
-        ["label"=>"Ein seltsames kreisförmiges Gerät","camping"=>15,"min_dist" => 25, "max_dist" => 100, "chance" => 15, "drops"=>[
+        ["label"=>"Ein seltsames kreisförmiges Gerät",'icon' => 'ufo',"camping"=>15,"min_dist" => 25, "max_dist" => 100, "chance" => 15, "drops"=>[
             array('item' => 'metal_bad_#00','count' => 6),
             array('item' => 'plate_raw_#00','count' => 2),
             array('item' => 'iphone_#00','count' => 1),
         ]],
-        ["label"=>"E-KEA","camping"=>7,"min_dist" => 4, "max_dist" => 10, "chance" => 242, "drops"=>[
+        ["label"=>"E-KEA",'icon' => 'ekea',"camping"=>7,"min_dist" => 4, "max_dist" => 10, "chance" => 242, "drops"=>[
             array('item' => 'deco_box_#00','count' => 49),
             array('item' => 'wood_plate_part_#00','count' => 28),
             array('item' => 'screw_#00','count' => 16),
@@ -291,14 +291,14 @@ class BeyondFixtures extends Fixture implements DependentFixtureInterface
             array('item' => 'wood2_#00','count' => 2),
             array('item' => 'saw_tool_part_#00','count' => 1),
         ]],
-        ["label"=>"Familiengrab","camping"=>0,"min_dist" => 3, "max_dist" => 9, "chance" => 68, "drops"=>[
+        ["label"=>"Familiengrab",'icon' => 'tomb',"camping"=>0,"min_dist" => 3, "max_dist" => 9, "chance" => 68, "drops"=>[
             array('item' => 'hmeat_#00','count' => 24),
             array('item' => 'gun_#00','count' => 17),
             array('item' => 'machine_gun_#00','count' => 5),
             array('item' => 'pet_rat_#00','count' => 4),
             array('item' => 'digger_#00','count' => 3),
         ]],
-        ["label"=>"Fast Food Restaurant","camping"=>7,"min_dist" => 6, "max_dist" => 13, "chance" => 710, "drops"=>[
+        ["label"=>"Fast Food Restaurant",'icon' => 'mczombie',"camping"=>7,"min_dist" => 6, "max_dist" => 13, "chance" => 710, "drops"=>[
             array('item' => 'coffee_#00','count' => 178),
             array('item' => 'meat_#00','count' => 94),
             array('item' => 'pharma_#00','count' => 28),
@@ -310,7 +310,7 @@ class BeyondFixtures extends Fixture implements DependentFixtureInterface
             array('item' => 'chest_food_#00','count' => 6),
             array('item' => 'coffee_machine_part_#00','count' => 2),
         ]],
-        ["label"=>"Flugzeugwrack","camping"=>9,"min_dist" => 4, "max_dist" => 10, "chance" => 155, "drops"=>[
+        ["label"=>"Flugzeugwrack",'icon' => 'plane',"camping"=>9,"min_dist" => 4, "max_dist" => 10, "chance" => 155, "drops"=>[
             array('item' => 'tube_#00','count' => 13),
             array('item' => 'chest_#00','count' => 13),
             array('item' => 'metal_beam_#00','count' => 10),
@@ -328,7 +328,7 @@ class BeyondFixtures extends Fixture implements DependentFixtureInterface
             array('item' => 'radius_mk2_part_#00','count' => 1),
             array('item' => 'repair_one_#00','count' => 1),
         ]],
-        ["label"=>"Gartenhaus","camping"=>7,"min_dist" => 6, "max_dist" => 13, "chance" => 624, "drops"=>[
+        ["label"=>"Gartenhaus",'icon' => 'shed',"camping"=>7,"min_dist" => 6, "max_dist" => 13, "chance" => 624, "drops"=>[
             array('item' => 'digger_#00','count' => 136),
             array('item' => 'electro_box_#00','count' => 62),
             array('item' => 'vegetable_tasty_#00','count' => 51),
@@ -345,7 +345,7 @@ class BeyondFixtures extends Fixture implements DependentFixtureInterface
             array('item' => 'angryc_#00','count' => 4),
             array('item' => 'staff_#00','count' => 4),
         ]],
-        ["label"=>"Geplünderte Mall","camping"=>5,"min_dist" => 4, "max_dist" => 10, "chance" => 466, "drops"=>[
+        ["label"=>"Geplünderte Mall",'icon' => 'supermarket',"camping"=>5,"min_dist" => 4, "max_dist" => 10, "chance" => 466, "drops"=>[
             array('item' => 'cart_part_#00','count' => 54),
             array('item' => 'meat_#00','count' => 48),
             array('item' => 'grenade_empty_#00','count' => 47),
@@ -370,7 +370,7 @@ class BeyondFixtures extends Fixture implements DependentFixtureInterface
             array('item' => 'vodka_de_#00','count' => 3),
             array('item' => 'saw_tool_part_#00','count' => 3),
         ]],
-        ["label"=>"Höhle","camping"=>7,"min_dist" => 3, "max_dist" => 9, "chance" => 73, "drops"=>[
+        ["label"=>"Höhle",'icon' => 'cave2',"camping"=>7,"min_dist" => 3, "max_dist" => 9, "chance" => 73, "drops"=>[
             array('item' => 'hmeat_#00','count' => 13),
             array('item' => 'chest_#00','count' => 13),
             array('item' => 'chest_tools_#00','count' => 9),
@@ -379,7 +379,7 @@ class BeyondFixtures extends Fixture implements DependentFixtureInterface
             array('item' => 'tagger_#00','count' => 2),
             array('item' => 'pet_snake_#00','count' => 1),
         ]],
-        ["label"=>"Indianerfriedhof","camping"=>-5,"min_dist" => 3, "max_dist" => 9, "chance" => 181, "drops"=>[
+        ["label"=>"Indianerfriedhof",'icon' => 'cemetary',"camping"=>-5,"min_dist" => 3, "max_dist" => 9, "chance" => 181, "drops"=>[
             array('item' => 'bone_#00','count' => 115),
             array('item' => 'bone_meat_#00','count' => 13),
             array('item' => 'hmeat_#00','count' => 7),
@@ -387,7 +387,7 @@ class BeyondFixtures extends Fixture implements DependentFixtureInterface
             array('item' => 'bag_#00','count' => 3),
             array('item' => 'chest_xl_#00','count' => 1),
         ]],
-        ["label"=>"Jahrmarktstand","camping"=>7,"min_dist" => 5, "max_dist" => 12, "chance" => 215, "drops"=>[
+        ["label"=>"Jahrmarktstand",'icon' => 'fair',"camping"=>7,"min_dist" => 5, "max_dist" => 12, "chance" => 215, "drops"=>[
             array('item' => 'grenade_empty_#00','count' => 53),
             array('item' => 'watergun_empty_#00','count' => 18),
             array('item' => 'chama_#00','count' => 17),
@@ -402,7 +402,7 @@ class BeyondFixtures extends Fixture implements DependentFixtureInterface
             array('item' => 'chudol_#00','count' => 1),
             array('item' => 'cdbrit_#00','count' => 1),
         ]],
-        ["label"=>"Kleines Haus","camping"=>7,"min_dist" => 2, "max_dist" => 7, "chance" => 381, "drops"=>[
+        ["label"=>"Kleines Haus",'icon' => 'house',"camping"=>7,"min_dist" => 2, "max_dist" => 7, "chance" => 381, "drops"=>[
             array('item' => 'pharma_#00','count' => 50),
             array('item' => 'water_#00','count' => 35),
             array('item' => 'rustine_#00','count' => 31),
@@ -419,13 +419,13 @@ class BeyondFixtures extends Fixture implements DependentFixtureInterface
             array('item' => 'chair_#00','count' => 3),
             array('item' => 'carpet_#00','count' => 2),
         ]],
-        ["label"=>"Kleinwasserkraftwerk","camping"=>7,"min_dist" => 5, "max_dist" => 12, "chance" => 472, "drops"=>[
+        ["label"=>"Kleinwasserkraftwerk",'icon' => 'water',"camping"=>7,"min_dist" => 5, "max_dist" => 12, "chance" => 472, "drops"=>[
             array('item' => 'jerrycan_#00','count' => 300),
             array('item' => 'water_#00','count' => 21),
             array('item' => 'jerrygun_part_#00','count' => 15),
             array('item' => 'plate_raw_#00','count' => 13),
         ]],
-        ["label"=>"Kosmetiklabor","camping"=>9,"min_dist" => 2, "max_dist" => 7, "chance" => 180, "drops"=>[
+        ["label"=>"Kosmetiklabor",'icon' => 'lab',"camping"=>9,"min_dist" => 2, "max_dist" => 7, "chance" => 180, "drops"=>[
             array('item' => 'pharma_#00','count' => 30),
             array('item' => 'pet_rat_#00','count' => 27),
             array('item' => 'meat_#00','count' => 17),
@@ -440,7 +440,7 @@ class BeyondFixtures extends Fixture implements DependentFixtureInterface
             array('item' => 'pet_snake_#00','count' => 2),
             array('item' => 'angryc_#00','count' => 2),
         ]],
-        ["label"=>"Krankenwagen","camping"=>7,"min_dist" => 2, "max_dist" => 7, "chance" => 183, "drops"=>[
+        ["label"=>"Krankenwagen",'icon' => 'ambulance',"camping"=>7,"min_dist" => 2, "max_dist" => 7, "chance" => 183, "drops"=>[
             array('item' => 'drug_random_#00','count' => 57),
             array('item' => 'pharma_#00','count' => 46),
             array('item' => 'bandage_#00','count' => 17),
@@ -449,7 +449,7 @@ class BeyondFixtures extends Fixture implements DependentFixtureInterface
             array('item' => 'cutcut_#00','count' => 1),
             array('item' => 'saw_tool_part_#00','count' => 1),
         ]],
-        ["label"=>"Lagerhalle","camping"=>7,"min_dist" => 15, "max_dist" => 26, "chance" => 219, "drops"=>[
+        ["label"=>"Lagerhalle",'icon' => 'wareouse2',"camping"=>7,"min_dist" => 15, "max_dist" => 26, "chance" => 219, "drops"=>[
             array('item' => 'rsc_pack_1_#00','count' => 86),
             array('item' => 'chest_food_#00','count' => 84),
             array('item' => 'chest_tools_#00','count' => 67),
@@ -459,7 +459,7 @@ class BeyondFixtures extends Fixture implements DependentFixtureInterface
             array('item' => 'book_gen_box_#00','count' => 16),
             array('item' => 'rsc_pack_3_#00','count' => 3),
         ]],
-        ["label"=>"Leeres Parkhaus","camping"=>7,"min_dist" => 3, "max_dist" => 9, "chance" => 335, "drops"=>[
+        ["label"=>"Leeres Parkhaus",'icon' => 'carpark',"camping"=>7,"min_dist" => 3, "max_dist" => 9, "chance" => 335, "drops"=>[
             array('item' => 'metal_beam_#00','count' => 119),
             array('item' => 'repair_one_#00','count' => 38),
             array('item' => 'trestle_#00','count' => 33),
@@ -473,7 +473,7 @@ class BeyondFixtures extends Fixture implements DependentFixtureInterface
             array('item' => 'jerrycan_#00','count' => 6),
             array('item' => 'engine_part_#00','count' => 5),
         ]],
-        ["label"=>"Liegengebliebener Kampfpanzer","camping"=>9,"min_dist" => 25, "max_dist" => 100, "chance" => 83, "drops"=>[
+        ["label"=>"Liegengebliebener Kampfpanzer",'icon' => 'tank',"camping"=>9,"min_dist" => 25, "max_dist" => 100, "chance" => 83, "drops"=>[
             array('item' => 'chain_#00','count' => 20),
             array('item' => 'home_def_#00','count' => 16),
             array('item' => 'mecanism_#00','count' => 14),
@@ -486,10 +486,10 @@ class BeyondFixtures extends Fixture implements DependentFixtureInterface
             array('item' => 'repair_kit_part_raw_#00','count' => 1),
             array('item' => 'home_box_xl_#00','count' => 1),
         ]],
-        ["label"=>"Motel 'Dusk'","camping"=>7,"min_dist" => 12, "max_dist" => 21, "chance" => 292, "drops"=>[
+        ["label"=>"Motel 'Dusk'",'icon' => 'motel',"camping"=>7,"min_dist" => 12, "max_dist" => 21, "chance" => 292, "drops"=>[
             // ToDo
         ]],
-        ["label"=>"Militärischer Wachposten","camping"=>9,"min_dist" => 16, "max_dist" => 27, "chance" => 212, "drops"=>[
+        ["label"=>"Militärischer Wachposten",'icon' => 'army',"camping"=>9,"min_dist" => 16, "max_dist" => 27, "chance" => 212, "drops"=>[
             array('item' => 'coffee_#00','count' => 68),
             array('item' => 'machine_gun_#00','count' => 62),
             array('item' => 'gun_#00','count' => 57),
@@ -498,7 +498,7 @@ class BeyondFixtures extends Fixture implements DependentFixtureInterface
             array('item' => 'rsc_pack_3_#00','count' => 11),
             array('item' => 'wire_#00','count' => 9),
         ]],
-        ["label"=>"Postfiliale","camping"=>7,"min_dist" => 8, "max_dist" => 16, "chance" => 177, "drops"=>[
+        ["label"=>"Postfiliale",'icon' => 'post',"camping"=>7,"min_dist" => 8, "max_dist" => 16, "chance" => 177, "drops"=>[
             array('item' => 'rp_letter_#00','count' => 41),
             array('item' => 'postal_box_#00','count' => 39),
             array('item' => 'book_gen_letter_#00','count' => 34),
@@ -508,7 +508,7 @@ class BeyondFixtures extends Fixture implements DependentFixtureInterface
             array('item' => 'table_#00','count' => 2),
             array('item' => 'cards_#00','count' => 2),
         ]],
-        ["label"=>"Räuberhöhle","camping"=>7,"min_dist" => 2, "max_dist" => 7, "chance" => 196, "drops"=>[
+        ["label"=>"Räuberhöhle",'icon' => 'cave3',"camping"=>7,"min_dist" => 2, "max_dist" => 7, "chance" => 196, "drops"=>[
             array('item' => 'chest_citizen_#00','count' => 52),
             array('item' => 'chest_tools_#00','count' => 33),
             array('item' => 'chest_#00','count' => 19),
@@ -516,13 +516,13 @@ class BeyondFixtures extends Fixture implements DependentFixtureInterface
             array('item' => 'chest_xl_#00','count' => 2),
             array('item' => 'chest_hero_#00','count' => 1),
         ]],
-        ["label"=>"Schützengraben","camping"=>9,"min_dist" => 5, "max_dist" => 12, "chance" => 216, "drops"=>[
+        ["label"=>"Schützengraben",'icon' => 'trench',"camping"=>9,"min_dist" => 5, "max_dist" => 12, "chance" => 216, "drops"=>[
             array('item' => 'concrete_#00','count' => 104),
             array('item' => 'bgrenade_empty_#00','count' => 33),
             array('item' => 'gun_#00','count' => 9),
             array('item' => 'machine_gun_#00','count' => 3),
         ]],
-        ["label"=>"Stadtbücherei","camping"=>7,"min_dist" => 6, "max_dist" => 13, "chance" => 204, "drops"=>[
+        ["label"=>"Stadtbücherei",'icon' => 'dll',"camping"=>7,"min_dist" => 6, "max_dist" => 13, "chance" => 204, "drops"=>[
             array('item' => 'deco_box_#00','count' => 77),
             array('item' => 'rp_scroll_#00','count' => 16),
             array('item' => 'rp_book_#00','count' => 13),
@@ -535,7 +535,7 @@ class BeyondFixtures extends Fixture implements DependentFixtureInterface
             array('item' => 'lamp_#00','count' => 1),
             array('item' => 'lens_#00','count' => 1),
         ]],
-        ["label"=>"Tante Emma Laden","camping"=>7,"min_dist" => 8, "max_dist" => 16, "chance" => 913, "drops"=>[
+        ["label"=>"Tante Emma Laden",'icon' => 'emma',"camping"=>7,"min_dist" => 8, "max_dist" => 16, "chance" => 913, "drops"=>[
             array('item' => 'cigs_#00','count' => 77),
             array('item' => 'jerrycan_#00','count' => 75),
             array('item' => 'can_#00','count' => 69),
@@ -551,10 +551,10 @@ class BeyondFixtures extends Fixture implements DependentFixtureInterface
             array('item' => 'food_candies_#00','count' => 11),
             array('item' => 'chama_#00','count' => 9),
         ]],
-        ["label"=>"Truck 'Rathaus auf Rädern'","camping"=>7,"min_dist" => 16, "max_dist" => 27, "chance" => 81, "drops"=>[
+        ["label"=>"Truck 'Rathaus auf Rädern'",'icon' => 'mayor',"camping"=>7,"min_dist" => 16, "max_dist" => 27, "chance" => 81, "drops"=>[
             // ToDO
         ]],
-        ["label"=>"Umgekippter Laster","camping"=>7,"min_dist" => 2, "max_dist" => 7, "chance" => 177, "drops"=>[
+        ["label"=>"Umgekippter Laster",'icon' => 'lkw',"camping"=>7,"min_dist" => 2, "max_dist" => 7, "chance" => 177, "drops"=>[
             array('item' => 'chest_food_#00','count' => 58),
             array('item' => 'chest_tools_#00','count' => 22),
             array('item' => 'wrench_#00','count' => 8),
@@ -567,7 +567,7 @@ class BeyondFixtures extends Fixture implements DependentFixtureInterface
             array('item' => 'mecanism_#00','count' => 2),
             array('item' => 'wire_#00','count' => 2),
         ]],
-        ["label"=>"Verbrannte Grundschule","camping"=>9,"min_dist" => 3, "max_dist" => 9, "chance" => 165, "drops"=>[
+        ["label"=>"Verbrannte Grundschule",'icon' => 'school',"camping"=>9,"min_dist" => 3, "max_dist" => 9, "chance" => 165, "drops"=>[
             array('item' => 'hmeat_#00','count' => 42),
             array('item' => 'watergun_empty_#00','count' => 21),
             array('item' => 'pile_#00','count' => 13),
@@ -576,7 +576,7 @@ class BeyondFixtures extends Fixture implements DependentFixtureInterface
             array('item' => 'cyanure_#00','count' => 5),
             array('item' => 'watergun_opt_part_#00','count' => 1),
         ]],
-        ["label"=>"Verfallenes Bürogebäude","camping"=>7,"min_dist" => 10, "max_dist" => 19, "chance" => 519, "drops"=>[
+        ["label"=>"Verfallenes Bürogebäude",'icon' => 'office',"camping"=>7,"min_dist" => 10, "max_dist" => 19, "chance" => 519, "drops"=>[
             array('item' => 'mecanism_#00','count' => 82),
             array('item' => 'chair_basic_#00','count' => 74),
             array('item' => 'electro_box_#00','count' => 72),
@@ -593,7 +593,7 @@ class BeyondFixtures extends Fixture implements DependentFixtureInterface
             array('item' => 'food_armag_#00','count' => 4),
             array('item' => 'cigs_#00','count' => 1),
         ]],
-        ["label"=>"Verfallene Villa","camping"=>7,"min_dist" => 3, "max_dist" => 9, "chance" => 338, "drops"=>[
+        ["label"=>"Verfallene Villa",'icon' => 'villa',"camping"=>7,"min_dist" => 3, "max_dist" => 9, "chance" => 338, "drops"=>[
             array('item' => 'can_#00','count' => 63),
             array('item' => 'pile_#00','count' => 32),
             array('item' => 'chest_citizen_#00','count' => 23),
@@ -614,7 +614,7 @@ class BeyondFixtures extends Fixture implements DependentFixtureInterface
             array('item' => 'rhum_#00','count' => 2),
             array('item' => 'pet_dog_#00','count' => 2),
         ]],
-        ["label"=>"Verlassene Baustelle","camping"=>7,"min_dist" => 4, "max_dist" => 10, "chance" => 481, "drops"=>[
+        ["label"=>"Verlassene Baustelle",'icon' => 'construction',"camping"=>7,"min_dist" => 4, "max_dist" => 10, "chance" => 481, "drops"=>[
             array('item' => 'metal_beam_#00','count' => 103),
             array('item' => 'repair_kit_#00','count' => 64),
             array('item' => 'plate_raw_#00','count' => 51),
@@ -630,15 +630,15 @@ class BeyondFixtures extends Fixture implements DependentFixtureInterface
             array('item' => 'pocket_belt_#00','count' => 2),
             array('item' => 'chest_xl_#00','count' => 2),
         ]],
-        ["label"=>"Verlassener Brunnen","camping"=>0,"min_dist" => 17, "max_dist" => 28, "chance" => 221, "drops"=>[
+        ["label"=>"Verlassener Brunnen",'icon' => 'well',"camping"=>0,"min_dist" => 17, "max_dist" => 28, "chance" => 221, "drops"=>[
             array('item' => 'water_#00','count' => 121),
             array('item' => 'water_cup_part_#00','count' => 38),
             array('item' => 'jerrycan_#00','count' => 11),
         ]],
-        ["label"=>"Verlassene Silos","camping"=>7,"min_dist" => 8, "max_dist" => 16, "chance" => 482, "drops"=>[
+        ["label"=>"Verlassene Silos",'icon' => 'silo',"camping"=>7,"min_dist" => 8, "max_dist" => 16, "chance" => 482, "drops"=>[
             array('item' => 'jerrycan_#00','count' => 321),
         ]],
-        ["label"=>"Versperrte Straße","camping"=>13,"min_dist" => 4, "max_dist" => 10, "chance" => 42, "drops"=>[
+        ["label"=>"Versperrte Straße",'icon' => 'street',"camping"=>13,"min_dist" => 4, "max_dist" => 10, "chance" => 42, "drops"=>[
             array('item' => 'concrete_wall_#00','count' => 18),
             array('item' => 'plate_raw_#00','count' => 9),
             array('item' => 'tube_#00','count' => 5),
@@ -648,7 +648,7 @@ class BeyondFixtures extends Fixture implements DependentFixtureInterface
             array('item' => 'courroie_#00','count' => 1),
             array('item' => 'repair_one_#00','count' => 1),
         ]],
-        ["label"=>"Verwilderter Park","camping"=>7,"min_dist" => 4, "max_dist" => 10, "chance" => 102, "drops"=>[
+        ["label"=>"Verwilderter Park",'icon' => 'park',"camping"=>7,"min_dist" => 4, "max_dist" => 10, "chance" => 102, "drops"=>[
             array('item' => 'watergun_empty_#00','count' => 12),
             array('item' => 'vegetable_#00','count' => 11),
             array('item' => 'pet_snake_#00','count' => 5),
@@ -661,15 +661,15 @@ class BeyondFixtures extends Fixture implements DependentFixtureInterface
             array('item' => 'ryebag_#00','count' => 1),
             array('item' => 'pet_pig_#00','count' => 1),
         ]],
-        ["label"=>"Waffengeschäft Guns'n'Zombies","camping"=>7,"min_dist" => 5, "max_dist" => 12, "chance" => 121, "drops"=>[
+        ["label"=>"Waffengeschäft Guns'n'Zombies",'icon' => 'guns',"camping"=>7,"min_dist" => 5, "max_dist" => 12, "chance" => 121, "drops"=>[
             // ToDo
         ]],
-        ["label"=>"Warenlager","camping"=>7,"min_dist" => 2, "max_dist" => 7, "chance" => 181, "drops"=>[
+        ["label"=>"Warenlager",'icon' => 'warehouse',"camping"=>7,"min_dist" => 2, "max_dist" => 7, "chance" => 181, "drops"=>[
             array('item' => 'chest_food_#00','count' => 43),
             array('item' => 'chest_citizen_#00','count' => 34),
             array('item' => 'chest_tools_#00','count' => 31),
         ]],
-        ["label"=>"Zelt eines Bürgers","camping"=>11,"min_dist" => 12, "max_dist" => 21, "chance" => 202, "drops"=>[
+        ["label"=>"Zelt eines Bürgers",'icon' => 'tent',"camping"=>11,"min_dist" => 12, "max_dist" => 21, "chance" => 202, "drops"=>[
             array('item' => 'chest_hero_#00','count' => 72),
             array('item' => 'lamp_#00','count' => 36),
             array('item' => 'banned_note_#00','count' => 36),
@@ -689,7 +689,7 @@ class BeyondFixtures extends Fixture implements DependentFixtureInterface
             array('item' => 'chama_tasty_#00','count' => 2),
             array('item' => 'bagxl_#00','count' => 2),
         ]],
-        ["label"=>"Zerstörte Apotheke","camping"=>7,"min_dist" => 4, "max_dist" => 10, "chance" => 458, "drops"=>[
+        ["label"=>"Zerstörte Apotheke",'icon' => 'pharma',"camping"=>7,"min_dist" => 4, "max_dist" => 10, "chance" => 458, "drops"=>[
             array('item' => 'pharma_#00','count' => 316),
             array('item' => 'cyanure_#00','count' => 37),
             array('item' => 'xanax_#00','count' => 30),
@@ -700,7 +700,7 @@ class BeyondFixtures extends Fixture implements DependentFixtureInterface
             array('item' => 'drug_random_#00','count' => 14),
             array('item' => 'bquies_#00','count' => 2),
         ]],
-        ["label"=>"ZomBIER Bar","camping"=>7,"min_dist" => 5, "max_dist" => 12, "chance" => 432, "drops"=>[
+        ["label"=>"ZomBIER Bar",'icon' => 'bar',"camping"=>7,"min_dist" => 5, "max_dist" => 12, "chance" => 432, "drops"=>[
             array('item' => 'rhum_#00','count' => 76),
             array('item' => 'meat_#00','count' => 60),
             array('item' => 'food_bag_#00','count' => 26),
@@ -740,6 +740,7 @@ class BeyondFixtures extends Fixture implements DependentFixtureInterface
                 ->setMinDistance( $entry['min_dist'] )
                 ->setMaxDistance( $entry['max_dist'] )
                 ->setChance( $entry['chance'] )
+                ->setIcon( $entry['icon'] )
                 ->setDrops( FixtureHelper::createItemGroup( $manager, 'zp_drop_' . substr(md5($entry['label']),0, 24), $entry['drops'] ) )
             ;
             $manager->persist( $entity );

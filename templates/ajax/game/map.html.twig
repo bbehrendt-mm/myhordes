@@ -38,6 +38,31 @@
                                 {% if zones[x][y].zombieStatus == constant('App\\Entity\\Zone::ZombieStateExact') %}
                                     <div class="count">{% if zones[x][y].zombies > 0 %}{{ zones[x][y].zombies }}{% endif %}</div>
                                 {% endif %}
+                                {% if x != pos_x or y != pos_y %}
+                                    <div class="tooltip tooltip-map">
+                                        {% if zones[x][y].discoveryStatus > constant('App\\Entity\\Zone::DiscoveryStateNone') and zones[x][y].prototype %}
+                                            <div class="row"><div class="cell rw-12 bold">
+                                                {% if zones[x][y].buryCount > 0 %}
+                                                    {{ 'Verschüttete Ruine'|trans({},'game') }}
+                                                {% else %}
+                                                    {{ zones[x][y].prototype.label|trans({}, 'game') }}
+                                                {% endif %}
+                                            </div></div>
+                                        {% endif %}
+                                        {% if x == 0 and y == 0 %}
+                                            <div class="row"><div class="cell rw-12 bold">{{ zones[x][y].town.name }}</div></div>
+                                        {% endif %}
+                                        <div class="row">
+                                            <div class="cell rw-6 left">{{ 'Zone'|trans({},'game') }}</div>
+                                            <div class="cell rw-6 right">{{ x }} / {{ y }}</div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="cell rw-6 left">{{ 'Entfernung'|trans({},'game') }}</div>
+                                            <div class="cell rw-6 right"><div class="ap">{{ (x - pos_x)|abs + (y - pos_y)|abs }}</div></div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+
                         </div>
                     {% else %}
                         <div class="void" style="width: {{ size }}%; padding-top: {{ size }}%"></div>
@@ -49,16 +74,54 @@
 
         {% if allow_zone_view %}
             <div class="zone-plane">
-                {% if zone_players > 0 %}
-                    {% for n in 1..zone_players %}
-                        <div class="actor citizen" style="left: {{ random(45,55) }}%; top: {{ random(45,55) }}%"></div>
+                <div class="zone-sub-container">
+                    {% for plane_y in -2..2 %}
+                        {% for plane_x in -2..2 %}
+                            <div class="zone-subplane{% if plane_x == 0 and plane_y == 0 %} center{% endif %}">
+                                {% if map_x0 <= pos_x + plane_x and map_x1 >= pos_x + plane_x and map_y0 <= pos_y + plane_y and map_y1 >= pos_y + plane_y %}
+
+                                    {# @var current_surrounding \App\Entity\Zone #}
+                                    {% set current_surrounding = zones[pos_x + plane_x][pos_y + plane_y] %}
+
+                                    {% if current_surrounding.discoveryStatus != constant('App\\Entity\\Zone::DiscoveryStateNone') and current_surrounding.prototype %}
+                                        <div class="ruin" style="background-image: url({{ asset('build/images/ruin/' ~ current_surrounding.prototype.icon ~ '.gif') }})"></div>
+                                    {% endif %}
+
+                                    {% if plane_x == 0 and plane_y == 0 %}
+                                        {% if zone_players > 0 %}
+                                            {% for n in 1..zone_players %}
+                                                <div class="actor citizen" style="left: {{ random(45,55) }}%; top: {{ random(45,55) }}%"></div>
+                                            {% endfor %}
+                                        {% endif %}
+                                        {% if zone_zombies > 0 %}
+                                            {% for n in 1..zone_zombies %}
+                                                <div class="actor zombie" style="left: {{ random([random(25,45),random(55,75)]) }}%; top: {{ random([random(25,45),random(55,75)]) }}%"></div>
+                                            {% endfor %}
+                                        {% endif %}
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        {% endfor %}
                     {% endfor %}
-                {% endif %}
-                {% if zone_zombies > 0 %}
-                    {% for n in 1..zone_zombies %}
-                        <div class="actor zombie" style="left: {{ random([random(25,45),random(55,75)]) }}%; top: {{ random([random(25,45),random(55,75)]) }}%"></div>
+                </div>
+                <div class="zone-sub-container censor-master">
+                    {% for plane_y in -2..2 %}
+                        {% for plane_x in -2..2 %}
+                            <div class="zone-subplane{% if plane_x == 0 and plane_y == 0 %} center{% endif %}" x-preview-for="{{ pos_x + plane_x }},{{ pos_y + plane_y }}">
+                                {% if map_x0 <= pos_x + plane_x and map_x1 >= pos_x + plane_x and map_y0 <= pos_y + plane_y and map_y1 >= pos_y + plane_y %}
+                                    {# @var current_surrounding \App\Entity\Zone #}
+                                    {% set current_surrounding = zones[pos_x + plane_x][pos_y + plane_y] %}
+
+                                    {% if current_surrounding.discoveryStatus == constant('App\\Entity\\Zone::DiscoveryStateNone') %}
+                                        <div class="censor"></div>
+                                    {% endif %}
+                                {% else %}
+                                    <div class="censor"></div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
                     {% endfor %}
-                {% endif %}
+                </div>
             </div>
 
             <div class="zone-plane-controls">

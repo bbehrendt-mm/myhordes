@@ -195,7 +195,7 @@ class ItemFixtures extends Fixture
         ["label"=>"Darmmelone","icon"=>"vegetable_tasty","category"=>"food_7","deco"=>0,"heavy"=>false],                                    // In Out
         ["label"=>"Raketenpulver","icon"=>"powder","category"=>"rsc","deco"=>0,"heavy"=>false],                                             // -- ---
         ["label"=>"Schießpulverbombe","icon"=>"flash","category"=>"exp_s","deco"=>0,"heavy"=>false],                                        // -- Out
-        ["label"=>"Teddybär","icon"=>"teddy","category"=>"furniture","deco"=>0,"heavy"=>false],                                             //
+        ["label"=>"Teddybär","icon"=>"teddy","category"=>"furniture","deco"=>0,"heavy"=>false],                                             // In Out
         ["label"=>"Holzkistendeckel","icon"=>"wood_plate_part","category"=>"aud_n","deco"=>0,"heavy"=>true],                                // -- ---
         ["label"=>"Solide Holzplatte","icon"=>"wood_plate","category"=>"armor","deco"=>0,"heavy"=>true],                                    // -- ---
         ["label"=>"Geldbündel","icon"=>"money","category"=>"furniture","deco"=>7,"heavy"=>false],                                           // -- ---
@@ -267,7 +267,7 @@ class ItemFixtures extends Fixture
         ["label"=>"Gereinigtes modriges Wasser","icon"=>"water_cup","category"=>"food","deco"=>0,"heavy"=>false],                           // In Out
         ["label"=>"Notizzettel eines Verbannten","icon"=>"banned_note","category"=>"exp_s","deco"=>0,"heavy"=>false],                       //
         ["label"=>"Blutdurchtränkter Verband","icon"=>"infect_poison_part","category"=>"drug","deco"=>0,"heavy"=>false],                    // -- ---
-        ["label"=>"Verfluchter Teddybär","icon"=>"teddy","category"=>"furniture","deco"=>0,"heavy"=>false],                                 //
+        ["label"=>"Verfluchter Teddybär","icon"=>"teddy","category"=>"furniture","deco"=>0,"heavy"=>false],                                 // In Out
         ["label"=>"Sägemehlsteak","icon"=>"woodsteak","category"=>"food_7","deco"=>0,"heavy"=>false],                                       // In Out
         ["label"=>"Abgetragene rote Jacke","icon"=>"christmas_suit_1","category"=>"misc","deco"=>0,"heavy"=>false],                         // -- ---
         ["label"=>"Zerrissene rote Hose","icon"=>"christmas_suit_2","category"=>"misc","deco"=>0,"heavy"=>false],                           // -- ---
@@ -338,7 +338,7 @@ class ItemFixtures extends Fixture
         ["label"=>"Teleskop","icon"=>"scope","category"=>"imp","deco"=>0,"heavy"=>false],                                                   // -- ---
         ["label"=>"Unpersönliche Explodierende Fußmatte","icon"=>"trapma","category"=>"furniture","deco"=>0,"heavy"=>false],                // -- ---
         ["label"=>"Chuck-Figur","icon"=>"chudol","category"=>"furniture","deco"=>15,"heavy"=>false],                                        // -- ---
-        ["label"=>"Kleine Zen-Fibel","icon"=>"lilboo","category"=>"imp","deco"=>0,"heavy"=>false],                                          // -- ---
+        ["label"=>"Kleine Zen-Fibel","icon"=>"lilboo","category"=>"imp","deco"=>0,"heavy"=>false],                                          // In Out
         ["label"=>"Trockene Kräuter","icon"=>"ryebag","category"=>"rsc","deco"=>0,"heavy"=>false],                                          // -- ---
         ["label"=>"Mutterkorn","icon"=>"fungus","category"=>"food","deco"=>0,"heavy"=>false],                                               // -- ---
         ["label"=>"Korn-Bräu","icon"=>"hmbrew","category"=>"food","deco"=>0,"heavy"=>false],                                                // In Out

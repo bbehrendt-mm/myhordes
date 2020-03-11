@@ -97,6 +97,7 @@ export default class HTML {
         }, false);
         parent.addEventListener('pointerenter', function(e) {
             element.style.display = 'block';
+            document.body.append( element );
         });
         parent.addEventListener('pointermove', function(e) {
             element.style.top  = e.clientY + 'px';
@@ -106,6 +107,7 @@ export default class HTML {
         });
         parent.addEventListener('pointerleave', function(e) {
             element.style.display = 'none';
+            parent.append( element );
         });
     };
 
