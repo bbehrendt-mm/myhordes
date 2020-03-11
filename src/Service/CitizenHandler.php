@@ -8,6 +8,7 @@ use App\Entity\CauseOfDeath;
 use App\Entity\Citizen;
 use App\Entity\CitizenProfession;
 use App\Entity\CitizenStatus;
+use App\Entity\ItemPrototype;
 use App\Structures\ItemRequest;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -85,14 +86,20 @@ class CitizenHandler
      * @param Citizen $citizen
      * @param CitizenStatus|string $status
      */
-    public function inflictStatus( Citizen &$citizen, $status ) {
+    public function inflictStatus( Citizen &$citizen, $status ): bool {
         if (is_string( $status )) $status = $this->entity_manager->getRepository(CitizenStatus::class)->findOneByName($status);
-        if (!$status) return;
+        if (!$status) return false;
 
         if (in_array( $status->getName(), ['tg_meta_wound','wound1','wound2','wound3','wound4','wound5','wound6'] )) {
             $this->inflictWound($citizen);
-            return;
+            return true;
         }
+
+        // Prevent terror when holding a zen booklet
+        if ($status->getName() === 'terror' && $this->inventory_handler->countSpecificItems(
+            $citizen->getInventory(),
+            $this->entity_manager->getRepository(ItemPrototype::class)->findOneByName('lilboo_#00') )
+        ) return $this->hasStatusEffect( $citizen, 'terror' );
 
         if (in_array($status->getName(), ['drugged','addict']))
             $this->removeStatus($citizen, 'clean');
@@ -101,18 +108,20 @@ class CitizenHandler
         if ( $status->getName() === 'hasdrunk' ) $citizen->setWalkingDistance( 0 );
 
         $citizen->addStatus( $status );
+        return true;
     }
 
-    public function removeStatus( Citizen &$citizen, $status ) {
+    public function removeStatus( Citizen &$citizen, $status ): bool {
         if (is_string( $status )) $status = $this->entity_manager->getRepository(CitizenStatus::class)->findOneByName($status);
-        if (!$status) return;
+        if (!$status) return false;
 
         if (in_array( $status->getName(), ['tg_meta_wound','wound1','wound2','wound3','wound4','wound5','wound6'] )) {
             $this->healWound($citizen);
-            return;
+            return true;
         }
 
         $citizen->removeStatus( $status );
+        return true;
     }
 
     public function increaseThirstLevel( Citizen $citizen ) {

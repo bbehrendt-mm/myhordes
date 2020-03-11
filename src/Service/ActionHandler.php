@@ -280,10 +280,22 @@ class ActionHandler
                     if ($citizen->getStatus()->contains( $status->getInitial() )) {
                         $this->citizen_handler->removeStatus( $citizen, $status->getInitial() );
                         $this->citizen_handler->inflictStatus( $citizen, $status->getResult() );
+                        $tags[] = 'stat-change';
+                        $tags[] = "stat-change-{$status->getInitial()->getName()}-{$status->getResult()->getName()}";
                     }
                 }
-                elseif ($status->getInitial()) $this->citizen_handler->removeStatus( $citizen, $status->getInitial() );
-                elseif ($status->getResult())  $this->citizen_handler->inflictStatus( $citizen, $status->getResult() );
+                elseif ($status->getInitial()) {
+                    if ($citizen->getStatus()->contains( $status->getInitial() ) && $this->citizen_handler->removeStatus( $citizen, $status->getInitial() )) {
+                        $tags[] = 'stat-down';
+                        $tags[] = "stat-down-{$status->getInitial()->getName()}";
+                    }
+                }
+                elseif ($status->getResult()) {
+                    if (!$citizen->getStatus()->contains( $status->getResult() ) && $this->citizen_handler->inflictStatus( $citizen, $status->getResult() )) {
+                        $tags[] = 'stat-up';
+                        $tags[] = "stat-up-{$status->getResult()->getName()}";
+                    }
+                }
 
             }
 

@@ -75,7 +75,8 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'have_canister'   => [ 'type' => Requirement::MessageOnFail, 'collection' => [ 'item' => [ 'item' => 'jerrycan_#00', 'prop' => null ] ], 'text' => 'Hierfür brauchst du einen Kanister.' ],
             'have_battery'    => [ 'type' => Requirement::MessageOnFail, 'collection' => [ 'item' => [ 'item' => 'pile_#00',  'prop' => null ] ],    'text' => 'Hierfür brauchst du eine Batterie.' ],
 
-            'must_be_terrorized' => [ 'type' => Requirement::MessageOnFail, 'collection' => [ 'status' => [ 'enabled' => true, 'status' => 'terror' ] ], 'text' => 'Das brauchst du gerade nicht ...' ],
+            'must_be_terrorized'     => [ 'type' => Requirement::MessageOnFail, 'collection' => [ 'status' => [ 'enabled' => true,  'status' => 'terror' ] ], 'text' => 'Das brauchst du gerade nicht ...' ],
+            'must_not_be_terrorized' => [ 'type' => Requirement::HideOnFail,    'collection' => [ 'status' => [ 'enabled' => false, 'status' => 'terror' ] ], 'text' => 'Das brauchst du gerade nicht ...' ],
 
             'must_be_outside' => [ 'type' => Requirement::HideOnFail,  'collection' => [ 'location' => [ RequireLocation::LocationOutside ] ]],
             'must_be_inside' =>  [ 'type' => Requirement::HideOnFail,  'collection' => [ 'location' => [ RequireLocation::LocationInTown  ] ]],
@@ -445,6 +446,9 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'eat_bone'    => [ 'label' => 'Essen', 'poison' => ItemAction::PoisonHandlerConsume, 'meta' => [ 'eat_ap' ], 'result' => [ 'eat_ap6', ['item' => ['consume' => false, 'morph' => 'bone_#00'] ], ['group' => [ ['do_nothing', 1], [ 'infect', 1 ] ]] ] ],
             'eat_cadaver' => [ 'label' => 'Essen', 'poison' => ItemAction::PoisonHandlerConsume, 'meta' => [ 'eat_ap' ], 'result' => [ 'eat_ap6', ['item' => ['consume' => false, 'morph' => 'cadaver_remains_#00'] ], ['group' => [ ['do_nothing', 1], [ 'infect', 1 ] ]] ] ],
 
+            'cuddle_teddy_1' => [ 'label' => 'Knuddeln', 'meta' => [ 'must_be_terrorized', [ 'type' => Requirement::CrossOnFail, 'collection' => [ 'status' => [ 'enabled' => false, 'status' => 'tg_teddy' ] ]] ], 'result' => [ [ 'status' => [ 'from' => null, 'to' => 'tg_teddy' ], 'group' => [ ['do_nothing', 1], ['unterrorize', 1] ] ] ], 'message' => 'Du drückst den {item} eng an deine Brust... <t-stat-down-terror>Tränen laufen über deine Wange, als du an die Hölle denkst, in der du lebst. Nach ein paar Minuten fühlst du dich besser!</t-stat-down-terror><nt-stat-down-terror>Aber nichts geschieht!</nt-stat-down-terror>' ],
+            'cuddle_teddy_2' => [ 'label' => 'Knuddeln', 'meta' => [ 'must_not_be_terrorized' ], 'result' => [ 'terrorize' ], 'message' => 'Du drückst den {item} eng an deine Brust... <t-stat-up-terror>Panik steigt in dir auf!</t-stat-up-terror><nt-stat-up-terror>Aber nichts geschieht!</nt-stat-up-terror>' ],
+
             'clean_clothes' => [ 'label' => 'Reinigen', 'meta' => [ 'must_be_inside', [ 'type' => Requirement::CrossOnFail, 'collection' => [ 'status' => [ 'enabled' => false, 'status' => 'tg_clothes' ] ]] ], 'result' => [ [ 'status' => [ 'from' => null, 'to' => 'tg_clothes' ], 'item' => ['consume' => false, 'morph' => 'basic_suit_#00'] ] ] ],
         ],
 
@@ -654,6 +658,9 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'digger_#00'         => ['nessquick'],
             'flesh_#00'          => ['bomb_1'],
             'flash_#00'          => ['bomb_2'],
+
+            'teddy_#00'          => ['cuddle_teddy_1'],
+            'teddy_#01'          => ['cuddle_teddy_2'],
 
             'basic_suit_dirt_#00' => [ 'clean_clothes' ],
         ]
