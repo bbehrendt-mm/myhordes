@@ -120,6 +120,11 @@ class Zone
      */
     private $zombieStatus = self::ZombieStateUnknown;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $buryCount = 0;
+
     public function __construct()
     {
         $this->citizens = new ArrayCollection();
@@ -404,5 +409,17 @@ class Zone
             if (abs($this->getX()) < abs($this->getY()) && $this->getY() > 0) return self::DirectionEast;
         }
 
+    }
+
+    public function getBuryCount(): ?int
+    {
+        return $this->buryCount;
+    }
+
+    public function setBuryCount(int $buryCount): self
+    {
+        $this->buryCount = $buryCount;
+
+        return $this;
     }
 }

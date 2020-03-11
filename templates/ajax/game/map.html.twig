@@ -18,7 +18,10 @@
                                 {% set zone_attribs = zone_attribs|merge(['past']) %}
                             {% endif %}
 
-                            {% if zones[x][y].prototype %}{% set zone_attribs = zone_attribs|merge(['ruin']) %}{% endif %}
+                            {% if zones[x][y].prototype %}
+                                {% set zone_attribs = zone_attribs|merge(['ruin']) %}
+                                {% if zones[x][y].buryCount > 0 %}{% set zone_attribs = zone_attribs|merge(['buried']) %}{% endif %}
+                            {% endif %}
 
                             {% if zones[x][y].zombieStatus >= constant('App\\Entity\\Zone::ZombieStateEstimate') %}
                                 {% if zones[x][y].zombies == 0 %}    {% set zone_attribs = zone_attribs|merge(['danger-0']) %}

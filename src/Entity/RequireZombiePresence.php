@@ -27,7 +27,7 @@ class RequireZombiePresence
     private $number;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", nullable=true)
      */
     private $mustBlock;
 
@@ -65,7 +65,7 @@ class RequireZombiePresence
         return $this->mustBlock;
     }
 
-    public function setMustBlock(bool $mustBlock): self
+    public function setMustBlock(?bool $mustBlock): self
     {
         $this->mustBlock = $mustBlock;
 

@@ -1,4 +1,5 @@
 {% extends "ajax/game/beyond/beyond.html.twig" %}
+{# @var zone \App\Entity\Zone #}
 {% block content %}
     {% if zone_blocked %}
         <div>
@@ -43,8 +44,15 @@
 
             {% if zone.prototype %}
                 <div class="note">
-                    {% trans from 'game' %}Ruine{% endtrans %}:
-                    <b>{{ zone.prototype.label|trans({}, 'game') }}</b>
+                    {% if zone.buryCount > 0 %}
+                        <b>{{ 'Verschüttete Ruine'|trans({},'game') }}</b><br />
+                        {{ 'Es muss noch aufgeräumt werden'|trans({},'game') }}:
+                        <div class="ruin-bury-count">{% for p in 1..zone.buryCount %}<div></div>{% endfor %}</div>
+                    {% else %}
+                        {{ 'Ruine'|trans({},'game') }}:
+                        <b>{{ zone.prototype.label|trans({}, 'game') }}</b>
+                    {% endif %}
+
                 </div>
 
             {% endif %}
@@ -89,10 +97,18 @@
                     </div>
                 {% endif %}
                 {% if zone.prototype %}
-                    <button id="dig_ruin_button" {% if zone_blocked or not dig_ruin %}disabled{% endif %} >
+                    <button id="dig_ruin_button" {% if zone_blocked or not dig_ruin or zone.buryCount > 0 %}disabled{% endif %} >
                         <img class="icon left" alt="" src="{{ asset('build/images/small_gather.gif') }}" />
-                        {% trans with {'%ruin%': zone.prototype.label|trans({},'game')} from 'game'  %}%ruin% durchsuchen{% endtrans %}
+                        {% set ruin_label = zone.prototype.label|trans({},'game') %}
+                        {% if zone.buryCount > 0 %}{% set ruin_label = 'Verschüttete Ruine'|trans({},'game') %}{% endif %}
+                        {% trans with {'%ruin%': ruin_label} from 'game'  %}%ruin% durchsuchen{% endtrans %}
                     </button>
+                    {% if zone.buryCount > 0 %}
+                        <button id="uncover_ruin_button" {% if zone_blocked %}disabled{% endif %} >
+                            <img class="icon left" alt="" src="{{ asset('build/images/uncover.gif') }}" />
+                            {{ 'Zone freiräumen'|trans({},'game') }} (<div class="ap">1</div>)
+                        </button>
+                    {% endif %}
                 {% endif %}
             {% endif %}
 
@@ -135,6 +151,15 @@
         if (dig_r_button)
             dig_r_button.addEventListener('click', function() {
                 $.ajax.easySend( '{{ path('beyond_desert_scavenge_controller') }}', {},
+                    function () {
+                        $.ajax.load(null, '{{ path('beyond_dashboard') }}', true);
+                    } );
+            });
+
+        let uncover_r_button = document.getElementById('uncover_ruin_button');
+        if (uncover_r_button)
+            uncover_r_button.addEventListener('click', function() {
+                $.ajax.easySend( '{{ path('beyond_desert_uncover_controller') }}', {},
                     function () {
                         $.ajax.load(null, '{{ path('beyond_dashboard') }}', true);
                     } );

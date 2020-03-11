@@ -18,6 +18,9 @@ class RequireLocation
 {
     const LocationInTown = 1;
     const LocationOutside = 2;
+    const LocationOutsideFree = 3;
+    const LocationOutsideRuin = 4;
+    const LocationOutsideBuried = 5;
 
     /**
      * @ORM\Id()

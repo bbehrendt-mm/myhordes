@@ -125,10 +125,14 @@ class ActionHandler
                 if ( $citizen->getZone() ) foreach ( $citizen->getZone()->getCitizens() as $c )
                     $cp += $this->citizen_handler->getCP( $c );
 
-                if (
-                    ($zombie_condition->getMustBlock() && $cp >= $current_zeds) ||
-                    ($zombie_condition->getNumber() > $current_zeds)
-                ) $current_state = min( $current_state, $this_state );
+                if ($zombie_condition->getMustBlock() !== null) {
+
+                    if ($zombie_condition->getMustBlock() && $cp >= $current_zeds) $current_state = min( $current_state, $this_state );
+                    elseif (!$zombie_condition->getMustBlock() && $cp < $current_zeds) $current_state = min( $current_state, $this_state );
+
+                }
+
+                if ($zombie_condition->getNumber() > $current_zeds) $current_state = min( $current_state, $this_state );
             }
 
             if ($building_condition = $meta_requirement->getBuilding()) {
@@ -401,7 +405,8 @@ class ActionHandler
                             }
                         }
 
-                // ToDO Ness-Quick
+                if ($zoneEffect->getUncoverRuin())
+                    $base_zone->setBuryCount( max(0, $base_zone->getBuryCount() - mt_rand(2,3)) );
             }
 
             if ($well = $result->getWell()) {

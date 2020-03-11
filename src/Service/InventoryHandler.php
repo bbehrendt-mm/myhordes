@@ -39,7 +39,7 @@ class InventoryHandler
 
     public function getSize( Inventory $inventory ): int {
         if ($inventory->getCitizen()) {
-            $hero = $inventory->getCitizen()->getProfession()->getHeroic();
+            $hero = $inventory->getCitizen()->getProfession() && $inventory->getCitizen()->getProfession()->getHeroic();
             $base = 4 + $this->countEssentialItems( $inventory ) + ($hero ? 1 : 0);
             if (
                 !empty($this->fetchSpecificItems( $inventory, [ new ItemRequest( 'bagxl_#00' ) ] )) ||

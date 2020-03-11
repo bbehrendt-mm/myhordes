@@ -158,6 +158,8 @@ class GameFactory
                 else $previous[$target_ruin->getId()]++;
 
                 $zone_list[$i]->setPrototype( $target_ruin );
+
+                if ($this->random_generator->chance(0.4)) $zone_list[$i]->setBuryCount( mt_rand(6, 20) );
             } else
                 $zombies_base = 1 + floor(min(1,sqrt( pow($zone_list[$i]->getX(),2) + pow($zone_list[$i]->getY(),2) )/18) * 3);
 

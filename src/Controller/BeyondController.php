@@ -404,7 +404,7 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
      * @Route("api/beyond/desert/dig", name="beyond_desert_dig_controller")
      * @return Response
      */
-    public function attack_dig_api(): Response {
+    public function desert_dig_api(): Response {
         $this->deferZoneUpdate();
 
         $citizen = $this->getActiveCitizen();
@@ -442,11 +442,14 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
      * @Route("api/beyond/desert/scavenge", name="beyond_desert_scavenge_controller")
      * @return Response
      */
-    public function attack_scavenge_api(): Response {
+    public function desert_scavenge_api(): Response {
         $this->deferZoneUpdate();
 
         $citizen = $this->getActiveCitizen();
         $zone = $citizen->getZone();
+
+        if (!$zone->getPrototype() || $zone->getBuryCount() > 0)
+            return AjaxResponse::error( self::ErrorNotDiggable );
 
         if (!$this->zone_handler->check_cp( $zone ))
             return AjaxResponse::error( self::ErrorZoneBlocked );
@@ -475,6 +478,38 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
 
         try {
             $this->entity_manager->persist($dm);
+            $this->entity_manager->persist($zone);
+            $this->entity_manager->flush();
+        } catch (Exception $e) {
+            return AjaxResponse::error( ErrorHelper::ErrorInternalError );
+        }
+
+        return AjaxResponse::success();
+    }
+
+    /**
+     * @Route("api/beyond/desert/uncover", name="beyond_desert_uncover_controller")
+     * @return Response
+     */
+    public function desert_uncover_api(): Response {
+        $this->deferZoneUpdate();
+
+        $citizen = $this->getActiveCitizen();
+        $zone = $citizen->getZone();
+
+        if (!$zone->getPrototype() || $zone->getBuryCount() <= 0 || ($zone->getX() === 0 && $zone->getY() === 0))
+            return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
+
+        if (!$this->zone_handler->check_cp( $zone ))
+            return AjaxResponse::error( self::ErrorZoneBlocked );
+
+        if ($citizen->getAp() < 1 || $this->citizen_handler->isTired($citizen))
+            return AjaxResponse::error( ErrorHelper::ErrorNoAP );
+
+        $this->citizen_handler->setAP($citizen, true, -1);
+        $zone->setBuryCount( $zone->getBuryCount() - 1 );
+
+        try {
             $this->entity_manager->persist($zone);
             $this->entity_manager->flush();
         } catch (Exception $e) {
