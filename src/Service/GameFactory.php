@@ -169,6 +169,15 @@ class GameFactory
             }
         }
 
+        $item_spawns = [
+            'bplan_box_e_#00', 'bplan_box_e_#00', 'bplan_r_#00',
+            'bplan_r_#00', 'bplan_r_#00', 'bplan_r_#00', 'bplan_r_#00',
+            'bplan_e_#00', 'bplan_e_#00',
+        ];
+        shuffle($zone_list);
+        for ($i = 0; $i < min(count($item_spawns),count($zone_list)); $i++)
+            $zone_list[$i]->getFloor()->addItem( $this->item_factory->createItem( $item_spawns[$i] ) );
+
         $this->zone_handler->dailyZombieSpawn( $town, 1, ZoneHandler::RespawnModeNone );
         return $town;
     }

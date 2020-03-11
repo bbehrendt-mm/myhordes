@@ -249,7 +249,7 @@ class ItemFixtures extends Fixture
         ["label"=>"Getrocknete Marshmallows","icon"=>"chama","category"=>"food_n","deco"=>0,"heavy"=>false],                                // -- ---
         ["label"=>"Geröstete Marshmallows","icon"=>"chama_tasty","category"=>"food_7","deco"=>0,"heavy"=>false],                            // In Out
         ["label"=>"PC-Gehäuse","icon"=>"pc","category"=>"weapon","deco"=>3,"heavy"=>true],                                                  // -- Out
-        ["label"=>"Safe","icon"=>"safe","category"=>"box","deco"=>0,"heavy"=>true],                                                         //
+        ["label"=>"Safe","icon"=>"safe","category"=>"box","deco"=>0,"heavy"=>true],                                                         // In Out
         ["label"=>"Eine Enzyklopädie","icon"=>"rp_twin","category"=>"misc","deco"=>0,"heavy"=>false],                                       // In Out
         ["label"=>"Wasserspender (leer)","icon"=>"water_can_empty","category"=>"exp_s","deco"=>0,"heavy"=>true],                            // -- ---
         ["label"=>"Wasserspender (1 Ration)","icon"=>"water_can_1","category"=>"food","deco"=>0,"heavy"=>true],                             // In Out
@@ -286,7 +286,7 @@ class ItemFixtures extends Fixture
         ["label"=>"Normaler Bauplan (selten)","icon"=>"bplan_r","category"=>"imp","deco"=>0,"heavy"=>false],                                // In ---
         ["label"=>"Normaler Bauplan (sehr selten!)","icon"=>"bplan_e","category"=>"imp","deco"=>0,"heavy"=>false],                          // In ---
         ["label"=>"Architektenkoffer","icon"=>"bplan_box","category"=>"box","deco"=>0,"heavy"=>true],                                       // In Out
-        ["label"=>"Versiegelter Architektenkoffer","icon"=>"bplan_box_e","category"=>"box","deco"=>0,"heavy"=>true],                        //
+        ["label"=>"Versiegelter Architektenkoffer","icon"=>"bplan_box_e","category"=>"box","deco"=>0,"heavy"=>true],                        // In Out
         ["label"=>"Ei","icon"=>"egg","category"=>"food_7","deco"=>0,"heavy"=>false],                                                        // In Out
         ["label"=>"Apfel","icon"=>"apple","category"=>"food_7","deco"=>0,"heavy"=>false],                                                   // In Out
         ["label"=>"Explosive Pampelmuse","icon"=>"boomfruit","category"=>"weapon","deco"=>0,"heavy"=>false],                                // --
