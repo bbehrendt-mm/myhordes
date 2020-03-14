@@ -4,6 +4,15 @@
         {% set size = 100.0/cellnum %}
 
         <div class="scroll-plane" x-default-size="{{ cellnum*20 }}" x-current-scroll-level="{{ default_zoom }}" style="min-width: {{ cellnum*20 }}px">
+            <div class="svg">
+                <svg viewBox="{{ map_x0 }} {{ map_y0 }} {{ 1+(map_x1-map_x0) }} {{ 1+(map_y1-map_y0) }}" xmlns="http://www.w3.org/2000/svg">
+                    <g x-local-id="map-expedition-layer">
+                        <g x-local-id="map-expedition-context"></g>
+                        <g x-local-id="map-expedition-focus"></g>
+                        <g x-local-id="map-expedition-live-editor"></g>
+                    </g>
+                </svg>
+            </div>
             {% for y in map_y0..map_y1 %}
                 {% for x in map_x0..map_x1 %}
                     {% if zones[x] and zones[x][y] %}
@@ -72,6 +81,19 @@
             {% endfor %}
         </div>
 
+        <div class="routes-plane hidden">
+            <div>
+                {# routes \App\Entity\ExpeditionRoute[] #}
+                {% for route in routes %}
+                    <div class="row" x-route-id="{{ route.id }}">
+                        <div class="padded cell rw-12">
+                            {{ route.label }} <div class="float-right"><div class="ap">{{ route.length }}</div></div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
         {% if allow_zone_view %}
             <div class="zone-plane">
                 <div class="zone-sub-container">
@@ -137,13 +159,15 @@
     <div class="controls">
         <div class="tilemap_controls">
             <div class="row">
-                <div class="cell rw-4">
+                <div class="cell rw-6">
                     <button x-control="plus"   class="small inline"><i class="fa fa-plus"></i></button>
                     <button x-control="center" {% if default_zoom == 0 %}disabled{% endif %} class="small inline"><i class="fa fa-map-marker-alt"></i></button>
                     <button x-control="minus"  {% if default_zoom == 0 %}disabled{% endif %} class="small inline"><i class="fa fa-minus"></i></button>
                 </div>
-                <div class="cell rw-4">&nbsp;</div>
-                <div class="cell rw-4 right">
+                <div class="cell rw-6 right">
+                    {% if routes|length > 0 %}
+                        <button x-control="routes" class="small inline">{% trans from 'game' %}Routen{% endtrans %}</button>
+                    {% endif %}
                     {% if allow_zone_view %}
                         <button x-control="zone" class="small inline">{% trans from 'game' %}Zone{% endtrans %}</button>
                     {% endif %}

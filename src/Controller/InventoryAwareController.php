@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Citizen;
 use App\Entity\CitizenProfession;
+use App\Entity\ExpeditionRoute;
 use App\Entity\Inventory;
 use App\Entity\Item;
 use App\Entity\ItemAction;
@@ -240,6 +241,32 @@ class InventoryAwareController extends AbstractController implements GameInterfa
         } catch (Exception $e) {
             return AjaxResponse::error( ErrorHelper::ErrorDatabaseException );
         }
+    }
+
+    public function get_map_blob(): array {
+        $zones = []; $range_x = [PHP_INT_MAX,PHP_INT_MIN]; $range_y = [PHP_INT_MAX,PHP_INT_MIN];
+        foreach ($this->getActiveCitizen()->getTown()->getZones() as $zone) {
+            $x = $zone->getX();
+            $y = $zone->getY();
+
+            $range_x = [ min($range_x[0], $x), max($range_x[1], $x) ];
+            $range_y = [ min($range_y[0], $y), max($range_y[1], $y) ];
+
+            if (!isset($zones[$x])) $zones[$x] = [];
+            $zones[$x][$y] = $zone;
+
+        }
+
+        return [
+            'zones' =>  $zones,
+            'routes' => $this->entity_manager->getRepository(ExpeditionRoute::class)->findByTown( $this->getActiveCitizen()->getTown() ),
+            'pos_x'  => $this->getActiveCitizen()->getZone() ? $this->getActiveCitizen()->getZone()->getX() : 0,
+            'pos_y'  => $this->getActiveCitizen()->getZone() ? $this->getActiveCitizen()->getZone()->getY() : 0,
+            'map_x0' => $range_x[0],
+            'map_x1' => $range_x[1],
+            'map_y0' => $range_y[0],
+            'map_y1' => $range_y[1],
+        ];
     }
 
     public function generic_action_api(JSONRequestParser $parser, InventoryHandler $handler): Response {

@@ -110,10 +110,16 @@ class Citizen
      */
     private $Bp;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ExpeditionRoute", mappedBy="owner", orphanRemoval=true, cascade={"persist", "remove"})
+     */
+    private $expeditionRoutes;
+
     public function __construct()
     {
         $this->status = new ArrayCollection();
         $this->digTimers = new ArrayCollection();
+        $this->expeditionRoutes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -364,6 +370,37 @@ class Citizen
     public function setBp(int $Bp): self
     {
         $this->Bp = $Bp;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ExpeditionRoute[]
+     */
+    public function getExpeditionRoutes(): Collection
+    {
+        return $this->expeditionRoutes;
+    }
+
+    public function addExpeditionRoute(ExpeditionRoute $expeditionRoute): self
+    {
+        if (!$this->expeditionRoutes->contains($expeditionRoute)) {
+            $this->expeditionRoutes[] = $expeditionRoute;
+            $expeditionRoute->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeExpeditionRoute(ExpeditionRoute $expeditionRoute): self
+    {
+        if ($this->expeditionRoutes->contains($expeditionRoute)) {
+            $this->expeditionRoutes->removeElement($expeditionRoute);
+            // set the owning side to null (unless already changed)
+            if ($expeditionRoute->getOwner() === $this) {
+                $expeditionRoute->setOwner(null);
+            }
+        }
 
         return $this;
     }

@@ -1,0 +1,95 @@
+{% extends "ajax/game/town/town.html.twig" %}
+{% block content %}
+
+    <div class="row">
+        <div class="padded cell rw-12">
+            {% embed "ajax/game/map.html.twig" with {'default_zoom': 0, 'default_show_zone': false, 'allow_zone_view': false} %}
+            {% endembed %}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="padded cell rw-6">
+            <div id="create_route_control">
+                <button id="create_route_1">{{ 'Neue einfache Route'|trans({},'game') }}</button>
+                <button id="create_route_2">{{ 'Neue komplexe Route'|trans({},'game') }}</button>
+            </div>
+            <div id="route_dashboard" style="display: none">
+                <div class="row">
+                    <div class="padded cell rw-12"><input id="route_name" type="text" maxlength="32" placeholder="{{ 'Name der Route'|trans({},'game') }}" /></div>
+                </div>
+                <div class="row">
+                    <div class="padded cell rw-6"><a class="small" href="" x-ajax-href="{{ path('town_planner') }}">{{ 'Abbrechen'|trans({},'global') }}</a></div>
+                    <div class="padded cell rw-6"><button disabled id="save_button">{{ 'Speichern'|trans({},'global') }}</button></div>
+                </div>
+            </div>
+        </div>
+        <div class="padded cell rw-6">
+            <div class="help">
+                <p>{% trans from 'game' %}
+                    Hier kannst du Routen für einen Trip in die Außenwelt planen. Einfache Routen beginnen und enden immer
+                    in der Stadt. Komplexe Routen können an beliebigen Punkten beginnen und enden.
+                {% endtrans %}</p>
+                <p>{% trans from 'game' %}
+                    Nur Helden können komplexe Routen planen.
+                {% endtrans %}</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    {{ parent() }}
+    <script>
+        {% embed "scripts/map.js.twig" %}{% endembed %}
+
+        let map = document.querySelector('.map_area');
+        let save_button = document.getElementById('save_button');
+        //map.addEventListener('zone-pointerenter', function(e) { console.log('zone-pointerenter', e.detail) })
+        //map.addEventListener('zone-pointerleave', function(e) { console.log('zone-pointerleave', e.detail) })
+        //map.addEventListener('zone-click', function(e) { console.log('zone-click', e.detail) })
+
+        let edit_nodes = [];
+        let edit_complex = false;
+        let edit_active = false;
+
+        const begin_route = function(complex) {
+            document.getElementById('create_route_control').style.display = 'none';
+            document.getElementById('route_dashboard').style.display = 'block';
+
+            if (!complex) edit_nodes = [ [0,0], [0,0] ];
+
+            edit_complex = complex;
+            edit_active = true;
+
+            render_routes( map, 'live-editor', '#b4da4c', edit_nodes );
+        }
+
+        map.addEventListener('zone-click', function(e) {
+            if (!edit_active) return;
+
+            if (!edit_complex) edit_nodes.pop();
+            if (edit_nodes.length === 0 || e.detail.x === edit_nodes[edit_nodes.length-1][0] || e.detail.y === edit_nodes[edit_nodes.length-1][1] )
+                edit_nodes.push( [ e.detail.x, e.detail.y ] );
+            if (!edit_complex) edit_nodes.push( [0,0] );
+
+            if (render_routes( map, 'live-editor', '#b8c49c', edit_nodes ))
+                save_button.removeAttribute('disabled');
+            else save_button.setAttribute('disabled','disabled');
+        });
+
+        document.getElementById('save_button').addEventListener('click', function(e) {
+            const name = document.getElementById('route_name').value;
+            if (name.length > 32 || name.length < 3) {
+                $.html.error('{{ 'Bitte gib einen gültigen Namen ein (zwischen 3 und 32 Zeichen).'|trans({},'game') }}');
+                return;
+            }
+            $.ajax.easySend( '{{ path('town_planner_route_submit_controller') }}', {data: edit_nodes, name: name},
+                function () {
+                    $.ajax.load(null, '{{ path('town_planner') }}', true);
+                } );
+        });
+
+        document.getElementById('create_route_1').addEventListener('click', function() { begin_route(false); })
+        document.getElementById('create_route_2').addEventListener('click', function() { begin_route(true); })
+    </script>
+{% endblock %}

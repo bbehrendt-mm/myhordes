@@ -8,6 +8,7 @@ use App\Entity\CitizenHomePrototype;
 use App\Entity\CitizenHomeUpgrade;
 use App\Entity\CitizenHomeUpgradeCosts;
 use App\Entity\CitizenHomeUpgradePrototype;
+use App\Entity\ExpeditionRoute;
 use App\Entity\Zone;
 use App\Response\AjaxResponse;
 use App\Service\ActionHandler;
@@ -603,27 +604,80 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
      */
     public function door(): Response
     {
-        $zones = []; $range_x = [PHP_INT_MAX,PHP_INT_MIN]; $range_y = [PHP_INT_MAX,PHP_INT_MIN];
-        foreach ($this->getActiveCitizen()->getTown()->getZones() as $zone) {
-            $x = $zone->getX();
-            $y = $zone->getY();
-
-            $range_x = [ min($range_x[0], $x), max($range_x[1], $x) ];
-            $range_y = [ min($range_y[0], $y), max($range_y[1], $y) ];
-
-            if (!isset($zones[$x])) $zones[$x] = [];
-            $zones[$x][$y] = $zone;
-
-        }
-        return $this->render( 'ajax/game/town/door.html.twig', $this->addDefaultTwigArgs('door', [
+        return $this->render( 'ajax/game/town/door.html.twig', $this->addDefaultTwigArgs('door', array_merge([
             'town'  =>  $this->getActiveCitizen()->getTown(),
-            'zones' =>  $zones,
-            'pos_x'  => $this->getActiveCitizen()->getZone() ? $this->getActiveCitizen()->getZone()->getX() : 0,
-            'pos_y'  => $this->getActiveCitizen()->getZone() ? $this->getActiveCitizen()->getZone()->getY() : 0,
-            'map_x0' => $range_x[0],
-            'map_x1' => $range_x[1],
-            'map_y0' => $range_y[0],
-            'map_y1' => $range_y[1],
-        ]) );
+        ], $this->get_map_blob())) );
+    }
+
+    /**
+     * @Route("api/town/planner/submit", name="town_planner_route_submit_controller")
+     * @param JSONRequestParser $parser
+     * @param TranslatorInterface $trans
+     * @return Response
+     */
+    public function planner_submit_api(JSONRequestParser $parser, TranslatorInterface $trans): Response {
+        $citizen = $this->getActiveCitizen();
+
+        $name = $parser->get('name', '');
+        if (mb_strlen( $name ) > 32 || mb_strlen( $name ) < 3)
+            return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
+
+        $data = $parser->get('data', []);
+        if (!$data || !is_array($data) || count($data) > 32 || count($data) < 2)
+            return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
+
+        if ($citizen->getExpeditionRoutes()->count() >= 12)
+            return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
+
+        $last = null; $ap = 0;
+        foreach ($data as $entry)
+            if (!is_array($entry) && count($entry) !== 2) return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
+            else {
+                list($x,$y) = $entry;
+                if (!is_int($x) || !is_int($y)) return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
+
+                if (!$this->entity_manager->getRepository(Zone::class)->findOneByPosition($citizen->getTown(), $x, $y))
+                    return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
+
+                if ($last !== null) {
+                    if ($last[0] !== $x && $last[1] !== $y) return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
+                    if ($last[0] === $x && $last[1] === $y) return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
+                    $ap += (abs($last[0] - $x) + abs($last[1] - $y));
+                }
+                $last = [$x,$y];
+            }
+
+        $is_pro_route = $data[0] !== [0,0] || $data[count($data)-1] !== [0,0];
+        if ($is_pro_route && !$citizen->getProfession()->getHeroic())
+            return AjaxResponse::error( ErrorHelper::ErrorMustBeHero );
+
+        $citizen->addExpeditionRoute(
+            (new ExpeditionRoute())
+                ->setLabel($name)
+                ->setOwner($citizen)
+                ->setLength($ap)
+                ->setData( $data )
+        );
+
+        try {
+            $this->entity_manager->persist($citizen);
+            $this->entity_manager->flush();
+        } catch (Exception $e) {
+            return AjaxResponse::error( ErrorHelper::ErrorDatabaseException );
+        }
+
+        $this->addFlash( 'notice', $trans->trans('Deine Route wurde gespeichert.', [], 'game') );
+        return AjaxResponse::success();
+    }
+
+    /**
+     * @Route("jx/town/planner", name="town_planner")
+     * @return Response
+     */
+    public function planner(): Response
+    {
+        return $this->render( 'ajax/game/town/planner.html.twig', $this->addDefaultTwigArgs('door', array_merge([
+            'town'  =>  $this->getActiveCitizen()->getTown(),
+        ], $this->get_map_blob())) );
     }
 }

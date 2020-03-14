@@ -97,19 +97,6 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
     }
 
     protected function addDefaultTwigArgs( ?string $section = null, ?array $data = null ): array {
-        $zones = []; $range_x = [PHP_INT_MAX,PHP_INT_MIN]; $range_y = [PHP_INT_MAX,PHP_INT_MIN];
-        foreach ($this->getActiveCitizen()->getTown()->getZones() as $zone) {
-            $x = $zone->getX();
-            $y = $zone->getY();
-
-            $range_x = [ min($range_x[0], $x), max($range_x[1], $x) ];
-            $range_y = [ min($range_y[0], $y), max($range_y[1], $y) ];
-
-            if (!isset($zones[$x])) $zones[$x] = [];
-            $zones[$x][$y] = $zone;
-
-        }
-
         $zone = $this->getActiveCitizen()->getZone();
         $blocked = !$this->zone_handler->check_cp($zone, $cp);
         $escape = $this->get_escape_timeout( $this->getActiveCitizen() );
@@ -120,17 +107,10 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
             'zone_zombies' => max(0,$zone->getZombies()),
             'zone_cp' => $cp,
             'zone'  =>  $zone,
-            'zones' =>  $zones,
             'allow_movement' => (!$blocked || $escape > 0) && !$citizen_tired,
-            'pos_x'  => $zone->getX(),
-            'pos_y'  => $zone->getY(),
-            'map_x0' => $range_x[0],
-            'map_x1' => $range_x[1],
-            'map_y0' => $range_y[0],
-            'map_y1' => $range_y[1],
             'actions' => $this->getItemActions(),
             'recipes' => $this->getItemCombinations(false),
-        ], $data) );
+        ], $data, $this->get_map_blob()) );
     }
 
     public function get_escape_timeout(Citizen $c): int {

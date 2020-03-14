@@ -1,3 +1,86 @@
+{# @var routes \App\Entity\ExpeditionRoute[] #}
+const known_routes = { {% for route in routes %}{{ route.id }}: {{ route.data|json_encode|raw }}{% endfor %} }
+
+const render_routes = function(map, target, color, nodes) {
+
+    if (!nodes) nodes = [];
+
+    let svg_group = map.querySelector('svg g[x-local-id="map-expedition-' + target + '"]');
+    if (!svg_group) return false;
+
+    let child = null;
+    while ((child = svg_group.lastElementChild)) {
+        svg_group.removeChild(child);
+    }
+
+    let filtered = [];
+    for (let i = 0; i < nodes.length; i++)
+        if (filtered.length == 0 || (nodes[i][0] != filtered[filtered.length-1][0] || nodes[i][1] != filtered[filtered.length-1][1]))
+            filtered.push( nodes[i] );
+
+    let b = filtered.length >= 2;
+    for (let i = 0; i < filtered.length; i++) {
+
+        let new_point = document.createElementNS("http://www.w3.org/2000/svg",'circle');
+        new_point.setAttribute('cx', "" + (filtered[i][0] + 0.5)); new_point.setAttribute('cy', "" + (filtered[i][1] + 0.5));
+        new_point.setAttribute('r', "0.12");
+        new_point.setAttribute('style', 'fill: ' + color + ';');
+        svg_group.appendChild( new_point );
+
+        if (i == 0) continue;
+
+        if (filtered[i][0] == filtered[i-1][0] || filtered[i][1] == filtered[i-1][1]) {
+            let new_line = document.createElementNS("http://www.w3.org/2000/svg",'line');
+            new_line.setAttribute('x1', "" + (filtered[i-1][0] + 0.5)); new_line.setAttribute('y1', "" + (filtered[i-1][1] + 0.5));
+            new_line.setAttribute('x2', "" + (filtered[i][0] + 0.5)); new_line.setAttribute('y2', "" + (filtered[i][1] + 0.5));
+            new_line.setAttribute('style', 'stroke: ' + color + '; stroke-width: 0.12;');
+            svg_group.appendChild( new_line );
+        } else b = false;
+    }
+
+    return b;
+}
+
+const activate_route = function(map, color, id) {
+    const r = render_routes( map, 'focus', color, known_routes[id] );
+
+    map.querySelector('.zone-plane-controls>.action-move-north').classList.remove('on-route');
+    map.querySelector('.zone-plane-controls>.action-move-south').classList.remove('on-route');
+    map.querySelector('.zone-plane-controls>.action-move-east').classList.remove('on-route');
+    map.querySelector('.zone-plane-controls>.action-move-west').classList.remove('on-route');
+
+    if (r) {
+
+        const route = known_routes[id];
+        let nodes = [ route[0] ]; let target = []; let maybe = []; let hit = false;
+        for (let i = 1; i < route.length; i++) {
+            const push = function(x,y) {
+                const d = Math.abs(x - {{ pos_x }}) + Math.abs(y - {{ pos_y }});
+                if ( d === 1 ) {
+                    if      (x < {{ pos_x }}) {if (hit) target.push('west');  else maybe.push('west'); }
+                    else if (x > {{ pos_x }}) {if (hit) target.push('east');  else maybe.push('east'); }
+                    else if (y < {{ pos_y }}) {if (hit) target.push('north'); else maybe.push('north');}
+                    else if (y > {{ pos_y }}) {if (hit) target.push('south'); else maybe.push('south');}
+                }
+                hit = d === 0;
+
+                if (nodes[ nodes.length - 1 ][0] !== x || nodes[ nodes.length - 1 ][1] !== y) nodes.push( [x,y] )
+            };
+            const current = nodes[ nodes.length - 1 ];
+
+            if      (current[0] < route[i][0]) for (let x = current[0]; x <= route[i][0]; x++ ) push(x,current[1]);
+            else if (current[0] > route[i][0]) for (let x = current[0]; x >= route[i][0]; x-- ) push(x,current[1]);
+            else if (current[1] < route[i][1]) for (let y = current[1]; y <= route[i][1]; y++ ) push(current[0],y);
+            else if (current[1] > route[i][1]) for (let y = current[1]; y >= route[i][1]; y-- ) push(current[0],y);
+        }
+
+        console.log(target,maybe);
+        if (target) for (let i = 0; i < target.length; i++) map.querySelector('.zone-plane-controls>.action-move-' + target[i]).classList.add('on-route');
+        else if (maybe) for (let i = 0; i < maybe.length; i++) map.querySelector('.zone-plane-controls>.action-move-' + maybe[i]).classList.add('on-route');
+
+    }
+}
+
 let scroll_areas = document.querySelectorAll('.map>.scroll-plane');
 for (let i = 0; i < scroll_areas.length; i++) {
     let scroll_area = scroll_areas[i];
@@ -5,6 +88,9 @@ for (let i = 0; i < scroll_areas.length; i++) {
     let map = map_area.parentNode;
     let map_controls = map.querySelector('.controls');
     let zone_plane = map.querySelector('.zone-plane');
+    let route_plane = map.querySelector('.routes-plane');
+
+    map_area.addEventListener('dragstart', function(e) { e.preventDefault(); });
 
     map_area.addEventListener('x-resize', function() {
         scroll_area.style.minWidth
@@ -90,6 +176,7 @@ for (let i = 0; i < scroll_areas.length; i++) {
 
         let map_button  = map_controls.querySelector('[x-control="map"]');
         let zone_button = map_controls.querySelector('[x-control="zone"]');
+        let route_button = map_controls.querySelector('[x-control="routes"]');
 
         if (plus_button)
             plus_button.addEventListener('click', function() {
@@ -124,11 +211,45 @@ for (let i = 0; i < scroll_areas.length; i++) {
         if (zone_button)
             zone_button.addEventListener('click', function() {
                 map.classList.add('zone-viewer-mode');
+                route_plane.classList.add('hidden');
+            });
+        if (route_button)
+            route_button.addEventListener('click', function() {
+                if (route_plane.classList.contains('hidden')) route_plane.classList.remove('hidden');
+                else route_plane.classList.add('hidden');
             });
         if (map_button)
             map_button.addEventListener('click', function() {
                 map.classList.remove('zone-viewer-mode');
             })
+    }
+
+    let route_selectors = route_plane.querySelectorAll('[x-route-id]');
+    for (let i = 0; i < route_selectors.length; i++)
+        route_selectors[i].addEventListener('click', function () {
+            const old_route = $.client.get('current','routes');
+            const new_route = old_route == route_selectors[i].getAttribute('x-route-id') ? null : route_selectors[i].getAttribute('x-route-id');
+            activate_route( map, '#b4da4c', new_route );
+            $.client.set('current','routes',new_route,false);
+            route_plane.classList.add('hidden');
+        });
+
+
+    const generate_zone_event = function(type, zone_element, original) {
+        return new CustomEvent(type, {
+            detail: {
+                zone: zone_element,
+                x: parseInt(zone_element.getAttribute('x-zone-x')),
+                y: parseInt(zone_element.getAttribute('x-zone-y')),
+                originalEvent: original
+            }
+        });
+    };
+    let zones = scroll_area.querySelectorAll('.zone[x-zone-x][x-zone-y]');
+    for (let i = 0; i < zones.length; i++) {
+        zones[i].addEventListener('pointerenter', function(e) { map.dispatchEvent( generate_zone_event( 'zone-pointerenter', zones[i], e ) ) });
+        zones[i].addEventListener('pointerleave', function(e) { map.dispatchEvent( generate_zone_event( 'zone-pointerleave', zones[i], e ) ) });
+        zones[i].addEventListener('click',        function(e) { map.dispatchEvent( generate_zone_event( 'zone-click',        zones[i], e ) ) });
     }
 
     map_area.dispatchEvent(new Event("x-resize", { bubbles: false, cancelable: true }));
@@ -154,6 +275,11 @@ for (let i = 0; i < scroll_areas.length; i++) {
                     } );
             });
     }
+
+    const user_active_route = $.client.get('current','routes');
+    if (user_active_route !== null && known_routes[user_active_route])
+        activate_route( map, '#b4da4c', user_active_route );
+
 
     add_move_handler( map_area.querySelector('.zone-plane-controls>.action-move-north') );
     add_move_handler( map_area.querySelector('.zone-plane-controls>.action-move-south') );

@@ -276,6 +276,7 @@ class NightlyHandler
                 $citizen->setDailyUpgradeVote(null);
             }
 
+            $citizen->getExpeditionRoutes()->clear();
             if (!$citizen->getAlive()) continue;
 
             if ($citizen->getStatus()->contains($status_survive))
