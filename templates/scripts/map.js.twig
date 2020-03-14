@@ -1,5 +1,5 @@
 {# @var routes \App\Entity\ExpeditionRoute[] #}
-const known_routes = { {% for route in routes %}{{ route.id }}: {{ route.data|json_encode|raw }}{% endfor %} }
+const known_routes = { {% for route in routes %}{{ route.id }}: {{ route.data|json_encode|raw }},{% endfor %} }
 
 const render_routes = function(map, target, color, nodes) {
 
@@ -44,28 +44,29 @@ const render_routes = function(map, target, color, nodes) {
 const activate_route = function(map, color, id) {
     const r = render_routes( map, 'focus', color, known_routes[id] );
 
-    map.querySelector('.zone-plane-controls>.action-move-north').classList.remove('on-route');
-    map.querySelector('.zone-plane-controls>.action-move-south').classList.remove('on-route');
-    map.querySelector('.zone-plane-controls>.action-move-east').classList.remove('on-route');
-    map.querySelector('.zone-plane-controls>.action-move-west').classList.remove('on-route');
+    let mv = map.querySelectorAll('.zone-plane-controls>.action-move');
+    for (let i = 0; i < mv.length; i++) mv[i].classList.remove('on-route');
 
     if (r) {
 
         const route = known_routes[id];
-        let nodes = [ route[0] ]; let target = []; let maybe = []; let hit = false;
-        for (let i = 1; i < route.length; i++) {
-            const push = function(x,y) {
-                const d = Math.abs(x - {{ pos_x }}) + Math.abs(y - {{ pos_y }});
-                if ( d === 1 ) {
-                    if      (x < {{ pos_x }}) {if (hit) target.push('west');  else maybe.push('west'); }
-                    else if (x > {{ pos_x }}) {if (hit) target.push('east');  else maybe.push('east'); }
-                    else if (y < {{ pos_y }}) {if (hit) target.push('north'); else maybe.push('north');}
-                    else if (y > {{ pos_y }}) {if (hit) target.push('south'); else maybe.push('south');}
-                }
-                hit = d === 0;
+        let nodes = [ ]; let target = []; let maybe = []; let hit = false;
 
-                if (nodes[ nodes.length - 1 ][0] !== x || nodes[ nodes.length - 1 ][1] !== y) nodes.push( [x,y] )
-            };
+        const push = function(x,y) {
+            const d = Math.abs(x - {{ pos_x }}) + Math.abs(y - {{ pos_y }});
+            if ( d === 1 ) {
+                if      (x < {{ pos_x }}) {if (hit) target.push('west');  else maybe.push('west'); }
+                else if (x > {{ pos_x }}) {if (hit) target.push('east');  else maybe.push('east'); }
+                else if (y < {{ pos_y }}) {if (hit) target.push('north'); else maybe.push('north');}
+                else if (y > {{ pos_y }}) {if (hit) target.push('south'); else maybe.push('south');}
+            }
+            hit = d === 0;
+
+            if (nodes.length === 0 || (nodes[ nodes.length - 1 ][0] !== x || nodes[ nodes.length - 1 ][1] !== y)) nodes.push( [x,y] )
+        };
+        push(route[0][0], route[0][1])
+
+        for (let i = 1; i < route.length; i++) {
             const current = nodes[ nodes.length - 1 ];
 
             if      (current[0] < route[i][0]) for (let x = current[0]; x <= route[i][0]; x++ ) push(x,current[1]);
@@ -74,10 +75,17 @@ const activate_route = function(map, color, id) {
             else if (current[1] > route[i][1]) for (let y = current[1]; y >= route[i][1]; y-- ) push(current[0],y);
         }
 
-        console.log(target,maybe);
-        if (target) for (let i = 0; i < target.length; i++) map.querySelector('.zone-plane-controls>.action-move-' + target[i]).classList.add('on-route');
-        else if (maybe) for (let i = 0; i < maybe.length; i++) map.querySelector('.zone-plane-controls>.action-move-' + maybe[i]).classList.add('on-route');
+        let z = null;
+        if (target.length > 0)
+            for (let i = 0; i < target.length; i++) {
+                if ((z = map.querySelector('.zone-plane-controls>.action-move-' + target[i]))) z.classList.add('on-route');
+            }
 
+        else if (maybe.length > 0)
+            for (let i = 0; i < maybe.length; i++) {
+                if ((z = map.querySelector('.zone-plane-controls>.action-move-' + maybe[i]))) z.classList.add('on-route');
+
+            }
     }
 }
 
