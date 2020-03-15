@@ -205,7 +205,7 @@ class CitizenHandler
 
         $inventory = $citizen->getInventory(); $null = null;
         foreach ($item_type_cache as &$entry) {
-            list(&$action,&$proto) = $entry;
+            list($action,$proto) = $entry;
 
             if ($action < 0) foreach ($this->inventory_handler->fetchSpecificItems( $inventory, [new ItemRequest($proto->getName(),1,null,null)] ) as $item)
                 $this->inventory_handler->transferItem($citizen,$item,$inventory,$null);
