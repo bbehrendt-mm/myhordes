@@ -26,9 +26,10 @@ class WebController extends AbstractController
         try {
             $version = $this->version_manager->getVersion();
             $is_debug_version =
-                $version->getPreRelease() && !(
+                ($version->getMajor() < 1) ||
+                ($version->getPreRelease() && !(
                     $version->getPreRelease() === 'rc' || substr($version->getPreRelease(), 0, 3) === 'rc.'
-                );
+                ));
         } catch (InvalidArgumentException $e) {
             $is_debug_version = false;
             $version = null;

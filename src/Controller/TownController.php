@@ -678,6 +678,7 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
     {
         return $this->render( 'ajax/game/town/planner.html.twig', $this->addDefaultTwigArgs('door', array_merge([
             'town'  =>  $this->getActiveCitizen()->getTown(),
+            'allow_extended' => $this->getActiveCitizen()->getProfession()->getHeroic()
         ], $this->get_map_blob())) );
     }
 }

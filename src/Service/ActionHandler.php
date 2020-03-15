@@ -510,6 +510,21 @@ class ActionHandler
 
                         $execute_info_cache['casino'] = $cmg;
                         break;
+                    case 3:
+                        $count = 0;
+                        foreach ($citizen->getTown()->getCitizens() as $target) {
+                            $this->citizen_handler->inflictStatus( $citizen, 'tg_guitar' );
+                            if ($target->getZone()) continue;
+                            else if ($this->citizen_handler->hasStatusEffect($target, ['drunk','drugged'], false)) {
+                                $this->citizen_handler->setAP($target, true, 2, 0);
+                                $count+=2;
+                            } else {
+                                $this->citizen_handler->setAP($target, true, 1, 0);
+                                $count++;
+                            }
+                        }
+                        $execute_info_cache['casino'] = $this->translator->trans('Mit deiner Gitarre hast du die Stadt gerockt! Die Bürger haben {ap} AP erhalten.', ['{ap}' => $count], 'items');
+                        break;
                 }
 
                 if ($ap) {

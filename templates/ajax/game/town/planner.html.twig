@@ -12,7 +12,7 @@
         <div class="padded cell rw-6 rw-md-12">
             <div id="create_route_control">
                 <button id="create_route_1">{{ 'Neue einfache Route'|trans({},'game') }}</button>
-                <button id="create_route_2">{{ 'Neue komplexe Route'|trans({},'game') }}</button>
+                <button {% if not allow_extended %}disabled{% endif %} id="create_route_2">{{ 'Neue komplexe Route'|trans({},'game') }}</button>
             </div>
             <div id="route_dashboard" style="display: none">
                 <div class="row">
@@ -53,6 +53,9 @@
         let edit_active = false;
 
         const begin_route = function(complex) {
+            {% if not allow_extended %}
+                complex = false;
+            {% endif %}
             document.getElementById('create_route_control').style.display = 'none';
             document.getElementById('route_dashboard').style.display = 'block';
 

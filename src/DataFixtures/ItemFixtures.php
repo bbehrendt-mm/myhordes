@@ -273,7 +273,7 @@ class ItemFixtures extends Fixture
         ["label"=>"Zerrissene rote Hose","icon"=>"christmas_suit_2","category"=>"misc","deco"=>0,"heavy"=>false],                           // -- ---
         ["label"=>"Schweißtriefende rote Mütze","icon"=>"christmas_suit_3","category"=>"misc","deco"=>0,"heavy"=>false],                    // -- ---
         ["label"=>"Übelriechender Anzug aus einer anderen Zeit","icon"=>"christmas_suit_full","category"=>"misc","deco"=>0,"heavy"=>false], //
-        ["label"=>"Mobiltelefon","icon"=>"iphone","category"=>"weapon","deco"=>0,"heavy"=>false],                                           // --
+        ["label"=>"Mobiltelefon","icon"=>"iphone","category"=>"weapon","deco"=>0,"heavy"=>false],                                           // -- Out
         ["label"=>"Ekliger Hautfetzen","icon"=>"smelly_meat","category"=>"camp","deco"=>0,"heavy"=>false],                                  // -- ---
         ["label"=>"MagLite Kinderlampe (aus)","icon"=>"maglite_off","category"=>"furniture","deco"=>5,"heavy"=>false],                      // In Out
         ["label"=>"MagLite Kinderlampe (1 Ladung)","icon"=>"maglite_1","category"=>"exp_s","deco"=>5,"heavy"=>false],                       // -- ---
@@ -290,7 +290,7 @@ class ItemFixtures extends Fixture
         ["label"=>"Versiegelter Architektenkoffer","icon"=>"bplan_box_e","category"=>"box","deco"=>0,"heavy"=>true],                        // In Out
         ["label"=>"Ei","icon"=>"egg","category"=>"food_7","deco"=>0,"heavy"=>false],                                                        // In Out
         ["label"=>"Apfel","icon"=>"apple","category"=>"food_7","deco"=>0,"heavy"=>false],                                                   // In Out
-        ["label"=>"Explosive Pampelmuse","icon"=>"boomfruit","category"=>"weapon","deco"=>0,"heavy"=>false],                                // --
+        ["label"=>"Explosive Pampelmuse","icon"=>"boomfruit","category"=>"weapon","deco"=>0,"heavy"=>false],                                // -- Out
         ["label"=>"Abgenutzte Kuriertasche","icon"=>"bplan_drop","category"=>"box","deco"=>0,"heavy"=>false],                               // In Out
         ["label"=>"Magnet-Schlüssel","icon"=>"magneticKey","category"=>"exp_s","deco"=>0,"heavy"=>false],                                   // --
         ["label"=>"Schlagschlüssel","icon"=>"bumpKey","category"=>"exp_s","deco"=>0,"heavy"=>false],                                        // --
@@ -328,7 +328,7 @@ class ItemFixtures extends Fixture
         ["label"=>"Wütende Mieze (halb verdaut)","icon"=>"angryc","category"=>"weapon","deco"=>0,"heavy"=>false],                           // --
         ["label"=>"Tretmine","icon"=>"claymo","category"=>"weapon","deco"=>0,"heavy"=>false],                                               // -- ---
         ["label"=>"Laserdiode","icon"=>"diode","category"=>"rsc","deco"=>0,"heavy"=>false],                                                 // -- ---
-        ["label"=>"Selbstgebaute Gitarre","icon"=>"guitar","category"=>"imp","deco"=>0,"heavy"=>false],                                     //    ---
+        ["label"=>"Selbstgebaute Gitarre","icon"=>"guitar","category"=>"imp","deco"=>0,"heavy"=>false],                                     // In ---
         ["label"=>"LSD","icon"=>"lsd","category"=>"drug","deco"=>0,"heavy"=>false],                                                         //
         ["label"=>"Starker Laserpointer (4 Schuss)","icon"=>"lpoint4","category"=>"weapon","deco"=>0,"heavy"=>false],                       // -- Out
         ["label"=>"Starker Laserpointer (3 Schuss)","icon"=>"lpoint3","category"=>"weapon","deco"=>0,"heavy"=>false],                       // -- Out
