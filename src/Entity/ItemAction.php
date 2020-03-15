@@ -35,7 +35,7 @@ class ItemAction
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=190)
      */
     private $label;
 
@@ -50,7 +50,7 @@ class ItemAction
     private $results;
 
     /**
-     * @ORM\Column(type="string", length=511, nullable=true)
+     * @ORM\Column(type="text", nullable=true)
      */
     private $message;
 
