@@ -35,6 +35,7 @@
 <div id="notifications"></div>
 <div id="wrapper">
     <div id="header">
+        <div id="header-reload-area"></div>
         {% block header %}{% endblock %}
     </div>
 
@@ -79,6 +80,7 @@
 </footer>
 <script>
     (function() {
+        document.getElementById('header-reload-area').addEventListener('click', function() { location.href=""; })
         window.c = {
             'errors': {
                 'default': '{% trans from 'global' %}Allgemeiner Fehler.{% endtrans %}',
