@@ -26,5 +26,10 @@
     {{ parent() }}
     <script>
         {% embed "scripts/map.js.twig" %}{% endembed %}
+
+        let map = document.querySelector('.map_area');
+        map.addEventListener('zone-click', function(e) {
+            mark_zone(map,e.detail.x,e.detail.y);
+        });
     </script>
 {% endblock %}

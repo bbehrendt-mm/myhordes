@@ -42,14 +42,15 @@ div.map_area {
     &>.zone-plane-controls {
       top: 0; left: 0; width: 100%; height: 100%; transform: scale(1.2); z-index: 4;
       &.hide { opacity: 0 };
-      &>.action-move {
+      &>.action-move,&>.marker-direction {
         position: absolute; background: green; z-index: 4; cursor: pointer;
         &.on-route { filter: hue-rotate(90deg); transform: scale(1.2); }
       }
-      &>.action-move-west  { top: 43%; bottom: 43%; left:  5%; right: 90%; background: url("../../img/map_move_west.svg")  center/contain no-repeat; &:hover { background: url("../../img/map_move_west_h.svg")  center/contain no-repeat; } }
-      &>.action-move-east  { top: 43%; bottom: 43%; left: 90%; right:  5%; background: url("../../img/map_move_east.svg")  center/contain no-repeat; &:hover { background: url("../../img/map_move_east_h.svg")  center/contain no-repeat; } }
-      &>.action-move-north { top:  5%; bottom: 90%; left: 43%; right: 43%; background: url("../../img/map_move_north.svg") center/contain no-repeat; &:hover { background: url("../../img/map_move_north_h.svg") center/contain no-repeat; } }
-      &>.action-move-south { top: 90%; bottom:  5%; left: 43%; right: 43%; background: url("../../img/map_move_south.svg") center/contain no-repeat; &:hover { background: url("../../img/map_move_south_h.svg") center/contain no-repeat; } }
+      &>.action-move-west  { top: 43%; bottom: 43%; left:  5%; right: 90%; background: url("../../img/map_move_west.svg")   center/contain no-repeat; &:hover { background: url("../../img/map_move_west_h.svg")  center/contain no-repeat; } }
+      &>.action-move-east  { top: 43%; bottom: 43%; left: 90%; right:  5%; background: url("../../img/map_move_east.svg")   center/contain no-repeat; &:hover { background: url("../../img/map_move_east_h.svg")  center/contain no-repeat; } }
+      &>.action-move-north { top:  5%; bottom: 90%; left: 43%; right: 43%; background: url("../../img/map_move_north.svg")  center/contain no-repeat; &:hover { background: url("../../img/map_move_north_h.svg") center/contain no-repeat; } }
+      &>.action-move-south { top: 90%; bottom:  5%; left: 43%; right: 43%; background: url("../../img/map_move_south.svg")  center/contain no-repeat; &:hover { background: url("../../img/map_move_south_h.svg") center/contain no-repeat; } }
+      &>.marker-direction  { top: 0; bottom: 0; left:  0; right: 0;        background: url("../../img/map_move_marker.svg") center/contain no-repeat; }
     };
 
     &>.scroll-plane {

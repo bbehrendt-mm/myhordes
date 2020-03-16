@@ -1,6 +1,37 @@
 {# @var routes \App\Entity\ExpeditionRoute[] #}
 const known_routes = { {% for route in routes %}{{ route.id }}: {{ route.data|json_encode|raw }},{% endfor %} }
 
+const mark_zone = function(map, x = null, y = null) {
+    let svg_group = map.querySelector('svg g[x-local-id="map-marker-layer"]');
+    if (!svg_group) return false;
+
+    let child = null;
+    while ((child = svg_group.lastElementChild)) {
+        svg_group.removeChild(child);
+    }
+
+    $.client.set('marker','routes',null,false);
+    if (x === null || y === null) return;
+    $.client.set('marker','routes',[x,y],false);
+
+    let marker_direction = map.querySelector('.marker-direction');
+    if (marker_direction) {
+        marker_direction.style.display = 'none';
+        const d_x = x - {{ pos_x }}; const d_y = y - {{ pos_y }};
+        if (d_x !== 0 || d_y !== 0) {
+            const angle = Math.round(Math.acos( d_y / Math.sqrt( d_x*d_x + d_y*d_y ) ) * 57.2957795);
+            marker_direction.style.transform = 'rotate(' + ((d_x > 0) ? 360 - angle : angle) + 'deg)';
+            marker_direction.style.display = 'block';
+        }
+    }
+
+    let new_rect = document.createElementNS("http://www.w3.org/2000/svg",'rect');
+    new_rect.setAttribute('x', "" + x); new_rect.setAttribute('y', "" + y);
+    new_rect.setAttribute('height', "1"); new_rect.setAttribute('width', "1");
+    new_rect.setAttribute('style', 'fill: transparent; opacity: 0.5; stroke: white; stroke-width: 0.08;');
+    svg_group.appendChild( new_rect );
+}
+
 const render_routes = function(map, target, color, nodes) {
 
     if (!nodes) nodes = [];
@@ -287,6 +318,9 @@ for (let i = 0; i < scroll_areas.length; i++) {
     const user_active_route = $.client.get('current','routes');
     if (user_active_route !== null && known_routes[user_active_route])
         activate_route( map, '#b4da4c', user_active_route );
+    const active_marker = $.client.get('marker','routes',null);
+    if (active_marker !== null)
+        mark_zone( map, active_marker[0], active_marker[1] );
 
 
     add_move_handler( map_area.querySelector('.zone-plane-controls>.action-move-north') );

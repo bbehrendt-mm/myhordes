@@ -6,6 +6,7 @@
         <div class="scroll-plane" x-default-size="{{ cellnum*20 }}" x-current-scroll-level="{{ default_zoom }}" style="min-width: {{ cellnum*20 }}px">
             <div class="svg">
                 <svg viewBox="{{ map_x0 }} {{ map_y0 }} {{ 1+(map_x1-map_x0) }} {{ 1+(map_y1-map_y0) }}" xmlns="http://www.w3.org/2000/svg">
+                    <g x-local-id="map-marker-layer"></g>
                     <g x-local-id="map-expedition-layer">
                         <g x-local-id="map-expedition-context"></g>
                         <g x-local-id="map-expedition-focus"></g>
@@ -147,6 +148,7 @@
             </div>
 
             <div class="zone-plane-controls">
+                {% if zone.x < map_x1 %}<div class="marker-direction"></div>{% endif %}
                 {% if move %}
                     {% if zone.x < map_x1 %}<div x-direction-x="1"  x-direction-y="0"  x-target-x="{{ zone.x + 1 }}" x-target-y="{{ zone.y }}" class="action-move action-move-east"></div>{% endif %}
                     {% if zone.x > map_x0 %}<div x-direction-x="-1" x-direction-y="0"  x-target-x="{{ zone.x - 1 }}" x-target-y="{{ zone.y }}" class="action-move action-move-west"></div>{% endif %}

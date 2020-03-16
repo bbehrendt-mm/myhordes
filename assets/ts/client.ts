@@ -20,7 +20,7 @@ export default class Client {
         try {
             if (value === null)
                 storage.removeItem( this.key( name, group ) );
-            storage.setItem( this.key( name, group ), value );
+            storage.setItem( this.key( name, group ), JSON.stringify(value) );
             return true;
         } catch (e) {
             return false;
