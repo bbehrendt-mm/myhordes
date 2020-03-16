@@ -98,6 +98,7 @@ export default class Ajax {
 
         if (push_history) history.pushState( url, '', url );
 
+        $.html.addLoadStack();
         let request = new XMLHttpRequest();
         request.responseType = 'document';
         request.addEventListener('load', function(e) {
@@ -108,9 +109,11 @@ export default class Ajax {
             }
 
             ajax_instance.render( this.responseURL, target, this.responseXML, false, true );
+            $.html.removeLoadStack();
         });
         request.addEventListener('error', function(e) {
             alert('Error loading page.');
+            $.html.removeLoadStack();
         });
         request.open('GET', url);
         request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
@@ -122,6 +125,7 @@ export default class Ajax {
         url = this.prepareURL(url);
         const base = this.base;
 
+        $.html.addLoadStack();
         let request = new XMLHttpRequest();
         request.responseType = 'json';
         request.addEventListener('load', function(e) {
@@ -134,9 +138,11 @@ export default class Ajax {
                 case 'process': default: break;
             }
             callback( this.response, this.status );
+            $.html.removeLoadStack();
         });
         request.addEventListener('error', function(e) {
             alert('Error transferring data.');
+            $.html.removeLoadStack();
         });
         request.open('POST', url);
         request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');

@@ -136,6 +136,16 @@ export default class HTML {
         });
     };
 
+    addLoadStack( num: number = 1): void {
+        let loadzone = document.getElementById('loadzone');
+        let current = parseInt(loadzone.getAttribute( 'x-stack' ));
+        loadzone.setAttribute( 'x-stack', '' + Math.max(0,current+num) );
+    }
+
+    removeLoadStack( num: number = 1): void {
+        this.addLoadStack(-num);
+    }
+
     handleTabNavigation( element: Element ): void {
 
         const hide_group = function(group: string) {
@@ -179,6 +189,5 @@ export default class HTML {
             }
 
         }
-
     }
 }
