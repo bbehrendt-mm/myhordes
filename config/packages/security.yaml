@@ -40,10 +40,12 @@ security:
         - { path: ^/jx/landing, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/jx/public/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/jx/ghost/,  roles: ROLE_USER }
+        - { path: ^/jx/soul/,   roles: ROLE_USER }
 
         # API Access
         - { path: ^/api/public/login,  roles: ROLE_REGISTERED }
         - { path: ^/api/public/logout, roles: ROLE_REGISTERED }
+        - { path: ^/api/soul/, roles: ROLE_USER }
         - { path: ^/api/public/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }

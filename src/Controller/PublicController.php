@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Exception\DynamicAjaxResetException;
 use App\Service\ErrorHelper;
 use App\Service\JSONRequestParser;
 use App\Service\UserFactory;
@@ -12,6 +13,7 @@ use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Validator\Constraints;
 use Symfony\Component\Validator\ConstraintViolationInterface;
@@ -23,13 +25,14 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class PublicController extends AbstractController
 {
-
     /**
      * @Route("jx/public/login", name="public_login")
      * @return Response
      */
     public function login(): Response
     {
+        if ($this->isGranted( 'ROLE_REGISTERED' ))
+            return $this->redirect($this->generateUrl('initial_landing'));
         return $this->render( 'ajax/public/login.html.twig' );
     }
 
@@ -39,6 +42,8 @@ class PublicController extends AbstractController
      */
     public function register(): Response
     {
+        if ($this->isGranted( 'ROLE_REGISTERED' ))
+            return $this->redirect($this->generateUrl('initial_landing'));
         return $this->render( 'ajax/public/register.html.twig' );
     }
 
@@ -48,6 +53,8 @@ class PublicController extends AbstractController
      */
     public function validate(): Response
     {
+        if ($this->isGranted( 'ROLE_USER' ))
+            return $this->redirect($this->generateUrl('initial_landing'));
         return $this->render( 'ajax/public/validate.html.twig' );
     }
 
@@ -66,6 +73,9 @@ class PublicController extends AbstractController
         EntityManagerInterface $entityManager
     ): Response
     {
+        if ($this->isGranted( 'ROLE_REGISTERED' ))
+            return AjaxResponse::error(ErrorHelper::ErrorActionNotAvailable);
+
         if (!$parser->valid()) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
         if (!$parser->has_all( ['user','mail1','mail2','pass1','pass2'], true ))
             return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
@@ -128,9 +138,7 @@ class PublicController extends AbstractController
      * @Route("api/public/login", name="api_login")
      * @return Response
      */
-    public function login_api(
-
-    ): Response
+    public function login_api(): Response
     {
         /** @var User $user */
         $user = $this->getUser();

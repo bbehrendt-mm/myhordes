@@ -7,13 +7,13 @@
                     <ul class="text-menu">
                         <li class="burger-button"><i class="fa fa-bars"></i></li>
                         {% if is_granted('ROLE_REGISTERED') %}
-                            <li class="forum">Forum</li>
+                            <li class="forum">{{ 'Forum'|trans({},'global') }}</li>
                         {% endif %}
                         {% block menu_text %}{% endblock %}
-                        {% if is_granted('ROLE_REGISTERED') %}
-                            <li class="soul">Deine Seele</li>
+                        {% if is_granted('ROLE_USER') %}
+                            <li class="soul" x-ajax-href="{{ url('soul_me') }}">{% trans from 'global' %}Deine Seele{% endtrans %}</li>
                         {% endif %}
-                        <li class="help">Hilfe</li>
+                        <li class="help">{{ 'Hilfe'|trans({},'global') }}</li>
                     </ul>
                 {% endblock %}
                 {% block menu_bar %}{% endblock %}

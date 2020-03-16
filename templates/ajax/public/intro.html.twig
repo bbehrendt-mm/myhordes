@@ -18,8 +18,16 @@
 
             <div class="row">
                 <div class="cell rw-12 right">
-                    <button x-ajax-href="{{ path('public_login') }}" class="inline hide-sm">{% trans from 'welcome' %}Zum Login{% endtrans %}</button>
-                    <button x-ajax-href="{{ path('public_login') }}" class="hide-desktop hide-lg hide-md">{% trans from 'welcome' %}Zum Login{% endtrans %}</button>
+                    {% if is_granted('ROLE_USER') %}
+                        <button x-ajax-href="{{ path('initial_landing') }}" class="inline hide-sm">{% trans from 'welcome' %}Zum Spiel{% endtrans %}</button>
+                        <button x-ajax-href="{{ path('initial_landing') }}" class="hide-desktop hide-lg hide-md">{% trans from 'welcome' %}Zum Spiel{% endtrans %}</button>
+                    {% elseif is_granted('ROLE_REGISTERED') %}
+                        <button x-ajax-href="{{ path('public_validate') }}" class="inline hide-sm">{% trans from 'welcome' %}Account validieren{% endtrans %}</button>
+                        <button x-ajax-href="{{ path('public_validate') }}" class="hide-desktop hide-lg hide-md">{% trans from 'welcome' %}Account validieren{% endtrans %}</button>
+                    {% else %}
+                        <button x-ajax-href="{{ path('public_login') }}" class="inline hide-sm">{% trans from 'welcome' %}Zum Login{% endtrans %}</button>
+                        <button x-ajax-href="{{ path('public_login') }}" class="hide-desktop hide-lg hide-md">{% trans from 'welcome' %}Zum Login{% endtrans %}</button>
+                    {% endif %}
                 </div>
             </div>
 

@@ -1,0 +1,15 @@
+{% extends "ajax/ajax.html.twig" %}
+{% block ajax %}
+    <div class="row">
+        <div class="cell padded header rw-8 ro-2 rw-lg-12 ro-lg-0">
+            <h4>{% trans from 'soul' %}Deine Seele{% endtrans %}</h4>
+
+            <p>
+                <div class="bold">{{ app.user.username }}</div>
+                <div class="small">{{ app.user.email }}</div>
+            </p>
+
+            <a target="_self" href="{{ path('auto_logout') }}">{{ 'Ausloggen'|trans({},'global') }}</a>
+        </div>
+    </div>
+{% endblock %}

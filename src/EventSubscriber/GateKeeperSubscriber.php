@@ -24,31 +24,29 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Lock\LockInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Security;
 
 class GateKeeperSubscriber implements EventSubscriberInterface
 {
-    private $token;
+    private $security;
     private $em;
     private $locksmith;
 
     /** @var LockInterface|null  */
     private $current_lock = null;
 
-    public function __construct(TokenStorageInterface $tokenStorage, EntityManagerInterface $em, Locksmith $locksmith)
+    public function __construct(EntityManagerInterface $em, Locksmith $locksmith, Security $security)
     {
-        $this->token = $tokenStorage;
         $this->em = $em;
         $this->locksmith = $locksmith;
+        $this->security = $security;
     }
 
     public function holdTheDoor(ControllerEvent $event) {
         $controller = $event->getController();
         if (is_array($controller)) $controller = $controller[0];
 
-        $token = $this->token->getToken();
-        /** @var User $user */
-        $user = ($token && $token->isAuthenticated()) ? $token->getUser() : null;
-        if ($user !== null && !($user instanceof User)) $user = null;
+        $user = $this->security->getUser();
 
         if ($controller instanceof GhostInterfaceController) {
             // This is a ghost controller; it is not available to players in a game
