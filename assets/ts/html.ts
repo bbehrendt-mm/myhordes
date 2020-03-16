@@ -35,10 +35,15 @@ export default class HTML {
         let div = document.createElement('div');
         div.innerHTML = msg;
         div.classList.add( label );
-        div.addEventListener('click', function() {
+        const f_hide = function() {
             div.classList.remove('show');
             setTimeout( function(node) { node.remove(); }, 500, div );
-        });
+        };
+        div.addEventListener('click', f_hide);
+        const timeout_id = setTimeout( f_hide, 5000 );
+        div.addEventListener('pointerenter', function() { clearTimeout(timeout_id); });
+
+
 
         div = document.getElementById('notifications').appendChild( div );
         setTimeout( function(node) { node.classList.add('show'); }, 100, div );
