@@ -47,6 +47,7 @@ export default class Ajax {
         ajax_intention = ajax_intention ? ajax_intention :  'native';
 
         // Clear the target
+        $.html.clearTooltips( target );
         {let c; while ((c = target.firstChild)) target.removeChild(c);}
 
         let ajax_instance = this;

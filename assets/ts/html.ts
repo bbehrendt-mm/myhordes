@@ -88,16 +88,36 @@ export default class HTML {
         f(true);
     }
 
+    tt_counter: number = 0;
+
+    clearTooltips( element: HTMLElement ): void {
+        let container = document.getElementById('tooltip_container');
+        let active_tts = container.querySelectorAll('[x-tooltip]');
+        for (let i = 0; i < active_tts.length; i++) {
+            let source = <HTMLElement>element.querySelector('[x-tooltip-source="' + active_tts[i].getAttribute('x-tooltip') + '"]');
+            if (source) {
+                source.append(active_tts[i]);
+                source.style.display = 'none';
+            }
+        }
+    }
+
     handleTooltip( element: HTMLElement): void {
         let parent = element.parentElement;
         if (!parent) return;
+
+        let container = document.getElementById('tooltip_container');
+        let current_id = ++this.tt_counter;
+
+        element.setAttribute('x-tooltip', '' + current_id);
+        parent.setAttribute('x-tooltip-source', '' + current_id);
 
         parent.addEventListener('contextmenu', function(e) {
            e.preventDefault();
         }, false);
         parent.addEventListener('pointerenter', function(e) {
             element.style.display = 'block';
-            document.body.append( element );
+            container.append( element );
         });
         parent.addEventListener('pointermove', function(e) {
             element.style.top  = e.clientY + 'px';
