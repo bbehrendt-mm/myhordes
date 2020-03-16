@@ -29,7 +29,7 @@
 
         let map = document.querySelector('.map_area');
         map.addEventListener('zone-click', function(e) {
-            mark_zone(map,e.detail.x,e.detail.y);
+            mark_zone(map,e.detail.x,e.detail.y,true);
         });
     </script>
 {% endblock %}

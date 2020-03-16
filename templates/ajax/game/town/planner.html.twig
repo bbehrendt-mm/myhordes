@@ -68,7 +68,10 @@
         }
 
         map.addEventListener('zone-click', function(e) {
-            if (!edit_active) return;
+            if (!edit_active) {
+                mark_zone(map,e.detail.x,e.detail.y,true);
+                return;
+            }
 
             if (!edit_complex) edit_nodes.pop();
             if (edit_nodes.length === 0 || e.detail.x === edit_nodes[edit_nodes.length-1][0] || e.detail.y === edit_nodes[edit_nodes.length-1][1] )
