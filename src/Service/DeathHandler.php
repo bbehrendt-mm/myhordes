@@ -45,7 +45,8 @@ class DeathHandler
      * @param CauseOfDeath|int $cod
      * @param array $remove
      */
-    public function kill(Citizen &$citizen, $cod, ?array &$remove = []): void {
+    public function kill(Citizen &$citizen, $cod, ?array &$remove = null): void {
+        $handle_em = $remove === null;
         $remove = [];
         if (!$citizen->getAlive()) return;
         if (is_int($cod)) $cod = $this->entity_manager->getRepository(CauseOfDeath::class)->findOneByRef( $cod );
@@ -78,5 +79,7 @@ class DeathHandler
 
         $citizen->setCauseOfDeath($cod);
         $citizen->setAlive( false );
+
+        if ($handle_em) foreach ($remove as $r) $this->entity_manager->remove($r);
     }
 }

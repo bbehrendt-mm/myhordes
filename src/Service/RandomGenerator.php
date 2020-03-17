@@ -33,7 +33,7 @@ class RandomGenerator
     function chance(float $c): bool {
         if ($c >= 1.0)     return true;
         elseif ($c <= 0.0) return false;
-        return mt_rand(0,100) <= (100*$c);
+        return mt_rand(0,99) < (100.0*$c);
     }
 
     /**

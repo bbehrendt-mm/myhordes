@@ -245,12 +245,6 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
         foreach ($this->entity_manager->getRepository(EscapeTimer::class)->findAllByCitizen($citizen) as $et)
             $this->entity_manager->remove( $et );
 
-        $this->citizen_handler->setAP($citizen, true, -1);
-        $citizen->setWalkingDistance( $citizen->getWalkingDistance() + 1 );
-        if ($citizen->getWalkingDistance() > 10) {
-            $this->citizen_handler->increaseThirstLevel( $citizen );
-            $citizen->setWalkingDistance( 0 );
-        }
         $clothes = $this->inventory_handler->fetchSpecificItems($citizen->getInventory(),[new ItemRequest('basic_suit_#00')]);
         if (!empty($clothes)) $clothes[0]->setPrototype( $this->entity_manager->getRepository( ItemPrototype::class )->findOneByName( 'basic_suit_dirt_#00' ) );
 
@@ -259,6 +253,13 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
             ->addCitizen( $citizen )
             ->setDiscoveryStatus( Zone::DiscoveryStateCurrent )
             ->setZombieStatus( max(Zone::ZombieStateEstimate, $new_zone->getZombieStatus() ) );
+
+        $this->citizen_handler->setAP($citizen, true, -1);
+        $citizen->setWalkingDistance( $citizen->getWalkingDistance() + 1 );
+        if ($citizen->getWalkingDistance() > 10) {
+            $this->citizen_handler->increaseThirstLevel( $citizen );
+            $citizen->setWalkingDistance( 0 );
+        }
 
         try {
             $this->zone_handler->handleCitizenCountUpdate($zone, $cp_ok);
@@ -276,7 +277,7 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
             $this->entity_manager->persist($new_zone);
             $this->entity_manager->flush();
         } catch (Exception $e) {
-            return AjaxResponse::error( ErrorHelper::ErrorDatabaseException, [$e->getMessage()] );
+            return AjaxResponse::error( ErrorHelper::ErrorDatabaseException );
         }
 
         return AjaxResponse::success();
