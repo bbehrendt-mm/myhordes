@@ -39,6 +39,16 @@ class RequireLocation
      */
     private $location;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $minDistance;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $maxDistance;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -64,6 +74,30 @@ class RequireLocation
     public function setLocation(int $location): self
     {
         $this->location = $location;
+
+        return $this;
+    }
+
+    public function getMinDistance(): ?int
+    {
+        return $this->minDistance;
+    }
+
+    public function setMinDistance(?int $minDistance): self
+    {
+        $this->minDistance = $minDistance;
+
+        return $this;
+    }
+
+    public function getMaxDistance(): ?int
+    {
+        return $this->maxDistance;
+    }
+
+    public function setMaxDistance(?int $maxDistance): self
+    {
+        $this->maxDistance = $maxDistance;
 
         return $this;
     }

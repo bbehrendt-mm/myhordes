@@ -66,6 +66,7 @@ class CitizenFixtures extends Fixture implements DependentFixtureInterface
         ['name' => 'tg_clothes'],
         ['name' => 'tg_teddy'],
         ['name' => 'tg_guitar'],
+        ['name' => 'tg_sbook'],
     ];
 
     public static $causes_of_death = [

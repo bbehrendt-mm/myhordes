@@ -109,17 +109,32 @@ class ActionHandler
                 ))) $current_state = min( $current_state, $this_state );
             }
 
-            if ($location_condition = $meta_requirement->getLocation())
+            if ($location_condition = $meta_requirement->getLocation()) {
                 switch ( $location_condition->getLocation() ) {
                     case RequireLocation::LocationInTown:
                         if ( $citizen->getZone() ) $current_state = min( $current_state, $this_state );
                         break;
-                    case RequireLocation::LocationOutside:
+                    case RequireLocation::LocationOutside:case RequireLocation::LocationOutsideFree:
+                    case RequireLocation::LocationOutsideRuin:case RequireLocation::LocationOutsideBuried:
                         if ( !$citizen->getZone() ) $current_state = min( $current_state, $this_state );
+                        else {
+                            if     ( $location_condition->getLocation() === RequireLocation::LocationOutsideFree   &&  $citizen->getZone()->getPrototype() ) $current_state = min( $current_state, $this_state );
+                            elseif ( $location_condition->getLocation() === RequireLocation::LocationOutsideRuin   && !$citizen->getZone()->getPrototype() ) $current_state = min( $current_state, $this_state );
+                            elseif ( $location_condition->getLocation() === RequireLocation::LocationOutsideBuried && (!$citizen->getZone()->getPrototype() || !$citizen->getZone()->getBuryCount()) ) $current_state = min( $current_state, $this_state );
+
+                            if ($location_condition->getMinDistance() !== null || $location_condition->getMaxDistance() !== null) {
+                                $dist = round(sqrt( pow($citizen->getZone()->getX(),2) + pow($citizen->getZone()->getY(),2) ));
+                                if ( ($location_condition->getMinDistance() !== null && $dist < $location_condition->getMinDistance() ) || ($location_condition->getMaxDistance() !== null && $dist > $location_condition->getMaxDistance() ) )
+                                    $current_state = min( $current_state, $this_state );
+                            }
+                        }
                         break;
+
                     default:
                         break;
                 }
+            }
+
 
             if ($zombie_condition = $meta_requirement->getZombies()) {
                 $cp = 0;
@@ -525,6 +540,8 @@ class ActionHandler
                         }
                         $execute_info_cache['casino'] = $this->translator->trans('Mit deiner Gitarre hast du die Stadt gerockt! Die Bürger haben {ap} AP erhalten.', ['{ap}' => $count], 'items');
                         break;
+
+                    // Tamer
                     case 4:case 5: {
                         $heavy = $result->getCasino() === 5;
 
@@ -534,6 +551,34 @@ class ActionHandler
                         foreach ( $citizen->getInventory()->getItems() as &$item )
                             if ($heavy || !$item->getPrototype()->getHeavy())
                                 $this->inventory_handler->transferItem($citizen,$item,$source,$target, InventoryHandler::ModalityTamer);
+
+                        break;
+                    }
+
+                    // Survivalist
+                    case 6:case 7: {
+                        $drink = $result->getCasino() === 6;
+                        $can_fail = $citizen->getTown()->getDay() > 4;
+
+                        if (!$can_fail || $this->random_generator->chance(0.85)) {
+
+                            if ($drink && $this->citizen_handler->hasStatusEffect($citizen, 'dehydrated')) {
+                                $this->citizen_handler->removeStatus($citizen, 'thirst2');
+                                $this->citizen_handler->inflictStatus($citizen, 'thirst1');
+                            } else {
+                                if (!$drink || !$this->citizen_handler->hasStatusEffect($citizen, 'hasdrunk')) {
+                                    $old_ap = $citizen->getAp();
+                                    $this->citizen_handler->setAP($citizen, false, 6, 0);
+                                    $execute_info_cache['ap'] += ( $citizen->getAp() - $old_ap );
+                                }
+                                if ($drink) $this->citizen_handler->removeStatus($citizen, 'thirst1');
+                                $this->citizen_handler->inflictStatus($citizen, $drink ? 'hasdrunk' : 'haseaten');
+
+                                $execute_info_cache['casino'] = $this->translator->trans($drink ? 'Äußerst erfrischend, und sogar mit einer leichten Note von Cholera.' : 'Immer noch besser als das Zeug, was die Köche in der Stadt zubereiten....', [], 'items');
+                            }
+
+                        } else $execute_info_cache['casino'] = $this->translator->trans('Trotz intensiver Suche hast du nichts verwertbares gefunden...', [], 'items');
+                        break;
                     }
                 }
 

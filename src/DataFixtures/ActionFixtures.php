@@ -33,6 +33,7 @@ use App\Entity\Requirement;
 use App\Entity\RequireStatus;
 use App\Entity\RequireZombiePresence;
 use App\Entity\Result;
+use App\Repository\RequireLocationRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -55,6 +56,7 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'not_yet_dice'   => [ 'type' => Requirement::CrossOnFail, 'collection' => [ 'status' => [ 'enabled' => false, 'status' => 'tg_dice' ]  ]],
             'not_yet_card'   => [ 'type' => Requirement::CrossOnFail, 'collection' => [ 'status' => [ 'enabled' => false, 'status' => 'tg_cards' ] ]],
             'not_yet_guitar' => [ 'type' => Requirement::CrossOnFail, 'collection' => [ 'status' => [ 'enabled' => false, 'status' => 'tg_guitar' ] ]],
+            'not_yet_sbook'  => [ 'type' => Requirement::CrossOnFail, 'collection' => [ 'status' => [ 'enabled' => false, 'status' => 'tg_sbook' ] ]],
 
             'eat_ap'      => [ 'type' => Requirement::CrossOnFail, 'collection' => [ 'status' => [ 'enabled' => false, 'status' => 'haseaten' ] ]],
 
@@ -83,6 +85,8 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'must_be_outside' => [ 'type' => Requirement::HideOnFail,  'collection' => [ 'location' => [ RequireLocation::LocationOutside ] ]],
             'must_be_inside' =>  [ 'type' => Requirement::HideOnFail,  'collection' => [ 'location' => [ RequireLocation::LocationInTown  ] ]],
             'must_be_at_buried_ruin' => [ 'type' => Requirement::CrossOnFail,  'collection' => [ 'location' => [ RequireLocation::LocationOutsideBuried ] ]],
+            'must_be_outside_3km' => [ 'type' => Requirement::HideOnFail,  'collection' => [ 'location' => [ 'min' => 3 ] ]],
+
 
 
             'must_have_zombies'   => [ 'type' => Requirement::MessageOnFail, 'collection' => [ 'zombies' => [ 'min' => 1, 'block' => null  ] ], 'text' => 'Zum Glück sind hier keine Zombies...'],
@@ -177,6 +181,10 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'hero_tamer_1' => [ 'casino' => [4] ],
             'hero_tamer_2' => [ 'casino' => [5] ],
             'hero_tamer_3' => [ 'item' => [ 'consume' => false, 'morph' => 'tamed_pet_drug_#00' ] ],
+
+            'hero_surv_0' => [ 'status' => [ 'from' => null, 'to' => 'tg_sbook' ] ],
+            'hero_surv_1' => [ 'casino' => [6] ],
+            'hero_surv_2' => [ 'casino' => [7] ],
         ],
 
         'results' => [
@@ -479,6 +487,10 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'hero_tamer_1'  => [ 'label' => 'Losschicken', 'meta' => [ 'must_be_outside' ], 'result' => [ 'hero_tamer_0', 'hero_tamer_1' ], 'message' => 'Du hast den {item} mit deinen Gegenständen in die Stadt geschickt.' ],
             'hero_tamer_2'  => [ 'label' => 'Losschicken', 'meta' => [ 'must_be_outside' ], 'result' => [ 'hero_tamer_0', 'hero_tamer_2' ], 'message' => 'Du hast den {item} mit deinen Gegenständen in die Stadt geschickt.' ],
             'hero_tamer_3'  => [ 'label' => 'Dopen', 'meta' => [ 'must_be_outside', 'must_have_drug' ], 'result' => [ 'consume_drug', 'hero_tamer_3' ], 'message' => 'Du hast den {item} mit einem {items_consume} ordentlich aufgeputscht!' ],
+
+            'hero_surv_1' => [ 'label' => 'Wasser suchen', 'meta' => [ 'must_be_outside_3km', 'not_yet_sbook' ], 'result' => [ 'hero_surv_0', 'hero_surv_1' ], 'message' => '{casino}' ],
+            'hero_surv_2' => [ 'label' => 'Essen suchen', 'meta' => [ 'must_be_outside_3km', 'not_yet_sbook', 'eat_ap' ], 'result' => [ 'hero_surv_0', 'hero_surv_2' ], 'message' => '{casino}' ],
+
         ],
 
 
@@ -703,6 +715,8 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
 
             'tamed_pet_#00'      => [ 'hero_tamer_1', 'hero_tamer_3' ],
             'tamed_pet_drug_#00' => [ 'hero_tamer_2' ],
+
+            'surv_book_#00' => [ 'hero_surv_1', 'hero_surv_2' ],
         ]
 
     ];
@@ -912,7 +926,14 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
                 $out->writeln( "\t\t\t<comment>Create</comment> condition <info>location/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
             }
 
-            $requirement->setName( $id )->setLocation( $data[0] );
+            $requirement->setName( $id );
+            if (count($data) === 1 && isset( $data[0] ))
+                $requirement->setLocation( $data[0] );
+            else $requirement
+                ->setMinDistance( $data['min'] ?? null )
+                ->setMaxDistance( $data['max'] ?? null )
+                ->setLocation( $data['type'] ?? ( ( isset($data['min']) || isset($data['max']) ) ? RequireLocation::LocationOutside : RequireLocation::LocationInTown ) );
+
             $manager->persist( $cache[$id] = $requirement );
         } else $out->writeln( "\t\t\t<comment>Skip</comment> condition <info>location/{$id}</info>", OutputInterface::VERBOSITY_DEBUG );
 
