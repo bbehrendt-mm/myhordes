@@ -90,6 +90,7 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'must_not_be_blocked' => [ 'type' => Requirement::MessageOnFail, 'collection' => [ 'zombies' => [ 'min' => 0, 'block' => false ] ], 'text' => 'Das kannst du nicht tun während du umzingelt bist...'],
 
             'must_have_micropur' => [ 'type' => Requirement::MessageOnFail, 'collection' => [ 'item' => [ 'item' => 'water_cleaner_#00', 'prop' => null ] ], 'text' => 'Hierfür brauchst du eine Micropur Brausetablette.'],
+            'must_have_drug'     => [ 'type' => Requirement::MessageOnFail, 'collection' => [ 'item' => [ 'item' => 'drug_#00',          'prop' => null ] ], 'text' => 'Hierfür brauchst du ein Steroid.'],
 
             'must_have_purifier'     => [ 'type' => Requirement::HideOnFail, 'collection' => [ 'building' => [ 'prototype' => 'item_jerrycan_#00', 'complete' => true  ] ] ],
             'must_not_have_purifier' => [ 'type' => Requirement::HideOnFail, 'collection' => [ 'building' => [ 'prototype' => 'item_jerrycan_#00', 'complete' => false ] ] ],
@@ -120,6 +121,7 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'consume_matches' => [ 'consume' => [ 'lights_#00' ] ],
             'consume_battery' => [ 'consume' => [ 'pile_#00'  ] ],
             'consume_micropur'=> [ 'consume' => [ 'water_cleaner_#00'  ] ],
+            'consume_drug'    => [ 'consume' => [ 'drug_#00'  ] ],
 
             'repair_target'   => [ 'target' => [ 'consume' => false, 'morph' => null, 'break' => false, 'poison' => null ] ],
             'poison_target'   => [ 'target' => [ 'consume' => false, 'morph' => null, 'break' => null, 'poison' => true  ] ],
@@ -169,7 +171,12 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'zonemarker' => [ 'zone' => ['scout' => true] ],
             'nessquick'  => [ 'zone' => ['uncover' => true] ],
 
-            'cyanide' => [ 'death' => [ CauseOfDeath::Cyanide ] ]
+            'cyanide' => [ 'death' => [ CauseOfDeath::Cyanide ] ],
+
+            'hero_tamer_0' => [ 'item' => [ 'consume' => false, 'morph' => 'tamed_pet_off_#00' ] ],
+            'hero_tamer_1' => [ 'casino' => [4] ],
+            'hero_tamer_2' => [ 'casino' => [5] ],
+            'hero_tamer_3' => [ 'item' => [ 'consume' => false, 'morph' => 'tamed_pet_drug_#00' ] ],
         ],
 
         'results' => [
@@ -468,6 +475,10 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'cuddle_teddy_2' => [ 'label' => 'Knuddeln', 'meta' => [ 'must_not_be_terrorized' ], 'result' => [ 'terrorize' ], 'message' => 'Du drückst den {item} eng an deine Brust... <t-stat-up-terror>Panik steigt in dir auf!</t-stat-up-terror><nt-stat-up-terror>Aber nichts geschieht!</nt-stat-up-terror>' ],
 
             'clean_clothes' => [ 'label' => 'Reinigen', 'meta' => [ 'must_be_inside', [ 'type' => Requirement::CrossOnFail, 'collection' => [ 'status' => [ 'enabled' => false, 'status' => 'tg_clothes' ] ]] ], 'result' => [ [ 'status' => [ 'from' => null, 'to' => 'tg_clothes' ], 'item' => ['consume' => false, 'morph' => 'basic_suit_#00'] ] ] ],
+
+            'hero_tamer_1'  => [ 'label' => 'Losschicken', 'meta' => [ 'must_be_outside' ], 'result' => [ 'hero_tamer_0', 'hero_tamer_1' ], 'message' => 'Du hast den {item} mit deinen Gegenständen in die Stadt geschickt.' ],
+            'hero_tamer_2'  => [ 'label' => 'Losschicken', 'meta' => [ 'must_be_outside' ], 'result' => [ 'hero_tamer_0', 'hero_tamer_2' ], 'message' => 'Du hast den {item} mit deinen Gegenständen in die Stadt geschickt.' ],
+            'hero_tamer_3'  => [ 'label' => 'Dopen', 'meta' => [ 'must_be_outside', 'must_have_drug' ], 'result' => [ 'consume_drug', 'hero_tamer_3' ], 'message' => 'Du hast den {item} mit einem {items_consume} ordentlich aufgeputscht!' ],
         ],
 
 
@@ -689,6 +700,9 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
             'cigs_#00'          => ['light_cig'],
 
             'basic_suit_dirt_#00' => [ 'clean_clothes' ],
+
+            'tamed_pet_#00'      => [ 'hero_tamer_1', 'hero_tamer_3' ],
+            'tamed_pet_drug_#00' => [ 'hero_tamer_2' ],
         ]
 
     ];

@@ -525,6 +525,16 @@ class ActionHandler
                         }
                         $execute_info_cache['casino'] = $this->translator->trans('Mit deiner Gitarre hast du die Stadt gerockt! Die Bürger haben {ap} AP erhalten.', ['{ap}' => $count], 'items');
                         break;
+                    case 4:case 5: {
+                        $heavy = $result->getCasino() === 5;
+
+                        $source = $citizen->getInventory();
+                        $target = $citizen->getTown()->getBank();
+
+                        foreach ( $citizen->getInventory()->getItems() as &$item )
+                            if ($heavy || !$item->getPrototype()->getHeavy())
+                                $this->inventory_handler->transferItem($citizen,$item,$source,$target, InventoryHandler::ModalityTamer);
+                    }
                 }
 
                 if ($ap) {
