@@ -73,10 +73,16 @@
                 return;
             }
 
-            if (!edit_complex) edit_nodes.pop();
-            if (edit_nodes.length === 0 || e.detail.x === edit_nodes[edit_nodes.length-1][0] || e.detail.y === edit_nodes[edit_nodes.length-1][1] )
-                edit_nodes.push( [ e.detail.x, e.detail.y ] );
-            if (!edit_complex) edit_nodes.push( [0,0] );
+            if (edit_complex) {
+                if (edit_nodes.length === 0 || ((e.detail.x === edit_nodes[edit_nodes.length-1][0] || e.detail.y === edit_nodes[edit_nodes.length-1][1]) && (e.detail.x !== edit_nodes[edit_nodes.length-1][0] || e.detail.y !== edit_nodes[edit_nodes.length-1][1])) )
+                    edit_nodes.push( [ e.detail.x, e.detail.y ] );
+            } else {
+                if (e.detail.x === 0 && e.detail.y === 0) return;
+                edit_nodes.pop();
+                if ((e.detail.x === edit_nodes[edit_nodes.length-1][0] || e.detail.y === edit_nodes[edit_nodes.length-1][1]) && (e.detail.x !== edit_nodes[edit_nodes.length-1][0] || e.detail.y !== edit_nodes[edit_nodes.length-1][1]))
+                    edit_nodes.push( [ e.detail.x, e.detail.y ] );
+                edit_nodes.push( [0,0] );
+            }
 
             if (render_routes( map, 'live-editor', '#b8c49c', edit_nodes ))
                 save_button.removeAttribute('disabled');
