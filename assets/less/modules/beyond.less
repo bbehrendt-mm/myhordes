@@ -11,11 +11,10 @@ div.zone-blocked-warning {
 }
 
 div.zone-info {
-  margin-top: 5px;
+  margin-top: 5px; border: 1px solid @myhordes-smalltext; background: @myhordes-cell-header-background-color; font-size: 0;
   &>div.row {
-    border: 1px solid @myhordes-smalltext; background: @myhordes-cell-header-background-color; font-size: 0;
+    &>.cell>span { vertical-align: bottom; font-size: 12px }
     &.zone-cp>.cell{
-      &>span { vertical-align: bottom; font-size: 12px }
       &:first-child { color: #d6f523; }
       &:last-child { color: #f15b30; }
     }

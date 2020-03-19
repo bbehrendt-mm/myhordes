@@ -216,7 +216,7 @@ class InventoryAwareController extends AbstractController implements GameInterfa
         return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
     }
 
-    public function generic_recipe_api(JSONRequestParser $parser, ActionHandler $handler): Response {
+    public function generic_recipe_api(JSONRequestParser $parser, ActionHandler $handler, ?callable $trigger_after = null): Response {
         $citizen = $this->getActiveCitizen();
         $town = $citizen->getTown();
 
@@ -232,6 +232,9 @@ class InventoryAwareController extends AbstractController implements GameInterfa
         if (($error = $handler->execute_recipe( $citizen, $recipe, $remove, $message )) !== ActionHandler::ErrorNone )
             return AjaxResponse::error( $error );
         else try {
+
+            if ($trigger_after) $trigger_after($recipe);
+
             $this->entity_manager->persist($town);
             $this->entity_manager->persist($citizen);
             foreach ($remove as $e) $this->entity_manager->remove( $e );
@@ -269,7 +272,7 @@ class InventoryAwareController extends AbstractController implements GameInterfa
         ];
     }
 
-    public function generic_action_api(JSONRequestParser $parser, InventoryHandler $handler): Response {
+    public function generic_action_api(JSONRequestParser $parser, InventoryHandler $handler, ?callable $trigger_after = null): Response {
         $item_id =   (int)$parser->get('item',   -1);
         $target_id = (int)$parser->get('target', -1);
         $action_id = (int)$parser->get('action', -1);
@@ -292,6 +295,9 @@ class InventoryAwareController extends AbstractController implements GameInterfa
         if ($target && !$citizen->getInventory()->getItems()->contains( $target ) && !$secondary_inv->getItems()->contains( $target )) return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
 
         if (($error = $this->action_handler->execute( $citizen, $item, $target, $action, $msg, $remove )) === ActionHandler::ErrorNone) {
+
+            if ($trigger_after) $trigger_after($action);
+
             $this->entity_manager->persist($citizen);
             if ($item->getInventory())
                 $this->entity_manager->persist($item);

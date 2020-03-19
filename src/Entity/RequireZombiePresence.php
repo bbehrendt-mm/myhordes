@@ -31,6 +31,11 @@ class RequireZombiePresence
      */
     private $mustBlock;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $tempControlAllowed;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -68,6 +73,18 @@ class RequireZombiePresence
     public function setMustBlock(?bool $mustBlock): self
     {
         $this->mustBlock = $mustBlock;
+
+        return $this;
+    }
+
+    public function getTempControlAllowed(): ?bool
+    {
+        return $this->tempControlAllowed;
+    }
+
+    public function setTempControlAllowed(?bool $tempControlAllowed): self
+    {
+        $this->tempControlAllowed = $tempControlAllowed;
 
         return $this;
     }

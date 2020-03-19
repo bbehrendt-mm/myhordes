@@ -145,7 +145,12 @@ class ActionHandler
                 if ($zombie_condition->getMustBlock() !== null) {
 
                     if ($zombie_condition->getMustBlock() && $cp >= $current_zeds) $current_state = min( $current_state, $this_state );
-                    elseif (!$zombie_condition->getMustBlock() && $cp < $current_zeds) $current_state = min( $current_state, $this_state );
+                    elseif (!$zombie_condition->getMustBlock() && $cp < $current_zeds) {
+
+                        if (!$zombie_condition->getTempControlAllowed() || !$this->entity_manager->getRepository( EscapeTimer::class )->findActiveByCitizen($citizen))
+                            $current_state = min( $current_state, $this_state );
+
+                    }
 
                 }
 

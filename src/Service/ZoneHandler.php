@@ -135,6 +135,8 @@ class ZoneHandler
             $zone_db[$zone->getX()][$zone->getY()] = $zone->getZombies();
             $despair_db[$zone->getX()][$zone->getY()] = $despair;
             if ($zone_db[$zone->getX()][$zone->getY()] == 0) $empty_zones[] = $zone;
+
+            $zone->setScoutEstimationOffset( mt_rand(-2,2) );
         }
 
         // Respawn

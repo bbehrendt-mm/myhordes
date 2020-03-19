@@ -42,10 +42,16 @@ div.map_area {
     &>.zone-plane-controls {
       top: 0; left: 0; width: 100%; height: 100%; transform: scale(1.2); z-index: 4;
       &.hide { opacity: 0 };
-      &>.action-move,&>.marker-direction {
-        position: absolute; background: green; z-index: 4; cursor: pointer;
+      &>.action-move,&>.marker-direction, &>.scout-sense {
+        position: absolute; z-index: 4; cursor: pointer;
         &.on-route { filter: hue-rotate(90deg); transform: scale(1.2); }
       }
+      &>.scout-sense,&>.marker-direction { cursor: default; }
+      &>.scout-sense-west  { top: 43%; bottom: 43%; left: 10%; right: 85% }
+      &>.scout-sense-east  { top: 43%; bottom: 43%; left: 85%; right: 10% }
+      &>.scout-sense-north { top: 10%; bottom: 85%; left: 43%; right: 43% }
+      &>.scout-sense-south { top: 85%; bottom: 10%; left: 43%; right: 43% }
+
       &>.action-move-west  { top: 43%; bottom: 43%; left:  5%; right: 90%; background: url("../../img/map_move_west.svg")   center/contain no-repeat; &:hover { background: url("../../img/map_move_west_h.svg")  center/contain no-repeat; } }
       &>.action-move-east  { top: 43%; bottom: 43%; left: 90%; right:  5%; background: url("../../img/map_move_east.svg")   center/contain no-repeat; &:hover { background: url("../../img/map_move_east_h.svg")  center/contain no-repeat; } }
       &>.action-move-north { top:  5%; bottom: 90%; left: 43%; right: 43%; background: url("../../img/map_move_north.svg")  center/contain no-repeat; &:hover { background: url("../../img/map_move_north_h.svg") center/contain no-repeat; } }

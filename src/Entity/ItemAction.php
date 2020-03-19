@@ -64,6 +64,11 @@ class ItemAction
      */
     private $poisonHandler = self::PoisonHandlerIgnore;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $keepsCover;
+
     public function __construct()
     {
         $this->requirements = new ArrayCollection();
@@ -195,6 +200,18 @@ class ItemAction
     public function setPoisonHandler(int $poisonHandler): self
     {
         $this->poisonHandler = $poisonHandler;
+
+        return $this;
+    }
+
+    public function getKeepsCover(): ?bool
+    {
+        return $this->keepsCover;
+    }
+
+    public function setKeepsCover(bool $keepsCover): self
+    {
+        $this->keepsCover = $keepsCover;
 
         return $this;
     }

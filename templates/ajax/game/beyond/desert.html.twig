@@ -18,13 +18,22 @@
                                 Das ist deine Chance - ergreife sie und fliehe! In Kürze werden die Zombies die Kontrolle über die Zone zurückerlangen. Dir verbleiden:
                             {% endtrans %}
                             <span x-countdown="{{ zone_escape }}" x-on-expire="reload">...</span>
+                        {% elseif active_scout_mode %}
+                            <br />
+                            {% trans from 'game' %}
+                                Dank deiner Tarnung kannst du dich dennoch bewegen - werde nur nicht zu übermütig...
+                            {% endtrans %}
+                            <br /><br />
+                            <b>{{ 'Achtung'|trans({},'global') }}</b>: {% trans from 'game' %}
+                                Bestimmte Aktionen können deine Tarnung auffliegen lassen!
+                            {% endtrans %}
                         {% else %}
                             {% trans from 'game' %}
                                 Du wurdest überrascht und bist jetzt von den Zombies umzingelt! Wenn du nichts unternimmst und dir niemand zu Hilfe eilt, wirst du ohne Zweifel heute Abend hier verrecken ...
                             {% endtrans %}
                         {% endif %}
                     </span>
-                    {% if zone_escape <= 0 %}
+                    {% if zone_escape <= 0 and not active_scout_mode %}
                         <div class="row">
                             <div class="padded-small cell rw-6"><button><img alt="" src="{{ asset('build/images/attacked.gif') }}" />{% trans from 'game' %}Hilfe rufen!{% endtrans %}</button></div>
                             <div {% if not can_escape %}disabled{% endif %} class="padded-small cell rw-6"><button id="escape-btn"><img alt="" src="{{ asset('build/images/death.gif') }}" />{% trans from 'game' %}Die Flucht wagen!{% endtrans %}</button></div>
@@ -45,7 +54,9 @@
             {% if zone.prototype %}
                 <div class="note">
                     {% if zone.buryCount > 0 %}
-                        <b>{{ 'Verschüttete Ruine'|trans({},'game') }}</b><br />
+                        <b>{{ 'Verschüttete Ruine'|trans({},'game') }}</b>
+                        {% if scout %}<b>(<i>{{ zone.prototype.label|trans({}, 'game') }}</i>)</b>{% endif %}
+                        <br />
                         {{ 'Es muss noch aufgeräumt werden'|trans({},'game') }}:
                         <div class="ruin-bury-count">{% for p in 1..zone.buryCount %}<div></div>{% endfor %}</div>
                     {% else %}
@@ -97,14 +108,20 @@
                     </div>
                 {% endif %}
                 {% if zone.prototype %}
-                    <button id="dig_ruin_button" {% if zone_blocked or not dig_ruin or zone.buryCount > 0 %}disabled{% endif %} >
+                    <button id="dig_ruin_button" {% if (zone_blocked and not active_scout_mode) or not dig_ruin or zone.buryCount > 0 %}disabled{% endif %} >
+                        {% if (zone_blocked and active_scout_mode) %}
+                            <img class="icon right" alt="" src="{{ asset('build/images/uncloak.gif') }}" />
+                        {% endif %}
                         <img class="icon left" alt="" src="{{ asset('build/images/small_gather.gif') }}" />
                         {% set ruin_label = zone.prototype.label|trans({},'game') %}
                         {% if zone.buryCount > 0 %}{% set ruin_label = 'Verschüttete Ruine'|trans({},'game') %}{% endif %}
                         {% trans with {'%ruin%': ruin_label} from 'game'  %}%ruin% durchsuchen{% endtrans %}
                     </button>
                     {% if zone.buryCount > 0 %}
-                        <button id="uncover_ruin_button" {% if zone_blocked %}disabled{% endif %} >
+                        <button id="uncover_ruin_button">
+                            {% if (zone_blocked and active_scout_mode) %}
+                                <img class="icon right" alt="" src="{{ asset('build/images/uncloak.gif') }}" />
+                            {% endif %}
                             <img class="icon left" alt="" src="{{ asset('build/images/uncover.gif') }}" />
                             {{ 'Zone freiräumen'|trans({},'game') }} (<div class="ap">1</div>)
                         </button>
@@ -113,7 +130,7 @@
             {% endif %}
 
             {% if zone.x != 0 or zone.y != 0 %}
-                {% embed "ajax/game/actions.html.twig" with {'list': actions, 'recipes': recipes} %}
+                {% embed "ajax/game/actions.html.twig" with {'list': actions, 'recipes': recipes, 'scout': (zone_blocked and active_scout_mode)} %}
                 {% endembed %}
             {% endif %}
         </div>
@@ -125,6 +142,14 @@
             {% endembed %}
 
             {% if allow_floor_access %}
+                {% if (zone_blocked and active_scout_mode) %}
+                    <div class="note">
+                        <b>{{ 'Achtung'|trans({},'global') }}</b>: {% trans from 'game' %}
+                            Wenn du einen Gegenstand aufnimmst oder ablegst, verlierst du deine Tarnung!
+                        {% endtrans %}
+                    </div>
+                {% endif %}
+
                 <button id="drop-all-button" {% if rucksack.items|length == 0 %}disabled{% endif %}>{% trans from 'game' %}Rucksack ausleeren{% endtrans %}</button>
                 {% embed "ajax/game/inventory.html.twig" with {'size': 0, 'items': floor.items} %}
                     {% block class %}desert{% endblock %}
@@ -165,63 +190,63 @@
                     } );
             });
 
-        {% if zone_blocked and zone_escape < 0 %}
-            document.getElementById('escape-btn').addEventListener('click', function () {
-                if (!confirm( '{% trans from 'global' %}Bestätigen?{% endtrans %}' ))
-                    return;
-                $.ajax.easySend( '{{ path('beyond_desert_escape_controller') }}', {},
-                    function () {
-                        $.ajax.load(null, '{{ path('beyond_dashboard') }}', true);
-                    } );
-            });
-            document.getElementById('attack-btn').addEventListener('click', function () {
-                if (!confirm( '{% trans from 'global' %}Bestätigen?{% endtrans %}' ))
-                    return;
-                $.ajax.easySend( '{{ path('beyond_desert_attack_controller') }}', {},
-                    function () {
-                        $.ajax.load(null, '{{ path('beyond_dashboard') }}', true);
-                    } );
-            });
+        {% if zone_blocked and zone_escape < 0 and not active_scout_mode %}
+        document.getElementById('escape-btn').addEventListener('click', function () {
+            if (!confirm( '{% trans from 'global' %}Bestätigen?{% endtrans %}' ))
+                return;
+            $.ajax.easySend( '{{ path('beyond_desert_escape_controller') }}', {},
+                function () {
+                    $.ajax.load(null, '{{ path('beyond_dashboard') }}', true);
+                } );
+        });
+        document.getElementById('attack-btn').addEventListener('click', function () {
+            if (!confirm( '{% trans from 'global' %}Bestätigen?{% endtrans %}' ))
+                return;
+            $.ajax.easySend( '{{ path('beyond_desert_attack_controller') }}', {},
+                function () {
+                    $.ajax.load(null, '{{ path('beyond_dashboard') }}', true);
+                } );
+        });
         {% endif %}
 
         {% if allow_floor_access %}
-            {% embed "scripts/inventory.js.twig" %}{% endembed %}
-            handleItems(
-                document.querySelectorAll('.rucksack>.item:not(.locked)'),
-                '{{ path('beyond_desert_item_controller') }}',
-                'down', '{{ path('beyond_dashboard') }}'
-            );
+        {% embed "scripts/inventory.js.twig" %}{% endembed %}
+        handleItems(
+            document.querySelectorAll('.rucksack>.item:not(.locked)'),
+            '{{ path('beyond_desert_item_controller') }}',
+            'down', '{{ path('beyond_dashboard') }}'
+        );
 
-            handleItems(
-                document.querySelectorAll('#drop-all-button'),
-                '{{ path('beyond_desert_item_controller') }}',
-                'down-all', '{{ path('beyond_dashboard') }}'
-            );
+        handleItems(
+            document.querySelectorAll('#drop-all-button'),
+            '{{ path('beyond_desert_item_controller') }}',
+            'down-all', '{{ path('beyond_dashboard') }}'
+        );
 
-            handleItems(
-                document.querySelectorAll('.desert>.item:not(.locked)'),
-                '{{ path('beyond_desert_item_controller') }}',
-                'up', '{{ path('beyond_dashboard') }}'
-            );
+        handleItems(
+            document.querySelectorAll('.desert>.item:not(.locked)'),
+            '{{ path('beyond_desert_item_controller') }}',
+            'up', '{{ path('beyond_dashboard') }}'
+        );
 
-            handleActions(
-                document.querySelectorAll('ul.actions li[x-action-id][x-provoking-id]:not([disabled])'),
-                '{{ path('beyond_desert_action_controller') }}', '{{ path('beyond_dashboard') }}'
-            );
-            handleRecipes(
-                document.querySelectorAll('ul.actions>li[x-recipe-id]:not([disabled])'),
-                '{{ path('beyond_desert_recipe_controller') }}', '{{ path('beyond_dashboard') }}'
-            );
+        handleActions(
+            document.querySelectorAll('ul.actions li[x-action-id][x-provoking-id]:not([disabled])'),
+            '{{ path('beyond_desert_action_controller') }}', '{{ path('beyond_dashboard') }}'
+        );
+        handleRecipes(
+            document.querySelectorAll('ul.actions>li[x-recipe-id]:not([disabled])'),
+            '{{ path('beyond_desert_recipe_controller') }}', '{{ path('beyond_dashboard') }}'
+        );
         {% endif %}
         {% if allow_enter_town %}
-            document.getElementById('town-enter').addEventListener('click', function() {
-                if (!confirm( '{% trans from 'global' %}Bestätigen?{% endtrans %}' ))
-                    return;
-                $.ajax.easySend( '{{ path('beyond_desert_exit_controller') }}', {},
-                    function () {
-                        $.ajax.load(null, '{{ path('game_landing') }}', true);
-                    } );
-            });
+        document.getElementById('town-enter').addEventListener('click', function() {
+            if (!confirm( '{% trans from 'global' %}Bestätigen?{% endtrans %}' ))
+                return;
+            $.ajax.easySend( '{{ path('beyond_desert_exit_controller') }}', {},
+                function () {
+                    $.ajax.load(null, '{{ path('game_landing') }}', true);
+                } );
+        });
         {% endif %}
     </script>
 {% endblock %}

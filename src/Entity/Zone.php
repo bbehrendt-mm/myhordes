@@ -125,12 +125,23 @@ class Zone
      */
     private $buryCount = 0;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ScoutVisit", mappedBy="zone", cascade={"persist","remove"}, orphanRemoval=true)
+     */
+    private $scoutVisits;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $scoutEstimationOffset;
+
     public function __construct()
     {
         $this->citizens = new ArrayCollection();
         $this->digTimers = new ArrayCollection();
         $this->escapeTimers = new ArrayCollection();
         $this->digRuinMarkers = new ArrayCollection();
+        $this->scoutVisits = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -419,6 +430,54 @@ class Zone
     public function setBuryCount(int $buryCount): self
     {
         $this->buryCount = $buryCount;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ScoutVisit[]
+     */
+    public function getScoutVisits(): Collection
+    {
+        return $this->scoutVisits;
+    }
+
+    public function addScoutVisit(ScoutVisit $scoutVisit): self
+    {
+        if (!$this->scoutVisits->contains($scoutVisit)) {
+            $this->scoutVisits[] = $scoutVisit;
+            $scoutVisit->setZone($this);
+        }
+
+        return $this;
+    }
+
+    public function removeScoutVisit(ScoutVisit $scoutVisit): self
+    {
+        if ($this->scoutVisits->contains($scoutVisit)) {
+            $this->scoutVisits->removeElement($scoutVisit);
+            // set the owning side to null (unless already changed)
+            if ($scoutVisit->getZone() === $this) {
+                $scoutVisit->setZone(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getScoutLevel(): int
+    {
+        return max(0,$this->getScoutVisits()->count() - 1);
+    }
+
+    public function getScoutEstimationOffset(): ?int
+    {
+        return $this->scoutEstimationOffset;
+    }
+
+    public function setScoutEstimationOffset(int $scoutEstimationOffset): self
+    {
+        $this->scoutEstimationOffset = $scoutEstimationOffset;
 
         return $this;
     }

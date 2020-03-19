@@ -180,8 +180,8 @@ button {
   &:not(.small) {
     &+& { margin-top: 5px; }
     >img {
-      &:not(.right) { float: left; }
-      &.right { float: right; }
+      &:not(.right) { float: left; &+img:not(.right) { margin-left: 2px; } }
+      &.right { float: right; &+img.right { margin-right: 2px; } }
     }
   }
 }
