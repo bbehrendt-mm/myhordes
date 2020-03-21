@@ -8,30 +8,59 @@ declare var $: Global;
 
 export default class Ajax {
 
-    base: string;
-    lastNode: HTMLElement;
+    private readonly base: string;
+    private defaultNode: HTMLElement;
+    private no_load_spinner: boolean;
+    private run_in_background: boolean;
 
     constructor(baseUrl: string) {
         if (baseUrl.length == 0 || baseUrl.slice(-1) != '/')
             baseUrl += '/';
         this.base = baseUrl;
-        this.lastNode = null;
+        this.defaultNode = null;
     }
 
-    prepareURL(url: string): string {
+    setDefaultNode( target: HTMLElement ) {
+        this.defaultNode = target;
+    }
+
+    no_loader(): Ajax {
+        this.no_load_spinner = true;
+        return this;
+    }
+
+    background(): Ajax {
+        this.run_in_background = true;
+        return this.no_loader();
+    }
+
+    private fetch_background(): boolean {
+        const r = this.run_in_background;
+        this.run_in_background = false;
+        return r;
+    }
+
+    private fetch_no_loader(): boolean {
+        const r = this.no_load_spinner;
+        this.no_load_spinner = false;
+        return r;
+    }
+
+    private prepareURL(url: string): string {
         if (url.slice(0,4) !== 'http' && url.slice(0,this.base.length) !== this.base) url = this.base + url;
         return url;
     }
-    prepareTarget(target: HTMLElement): HTMLElement {
-        if (target === null) target = this.lastNode;
+
+    private prepareTarget(target: HTMLElement): HTMLElement {
+        if (target === null) target = this.defaultNode;
         if (target === null) {
             alert('ERROR_NO_TARGET_NODE');
             return null;
-        } else this.lastNode = target;
+        }
         return target;
     }
 
-    render( url: string, target: HTMLElement, result_document: Document, push_history: boolean, replace_history: boolean ) {
+    private render( url: string, target: HTMLElement, result_document: Document, push_history: boolean, replace_history: boolean ) {
         // Get URL
         if (push_history) history.pushState( url, '', url );
         if (replace_history) history.replaceState( url, '', url );
@@ -60,7 +89,7 @@ export default class Ajax {
             for (let b = 0; b < buttons.length; b++)
                 buttons[b].addEventListener('click', function(e) {
                     e.preventDefault();
-                    ajax_instance.load( target, buttons[b].getAttribute('x-ajax-href'), push_history )
+                    ajax_instance.load( target, buttons[b].getAttribute('x-ajax-href'), true )
                 }, {once: true, capture: true});
             let countdowns = content_source[i].querySelectorAll('*[x-countdown]');
             for (let c = 0; c < countdowns.length; c++) {
@@ -93,12 +122,15 @@ export default class Ajax {
 
     load( target: HTMLElement, url: string, push_history: boolean = false ) {
         let ajax_instance = this;
+
         if (!(target = this.prepareTarget( target ))) return;
         url = this.prepareURL(url);
 
+        const background = this.fetch_background();
+        const no_loader  = this.fetch_no_loader();
         if (push_history) history.pushState( url, '', url );
 
-        $.html.addLoadStack();
+        if (!no_loader) $.html.addLoadStack();
         let request = new XMLHttpRequest();
         request.responseType = 'document';
         request.addEventListener('load', function(e) {
@@ -108,12 +140,12 @@ export default class Ajax {
                 return;
             }
 
-            ajax_instance.render( this.responseURL, target, this.responseXML, false, true );
-            $.html.removeLoadStack();
+            ajax_instance.render( this.responseURL, target, this.responseXML, false, !background );
+            if (!no_loader) $.html.removeLoadStack();
         });
         request.addEventListener('error', function(e) {
             alert('Error loading page.');
-            $.html.removeLoadStack();
+            if (!no_loader) $.html.removeLoadStack();
         });
         request.open('GET', url);
         request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
@@ -125,7 +157,10 @@ export default class Ajax {
         url = this.prepareURL(url);
         const base = this.base;
 
-        $.html.addLoadStack();
+        const background = this.fetch_background();
+        const no_loader = this.fetch_background();
+
+        if (!no_loader) $.html.addLoadStack();
         let request = new XMLHttpRequest();
         request.responseType = 'json';
         request.addEventListener('load', function(e) {
@@ -138,11 +173,11 @@ export default class Ajax {
                 case 'process': default: break;
             }
             callback( this.response, this.status );
-            $.html.removeLoadStack();
+            if (!no_loader) $.html.removeLoadStack();
         });
         request.addEventListener('error', function(e) {
             alert('Error transferring data.');
-            $.html.removeLoadStack();
+            if (!no_loader) $.html.removeLoadStack();
         });
         request.open('POST', url);
         request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');

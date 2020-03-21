@@ -1,0 +1,40 @@
+@import (once) "../theme";
+
+.log {
+  background: @myhordes-cell-header-background-color; border: 1px solid @myhordes-input-border;
+  padding: 4px;
+  &>.log-content {
+    font-size: 12px; color: #ffe3bf; max-height: 300px; overflow-y: auto;
+    &>.log-spinner, &>.log-complete-link { padding: 5px; }
+    &>.log-complete-link { cursor: pointer; text-decoration: underline; display: inline-block; }
+    &>.log-entry {
+      &:before { content: " "; height: 16px; width: 16px; top: 2px; left: 2px; position: absolute; }
+      padding: 2px 2px 2px 20px; position: relative; cursor: default;
+      &>span.log-part-time {
+        color: @myhordes-smalltext; font-size: 0.9em; display: inline-block; width: 50px;
+        position: relative; text-align: center;
+        &:before, &:after { display: block; width: 10px; position: absolute; top: 0; }
+        &:before{ content: '['; left: 0; } &:after{ content: ']'; right: 0; }
+      }
+      &>span.log-part-content {
+        &>span { color: white; font-weight: bold; &>img { vertical-align: text-top } }
+      }
+
+      &.log-entry-class-0 {}
+      &.log-entry-class-1 { background-color: #820000 }
+      &.log-entry-class-2 { background-color: #ad2714 }
+      &.log-entry-class-3 { background-color: #965c36 }
+
+      &.log-entry-type-0 {}
+      &.log-entry-type-1 {}
+      &.log-entry-type-2 { &.log-entry-class-0:before { background: url("../../img/log/bank_in.gif") } &.log-entry-class-1:before { background: url("../../img/log/bank_out.gif") } }
+      &.log-entry-type-3 {}
+      &.log-entry-type-4 {}
+      &.log-entry-type-5 {}
+      &.log-entry-type-6 {}
+      &.log-entry-type-7 { &:before { background: url("../../img/log/well.gif") } }
+      &.log-entry-type-8 {}
+      &.log-entry-type-9 {}
+    }
+  }
+}

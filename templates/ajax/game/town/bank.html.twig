@@ -25,11 +25,19 @@
             {% endembed %}
         </div>
     </div>
+    <div class="row">
+        <h5>{% trans from 'game' %}Bankregister{% endtrans %}</h5>
+        <div class="cell rw-12">
+            {% embed "ajax/game/log.html.twig" with {'log_content': log, 'log_source': path('town_bank_log_controller') } %}
+            {% endembed %}
+        </div>
+    </div>
 {% endblock %}
 {% block js %}
     {{ parent() }}
     <script>
-        {% embed "scripts/inventory.js.twig" %}{% endembed %}
+        {% embed "scripts/inventory.js.twig" %}{% endembed %};
+        {% embed "scripts/log.js.twig" %}{% endembed %}
 
         handleItems(
             document.querySelectorAll('.rucksack>.item:not(.locked)[x-item-id]'),

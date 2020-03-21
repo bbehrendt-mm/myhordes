@@ -1,3 +1,6 @@
+{% if scout is not defined %}
+    {% set scout = false %}
+{% endif %}
 {% if list|length > 0 or recipes.recipes|length > 0  %}
     <ul class="actions">
         {% for entry in list %}

@@ -13,6 +13,7 @@ use App\Entity\ItemPrototype;
 use App\Entity\ItemTargetDefinition;
 use App\Entity\Recipe;
 use App\Entity\TownClass;
+use App\Entity\TownLogEntry;
 use App\Entity\User;
 use App\Entity\UserPendingValidation;
 use App\Response\AjaxResponse;
@@ -23,6 +24,7 @@ use App\Service\InventoryHandler;
 use App\Service\ItemFactory;
 use App\Service\JSONRequestParser;
 use App\Service\Locksmith;
+use App\Service\LogTemplateHandler;
 use App\Structures\BankItem;
 use App\Structures\ItemRequest;
 use Doctrine\Common\Collections\Collection;
@@ -31,6 +33,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\Expr\Join;
 use Exception;
+use Symfony\Component\DependencyInjection\Compiler\ResolveBindingsPass;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -53,16 +56,18 @@ class InventoryAwareController extends AbstractController implements GameInterfa
     protected $citizen_handler;
     protected $action_handler;
     protected $translator;
+    protected $log;
 
     public function __construct(
         EntityManagerInterface $em, InventoryHandler $ih, CitizenHandler $ch, ActionHandler $ah,
-        TranslatorInterface $translator)
+        TranslatorInterface $translator, LogTemplateHandler $lt)
     {
         $this->entity_manager = $em;
         $this->inventory_handler = $ih;
         $this->citizen_handler = $ch;
         $this->action_handler = $ah;
         $this->translator = $translator;
+        $this->log = $lt;
     }
 
     protected function addDefaultTwigArgs( ?string $section = null, ?array $data = null ): array {
@@ -81,6 +86,15 @@ class InventoryAwareController extends AbstractController implements GameInterfa
 
     protected function getActiveCitizen(): Citizen {
         return $this->entity_manager->getRepository(Citizen::class)->findActiveByUser($this->getUser());
+    }
+
+    protected function renderLog( ?int $day, $citizen = null, $zone = null, ?int $type = null, ?int $max = null ): Response {
+        return $this->render( 'ajax/game/log_content.html.twig', [
+            'entries' => $this->entity_manager->getRepository(TownLogEntry::class)->findByFilter(
+                $this->getActiveCitizen()->getTown(),
+                $day, $citizen, $zone, $type, $max
+            )
+        ] );
     }
 
     protected function getItemActions(): array {
@@ -193,12 +207,17 @@ class InventoryAwareController extends AbstractController implements GameInterfa
                     return !in_array($i->getPrototype()->getName(), $carrier_items);
                 });
 
+            $bank_up = null;
+            if ($inv_source->getTown()) $bank_up = true;
+            if ($inv_target->getTown()) $bank_up = false;
+
             $errors = [];
             foreach ($items as &$current_item)
                 if (($error = $handler->transferItem(
                         $citizen,
                         $current_item,$inv_source, $inv_target
                     )) === InventoryHandler::ErrorNone) {
+                    if ($bank_up !== null) $this->entity_manager->persist( $this->log->bankItemLog( $citizen, $current_item, !$bank_up ) );
                     if ($current_item->getInventory())
                         $this->entity_manager->persist($current_item);
                     else $this->entity_manager->remove($current_item);

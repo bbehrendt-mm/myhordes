@@ -9,6 +9,7 @@ use App\Entity\CitizenHomeUpgrade;
 use App\Entity\CitizenHomeUpgradeCosts;
 use App\Entity\CitizenHomeUpgradePrototype;
 use App\Entity\ExpeditionRoute;
+use App\Entity\TownLogEntry;
 use App\Entity\Zone;
 use App\Response\AjaxResponse;
 use App\Service\ActionHandler;
@@ -118,7 +119,27 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
 
             'def' => $summary,
             'deco' => $deco,
+
+            'log' => $this->renderLog( -1, $c, false, null, 10 )->getContent(),
         ]) );
+    }
+
+    /**
+     * @Route("api/town/visit/{id}/log", name="town_visit_log_controller")
+     * @param int $id
+     * @param JSONRequestParser $parser
+     * @return Response
+     */
+    public function log_visit_api(int $id, JSONRequestParser $parser): Response {
+        if ($id === $this->getActiveCitizen()->getId())
+            return $this->redirect($this->generateUrl('town_house_log_controller'));
+
+        /** @var Citizen $c */
+        $c = $this->entity_manager->getRepository(Citizen::class)->find( $id );
+        if (!$c || $c->getTown()->getId() !== $this->getActiveCitizen()->getTown()->getId())
+            $c = null;
+
+        return $this->renderLog((int)$parser->get('day', -1), $c, false, null, $c ===  null ? 0 : null);
     }
 
     /**
@@ -176,7 +197,18 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
 
             'def' => $summary,
             'deco' => $deco,
+
+            'log' => $this->renderLog( -1, $this->getActiveCitizen(), false, null, 10 )->getContent(),
         ]) );
+    }
+
+    /**
+     * @Route("api/town/house/log", name="town_house_log_controller")
+     * @param JSONRequestParser $parser
+     * @return Response
+     */
+    public function log_house_api(JSONRequestParser $parser): Response {
+        return $this->renderLog((int)$parser->get('day', -1), $this->getActiveCitizen(), false, null, null);
     }
 
     /**
@@ -333,7 +365,18 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
             'first_take' => $this->getActiveCitizen()->getWellCounter()->getTaken() === 0,
             'allow_take' => $this->getActiveCitizen()->getWellCounter()->getTaken() < ($pump ? 2 : 1),
             'pump' => $pump,
+
+            'log' => $this->renderLog( -1, null, false, TownLogEntry::TypeWell, 10 )->getContent(),
         ]) );
+    }
+
+    /**
+     * @Route("api/town/well/log", name="town_well_log_controller")
+     * @param JSONRequestParser $parser
+     * @return Response
+     */
+    public function log_well_api(JSONRequestParser $parser): Response {
+        return $this->renderLog((int)$parser->get('day', -1), null, false, TownLogEntry::TypeWell, null);
     }
 
     /**
@@ -365,6 +408,7 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
                     $citizen,
                     $item,$inv_source, $inv_target
                 )) === InventoryHandler::ErrorNone) {
+                    $this->entity_manager->persist( $this->log->wellLog( $citizen, $wellLock->getTaken() >= 1 ) );
                     $wellLock->setTaken( $wellLock->getTaken()+1 );
                     $town->setWell( $town->getWell()-1 );
                     try {
@@ -391,6 +435,7 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
                     )) === InventoryHandler::ErrorNone) {
                     $town->setWell( $town->getWell()+1 );
                     try {
+                        $this->entity_manager->persist( $this->log->wellAdd( $citizen, $items[0], 1) );
                         $this->entity_manager->remove($items[0]);
                         $this->entity_manager->persist($town);
                         $this->entity_manager->flush();
@@ -414,7 +459,17 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
     {
         return $this->render( 'ajax/game/town/bank.html.twig', $this->addDefaultTwigArgs('bank', [
             'bank' => $this->renderInventoryAsBank( $this->getActiveCitizen()->getTown()->getBank() ),
+            'log' => $this->renderLog( -1, null, false, TownLogEntry::TypeBank, 10 )->getContent(),
         ]) );
+    }
+
+    /**
+     * @Route("api/town/bank/log", name="town_bank_log_controller")
+     * @param JSONRequestParser $parser
+     * @return Response
+     */
+    public function log_bank_api(JSONRequestParser $parser): Response {
+        return $this->renderLog((int)$parser->get('day', -1), null, false, TownLogEntry::TypeBank, null);
     }
 
     /**

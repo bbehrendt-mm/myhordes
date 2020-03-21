@@ -40,12 +40,13 @@ class ActionHandler
     private $town_handler;
     private $zone_handler;
     private $assets;
+    private $log;
 
 
     public function __construct(
         EntityManagerInterface $em, StatusFactory $sf, CitizenHandler $ch, InventoryHandler $ih, DeathHandler $dh,
         RandomGenerator $rg, ItemFactory $if, TranslatorInterface $ti, GameFactory $gf, Packages $am, TownHandler $th,
-        ZoneHandler $zh)
+        ZoneHandler $zh, LogTemplateHandler $lt)
     {
         $this->entity_manager = $em;
         $this->status_factory = $sf;
@@ -59,6 +60,7 @@ class ActionHandler
         $this->town_handler = $th;
         $this->death_handler = $dh;
         $this->zone_handler = $zh;
+        $this->log = $lt;
     }
 
     const ActionValidityNone = 1;
@@ -453,6 +455,9 @@ class ActionHandler
                 $add = mt_rand( $well->getFillMin(), $well->getFillMax() );
                 $citizen->getTown()->setWell( $citizen->getTown()->getWell() + $add );
                 $execute_info_cache['well'] += $add;
+
+                if ($add > 0)
+                    $this->entity_manager->persist( $this->log->wellAdd( $citizen, $item, $add) );
             }
 
             if ($result->getRolePlayerText()) {

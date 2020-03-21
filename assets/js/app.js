@@ -28,7 +28,8 @@ let $ = {
 window.$ = $;
 
 document.addEventListener('DOMContentLoaded', function() {
-    $.ajax.load( document.getElementById('content'), document.documentElement.getAttribute('x-ajax-landing'), true );
+    $.ajax.setDefaultNode( document.getElementById('content') );
+    $.ajax.no_loader().load( null, document.documentElement.getAttribute('x-ajax-landing'), true );
 }, {once: true, passive: true});
 
 window.addEventListener('popstate', function(event) {

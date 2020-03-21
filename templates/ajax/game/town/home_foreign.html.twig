@@ -49,6 +49,16 @@
     </div>
 
     <div class="row">
+        <h5>{{ '%citizen%s Register'|trans({'%citizen%': citizen.user.username},'game') }}</h5>
+        <div class="cell rw-12">
+            {% embed "ajax/game/log.html.twig" with {'log_content': log, 'log_source': path('town_visit_log_controller', {'id': citizen.id}) } %}
+            {% endembed %}
+        </div>
+    </div>
+
+    <br />
+
+    <div class="row">
         <div class="cell ro-8 rw-4 ro-md-7 rw-md-5"><button x-ajax-href="{{ path('town_citizens') }}">{{ 'Schließen'|trans({},'game') }}</button></div>
     </div>
 
@@ -56,5 +66,6 @@
 {% block js %}
     {{ parent() }}
     <script>
+        {% embed "scripts/log.js.twig" %}{% endembed %}
     </script>
 {% endblock %}

@@ -1,0 +1,11 @@
+{# @var entries \App\Entity\TownLogEntry[] #}
+{% if entries|length == 0 %}
+    <i>Heute ist nichts Erwähnenswertes passiert...</i>
+{% else %}
+    {% for entry in entries %}
+        <div class="log-entry log-entry-type-{{ entry.type }} log-entry-class-{{ entry.class }}">
+            <span class="log-part-time">{{ entry.timestamp.format('G:i') }}</span>
+            <span class="log-part-content">{{ entry.text|raw }}</span>
+        </div>
+    {% endfor %}
+{% endif %}
