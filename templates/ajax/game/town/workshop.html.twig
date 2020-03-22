@@ -79,10 +79,20 @@
             {% endif %}
         {% endfor %}
     </div>
+
+    <div class="row">
+        <h5>{{ 'Werkstatt-Register'|trans({},'game') }}</h5>
+        <div class="cell rw-12">
+            {% embed "ajax/game/log.html.twig" with {'log_content': log, 'log_source': path('town_workshop_log_controller') } %}
+            {% endembed %}
+        </div>
+    </div>
 {% endblock %}
 {% block js %}
     {{ parent() }}
     <script>
+        {% embed "scripts/log.js.twig" %}{% endembed %}
+
         let buttons = document.querySelectorAll('[x-recipe-id]');
         for (let i = 0; i < buttons.length; i++)
             buttons[i].addEventListener('click', function() {

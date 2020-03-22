@@ -270,6 +270,7 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
             $item->getInventory()->removeItem($item);
             $em->remove($item);
         }
+        $em->persist( $this->log->homeUpgrade( $citizen ) );
         $em->persist($home);
         $em->persist($citizen);
         $em->flush();
@@ -538,16 +539,20 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
         }
 
         $was_completed = $building->getComplete();
+        if ($th->getBuilding($town, 'item_rp_book2_#00', true))
+            $this->entity_manager->persist( $this->log->constructionsInvestAP( $citizen, $building->getPrototype(), $ap ) );
 
         $this->citizen_handler->deductAPBP( $citizen, $ap );
         $building->setAp( $building->getAp() + $ap );
         $building->setComplete( $building->getComplete() || $building->getAp() >= $building->getPrototype()->getAp() );
+
         if (!$was_completed && $building->getComplete()) {
             foreach ($items as $item) {
                 $town->getBank()->removeItem( $item );
                 $this->entity_manager->remove( $item );
             }
             $th->triggerBuildingCompletion( $town, $building );
+            $this->entity_manager->persist( $this->log->constructionsBuildingComplete( $citizen, $building->getPrototype() ) );
         }
 
 
@@ -592,7 +597,18 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
             'root_cats'  => $root,
             'dictionary' => $dict,
             'bank' => $items,
+
+            'log' => $this->renderLog( -1, null, false, TownLogEntry::TypeConstruction, 10 )->getContent(),
         ]) );
+    }
+
+    /**
+     * @Route("api/town/constructions/log", name="town_constructions_log_controller")
+     * @param JSONRequestParser $parser
+     * @return Response
+     */
+    public function log_constructions_api(JSONRequestParser $parser): Response {
+        return $this->renderLog((int)$parser->get('day', -1), null, false, TownLogEntry::TypeConstruction, null);
     }
 
     /**
@@ -618,6 +634,8 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
         $this->citizen_handler->setAP($citizen, true, -1);
         $town->setDoor( $action === 'open' );
 
+        $this->entity_manager->persist( $this->log->doorControl( $citizen, $action === 'open' ) );
+
         try {
             $this->entity_manager->persist($citizen);
             $this->entity_manager->persist($town);
@@ -641,6 +659,7 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
         if (!$zone)
             return AjaxResponse::error( ErrorHelper::ErrorInternalError );
 
+        $this->entity_manager->persist( $this->log->doorPass( $citizen, false ) );
         $zone->addCitizen( $citizen );
 
         try {
@@ -661,7 +680,17 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
     {
         return $this->render( 'ajax/game/town/door.html.twig', $this->addDefaultTwigArgs('door', array_merge([
             'town'  =>  $this->getActiveCitizen()->getTown(),
+            'log' => $this->renderLog( -1, null, false, TownLogEntry::TypeDoor, 10 )->getContent(),
         ], $this->get_map_blob())) );
+    }
+
+    /**
+     * @Route("api/town/door/log", name="town_door_log_controller")
+     * @param JSONRequestParser $parser
+     * @return Response
+     */
+    public function log_door_api(JSONRequestParser $parser): Response {
+        return $this->renderLog((int)$parser->get('day', -1), null, false, TownLogEntry::TypeDoor, null);
     }
 
     /**

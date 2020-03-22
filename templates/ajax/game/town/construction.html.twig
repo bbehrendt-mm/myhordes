@@ -70,10 +70,19 @@
         <div class="buildings type_{{ building.prototype.icon }}">{{ _self.building_entry(building, true, 0, dictionary, bank) }}</div>
     {% endfor %}
 
+    <div class="row">
+        <h5>{{ 'Baustellenregister'|trans({},'game') }}</h5>
+        <div class="cell rw-12">
+            {% embed "ajax/game/log.html.twig" with {'log_content': log, 'log_source': path('town_constructions_log_controller') } %}
+            {% endembed %}
+        </div>
+    </div>
 {% endblock %}
 {% block js %}
     {{ parent() }}
     <script>
+        {% embed "scripts/log.js.twig" %}{% endembed %}
+
         const send_build_request = function(id) {
             let ap = null, valid = false;
             do {

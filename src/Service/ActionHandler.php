@@ -333,6 +333,7 @@ class ActionHandler
 
             if ($death = $result->getDeath()) {
                 $this->death_handler->kill( $citizen, $death->getCause(), $r );
+                $this->entity_manager->persist( $this->log->citizenDeath( $citizen ) );
                 foreach ($r as $r_entry) $remove[] = $r_entry;
             }
 
@@ -349,6 +350,7 @@ class ActionHandler
                     if ($this->town_handler->addBuilding( $town, $pick )) {
                         $tags[] = 'bp_ok';
                         $execute_info_cache['bp_spawn'][] = $pick;
+                        $this->entity_manager->persist( $this->log->constructionsNewSite( $citizen, $pick ) );
                     }
 
                 } else $tags[] = 'bp_fail';
@@ -613,6 +615,7 @@ class ActionHandler
         if ($kill_by_poison && $citizen->getAlive()) {
             $this->death_handler->kill( $citizen, CauseOfDeath::Posion, $r );
             foreach ($r as $r_entry) $remove[] = $r_entry;
+            $this->entity_manager->persist( $this->log->citizenDeath( $citizen ) );
         }
 
         if ($action->getMessage() && !$kill_by_poison) {
@@ -698,6 +701,9 @@ class ActionHandler
 
         $new_item = $this->random_generator->pickItemPrototypeFromGroup( $recipe->getResult() );
         $this->inventory_handler->placeItem( $citizen, $this->item_factory->createItem( $new_item ) , $target_inv );
+
+        if ($recipe->getType() === Recipe::WorkshopType)
+            $this->entity_manager->persist( $this->log->workshopConvert( $citizen, $items, [$new_item] ) );
 
         switch ( $recipe->getType() ) {
             case Recipe::WorkshopType:

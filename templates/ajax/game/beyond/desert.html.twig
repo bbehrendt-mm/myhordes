@@ -158,11 +158,20 @@
             {% endif %}
         </div>
     </div>
+
+    <div class="row">
+        <h5>{{ 'Zonenregister'|trans({},'game') }}</h5>
+        <div class="cell rw-12">
+            {% embed "ajax/game/log.html.twig" with {'log_content': log, 'log_source': path('beyond_desert_log_controller') } %}
+            {% endembed %}
+        </div>
+    </div>
 {% endblock %}
 {% block js %}
     {{ parent() }}
     <script>
-        {% embed "scripts/actions.js.twig" %}{% endembed %}
+        {% embed "scripts/actions.js.twig" %}{% endembed %};
+        {% embed "scripts/log.js.twig" %}{% endembed %}
 
         let dig_button = document.getElementById('dig_button');
         if (dig_button)

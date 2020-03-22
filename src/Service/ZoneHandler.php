@@ -16,6 +16,7 @@ use App\Entity\Inventory;
 use App\Entity\ItemGroup;
 use App\Entity\Town;
 use App\Entity\TownClass;
+use App\Entity\TownLogEntry;
 use App\Entity\User;
 use App\Entity\WellCounter;
 use App\Entity\Zone;
@@ -32,9 +33,10 @@ class ZoneHandler
     private $random_generator;
     private $inventory_handler;
     private $citizen_handler;
+    private $log;
 
     public function __construct(
-        EntityManagerInterface $em, ItemFactory $if,
+        EntityManagerInterface $em, ItemFactory $if, LogTemplateHandler $lh,
         StatusFactory $sf, RandomGenerator $rg, InventoryHandler $ih, CitizenHandler $ch)
     {
         $this->entity_manager = $em;
@@ -43,6 +45,7 @@ class ZoneHandler
         $this->random_generator = $rg;
         $this->inventory_handler = $ih;
         $this->citizen_handler = $ch;
+        $this->log = $lh;
     }
 
     public function updateZone( Zone $zone, ?DateTime $up_to = null ) {
@@ -86,10 +89,14 @@ class ZoneHandler
             foreach ($dig_timers as &$timer)
                 if ($timer->getTimestamp() <= $up_to) {
 
-                    $item_prototype = $this->random_generator->chance($zone->getDigs() > 0 ? 0.333 : 0.25)
+                    $factor = 1.0;
+                    if ($timer->getCitizen()->getProfession()->getName() === 'collec') $factor += 0.2;
+                    if ($this->citizen_handler->hasStatusEffect( $timer->getCitizen(), 'camper' )) $factor += 0.2;
+                    $item_prototype = $this->random_generator->chance($factor * ($zone->getDigs() > 0 ? 0.40 : 0.25))
                         ? $this->random_generator->pickItemPrototypeFromGroup( $zone->getDigs() > 0 ? $base_group : $empty_group )
                         : null;
 
+                    $this->entity_manager->persist( $this->log->outsideDig( $timer->getCitizen(), $item_prototype, $timer->getTimestamp() ) );
                     if ($item_prototype) {
                         $item = $this->item_factory->createItem($item_prototype);
                         if ($this->inventory_handler->placeItem( $timer->getCitizen(), $item, [ $timer->getCitizen()->getInventory(), $timer->getZone()->getFloor() ] )) {
@@ -206,10 +213,18 @@ class ZoneHandler
         return $cp >= $zone->getZombies();
     }
 
+    /**
+     * @param Zone $zone
+     * @param $cp_ok_before
+     */
     public function handleCitizenCountUpdate(&$zone, $cp_ok_before) {
-        // If no citizens remain in a zone, invalidate all associated escape timers
-        if (!count($zone->getCitizens())) foreach ($this->entity_manager->getRepository(EscapeTimer::class)->findAllByZone($zone) as $et)
-            $this->entity_manager->remove( $et );
+        // If no citizens remain in a zone, invalidate all associated escape timers and clear the log
+        if (!count($zone->getCitizens())) {
+            foreach ($this->entity_manager->getRepository(EscapeTimer::class)->findAllByZone($zone) as $et)
+                $this->entity_manager->remove( $et );
+            foreach ($this->entity_manager->getRepository(TownLogEntry::class)->findByFilter( $zone->getTown(), null, null, $zone, null, null ) as $entry)
+                $this->entity_manager->remove( $entry );
+        }
         // If zombies can take control after leaving the zone and there are citizens remaining, install a grace escape timer
         elseif ( $cp_ok_before && !$this->check_cp( $zone ) )
             $zone->addEscapeTimer( (new EscapeTimer())->setTime( new DateTime('+30min') ) );

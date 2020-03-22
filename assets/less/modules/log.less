@@ -9,7 +9,7 @@
     &>.log-complete-link { cursor: pointer; text-decoration: underline; display: inline-block; }
     &>.log-entry {
       &:before { content: " "; height: 16px; width: 16px; top: 2px; left: 2px; position: absolute; }
-      padding: 2px 2px 2px 20px; position: relative; cursor: default;
+      padding: 2px 2px 2px 20px; position: relative; cursor: default; margin: 1px 0;
       &>span.log-part-time {
         color: @myhordes-smalltext; font-size: 0.9em; display: inline-block; width: 50px;
         position: relative; text-align: center;
@@ -25,16 +25,17 @@
       &.log-entry-class-2 { background-color: #ad2714 }
       &.log-entry-class-3 { background-color: #965c36 }
 
-      &.log-entry-type-0 {}
-      &.log-entry-type-1 {}
-      &.log-entry-type-2 { &.log-entry-class-0:before { background: url("../../img/log/bank_in.gif") } &.log-entry-class-1:before { background: url("../../img/log/bank_out.gif") } }
-      &.log-entry-type-3 {}
-      &.log-entry-type-4 {}
-      &.log-entry-type-5 {}
-      &.log-entry-type-6 {}
-      &.log-entry-type-7 { &:before { background: url("../../img/log/well.gif") } }
-      &.log-entry-type-8 {}
-      &.log-entry-type-9 {}
+      &.log-entry-type-0  {}
+      &.log-entry-type-1  {}
+      &.log-entry-type-2  { &.log-entry-class-0:before { background: url("../../img/log/bank_in.gif") } &.log-entry-class-1:before { background: url("../../img/log/bank_out.gif") } }
+      &.log-entry-type-3  {}
+      &.log-entry-type-4  { &:before { background: url("../../img/log/build.gif") } }
+      &.log-entry-type-5  { &:before { background: url("../../img/log/workshop.gif") } }
+      &.log-entry-type-6  { &.log-entry-class-0:before { background: url("../../img/log/door_open.gif") } &.log-entry-class-3:before { background: url("../../img/log/door_closed.gif") } }
+      &.log-entry-type-7  { &:before { background: url("../../img/log/well.gif") } }
+      &.log-entry-type-8  { &:not(.log-entry-class-2):before { background: url("../../img/log/citizen.gif") } &.log-entry-class-2:before { background: url("../../img/log/death.gif") } }
+      &.log-entry-type-9  {}
+      &.log-entry-type-10 { &:before { background: url("../../img/log/home.gif") } }
     }
   }
 }

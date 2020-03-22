@@ -10,6 +10,7 @@ use App\Entity\CitizenHomeUpgradePrototype;
 use App\Entity\DailyUpgradeVote;
 use App\Entity\ItemPrototype;
 use App\Entity\Recipe;
+use App\Entity\TownLogEntry;
 use App\Entity\ZombieEstimation;
 use App\Entity\Zone;
 use App\Response\AjaxResponse;
@@ -212,7 +213,19 @@ class TownAddonsController extends TownController
             'saw' => $have_saw, 'manu' => $have_manu,
             'need_ap' => 3 - ($have_saw ? 1 : 0) - ($have_manu ? 1 : 0),
             'source' => $source_db, 'result' => $result_db,
+
+            'log' => $this->renderLog( -1, null, false, TownLogEntry::TypeWorkshop, 10 )->getContent(),
+
         ]) );
+    }
+
+    /**
+     * @Route("api/town/workshop/log", name="town_workshop_log_controller")
+     * @param JSONRequestParser $parser
+     * @return Response
+     */
+    public function log_workshop_api(JSONRequestParser $parser): Response {
+        return $this->renderLog((int)$parser->get('day', -1), null, false, TownLogEntry::TypeWorkshop, null);
     }
 
     /**

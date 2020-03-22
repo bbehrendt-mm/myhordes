@@ -33,9 +33,10 @@ class NightlyHandler
     private $zone_handler;
     private $inventory_handler;
     private $item_factory;
+    private $logTemplates;
 
     public function __construct(EntityManagerInterface $em, LoggerInterface $log, CitizenHandler $ch, InventoryHandler $ih,
-                                RandomGenerator $rg, DeathHandler $dh, TownHandler $th, ZoneHandler $zh, ItemFactory $if)
+                                RandomGenerator $rg, DeathHandler $dh, TownHandler $th, ZoneHandler $zh, ItemFactory $if, LogTemplateHandler $lh)
     {
         $this->entity_manager = $em;
         $this->citizen_handler = $ch;
@@ -47,6 +48,7 @@ class NightlyHandler
         $this->zone_handler = $zh;
         $this->item_factory = $if;
         $this->log = $log;
+        $this->logTemplates = $lh;
     }
 
     private function check_town(Town &$town): bool {
@@ -70,9 +72,10 @@ class NightlyHandler
         return true;
     }
 
-    private function kill_wrap( Citizen &$citizen, CauseOfDeath &$cod, bool $skip_reanimation = false ) {
+    private function kill_wrap( Citizen &$citizen, CauseOfDeath &$cod, bool $skip_reanimation = false, int $zombies = 0 ) {
         $this->log->debug("Citizen <info>{$citizen->getUser()->getUsername()}</info> dies of <info>{$cod->getLabel()}</info>.");
         $this->death_handler->kill($citizen,$cod,$rr);
+        $this->entity_manager->persist( $this->logTemplates->citizenDeath( $citizen, $zombies ) );
         foreach ($rr as $r) $this->cleanup[] = $r;
         if ($skip_reanimation) $this->skip_reanimation[] = $citizen->getId();
     }
@@ -247,7 +250,7 @@ class NightlyHandler
             else $force = $attacking > 0 ? mt_rand(1, max(1,min($max,$attacking-$left)) ) : 0;
             $def = $this->town_handler->calculate_home_def($home);
             $this->log->debug("Citizen <info>{$target->getUser()->getUsername()}</info> is attacked by <info>{$force}</info> zombies and protected by <info>{$def}</info> home defense!");
-            if ($force > $def) $this->kill_wrap($target, $cod);
+            if ($force > $def) $this->kill_wrap($target, $cod, $force);
             elseif (!$has_kino && $this->random->chance( 0.75 * ($force/max(1,$def)) )) {
                 $this->citizen_handler->inflictStatus( $target, $status_terror );
                 $this->log->debug("Citizen <info>{$target->getUser()->getUsername()}</info> now suffers from <info>{$status_terror->getLabel()}</info>");

@@ -9,16 +9,17 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class TownLogEntry
 {
-    const TypeVarious      = 0;
-    const TypeCrimes       = 1;
-    const TypeBank         = 2;
-    const TypeDump         = 3;
-    const TypeConstruction = 4;
-    const TypeWorkshop     = 5;
-    const TypeDoor         = 6;
-    const TypeWell         = 7;
-    const TypeCitizens     = 8;
-    const TypeNightly      = 9;
+    const TypeVarious      =  0;
+    const TypeCrimes       =  1;
+    const TypeBank         =  2;
+    const TypeDump         =  3;
+    const TypeConstruction =  4;
+    const TypeWorkshop     =  5;
+    const TypeDoor         =  6;
+    const TypeWell         =  7;
+    const TypeCitizens     =  8;
+    const TypeNightly      =  9;
+    const TypeHome         = 10;
 
     const ClassNone     = 0;
     const ClassWarning  = 1;
@@ -33,7 +34,7 @@ class TownLogEntry
     private $id;
 
     /**
-     * @ORM\Column(type="time")
+     * @ORM\Column(type="datetime")
      */
     private $timestamp;
 
@@ -77,6 +78,16 @@ class TownLogEntry
      * @ORM\ManyToOne(targetEntity="App\Entity\Zone")
      */
     private $zone;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $secondaryType;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Citizen")
+     */
+    private $secondaryCitizen;
 
     public function getId(): ?int
     {
@@ -187,6 +198,30 @@ class TownLogEntry
     public function setZone(?Zone $zone): self
     {
         $this->zone = $zone;
+
+        return $this;
+    }
+
+    public function getSecondaryType(): ?int
+    {
+        return $this->secondaryType;
+    }
+
+    public function setSecondaryType(?int $secondaryType): self
+    {
+        $this->secondaryType = $secondaryType;
+
+        return $this;
+    }
+
+    public function getSecondaryCitizen(): ?Citizen
+    {
+        return $this->secondaryCitizen;
+    }
+
+    public function setSecondaryCitizen(?Citizen $secondaryCitizen): self
+    {
+        $this->secondaryCitizen = $secondaryCitizen;
 
         return $this;
     }

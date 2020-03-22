@@ -27,6 +27,7 @@ use App\Service\InventoryHandler;
 use App\Service\ItemFactory;
 use App\Service\JSONRequestParser;
 use App\Service\Locksmith;
+use App\Service\LogTemplateHandler;
 use App\Service\RandomGenerator;
 use App\Service\TownHandler;
 use App\Service\ZoneHandler;
@@ -85,9 +86,9 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
      */
     public function __construct(
         EntityManagerInterface $em, InventoryHandler $ih, CitizenHandler $ch, ActionHandler $ah, DeathHandler $dh,
-        TranslatorInterface $translator, GameFactory $gf, RandomGenerator $rg, ItemFactory $if, ZoneHandler $zh)
+        TranslatorInterface $translator, GameFactory $gf, RandomGenerator $rg, ItemFactory $if, ZoneHandler $zh, LogTemplateHandler $lh)
     {
-        parent::__construct($em, $ih, $ch, $ah, $translator);
+        parent::__construct($em, $ih, $ch, $ah, $translator, $lh);
         $this->citizen_handler->upgrade($dh);
         $this->game_factory = $gf;
         $this->random_generator = $rg;
@@ -192,7 +193,21 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
             'dig_timeout' => $dig_timeout,
             'actions' => $this->getItemActions(),
             'floor' => $this->getActiveCitizen()->getZone()->getFloor(),
+
+            'log' => $this->renderLog( -1, null, $zone, null, 10 )->getContent(),
         ]) );
+    }
+
+    /**
+     * @Route("api/beyond/desert/log", name="beyond_desert_log_controller")
+     * @param JSONRequestParser $parser
+     * @return Response
+     */
+    public function log_desert_api(JSONRequestParser $parser): Response {
+        $zone = $this->getActiveCitizen()->getZone();
+        if (!$zone || ($zone->getX() === 0 && $zone->getY() === 0))
+            return $this->renderLog((int)$parser->get('day', -1), null, null, null, 0);
+        return $this->renderLog((int)$parser->get('day', -1), null, $zone, null, null);
     }
 
     /**
@@ -218,8 +233,18 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
         if ($distance > $port_distance)
             return AjaxResponse::error( self::ErrorNoReturnFromHere );
 
+
+
         $citizen->setZone( null );
         $zone->removeCitizen( $citizen );
+        $others_are_here = $zone->getCitizens()->count() > 0;
+
+        if ( $distance > 0 ) {
+            $zero_zone = $this->entity_manager->getRepository(Zone::class)->findOneByPosition( $zone->getTown(), 0, 0 );
+            if ($others_are_here) $this->entity_manager->persist( $this->log->outsideMove( $citizen, $zone, $zero_zone, true ) );
+            $this->entity_manager->persist( $this->log->outsideMove( $citizen, $zero_zone, $zone, false ) );
+        }
+        $this->entity_manager->persist( $this->log->doorPass( $citizen, true ) );
 
         $cp_ok = $this->zone_handler->check_cp( $zone );
         $this->zone_handler->handleCitizenCountUpdate( $zone, $cp_ok );
@@ -305,6 +330,11 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
             $this->citizen_handler->increaseThirstLevel( $citizen );
             $citizen->setWalkingDistance( 0 );
         }
+
+        $others_are_here = $zone->getCitizens()->count() > 0;
+
+        if ($others_are_here || ($zone->getX() === 0 && $zone->getY() === 0)) $this->entity_manager->persist( $this->log->outsideMove( $citizen, $zone, $new_zone, true  ) );
+        $this->entity_manager->persist( $this->log->outsideMove( $citizen, $new_zone, $zone, false ) );
 
         try {
             $this->zone_handler->handleCitizenCountUpdate($zone, $cp_ok);

@@ -36,6 +36,7 @@ class GameFactory
     private $citizen_handler;
     private $zone_handler;
     private $town_handler;
+    private $log;
 
     const ErrorNone = 0;
     const ErrorTownClosed          = ErrorHelper::BaseTownSelectionErrors + 1;
@@ -43,9 +44,11 @@ class GameFactory
     const ErrorUserAlreadyInTown   = ErrorHelper::BaseTownSelectionErrors + 3;
     const ErrorNoDefaultProfession = ErrorHelper::BaseTownSelectionErrors + 4;
 
+
+
     public function __construct(
         EntityManagerInterface $em, GameValidator $v, Locksmith $l, ItemFactory $if, TownHandler $th,
-        StatusFactory $sf, RandomGenerator $rg, InventoryHandler $ih, CitizenHandler $ch, ZoneHandler $zh)
+        StatusFactory $sf, RandomGenerator $rg, InventoryHandler $ih, CitizenHandler $ch, ZoneHandler $zh, LogTemplateHandler $lh)
     {
         $this->entity_manager = $em;
         $this->validator = $v;
@@ -57,6 +60,7 @@ class GameFactory
         $this->citizen_handler = $ch;
         $this->zone_handler = $zh;
         $this->town_handler = $th;
+        $this->log = $lh;
     }
 
     private static $town_name_snippets = [
@@ -228,6 +232,8 @@ class GameFactory
         $chest
             ->addItem( $this->item_factory->createItem( 'chest_citizen_#00' ) )
             ->addItem( $this->item_factory->createItem( 'food_bag_#00' ) );
+
+        $this->entity_manager->persist( $this->log->citizenJoin( $citizen ) );
 
         return $citizen;
     }

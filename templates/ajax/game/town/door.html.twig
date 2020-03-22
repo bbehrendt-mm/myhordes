@@ -24,11 +24,20 @@
             {% endembed %}
         </div>
     </div>
+
+    <div class="row">
+        <h5>{{ 'Stadttor-Register'|trans({},'game') }}</h5>
+        <div class="cell rw-12">
+            {% embed "ajax/game/log.html.twig" with {'log_content': log, 'log_source': path('town_door_log_controller') } %}
+            {% endembed %}
+        </div>
+    </div>
 {% endblock %}
 {% block js %}
     {{ parent() }}
     <script>
-        {% embed "scripts/map.js.twig" %}{% endembed %}
+        {% embed "scripts/map.js.twig" %}{% endembed %};
+        {% embed "scripts/log.js.twig" %}{% endembed %}
 
         const handleDoor = function(element, action) {
             if (!element) return;

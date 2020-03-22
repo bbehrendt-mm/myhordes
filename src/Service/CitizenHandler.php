@@ -19,17 +19,21 @@ class CitizenHandler
     private $item_factory;
     private $random_generator;
     private $inventory_handler;
-    /** @var DeathHandler $death_handler */
+    /**
+     * @var DeathHandler
+     */
     private $death_handler;
+    private $log;
 
     public function __construct(
-        EntityManagerInterface $em, StatusFactory $sf, RandomGenerator $g, InventoryHandler $ih, ItemFactory $if)
+        EntityManagerInterface $em, StatusFactory $sf, RandomGenerator $g, InventoryHandler $ih, ItemFactory $if, LogTemplateHandler $lh)
     {
         $this->entity_manager = $em;
         $this->status_factory = $sf;
         $this->random_generator = $g;
         $this->inventory_handler = $ih;
         $this->item_factory = $if;
+        $this->log = $lh;
     }
 
     public function upgrade(DeathHandler $dh) {
@@ -221,6 +225,9 @@ class CitizenHandler
         if ($profession->getName() === 'tech')
             $this->setBP($citizen,false, $this->getMaxBP( $citizen ),0);
         else $this->setBP($citizen, false, 0);
+
+        if ($profession->getName() !== 'none')
+            $this->entity_manager->persist( $this->log->citizenProfession( $citizen ) );
 
     }
 
