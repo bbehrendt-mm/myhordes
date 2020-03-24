@@ -1,43 +1,49 @@
 {% extends "ajax/ajax.html.twig" %}
 {% block menu_text %}
-    <li class="town-news">{% trans from 'game' %}Zeitung{% endtrans %}</li>
+    <li class="town-news" x-ajax-href="{{ url('game_newspaper') }}">{% trans from 'game' %}Zeitung{% endtrans %}</li>
 {% endblock %}
 {% block menu_bar %}
-    <ul class="status">
-        {% for stat in status %}
-            {# @var stat \App\Entity\CitizenStatus #}
-            {% if not stat.hidden %}
-                <li class="status"><img src="{{ asset('build/images/status/status_' ~ stat.name ~ '.gif') }}" alt="{{ stat.label|trans({},'status') }}"></li>
-            {% endif %}
-        {% endfor %}
-    </ul>
-    <ul class="rucksack">
-        {% for item in rucksack.items %}
-            {% embed "ajax/game/item.html.twig" with {'item': item, 'no_id': true} %}{% endembed %}
-        {% endfor %}
-        {% if rucksack.items|length < rucksack_size %}
-            {% for i in range(0, rucksack_size - rucksack.items|length - 1) %}
-                <li class="free"></li>
+    {% if status is defined %}
+        <ul class="status">
+            {% for stat in status %}
+                {# @var stat \App\Entity\CitizenStatus #}
+                {% if not stat.hidden %}
+                    <li class="status"><img src="{{ asset('build/images/status/status_' ~ stat.name ~ '.gif') }}" alt="{{ stat.label|trans({},'status') }}"></li>
+                {% endif %}
             {% endfor %}
-        {% endif %}
-    </ul>
-    <div class="ulcont">
-        <ul class="ap">
-            <li>{{ ap }}</li>
-            <li>/</li>
-            <li>{{ max_ap }}</li>
         </ul>
-        <div class="tooltip">
-            <b>{{ 'Aktionspunkte'|trans({},'game') }}</b><br />
-            {% trans from 'game' %}
-                Für viele Aktionen, wie beispielsweise die Erkundung der Aussenwelt oder der Arbeit auf einer Baustelle,
-                benötigst du Aktionspunkte. Deine Aktionspunkte werden jede Nacht nach dem Angriff aufgefüllt. Außerdem
-                kannst du sie durch den Einsatz bestimmter Gegenstände sowie einmal pro Tag durch Essen und Trinken neu
-                auffüllen.
-            {% endtrans %}
+    {% endif %}
+    {% if rucksack is defined %}
+        <ul class="rucksack">
+            {% for item in rucksack.items %}
+                {% embed "ajax/game/item.html.twig" with {'item': item, 'no_id': true} %}{% endembed %}
+            {% endfor %}
+            {% if rucksack.items|length < rucksack_size %}
+                {% for i in range(0, rucksack_size - rucksack.items|length - 1) %}
+                    <li class="free"></li>
+                {% endfor %}
+            {% endif %}
+        </ul>
+    {% endif %}
+    {% if ap is defined and max_ap is defined %}
+        <div class="ulcont">
+            <ul class="ap">
+                <li>{{ ap }}</li>
+                <li>/</li>
+                <li>{{ max_ap }}</li>
+            </ul>
+            <div class="tooltip">
+                <b>{{ 'Aktionspunkte'|trans({},'game') }}</b><br />
+                {% trans from 'game' %}
+                    Für viele Aktionen, wie beispielsweise die Erkundung der Aussenwelt oder der Arbeit auf einer Baustelle,
+                    benötigst du Aktionspunkte. Deine Aktionspunkte werden jede Nacht nach dem Angriff aufgefüllt. Außerdem
+                    kannst du sie durch den Einsatz bestimmter Gegenstände sowie einmal pro Tag durch Essen und Trinken neu
+                    auffüllen.
+                {% endtrans %}
+            </div>
         </div>
-    </div>
-    {% if max_bp > 0 %}
+    {% endif %}
+    {% if bp is defined and max_bp is defined and max_bp > 0 %}
         <div class="ulcont">
             <ul class="bp">
                 <li>{{ bp }}</li>

@@ -120,7 +120,7 @@ export default class Ajax {
         }));
     }
 
-    load( target: HTMLElement, url: string, push_history: boolean = false ) {
+    load( target: HTMLElement, url: string, push_history: boolean = false, data: object = {} ) {
         let ajax_instance = this;
 
         if (!(target = this.prepareTarget( target ))) return;
@@ -147,10 +147,11 @@ export default class Ajax {
             alert('Error loading page.');
             if (!no_loader) $.html.removeLoadStack();
         });
-        request.open('GET', url);
+        request.open('POST', url);
         request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
         request.setRequestHeader('X-Request-Intent', 'WebNavigation');
-        request.send();
+        request.setRequestHeader('Content-Type', 'application/json');
+        request.send( JSON.stringify(data) );
     };
 
     send( url: string, data: object, callback: ajaxCallback ) {

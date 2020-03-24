@@ -215,7 +215,7 @@ class TownAddonsController extends TownController
             'source' => $source_db, 'result' => $result_db,
 
             'log' => $this->renderLog( -1, null, false, TownLogEntry::TypeWorkshop, 10 )->getContent(),
-
+            'day' => $this->getActiveCitizen()->getTown()->getDay()
         ]) );
     }
 

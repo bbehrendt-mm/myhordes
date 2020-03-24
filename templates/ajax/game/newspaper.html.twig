@@ -1,0 +1,33 @@
+{% extends "ajax/game/game.html.twig" %}
+{% block menu_text %}
+    {{ parent() }}
+    {% if show_town_link %}
+        <li class="town-dash" x-ajax-href="{{ url('town_dashboard') }}">{% trans from 'game' %}Stadt{% endtrans %}</li>
+    {% endif %}
+{% endblock %}
+{% block ajax %}
+    {{ parent() }}
+    <div class="row">
+        <div class="padded cell rw-12">
+            <h5>{{ 'Stadtregister'|trans({},'game') }}</h5>
+            {% if show_register %}
+                {% embed "ajax/game/log.html.twig" with {'log_content': log, 'log_source': path('game_newspaper_log_controller') } %}
+                {% endembed %}
+            {% else %}
+            <div class="note">
+                {% trans from 'game' %}
+                    Das Stadtregister steht nicht zur Verfügung.
+                {% endtrans %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    {{ parent() }}
+    <script>
+        {% if show_register %}
+            {% embed "scripts/log.js.twig" %}{% endembed %}
+        {% endif %}
+    </script>
+{% endblock %}

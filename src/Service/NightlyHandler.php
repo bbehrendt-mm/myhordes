@@ -72,10 +72,10 @@ class NightlyHandler
         return true;
     }
 
-    private function kill_wrap( Citizen &$citizen, CauseOfDeath &$cod, bool $skip_reanimation = false, int $zombies = 0 ) {
+    private function kill_wrap( Citizen &$citizen, CauseOfDeath &$cod, bool $skip_reanimation = false, int $zombies = 0, $skip_log = false ) {
         $this->log->debug("Citizen <info>{$citizen->getUser()->getUsername()}</info> dies of <info>{$cod->getLabel()}</info>.");
         $this->death_handler->kill($citizen,$cod,$rr);
-        $this->entity_manager->persist( $this->logTemplates->citizenDeath( $citizen, $zombies ) );
+        if (!$skip_log) $this->entity_manager->persist( $this->logTemplates->citizenDeath( $citizen, $zombies ) );
         foreach ($rr as $r) $this->cleanup[] = $r;
         if ($skip_reanimation) $this->skip_reanimation[] = $citizen->getId();
     }
@@ -135,7 +135,7 @@ class NightlyHandler
         $this->log->info('<info>Updating survival information</info> ...');
         foreach ($town->getCitizens() as $citizen) {
             if (!$citizen->getAlive()) continue;
-            $citizen->setSurvivedDays( $citizen->getTown()->getDay() + 1 );
+            $citizen->setSurvivedDays( $citizen->getTown()->getDay() );
         }
     }
 
@@ -173,6 +173,7 @@ class NightlyHandler
 
             if (empty($opts)) {
                 $this->log->debug("The corpse of citizen <info>{$corpse->getUser()->getUsername()}</info> has nothing to do.");
+                $this->entity_manager->persist( $this->logTemplates->nightlyInternalAttackNothing( $corpse ) );
                 continue;
             }
 
@@ -180,16 +181,19 @@ class NightlyHandler
                 case 1:
                     $victim = array_pop($targets);
                     $this->log->debug("The corpse of citizen <info>{$corpse->getUser()->getUsername()}</info> attacks and kills <info>{$victim->getUser()->getUsername()}</info>.");
-                    $this->kill_wrap( $victim, $cod );
+                    $this->entity_manager->persist( $this->logTemplates->nightlyInternalAttackKill( $corpse, $victim ) );
+                    $this->kill_wrap( $victim, $cod, false, 1, true );
                     break;
                 case 2:
                     $construction = array_pop($buildings);
                     $this->log->debug("The corpse of citizen <info>{$corpse->getUser()->getUsername()}</info> destroys the progress on <info>{$construction->getPrototype()->getLabel()}</info>.");
+                    $this->entity_manager->persist( $this->logTemplates->nightlyInternalAttackDestroy( $corpse, $construction ) );
                     $construction->setAp(0);
                     break;
                 case 3:
                     $d = min($town->getWell(), 20);
                     $this->log->debug("The corpse of citizen <info>{$corpse->getUser()->getUsername()}</info> removes <info>{$d} water rations</info> from the well.");
+                    $this->entity_manager->persist( $this->logTemplates->nightlyInternalAttackWell( $corpse, $d ) );
                     $town->setWell( $town->getWell() - $d );
                     break;
             }
@@ -205,12 +209,15 @@ class NightlyHandler
 
         $def  = $this->town_handler->calculate_town_def( $town );
         /** @var ZombieEstimation $est */
-        $est = $this->entity_manager->getRepository(ZombieEstimation::class)->findOneByTown($town,$town->getDay());
+        $est = $this->entity_manager->getRepository(ZombieEstimation::class)->findOneByTown($town,$town->getDay()-1);
         $zombies = $est ? $est->getZombies() : 0;
 
         $overflow = !$town->getDoor() ? max(0, $zombies - $def) : $zombies;
         $this->log->debug("The down has <info>{$def}</info> defense and is attacked by <info>{$zombies}</info> Zombies. The door is <info>" . ($town->getDoor() ? 'open' : 'closed') . "</info>!");
         $this->log->debug("<info>{$overflow}</info> Zombies have entered the town!");
+
+        $this->entity_manager->persist( $this->logTemplates->nightlyAttackBegin($town, $zombies) );
+        $this->entity_manager->persist( $this->logTemplates->nightlyAttackSummary($town, $town->getDoor(), $overflow) );
 
         if ($overflow <= 0) return;
 
@@ -225,21 +232,24 @@ class NightlyHandler
             }
         }
         shuffle($targets);
+        $attack_day = $town->getDay() - 1;
 
-        if ($town->getDay() <= 5) {
+        if ($attack_day <= 5) {
             $attacking = $overflow;
             $targets = $this->random->pick($targets, mt_rand( ceil(count($targets) * 0.15), ceil(count($targets) * 0.35 )), true);
         } else {
-            if     ($town->getDay() <= 14) $x = 1;
-            elseif ($town->getDay() <= 18) $x = 4;
-            elseif ($town->getDay() <= 23) $x = 5;
-            else                           $x = 6;
+            if     ($attack_day <= 14) $x = 1;
+            elseif ($attack_day <= 18) $x = 4;
+            elseif ($attack_day <= 23) $x = 5;
+            else                       $x = 6;
 
-            $attacking = min(($town->getDay() + $x) * max(10, count($targets)), $overflow);
+            $attacking = min(($attack_day + $x) * max(10, count($targets)), $overflow);
             $targets = $this->random->pick($targets, ceil(count($targets) * 0.85), true);
         }
 
         $this->log->debug("<info>{$attacking}</info> Zombies are attacking <info>" . count($targets) . "</info> citizens!");
+        $this->entity_manager->persist( $this->logTemplates->nightlyAttackLazy($town, $attacking) );
+
         $max = empty($targets) ? 0 : ceil(4 * $attacking/count($targets));
 
         $left = count($targets);
@@ -250,7 +260,7 @@ class NightlyHandler
             else $force = $attacking > 0 ? mt_rand(1, max(1,min($max,$attacking-$left)) ) : 0;
             $def = $this->town_handler->calculate_home_def($home);
             $this->log->debug("Citizen <info>{$target->getUser()->getUsername()}</info> is attacked by <info>{$force}</info> zombies and protected by <info>{$def}</info> home defense!");
-            if ($force > $def) $this->kill_wrap($target, $cod, $force);
+            if ($force > $def) $this->kill_wrap($target, $cod, false, $force);
             elseif (!$has_kino && $this->random->chance( 0.75 * ($force/max(1,$def)) )) {
                 $this->citizen_handler->inflictStatus( $target, $status_terror );
                 $this->log->debug("Citizen <info>{$target->getUser()->getUsername()}</info> now suffers from <info>{$status_terror->getLabel()}</info>");
@@ -274,10 +284,8 @@ class NightlyHandler
 
         foreach ($town->getCitizens() as $citizen) {
 
-            if ($citizen->getDailyUpgradeVote()) {
+            if ($citizen->getDailyUpgradeVote())
                 $this->cleanup[] = $citizen->getDailyUpgradeVote();
-                $citizen->setDailyUpgradeVote(null);
-            }
 
             $citizen->getExpeditionRoutes()->clear();
             if (!$citizen->getAlive()) continue;
@@ -460,6 +468,8 @@ class NightlyHandler
                 case 'small_water_#00':
                     $water_add = [5,20,20,30,30,40];
                     $town->setWell( $town->getWell() + $water_add[$target_building->getLevel()] );
+                    $this->entity_manager->persist( $this->logTemplates->nightlyAttackUpgradeBuildingWell( $target_building, $water_add[$target_building->getLevel()] ) );
+
                     $this->log->debug("Leveling up <info>{$target_building->getPrototype()->getLabel()}</info>: Increasing well count by <info>{$water_add[ $target_building->getLevel() ] }</info>.");
                     break;
                 case 'small_refine_#01':
@@ -484,6 +494,7 @@ class NightlyHandler
                         $tx[] = "<info>{$plan->getPrototype()->getLabel()}</info>";
                     }
 
+                    $this->entity_manager->persist( $this->logTemplates->nightlyAttackUpgradeBuildingItems( $target_building, $plans ) );
                     $this->log->debug("Leveling up <info>{$target_building->getPrototype()->getLabel()}</info>: Placing " . implode(', ', $tx) . " in the bank.");
                     break;
             }
@@ -494,12 +505,16 @@ class NightlyHandler
             $n = [0,2,4,6,9,12];
             if ($town->getWell() >= $n[ $watertower->getLevel() ]) {
                 $town->setWell( $town->getWell() - $n[ $watertower->getLevel() ] );
+                $this->entity_manager->persist( $this->logTemplates->nightlyAttackBuildingDefenseWater( $watertower, $n[ $watertower->getLevel() ] ) );
                 $this->log->debug( "Deducting <info>{$n[$watertower->getLevel()]}</info> water from the well to operate the <info>{$watertower->getPrototype()->getLabel()}</info>." );
             }
         }
 
         $daily_items = []; $tx = [];
-        if ($spawn_default_blueprint) $daily_items['bplan_c_#00'] = 1;
+        if ($spawn_default_blueprint) {
+            $this->entity_manager->persist( $this->logTemplates->nightlyAttackProductionBlueprint( $town, $this->entity_manager->getRepository(ItemPrototype::class)->findOneByName('bplan_c_#00') ) );
+            $daily_items['bplan_c_#00'] = 1;
+        }
 
         $has_fertilizer = $this->town_handler->getBuilding( $town, 'item_digger_#00', true ) !== null;
 
@@ -511,11 +526,18 @@ class NightlyHandler
         ];
 
         foreach ($db as $b_class => $spawn)
-            if ($this->town_handler->getBuilding( $town, $b_class, true ) !== null)
+            if (($b = $this->town_handler->getBuilding( $town, $b_class, true )) !== null) {
+                $local = [];
                 foreach ( $spawn as $item_id => $count ) {
                     if (!isset($daily_items[$item_id])) $daily_items[$item_id] = $count;
                     else $daily_items[$item_id] += $count;
+                    if ($count > 0) $local[$item_id] = $count;
                 }
+                $this->entity_manager->persist( $this->logTemplates->nightlyAttackProduction( $b, array_map( function($proto,$count) {
+                    return [ $this->entity_manager->getRepository(ItemPrototype::class)->findOneByName($proto), $count ];
+                }, array_keys($local), $local ) ) );
+            }
+
 
         foreach ($daily_items as $item_id => $count)
             for ($i = 0; $i < $count; $i++) {
@@ -541,6 +563,7 @@ class NightlyHandler
         $this->stage1_vanish($town);
         $this->stage1_status($town);
 
+        $town->setDay( $town->getDay() + 1);
         $this->log->info('Entering <comment>Phase 2</comment> - The Attack');
         $this->stage2_day($town);
         $this->stage2_surprise_attack($town);
@@ -553,7 +576,6 @@ class NightlyHandler
         $this->stage3_items($town);
 
         $c = count($this->cleanup);
-        $town->setDay( $town->getDay() + 1);
         $this->log->info("It is now <comment>Day {$town->getDay()}</comment> in <info>{$town->getName()}</info>.");
         $this->town_handler->calculate_zombie_attacks( $town, 3 );
         $this->log->debug( "<info>{$c}</info> entities have been marked for removal." );

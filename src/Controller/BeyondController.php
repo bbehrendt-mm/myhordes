@@ -83,6 +83,7 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
      * @param RandomGenerator $rg
      * @param ItemFactory $if
      * @param ZoneHandler $zh
+     * @param LogTemplateHandler $lh
      */
     public function __construct(
         EntityManagerInterface $em, InventoryHandler $ih, CitizenHandler $ch, ActionHandler $ah, DeathHandler $dh,
@@ -195,6 +196,7 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
             'floor' => $this->getActiveCitizen()->getZone()->getFloor(),
 
             'log' => $this->renderLog( -1, null, $zone, null, 10 )->getContent(),
+            'day' => $this->getActiveCitizen()->getTown()->getDay()
         ]) );
     }
 

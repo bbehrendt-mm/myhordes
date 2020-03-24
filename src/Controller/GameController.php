@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Citizen;
 use App\Entity\CitizenProfession;
+use App\Entity\TownLogEntry;
 use App\Entity\User;
 use App\Response\AjaxResponse;
 use App\Service\CitizenHandler;
@@ -34,6 +35,15 @@ class GameController extends AbstractController implements GameInterfaceControll
         return $this->entity_manager->getRepository(Citizen::class)->findActiveByUser($this->getUser());
     }
 
+    protected function renderLog( ?int $day, $citizen = null, $zone = null, ?int $type = null, ?int $max = null ): Response {
+        return $this->render( 'ajax/game/log_content.html.twig', [
+            'entries' => $this->entity_manager->getRepository(TownLogEntry::class)->findByFilter(
+                $this->getActiveCitizen()->getTown(),
+                $day, $citizen, $zone, $type, $max
+            )
+        ] );
+    }
+
     /**
      * @Route("jx/game/landing", name="game_landing")
      * @return Response
@@ -47,6 +57,35 @@ class GameController extends AbstractController implements GameInterfaceControll
         elseif ($this->getActiveCitizen()->getZone()) return $this->redirect($this->generateUrl('beyond_dashboard'));
         else return $this->redirect($this->generateUrl('town_dashboard'));
     }
+
+    /**
+     * @Route("jx/game/raventimes", name="game_newspaper")
+     * @return Response
+     */
+    public function newspaper(): Response {
+        if (!$this->getActiveCitizen()->getAlive() || $this->getActiveCitizen()->getProfession()->getName() === CitizenProfession::DEFAULT)
+            return $this->redirect($this->generateUrl('game_landing'));
+
+        $in_town = $this->getActiveCitizen()->getZone() === null;
+
+        return $this->render( 'ajax/game/newspaper.html.twig', [
+            'show_register'  => $in_town,
+            'show_town_link' => $in_town,
+
+            'log' => $in_town ? $this->renderLog( -1, null, false, null, 50 )->getContent() : "",
+            'day' => $this->getActiveCitizen()->getTown()->getDay()
+        ] );
+    }
+
+    /**
+     * @Route("api/game/raventimes/log", name="game_newspaper_log_controller")
+     * @param JSONRequestParser $parser
+     * @return Response
+     */
+    public function log_newspaper_api(JSONRequestParser $parser): Response {
+        return $this->renderLog((int)$parser->get('day', -1), null, false, null, null);
+    }
+
 
     /**
      * @Route("jx/game/jobcenter", name="game_jobs")

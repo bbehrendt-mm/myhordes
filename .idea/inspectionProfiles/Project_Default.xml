@@ -4,7 +4,7 @@
     <inspection_tool class="HtmlUnknownAttribute" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="myValues">
         <value>
-          <list size="42">
+          <list size="45">
             <item index="0" class="java.lang.String" itemvalue="x-ajax-intention" />
             <item index="1" class="java.lang.String" itemvalue="x-ajax-href" />
             <item index="2" class="java.lang.String" itemvalue="x-ajax-landing" />
@@ -47,6 +47,9 @@
             <item index="39" class="java.lang.String" itemvalue="x-stack" />
             <item index="40" class="java.lang.String" itemvalue="x-log-source" />
             <item index="41" class="java.lang.String" itemvalue="x-log-default-provided" />
+            <item index="42" class="java.lang.String" itemvalue="x-page-min" />
+            <item index="43" class="java.lang.String" itemvalue="x-page-max" />
+            <item index="44" class="java.lang.String" itemvalue="x-page-current" />
           </list>
         </value>
       </option>

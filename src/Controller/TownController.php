@@ -121,6 +121,7 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
             'deco' => $deco,
 
             'log' => $this->renderLog( -1, $c, false, null, 10 )->getContent(),
+            'day' => $c->getTown()->getDay()
         ]) );
     }
 
@@ -199,6 +200,7 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
             'deco' => $deco,
 
             'log' => $this->renderLog( -1, $this->getActiveCitizen(), false, null, 10 )->getContent(),
+            'day' => $this->getActiveCitizen()->getTown()->getDay()
         ]) );
     }
 
@@ -368,6 +370,7 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
             'pump' => $pump,
 
             'log' => $this->renderLog( -1, null, false, TownLogEntry::TypeWell, 10 )->getContent(),
+            'day' => $this->getActiveCitizen()->getTown()->getDay()
         ]) );
     }
 
@@ -461,6 +464,7 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
         return $this->render( 'ajax/game/town/bank.html.twig', $this->addDefaultTwigArgs('bank', [
             'bank' => $this->renderInventoryAsBank( $this->getActiveCitizen()->getTown()->getBank() ),
             'log' => $this->renderLog( -1, null, false, TownLogEntry::TypeBank, 10 )->getContent(),
+            'day' => $this->getActiveCitizen()->getTown()->getDay()
         ]) );
     }
 
@@ -551,8 +555,8 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
                 $town->getBank()->removeItem( $item );
                 $this->entity_manager->remove( $item );
             }
-            $th->triggerBuildingCompletion( $town, $building );
             $this->entity_manager->persist( $this->log->constructionsBuildingComplete( $citizen, $building->getPrototype() ) );
+            $th->triggerBuildingCompletion( $town, $building );
         }
 
 
@@ -599,6 +603,7 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
             'bank' => $items,
 
             'log' => $this->renderLog( -1, null, false, TownLogEntry::TypeConstruction, 10 )->getContent(),
+            'day' => $this->getActiveCitizen()->getTown()->getDay()
         ]) );
     }
 
@@ -681,6 +686,7 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
         return $this->render( 'ajax/game/town/door.html.twig', $this->addDefaultTwigArgs('door', array_merge([
             'town'  =>  $this->getActiveCitizen()->getTown(),
             'log' => $this->renderLog( -1, null, false, TownLogEntry::TypeDoor, 10 )->getContent(),
+            'day' => $this->getActiveCitizen()->getTown()->getDay()
         ], $this->get_map_blob())) );
     }
 

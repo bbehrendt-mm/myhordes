@@ -9,6 +9,7 @@ use App\Entity\BuildingPrototype;
 use App\Entity\CitizenHome;
 use App\Entity\CitizenHomeUpgrade;
 use App\Entity\CitizenHomeUpgradePrototype;
+use App\Entity\ItemPrototype;
 use App\Entity\Town;
 use App\Entity\ZombieEstimation;
 use App\Entity\Zone;
@@ -21,13 +22,15 @@ class TownHandler
     private $entity_manager;
     private $inventory_handler;
     private $item_factory;
+    private $log;
 
     public function __construct(
-        EntityManagerInterface $em, InventoryHandler $ih, ItemFactory $if)
+        EntityManagerInterface $em, InventoryHandler $ih, ItemFactory $if, LogTemplateHandler $lh)
     {
         $this->entity_manager = $em;
         $this->inventory_handler = $ih;
         $this->item_factory = $if;
+        $this->log = $lh;
     }
 
     private function internalAddBuilding( Town &$town, BuildingPrototype $prototype ) {
@@ -58,7 +61,10 @@ class TownHandler
         if (isset($water_db[$building->getPrototype()->getName()]))
             $well += $water_db[$building->getPrototype()->getName()];
 
+
         $town->setWell( $town->getWell() + $well );
+        if ($well > 0)
+            $this->entity_manager->persist( $this->log->constructionsBuildingCompleteWell( $building, $well ) );
 
         switch ($building->getPrototype()->getName()) {
             case 'small_fireworks_#00':case 'small_balloon_#00':
@@ -77,8 +83,10 @@ class TownHandler
                     }
                 break;
             case 'small_cafet_#00':
-                $town->getBank()->addItem( $this->item_factory->createItem( 'woodsteak_#00' ) );
-                $town->getBank()->addItem( $this->item_factory->createItem( 'woodsteak_#00' ) );
+                $proto = $this->entity_manager->getRepository(ItemPrototype::class)->findOneByName( 'woodsteak_#00' );
+                $town->getBank()->addItem( $this->item_factory->createItem( $proto ) );
+                $town->getBank()->addItem( $this->item_factory->createItem( $proto ) );
+                $this->entity_manager->persist( $this->log->constructionsBuildingCompleteSpawnItems( $building, [ [$proto,2] ] ) );
                 break;
             default: break;
         }

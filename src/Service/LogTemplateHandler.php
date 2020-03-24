@@ -13,6 +13,7 @@ use App\Entity\CitizenProfession;
 use App\Entity\Item;
 use App\Entity\ItemGroupEntry;
 use App\Entity\ItemPrototype;
+use App\Entity\Town;
 use App\Entity\TownLogEntry;
 use App\Entity\Zone;
 use DateTime;
@@ -36,11 +37,13 @@ class LogTemplateHandler
     }
 
     /**
-     * @param Item|ItemPrototype|ItemGroupEntry|Citizen|CitizenProfession|Building|BuildingPrototype|CauseOfDeath|CitizenHome|CitizenHomePrototype $obj
+     * @param Item|ItemPrototype|ItemGroupEntry|Citizen|CitizenProfession|Building|BuildingPrototype|CauseOfDeath|CitizenHome|CitizenHomePrototype|array $obj
      * @param bool $small
      * @return string
      */
     private function iconize($obj, bool $small = false): string {
+        if (is_array($obj) && count($obj) === 2) return $this->iconize( $obj[0], $small) . ' x ' . $obj[1];
+
         if ($obj instanceof Item)        return $this->iconize( $obj->getPrototype(), $small );
         if ($obj instanceof Building)    return $this->iconize( $obj->getPrototype(), $small );
         if ($obj instanceof CitizenHome) return $this->iconize( $obj->getPrototype(), $small );
@@ -158,6 +161,37 @@ class LogTemplateHandler
                 '%list%' => implode( ', ', $list )
             ], 'game' ) );
     }
+
+    public function constructionsBuildingCompleteSpawnItems( Building $building, $items ): TownLogEntry {
+        $list = array_map( function($e) { return $this->wrap( $this->iconize( $e ) ); }, $items );
+
+        return (new TownLogEntry())
+            ->setType( TownLogEntry::TypeConstruction )
+            ->setSecondaryType( TownLogEntry::TypeBank )
+            ->setClass( TownLogEntry::ClassInfo )
+            ->setTown( $building->getTown() )
+            ->setDay( $building->getTown()->getDay() )
+            ->setTimestamp( new DateTime('now') )
+            ->setText( $this->trans->trans( 'Durch die Konstruktion von %building% hat die Stadt folgende Gegenstände erhalten: %list%', [
+                '%building%' => $this->wrap( $this->iconize( $building ) ),
+                '%list%'     => implode( ', ', $list )
+            ], 'game' ) );
+    }
+
+    public function constructionsBuildingCompleteWell( Building $building, int $water ): TownLogEntry {
+        return (new TownLogEntry())
+            ->setType( TownLogEntry::TypeConstruction )
+            ->setSecondaryType( TownLogEntry::TypeWell )
+            ->setClass( TownLogEntry::ClassInfo )
+            ->setTown( $building->getTown() )
+            ->setDay( $building->getTown()->getDay() )
+            ->setTimestamp( new DateTime('now') )
+            ->setText( $this->trans->trans( 'Durch die Konstruktion von %building% wurde der Brunnen um %num% Rationen Wasser aufgefüllt!', [
+                '%building%' => $this->wrap( $this->iconize( $building ) ),
+                '%num%'      => $this->wrap( "{$water}" )
+            ], 'game' ) );
+    }
+
 
     public function doorControl( Citizen $citizen, bool $open ): TownLogEntry {
         return (new TownLogEntry())
@@ -335,6 +369,190 @@ class LogTemplateHandler
             ->setText( $this->trans->trans($str, [
                 '%citizen%' => $this->wrap( $this->iconize( $citizen ) ),
                 '%item%' => $item ? $this->wrap( $this->iconize( $item ) ) : ''
+            ], 'game' ) );
+    }
+
+    public function nightlyInternalAttackKill( Citizen $zombie, Citizen $victim ): TownLogEntry {
+        return (new TownLogEntry())
+            ->setType( TownLogEntry::TypeNightly )
+            ->setClass( TownLogEntry::ClassCritical )
+            ->setTown( $zombie->getTown() )
+            ->setDay( $zombie->getTown()->getDay() )
+            ->setTimestamp( new DateTime('now') )
+            ->setCitizen( $zombie )
+            ->setSecondaryCitizen( $victim )
+            ->setText( $this->trans->trans('%zombie% ist von den Toten auferstanden und hat %victim% zerfleischt!', [
+                '%zombie%' => $this->wrap( $this->iconize( $zombie ) ),
+                '%victim%' => $this->wrap( $this->iconize( $victim ) ),
+            ], 'game' ) );
+    }
+
+    public function nightlyInternalAttackDestroy( Citizen $zombie, Building $building ): TownLogEntry {
+        return (new TownLogEntry())
+            ->setType( TownLogEntry::TypeNightly )
+            ->setSecondaryType( TownLogEntry::TypeConstruction )
+            ->setClass( TownLogEntry::ClassCritical )
+            ->setTown( $zombie->getTown() )
+            ->setDay( $zombie->getTown()->getDay() )
+            ->setTimestamp( new DateTime('now') )
+            ->setCitizen( $zombie )
+            ->setText( $this->trans->trans('%zombie% ist von den Toten auferstanden und hat die Baustelle für %building% verwüstet!', [
+                '%zombie%' => $this->wrap( $this->iconize( $zombie ) ),
+                '%building%' => $this->wrap( $this->iconize( $building ) ),
+            ], 'game' ) );
+    }
+
+    public function nightlyInternalAttackWell( Citizen $zombie, int $units ): TownLogEntry {
+        return (new TownLogEntry())
+            ->setType( TownLogEntry::TypeNightly )
+            ->setSecondaryType( TownLogEntry::TypeWell )
+            ->setClass( TownLogEntry::ClassCritical )
+            ->setTown( $zombie->getTown() )
+            ->setDay( $zombie->getTown()->getDay() )
+            ->setTimestamp( new DateTime('now') )
+            ->setCitizen( $zombie )
+            ->setText( $this->trans->trans('%zombie% ist von den Toten auferstanden und hat den Brunnen kontaminiert! Das kostet uns %num% Rationen Wasser!', [
+                '%zombie%' => $this->wrap( $this->iconize( $zombie ) ),
+                '%num%'    => $this->wrap( "{$units}" ),
+            ], 'game' ) );
+    }
+
+    public function nightlyInternalAttackNothing( Citizen $zombie ): TownLogEntry {
+        $list = [
+            '%zombie% ist von den Toten auferstanden und hat unanständige Nachrichten auf die Heldentafel geschrieben!',
+            '%zombie% ist von den Toten auferstanden und hat sich wieder hingelegt!',
+            '%zombie% ist von den Toten auferstanden und verlangt nach einem Kaffee!',
+            '%zombie% ist von den Toten auferstanden und hat eine Runde auf dem Stadtplatz gedreht!',
+        ];
+        $str = $list[array_rand($list,1)];
+
+        return (new TownLogEntry())
+            ->setType( TownLogEntry::TypeNightly )
+            ->setClass( TownLogEntry::ClassCritical )
+            ->setTown( $zombie->getTown() )
+            ->setDay( $zombie->getTown()->getDay() )
+            ->setTimestamp( new DateTime('now') )
+            ->setCitizen( $zombie )
+            ->setText( $this->trans->trans($str, [
+                '%zombie%' => $this->wrap( $this->iconize( $zombie ) ),
+            ], 'game' ) );
+    }
+
+    public function nightlyAttackBegin( Town $town, int $num_zombies ): TownLogEntry {
+        return (new TownLogEntry())
+            ->setType( TownLogEntry::TypeNightly )
+            ->setClass( TownLogEntry::ClassCritical )
+            ->setTown( $town )
+            ->setDay( $town->getDay() )
+            ->setTimestamp( new DateTime('now') )
+            ->setText( $this->trans->trans('Resigniert und untröstlich sahen die Bürger wie eine Horde von %num% Zombies sich in Richtung Stadt bewegte... Wie aus dem Nichts stand die Meute auf einmal vor dem Stadttor...', [
+                '%num%' => $this->wrap( "{$num_zombies}" ),
+            ], 'game' ) );
+    }
+
+    public function nightlyAttackSummary( Town $town, bool $door_open, int $num_zombies ): TownLogEntry {
+        if ($door_open)
+            $str = '... das OFFEN stand! %num% Zombies sind in die Stadt eingedrungen!';
+        else $str = $num_zombies > 0 ? '%num% Zombies sind durch unsere Verteidigung gebrochen!' : 'Nicht ein Zombie hat die Stadt betreten!';
+
+        return (new TownLogEntry())
+            ->setType( TownLogEntry::TypeNightly )
+            ->setClass( TownLogEntry::ClassCritical )
+            ->setTown( $town )
+            ->setDay( $town->getDay() )
+            ->setTimestamp( new DateTime('now') )
+            ->setText( $this->trans->trans($str, [
+                '%num%' => $this->wrap( "{$num_zombies}" ),
+            ], 'game' ) );
+    }
+
+    public function nightlyAttackLazy( Town $town, int $num_attacking_zombies ): TownLogEntry {
+        return (new TownLogEntry())
+            ->setType( TownLogEntry::TypeNightly )
+            ->setClass( TownLogEntry::ClassCritical )
+            ->setTown( $town )
+            ->setDay( $town->getDay() )
+            ->setTimestamp( new DateTime('now') )
+            ->setText( $this->trans->trans('%num% Zombies attackieren die Stadtbewohner!', [
+                '%num%' => $this->wrap( "{$num_attacking_zombies}" ),
+            ], 'game' ) );
+    }
+
+    public function nightlyAttackBuildingDefenseWater( Building $building, int $num ): TownLogEntry {
+        return (new TownLogEntry())
+            ->setType( TownLogEntry::TypeNightly )
+            ->setSecondaryType( TownLogEntry::TypeWell )
+            ->setClass( TownLogEntry::ClassWarning )
+            ->setTown( $building->getTown() )
+            ->setDay( $building->getTown()->getDay() )
+            ->setTimestamp( new DateTime('now') )
+            ->setText( $this->trans->trans('Der Einsatz von %building% für die Verteidigung der Stadt hat uns %num% Rationen Wasser gekostet.', [
+                '%building%' => $this->wrap( $this->iconize( $building ) ),
+                '%num%'      => $this->wrap( "{$num}" ),
+            ], 'game' ) );
+    }
+
+    public function nightlyAttackUpgradeBuildingWell( Building $building, int $num ): TownLogEntry {
+        return (new TownLogEntry())
+            ->setType( TownLogEntry::TypeNightly )
+            ->setSecondaryType( TownLogEntry::TypeWell )
+            ->setClass( TownLogEntry::ClassInfo )
+            ->setTown( $building->getTown() )
+            ->setDay( $building->getTown()->getDay() )
+            ->setTimestamp( new DateTime('now') )
+            ->setText( $this->trans->trans('Durch die Verbesserung von %building% wurdem dem Brunnen %num% Rationen Wasser hinzugefügt.', [
+                '%building%' => $this->wrap( $this->iconize( $building ) ),
+                '%num%'      => $this->wrap( "{$num}" ),
+            ], 'game' ) );
+    }
+
+    public function nightlyAttackUpgradeBuildingItems( Building $building, ?array $items ): TownLogEntry {
+        $items = array_map( function(Item $e) { return $this->wrap( $this->iconize( $e ) ); }, $items );
+
+        return (new TownLogEntry())
+            ->setType( TownLogEntry::TypeNightly )
+            ->setSecondaryType( TownLogEntry::TypeBank )
+            ->setClass( TownLogEntry::ClassInfo )
+            ->setTown( $building->getTown() )
+            ->setDay( $building->getTown()->getDay() )
+            ->setTimestamp( new DateTime('now') )
+            ->setText( $this->trans->trans('Durch die Verbesserung von %building% hat die Stadt folgende Gegenstände erhalten: %items%', [
+                '%building%' => $this->wrap( $this->iconize( $building ) ),
+                '%items%'    => implode( ', ', $items )
+            ], 'game' ) );
+    }
+
+    /**
+     * @param Town $town
+     * @param Item|ItemPrototype $item
+     * @return TownLogEntry
+     */
+    public function nightlyAttackProductionBlueprint( Town $town, $item ): TownLogEntry {
+        return (new TownLogEntry())
+            ->setType( TownLogEntry::TypeNightly )
+            ->setSecondaryType( TownLogEntry::TypeBank )
+            ->setClass( TownLogEntry::ClassInfo )
+            ->setTown( $town )
+            ->setDay( $town->getDay() )
+            ->setTimestamp( new DateTime('now') )
+            ->setText( $this->trans->trans('Was für ein Glück! Kurz nach dem Angriff wurde ein Bauplan in die Stadt geweht. Ihr erhaltet: %item%', [
+                '%item%' => $this->wrap( $this->iconize( $item ) ),
+            ], 'game' ) );
+    }
+
+    public function nightlyAttackProduction( Building $building, ?array $items ): TownLogEntry {
+        $items = array_map( function(Item $e) { return $this->wrap( $this->iconize( $e ) ); }, $items );
+
+        return (new TownLogEntry())
+            ->setType( TownLogEntry::TypeNightly )
+            ->setSecondaryType( TownLogEntry::TypeBank )
+            ->setClass( TownLogEntry::ClassInfo )
+            ->setTown( $building->getTown() )
+            ->setDay( $building->getTown()->getDay() )
+            ->setTimestamp( new DateTime('now') )
+            ->setText( $this->trans->trans('Heute Nacht wurden von %building% folgende Gegenstände produziert: %items%', [
+                '%building%' => $this->wrap( $this->iconize( $building ) ),
+                '%items%'    => implode( ', ', $items )
             ], 'game' ) );
     }
 }
