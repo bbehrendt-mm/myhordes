@@ -116,7 +116,11 @@ class InventoryAwareController extends AbstractController implements GameInterfa
 
         $av_inv = [$this->getActiveCitizen()->getInventory(), $this->getActiveCitizen()->getZone() ? $this->getActiveCitizen()->getZone()->getFloor() : $this->getActiveCitizen()->getHome()->getChest()];
 
-        foreach ($this->getActiveCitizen()->getInventory()->getItems() as $item) if (!$item->getBroken()) {
+        $items = [];
+        foreach ($this->getActiveCitizen()->getInventory()->getItems() as $item) $items[] = $item;
+        if ($this->getActiveCitizen()->getZone() === null) foreach ($this->getActiveCitizen()->getHome()->getChest()->getItems() as $item) $items[] = $item;
+
+        foreach ($items as $item) if (!$item->getBroken()) {
 
             $this->action_handler->getAvailableItemActions( $this->getActiveCitizen(), $item, $available, $crossed );
             if (empty($available) && empty($crossed)) continue;

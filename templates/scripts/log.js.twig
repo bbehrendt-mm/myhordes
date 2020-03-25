@@ -34,8 +34,6 @@
             let control_bwd = control_tab.querySelector( 'div.control:last-child' );
             let label       = control_tab.querySelector( 'span' );
 
-            console.log(control_fwd,control_bwd);
-
             const fun_adjust = function(dif) {
                 if ((dif > 0 && cur <= (max-dif)) || (dif < 0 && cur >= (min+dif))) {
                     cur += dif;
