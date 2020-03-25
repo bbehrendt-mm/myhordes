@@ -9,6 +9,7 @@ use App\Entity\CitizenHomeUpgrade;
 use App\Entity\CitizenHomeUpgradeCosts;
 use App\Entity\CitizenHomeUpgradePrototype;
 use App\Entity\ExpeditionRoute;
+use App\Entity\ItemPrototype;
 use App\Entity\TownLogEntry;
 use App\Entity\Zone;
 use App\Response\AjaxResponse;
@@ -110,12 +111,14 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
         foreach ($home->getChest()->getItems() as $item)
             $deco += $item->getPrototype()->getDeco();
 
+        $town = $this->getActiveCitizen()->getTown();
         return $this->render( 'ajax/game/town/home_foreign.html.twig', $this->addDefaultTwigArgs('citizens', [
             'citizen' => $c,
             'home' => $home,
             'actions' => $this->getItemActions(),
             'chest' => $home->getChest(),
             'chest_size' => $this->inventory_handler->getSize($home->getChest()),
+            'has_cremato' => $th->getBuilding($town, 'item_hmeat_#00', true) !== null,
 
             'def' => $summary,
             'deco' => $deco,
@@ -141,6 +144,71 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
             $c = null;
 
         return $this->renderLog((int)$parser->get('day', -1), $c, false, null, $c ===  null ? 0 : null);
+    }
+
+    /**
+     * @Route("api/town/visit/{id}/dispose", name="town_visit_dispose_controller")
+     * @param int $id
+     * @param EntityManagerInterface $em
+     * @param JSONRequestParser $parser
+     * @param TownHandler $th
+     * @param ItemFactory $if
+     * @return Response
+     */
+    public function dispose_visit_api(int $id, EntityManagerInterface $em, JSONRequestParser $parser, TownHandler $th, ItemFactory $if): Response {
+        if ($id === $this->getActiveCitizen()->getId())
+            return AjaxResponse::error(ErrorHelper::ErrorActionNotAvailable );
+
+        $ac = $this->getActiveCitizen();
+
+        /** @var Citizen $c */
+        $c = $em->getRepository(Citizen::class)->find( $id );
+        if (!$c || $c->getTown()->getId() !== $this->getActiveCitizen()->getTown()->getId() || $c->getAlive() || !$c->getHome()->getHoldsBody())
+            return AjaxResponse::error(ErrorHelper::ErrorActionNotAvailable );
+
+        $action = (int)$parser->get('action');
+
+        if ($action < 1 || $action > 3)
+            return AjaxResponse::error(ErrorHelper::ErrorActionNotAvailable );
+
+        $spawn_items = [];
+
+        switch ($action) {
+
+            case 1:
+                if ($ac->getAp() <= 0 || $this->citizen_handler->isTired( $ac ))
+                    return AjaxResponse::error( ErrorHelper::ErrorNoAP );
+                $this->citizen_handler->setAP($ac, true, -1);
+                break;
+            case 2:
+                $items = $this->inventory_handler->fetchSpecificItems( $ac->getInventory(), [new ItemRequest('water_#00')] );
+                if (!$items) return AjaxResponse::error(ErrorHelper::ErrorItemsMissing );
+                $ac->getInventory()->removeItem( $items[0] );
+                $em->remove( $items[0] );
+                break;
+            case 3:
+                $town = $ac->getTown();
+                if (!$th->getBuilding($town, 'item_hmeat_#00', true))
+                    return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
+                $spawn_items[] = [ $em->getRepository( ItemPrototype::class )->findOneByName( 'hmeat_#00' ), 2 ];
+                break;
+        }
+
+        foreach ($spawn_items as $item_spec)
+            for ($i = 0; $i < $item_spec[1]; $i++)
+                $ac->getTown()->getBank()->addItem( $if->createItem( $item_spec[0] ) );
+        $em->persist( $this->log->citizenDisposal( $ac, $c, $action, $spawn_items ) );
+        $c->getHome()->setHoldsBody( false );
+
+        try {
+            $em->persist($ac);
+            $em->persist($c);
+            $em->flush();
+        } catch (Exception $e) {
+            return AjaxResponse::error(ErrorHelper::ErrorDatabaseException);
+        }
+
+        return AjaxResponse::success();
     }
 
     /**

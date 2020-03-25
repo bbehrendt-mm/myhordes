@@ -8,6 +8,8 @@
                 <div class="padded cell rw-1 rw-md-2">
                     {% if citizen.alive %}
                         <img alt="{{ citizen.home.prototype.level }}" src="{{ asset('build/images/home/' ~ citizen.home.prototype.icon ~ '.gif') }}" />
+                    {% elseif citizen.home.holdsBody %}
+                        <img alt="{{ 'Leiche nicht beseitigt!'|trans({},'game') }}" src="{{ asset('build/images/small_warning.gif') }}" />
                     {% endif %}
                 </div>
                 <div class="padded cell rw-3 rw-md-5 small">

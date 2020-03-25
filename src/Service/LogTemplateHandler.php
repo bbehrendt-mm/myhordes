@@ -558,7 +558,7 @@ class LogTemplateHandler
             ], 'game' ) );
     }
 
-    public function nightlyAttackProduction( Building $building, ?array $items ): TownLogEntry {
+    public function nightlyAttackProduction( Building $building, ?array $items = [] ): TownLogEntry {
         $items = array_map( function(Item $e) { return $this->wrap( $this->iconize( $e ) ); }, $items );
 
         return (new TownLogEntry())
@@ -570,6 +570,41 @@ class LogTemplateHandler
             ->setTimestamp( new DateTime('now') )
             ->setText( $this->trans->trans('Heute Nacht wurden von %building% folgende Gegenstände produziert: %items%', [
                 '%building%' => $this->wrap( $this->iconize( $building ) ),
+                '%items%'    => implode( ', ', $items )
+            ], 'game' ) );
+    }
+
+    public function citizenDisposal( Citizen $actor, Citizen $disposed, int $action, ?array $items = [] ): TownLogEntry {
+        $items = array_map( function(Item $e) { return $this->wrap( $this->iconize( $e ) ); }, $items );
+
+        $str = '';
+        switch ($action) {
+            case 1:
+                $str = '%citizen% hat die Leiche von %disposed% aus der Stadt gezerrt.';
+                break;
+            case 2:
+                $str = '%citizen% hat die Leiche von %disposed% vernichtet, indem er sie mit Wasser übergossen hat.';
+                break;
+            case 3:
+                $str = '%citizen% hat aus der Leiche von %disposed% eine leckere Mahlzeit gegrillt. Die Stadt hat %items% erhalten.';
+                break;
+            default:
+                $str = '%citizen% hat die Leiche von %disposed% vernichtet.';
+                break;
+        }
+
+        return (new TownLogEntry())
+            ->setType( TownLogEntry::TypeHome )
+            ->setSecondaryType( empty($items) ? TownLogEntry::TypeVarious : TownLogEntry::TypeBank )
+            ->setClass( TownLogEntry::ClassInfo )
+            ->setTown( $actor->getTown() )
+            ->setDay( $actor->getTown()->getDay() )
+            ->setCitizen( $actor )
+            ->setSecondaryCitizen( $disposed )
+            ->setTimestamp( new DateTime('now') )
+            ->setText( $this->trans->trans($str, [
+                '%citizen%'  => $this->wrap( $this->iconize( $actor ) ),
+                '%disposed%' => $this->wrap( $this->iconize( $disposed ) ),
                 '%items%'    => implode( ', ', $items )
             ], 'game' ) );
     }
