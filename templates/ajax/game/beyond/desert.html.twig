@@ -108,7 +108,7 @@
                     </div>
                 {% endif %}
                 {% if zone.prototype %}
-                    <button id="dig_ruin_button" {% if (zone_blocked and not active_scout_mode) or not dig_ruin or zone.buryCount > 0 %}disabled{% endif %} >
+                    <button id="dig_ruin_button" {% if not dig_ruin or zone.buryCount > 0 %}disabled{% endif %} >
                         {% if (zone_blocked and active_scout_mode) %}
                             <img class="icon right" alt="" src="{{ asset('build/images/uncloak.gif') }}" />
                         {% endif %}

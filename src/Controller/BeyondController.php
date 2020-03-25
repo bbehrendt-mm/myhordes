@@ -539,8 +539,8 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
                 $this->getActiveCitizen()->getInventory(), $this->entity_manager->getRepository(ItemPrototype::class)->findOneByName('vest_on_#00')
             ) > 0;
 
-        if (!$this->zone_handler->check_cp( $zone ) && !$scout)
-            return AjaxResponse::error( self::ErrorZoneBlocked );
+        //if (!$this->zone_handler->check_cp( $zone ) && !$scout)
+        //    return AjaxResponse::error( self::ErrorZoneBlocked );
         if ($zone->getX() === 0 && $zone->getY() === 0)
             return AjaxResponse::error( self::ErrorNotDiggable );
 
@@ -560,6 +560,7 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
                 $item = $this->item_factory->createItem( $prototype );
                 if ($item) {
                     $this->inventory_handler->placeItem( $citizen, $item, [ $citizen->getInventory(), $zone->getFloor() ] );
+                    $this->entity_manager->persist( $this->log->outsideDig( $citizen, $prototype ) );
                     $this->entity_manager->persist( $item );
                     $this->entity_manager->persist( $citizen->getInventory() );
                     $this->entity_manager->persist( $zone->getFloor() );
