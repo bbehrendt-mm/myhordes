@@ -35,7 +35,7 @@
             let label       = control_tab.querySelector( 'span' );
 
             const fun_adjust = function(dif) {
-                if ((dif > 0 && cur <= (max-dif)) || (dif < 0 && cur >= (min+dif))) {
+                if ((dif > 0 && cur <= (max-dif)) || (dif < 0 && cur >= (min-dif))) {
                     cur += dif;
                     label.innerText = ('' + cur);
                     fun_refresh(cur,false);

@@ -79,6 +79,24 @@ class LogTemplateHandler
             ], 'game' ) );
     }
 
+    public function beyondItemLog( Citizen $citizen, Item $item, bool $toFloor ): TownLogEntry {
+        return (new TownLogEntry())
+            ->setType( TownLogEntry::TypeVarious )
+            ->setClass( TownLogEntry::ClassInfo )
+            ->setTown( $citizen->getTown() )
+            ->setDay( $citizen->getTown()->getDay() )
+            ->setZone( $citizen->getZone() )
+            ->setTimestamp( new DateTime('now') )
+            ->setCitizen( $citizen )
+            ->setText( $this->trans->trans(
+                $toFloor
+                    ? '%citizen% hat folgenden Gegenstand hier abgelegt: %item%'
+                    : '%citizen% hat diesen Gegenstand mitgenommen: %item%', [
+                '%citizen%' => $this->wrap( $this->iconize( $citizen ) ),
+                '%item%'    => $this->wrap( $this->iconize( $item ) ),
+            ], 'game' ) );
+    }
+
     public function wellLog( Citizen $citizen, bool $tooMuch ): TownLogEntry {
         return (new TownLogEntry())
             ->setType( TownLogEntry::TypeWell )

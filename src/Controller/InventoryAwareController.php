@@ -215,13 +215,18 @@ class InventoryAwareController extends AbstractController implements GameInterfa
             if ($inv_source->getTown()) $bank_up = true;
             if ($inv_target->getTown()) $bank_up = false;
 
+            $floor_up = null;
+            if ($inv_source->getZone()) $floor_up = true;
+            if ($inv_target->getZone()) $floor_up = false;
+
             $errors = [];
             foreach ($items as &$current_item)
                 if (($error = $handler->transferItem(
                         $citizen,
                         $current_item,$inv_source, $inv_target
                     )) === InventoryHandler::ErrorNone) {
-                    if ($bank_up !== null) $this->entity_manager->persist( $this->log->bankItemLog( $citizen, $current_item, !$bank_up ) );
+                    if ($bank_up !== null)  $this->entity_manager->persist( $this->log->bankItemLog( $citizen, $current_item, !$bank_up ) );
+                    if ($floor_up !== null) $this->entity_manager->persist( $this->log->beyondItemLog( $citizen, $current_item, !$floor_up ) );
                     if ($current_item->getInventory())
                         $this->entity_manager->persist($current_item);
                     else $this->entity_manager->remove($current_item);
