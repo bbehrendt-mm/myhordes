@@ -271,7 +271,6 @@ class RecipeFixtures extends Fixture implements DependentFixtureInterface
             ["name"=>"Ministerium für Sklaverei","temporary"=>0,"img"=>"small_slave","vp"=>0,"ap"=>45,"bp"=>4,"rsc"=>["wood_beam_#00" => 10,"metal_beam_#00" => 5,"chain_#00" => 2,]],
             // TODO: Destroyable, kill
             ["name"=>"Reaktor","temporary"=>0,"img"=>"small_arma","vp"=>500,"ap"=>100,"bp"=>4,"rsc"=>["pile_#00" => 10,"engine_#00" => 1,"electro_#00" => 4,"concrete_wall_#00" => 2,"metal_beam_#00" => 15,]],
-            // TODO: 1AP
             ["name"=>"Labyrinth","temporary"=>0,"img"=>"small_labyrinth","vp"=>150,"ap"=>200,"bp"=>3,"rsc"=>["meca_parts_#00" => 2,"wood2_#00" => 20,"metal_#00" => 10,"concrete_wall_#00" => 4,]],
             // TODO: Temp Def
             ["name"=>"Alles oder nichts","temporary"=>0,"img"=>"small_lastchance","vp"=>55,"ap"=>150,"bp"=>3,"rsc"=>["meca_parts_#00" => 4,"wood_beam_#00" => 15,"metal_beam_#00" => 15,]],
@@ -291,7 +290,6 @@ class RecipeFixtures extends Fixture implements DependentFixtureInterface
             ["name"=>"Kolbenschließmechanismus","temporary"=>0,"img"=>"small_door_closed","vp"=>30,"ap"=>24,"bp"=>1,"rsc"=>["meca_parts_#00" => 2,"wood2_#00" => 10,"tube_#00" => 1,"metal_beam_#00" => 3,], "children" => [
                 ["name"=>"Automatiktür","temporary"=>0,"img"=>"small_door_closed","vp"=>0,"ap"=>10,"bp"=>1,"rsc"=>[]],
             ]],
-            // TODO: Hero Action
             ["name"=>"Ventilationssystem","temporary"=>0,"img"=>"small_ventilation","vp"=>20,"ap"=>24,"bp"=>2,"rsc"=>["meca_parts_#00" => 1,"metal_#00" => 8,]],
         ]],
     ];

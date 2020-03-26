@@ -65,6 +65,7 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
     const ErrorZoneUnderControl     = ErrorHelper::BaseBeyondErrors + 4;
     const ErrorAlreadyWounded       = ErrorHelper::BaseBeyondErrors + 5;
     const ErrorNotDiggable          = ErrorHelper::BaseBeyondErrors + 6;
+    const ErrorDoorClosed           = ErrorHelper::BaseBeyondErrors + 7;
 
     protected $game_factory;
     protected $zone_handler;
@@ -182,9 +183,14 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
         $blocked = !$this->zone_handler->check_cp($zone, $cp);
         $escape = $this->get_escape_timeout( $this->getActiveCitizen() );
 
+        $require_ap = ($is_on_zero && $th->getBuilding($town, 'small_labyrinth_#00',  true));
+
         return $this->render( 'ajax/game/beyond/desert.html.twig', $this->addDefaultTwigArgs(null, [
             'scout' => $this->getActiveCitizen()->getProfession()->getName() === 'hunter',
             'allow_enter_town' => $can_enter,
+            'show_ventilation'  => $is_on_zero && $th->getBuilding($town, 'small_ventilation_#00',  true) !== null,
+            'allow_ventilation' => $this->getActiveCitizen()->getProfession()->getHeroic(),
+            'enter_costs_ap' => $require_ap,
             'allow_floor_access' => !$is_on_zero,
             'can_escape' => !$this->citizen_handler->isWounded( $this->getActiveCitizen() ),
             'can_attack' => !$citizen_tired,
@@ -214,6 +220,42 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
     }
 
     /**
+     * @Route("api/beyond/desert/hero_exit", name="beyond_desert_hero_exit_controller")
+     * @param TownHandler $th
+     * @return Response
+     */
+    public function desert_exit_hero_api(TownHandler $th): Response {
+        $this->deferZoneUpdate();
+
+        $citizen = $this->getActiveCitizen();
+        $zone = $citizen->getZone();
+        $town = $citizen->getTown();
+
+        if (!$th->getBuilding($town, 'small_ventilation_#00',  true))
+            return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
+
+        if (!$citizen->getProfession()->getHeroic())
+            return AjaxResponse::error( ErrorHelper::ErrorMustBeHero );
+
+        $citizen->setZone( null );
+        $zone->removeCitizen( $citizen );
+        $this->entity_manager->persist( $this->log->doorPass( $citizen, true ) );
+
+        $cp_ok = $this->zone_handler->check_cp( $zone );
+        $this->zone_handler->handleCitizenCountUpdate( $zone, $cp_ok );
+
+        try {
+            $this->entity_manager->persist($citizen);
+            $this->entity_manager->persist($zone);
+            $this->entity_manager->flush();
+        } catch (Exception $e) {
+            return AjaxResponse::error( ErrorHelper::ErrorDatabaseException );
+        }
+
+        return AjaxResponse::success();
+    }
+
+    /**
      * @Route("api/beyond/desert/exit", name="beyond_desert_exit_controller")
      * @param TownHandler $th
      * @return Response
@@ -236,7 +278,14 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
         if ($distance > $port_distance)
             return AjaxResponse::error( self::ErrorNoReturnFromHere );
 
+        if (!$town->getDoor())
+            return AjaxResponse::error( self::ErrorDoorClosed );
 
+        if ($zone->getX() === 0 && $zone->getY() === 0 && $th->getBuilding($town, 'small_labyrinth_#00',  true)) {
+            if ($citizen->getAp() <= 0 || $this->citizen_handler->isTired( $citizen ))
+                return AjaxResponse::error( ErrorHelper::ErrorNoAP );
+            $this->citizen_handler->setAP($citizen, true, -1);
+        }
 
         $citizen->setZone( null );
         $zone->removeCitizen( $citizen );

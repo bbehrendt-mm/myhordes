@@ -86,7 +86,13 @@
                     {% else %}
                         {% trans from 'game' %}In die Stadt zurückkehren{% endtrans %}
                     {% endif %}
+                    {% if enter_costs_ap %}
+                        (<div class="ap">1</div>)
+                    {% endif %}
                 </button>
+            {% endif %}
+            {% if show_ventilation %}
+                <button id="town-enter-hero"{% if not allow_ventilation %}disabled{% endif %}><img alt="" src="{{ asset('build/images/star.gif') }}">{{ 'Durch die Lüftungsschächte klettern' }}</button>
             {% endif %}
             {% if zone.x != 0 or zone.y != 0 %}
                 {% if not digging %}
@@ -159,19 +165,23 @@
         </div>
     </div>
 
-    <div class="row">
-        <h5>{{ 'Zonenregister'|trans({},'game') }}</h5>
-        <div class="cell rw-12">
-            {% embed "ajax/game/log.html.twig" with {'log_content': log, 'log_source': path('beyond_desert_log_controller') } %}
-            {% endembed %}
+    {% if zone.x != 0 or zone.y != 0 %}
+        <div class="row">
+            <h5>{{ 'Zonenregister'|trans({},'game') }}</h5>
+            <div class="cell rw-12">
+                {% embed "ajax/game/log.html.twig" with {'log_content': log, 'log_source': path('beyond_desert_log_controller') } %}
+                {% endembed %}
+            </div>
         </div>
-    </div>
+    {% endif %}
 {% endblock %}
 {% block js %}
     {{ parent() }}
     <script>
         {% embed "scripts/actions.js.twig" %}{% endembed %};
-        {% embed "scripts/log.js.twig" %}{% endembed %}
+        {% if zone.x != 0 or zone.y != 0 %}
+            {% embed "scripts/log.js.twig" %}{% endembed %}
+        {% endif %}
 
         let dig_button = document.getElementById('dig_button');
         if (dig_button)
@@ -248,14 +258,24 @@
         );
         {% endif %}
         {% if allow_enter_town %}
-        document.getElementById('town-enter').addEventListener('click', function() {
-            if (!confirm( '{% trans from 'global' %}Bestätigen?{% endtrans %}' ))
-                return;
-            $.ajax.easySend( '{{ path('beyond_desert_exit_controller') }}', {},
-                function () {
-                    $.ajax.load(null, '{{ path('game_landing') }}', true);
-                } );
-        });
+            document.getElementById('town-enter').addEventListener('click', function() {
+                if (!confirm( '{% trans from 'global' %}Bestätigen?{% endtrans %}' ))
+                    return;
+                $.ajax.easySend( '{{ path('beyond_desert_exit_controller') }}', {},
+                    function () {
+                        $.ajax.load(null, '{{ path('game_landing') }}', true);
+                    } );
+            });
+        {% endif %}
+        {% if show_ventilation and allow_ventilation %}
+            document.getElementById('town-enter-hero').addEventListener('click', function() {
+                if (!confirm( '{% trans from 'global' %}Bestätigen?{% endtrans %}' ))
+                    return;
+                $.ajax.easySend( '{{ path('beyond_desert_hero_exit_controller') }}', {},
+                    function () {
+                        $.ajax.load(null, '{{ path('game_landing') }}', true);
+                    } );
+            });
         {% endif %}
     </script>
 {% endblock %}
