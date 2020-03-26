@@ -320,13 +320,17 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
      * @param CitizenHandler $ch
      * @return Response
      */
-    public function upgrade_house_api(EntityManagerInterface $em, InventoryHandler $ih, CitizenHandler $ch): Response {
+    public function upgrade_house_api(EntityManagerInterface $em, InventoryHandler $ih, CitizenHandler $ch, TownHandler $th): Response {
         $citizen = $this->getActiveCitizen();
+        $town = $citizen->getTown();
         $home = $citizen->getHome();
         $next = $em->getRepository(CitizenHomePrototype::class)->findOneByLevel( $home->getPrototype()->getLevel() + 1 );
         if (!$next) return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
 
         if ($ch->isTired( $citizen ) || $citizen->getAp() < $next->getAp()) return AjaxResponse::error( ErrorHelper::ErrorNoAP );
+
+        if ($next->getRequiredBuilding() && !$th->getBuilding( $town, $next->getRequiredBuilding(), true ))
+            return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
 
         $items = [];
         if ($next->getResources()) {

@@ -167,7 +167,6 @@ class RecipeFixtures extends Fixture implements DependentFixtureInterface
             // TODO: Home upgrade
             ["name"=>"Kantine","temporary"=>0,"img"=>"small_cafet","vp"=>0,"ap"=>20,"bp"=>1,"rsc"=>["pharma_#00" => 1,"wood_beam_#00" => 5,"metal_beam_#00" => 1,"table_#00" => 1,]],
             ["name"=>"Bollwerk","temporary"=>0,"img"=>"small_strategy","vp"=>0,"ap"=>60,"bp"=>3,"rsc"=>["meca_parts_#00" => 3,"wood_beam_#00" => 15,"metal_beam_#00" => 15,]],
-            // TODO: Skip upgrade limit
             ["name"=>"Baumarkt","temporary"=>0,"img"=>"small_strategy","vp"=>0,"ap"=>30,"bp"=>4,"rsc"=>["meca_parts_#00" => 3,"wood_beam_#00" => 10,"metal_beam_#00" => 10,]],
             // TODO: Special Action
             ["name"=>"Krankenstation","temporary"=>0,"img"=>"small_infirmary","vp"=>0,"ap"=>40,"bp"=>3,"rsc"=>["pharma_#00" => 6,"disinfect_#00" => 1,"wood_beam_#00" => 5,"metal_beam_#00" => 5,]],
