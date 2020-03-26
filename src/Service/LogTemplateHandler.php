@@ -225,6 +225,18 @@ class LogTemplateHandler
             ], 'game' ) );
     }
 
+    public function doorControlAuto( Town $town, bool $open, ?DateTimeInterface $time ): TownLogEntry {
+        return (new TownLogEntry())
+            ->setType( TownLogEntry::TypeDoor )
+            ->setClass( TownLogEntry::ClassInfo )
+            ->setTown( $town )
+            ->setDay( $town->getDay() )
+            ->setTimestamp( $time ?? new DateTime('now') )
+            ->setText( $this->trans->trans('Das Stadttor wurde automatisch %action%.', [
+                '%action%'  => $this->wrap( $open ? $this->trans->trans('geöffnet', [], 'game') : $this->trans->trans('geschlossen', [], 'game') ),
+            ], 'game' ) );
+    }
+
     public function doorPass( Citizen $citizen, bool $in ): TownLogEntry {
         return (new TownLogEntry())
             ->setType( TownLogEntry::TypeDoor )

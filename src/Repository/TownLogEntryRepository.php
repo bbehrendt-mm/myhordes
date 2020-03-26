@@ -56,7 +56,7 @@ class TownLogEntryRepository extends ServiceEntityRepository
 
         return $q
             ->orderBy('t.timestamp', 'DESC')
-            ->orderBy('t.id', 'DESC')
+            ->addOrderBy('t.id', 'DESC')
             ->getQuery()
             ->getResult()
         ;

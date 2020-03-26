@@ -13,6 +13,14 @@
             {% endfor %}
         </ul>
     {% endif %}
+    {% if clock is defined %}
+        <ul class="clock">
+            <li>{{ clock.desc }}</li>
+            <li>{{ 'Tag %day%'|trans({'%day%': clock.day}, 'game') }}</li>
+            <li>{{ clock.timestamp.format('G:i') }}</li>
+            <li x-countdown="{{ clock.attack }}" x-countdown-no-seconds="1" x-countdown-force-hours="1"></li>
+        </ul>
+    {% endif %}
     {% if rucksack is defined %}
         <ul class="rucksack">
             {% for item in rucksack.items %}

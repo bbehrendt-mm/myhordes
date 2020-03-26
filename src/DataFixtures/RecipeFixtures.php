@@ -143,7 +143,6 @@ class RecipeFixtures extends Fixture implements DependentFixtureInterface
             ["name"=>"Holzbalkendrehkreuz","temporary"=>0,"img"=>"item_wood_beam","vp"=>10,"ap"=>15,"bp"=>0,"rsc"=>["wood_beam_#00" => 2,"metal_beam_#00" => 1,]],
             ["name"=>"Manufaktur","temporary"=>0,"img"=>"small_factory","vp"=>0,"ap"=>40,"bp"=>0,"rsc"=>["wood_beam_#00" => 5,"metal_beam_#00" => 5,"table_#00" => 1,]],
             ["name"=>"Kreischende Sägen","temporary"=>0,"img"=>"small_saw","vp"=>45,"ap"=>65,"bp"=>0,"rsc"=>["meca_parts_#00" => 3,"metal_#00" => 5,"rustine_#00" => 3,"metal_beam_#00" => 2,]],
-            // TODO: Log
             ["name"=>"Baustellenbuch","temporary"=>0,"img"=>"item_rp_book2","vp"=>0,"ap"=>15,"bp"=>0,"rsc"=>["table_#00" => 1,], "children" => [
                 ["name"=>"Bauhaus","maxLevel" => 5,"temporary"=>0,"img"=>"small_refine","vp"=>0,"ap"=>75,"bp"=>0,"rsc"=>["drug_#00" => 1,"vodka_de_#00" => 1,"wood_beam_#00" => 10,],
                 "upgradeTexts" => [
@@ -287,12 +286,9 @@ class RecipeFixtures extends Fixture implements DependentFixtureInterface
             ["name"=>"Tunnelratte","temporary"=>0,"img"=>"small_derrick","vp"=>0,"ap"=>170,"bp"=>4,"rsc"=>["concrete_wall_#00" => 3,"wood_beam_#00" => 15,"metal_beam_#00" => 15,]],
         ]],
 
-        // TODO: Prevent door opening
         ["name"=>"Portal","temporary"=>0,"img"=>"small_door_closed","vp"=>0,"ap"=>16,"bp"=>0,"rsc"=>["metal_#00" => 2,], "children" => [
             ["name"=>"Torpanzerung","temporary"=>0,"img"=>"item_plate","vp"=>20,"ap"=>35,"bp"=>0,"rsc"=>["wood2_#00" => 3,]],
-            // TODO: Auto close door
             ["name"=>"Kolbenschließmechanismus","temporary"=>0,"img"=>"small_door_closed","vp"=>30,"ap"=>24,"bp"=>1,"rsc"=>["meca_parts_#00" => 2,"wood2_#00" => 10,"tube_#00" => 1,"metal_beam_#00" => 3,], "children" => [
-                // TODO: Auto close door
                 ["name"=>"Automatiktür","temporary"=>0,"img"=>"small_door_closed","vp"=>0,"ap"=>10,"bp"=>1,"rsc"=>[]],
             ]],
             // TODO: Hero Action

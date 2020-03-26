@@ -687,9 +687,10 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
     /**
      * @Route("api/town/door/control", name="town_door_control_controller")
      * @param JSONRequestParser $parser
+     * @param TownHandler $th
      * @return Response
      */
-    public function door_control_api(JSONRequestParser $parser): Response {
+    public function door_control_api(JSONRequestParser $parser, TownHandler $th): Response {
         $citizen = $this->getActiveCitizen();
         $town = $citizen->getTown();
 
@@ -698,6 +699,8 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
 
         if ($action === 'open'  && $town->getDoor())
             return AjaxResponse::error( self::ErrorDoorAlreadyOpen );
+        if ($action === 'open'  && $this->door_is_locked($th))
+            return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
         if ($action === 'close' && !$town->getDoor())
             return AjaxResponse::error( self::ErrorDoorAlreadyClosed );
 
@@ -726,6 +729,9 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
      * @return Response
      */
     public function door_exit_api(JSONRequestParser $parser): Response {
+        if (!$this->getActiveCitizen()->getTown()->getDoor())
+            return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
+
         $citizen = $this->getActiveCitizen();
         $zone = $this->entity_manager->getRepository(Zone::class)->findOneByPosition($citizen->getTown(), 0, 0);
 
@@ -745,14 +751,31 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
         return AjaxResponse::success();
     }
 
+    private function door_is_locked(TownHandler $th): bool {
+        $town = $this->getActiveCitizen()->getTown();
+        if ( !$town->getDoor() && (($s = $this->time_keeper->secondsUntilNextAttack(null, true)) <= 1800) ) {
+            if ($th->getBuilding( $town, 'small_door_closed_#02', true )) {
+                if ($s <= 60) return true;
+            } elseif ($th->getBuilding( $town, 'small_door_closed_#01', true )) {
+                if ($s <= 1800) return true;
+            } elseif ($th->getBuilding( $town, 'small_door_closed_#00', true )) {
+                if ($s <= 1200) return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * @Route("jx/town/door", name="town_door")
+     * @param TownHandler $th
      * @return Response
      */
-    public function door(): Response
+    public function door(TownHandler $th): Response
     {
+        $door_locked = $this->door_is_locked($th);
         return $this->render( 'ajax/game/town/door.html.twig', $this->addDefaultTwigArgs('door', array_merge([
             'town'  =>  $this->getActiveCitizen()->getTown(),
+            'door_locked' => $door_locked,
             'log' => $this->renderLog( -1, null, false, TownLogEntry::TypeDoor, 10 )->getContent(),
             'day' => $this->getActiveCitizen()->getTown()->getDay()
         ], $this->get_map_blob())) );

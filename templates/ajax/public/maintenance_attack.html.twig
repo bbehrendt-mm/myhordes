@@ -1,0 +1,26 @@
+{% extends "ajax/ajax.html.twig" %}
+{% block text_menu_content %}
+{% endblock %}
+{% block ajax %}
+    <div class="row">
+        <div class="cell padded header rw-6 ro-3">
+            <h4>{% trans from 'ghost' %}Nächtlicher Angriff{% endtrans %}</h4>
+            <p class="justify">
+                {% trans from 'ghost' %}
+                    Der Server wird aktuell von Zombies überrannt. Bitte hab einen Moment Geduld, während wir die angreifenden Horden abwehren.
+                {% endtrans %}
+            </p>
+            <div class="help">
+                {% trans from 'ghost' %}
+                    Der nächtliche Angriff findet jeden Tag um Mitternacht statt und dauert ungefähr 20 Minuten. Während dieser Zeit ist MyHordes nicht erreichbar.
+                {% endtrans %}
+            </div>
+            <button x-ajax-href="{{ path('initial_landing') }}">{{ 'Seite neu laden'|trans({},'global') }}</button>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    <script>
+
+    </script>
+{% endblock %}

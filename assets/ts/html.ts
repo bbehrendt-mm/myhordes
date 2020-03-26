@@ -65,6 +65,9 @@ export default class HTML {
         let attr = parseInt(element.getAttribute('x-countdown'));
         const timeout = new Date( (new Date()).getTime() + 1000 * attr );
 
+        const show_secs   = !element.getAttribute('x-countdown-no-seconds');
+        const force_hours =  element.getAttribute('x-countdown-force-hours');
+
         const draw = function() {
             const seconds = Math.floor((timeout.getTime() - (new Date()).getTime())/1000);
             if (seconds < 0) return;
@@ -73,9 +76,9 @@ export default class HTML {
             const m = Math.floor((seconds - h*3600)/60);
             const s = seconds - h*3600 - m*60;
             element.innerHTML =
-                (h > 0 ? (h + ':') : '') +
-                (h > 0 ? (m > 9 ? (m + ':') : ('0' + m + ':')) : (m + ':')) +
-                (s > 9 ? s : ('0' + s));
+                ((h > 0 || force_hours) ? (h + ':') : '') +
+                ((h > 0 || force_hours) ? (m > 9 ? m : ('0' + m)) : m) +
+                (show_secs ? (':' + (s > 9 ? s : ('0' + s))) : '');
         };
 
         const f = function(no_chk = false) {

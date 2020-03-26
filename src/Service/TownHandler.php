@@ -23,14 +23,16 @@ class TownHandler
     private $inventory_handler;
     private $item_factory;
     private $log;
+    private $timeKeeper;
 
     public function __construct(
-        EntityManagerInterface $em, InventoryHandler $ih, ItemFactory $if, LogTemplateHandler $lh)
+        EntityManagerInterface $em, InventoryHandler $ih, ItemFactory $if, LogTemplateHandler $lh, TimeKeeperService $tk)
     {
         $this->entity_manager = $em;
         $this->inventory_handler = $ih;
         $this->item_factory = $if;
         $this->log = $lh;
+        $this->timeKeeper = $tk;
     }
 
     private function internalAddBuilding( Town &$town, BuildingPrototype $prototype ) {
@@ -41,6 +43,34 @@ class TownHandler
         // Add all children that do not require blueprints
         foreach ( $prototype->getChildren() as $child )
             if ($child->getBlueprint() == 0) $this->internalAddBuilding( $town, $child );
+    }
+
+    public function triggerAlways( Town $town, bool $flush = false ) {
+        $changed = false;
+
+        if ( $town->getDoor() && (($s = $this->timeKeeper->secondsUntilNextAttack(null, true)) <= 1800) ) {
+
+            $close_ts = null;
+            if ($this->getBuilding( $town, 'small_door_closed_#02', true )) {
+                if ($s <= 60)
+                    $close_ts = $this->timeKeeper->getCurrentAttackTime()->modify('-1min');
+            } elseif ($this->getBuilding( $town, 'small_door_closed_#01', true )) {
+                if ($s <= 1800)
+                    $close_ts = $this->timeKeeper->getCurrentAttackTime()->modify('-30min');
+            }
+
+            if ($close_ts !== null) {
+                $town->setDoor( false );
+                $this->entity_manager->persist( $this->log->doorControlAuto( $town, false, $close_ts ) );
+                $changed = true;
+            }
+
+        }
+
+        if ($changed) {
+            $this->entity_manager->persist( $town );
+            if ($flush) $this->entity_manager->flush();
+        }
     }
 
     public function triggerBuildingCompletion( Town &$town, Building $building ) {

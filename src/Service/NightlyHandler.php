@@ -559,6 +559,8 @@ class NightlyHandler
             return false;
         } else $this->log->info("Precondition checks passed. Attack can <info>commence</info>.");
 
+        $this->town_handler->triggerAlways( $town );
+
         $this->log->info('Entering <comment>Phase 1</comment> - Pre-attack processing');
         $this->stage1_vanish($town);
         $this->stage1_status($town);

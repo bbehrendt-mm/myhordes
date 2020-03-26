@@ -9,12 +9,17 @@ use App\Controller\GameAliveInterfaceController;
 use App\Controller\GameInterfaceController;
 use App\Controller\GameProfessionInterfaceController;
 use App\Controller\GhostInterfaceController;
+use App\Controller\LandingController;
+use App\Controller\PublicController;
 use App\Controller\TownController;
 use App\Controller\TownInterfaceController;
+use App\Controller\WebController;
 use App\Entity\Citizen;
 use App\Entity\User;
 use App\Exception\DynamicAjaxResetException;
 use App\Service\Locksmith;
+use App\Service\TimeKeeperService;
+use App\Service\TownHandler;
 use Doctrine\ORM\EntityManagerInterface;
 use Proxies\__CG__\App\Entity\CitizenProfession;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -31,20 +36,30 @@ class GateKeeperSubscriber implements EventSubscriberInterface
     private $security;
     private $em;
     private $locksmith;
+    private $townHandler;
+    private $timeKeeper;
 
     /** @var LockInterface|null  */
     private $current_lock = null;
 
-    public function __construct(EntityManagerInterface $em, Locksmith $locksmith, Security $security)
+    public function __construct(EntityManagerInterface $em, Locksmith $locksmith, Security $security, TownHandler $th, TimeKeeperService $tk)
     {
         $this->em = $em;
         $this->locksmith = $locksmith;
         $this->security = $security;
+        $this->townHandler = $th;
+        $this->timeKeeper = $tk;
     }
 
     public function holdTheDoor(ControllerEvent $event) {
         $controller = $event->getController();
         if (is_array($controller)) $controller = $controller[0];
+
+        if (!($controller instanceof LandingController) && !($controller instanceof WebController)) {
+            // During the attack, only the landing and web controller shall be made available
+            if ($this->timeKeeper->isDuringAttack())
+                throw new DynamicAjaxResetException($event->getRequest());
+        }
 
         $user = $this->security->getUser();
 
@@ -61,6 +76,7 @@ class GateKeeperSubscriber implements EventSubscriberInterface
 
             /** @var $citizen Citizen */
             $this->current_lock = $this->locksmith->waitForLock( 'game-' . $citizen->getTown()->getId() );
+            $this->townHandler->triggerAlways( $citizen->getTown(), true );
 
             if ($controller instanceof GameAliveInterfaceController) {
                 // This is a game action controller; it is not available to players who are dead

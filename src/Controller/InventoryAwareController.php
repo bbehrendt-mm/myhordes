@@ -3,50 +3,30 @@
 namespace App\Controller;
 
 use App\Entity\Citizen;
-use App\Entity\CitizenProfession;
 use App\Entity\ExpeditionRoute;
 use App\Entity\Inventory;
 use App\Entity\Item;
 use App\Entity\ItemAction;
 use App\Entity\ItemGroupEntry;
-use App\Entity\ItemPrototype;
 use App\Entity\ItemTargetDefinition;
 use App\Entity\Recipe;
-use App\Entity\TownClass;
 use App\Entity\TownLogEntry;
-use App\Entity\User;
-use App\Entity\UserPendingValidation;
 use App\Response\AjaxResponse;
 use App\Service\ActionHandler;
 use App\Service\CitizenHandler;
 use App\Service\ErrorHelper;
 use App\Service\InventoryHandler;
-use App\Service\ItemFactory;
 use App\Service\JSONRequestParser;
-use App\Service\Locksmith;
 use App\Service\LogTemplateHandler;
+use App\Service\TimeKeeperService;
 use App\Structures\BankItem;
-use App\Structures\ItemRequest;
-use Doctrine\Common\Collections\Collection;
+use DateTime;
 use Doctrine\ORM\AbstractQuery;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\Expr\Join;
 use Exception;
-use Symfony\Component\DependencyInjection\Compiler\ResolveBindingsPass;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Lock\LockFactory;
-use Symfony\Component\Lock\Store\MemcachedStore;
-use Symfony\Component\Lock\Store\SemaphoreStore;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Validator\Constraints;
-use Symfony\Component\Validator\ConstraintViolationInterface;
-use Symfony\Component\Validator\Validation;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class InventoryAwareController extends AbstractController implements GameInterfaceController, GameProfessionInterfaceController, GameAliveInterfaceController
@@ -57,10 +37,11 @@ class InventoryAwareController extends AbstractController implements GameInterfa
     protected $action_handler;
     protected $translator;
     protected $log;
+    protected $time_keeper;
 
     public function __construct(
         EntityManagerInterface $em, InventoryHandler $ih, CitizenHandler $ch, ActionHandler $ah,
-        TranslatorInterface $translator, LogTemplateHandler $lt)
+        TranslatorInterface $translator, LogTemplateHandler $lt, TimeKeeperService $tk)
     {
         $this->entity_manager = $em;
         $this->inventory_handler = $ih;
@@ -68,12 +49,19 @@ class InventoryAwareController extends AbstractController implements GameInterfa
         $this->action_handler = $ah;
         $this->translator = $translator;
         $this->log = $lt;
+        $this->time_keeper = $tk;
     }
 
     protected function addDefaultTwigArgs( ?string $section = null, ?array $data = null ): array {
         $data = $data ?? [];
         $data['menu_section'] = $section;
 
+        $data['clock'] = [
+            'desc'      => $this->getActiveCitizen()->getTown()->getName(),
+            'day'       => $this->getActiveCitizen()->getTown()->getDay(),
+            'timestamp' => new DateTime('now'),
+            'attack'    => $this->time_keeper->secondsUntilNextAttack(null, true)
+        ];
         $data['ap'] = $this->getActiveCitizen()->getAp();
         $data['max_ap'] = $this->citizen_handler->getMaxAP( $this->getActiveCitizen() );
         $data['bp'] = $this->getActiveCitizen()->getBp();

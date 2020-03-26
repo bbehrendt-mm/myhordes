@@ -29,6 +29,7 @@ use App\Service\JSONRequestParser;
 use App\Service\Locksmith;
 use App\Service\LogTemplateHandler;
 use App\Service\RandomGenerator;
+use App\Service\TimeKeeperService;
 use App\Service\TownHandler;
 use App\Service\ZoneHandler;
 use App\Structures\ItemRequest;
@@ -86,10 +87,10 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
      * @param LogTemplateHandler $lh
      */
     public function __construct(
-        EntityManagerInterface $em, InventoryHandler $ih, CitizenHandler $ch, ActionHandler $ah, DeathHandler $dh,
+        EntityManagerInterface $em, InventoryHandler $ih, CitizenHandler $ch, ActionHandler $ah, DeathHandler $dh, TimeKeeperService $tk,
         TranslatorInterface $translator, GameFactory $gf, RandomGenerator $rg, ItemFactory $if, ZoneHandler $zh, LogTemplateHandler $lh)
     {
-        parent::__construct($em, $ih, $ch, $ah, $translator, $lh);
+        parent::__construct($em, $ih, $ch, $ah, $translator, $lh, $tk);
         $this->citizen_handler->upgrade($dh);
         $this->game_factory = $gf;
         $this->random_generator = $rg;
