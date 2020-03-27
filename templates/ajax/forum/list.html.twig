@@ -1,0 +1,27 @@
+{% extends "ajax/ajax.html.twig" %}
+{# @var forums \App\Entity\Forum[] #}
+{% block ajax %}
+    <div class="row">
+        <div class="cell padded header rw-8 ro-2 rw-lg-12 ro-lg-0">
+            <h4>{% trans from 'welcome' %}Foren{% endtrans %}</h4>
+
+            <div class="cell rw-12 padded">
+                {% if forums|length == 0 %}
+                    <div class="note">
+                        {% trans from 'game' %}
+                            Leider gibt es aktuell keine Foren, auf die zu Zugriff hast. Bitte versuche es später erneut.
+                        {% endtrans %}
+                    </div>
+                {% else %}
+                    {% for forum in forums %}
+                        <div x-ajax-href="{{ url('forum_view', {id: forum.id}) }}" class="forum-preview {% if forum.town %}forum-preview-town{% endif %}">
+                            {{ forum.title }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+
+        </div>
+    </div>
+{% endblock %}

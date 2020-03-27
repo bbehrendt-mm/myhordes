@@ -1,0 +1,50 @@
+<div class="forum-editor">
+    {% if tid is null %}
+        <div class="row">
+            <div class="cell rw-4 padded">
+                <label for="forum-editor-title">{{ 'Titel'|trans({},'global') }}</label>
+            </div>
+            <div class="cell rw-8 padded">
+                <input type="text" id="forum-editor-title" />
+            </div>
+        </div>
+    {% endif %}
+    <div class="row">
+        <div class="padded cell rw-12">
+            <label for="forum-editor-text">{{ 'Deine Nachricht'|trans({},'global') }}</label>
+            <textarea id="forum-editor-text"></textarea>
+        </div>
+    </div>
+    <div class="row">
+        <div class="padded cell rw-12 right">
+            <div x-forum-action="send" class="forum-button">{{ 'Absenden'|trans({},'global') }}</div>
+        </div>
+    </div>
+
+</div>
+<script>
+    (function() {
+        let send_buttons = document.querySelectorAll('[x-forum-action=send]');
+        for (let i = 0; i < send_buttons.length; i++) {
+            send_buttons[i].addEventListener('click', function() {
+                let target_url, target_payload;
+                {% if tid is null %}
+                    target_url = '{{ path('forum_new_thread_controller', {id: fid}) }}';
+                    target_payload = {
+                        title: document.getElementById('forum-editor-title').value,
+                        text: document.getElementById('forum-editor-text').value,
+                    };
+                {% else %}
+                    target_url = '{{ path('forum_new_post_controller', {fid: fid, tid: tid}) }}';
+                    target_payload = {
+                        text: document.getElementById('forum-editor-text').value,
+                    };
+                {% endif %}
+                $.ajax.easySend( target_url, target_payload,
+                    function (data) {
+                        $.ajax.load( null, data.url, true );
+                    } );
+            });
+        }
+    })();
+</script>

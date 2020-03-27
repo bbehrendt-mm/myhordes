@@ -77,6 +77,11 @@ class Town
      */
     private $zombieEstimations;
 
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Forum", mappedBy="town", cascade={"persist", "remove"})
+     */
+    private $forum;
+
     public function __construct()
     {
         $this->citizens = new ArrayCollection();
@@ -301,6 +306,24 @@ class Town
             if ($zombieEstimation->getTown() === $this) {
                 $zombieEstimation->setTown(null);
             }
+        }
+
+        return $this;
+    }
+
+    public function getForum(): ?Forum
+    {
+        return $this->forum;
+    }
+
+    public function setForum(?Forum $forum): self
+    {
+        $this->forum = $forum;
+
+        // set (or unset) the owning side of the relation if necessary
+        $newTown = null === $forum ? null : $this;
+        if ($forum->getTown() !== $newTown) {
+            $forum->setTown($newTown);
         }
 
         return $this;

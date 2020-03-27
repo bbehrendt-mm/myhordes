@@ -1,0 +1,55 @@
+{# @var posts \App\Entity\Post[] #}
+
+{% block pagenav %}
+    {% if pages > 1 %}
+        <div class="row">
+            <div class="cell rw-12 padded center">
+                <div class="forum-button" x-forum-action="post-pager" x-to-page="1"><i class="fa fa-fast-backward"></i></div>
+                <div class="forum-button" x-forum-action="post-pager" x-to-page="{{ current_page - 1 }}"><i class="fa fa-backward"></i></div>
+                <div class="forum-button">{{ 'Seite %page%/%pages%'|trans({'%page%': current_page, '%pages%': pages},'global') }}</div>
+                <div class="forum-button" x-forum-action="post-pager" x-to-page="{{ current_page + 1 }}"><i class="fa fa-forward"></i></div>
+                <div class="forum-button" x-forum-action="post-pager" x-to-page="{{ pages }}"><i class="fa fa-fast-forward"></i></div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+<div class="forum-posts">
+    {% for post in posts %}
+        <div class="forum-post">
+            <div class="forum-post-header">
+                <i>{{ post.date.format('D, d.m.Y G:i') }}</i>
+                <b>{{ post.owner.username }}</b>
+                {% if post.note is not null %}<br /><span>{{ post.note }}</span>{% endif %}
+            </div>
+            <div class="forum-post-content">{{ post.text }}</div>
+        </div>
+    {% endfor %}
+</div>
+{% if pages == current_page and not locked %}
+    <div class="row">
+        <div class="cell rw-12 right">
+            <div x-forum-action="answer" class="forum-button">{{ 'Antworten'|trans({},'global') }}</div>
+        </div>
+    </div>
+{% endif %}
+{{ block('pagenav') }}
+<script>
+    let new_post_btns = document.querySelectorAll('[x-forum-action=answer]');
+    for (let i = 0; i < new_post_btns.length; i++)
+        new_post_btns[i].addEventListener('click', function() {
+            new_post_btns[i].parentNode.removeChild(new_post_btns[i]);
+            $.ajax.no_history().load( document.getElementById('forum-editor'), '{{ url('forum_post_editor_controller', {fid: fid, tid: tid}) }}', false )
+        })
+    let nav_buttons =  document.querySelectorAll('[x-forum-action="post-pager"][x-to-page]');
+    for (let i = 0; i < nav_buttons.length; i++)
+        nav_buttons[i].addEventListener('click', function() {
+            let editor = document.getElementById('forum-editor');
+            {let c; while ((c = editor.firstChild)) editor.removeChild(c);}
+            $.ajax.no_history().load( document.getElementById('forum-content'), '{{ path('forum_viewer_controller', {fid: fid, tid: tid}) }}', false, {page: parseInt( this.getAttribute('x-to-page') )} )
+        })
+    {% if pages == current_page %}
+        let thread_listings = document.querySelectorAll('[x-thread-id="{{ tid }}"]');
+        for (let i = 0; i < thread_listings.length; i++)
+            thread_listings[i].classList.remove('forum-thread-unread');
+    {% endif %}
+</script>

@@ -6,8 +6,8 @@
                 {% block text_menu_content %}
                     <ul class="text-menu">
                         <li class="burger-button"><i class="fa fa-bars"></i></li>
-                        {% if is_granted('ROLE_REGISTERED') %}
-                            <li class="forum">{{ 'Forum'|trans({},'global') }}</li>
+                        {% if is_granted('ROLE_USER') %}
+                            <li class="forum" x-ajax-href="{{ url('forum_list') }}">{{ 'Forum'|trans({},'global') }}</li>
                         {% endif %}
                         {% block menu_text %}{% endblock %}
                         {% if is_granted('ROLE_USER') %}

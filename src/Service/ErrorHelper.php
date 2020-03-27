@@ -18,6 +18,8 @@ class ErrorHelper
     const BaseActionErrors        = 600;
     const BaseBeyondErrors        = 700;
 
+    const BaseForumErrors         = 1100;
+
     const ErrorInvalidRequest    = 1;
     const ErrorDatabaseException = 2;
     const ErrorInternalError     = 3;

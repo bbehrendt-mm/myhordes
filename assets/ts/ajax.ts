@@ -11,7 +11,7 @@ export default class Ajax {
     private readonly base: string;
     private defaultNode: HTMLElement;
     private no_load_spinner: boolean;
-    private run_in_background: boolean;
+    private no_history_manipulation: boolean;
 
     constructor(baseUrl: string) {
         if (baseUrl.length == 0 || baseUrl.slice(-1) != '/')
@@ -24,25 +24,30 @@ export default class Ajax {
         this.defaultNode = target;
     }
 
+    no_history(): Ajax {
+        this.no_history_manipulation = true;
+        return this;
+    }
+
     no_loader(): Ajax {
         this.no_load_spinner = true;
         return this;
     }
 
     background(): Ajax {
-        this.run_in_background = true;
-        return this.no_loader();
-    }
-
-    private fetch_background(): boolean {
-        const r = this.run_in_background;
-        this.run_in_background = false;
-        return r;
+        this.no_history_manipulation = this.no_load_spinner = true;
+        return this;
     }
 
     private fetch_no_loader(): boolean {
         const r = this.no_load_spinner;
         this.no_load_spinner = false;
+        return r;
+    }
+
+    private fetch_no_history(): boolean {
+        const r = this.no_history_manipulation;
+        this.no_history_manipulation = false;
         return r;
     }
 
@@ -120,13 +125,18 @@ export default class Ajax {
         }));
     }
 
+    push_history( url: string ) {
+        url = this.prepareURL(url);
+        history.pushState( url, '', url );
+    }
+
     load( target: HTMLElement, url: string, push_history: boolean = false, data: object = {} ) {
         let ajax_instance = this;
 
         if (!(target = this.prepareTarget( target ))) return;
         url = this.prepareURL(url);
 
-        const background = this.fetch_background();
+        const no_hist    = this.fetch_no_history();
         const no_loader  = this.fetch_no_loader();
         if (push_history) history.pushState( url, '', url );
 
@@ -140,7 +150,13 @@ export default class Ajax {
                 return;
             }
 
-            ajax_instance.render( this.responseURL, target, this.responseXML, false, !background );
+            if (this.status >= 400) {
+                alert('Error loading page (' + this.status + ')');
+                window.location.href = ajax_instance.base;
+                return;
+            }
+
+            ajax_instance.render( this.responseURL, target, this.responseXML, false, !no_hist );
             if (!no_loader) $.html.removeLoadStack();
         });
         request.addEventListener('error', function(e) {
@@ -158,8 +174,8 @@ export default class Ajax {
         url = this.prepareURL(url);
         const base = this.base;
 
-        const background = this.fetch_background();
-        const no_loader = this.fetch_background();
+        const no_hist   = this.fetch_no_history();
+        const no_loader = this.fetch_no_loader();
 
         if (!no_loader) $.html.addLoadStack();
         let request = new XMLHttpRequest();

@@ -12,6 +12,7 @@ use App\Entity\CitizenHome;
 use App\Entity\CitizenHomePrototype;
 use App\Entity\CitizenProfession;
 use App\Entity\DigTimer;
+use App\Entity\Forum;
 use App\Entity\Inventory;
 use App\Entity\ItemGroup;
 use App\Entity\Town;
@@ -182,6 +183,9 @@ class GameFactory
             $zone_list[$i]->getFloor()->addItem( $this->item_factory->createItem( $item_spawns[$i] ) );
 
         $this->zone_handler->dailyZombieSpawn( $town, 1, ZoneHandler::RespawnModeNone );
+
+        $town->setForum( (new Forum())->setTitle( $town->getName() ) );
+
         return $town;
     }
 

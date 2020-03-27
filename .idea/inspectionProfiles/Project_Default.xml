@@ -4,7 +4,7 @@
     <inspection_tool class="HtmlUnknownAttribute" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="myValues">
         <value>
-          <list size="52">
+          <list size="57">
             <item index="0" class="java.lang.String" itemvalue="x-ajax-intention" />
             <item index="1" class="java.lang.String" itemvalue="x-ajax-href" />
             <item index="2" class="java.lang.String" itemvalue="x-ajax-landing" />
@@ -57,6 +57,11 @@
             <item index="49" class="java.lang.String" itemvalue="x-until" />
             <item index="50" class="java.lang.String" itemvalue="x-countdown-no-seconds" />
             <item index="51" class="java.lang.String" itemvalue="x-countdown-force-hours" />
+            <item index="52" class="java.lang.String" itemvalue="x-forum-action" />
+            <item index="53" class="java.lang.String" itemvalue="x-thread-id" />
+            <item index="54" class="java.lang.String" itemvalue="x-post-source" />
+            <item index="55" class="java.lang.String" itemvalue="x-public-route" />
+            <item index="56" class="java.lang.String" itemvalue="x-to-page" />
           </list>
         </value>
       </option>

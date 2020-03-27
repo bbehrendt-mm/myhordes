@@ -5,6 +5,7 @@
 @import (once) "modules/town";
 @import (once) "modules/beyond";
 @import (once) "modules/constructions";
+@import (once) "modules/forum";
 
 @myhordes-font: 'Open Sans',sans-serif;
 
@@ -38,6 +39,7 @@
 @myhordes-button-border: black;
 
 @myhordes-input-background: url('../img/bg_input.jpg') bottom center repeat;
+@myhordes-input-text-background: url('../img/form_textarea.gif') bottom center repeat;
 @myhordes-input-color: #3B3249;
 @myhordes-input-border: #EFDBA8;
 
@@ -75,7 +77,8 @@ div.debug_info {
     &.error:before { background: #a90017 }
     &>span {
       &>img { margin-right: 3px; }
-      background: rgba(0,0,0,0.15); border: 1px solid rgba(0,0,0,0.15); padding: 0 5px; border-radius: 6px; font-variant: small-caps; color: white;
+      background: rgba(0,0,0,0.15); border: 1px solid rgba(0,0,0,0.15); padding: 0 5px; border-radius: 6px;
+      font-variant: small-caps; color: white; display: inline-block;
     }
   }
 
@@ -187,10 +190,11 @@ button {
   }
 }
 
-input[type='text'],input[type='password'],input[type='email'] {
+input[type='text'],input[type='password'],input[type='email'],textarea {
   transition: outline-color 0.5s; outline: 1px solid rgba(0,0,0,0);
-  background: @myhordes-input-background; border: 1px solid @myhordes-input-border; height: 25px;
-
+  &:not(textarea) { background: @myhordes-input-background; }
+  &:not(input)    { background: @myhordes-input-text-background; resize: vertical; max-width: 100%; min-height: 250px; }
+  border: 1px solid @myhordes-input-border; height: 25px;
   &:not(.inline) { display: block; width: 100%; }
   &:focus { outline-color: @myhordes-input-border; }
   &:invalid,&.invalid { box-shadow: 0 0 4px red; }
