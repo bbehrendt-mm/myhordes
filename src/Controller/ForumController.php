@@ -14,6 +14,7 @@ use App\Service\UserFactory;
 use App\Response\AjaxResponse;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use DOMDocument;
 use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -106,15 +107,17 @@ class ForumController extends AbstractController
         ] );
     }
 
-    private function preparePost(User $user, Forum $forum, Thread $thread, Post &$post) {
+    private function preparePost(User $user, Forum $forum, Thread $thread, Post &$post): bool {
         if ($forum->getTown()) {
 
             foreach ( $forum->getTown()->getCitizens() as $citizen )
                 if ($citizen->getUser()->getId() === $user->getId()) {
-                    if ($citizen->getZone()) $note = "[{$citizen->getZone()->getX()}/{$citizen->getZone()->getY()}]";
+                    if ($citizen->getZone()) $post->setNote("[{$citizen->getZone()->getX()}/{$citizen->getZone()->getY()}]");
                     else $post->setNote("[{$citizen->getTown()->getName()}]");
                 }
         }
+
+        return true;
     }
 
     /**
@@ -149,7 +152,10 @@ class ForumController extends AbstractController
             ->setOwner( $user )
             ->setText( $text )
             ->setDate( new DateTime('now') );
-        $this->preparePost($user,$forum,$thread,$post);
+        if (!$this->preparePost($user,$forum,$thread,$post))
+            return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
+
+
         $thread->addPost($post)->setLastPost( $post->getDate() );
         $forum->addThread($thread);
 
@@ -197,7 +203,8 @@ class ForumController extends AbstractController
             ->setOwner( $user )
             ->setText( $text )
             ->setDate( new DateTime('now') );
-        $this->preparePost($user,$forum,$thread,$post);
+        if (!$this->preparePost($user,$forum,$thread,$post))
+            return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
         $thread->addPost($post)->setLastPost( $post->getDate() );
 
         try {
