@@ -402,6 +402,25 @@ class LogTemplateHandler
             ], 'game' ) );
     }
 
+    public function zombieKillLog( Citizen $citizen, Item $item, int $kills ): TownLogEntry {
+      return (new TownLogEntry())
+        ->setType( TownLogEntry::TypeVarious )
+        ->setClass( TownLogEntry::ClassInfo )
+        ->setTown( $citizen->getTown() )
+        ->setDay( $citizen->getTown()->getDay() )
+        ->setZone( $citizen->getZone() )
+        ->setTimestamp( new DateTime('now') )
+        ->setCitizen( $citizen )
+        ->setText( $this->trans->trans(
+          $kills == 1
+          ? '%citizen% hat mit dem Gegenstand %item% %kills% Zombie getötet.'
+          : '%citizen% hat mit dem Gegenstand %item% %kills% Zombies getötet.', [
+          '%citizen%' => $this->wrap( $this->iconize( $citizen ) ),
+          '%item%'    => $this->wrap( $this->iconize( $item ) ),
+          '%kills%'   => $kills,
+        ], 'game' ) );
+    }
+
     public function nightlyInternalAttackKill( Citizen $zombie, Citizen $victim ): TownLogEntry {
         return (new TownLogEntry())
             ->setType( TownLogEntry::TypeNightly )
