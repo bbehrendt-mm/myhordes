@@ -172,6 +172,13 @@ class User implements UserInterface, EquatableInterface
             $this->getRoles() === $user->getRoles();
     }
 
+    public function getActiveCitizen(): ?Citizen {
+        foreach ($this->getCitizens() as $c)
+            if ($c->getActive())
+                return $c;
+        return null;
+    }
+
     /**
      * @return Collection|Citizen[]
      */

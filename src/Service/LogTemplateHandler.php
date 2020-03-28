@@ -278,6 +278,21 @@ class LogTemplateHandler
             ], 'game' ) );
     }
 
+    public function citizenZombieAttackRepelled( Citizen $citizen, int $def, int $zombies ): TownLogEntry {
+        return (new TownLogEntry())
+            ->setType( TownLogEntry::TypeCitizens )
+            ->setClass( TownLogEntry::ClassCritical )
+            ->setTown( $citizen->getTown() )
+            ->setDay( $citizen->getTown()->getDay() )
+            ->setTimestamp( new DateTime('now') )
+            ->setCitizen( $citizen )
+            ->setText( $this->trans->trans('%zombies% haben vergeblich versucht, in das Haus von %citizen% einzudringen.', [
+                '%citizen%' => $this->wrap( $this->iconize( $citizen ) ),
+                '%zombies%' => $this->wrap( $this->trans->trans( '%num% Zombies', ['%num%' => $zombies], 'game' ) ),
+                '%defense%' => $this->wrap( "{$def}" ),
+            ], 'game' ) );
+    }
+
     public function citizenDeath( Citizen $citizen, int $zombies = 0 ): TownLogEntry {
         switch ($citizen->getCauseOfDeath()->getRef()) {
             case CauseOfDeath::NightlyAttack:
@@ -639,4 +654,51 @@ class LogTemplateHandler
                 '%items%'    => implode( ', ', $items )
             ], 'game' ) );
     }
+
+    public function townSteal( Citizen $victim, ?Citizen $actor, Item $item, bool $up ): TownLogEntry {
+
+        if ($up)
+            $str = $actor
+                ? 'HALTET DEN DIEB! %actor% ist bei %victim% eingebrochen und hat %item% gestohlen!'
+                : 'VERDAMMT! Es scheint, jemand ist bei %victim% eingebrochen und hat %item% gestohlen...';
+        else
+            $str = $actor
+                ? '%actor% ist bei %victim% eingebrochen und hat %item% hinterlassen...'
+                : 'Es scheint, jemand ist bei %victim% eingebrochen und hat %item% hinterlassen...';
+
+        return (new TownLogEntry())
+            ->setType( TownLogEntry::TypeHome )
+            ->setSecondaryType( empty($items) ? TownLogEntry::TypeVarious : TownLogEntry::TypeBank )
+            ->setClass( TownLogEntry::ClassCritical )
+            ->setTown( $victim->getTown() )
+            ->setDay( $victim->getTown()->getDay() )
+            ->setCitizen( $victim )
+            ->setSecondaryCitizen( $actor )
+            ->setTimestamp( new DateTime('now') )
+            ->setText( $this->trans->trans( $str , [
+                '%actor%'    => $actor ? $this->wrap( $this->iconize( $actor ) ) : '',
+                '%victim%'   => $this->wrap( $this->iconize( $victim ) ),
+                '%item%'     => $this->wrap( $this->iconize( $item ) ),
+            ], 'game' ) );
+    }
+
+    public function zombieKill( Citizen $citizen, ?Item $item, int $kills ): TownLogEntry {
+        return (new TownLogEntry())
+            ->setType( TownLogEntry::TypeVarious )
+            ->setClass( TownLogEntry::ClassCritical )
+            ->setTown( $citizen->getTown() )
+            ->setDay( $citizen->getTown()->getDay() )
+            ->setZone( $citizen->getZone() )
+            ->setTimestamp( new DateTime('now') )
+            ->setCitizen( $citizen )
+            ->setText( $this->trans->trans(
+                $item
+                    ? '%citizen% hat mit dem Gegenstand %item% %kills% Zombie(s) getötet.'
+                    : '%citizen% hat %kills% Zombies getötet.', [
+                '%citizen%' => $this->wrap( $this->iconize( $citizen ) ),
+                '%item%'    => $item ? $this->wrap( $this->iconize( $item ) ) : '',
+                '%kills%'   => $this->wrap( "{$kills}" ),
+            ], 'game' ) );
+    }
+
 }

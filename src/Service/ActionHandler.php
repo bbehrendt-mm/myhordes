@@ -421,8 +421,13 @@ class ActionHandler
 
             if ($zombie_kill = $result->getZombies()) {
 
-                if ($citizen->getZone())
-                    $citizen->getZone()->setZombies( max( 0, $citizen->getZone()->getZombies() - mt_rand( $zombie_kill->getMin(), $zombie_kill->getMax() ) ) );
+                if ($citizen->getZone()) {
+                    $kills = min($citizen->getZone()->getZombies(), mt_rand( $zombie_kill->getMin(), $zombie_kill->getMax() ));
+                    if ($kills > 0) {
+                        $citizen->getZone()->setZombies( $citizen->getZone()->getZombies() - $kills );
+                        $this->entity_manager->persist( $this->log->zombieKill( $citizen, $item, $kills ) );
+                    }
+                }
 
             }
 

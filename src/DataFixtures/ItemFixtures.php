@@ -391,7 +391,7 @@ class ItemFixtures extends Fixture
         'car_door_#00'     => [ 'defence' ],
         'pet_dog_#00'      => [ 'defence' ],
         'plate_#00'        => [ 'defence' ],
-        'tekel_#00'        => [ 'defence' ],
+        'tekel_#00'        => [ 'defence', 'lock' ],
         'torch_#00'        => [ 'defence' ],
         'trestle_#00'      => [ 'defence' ],
         'table_#00'        => [ 'defence' ],
@@ -407,6 +407,7 @@ class ItemFixtures extends Fixture
         'water_can_2_#00'  => [ 'can_poison' ],
         'water_can_1_#00'  => [ 'can_poison' ],
         'cyanure_#00'      => [ 'can_poison' ],
+        'lock_#00'         => [ 'lock' ],
     ];
 
     public static $item_groups = [

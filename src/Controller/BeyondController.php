@@ -69,7 +69,6 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
 
     protected $game_factory;
     protected $zone_handler;
-    protected $random_generator;
     protected $item_factory;
     protected $death_handler;
 
@@ -91,10 +90,9 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
         EntityManagerInterface $em, InventoryHandler $ih, CitizenHandler $ch, ActionHandler $ah, DeathHandler $dh, TimeKeeperService $tk,
         TranslatorInterface $translator, GameFactory $gf, RandomGenerator $rg, ItemFactory $if, ZoneHandler $zh, LogTemplateHandler $lh)
     {
-        parent::__construct($em, $ih, $ch, $ah, $translator, $lh, $tk);
+        parent::__construct($em, $ih, $ch, $ah, $translator, $lh, $tk, $rg);
         $this->citizen_handler->upgrade($dh);
         $this->game_factory = $gf;
-        $this->random_generator = $rg;
         $this->item_factory = $if;
         $this->zone_handler = $zh;
     }
@@ -520,8 +518,10 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
             return AjaxResponse::error( ErrorHelper::ErrorNoAP );
 
         $this->citizen_handler->setAP( $citizen, true, -1 );
-        if ($generator->chance( 0.1 ))
+        if ($generator->chance( 0.1 )) {
             $zone->setZombies( $zone->getZombies() - 1 );
+            $this->entity_manager->persist( $this->log->zombieKill( $citizen, null, 1 ) );
+        }
 
         try {
             $this->entity_manager->persist( $citizen );

@@ -9,6 +9,7 @@ use App\Entity\CitizenHome;
 use App\Entity\CitizenHomeUpgrade;
 use App\Entity\CitizenHomeUpgradePrototype;
 use App\Entity\CitizenProfession;
+use App\Entity\CitizenStatus;
 use App\Entity\Inventory;
 use App\Entity\Item;
 use App\Entity\ItemGroup;
@@ -96,10 +97,14 @@ class InventoryHandler
 
     /**
      * @param Inventory|Inventory[] $inventory
-     * @param ItemPrototype|ItemPrototype[] $prototype
+     * @param ItemPrototype|ItemPrototype[]|string $prototype
+     * @param bool $is_property
      * @return int
      */
-    public function countSpecificItems($inventory, $prototype): int {
+    public function countSpecificItems($inventory, $prototype, bool $is_property = false): int {
+        if (is_string( $prototype )) $prototype = $is_property
+            ? $this->entity_manager->getRepository(ItemProperty::class)->findOneByName( $prototype )->getItemPrototypes()->getValues()
+            : $this->entity_manager->getRepository(ItemPrototype::class)->findOneByName( $prototype );
         if (!is_array($prototype)) $prototype = [$prototype];
         if (!is_array($inventory)) $inventory = [$inventory];
         try {
@@ -281,6 +286,7 @@ class InventoryHandler
     const ErrorHeavyLimitHit   = ErrorHelper::BaseInventoryErrors + 3;
     const ErrorBankLimitHit    = ErrorHelper::BaseInventoryErrors + 4;
     const ErrorStealLimitHit   = ErrorHelper::BaseInventoryErrors + 5;
+    const ErrorStealBlocked    = ErrorHelper::BaseInventoryErrors + 6;
 
     const ModalityNone = 0;
     const ModalityTamer = 1;
@@ -305,8 +311,20 @@ class InventoryHandler
         //ToDo Check Bank lock
         //if ($type_from === self::TransferTypeBank) {}
 
-        //ToDo Check Steal lock
-        //if ($type_from === self::TransferTypeSteal) {}
+        if ($type_from === self::TransferTypeSteal || $type_to === self::TransferTypeSteal) {
+            if ($actor->getStatus()->contains( $this->entity_manager->getRepository(CitizenStatus::class)->findOneByName( 'tg_steal' ) ))
+                return self::ErrorStealLimitHit;
+
+            $victim = $type_from === self::TransferTypeSteal ? $from->getHome()->getCitizen() : $to->getHome()->getCitizen();
+            if ($victim->getAlive() && !$victim->getZone()) return self::ErrorStealBlocked;
+            if ($victim->getHome()->getPrototype()->getTheftProtection()) return self::ErrorStealBlocked;
+            if ($this->entity_manager->getRepository(CitizenHomeUpgrade::class)->findOneByPrototype(
+                $victim->getHome(),
+                $this->entity_manager->getRepository(CitizenHomeUpgradePrototype::class)->findOneByName( 'lock' ) ))
+                return self::ErrorStealBlocked;
+            if ($this->countSpecificItems( $victim->getHome()->getChest(), 'lock', true ) > 0)
+                return self::ErrorStealBlocked;
+        }
 
         if ($type_from === self::TransferTypeRucksack && $type_to === self::TransferTypeTamer && $modality !== self::ModalityTamer)
             return self::ErrorInvalidTransfer;

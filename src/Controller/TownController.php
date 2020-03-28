@@ -39,6 +39,8 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
     const ErrorDoorAlreadyClosed = ErrorHelper::BaseTownErrors + 4;
     const ErrorDoorAlreadyOpen   = ErrorHelper::BaseTownErrors + 5;
     const ErrorNotEnoughRes      = ErrorHelper::BaseTownErrors + 6;
+    const ErrorAlreadyUpgraded   = ErrorHelper::BaseTownErrors + 7;
+
 
 
     protected function addDefaultTwigArgs( ?string $section = null, ?array $data = null ): array {
@@ -212,6 +214,30 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
     }
 
     /**
+     * @Route("api/town/visit/{id}/item", name="town_visit_item_controller")
+     * @param int $id
+     * @param JSONRequestParser $parser
+     * @param InventoryHandler $handler
+     * @param EntityManagerInterface $em
+     * @return Response
+     */
+    public function item_visit_api(int $id, JSONRequestParser $parser, InventoryHandler $handler, EntityManagerInterface $em): Response {
+        if ($id === $this->getActiveCitizen()->getId())
+            return AjaxResponse::error(ErrorHelper::ErrorActionNotAvailable );
+
+        $ac = $this->getActiveCitizen();
+
+        /** @var Citizen $c */
+        $c = $em->getRepository(Citizen::class)->find( $id );
+        if (!$c || $c->getTown()->getId() !== $this->getActiveCitizen()->getTown()->getId())
+            return AjaxResponse::error(ErrorHelper::ErrorActionNotAvailable );
+
+        $up_inv   = $ac->getInventory();
+        $down_inv = $c->getHome()->getChest();
+        return $this->generic_item_api( $up_inv, $down_inv, false, $parser, $handler);
+    }
+
+    /**
      * @Route("jx/town/house", name="town_house")
      * @param EntityManagerInterface $em
      * @param TownHandler $th
@@ -329,6 +355,9 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
 
         if ($ch->isTired( $citizen ) || $citizen->getAp() < $next->getAp()) return AjaxResponse::error( ErrorHelper::ErrorNoAP );
 
+        if ($ch->hasStatusEffect($citizen, 'tg_home_upgrade'))
+            return AjaxResponse::error( self::ErrorAlreadyUpgraded );
+
         if ($next->getRequiredBuilding() && !$th->getBuilding( $town, $next->getRequiredBuilding(), true ))
             return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
 
@@ -340,6 +369,7 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
 
         $home->setPrototype($next);
         $ch->setAP($citizen, true, -$next->getAp());
+        $ch->inflictStatus( $citizen, 'tg_home_upgrade' );
         foreach ($items as $item) {
             $item->getInventory()->removeItem($item);
             $em->remove($item);
@@ -403,6 +433,10 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
         if (!$costs) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
 
         if ($ch->isTired( $citizen ) || $citizen->getAp() < $costs->getAp()) return AjaxResponse::error( ErrorHelper::ErrorNoAP );
+
+        if ($ch->hasStatusEffect($citizen, 'tg_home_upgrade'))
+            return AjaxResponse::error( self::ErrorAlreadyUpgraded );
+
         $items = [];
         if ($costs->getResources()) {
             $items = $ih->fetchSpecificItems( [$home->getChest(),$citizen->getInventory()], $costs->getResources() );
@@ -413,6 +447,7 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
         else $current->setLevel( $current->getLevel()+1 );
 
         $ch->setAP($citizen, true, -$costs->getAp());
+        $ch->inflictStatus( $citizen, 'tg_home_upgrade' );
         foreach ($items as $item) {
             $item->getInventory()->removeItem($item);
             $em->remove($item);

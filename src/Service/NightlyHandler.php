@@ -261,10 +261,14 @@ class NightlyHandler
             $def = $this->town_handler->calculate_home_def($home);
             $this->log->debug("Citizen <info>{$target->getUser()->getUsername()}</info> is attacked by <info>{$force}</info> zombies and protected by <info>{$def}</info> home defense!");
             if ($force > $def) $this->kill_wrap($target, $cod, false, $force);
-            elseif (!$has_kino && $this->random->chance( 0.75 * ($force/max(1,$def)) )) {
-                $this->citizen_handler->inflictStatus( $target, $status_terror );
-                $this->log->debug("Citizen <info>{$target->getUser()->getUsername()}</info> now suffers from <info>{$status_terror->getLabel()}</info>");
+            else {
+                $this->entity_manager->persist($this->logTemplates->citizenZombieAttackRepelled( $target, $force, $def));
+                if (!$has_kino && $this->random->chance( 0.75 * ($force/max(1,$def)) )) {
+                    $this->citizen_handler->inflictStatus( $target, $status_terror );
+                    $this->log->debug("Citizen <info>{$target->getUser()->getUsername()}</info> now suffers from <info>{$status_terror->getLabel()}</info>");
+                }
             }
+
             $attacking -= $force;
         }
     }
@@ -277,7 +281,7 @@ class NightlyHandler
         $status_infection = $this->entity_manager->getRepository(CitizenStatus::class)->findOneByName( 'infection' );
         $status_camping   = $this->entity_manager->getRepository(CitizenStatus::class)->findOneByName( 'camper' );
 
-        $status_clear_list = ['hasdrunk','haseaten','immune','hsurvive','drugged','healed','tg_dice','tg_cards','tg_clothes','tg_teddy','tg_guitar','tg_sbook'];
+        $status_clear_list = ['hasdrunk','haseaten','immune','hsurvive','drugged','healed','tg_dice','tg_cards','tg_clothes','tg_teddy','tg_guitar','tg_sbook','tg_steal','tg_home_upgrade'];
         $status_morph_list = [
             'drunk' => $this->entity_manager->getRepository(CitizenStatus::class)->findOneByName( 'hungover' ),
         ];
