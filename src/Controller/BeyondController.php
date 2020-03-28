@@ -518,8 +518,10 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
             return AjaxResponse::error( ErrorHelper::ErrorNoAP );
 
         $this->citizen_handler->setAP( $citizen, true, -1 );
-        if ($generator->chance( 0.1 ))
+        if ($generator->chance( 0.1 )) {
             $zone->setZombies( $zone->getZombies() - 1 );
+            $this->entity_manager->persist( $this->log->zombieKill( $citizen, null, 1 ) );
+        }
 
         try {
             $this->entity_manager->persist( $citizen );

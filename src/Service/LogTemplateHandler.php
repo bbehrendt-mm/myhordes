@@ -647,4 +647,24 @@ class LogTemplateHandler
                 '%item%'     => $this->wrap( $this->iconize( $item ) ),
             ], 'game' ) );
     }
+
+    public function zombieKill( Citizen $citizen, ?Item $item, int $kills ): TownLogEntry {
+        return (new TownLogEntry())
+            ->setType( TownLogEntry::TypeVarious )
+            ->setClass( TownLogEntry::ClassCritical )
+            ->setTown( $citizen->getTown() )
+            ->setDay( $citizen->getTown()->getDay() )
+            ->setZone( $citizen->getZone() )
+            ->setTimestamp( new DateTime('now') )
+            ->setCitizen( $citizen )
+            ->setText( $this->trans->trans(
+                $item
+                    ? '%citizen% hat mit dem Gegenstand %item% %kills% Zombie(s) getötet.'
+                    : '%citizen% hat %kills% Zombies getötet.', [
+                '%citizen%' => $this->wrap( $this->iconize( $citizen ) ),
+                '%item%'    => $item ? $this->wrap( $this->iconize( $item ) ) : '',
+                '%kills%'   => $this->wrap( "{$kills}" ),
+            ], 'game' ) );
+    }
+
 }
