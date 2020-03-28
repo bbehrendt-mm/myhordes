@@ -9,7 +9,11 @@
                         {% if is_granted('ROLE_USER') %}
                             <li class="forum" x-ajax-href="{{ url('forum_list') }}">{{ 'Forum'|trans({},'global') }}</li>
                         {% endif %}
-                        {% block menu_text %}{% endblock %}
+                        {% block menu_text %}
+                            {% if app.user.activeCitizen %}
+                                <li class="forum" x-ajax-href="{{ url('game_landing') }}">{{ 'Zum Spiel'|trans({},'global') }}</li>
+                            {% endif %}
+                        {% endblock %}
                         {% if is_granted('ROLE_USER') %}
                             <li class="soul" x-ajax-href="{{ url('soul_me') }}">{% trans from 'global' %}Deine Seele{% endtrans %}</li>
                         {% endif %}
