@@ -278,6 +278,21 @@ class LogTemplateHandler
             ], 'game' ) );
     }
 
+    public function citizenZombieAttackRepelled( Citizen $citizen, int $def, int $zombies ): TownLogEntry {
+        return (new TownLogEntry())
+            ->setType( TownLogEntry::TypeCitizens )
+            ->setClass( TownLogEntry::ClassCritical )
+            ->setTown( $citizen->getTown() )
+            ->setDay( $citizen->getTown()->getDay() )
+            ->setTimestamp( new DateTime('now') )
+            ->setCitizen( $citizen )
+            ->setText( $this->trans->trans('%zombies% haben vergeblich versucht, in das Haus von %citizen% einzudringen.', [
+                '%citizen%' => $this->wrap( $this->iconize( $citizen ) ),
+                '%zombies%' => $this->wrap( $this->trans->trans( '%num% Zombies', ['%num%' => $zombies], 'game' ) ),
+                '%defense%' => $this->wrap( "{$def}" ),
+            ], 'game' ) );
+    }
+
     public function citizenDeath( Citizen $citizen, int $zombies = 0 ): TownLogEntry {
         switch ($citizen->getCauseOfDeath()->getRef()) {
             case CauseOfDeath::NightlyAttack:
