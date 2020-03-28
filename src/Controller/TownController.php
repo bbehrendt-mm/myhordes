@@ -39,8 +39,7 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
     const ErrorDoorAlreadyClosed = ErrorHelper::BaseTownErrors + 4;
     const ErrorDoorAlreadyOpen   = ErrorHelper::BaseTownErrors + 5;
     const ErrorNotEnoughRes      = ErrorHelper::BaseTownErrors + 6;
-    //const ErrorStealCitizenPresent = ErrorHelper::BaseTownErrors + 7;
-    //const ErrorStealLimitHit       = ErrorHelper::BaseTownErrors + 8;
+    const ErrorAlreadyUpgraded   = ErrorHelper::BaseTownErrors + 7;
 
 
 
@@ -356,6 +355,9 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
 
         if ($ch->isTired( $citizen ) || $citizen->getAp() < $next->getAp()) return AjaxResponse::error( ErrorHelper::ErrorNoAP );
 
+        if ($ch->hasStatusEffect($citizen, 'tg_home_upgrade'))
+            return AjaxResponse::error( self::ErrorAlreadyUpgraded );
+
         if ($next->getRequiredBuilding() && !$th->getBuilding( $town, $next->getRequiredBuilding(), true ))
             return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
 
@@ -367,6 +369,7 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
 
         $home->setPrototype($next);
         $ch->setAP($citizen, true, -$next->getAp());
+        $ch->inflictStatus( $citizen, 'tg_home_upgrade' );
         foreach ($items as $item) {
             $item->getInventory()->removeItem($item);
             $em->remove($item);
@@ -430,6 +433,10 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
         if (!$costs) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
 
         if ($ch->isTired( $citizen ) || $citizen->getAp() < $costs->getAp()) return AjaxResponse::error( ErrorHelper::ErrorNoAP );
+
+        if ($ch->hasStatusEffect($citizen, 'tg_home_upgrade'))
+            return AjaxResponse::error( self::ErrorAlreadyUpgraded );
+
         $items = [];
         if ($costs->getResources()) {
             $items = $ih->fetchSpecificItems( [$home->getChest(),$citizen->getInventory()], $costs->getResources() );
@@ -440,6 +447,7 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
         else $current->setLevel( $current->getLevel()+1 );
 
         $ch->setAP($citizen, true, -$costs->getAp());
+        $ch->inflictStatus( $citizen, 'tg_home_upgrade' );
         foreach ($items as $item) {
             $item->getInventory()->removeItem($item);
             $em->remove($item);
