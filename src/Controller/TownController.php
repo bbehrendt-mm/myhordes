@@ -39,6 +39,9 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
     const ErrorDoorAlreadyClosed = ErrorHelper::BaseTownErrors + 4;
     const ErrorDoorAlreadyOpen   = ErrorHelper::BaseTownErrors + 5;
     const ErrorNotEnoughRes      = ErrorHelper::BaseTownErrors + 6;
+    //const ErrorStealCitizenPresent = ErrorHelper::BaseTownErrors + 7;
+    //const ErrorStealLimitHit       = ErrorHelper::BaseTownErrors + 8;
+
 
 
     protected function addDefaultTwigArgs( ?string $section = null, ?array $data = null ): array {
@@ -209,6 +212,30 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
         }
 
         return AjaxResponse::success();
+    }
+
+    /**
+     * @Route("api/town/visit/{id}/item", name="town_visit_item_controller")
+     * @param int $id
+     * @param JSONRequestParser $parser
+     * @param InventoryHandler $handler
+     * @param EntityManagerInterface $em
+     * @return Response
+     */
+    public function item_visit_api(int $id, JSONRequestParser $parser, InventoryHandler $handler, EntityManagerInterface $em): Response {
+        if ($id === $this->getActiveCitizen()->getId())
+            return AjaxResponse::error(ErrorHelper::ErrorActionNotAvailable );
+
+        $ac = $this->getActiveCitizen();
+
+        /** @var Citizen $c */
+        $c = $em->getRepository(Citizen::class)->find( $id );
+        if (!$c || $c->getTown()->getId() !== $this->getActiveCitizen()->getTown()->getId())
+            return AjaxResponse::error(ErrorHelper::ErrorActionNotAvailable );
+
+        $up_inv   = $ac->getInventory();
+        $down_inv = $c->getHome()->getChest();
+        return $this->generic_item_api( $up_inv, $down_inv, false, $parser, $handler);
     }
 
     /**

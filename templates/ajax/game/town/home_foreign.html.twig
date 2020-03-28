@@ -50,9 +50,16 @@
             {% endif %}
         </div>
         <div class="padded cell rw-6">
+            {% if (citizen.alive) %}
+                {% embed "ajax/game/inventory.html.twig" with {'size': rucksack_size, 'items': rucksack.items} %}
+                    {% block class %}rucksack{% endblock %}
+                    {% block title %}{% trans from 'game' %}Dein Rucksack{% endtrans %}{% endblock %}
+                {% endembed %}
+            {% endif %}
+
             {% embed "ajax/game/inventory.html.twig" with {'size': chest_size, 'items': chest.items} %}
                 {% block class %}chest{% endblock %}
-                {% block title %}{% trans from 'game' %}Truhe{% endtrans %}{% endblock %}
+                {% block title %}{{ '%citizen%s Truhe'|trans({'%citizen%': citizen.user.username}, 'game') }}{% endblock %}
             {% endembed %}
         </div>
     </div>
@@ -75,7 +82,22 @@
 {% block js %}
     {{ parent() }}
     <script>
-        {% embed "scripts/log.js.twig" %}{% endembed %}
+        {% embed "scripts/log.js.twig" %}{% endembed %};
+        {% embed "scripts/inventory.js.twig" %}{% endembed %};
+
+        handleItems(
+            document.querySelectorAll('.rucksack>.item:not(.locked)[x-item-id]'),
+            '{{ path('town_visit_item_controller', {id: citizen.id}) }}',
+            'down', '{{ path('town_visit', {id: citizen.id}) }}',
+            '{{ 'Bist du sicher, dass du hier einbrechen und einen Gegenstand hinterlassen willst?'|trans({},'game') }}'
+        );
+
+        handleItems(
+            document.querySelectorAll('.chest>.item:not(.locked)[x-item-id]'),
+            '{{ path('town_visit_item_controller', {id: citizen.id}) }}',
+            'up', '{{ path('town_visit', {id: citizen.id}) }}',
+            '{{ 'Bist du sicher, dass du hier einbrechen und einen Gegenstand stehlen willst?'|trans({},'game') }}'
+        );
 
         {% if citizen.home.holdsBody %}
             const disposalButtons = document.querySelectorAll('[x-disposal-id]');

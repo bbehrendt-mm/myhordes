@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Citizen;
+use App\Entity\CitizenHomeUpgrade;
+use App\Entity\CitizenHomeUpgradePrototype;
 use App\Entity\ExpeditionRoute;
 use App\Entity\Inventory;
 use App\Entity\Item;
@@ -11,6 +13,7 @@ use App\Entity\ItemGroupEntry;
 use App\Entity\ItemTargetDefinition;
 use App\Entity\Recipe;
 use App\Entity\TownLogEntry;
+use App\Interfaces\RandomGroup;
 use App\Response\AjaxResponse;
 use App\Service\ActionHandler;
 use App\Service\CitizenHandler;
@@ -18,6 +21,7 @@ use App\Service\ErrorHelper;
 use App\Service\InventoryHandler;
 use App\Service\JSONRequestParser;
 use App\Service\LogTemplateHandler;
+use App\Service\RandomGenerator;
 use App\Service\TimeKeeperService;
 use App\Structures\BankItem;
 use DateTime;
@@ -38,10 +42,11 @@ class InventoryAwareController extends AbstractController implements GameInterfa
     protected $translator;
     protected $log;
     protected $time_keeper;
+    protected $random_generator;
 
     public function __construct(
         EntityManagerInterface $em, InventoryHandler $ih, CitizenHandler $ch, ActionHandler $ah,
-        TranslatorInterface $translator, LogTemplateHandler $lt, TimeKeeperService $tk)
+        TranslatorInterface $translator, LogTemplateHandler $lt, TimeKeeperService $tk, RandomGenerator $rd)
     {
         $this->entity_manager = $em;
         $this->inventory_handler = $ih;
@@ -50,6 +55,7 @@ class InventoryAwareController extends AbstractController implements GameInterfa
         $this->translator = $translator;
         $this->log = $lt;
         $this->time_keeper = $tk;
+        $this->random_generator = $rd;
     }
 
     protected function addDefaultTwigArgs( ?string $section = null, ?array $data = null ): array {
@@ -207,6 +213,10 @@ class InventoryAwareController extends AbstractController implements GameInterfa
             if ($inv_source->getZone()) $floor_up = true;
             if ($inv_target->getZone()) $floor_up = false;
 
+            $steal_up = null;
+            if ($inv_source->getHome() && $inv_source->getHome()->getId() !== $citizen->getHome()->getId()) $steal_up = true;
+            if ($inv_target->getHome() && $inv_target->getHome()->getId() !== $citizen->getHome()->getId()) $steal_up = false;
+
             $errors = [];
             foreach ($items as &$current_item)
                 if (($error = $handler->transferItem(
@@ -215,6 +225,27 @@ class InventoryAwareController extends AbstractController implements GameInterfa
                     )) === InventoryHandler::ErrorNone) {
                     if ($bank_up !== null)  $this->entity_manager->persist( $this->log->bankItemLog( $citizen, $current_item, !$bank_up ) );
                     if ($floor_up !== null) $this->entity_manager->persist( $this->log->beyondItemLog( $citizen, $current_item, !$floor_up ) );
+                    if ($steal_up !== null) {
+
+                        $this->citizen_handler->inflictStatus( $citizen, 'tg_steal' );
+                        $victim_home = $steal_up ? $inv_source->getHome() : $inv_target->getHome();
+
+                        if ($this->entity_manager->getRepository(CitizenHomeUpgrade::class)->findOneByPrototype(
+                            $victim_home,
+                            $this->entity_manager->getRepository(CitizenHomeUpgradePrototype::class)->findOneByName( 'alarm' ) ))
+                        {
+                            $this->entity_manager->persist( $this->log->townSteal( $victim_home->getCitizen(), $citizen, $current_item, $steal_up ) );
+                            $this->citizen_handler->inflictStatus( $citizen, 'terror' );
+                            $this->addFlash( 'notice', $this->translator->trans('%victim%s Alarmanlage hat die halbe Stadt aufgeweckt und dich zu Tode erschreckt!', ['%victim%' => $victim_home->getCitizen()->getUser()->getUsername()], 'game') );
+                        } elseif ($this->random_generator->chance(0.5)) {
+                            $this->entity_manager->persist( $this->log->townSteal( $victim_home->getCitizen(), $citizen, $current_item, $steal_up ) );
+                            $this->addFlash( 'notice', $this->translator->trans('Mist, dein Einbruch bei %victim% ist aufgeflogen...', ['%victim%' => $victim_home->getCitizen()->getUser()->getUsername()], 'game') );
+                        } else {
+                            $this->entity_manager->persist( $this->log->townSteal( $victim_home->getCitizen(), null, $current_item, $steal_up ) );
+                            $this->addFlash( 'notice', $this->translator->trans('Sehr gut, niemand hat dich bei deinem Einbruch bei %victim% beobachtet.', ['%victim%' => $victim_home->getCitizen()->getUser()->getUsername()], 'game') );
+                        }
+
+                    }
                     if ($current_item->getInventory())
                         $this->entity_manager->persist($current_item);
                     else $this->entity_manager->remove($current_item);
