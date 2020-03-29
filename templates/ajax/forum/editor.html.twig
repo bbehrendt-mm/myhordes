@@ -1,4 +1,12 @@
 <div class="forum-editor">
+    <div class="forum-editor-header">
+        {% if tid is null %}
+            <i>{{ 'Neuer Thread'|trans({},'global') }}</i>
+        {% else %}
+            <i>{{ 'Neuer Post'|trans({},'global') }}</i>
+        {% endif %}
+        <b>{{ app.user.username }}</b>
+    </div>
     {% if tid is null %}
         <div class="row">
             <div class="cell rw-4 padded">
@@ -12,7 +20,18 @@
     <div class="row">
         <div class="padded cell rw-12">
             <label for="forum-editor-text">{{ 'Deine Nachricht'|trans({},'global') }}</label>
-            <textarea id="forum-editor-text"></textarea>
+            <div style="margin-bottom: 5px;">
+                <div x-forum-action="edit" x-text-control-node="bold" class="forum-button"><i class="fa fa-bold"></i></div>
+                <div x-forum-action="edit" x-text-control-node="italic" class="forum-button"><i class="fa fa-italic"></i></div>
+                <div x-forum-action="edit" x-text-control-node="underline" class="forum-button"><i class="fa fa-underline"></i></div>
+                <div x-forum-action="edit" x-text-control-node="strikeThrough" class="forum-button"><i class="fa fa-strikethrough"></i></div>
+                <div x-forum-action="edit" x-text-control-node="indent" class="forum-button"><i class="fa fa-indent"></i></div>
+                <div x-forum-action="edit" x-text-control-node="outdent" class="forum-button"><i class="fa fa-outdent"></i></div>
+                <div x-forum-action="edit" x-text-control-node="insertUnorderedList" class="forum-button"><i class="fa fa-list"></i></div>
+                <div x-forum-action="edit" x-text-control-node="insertOrderedList" class="forum-button"><i class="fa fa-list-ol"></i></div>
+                <div x-forum-action="edit" x-text-control-node="insertHorizontalRule" class="forum-button"><i class="fa fa-grip-lines"></i></div>
+            </div>
+            <div contentEditable="true" id="forum-editor-text"></div>
         </div>
     </div>
     <div class="row">
@@ -24,6 +43,78 @@
 </div>
 <script>
     (function() {
+
+        const allowed_nodes  = [ 'br', 'b', 'strong', 'i', 'u', 'strike', 'div', 'blockquote', 'hr', 'ul', 'ol', 'li', 'style' ];
+        const collapse_nodes = [ 'b', 'strong', 'i', 'u', 'strike' ];
+
+        let clean_up = function( node, skip_first ) {
+            if (!node) return;
+            let styles = [];
+            let current_node = node;
+            do {
+                let original_node = current_node;
+
+                if (!skip_first) {
+                    if (current_node.nodeType === Node.ELEMENT_NODE)
+                        while(original_node.attributes.length > 0) original_node.removeAttribute(original_node.attributes[0].name);
+
+                    if (current_node.nodeType === Node.ELEMENT_NODE && current_node.nodeName.toLowerCase() === 'style') styles.push( current_node );
+                    if (current_node.nodeType === Node.ELEMENT_NODE && current_node.nodeName.toLowerCase() === 'p') {
+                        let div = document.createElement('div');
+                        current_node.after( div );
+                        while (current_node.firstChild) div.appendChild(current_node.firstChild);
+                    }
+
+                    while (current_node.nodeType === Node.ELEMENT_NODE && current_node.nextSibling && collapse_nodes.indexOf(current_node.nodeName.toLowerCase()) >= 0 && current_node.nextSibling.nodeName === current_node.nodeName) {
+                        let sib = current_node.nextSibling;
+                        while (sib.firstChild) current_node.append( sib.firstChild );
+                        sib.remove();
+                    }
+                }
+
+
+                if (current_node.hasChildNodes())
+                    current_node = current_node.firstChild;
+                else {
+                    if (current_node === node) current_node = null;
+                    while (current_node && !current_node.nextSibling) current_node = current_node.parentNode;
+                    if (current_node) current_node = current_node === node ? null : current_node.nextSibling;
+                }
+
+                if (!skip_first) {
+                    if (original_node.nodeType === Node.ELEMENT_NODE && allowed_nodes.indexOf(original_node.nodeName.toLowerCase()) < 0) {
+                        while (original_node.firstChild) original_node.before(original_node.firstChild);
+                        original_node.remove();
+                    }
+                }
+
+                skip_first = false;
+
+            } while (current_node);
+            for (let i = 0; i < styles.length; i++) styles[i].remove();
+        }
+
+        const observer = new MutationObserver( function(list,observer) {
+            observer.disconnect();
+            clean_up( document.getElementById('forum-editor-text'), true );
+            observer.observe( document.getElementById('forum-editor-text'), { childList: true, subtree: true } );
+        });
+        observer.observe( document.getElementById('forum-editor-text'), { childList: true, subtree: true } );
+
+        let text_buttons = document.querySelectorAll('[x-forum-action=edit][x-text-control-node]');
+        for (let i = 0; i < text_buttons.length; i++) {
+            text_buttons[i].addEventListener('mousedown', function(e) {
+                e.preventDefault();
+                const parent = document.getElementById('forum-editor-text');
+                if (document.activeElement !== parent) return;
+                const node_type = text_buttons[i].getAttribute('x-text-control-node');
+
+                document.execCommand("styleWithCSS", null, "false");
+                document.execCommand( node_type, false, null );
+
+            });
+        }
+
         let send_buttons = document.querySelectorAll('[x-forum-action=send]');
         for (let i = 0; i < send_buttons.length; i++) {
             send_buttons[i].addEventListener('click', function() {
@@ -32,12 +123,12 @@
                     target_url = '{{ path('forum_new_thread_controller', {id: fid}) }}';
                     target_payload = {
                         title: document.getElementById('forum-editor-title').value,
-                        text: document.getElementById('forum-editor-text').value,
+                        text: document.getElementById('forum-editor-text').innerHTML,
                     };
                 {% else %}
                     target_url = '{{ path('forum_new_post_controller', {fid: fid, tid: tid}) }}';
                     target_payload = {
-                        text: document.getElementById('forum-editor-text').value,
+                        text: document.getElementById('forum-editor-text').innerHTML,
                     };
                 {% endif %}
                 $.ajax.easySend( target_url, target_payload,

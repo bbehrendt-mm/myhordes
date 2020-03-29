@@ -5,11 +5,12 @@
         <div class="cell rw-12">
 
             <div class="row">
-                <div class="cell padded rw-4">
+                <div class="cell padded rw-4 rw-md-12">
                     <div class="forum-control">
                         <b><i class="fa fa-scroll"></i> {{ forum.title }}</b>
                         <div class="forum-button-bar">
                             <div x-ajax-href="{{ url('forum_list') }}" class="forum-button">{{ 'Zurück'|trans({},'global') }}</div>
+                            <div x-ajax-href="{{ url('forum_view', {id: forum.id}) }}" class="forum-button"><i class="fa fa-sync-alt"></i></div>
                             <div x-forum-action="new" class="forum-button">{{ 'Neues Thema'|trans({},'global') }}</div>
                         </div>
                     </div>
@@ -48,7 +49,7 @@
                     </div>
                 </div>
 
-                <div class="cell padded rw-8">
+                <div class="cell padded rw-8 rw-md-12">
 
                     <div id="forum-content">
 

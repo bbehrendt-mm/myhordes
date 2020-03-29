@@ -36,13 +36,27 @@
     &:after {display: block; height: 0;}
   }
   &>.forum-post-content {
-    padding: 25px;
+    padding: 25px; max-height: 750px; overflow: auto;
   }
 }
 
 .forum-editor {
   background: #8a5432; box-shadow: 0 0 5px rgba(0,0,0,0.2);  padding: 0 0 5px;
   border: 1px solid #704328; margin: 10px 0;
+
+  &>.forum-editor-header {
+    display: block; background: #804d2f; padding: 4px;
+    &>b { padding: 5px; }
+    &>i { float: right; font-size: 0.8em; }
+  }
+
+  div[contentEditable="true"] {
+    height: 250px; border: 1px solid #704328; padding: 5px 25px; overflow: auto; outline: 0 solid transparent;
+  }
+}
+
+.forum-post >.forum-post-content, .forum-editor div[contentEditable="true"] {
+  hr { border-color: @myhordes-smalltext }
 }
 
 .forum-button-bar { margin: 5px 0; padding: 0 5px; }
