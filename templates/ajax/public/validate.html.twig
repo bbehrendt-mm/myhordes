@@ -23,7 +23,7 @@
             </form>
             <p class="right small">
                 {% if is_granted('ROLE_REGISTERED') %}
-                    <a href="" x-ajax-href="{{ path('auto_logout') }}">{% trans from 'login' %}Ausloggen{% endtrans %}</a><br />
+                    <a target="_self" href="{{ path('auto_logout') }}">{% trans from 'login' %}Ausloggen{% endtrans %}</a><br />
                 {% else %}
                     {% trans from 'login' %}Du hast noch keinen Account?{% endtrans %}
                     <a href="" x-ajax-href="{{ path('public_register') }}">{% trans from 'login' %}Registrieren!{% endtrans %}</a><br />

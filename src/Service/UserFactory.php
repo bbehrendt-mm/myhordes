@@ -69,6 +69,17 @@ class UserFactory
             $new_validation = new UserPendingValidation();
             $new_validation->setPkey( $key );
             $new_user->setPendingValidation( $new_validation );
+
+            mail(
+                $email,
+                'MyHordes - Account Validation',
+                "Your validation code is <b>$key</b>. Thank you for playing MyHordes!",
+                [
+                    'MIME-Version' => '1.0',
+                    'Content-type' => 'text/html; charset=UTF-8',
+                    'From' => 'The Undead Mailman <mailzombie@' . $_SERVER['SERVER_NAME'] . '>'
+                ]
+            );
         }
 
         return $new_user;
