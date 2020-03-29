@@ -142,7 +142,7 @@ class ForumController extends AbstractController
 
     private function preparePost(User $user, Forum $forum, Thread $thread, Post &$post, int &$tx_len): bool {
         $dom = new DOMDocument();
-        $dom->loadHTML( nl2br($post->getText()) );
+        $dom->loadHTML( '<?xml encoding="utf-8" ?>' . nl2br($post->getText()) );
         $body = $dom->getElementsByTagName('body');
         if (!$body || $body->length > 1) return false;
 
@@ -159,7 +159,7 @@ class ForumController extends AbstractController
 
             foreach ( $forum->getTown()->getCitizens() as $citizen )
                 if ($citizen->getUser()->getId() === $user->getId()) {
-                    if ($citizen->getZone()) $note = "[{$citizen->getZone()->getX()}/{$citizen->getZone()->getY()}]";
+                    if ($citizen->getZone()) $post->setNote("[{$citizen->getZone()->getX()}/{$citizen->getZone()->getY()}]");
                     else $post->setNote("[{$citizen->getTown()->getName()}]");
                 }
         }
