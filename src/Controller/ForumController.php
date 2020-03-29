@@ -108,7 +108,7 @@ class ForumController extends AbstractController
         ] );
     }
 
-    private const HTML_ALLOWED_NODES   = [ 'br', 'b', 'strong', 'i', 'u', 'strike', 'div', 'blockquote', 'hr', 'ul', 'ol', 'li' ];
+    private const HTML_ALLOWED_NODES   = [ 'br', 'b', 'strong', 'i', 'u', 'strike', 'div', 'blockquote', 'hr', 'ul', 'ol', 'li', 'p' ];
     private const HTML_ALLOWED_ATTRIBS = [ ];
 
     private function htmlValidator( DOMNode $node, int &$text_length, int $depth = 0 ): bool {
@@ -142,7 +142,7 @@ class ForumController extends AbstractController
 
     private function preparePost(User $user, Forum $forum, Thread $thread, Post &$post, int &$tx_len): bool {
         $dom = new DOMDocument();
-        $dom->loadHTML( '<?xml encoding="utf-8" ?>' . nl2br($post->getText()) );
+        $dom->loadHTML( '<?xml encoding="utf-8" ?>' .nl2br($post->getText()) );
         $body = $dom->getElementsByTagName('body');
         if (!$body || $body->length > 1) return false;
 
