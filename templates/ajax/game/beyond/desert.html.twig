@@ -39,7 +39,7 @@
                     </span>
                     {% if zone_escape <= 0 and not active_scout_mode %}
                         <div class="row">
-                            <div class="padded-small cell rw-6"><button><img alt="" src="{{ asset('build/images/attacked.gif') }}" />{% trans from 'game' %}Hilfe rufen!{% endtrans %}</button></div>
+                            <div class="padded-small cell rw-6"><button x-ajax-href="{{ url('forum_town_redirect') }}"><img alt="" src="{{ asset('build/images/attacked.gif') }}" />{% trans from 'game' %}Hilfe rufen!{% endtrans %}</button></div>
                             <div {% if not can_escape %}disabled{% endif %} class="padded-small cell rw-6"><button id="escape-btn"><img alt="" src="{{ asset('build/images/death.gif') }}" />{% trans from 'game' %}Die Flucht wagen!{% endtrans %}</button></div>
                         </div>
                         <div class="row">

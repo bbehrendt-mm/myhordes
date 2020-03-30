@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Citizen;
 use App\Entity\Forum;
 use App\Entity\Post;
 use App\Entity\Thread;
@@ -70,6 +71,23 @@ class ForumController extends AbstractController
             'pages' => $pages,
             'current_page' => $page
         ] );
+    }
+
+    /**
+     * @Route("jx/forum/town", name="forum_town_redirect")
+     * @param EntityManagerInterface $em
+     * @return Response
+     */
+    public function forum_redirector(EntityManagerInterface $em): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        /** @var Citizen $citizen */
+        $citizen = $em->getRepository(Citizen::class)->findActiveByUser( $user );
+
+        if ($citizen->getAlive() && $citizen->getTown()->getForum())
+            return $this->redirect($this->generateUrl('forum_view', ['id' => $citizen->getTown()->getForum()->getId()]));
+        else return $this->redirect( $this->generateUrl( 'forum_list' ) );
     }
 
     /**
