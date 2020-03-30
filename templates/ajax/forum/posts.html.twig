@@ -21,7 +21,7 @@
                 <b>{{ post.owner.username }}</b>
                 {% if post.note is not null %}<br /><span>{{ post.note }}</span>{% endif %}
             </div>
-            <div class="forum-post-content">{{ post.text }}</div>
+            <div class="forum-post-content">{{ post.text|raw }}</div>
         </div>
     {% endfor %}
 </div>

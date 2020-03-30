@@ -15,6 +15,7 @@ use App\Response\AjaxResponse;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use DOMDocument;
+use DOMNode;
 use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -107,7 +108,53 @@ class ForumController extends AbstractController
         ] );
     }
 
-    private function preparePost(User $user, Forum $forum, Thread $thread, Post &$post): bool {
+    private const HTML_ALLOWED_NODES   = [ 'br', 'b', 'strong', 'i', 'u', 'strike', 'div', 'blockquote', 'hr', 'ul', 'ol', 'li', 'p' ];
+    private const HTML_ALLOWED_ATTRIBS = [ ];
+
+    private function htmlValidator( DOMNode $node, int &$text_length, int $depth = 0 ): bool {
+        if ($depth > 32) return false;
+        if ($node->nodeType === XML_ELEMENT_NODE) {
+
+            if (!in_array($node->nodeName, self::HTML_ALLOWED_NODES) && !($depth === 0 && $node->nodeName === 'body')) {
+                $node->parentNode->removeChild( $node );
+                return true;
+            }
+
+            $remove_attribs = [];
+            for ($i = 0; $i < $node->attributes->length; $i++)
+                if (!in_array($node->attributes->item($i)->nodeName, self::HTML_ALLOWED_ATTRIBS))
+                    $remove_attribs[] = $node->attributes->item($i)->nodeName;
+            foreach ($remove_attribs as $attrib)
+                $node->removeAttribute($attrib);
+
+            foreach ( $node->childNodes as $child )
+                if (!$this->htmlValidator( $child, $text_length, $depth+1 ))
+                    return false;
+
+            return true;
+
+        } elseif ($node->nodeType === XML_TEXT_NODE) {
+            $text_length += mb_strlen($node->textContent);
+            return true;
+        }
+        else return false;
+    }
+
+    private function preparePost(User $user, Forum $forum, Thread $thread, Post &$post, int &$tx_len): bool {
+        $dom = new DOMDocument();
+        $dom->loadHTML( '<?xml encoding="utf-8" ?>' .nl2br($post->getText()) );
+        $body = $dom->getElementsByTagName('body');
+        if (!$body || $body->length > 1) return false;
+
+        if (!$this->htmlValidator($body->item(0),$tx_len))
+            return false;
+
+        $tmp_str = "";
+        foreach ($body->item(0)->childNodes as $child)
+            $tmp_str .= $dom->saveHTML($child);
+
+        $post->setText( $tmp_str );
+
         if ($forum->getTown()) {
 
             foreach ( $forum->getTown()->getCitizens() as $citizen )
@@ -152,10 +199,10 @@ class ForumController extends AbstractController
             ->setOwner( $user )
             ->setText( $text )
             ->setDate( new DateTime('now') );
-        if (!$this->preparePost($user,$forum,$thread,$post))
-            return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
-
-
+        $tx_len = 0;
+        if (!$this->preparePost($user,$forum,$thread,$post,$tx_len))
+            return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
+        if ($tx_len < 10) return AjaxResponse::error( self::ErrorPostTextLength );
         $thread->addPost($post)->setLastPost( $post->getDate() );
         $forum->addThread($thread);
 
@@ -203,8 +250,10 @@ class ForumController extends AbstractController
             ->setOwner( $user )
             ->setText( $text )
             ->setDate( new DateTime('now') );
-        if (!$this->preparePost($user,$forum,$thread,$post))
-            return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
+        $tx_len = 0;
+        if (!$this->preparePost($user,$forum,$thread,$post,$tx_len))
+            return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
+        if ($tx_len < 10) return AjaxResponse::error( self::ErrorPostTextLength );
         $thread->addPost($post)->setLastPost( $post->getDate() );
 
         try {
