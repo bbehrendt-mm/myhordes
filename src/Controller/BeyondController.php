@@ -131,6 +131,7 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
             'scout_sense' => $scout_sense,
             'actions' => $this->getItemActions(),
             'recipes' => $this->getItemCombinations(false),
+            'km' => round(sqrt( pow($zone->getX(),2) + pow($zone->getY(),2) )),
         ], $data, $this->get_map_blob()) );
     }
 
