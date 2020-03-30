@@ -223,7 +223,9 @@ class ZoneHandler
             foreach ($this->entity_manager->getRepository(EscapeTimer::class)->findAllByZone($zone) as $et)
                 $this->entity_manager->remove( $et );
             foreach ($this->entity_manager->getRepository(TownLogEntry::class)->findByFilter( $zone->getTown(), null, null, $zone, null, null ) as $entry)
-                $this->entity_manager->remove( $entry );
+                /** @var TownLogEntry $entry */
+                if ($entry->getClass() !== TownLogEntry::ClassCritical)
+                    $this->entity_manager->remove( $entry );
         }
         // If zombies can take control after leaving the zone and there are citizens remaining, install a grace escape timer
         elseif ( $cp_ok_before && !$this->check_cp( $zone ) )

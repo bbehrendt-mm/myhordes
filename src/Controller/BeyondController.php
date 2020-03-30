@@ -66,6 +66,7 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
     const ErrorAlreadyWounded       = ErrorHelper::BaseBeyondErrors + 5;
     const ErrorNotDiggable          = ErrorHelper::BaseBeyondErrors + 6;
     const ErrorDoorClosed           = ErrorHelper::BaseBeyondErrors + 7;
+    const ErrorChatMessageInvalid   = ErrorHelper::BaseBeyondErrors + 8;
 
     protected $game_factory;
     protected $zone_handler;
@@ -216,6 +217,27 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
             return $this->renderLog((int)$parser->get('day', -1), null, null, null, 0);
         return $this->renderLog((int)$parser->get('day', -1), null, $zone, null, null);
     }
+
+    /**
+     * @Route("api/beyond/desert/chat", name="beyond_desert_chat_controller")
+     * @param JSONRequestParser $parser
+     * @return Response
+     */
+    public function chat_desert_api(JSONRequestParser $parser): Response {
+        $message = $parser->get('msg', null);
+        if (!$message || mb_strlen($message) < 2 || mb_strlen($message) > 256 )
+            return AjaxResponse::error(self::ErrorChatMessageInvalid);
+
+        try {
+            $this->entity_manager->persist( $this->log->beyondChat( $this->getActiveCitizen(), $message ) );
+            $this->entity_manager->flush(  );
+        } catch (Exception $e) {
+            return AjaxResponse::error( ErrorHelper::ErrorDatabaseException );
+        }
+
+        return AjaxResponse::success();
+    }
+
 
     /**
      * @Route("api/beyond/desert/hero_exit", name="beyond_desert_hero_exit_controller")
@@ -650,6 +672,7 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
 
         $this->citizen_handler->setAP($citizen, true, -1);
         $zone->setBuryCount( $zone->getBuryCount() - 1 );
+        $this->entity_manager->persist( $this->log->outsideUncover( $citizen ) );
 
         try {
             $this->entity_manager->persist($zone);

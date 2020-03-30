@@ -450,8 +450,11 @@ class ActionHandler
                             }
                         }
 
-                if ($zoneEffect->getUncoverRuin())
+                if ($zoneEffect->getUncoverRuin()) {
                     $base_zone->setBuryCount( max(0, $base_zone->getBuryCount() - mt_rand(2,3)) );
+                    if ($base_zone->getPrototype())
+                        $this->entity_manager->persist( $this->log->outsideUncover( $citizen ) );
+                }
 
                 if ($zoneEffect->getEscape() !== null && $zoneEffect->getEscape() > 0)
                     $base_zone->addEscapeTimer( (new EscapeTimer())->setTime( new DateTime("+{$zoneEffect->getEscape()}sec") ) );

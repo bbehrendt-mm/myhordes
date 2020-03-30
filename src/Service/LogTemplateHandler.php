@@ -293,7 +293,7 @@ class LogTemplateHandler
             ], 'game' ) );
     }
 
-    public function citizenDeath( Citizen $citizen, int $zombies = 0 ): TownLogEntry {
+    public function citizenDeath( Citizen $citizen, int $zombies = 0, ?Zone $zone = null ): TownLogEntry {
         switch ($citizen->getCauseOfDeath()->getRef()) {
             case CauseOfDeath::NightlyAttack:
                 $str = '%citizen% wurde von %zombies% zerfleischt!';
@@ -320,6 +320,7 @@ class LogTemplateHandler
             ->setDay( $citizen->getTown()->getDay() )
             ->setTimestamp( new DateTime('now') )
             ->setCitizen( $citizen )
+            ->setZone( $zone )
             ->setText( $this->trans->trans($str, [
                 '%citizen%' => $this->wrap( $this->iconize( $citizen ) ),
                 '%zombies%' => $this->wrap( $this->trans->trans( '%num% Zombies', ['%num%' => $zombies], 'game' ) ),
@@ -414,6 +415,23 @@ class LogTemplateHandler
             ->setText( $this->trans->trans($str, [
                 '%citizen%' => $this->wrap( $this->iconize( $citizen ) ),
                 '%item%' => $item ? $this->wrap( $this->iconize( $item ) ) : ''
+            ], 'game' ) );
+    }
+
+    public function outsideUncover( Citizen $citizen ): TownLogEntry {
+        $str = ($citizen->getZone()->getBuryCount() > 0) ? '%citizen% hat etwas Schutt entfernt.' : '%citizen% hat diese Ruine freigelegt. Es handelt sich um %type%. Hurra!';
+
+        return (new TownLogEntry())
+            ->setType( TownLogEntry::TypeVarious )
+            ->setClass( ($citizen->getZone()->getBuryCount() === 0) ? TownLogEntry::ClassCritical : TownLogEntry::ClassInfo )
+            ->setTown( $citizen->getTown() )
+            ->setDay( $citizen->getTown()->getDay() )
+            ->setTimestamp( $time ?? new DateTime('now') )
+            ->setCitizen( $citizen )
+            ->setZone( $citizen->getZone() )
+            ->setText( $this->trans->trans($str, [
+                '%citizen%' => $this->wrap( $this->iconize( $citizen ) ),
+                '%type%'    => ($citizen->getZone()->getBuryCount() > 0) ? '' : $this->wrap( $this->trans->trans( $citizen->getZone()->getPrototype()->getLabel(), [], 'game' ) )
             ], 'game' ) );
     }
 
@@ -680,6 +698,18 @@ class LogTemplateHandler
                 '%item%'    => $item ? $this->wrap( $this->iconize( $item ) ) : '',
                 '%kills%'   => $this->wrap( "{$kills}" ),
             ], 'game' ) );
+    }
+
+    public function beyondChat( Citizen $sender, string $message ): TownLogEntry {
+        return (new TownLogEntry())
+            ->setType( TownLogEntry::TypeChat )
+            ->setClass( TownLogEntry::ClassChat )
+            ->setTown( $sender->getTown() )
+            ->setDay( $sender->getTown()->getDay() )
+            ->setZone( $sender->getZone() )
+            ->setTimestamp( new DateTime('now') )
+            ->setCitizen( $sender )
+            ->setText( $this->wrap( $this->iconize( $sender ) ) . ': ' . $message );
     }
 
 }
