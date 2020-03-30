@@ -278,22 +278,22 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
 
         'actions' => [
             'water_tl0'  => [ 'label' => 'Trinken', 'cover' => true, 'poison' => ItemAction::PoisonHandlerConsume, 'meta' => [ 'no_full_ap', 'drink_cross', 'drink_tl0a', 'drink_tl0b' ], 'result' => [ 'drink_ap_1', 'drink_ap_2',  'consume_item' ] ],
-            'water_tl1a' => [ 'label' => 'Trinken', 'cover' => true, 'poison' => ItemAction::PoisonHandlerConsume, 'meta' => [ 'no_full_ap', 'drink_hide',  'drink_tl1'                ], 'result' => [ 'drink_ap_1', 'drink_ap_2',  'consume_item' ] ],
+            'water_tl1a' => [ 'label' => 'Trinken', 'cover' => true, 'poison' => ItemAction::PoisonHandlerConsume, 'meta' => [               'drink_hide',  'drink_tl1'                ], 'result' => [ 'drink_ap_1', 'drink_ap_2',  'consume_item' ] ],
             'water_tl1b' => [ 'label' => 'Trinken', 'cover' => true, 'poison' => ItemAction::PoisonHandlerConsume, 'meta' => [               'drink_rhide', 'drink_tl1'                ], 'result' => [               'drink_ap_2',  'consume_item' ] ],
             'water_tl2'  => [ 'label' => 'Trinken', 'cover' => true, 'poison' => ItemAction::PoisonHandlerConsume, 'meta' => [                              'drink_tl2'                ], 'result' => [               'drink_no_ap', 'consume_item' ] ],
 
             'watercan3_tl0'  => [ 'label' => 'Trinken', 'cover' => true, 'poison' => ItemAction::PoisonHandlerConsume, 'meta' => [ 'no_full_ap', 'drink_cross', 'drink_tl0a', 'drink_tl0b' ], 'result' => [ 'drink_ap_1', 'drink_ap_2',  'produce_watercan2' ] ],
-            'watercan3_tl1a' => [ 'label' => 'Trinken', 'cover' => true, 'poison' => ItemAction::PoisonHandlerConsume, 'meta' => [ 'no_full_ap', 'drink_hide',  'drink_tl1'                ], 'result' => [ 'drink_ap_1', 'drink_ap_2',  'produce_watercan2' ] ],
+            'watercan3_tl1a' => [ 'label' => 'Trinken', 'cover' => true, 'poison' => ItemAction::PoisonHandlerConsume, 'meta' => [               'drink_hide',  'drink_tl1'                ], 'result' => [ 'drink_ap_1', 'drink_ap_2',  'produce_watercan2' ] ],
             'watercan3_tl1b' => [ 'label' => 'Trinken', 'cover' => true, 'poison' => ItemAction::PoisonHandlerConsume, 'meta' => [               'drink_rhide', 'drink_tl1'                ], 'result' => [               'drink_ap_2',  'produce_watercan2' ] ],
             'watercan3_tl2'  => [ 'label' => 'Trinken', 'cover' => true, 'poison' => ItemAction::PoisonHandlerConsume, 'meta' => [                              'drink_tl2'                ], 'result' => [               'drink_no_ap', 'produce_watercan2' ] ],
 
             'watercan2_tl0'  => [ 'label' => 'Trinken', 'cover' => true, 'poison' => ItemAction::PoisonHandlerConsume, 'meta' => [ 'no_full_ap', 'drink_cross', 'drink_tl0a', 'drink_tl0b' ], 'result' => [ 'drink_ap_1', 'drink_ap_2',  'produce_watercan1' ] ],
-            'watercan2_tl1a' => [ 'label' => 'Trinken', 'cover' => true, 'poison' => ItemAction::PoisonHandlerConsume, 'meta' => [ 'no_full_ap', 'drink_hide',  'drink_tl1'                ], 'result' => [ 'drink_ap_1', 'drink_ap_2',  'produce_watercan1' ] ],
+            'watercan2_tl1a' => [ 'label' => 'Trinken', 'cover' => true, 'poison' => ItemAction::PoisonHandlerConsume, 'meta' => [               'drink_hide',  'drink_tl1'                ], 'result' => [ 'drink_ap_1', 'drink_ap_2',  'produce_watercan1' ] ],
             'watercan2_tl1b' => [ 'label' => 'Trinken', 'cover' => true, 'poison' => ItemAction::PoisonHandlerConsume, 'meta' => [               'drink_rhide', 'drink_tl1'                ], 'result' => [               'drink_ap_2',  'produce_watercan1' ] ],
             'watercan2_tl2'  => [ 'label' => 'Trinken', 'cover' => true, 'poison' => ItemAction::PoisonHandlerConsume, 'meta' => [                              'drink_tl2'                ], 'result' => [               'drink_no_ap', 'produce_watercan1' ] ],
 
             'watercan1_tl0'  => [ 'label' => 'Trinken', 'cover' => true, 'poison' => ItemAction::PoisonHandlerConsume, 'meta' => [ 'no_full_ap', 'drink_cross', 'drink_tl0a', 'drink_tl0b' ], 'result' => [ 'drink_ap_1', 'drink_ap_2',  'produce_watercan0' ] ],
-            'watercan1_tl1a' => [ 'label' => 'Trinken', 'cover' => true, 'poison' => ItemAction::PoisonHandlerConsume, 'meta' => [ 'no_full_ap', 'drink_hide',  'drink_tl1'                ], 'result' => [ 'drink_ap_1', 'drink_ap_2',  'produce_watercan0' ] ],
+            'watercan1_tl1a' => [ 'label' => 'Trinken', 'cover' => true, 'poison' => ItemAction::PoisonHandlerConsume, 'meta' => [               'drink_hide',  'drink_tl1'                ], 'result' => [ 'drink_ap_1', 'drink_ap_2',  'produce_watercan0' ] ],
             'watercan1_tl1b' => [ 'label' => 'Trinken', 'cover' => true, 'poison' => ItemAction::PoisonHandlerConsume, 'meta' => [               'drink_rhide', 'drink_tl1'                ], 'result' => [               'drink_ap_2',  'produce_watercan0' ] ],
             'watercan1_tl2'  => [ 'label' => 'Trinken', 'cover' => true, 'poison' => ItemAction::PoisonHandlerConsume, 'meta' => [                              'drink_tl2'                ], 'result' => [               'drink_no_ap', 'produce_watercan0' ] ],
 
