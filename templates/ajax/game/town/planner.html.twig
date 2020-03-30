@@ -13,6 +13,7 @@
             <div id="create_route_control">
                 <button id="create_route_1">{{ 'Neue einfache Route'|trans({},'game') }}</button>
                 <button {% if not allow_extended %}disabled{% endif %} id="create_route_2">{{ 'Neue komplexe Route'|trans({},'game') }}</button>
+                <button x-ajax-href="{{ path('town_door') }}">{{ 'Schließen'|trans({},'global') }}</button>
             </div>
             <div id="route_dashboard" style="display: none">
                 <div class="row">

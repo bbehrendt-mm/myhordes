@@ -227,7 +227,7 @@ for (let i = 0; i < scroll_areas.length; i++) {
                 let current_level = parseFloat(scroll_area.getAttribute('x-current-scroll-level'));
                 if (minus_button)  minus_button.removeAttribute('disabled');
                 if (center_button) center_button.removeAttribute('disabled');
-                if (current_level <= 0) current_level = 1;
+                if (current_level <= 0 && parseFloat(scroll_area.getAttribute('x-default-size')) > map_area.clientWidth) current_level = 1;
                 else {
                     plus_button.setAttribute('disabled','');
                     current_level = 1.5;
@@ -239,7 +239,7 @@ for (let i = 0; i < scroll_areas.length; i++) {
             minus_button.addEventListener('click', function() {
                 let current_level = parseFloat(scroll_area.getAttribute('x-current-scroll-level'));
                 if (plus_button) plus_button.removeAttribute('disabled');
-                if (current_level > 1) current_level = 1;
+                if (current_level > 1 && parseFloat(scroll_area.getAttribute('x-default-size')) > map_area.clientWidth) current_level = 1;
                 else {
                     minus_button.setAttribute('disabled','');
                     if (center_button) center_button.setAttribute('disabled','');
