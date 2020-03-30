@@ -1,5 +1,7 @@
 {# @var posts \App\Entity\Post[] #}
 
+{% set today = date() %}
+{% set yesterday = date('-1days') %}
 {% block pagenav %}
     {% if pages > 1 %}
         <div class="row">
@@ -17,7 +19,15 @@
     {% for post in posts %}
         <div class="forum-post">
             <div class="forum-post-header">
-                <i>{{ post.date.format('D, d.m.Y G:i') }}</i>
+                <i>
+                    {% if post.date.format('Ymd') = today|date("Ymd") %}
+                        {{ 'Heute um'|trans({},'global') }}{{ post.date.format(' G:i') }}
+                    {% elseif post.date.format('Ymd') = yesterday|date("Ymd") %}
+                        {{ 'Gestern um'|trans({},'global') }}{{ post.date.format(' G:i') }}
+                    {% else %}
+                        {{ post.date.format('D, d.m.Y G:i') }}
+                    {% endif %}
+                </i>
                 <b>{{ post.owner.username }}</b>
                 {% if post.note is not null %}<br /><span>{{ post.note }}</span>{% endif %}
             </div>
