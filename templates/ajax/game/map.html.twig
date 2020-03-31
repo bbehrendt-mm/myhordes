@@ -48,6 +48,9 @@
                                 {% if zones[x][y].zombieStatus == constant('App\\Entity\\Zone::ZombieStateExact') %}
                                     <div class="count">{% if zones[x][y].zombies > 0 %}{{ zones[x][y].zombies }}{% endif %}</div>
                                 {% endif %}
+                                {% if zones[x][y].citizens|length != 0 %}
+                                    <div class="citizen_marker"></div>
+                                {% endif %}
                                 {% if x != pos_x or y != pos_y %}
                                     <div class="tooltip tooltip-map">
                                         {% if zones[x][y].discoveryStatus > constant('App\\Entity\\Zone::DiscoveryStateNone') and zones[x][y].prototype %}
@@ -70,6 +73,13 @@
                                             <div class="cell rw-6 left">{{ 'Entfernung'|trans({},'game') }}</div>
                                             <div class="cell rw-6 right"><div class="ap">{{ (x - pos_x)|abs + (y - pos_y)|abs }}</div></div>
                                         </div>
+                                        {% if zones[x][y].citizens|length != 0 %}
+                                            {% for resident in zones[x][y].citizens %}
+                                                <div class="row">
+                                                    <div class="cell ro-6 rw-6 right">{{ resident.user.username }}</div>
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
                                     </div>
                                 {% endif %}
 

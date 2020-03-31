@@ -39,7 +39,7 @@
                     </span>
                     {% if zone_escape <= 0 and not active_scout_mode %}
                         <div class="row">
-                            <div class="padded-small cell rw-6"><button><img alt="" src="{{ asset('build/images/attacked.gif') }}" />{% trans from 'game' %}Hilfe rufen!{% endtrans %}</button></div>
+                            <div class="padded-small cell rw-6"><button x-ajax-href="{{ url('forum_town_redirect') }}"><img alt="" src="{{ asset('build/images/attacked.gif') }}" />{% trans from 'game' %}Hilfe rufen!{% endtrans %}</button></div>
                             <div {% if not can_escape %}disabled{% endif %} class="padded-small cell rw-6"><button id="escape-btn"><img alt="" src="{{ asset('build/images/death.gif') }}" />{% trans from 'game' %}Die Flucht wagen!{% endtrans %}</button></div>
                         </div>
                         <div class="row">
@@ -122,7 +122,7 @@
                         {% if (zone_blocked and active_scout_mode) %}
                             <img class="icon right" alt="" src="{{ asset('build/images/uncloak.gif') }}" />
                         {% endif %}
-                        <img class="icon left" alt="" src="{{ asset('build/images/small_gather.gif') }}" />
+                        <img class="icon left" alt="" src="{{ asset('build/images/small_view.gif') }}" />
                         {% set ruin_label = zone.prototype.label|trans({},'game') %}
                         {% if zone.buryCount > 0 %}{% set ruin_label = 'Verschüttete Ruine'|trans({},'game') %}{% endif %}
                         {% trans with {'%ruin%': ruin_label} from 'game'  %}%ruin% durchsuchen{% endtrans %}
@@ -173,6 +173,14 @@
         <div class="row">
             <h5>{{ 'Zonenregister'|trans({},'game') }}</h5>
             <div class="cell rw-12">
+                <div class="row">
+                    <div class="padded cell rw-3 hide-lg hide-md hide-sm"><label for="beyond_chat">{{ 'Zonenchat'|trans({},'game') }}</label></div>
+                    <div class="padded cell rw-8 rw-lg-10 rw-md-9 rw-sm-8"><input id="beyond_chat" type="text" placeholder="{{ 'Deine Nachricht'|trans({},'global') }}" /></div>
+                    <div class="padded cell rw-1 rw-lg-2 rw-md-3 rw-sm-4"><button id="chat_button"><i class="fa fa-paper-plane"></i></button></div>
+                </div>
+
+            </div>
+            <div class="cell rw-12">
                 {% embed "ajax/game/log.html.twig" with {'log_content': log, 'log_source': path('beyond_desert_log_controller') } %}
                 {% endembed %}
             </div>
@@ -186,6 +194,15 @@
         {% if zone.x != 0 or zone.y != 0 %}
             {% embed "scripts/log.js.twig" %}{% endembed %}
         {% endif %}
+
+        let chat_button = document.getElementById('chat_button');
+        if (chat_button)
+            chat_button.addEventListener('click', function() {
+                $.ajax.easySend( '{{ path('beyond_desert_chat_controller') }}', { msg: document.getElementById('beyond_chat').value },
+                    function () {
+                        $.ajax.load(null, '{{ path('beyond_dashboard') }}', true);
+                    } );
+            });
 
         let dig_button = document.getElementById('dig_button');
         if (dig_button)

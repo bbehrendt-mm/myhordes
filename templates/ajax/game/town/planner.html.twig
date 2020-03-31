@@ -13,10 +13,14 @@
             <div id="create_route_control">
                 <button id="create_route_1">{{ 'Neue einfache Route'|trans({},'game') }}</button>
                 <button {% if not allow_extended %}disabled{% endif %} id="create_route_2">{{ 'Neue komplexe Route'|trans({},'game') }}</button>
+                <button x-ajax-href="{{ path('town_door') }}">{{ 'Schließen'|trans({},'global') }}</button>
             </div>
             <div id="route_dashboard" style="display: none">
                 <div class="row">
                     <div class="padded cell rw-12"><input id="route_name" type="text" maxlength="32" placeholder="{{ 'Name der Route'|trans({},'game') }}" /></div>
+                </div>
+                <div class="row">
+                    <div class="padded cell rw-6"><a id="route_undo" class="small" href=""><i class="fa fa-undo"></i> {{ 'Rückgängig'|trans({},'global') }}</a></div>
                 </div>
                 <div class="row">
                     <div class="padded cell rw-6"><a class="small" href="" x-ajax-href="{{ path('town_planner') }}">{{ 'Abbrechen'|trans({},'global') }}</a></div>
@@ -63,6 +67,22 @@
 
             render_routes( map, 'live-editor', '#b4da4c', edit_nodes );
         }
+
+        document.getElementById('route_undo').addEventListener('click', function(e) {
+            e.preventDefault();
+            if (!edit_complex) {
+                if (edit_nodes.length > 2) {
+                    edit_nodes.pop();
+                    edit_nodes.pop();
+                    edit_nodes.push( [0,0] );
+                }
+            } else if (edit_nodes.length > 0)
+                edit_nodes.pop();
+
+            if (render_routes( map, 'live-editor', '#b8c49c', edit_nodes ))
+                save_button.removeAttribute('disabled');
+            else save_button.setAttribute('disabled','disabled');
+        });
 
         map.addEventListener('zone-click', function(e) {
             if (!edit_active) {

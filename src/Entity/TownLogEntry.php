@@ -20,11 +20,13 @@ class TownLogEntry
     const TypeCitizens     =  8;
     const TypeNightly      =  9;
     const TypeHome         = 10;
+    const TypeChat         = 11;
 
     const ClassNone     = 0;
     const ClassWarning  = 1;
     const ClassCritical = 2;
     const ClassInfo     = 3;
+    const ClassChat     = 4;
 
     /**
      * @ORM\Id()

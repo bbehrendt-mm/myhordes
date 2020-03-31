@@ -295,7 +295,9 @@ class ActionHandler
             'well' => 0,
         ];
 
-        $execute_result = function(Result &$result) use (&$citizen, &$item, &$target, &$action, &$message, &$remove, &$execute_result, &$execute_info_cache, &$tags, &$kill_by_poison, &$spread_poison) {
+        $item_in_chest = $item->getInventory() && $item->getInventory()->getId() === $citizen->getHome()->getChest()->getId();
+
+        $execute_result = function(Result &$result) use (&$citizen, &$item, &$target, &$action, &$message, &$remove, &$execute_result, &$execute_info_cache, &$tags, &$kill_by_poison, &$spread_poison, $item_in_chest) {
             if ($status = $result->getStatus()) {
 
                 if ($status->getInitial() && $status->getResult()) {
@@ -394,10 +396,11 @@ class ActionHandler
 
                     if ($proto) $tags[] = 'spawned';
 
+
                     if ($proto && $this->inventory_handler->placeItem( $citizen, $this->item_factory->createItem( $proto ),
                             $citizen->getZone()
                                 ? [ $citizen->getInventory(), $citizen->getZone()->getFloor() ]
-                                : [ $citizen->getInventory(), $citizen->getHome()->getChest(), $citizen->getTown()->getBank() ]
+                                : ( $item_in_chest ? [ $citizen->getHome()->getChest(), $citizen->getInventory(), $citizen->getTown()->getBank() ] : [ $citizen->getInventory(), $citizen->getHome()->getChest(), $citizen->getTown()->getBank() ])
                         )) $execute_info_cache['items_spawn'][] = $proto;
                 }
             }
@@ -450,8 +453,11 @@ class ActionHandler
                             }
                         }
 
-                if ($zoneEffect->getUncoverRuin())
+                if ($zoneEffect->getUncoverRuin()) {
                     $base_zone->setBuryCount( max(0, $base_zone->getBuryCount() - mt_rand(2,3)) );
+                    if ($base_zone->getPrototype())
+                        $this->entity_manager->persist( $this->log->outsideUncover( $citizen ) );
+                }
 
                 if ($zoneEffect->getEscape() !== null && $zoneEffect->getEscape() > 0)
                     $base_zone->addEscapeTimer( (new EscapeTimer())->setTime( new DateTime("+{$zoneEffect->getEscape()}sec") ) );

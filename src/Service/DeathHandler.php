@@ -29,15 +29,17 @@ class DeathHandler
     private $item_factory;
     private $inventory_handler;
     private $zone_handler;
+    private $log;
 
     public function __construct(
-        EntityManagerInterface $em, StatusFactory $sf, ZoneHandler $zh, InventoryHandler $ih, ItemFactory $if)
+        EntityManagerInterface $em, StatusFactory $sf, ZoneHandler $zh, InventoryHandler $ih, ItemFactory $if, LogTemplateHandler $lt)
     {
         $this->entity_manager = $em;
         $this->status_factory = $sf;
         $this->inventory_handler = $ih;
         $this->item_factory = $if;
         $this->zone_handler = $zh;
+        $this->log = $lt;
     }
 
     /**
@@ -64,7 +66,9 @@ class DeathHandler
             $remove[] = $et;
         $citizen->getStatus()->clear();
 
-        if (!$citizen->getZone()) {
+        $died_outside = $citizen->getZone() !== null;
+        if (!$died_outside) {
+            $zone = null;
             $citizen->getHome()->setHoldsBody( true );
             $this->inventory_handler->placeItem( $citizen, $this->item_factory->createItem('bone_meat_#00'),
                 in_array($cod->getRef(), [CauseOfDeath::Hanging, CauseOfDeath::FleshCage]) ? [$citizen->getTown()->getBank()] : [$citizen->getHome()->getChest(),$citizen->getTown()->getBank()]
@@ -74,11 +78,14 @@ class DeathHandler
             $zone = $citizen->getZone(); $ok = $this->zone_handler->check_cp( $zone );
             $this->inventory_handler->placeItem( $citizen, $this->item_factory->createItem('bone_meat_#00'), [$zone->getFloor()]);
             $citizen->setZone(null);
+            $zone->removeCitizen( $citizen );
             $this->zone_handler->handleCitizenCountUpdate( $zone, $ok );
         }
 
         $citizen->setCauseOfDeath($cod);
         $citizen->setAlive( false );
+
+        if ($died_outside) $this->entity_manager->persist( $this->log->citizenDeath( $citizen, 0, $zone ) );
 
         if ($handle_em) foreach ($remove as $r) $this->entity_manager->remove($r);
     }
