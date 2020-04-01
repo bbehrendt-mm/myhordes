@@ -15,7 +15,9 @@
                 <div class="padded cell rw-3 rw-md-5 small">
                     <span class="pointer" x-ajax-href="{{ path('town_visit', {id: citizen.id}) }}">
                         {% if citizen.alive %}
-                            {% if citizen.profession.heroic %}
+                            {% if citizen.banished %}
+                                <img alt="" src="{{ asset('build/images/banished.gif') }}" />
+                            {% elseif citizen.profession.heroic %}
                                 <img alt="" src="{{ asset('build/images/professions/hero.gif') }}" />
                             {% else %}
                                 <img alt="" src="{{ asset('build/images/professions/void.gif') }}" />
@@ -28,7 +30,7 @@
                         <b>{{ citizen.user.username }}</b>
                     </span>
                 </div>
-                <div class="padded cell rw-4 small hide-md hide-sm">
+                <div class="padded cell rw-3 small hide-md hide-sm">
                     {{ citizen.home.description }}
                 </div>
                 <div class="padded cell rw-3 rw-md-5 small">
@@ -41,9 +43,11 @@
                         <span>---</span>
                     {% endif %}
                 </div>
-                <div class="padded cell rw-1 small hide-md hide-sm">
-                    {% if (citizen.zone.x == 0) and (citizen.zone.y == 0) %}
-                        {{ "in der Stadt"|trans({},'game') }}
+                <div class="padded cell rw-2 small hide-md hide-sm right ">
+                    {% if not citizen.zone %}
+                        {{ "In der Stadt"|trans({},'game') }}
+                    {% elseif (citizen.zone.x == 0) and (citizen.zone.y == 0) %}
+                        {{ "Am Stadttor"|trans({},'game') }}
                     {% else %}
                         [{{ citizen.zone.x }}|{{ citizen.zone.y }}]
                     {% endif %}
