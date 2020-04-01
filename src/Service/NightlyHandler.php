@@ -455,6 +455,7 @@ class NightlyHandler
                     $buildings = [$b];
                     $max_votes = $v;
                 } elseif ($v === $max_votes) $buildings[] = $b;
+                $b->getDailyUpgradeVotes()->clear();
             }
 
         $spawn_default_blueprint = $this->town_handler->getBuilding($town, 'small_refine_#01', true) !== null;
