@@ -10,6 +10,7 @@ use App\Entity\Citizen;
 use App\Entity\CitizenHome;
 use App\Entity\CitizenHomePrototype;
 use App\Entity\CitizenProfession;
+use App\Entity\Complaint;
 use App\Entity\Item;
 use App\Entity\ItemGroupEntry;
 use App\Entity\ItemPrototype;
@@ -617,6 +618,36 @@ class LogTemplateHandler
                 '%building%' => $this->wrap( $this->iconize( $building ) ),
                 '%items%'    => implode( ', ', $items )
             ], 'game' ) );
+    }
+
+    public function citizenComplaint( Complaint $complaint ): TownLogEntry {
+        return (new TownLogEntry())
+            ->setType( TownLogEntry::TypeHome )
+            ->setClass( $complaint->getSeverity() === Complaint::SeverityNone ? TownLogEntry::ClassInfo : TownLogEntry::ClassCritical )
+            ->setTown( $complaint->getAutor()->getTown() )
+            ->setDay( $complaint->getAutor()->getTown()->getDay() )
+            ->setCitizen( $complaint->getCulprit() )
+            ->setTimestamp( new DateTime('now') )
+            ->setText( $this->trans->trans( $complaint->getSeverity() > Complaint::SeverityNone
+                    ? 'Jemand hat eine anonyme Anzeige gegen %citizen% vorgebracht!'
+                    : 'Jemand hat seine anonyme Anzeige gegen %citizen% zurückgezogen.' ,
+                [
+                    '%citizen%'  => $this->wrap( $this->iconize( $complaint->getCulprit() ) ),
+                ], 'game' ) );
+    }
+
+    public function citizenBanish( Citizen $citizen ): TownLogEntry {
+        return (new TownLogEntry())
+            ->setType( TownLogEntry::TypeHome )
+            ->setClass( TownLogEntry::ClassCritical )
+            ->setTown( $citizen->getTown() )
+            ->setDay( $citizen->getTown()->getDay() )
+            ->setCitizen( $citizen )
+            ->setTimestamp( new DateTime('now') )
+            ->setText( $this->trans->trans( 'Die letzte Anzeige hat das Fass zum Überlaufen gebracht. %citizen% wurde von den Bürgern der Stadt verbannt!' ,
+                [
+                    '%citizen%'  => $this->wrap( $this->iconize( $citizen ) ),
+                ], 'game' ) );
     }
 
     public function citizenDisposal( Citizen $actor, Citizen $disposed, int $action, ?array $items = [] ): TownLogEntry {

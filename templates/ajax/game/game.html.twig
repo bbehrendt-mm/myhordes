@@ -68,6 +68,19 @@
             </div>
         </div>
     {% endif %}
+    {% if banished is defined and banished %}
+        <ul class="civil">
+            <li class="status"><img src="{{ asset('build/images/banished.gif') }}" alt="{{ 'Verbannt'|trans({},'game') }}">
+                <div class="tooltip">
+                    <b>{{ 'Verbannt'|trans({},'game') }}</b><br />
+                    {% trans from 'game' %}
+                        Deine Stadt hat entschieden, dich zu verbannen. Einige Aktionen stehen dir nicht länger zur
+                        Verfügung.
+                    {% endtrans %}
+                </div>
+            </li>
+        </ul>
+    {% endif %}
 {% endblock %}
 {% block js %}
     {{ parent() }}

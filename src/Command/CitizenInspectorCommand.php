@@ -39,19 +39,21 @@ class CitizenInspectorCommand extends Command
             ->addOption('set-ap', 'ap',InputOption::VALUE_REQUIRED, 'Sets the current AP.', -1)
             ->addOption('add-status','sn',InputOption::VALUE_REQUIRED, 'Adds a new status.', '')
             ->addOption('remove-status',null,InputOption::VALUE_REQUIRED, 'Removes an existing status.', '')
+            ->addOption('set-banned', null, InputOption::VALUE_NONE, 'Bans a citizen')
         ;
     }
 
-    protected function info(Citizen $citizen, OutputInterface $output) {
+    protected function info(Citizen &$citizen, OutputInterface $output) {
         $output->writeln("This is a citizen of '<info>{$citizen->getTown()->getName()}</info>'.");
 
         $output->writeln('<comment>Citizen info</comment>');
         $table = new Table( $output );
-        $table->setHeaders( ['Active?', 'Alive?','UID', 'TID', 'InvID', 'HomeID', 'HomeInvID', 'AP', 'Status'] );
+        $table->setHeaders( ['Active?', 'Alive?', 'Banished?', 'UID', 'TID', 'InvID', 'HomeID', 'HomeInvID', 'AP', 'Status'] );
 
         $table->addRow([
             (int)$citizen->getActive(),
             (int)$citizen->getAlive(),
+            (int)$citizen->getBanished(),
             (int)$citizen->getUser()->getId(),
             (int)$citizen->getTown()->getId(),
             (int)$citizen->getInventory()->getId(),
@@ -67,6 +69,7 @@ class CitizenInspectorCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        /** @var Citizen $citizen */
         $citizen = $this->entityManager->getRepository(Citizen::class)->find( (int)$input->getArgument('CitizenID') );
 
         $updated = false;
@@ -79,6 +82,11 @@ class CitizenInspectorCommand extends Command
         $set_ap = $input->getOption('set-ap');
         if ($set_ap >= 0) {
             $citizen->setAp( $set_ap );
+            $updated = true;
+        }
+
+        if ($input->getOption('set-banned')) {
+            $citizen->setBanished(true);
             $updated = true;
         }
 

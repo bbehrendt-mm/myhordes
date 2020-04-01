@@ -226,6 +226,7 @@ class InventoryHandler
     const TransferTypeLocal = 7;
     const TransferTypeEscort = 8;
     const TransferTypeTamer = 9;
+    const TransferTypeImpound = 10;
 
     protected function validateTransferTypes( Item &$item, int $target, int $source ): bool {
         $valid_types = [
@@ -235,7 +236,8 @@ class InventoryHandler
             self::TransferTypeHome => [ self::TransferTypeRucksack, self::TransferTypeConsume ],
             self::TransferTypeSteal => [ self::TransferTypeRucksack ],
             self::TransferTypeLocal => [ self::TransferTypeRucksack, self::TransferTypeEscort, self::TransferTypeConsume ],
-            self::TransferTypeEscort => [ self::TransferTypeRucksack, self::TransferTypeConsume ]
+            self::TransferTypeEscort => [ self::TransferTypeRucksack, self::TransferTypeConsume ],
+            self::TransferTypeImpound => [ self::TransferTypeTamer ],
         ];
 
         // Essential items can not be transferred; only allow spawn and consume
@@ -256,7 +258,7 @@ class InventoryHandler
 
         // Check if the inventory belongs to a house, and if the house is owned by the citizen
         if ($inventory->getHome() && $inventory->getHome()->getId() === $citizen->getHome()->getId())
-            return $citizen_is_at_home ? self::TransferTypeHome : self::TransferTypeUnknown;
+            return $citizen_is_at_home ? self::TransferTypeHome : self::TransferTypeImpound;
 
         // Check if the inventory belongs to a house, and if the house is owned by a different citizen of the same town
         if ($inventory->getHome() && $inventory->getHome()->getId() !== $citizen->getHome()->getId() && $inventory->getHome()->getCitizen()->getTown()->getId() === $citizen->getTown()->getId())
@@ -287,9 +289,11 @@ class InventoryHandler
     const ErrorBankLimitHit    = ErrorHelper::BaseInventoryErrors + 4;
     const ErrorStealLimitHit   = ErrorHelper::BaseInventoryErrors + 5;
     const ErrorStealBlocked    = ErrorHelper::BaseInventoryErrors + 6;
+    const ErrorBankBlocked     = ErrorHelper::BaseInventoryErrors + 7;
 
-    const ModalityNone = 0;
-    const ModalityTamer = 1;
+    const ModalityNone    = 0;
+    const ModalityTamer   = 1;
+    const ModalityImpound = 2;
 
     public function transferItem( ?Citizen &$actor, Item &$item, ?Inventory &$from, ?Inventory &$to, $modality = self::ModalityNone ): int {
         // Check if the source is valid
@@ -309,7 +313,9 @@ class InventoryHandler
         ) return self::ErrorHeavyLimitHit;
 
         //ToDo Check Bank lock
-        //if ($type_from === self::TransferTypeBank) {}
+        if ($type_from === self::TransferTypeBank) {
+            if ($actor->getBanished()) return self::ErrorBankBlocked;
+        }
 
         if ($type_from === self::TransferTypeSteal || $type_to === self::TransferTypeSteal) {
             if ($actor->getStatus()->contains( $this->entity_manager->getRepository(CitizenStatus::class)->findOneByName( 'tg_steal' ) ))
@@ -326,7 +332,10 @@ class InventoryHandler
                 return self::ErrorStealBlocked;
         }
 
-        if ($type_from === self::TransferTypeRucksack && $type_to === self::TransferTypeTamer && $modality !== self::ModalityTamer)
+        if ($type_from === self::TransferTypeRucksack && $type_to === self::TransferTypeTamer && $modality !== self::ModalityTamer && $modality !== self::ModalityImpound)
+            return self::ErrorInvalidTransfer;
+
+        if ($type_from === self::TransferTypeImpound && $type_to === self::TransferTypeTamer && $modality !== self::ModalityImpound)
             return self::ErrorInvalidTransfer;
 
         if ($to !== null)

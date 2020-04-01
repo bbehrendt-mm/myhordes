@@ -9,6 +9,7 @@ use App\Entity\BuildingPrototype;
 use App\Entity\CitizenHome;
 use App\Entity\CitizenHomeUpgrade;
 use App\Entity\CitizenHomeUpgradePrototype;
+use App\Entity\Complaint;
 use App\Entity\ItemPrototype;
 use App\Entity\Town;
 use App\Entity\ZombieEstimation;
@@ -16,6 +17,7 @@ use App\Entity\Zone;
 use App\Structures\HomeDefenseSummary;
 use App\Structures\TownDefenseSummary;
 use Doctrine\ORM\EntityManagerInterface;
+use function Couchbase\basicEncoderV1;
 
 class TownHandler
 {
@@ -24,15 +26,17 @@ class TownHandler
     private $item_factory;
     private $log;
     private $timeKeeper;
+    private $citizen_handler;
 
     public function __construct(
-        EntityManagerInterface $em, InventoryHandler $ih, ItemFactory $if, LogTemplateHandler $lh, TimeKeeperService $tk)
+        EntityManagerInterface $em, InventoryHandler $ih, ItemFactory $if, LogTemplateHandler $lh, TimeKeeperService $tk, CitizenHandler $ch)
     {
         $this->entity_manager = $em;
         $this->inventory_handler = $ih;
         $this->item_factory = $if;
         $this->log = $lh;
         $this->timeKeeper = $tk;
+        $this->citizen_handler = $ch;
     }
 
     private function internalAddBuilding( Town &$town, BuildingPrototype $prototype ) {
@@ -118,6 +122,23 @@ class TownHandler
                 $town->getBank()->addItem( $this->item_factory->createItem( $proto ) );
                 $this->entity_manager->persist( $this->log->constructionsBuildingCompleteSpawnItems( $building, [ [$proto,2] ] ) );
                 break;
+            case 'r_dhang_#00':case 'small_fleshcage_#00':
+                foreach ($town->getCitizens() as $citizen)
+                    if ($this->citizen_handler->updateBanishment( $citizen, $building->getPrototype()->getName() === 'r_dhang_#00' ? $building : $this->getBuilding( $town, 'r_dhang_#00', true ), $building->getPrototype()->getName() === 'small_fleshcage_#00' ? $building : $this->getBuilding( $town, 'small_fleshcage_#00', true ) ))
+                        $this->entity_manager->persist($town);
+                break;
+            case 'small_redemption_#00':
+                foreach ($town->getCitizens() as $citizen)
+                    if ($citizen->getBanished()) {
+                        foreach ($this->entity_manager->getRepository(Complaint::class)->findByCulprit($citizen) as $complaint) {
+                            /** @var $complaint Complaint */
+                            $complaint->setSeverity(0);
+                            $this->entity_manager->persist($complaint);
+                        }
+                        $citizen->setBanished(false);
+                        $this->entity_manager->persist($citizen);
+                    }
+                break;
             default: break;
         }
     }
@@ -198,6 +219,7 @@ class TownHandler
 
         }
         else $d += ( $building->getDefenseBonus() + $building->getPrototype()->getDefense() );
+        $d += $building->getTempDefenseBonus();
 
         return $d;
     }

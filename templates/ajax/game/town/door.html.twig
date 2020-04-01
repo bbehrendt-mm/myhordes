@@ -10,11 +10,21 @@
                 {% endtrans %}
             </div>
 
+            {% if banished %}
+                <div class="note note-warning">
+                    {% trans from 'game' %}
+                        Du wurdest verbannt und kannst daher das Stadttor weder öffnen noch schließen.
+                    {% endtrans %}
+                </div>
+            {% endif %}
+
             <h5>{% trans from 'game' %}Meine Aktionen{% endtrans %}</h5>
-            {% if town.door %}
-                <button id="door_closer"><img alt="" src="{{ asset('build/images/small_action.gif') }}" />{% trans from 'game' %}Tor schließen{% endtrans %} (<div class="ap">1</div>)</button>
-            {% else %}
-                <button id="door_opener" {% if door_locked %}disabled{% endif %}><img alt="" src="{{ asset('build/images/small_action.gif') }}" />{% trans from 'game' %}Tor öffnen{% endtrans %} (<div class="ap">1</div>)</button>
+            {% if not banished %}
+                {% if town.door %}
+                    <button id="door_closer"><img alt="" src="{{ asset('build/images/small_action.gif') }}" />{% trans from 'game' %}Tor schließen{% endtrans %} (<div class="ap">1</div>)</button>
+                {% else %}
+                    <button id="door_opener" {% if door_locked %}disabled{% endif %}><img alt="" src="{{ asset('build/images/small_action.gif') }}" />{% trans from 'game' %}Tor öffnen{% endtrans %} (<div class="ap">1</div>)</button>
+                {% endif %}
             {% endif %}
             <button x-ajax-href="{{ path('town_planner') }}"><img alt="" src="{{ asset('build/images/planner.gif') }}" />{{ 'Route planen...'|trans({},'game') }}</button>
             <button id="door_exit" {% if not town.door %}disabled{% endif %}><img alt="" src="{{ asset('build/images/small_move.gif') }}" />{% trans from 'game' %}Stadt verlassen{% endtrans %}</button>

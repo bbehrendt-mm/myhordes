@@ -6,6 +6,14 @@
         {% endtrans %}
     </div>
 
+    {% if banished %}
+    <div class="note note-warning">
+        {% trans from 'game' %}
+            Du wurdest verbannt und kannst daher nicht länger für eine Verbesserung des Tages abstimmen.
+        {% endtrans %}
+    </div>
+    {% endif %}
+
     {# @var vote \App\Entity\Building #}
     {% if vote is not null %}
         <div class="note">
@@ -44,7 +52,7 @@
                         <p>&nbsp;</p>
                     {% endif %}
                     {% if vote is null and building.level < building.prototype.maxLevel %}
-                        <button x-building-id="{{ building.id }}">{% trans from 'game' %}Abstimmen{% endtrans %}</button>
+                        <button {% if banished %}disabled{% endif%} x-building-id="{{ building.id }}">{% trans from 'game' %}Abstimmen{% endtrans %}</button>
                     {% elseif building.level < building.prototype.maxLevel %}
                         {% trans from 'game' %}Stimmen:{% endtrans %} {{ building.dailyUpgradeVotes|length }}
                         {% if building.dailyUpgradeVotes|length == max_votes %}

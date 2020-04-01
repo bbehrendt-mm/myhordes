@@ -4,10 +4,14 @@
 namespace App\Service;
 
 
+use App\Entity\Building;
 use App\Entity\CauseOfDeath;
 use App\Entity\Citizen;
 use App\Entity\CitizenProfession;
 use App\Entity\CitizenStatus;
+use App\Entity\Complaint;
+use App\Entity\Item;
+use App\Entity\ItemProperty;
 use App\Entity\ItemPrototype;
 use App\Structures\ItemRequest;
 use Doctrine\ORM\EntityManagerInterface;
@@ -89,6 +93,7 @@ class CitizenHandler
     /**
      * @param Citizen $citizen
      * @param CitizenStatus|string $status
+     * @return bool
      */
     public function inflictStatus( Citizen &$citizen, $status ): bool {
         if (is_string( $status )) $status = $this->entity_manager->getRepository(CitizenStatus::class)->findOneByName($status);
@@ -140,6 +145,58 @@ class CitizenHandler
             $this->inflictStatus( $citizen, $lv2 );
         } else $this->inflictStatus( $citizen, $lv1 );
 
+    }
+
+    public function updateBanishment( Citizen &$citizen, ?Building $gallows, ?Building $cage ): bool {
+
+        if (!$citizen->getAlive()) return false;
+
+        $action = false; $kill = false;
+        if (!$citizen->getBanished()) {
+            if ($this->entity_manager->getRepository(Complaint::class)->countComplaintsFor( $citizen, Complaint::SeverityBanish ) >= 8)
+                $action = true;
+        }
+
+        if ($gallows || $cage) {
+            if ($this->entity_manager->getRepository(Complaint::class)->countComplaintsFor( $citizen, Complaint::SeverityKill ) >= 8)
+                $action = $kill = true;
+        }
+
+        if ($action) {
+            if (!$citizen->getBanished()) $this->entity_manager->persist( $this->log->citizenBanish( $citizen ) );
+            $citizen->setBanished( true );
+
+            /** @var Item[] $items */
+            $items = [];
+            $impound_prop = $this->entity_manager->getRepository(ItemProperty::class)->findOneByName( 'impoundable' );
+            foreach ( $citizen->getInventory()->getItems() as $item )
+                if ($item->getPrototype()->getProperties()->contains( $impound_prop ))
+                    $items[] = $item;
+            foreach ( $citizen->getHome()->getChest()->getItems() as $item )
+                if ($item->getPrototype()->getProperties()->contains( $impound_prop ))
+                    $items[] = $item;
+
+            $bank = $citizen->getTown()->getBank();
+            foreach ($items as $item) {
+                $source = $item->getInventory();
+                if ($this->inventory_handler->transferItem( $citizen, $item, $source, $bank, InventoryHandler::ModalityImpound ) === InventoryHandler::ErrorNone)
+                    $this->entity_manager->persist( $this->log->bankItemLog( $citizen, $item, true ) );
+            }
+        }
+
+        if ($kill) {
+            $rem = [];
+            if ($cage) {
+                $this->death_handler->kill( $citizen, CauseOfDeath::FleshCage, $rem );
+                $cage->setTempDefenseBonus( $cage->getTempDefenseBonus() + ( $citizen->getProfession()->getHeroic() ? 60 : 40 ) );
+                $this->entity_manager->persist( $cage );
+            }
+            elseif ($gallows) $this->death_handler->kill( $citizen, CauseOfDeath::Hanging, $rem );
+            $this->entity_manager->persist( $this->log->citizenDeath( $citizen, 0, null ) );
+            foreach ($rem as $r) $this->entity_manager->remove( $r );
+        }
+
+        return $action;
     }
 
     public function isTired(Citizen $citizen) {

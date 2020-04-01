@@ -115,11 +115,27 @@ class Citizen
      */
     private $expeditionRoutes;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $banished = false;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Complaint", mappedBy="culprit", orphanRemoval=true)
+     */
+    private $complaints;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\TrashCounter", inversedBy="citizen", cascade={"persist", "remove"})
+     */
+    private $trashCounter;
+
     public function __construct()
     {
         $this->status = new ArrayCollection();
         $this->digTimers = new ArrayCollection();
         $this->expeditionRoutes = new ArrayCollection();
+        $this->complaints = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -401,6 +417,61 @@ class Citizen
                 $expeditionRoute->setOwner(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getBanished(): ?bool
+    {
+        return $this->banished;
+    }
+
+    public function setBanished(bool $banished): self
+    {
+        $this->banished = $banished;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Complaint[]
+     */
+    public function getComplaints(): Collection
+    {
+        return $this->complaints;
+    }
+
+    public function addComplaint(Complaint $complaint): self
+    {
+        if (!$this->complaints->contains($complaint)) {
+            $this->complaints[] = $complaint;
+            $complaint->setCulprit($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComplaint(Complaint $complaint): self
+    {
+        if ($this->complaints->contains($complaint)) {
+            $this->complaints->removeElement($complaint);
+            // set the owning side to null (unless already changed)
+            if ($complaint->getCulprit() === $this) {
+                $complaint->setCulprit(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getTrashCounter(): ?TrashCounter
+    {
+        return $this->trashCounter;
+    }
+
+    public function setTrashCounter(?TrashCounter $trashCounter): self
+    {
+        $this->trashCounter = $trashCounter;
 
         return $this;
     }

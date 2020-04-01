@@ -17,6 +17,7 @@ use App\Interfaces\RandomGroup;
 use App\Response\AjaxResponse;
 use App\Service\ActionHandler;
 use App\Service\CitizenHandler;
+use App\Service\DeathHandler;
 use App\Service\ErrorHelper;
 use App\Service\InventoryHandler;
 use App\Service\JSONRequestParser;
@@ -45,12 +46,13 @@ class InventoryAwareController extends AbstractController implements GameInterfa
     protected $random_generator;
 
     public function __construct(
-        EntityManagerInterface $em, InventoryHandler $ih, CitizenHandler $ch, ActionHandler $ah,
+        EntityManagerInterface $em, InventoryHandler $ih, CitizenHandler $ch, ActionHandler $ah, DeathHandler $dh,
         TranslatorInterface $translator, LogTemplateHandler $lt, TimeKeeperService $tk, RandomGenerator $rd)
     {
         $this->entity_manager = $em;
         $this->inventory_handler = $ih;
         $this->citizen_handler = $ch;
+        $this->citizen_handler->upgrade( $dh );
         $this->action_handler = $ah;
         $this->translator = $translator;
         $this->log = $lt;
@@ -70,6 +72,7 @@ class InventoryAwareController extends AbstractController implements GameInterfa
         ];
         $data['ap'] = $this->getActiveCitizen()->getAp();
         $data['max_ap'] = $this->citizen_handler->getMaxAP( $this->getActiveCitizen() );
+        $data['banished'] = $this->getActiveCitizen()->getBanished();
         $data['bp'] = $this->getActiveCitizen()->getBp();
         $data['max_bp'] = $this->citizen_handler->getMaxBP( $this->getActiveCitizen() );
         $data['status'] = $this->getActiveCitizen()->getStatus();

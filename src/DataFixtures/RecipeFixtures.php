@@ -151,7 +151,6 @@ class RecipeFixtures extends Fixture implements DependentFixtureInterface
                     'Die Stadt erhält nach dem nächsten Angriff einmalig 2 ungewöhnliche und 2 seltene Baupläne sowie - möglicherweise - eine nette Überraschung.',
                 ]],
             ]],
-            // TODO: Banning
             ["name"=>"Galgen","temporary"=>0,"img"=>"r_dhang","vp"=>0,"ap"=>13,"bp"=>0,"rsc"=>["wood_beam_#00" => 1,"chain_#00" => 1,]],
             ["name"=>"Kleines Cafe","temporary"=>1,"img"=>"small_cafet","vp"=>0,"ap"=>6,"bp"=>0,"rsc"=>["water_#00" => 1,"wood2_#00" => 2,"pharma_#00" => 1,]],
             ["name"=>"Kleiner Friedhof","temporary"=>0,"img"=>"small_cemetery","vp"=>0,"ap"=>36,"bp"=>1,"rsc"=>["meca_parts_#00" => 1,"wood2_#00" => 10,], "children" => [
@@ -236,9 +235,7 @@ class RecipeFixtures extends Fixture implements DependentFixtureInterface
             ["name"=>"Wasserhahn","temporary"=>0,"img"=>"small_valve","vp"=>0,"ap"=>130,"bp"=>3,"rsc"=>["engine_#00" => 1,"meca_parts_#00" => 4,"metal_#00" => 10,"wood_beam_#00" => 6,"metal_beam_#00" => 3,]],
             ["name"=>"Großer Umbau","temporary"=>0,"img"=>"small_moving","vp"=>300,"ap"=>300,"bp"=>3,"rsc"=>["wood2_#00" => 20,"metal_#00" => 20,"concrete_wall_#00" => 5,"wood_beam_#00" => 20,"metal_beam_#00" => 20,]],
             ["name"=>"Vogelscheuche","temporary"=>0,"img"=>"small_scarecrow","vp"=>25,"ap"=>35,"bp"=>0,"rsc"=>["wood2_#00" => 10,"rustine_#00" => 2,]],
-            // TODO: Banning
             ["name"=>"Fleischkäfig","temporary"=>0,"img"=>"small_fleshcage","vp"=>0,"ap"=>40,"bp"=>0,"rsc"=>["meca_parts_#00" => 2,"metal_#00" => 8,"chair_basic_#00" => 1,"wood_beam_#00" => 1,]],
-            // TODO: Banning
             ["name"=>"Bürgergericht","temporary"=>0,"img"=>"small_court","vp"=>0,"ap"=>12,"bp"=>2,"rsc"=>["wood2_#00" => 6,"metal_beam_#00" => 15,"table_#00" => 1,]],
             ["name"=>"Befestigungen","temporary"=>0,"img"=>"small_city_up","vp"=>0,"ap"=>50,"bp"=>3,"rsc"=>["concrete_wall_#00" => 2,"wood_beam_#00" => 15,"metal_beam_#00" => 10,]],
             // TODO: UI
@@ -262,11 +259,9 @@ class RecipeFixtures extends Fixture implements DependentFixtureInterface
             ]],
             // TODO: Camping
             ["name"=>"Leuchtturm","temporary"=>0,"img"=>"small_lighthouse","vp"=>0,"ap"=>30,"bp"=>3,"rsc"=>["electro_#00" => 2,"wood_beam_#00" => 5,"metal_beam_#00" => 5,]],
-            // TODO: Banning
             ["name"=>"Altar","temporary"=>0,"img"=>"small_redemption","vp"=>0,"ap"=>24,"bp"=>2,"rsc"=>["pet_pig_#00" => 1,"wood_beam_#00" => 3,"metal_beam_#00" => 2,]],
             ["name"=>"Riesige Sandburg","temporary"=>0,"img"=>"small_castle","vp"=>0,"ap"=>300,"bp"=>4,"rsc"=>["water_#00" => 30,"wood_beam_#00" => 15,"metal_beam_#00" => 10,]],
             ["name"=>"Leuchtfeuer","temporary"=>1,"img"=>"small_score","vp"=>30,"ap"=>15,"bp"=>2,"rsc"=>["lights_#00" => 1,"wood2_#00" => 5,]],
-            // TODO: Banning
             ["name"=>"Ministerium für Sklaverei","temporary"=>0,"img"=>"small_slave","vp"=>0,"ap"=>45,"bp"=>4,"rsc"=>["wood_beam_#00" => 10,"metal_beam_#00" => 5,"chain_#00" => 2,]],
             // TODO: Destroyable, kill
             ["name"=>"Reaktor","temporary"=>0,"img"=>"small_arma","vp"=>500,"ap"=>100,"bp"=>4,"rsc"=>["pile_#00" => 10,"engine_#00" => 1,"electro_#00" => 4,"concrete_wall_#00" => 2,"metal_beam_#00" => 15,]],

@@ -60,6 +60,11 @@ class Building
      */
     private $defenseBonus = 0;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $tempDefenseBonus = 0;
+
     public function __construct()
     {
         $this->dailyUpgradeVotes = new ArrayCollection();
@@ -169,6 +174,18 @@ class Building
     public function setDefenseBonus(int $defenseBonus): self
     {
         $this->defenseBonus = $defenseBonus;
+
+        return $this;
+    }
+
+    public function getTempDefenseBonus(): ?int
+    {
+        return $this->tempDefenseBonus;
+    }
+
+    public function setTempDefenseBonus(int $tempDefenseBonus): self
+    {
+        $this->tempDefenseBonus = $tempDefenseBonus;
 
         return $this;
     }

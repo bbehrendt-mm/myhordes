@@ -69,7 +69,7 @@ class TownAddonsController extends TownController
         $citizen = $this->getActiveCitizen();
         $town = $citizen->getTown();
 
-        if ($citizen->getDailyUpgradeVote())
+        if ($citizen->getDailyUpgradeVote() || $citizen->getBanished())
             return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
 
         if (!$parser->has_all(['id'], true))
@@ -239,18 +239,22 @@ class TownAddonsController extends TownController
         $citizen = $this->getActiveCitizen();
         $town = $citizen->getTown();
 
-        if (!$th->getBuilding($town, 'small_refine_#00', true))
+        // Check if citizen is banished or workshop is not build
+        if ($citizen->getBanished() || !$th->getBuilding($town, 'small_refine_#00', true))
             return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
 
+        // Get recipe ID
         if (!$parser->has_all(['id'], true))
             return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
         $id = (int)$parser->get('id');
 
         /** @var Recipe $recipe */
+        // Get recipe object and make sure it is a workshop recipe
         $recipe = $this->entity_manager->getRepository(Recipe::class)->find( $id );
         if ($recipe === null || $recipe->getType() !== Recipe::WorkshopType)
             return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
 
+        // Execute recipe and persist
         if (($error = $ah->execute_recipe( $citizen, $recipe, $remove, $message )) !== ActionHandler::ErrorNone )
             return AjaxResponse::error( $error );
         else try {

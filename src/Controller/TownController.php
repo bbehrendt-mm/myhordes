@@ -8,6 +8,7 @@ use App\Entity\CitizenHomePrototype;
 use App\Entity\CitizenHomeUpgrade;
 use App\Entity\CitizenHomeUpgradeCosts;
 use App\Entity\CitizenHomeUpgradePrototype;
+use App\Entity\Complaint;
 use App\Entity\ExpeditionRoute;
 use App\Entity\ItemPrototype;
 use App\Entity\TownLogEntry;
@@ -118,6 +119,8 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
             'citizen' => $c,
             'home' => $home,
             'actions' => $this->getItemActions(),
+            'complaint' => $this->entity_manager->getRepository(Complaint::class)->findByCitizens( $this->getActiveCitizen(), $c ),
+            'complaints' => $this->entity_manager->getRepository(Complaint::class)->countComplaintsFor( $c ),
             'chest' => $home->getChest(),
             'chest_size' => $this->inventory_handler->getSize($home->getChest()),
             'has_cremato' => $th->getBuilding($town, 'item_hmeat_#00', true) !== null,
@@ -214,6 +217,63 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
     }
 
     /**
+     * @Route("api/town/visit/{id}/complain", name="town_visit_complain_controller")
+     * @param int $id
+     * @param EntityManagerInterface $em
+     * @param TownHandler $th
+     * @param JSONRequestParser $parser
+     * @return Response
+     */
+    public function complain_visit_api(int $id, EntityManagerInterface $em, TownHandler $th, JSONRequestParser $parser ): Response {
+        if ($id === $this->getActiveCitizen()->getId())
+            return AjaxResponse::error(ErrorHelper::ErrorActionNotAvailable );
+
+        $severity = (int)$parser->get('severity', -1);
+        if ($severity < Complaint::SeverityNone || $severity > Complaint::SeverityKill)
+            return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest );
+
+        $autor = $this->getActiveCitizen();
+        $town = $autor->getTown();
+
+        /** @var Citizen $c */
+        $culprit = $em->getRepository(Citizen::class)->find( $id );
+        if (!$culprit || $culprit->getTown()->getId() !== $town->getId() || !$culprit->getAlive() )
+            return AjaxResponse::error(ErrorHelper::ErrorActionNotAvailable );
+
+        $existing_complaint = $em->getRepository( Complaint::class )->findByCitizens($autor, $culprit);
+        $severity_before = $existing_complaint ? $existing_complaint->getSeverity() : 0;
+
+        if (!$existing_complaint) {
+            $existing_complaint = (new Complaint())
+                ->setAutor( $autor )
+                ->setCulprit( $culprit )
+                ->setSeverity( $severity )
+                ->setCount( ($autor->getProfession()->getHeroic() && $th->getBuilding( $town, 'small_court_#00', true )) ? 2 : 1 );
+            $culprit->addComplaint( $existing_complaint );
+        } else $existing_complaint->setSeverity( $severity );
+
+        try {
+            if ($severity !== $severity_before && ($severity === 0 || $severity_before === 0)) $em->persist( $this->log->citizenComplaint( $existing_complaint ) );
+            $em->persist($culprit);
+            $em->persist($existing_complaint);
+            $em->flush();
+        } catch (Exception $e) {
+            return AjaxResponse::error(ErrorHelper::ErrorDatabaseException);
+        }
+
+        if ($this->citizen_handler->updateBanishment( $culprit, $th->getBuilding( $town, 'r_dhang_#00', true ), $th->getBuilding( $town, 'small_fleshcage_#00', true ) ))
+            try {
+                $em->persist($town);
+                $em->persist($culprit);
+                $em->flush();
+            } catch (Exception $e) {
+                return AjaxResponse::error(ErrorHelper::ErrorDatabaseException);
+            }
+
+        return AjaxResponse::success();
+    }
+
+    /**
      * @Route("api/town/visit/{id}/item", name="town_visit_item_controller")
      * @param int $id
      * @param JSONRequestParser $parser
@@ -289,6 +349,7 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
             'upgrades' => $upgrade_proto,
             'upgrade_levels' => $upgrade_proto_lv,
             'upgrade_costs' => $upgrade_cost,
+            'complaints' => $this->entity_manager->getRepository(Complaint::class)->countComplaintsFor( $this->getActiveCitizen() ),
 
             'def' => $summary,
             'deco' => $deco,
@@ -473,7 +534,7 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
         return $this->render( 'ajax/game/town/well.html.twig', $this->addDefaultTwigArgs('well', [
             'rations_left' => $this->getActiveCitizen()->getTown()->getWell(),
             'first_take' => $this->getActiveCitizen()->getWellCounter()->getTaken() === 0,
-            'allow_take' => $this->getActiveCitizen()->getWellCounter()->getTaken() < ($pump ? 2 : 1),
+            'allow_take' => $this->getActiveCitizen()->getWellCounter()->getTaken() < (($pump && !$this->getActiveCitizen()->getBanished()) ? 2 : 1),
             'pump' => $pump,
 
             'log' => $this->renderLog( -1, null, false, TownLogEntry::TypeWell, 10 )->getContent(),
@@ -491,13 +552,13 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
     }
 
     /**
-     * @Route("api/well/item", name="town_well_item_controller")
+     * @Route("api/town/well/item", name="town_well_item_controller")
      * @param JSONRequestParser $parser
      * @param InventoryHandler $handler
      * @param ItemFactory $factory
      * @return Response
      */
-    public function well_api(JSONRequestParser $parser, InventoryHandler $handler, ItemFactory $factory): Response {
+    public function well_api(JSONRequestParser $parser, InventoryHandler $handler, ItemFactory $factory, TownHandler $th): Response {
         $direction = $parser->get('direction', '');
 
         if (in_array($direction, ['up','down'])) {
@@ -506,10 +567,12 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
             $town = $citizen->getTown();
             $wellLock = $citizen->getWellCounter();
 
+            $limit = ($th->getBuilding( $town, 'small_water_#00', true ) && !$this->getActiveCitizen()->getBanished()) ? 2 : 1;
+
             if ($direction == 'up') {
 
                 if ($town->getWell() <= 0) return AjaxResponse::error(self::ErrorWellEmpty);
-                if ($wellLock->getTaken() >= 2) return AjaxResponse::error(self::ErrorWellLimitHit); //ToDo: Fix the count!
+                if ($wellLock->getTaken() >= $limit) return AjaxResponse::error(self::ErrorWellLimitHit);
 
                 $inv_target = $citizen->getInventory();
                 $inv_source = null;
@@ -623,41 +686,69 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
      * @return Response
      */
     public function construction_build_api(JSONRequestParser $parser, TownHandler $th): Response {
+        // Get citizen & town
         $citizen = $this->getActiveCitizen();
         $town = $citizen->getTown();
 
+        // Check if the request is complete
         if (!$parser->has_all(['id','ap'], true))
             return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
         $id = (int)$parser->get('id');
         $ap = (int)$parser->get('ap');
 
+        // Check if slave labor is allowed (ministry of slavery must be built)
+        $slavery_allowed = $th->getBuilding($town, 'small_slave_#00', true) !== null;
+
+        // If no slavery is allowed, block banished citizens from working on the construction site
+        // If slavery is allowed and the citizen is banished, permit slavery bonus
+        if (!$slavery_allowed && $citizen->getBanished())
+            return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
+        $slave_bonus = $citizen->getBanished();
+
         /** @var Building|null $building */
+        // Get the building the citizen wants to work on; fail if we can't find it
         $building = $this->entity_manager->getRepository(Building::class)->find($id);
         if (!$building || $building->getTown()->getId() !== $town->getId() || $ap <= 0)
             return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
 
-        $ap = max(0,min( $ap, $building->getPrototype()->getAp() - $building->getAp() ) );
+        // Check out how much AP is missing to complete the building; restrict invested AP to not exceed this
+        $missing_ap = ceil( ($building->getPrototype()->getAp() - $building->getAp()) * ( $slave_bonus ? (2.0/3.0) : 1 )) ;
+        $ap = max(0,min( $ap, $missing_ap ) );
+
+        // If the citizen has not enough AP, fail
         if (($citizen->getAp() + $citizen->getBp()) < $ap || $this->citizen_handler->isTired( $citizen ))
             return AjaxResponse::error( ErrorHelper::ErrorNoAP );
 
+        // Get all resources needed for this building
         $res = $items = [];
         if (!$building->getComplete() && $building->getPrototype()->getResources())
             foreach ($building->getPrototype()->getResources()->getEntries() as $entry)
                 $res[] = new ItemRequest( $entry->getPrototype()->getName(), $entry->getChance() );
+
+        // If the building needs resources, check if they are present in the bank; otherwise fail
         if (!empty($res)) {
             $items = $this->inventory_handler->fetchSpecificItems($town->getBank(), $res);
             if (empty($items)) return AjaxResponse::error( self::ErrorNotEnoughRes );
         }
 
+        // Remember if the building has already been completed (i.e. this is a repair action)
         $was_completed = $building->getComplete();
+
+        // Create a log entry
         if ($th->getBuilding($town, 'item_rp_book2_#00', true))
             $this->entity_manager->persist( $this->log->constructionsInvestAP( $citizen, $building->getPrototype(), $ap ) );
 
-        $this->citizen_handler->deductAPBP( $citizen, $ap );
-        $building->setAp( $building->getAp() + $ap );
-        $building->setComplete( $building->getComplete() || $building->getAp() >= $building->getPrototype()->getAp() );
+        // Calculate the amount of AP that will be invested in the construction
+        $ap_effect = floor( $ap * ( $slave_bonus ? 1.5 : 1 ) );
 
+        // Deduct AP and increase completion of the building
+        $this->citizen_handler->deductAPBP( $citizen, $ap );
+        $building->setAp( $building->getAp() + $ap_effect );
+
+        // If the building was not previously completed but reached 100%, complete the building and trigger the completion handler
+        $building->setComplete( $building->getComplete() || $building->getAp() >= $building->getPrototype()->getAp() );
         if (!$was_completed && $building->getComplete()) {
+            // Remove resources, create a log entry, trigger
             foreach ($items as $item) {
                 $town->getBank()->removeItem( $item );
                 $this->entity_manager->remove( $item );
@@ -666,7 +757,7 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
             $th->triggerBuildingCompletion( $town, $building );
         }
 
-
+        // Persist
         try {
             $this->entity_manager->persist($citizen);
             $this->entity_manager->persist($building);
@@ -681,11 +772,13 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
 
     /**
      * @Route("jx/town/constructions", name="town_constructions")
+     * @param TownHandler $th
      * @return Response
      */
-    public function constructions(): Response
+    public function constructions(TownHandler $th): Response
     {
-        $buildings = $this->getActiveCitizen()->getTown()->getBuildings();
+        $town = $this->getActiveCitizen()->getTown();
+        $buildings = $town->getBuildings();
 
         $root = [];
         $dict = [];
@@ -708,6 +801,7 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
             'root_cats'  => $root,
             'dictionary' => $dict,
             'bank' => $items,
+            'slavery' => $th->getBuilding($town, 'small_slave_#00', true) !== null,
 
             'log' => $this->renderLog( -1, null, false, TownLogEntry::TypeConstruction, 10 )->getContent(),
             'day' => $this->getActiveCitizen()->getTown()->getDay()
@@ -732,6 +826,9 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
     public function door_control_api(JSONRequestParser $parser, TownHandler $th): Response {
         $citizen = $this->getActiveCitizen();
         $town = $citizen->getTown();
+
+        if ($citizen->getBanished())
+            return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
 
         if (!($action = $parser->get('action')) || !in_array($action, ['open','close']))
             return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );

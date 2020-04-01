@@ -6,18 +6,26 @@
         {% endtrans %}
     </div>
 
-    <div class="note">
-        {% trans with {'%ap%': '<div class="ap">' ~ need_ap ~ '</div>'} from 'game' %}
-            Jede Verarbeitung kostet %ap% (manche Gegenstände und Konstruktionen können diese Verarbeitungskosten senken).
-        {% endtrans %}
-        {% if saw or manu %}
-            <p><b>
-                {% if saw  %}{% trans from 'game' %}Du trägst eine Säge bei dir.{% endtrans %}{% endif %}
-                {% if manu %}{% trans from 'game' %}Die Stadt verfügt über eine Manufaktur.{% endtrans %}{% endif %}
-            </b></p>
-            <p><b></b></p>
-        {% endif %}
-    </div>
+    {% if banished %}
+        <div class="note note-warning">
+            {% trans from 'game' %}
+                Du wurdest verbannt und kannst daher nicht länger in der Werkstatt arbeiten.
+            {% endtrans %}
+        </div>
+    {% else %}
+        <div class="note">
+            {% trans with {'%ap%': '<div class="ap">' ~ need_ap ~ '</div>'} from 'game' %}
+                Jede Verarbeitung kostet %ap% (manche Gegenstände und Konstruktionen können diese Verarbeitungskosten senken).
+            {% endtrans %}
+            {% if saw or manu %}
+                <p><b>
+                        {% if saw  %}{% trans from 'game' %}Du trägst eine Säge bei dir.{% endtrans %}{% endif %}
+                        {% if manu %}{% trans from 'game' %}Die Stadt verfügt über eine Manufaktur.{% endtrans %}{% endif %}
+                    </b></p>
+                <p><b></b></p>
+            {% endif %}
+        </div>
+    {% endif %}
 
     <div class="row-table">
         <div class="row header">
@@ -73,7 +81,7 @@
                         {% endif %}
                     </div>
                     <div class="padded cell rw-2">
-                        <button x-recipe-id="{{ recipe.id }}"><img src="{{ asset('build/images/small_refine.gif') }}" alt="" /><span class="hide-lg hide-md hide-sm">{% trans from 'game' %}Herst.{% endtrans %}</span></button>
+                        <button {% if banished%}disabled{% endif %} x-recipe-id="{{ recipe.id }}"><img src="{{ asset('build/images/small_refine.gif') }}" alt="" /><span class="hide-lg hide-md hide-sm">{% trans from 'game' %}Herst.{% endtrans %}</span></button>
                     </div>
                 </div>
             {% endif %}

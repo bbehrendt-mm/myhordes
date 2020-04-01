@@ -7,7 +7,24 @@
         {% endtrans %}
     </div>
 
-    {% macro building_entry(building, buildable, n, dict, items) %}
+    {% if banished %}
+        {% if slavery %}
+            <div class="note">
+                {% trans from 'game' %}
+                    Die Stadt hat Sklaverei legalisiert. Ab sofort kannst du trotz deiner Verbannung auf einer Baustelle
+                    arbeiten und erhälst sogar einen Bonus von 50% auf alle investierten <div class="ap"></div>.
+                {% endtrans %}
+            </div>
+        {% else %}
+            <div class="note note-warning">
+                {% trans from 'game' %}
+                    Du wurdest verbannt und kannst daher nicht länger auf einer Baustelle arbeiten.
+                {% endtrans %}
+            </div>
+        {% endif %}
+    {% endif %}
+
+    {% macro building_entry(building, buildable, n, dict, items, disable_all) %}
         {# @var building \App\Entity\Building #}
         <div class="row {% if not buildable %}locked{% elseif building.complete %}complete{% endif %} {% if n > 0 %}lv-{{ min(n,6) }}{% else %}root{% endif %}">
             <div class="padded cell rw-5 rw-lg-12">
@@ -52,7 +69,7 @@
             </div>
             <div class="padded cell rw-1 rw-lg-2 rw-sm-12">
                 {% if buildable and building.ap < building.prototype.ap %}
-                    <button {% if not res_ok %}disabled{% else %}x-building-id="{{ building.id }}"{% endif %}><i class="fa {% if building.complete %}fa-wrench{% else %}fa-plus{% endif %}"></i></button>
+                    <button {% if (not res_ok) or disable_all %}disabled{% else %}x-building-id="{{ building.id }}"{% endif %}><i class="fa {% if building.complete %}fa-wrench{% else %}fa-plus{% endif %}"></i></button>
                 {% else %}
                     &nbsp;
                 {% endif %}
@@ -60,14 +77,14 @@
         </div>
         {% if n < 20 and dict[building.prototype.id] is not empty %}
             {% for sub_building in dict[building.prototype.id] %}
-                {{ _self.building_entry(sub_building, buildable and building.complete, n+1, dict, items) }}
+                {{ _self.building_entry(sub_building, buildable and building.complete, n+1, dict, items, disable_all) }}
             {% endfor %}
         {% endif %}
     {% endmacro %}
 
     {# @var root_cats \App\Entity\Building[] #}
     {% for building in root_cats %}
-        <div class="buildings type_{{ building.prototype.icon }}">{{ _self.building_entry(building, true, 0, dictionary, bank) }}</div>
+        <div class="buildings type_{{ building.prototype.icon }}">{{ _self.building_entry(building, true, 0, dictionary, bank, banished and not slavery) }}</div>
     {% endfor %}
 
     <div class="row">

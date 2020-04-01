@@ -9,10 +9,12 @@ use App\Entity\DigTimer;
 use App\Entity\EscapeTimer;
 use App\Entity\Item;
 use App\Entity\ItemAction;
+use App\Entity\ItemGroup;
 use App\Entity\ItemPrototype;
 use App\Entity\Recipe;
 use App\Entity\ScoutVisit;
 use App\Entity\TownClass;
+use App\Entity\TrashCounter;
 use App\Entity\User;
 use App\Entity\UserPendingValidation;
 use App\Entity\Zone;
@@ -67,6 +69,7 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
     const ErrorNotDiggable          = ErrorHelper::BaseBeyondErrors + 6;
     const ErrorDoorClosed           = ErrorHelper::BaseBeyondErrors + 7;
     const ErrorChatMessageInvalid   = ErrorHelper::BaseBeyondErrors + 8;
+    const ErrorTrashLimitHit        = ErrorHelper::BaseBeyondErrors + 9;
 
     protected $game_factory;
     protected $zone_handler;
@@ -80,6 +83,7 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
      * @param CitizenHandler $ch
      * @param ActionHandler $ah
      * @param DeathHandler $dh
+     * @param TimeKeeperService $tk
      * @param TranslatorInterface $translator
      * @param GameFactory $gf
      * @param RandomGenerator $rg
@@ -88,11 +92,10 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
      * @param LogTemplateHandler $lh
      */
     public function __construct(
-        EntityManagerInterface $em, InventoryHandler $ih, CitizenHandler $ch, ActionHandler $ah, DeathHandler $dh, TimeKeeperService $tk,
+        EntityManagerInterface $em, InventoryHandler $ih, CitizenHandler $ch, ActionHandler $ah, TimeKeeperService $tk, DeathHandler $dh,
         TranslatorInterface $translator, GameFactory $gf, RandomGenerator $rg, ItemFactory $if, ZoneHandler $zh, LogTemplateHandler $lh)
     {
-        parent::__construct($em, $ih, $ch, $ah, $translator, $lh, $tk, $rg);
-        $this->citizen_handler->upgrade($dh);
+        parent::__construct($em, $ih, $ch, $ah, $dh, $translator, $lh, $tk, $rg);
         $this->game_factory = $gf;
         $this->item_factory = $if;
         $this->zone_handler = $zh;
@@ -120,6 +123,8 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
             $this->getActiveCitizen()->getInventory(), $this->entity_manager->getRepository(ItemPrototype::class)->findOneByName('vest_on_#00')
         ) > 0;
 
+        $trashlock = $this->getActiveCitizen()->getBanished() ? $this->getActiveCitizen()->getTrashCounter() : null;
+
         return parent::addDefaultTwigArgs( $section,array_merge( [
             'zone_players' => count($zone->getCitizens()),
             'zone_zombies' => max(0,$zone->getZombies()),
@@ -132,6 +137,7 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
             'actions' => $this->getItemActions(),
             'recipes' => $this->getItemCombinations(false),
             'km' => round(sqrt( pow($zone->getX(),2) + pow($zone->getY(),2) )),
+            'lock_trash' => $trashlock && $trashlock->getTaken() >= ( $this->getActiveCitizen()->getProfession()->getName() === 'collec' ? 4 : 3 ),
         ], $data, $this->get_map_blob()) );
     }
 
@@ -217,6 +223,54 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
         if (!$zone || ($zone->getX() === 0 && $zone->getY() === 0))
             return $this->renderLog((int)$parser->get('day', -1), null, null, null, 0);
         return $this->renderLog((int)$parser->get('day', -1), null, $zone, null, null);
+    }
+
+    /**
+     * @Route("api/beyond/trash", name="beyond_trash_controller")
+     * @param JSONRequestParser $parser
+     * @param InventoryHandler $handler
+     * @param ItemFactory $factory
+     * @return Response
+     */
+    public function trash_api(JSONRequestParser $parser, InventoryHandler $handler, ItemFactory $factory): Response {
+
+        $citizen = $this->getActiveCitizen();
+        if (!$citizen->getBanished() || $citizen->getZone()->getX() !== 0 || $citizen->getZone()->getY())
+            return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
+
+        $trashlock = $citizen->getTrashCounter();
+        if (!$trashlock)
+            $trashlock = (new TrashCounter())->setCitizen($citizen);
+
+        $limit = $citizen->getProfession()->getName() === 'collec' ? 4 : 3;
+        if ($trashlock->getTaken() >= $limit) return AjaxResponse::error(self::ErrorTrashLimitHit);
+
+        $inv_target = $citizen->getInventory();
+        $inv_source = null;
+
+        $item_group = $this->entity_manager->getRepository(ItemGroup::class)->findOneByName($this->random_generator->chance(0.125) ? 'trash_good' : 'trash_bad');
+        $proto = $this->random_generator->pickItemPrototypeFromGroup( $item_group );
+        if (!$proto)
+            return AjaxResponse::error(ErrorHelper::ErrorInternalError);
+
+        $item = $this->item_factory->createItem($proto);
+
+        if (($error = $handler->transferItem(
+                $citizen,
+                $item,$inv_source, $inv_target
+            )) === InventoryHandler::ErrorNone) {
+
+            $trashlock->setTaken( $trashlock->getTaken()+1 );
+            try {
+                $this->entity_manager->persist($item);
+                $this->entity_manager->persist($citizen);
+                $this->entity_manager->persist($trashlock);
+                $this->entity_manager->flush();
+            } catch (Exception $e) {
+                return AjaxResponse::error(ErrorHelper::ErrorDatabaseException);
+            }
+            return AjaxResponse::success();
+        } else return AjaxResponse::error($error);
     }
 
     /**

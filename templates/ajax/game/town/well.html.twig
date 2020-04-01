@@ -17,11 +17,21 @@
             </div>
             {% if pump is not null %}
                 {# @var pump \App\Entity\Building #}
-                <div class="note">
-                    {% trans with {'%pumpname%':'<b>' ~ pump.prototype.label ~ '</b>' } from 'game' %}
-                        Die Stadt verfügt über eine %pumpname%.
-                    {% endtrans %}
-                </div>
+                {% if banished %}
+                    <div class="note note-warning">
+                        {% trans from 'game' %}
+                            Aufgrund deiner Verbannung kannst du maximal eine Ration Wasser pro Tag entnehmen.
+                        {% endtrans %}
+                    </div>
+                {% else %}
+                    <div class="note">
+                        {% trans with {'%pumpname%':'<b>' ~ pump.prototype.label ~ '</b>' } from 'game' %}
+                            Die Stadt verfügt über eine %pumpname%.
+                        {% endtrans %}
+                    </div>
+                {% endif %}
+
+
             {% endif %}
             <p>
                 {% if first_take %}

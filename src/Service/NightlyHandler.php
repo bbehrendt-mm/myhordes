@@ -554,6 +554,11 @@ class NightlyHandler
 
         if (!empty($daily_items))
             $this->log->debug("Daily items: Placing " . implode(', ', $tx) . " in the bank.");
+
+        foreach ($town->getBuildings() as $b) if ($b->getComplete()) {
+            if ($b->getPrototype()->getTemp()) $b->setComplete(false)->setAp(0);
+            $b->setTempDefenseBonus(0);
+        }
     }
 
     public function advance_day(Town &$town): bool {
