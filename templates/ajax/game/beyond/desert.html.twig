@@ -200,14 +200,25 @@
             {% embed "scripts/log.js.twig" %}{% endembed %}
         {% endif %}
 
+        let sendLog = function() {
+            $.ajax.easySend( '{{ path('beyond_desert_chat_controller') }}', { msg: document.getElementById('beyond_chat').value },
+                function () {
+                    $.ajax.load(null, '{{ path('beyond_dashboard') }}', true);
+                } );
+        };
         let chat_button = document.getElementById('chat_button');
         if (chat_button)
             chat_button.addEventListener('click', function() {
-                $.ajax.easySend( '{{ path('beyond_desert_chat_controller') }}', { msg: document.getElementById('beyond_chat').value },
-                    function () {
-                        $.ajax.load(null, '{{ path('beyond_dashboard') }}', true);
-                    } );
+                sendLog();
             });
+
+        let beyond_chat = document.getElementById('beyond_chat');
+        if (chat_button)
+          beyond_chat.addEventListener('keypress', function(e) {
+            if (e.key === "Enter") {
+              sendLog();
+            }
+          });
 
         let dig_button = document.getElementById('dig_button');
         if (dig_button)

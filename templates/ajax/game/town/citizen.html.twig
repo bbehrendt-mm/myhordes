@@ -28,7 +28,7 @@
                         <b>{{ citizen.user.username }}</b>
                     </span>
                 </div>
-                <div class="padded cell rw-5 small hide-md hide-sm">
+                <div class="padded cell rw-4 small hide-md hide-sm">
                     {{ citizen.home.description }}
                 </div>
                 <div class="padded cell rw-3 rw-md-5 small">
@@ -39,6 +39,13 @@
                         {% endfor %}
                     {% else %}
                         <span>---</span>
+                    {% endif %}
+                </div>
+                <div class="padded cell rw-1 small hide-md hide-sm">
+                    {% if (citizen.zone.x == 0) and (citizen.zone.y == 0) %}
+                        {{ "in der Stadt"|trans({},'game') }}
+                    {% else %}
+                        [{{ citizen.zone.x }}|{{ citizen.zone.y }}]
                     {% endif %}
                 </div>
                 <div class="padded cell rw-12 small hide-desktop hide-lg">

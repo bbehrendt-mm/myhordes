@@ -30,7 +30,7 @@
                                     <div class="cell rw-12 {% if not meta_thread[1] %}forum-thread-unread{% endif%} forum-thread" x-public-route="{{ path('forum_thread_view', {fid: forum.id, tid: thread.id }) }}" x-post-source="{{ path('forum_viewer_controller', {fid: forum.id, tid: thread.id }) }}" x-thread-id="{{ thread.id }}">
                                         <div>{{ thread.posts|length }}</div>
                                         <b>{% if thread.translatable %}{{ thread.title|trans({},'global') }}{% else %}{{ thread.title }}{% endif %}</b><br />
-                                        <i>{% if thread.owner %}{{ thread.owner.username }}{% else %}{{ 'Der Rabe'|trans({},'global') }}{% endif %}</i>
+                                        <i>{% if thread.lastPost.owner %}{{ thread.lastPost.owner.username }}{% elseif thread.owner %}{{ thread.owner.username }}{% else %}{{ 'Der Rabe'|trans({},'global') }}{% endif %}</i>
                                     </div>
                                 {% endfor %}
                             {% endif %}
