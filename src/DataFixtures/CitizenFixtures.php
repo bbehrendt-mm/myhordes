@@ -28,7 +28,7 @@ class CitizenFixtures extends Fixture implements DependentFixtureInterface
         ['hero' => false, 'icon' => 'basic',  'name'=>'basic'       ,'label'=>'Einwohner',  'items' => ['basic_suit_#00'], 'items_alt' => ['basic_suit_dirt_#00'] ],
         ['hero' => true, 'icon' => 'dig',    'name'=>'collec'      ,'label'=>'Buddler',    'items' => ['basic_suit_#00','pelle_#00'], 'items_alt' => ['basic_suit_dirt_#00'] ],
         ['hero' => true, 'icon' => 'shield', 'name'=>'guardian'    ,'label'=>'Wächter',    'items' => ['basic_suit_#00','shield_#00'], 'items_alt' => ['basic_suit_dirt_#00'] ],
-        ['hero' => true, 'icon' => 'vest',   'name'=>'hunter'      ,'label'=>'Aufklärer',  'items' => ['basic_suit_#00','vest_off_#00'], 'items_alt' => ['basic_suit_dirt_#00','vest_on_#00'] ],
+        ['hero' => true, 'icon' => 'vest',   'name'=>'hunter'      ,'label'=>'Aufklärer',  'items' => ['basic_suit_#00','vest_on_#00'], 'items_alt' => ['basic_suit_dirt_#00','vest_off_#00'] ],
         ['hero' => true, 'icon' => 'tamer',  'name'=>'tamer'       ,'label'=>'Dompteur',   'items' => ['basic_suit_#00','tamed_pet_#00'], 'items_alt' => ['basic_suit_dirt_#00','tamed_pet_drug_#00','tamed_pet_off_#00'] ],
         ['hero' => true, 'icon' => 'tech',   'name'=>'tech'        ,'label'=>'Techniker',  'items' => ['basic_suit_#00','keymol_#00'], 'items_alt' => ['basic_suit_dirt_#00'] ],
         ['hero' => true, 'icon' => 'shaman', 'name'=>'shaman'      ,'label'=>'Schamane',   'items' => ['basic_suit_#00','shaman_#00'], 'items_alt' => ['basic_suit_dirt_#00'] ],
