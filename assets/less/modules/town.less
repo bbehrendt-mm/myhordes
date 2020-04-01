@@ -55,3 +55,39 @@
     &.town-addon-watchtower>div>div:first-child>div:first-child { background: url("../../img/smenu_tower.gif") center/cover no-repeat }
   }
 }
+
+.watchtower-prediction {
+  display: flex;
+  flex-wrap: wrap;
+
+  &>* {
+    flex-basis: 100%;
+  }
+  & p {
+    text-align: center;
+  }
+  & .watchtower-prediction-bar {
+    margin-top: .25em;
+    height: 1.25em;
+    border: 1px solid #ddab76;
+    background-color: #773939;
+    position: relative;
+
+    & > * {
+      height: calc(100% - 2px);
+      position: absolute;
+      top: 1px;
+      left: 1px;
+    }
+    & .watchtower-prediction-progress {
+      background-color: #5c2b20;
+    }
+
+    & .watchtower-prediction-text {
+      min-width: 4em;
+      color: #ddab76;
+      line-height: 1.25em;
+      text-align: center;
+    }
+  }
+}
