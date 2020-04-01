@@ -42,10 +42,14 @@
                     {% endif %}
                 </div>
                 <div class="padded cell rw-1 small hide-md hide-sm">
-                    {% if (citizen.zone.x == 0) and (citizen.zone.y == 0) %}
-                        {{ "in der Stadt"|trans({},'game') }}
+                    {% if citizen.alive %}
+                        {% if (citizen.zone.x == 0) and (citizen.zone.y == 0) %}
+                            {{ "in der Stadt"|trans({},'game') }}
+                        {% else %}
+                            [{{ citizen.zone.x }}|{{ citizen.zone.y }}]
+                        {% endif %}
                     {% else %}
-                        [{{ citizen.zone.x }}|{{ citizen.zone.y }}]
+                        {{ citizen.causeOfDeath.label }}
                     {% endif %}
                 </div>
                 <div class="padded cell rw-12 small hide-desktop hide-lg">
