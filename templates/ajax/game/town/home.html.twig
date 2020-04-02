@@ -87,6 +87,7 @@
                         <ul>
                             <li>{{ 'durch Haus'|trans({},'game') }} <span><img alt="" src="{{ asset('build/images/def.gif') }}"> {{ def.house_defense }}</span></li>
                             {% if home.citizen.profession.heroic %}
+                                <li>{{ 'durch Beruf'|trans({},'game') }} <span><img alt="" src="{{ asset('build/images/def.gif') }}"> {{ def.job_defense }}</span></li>
                                 <li>{{ 'durch Ausbauten'|trans({},'game') }} <span><img alt="" src="{{ asset('build/images/def.gif') }}"> {{ def.upgrades_defense }}</span></li>
                             {% endif %}
                             <li>{{ 'durch Gegenstände'|trans({},'game') }} <span><img alt="" src="{{ asset('build/images/def.gif') }}"> {{ def.item_defense }}</span></li>

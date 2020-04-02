@@ -44,12 +44,16 @@
                     {% endif %}
                 </div>
                 <div class="padded cell rw-2 small hide-md hide-sm right ">
-                    {% if not citizen.zone %}
-                        {{ "In der Stadt"|trans({},'game') }}
-                    {% elseif (citizen.zone.x == 0) and (citizen.zone.y == 0) %}
-                        {{ "Am Stadttor"|trans({},'game') }}
+                    {% if citizen.alive %}
+                        {% if not citizen.zone %}
+                            {{ "In der Stadt"|trans({},'game') }}
+                        {% elseif (citizen.zone.x == 0) and (citizen.zone.y == 0) %}
+                            {{ "Am Stadttor"|trans({},'game') }}
+                        {% else %}
+                            [{{ citizen.zone.x }}|{{ citizen.zone.y }}]
+                        {% endif %}
                     {% else %}
-                        [{{ citizen.zone.x }}|{{ citizen.zone.y }}]
+                        {{ citizen.causeOfDeath.label }}
                     {% endif %}
                 </div>
                 <div class="padded cell rw-12 small hide-desktop hide-lg">
