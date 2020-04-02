@@ -288,8 +288,10 @@ class NightlyHandler
 
         foreach ($town->getCitizens() as $citizen) {
 
-            if ($citizen->getDailyUpgradeVote())
+            if ($citizen->getDailyUpgradeVote()) {
                 $this->cleanup[] = $citizen->getDailyUpgradeVote();
+                $citizen->setDailyUpgradeVote(null);
+            }
 
             $citizen->getExpeditionRoutes()->clear();
             if (!$citizen->getAlive()) continue;
@@ -304,7 +306,7 @@ class NightlyHandler
                 }
                 if (!$citizen->getStatus()->contains($status_infection) && $this->citizen_handler->isWounded( $citizen )) {
                     $this->log->debug("Citizen <info>{$citizen->getUser()->getUsername()}</info> is <info>wounded</info>. Adding an <info>infection</info>.");
-                    $this->citizen_handler->increaseThirstLevel( $citizen );
+                    $this->citizen_handler->inflictStatus($citizen, $status_infection);
                 }
             }
 
@@ -455,7 +457,6 @@ class NightlyHandler
                     $buildings = [$b];
                     $max_votes = $v;
                 } elseif ($v === $max_votes) $buildings[] = $b;
-                $b->getDailyUpgradeVotes()->clear();
             }
 
         $spawn_default_blueprint = $this->town_handler->getBuilding($town, 'small_refine_#01', true) !== null;

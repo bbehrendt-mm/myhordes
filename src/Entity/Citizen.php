@@ -330,12 +330,12 @@ class Citizen
         return $this->dailyUpgradeVote;
     }
 
-    public function setDailyUpgradeVote(DailyUpgradeVote $dailyUpgradeVote): self
+    public function setDailyUpgradeVote(?DailyUpgradeVote $dailyUpgradeVote): self
     {
         $this->dailyUpgradeVote = $dailyUpgradeVote;
 
         // set the owning side of the relation if necessary
-        if ($dailyUpgradeVote->getCitizen() !== $this) {
+        if ($dailyUpgradeVote !== null && $dailyUpgradeVote->getCitizen() !== $this) {
             $dailyUpgradeVote->setCitizen($this);
         }
 
