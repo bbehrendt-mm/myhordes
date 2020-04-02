@@ -22,7 +22,7 @@ const mark_zone = function(map, x = null, y = null, manual = false) {
     $.client.set('marker','routes',[x,y],false);
 
     if (marker_direction) {
-        const d_x = x - {{ pos_x }}; const d_y = y - {{ pos_y }};
+        const d_x = x - {{ pos_x }}; const d_y = {{ pos_y }} - y;
         if (d_x !== 0 || d_y !== 0) {
             const angle = Math.round(Math.acos( d_y / Math.sqrt( d_x*d_x + d_y*d_y ) ) * 57.2957795);
             marker_direction.style.transform = 'rotate(' + ((d_x > 0) ? 360 - angle : angle) + 'deg)';
@@ -93,8 +93,8 @@ const activate_route = function(map, color, id) {
             if ( d === 1 ) {
                 if      (x < {{ pos_x }}) {if (hit) target.push('west');  else maybe.push('west'); }
                 else if (x > {{ pos_x }}) {if (hit) target.push('east');  else maybe.push('east'); }
-                else if (y < {{ pos_y }}) {if (hit) target.push('north'); else maybe.push('north');}
-                else if (y > {{ pos_y }}) {if (hit) target.push('south'); else maybe.push('south');}
+                else if (y > {{ pos_y }}) {if (hit) target.push('north'); else maybe.push('north');}
+                else if (y < {{ pos_y }}) {if (hit) target.push('south'); else maybe.push('south');}
             }
             hit = d === 0;
 
@@ -312,7 +312,7 @@ for (let i = 0; i < scroll_areas.length; i++) {
                     },
                     function () {
                         zone_plane.style.left = (-200 + dx * -50) + '%';
-                        zone_plane.style.top =  (-200 + dy * -50) + '%';
+                        zone_plane.style.top =  (-200 + dy *  50) + '%';
                         setTimeout(function() { $.ajax.load(null, '{{ path('beyond_dashboard') }}', true); }, 1000)
                     }, null, function() {
                         map_area.querySelector('.zone-plane-controls').classList.remove('hide');

@@ -14,7 +14,7 @@
                     </g>
                 </svg>
             </div>
-            {% for y in map_y0..map_y1 %}
+            {% for y in map_y1..map_y0 %}
                 {% for x in map_x0..map_x1 %}
                     {% if zones[x] and zones[x][y] %}
 
@@ -173,13 +173,13 @@
                                 <text x="7" y="24.5" text-anchor="middle"  style="font: bold 10px sans-serif; fill: #a0be40;">{{ sense }}</text>
                             </svg>
                         </div>{% endif %}
-                        {% if zone.y > map_y0 %}<div class="scout-sense scout-sense-north">
+                        {% if zone.y > map_y0 %}<div class="scout-sense scout-sense-south">
                             {% set sense = max(0,zones[zone.x][zone.y-1].zombies + zones[zone.x][zone.y-1].scoutEstimationOffset) %}
                             <svg viewBox="0 0 39 14" xmlns="http://www.w3.org/2000/svg">
                                 <text x="19.5" y="12" text-anchor="middle"  style="font: bold 10px sans-serif; fill: #a0be40;">{{ sense }}</text>
                             </svg>
                         </div>{% endif %}
-                        {% if zone.y < map_y1 %}<div class="scout-sense scout-sense-south">
+                        {% if zone.y < map_y1 %}<div class="scout-sense scout-sense-north">
                             {% set sense = max(0,zones[zone.x][zone.y+1].zombies + zones[zone.x][zone.y+1].scoutEstimationOffset) %}
                             <svg viewBox="0 0 39 14" xmlns="http://www.w3.org/2000/svg">
                                 <text x="19.5" y="12" text-anchor="middle"  style="font: bold 10px sans-serif; fill: #a0be40;">{{ sense }}</text>
@@ -188,8 +188,8 @@
                     {% endif %}
                     {% if zone.x < map_x1 %}<div x-direction-x="1"  x-direction-y="0"  x-target-x="{{ zone.x + 1 }}" x-target-y="{{ zone.y }}" class="action-move action-move-east"></div>{% endif %}
                     {% if zone.x > map_x0 %}<div x-direction-x="-1" x-direction-y="0"  x-target-x="{{ zone.x - 1 }}" x-target-y="{{ zone.y }}" class="action-move action-move-west"></div>{% endif %}
-                    {% if zone.y > map_y0 %}<div x-direction-x="0"  x-direction-y="-1" x-target-x="{{ zone.x }}" x-target-y="{{ zone.y - 1 }}" class="action-move action-move-north"></div>{% endif %}
-                    {% if zone.y < map_y1 %}<div x-direction-x="0"  x-direction-y="1"  x-target-x="{{ zone.x }}" x-target-y="{{ zone.y + 1 }}" class="action-move action-move-south"></div>{% endif %}
+                    {% if zone.y > map_y0 %}<div x-direction-x="0"  x-direction-y="-1" x-target-x="{{ zone.x }}" x-target-y="{{ zone.y - 1 }}" class="action-move action-move-south"></div>{% endif %}
+                    {% if zone.y < map_y1 %}<div x-direction-x="0"  x-direction-y="1"  x-target-x="{{ zone.x }}" x-target-y="{{ zone.y + 1 }}" class="action-move action-move-north"></div>{% endif %}
                 {% endif %}
             </div>
         {% endif %}
