@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Town;
 
 use App\Entity\Building;
 use App\Entity\CitizenHomePrototype;
