@@ -106,8 +106,10 @@ class ActionHandler
                     ? $item_condition->getProperty()->getName()
                     : $item_condition->getPrototype()->getName();
 
-                if (empty($this->inventory_handler->fetchSpecificItems( $citizen->getInventory(),
-                    [new ItemRequest($item_str, 1, null, null, $is_prop)]
+                $source = $citizen->getZone() ? [$citizen->getInventory(), $citizen->getZone()->getFloor()] : [$citizen->getInventory(), $citizen->getHome()->getChest()];
+
+                if (empty($this->inventory_handler->fetchSpecificItems( $source,
+                    [new ItemRequest($item_str, 1, false, null, $is_prop)]
                 ))) $current_state = min( $current_state, $this_state );
             }
 
@@ -406,7 +408,8 @@ class ActionHandler
             }
 
             if ($item_consume = $result->getConsume()) {
-                $items = $this->inventory_handler->fetchSpecificItems( $citizen->getInventory(),
+                $source = $citizen->getZone() ? [$citizen->getInventory(), $citizen->getZone()->getFloor()] : [$citizen->getInventory(), $citizen->getHome()->getChest()];
+                $items = $this->inventory_handler->fetchSpecificItems( $source,
                     [new ItemRequest( $item_consume->getPrototype()->getName(), $item_consume->getCount() )] );
 
                 foreach ($items as $consume_item) {
@@ -416,7 +419,7 @@ class ActionHandler
                         if ($action->getPoisonHandler() & ItemAction::PoisonHandlerTransgress) $spread_poison = true;
                     }
 
-                    $citizen->getInventory()->removeItem( $consume_item );
+                    $consume_item->getInventory()->removeItem( $consume_item );
                     $remove[] = $consume_item;
                     $execute_info_cache['items_consume'][] = $consume_item->getPrototype();
                 }
