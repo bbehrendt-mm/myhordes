@@ -366,8 +366,8 @@ class LogTemplateHandler
     public function outsideMove( Citizen $citizen, Zone $zone1, Zone $zone2, bool $depart ): TownLogEntry {
         $is_zero_zone = ($zone1->getX() === 0 && $zone1->getY() === 0);
 
-        $d_north = $zone2->getY() < $zone1->getY();
-        $d_south = $zone2->getY() > $zone1->getY();
+        $d_north = $zone2->getY() > $zone1->getY();
+        $d_south = $zone2->getY() < $zone1->getY();
         $d_east  = $zone2->getX() > $zone1->getX();
         $d_west  = $zone2->getX() < $zone1->getX();
 
