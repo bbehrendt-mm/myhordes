@@ -7,155 +7,155 @@
     <body>
       <trans-unit id="dFL__mK" resname="Wassergraben">
         <source>Wassergraben</source>
-        <target>Wassergraben</target>
+        <target>Douves</target>
       </trans-unit>
       <trans-unit id="pmF7FgU" resname="Großer Graben">
         <source>Großer Graben</source>
-        <target>Großer Graben</target>
+        <target>Grand Fossé</target>
       </trans-unit>
       <trans-unit id="39k_QT1" resname="Der Verteidigungsbonus des Grabens steigt dauerhaft um 13.">
         <source>Der Verteidigungsbonus des Grabens steigt dauerhaft um 13.</source>
-        <target>Der Verteidigungsbonus des Grabens steigt dauerhaft um 13.</target>
+        <target>Le Grand fossé apporte 23 points de défense.</target>
       </trans-unit>
       <trans-unit id="mkCln4o" resname="Der Verteidigungsbonus des Grabens steigt dauerhaft um 21.">
         <source>Der Verteidigungsbonus des Grabens steigt dauerhaft um 21.</source>
-        <target>Der Verteidigungsbonus des Grabens steigt dauerhaft um 21.</target>
+        <target>Le Grand fossé apporte 44 points de défense.</target>
       </trans-unit>
       <trans-unit id="7ohJiNu" resname="Der Verteidigungsbonus des Grabens steigt dauerhaft um 32.">
         <source>Der Verteidigungsbonus des Grabens steigt dauerhaft um 32.</source>
-        <target>Der Verteidigungsbonus des Grabens steigt dauerhaft um 32.</target>
+        <target>Le Grand fossé apporte 76 points de défense.</target>
       </trans-unit>
       <trans-unit id="wvQCfMZ" resname="Der Verteidigungsbonus des Grabens steigt dauerhaft um 33.">
         <source>Der Verteidigungsbonus des Grabens steigt dauerhaft um 33.</source>
-        <target>Der Verteidigungsbonus des Grabens steigt dauerhaft um 33.</target>
+        <target>Le Grand fossé apporte 109 points de défense.</target>
       </trans-unit>
       <trans-unit id="HL3IJ3X" resname="Der Verteidigungsbonus des Grabens steigt dauerhaft um 51.">
         <source>Der Verteidigungsbonus des Grabens steigt dauerhaft um 51.</source>
-        <target>Der Verteidigungsbonus des Grabens steigt dauerhaft um 51.</target>
+        <target>Le Grand fossé apporte 160 points de défense.</target>
       </trans-unit>
       <trans-unit id="wlt3nkJ" resname="Rasierklingenmauer">
         <source>Rasierklingenmauer</source>
-        <target>Rasierklingenmauer</target>
+        <target>Muraille rasoir</target>
       </trans-unit>
       <trans-unit id="nDqxP50" resname="Pfahlgraben">
         <source>Pfahlgraben</source>
-        <target>Pfahlgraben</target>
+        <target>Fosse à Pieux</target>
       </trans-unit>
       <trans-unit id="CrQIj8M" resname="Köder">
         <source>Köder</source>
-        <target>Köder</target>
+        <target>Appâts</target>
       </trans-unit>
       <trans-unit id="I6Ou0iS" resname="Stacheldraht">
         <source>Stacheldraht</source>
-        <target>Stacheldraht</target>
+        <target>Barbelés</target>
       </trans-unit>
       <trans-unit id="N_IRvC9" resname="Weiterentwickelte Stadtmauer">
         <source>Weiterentwickelte Stadtmauer</source>
-        <target>Weiterentwickelte Stadtmauer</target>
+        <target>Remparts avancés</target>
       </trans-unit>
       <trans-unit id="HbQ4h88" resname="Groooße Mauer">
         <source>Groooße Mauer</source>
-        <target>Groooße Mauer</target>
+        <target>Grogro mur</target>
       </trans-unit>
       <trans-unit id="rrm6H8d" resname="Zackenmauer">
         <source>Zackenmauer</source>
-        <target>Zackenmauer</target>
+        <target>Muraille à pointes</target>
       </trans-unit>
       <trans-unit id="2g3app1" resname="Dritte Schicht">
         <source>Dritte Schicht</source>
-        <target>Dritte Schicht</target>
+        <target>Troisième couche</target>
       </trans-unit>
       <trans-unit id="9lvn8i4" resname="Zweite Schicht">
         <source>Zweite Schicht</source>
-        <target>Zweite Schicht</target>
+        <target>Seconde couche</target>
       </trans-unit>
       <trans-unit id="Y45k2Pv" resname="Betonschicht">
         <source>Betonschicht</source>
-        <target>Betonschicht</target>
+        <target>Bétonnade</target>
       </trans-unit>
       <trans-unit id="jULo0MF" resname="Entwicklungsfähige Stadtmauer">
         <source>Entwicklungsfähige Stadtmauer</source>
-        <target>Entwicklungsfähige Stadtmauer</target>
+        <target>Muraille évolutive</target>
       </trans-unit>
       <trans-unit id="i.v_PDf" resname="Der Verteidigungsbonus der Stadtmauer steigt dauerhaft um 30.">
         <source>Der Verteidigungsbonus der Stadtmauer steigt dauerhaft um 30.</source>
-        <target>Der Verteidigungsbonus der Stadtmauer steigt dauerhaft um 30.</target>
+        <target>La Muraille évolutive apporte 85 points de défense.</target>
       </trans-unit>
       <trans-unit id="jlp8Fv_" resname="Der Verteidigungsbonus der Stadtmauer steigt dauerhaft um 35.">
         <source>Der Verteidigungsbonus der Stadtmauer steigt dauerhaft um 35.</source>
-        <target>Der Verteidigungsbonus der Stadtmauer steigt dauerhaft um 35.</target>
+        <target>La Muraille évolutive apporte 120 points de défense.</target>
       </trans-unit>
       <trans-unit id="is67H0y" resname="Der Verteidigungsbonus der Stadtmauer steigt dauerhaft um 50.">
         <source>Der Verteidigungsbonus der Stadtmauer steigt dauerhaft um 50.</source>
-        <target>Der Verteidigungsbonus der Stadtmauer steigt dauerhaft um 50.</target>
+        <target>La Muraille évolutive apporte 170 points de défense.</target>
       </trans-unit>
       <trans-unit id="V.Pp1rj" resname="Der Verteidigungsbonus der Stadtmauer steigt dauerhaft um 65.">
         <source>Der Verteidigungsbonus der Stadtmauer steigt dauerhaft um 65.</source>
-        <target>Der Verteidigungsbonus der Stadtmauer steigt dauerhaft um 65.</target>
+        <target>La Muraille évolutive apporte 235 points de défense.</target>
       </trans-unit>
       <trans-unit id="HaXbtuP" resname="Der Verteidigungsbonus der Stadtmauer steigt dauerhaft um 80.">
         <source>Der Verteidigungsbonus der Stadtmauer steigt dauerhaft um 80.</source>
-        <target>Der Verteidigungsbonus der Stadtmauer steigt dauerhaft um 80.</target>
+        <target>La Muraille évolutive apporte 315 points de défense.</target>
       </trans-unit>
       <trans-unit id="lgS6PS2" resname="Verstärkende Balken">
         <source>Verstärkende Balken</source>
-        <target>Verstärkende Balken</target>
+        <target>Poutres renfort</target>
       </trans-unit>
       <trans-unit id="GP9xakw" resname="Zombiereibe">
         <source>Zombiereibe</source>
-        <target>Zombiereibe</target>
+        <target>Râpe à zombies</target>
       </trans-unit>
       <trans-unit id="FMhDGIY" resname="Fallgruben">
         <source>Fallgruben</source>
-        <target>Fallgruben</target>
+        <target>Oubliettes</target>
       </trans-unit>
       <trans-unit id="rCdMakD" resname="Zaun">
         <source>Zaun</source>
-        <target>Zaun</target>
+        <target>Barrières</target>
       </trans-unit>
       <trans-unit id="1VFjm8C" resname="Holzzaun">
         <source>Holzzaun</source>
-        <target>Holzzaun</target>
+        <target>Palissade</target>
       </trans-unit>
       <trans-unit id="sUMdYSq" resname="Sperrholz">
         <source>Sperrholz</source>
-        <target>Sperrholz</target>
+        <target>Contre-plaqué</target>
       </trans-unit>
       <trans-unit id="XQiF0XP" resname="Rüstungsplatten 3.0">
         <source>Rüstungsplatten 3.0</source>
-        <target>Rüstungsplatten 3.0</target>
+        <target>Cloison épaisse</target>
       </trans-unit>
       <trans-unit id="00gaKK_" resname="Extramauer">
         <source>Extramauer</source>
-        <target>Extramauer</target>
+        <target>Bastion</target>
       </trans-unit>
       <trans-unit id="zlG5ILw" resname="Rüstungsplatten">
         <source>Rüstungsplatten</source>
-        <target>Rüstungsplatten</target>
+        <target>Cloison en bois</target>
       </trans-unit>
       <trans-unit id="95xxaU2" resname="Rüstungsplatten 2.0">
         <source>Rüstungsplatten 2.0</source>
-        <target>Rüstungsplatten 2.0</target>
+        <target>Cloison métallique</target>
       </trans-unit>
       <trans-unit id="XbhNL1e" resname="Einseifer">
         <source>Einseifer</source>
-        <target>Einseifer</target>
+        <target>Mur Savonné</target>
       </trans-unit>
       <trans-unit id="3q79VCE" resname="Spraykanone">
         <source>Spraykanone</source>
-        <target>Spraykanone</target>
+        <target>Neurotoxine</target>
       </trans-unit>
       <trans-unit id="2NZcCax" resname="Säurespray">
         <source>Säurespray</source>
-        <target>Säurespray</target>
+        <target>Projection acide</target>
       </trans-unit>
       <trans-unit id="i0za.Ug" resname="Zerstäuber">
         <source>Zerstäuber</source>
-        <target>Zerstäuber</target>
+        <target>Pulvérisateur</target>
       </trans-unit>
       <trans-unit id="uQSIZwY" resname="Verstärkte Stadtmauer">
         <source>Verstärkte Stadtmauer</source>
-        <target>Verstärkte Stadtmauer</target>
+        <target>Muraille</target>
       </trans-unit>
       <trans-unit id="2gSRbEU" resname="Minen">
         <source>Minen</source>
