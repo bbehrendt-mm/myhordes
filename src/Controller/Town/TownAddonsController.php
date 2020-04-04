@@ -76,8 +76,9 @@ class TownAddonsController extends TownController
             return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
         $id = (int)$parser->get('id');
 
+        /** @var Building $building */
         $building = $this->entity_manager->getRepository(Building::class)->find($id);
-        if (!$building || $building->getTown()->getId() !== $town->getId())
+        if (!$building || !$building->getComplete() || $building->getTown()->getId() !== $town->getId())
             return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
 
         try {
