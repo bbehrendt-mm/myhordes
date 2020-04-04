@@ -7,6 +7,9 @@
 wget https://raw.githubusercontent.com/composer/getcomposer.org/76a7060ccb93902cd7576b67264ad91c8a2700e2/web/installer -O - -q | php -- --quiet
 php composer.phar update
 
+# Update .env file
+cp .env .env.local
+
 # Create database
 bin/console doctrine:database:create
 bin/console doctrine:schema:update --force
@@ -15,6 +18,27 @@ bin/console doctrine:fixtures:load --append
 # Install yarn
 yarn install
 yarn encore dev
+
+# Create a new town
+bin/console app:create-town remote 40
+
+# Add debug users (password = password)
+bin/console app:debug --add-debug-users
+
+# Schedule an attack
+bin/console app:schedule --add "tomorrow"
+
+#EVERYTHING
+bin/console app:citizen --help
+bin/console app:create-town --help
+bin/console app:create-user --help
+bin/console app:debug --help
+bin/console app:inventory --help
+bin/console app:schedule --help
+bin/console app:town --help
+bin/console app:towns --help
+bin/console app:users --help
+
 ```
 
 ## Update
