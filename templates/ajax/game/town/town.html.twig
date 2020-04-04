@@ -9,7 +9,7 @@
     <div class="row">
         <div class="padded-small cell rw-4 rw-sm-12">
             <div class="row town-menu">
-                <div x-ajax-href="{{ path('town_house') }}" class="cell padded-small rw-6 rw-lg-12 rw-sm-6 {% if menu_section == 'house' %}selected{% endif %} town-menu-house"><div></div><div class="hide-sm"><img alt="{{ home.prototype.level }}" src="{{ asset('build/images/home/' ~ home.prototype.icon ~ '.gif') }}" />{% trans from 'game' %}Mein Haus{% endtrans %}</div></div>
+                <div x-ajax-href="{{ path('town_house', {tab: 'dash'}) }}" class="cell padded-small rw-6 rw-lg-12 rw-sm-6 {% if menu_section == 'house' %}selected{% endif %} town-menu-house"><div></div><div class="hide-sm"><img alt="{{ home.prototype.level }}" src="{{ asset('build/images/home/' ~ home.prototype.icon ~ '.gif') }}" />{% trans from 'game' %}Mein Haus{% endtrans %}</div></div>
                 <div x-ajax-href="{{ path('town_well') }}" class="cell padded-small rw-6 rw-lg-12 rw-sm-6 {% if menu_section == 'well' %}selected{% endif %} town-menu-well"><div></div><div class="hide-sm">{% trans from 'game' %}Brunnen{% endtrans %}</div></div>
                 <div x-ajax-href="{{ path('town_bank') }}" class="cell padded-small rw-6 rw-lg-12 rw-sm-6 {% if menu_section == 'bank' %}selected{% endif %} town-menu-bank"><div></div><div class="hide-sm">{% trans from 'game' %}Bank{% endtrans %}</div></div>
                 <div x-ajax-href="{{ path('town_citizens') }}" class="cell padded-small rw-6 rw-lg-12 rw-sm-6 {% if menu_section == 'citizens' %}selected{% endif %} town-menu-citizens"><div></div><div class="hide-sm">{% trans from 'game' %}Bürger{% endtrans %}</div></div>

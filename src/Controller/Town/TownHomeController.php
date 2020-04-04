@@ -37,12 +37,13 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class TownHomeController extends TownController
 {
     /**
-     * @Route("jx/town/house", name="town_house")
+     * @Route("jx/town/house/{tab?}", name="town_house")
+     * @param string|null $tab
      * @param EntityManagerInterface $em
      * @param TownHandler $th
      * @return Response
      */
-    public function house(EntityManagerInterface $em, TownHandler $th): Response
+    public function house(?string $tab, EntityManagerInterface $em, TownHandler $th): Response
     {
         // Get citizen, town and home objects
         $citizen = $this->getActiveCitizen();
@@ -94,6 +95,7 @@ class TownHomeController extends TownController
         // Render
         return $this->render( 'ajax/game/town/home.html.twig', $this->addDefaultTwigArgs('house', [
             'home' => $home,
+            'tab' => $tab,
             'actions' => $this->getItemActions(),
             'recipes' => $this->getItemCombinations(true),
             'chest' => $home->getChest(),
