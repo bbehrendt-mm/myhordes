@@ -1,11 +1,50 @@
-<?xml version="1.0"?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-    <file source-language="en" datatype="plaintext" original="file.ext">
-        <body>
-            <trans-unit id="symfony_is_great">
-                <source>Symfony is great</source>
-                <target>J'aime Symfony</target>
-            </trans-unit>
-        </body>
-    </file>
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="de" target-language="en" datatype="plaintext" original="file.ext">
+    <header>
+      <tool tool-id="symfony" tool-name="Symfony"/>
+    </header>
+    <body>
+      <trans-unit id="Ytua8lq" resname="Die gewählte Stadt ist bereits voll.">
+        <source>Die gewählte Stadt ist bereits voll.</source>
+        <target>Die gewählte Stadt ist bereits voll.</target>
+      </trans-unit>
+      <trans-unit id="9O4x._6" resname="Du kannst nicht mehr als einer Stadt gleichzeitig beitreten.">
+        <source>Du kannst nicht mehr als einer Stadt gleichzeitig beitreten.</source>
+        <target>Du kannst nicht mehr als einer Stadt gleichzeitig beitreten.</target>
+      </trans-unit>
+      <trans-unit id="KGUlxGY" resname="Du bist dieser Stadt bereits beigetreten.">
+        <source>Du bist dieser Stadt bereits beigetreten.</source>
+        <target>Du bist dieser Stadt bereits beigetreten.</target>
+      </trans-unit>
+      <trans-unit id="xkZqSVc" resname="Wähle eine Stadt">
+        <source>Wähle eine Stadt</source>
+        <target>Wähle eine Stadt</target>
+      </trans-unit>
+      <trans-unit id="Bfb7kn4" resname="Stadtname">
+        <source>Stadtname</source>
+        <target>Stadtname</target>
+      </trans-unit>
+      <trans-unit id="Vlb5Lbe" resname="Aktionen">
+        <source>Aktionen</source>
+        <target>Aktionen</target>
+      </trans-unit>
+      <trans-unit id="rgtSNg9" resname="Aktuell gibt es keine Stadt diesen Typs.">
+        <source>Aktuell gibt es keine Stadt diesen Typs.</source>
+        <target>Aktuell gibt es keine Stadt diesen Typs.</target>
+      </trans-unit>
+      <trans-unit id="Enh.KhP" resname="Nächtlicher Angriff">
+        <source>Nächtlicher Angriff</source>
+        <target>Nächtlicher Angriff</target>
+      </trans-unit>
+      <trans-unit id="xOWTZkZ" resname="Der Server wird aktuell von Zombies überrannt. Bitte hab einen Moment Geduld, während wir die angreifenden Horden abwehren.">
+        <source>Der Server wird aktuell von Zombies überrannt. Bitte hab einen Moment Geduld, während wir die angreifenden Horden abwehren.</source>
+        <target>Der Server wird aktuell von Zombies überrannt. Bitte hab einen Moment Geduld, während wir die angreifenden Horden abwehren.</target>
+      </trans-unit>
+      <trans-unit id="e6r4m6r" resname="Der nächtliche Angriff findet jeden Tag um Mitternacht statt und dauert ungefähr 20 Minuten. Während dieser Zeit ist MyHordes nicht erreichbar.">
+        <source>Der nächtliche Angriff findet jeden Tag um Mitternacht statt und dauert ungefähr 20 Minuten. Während dieser Zeit ist MyHordes nicht erreichbar.</source>
+        <target>Der nächtliche Angriff findet jeden Tag um Mitternacht statt und dauert ungefähr 20 Minuten. Während dieser Zeit ist MyHordes nicht erreichbar.</target>
+      </trans-unit>
+    </body>
+  </file>
 </xliff>

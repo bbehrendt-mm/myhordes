@@ -91,7 +91,7 @@ class ForumController extends AbstractController
     }
 
     /**
-     * @Route("jx/forum/{id}", name="forum_view")
+     * @Route("jx/forum/{id<\d+>}", name="forum_view")
      * @param int $id
      * @param EntityManagerInterface $em
      * @return Response
@@ -102,7 +102,7 @@ class ForumController extends AbstractController
     }
 
     /**
-     * @Route("jx/forum/{fid}/{tid}", name="forum_thread_view")
+     * @Route("jx/forum/{fid<\d+>}/{tid<\d+>}", name="forum_thread_view")
      * @param int $fid
      * @param int $tid
      * @param EntityManagerInterface $em
@@ -186,7 +186,7 @@ class ForumController extends AbstractController
     }
 
     /**
-     * @Route("api/forum/{id}/post", name="forum_new_thread_controller")
+     * @Route("api/forum/{id<\d+>}/post", name="forum_new_thread_controller")
      * @param int $id
      * @param JSONRequestParser $parser
      * @param EntityManagerInterface $em
@@ -236,7 +236,7 @@ class ForumController extends AbstractController
     }
 
     /**
-     * @Route("api/forum/{fid}/{tid}/post", name="forum_new_post_controller")
+     * @Route("api/forum/{fid<\d+>}/{tid<\d+>}/post", name="forum_new_post_controller")
      * @param int $fid
      * @param int $tid
      * @param JSONRequestParser $parser
@@ -286,7 +286,7 @@ class ForumController extends AbstractController
     }
 
     /**
-     * @Route("api/forum/{tid}/{fid}/view", name="forum_viewer_controller")
+     * @Route("api/forum/{tid<\d+>}/{fid<\d+>}/view", name="forum_viewer_controller")
      * @param int $fid
      * @param int $tid
      * @param EntityManagerInterface $em
@@ -333,7 +333,7 @@ class ForumController extends AbstractController
     }
 
     /**
-     * @Route("api/forum/{id}/editor", name="forum_thread_editor_controller")
+     * @Route("api/forum/{id<\d+>}/editor", name="forum_thread_editor_controller")
      * @param int $id
      * @param EntityManagerInterface $em
      * @return Response
@@ -349,7 +349,7 @@ class ForumController extends AbstractController
     }
 
     /**
-     * @Route("api/forum/{fid}/{tid}/editor", name="forum_post_editor_controller")
+     * @Route("api/forum/{fid<\d+>}/{tid<\d+>}/editor", name="forum_post_editor_controller")
      * @param int $fid
      * @param int $tid
      * @param EntityManagerInterface $em

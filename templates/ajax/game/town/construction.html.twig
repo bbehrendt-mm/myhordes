@@ -70,8 +70,6 @@
             <div class="padded cell rw-1 rw-lg-2 rw-sm-12">
                 {% if buildable and building.ap < building.prototype.ap %}
                     <button {% if (not res_ok) or disable_all %}disabled{% else %}x-building-id="{{ building.id }}"{% endif %}><i class="fa {% if building.complete %}fa-wrench{% else %}fa-plus{% endif %}"></i></button>
-                {% else %}
-                    &nbsp;
                 {% endif %}
             </div>
         </div>

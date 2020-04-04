@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="de" target-language="es" datatype="plaintext" original="file.ext">
+    <header>
+      <tool tool-id="symfony" tool-name="Symfony"/>
+    </header>
+    <body>
+      <trans-unit id="KHtB91o" resname="Dein Name muss mindestens {{ limit }} Zeichen umfassen.">
+        <source>Dein Name muss mindestens {{ limit }} Zeichen umfassen.</source>
+        <target>Dein Name muss mindestens {{ limit }} Zeichen umfassen.</target>
+      </trans-unit>
+      <trans-unit id="ouF_pon" resname="Dein Name kann höchstens {{ limit }} Zeichen umfassen.">
+        <source>Dein Name kann höchstens {{ limit }} Zeichen umfassen.</source>
+        <target>Dein Name kann höchstens {{ limit }} Zeichen umfassen.</target>
+      </trans-unit>
+      <trans-unit id="WvW8_JI" resname="Die eingegebene E-Mail Adresse ist nicht gültig.">
+        <source>Die eingegebene E-Mail Adresse ist nicht gültig.</source>
+        <target>Die eingegebene E-Mail Adresse ist nicht gültig.</target>
+      </trans-unit>
+      <trans-unit id="6UV8ek7" resname="Die eingegebenen E-Mail Adressen stimmen nicht überein.">
+        <source>Die eingegebenen E-Mail Adressen stimmen nicht überein.</source>
+        <target>Die eingegebenen E-Mail Adressen stimmen nicht überein.</target>
+      </trans-unit>
+      <trans-unit id="AHjj6mV" resname="Dein Passwort muss mindestens {{ limit }} Zeichen umfassen.">
+        <source>Dein Passwort muss mindestens {{ limit }} Zeichen umfassen.</source>
+        <target>Dein Passwort muss mindestens {{ limit }} Zeichen umfassen.</target>
+      </trans-unit>
+      <trans-unit id="OK9eVbg" resname="Die eingegebenen Passwörter stimmen nicht überein.">
+        <source>Die eingegebenen Passwörter stimmen nicht überein.</source>
+        <target>Die eingegebenen Passwörter stimmen nicht überein.</target>
+      </trans-unit>
+      <trans-unit id="a9.cyds" resname="Der Validierungscode muss {{ limit }} Zeichen umfassen.">
+        <source>Der Validierungscode muss {{ limit }} Zeichen umfassen.</source>
+        <target>Der Validierungscode muss {{ limit }} Zeichen umfassen.</target>
+      </trans-unit>
+      <trans-unit id="0f1ZNLd" resname="Der angegebene Validierungscode ist nicht gültig.">
+        <source>Der angegebene Validierungscode ist nicht gültig.</source>
+        <target>Der angegebene Validierungscode ist nicht gültig.</target>
+      </trans-unit>
+      <trans-unit id="ePGiZSF" resname="Der angegebene Name existiert bereits im Spiel.">
+        <source>Der angegebene Name existiert bereits im Spiel.</source>
+        <target>Der angegebene Name existiert bereits im Spiel.</target>
+      </trans-unit>
+      <trans-unit id="kVhhGdk" resname="Die angegebene E-Mail Adresse wird bereits von einem anderen Profil verwendet.">
+        <source>Die angegebene E-Mail Adresse wird bereits von einem anderen Profil verwendet.</source>
+        <target>Die angegebene E-Mail Adresse wird bereits von einem anderen Profil verwendet.</target>
+      </trans-unit>
+      <trans-unit id="Qu4FAIf" resname="E-Mail Adresse validieren">
+        <source>E-Mail Adresse validieren</source>
+        <target>E-Mail Adresse validieren</target>
+      </trans-unit>
+      <trans-unit id="TM0i7i7" resname="Hallo %name%!">
+        <source>Hallo %name%!</source>
+        <target>Hallo %name%!</target>
+      </trans-unit>
+      <trans-unit id="UA_FeeT" resname="Bevor du loslegen kannst, musst du noch deine E-Mail Adresse validieren.">
+        <source>Bevor du loslegen kannst, musst du noch deine E-Mail Adresse validieren.</source>
+        <target>Bevor du loslegen kannst, musst du noch deine E-Mail Adresse validieren.</target>
+      </trans-unit>
+      <trans-unit id="JeRbwqT" resname="Bitte gib den Validierungscode ein, den du via E-Mail erhalten hast.">
+        <source>Bitte gib den Validierungscode ein, den du via E-Mail erhalten hast.</source>
+        <target>Bitte gib den Validierungscode ein, den du via E-Mail erhalten hast.</target>
+      </trans-unit>
+      <trans-unit id="ANnpnHZ" resname="Validierungscode">
+        <source>Validierungscode</source>
+        <target>Validierungscode</target>
+      </trans-unit>
+      <trans-unit id="ocoTV1m" resname="Prüfen">
+        <source>Prüfen</source>
+        <target>Prüfen</target>
+      </trans-unit>
+      <trans-unit id="tkZocIU" resname="Ausloggen">
+        <source>Ausloggen</source>
+        <target>Ausloggen</target>
+      </trans-unit>
+      <trans-unit id="VBEBU.F" resname="Du hast noch keinen Account?">
+        <source>Du hast noch keinen Account?</source>
+        <target>Du hast noch keinen Account?</target>
+      </trans-unit>
+      <trans-unit id="pMJydfA" resname="Registrieren!">
+        <source>Registrieren!</source>
+        <target>Registrieren!</target>
+      </trans-unit>
+      <trans-unit id="0wO.38C" resname="Du hast deine E-Mail Adresse schon validiert?">
+        <source>Du hast deine E-Mail Adresse schon validiert?</source>
+        <target>Du hast deine E-Mail Adresse schon validiert?</target>
+      </trans-unit>
+      <trans-unit id="cLGN4MZ" resname="Einloggen!">
+        <source>Einloggen!</source>
+        <target>Einloggen!</target>
+      </trans-unit>
+      <trans-unit id="m8bXbyH" resname="Validierung fehlgeschlagen. Bitte prüfe deine Eingaben.">
+        <source>Validierung fehlgeschlagen. Bitte prüfe deine Eingaben.</source>
+        <target>Validierung fehlgeschlagen. Bitte prüfe deine Eingaben.</target>
+      </trans-unit>
+      <trans-unit id="Bw.Ze07" resname="Einige Felder sind nicht korrekt ausgefüllt. Bitte prüfe eine Eingaben.">
+        <source>Einige Felder sind nicht korrekt ausgefüllt. Bitte prüfe eine Eingaben.</source>
+        <target>Einige Felder sind nicht korrekt ausgefüllt. Bitte prüfe eine Eingaben.</target>
+      </trans-unit>
+      <trans-unit id="O63JhDQ" resname="Registrieren">
+        <source>Registrieren</source>
+        <target>Registrieren</target>
+      </trans-unit>
+      <trans-unit id="VR0KmfL" resname="Spielername">
+        <source>Spielername</source>
+        <target>Spielername</target>
+      </trans-unit>
+      <trans-unit id="Up_TjZv" resname="E-Mail Adresse">
+        <source>E-Mail Adresse</source>
+        <target>E-Mail Adresse</target>
+      </trans-unit>
+      <trans-unit id="QNpwRBL" resname="wiederholen">
+        <source>wiederholen</source>
+        <target>wiederholen</target>
+      </trans-unit>
+      <trans-unit id="o2wQFXD" resname="Passwort">
+        <source>Passwort</source>
+        <target>Passwort</target>
+      </trans-unit>
+      <trans-unit id="MI8TC0R" resname="Um die Registrierung abzuschließen und deinen Account zu aktivieren, musst du auf einen&#10;                        Aktivierungslink klicken, der dir an die angegebene E-Mail Adresse geschickt wird.">
+        <source>Um die Registrierung abzuschließen und deinen Account zu aktivieren, musst du auf einen
+                        Aktivierungslink klicken, der dir an die angegebene E-Mail Adresse geschickt wird.</source>
+        <target>Um die Registrierung abzuschließen und deinen Account zu aktivieren, musst du auf einen
+                        Aktivierungslink klicken, der dir an die angegebene E-Mail Adresse geschickt wird.</target>
+      </trans-unit>
+      <trans-unit id="._jFtS_" resname="Du hast schon einen Account?">
+        <source>Du hast schon einen Account?</source>
+        <target>Du hast schon einen Account?</target>
+      </trans-unit>
+      <trans-unit id="kTHLCAW" resname="Einloggen">
+        <source>Einloggen</source>
+        <target>Einloggen</target>
+      </trans-unit>
+      <trans-unit id="k.cRHPZ" resname="Bitte gib deinen Spielernamen und dein Passwort ein.">
+        <source>Bitte gib deinen Spielernamen und dein Passwort ein.</source>
+        <target>Bitte gib deinen Spielernamen und dein Passwort ein.</target>
+      </trans-unit>
+      <trans-unit id="ku3di7g" resname="Login fehlgeschlagen. Bitte prüfe deine Eingaben.">
+        <source>Login fehlgeschlagen. Bitte prüfe deine Eingaben.</source>
+        <target>Login fehlgeschlagen. Bitte prüfe deine Eingaben.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

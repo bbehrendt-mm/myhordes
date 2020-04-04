@@ -5,7 +5,7 @@
     {# @var chest \App\Entity\Inventory #}
     {# @var def \App\Structures\HomeDefenseSummary #}
 
-    <ul class="tabs" x-tab-group="home-main" x-tab-control>
+    <ul class="tabs" x-tab-group="home-main" x-tab-control x-tab-default="{{ tab }}">
         <li x-tab-id="dash">{% trans from 'game' %}Truhe und Aktionen{% endtrans %}</li>
         <li x-tab-id="values">{% trans with {'%type%': home.prototype.label|trans({},'buildings')} from 'game' %}Mein(e) %type%{% endtrans %}</li>
         <li x-tab-id="build">{% trans from 'game' %}Bauarbeiten{% endtrans %}</li>

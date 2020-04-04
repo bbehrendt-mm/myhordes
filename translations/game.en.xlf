@@ -1,11 +1,1578 @@
-<?xml version="1.0"?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-    <file source-language="en" datatype="plaintext" original="file.ext">
-        <body>
-            <trans-unit id="symfony_is_great">
-                <source>Symfony is great</source>
-                <target>J'aime Symfony</target>
-            </trans-unit>
-        </body>
-    </file>
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="de" target-language="en" datatype="plaintext" original="file.ext">
+    <header>
+      <tool tool-id="symfony" tool-name="Symfony"/>
+    </header>
+    <body>
+      <trans-unit id="rn1xaB2" resname="%victim%s Alarmanlage hat die halbe Stadt aufgeweckt und dich zu Tode erschreckt!">
+        <source>%victim%s Alarmanlage hat die halbe Stadt aufgeweckt und dich zu Tode erschreckt!</source>
+        <target>%victim%s Alarmanlage hat die halbe Stadt aufgeweckt und dich zu Tode erschreckt!</target>
+      </trans-unit>
+      <trans-unit id="uPyX7.a" resname="Mist, dein Einbruch bei %victim% ist aufgeflogen...">
+        <source>Mist, dein Einbruch bei %victim% ist aufgeflogen...</source>
+        <target>Mist, dein Einbruch bei %victim% ist aufgeflogen...</target>
+      </trans-unit>
+      <trans-unit id="w4JJj.q" resname="Sehr gut, niemand hat dich bei deinem Einbruch bei %victim% beobachtet.">
+        <source>Sehr gut, niemand hat dich bei deinem Einbruch bei %victim% beobachtet.</source>
+        <target>Sehr gut, niemand hat dich bei deinem Einbruch bei %victim% beobachtet.</target>
+      </trans-unit>
+      <trans-unit id="kwtIuD9" resname="Deine Route wurde gespeichert.">
+        <source>Deine Route wurde gespeichert.</source>
+        <target>Deine Route wurde gespeichert.</target>
+      </trans-unit>
+      <trans-unit id="YY4H.QM" resname="Du hast deine Beschreibung geändert.">
+        <source>Du hast deine Beschreibung geändert.</source>
+        <target>Du hast deine Beschreibung geändert.</target>
+      </trans-unit>
+      <trans-unit id="f7yKfIC" resname="%citizen% hat %item% in den Brunnen geschüttet und damit %num% Rationen Wasser hinzugefügt.">
+        <source>%citizen% hat %item% in den Brunnen geschüttet und damit %num% Rationen Wasser hinzugefügt.</source>
+        <target>%citizen% hat %item% in den Brunnen geschüttet und damit %num% Rationen Wasser hinzugefügt.</target>
+      </trans-unit>
+      <trans-unit id="uHRiWHu" resname="%citizen% hat an dem Bauprojekt %plan% mitgearbeitet und dabei %ap% ausgegeben.">
+        <source>%citizen% hat an dem Bauprojekt %plan% mitgearbeitet und dabei %ap% ausgegeben.</source>
+        <target>%citizen% hat an dem Bauprojekt %plan% mitgearbeitet und dabei %ap% ausgegeben.</target>
+      </trans-unit>
+      <trans-unit id="XyE6HNd" resname="Durch die Konstruktion von %building% hat die Stadt folgende Gegenstände erhalten: %list%">
+        <source>Durch die Konstruktion von %building% hat die Stadt folgende Gegenstände erhalten: %list%</source>
+        <target>Durch die Konstruktion von %building% hat die Stadt folgende Gegenstände erhalten: %list%</target>
+      </trans-unit>
+      <trans-unit id="RScnWL2" resname="Durch die Konstruktion von %building% wurde der Brunnen um %num% Rationen Wasser aufgefüllt!">
+        <source>Durch die Konstruktion von %building% wurde der Brunnen um %num% Rationen Wasser aufgefüllt!</source>
+        <target>Durch die Konstruktion von %building% wurde der Brunnen um %num% Rationen Wasser aufgefüllt!</target>
+      </trans-unit>
+      <trans-unit id="IrDOx2H" resname="%citizen% hat das Stadttor %action%.">
+        <source>%citizen% hat das Stadttor %action%.</source>
+        <target>%citizen% hat das Stadttor %action%.</target>
+      </trans-unit>
+      <trans-unit id="7F6V04y" resname="geöffnet">
+        <source>geöffnet</source>
+        <target>geöffnet</target>
+      </trans-unit>
+      <trans-unit id="2nMdNJ8" resname="geschlossen">
+        <source>geschlossen</source>
+        <target>geschlossen</target>
+      </trans-unit>
+      <trans-unit id="_B_xHpE" resname="Das Stadttor wurde automatisch %action%.">
+        <source>Das Stadttor wurde automatisch %action%.</source>
+        <target>Das Stadttor wurde automatisch %action%.</target>
+      </trans-unit>
+      <trans-unit id="lnVaJJH" resname="%citizen% hat die Stadt %action%.">
+        <source>%citizen% hat die Stadt %action%.</source>
+        <target>%citizen% hat die Stadt %action%.</target>
+      </trans-unit>
+      <trans-unit id="RvCIvJN" resname="betreten">
+        <source>betreten</source>
+        <target>betreten</target>
+      </trans-unit>
+      <trans-unit id="N0kS6xp" resname="verlassen">
+        <source>verlassen</source>
+        <target>verlassen</target>
+      </trans-unit>
+      <trans-unit id="o6VrUc4" resname="Ein neuer Bürger ist in der Stadt angekommen: %citizen%.">
+        <source>Ein neuer Bürger ist in der Stadt angekommen: %citizen%.</source>
+        <target>Ein neuer Bürger ist in der Stadt angekommen: %citizen%.</target>
+      </trans-unit>
+      <trans-unit id="uTUmYsJ" resname="%citizen% hat seine neue Berufung als %profession% gefunden.">
+        <source>%citizen% hat seine neue Berufung als %profession% gefunden.</source>
+        <target>%citizen% hat seine neue Berufung als %profession% gefunden.</target>
+      </trans-unit>
+      <trans-unit id="nK4zXOH" resname="%zombies% haben vergeblich versucht, in das Haus von %citizen% einzudringen.">
+        <source>%zombies% haben vergeblich versucht, in das Haus von %citizen% einzudringen.</source>
+        <target>%zombies% haben vergeblich versucht, in das Haus von %citizen% einzudringen.</target>
+      </trans-unit>
+      <trans-unit id="fPimUWN" resname="%num% Zombies">
+        <source>%num% Zombies</source>
+        <target>%num% Zombies</target>
+      </trans-unit>
+      <trans-unit id="DyVRMkF" resname="%citizen% hat seine Behausung in ein(e,n) %home% verwandelt...">
+        <source>%citizen% hat seine Behausung in ein(e,n) %home% verwandelt...</source>
+        <target>%citizen% hat seine Behausung in ein(e,n) %home% verwandelt...</target>
+      </trans-unit>
+      <trans-unit id="0uk_Ijd" resname="%citizen% folgendes hergestellt: %list2%; dabei wurden folgende Gegenstände verbraucht: %list1%.">
+        <source>%citizen% folgendes hergestellt: %list2%; dabei wurden folgende Gegenstände verbraucht: %list1%.</source>
+        <target>%citizen% folgendes hergestellt: %list2%; dabei wurden folgende Gegenstände verbraucht: %list1%.</target>
+      </trans-unit>
+      <trans-unit id="wxkGehN" resname="%zombie% ist von den Toten auferstanden und hat %victim% zerfleischt!">
+        <source>%zombie% ist von den Toten auferstanden und hat %victim% zerfleischt!</source>
+        <target>%zombie% ist von den Toten auferstanden und hat %victim% zerfleischt!</target>
+      </trans-unit>
+      <trans-unit id="Wqb2b8u" resname="%zombie% ist von den Toten auferstanden und hat die Baustelle für %building% verwüstet!">
+        <source>%zombie% ist von den Toten auferstanden und hat die Baustelle für %building% verwüstet!</source>
+        <target>%zombie% ist von den Toten auferstanden und hat die Baustelle für %building% verwüstet!</target>
+      </trans-unit>
+      <trans-unit id="kWsuJms" resname="%zombie% ist von den Toten auferstanden und hat den Brunnen kontaminiert! Das kostet uns %num% Rationen Wasser!">
+        <source>%zombie% ist von den Toten auferstanden und hat den Brunnen kontaminiert! Das kostet uns %num% Rationen Wasser!</source>
+        <target>%zombie% ist von den Toten auferstanden und hat den Brunnen kontaminiert! Das kostet uns %num% Rationen Wasser!</target>
+      </trans-unit>
+      <trans-unit id="ByzkImj" resname="Resigniert und untröstlich sahen die Bürger wie eine Horde von %num% Zombies sich in Richtung Stadt bewegte... Wie aus dem Nichts stand die Meute auf einmal vor dem Stadttor...">
+        <source>Resigniert und untröstlich sahen die Bürger wie eine Horde von %num% Zombies sich in Richtung Stadt bewegte... Wie aus dem Nichts stand die Meute auf einmal vor dem Stadttor...</source>
+        <target>Resigniert und untröstlich sahen die Bürger wie eine Horde von %num% Zombies sich in Richtung Stadt bewegte... Wie aus dem Nichts stand die Meute auf einmal vor dem Stadttor...</target>
+      </trans-unit>
+      <trans-unit id="XX6_Va3" resname="%num% Zombies attackieren die Stadtbewohner!">
+        <source>%num% Zombies attackieren die Stadtbewohner!</source>
+        <target>%num% Zombies attackieren die Stadtbewohner!</target>
+      </trans-unit>
+      <trans-unit id="eJyeGor" resname="Der Einsatz von %building% für die Verteidigung der Stadt hat uns %num% Rationen Wasser gekostet.">
+        <source>Der Einsatz von %building% für die Verteidigung der Stadt hat uns %num% Rationen Wasser gekostet.</source>
+        <target>Der Einsatz von %building% für die Verteidigung der Stadt hat uns %num% Rationen Wasser gekostet.</target>
+      </trans-unit>
+      <trans-unit id="F2roj_A" resname="Durch die Verbesserung von %building% wurdem dem Brunnen %num% Rationen Wasser hinzugefügt.">
+        <source>Durch die Verbesserung von %building% wurdem dem Brunnen %num% Rationen Wasser hinzugefügt.</source>
+        <target>Durch die Verbesserung von %building% wurdem dem Brunnen %num% Rationen Wasser hinzugefügt.</target>
+      </trans-unit>
+      <trans-unit id="Bv9VF1c" resname="Durch die Verbesserung von %building% hat die Stadt folgende Gegenstände erhalten: %items%">
+        <source>Durch die Verbesserung von %building% hat die Stadt folgende Gegenstände erhalten: %items%</source>
+        <target>Durch die Verbesserung von %building% hat die Stadt folgende Gegenstände erhalten: %items%</target>
+      </trans-unit>
+      <trans-unit id="icmQw3h" resname="Was für ein Glück! Kurz nach dem Angriff wurde ein Bauplan in die Stadt geweht. Ihr erhaltet: %item%">
+        <source>Was für ein Glück! Kurz nach dem Angriff wurde ein Bauplan in die Stadt geweht. Ihr erhaltet: %item%</source>
+        <target>Was für ein Glück! Kurz nach dem Angriff wurde ein Bauplan in die Stadt geweht. Ihr erhaltet: %item%</target>
+      </trans-unit>
+      <trans-unit id="v7qhwcN" resname="Heute Nacht wurden von %building% folgende Gegenstände produziert: %items%">
+        <source>Heute Nacht wurden von %building% folgende Gegenstände produziert: %items%</source>
+        <target>Heute Nacht wurden von %building% folgende Gegenstände produziert: %items%</target>
+      </trans-unit>
+      <trans-unit id="ThZ6eEv" resname="Die letzte Anzeige hat das Fass zum Überlaufen gebracht. %citizen% wurde von den Bürgern der Stadt verbannt!">
+        <source>Die letzte Anzeige hat das Fass zum Überlaufen gebracht. %citizen% wurde von den Bürgern der Stadt verbannt!</source>
+        <target>Die letzte Anzeige hat das Fass zum Überlaufen gebracht. %citizen% wurde von den Bürgern der Stadt verbannt!</target>
+      </trans-unit>
+      <trans-unit id="gaDgdbl" resname="Du kannst die Stadt von hier aus nicht betreten.">
+        <source>Du kannst die Stadt von hier aus nicht betreten.</source>
+        <target>Du kannst die Stadt von hier aus nicht betreten.</target>
+      </trans-unit>
+      <trans-unit id="4rHd9Vd" resname="Du kannst diese Zone von hier aus nicht betreten.">
+        <source>Du kannst diese Zone von hier aus nicht betreten.</source>
+        <target>Du kannst diese Zone von hier aus nicht betreten.</target>
+      </trans-unit>
+      <trans-unit id="E3IPzEv" resname="Zombies blockieren deine Zone!">
+        <source>Zombies blockieren deine Zone!</source>
+        <target>Zombies blockieren deine Zone!</target>
+      </trans-unit>
+      <trans-unit id="eDXR6Le" resname="Diese Aktion kann nur in Zonen ausgeführt werden, die von Zombies kontrolliert werden.">
+        <source>Diese Aktion kann nur in Zonen ausgeführt werden, die von Zombies kontrolliert werden.</source>
+        <target>Diese Aktion kann nur in Zonen ausgeführt werden, die von Zombies kontrolliert werden.</target>
+      </trans-unit>
+      <trans-unit id="scZCiSc" resname="Du kannst nicht angreifen wenn du bereits verwundet bist.">
+        <source>Du kannst nicht angreifen wenn du bereits verwundet bist.</source>
+        <target>Du kannst nicht angreifen wenn du bereits verwundet bist.</target>
+      </trans-unit>
+      <trans-unit id="Lil.cvr" resname="Du kannst auf dieser Zone nicht graben.">
+        <source>Du kannst auf dieser Zone nicht graben.</source>
+        <target>Du kannst auf dieser Zone nicht graben.</target>
+      </trans-unit>
+      <trans-unit id="MPn9B5E" resname="Das Stadttor ist geschlossen!">
+        <source>Das Stadttor ist geschlossen!</source>
+        <target>Das Stadttor ist geschlossen!</target>
+      </trans-unit>
+      <trans-unit id="Wevnltm" resname="Deine Nachricht muss zwischen 2 und 256 Zeichen haben.">
+        <source>Deine Nachricht muss zwischen 2 und 256 Zeichen haben.</source>
+        <target>Deine Nachricht muss zwischen 2 und 256 Zeichen haben.</target>
+      </trans-unit>
+      <trans-unit id="7CYUPCo" resname="Heute wirst du nichts mehr im Müll finden.">
+        <source>Heute wirst du nichts mehr im Müll finden.</source>
+        <target>Heute wirst du nichts mehr im Müll finden.</target>
+      </trans-unit>
+      <trans-unit id="4cWeVEO" resname="Du hast bereits einen Beruf gewählt.">
+        <source>Du hast bereits einen Beruf gewählt.</source>
+        <target>Du hast bereits einen Beruf gewählt.</target>
+      </trans-unit>
+      <trans-unit id="3fRIOKg" resname="Ungültige Auswahl.">
+        <source>Ungültige Auswahl.</source>
+        <target>Ungültige Auswahl.</target>
+      </trans-unit>
+      <trans-unit id="iSpeYjc" resname="Der Brunnen ist leer!">
+        <source>Der Brunnen ist leer!</source>
+        <target>Der Brunnen ist leer!</target>
+      </trans-unit>
+      <trans-unit id="t9s1UYK" resname="Du kannst heute keine weiteren Rationen entnehmen.">
+        <source>Du kannst heute keine weiteren Rationen entnehmen.</source>
+        <target>Du kannst heute keine weiteren Rationen entnehmen.</target>
+      </trans-unit>
+      <trans-unit id="GNSPYmK" resname="Hierfür brauchst du klares Wasser (keine Kanister)!">
+        <source>Hierfür brauchst du klares Wasser (keine Kanister)!</source>
+        <target>Hierfür brauchst du klares Wasser (keine Kanister)!</target>
+      </trans-unit>
+      <trans-unit id="TEo9cyt" resname="Das Tor ist bereits geschlossen.">
+        <source>Das Tor ist bereits geschlossen.</source>
+        <target>Das Tor ist bereits geschlossen.</target>
+      </trans-unit>
+      <trans-unit id="JsP4vsH" resname="Das Tor ist bereits offen.">
+        <source>Das Tor ist bereits offen.</source>
+        <target>Das Tor ist bereits offen.</target>
+      </trans-unit>
+      <trans-unit id="GjXgBou" resname="Für dieses Gebäude fehlen Baumaterialien.">
+        <source>Für dieses Gebäude fehlen Baumaterialien.</source>
+        <target>Für dieses Gebäude fehlen Baumaterialien.</target>
+      </trans-unit>
+      <trans-unit id="P242oK2" resname="Du hast heute bereits eine Verbesserung deines Hauses vorgenommen.">
+        <source>Du hast heute bereits eine Verbesserung deines Hauses vorgenommen.</source>
+        <target>Du hast heute bereits eine Verbesserung deines Hauses vorgenommen.</target>
+      </trans-unit>
+      <trans-unit id="s1D0Mug" resname="Dieser Gegenstand ist außerhalb deiner Reichweite.">
+        <source>Dieser Gegenstand ist außerhalb deiner Reichweite.</source>
+        <target>Dieser Gegenstand ist außerhalb deiner Reichweite.</target>
+      </trans-unit>
+      <trans-unit id="WFi0NxJ" resname="Du hast keinen Platz mehr für diesen Gegenstand!">
+        <source>Du hast keinen Platz mehr für diesen Gegenstand!</source>
+        <target>Du hast keinen Platz mehr für diesen Gegenstand!</target>
+      </trans-unit>
+      <trans-unit id="4lQ8bY." resname="Du kannst keinen weiteren schweren Gegenstand tragen!">
+        <source>Du kannst keinen weiteren schweren Gegenstand tragen!</source>
+        <target>Du kannst keinen weiteren schweren Gegenstand tragen!</target>
+      </trans-unit>
+      <trans-unit id="QRxC8ol" resname="Du kannst für eine Weile keine weiteren Gegenstände aus der Bank entnehmen.">
+        <source>Du kannst für eine Weile keine weiteren Gegenstände aus der Bank entnehmen.</source>
+        <target>Du kannst für eine Weile keine weiteren Gegenstände aus der Bank entnehmen.</target>
+      </trans-unit>
+      <trans-unit id="485Czj9" resname="Du kannst heute keinen weiteren Gegenstand stehlen.">
+        <source>Du kannst heute keinen weiteren Gegenstand stehlen.</source>
+        <target>Du kannst heute keinen weiteren Gegenstand stehlen.</target>
+      </trans-unit>
+      <trans-unit id="2BZWXxV" resname="Du siehst keine Möglichkeit, hier einzubrechen ...">
+        <source>Du siehst keine Möglichkeit, hier einzubrechen ...</source>
+        <target>Du siehst keine Möglichkeit, hier einzubrechen ...</target>
+      </trans-unit>
+      <trans-unit id="zGsgAe0" resname="Als Verbannter darfst du keine Gegenstände aus der Bank entnehmen.">
+        <source>Als Verbannter darfst du keine Gegenstände aus der Bank entnehmen.</source>
+        <target>Als Verbannter darfst du keine Gegenstände aus der Bank entnehmen.</target>
+      </trans-unit>
+      <trans-unit id="2HhqG76" resname="Diese Aktion ist ungültig.">
+        <source>Diese Aktion ist ungültig.</source>
+        <target>Diese Aktion ist ungültig.</target>
+      </trans-unit>
+      <trans-unit id="RvTmYTp" resname="Diese Aktion ist nicht verfügbar.">
+        <source>Diese Aktion ist nicht verfügbar.</source>
+        <target>Diese Aktion ist nicht verfügbar.</target>
+      </trans-unit>
+      <trans-unit id="UK6Ie5i" resname="Das kannst du zur Zeit nicht tun.">
+        <source>Das kannst du zur Zeit nicht tun.</source>
+        <target>Das kannst du zur Zeit nicht tun.</target>
+      </trans-unit>
+      <trans-unit id="2dPpxn7" resname="Leider gibt es aktuell keine Foren, auf die zu Zugriff hast. Bitte versuche es später erneut.">
+        <source>Leider gibt es aktuell keine Foren, auf die zu Zugriff hast. Bitte versuche es später erneut.</source>
+        <target>Leider gibt es aktuell keine Foren, auf die zu Zugriff hast. Bitte versuche es später erneut.</target>
+      </trans-unit>
+      <trans-unit id="QI_O4UJ" resname="Verschüttete Ruine">
+        <source>Verschüttete Ruine</source>
+        <target>Verschüttete Ruine</target>
+      </trans-unit>
+      <trans-unit id="qKBuSla" resname="Zone">
+        <source>Zone</source>
+        <target>Zone</target>
+      </trans-unit>
+      <trans-unit id="8Nqa1HE" resname="Entfernung">
+        <source>Entfernung</source>
+        <target>Entfernung</target>
+      </trans-unit>
+      <trans-unit id="VasxdH5" resname="Routen">
+        <source>Routen</source>
+        <target>Routen</target>
+      </trans-unit>
+      <trans-unit id="wkJT.qQ" resname="Stadttor">
+        <source>Stadttor</source>
+        <target>Stadttor</target>
+      </trans-unit>
+      <trans-unit id="NqjEmUx" resname="Karte">
+        <source>Karte</source>
+        <target>Karte</target>
+      </trans-unit>
+      <trans-unit id="VgeAGfB" resname="Bitte wähle einen Gegenstand:">
+        <source>Bitte wähle einen Gegenstand:</source>
+        <target>Bitte wähle einen Gegenstand:</target>
+      </trans-unit>
+      <trans-unit id="m.LKoYd" resname="Du verfügst über keine geeigneten Gegenstände">
+        <source>Du verfügst über keine geeigneten Gegenstände</source>
+        <target>Du verfügst über keine geeigneten Gegenstände</target>
+      </trans-unit>
+      <trans-unit id="bxRbnw9" resname="Herstellen">
+        <source>Herstellen</source>
+        <target>Herstellen</target>
+      </trans-unit>
+      <trans-unit id="IzfDfwc" resname="aus">
+        <source>aus</source>
+        <target>aus</target>
+      </trans-unit>
+      <trans-unit id="SQxs_a5" resname="Kombinieren">
+        <source>Kombinieren</source>
+        <target>Kombinieren</target>
+      </trans-unit>
+      <trans-unit id="dizwCRc" resname="Du kannst von hier aus die Stadt verlassen und die Außenwelt erkunden. Vergiss aber nicht, um Mitternacht das Tor zu schließen!">
+        <source>Du kannst von hier aus die Stadt verlassen und die Außenwelt erkunden. Vergiss aber nicht, um Mitternacht das Tor zu schließen!</source>
+        <target>Du kannst von hier aus die Stadt verlassen und die Außenwelt erkunden. Vergiss aber nicht, um Mitternacht das Tor zu schließen!</target>
+      </trans-unit>
+      <trans-unit id="UgTjBPn" resname="Du wurdest verbannt und kannst daher das Stadttor weder öffnen noch schließen.">
+        <source>Du wurdest verbannt und kannst daher das Stadttor weder öffnen noch schließen.</source>
+        <target>Du wurdest verbannt und kannst daher das Stadttor weder öffnen noch schließen.</target>
+      </trans-unit>
+      <trans-unit id="_rfFVtg" resname="Meine Aktionen">
+        <source>Meine Aktionen</source>
+        <target>Meine Aktionen</target>
+      </trans-unit>
+      <trans-unit id="Ja76Y2N" resname="Tor schließen">
+        <source>Tor schließen</source>
+        <target>Tor schließen</target>
+      </trans-unit>
+      <trans-unit id="0UyjBX6" resname="Tor öffnen">
+        <source>Tor öffnen</source>
+        <target>Tor öffnen</target>
+      </trans-unit>
+      <trans-unit id="uhQorE4" resname="Route planen...">
+        <source>Route planen...</source>
+        <target>Route planen...</target>
+      </trans-unit>
+      <trans-unit id="wKVgmMx" resname="Stadt verlassen">
+        <source>Stadt verlassen</source>
+        <target>Stadt verlassen</target>
+      </trans-unit>
+      <trans-unit id="VHo.w1Y" resname="Stadttor-Register">
+        <source>Stadttor-Register</source>
+        <target>Stadttor-Register</target>
+      </trans-unit>
+      <trans-unit id="oCYA07E" resname="Mithilfe des Wachturms kann die Stärke des nächtlichen Angriffs abgeschätzt werden. Je mehr Bürger sich an der Abschätzung beteiligen, desto genauer wird das Ergebnis.">
+        <source>Mithilfe des Wachturms kann die Stärke des nächtlichen Angriffs abgeschätzt werden. Je mehr Bürger sich an der Abschätzung beteiligen, desto genauer wird das Ergebnis.</source>
+        <target>Mithilfe des Wachturms kann die Stärke des nächtlichen Angriffs abgeschätzt werden. Je mehr Bürger sich an der Abschätzung beteiligen, desto genauer wird das Ergebnis.</target>
+      </trans-unit>
+      <trans-unit id="MVukZx5" resname="Heutige Abschätzung">
+        <source>Heutige Abschätzung</source>
+        <target>Heutige Abschätzung</target>
+      </trans-unit>
+      <trans-unit id="8N0dl_g" resname="Zombies">
+        <source>Zombies</source>
+        <target>Zombies</target>
+      </trans-unit>
+      <trans-unit id="ItcOxwd" resname="Qualität der Abschätzung">
+        <source>Qualität der Abschätzung</source>
+        <target>Qualität der Abschätzung</target>
+      </trans-unit>
+      <trans-unit id="GHVvmus" resname="Abschätzung verbessern">
+        <source>Abschätzung verbessern</source>
+        <target>Abschätzung verbessern</target>
+      </trans-unit>
+      <trans-unit id="PudnUuv" resname="Morgige Abschätzung">
+        <source>Morgige Abschätzung</source>
+        <target>Morgige Abschätzung</target>
+      </trans-unit>
+      <trans-unit id="Y5SuVaF" resname="Wow, von hier oben kannst du praktisch alles sehen! Schade nur, dass dieses 'alles' sich auf eine leere Sandwüste beschränkt. Wenn du ganz genau hinschaust, kannst du jedoch die Zombies zählen, die sich Richtung Stadt schleppen.">
+        <source>Wow, von hier oben kannst du praktisch alles sehen! Schade nur, dass dieses 'alles' sich auf eine leere Sandwüste beschränkt. Wenn du ganz genau hinschaust, kannst du jedoch die Zombies zählen, die sich Richtung Stadt schleppen.</source>
+        <target>Wow, von hier oben kannst du praktisch alles sehen! Schade nur, dass dieses 'alles' sich auf eine leere Sandwüste beschränkt. Wenn du ganz genau hinschaust, kannst du jedoch die Zombies zählen, die sich Richtung Stadt schleppen.</target>
+      </trans-unit>
+      <trans-unit id="sdTkF5i" resname="Morgiger Angriff">
+        <source>Morgiger Angriff</source>
+        <target>Morgiger Angriff</target>
+      </trans-unit>
+      <trans-unit id="ZI5NoYl" resname="Tag %day%">
+        <source>Tag %day%</source>
+        <target>Tag %day%</target>
+      </trans-unit>
+      <trans-unit id="HMtmyP_" resname="Rucksack">
+        <source>Rucksack</source>
+        <target>Rucksack</target>
+      </trans-unit>
+      <trans-unit id="n__v7g9" resname="Truhe">
+        <source>Truhe</source>
+        <target>Truhe</target>
+      </trans-unit>
+      <trans-unit id="X3ACy1e" resname="Truhe und Aktionen">
+        <source>Truhe und Aktionen</source>
+        <target>Truhe und Aktionen</target>
+      </trans-unit>
+      <trans-unit id="jsTL6lr" resname="Mein(e) %type%">
+        <source>Mein(e) %type%</source>
+        <target>Mein(e) %type%</target>
+      </trans-unit>
+      <trans-unit id="lQhjNcE" resname="Bauarbeiten">
+        <source>Bauarbeiten</source>
+        <target>Bauarbeiten</target>
+      </trans-unit>
+      <trans-unit id="PA2qVgw" resname="Dein Beschreibungstext">
+        <source>Dein Beschreibungstext</source>
+        <target>Dein Beschreibungstext</target>
+      </trans-unit>
+      <trans-unit id="9rL.OfV" resname="Speichern">
+        <source>Speichern</source>
+        <target>Speichern</target>
+      </trans-unit>
+      <trans-unit id="vwfykUF" resname="Du hast %num% anonyme Anzeige(n).">
+        <source>Du hast %num% anonyme Anzeige(n).</source>
+        <target>Du hast %num% anonyme Anzeige(n).</target>
+      </trans-unit>
+      <trans-unit id="0drragL" resname="Anzeigen können zu deiner Verbannung oder sogar Hinrichtung führen. Vielleicht solltest du das Verhältnis zwischen dir und dem Rest der Stadt verbessern ...">
+        <source>Anzeigen können zu deiner Verbannung oder sogar Hinrichtung führen. Vielleicht solltest du das Verhältnis zwischen dir und dem Rest der Stadt verbessern ...</source>
+        <target>Anzeigen können zu deiner Verbannung oder sogar Hinrichtung führen. Vielleicht solltest du das Verhältnis zwischen dir und dem Rest der Stadt verbessern ...</target>
+      </trans-unit>
+      <trans-unit id="2zVOnFs" resname="In der linken Spalte werden alle Aktionen und Handlungen dargestellt, die du mit deinen Gegenständen ausführen kannst. In der rechten Spalte kannst du den Inhalt deines Rucksacks und deiner Truhe ansehen.">
+        <source>In der linken Spalte werden alle Aktionen und Handlungen dargestellt, die du mit deinen Gegenständen ausführen kannst. In der rechten Spalte kannst du den Inhalt deines Rucksacks und deiner Truhe ansehen.</source>
+        <target>In der linken Spalte werden alle Aktionen und Handlungen dargestellt, die du mit deinen Gegenständen ausführen kannst. In der rechten Spalte kannst du den Inhalt deines Rucksacks und deiner Truhe ansehen.</target>
+      </trans-unit>
+      <trans-unit id="mvdJ1gZ" resname="Meine Spezialaktionen">
+        <source>Meine Spezialaktionen</source>
+        <target>Meine Spezialaktionen</target>
+      </trans-unit>
+      <trans-unit id="zSx1h9s" resname="Rucksack ausleeren">
+        <source>Rucksack ausleeren</source>
+        <target>Rucksack ausleeren</target>
+      </trans-unit>
+      <trans-unit id="bd_whxO" resname="Mein Register">
+        <source>Mein Register</source>
+        <target>Mein Register</target>
+      </trans-unit>
+      <trans-unit id="HbM7uO9" resname="Verteidigung und Dekoration">
+        <source>Verteidigung und Dekoration</source>
+        <target>Verteidigung und Dekoration</target>
+      </trans-unit>
+      <trans-unit id="77.Cp5H" resname="Verteidigung">
+        <source>Verteidigung</source>
+        <target>Verteidigung</target>
+      </trans-unit>
+      <trans-unit id="ESh2aNj" resname="durch Haus">
+        <source>durch Haus</source>
+        <target>durch Haus</target>
+      </trans-unit>
+      <trans-unit id="bhU20pv" resname="durch Beruf">
+        <source>durch Beruf</source>
+        <target>durch Beruf</target>
+      </trans-unit>
+      <trans-unit id="d5El4_h" resname="durch Ausbauten">
+        <source>durch Ausbauten</source>
+        <target>durch Ausbauten</target>
+      </trans-unit>
+      <trans-unit id="0Rphz24" resname="durch Gegenstände">
+        <source>durch Gegenstände</source>
+        <target>durch Gegenstände</target>
+      </trans-unit>
+      <trans-unit id=".k1cQGO" resname="Dekoration">
+        <source>Dekoration</source>
+        <target>Dekoration</target>
+      </trans-unit>
+      <trans-unit id="aai5fCx" resname="Gegenstände">
+        <source>Gegenstände</source>
+        <target>Gegenstände</target>
+      </trans-unit>
+      <trans-unit id="UfaHlFI" resname="Ausbauten">
+        <source>Ausbauten</source>
+        <target>Ausbauten</target>
+      </trans-unit>
+      <trans-unit id="32LY7bW" resname="Ausbauten stehen nur Helden zur Verfügung. Solange du nur ein normaler Einwohner bist, sind deine&#10;                        Ausbauten funktionslos.">
+        <source>Ausbauten stehen nur Helden zur Verfügung. Solange du nur ein normaler Einwohner bist, sind deine
+                        Ausbauten funktionslos.</source>
+        <target>Ausbauten stehen nur Helden zur Verfügung. Solange du nur ein normaler Einwohner bist, sind deine
+                        Ausbauten funktionslos.</target>
+      </trans-unit>
+      <trans-unit id="XhECS_Z" resname="Stufe %level%">
+        <source>Stufe %level%</source>
+        <target>Stufe %level%</target>
+      </trans-unit>
+      <trans-unit id="RmaV9PR" resname="Mein Haus ausbauen">
+        <source>Mein Haus ausbauen</source>
+        <target>Mein Haus ausbauen</target>
+      </trans-unit>
+      <trans-unit id="J53z_38" resname="Du kannst die Widerstandsfähigkeit deines Hauses verbessern, indem du es ausbaust.">
+        <source>Du kannst die Widerstandsfähigkeit deines Hauses verbessern, indem du es ausbaust.</source>
+        <target>Du kannst die Widerstandsfähigkeit deines Hauses verbessern, indem du es ausbaust.</target>
+      </trans-unit>
+      <trans-unit id="9.thJKR" resname="Mit der ersten Verbesserungstufe bekommst du die Möglichkeit private Bauarbeiten durchführen zu können.">
+        <source>Mit der ersten Verbesserungstufe bekommst du die Möglichkeit private Bauarbeiten durchführen zu können.</source>
+        <target>Mit der ersten Verbesserungstufe bekommst du die Möglichkeit private Bauarbeiten durchführen zu können.</target>
+      </trans-unit>
+      <trans-unit id="LpICvqt" resname="Bauen">
+        <source>Bauen</source>
+        <target>Bauen</target>
+      </trans-unit>
+      <trans-unit id="0uS2PQd" resname="Um dein Haus weiter auszubauen, muss die Stadt über folgendes Gebäude verfügen:">
+        <source>Um dein Haus weiter auszubauen, muss die Stadt über folgendes Gebäude verfügen:</source>
+        <target>Um dein Haus weiter auszubauen, muss die Stadt über folgendes Gebäude verfügen:</target>
+      </trans-unit>
+      <trans-unit id="N6UlT0G" resname="Für diesen Ausbau benötigst du folgende Gegenstände:">
+        <source>Für diesen Ausbau benötigst du folgende Gegenstände:</source>
+        <target>Für diesen Ausbau benötigst du folgende Gegenstände:</target>
+      </trans-unit>
+      <trans-unit id="1XZ6TGN" resname="Für diesen Ausbau werden keine Gegenstände benötigt.">
+        <source>Für diesen Ausbau werden keine Gegenstände benötigt.</source>
+        <target>Für diesen Ausbau werden keine Gegenstände benötigt.</target>
+      </trans-unit>
+      <trans-unit id="x7duHnG" resname="Die folgenden Bauarbeiten kannst du an deinem Haus durchführen. Jede Verbesserung bringt dir besondere Vorteile.">
+        <source>Die folgenden Bauarbeiten kannst du an deinem Haus durchführen. Jede Verbesserung bringt dir besondere Vorteile.</source>
+        <target>Die folgenden Bauarbeiten kannst du an deinem Haus durchführen. Jede Verbesserung bringt dir besondere Vorteile.</target>
+      </trans-unit>
+      <trans-unit id="r5DiSCv" resname="Du musst ein Held sein, um die folgenden Ausbauten vornehmen zu können.">
+        <source>Du musst ein Held sein, um die folgenden Ausbauten vornehmen zu können.</source>
+        <target>Du musst ein Held sein, um die folgenden Ausbauten vornehmen zu können.</target>
+      </trans-unit>
+      <trans-unit id="jvbOgSC" resname="Erfordert">
+        <source>Erfordert</source>
+        <target>Erfordert</target>
+      </trans-unit>
+      <trans-unit id="MzBikVy" resname="Einbauen">
+        <source>Einbauen</source>
+        <target>Einbauen</target>
+      </trans-unit>
+      <trans-unit id="lxPyIGw" resname="Upgrade auf St. %level%">
+        <source>Upgrade auf St. %level%</source>
+        <target>Upgrade auf St. %level%</target>
+      </trans-unit>
+      <trans-unit id="W2jpIKn" resname="Kein weiterer Ausbau möglich">
+        <source>Kein weiterer Ausbau möglich</source>
+        <target>Kein weiterer Ausbau möglich</target>
+      </trans-unit>
+      <trans-unit id="u1m7Ptc" resname="Leiche nicht beseitigt!">
+        <source>Leiche nicht beseitigt!</source>
+        <target>Leiche nicht beseitigt!</target>
+      </trans-unit>
+      <trans-unit id="u_yrL5q" resname="Tot!">
+        <source>Tot!</source>
+        <target>Tot!</target>
+      </trans-unit>
+      <trans-unit id="fV5wxwj" resname="In der Stadt">
+        <source>In der Stadt</source>
+        <target>In der Stadt</target>
+      </trans-unit>
+      <trans-unit id="5TOztAt" resname="Am Stadttor">
+        <source>Am Stadttor</source>
+        <target>Am Stadttor</target>
+      </trans-unit>
+      <trans-unit id="Voc3Ntu" resname="Neue einfache Route">
+        <source>Neue einfache Route</source>
+        <target>Neue einfache Route</target>
+      </trans-unit>
+      <trans-unit id="v88wslY" resname="Neue komplexe Route">
+        <source>Neue komplexe Route</source>
+        <target>Neue komplexe Route</target>
+      </trans-unit>
+      <trans-unit id="fn_qM4v" resname="Name der Route">
+        <source>Name der Route</source>
+        <target>Name der Route</target>
+      </trans-unit>
+      <trans-unit id="QL.qpuP" resname="Hier kannst du Routen für einen Trip in die Außenwelt planen. Einfache Routen beginnen und enden immer&#10;                    in der Stadt. Komplexe Routen können an beliebigen Punkten beginnen und enden.">
+        <source>Hier kannst du Routen für einen Trip in die Außenwelt planen. Einfache Routen beginnen und enden immer
+                    in der Stadt. Komplexe Routen können an beliebigen Punkten beginnen und enden.</source>
+        <target>Hier kannst du Routen für einen Trip in die Außenwelt planen. Einfache Routen beginnen und enden immer
+                    in der Stadt. Komplexe Routen können an beliebigen Punkten beginnen und enden.</target>
+      </trans-unit>
+      <trans-unit id="dLIxjrY" resname="Nur Helden können komplexe Routen planen.">
+        <source>Nur Helden können komplexe Routen planen.</source>
+        <target>Nur Helden können komplexe Routen planen.</target>
+      </trans-unit>
+      <trans-unit id="qjGq_3f" resname="Bitte gib einen gültigen Namen ein (zwischen 3 und 32 Zeichen).">
+        <source>Bitte gib einen gültigen Namen ein (zwischen 3 und 32 Zeichen).</source>
+        <target>Bitte gib einen gültigen Namen ein (zwischen 3 und 32 Zeichen).</target>
+      </trans-unit>
+      <trans-unit id="Qsm1_.k" resname="Dein Rucksack">
+        <source>Dein Rucksack</source>
+        <target>Dein Rucksack</target>
+      </trans-unit>
+      <trans-unit id="ZHTFO77" resname="%citizen%s Truhe">
+        <source>%citizen%s Truhe</source>
+        <target>%citizen%s Truhe</target>
+      </trans-unit>
+      <trans-unit id="ygfGVvY" resname="Tot">
+        <source>Tot</source>
+        <target>Tot</target>
+      </trans-unit>
+      <trans-unit id="UJdq1Y9" resname="Haus">
+        <source>Haus</source>
+        <target>Haus</target>
+      </trans-unit>
+      <trans-unit id="7F000hR" resname="Todesursache">
+        <source>Todesursache</source>
+        <target>Todesursache</target>
+      </trans-unit>
+      <trans-unit id="rD2ZHAN" resname="Letzte Worte">
+        <source>Letzte Worte</source>
+        <target>Letzte Worte</target>
+      </trans-unit>
+      <trans-unit id="tTFjSe8" resname="Gemeinschaft">
+        <source>Gemeinschaft</source>
+        <target>Gemeinschaft</target>
+      </trans-unit>
+      <trans-unit id="qvB2Xk." resname="%citizen% hat bereits %num% Anzeige(n).">
+        <source>%citizen% hat bereits %num% Anzeige(n).</source>
+        <target>%citizen% hat bereits %num% Anzeige(n).</target>
+      </trans-unit>
+      <trans-unit id="S8vqbzA" resname="Verbannung">
+        <source>Verbannung</source>
+        <target>Verbannung</target>
+      </trans-unit>
+      <trans-unit id="utVVlIc" resname="Todesstrafe">
+        <source>Todesstrafe</source>
+        <target>Todesstrafe</target>
+      </trans-unit>
+      <trans-unit id="VfVtXGi" resname="Eine davon stammt von dir. Du hast %punishment% gefordert.">
+        <source>Eine davon stammt von dir. Du hast %punishment% gefordert.</source>
+        <target>Eine davon stammt von dir. Du hast %punishment% gefordert.</target>
+      </trans-unit>
+      <trans-unit id="MAnMgpF" resname="Anzeige erstatten">
+        <source>Anzeige erstatten</source>
+        <target>Anzeige erstatten</target>
+      </trans-unit>
+      <trans-unit id="hWJotD4" resname="Anzeige zurückziehen">
+        <source>Anzeige zurückziehen</source>
+        <target>Anzeige zurückziehen</target>
+      </trans-unit>
+      <trans-unit id="NiNilxh" resname="Anzeige: Todesstrafe fordern">
+        <source>Anzeige: Todesstrafe fordern</source>
+        <target>Anzeige: Todesstrafe fordern</target>
+      </trans-unit>
+      <trans-unit id="WwHdsjz" resname="Anzeige: Verbannung fordern">
+        <source>Anzeige: Verbannung fordern</source>
+        <target>Anzeige: Verbannung fordern</target>
+      </trans-unit>
+      <trans-unit id="ZU0JC0f" resname="%citizen%s Register">
+        <source>%citizen%s Register</source>
+        <target>%citizen%s Register</target>
+      </trans-unit>
+      <trans-unit id="oYgU.Rg" resname="Bist du sicher, dass du hier einbrechen und einen Gegenstand hinterlassen willst?">
+        <source>Bist du sicher, dass du hier einbrechen und einen Gegenstand hinterlassen willst?</source>
+        <target>Bist du sicher, dass du hier einbrechen und einen Gegenstand hinterlassen willst?</target>
+      </trans-unit>
+      <trans-unit id="pZ8LEh0" resname="Bist du sicher, dass du hier einbrechen und einen Gegenstand stehlen willst?">
+        <source>Bist du sicher, dass du hier einbrechen und einen Gegenstand stehlen willst?</source>
+        <target>Bist du sicher, dass du hier einbrechen und einen Gegenstand stehlen willst?</target>
+      </trans-unit>
+      <trans-unit id="EB14a2E" resname="Einmal pro Tag können bestimmte Konstruktionen umsonst verbessert werden (ohne Einsatz von AP oder Ressourcen). Das nennt sich die Verbesserung des Tages. Jede Verbesserung bringt verschiedene Vorteile mit sich (Verteidigung, Wasser, spezielle Fähigkeiten...). Es ist eure Aufgabe die Verbesserung des Tages zu wählen, die euch am geeignetsten scheint.">
+        <source>Einmal pro Tag können bestimmte Konstruktionen umsonst verbessert werden (ohne Einsatz von AP oder Ressourcen). Das nennt sich die Verbesserung des Tages. Jede Verbesserung bringt verschiedene Vorteile mit sich (Verteidigung, Wasser, spezielle Fähigkeiten...). Es ist eure Aufgabe die Verbesserung des Tages zu wählen, die euch am geeignetsten scheint.</source>
+        <target>Einmal pro Tag können bestimmte Konstruktionen umsonst verbessert werden (ohne Einsatz von AP oder Ressourcen). Das nennt sich die Verbesserung des Tages. Jede Verbesserung bringt verschiedene Vorteile mit sich (Verteidigung, Wasser, spezielle Fähigkeiten...). Es ist eure Aufgabe die Verbesserung des Tages zu wählen, die euch am geeignetsten scheint.</target>
+      </trans-unit>
+      <trans-unit id="PhutSSq" resname="Du wurdest verbannt und kannst daher nicht länger für eine Verbesserung des Tages abstimmen.">
+        <source>Du wurdest verbannt und kannst daher nicht länger für eine Verbesserung des Tages abstimmen.</source>
+        <target>Du wurdest verbannt und kannst daher nicht länger für eine Verbesserung des Tages abstimmen.</target>
+      </trans-unit>
+      <trans-unit id="_LKq1VW" resname="Du hast bereits für folgendes Projekt abgestimmt:">
+        <source>Du hast bereits für folgendes Projekt abgestimmt:</source>
+        <target>Du hast bereits für folgendes Projekt abgestimmt:</target>
+      </trans-unit>
+      <trans-unit id="HDgwb1i" resname="Aktuelles Level:">
+        <source>Aktuelles Level:</source>
+        <target>Aktuelles Level:</target>
+      </trans-unit>
+      <trans-unit id="tSHIOru" resname="Nächstes Level:">
+        <source>Nächstes Level:</source>
+        <target>Nächstes Level:</target>
+      </trans-unit>
+      <trans-unit id="vihCVqO" resname="Max. Level">
+        <source>Max. Level</source>
+        <target>Max. Level</target>
+      </trans-unit>
+      <trans-unit id="QMbrYas" resname="Level %lv%">
+        <source>Level %lv%</source>
+        <target>Level %lv%</target>
+      </trans-unit>
+      <trans-unit id="sGKanc7" resname="Abstimmen">
+        <source>Abstimmen</source>
+        <target>Abstimmen</target>
+      </trans-unit>
+      <trans-unit id="_fJ2tva" resname="Stimmen:">
+        <source>Stimmen:</source>
+        <target>Stimmen:</target>
+      </trans-unit>
+      <trans-unit id="qOmfTuV" resname="In der Werkstatt können Materialien zu brauchbaren Hilfsmitteln verarbeitet werden, die für bestimmte Gebäude und Konstruktionen in der Stadt notwendig sind. Alle zu bearbeitenden Gegenstände müssen direkt in der Bank deponiert werden.">
+        <source>In der Werkstatt können Materialien zu brauchbaren Hilfsmitteln verarbeitet werden, die für bestimmte Gebäude und Konstruktionen in der Stadt notwendig sind. Alle zu bearbeitenden Gegenstände müssen direkt in der Bank deponiert werden.</source>
+        <target>In der Werkstatt können Materialien zu brauchbaren Hilfsmitteln verarbeitet werden, die für bestimmte Gebäude und Konstruktionen in der Stadt notwendig sind. Alle zu bearbeitenden Gegenstände müssen direkt in der Bank deponiert werden.</target>
+      </trans-unit>
+      <trans-unit id="pOcBXgj" resname="Du wurdest verbannt und kannst daher nicht länger in der Werkstatt arbeiten.">
+        <source>Du wurdest verbannt und kannst daher nicht länger in der Werkstatt arbeiten.</source>
+        <target>Du wurdest verbannt und kannst daher nicht länger in der Werkstatt arbeiten.</target>
+      </trans-unit>
+      <trans-unit id="x01nfA5" resname="Jede Verarbeitung kostet %ap% (manche Gegenstände und Konstruktionen können diese Verarbeitungskosten senken).">
+        <source>Jede Verarbeitung kostet %ap% (manche Gegenstände und Konstruktionen können diese Verarbeitungskosten senken).</source>
+        <target>Jede Verarbeitung kostet %ap% (manche Gegenstände und Konstruktionen können diese Verarbeitungskosten senken).</target>
+      </trans-unit>
+      <trans-unit id="pVNCjNA" resname="Du trägst eine Säge bei dir.">
+        <source>Du trägst eine Säge bei dir.</source>
+        <target>Du trägst eine Säge bei dir.</target>
+      </trans-unit>
+      <trans-unit id="bwiADmE" resname="Die Stadt verfügt über eine Manufaktur.">
+        <source>Die Stadt verfügt über eine Manufaktur.</source>
+        <target>Die Stadt verfügt über eine Manufaktur.</target>
+      </trans-unit>
+      <trans-unit id="uLqulMX" resname="Vorrat">
+        <source>Vorrat</source>
+        <target>Vorrat</target>
+      </trans-unit>
+      <trans-unit id="hQll2q4" resname="Umwandlung">
+        <source>Umwandlung</source>
+        <target>Umwandlung</target>
+      </trans-unit>
+      <trans-unit id="cXTeIrr" resname="Anzahl">
+        <source>Anzahl</source>
+        <target>Anzahl</target>
+      </trans-unit>
+      <trans-unit id="UNwR9SS" resname="Zufälliger Gegenstand">
+        <source>Zufälliger Gegenstand</source>
+        <target>Zufälliger Gegenstand</target>
+      </trans-unit>
+      <trans-unit id="MkWoNw1" resname="Herst.">
+        <source>Herst.</source>
+        <target>Herst.</target>
+      </trans-unit>
+      <trans-unit id="5WqPLsh" resname="Werkstatt-Register">
+        <source>Werkstatt-Register</source>
+        <target>Werkstatt-Register</target>
+      </trans-unit>
+      <trans-unit id="hbYU0EF" resname="Hier findest du alle Gegenstände, die gegenwärtig in der Bank aufbewahrt werden. Bei diesen Gegenständen handelt es sich um Spenden der Bürger. Sie sind im Wesentlichen dazu da, Gemeinschaftsgebäude zu bauen und die Stadt gegen die allnächtlichen Zombieattacken zu verteidigen.">
+        <source>Hier findest du alle Gegenstände, die gegenwärtig in der Bank aufbewahrt werden. Bei diesen Gegenständen handelt es sich um Spenden der Bürger. Sie sind im Wesentlichen dazu da, Gemeinschaftsgebäude zu bauen und die Stadt gegen die allnächtlichen Zombieattacken zu verteidigen.</source>
+        <target>Hier findest du alle Gegenstände, die gegenwärtig in der Bank aufbewahrt werden. Bei diesen Gegenständen handelt es sich um Spenden der Bürger. Sie sind im Wesentlichen dazu da, Gemeinschaftsgebäude zu bauen und die Stadt gegen die allnächtlichen Zombieattacken zu verteidigen.</target>
+      </trans-unit>
+      <trans-unit id="U0vMVpy" resname="Bankregister">
+        <source>Bankregister</source>
+        <target>Bankregister</target>
+      </trans-unit>
+      <trans-unit id="TygUMhY" resname="In diesem Bereich kannst du an der Errichtung neuer Gebäude und Bauprojekte mitarbeiten. Dazu musst du zunächst die dafür notwendigen Materialien in der Wüste einsammeln (Holz, Metall,...). Anschließend kannst du deine Aktionspunkte (AP) für das Gebäude ausgeben, das dich am meisten interessiert.">
+        <source>In diesem Bereich kannst du an der Errichtung neuer Gebäude und Bauprojekte mitarbeiten. Dazu musst du zunächst die dafür notwendigen Materialien in der Wüste einsammeln (Holz, Metall,...). Anschließend kannst du deine Aktionspunkte (AP) für das Gebäude ausgeben, das dich am meisten interessiert.</source>
+        <target>In diesem Bereich kannst du an der Errichtung neuer Gebäude und Bauprojekte mitarbeiten. Dazu musst du zunächst die dafür notwendigen Materialien in der Wüste einsammeln (Holz, Metall,...). Anschließend kannst du deine Aktionspunkte (AP) für das Gebäude ausgeben, das dich am meisten interessiert.</target>
+      </trans-unit>
+      <trans-unit id="yrqg0t2" resname="Die Stadt hat Sklaverei legalisiert. Ab sofort kannst du trotz deiner Verbannung auf einer Baustelle&#10;                    arbeiten und erhälst sogar einen Bonus von 50% auf alle investierten &lt;div class=&quot;ap&quot;&gt;&lt;/div&gt;.">
+        <source>Die Stadt hat Sklaverei legalisiert. Ab sofort kannst du trotz deiner Verbannung auf einer Baustelle
+                    arbeiten und erhälst sogar einen Bonus von 50% auf alle investierten &lt;div class="ap"&gt;&lt;/div&gt;.</source>
+        <target><![CDATA[Die Stadt hat Sklaverei legalisiert. Ab sofort kannst du trotz deiner Verbannung auf einer Baustelle
+                    arbeiten und erhälst sogar einen Bonus von 50% auf alle investierten <div class="ap"></div>.]]></target>
+      </trans-unit>
+      <trans-unit id="ryRHkfD" resname="Du wurdest verbannt und kannst daher nicht länger auf einer Baustelle arbeiten.">
+        <source>Du wurdest verbannt und kannst daher nicht länger auf einer Baustelle arbeiten.</source>
+        <target>Du wurdest verbannt und kannst daher nicht länger auf einer Baustelle arbeiten.</target>
+      </trans-unit>
+      <trans-unit id="m_7J.WC" resname="Baustellenregister">
+        <source>Baustellenregister</source>
+        <target>Baustellenregister</target>
+      </trans-unit>
+      <trans-unit id="0m1lFXV" resname="Wie viele Aktionspunkte möchtest du in den Bau investieren?">
+        <source>Wie viele Aktionspunkte möchtest du in den Bau investieren?</source>
+        <target>Wie viele Aktionspunkte möchtest du in den Bau investieren?</target>
+      </trans-unit>
+      <trans-unit id="CNDL68g" resname="%rations% Rationen Wasser übrig">
+        <source>%rations% Rationen Wasser übrig</source>
+        <target>%rations% Rationen Wasser übrig</target>
+      </trans-unit>
+      <trans-unit id="qv0A9J5" resname="Aufgrund deiner Verbannung kannst du maximal eine Ration Wasser pro Tag entnehmen.">
+        <source>Aufgrund deiner Verbannung kannst du maximal eine Ration Wasser pro Tag entnehmen.</source>
+        <target>Aufgrund deiner Verbannung kannst du maximal eine Ration Wasser pro Tag entnehmen.</target>
+      </trans-unit>
+      <trans-unit id="6KUjC8g" resname="Die Stadt verfügt über eine %pumpname%.">
+        <source>Die Stadt verfügt über eine %pumpname%.</source>
+        <target>Die Stadt verfügt über eine %pumpname%.</target>
+      </trans-unit>
+      <trans-unit id="syHx5ID" resname="Deine Ration Wasser erhalten">
+        <source>Deine Ration Wasser erhalten</source>
+        <target>Deine Ration Wasser erhalten</target>
+      </trans-unit>
+      <trans-unit id="unhSN_Y" resname="Eine weitere Ration erhalten">
+        <source>Eine weitere Ration erhalten</source>
+        <target>Eine weitere Ration erhalten</target>
+      </trans-unit>
+      <trans-unit id="eEQntCE" resname="Wasser hinzufügen">
+        <source>Wasser hinzufügen</source>
+        <target>Wasser hinzufügen</target>
+      </trans-unit>
+      <trans-unit id="BMwsxtX" resname="Wasser ist unersetzbar. Es ermöglicht dir einmal pro Tag deine Aktionspunkte durch Trinken wieder aufzufüllen. Des weiteren kann man es auch gegen Zombies einsetzen (reines Wasser zerstört sie).">
+        <source>Wasser ist unersetzbar. Es ermöglicht dir einmal pro Tag deine Aktionspunkte durch Trinken wieder aufzufüllen. Des weiteren kann man es auch gegen Zombies einsetzen (reines Wasser zerstört sie).</source>
+        <target>Wasser ist unersetzbar. Es ermöglicht dir einmal pro Tag deine Aktionspunkte durch Trinken wieder aufzufüllen. Des weiteren kann man es auch gegen Zombies einsetzen (reines Wasser zerstört sie).</target>
+      </trans-unit>
+      <trans-unit id="96udPgY" resname="Brunnenregister">
+        <source>Brunnenregister</source>
+        <target>Brunnenregister</target>
+      </trans-unit>
+      <trans-unit id="Inm9E03" resname="Stadt">
+        <source>Stadt</source>
+        <target>Stadt</target>
+      </trans-unit>
+      <trans-unit id="uq5UdLr" resname="Mein Haus">
+        <source>Mein Haus</source>
+        <target>Mein Haus</target>
+      </trans-unit>
+      <trans-unit id="lQNhv.P" resname="Brunnen">
+        <source>Brunnen</source>
+        <target>Brunnen</target>
+      </trans-unit>
+      <trans-unit id="Z2xHG8j" resname="Bank">
+        <source>Bank</source>
+        <target>Bank</target>
+      </trans-unit>
+      <trans-unit id="FlZntyi" resname="Bürger">
+        <source>Bürger</source>
+        <target>Bürger</target>
+      </trans-unit>
+      <trans-unit id="OlFB1V6" resname="Konstruktionen">
+        <source>Konstruktionen</source>
+        <target>Konstruktionen</target>
+      </trans-unit>
+      <trans-unit id="SVMpOGM" resname="Kaum erforschte Zone">
+        <source>Kaum erforschte Zone</source>
+        <target>Kaum erforschte Zone</target>
+      </trans-unit>
+      <trans-unit id="_HUy8Fq" resname="Die Zone wurde teilweise erforscht">
+        <source>Die Zone wurde teilweise erforscht</source>
+        <target>Die Zone wurde teilweise erforscht</target>
+      </trans-unit>
+      <trans-unit id="iyIDK7q" resname="Die Zone wurde erforscht">
+        <source>Die Zone wurde erforscht</source>
+        <target>Die Zone wurde erforscht</target>
+      </trans-unit>
+      <trans-unit id="ZOevyFz" resname="Die Zone wurde voll und ganz erforscht und kartographiert">
+        <source>Die Zone wurde voll und ganz erforscht und kartographiert</source>
+        <target>Die Zone wurde voll und ganz erforscht und kartographiert</target>
+      </trans-unit>
+      <trans-unit id="VG34_F_" resname="Punkt(e)">
+        <source>Punkt(e)</source>
+        <target>Punkt(e)</target>
+      </trans-unit>
+      <trans-unit id="MwvCTQm" resname="Stadt in %km% Entfernung">
+        <source>Stadt in %km% Entfernung</source>
+        <target>Stadt in %km% Entfernung</target>
+      </trans-unit>
+      <trans-unit id="AW6aLpM" resname="Am Boden">
+        <source>Am Boden</source>
+        <target>Am Boden</target>
+      </trans-unit>
+      <trans-unit id="uBY6LwO" resname="Temporäre Zonenkontrolle">
+        <source>Temporäre Zonenkontrolle</source>
+        <target>Temporäre Zonenkontrolle</target>
+      </trans-unit>
+      <trans-unit id="V566.Sb" resname="%z% Zombies kontrollieren diese Zone!">
+        <source>%z% Zombies kontrollieren diese Zone!</source>
+        <target>%z% Zombies kontrollieren diese Zone!</target>
+      </trans-unit>
+      <trans-unit id="5GwqUxA" resname="Das ist deine Chance - ergreife sie und fliehe! In Kürze werden die Zombies die Kontrolle über die Zone zurückerlangen. Dir verbleiden:">
+        <source>Das ist deine Chance - ergreife sie und fliehe! In Kürze werden die Zombies die Kontrolle über die Zone zurückerlangen. Dir verbleiden:</source>
+        <target>Das ist deine Chance - ergreife sie und fliehe! In Kürze werden die Zombies die Kontrolle über die Zone zurückerlangen. Dir verbleiden:</target>
+      </trans-unit>
+      <trans-unit id="1lHHd11" resname="Dank deiner Tarnung kannst du dich dennoch bewegen - werde nur nicht zu übermütig...">
+        <source>Dank deiner Tarnung kannst du dich dennoch bewegen - werde nur nicht zu übermütig...</source>
+        <target>Dank deiner Tarnung kannst du dich dennoch bewegen - werde nur nicht zu übermütig...</target>
+      </trans-unit>
+      <trans-unit id="DJhmFr9" resname="Bestimmte Aktionen können deine Tarnung auffliegen lassen!">
+        <source>Bestimmte Aktionen können deine Tarnung auffliegen lassen!</source>
+        <target>Bestimmte Aktionen können deine Tarnung auffliegen lassen!</target>
+      </trans-unit>
+      <trans-unit id="Zkh813p" resname="Du wurdest überrascht und bist jetzt von den Zombies umzingelt! Wenn du nichts unternimmst und dir niemand zu Hilfe eilt, wirst du ohne Zweifel heute Abend hier verrecken ...">
+        <source>Du wurdest überrascht und bist jetzt von den Zombies umzingelt! Wenn du nichts unternimmst und dir niemand zu Hilfe eilt, wirst du ohne Zweifel heute Abend hier verrecken ...</source>
+        <target>Du wurdest überrascht und bist jetzt von den Zombies umzingelt! Wenn du nichts unternimmst und dir niemand zu Hilfe eilt, wirst du ohne Zweifel heute Abend hier verrecken ...</target>
+      </trans-unit>
+      <trans-unit id="EV7eyTa" resname="Hilfe rufen!">
+        <source>Hilfe rufen!</source>
+        <target>Hilfe rufen!</target>
+      </trans-unit>
+      <trans-unit id="9IuEojL" resname="Die Flucht wagen!">
+        <source>Die Flucht wagen!</source>
+        <target>Die Flucht wagen!</target>
+      </trans-unit>
+      <trans-unit id="vTDaFPO" resname="Gegen einen Zombie kämpfen!">
+        <source>Gegen einen Zombie kämpfen!</source>
+        <target>Gegen einen Zombie kämpfen!</target>
+      </trans-unit>
+      <trans-unit id="seBLTh9" resname="Diese Zone">
+        <source>Diese Zone</source>
+        <target>Diese Zone</target>
+      </trans-unit>
+      <trans-unit id="X_hg9YY" resname="Es muss noch aufgeräumt werden">
+        <source>Es muss noch aufgeräumt werden</source>
+        <target>Es muss noch aufgeräumt werden</target>
+      </trans-unit>
+      <trans-unit id="tJrpqeH" resname="Ruine">
+        <source>Ruine</source>
+        <target>Ruine</target>
+      </trans-unit>
+      <trans-unit id="UKXXzW6" resname="Diese Zone ist leergesucht. Du wirst hier keine wertvollen Gegenstände mehr finden können.">
+        <source>Diese Zone ist leergesucht. Du wirst hier keine wertvollen Gegenstände mehr finden können.</source>
+        <target>Diese Zone ist leergesucht. Du wirst hier keine wertvollen Gegenstände mehr finden können.</target>
+      </trans-unit>
+      <trans-unit id="M8h1dhU" resname="Stadt betreten">
+        <source>Stadt betreten</source>
+        <target>Stadt betreten</target>
+      </trans-unit>
+      <trans-unit id="WrJhBrF" resname="In die Stadt zurückkehren">
+        <source>In die Stadt zurückkehren</source>
+        <target>In die Stadt zurückkehren</target>
+      </trans-unit>
+      <trans-unit id="Dc6dT95" resname="Du hast hier bereits vor Kurzem gegraben. Die nächste Ausgrabung ist möglich in:">
+        <source>Du hast hier bereits vor Kurzem gegraben. Die nächste Ausgrabung ist möglich in:</source>
+        <target>Du hast hier bereits vor Kurzem gegraben. Die nächste Ausgrabung ist möglich in:</target>
+      </trans-unit>
+      <trans-unit id="IUt.xlO" resname="In dieser Zone graben">
+        <source>In dieser Zone graben</source>
+        <target>In dieser Zone graben</target>
+      </trans-unit>
+      <trans-unit id="K5c71RM" resname="Nächste automatische Ausgrabung:">
+        <source>Nächste automatische Ausgrabung:</source>
+        <target>Nächste automatische Ausgrabung:</target>
+      </trans-unit>
+      <trans-unit id="GwPmPsr" resname="%ruin% durchsuchen">
+        <source>%ruin% durchsuchen</source>
+        <target>%ruin% durchsuchen</target>
+      </trans-unit>
+      <trans-unit id="ZaxaGah" resname="Zone freiräumen">
+        <source>Zone freiräumen</source>
+        <target>Zone freiräumen</target>
+      </trans-unit>
+      <trans-unit id="ftAsu0Q" resname="Müll durchwühlen">
+        <source>Müll durchwühlen</source>
+        <target>Müll durchwühlen</target>
+      </trans-unit>
+      <trans-unit id="s5pZm5S" resname="Wenn du einen Gegenstand aufnimmst oder ablegst, verlierst du deine Tarnung!">
+        <source>Wenn du einen Gegenstand aufnimmst oder ablegst, verlierst du deine Tarnung!</source>
+        <target>Wenn du einen Gegenstand aufnimmst oder ablegst, verlierst du deine Tarnung!</target>
+      </trans-unit>
+      <trans-unit id="AcukbqL" resname="Zonenregister">
+        <source>Zonenregister</source>
+        <target>Zonenregister</target>
+      </trans-unit>
+      <trans-unit id="T478uEB" resname="Zonenchat">
+        <source>Zonenchat</source>
+        <target>Zonenchat</target>
+      </trans-unit>
+      <trans-unit id="nq1XXly" resname="Stadtregister">
+        <source>Stadtregister</source>
+        <target>Stadtregister</target>
+      </trans-unit>
+      <trans-unit id="eR2SPb." resname="Das Stadtregister steht nicht zur Verfügung.">
+        <source>Das Stadtregister steht nicht zur Verfügung.</source>
+        <target>Das Stadtregister steht nicht zur Verfügung.</target>
+      </trans-unit>
+      <trans-unit id="V3rm2Ma" resname="Herzlichen Glückwunsch, du bist TOT!">
+        <source>Herzlichen Glückwunsch, du bist TOT!</source>
+        <target>Herzlichen Glückwunsch, du bist TOT!</target>
+      </trans-unit>
+      <trans-unit id="AEDztPF" resname="Du hast %sp% Seelenpunkte gewonnen!">
+        <source>Du hast %sp% Seelenpunkte gewonnen!</source>
+        <target>Du hast %sp% Seelenpunkte gewonnen!</target>
+      </trans-unit>
+      <trans-unit id="wD7XaTz" resname="Du hast folgende Auszeichnungen verliehen bekommen:">
+        <source>Du hast folgende Auszeichnungen verliehen bekommen:</source>
+        <target>Du hast folgende Auszeichnungen verliehen bekommen:</target>
+      </trans-unit>
+      <trans-unit id="RcinBjy" resname="Begrüße den Tod wie es sich gehört...">
+        <source>Begrüße den Tod wie es sich gehört...</source>
+        <target>Begrüße den Tod wie es sich gehört...</target>
+      </trans-unit>
+      <trans-unit id="uFR9Aa." resname="Der Tod in &quot;MyHordes&quot; ist nicht weiter schlimm!">
+        <source>Der Tod in "MyHordes" ist nicht weiter schlimm!</source>
+        <target>Der Tod in "MyHordes" ist nicht weiter schlimm!</target>
+      </trans-unit>
+      <trans-unit id="mkPbtI8" resname="Du kannst in einer neuen Stadt wiedergeboren werden und das so oft wie du möchtest. Sei erfinderisch, probiere verschiedene Optionen aus und finde deinen eigenen Spielstil!">
+        <source>Du kannst in einer neuen Stadt wiedergeboren werden und das so oft wie du möchtest. Sei erfinderisch, probiere verschiedene Optionen aus und finde deinen eigenen Spielstil!</source>
+        <target>Du kannst in einer neuen Stadt wiedergeboren werden und das so oft wie du möchtest. Sei erfinderisch, probiere verschiedene Optionen aus und finde deinen eigenen Spielstil!</target>
+      </trans-unit>
+      <trans-unit id="em6PCOi" resname="Wiedergeboren werden">
+        <source>Wiedergeboren werden</source>
+        <target>Wiedergeboren werden</target>
+      </trans-unit>
+      <trans-unit id=".1viyI2" resname="Zeitung">
+        <source>Zeitung</source>
+        <target>Zeitung</target>
+      </trans-unit>
+      <trans-unit id="r6ej4.8" resname="Aktionspunkte">
+        <source>Aktionspunkte</source>
+        <target>Aktionspunkte</target>
+      </trans-unit>
+      <trans-unit id="dWg5UEc" resname="Für viele Aktionen, wie beispielsweise die Erkundung der Aussenwelt oder der Arbeit auf einer Baustelle,&#10;                    benötigst du Aktionspunkte. Deine Aktionspunkte werden jede Nacht nach dem Angriff aufgefüllt. Außerdem&#10;                    kannst du sie durch den Einsatz bestimmter Gegenstände sowie einmal pro Tag durch Essen und Trinken neu&#10;                    auffüllen.">
+        <source>Für viele Aktionen, wie beispielsweise die Erkundung der Aussenwelt oder der Arbeit auf einer Baustelle,
+                    benötigst du Aktionspunkte. Deine Aktionspunkte werden jede Nacht nach dem Angriff aufgefüllt. Außerdem
+                    kannst du sie durch den Einsatz bestimmter Gegenstände sowie einmal pro Tag durch Essen und Trinken neu
+                    auffüllen.</source>
+        <target>Für viele Aktionen, wie beispielsweise die Erkundung der Aussenwelt oder der Arbeit auf einer Baustelle,
+                    benötigst du Aktionspunkte. Deine Aktionspunkte werden jede Nacht nach dem Angriff aufgefüllt. Außerdem
+                    kannst du sie durch den Einsatz bestimmter Gegenstände sowie einmal pro Tag durch Essen und Trinken neu
+                    auffüllen.</target>
+      </trans-unit>
+      <trans-unit id="bfXTcH6" resname="Baupunkte">
+        <source>Baupunkte</source>
+        <target>Baupunkte</target>
+      </trans-unit>
+      <trans-unit id="cycrpjD" resname="Baupunkte können in der Werkstatt und auf Baustellen verwendet werden, wo sie wie Aktionspunkte&#10;                    zählen. Wenn möglich werden immer zuerst Baupunkte verbraucht, bevor Aktionspunkte eingesetzt&#10;                    werden. Bedenke, dass Baupunkte nicht eingesetzt werden können wenn du erschöpft bist!">
+        <source>Baupunkte können in der Werkstatt und auf Baustellen verwendet werden, wo sie wie Aktionspunkte
+                    zählen. Wenn möglich werden immer zuerst Baupunkte verbraucht, bevor Aktionspunkte eingesetzt
+                    werden. Bedenke, dass Baupunkte nicht eingesetzt werden können wenn du erschöpft bist!</source>
+        <target>Baupunkte können in der Werkstatt und auf Baustellen verwendet werden, wo sie wie Aktionspunkte
+                    zählen. Wenn möglich werden immer zuerst Baupunkte verbraucht, bevor Aktionspunkte eingesetzt
+                    werden. Bedenke, dass Baupunkte nicht eingesetzt werden können wenn du erschöpft bist!</target>
+      </trans-unit>
+      <trans-unit id="6UFJBEW" resname="Verbannt">
+        <source>Verbannt</source>
+        <target>Verbannt</target>
+      </trans-unit>
+      <trans-unit id="IV3fj_Y" resname="Deine Stadt hat entschieden, dich zu verbannen. Einige Aktionen stehen dir nicht länger zur&#10;                        Verfügung.">
+        <source>Deine Stadt hat entschieden, dich zu verbannen. Einige Aktionen stehen dir nicht länger zur
+                        Verfügung.</source>
+        <target>Deine Stadt hat entschieden, dich zu verbannen. Einige Aktionen stehen dir nicht länger zur
+                        Verfügung.</target>
+      </trans-unit>
+      <trans-unit id="Qc.QL70" resname="Je nachdem, welchen Beruf du auswählst, stehen dir unterschiedliche Aktionen und Spielweisen in&#10;                dieser Stadt zur Verfügung.">
+        <source>Je nachdem, welchen Beruf du auswählst, stehen dir unterschiedliche Aktionen und Spielweisen in
+                dieser Stadt zur Verfügung.</source>
+        <target>Je nachdem, welchen Beruf du auswählst, stehen dir unterschiedliche Aktionen und Spielweisen in
+                dieser Stadt zur Verfügung.</target>
+      </trans-unit>
+      <trans-unit id="kw2Iw8G" resname="Spielst du als %hero%, wird dir täglich ein Heldentag abgezogen. Gehen dir die Heldentage in der&#10;                Stadt aus, musst du als einfacher Einwohner weiterspielen.">
+        <source>Spielst du als %hero%, wird dir täglich ein Heldentag abgezogen. Gehen dir die Heldentage in der
+                Stadt aus, musst du als einfacher Einwohner weiterspielen.</source>
+        <target>Spielst du als %hero%, wird dir täglich ein Heldentag abgezogen. Gehen dir die Heldentage in der
+                Stadt aus, musst du als einfacher Einwohner weiterspielen.</target>
+      </trans-unit>
+      <trans-unit id="hc1h_MP" resname="Held">
+        <source>Held</source>
+        <target>Held</target>
+      </trans-unit>
+      <trans-unit id="nbN6CQm" resname="Spielst du als %citizen%, verbrauchst du keine Heldentage. Wenn du jedoch über Heldentage&#10;                verfügst, kannst du einmal pro Stadt auf einen Heldenberuf wechseln.">
+        <source>Spielst du als %citizen%, verbrauchst du keine Heldentage. Wenn du jedoch über Heldentage
+                verfügst, kannst du einmal pro Stadt auf einen Heldenberuf wechseln.</source>
+        <target>Spielst du als %citizen%, verbrauchst du keine Heldentage. Wenn du jedoch über Heldentage
+                verfügst, kannst du einmal pro Stadt auf einen Heldenberuf wechseln.</target>
+      </trans-unit>
+      <trans-unit id="hlH9eeR" resname="Einwohner">
+        <source>Einwohner</source>
+        <target>Einwohner</target>
+      </trans-unit>
+      <trans-unit id="ssGV66L" resname="Wähle einen Beruf">
+        <source>Wähle einen Beruf</source>
+        <target>Wähle einen Beruf</target>
+      </trans-unit>
+      <trans-unit id="CreTS5x" resname="Alle Einträge anzeigen">
+        <source>Alle Einträge anzeigen</source>
+        <target>Alle Einträge anzeigen</target>
+      </trans-unit>
+      <trans-unit id="FQORaiq" resname="Tag">
+        <source>Tag</source>
+        <target>Tag</target>
+      </trans-unit>
+      <trans-unit id="UTfIdgy" resname="Clean">
+        <source>Clean</source>
+        <target>Clean</target>
+      </trans-unit>
+      <trans-unit id="2rjbtHk" resname="Getrunken">
+        <source>Getrunken</source>
+        <target>Getrunken</target>
+      </trans-unit>
+      <trans-unit id="_akkbne" resname="Satt">
+        <source>Satt</source>
+        <target>Satt</target>
+      </trans-unit>
+      <trans-unit id="LQhKsMz" resname="Umsichtiger Camper">
+        <source>Umsichtiger Camper</source>
+        <target>Umsichtiger Camper</target>
+      </trans-unit>
+      <trans-unit id="LoyMaAF" resname="Immunisiert">
+        <source>Immunisiert</source>
+        <target>Immunisiert</target>
+      </trans-unit>
+      <trans-unit id="dIXELzM" resname="Den Tod besiegen">
+        <source>Den Tod besiegen</source>
+        <target>Den Tod besiegen</target>
+      </trans-unit>
+      <trans-unit id="OAnJvWx" resname="Erschöpfung">
+        <source>Erschöpfung</source>
+        <target>Erschöpfung</target>
+      </trans-unit>
+      <trans-unit id="m0NU7Ex" resname="Angststarre">
+        <source>Angststarre</source>
+        <target>Angststarre</target>
+      </trans-unit>
+      <trans-unit id="MDmkyh9" resname="Durst">
+        <source>Durst</source>
+        <target>Durst</target>
+      </trans-unit>
+      <trans-unit id="csu4Gzn" resname="Dehydriert">
+        <source>Dehydriert</source>
+        <target>Dehydriert</target>
+      </trans-unit>
+      <trans-unit id="4cxMzfa" resname="Rauschzustand">
+        <source>Rauschzustand</source>
+        <target>Rauschzustand</target>
+      </trans-unit>
+      <trans-unit id="eIBDvhn" resname="Drogenabhängig">
+        <source>Drogenabhängig</source>
+        <target>Drogenabhängig</target>
+      </trans-unit>
+      <trans-unit id="CXdRrv3" resname="Infektion">
+        <source>Infektion</source>
+        <target>Infektion</target>
+      </trans-unit>
+      <trans-unit id="3dkb1Z2" resname="Trunkenheit">
+        <source>Trunkenheit</source>
+        <target>Trunkenheit</target>
+      </trans-unit>
+      <trans-unit id="EPpwyta" resname="Kater">
+        <source>Kater</source>
+        <target>Kater</target>
+      </trans-unit>
+      <trans-unit id="E6kbVNC" resname="Verwundung - Kopf">
+        <source>Verwundung - Kopf</source>
+        <target>Verwundung - Kopf</target>
+      </trans-unit>
+      <trans-unit id="yI0ueHI" resname="Verwundung - Hände">
+        <source>Verwundung - Hände</source>
+        <target>Verwundung - Hände</target>
+      </trans-unit>
+      <trans-unit id="lfaLaVU" resname="Verwundung - Arme">
+        <source>Verwundung - Arme</source>
+        <target>Verwundung - Arme</target>
+      </trans-unit>
+      <trans-unit id="KRP.Csa" resname="Verwundung - Bein">
+        <source>Verwundung - Bein</source>
+        <target>Verwundung - Bein</target>
+      </trans-unit>
+      <trans-unit id="15_YwON" resname="Verwundung - Auge">
+        <source>Verwundung - Auge</source>
+        <target>Verwundung - Auge</target>
+      </trans-unit>
+      <trans-unit id="iU.tgTh" resname="Verwundung - Fuß">
+        <source>Verwundung - Fuß</source>
+        <target>Verwundung - Fuß</target>
+      </trans-unit>
+      <trans-unit id="72h0.SN" resname="Ghul">
+        <source>Ghul</source>
+        <target>Ghul</target>
+      </trans-unit>
+      <trans-unit id="AdfvkQI" resname="Bandagiert">
+        <source>Bandagiert</source>
+        <target>Bandagiert</target>
+      </trans-unit>
+      <trans-unit id="qsjDwdX" resname="tg_dice">
+        <source>tg_dice</source>
+        <target>tg_dice</target>
+      </trans-unit>
+      <trans-unit id="ekEtK_D" resname="tg_cards">
+        <source>tg_cards</source>
+        <target>tg_cards</target>
+      </trans-unit>
+      <trans-unit id="TxIoVDY" resname="tg_meta_wound">
+        <source>tg_meta_wound</source>
+        <target>tg_meta_wound</target>
+      </trans-unit>
+      <trans-unit id="LJ2TI_g" resname="tg_clothes">
+        <source>tg_clothes</source>
+        <target>tg_clothes</target>
+      </trans-unit>
+      <trans-unit id="Fs0l96M" resname="tg_teddy">
+        <source>tg_teddy</source>
+        <target>tg_teddy</target>
+      </trans-unit>
+      <trans-unit id="rePnXfd" resname="tg_guitar">
+        <source>tg_guitar</source>
+        <target>tg_guitar</target>
+      </trans-unit>
+      <trans-unit id="S.v59pK" resname="tg_sbook">
+        <source>tg_sbook</source>
+        <target>tg_sbook</target>
+      </trans-unit>
+      <trans-unit id="Vaet2kz" resname="tg_steal">
+        <source>tg_steal</source>
+        <target>tg_steal</target>
+      </trans-unit>
+      <trans-unit id="yD4A901" resname="tg_home_upgrade">
+        <source>tg_home_upgrade</source>
+        <target>tg_home_upgrade</target>
+      </trans-unit>
+      <trans-unit id="RXBorL8" resname="tg_never">
+        <source>tg_never</source>
+        <target>tg_never</target>
+      </trans-unit>
+      <trans-unit id="UUnigxa" resname="Abgelegenes Haus">
+        <source>Abgelegenes Haus</source>
+        <target>Abgelegenes Haus</target>
+      </trans-unit>
+      <trans-unit id="BuoM8x8" resname="Albi Supermarkt">
+        <source>Albi Supermarkt</source>
+        <target>Albi Supermarkt</target>
+      </trans-unit>
+      <trans-unit id="z79LmBi" resname="Alte Höhle">
+        <source>Alte Höhle</source>
+        <target>Alte Höhle</target>
+      </trans-unit>
+      <trans-unit id="7N1b8YP" resname="Alte Hydraulikpumpe">
+        <source>Alte Hydraulikpumpe</source>
+        <target>Alte Hydraulikpumpe</target>
+      </trans-unit>
+      <trans-unit id="S85DdXs" resname="Alter Fahrradverleih">
+        <source>Alter Fahrradverleih</source>
+        <target>Alter Fahrradverleih</target>
+      </trans-unit>
+      <trans-unit id="swauljp" resname="Alter Rangierbahnhof">
+        <source>Alter Rangierbahnhof</source>
+        <target>Alter Rangierbahnhof</target>
+      </trans-unit>
+      <trans-unit id="gjzBe3w" resname="Altes Feldkrankenhaus">
+        <source>Altes Feldkrankenhaus</source>
+        <target>Altes Feldkrankenhaus</target>
+      </trans-unit>
+      <trans-unit id="yKnc_Mp" resname="Altes Flugfeld">
+        <source>Altes Flugfeld</source>
+        <target>Altes Flugfeld</target>
+      </trans-unit>
+      <trans-unit id="Kt0e8zP" resname="Altes Polizeipräsidium">
+        <source>Altes Polizeipräsidium</source>
+        <target>Altes Polizeipräsidium</target>
+      </trans-unit>
+      <trans-unit id="GRuqR5L" resname="Atombunker">
+        <source>Atombunker</source>
+        <target>Atombunker</target>
+      </trans-unit>
+      <trans-unit id="pSDkjjr" resname="Atomic Cafe">
+        <source>Atomic Cafe</source>
+        <target>Atomic Cafe</target>
+      </trans-unit>
+      <trans-unit id="yMlxN96" resname="Autobahnraststätte">
+        <source>Autobahnraststätte</source>
+        <target>Autobahnraststätte</target>
+      </trans-unit>
+      <trans-unit id="wuZIxTk" resname="Autowracks">
+        <source>Autowracks</source>
+        <target>Autowracks</target>
+      </trans-unit>
+      <trans-unit id="lVmO2OQ" resname="Bar der verlorenen Hoffnungen">
+        <source>Bar der verlorenen Hoffnungen</source>
+        <target>Bar der verlorenen Hoffnungen</target>
+      </trans-unit>
+      <trans-unit id="zkW4TlC" resname="Baumarkt">
+        <source>Baumarkt</source>
+        <target>Baumarkt</target>
+      </trans-unit>
+      <trans-unit id="ejtguBI" resname="Baustellencontainer">
+        <source>Baustellencontainer</source>
+        <target>Baustellencontainer</target>
+      </trans-unit>
+      <trans-unit id="4P7trch" resname="Dönerbude Utsel-Brutzel">
+        <source>Dönerbude Utsel-Brutzel</source>
+        <target>Dönerbude Utsel-Brutzel</target>
+      </trans-unit>
+      <trans-unit id="JNOFU3C" resname="Dukes Villa">
+        <source>Dukes Villa</source>
+        <target>Dukes Villa</target>
+      </trans-unit>
+      <trans-unit id=".ebOOu8" resname="Dunkler Hain">
+        <source>Dunkler Hain</source>
+        <target>Dunkler Hain</target>
+      </trans-unit>
+      <trans-unit id="tRFSLoD" resname="Eingestürzte Mine">
+        <source>Eingestürzte Mine</source>
+        <target>Eingestürzte Mine</target>
+      </trans-unit>
+      <trans-unit id="qV.QEqb" resname="Eingestürzter Steinbruch">
+        <source>Eingestürzter Steinbruch</source>
+        <target>Eingestürzter Steinbruch</target>
+      </trans-unit>
+      <trans-unit id="9jdPsSc" resname="Ein seltsames kreisförmiges Gerät">
+        <source>Ein seltsames kreisförmiges Gerät</source>
+        <target>Ein seltsames kreisförmiges Gerät</target>
+      </trans-unit>
+      <trans-unit id="XbKWmCS" resname="E-KEA">
+        <source>E-KEA</source>
+        <target>E-KEA</target>
+      </trans-unit>
+      <trans-unit id="04ljFsj" resname="Familiengrab">
+        <source>Familiengrab</source>
+        <target>Familiengrab</target>
+      </trans-unit>
+      <trans-unit id="Obfx4xd" resname="Fast Food Restaurant">
+        <source>Fast Food Restaurant</source>
+        <target>Fast Food Restaurant</target>
+      </trans-unit>
+      <trans-unit id="3jRHmba" resname="Flugzeugwrack">
+        <source>Flugzeugwrack</source>
+        <target>Flugzeugwrack</target>
+      </trans-unit>
+      <trans-unit id="jeS33HC" resname="Gartenhaus">
+        <source>Gartenhaus</source>
+        <target>Gartenhaus</target>
+      </trans-unit>
+      <trans-unit id=".BpYDum" resname="Geplünderte Mall">
+        <source>Geplünderte Mall</source>
+        <target>Geplünderte Mall</target>
+      </trans-unit>
+      <trans-unit id=".fpd4co" resname="Höhle">
+        <source>Höhle</source>
+        <target>Höhle</target>
+      </trans-unit>
+      <trans-unit id="9x03HdM" resname="Indianerfriedhof">
+        <source>Indianerfriedhof</source>
+        <target>Indianerfriedhof</target>
+      </trans-unit>
+      <trans-unit id="ruzMP1g" resname="Jahrmarktstand">
+        <source>Jahrmarktstand</source>
+        <target>Jahrmarktstand</target>
+      </trans-unit>
+      <trans-unit id="xBqXQ3h" resname="Kleines Haus">
+        <source>Kleines Haus</source>
+        <target>Kleines Haus</target>
+      </trans-unit>
+      <trans-unit id="HaU4ESp" resname="Kleinwasserkraftwerk">
+        <source>Kleinwasserkraftwerk</source>
+        <target>Kleinwasserkraftwerk</target>
+      </trans-unit>
+      <trans-unit id="Dm49uOY" resname="Kosmetiklabor">
+        <source>Kosmetiklabor</source>
+        <target>Kosmetiklabor</target>
+      </trans-unit>
+      <trans-unit id="XZBo0Eq" resname="Krankenwagen">
+        <source>Krankenwagen</source>
+        <target>Krankenwagen</target>
+      </trans-unit>
+      <trans-unit id="VGlWZjs" resname="Lagerhalle">
+        <source>Lagerhalle</source>
+        <target>Lagerhalle</target>
+      </trans-unit>
+      <trans-unit id="yAH2rE7" resname="Leeres Parkhaus">
+        <source>Leeres Parkhaus</source>
+        <target>Leeres Parkhaus</target>
+      </trans-unit>
+      <trans-unit id="PLyihQR" resname="Liegengebliebener Kampfpanzer">
+        <source>Liegengebliebener Kampfpanzer</source>
+        <target>Liegengebliebener Kampfpanzer</target>
+      </trans-unit>
+      <trans-unit id="ECpLJti" resname="Motel 'Dusk'">
+        <source>Motel 'Dusk'</source>
+        <target>Motel 'Dusk'</target>
+      </trans-unit>
+      <trans-unit id="aXgXOJr" resname="Militärischer Wachposten">
+        <source>Militärischer Wachposten</source>
+        <target>Militärischer Wachposten</target>
+      </trans-unit>
+      <trans-unit id="zNUF7cP" resname="Postfiliale">
+        <source>Postfiliale</source>
+        <target>Postfiliale</target>
+      </trans-unit>
+      <trans-unit id="Xf.22AP" resname="Räuberhöhle">
+        <source>Räuberhöhle</source>
+        <target>Räuberhöhle</target>
+      </trans-unit>
+      <trans-unit id="BoMLh_D" resname="Schützengraben">
+        <source>Schützengraben</source>
+        <target>Schützengraben</target>
+      </trans-unit>
+      <trans-unit id="3XX2wLZ" resname="Stadtbücherei">
+        <source>Stadtbücherei</source>
+        <target>Stadtbücherei</target>
+      </trans-unit>
+      <trans-unit id="mgQ86_P" resname="Tante Emma Laden">
+        <source>Tante Emma Laden</source>
+        <target>Tante Emma Laden</target>
+      </trans-unit>
+      <trans-unit id="19QLQFs" resname="Truck 'Rathaus auf Rädern'">
+        <source>Truck 'Rathaus auf Rädern'</source>
+        <target>Truck 'Rathaus auf Rädern'</target>
+      </trans-unit>
+      <trans-unit id="OHLvvVZ" resname="Umgekippter Laster">
+        <source>Umgekippter Laster</source>
+        <target>Umgekippter Laster</target>
+      </trans-unit>
+      <trans-unit id="_TTUt_P" resname="Verbrannte Grundschule">
+        <source>Verbrannte Grundschule</source>
+        <target>Verbrannte Grundschule</target>
+      </trans-unit>
+      <trans-unit id="h5BzcKH" resname="Verfallenes Bürogebäude">
+        <source>Verfallenes Bürogebäude</source>
+        <target>Verfallenes Bürogebäude</target>
+      </trans-unit>
+      <trans-unit id="mAr1mWV" resname="Verfallene Villa">
+        <source>Verfallene Villa</source>
+        <target>Verfallene Villa</target>
+      </trans-unit>
+      <trans-unit id="kP_vzTg" resname="Verlassene Baustelle">
+        <source>Verlassene Baustelle</source>
+        <target>Verlassene Baustelle</target>
+      </trans-unit>
+      <trans-unit id="gy.Tm7F" resname="Verlassener Brunnen">
+        <source>Verlassener Brunnen</source>
+        <target>Verlassener Brunnen</target>
+      </trans-unit>
+      <trans-unit id="c9WjvSB" resname="Verlassene Silos">
+        <source>Verlassene Silos</source>
+        <target>Verlassene Silos</target>
+      </trans-unit>
+      <trans-unit id="dSZWbRo" resname="Versperrte Straße">
+        <source>Versperrte Straße</source>
+        <target>Versperrte Straße</target>
+      </trans-unit>
+      <trans-unit id="12P6EOC" resname="Verwilderter Park">
+        <source>Verwilderter Park</source>
+        <target>Verwilderter Park</target>
+      </trans-unit>
+      <trans-unit id="u17l49g" resname="Waffengeschäft Guns'n'Zombies">
+        <source>Waffengeschäft Guns'n'Zombies</source>
+        <target>Waffengeschäft Guns'n'Zombies</target>
+      </trans-unit>
+      <trans-unit id="TcWj320" resname="Warenlager">
+        <source>Warenlager</source>
+        <target>Warenlager</target>
+      </trans-unit>
+      <trans-unit id="bQ1Prey" resname="Zelt eines Bürgers">
+        <source>Zelt eines Bürgers</source>
+        <target>Zelt eines Bürgers</target>
+      </trans-unit>
+      <trans-unit id="z04UYqm" resname="Zerstörte Apotheke">
+        <source>Zerstörte Apotheke</source>
+        <target>Zerstörte Apotheke</target>
+      </trans-unit>
+      <trans-unit id="4N3cahH" resname="ZomBIER Bar">
+        <source>ZomBIER Bar</source>
+        <target>ZomBIER Bar</target>
+      </trans-unit>
+      <trans-unit id="ZWfE2Vb" resname="%citizen% hat der Stadt folgendes gespendet: %item%">
+        <source>%citizen% hat der Stadt folgendes gespendet: %item%</source>
+        <target>%citizen% hat der Stadt folgendes gespendet: %item%</target>
+      </trans-unit>
+      <trans-unit id="d8vpz_8" resname="%citizen% hat folgenden Gegenstand aus der Bank genommen: %item%">
+        <source>%citizen% hat folgenden Gegenstand aus der Bank genommen: %item%</source>
+        <target>%citizen% hat folgenden Gegenstand aus der Bank genommen: %item%</target>
+      </trans-unit>
+      <trans-unit id="R43wWvR" resname="%citizen% hat folgenden Gegenstand hier abgelegt: %item%">
+        <source>%citizen% hat folgenden Gegenstand hier abgelegt: %item%</source>
+        <target>%citizen% hat folgenden Gegenstand hier abgelegt: %item%</target>
+      </trans-unit>
+      <trans-unit id="6zpuvqo" resname="%citizen% hat diesen Gegenstand mitgenommen: %item%">
+        <source>%citizen% hat diesen Gegenstand mitgenommen: %item%</source>
+        <target>%citizen% hat diesen Gegenstand mitgenommen: %item%</target>
+      </trans-unit>
+      <trans-unit id="Msm_smP" resname="%citizen% hat mehr Wasser genommen, als erlaubt ist...">
+        <source>%citizen% hat mehr Wasser genommen, als erlaubt ist...</source>
+        <target>%citizen% hat mehr Wasser genommen, als erlaubt ist...</target>
+      </trans-unit>
+      <trans-unit id="EMJ_Kff" resname="%citizen% hat eine Ration Wasser genommen.">
+        <source>%citizen% hat eine Ration Wasser genommen.</source>
+        <target>%citizen% hat eine Ration Wasser genommen.</target>
+      </trans-unit>
+      <trans-unit id="mdts1Bm" resname="Es wurde ein neues Gebäude gebaut: %plan%. Der Bau hat folgende Ressourcen verbraucht: %list%">
+        <source>Es wurde ein neues Gebäude gebaut: %plan%. Der Bau hat folgende Ressourcen verbraucht: %list%</source>
+        <target>Es wurde ein neues Gebäude gebaut: %plan%. Der Bau hat folgende Ressourcen verbraucht: %list%</target>
+      </trans-unit>
+      <trans-unit id="T6_1xeh" resname="Es wurde ein neues Gebäude gebaut: %plan%.">
+        <source>Es wurde ein neues Gebäude gebaut: %plan%.</source>
+        <target>Es wurde ein neues Gebäude gebaut: %plan%.</target>
+      </trans-unit>
+      <trans-unit id="WsxqQWs" resname="%citizen% wurde von %zombies% zerfleischt!">
+        <source>%citizen% wurde von %zombies% zerfleischt!</source>
+        <target>%citizen% wurde von %zombies% zerfleischt!</target>
+      </trans-unit>
+      <trans-unit id="26dC9N0" resname="Hat jemand in letzter Zeit von %citizen% gehört? Er scheint verschwunden zu sein ...">
+        <source>Hat jemand in letzter Zeit von %citizen% gehört? Er scheint verschwunden zu sein ...</source>
+        <target>Hat jemand in letzter Zeit von %citizen% gehört? Er scheint verschwunden zu sein ...</target>
+      </trans-unit>
+      <trans-unit id="HNlT.7E" resname="%citizen% hat dem Druck nicht länger standgehalten und sein Leben beendet: %cod%.">
+        <source>%citizen% hat dem Druck nicht länger standgehalten und sein Leben beendet: %cod%.</source>
+        <target>%citizen% hat dem Druck nicht länger standgehalten und sein Leben beendet: %cod%.</target>
+      </trans-unit>
+      <trans-unit id="1DaM5oy" resname="Verrat! %citizen% ist gestorben: %cod%.">
+        <source>Verrat! %citizen% ist gestorben: %cod%.</source>
+        <target>Verrat! %citizen% ist gestorben: %cod%.</target>
+      </trans-unit>
+      <trans-unit id="EWgulaj" resname="%citizen% hat das Fass zum Überlaufen gebracht. Die Stadt hat seinen Tod entschieden: %cod%.">
+        <source>%citizen% hat das Fass zum Überlaufen gebracht. Die Stadt hat seinen Tod entschieden: %cod%.</source>
+        <target>%citizen% hat das Fass zum Überlaufen gebracht. Die Stadt hat seinen Tod entschieden: %cod%.</target>
+      </trans-unit>
+      <trans-unit id="VImW6PC" resname="%citizen% hat seinen letzten Atemzug getan: %cod%!">
+        <source>%citizen% hat seinen letzten Atemzug getan: %cod%!</source>
+        <target>%citizen% hat seinen letzten Atemzug getan: %cod%!</target>
+      </trans-unit>
+      <trans-unit id="gaihf5j" resname="%citizen% hat das Stadtgebiet in Richtung %direction% verlassen.">
+        <source>%citizen% hat das Stadtgebiet in Richtung %direction% verlassen.</source>
+        <target>%citizen% hat das Stadtgebiet in Richtung %direction% verlassen.</target>
+      </trans-unit>
+      <trans-unit id="o9wb9sd" resname="%citizen% hat das Stadtgebiet aus Richtung %direction% betreten.">
+        <source>%citizen% hat das Stadtgebiet aus Richtung %direction% betreten.</source>
+        <target>%citizen% hat das Stadtgebiet aus Richtung %direction% betreten.</target>
+      </trans-unit>
+      <trans-unit id="PFgh04I" resname="%citizen% (%profession%) ist Richtung %direction% aufgebrochen.">
+        <source>%citizen% (%profession%) ist Richtung %direction% aufgebrochen.</source>
+        <target>%citizen% (%profession%) ist Richtung %direction% aufgebrochen.</target>
+      </trans-unit>
+      <trans-unit id="07sRf7u" resname="%citizen% (%profession%) ist aus dem %direction% angekommen.">
+        <source>%citizen% (%profession%) ist aus dem %direction% angekommen.</source>
+        <target>%citizen% (%profession%) ist aus dem %direction% angekommen.</target>
+      </trans-unit>
+      <trans-unit id="pCkOgOT" resname="%citizen% hat ein(e,n) %item% ausgegraben!">
+        <source>%citizen% hat ein(e,n) %item% ausgegraben!</source>
+        <target>%citizen% hat ein(e,n) %item% ausgegraben!</target>
+      </trans-unit>
+      <trans-unit id="nHE1X2F" resname="%citizen% hat hier durch Graben nichts gefunden...">
+        <source>%citizen% hat hier durch Graben nichts gefunden...</source>
+        <target>%citizen% hat hier durch Graben nichts gefunden...</target>
+      </trans-unit>
+      <trans-unit id="J84MRtT" resname="%citizen% hat etwas Schutt entfernt.">
+        <source>%citizen% hat etwas Schutt entfernt.</source>
+        <target>%citizen% hat etwas Schutt entfernt.</target>
+      </trans-unit>
+      <trans-unit id="WmDHw.1" resname="%citizen% hat diese Ruine freigelegt. Es handelt sich um %type%. Hurra!">
+        <source>%citizen% hat diese Ruine freigelegt. Es handelt sich um %type%. Hurra!</source>
+        <target>%citizen% hat diese Ruine freigelegt. Es handelt sich um %type%. Hurra!</target>
+      </trans-unit>
+      <trans-unit id="zTh0a4e" resname="%zombie% ist von den Toten auferstanden und hat unanständige Nachrichten auf die Heldentafel geschrieben!">
+        <source>%zombie% ist von den Toten auferstanden und hat unanständige Nachrichten auf die Heldentafel geschrieben!</source>
+        <target>%zombie% ist von den Toten auferstanden und hat unanständige Nachrichten auf die Heldentafel geschrieben!</target>
+      </trans-unit>
+      <trans-unit id="ToXb7Kr" resname="%zombie% ist von den Toten auferstanden und hat sich wieder hingelegt!">
+        <source>%zombie% ist von den Toten auferstanden und hat sich wieder hingelegt!</source>
+        <target>%zombie% ist von den Toten auferstanden und hat sich wieder hingelegt!</target>
+      </trans-unit>
+      <trans-unit id="vw6w67." resname="%zombie% ist von den Toten auferstanden und verlangt nach einem Kaffee!">
+        <source>%zombie% ist von den Toten auferstanden und verlangt nach einem Kaffee!</source>
+        <target>%zombie% ist von den Toten auferstanden und verlangt nach einem Kaffee!</target>
+      </trans-unit>
+      <trans-unit id="vlEPrgk" resname="%zombie% ist von den Toten auferstanden und hat eine Runde auf dem Stadtplatz gedreht!">
+        <source>%zombie% ist von den Toten auferstanden und hat eine Runde auf dem Stadtplatz gedreht!</source>
+        <target>%zombie% ist von den Toten auferstanden und hat eine Runde auf dem Stadtplatz gedreht!</target>
+      </trans-unit>
+      <trans-unit id="GtC0MNC" resname="... das OFFEN stand! %num% Zombies sind in die Stadt eingedrungen!">
+        <source>... das OFFEN stand! %num% Zombies sind in die Stadt eingedrungen!</source>
+        <target>... das OFFEN stand! %num% Zombies sind in die Stadt eingedrungen!</target>
+      </trans-unit>
+      <trans-unit id="4ETWhR_" resname="%num% Zombies sind durch unsere Verteidigung gebrochen!">
+        <source>%num% Zombies sind durch unsere Verteidigung gebrochen!</source>
+        <target>%num% Zombies sind durch unsere Verteidigung gebrochen!</target>
+      </trans-unit>
+      <trans-unit id="IT1iVPi" resname="Nicht ein Zombie hat die Stadt betreten!">
+        <source>Nicht ein Zombie hat die Stadt betreten!</source>
+        <target>Nicht ein Zombie hat die Stadt betreten!</target>
+      </trans-unit>
+      <trans-unit id="qdFcLMD" resname="%citizen% hat die Leiche von %disposed% aus der Stadt gezerrt.">
+        <source>%citizen% hat die Leiche von %disposed% aus der Stadt gezerrt.</source>
+        <target>%citizen% hat die Leiche von %disposed% aus der Stadt gezerrt.</target>
+      </trans-unit>
+      <trans-unit id="33.BZ8y" resname="%citizen% hat die Leiche von %disposed% vernichtet, indem er sie mit Wasser übergossen hat.">
+        <source>%citizen% hat die Leiche von %disposed% vernichtet, indem er sie mit Wasser übergossen hat.</source>
+        <target>%citizen% hat die Leiche von %disposed% vernichtet, indem er sie mit Wasser übergossen hat.</target>
+      </trans-unit>
+      <trans-unit id="SS1lJ6A" resname="%citizen% hat aus der Leiche von %disposed% eine leckere Mahlzeit gegrillt. Die Stadt hat %items% erhalten.">
+        <source>%citizen% hat aus der Leiche von %disposed% eine leckere Mahlzeit gegrillt. Die Stadt hat %items% erhalten.</source>
+        <target>%citizen% hat aus der Leiche von %disposed% eine leckere Mahlzeit gegrillt. Die Stadt hat %items% erhalten.</target>
+      </trans-unit>
+      <trans-unit id="d3G_QIz" resname="%citizen% hat die Leiche von %disposed% vernichtet.">
+        <source>%citizen% hat die Leiche von %disposed% vernichtet.</source>
+        <target>%citizen% hat die Leiche von %disposed% vernichtet.</target>
+      </trans-unit>
+      <trans-unit id="oxUEe4_" resname="HALTET DEN DIEB! %actor% ist bei %victim% eingebrochen und hat %item% gestohlen!">
+        <source>HALTET DEN DIEB! %actor% ist bei %victim% eingebrochen und hat %item% gestohlen!</source>
+        <target>HALTET DEN DIEB! %actor% ist bei %victim% eingebrochen und hat %item% gestohlen!</target>
+      </trans-unit>
+      <trans-unit id="4N3qfX_" resname="VERDAMMT! Es scheint, jemand ist bei %victim% eingebrochen und hat %item% gestohlen...">
+        <source>VERDAMMT! Es scheint, jemand ist bei %victim% eingebrochen und hat %item% gestohlen...</source>
+        <target>VERDAMMT! Es scheint, jemand ist bei %victim% eingebrochen und hat %item% gestohlen...</target>
+      </trans-unit>
+      <trans-unit id="xFPnTgQ" resname="%actor% ist bei %victim% eingebrochen und hat %item% hinterlassen...">
+        <source>%actor% ist bei %victim% eingebrochen und hat %item% hinterlassen...</source>
+        <target>%actor% ist bei %victim% eingebrochen und hat %item% hinterlassen...</target>
+      </trans-unit>
+      <trans-unit id="Lzd32wL" resname="Es scheint, jemand ist bei %victim% eingebrochen und hat %item% hinterlassen...">
+        <source>Es scheint, jemand ist bei %victim% eingebrochen und hat %item% hinterlassen...</source>
+        <target>Es scheint, jemand ist bei %victim% eingebrochen und hat %item% hinterlassen...</target>
+      </trans-unit>
+      <trans-unit id="e.cUavH" resname="%citizen% hat mit dem Gegenstand %item% %kills% Zombie(s) getötet.">
+        <source>%citizen% hat mit dem Gegenstand %item% %kills% Zombie(s) getötet.</source>
+        <target>%citizen% hat mit dem Gegenstand %item% %kills% Zombie(s) getötet.</target>
+      </trans-unit>
+      <trans-unit id="41pWf5b" resname="%citizen% hat %kills% Zombies getötet.">
+        <source>%citizen% hat %kills% Zombies getötet.</source>
+        <target>%citizen% hat %kills% Zombies getötet.</target>
+      </trans-unit>
+      <trans-unit id="TxkwDJh" resname="Leiche aus der Stadt ziehen">
+        <source>Leiche aus der Stadt ziehen</source>
+        <target>Leiche aus der Stadt ziehen</target>
+      </trans-unit>
+      <trans-unit id="hXIZAOO" resname="Leiche mit Wasser übergießen">
+        <source>Leiche mit Wasser übergießen</source>
+        <target>Leiche mit Wasser übergießen</target>
+      </trans-unit>
+      <trans-unit id="4hCJabi" resname="Leiche grillen">
+        <source>Leiche grillen</source>
+        <target>Leiche grillen</target>
+      </trans-unit>
+    </body>
+  </file>
 </xliff>

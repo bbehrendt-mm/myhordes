@@ -180,7 +180,7 @@ export default class HTML {
             }
 
             if (buttons.length > 0) {
-                const pre_selection = $.client.get( group, 'tabState' );
+                const pre_selection = controllers[i].getAttribute('x-tab-default') ? controllers[i].getAttribute('x-tab-default') : $.client.get( group, 'tabState' );
                 let target: Element | null = null;
                 if (pre_selection !== null)
                     target = controllers[i].querySelector( '[x-tab-id=' + pre_selection + ']' );
