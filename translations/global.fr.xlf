@@ -11,23 +11,23 @@
       </trans-unit>
       <trans-unit id="YoYmlHE" resname="Das gewählte Forum existiert nicht oder dir fehlt die Zugangsberechtigung dafür.">
         <source>Das gewählte Forum existiert nicht oder dir fehlt die Zugangsberechtigung dafür.</source>
-        <target>Le forum sélectionné n'existe pas ou vous n'avez pas l'autorisation d'y accéder.</target>
+        <target>Le forum sélectionné n\'existe pas ou vous n\'avez pas l\'autorisation d\'y accéder.</target>
       </trans-unit>
       <trans-unit id="cLv91_L" resname="Dein Text muss mindestens 10 Zeichen lang sein.">
         <source>Dein Text muss mindestens 10 Zeichen lang sein.</source>
-        <target>Dein Text muss mindestens 10 Zeichen lang sein.</target>
+        <target>Votre texte doit contenir au moins 10 charactères.</target>
       </trans-unit>
       <trans-unit id="1rA34oT" resname="Dein Titel muss zwischen 3 und 64 Zeichen lang sein.">
         <source>Dein Titel muss zwischen 3 und 64 Zeichen lang sein.</source>
-        <target>Dein Titel muss zwischen 3 und 64 Zeichen lang sein.</target>
+        <target>Votre tritre doit contenir entre 3 et 64 charactères.</target>
       </trans-unit>
       <trans-unit id="3r067AY" resname="Kommunikationsfehler.">
         <source>Kommunikationsfehler.</source>
-        <target>Kommunikationsfehler.</target>
+        <target>Erreur de communication.</target>
       </trans-unit>
       <trans-unit id="Q4DVSd6" resname="Die Aktion kann nicht ausgeführt werden, da deine Anfrage unvollständig oder fehlerhaft ist.">
         <source>Die Aktion kann nicht ausgeführt werden, da deine Anfrage unvollständig oder fehlerhaft ist.</source>
-        <target>Die Aktion kann nicht ausgeführt werden, da deine Anfrage unvollständig oder fehlerhaft ist.</target>
+        <target>Cette action ne peut pas être effectuée car la demande est incorrecte ou incomplète.</target>
       </trans-unit>
       <trans-unit id="XEsiQcR" resname="Beim Ausführen der Aktion ist ein Datenbankfehler aufgetreten. Bitte versuche es später erneut.">
         <source>Beim Ausführen der Aktion ist ein Datenbankfehler aufgetreten. Bitte versuche es später erneut.</source>
@@ -39,123 +39,123 @@
       </trans-unit>
       <trans-unit id="6MqeHWt" resname="Für diese Aktion hast du nicht genug AP.">
         <source>Für diese Aktion hast du nicht genug AP.</source>
-        <target>Für diese Aktion hast du nicht genug AP.</target>
+        <target>Vous n\'avez pas assez de PA pour cette action.</target>
       </trans-unit>
       <trans-unit id="doUPd7A" resname="Diese Aktion steht dir aktuell nicht zur Verfügung.">
         <source>Diese Aktion steht dir aktuell nicht zur Verfügung.</source>
-        <target>Diese Aktion steht dir aktuell nicht zur Verfügung.</target>
+        <target>Vous ne pouvez pas faire cette action actuellement.</target>
       </trans-unit>
       <trans-unit id="KlavWsd" resname="Hierfür fehlen dir notwendige Gegenstände.">
         <source>Hierfür fehlen dir notwendige Gegenstände.</source>
-        <target>Hierfür fehlen dir notwendige Gegenstände.</target>
+        <target>Vous n\'avez pas les élements nécessaire pour cela.</target>
       </trans-unit>
       <trans-unit id="OAMaKv3" resname="Diese Aktion steht nur Helden zur Verfügung.">
         <source>Diese Aktion steht nur Helden zur Verfügung.</source>
-        <target>Diese Aktion steht nur Helden zur Verfügung.</target>
+        <target>Cette ation n\'est disponible que pour les héros.</target>
       </trans-unit>
       <trans-unit id="OA0ZiO0" resname="Neuer Thread">
         <source>Neuer Thread</source>
-        <target>Neuer Thread</target>
+        <target>Nouveau fil</target>
       </trans-unit>
       <trans-unit id="2Jf.Bop" resname="Neuer Post">
         <source>Neuer Post</source>
-        <target>Neuer Post</target>
+        <target>Nouveau message</target>
       </trans-unit>
       <trans-unit id="q8r8gtq" resname="Titel">
         <source>Titel</source>
-        <target>Titel</target>
+        <target>Titre</target>
       </trans-unit>
       <trans-unit id="P6NlaF8" resname="Deine Nachricht">
         <source>Deine Nachricht</source>
-        <target>Deine Nachricht</target>
+        <target>Votre message</target>
       </trans-unit>
       <trans-unit id="IuHFUTo" resname="Absenden">
         <source>Absenden</source>
-        <target>Absenden</target>
+        <target>Envoyer</target>
       </trans-unit>
       <trans-unit id="VIYRzlj" resname="Zurück">
         <source>Zurück</source>
-        <target>Zurück</target>
+        <target>Retour</target>
       </trans-unit>
       <trans-unit id="6Pt1B9Z" resname="Neues Thema">
         <source>Neues Thema</source>
-        <target>Neues Thema</target>
+        <target>Nouveau sujet</target>
       </trans-unit>
       <trans-unit id="bej0jm2" resname="Themen">
         <source>Themen</source>
-        <target>Themen</target>
+        <target>Sujets</target>
       </trans-unit>
       <trans-unit id="Zyb_RyS" resname="Bisher hat niemand in dieses Forum geschrieben. Sei du doch der Erste!">
         <source>Bisher hat niemand in dieses Forum geschrieben. Sei du doch der Erste!</source>
-        <target>Bisher hat niemand in dieses Forum geschrieben. Sei du doch der Erste!</target>
+        <target>Personne n'a encore posté dans ce forum. Soyez le premier !</target>
       </trans-unit>
       <trans-unit id="Oxu558J" resname="Der Rabe">
         <source>Der Rabe</source>
-        <target>Der Rabe</target>
+        <target>Le corbeau</target>
       </trans-unit>
       <trans-unit id="81dFh4o" resname="Seite %page%/%pages%">
         <source>Seite %page%/%pages%</source>
-        <target>Seite %page%/%pages%</target>
+        <target>Page %page%/%pages%</target>
       </trans-unit>
       <trans-unit id="xtsvLHK" resname="Bitte halte dich an die Regeln:">
         <source>Bitte halte dich an die Regeln:</source>
-        <target>Bitte halte dich an die Regeln:</target>
+        <target>Merci de suivre les règles :</target>
       </trans-unit>
       <trans-unit id="5z8rcLL" resname="Achte auf deine Rechtschreibung">
         <source>Achte auf deine Rechtschreibung</source>
-        <target>Achte auf deine Rechtschreibung</target>
+        <target>Faites attention à l'orthographe</target>
       </trans-unit>
       <trans-unit id="htYR3Qp" resname="Bleibe höflich und freundlich">
         <source>Bleibe höflich und freundlich</source>
-        <target>Bleibe höflich und freundlich</target>
+        <target>Restez poli et amical</target>
       </trans-unit>
       <trans-unit id="fS360q." resname="Werbung ist verboten (Links etc.)">
         <source>Werbung ist verboten (Links etc.)</source>
-        <target>Werbung ist verboten (Links etc.)</target>
+        <target>La publicité est interdite (liens, etc...)</target>
       </trans-unit>
       <trans-unit id="58t6egl" resname="Heute um">
         <source>Heute um</source>
-        <target>Heute um</target>
+        <target>Aujourd'hui à</target>
       </trans-unit>
       <trans-unit id="K9r8v8p" resname="Gestern um">
         <source>Gestern um</source>
-        <target>Gestern um</target>
+        <target>Hier à</target>
       </trans-unit>
       <trans-unit id="Et.Ao0w" resname="Antworten">
         <source>Antworten</source>
-        <target>Antworten</target>
+        <target>Répondre</target>
       </trans-unit>
       <trans-unit id="uAj26XB" resname="Schließen">
         <source>Schließen</source>
-        <target>Schließen</target>
+        <target>Fermer</target>
       </trans-unit>
       <trans-unit id="SOVZNkR" resname="Bestätigen?">
         <source>Bestätigen?</source>
-        <target>Bestätigen?</target>
+        <target>Confirmer ?</target>
       </trans-unit>
       <trans-unit id="3XvS9ox" resname="Rückgängig">
         <source>Rückgängig</source>
-        <target>Rückgängig</target>
+        <target>Annuler</target>
       </trans-unit>
       <trans-unit id="9.8ReK8" resname="Abbrechen">
         <source>Abbrechen</source>
-        <target>Abbrechen</target>
+        <target>Annuler</target>
       </trans-unit>
       <trans-unit id="9rL.OfV" resname="Speichern">
         <source>Speichern</source>
-        <target>Speichern</target>
+        <target>Enregistrer</target>
       </trans-unit>
       <trans-unit id="R4MmGpY" resname="Achtung">
         <source>Achtung</source>
-        <target>Achtung</target>
+	<target>Attention</target>
       </trans-unit>
       <trans-unit id="fDDOLlJ" resname="Bist du sicher?">
         <source>Bist du sicher?</source>
-        <target>Bist du sicher?</target>
+        <target>Êtes-vous sûr ?</target>
       </trans-unit>
       <trans-unit id="lO_TcU3" resname="Auswahl bestätigen">
         <source>Auswahl bestätigen</source>
-        <target>Auswahl bestätigen</target>
+        <target>Confirmer la sélection</target>
       </trans-unit>
       <trans-unit id="Tae9Qqu" resname="Forum">
         <source>Forum</source>
@@ -163,23 +163,23 @@
       </trans-unit>
       <trans-unit id="BNcLxkK" resname="Deine Seele">
         <source>Deine Seele</source>
-        <target>Deine Seele</target>
+        <target>Votre âme</target>
       </trans-unit>
       <trans-unit id="lUcvZQo" resname="Hilfe">
         <source>Hilfe</source>
-        <target>Hilfe</target>
+	<target>Aide</target>
       </trans-unit>
       <trans-unit id="mbIzlHW" resname="Zum Spiel">
         <source>Zum Spiel</source>
-        <target>Zum Spiel</target>
+        <target>Retour au jeu</target>
       </trans-unit>
       <trans-unit id="tkZocIU" resname="Ausloggen">
         <source>Ausloggen</source>
-        <target>Ausloggen</target>
+        <target>Déconnexion</target>
       </trans-unit>
       <trans-unit id="YeLCoLU" resname="Seite neu laden">
         <source>Seite neu laden</source>
-        <target>Seite neu laden</target>
+        <target>Rechercher la page</target>
       </trans-unit>
     </body>
   </file>
