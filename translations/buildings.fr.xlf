@@ -443,43 +443,43 @@
       </trans-unit>
       <trans-unit id="fxriL78" resname="Verbesserte Karte">
         <source>Verbesserte Karte</source>
-        <target>Verbesserte Karte</target>
+        <target>Carte améliorée</target>
       </trans-unit>
       <trans-unit id="wBOW_40" resname="Rechenmaschine">
         <source>Rechenmaschine</source>
-        <target>Rechenmaschine</target>
+        <target>Planificateur</target>
       </trans-unit>
       <trans-unit id="kOf03MZ" resname="Forschungsturm">
         <source>Forschungsturm</source>
-        <target>Forschungsturm</target>
+        <target>Scrutateur</target>
       </trans-unit>
       <trans-unit id="3BWnOol" resname="Die Chance, dass sich die Zonen in Windrichtung regenerieren steigt auf 37%.">
         <source>Die Chance, dass sich die Zonen in Windrichtung regenerieren steigt auf 37%.</source>
-        <target>Die Chance, dass sich die Zonen in Windrichtung regenerieren steigt auf 37%.</target>
+        <target>Les chances de régénération d'une case du désert passent à 37%.</target>
       </trans-unit>
       <trans-unit id="wn7xMlO" resname="Die Chance, dass sich die Zonen in Windrichtung regenerieren steigt auf 49%.">
         <source>Die Chance, dass sich die Zonen in Windrichtung regenerieren steigt auf 49%.</source>
-        <target>Die Chance, dass sich die Zonen in Windrichtung regenerieren steigt auf 49%.</target>
+        <target>Les chances de régénération d'une case du désert passent à 49%.</target>
       </trans-unit>
       <trans-unit id="hOAn2zi" resname="Die Chance, dass sich die Zonen in Windrichtung regenerieren steigt auf 61%.">
         <source>Die Chance, dass sich die Zonen in Windrichtung regenerieren steigt auf 61%.</source>
-        <target>Die Chance, dass sich die Zonen in Windrichtung regenerieren steigt auf 61%.</target>
+        <target>Les chances de régénération d'une case du désert passent à 61%.</target>
       </trans-unit>
       <trans-unit id="4qtyyT_" resname="Die Chance, dass sich die Zonen in Windrichtung regenerieren steigt auf 73%.">
         <source>Die Chance, dass sich die Zonen in Windrichtung regenerieren steigt auf 73%.</source>
-        <target>Die Chance, dass sich die Zonen in Windrichtung regenerieren steigt auf 73%.</target>
+        <target>Les chances de régénération d'une case du désert passent à 73%.</target>
       </trans-unit>
       <trans-unit id="EII..O4" resname="Die Chance, dass sich die Zonen in Windrichtung regenerieren steigt auf 85%.">
         <source>Die Chance, dass sich die Zonen in Windrichtung regenerieren steigt auf 85%.</source>
-        <target>Die Chance, dass sich die Zonen in Windrichtung regenerieren steigt auf 85%.</target>
+        <target>Les chances de régénération d'une case du désert passent à 85%.</target>
       </trans-unit>
       <trans-unit id="iJl3i40" resname="Verteidigungspfähle">
         <source>Verteidigungspfähle</source>
-        <target>Verteidigungspfähle</target>
+        <target>Champs piégés</target>
       </trans-unit>
       <trans-unit id="ZwtYGJS" resname="Notfallabstützung">
         <source>Notfallabstützung</source>
-        <target>Notfallabstützung</target>
+        <target>Renforts d'urgence</target>
       </trans-unit>
       <trans-unit id="CZ3TwGn" resname="Guerilla">
         <source>Guerilla</source>
@@ -487,103 +487,103 @@
       </trans-unit>
       <trans-unit id="2oexLnE" resname="Trümmerberg">
         <source>Trümmerberg</source>
-        <target>Trümmerberg</target>
+        <target>Mont pointu</target>
       </trans-unit>
       <trans-unit id="fhLdJ84" resname="Abfallberg">
         <source>Abfallberg</source>
-        <target>Abfallberg</target>
+        <target>Tas détritus</target>
       </trans-unit>
       <trans-unit id="Rj.C34H" resname="Wolfsfalle">
         <source>Wolfsfalle</source>
-        <target>Wolfsfalle</target>
+        <target>Piège à loups</target>
       </trans-unit>
       <trans-unit id="mdZatxx" resname="Sprengfalle">
         <source>Sprengfalle</source>
-        <target>Sprengfalle</target>
+        <target>Dynamitage</target>
       </trans-unit>
       <trans-unit id="Bomnue9" resname="Nackte Panik">
         <source>Nackte Panik</source>
-        <target>Nackte Panik</target>
+        <target>Panique</target>
       </trans-unit>
       <trans-unit id="0lzRs8w" resname="Dollhouse">
         <source>Dollhouse</source>
-        <target>Dollhouse</target>
+        <target>La Bamba</target>
       </trans-unit>
       <trans-unit id="thcdfWu" resname="Heiliger Regen">
         <source>Heiliger Regen</source>
-        <target>Heiliger Regen</target>
+        <target>Pluie bénite</target>
       </trans-unit>
       <trans-unit id="kDKItz." resname="Voodoo-Puppe">
         <source>Voodoo-Puppe</source>
-        <target>Voodoo-Puppe</target>
+        <target>Poupée Vaudou XXL</target>
       </trans-unit>
       <trans-unit id="Pb0lyLQ" resname="Spirituelles Wunder">
         <source>Spirituelles Wunder</source>
-        <target>Spirituelles Wunder</target>
+        <target>Mirage Spirituel</target>
       </trans-unit>
       <trans-unit id="5CaCw2S" resname="Bokors Guillotine">
         <source>Bokors Guillotine</source>
-        <target>Bokors Guillotine</target>
+        <target>Guillotine à Bokor</target>
       </trans-unit>
       <trans-unit id="vSThV6l" resname="Notfallkonstruktion">
         <source>Notfallkonstruktion</source>
-        <target>Notfallkonstruktion</target>
+        <target>Dispositifs urgence</target>
       </trans-unit>
       <trans-unit id="aPBadh7" resname="Verbesserter Katapult">
         <source>Verbesserter Katapult</source>
-        <target>Verbesserter Katapult</target>
+        <target>Catapulte calibrée</target>
       </trans-unit>
       <trans-unit id="GWsFaiN" resname="Katapult">
         <source>Katapult</source>
-        <target>Katapult</target>
+        <target>Catapulte Primitive</target>
       </trans-unit>
       <trans-unit id="d_fImyz" resname="Kleine Waffenschmiede">
         <source>Kleine Waffenschmiede</source>
-        <target>Kleine Waffenschmiede</target>
+        <target>Armurerie</target>
       </trans-unit>
       <trans-unit id="IILr3kv" resname="Schwedische Schreinerei">
         <source>Schwedische Schreinerei</source>
-        <target>Schwedische Schreinerei</target>
+        <target>Magasin suédois</target>
       </trans-unit>
       <trans-unit id="Vw74UDb" resname="Schießstand">
         <source>Schießstand</source>
-        <target>Schießstand</target>
+        <target>Tourelle lance-eau</target>
       </trans-unit>
       <trans-unit id="sgVOApH" resname="Kleiner Tribok">
         <source>Kleiner Tribok</source>
-        <target>Kleiner Tribok</target>
+        <target>Lance-bête</target>
       </trans-unit>
       <trans-unit id="rDDj6vk" resname="Wächter-Turm">
         <source>Wächter-Turm</source>
-        <target>Wächter-Turm</target>
+        <target>Tour des gardiens</target>
       </trans-unit>
       <trans-unit id="NIEy.oJ" resname="Krähennest">
         <source>Krähennest</source>
-        <target>Krähennest</target>
+        <target>Tour des éclaireurs</target>
       </trans-unit>
       <trans-unit id="IbZvvYE" resname="Wachturm">
         <source>Wachturm</source>
-        <target>Wachturm</target>
+        <target>Tour de Guet</target>
       </trans-unit>
       <trans-unit id="Sy.Q4GU" resname="Erspäht jeden Morgen alle Zombies, die sich im Umkreis von 3km um die Stadt aufhalten.">
         <source>Erspäht jeden Morgen alle Zombies, die sich im Umkreis von 3km um die Stadt aufhalten.</source>
-        <target>Erspäht jeden Morgen alle Zombies, die sich im Umkreis von 3km um die Stadt aufhalten.</target>
+        <target>Détecte chaque matin tous les zombies à 3 km de la ville.</target>
       </trans-unit>
       <trans-unit id="NZeNsxy" resname="Erspäht jeden Morgen alle Zombies, die sich im Umkreis von 6km um die Stadt aufhalten.">
         <source>Erspäht jeden Morgen alle Zombies, die sich im Umkreis von 6km um die Stadt aufhalten.</source>
-        <target>Erspäht jeden Morgen alle Zombies, die sich im Umkreis von 6km um die Stadt aufhalten.</target>
+        <target>Détecte chaque matin tous les zombies à 6 km de la ville.</target>
       </trans-unit>
       <trans-unit id="wGZu2sa" resname="Erspäht jeden Morgen alle Zombies, die sich im Umkreis von 10km um die Stadt aufhalten.">
         <source>Erspäht jeden Morgen alle Zombies, die sich im Umkreis von 10km um die Stadt aufhalten.</source>
-        <target>Erspäht jeden Morgen alle Zombies, die sich im Umkreis von 10km um die Stadt aufhalten.</target>
+        <target>Détecte chaque matin tous les zombies à 10 km de la ville.</target>
       </trans-unit>
       <trans-unit id="h1r5RdI" resname="Erspäht jeden Morgen alle Zombies, die sich im Umkreis von 10km um die Stadt aufhalten. Bürger im Umkreis von 1km um die Stadt können ohne AP-Verbrauch die Stadt betreten.">
         <source>Erspäht jeden Morgen alle Zombies, die sich im Umkreis von 10km um die Stadt aufhalten. Bürger im Umkreis von 1km um die Stadt können ohne AP-Verbrauch die Stadt betreten.</source>
-        <target>Erspäht jeden Morgen alle Zombies, die sich im Umkreis von 10km um die Stadt aufhalten. Bürger im Umkreis von 1km um die Stadt können ohne AP-Verbrauch die Stadt betreten.</target>
+        <target>Détecte chaque matin tous les zombies à 10 km de la ville et permet aux citoyens à 1 km de la ville de rentrer gratuitement.</target>
       </trans-unit>
       <trans-unit id="N0sOdNf" resname="Erspäht jeden Morgen alle Zombies, die sich im Umkreis von 10km um die Stadt aufhalten. Bürger im Umkreis von 2km um die Stadt können ohne AP-Verbrauch die Stadt betreten.">
         <source>Erspäht jeden Morgen alle Zombies, die sich im Umkreis von 10km um die Stadt aufhalten. Bürger im Umkreis von 2km um die Stadt können ohne AP-Verbrauch die Stadt betreten.</source>
-        <target>Erspäht jeden Morgen alle Zombies, die sich im Umkreis von 10km um die Stadt aufhalten. Bürger im Umkreis von 2km um die Stadt können ohne AP-Verbrauch die Stadt betreten.</target>
+        <target>Détecte chaque matin tous les zombies à 10 km de la ville et permet aux citoyens à 2 km de la ville de rentrer gratuitement</target>
       </trans-unit>
       <trans-unit id="2B9BF5F" resname="Bohrturm">
         <source>Bohrturm</source>
