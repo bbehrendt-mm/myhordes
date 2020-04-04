@@ -159,111 +159,111 @@
       </trans-unit>
       <trans-unit id="2gSRbEU" resname="Minen">
         <source>Minen</source>
-        <target>Minen</target>
+        <target>Champ mines eau</target>
       </trans-unit>
       <trans-unit id="rCKz3m3" resname="Wasserfilter">
         <source>Wasserfilter</source>
-        <target>Wasserfilter</target>
+        <target>Filtre</target>
       </trans-unit>
       <trans-unit id="14diVFD" resname="Wasserreiniger">
         <source>Wasserreiniger</source>
-        <target>Wasserreiniger</target>
+        <target>Purificateur</target>
       </trans-unit>
       <trans-unit id="MHnbW88" resname="Dünger">
         <source>Dünger</source>
-        <target>Dünger</target>
+        <target>Fertilisation sauvage</target>
       </trans-unit>
       <trans-unit id="kP2Srb9" resname="Granatapfel">
         <source>Granatapfel</source>
-        <target>Granatapfel</target>
+        <target>Pamplemousses explosifs</target>
       </trans-unit>
       <trans-unit id="ruRpI7F" resname="Gemüsebeet">
         <source>Gemüsebeet</source>
-        <target>Gemüsebeet</target>
+        <target>Potager</target>
       </trans-unit>
       <trans-unit id="aMK4lTK" resname="Projekt Eden">
         <source>Projekt Eden</source>
-        <target>Projekt Eden</target>
+        <target>Projet Eden</target>
       </trans-unit>
       <trans-unit id="g7vkdOB" resname="Brunnenbohrer">
         <source>Brunnenbohrer</source>
-        <target>Brunnenbohrer</target>
+        <target>Foreuse puits</target>
       </trans-unit>
       <trans-unit id="18uh4Vj" resname="Kärcher">
         <source>Kärcher</source>
-        <target>Kärcher</target>
+        <target>Vaporisateur</target>
       </trans-unit>
       <trans-unit id="CfQ_Bib" resname="Kreischender Rotor">
         <source>Kreischender Rotor</source>
-        <target>Kreischender Rotor</target>
+        <target>Sanibroyeur</target>
       </trans-unit>
       <trans-unit id="OcCCWxy" resname="Sprinkleranlage">
         <source>Sprinkleranlage</source>
-        <target>Sprinkleranlage</target>
+        <target>Arroseurs auto</target>
       </trans-unit>
       <trans-unit id="MULCyIk" resname="Dusche">
         <source>Dusche</source>
-        <target>Dusche</target>
+        <target>Douches</target>
       </trans-unit>
       <trans-unit id="7j0r7B9" resname="Wasserleitungsnetz">
         <source>Wasserleitungsnetz</source>
-        <target>Wasserleitungsnetz</target>
+        <target>Réseau hydraulique</target>
       </trans-unit>
       <trans-unit id="Rhgjmll" resname="Wasserturm">
         <source>Wasserturm</source>
-        <target>Wasserturm</target>
+        <target>Aqua tourelles</target>
       </trans-unit>
       <trans-unit id="_TjOaCj" resname="Der Wasserturm verbraucht beim nächtlichen Angriff 2 Rationen Wasser und steigert seinen Verteidigungswert dafür um 56.">
         <source>Der Wasserturm verbraucht beim nächtlichen Angriff 2 Rationen Wasser und steigert seinen Verteidigungswert dafür um 56.</source>
-        <target>Der Wasserturm verbraucht beim nächtlichen Angriff 2 Rationen Wasser und steigert seinen Verteidigungswert dafür um 56.</target>
+        <target>La défense des aqua-tourelles est multipliée par 1.8 (126 points de défense), mais coûte 2 rations d'eau par nuit.</target>
       </trans-unit>
       <trans-unit id="L6.6ahS" resname="Der Wasserturm verbraucht beim nächtlichen Angriff 4 Rationen Wasser und steigert seinen Verteidigungswert dafür um 112.">
         <source>Der Wasserturm verbraucht beim nächtlichen Angriff 4 Rationen Wasser und steigert seinen Verteidigungswert dafür um 112.</source>
-        <target>Der Wasserturm verbraucht beim nächtlichen Angriff 4 Rationen Wasser und steigert seinen Verteidigungswert dafür um 112.</target>
+        <target>La défense des aqua-tourelles est multipliée par 2.6 (182 points de défense), mais coûte 4 rations d'eau par nuit.</target>
       </trans-unit>
       <trans-unit id="P7EINL." resname="Der Wasserturm verbraucht beim nächtlichen Angriff 6 Rationen Wasser und steigert seinen Verteidigungswert dafür um 168.">
         <source>Der Wasserturm verbraucht beim nächtlichen Angriff 6 Rationen Wasser und steigert seinen Verteidigungswert dafür um 168.</source>
-        <target>Der Wasserturm verbraucht beim nächtlichen Angriff 6 Rationen Wasser und steigert seinen Verteidigungswert dafür um 168.</target>
+        <target>La défense des aqua-tourelles est multipliée par 3.4 (238 points de défense), mais coûte 6 rations d'eau par nuit.</target>
       </trans-unit>
       <trans-unit id="Y_jBf_Y" resname="Der Wasserturm verbraucht beim nächtlichen Angriff 9 Rationen Wasser und steigert seinen Verteidigungswert dafür um 224.">
         <source>Der Wasserturm verbraucht beim nächtlichen Angriff 9 Rationen Wasser und steigert seinen Verteidigungswert dafür um 224.</source>
-        <target>Der Wasserturm verbraucht beim nächtlichen Angriff 9 Rationen Wasser und steigert seinen Verteidigungswert dafür um 224.</target>
+        <target>La défense des aqua-tourelles est multipliée par 4.2 (294 points de défense), mais coûte 9 rations d'eau par nuit.</target>
       </trans-unit>
       <trans-unit id="94xxibL" resname="Der Wasserturm verbraucht beim nächtlichen Angriff 12 Rationen Wasser und steigert seinen Verteidigungswert dafür um 280.">
         <source>Der Wasserturm verbraucht beim nächtlichen Angriff 12 Rationen Wasser und steigert seinen Verteidigungswert dafür um 280.</source>
-        <target>Der Wasserturm verbraucht beim nächtlichen Angriff 12 Rationen Wasser und steigert seinen Verteidigungswert dafür um 280.</target>
+        <target>La défense des aqua-tourelles est multipliée par 5 (350 points de défense), mais coûte 12 rations d'eau par nuit.</target>
       </trans-unit>
       <trans-unit id="aD._KEu" resname="Wasserfänger">
         <source>Wasserfänger</source>
-        <target>Wasserfänger</target>
+        <target>Percée</target>
       </trans-unit>
       <trans-unit id="ABN1XUN" resname="Wasserkanone">
         <source>Wasserkanone</source>
-        <target>Wasserkanone</target>
+        <target>Pluvio-canons</target>
       </trans-unit>
       <trans-unit id="gCJBWWD" resname="Schleuse">
         <source>Schleuse</source>
-        <target>Schleuse</target>
+        <target>Caniveaux</target>
       </trans-unit>
       <trans-unit id="qo4gzuN" resname="Wasserfall">
         <source>Wasserfall</source>
-        <target>Wasserfall</target>
+        <target>Rid'eau</target>
       </trans-unit>
       <trans-unit id="bZnWnKs" resname="Wünschelrakete">
         <source>Wünschelrakete</source>
-        <target>Wünschelrakete</target>
+        <target>Roquette Foreuse</target>
       </trans-unit>
       <trans-unit id="kBVya6M" resname="Wünschelrute">
         <source>Wünschelrute</source>
-        <target>Wünschelrute</target>
+        <target>Détecteur à eau</target>
       </trans-unit>
       <trans-unit id="FL6iCcw" resname="Apfelbaum">
         <source>Apfelbaum</source>
-        <target>Apfelbaum</target>
+        <target>Pommier de l'Outre-Monde</target>
       </trans-unit>
       <trans-unit id="sfG6Jkq" resname="Pumpe">
         <source>Pumpe</source>
-        <target>Pumpe</target>
+        <target>Pompe</target>
       </trans-unit>
       <trans-unit id="soE_FyU" resname="Der Brunnen der Stadt wird einmalig um 5 Rationen Wasser aufgefüllt">
         <source>Der Brunnen der Stadt wird einmalig um 5 Rationen Wasser aufgefüllt</source>
