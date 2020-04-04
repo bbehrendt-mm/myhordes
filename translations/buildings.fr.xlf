@@ -587,139 +587,139 @@
       </trans-unit>
       <trans-unit id="2B9BF5F" resname="Bohrturm">
         <source>Bohrturm</source>
-        <target>Bohrturm</target>
+        <target>Derrick</target>
       </trans-unit>
       <trans-unit id="ukqZW.g" resname="Falsche Stadt">
         <source>Falsche Stadt</source>
-        <target>Falsche Stadt</target>
+        <target>Fausse Ville</target>
       </trans-unit>
       <trans-unit id="0dmkB9a" resname="Wasserhahn">
         <source>Wasserhahn</source>
-        <target>Wasserhahn</target>
+        <target>Robinetterie</target>
       </trans-unit>
       <trans-unit id="BlCgW4T" resname="Großer Umbau">
         <source>Großer Umbau</source>
-        <target>Großer Umbau</target>
+        <target>Grand déménagement</target>
       </trans-unit>
       <trans-unit id="zaMjBQ." resname="Vogelscheuche">
         <source>Vogelscheuche</source>
-        <target>Vogelscheuche</target>
+        <target>Champs d'épouvantails</target>
       </trans-unit>
       <trans-unit id="WP.9MMH" resname="Fleischkäfig">
         <source>Fleischkäfig</source>
-        <target>Fleischkäfig</target>
+        <target>Cage à viande</target>
       </trans-unit>
       <trans-unit id="lFBoBtv" resname="Bürgergericht">
         <source>Bürgergericht</source>
-        <target>Bürgergericht</target>
+        <target>Dictature des héros</target>
       </trans-unit>
       <trans-unit id="ksEwaBK" resname="Befestigungen">
         <source>Befestigungen</source>
-        <target>Befestigungen</target>
+        <target>Habitations fortifiées</target>
       </trans-unit>
       <trans-unit id="k0lGB7h" resname="Holzabfall">
         <source>Holzabfall</source>
-        <target>Holzabfall</target>
+        <target>Déchardes de bois</target>
       </trans-unit>
       <trans-unit id="EdJMx7W" resname="Metallabfall">
         <source>Metallabfall</source>
-        <target>Metallabfall</target>
+        <target>Ferraillerie</target>
       </trans-unit>
       <trans-unit id="_vBaevU" resname="Tierabfälle">
         <source>Tierabfälle</source>
-        <target>Tierabfälle</target>
+        <target>Enclos</target>
       </trans-unit>
       <trans-unit id="dBs_6pB" resname="Müll für Alle">
         <source>Müll für Alle</source>
-        <target>Müll für Alle</target>
+        <target>Décharge organisée</target>
       </trans-unit>
       <trans-unit id="NNvtYXk" resname="Waffenabfall">
         <source>Waffenabfall</source>
-        <target>Waffenabfall</target>
+        <target>Décharge piégée</target>
       </trans-unit>
       <trans-unit id="SrT9K6G" resname="Biomüll">
         <source>Biomüll</source>
-        <target>Biomüll</target>
+        <target>Appâts odorants</target>
       </trans-unit>
       <trans-unit id="KRW3IVw" resname="Rüstungsabfall">
         <source>Rüstungsabfall</source>
-        <target>Rüstungsabfall</target>
+        <target>Décharge blindée</target>
       </trans-unit>
       <trans-unit id="9.Bs0jf" resname="Verbesserte Müllhalde">
         <source>Verbesserte Müllhalde</source>
-        <target>Verbesserte Müllhalde</target>
+        <target>Décharge humidifiée</target>
       </trans-unit>
       <trans-unit id="K6Bt5zV" resname="Müllhalde">
         <source>Müllhalde</source>
-        <target>Müllhalde</target>
+        <target>Décharge publique</target>
       </trans-unit>
       <trans-unit id="QNQV_hH" resname="Leuchtturm">
         <source>Leuchtturm</source>
-        <target>Leuchtturm</target>
+        <target>Phare</target>
       </trans-unit>
       <trans-unit id="MwGqzqF" resname="Altar">
         <source>Altar</source>
-        <target>Altar</target>
+        <target>Autel de la rédemption</target>
       </trans-unit>
       <trans-unit id="Uqbfdqj" resname="Riesige Sandburg">
         <source>Riesige Sandburg</source>
-        <target>Riesige Sandburg</target>
+        <target>Château de sable</target>
       </trans-unit>
       <trans-unit id="Pp2_CqH" resname="Leuchtfeuer">
         <source>Leuchtfeuer</source>
-        <target>Leuchtfeuer</target>
+        <target>Feu de joie</target>
       </trans-unit>
       <trans-unit id="9zmUkLt" resname="Ministerium für Sklaverei">
         <source>Ministerium für Sklaverei</source>
-        <target>Ministerium für Sklaverei</target>
+        <target>Bureau des esclavagistes</target>
       </trans-unit>
       <trans-unit id="J1OKCl2" resname="Reaktor">
         <source>Reaktor</source>
-        <target>Reaktor</target>
+        <target>Réacteur soviétique</target>
       </trans-unit>
       <trans-unit id="3zCLWcZ" resname="Labyrinth">
         <source>Labyrinth</source>
-        <target>Labyrinth</target>
+        <target>Labyrinthe</target>
       </trans-unit>
       <trans-unit id="EUDSTNQ" resname="Alles oder nichts">
         <source>Alles oder nichts</source>
-        <target>Alles oder nichts</target>
+        <target>Dernière chance</target>
       </trans-unit>
       <trans-unit id="PXNOlXe" resname="Riesiger KVF">
         <source>Riesiger KVF</source>
-        <target>Riesiger KVF</target>
+        <target>PMV géant</target>
       </trans-unit>
       <trans-unit id="GKI2tai" resname="Riesenrad">
         <source>Riesenrad</source>
-        <target>Riesenrad</target>
+        <target>Grande roue de Grostas</target>
       </trans-unit>
       <trans-unit id="oemK25y" resname="Feuerwerk">
         <source>Feuerwerk</source>
-        <target>Feuerwerk</target>
+        <target>Feux d'artifices</target>
       </trans-unit>
       <trans-unit id="0iB.kKU" resname="Krähenstatue">
         <source>Krähenstatue</source>
-        <target>Krähenstatue</target>
+        <target>Statue du Corbeau</target>
       </trans-unit>
       <trans-unit id="bhbqmFu" resname="Kino">
         <source>Kino</source>
-        <target>Kino</target>
+        <target>Cinéma</target>
       </trans-unit>
       <trans-unit id="gEG0Yxp" resname="Luftschlag">
         <source>Luftschlag</source>
-        <target>Luftschlag</target>
+        <target>Roquettes</target>
       </trans-unit>
       <trans-unit id="20Mg3eL" resname="Heißluftballon">
         <source>Heißluftballon</source>
-        <target>Heißluftballon</target>
+        <target>Montgolfière</target>
       </trans-unit>
       <trans-unit id="sEt2j5e" resname="Tunnelratte">
         <source>Tunnelratte</source>
-        <target>Tunnelratte</target>
+        <target>Foreuse améliorée</target>
       </trans-unit>
       <trans-unit id="45eKiS1" resname="Fundament">
         <source>Fundament</source>
-        <target>Fundament</target>
+        <target>Fondations</target>
       </trans-unit>
       <trans-unit id="oqi.Bcz" resname="Torpanzerung">
         <source>Torpanzerung</source>
