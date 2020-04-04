@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
-  <file source-language="de" target-language="en" datatype="plaintext" original="file.ext">
+  <file source-language="de" target-language="de" datatype="plaintext" original="file.ext">
     <header>
       <tool tool-id="symfony" tool-name="Symfony"/>
     </header>
@@ -1405,6 +1405,18 @@
         <source>ZomBIER Bar</source>
         <target>ZomBIER Bar</target>
       </trans-unit>
+      <trans-unit id="TxkwDJh" resname="Leiche aus der Stadt ziehen">
+        <source>Leiche aus der Stadt ziehen</source>
+        <target>Leiche aus der Stadt ziehen</target>
+      </trans-unit>
+      <trans-unit id="hXIZAOO" resname="Leiche mit Wasser übergießen">
+        <source>Leiche mit Wasser übergießen</source>
+        <target>Leiche mit Wasser übergießen</target>
+      </trans-unit>
+      <trans-unit id="4hCJabi" resname="Leiche grillen">
+        <source>Leiche grillen</source>
+        <target>Leiche grillen</target>
+      </trans-unit>
       <trans-unit id="ZWfE2Vb" resname="%citizen% hat der Stadt folgendes gespendet: %item%">
         <source>%citizen% hat der Stadt folgendes gespendet: %item%</source>
         <target>%citizen% hat der Stadt folgendes gespendet: %item%</target>
@@ -1460,6 +1472,14 @@
       <trans-unit id="VImW6PC" resname="%citizen% hat seinen letzten Atemzug getan: %cod%!">
         <source>%citizen% hat seinen letzten Atemzug getan: %cod%!</source>
         <target>%citizen% hat seinen letzten Atemzug getan: %cod%!</target>
+      </trans-unit>
+      <trans-unit id="e.cUavH" resname="%citizen% hat mit dem Gegenstand %item% %kills% Zombie(s) getötet.">
+        <source>%citizen% hat mit dem Gegenstand %item% %kills% Zombie(s) getötet.</source>
+        <target>%citizen% hat mit dem Gegenstand %item% %kills% Zombie(s) getötet.</target>
+      </trans-unit>
+      <trans-unit id="41pWf5b" resname="%citizen% hat %kills% Zombies getötet.">
+        <source>%citizen% hat %kills% Zombies getötet.</source>
+        <target>%citizen% hat %kills% Zombies getötet.</target>
       </trans-unit>
       <trans-unit id="gaihf5j" resname="%citizen% hat das Stadtgebiet in Richtung %direction% verlassen.">
         <source>%citizen% hat das Stadtgebiet in Richtung %direction% verlassen.</source>
@@ -1552,26 +1572,6 @@
       <trans-unit id="Lzd32wL" resname="Es scheint, jemand ist bei %victim% eingebrochen und hat %item% hinterlassen...">
         <source>Es scheint, jemand ist bei %victim% eingebrochen und hat %item% hinterlassen...</source>
         <target>Es scheint, jemand ist bei %victim% eingebrochen und hat %item% hinterlassen...</target>
-      </trans-unit>
-      <trans-unit id="e.cUavH" resname="%citizen% hat mit dem Gegenstand %item% %kills% Zombie(s) getötet.">
-        <source>%citizen% hat mit dem Gegenstand %item% %kills% Zombie(s) getötet.</source>
-        <target>%citizen% hat mit dem Gegenstand %item% %kills% Zombie(s) getötet.</target>
-      </trans-unit>
-      <trans-unit id="41pWf5b" resname="%citizen% hat %kills% Zombies getötet.">
-        <source>%citizen% hat %kills% Zombies getötet.</source>
-        <target>%citizen% hat %kills% Zombies getötet.</target>
-      </trans-unit>
-      <trans-unit id="TxkwDJh" resname="Leiche aus der Stadt ziehen">
-        <source>Leiche aus der Stadt ziehen</source>
-        <target>Leiche aus der Stadt ziehen</target>
-      </trans-unit>
-      <trans-unit id="hXIZAOO" resname="Leiche mit Wasser übergießen">
-        <source>Leiche mit Wasser übergießen</source>
-        <target>Leiche mit Wasser übergießen</target>
-      </trans-unit>
-      <trans-unit id="4hCJabi" resname="Leiche grillen">
-        <source>Leiche grillen</source>
-        <target>Leiche grillen</target>
       </trans-unit>
     </body>
   </file>

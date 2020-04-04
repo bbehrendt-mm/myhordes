@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
-  <file source-language="de" target-language="en" datatype="plaintext" original="file.ext">
+  <file source-language="de" target-language="es" datatype="plaintext" original="file.ext">
     <header>
       <tool tool-id="symfony" tool-name="Symfony"/>
     </header>
     <body>
       <trans-unit id="rn1xaB2" resname="%victim%s Alarmanlage hat die halbe Stadt aufgeweckt und dich zu Tode erschreckt!">
         <source>%victim%s Alarmanlage hat die halbe Stadt aufgeweckt und dich zu Tode erschreckt!</source>
-        <target>%victim%s Alarmanlage hat die halbe Stadt aufgeweckt und dich zu Tode erschreckt!</target>
+        <target state="needs-translation">%victim%s Alarmanlage hat die halbe Stadt aufgeweckt und dich zu Tode erschreckt!</target>
       </trans-unit>
       <trans-unit id="uPyX7.a" resname="Mist, dein Einbruch bei %victim% ist aufgeflogen...">
         <source>Mist, dein Einbruch bei %victim% ist aufgeflogen...</source>
-        <target>Mist, dein Einbruch bei %victim% ist aufgeflogen...</target>
+        <target state="needs-translation">Mist, dein Einbruch bei %victim% ist aufgeflogen...</target>
       </trans-unit>
       <trans-unit id="w4JJj.q" resname="Sehr gut, niemand hat dich bei deinem Einbruch bei %victim% beobachtet.">
         <source>Sehr gut, niemand hat dich bei deinem Einbruch bei %victim% beobachtet.</source>

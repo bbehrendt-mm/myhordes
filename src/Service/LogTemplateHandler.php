@@ -17,6 +17,7 @@ use App\Entity\ItemPrototype;
 use App\Entity\Town;
 use App\Entity\TownLogEntry;
 use App\Entity\Zone;
+use App\Translation\T;
 use DateTime;
 use DateTimeInterface;
 use Symfony\Component\Asset\Packages;
@@ -165,9 +166,7 @@ class LogTemplateHandler
         $list = $proto->getResources() ? $proto->getResources()->getEntries()->getValues() : [];
         $list = array_map( function(ItemGroupEntry $e) { return $this->wrap( $this->iconize( $e ) ); }, $list );
 
-        $str = 'Es wurde ein neues Gebäude gebaut: %plan%.';
-        if (!empty($list)) $str .= ' Der Bau hat folgende Ressourcen verbraucht: %list%';
-
+        $uses_res = !empty($list);
         return (new TownLogEntry())
             ->setType( TownLogEntry::TypeConstruction )
             ->setSecondaryType( TownLogEntry::TypeBank )
@@ -175,7 +174,9 @@ class LogTemplateHandler
             ->setTown( $citizen->getTown() )
             ->setDay( $citizen->getTown()->getDay() )
             ->setTimestamp( new DateTime('now') )
-            ->setText( $this->trans->trans( $str, [
+            ->setText( $this->trans->trans( $uses_res
+                ? 'Es wurde ein neues Gebäude gebaut: %plan%. Der Bau hat folgende Ressourcen verbraucht: %list%'
+                : 'Es wurde ein neues Gebäude gebaut: %plan%.', [
                 '%plan%' => $this->wrap( $this->iconize( $proto ) ),
                 '%list%' => implode( ', ', $list )
             ], 'game' ) );
@@ -297,21 +298,21 @@ class LogTemplateHandler
     public function citizenDeath( Citizen $citizen, int $zombies = 0, ?Zone $zone = null ): TownLogEntry {
         switch ($citizen->getCauseOfDeath()->getRef()) {
             case CauseOfDeath::NightlyAttack:
-                $str = '%citizen% wurde von %zombies% zerfleischt!';
+                $str = T::__('%citizen% wurde von %zombies% zerfleischt!','game');
                 break;
             case CauseOfDeath::Vanished:
-                $str = 'Hat jemand in letzter Zeit von %citizen% gehört? Er scheint verschwunden zu sein ...';
+                $str = T::__('Hat jemand in letzter Zeit von %citizen% gehört? Er scheint verschwunden zu sein ...','game');
                 break;
             case CauseOfDeath::Cyanide:
-                $str = '%citizen% hat dem Druck nicht länger standgehalten und sein Leben beendet: %cod%.';
+                $str = T::__('%citizen% hat dem Druck nicht länger standgehalten und sein Leben beendet: %cod%.','game');
                 break;
             case CauseOfDeath::Posion: case CauseOfDeath::GhulEaten:
-                $str = 'Verrat! %citizen% ist gestorben: %cod%.';
+                $str = T::__('Verrat! %citizen% ist gestorben: %cod%.','game');
                 break;
             case CauseOfDeath::Hanging: case CauseOfDeath::FleshCage:
-                $str = '%citizen% hat das Fass zum Überlaufen gebracht. Die Stadt hat seinen Tod entschieden: %cod%.';
+                $str = T::__('%citizen% hat das Fass zum Überlaufen gebracht. Die Stadt hat seinen Tod entschieden: %cod%.','game');
                 break;
-            default: $str = '%citizen% hat seinen letzten Atemzug getan: %cod%!';
+            default: $str = T::__('%citizen% hat seinen letzten Atemzug getan: %cod%!','game');
         }
 
         return (new TownLogEntry())
@@ -383,8 +384,8 @@ class LogTemplateHandler
         elseif ($d_west)     $str = 'Westen';
 
         if ($is_zero_zone)
-            $base = $depart ?  '%citizen% hat das Stadtgebiet in Richtung %direction% verlassen.' : '%citizen% hat das Stadtgebiet aus Richtung %direction% betreten.';
-        else $base = $depart ? '%citizen% (%profession%) ist Richtung %direction% aufgebrochen.' : '%citizen% (%profession%) ist aus dem %direction% angekommen.';
+            $base = $depart ?  T::__('%citizen% hat das Stadtgebiet in Richtung %direction% verlassen.', 'game') : T::__('%citizen% hat das Stadtgebiet aus Richtung %direction% betreten.', 'game');
+        else $base = $depart ? T::__('%citizen% (%profession%) ist Richtung %direction% aufgebrochen.', 'game') :  T::__('%citizen% (%profession%) ist aus dem %direction% angekommen.', 'game');
 
         return (new TownLogEntry())
             ->setType( TownLogEntry::TypeVarious )
@@ -403,7 +404,7 @@ class LogTemplateHandler
     }
 
     public function outsideDig( Citizen $citizen, ?ItemPrototype $item, ?DateTimeInterface $time = null ): TownLogEntry {
-        $str = $item === null ? '%citizen% hat hier durch Graben nichts gefunden...' : '%citizen% hat ein(e,n) %item% ausgegraben!';
+        $found_something = $item !== null;
 
         return (new TownLogEntry())
             ->setType( TownLogEntry::TypeVarious )
@@ -413,14 +414,14 @@ class LogTemplateHandler
             ->setTimestamp( $time ?? new DateTime('now') )
             ->setCitizen( $citizen )
             ->setZone( $citizen->getZone() )
-            ->setText( $this->trans->trans($str, [
+            ->setText( $this->trans->trans($found_something ? '%citizen% hat ein(e,n) %item% ausgegraben!' : '%citizen% hat hier durch Graben nichts gefunden...', [
                 '%citizen%' => $this->wrap( $this->iconize( $citizen ) ),
                 '%item%' => $item ? $this->wrap( $this->iconize( $item ) ) : ''
             ], 'game' ) );
     }
 
     public function outsideUncover( Citizen $citizen ): TownLogEntry {
-        $str = ($citizen->getZone()->getBuryCount() > 0) ? '%citizen% hat etwas Schutt entfernt.' : '%citizen% hat diese Ruine freigelegt. Es handelt sich um %type%. Hurra!';
+        $bc = $citizen->getZone()->getBuryCount() > 0;
 
         return (new TownLogEntry())
             ->setType( TownLogEntry::TypeVarious )
@@ -430,7 +431,7 @@ class LogTemplateHandler
             ->setTimestamp( $time ?? new DateTime('now') )
             ->setCitizen( $citizen )
             ->setZone( $citizen->getZone() )
-            ->setText( $this->trans->trans($str, [
+            ->setText( $this->trans->trans( $bc ? '%citizen% hat etwas Schutt entfernt.' : '%citizen% hat diese Ruine freigelegt. Es handelt sich um %type%. Hurra!', [
                 '%citizen%' => $this->wrap( $this->iconize( $citizen ) ),
                 '%type%'    => ($citizen->getZone()->getBuryCount() > 0) ? '' : $this->wrap( $this->trans->trans( $citizen->getZone()->getPrototype()->getLabel(), [], 'game' ) )
             ], 'game' ) );
@@ -483,10 +484,10 @@ class LogTemplateHandler
 
     public function nightlyInternalAttackNothing( Citizen $zombie ): TownLogEntry {
         $list = [
-            '%zombie% ist von den Toten auferstanden und hat unanständige Nachrichten auf die Heldentafel geschrieben!',
-            '%zombie% ist von den Toten auferstanden und hat sich wieder hingelegt!',
-            '%zombie% ist von den Toten auferstanden und verlangt nach einem Kaffee!',
-            '%zombie% ist von den Toten auferstanden und hat eine Runde auf dem Stadtplatz gedreht!',
+            T::__('%zombie% ist von den Toten auferstanden und hat unanständige Nachrichten auf die Heldentafel geschrieben!', 'game'),
+            T::__('%zombie% ist von den Toten auferstanden und hat sich wieder hingelegt!', 'game'),
+            T::__('%zombie% ist von den Toten auferstanden und verlangt nach einem Kaffee!', 'game'),
+            T::__('%zombie% ist von den Toten auferstanden und hat eine Runde auf dem Stadtplatz gedreht!', 'game'),
         ];
         $str = $list[array_rand($list,1)];
 
@@ -516,8 +517,8 @@ class LogTemplateHandler
 
     public function nightlyAttackSummary( Town $town, bool $door_open, int $num_zombies ): TownLogEntry {
         if ($door_open)
-            $str = '... das OFFEN stand! %num% Zombies sind in die Stadt eingedrungen!';
-        else $str = $num_zombies > 0 ? '%num% Zombies sind durch unsere Verteidigung gebrochen!' : 'Nicht ein Zombie hat die Stadt betreten!';
+            $str = T::__('... das OFFEN stand! %num% Zombies sind in die Stadt eingedrungen!', 'game');
+        else $str = $num_zombies > 0 ? T::__('%num% Zombies sind durch unsere Verteidigung gebrochen!', 'game') : T::__('Nicht ein Zombie hat die Stadt betreten!', 'game');
 
         return (new TownLogEntry())
             ->setType( TownLogEntry::TypeNightly )
@@ -656,16 +657,16 @@ class LogTemplateHandler
         $str = '';
         switch ($action) {
             case 1:
-                $str = '%citizen% hat die Leiche von %disposed% aus der Stadt gezerrt.';
+                $str = T::__('%citizen% hat die Leiche von %disposed% aus der Stadt gezerrt.', 'game');
                 break;
             case 2:
-                $str = '%citizen% hat die Leiche von %disposed% vernichtet, indem er sie mit Wasser übergossen hat.';
+                $str = T::__('%citizen% hat die Leiche von %disposed% vernichtet, indem er sie mit Wasser übergossen hat.', 'game');
                 break;
             case 3:
-                $str = '%citizen% hat aus der Leiche von %disposed% eine leckere Mahlzeit gegrillt. Die Stadt hat %items% erhalten.';
+                $str = T::__('%citizen% hat aus der Leiche von %disposed% eine leckere Mahlzeit gegrillt. Die Stadt hat %items% erhalten.', 'game');
                 break;
             default:
-                $str = '%citizen% hat die Leiche von %disposed% vernichtet.';
+                $str = T::__('%citizen% hat die Leiche von %disposed% vernichtet.', 'game');
                 break;
         }
 
@@ -689,12 +690,12 @@ class LogTemplateHandler
 
         if ($up)
             $str = $actor
-                ? 'HALTET DEN DIEB! %actor% ist bei %victim% eingebrochen und hat %item% gestohlen!'
-                : 'VERDAMMT! Es scheint, jemand ist bei %victim% eingebrochen und hat %item% gestohlen...';
+                ? T::__('HALTET DEN DIEB! %actor% ist bei %victim% eingebrochen und hat %item% gestohlen!', 'game')
+                : T::__('VERDAMMT! Es scheint, jemand ist bei %victim% eingebrochen und hat %item% gestohlen...', 'game');
         else
             $str = $actor
-                ? '%actor% ist bei %victim% eingebrochen und hat %item% hinterlassen...'
-                : 'Es scheint, jemand ist bei %victim% eingebrochen und hat %item% hinterlassen...';
+                ? T::__('%actor% ist bei %victim% eingebrochen und hat %item% hinterlassen...', 'game')
+                : T::__('Es scheint, jemand ist bei %victim% eingebrochen und hat %item% hinterlassen...', 'game');
 
         return (new TownLogEntry())
             ->setType( TownLogEntry::TypeHome )

@@ -531,10 +531,8 @@ class ActionHandler
 
                             $s_color = $this->translator->trans((['Kreuz','Pik','Herz','Karo'])[$color], [], 'items');
                             $s_value = $value < 9 ? ('' . ($value+2)) : $this->translator->trans((['Bube','Dame','König','Ass'])[$value-9], [], 'items');
-                            $s_article = in_array($value, [9, 11]) ? $this->translator->trans('der') : (in_array($value, [12]) ? $this->translator->trans('das') : $this->translator->trans('die'));
 
-                            $cmg = $this->translator->trans('Du ziehst eine Karte... es ist {article} {color} {value}.', [
-                                '{article}' => $s_article,
+                            $cmg = $this->translator->trans('Du ziehst eine Karte... es ist: {color} {value}.', [
                                 '{color}' => "<b>{$s_color}</b>",
                                 '{value}' => "<b>{$s_value}</b>",
                             ], 'items');

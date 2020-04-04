@@ -25,3 +25,9 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    App\Translation\DatabaseExtractor:
+        tags:
+            - { name: translation.extractor, alias: DatabaseExtractor }
+    App\Translation\ExpandedPhpExtractor:
+        tags:
+            - { name: translation.extractor, alias: ExpandedPhpExtractor }
