@@ -723,51 +723,51 @@
       </trans-unit>
       <trans-unit id="oqi.Bcz" resname="Torpanzerung">
         <source>Torpanzerung</source>
-        <target>Torpanzerung</target>
+        <target>Blindage d'entrée</target>
       </trans-unit>
       <trans-unit id="TsPH66_" resname="Automatiktür">
         <source>Automatiktür</source>
-        <target>Automatiktür</target>
+        <target>Piston calibré</target>
       </trans-unit>
       <trans-unit id="ZyEH3qK" resname="Kolbenschließmechanismus">
         <source>Kolbenschließmechanismus</source>
-        <target>Kolbenschließmechanismus</target>
+        <target>Piston verrou</target>
       </trans-unit>
       <trans-unit id="aNUYPPj" resname="Ventilationssystem">
         <source>Ventilationssystem</source>
-        <target>Ventilationssystem</target>
+        <target>Conduite d'aération</target>
       </trans-unit>
       <trans-unit id="tl._DOx" resname="Portal">
         <source>Portal</source>
-        <target>Portal</target>
+        <target>Portail</target>
       </trans-unit>
       <trans-unit id="7I8s6VU" resname="Feldbett">
         <source>Feldbett</source>
-        <target>Feldbett</target>
+        <target>Lit de camp</target>
       </trans-unit>
       <trans-unit id="6VkIdiO" resname="Zelt">
         <source>Zelt</source>
-        <target>Zelt</target>
+        <target>Tente</target>
       </trans-unit>
       <trans-unit id="ERgjYMQ" resname="Baracke">
         <source>Baracke</source>
-        <target>Baracke</target>
+        <target>Taudis</target>
       </trans-unit>
       <trans-unit id="0TTwMvT" resname="Hütte">
         <source>Hütte</source>
-        <target>Hütte</target>
+        <target>Baraque</target>
       </trans-unit>
       <trans-unit id="UJdq1Y9" resname="Haus">
         <source>Haus</source>
-        <target>Haus</target>
+        <target>Maison</target>
       </trans-unit>
       <trans-unit id=".xY6IFq" resname="Umzäuntes Haus">
         <source>Umzäuntes Haus</source>
-        <target>Umzäuntes Haus</target>
+        <target>Maison clôturée</target>
       </trans-unit>
       <trans-unit id="Puc93rh" resname="Befestigte Unterkunft">
         <source>Befestigte Unterkunft</source>
-        <target>Befestigte Unterkunft</target>
+        <target>Abris fortifié</target>
       </trans-unit>
       <trans-unit id="TLVi.09" resname="Bunker">
         <source>Bunker</source>
@@ -775,75 +775,75 @@
       </trans-unit>
       <trans-unit id="EQFRE1h" resname="Schloss">
         <source>Schloss</source>
-        <target>Schloss</target>
+        <target>Château</target>
       </trans-unit>
       <trans-unit id="eUUzMiR" resname="Großer Vorhang">
         <source>Großer Vorhang</source>
-        <target>Großer Vorhang</target>
+        <target>Gros rideau</target>
       </trans-unit>
       <trans-unit id="3Gfr9md" resname="Mit dieser alten, schmutzigen Jutesackleinwand kannst du deine Habseligkeiten vor den neugierigen Blicken deiner Nachbarn schützen.">
         <source>Mit dieser alten, schmutzigen Jutesackleinwand kannst du deine Habseligkeiten vor den neugierigen Blicken deiner Nachbarn schützen.</source>
-        <target>Mit dieser alten, schmutzigen Jutesackleinwand kannst du deine Habseligkeiten vor den neugierigen Blicken deiner Nachbarn schützen.</target>
+        <target>Un vieux morceau de toile de jute taché qui permet de cacher aux yeux de vos voisins vos possessions.</target>
       </trans-unit>
       <trans-unit id="7Bfx_db" resname="Hobbylabor">
         <source>Hobbylabor</source>
-        <target>Hobbylabor</target>
+        <target>Cave laboratoire</target>
       </trans-unit>
       <trans-unit id="P0f3sQx" resname="Ein in dein Wohnzimmer geschaufeltes Loch dient dir als Versuchsküche für deine pharmazeutischen Experimente.">
         <source>Ein in dein Wohnzimmer geschaufeltes Loch dient dir als Versuchsküche für deine pharmazeutischen Experimente.</source>
-        <target>Ein in dein Wohnzimmer geschaufeltes Loch dient dir als Versuchsküche für deine pharmazeutischen Experimente.</target>
+        <target>Un minuscule trou qui sent fort le camphre et la mort, creusé au milieu de votre 'salon'. Mais vous pouvez y mener vos expériences pharmaceutiques tranquillement (chaque niveau augmente de 25% les chances d'obtenir une puissante drogue)…</target>
       </trans-unit>
       <trans-unit id="qeyHLmY" resname="Küche">
         <source>Küche</source>
-        <target>Küche</target>
+        <target>Cuisine</target>
       </trans-unit>
       <trans-unit id="BL3_hNZ" resname="In dieser notdürftig zusammengeschraubten Küche können schmackhafte und 'gesunde' Speisen zubereitet werden.">
         <source>In dieser notdürftig zusammengeschraubten Küche können schmackhafte und 'gesunde' Speisen zubereitet werden.</source>
-        <target>In dieser notdürftig zusammengeschraubten Küche können schmackhafte und 'gesunde' Speisen zubereitet werden.</target>
+        <target>La cuisine est un coin aménagé de manière très sommaire pour y préparer des rations de meilleure qualité (chaque niveau augmente de 33% les chances d'obtenir un bon plat).</target>
       </trans-unit>
       <trans-unit id="N8dpSCq" resname="Primitives Alarmsystem">
         <source>Primitives Alarmsystem</source>
-        <target>Primitives Alarmsystem</target>
+        <target>Alarme rudimentaire</target>
       </trans-unit>
       <trans-unit id="x6GQTRQ" resname="Eisenteile, die an einem Faden hängen - so einfach und so effektiv kann ein Alarmsystem sein. Wenn jemand versuchen sollte, bei dir einzubrechen, wird er zwangsläufig die halbe Stadt aufwecken...">
         <source>Eisenteile, die an einem Faden hängen - so einfach und so effektiv kann ein Alarmsystem sein. Wenn jemand versuchen sollte, bei dir einzubrechen, wird er zwangsläufig die halbe Stadt aufwecken...</source>
-        <target>Eisenteile, die an einem Faden hängen - so einfach und so effektiv kann ein Alarmsystem sein. Wenn jemand versuchen sollte, bei dir einzubrechen, wird er zwangsläufig die halbe Stadt aufwecken...</target>
+        <target>C'est un système un peu simpliste de ferrailles fixées par un fil, mais ça marchera bien pour rameuter tout le monde si quelqu'un entre chez vous...</target>
       </trans-unit>
       <trans-unit id="Dy4Ru5R" resname="Ruheecke">
         <source>Ruheecke</source>
-        <target>Ruheecke</target>
+        <target>Coin sieste</target>
       </trans-unit>
       <trans-unit id="RR.D4lZ" resname="Was hier als 'Ruhe-Ecke' bezeichnet wird, ist in Wahrheit nichts anderes als ein mit Kartons gefülltes Loch im Boden... der ideale Ort, wenn deine Kräfte schwinden und du dich für ein Nickerchen zurückziehen willst.">
         <source>Was hier als 'Ruhe-Ecke' bezeichnet wird, ist in Wahrheit nichts anderes als ein mit Kartons gefülltes Loch im Boden... der ideale Ort, wenn deine Kräfte schwinden und du dich für ein Nickerchen zurückziehen willst.</source>
-        <target>Was hier als 'Ruhe-Ecke' bezeichnet wird, ist in Wahrheit nichts anderes als ein mit Kartons gefülltes Loch im Boden... der ideale Ort, wenn deine Kräfte schwinden und du dich für ein Nickerchen zurückziehen willst.</target>
+        <target>Il s'agit juste d'un trou dans le sol couvert par quelques cartons. Mais c'est bien utile pour se faire une petite sieste quand l'envie s'en fait sentir (chaque niveau augmente de 33% les chances de bien dormir).</target>
       </trans-unit>
       <trans-unit id="ASpYRZf" resname="Türschloss">
         <source>Türschloss</source>
-        <target>Türschloss</target>
+        <target>Verrou</target>
       </trans-unit>
       <trans-unit id="cv5fZ5I" resname="Dieses rudimentäre Schließsystem schützt dein Haus vor Diebstahl.">
         <source>Dieses rudimentäre Schließsystem schützt dein Haus vor Diebstahl.</source>
-        <target>Dieses rudimentäre Schließsystem schützt dein Haus vor Diebstahl.</target>
+        <target>Ce système rudimentaire mais efficace empêchera quiconque de vous voler un objet.</target>
       </trans-unit>
       <trans-unit id="_XJvPlM" resname="Wenn dich deine Wände nicht mehr ausreichend schützen, solltest du den Bau eines Zauns erwägen.">
         <source>Wenn dich deine Wände nicht mehr ausreichend schützen, solltest du den Bau eines Zauns erwägen.</source>
-        <target>Wenn dich deine Wände nicht mehr ausreichend schützen, solltest du den Bau eines Zauns erwägen.</target>
+        <target>Quand les murs ne suffisent plus, une vraie clôture n'est jamais un luxe. Une défense de bonne qualité.</target>
       </trans-unit>
       <trans-unit id="_ZwT1d7" resname="Stauraum">
         <source>Stauraum</source>
-        <target>Stauraum</target>
+        <target>Rangements</target>
       </trans-unit>
       <trans-unit id="ukY3L6h" resname="Deine persönliche Truhe vergrößert sich. ">
         <source>Deine persönliche Truhe vergrößert sich. </source>
-        <target>Deine persönliche Truhe vergrößert sich. </target>
+        <target>Ajoute une place dans votre coffre personnel. </target>
       </trans-unit>
       <trans-unit id="9vHiNcG" resname="Verstärkungen">
         <source>Verstärkungen</source>
-        <target>Verstärkungen</target>
+        <target>Renforts </target>
       </trans-unit>
       <trans-unit id="_a49kpt" resname="Dein Haus wird mit allen zur Verfügung stehenden Mitteln technisch verstärkt und auf Vordermann gebraucht. Diese Maßnahmen verlängern dein Leben... zumindest ein wenig.">
         <source>Dein Haus wird mit allen zur Verfügung stehenden Mitteln technisch verstärkt und auf Vordermann gebraucht. Diese Maßnahmen verlängern dein Leben... zumindest ein wenig.</source>
-        <target>Dein Haus wird mit allen zur Verfügung stehenden Mitteln technisch verstärkt und auf Vordermann gebraucht. Diese Maßnahmen verlängern dein Leben... zumindest ein wenig.</target>
+        <target>Un peu de bricolage avec les moyens du bord et on augmente sa durée de vie... un peu (chaque niveau ajoute 1 pt de défense)..</target>
       </trans-unit>
     </body>
   </file>
