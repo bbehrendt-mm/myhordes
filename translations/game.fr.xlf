@@ -1475,7 +1475,7 @@
       </trans-unit>
       <trans-unit id="07sRf7u" resname="%citizen% (%profession%) ist aus dem %direction% angekommen.">
         <source>%citizen% (%profession%) ist aus dem %direction% angekommen.</source>
-        <target>%citizen% (%profession%) ist aus dem %direction% angekommen.</target>
+        <target>%citizen% (%profession%) est arrivé depuis le %direction%.</target>
       </trans-unit>
       <trans-unit id="pCkOgOT" resname="%citizen% hat ein(e,n) %item% ausgegraben!">
         <source>%citizen% hat ein(e,n) %item% ausgegraben!</source>
