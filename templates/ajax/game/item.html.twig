@@ -8,7 +8,7 @@
     {% if count is defined and count > 1 %}<span>{{ count }}</span>{% endif %}
     {% if no_tooltip is not defined or not no_tooltip %}
         <div class="tooltip">
-            <h1>{{ item.prototype.label }}</h1>
+            <h1>{{ item.prototype.label|trans({},'items') }}</h1>
             Add item description here! Hopefully, there will be enough space. Maybe there will, maybe there won't.
         </div>
     {% endif %}
