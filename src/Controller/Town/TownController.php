@@ -490,10 +490,12 @@ class TownController extends InventoryAwareController implements TownInterfaceCo
             return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
 
         // Check if all parent buildings are completed
-        $current = $building;
-        while ($parent = $current->getPrototype()->getParent())
+        $current = $building->getPrototype();
+        while ($parent = $current->getParent()) {
             if (!$th->getBuilding($town, $parent, true))
-                return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
+                return AjaxResponse::error(ErrorHelper::ErrorActionNotAvailable);
+            $current = $parent;
+        }
 
         // Check out how much AP is missing to complete the building; restrict invested AP to not exceed this
         $missing_ap = ceil( ($building->getPrototype()->getAp() - $building->getAp()) * ( $slave_bonus ? (2.0/3.0) : 1 )) ;
