@@ -147,7 +147,7 @@
       </trans-unit>
       <trans-unit id="R4MmGpY" resname="Achtung">
         <source>Achtung</source>
-	<target>Attention</target>
+        <target>Attention</target>
       </trans-unit>
       <trans-unit id="fDDOLlJ" resname="Bist du sicher?">
         <source>Bist du sicher?</source>
@@ -167,7 +167,7 @@
       </trans-unit>
       <trans-unit id="lUcvZQo" resname="Hilfe">
         <source>Hilfe</source>
-	<target>Aide</target>
+        <target>Aide</target>
       </trans-unit>
       <trans-unit id="mbIzlHW" resname="Zum Spiel">
         <source>Zum Spiel</source>

@@ -299,7 +299,7 @@
       </trans-unit>
       <trans-unit id="dizwCRc" resname="Du kannst von hier aus die Stadt verlassen und die Außenwelt erkunden. Vergiss aber nicht, um Mitternacht das Tor zu schließen!">
         <source>Du kannst von hier aus die Stadt verlassen und die Außenwelt erkunden. Vergiss aber nicht, um Mitternacht das Tor zu schließen!</source>
-        <target>Du kannst von hier aus die Stadt verlassen und die Außenwelt erkunden. Vergiss aber nicht, um Mitternacht das Tor zu schließen!</target>
+        <target>Vous pouvez sortir de la ville et explorer l'Outre-Monde depuis ici. N'oubliez pas de garder la Grande Porte fermée lors de l'attaque à minuit !</target>
       </trans-unit>
       <trans-unit id="UgTjBPn" resname="Du wurdest verbannt und kannst daher das Stadttor weder öffnen noch schließen.">
         <source>Du wurdest verbannt und kannst daher das Stadttor weder öffnen noch schließen.</source>
@@ -315,19 +315,19 @@
       </trans-unit>
       <trans-unit id="0UyjBX6" resname="Tor öffnen">
         <source>Tor öffnen</source>
-        <target>Tor öffnen</target>
+        <target>Ouvrir les portes</target>
       </trans-unit>
       <trans-unit id="uhQorE4" resname="Route planen...">
         <source>Route planen...</source>
-        <target>Route planen...</target>
+        <target>Préparer une expédition</target>
       </trans-unit>
       <trans-unit id="wKVgmMx" resname="Stadt verlassen">
         <source>Stadt verlassen</source>
-        <target>Stadt verlassen</target>
+        <target>Sortir dans l'Outre-Monde...</target>
       </trans-unit>
       <trans-unit id="VHo.w1Y" resname="Stadttor-Register">
         <source>Stadttor-Register</source>
-        <target>Stadttor-Register</target>
+        <target>Porte de la ville</target>
       </trans-unit>
       <trans-unit id="oCYA07E" resname="Mithilfe des Wachturms kann die Stärke des nächtlichen Angriffs abgeschätzt werden. Je mehr Bürger sich an der Abschätzung beteiligen, desto genauer wird das Ergebnis.">
         <source>Mithilfe des Wachturms kann die Stärke des nächtlichen Angriffs abgeschätzt werden. Je mehr Bürger sich an der Abschätzung beteiligen, desto genauer wird das Ergebnis.</source>
@@ -363,7 +363,7 @@
       </trans-unit>
       <trans-unit id="ZI5NoYl" resname="Tag %day%">
         <source>Tag %day%</source>
-        <target>Tag %day%</target>
+        <target>Jour %day%</target>
       </trans-unit>
       <trans-unit id="HMtmyP_" resname="Rucksack">
         <source>Rucksack</source>
@@ -520,15 +520,15 @@
       </trans-unit>
       <trans-unit id="u_yrL5q" resname="Tot!">
         <source>Tot!</source>
-        <target>Tot!</target>
+        <target>Mort!</target>
       </trans-unit>
       <trans-unit id="fV5wxwj" resname="In der Stadt">
         <source>In der Stadt</source>
-        <target>In der Stadt</target>
+        <target>--</target>
       </trans-unit>
       <trans-unit id="5TOztAt" resname="Am Stadttor">
         <source>Am Stadttor</source>
-        <target>Am Stadttor</target>
+        <target>[0,0]</target>
       </trans-unit>
       <trans-unit id="Voc3Ntu" resname="Neue einfache Route">
         <source>Neue einfache Route</source>
@@ -710,15 +710,15 @@
       </trans-unit>
       <trans-unit id="hbYU0EF" resname="Hier findest du alle Gegenstände, die gegenwärtig in der Bank aufbewahrt werden. Bei diesen Gegenständen handelt es sich um Spenden der Bürger. Sie sind im Wesentlichen dazu da, Gemeinschaftsgebäude zu bauen und die Stadt gegen die allnächtlichen Zombieattacken zu verteidigen.">
         <source>Hier findest du alle Gegenstände, die gegenwärtig in der Bank aufbewahrt werden. Bei diesen Gegenständen handelt es sich um Spenden der Bürger. Sie sind im Wesentlichen dazu da, Gemeinschaftsgebäude zu bauen und die Stadt gegen die allnächtlichen Zombieattacken zu verteidigen.</source>
-        <target>Hier findest du alle Gegenstände, die gegenwärtig in der Bank aufbewahrt werden. Bei diesen Gegenständen handelt es sich um Spenden der Bürger. Sie sind im Wesentlichen dazu da, Gemeinschaftsgebäude zu bauen und die Stadt gegen die allnächtlichen Zombieattacken zu verteidigen.</target>
+        <target>Voici l'intégralité des objets qui sont actuellement stockés à la Banque. Ces objets sont le fruit des dons des citoyens. Ils serviront notamment à construire des bâtiments communautaires ou défendre la ville lors des attaques quotidiennes de la Horde.</target>
       </trans-unit>
       <trans-unit id="U0vMVpy" resname="Bankregister">
         <source>Bankregister</source>
-        <target>Bankregister</target>
+        <target>Banque</target>
       </trans-unit>
       <trans-unit id="TygUMhY" resname="In diesem Bereich kannst du an der Errichtung neuer Gebäude und Bauprojekte mitarbeiten. Dazu musst du zunächst die dafür notwendigen Materialien in der Wüste einsammeln (Holz, Metall,...). Anschließend kannst du deine Aktionspunkte (AP) für das Gebäude ausgeben, das dich am meisten interessiert.">
         <source>In diesem Bereich kannst du an der Errichtung neuer Gebäude und Bauprojekte mitarbeiten. Dazu musst du zunächst die dafür notwendigen Materialien in der Wüste einsammeln (Holz, Metall,...). Anschließend kannst du deine Aktionspunkte (AP) für das Gebäude ausgeben, das dich am meisten interessiert.</source>
-        <target>In diesem Bereich kannst du an der Errichtung neuer Gebäude und Bauprojekte mitarbeiten. Dazu musst du zunächst die dafür notwendigen Materialien in der Wüste einsammeln (Holz, Metall,...). Anschließend kannst du deine Aktionspunkte (AP) für das Gebäude ausgeben, das dich am meisten interessiert.</target>
+        <target>Cette section permet de participer à la construction de nouveaux bâtiments. Commencez par récupérer des ressources dans le désert (bois, métal...), puis apportez des Points d'Action (PA) au bâtiment qui vous intéresse le plus.</target>
       </trans-unit>
       <trans-unit id="yrqg0t2" resname="Die Stadt hat Sklaverei legalisiert. Ab sofort kannst du trotz deiner Verbannung auf einer Baustelle&#10;                    arbeiten und erhälst sogar einen Bonus von 50% auf alle investierten &lt;div class=&quot;ap&quot;&gt;&lt;/div&gt;.">
         <source>Die Stadt hat Sklaverei legalisiert. Ab sofort kannst du trotz deiner Verbannung auf einer Baustelle
@@ -732,7 +732,7 @@
       </trans-unit>
       <trans-unit id="m_7J.WC" resname="Baustellenregister">
         <source>Baustellenregister</source>
-        <target>Baustellenregister</target>
+        <target>Constructions</target>
       </trans-unit>
       <trans-unit id="0m1lFXV" resname="Wie viele Aktionspunkte möchtest du in den Bau investieren?">
         <source>Wie viele Aktionspunkte möchtest du in den Bau investieren?</source>
@@ -1404,11 +1404,11 @@
       </trans-unit>
       <trans-unit id="ZWfE2Vb" resname="%citizen% hat der Stadt folgendes gespendet: %item%">
         <source>%citizen% hat der Stadt folgendes gespendet: %item%</source>
-        <target>%citizen% hat der Stadt folgendes gespendet: %item%</target>
+        <target>%citizen% a donné %item% à la ville.</target>
       </trans-unit>
       <trans-unit id="d8vpz_8" resname="%citizen% hat folgenden Gegenstand aus der Bank genommen: %item%">
         <source>%citizen% hat folgenden Gegenstand aus der Bank genommen: %item%</source>
-        <target>%citizen% hat folgenden Gegenstand aus der Bank genommen: %item%</target>
+        <target>%citizen% a pris %item% dans les coffres de la Banque !</target>
       </trans-unit>
       <trans-unit id="R43wWvR" resname="%citizen% hat folgenden Gegenstand hier abgelegt: %item%">
         <source>%citizen% hat folgenden Gegenstand hier abgelegt: %item%</source>
@@ -1569,6 +1569,10 @@
       <trans-unit id="4hCJabi" resname="Leiche grillen">
         <source>Leiche grillen</source>
         <target>Leiche grillen</target>
+      </trans-unit>
+      <trans-unit id="yFVdfG6" resname="Rucksack in der Bank ausleeren">
+        <source>Rucksack in der Bank ausleeren</source>
+        <target>Vider son sac dans la banque</target>
       </trans-unit>
     </body>
   </file>
