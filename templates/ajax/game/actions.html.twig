@@ -1,21 +1,55 @@
 {% if scout is not defined %}
     {% set scout = false %}
 {% endif %}
+
+{% if heroics|length > 0 %}
+    <button x-heroic-toggle="1"><img src="{{ asset('build/images/star.gif') }}" alt="">{{ 'Heldentaten' }}</button>
+    <ul class="heroic_actions">
+        {% for entry in heroics %}
+            <li class="heroic_action" {% if entry.crossed %}disabled{% elseif entry.item_targets is null %}x-action-id="{{ entry.action.id }}"{% else %}x-target-definition="{{ entry.action.id }}-hero"{% endif %}>
+                <img src="{{ asset('build/images/star.gif') }}" alt="">
+                {% if scout and not entry.action.keepsCover %}
+                    <img class="float-right" src="{{ asset('build/images/uncloak.gif') }}" alt="">
+                {% endif %}
+                <span><b>{{ entry.action.label|trans({},'game') }}</b></span>
+                {% if entry.item_targets is not null and not entry.crossed %}
+                    <div class="targets" x-target-selection-for="{{ entry.action.id }}-{{ entry.item.id }}">
+                        {% if entry.item_targets|length > 0 %}
+                            <span>{{ 'Bitte wähle einen Gegenstand:'|trans({},'game') }}</span>
+                            <ul>
+                                {% for item in entry.item_targets %}
+                                    {# @var item \App\Entity\Item #}
+                                    <li x-action-id="{{ entry.action.id }}" x-provoking-id="{{ entry.item.id }}" x-target-id="{{ item.id }}" ><img src="{{ asset('build/images/item/item_' ~ item.prototype.icon ~ '.gif') }}" alt="{{ item.prototype.label|trans({},'items') }}"></li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <span>{{ 'Du verfügst über keine geeigneten Gegenstände'|trans({},'game') }}</span>
+                        {% endif %}
+                        <div class="right"><span x-close-for="{{ entry.action.id }}-hero">{{ 'Schließen'|trans({},'global') }}</span></div>
+                    </div>
+                {% endif %}
+            </li>
+        {% endfor %}
+        <li><div class="right pointer small" x-heroic-toggle="0">{{ 'Schließen'|trans({},'global') }}</div></li>
+    </ul>
+
+{% endif %}
+
 {% if list|length > 0 or recipes.recipes|length > 0  %}
     <ul class="actions">
         {% for entry in list %}
-            <li class="action" {% if entry.crossed %}disabled{% elseif entry.targets is null %}x-action-id="{{ entry.action.id }}" x-provoking-id="{{ entry.item.id }}"{% else %}x-target-definition="{{ entry.action.id }}-{{ entry.item.id }}"{% endif %}>
+            <li class="action" {% if entry.crossed %}disabled{% elseif entry.item_targets is null %}x-action-id="{{ entry.action.id }}" x-provoking-id="{{ entry.item.id }}"{% else %}x-target-definition="{{ entry.action.id }}-{{ entry.item.id }}"{% endif %}>
                 <img src="{{ asset('build/images/item/item_' ~ entry.item.prototype.icon ~ '.gif') }}" alt="{{ entry.item.prototype.label|trans({},'items') }}">
                 {% if scout and not entry.action.keepsCover %}
                     <img class="float-right" src="{{ asset('build/images/uncloak.gif') }}" alt="">
                 {% endif %}
                 <span>{{ entry.action.label|trans({},'game') }}: <b>{{ entry.item.prototype.label|trans({},'items') }}</b></span>
-                {% if entry.targets is not null and not entry.crossed %}
+                {% if entry.item_targets is not null and not entry.crossed %}
                     <div class="targets" x-target-selection-for="{{ entry.action.id }}-{{ entry.item.id }}">
-                        {% if entry.targets|length > 0 %}
+                        {% if entry.item_targets|length > 0 %}
                             <span>{{ 'Bitte wähle einen Gegenstand:'|trans({},'game') }}</span>
                             <ul>
-                                {% for item in entry.targets %}
+                                {% for item in entry.item_targets %}
                                     {# @var item \App\Entity\Item #}
                                     <li x-action-id="{{ entry.action.id }}" x-provoking-id="{{ entry.item.id }}" x-target-id="{{ item.id }}" ><img src="{{ asset('build/images/item/item_' ~ item.prototype.icon ~ '.gif') }}" alt="{{ item.prototype.label|trans({},'items') }}"></li>
                                 {% endfor %}

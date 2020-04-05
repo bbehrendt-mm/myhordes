@@ -69,9 +69,9 @@ class ActionHandler
     const ActionValidityAllow = 4;
     const ActionValidityFull = 5;
 
-    protected function evaluate( Citizen $citizen, Item $item, ?Item $target, ItemAction $action, ?string &$message ): int {
+    protected function evaluate( Citizen $citizen, ?Item $item, ?Item $target, ItemAction $action, ?string &$message ): int {
 
-        if (!$item->getPrototype()->getActions()->contains( $action )) return self::ActionValidityNone;
+        if ($item && !$item->getPrototype()->getActions()->contains( $action )) return self::ActionValidityNone;
         if ($target && (!$action->getTarget() || !$this->targetDefinitionApplies($target, $action->getTarget())))
             return self::ActionValidityNone;
 
@@ -165,7 +165,6 @@ class ActionHandler
                 $town = $citizen->getTown();
                 $building = $this->town_handler->getBuilding($town, $building_condition->getBuilding(), false);
 
-                $cpl = true;
                 if ($building) {
                     if ($building_condition->getComplete() !== null && $building_condition->getComplete() !== $building->getComplete()) $current_state = min( $current_state, $this_state );
                     if ($building->getComplete()) {
@@ -224,6 +223,24 @@ class ActionHandler
 
     }
 
+    /**
+     * @param Citizen $citizen
+     * @param ItemAction[] $available
+     * @param ItemAction[] $crossed
+     */
+    public function getAvailableIHeroicActions(Citizen $citizen, ?array &$available, ?array &$crossed ) {
+        $available = $crossed = [];
+
+        if (!$citizen->getProfession()->getHeroic()) return;
+
+         foreach ($citizen->getHeroicActions() as $heroic) {
+            $mode = $this->evaluate( $citizen, null, null, $heroic->getAction(), $tx );
+            if ($mode >= self::ActionValidityAllow) $available[] = $heroic->getAction();
+            else if ($mode >= self::ActionValidityCrossed) $crossed[] = $heroic->getAction();
+         }
+
+    }
+
     public function targetDefinitionApplies(Item $item, ItemTargetDefinition $definition): bool {
         if ($definition->getHeavy() !== null && $item->getPrototype()->getHeavy() !== $definition->getHeavy()) return false;
         if ($definition->getBroken() !== null && $item->getBroken() !== $definition->getBroken()) return false;
@@ -266,12 +283,12 @@ class ActionHandler
     const ErrorActionForbidden    = ErrorHelper::BaseActionErrors + 2;
     const ErrorActionImpossible   = ErrorHelper::BaseActionErrors + 3;
 
-    public function execute( Citizen &$citizen, Item &$item, ?Item &$target, ItemAction $action, ?string &$message, ?array &$remove ): int {
+    public function execute( Citizen &$citizen, ?Item &$item, ?Item &$target, ItemAction $action, ?string &$message, ?array &$remove ): int {
 
         $remove = [];
         $tags = [];
 
-        $kill_by_poison = $item->getPoison() && ($action->getPoisonHandler() & ItemAction::PoisonHandlerConsume);
+        $kill_by_poison = $item && $item->getPoison() && ($action->getPoisonHandler() & ItemAction::PoisonHandlerConsume);
         $spread_poison = false;
 
         $mode = $this->evaluate( $citizen, $item, $target, $action, $tx );
@@ -285,7 +302,7 @@ class ActionHandler
 
         $execute_info_cache = [
             'ap' => 0,
-            'item'   => $item->getPrototype(),
+            'item'   => $item ? $item->getPrototype() : null,
             'target' => $target ? $target->getPrototype() : null,
             'item_morph' => [ null, null ],
             'item_target_morph' => [ null, null ],
@@ -297,7 +314,7 @@ class ActionHandler
             'well' => 0,
         ];
 
-        $item_in_chest = $item->getInventory() && $item->getInventory()->getId() === $citizen->getHome()->getChest()->getId();
+        $item_in_chest = $item && $item->getInventory() && $item->getInventory()->getId() === $citizen->getHome()->getChest()->getId();
 
         $execute_result = function(Result &$result) use (&$citizen, &$item, &$target, &$action, &$message, &$remove, &$execute_result, &$execute_info_cache, &$tags, &$kill_by_poison, &$spread_poison, $item_in_chest) {
             if ($status = $result->getStatus()) {
@@ -360,7 +377,7 @@ class ActionHandler
                 } else $tags[] = 'bp_fail';
             }
 
-            if ($item_result = $result->getItem()) {
+            if ($item && $item_result = $result->getItem()) {
                 if ($execute_info_cache['item_morph'][0] === null) $execute_info_cache['item_morph'][0] = $item->getPrototype();
                 if ($item_result->getConsume()) {
                     $item->getInventory()->removeItem($item);
@@ -488,11 +505,12 @@ class ActionHandler
                 }
             }
 
-            if ($result->getCasino())
+            if ($result->getCustom())
             {
                 $ap     = false;
                 $terror = false;
-                switch ($result->getCasino()) {
+                switch ($result->getCustom()) {
+                    // Dice
                     case 1:
                         $dice = [ mt_rand(1, 6), mt_rand(1, 6), mt_rand(1, 6) ];
                         $cmg = $this->translator->trans('Du hast folgendes gewürfelt: {dc1}, {dc2} und {dc3}.', [
@@ -517,6 +535,7 @@ class ActionHandler
 
                         $execute_info_cache['casino'] = $cmg;
                         break;
+                    // Cards
                     case 2:
                         $card = mt_rand(0, 53);
                         $color = floor($card / 13);
@@ -551,6 +570,7 @@ class ActionHandler
 
                         $execute_info_cache['casino'] = $cmg;
                         break;
+                    // Guitar
                     case 3:
                         $count = 0;
                         foreach ($citizen->getTown()->getCitizens() as $target) {
@@ -569,21 +589,21 @@ class ActionHandler
 
                     // Tamer
                     case 4:case 5: {
-                        $heavy = $result->getCasino() === 5;
+                        $heavy = $result->getCustom() === 5;
 
                         $source = $citizen->getInventory();
                         $target = $citizen->getTown()->getBank();
 
-                        foreach ( $citizen->getInventory()->getItems() as &$item )
-                            if ($heavy || !$item->getPrototype()->getHeavy())
-                                $this->inventory_handler->transferItem($citizen,$item,$source,$target, InventoryHandler::ModalityTamer);
+                        foreach ( $citizen->getInventory()->getItems() as &$target_item )
+                            if ($heavy || !$target_item->getPrototype()->getHeavy())
+                                $this->inventory_handler->transferItem($citizen,$target_item,$source,$target, InventoryHandler::ModalityTamer);
 
                         break;
                     }
 
                     // Survivalist
                     case 6:case 7: {
-                        $drink = $result->getCasino() === 6;
+                        $drink = $result->getCustom() === 6;
                         $can_fail = $citizen->getTown()->getDay() > 4;
 
                         if (!$can_fail || $this->random_generator->chance(0.85)) {
@@ -606,6 +626,8 @@ class ActionHandler
                         } else $execute_info_cache['casino'] = $this->translator->trans('Trotz intensiver Suche hast du nichts verwertbares gefunden...', [], 'items');
                         break;
                     }
+
+
                 }
 
                 if ($ap) {
