@@ -7,435 +7,435 @@
     <body>
       <trans-unit id="dFL__mK" resname="Wassergraben">
         <source>Wassergraben</source>
-        <target>Wassergraben</target>
+        <target>Douves</target>
       </trans-unit>
       <trans-unit id="pmF7FgU" resname="Großer Graben">
         <source>Großer Graben</source>
-        <target>Großer Graben</target>
+        <target>Grand Fossé</target>
       </trans-unit>
       <trans-unit id="39k_QT1" resname="Der Verteidigungsbonus des Grabens steigt dauerhaft um 13.">
         <source>Der Verteidigungsbonus des Grabens steigt dauerhaft um 13.</source>
-        <target>Der Verteidigungsbonus des Grabens steigt dauerhaft um 13.</target>
+        <target>Le Grand fossé apporte 23 points de défense.</target>
       </trans-unit>
       <trans-unit id="mkCln4o" resname="Der Verteidigungsbonus des Grabens steigt dauerhaft um 21.">
         <source>Der Verteidigungsbonus des Grabens steigt dauerhaft um 21.</source>
-        <target>Der Verteidigungsbonus des Grabens steigt dauerhaft um 21.</target>
+        <target>Le Grand fossé apporte 44 points de défense.</target>
       </trans-unit>
       <trans-unit id="7ohJiNu" resname="Der Verteidigungsbonus des Grabens steigt dauerhaft um 32.">
         <source>Der Verteidigungsbonus des Grabens steigt dauerhaft um 32.</source>
-        <target>Der Verteidigungsbonus des Grabens steigt dauerhaft um 32.</target>
+        <target>Le Grand fossé apporte 76 points de défense.</target>
       </trans-unit>
       <trans-unit id="wvQCfMZ" resname="Der Verteidigungsbonus des Grabens steigt dauerhaft um 33.">
         <source>Der Verteidigungsbonus des Grabens steigt dauerhaft um 33.</source>
-        <target>Der Verteidigungsbonus des Grabens steigt dauerhaft um 33.</target>
+        <target>Le Grand fossé apporte 109 points de défense.</target>
       </trans-unit>
       <trans-unit id="HL3IJ3X" resname="Der Verteidigungsbonus des Grabens steigt dauerhaft um 51.">
         <source>Der Verteidigungsbonus des Grabens steigt dauerhaft um 51.</source>
-        <target>Der Verteidigungsbonus des Grabens steigt dauerhaft um 51.</target>
+        <target>Le Grand fossé apporte 160 points de défense.</target>
       </trans-unit>
       <trans-unit id="wlt3nkJ" resname="Rasierklingenmauer">
         <source>Rasierklingenmauer</source>
-        <target>Rasierklingenmauer</target>
+        <target>Muraille rasoir</target>
       </trans-unit>
       <trans-unit id="nDqxP50" resname="Pfahlgraben">
         <source>Pfahlgraben</source>
-        <target>Pfahlgraben</target>
+        <target>Fosse à Pieux</target>
       </trans-unit>
       <trans-unit id="CrQIj8M" resname="Köder">
         <source>Köder</source>
-        <target>Köder</target>
+        <target>Appâts</target>
       </trans-unit>
       <trans-unit id="I6Ou0iS" resname="Stacheldraht">
         <source>Stacheldraht</source>
-        <target>Stacheldraht</target>
+        <target>Barbelés</target>
       </trans-unit>
       <trans-unit id="N_IRvC9" resname="Weiterentwickelte Stadtmauer">
         <source>Weiterentwickelte Stadtmauer</source>
-        <target>Weiterentwickelte Stadtmauer</target>
+        <target>Remparts avancés</target>
       </trans-unit>
       <trans-unit id="HbQ4h88" resname="Groooße Mauer">
         <source>Groooße Mauer</source>
-        <target>Groooße Mauer</target>
+        <target>Grogro mur</target>
       </trans-unit>
       <trans-unit id="rrm6H8d" resname="Zackenmauer">
         <source>Zackenmauer</source>
-        <target>Zackenmauer</target>
+        <target>Muraille à pointes</target>
       </trans-unit>
       <trans-unit id="2g3app1" resname="Dritte Schicht">
         <source>Dritte Schicht</source>
-        <target>Dritte Schicht</target>
+        <target>Troisième couche</target>
       </trans-unit>
       <trans-unit id="9lvn8i4" resname="Zweite Schicht">
         <source>Zweite Schicht</source>
-        <target>Zweite Schicht</target>
+        <target>Seconde couche</target>
       </trans-unit>
       <trans-unit id="Y45k2Pv" resname="Betonschicht">
         <source>Betonschicht</source>
-        <target>Betonschicht</target>
+        <target>Bétonnade</target>
       </trans-unit>
       <trans-unit id="jULo0MF" resname="Entwicklungsfähige Stadtmauer">
         <source>Entwicklungsfähige Stadtmauer</source>
-        <target>Entwicklungsfähige Stadtmauer</target>
+        <target>Muraille évolutive</target>
       </trans-unit>
       <trans-unit id="i.v_PDf" resname="Der Verteidigungsbonus der Stadtmauer steigt dauerhaft um 30.">
         <source>Der Verteidigungsbonus der Stadtmauer steigt dauerhaft um 30.</source>
-        <target>Der Verteidigungsbonus der Stadtmauer steigt dauerhaft um 30.</target>
+        <target>La Muraille évolutive apporte 85 points de défense.</target>
       </trans-unit>
       <trans-unit id="jlp8Fv_" resname="Der Verteidigungsbonus der Stadtmauer steigt dauerhaft um 35.">
         <source>Der Verteidigungsbonus der Stadtmauer steigt dauerhaft um 35.</source>
-        <target>Der Verteidigungsbonus der Stadtmauer steigt dauerhaft um 35.</target>
+        <target>La Muraille évolutive apporte 120 points de défense.</target>
       </trans-unit>
       <trans-unit id="is67H0y" resname="Der Verteidigungsbonus der Stadtmauer steigt dauerhaft um 50.">
         <source>Der Verteidigungsbonus der Stadtmauer steigt dauerhaft um 50.</source>
-        <target>Der Verteidigungsbonus der Stadtmauer steigt dauerhaft um 50.</target>
+        <target>La Muraille évolutive apporte 170 points de défense.</target>
       </trans-unit>
       <trans-unit id="V.Pp1rj" resname="Der Verteidigungsbonus der Stadtmauer steigt dauerhaft um 65.">
         <source>Der Verteidigungsbonus der Stadtmauer steigt dauerhaft um 65.</source>
-        <target>Der Verteidigungsbonus der Stadtmauer steigt dauerhaft um 65.</target>
+        <target>La Muraille évolutive apporte 235 points de défense.</target>
       </trans-unit>
       <trans-unit id="HaXbtuP" resname="Der Verteidigungsbonus der Stadtmauer steigt dauerhaft um 80.">
         <source>Der Verteidigungsbonus der Stadtmauer steigt dauerhaft um 80.</source>
-        <target>Der Verteidigungsbonus der Stadtmauer steigt dauerhaft um 80.</target>
+        <target>La Muraille évolutive apporte 315 points de défense.</target>
       </trans-unit>
       <trans-unit id="lgS6PS2" resname="Verstärkende Balken">
         <source>Verstärkende Balken</source>
-        <target>Verstärkende Balken</target>
+        <target>Poutres renfort</target>
       </trans-unit>
       <trans-unit id="GP9xakw" resname="Zombiereibe">
         <source>Zombiereibe</source>
-        <target>Zombiereibe</target>
+        <target>Râpe à zombies</target>
       </trans-unit>
       <trans-unit id="FMhDGIY" resname="Fallgruben">
         <source>Fallgruben</source>
-        <target>Fallgruben</target>
+        <target>Oubliettes</target>
       </trans-unit>
       <trans-unit id="rCdMakD" resname="Zaun">
         <source>Zaun</source>
-        <target>Zaun</target>
+        <target>Barrières</target>
       </trans-unit>
       <trans-unit id="1VFjm8C" resname="Holzzaun">
         <source>Holzzaun</source>
-        <target>Holzzaun</target>
+        <target>Palissade</target>
       </trans-unit>
       <trans-unit id="sUMdYSq" resname="Sperrholz">
         <source>Sperrholz</source>
-        <target>Sperrholz</target>
+        <target>Contre-plaqué</target>
       </trans-unit>
       <trans-unit id="XQiF0XP" resname="Rüstungsplatten 3.0">
         <source>Rüstungsplatten 3.0</source>
-        <target>Rüstungsplatten 3.0</target>
+        <target>Cloison épaisse</target>
       </trans-unit>
       <trans-unit id="00gaKK_" resname="Extramauer">
         <source>Extramauer</source>
-        <target>Extramauer</target>
+        <target>Bastion</target>
       </trans-unit>
       <trans-unit id="zlG5ILw" resname="Rüstungsplatten">
         <source>Rüstungsplatten</source>
-        <target>Rüstungsplatten</target>
+        <target>Cloison en bois</target>
       </trans-unit>
       <trans-unit id="95xxaU2" resname="Rüstungsplatten 2.0">
         <source>Rüstungsplatten 2.0</source>
-        <target>Rüstungsplatten 2.0</target>
+        <target>Cloison métallique</target>
       </trans-unit>
       <trans-unit id="XbhNL1e" resname="Einseifer">
         <source>Einseifer</source>
-        <target>Einseifer</target>
+        <target>Mur Savonné</target>
       </trans-unit>
       <trans-unit id="3q79VCE" resname="Spraykanone">
         <source>Spraykanone</source>
-        <target>Spraykanone</target>
+        <target>Neurotoxine</target>
       </trans-unit>
       <trans-unit id="2NZcCax" resname="Säurespray">
         <source>Säurespray</source>
-        <target>Säurespray</target>
+        <target>Projection acide</target>
       </trans-unit>
       <trans-unit id="i0za.Ug" resname="Zerstäuber">
         <source>Zerstäuber</source>
-        <target>Zerstäuber</target>
+        <target>Pulvérisateur</target>
       </trans-unit>
       <trans-unit id="uQSIZwY" resname="Verstärkte Stadtmauer">
         <source>Verstärkte Stadtmauer</source>
-        <target>Verstärkte Stadtmauer</target>
+        <target>Muraille</target>
       </trans-unit>
       <trans-unit id="2gSRbEU" resname="Minen">
         <source>Minen</source>
-        <target>Minen</target>
+        <target>Champ mines eau</target>
       </trans-unit>
       <trans-unit id="rCKz3m3" resname="Wasserfilter">
         <source>Wasserfilter</source>
-        <target>Wasserfilter</target>
+        <target>Filtre</target>
       </trans-unit>
       <trans-unit id="14diVFD" resname="Wasserreiniger">
         <source>Wasserreiniger</source>
-        <target>Wasserreiniger</target>
+        <target>Purificateur</target>
       </trans-unit>
       <trans-unit id="MHnbW88" resname="Dünger">
         <source>Dünger</source>
-        <target>Dünger</target>
+        <target>Fertilisation sauvage</target>
       </trans-unit>
       <trans-unit id="kP2Srb9" resname="Granatapfel">
         <source>Granatapfel</source>
-        <target>Granatapfel</target>
+        <target>Pamplemousses explosifs</target>
       </trans-unit>
       <trans-unit id="ruRpI7F" resname="Gemüsebeet">
         <source>Gemüsebeet</source>
-        <target>Gemüsebeet</target>
+        <target>Potager</target>
       </trans-unit>
       <trans-unit id="aMK4lTK" resname="Projekt Eden">
         <source>Projekt Eden</source>
-        <target>Projekt Eden</target>
+        <target>Projet Eden</target>
       </trans-unit>
       <trans-unit id="g7vkdOB" resname="Brunnenbohrer">
         <source>Brunnenbohrer</source>
-        <target>Brunnenbohrer</target>
+        <target>Foreuse puits</target>
       </trans-unit>
       <trans-unit id="18uh4Vj" resname="Kärcher">
         <source>Kärcher</source>
-        <target>Kärcher</target>
+        <target>Vaporisateur</target>
       </trans-unit>
       <trans-unit id="CfQ_Bib" resname="Kreischender Rotor">
         <source>Kreischender Rotor</source>
-        <target>Kreischender Rotor</target>
+        <target>Sanibroyeur</target>
       </trans-unit>
       <trans-unit id="OcCCWxy" resname="Sprinkleranlage">
         <source>Sprinkleranlage</source>
-        <target>Sprinkleranlage</target>
+        <target>Arroseurs auto</target>
       </trans-unit>
       <trans-unit id="MULCyIk" resname="Dusche">
         <source>Dusche</source>
-        <target>Dusche</target>
+        <target>Douches</target>
       </trans-unit>
       <trans-unit id="7j0r7B9" resname="Wasserleitungsnetz">
         <source>Wasserleitungsnetz</source>
-        <target>Wasserleitungsnetz</target>
+        <target>Réseau hydraulique</target>
       </trans-unit>
       <trans-unit id="Rhgjmll" resname="Wasserturm">
         <source>Wasserturm</source>
-        <target>Wasserturm</target>
+        <target>Aqua tourelles</target>
       </trans-unit>
       <trans-unit id="_TjOaCj" resname="Der Wasserturm verbraucht beim nächtlichen Angriff 2 Rationen Wasser und steigert seinen Verteidigungswert dafür um 56.">
         <source>Der Wasserturm verbraucht beim nächtlichen Angriff 2 Rationen Wasser und steigert seinen Verteidigungswert dafür um 56.</source>
-        <target>Der Wasserturm verbraucht beim nächtlichen Angriff 2 Rationen Wasser und steigert seinen Verteidigungswert dafür um 56.</target>
+        <target>La défense des aqua-tourelles est multipliée par 1.8 (126 points de défense), mais coûte 2 rations d'eau par nuit.</target>
       </trans-unit>
       <trans-unit id="L6.6ahS" resname="Der Wasserturm verbraucht beim nächtlichen Angriff 4 Rationen Wasser und steigert seinen Verteidigungswert dafür um 112.">
         <source>Der Wasserturm verbraucht beim nächtlichen Angriff 4 Rationen Wasser und steigert seinen Verteidigungswert dafür um 112.</source>
-        <target>Der Wasserturm verbraucht beim nächtlichen Angriff 4 Rationen Wasser und steigert seinen Verteidigungswert dafür um 112.</target>
+        <target>La défense des aqua-tourelles est multipliée par 2.6 (182 points de défense), mais coûte 4 rations d'eau par nuit.</target>
       </trans-unit>
       <trans-unit id="P7EINL." resname="Der Wasserturm verbraucht beim nächtlichen Angriff 6 Rationen Wasser und steigert seinen Verteidigungswert dafür um 168.">
         <source>Der Wasserturm verbraucht beim nächtlichen Angriff 6 Rationen Wasser und steigert seinen Verteidigungswert dafür um 168.</source>
-        <target>Der Wasserturm verbraucht beim nächtlichen Angriff 6 Rationen Wasser und steigert seinen Verteidigungswert dafür um 168.</target>
+        <target>La défense des aqua-tourelles est multipliée par 3.4 (238 points de défense), mais coûte 6 rations d'eau par nuit.</target>
       </trans-unit>
       <trans-unit id="Y_jBf_Y" resname="Der Wasserturm verbraucht beim nächtlichen Angriff 9 Rationen Wasser und steigert seinen Verteidigungswert dafür um 224.">
         <source>Der Wasserturm verbraucht beim nächtlichen Angriff 9 Rationen Wasser und steigert seinen Verteidigungswert dafür um 224.</source>
-        <target>Der Wasserturm verbraucht beim nächtlichen Angriff 9 Rationen Wasser und steigert seinen Verteidigungswert dafür um 224.</target>
+        <target>La défense des aqua-tourelles est multipliée par 4.2 (294 points de défense), mais coûte 9 rations d'eau par nuit.</target>
       </trans-unit>
       <trans-unit id="94xxibL" resname="Der Wasserturm verbraucht beim nächtlichen Angriff 12 Rationen Wasser und steigert seinen Verteidigungswert dafür um 280.">
         <source>Der Wasserturm verbraucht beim nächtlichen Angriff 12 Rationen Wasser und steigert seinen Verteidigungswert dafür um 280.</source>
-        <target>Der Wasserturm verbraucht beim nächtlichen Angriff 12 Rationen Wasser und steigert seinen Verteidigungswert dafür um 280.</target>
+        <target>La défense des aqua-tourelles est multipliée par 5 (350 points de défense), mais coûte 12 rations d'eau par nuit.</target>
       </trans-unit>
       <trans-unit id="aD._KEu" resname="Wasserfänger">
         <source>Wasserfänger</source>
-        <target>Wasserfänger</target>
+        <target>Percée</target>
       </trans-unit>
       <trans-unit id="ABN1XUN" resname="Wasserkanone">
         <source>Wasserkanone</source>
-        <target>Wasserkanone</target>
+        <target>Pluvio-canons</target>
       </trans-unit>
       <trans-unit id="gCJBWWD" resname="Schleuse">
         <source>Schleuse</source>
-        <target>Schleuse</target>
+        <target>Caniveaux</target>
       </trans-unit>
       <trans-unit id="qo4gzuN" resname="Wasserfall">
         <source>Wasserfall</source>
-        <target>Wasserfall</target>
+        <target>Rid'eau</target>
       </trans-unit>
       <trans-unit id="bZnWnKs" resname="Wünschelrakete">
         <source>Wünschelrakete</source>
-        <target>Wünschelrakete</target>
+        <target>Roquette Foreuse</target>
       </trans-unit>
       <trans-unit id="kBVya6M" resname="Wünschelrute">
         <source>Wünschelrute</source>
-        <target>Wünschelrute</target>
+        <target>Détecteur à eau</target>
       </trans-unit>
       <trans-unit id="FL6iCcw" resname="Apfelbaum">
         <source>Apfelbaum</source>
-        <target>Apfelbaum</target>
+        <target>Pommier de l'Outre-Monde</target>
       </trans-unit>
       <trans-unit id="sfG6Jkq" resname="Pumpe">
         <source>Pumpe</source>
-        <target>Pumpe</target>
+        <target>Pompe</target>
       </trans-unit>
       <trans-unit id="soE_FyU" resname="Der Brunnen der Stadt wird einmalig um 5 Rationen Wasser aufgefüllt">
         <source>Der Brunnen der Stadt wird einmalig um 5 Rationen Wasser aufgefüllt</source>
-        <target>Der Brunnen der Stadt wird einmalig um 5 Rationen Wasser aufgefüllt</target>
+        <target>Ajoute 5 Rations d'eau dans le puits (une seule fois).</target>
       </trans-unit>
       <trans-unit id="1gviUPR" resname="Der Brunnen der Stadt wird einmalig um 20 Rationen Wasser aufgefüllt">
         <source>Der Brunnen der Stadt wird einmalig um 20 Rationen Wasser aufgefüllt</source>
-        <target>Der Brunnen der Stadt wird einmalig um 20 Rationen Wasser aufgefüllt</target>
+        <target>Ajoute 20 Rations d'eau dans le puits (une seule fois).</target>
       </trans-unit>
       <trans-unit id="IAeAAwG" resname="Der Brunnen der Stadt wird einmalig um 30 Rationen Wasser aufgefüllt">
         <source>Der Brunnen der Stadt wird einmalig um 30 Rationen Wasser aufgefüllt</source>
-        <target>Der Brunnen der Stadt wird einmalig um 30 Rationen Wasser aufgefüllt</target>
+        <target>Ajoute 30 Rations d'eau dans le puits (une seule fois).</target>
       </trans-unit>
       <trans-unit id="cLG_5i1" resname="Der Brunnen der Stadt wird einmalig um 40 Rationen Wasser aufgefüllt">
         <source>Der Brunnen der Stadt wird einmalig um 40 Rationen Wasser aufgefüllt</source>
-        <target>Der Brunnen der Stadt wird einmalig um 40 Rationen Wasser aufgefüllt</target>
+        <target>Ajoute 40 Rations d'eau dans le puits (une seule fois).</target>
       </trans-unit>
       <trans-unit id="Mjl71we" resname="Kremato-Cue">
         <source>Kremato-Cue</source>
-        <target>Kremato-Cue</target>
+        <target>Crémato-Cue</target>
       </trans-unit>
       <trans-unit id="j.YCYvG" resname="Metzgerei">
         <source>Metzgerei</source>
-        <target>Metzgerei</target>
+        <target>Boucherie</target>
       </trans-unit>
       <trans-unit id="aejltM1" resname="Verteidigungsanlage">
         <source>Verteidigungsanlage</source>
-        <target>Verteidigungsanlage</target>
+        <target>Fixations de défenses</target>
       </trans-unit>
       <trans-unit id="u73yQTm" resname="Der Verteidigungsbonus von Gegenständen in der Bank steigt um 100%.">
         <source>Der Verteidigungsbonus von Gegenständen in der Bank steigt um 100%.</source>
-        <target>Der Verteidigungsbonus von Gegenständen in der Bank steigt um 100%.</target>
+        <target>Le bonus des Objets de Défense en banque augmente de 100%.</target>
       </trans-unit>
       <trans-unit id="GLo_FzK" resname="Der Verteidigungsbonus von Gegenständen in der Bank steigt um 150%.">
         <source>Der Verteidigungsbonus von Gegenständen in der Bank steigt um 150%.</source>
-        <target>Der Verteidigungsbonus von Gegenständen in der Bank steigt um 150%.</target>
+        <target>Le bonus des Objets de Défense en banque augmente de 150%.</target>
       </trans-unit>
       <trans-unit id="l3tFIbP" resname="Der Verteidigungsbonus von Gegenständen in der Bank steigt um 200%.">
         <source>Der Verteidigungsbonus von Gegenständen in der Bank steigt um 200%.</source>
-        <target>Der Verteidigungsbonus von Gegenständen in der Bank steigt um 200%.</target>
+        <target>Le bonus des Objets de Défense en banque augmente de 200%.</target>
       </trans-unit>
       <trans-unit id="FXvZuCC" resname="Der Verteidigungsbonus von Gegenständen in der Bank steigt um 250%.">
         <source>Der Verteidigungsbonus von Gegenständen in der Bank steigt um 250%.</source>
-        <target>Der Verteidigungsbonus von Gegenständen in der Bank steigt um 250%.</target>
+        <target>Le bonus des Objets de Défense en banque augmente de 250%.</target>
       </trans-unit>
       <trans-unit id="fPl.xwk" resname="Der Verteidigungsbonus von Gegenständen in der Bank steigt um 300%.">
         <source>Der Verteidigungsbonus von Gegenständen in der Bank steigt um 300%.</source>
-        <target>Der Verteidigungsbonus von Gegenständen in der Bank steigt um 300%.</target>
+        <target>Le bonus des Objets de Défense en banque augmente de 300%.</target>
       </trans-unit>
       <trans-unit id="Vln90x5" resname="Steinkanone">
         <source>Steinkanone</source>
-        <target>Steinkanone</target>
+        <target>Canon à briques</target>
       </trans-unit>
       <trans-unit id="u_k83kB" resname="Selbstgebaute Railgun">
         <source>Selbstgebaute Railgun</source>
-        <target>Selbstgebaute Railgun</target>
+        <target>Perforeuse</target>
       </trans-unit>
       <trans-unit id="Vj3WnMj" resname="Blechplattenwerfer">
         <source>Blechplattenwerfer</source>
-        <target>Blechplattenwerfer</target>
+        <target>Lance-Grenailles</target>
       </trans-unit>
       <trans-unit id="CAZwcmO" resname="Brutale Kanone">
         <source>Brutale Kanone</source>
-        <target>Brutale Kanone</target>
+        <target>Canon brutal</target>
       </trans-unit>
       <trans-unit id="ZyMPQfA" resname="Kanonenhügel">
         <source>Kanonenhügel</source>
-        <target>Kanonenhügel</target>
+        <target>Monticules canons</target>
       </trans-unit>
       <trans-unit id="fXSFcSL" resname="Holzbalkendrehkreuz">
         <source>Holzbalkendrehkreuz</source>
-        <target>Holzbalkendrehkreuz</target>
+        <target>Tourniquet</target>
       </trans-unit>
       <trans-unit id="G2Xnwsv" resname="Manufaktur">
         <source>Manufaktur</source>
-        <target>Manufaktur</target>
+        <target>Manufacture</target>
       </trans-unit>
       <trans-unit id="885G31O" resname="Kreischende Sägen">
         <source>Kreischende Sägen</source>
-        <target>Kreischende Sägen</target>
+        <target>Scies hurlantes</target>
       </trans-unit>
       <trans-unit id="EicSNbc" resname="Bauhaus">
         <source>Bauhaus</source>
-        <target>Bauhaus</target>
+        <target>Architectoire</target>
       </trans-unit>
       <trans-unit id="apLtnCI" resname="Die Stadt erhält nach dem nächsten Angriff einmalig 4 gewöhnliche Baupläne sowie - möglicherweise - eine nette Überraschung.">
         <source>Die Stadt erhält nach dem nächsten Angriff einmalig 4 gewöhnliche Baupläne sowie - möglicherweise - eine nette Überraschung.</source>
-        <target>Die Stadt erhält nach dem nächsten Angriff einmalig 4 gewöhnliche Baupläne sowie - möglicherweise - eine nette Überraschung.</target>
+        <target>La ville obtiendra 4 plans communs et une surprise (rien ou 1 plan supérieur) après l'attaque.</target>
       </trans-unit>
       <trans-unit id="GIcE44t" resname="Die Stadt erhält nach dem nächsten Angriff einmalig 2 gewöhnliche und 2 ungewöhnliche Baupläne sowie - möglicherweise - eine nette Überraschung.">
         <source>Die Stadt erhält nach dem nächsten Angriff einmalig 2 gewöhnliche und 2 ungewöhnliche Baupläne sowie - möglicherweise - eine nette Überraschung.</source>
-        <target>Die Stadt erhält nach dem nächsten Angriff einmalig 2 gewöhnliche und 2 ungewöhnliche Baupläne sowie - möglicherweise - eine nette Überraschung.</target>
+        <target>La ville obtiendra 2 plans communs, 2 plans inhabituels et une surprise après l'attaque.</target>
       </trans-unit>
       <trans-unit id="4TGJ0Dx" resname="Die Stadt erhält nach dem nächsten Angriff einmalig 2 ungewöhnliche und 2 seltene Baupläne sowie - möglicherweise - eine nette Überraschung.">
         <source>Die Stadt erhält nach dem nächsten Angriff einmalig 2 ungewöhnliche und 2 seltene Baupläne sowie - möglicherweise - eine nette Überraschung.</source>
-        <target>Die Stadt erhält nach dem nächsten Angriff einmalig 2 ungewöhnliche und 2 seltene Baupläne sowie - möglicherweise - eine nette Überraschung.</target>
+        <target>La ville obtiendra 2 plans inhabituels, 2 plans rares et une surprise après l'attaque.</target>
       </trans-unit>
       <trans-unit id="erBRQsV" resname="Baustellenbuch">
         <source>Baustellenbuch</source>
-        <target>Baustellenbuch</target>
+        <target>Registre chantier</target>
       </trans-unit>
       <trans-unit id="Cou_v9E" resname="Galgen">
         <source>Galgen</source>
-        <target>Galgen</target>
+        <target>Potence</target>
       </trans-unit>
       <trans-unit id="3ZbLUsz" resname="Kleines Cafe">
         <source>Kleines Cafe</source>
-        <target>Kleines Cafe</target>
+        <target>Cantine à bois</target>
       </trans-unit>
       <trans-unit id="fIiQQtV" resname="Sarg-Katapult">
         <source>Sarg-Katapult</source>
-        <target>Sarg-Katapult</target>
+        <target>Cercueils sur ressort</target>
       </trans-unit>
       <trans-unit id="Ddy6W0H" resname="Kleiner Friedhof">
         <source>Kleiner Friedhof</source>
-        <target>Kleiner Friedhof</target>
+        <target>Cimetière cadenassé</target>
       </trans-unit>
       <trans-unit id="FN3dAwg" resname="Hühnerstall">
         <source>Hühnerstall</source>
-        <target>Hühnerstall</target>
+        <target>Poulailler</target>
       </trans-unit>
       <trans-unit id="rvXKPYg" resname="Schlachthof">
         <source>Schlachthof</source>
-        <target>Schlachthof</target>
+        <target>Abattoir</target>
       </trans-unit>
       <trans-unit id="Fs4XN5W" resname="Pentagon">
         <source>Pentagon</source>
-        <target>Pentagon</target>
+        <target>Supports défensifs</target>
       </trans-unit>
       <trans-unit id="NBHNMKt" resname="Kantine">
         <source>Kantine</source>
-        <target>Kantine</target>
+        <target>Cantine centrale</target>
       </trans-unit>
       <trans-unit id="jaLVdqp" resname="Bollwerk">
         <source>Bollwerk</source>
-        <target>Bollwerk</target>
+        <target>Quartiers circulaires</target>
       </trans-unit>
       <trans-unit id="zkW4TlC" resname="Baumarkt">
         <source>Baumarkt</source>
-        <target>Baumarkt</target>
+        <target>Stratégies citoyennes</target>
       </trans-unit>
       <trans-unit id="YpxBmf9" resname="Krankenstation">
         <source>Krankenstation</source>
-        <target>Krankenstation</target>
+        <target>Infirmerie</target>
       </trans-unit>
       <trans-unit id="e2uWnIv" resname="Labor">
         <source>Labor</source>
-        <target>Labor</target>
+        <target>Laboratoire central</target>
       </trans-unit>
       <trans-unit id="gd8sEx3" resname="Werkstatt">
         <source>Werkstatt</source>
-        <target>Werkstatt</target>
+        <target>Atelier</target>
       </trans-unit>
       <trans-unit id="FXAUu02" resname="Die AP-Kosten aller Bauprojekte werden um 5% gesenkt.">
         <source>Die AP-Kosten aller Bauprojekte werden um 5% gesenkt.</source>
-        <target>Die AP-Kosten aller Bauprojekte werden um 5% gesenkt.</target>
+        <target>Le coût en PA de tous les chantiers est réduit de 5%.</target>
       </trans-unit>
       <trans-unit id="RpqPbZr" resname="Die AP-Kosten aller Bauprojekte werden um 10% gesenkt.">
         <source>Die AP-Kosten aller Bauprojekte werden um 10% gesenkt.</source>
-        <target>Die AP-Kosten aller Bauprojekte werden um 10% gesenkt.</target>
+        <target>Le coût en PA de tous les chantiers est réduit de 10%.</target>
       </trans-unit>
       <trans-unit id="xQHKrzW" resname="Die AP-Kosten aller Bauprojekte werden um 15% gesenkt.">
         <source>Die AP-Kosten aller Bauprojekte werden um 15% gesenkt.</source>
-        <target>Die AP-Kosten aller Bauprojekte werden um 15% gesenkt.</target>
+        <target>Le coût en PA de tous les chantiers est réduit de 15%.</target>
       </trans-unit>
       <trans-unit id="SAknSq2" resname="Die AP-Kosten aller Bauprojekte werden um 20% gesenkt.">
         <source>Die AP-Kosten aller Bauprojekte werden um 20% gesenkt.</source>
-        <target>Die AP-Kosten aller Bauprojekte werden um 20% gesenkt.</target>
+        <target>Le coût en PA de tous les chantiers est réduit de 20%.</target>
       </trans-unit>
       <trans-unit id="1dzbsZW" resname="Die AP-Kosten aller Bauprojekte werden um 25% gesenkt.">
         <source>Die AP-Kosten aller Bauprojekte werden um 25% gesenkt.</source>
-        <target>Die AP-Kosten aller Bauprojekte werden um 25% gesenkt.</target>
+        <target>Le coût en PA de tous les chantiers est réduit de 25%.</target>
       </trans-unit>
       <trans-unit id="cdTPlT5" resname="Scanner">
         <source>Scanner</source>
@@ -443,43 +443,43 @@
       </trans-unit>
       <trans-unit id="fxriL78" resname="Verbesserte Karte">
         <source>Verbesserte Karte</source>
-        <target>Verbesserte Karte</target>
+        <target>Carte améliorée</target>
       </trans-unit>
       <trans-unit id="wBOW_40" resname="Rechenmaschine">
         <source>Rechenmaschine</source>
-        <target>Rechenmaschine</target>
+        <target>Planificateur</target>
       </trans-unit>
       <trans-unit id="kOf03MZ" resname="Forschungsturm">
         <source>Forschungsturm</source>
-        <target>Forschungsturm</target>
+        <target>Scrutateur</target>
       </trans-unit>
       <trans-unit id="3BWnOol" resname="Die Chance, dass sich die Zonen in Windrichtung regenerieren steigt auf 37%.">
         <source>Die Chance, dass sich die Zonen in Windrichtung regenerieren steigt auf 37%.</source>
-        <target>Die Chance, dass sich die Zonen in Windrichtung regenerieren steigt auf 37%.</target>
+        <target>Les chances de régénération d'une case du désert passent à 37%.</target>
       </trans-unit>
       <trans-unit id="wn7xMlO" resname="Die Chance, dass sich die Zonen in Windrichtung regenerieren steigt auf 49%.">
         <source>Die Chance, dass sich die Zonen in Windrichtung regenerieren steigt auf 49%.</source>
-        <target>Die Chance, dass sich die Zonen in Windrichtung regenerieren steigt auf 49%.</target>
+        <target>Les chances de régénération d'une case du désert passent à 49%.</target>
       </trans-unit>
       <trans-unit id="hOAn2zi" resname="Die Chance, dass sich die Zonen in Windrichtung regenerieren steigt auf 61%.">
         <source>Die Chance, dass sich die Zonen in Windrichtung regenerieren steigt auf 61%.</source>
-        <target>Die Chance, dass sich die Zonen in Windrichtung regenerieren steigt auf 61%.</target>
+        <target>Les chances de régénération d'une case du désert passent à 61%.</target>
       </trans-unit>
       <trans-unit id="4qtyyT_" resname="Die Chance, dass sich die Zonen in Windrichtung regenerieren steigt auf 73%.">
         <source>Die Chance, dass sich die Zonen in Windrichtung regenerieren steigt auf 73%.</source>
-        <target>Die Chance, dass sich die Zonen in Windrichtung regenerieren steigt auf 73%.</target>
+        <target>Les chances de régénération d'une case du désert passent à 73%.</target>
       </trans-unit>
       <trans-unit id="EII..O4" resname="Die Chance, dass sich die Zonen in Windrichtung regenerieren steigt auf 85%.">
         <source>Die Chance, dass sich die Zonen in Windrichtung regenerieren steigt auf 85%.</source>
-        <target>Die Chance, dass sich die Zonen in Windrichtung regenerieren steigt auf 85%.</target>
+        <target>Les chances de régénération d'une case du désert passent à 85%.</target>
       </trans-unit>
       <trans-unit id="iJl3i40" resname="Verteidigungspfähle">
         <source>Verteidigungspfähle</source>
-        <target>Verteidigungspfähle</target>
+        <target>Champs piégés</target>
       </trans-unit>
       <trans-unit id="ZwtYGJS" resname="Notfallabstützung">
         <source>Notfallabstützung</source>
-        <target>Notfallabstützung</target>
+        <target>Renforts d'urgence</target>
       </trans-unit>
       <trans-unit id="CZ3TwGn" resname="Guerilla">
         <source>Guerilla</source>
@@ -487,287 +487,287 @@
       </trans-unit>
       <trans-unit id="2oexLnE" resname="Trümmerberg">
         <source>Trümmerberg</source>
-        <target>Trümmerberg</target>
+        <target>Mont pointu</target>
       </trans-unit>
       <trans-unit id="fhLdJ84" resname="Abfallberg">
         <source>Abfallberg</source>
-        <target>Abfallberg</target>
+        <target>Tas détritus</target>
       </trans-unit>
       <trans-unit id="Rj.C34H" resname="Wolfsfalle">
         <source>Wolfsfalle</source>
-        <target>Wolfsfalle</target>
+        <target>Piège à loups</target>
       </trans-unit>
       <trans-unit id="mdZatxx" resname="Sprengfalle">
         <source>Sprengfalle</source>
-        <target>Sprengfalle</target>
+        <target>Dynamitage</target>
       </trans-unit>
       <trans-unit id="Bomnue9" resname="Nackte Panik">
         <source>Nackte Panik</source>
-        <target>Nackte Panik</target>
+        <target>Panique</target>
       </trans-unit>
       <trans-unit id="0lzRs8w" resname="Dollhouse">
         <source>Dollhouse</source>
-        <target>Dollhouse</target>
+        <target>La Bamba</target>
       </trans-unit>
       <trans-unit id="thcdfWu" resname="Heiliger Regen">
         <source>Heiliger Regen</source>
-        <target>Heiliger Regen</target>
+        <target>Pluie bénite</target>
       </trans-unit>
       <trans-unit id="kDKItz." resname="Voodoo-Puppe">
         <source>Voodoo-Puppe</source>
-        <target>Voodoo-Puppe</target>
+        <target>Poupée Vaudou XXL</target>
       </trans-unit>
       <trans-unit id="Pb0lyLQ" resname="Spirituelles Wunder">
         <source>Spirituelles Wunder</source>
-        <target>Spirituelles Wunder</target>
+        <target>Mirage Spirituel</target>
       </trans-unit>
       <trans-unit id="5CaCw2S" resname="Bokors Guillotine">
         <source>Bokors Guillotine</source>
-        <target>Bokors Guillotine</target>
+        <target>Guillotine à Bokor</target>
       </trans-unit>
       <trans-unit id="vSThV6l" resname="Notfallkonstruktion">
         <source>Notfallkonstruktion</source>
-        <target>Notfallkonstruktion</target>
+        <target>Dispositifs urgence</target>
       </trans-unit>
       <trans-unit id="aPBadh7" resname="Verbesserter Katapult">
         <source>Verbesserter Katapult</source>
-        <target>Verbesserter Katapult</target>
+        <target>Catapulte calibrée</target>
       </trans-unit>
       <trans-unit id="GWsFaiN" resname="Katapult">
         <source>Katapult</source>
-        <target>Katapult</target>
+        <target>Catapulte Primitive</target>
       </trans-unit>
       <trans-unit id="d_fImyz" resname="Kleine Waffenschmiede">
         <source>Kleine Waffenschmiede</source>
-        <target>Kleine Waffenschmiede</target>
+        <target>Armurerie</target>
       </trans-unit>
       <trans-unit id="IILr3kv" resname="Schwedische Schreinerei">
         <source>Schwedische Schreinerei</source>
-        <target>Schwedische Schreinerei</target>
+        <target>Magasin suédois</target>
       </trans-unit>
       <trans-unit id="Vw74UDb" resname="Schießstand">
         <source>Schießstand</source>
-        <target>Schießstand</target>
+        <target>Tourelle lance-eau</target>
       </trans-unit>
       <trans-unit id="sgVOApH" resname="Kleiner Tribok">
         <source>Kleiner Tribok</source>
-        <target>Kleiner Tribok</target>
+        <target>Lance-bête</target>
       </trans-unit>
       <trans-unit id="rDDj6vk" resname="Wächter-Turm">
         <source>Wächter-Turm</source>
-        <target>Wächter-Turm</target>
+        <target>Tour des gardiens</target>
       </trans-unit>
       <trans-unit id="NIEy.oJ" resname="Krähennest">
         <source>Krähennest</source>
-        <target>Krähennest</target>
+        <target>Tour des éclaireurs</target>
       </trans-unit>
       <trans-unit id="IbZvvYE" resname="Wachturm">
         <source>Wachturm</source>
-        <target>Wachturm</target>
+        <target>Tour de Guet</target>
       </trans-unit>
       <trans-unit id="Sy.Q4GU" resname="Erspäht jeden Morgen alle Zombies, die sich im Umkreis von 3km um die Stadt aufhalten.">
         <source>Erspäht jeden Morgen alle Zombies, die sich im Umkreis von 3km um die Stadt aufhalten.</source>
-        <target>Erspäht jeden Morgen alle Zombies, die sich im Umkreis von 3km um die Stadt aufhalten.</target>
+        <target>Détecte chaque matin tous les zombies à 3 km de la ville.</target>
       </trans-unit>
       <trans-unit id="NZeNsxy" resname="Erspäht jeden Morgen alle Zombies, die sich im Umkreis von 6km um die Stadt aufhalten.">
         <source>Erspäht jeden Morgen alle Zombies, die sich im Umkreis von 6km um die Stadt aufhalten.</source>
-        <target>Erspäht jeden Morgen alle Zombies, die sich im Umkreis von 6km um die Stadt aufhalten.</target>
+        <target>Détecte chaque matin tous les zombies à 6 km de la ville.</target>
       </trans-unit>
       <trans-unit id="wGZu2sa" resname="Erspäht jeden Morgen alle Zombies, die sich im Umkreis von 10km um die Stadt aufhalten.">
         <source>Erspäht jeden Morgen alle Zombies, die sich im Umkreis von 10km um die Stadt aufhalten.</source>
-        <target>Erspäht jeden Morgen alle Zombies, die sich im Umkreis von 10km um die Stadt aufhalten.</target>
+        <target>Détecte chaque matin tous les zombies à 10 km de la ville.</target>
       </trans-unit>
       <trans-unit id="h1r5RdI" resname="Erspäht jeden Morgen alle Zombies, die sich im Umkreis von 10km um die Stadt aufhalten. Bürger im Umkreis von 1km um die Stadt können ohne AP-Verbrauch die Stadt betreten.">
         <source>Erspäht jeden Morgen alle Zombies, die sich im Umkreis von 10km um die Stadt aufhalten. Bürger im Umkreis von 1km um die Stadt können ohne AP-Verbrauch die Stadt betreten.</source>
-        <target>Erspäht jeden Morgen alle Zombies, die sich im Umkreis von 10km um die Stadt aufhalten. Bürger im Umkreis von 1km um die Stadt können ohne AP-Verbrauch die Stadt betreten.</target>
+        <target>Détecte chaque matin tous les zombies à 10 km de la ville et permet aux citoyens à 1 km de la ville de rentrer gratuitement.</target>
       </trans-unit>
       <trans-unit id="N0sOdNf" resname="Erspäht jeden Morgen alle Zombies, die sich im Umkreis von 10km um die Stadt aufhalten. Bürger im Umkreis von 2km um die Stadt können ohne AP-Verbrauch die Stadt betreten.">
         <source>Erspäht jeden Morgen alle Zombies, die sich im Umkreis von 10km um die Stadt aufhalten. Bürger im Umkreis von 2km um die Stadt können ohne AP-Verbrauch die Stadt betreten.</source>
-        <target>Erspäht jeden Morgen alle Zombies, die sich im Umkreis von 10km um die Stadt aufhalten. Bürger im Umkreis von 2km um die Stadt können ohne AP-Verbrauch die Stadt betreten.</target>
+        <target>Détecte chaque matin tous les zombies à 10 km de la ville et permet aux citoyens à 2 km de la ville de rentrer gratuitement</target>
       </trans-unit>
       <trans-unit id="2B9BF5F" resname="Bohrturm">
         <source>Bohrturm</source>
-        <target>Bohrturm</target>
+        <target>Derrick</target>
       </trans-unit>
       <trans-unit id="ukqZW.g" resname="Falsche Stadt">
         <source>Falsche Stadt</source>
-        <target>Falsche Stadt</target>
+        <target>Fausse Ville</target>
       </trans-unit>
       <trans-unit id="0dmkB9a" resname="Wasserhahn">
         <source>Wasserhahn</source>
-        <target>Wasserhahn</target>
+        <target>Robinetterie</target>
       </trans-unit>
       <trans-unit id="BlCgW4T" resname="Großer Umbau">
         <source>Großer Umbau</source>
-        <target>Großer Umbau</target>
+        <target>Grand déménagement</target>
       </trans-unit>
       <trans-unit id="zaMjBQ." resname="Vogelscheuche">
         <source>Vogelscheuche</source>
-        <target>Vogelscheuche</target>
+        <target>Champs d'épouvantails</target>
       </trans-unit>
       <trans-unit id="WP.9MMH" resname="Fleischkäfig">
         <source>Fleischkäfig</source>
-        <target>Fleischkäfig</target>
+        <target>Cage à viande</target>
       </trans-unit>
       <trans-unit id="lFBoBtv" resname="Bürgergericht">
         <source>Bürgergericht</source>
-        <target>Bürgergericht</target>
+        <target>Dictature des héros</target>
       </trans-unit>
       <trans-unit id="ksEwaBK" resname="Befestigungen">
         <source>Befestigungen</source>
-        <target>Befestigungen</target>
+        <target>Habitations fortifiées</target>
       </trans-unit>
       <trans-unit id="k0lGB7h" resname="Holzabfall">
         <source>Holzabfall</source>
-        <target>Holzabfall</target>
+        <target>Déchardes de bois</target>
       </trans-unit>
       <trans-unit id="EdJMx7W" resname="Metallabfall">
         <source>Metallabfall</source>
-        <target>Metallabfall</target>
+        <target>Ferraillerie</target>
       </trans-unit>
       <trans-unit id="_vBaevU" resname="Tierabfälle">
         <source>Tierabfälle</source>
-        <target>Tierabfälle</target>
+        <target>Enclos</target>
       </trans-unit>
       <trans-unit id="dBs_6pB" resname="Müll für Alle">
         <source>Müll für Alle</source>
-        <target>Müll für Alle</target>
+        <target>Décharge organisée</target>
       </trans-unit>
       <trans-unit id="NNvtYXk" resname="Waffenabfall">
         <source>Waffenabfall</source>
-        <target>Waffenabfall</target>
+        <target>Décharge piégée</target>
       </trans-unit>
       <trans-unit id="SrT9K6G" resname="Biomüll">
         <source>Biomüll</source>
-        <target>Biomüll</target>
+        <target>Appâts odorants</target>
       </trans-unit>
       <trans-unit id="KRW3IVw" resname="Rüstungsabfall">
         <source>Rüstungsabfall</source>
-        <target>Rüstungsabfall</target>
+        <target>Décharge blindée</target>
       </trans-unit>
       <trans-unit id="9.Bs0jf" resname="Verbesserte Müllhalde">
         <source>Verbesserte Müllhalde</source>
-        <target>Verbesserte Müllhalde</target>
+        <target>Décharge humidifiée</target>
       </trans-unit>
       <trans-unit id="K6Bt5zV" resname="Müllhalde">
         <source>Müllhalde</source>
-        <target>Müllhalde</target>
+        <target>Décharge publique</target>
       </trans-unit>
       <trans-unit id="QNQV_hH" resname="Leuchtturm">
         <source>Leuchtturm</source>
-        <target>Leuchtturm</target>
+        <target>Phare</target>
       </trans-unit>
       <trans-unit id="MwGqzqF" resname="Altar">
         <source>Altar</source>
-        <target>Altar</target>
+        <target>Autel de la rédemption</target>
       </trans-unit>
       <trans-unit id="Uqbfdqj" resname="Riesige Sandburg">
         <source>Riesige Sandburg</source>
-        <target>Riesige Sandburg</target>
+        <target>Château de sable</target>
       </trans-unit>
       <trans-unit id="Pp2_CqH" resname="Leuchtfeuer">
         <source>Leuchtfeuer</source>
-        <target>Leuchtfeuer</target>
+        <target>Feu de joie</target>
       </trans-unit>
       <trans-unit id="9zmUkLt" resname="Ministerium für Sklaverei">
         <source>Ministerium für Sklaverei</source>
-        <target>Ministerium für Sklaverei</target>
+        <target>Bureau des esclavagistes</target>
       </trans-unit>
       <trans-unit id="J1OKCl2" resname="Reaktor">
         <source>Reaktor</source>
-        <target>Reaktor</target>
+        <target>Réacteur soviétique</target>
       </trans-unit>
       <trans-unit id="3zCLWcZ" resname="Labyrinth">
         <source>Labyrinth</source>
-        <target>Labyrinth</target>
+        <target>Labyrinthe</target>
       </trans-unit>
       <trans-unit id="EUDSTNQ" resname="Alles oder nichts">
         <source>Alles oder nichts</source>
-        <target>Alles oder nichts</target>
+        <target>Dernière chance</target>
       </trans-unit>
       <trans-unit id="PXNOlXe" resname="Riesiger KVF">
         <source>Riesiger KVF</source>
-        <target>Riesiger KVF</target>
+        <target>PMV géant</target>
       </trans-unit>
       <trans-unit id="GKI2tai" resname="Riesenrad">
         <source>Riesenrad</source>
-        <target>Riesenrad</target>
+        <target>Grande roue de Grostas</target>
       </trans-unit>
       <trans-unit id="oemK25y" resname="Feuerwerk">
         <source>Feuerwerk</source>
-        <target>Feuerwerk</target>
+        <target>Feux d'artifices</target>
       </trans-unit>
       <trans-unit id="0iB.kKU" resname="Krähenstatue">
         <source>Krähenstatue</source>
-        <target>Krähenstatue</target>
+        <target>Statue du Corbeau</target>
       </trans-unit>
       <trans-unit id="bhbqmFu" resname="Kino">
         <source>Kino</source>
-        <target>Kino</target>
+        <target>Cinéma</target>
       </trans-unit>
       <trans-unit id="gEG0Yxp" resname="Luftschlag">
         <source>Luftschlag</source>
-        <target>Luftschlag</target>
+        <target>Roquettes</target>
       </trans-unit>
       <trans-unit id="20Mg3eL" resname="Heißluftballon">
         <source>Heißluftballon</source>
-        <target>Heißluftballon</target>
+        <target>Montgolfière</target>
       </trans-unit>
       <trans-unit id="sEt2j5e" resname="Tunnelratte">
         <source>Tunnelratte</source>
-        <target>Tunnelratte</target>
+        <target>Foreuse améliorée</target>
       </trans-unit>
       <trans-unit id="45eKiS1" resname="Fundament">
         <source>Fundament</source>
-        <target>Fundament</target>
+        <target>Fondations</target>
       </trans-unit>
       <trans-unit id="oqi.Bcz" resname="Torpanzerung">
         <source>Torpanzerung</source>
-        <target>Torpanzerung</target>
+        <target>Blindage d'entrée</target>
       </trans-unit>
       <trans-unit id="TsPH66_" resname="Automatiktür">
         <source>Automatiktür</source>
-        <target>Automatiktür</target>
+        <target>Piston calibré</target>
       </trans-unit>
       <trans-unit id="ZyEH3qK" resname="Kolbenschließmechanismus">
         <source>Kolbenschließmechanismus</source>
-        <target>Kolbenschließmechanismus</target>
+        <target>Piston verrou</target>
       </trans-unit>
       <trans-unit id="aNUYPPj" resname="Ventilationssystem">
         <source>Ventilationssystem</source>
-        <target>Ventilationssystem</target>
+        <target>Conduite d'aération</target>
       </trans-unit>
       <trans-unit id="tl._DOx" resname="Portal">
         <source>Portal</source>
-        <target>Portal</target>
+        <target>Portail</target>
       </trans-unit>
       <trans-unit id="7I8s6VU" resname="Feldbett">
         <source>Feldbett</source>
-        <target>Feldbett</target>
+        <target>Lit de camp</target>
       </trans-unit>
       <trans-unit id="6VkIdiO" resname="Zelt">
         <source>Zelt</source>
-        <target>Zelt</target>
+        <target>Tente</target>
       </trans-unit>
       <trans-unit id="ERgjYMQ" resname="Baracke">
         <source>Baracke</source>
-        <target>Baracke</target>
+        <target>Taudis</target>
       </trans-unit>
       <trans-unit id="0TTwMvT" resname="Hütte">
         <source>Hütte</source>
-        <target>Hütte</target>
+        <target>Baraque</target>
       </trans-unit>
       <trans-unit id="UJdq1Y9" resname="Haus">
         <source>Haus</source>
-        <target>Haus</target>
+        <target>Maison</target>
       </trans-unit>
       <trans-unit id=".xY6IFq" resname="Umzäuntes Haus">
         <source>Umzäuntes Haus</source>
-        <target>Umzäuntes Haus</target>
+        <target>Maison clôturée</target>
       </trans-unit>
       <trans-unit id="Puc93rh" resname="Befestigte Unterkunft">
         <source>Befestigte Unterkunft</source>
-        <target>Befestigte Unterkunft</target>
+        <target>Abris fortifié</target>
       </trans-unit>
       <trans-unit id="TLVi.09" resname="Bunker">
         <source>Bunker</source>
@@ -775,75 +775,75 @@
       </trans-unit>
       <trans-unit id="EQFRE1h" resname="Schloss">
         <source>Schloss</source>
-        <target>Schloss</target>
+        <target>Château</target>
       </trans-unit>
       <trans-unit id="eUUzMiR" resname="Großer Vorhang">
         <source>Großer Vorhang</source>
-        <target>Großer Vorhang</target>
+        <target>Gros rideau</target>
       </trans-unit>
       <trans-unit id="3Gfr9md" resname="Mit dieser alten, schmutzigen Jutesackleinwand kannst du deine Habseligkeiten vor den neugierigen Blicken deiner Nachbarn schützen.">
         <source>Mit dieser alten, schmutzigen Jutesackleinwand kannst du deine Habseligkeiten vor den neugierigen Blicken deiner Nachbarn schützen.</source>
-        <target>Mit dieser alten, schmutzigen Jutesackleinwand kannst du deine Habseligkeiten vor den neugierigen Blicken deiner Nachbarn schützen.</target>
+        <target>Un vieux morceau de toile de jute taché qui permet de cacher aux yeux de vos voisins vos possessions.</target>
       </trans-unit>
       <trans-unit id="7Bfx_db" resname="Hobbylabor">
         <source>Hobbylabor</source>
-        <target>Hobbylabor</target>
+        <target>Cave laboratoire</target>
       </trans-unit>
       <trans-unit id="P0f3sQx" resname="Ein in dein Wohnzimmer geschaufeltes Loch dient dir als Versuchsküche für deine pharmazeutischen Experimente.">
         <source>Ein in dein Wohnzimmer geschaufeltes Loch dient dir als Versuchsküche für deine pharmazeutischen Experimente.</source>
-        <target>Ein in dein Wohnzimmer geschaufeltes Loch dient dir als Versuchsküche für deine pharmazeutischen Experimente.</target>
+        <target>Un minuscule trou qui sent fort le camphre et la mort, creusé au milieu de votre 'salon'. Mais vous pouvez y mener vos expériences pharmaceutiques tranquillement (chaque niveau augmente de 25% les chances d'obtenir une puissante drogue)…</target>
       </trans-unit>
       <trans-unit id="qeyHLmY" resname="Küche">
         <source>Küche</source>
-        <target>Küche</target>
+        <target>Cuisine</target>
       </trans-unit>
       <trans-unit id="BL3_hNZ" resname="In dieser notdürftig zusammengeschraubten Küche können schmackhafte und 'gesunde' Speisen zubereitet werden.">
         <source>In dieser notdürftig zusammengeschraubten Küche können schmackhafte und 'gesunde' Speisen zubereitet werden.</source>
-        <target>In dieser notdürftig zusammengeschraubten Küche können schmackhafte und 'gesunde' Speisen zubereitet werden.</target>
+        <target>La cuisine est un coin aménagé de manière très sommaire pour y préparer des rations de meilleure qualité (chaque niveau augmente de 33% les chances d'obtenir un bon plat).</target>
       </trans-unit>
       <trans-unit id="N8dpSCq" resname="Primitives Alarmsystem">
         <source>Primitives Alarmsystem</source>
-        <target>Primitives Alarmsystem</target>
+        <target>Alarme rudimentaire</target>
       </trans-unit>
       <trans-unit id="x6GQTRQ" resname="Eisenteile, die an einem Faden hängen - so einfach und so effektiv kann ein Alarmsystem sein. Wenn jemand versuchen sollte, bei dir einzubrechen, wird er zwangsläufig die halbe Stadt aufwecken...">
         <source>Eisenteile, die an einem Faden hängen - so einfach und so effektiv kann ein Alarmsystem sein. Wenn jemand versuchen sollte, bei dir einzubrechen, wird er zwangsläufig die halbe Stadt aufwecken...</source>
-        <target>Eisenteile, die an einem Faden hängen - so einfach und so effektiv kann ein Alarmsystem sein. Wenn jemand versuchen sollte, bei dir einzubrechen, wird er zwangsläufig die halbe Stadt aufwecken...</target>
+        <target>C'est un système un peu simpliste de ferrailles fixées par un fil, mais ça marchera bien pour rameuter tout le monde si quelqu'un entre chez vous...</target>
       </trans-unit>
       <trans-unit id="Dy4Ru5R" resname="Ruheecke">
         <source>Ruheecke</source>
-        <target>Ruheecke</target>
+        <target>Coin sieste</target>
       </trans-unit>
       <trans-unit id="RR.D4lZ" resname="Was hier als 'Ruhe-Ecke' bezeichnet wird, ist in Wahrheit nichts anderes als ein mit Kartons gefülltes Loch im Boden... der ideale Ort, wenn deine Kräfte schwinden und du dich für ein Nickerchen zurückziehen willst.">
         <source>Was hier als 'Ruhe-Ecke' bezeichnet wird, ist in Wahrheit nichts anderes als ein mit Kartons gefülltes Loch im Boden... der ideale Ort, wenn deine Kräfte schwinden und du dich für ein Nickerchen zurückziehen willst.</source>
-        <target>Was hier als 'Ruhe-Ecke' bezeichnet wird, ist in Wahrheit nichts anderes als ein mit Kartons gefülltes Loch im Boden... der ideale Ort, wenn deine Kräfte schwinden und du dich für ein Nickerchen zurückziehen willst.</target>
+        <target>Il s'agit juste d'un trou dans le sol couvert par quelques cartons. Mais c'est bien utile pour se faire une petite sieste quand l'envie s'en fait sentir (chaque niveau augmente de 33% les chances de bien dormir).</target>
       </trans-unit>
       <trans-unit id="ASpYRZf" resname="Türschloss">
         <source>Türschloss</source>
-        <target>Türschloss</target>
+        <target>Verrou</target>
       </trans-unit>
       <trans-unit id="cv5fZ5I" resname="Dieses rudimentäre Schließsystem schützt dein Haus vor Diebstahl.">
         <source>Dieses rudimentäre Schließsystem schützt dein Haus vor Diebstahl.</source>
-        <target>Dieses rudimentäre Schließsystem schützt dein Haus vor Diebstahl.</target>
+        <target>Ce système rudimentaire mais efficace empêchera quiconque de vous voler un objet.</target>
       </trans-unit>
       <trans-unit id="_XJvPlM" resname="Wenn dich deine Wände nicht mehr ausreichend schützen, solltest du den Bau eines Zauns erwägen.">
         <source>Wenn dich deine Wände nicht mehr ausreichend schützen, solltest du den Bau eines Zauns erwägen.</source>
-        <target>Wenn dich deine Wände nicht mehr ausreichend schützen, solltest du den Bau eines Zauns erwägen.</target>
+        <target>Quand les murs ne suffisent plus, une vraie clôture n'est jamais un luxe. Une défense de bonne qualité.</target>
       </trans-unit>
       <trans-unit id="_ZwT1d7" resname="Stauraum">
         <source>Stauraum</source>
-        <target>Stauraum</target>
+        <target>Rangements</target>
       </trans-unit>
       <trans-unit id="ukY3L6h" resname="Deine persönliche Truhe vergrößert sich. ">
         <source>Deine persönliche Truhe vergrößert sich. </source>
-        <target>Deine persönliche Truhe vergrößert sich. </target>
+        <target>Ajoute une place dans votre coffre personnel. </target>
       </trans-unit>
       <trans-unit id="9vHiNcG" resname="Verstärkungen">
         <source>Verstärkungen</source>
-        <target>Verstärkungen</target>
+        <target>Renforts </target>
       </trans-unit>
       <trans-unit id="_a49kpt" resname="Dein Haus wird mit allen zur Verfügung stehenden Mitteln technisch verstärkt und auf Vordermann gebraucht. Diese Maßnahmen verlängern dein Leben... zumindest ein wenig.">
         <source>Dein Haus wird mit allen zur Verfügung stehenden Mitteln technisch verstärkt und auf Vordermann gebraucht. Diese Maßnahmen verlängern dein Leben... zumindest ein wenig.</source>
-        <target>Dein Haus wird mit allen zur Verfügung stehenden Mitteln technisch verstärkt und auf Vordermann gebraucht. Diese Maßnahmen verlängern dein Leben... zumindest ein wenig.</target>
+        <target>Un peu de bricolage avec les moyens du bord et on augmente sa durée de vie... un peu (chaque niveau ajoute 1 pt de défense)..</target>
       </trans-unit>
     </body>
   </file>
