@@ -144,7 +144,17 @@ class TownHomeController extends TownController
      * @return Response
      */
     public function action_house_api(JSONRequestParser $parser, InventoryHandler $handler): Response {
-        return $this->generic_action_api( $parser, $handler);
+        return $this->generic_action_api( $parser );
+    }
+
+    /**
+     * @Route("api/town/house/heroic", name="town_house_heroic_controller")
+     * @param JSONRequestParser $parser
+     * @param InventoryHandler $handler
+     * @return Response
+     */
+    public function heroic_house_api(JSONRequestParser $parser, InventoryHandler $handler): Response {
+        return $this->generic_heroic_action_api( $parser );
     }
 
     /**

@@ -313,11 +313,10 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
         if (!$citizen->getProfession()->getHeroic())
             return AjaxResponse::error( ErrorHelper::ErrorMustBeHero );
 
+        $cp_ok = $this->zone_handler->check_cp( $zone );
         $citizen->setZone( null );
         $zone->removeCitizen( $citizen );
         $this->entity_manager->persist( $this->log->doorPass( $citizen, true ) );
-
-        $cp_ok = $this->zone_handler->check_cp( $zone );
         $this->zone_handler->handleCitizenCountUpdate( $zone, $cp_ok );
 
         try {
@@ -363,6 +362,7 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
             $this->citizen_handler->setAP($citizen, true, -1);
         }
 
+        $cp_ok = $this->zone_handler->check_cp( $zone );
         $citizen->setZone( null );
         $zone->removeCitizen( $citizen );
         $others_are_here = $zone->getCitizens()->count() > 0;
@@ -374,7 +374,6 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
         }
         $this->entity_manager->persist( $this->log->doorPass( $citizen, true ) );
 
-        $cp_ok = $this->zone_handler->check_cp( $zone );
         $this->zone_handler->handleCitizenCountUpdate( $zone, $cp_ok );
 
         try {
@@ -501,8 +500,25 @@ class BeyondController extends InventoryAwareController implements BeyondInterfa
                 $this->addFlash( 'notice', 'Deine Tarnung ist aufgeflogen!' );
         };
 
+        return $this->generic_action_api( $parser, $uncover_fun);
+    }
 
-        return $this->generic_action_api( $parser, $handler, $uncover_fun);
+    /**
+     * @Route("api/beyond/desert/heroic", name="beyond_desert_heroic_controller")
+     * @param JSONRequestParser $parser
+     * @param InventoryHandler $handler
+     * @return Response
+     */
+    public function heroic_desert_api(JSONRequestParser $parser, InventoryHandler $handler): Response {
+        $this->deferZoneUpdate();
+
+        $uncover_fun = function(ItemAction &$a) {
+
+            if (!$a->getKeepsCover() && !$this->zone_handler->check_cp( $this->getActiveCitizen()->getZone() ) && $this->uncoverHunter($this->getActiveCitizen()))
+                $this->addFlash( 'notice', 'Deine Tarnung ist aufgeflogen!' );
+        };
+
+        return $this->generic_heroic_action_api( $parser, $uncover_fun);
     }
 
     /**
