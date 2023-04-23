@@ -270,21 +270,32 @@ class NightlyHandler
 
             // When the guide is enabled and enough citizens are below the SP threshold...
             $th = $town_conf->get(TownConf::CONF_GUIDE_SP_LIMIT, 100);
-            if ($town->getCitizens()->filter(function (Citizen $c) use ($th) {
-                return $this->user_handler->fetchSoulPoints( $c->getUser(), true, true ) < $th;
-            })->count() >= ($town_conf->get(TownConf::CONF_GUIDE_CTC_LIMIT, 0.5) * $town->getPopulation()))
+            $citizensBelowThreshold = 0;
+            $citizensAboveThreshold = [];
 
-                // Each citizen above the threshold gets assigned the potential guide status
-                foreach ($town->getCitizens()->filter(function (Citizen $c) use ($th) {
-                    return $this->user_handler->fetchSoulPoints( $c->getUser(), true, true ) >= $th;
-                }) as $spiritual_guide) {
-                    $this->citizen_handler->inflictStatus( $spiritual_guide, 'tg_spirit_guide' );
-                    $this->log->debug( "Registered <info>{$spiritual_guide->getName()}</info> as potential spiritual leader." );
+            // Loop through citizens once and count citizens below and above the threshold
+            foreach ($town->getCitizens() as $citizen) {
+                $soulPoints = $this->user_handler->fetchSoulPoints($citizen->getUser(), true, true);
+                if ($soulPoints < $th) {
+                    $citizensBelowThreshold++;
+                } else {
+                    $citizensAboveThreshold[] = $citizen;
                 }
-            else {
+            }
+
+            $requiredCitizensBelowThreshold = $town_conf->get(TownConf::CONF_GUIDE_CTC_LIMIT, 0.5) * $town->getPopulation();
+
+            if ($citizensBelowThreshold >= $requiredCitizensBelowThreshold) {
+                // Each citizen above the threshold gets assigned the potential guide status
+                foreach ($citizensAboveThreshold as $spiritual_guide) {
+                    $this->citizen_handler->inflictStatus($spiritual_guide, 'tg_spirit_guide');
+                    $this->log->debug("Registered <info>{$spiritual_guide->getName()}</info> as potential spiritual leader.");
+                }
+            } else {
                 // Remove guide status from all citizens
-                foreach ($town->getCitizens() as $citizen)
-                    $this->citizen_handler->removeStatus( $citizen, 'tg_spirit_guide' );
+                foreach ($town->getCitizens() as $citizen) {
+                    $this->citizen_handler->removeStatus($citizen, 'tg_spirit_guide');
+                }
                 $this->log->debug("Not enough citizen are below <info>$th SP</info>.");
             }
         }
