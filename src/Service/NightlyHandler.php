@@ -605,22 +605,29 @@ class NightlyHandler
 
     private function stage2_day(Town $town) {
         $this->log->info('<info>Updating survival information</info> ...');
+        $newbieCount = -1;
+        $nbSpiritualGuidePicto = 0;
         foreach ($town->getCitizens() as $citizen) {
             if (!$citizen->getAlive()) continue;
 
             // Spiritual leader
             if ($this->citizen_handler->hasStatusEffect($citizen, 'tg_spirit_guide')) {
-                $c = 0;
-                foreach ($town->getCitizens() as $foreign) {
-                    if (!$foreign->getAlive()) continue;
-                    if ($foreign->getUser()->getAllSoulPoints() < $this->conf->getGlobalConf()->get(MyHordesConf::CONF_SOULPOINT_LIMIT_REMOTE)) $c++;
+                //Doing it this way prevents recounting the newbies for every citizen
+                if($newbieCount == -1) {
+                    $newbieCount = 0;
+                    foreach ($town->getCitizens() as $foreign) {
+                        if (!$foreign->getAlive()) continue;
+                        if ($foreign->getUser()->getAllSoulPoints() < $this->conf->getGlobalConf()->get(MyHordesConf::CONF_SOULPOINT_LIMIT_REMOTE)) $newbieCount++;
+                    }
                 }
 
                 // The spiritual leader is only given if there's more than 50% of alive citizen with less than 100 SP
-                if ($c >= $town->getAliveCitizenCount() / 2) {
-                    $nbPicto = 0;
-                    for ($d = 1; $d < $town->getDay(); $d++) $nbPicto += $d;
-                    $this->picto_handler->give_picto($citizen, 'r_guide_#00', $nbPicto);
+                if ($newbieCount >= $town->getAliveCitizenCount() / 2) {
+                    //Doing it this way prevents recounting the picto count for every citizen
+                    if($nbSpiritualGuidePicto == 0){
+                        for ($d = 1; $d < $town->getDay(); $d++) $nbSpiritualGuidePicto += $d;
+                    }
+                    $this->picto_handler->give_picto($citizen, 'r_guide_#00', $nbSpiritualGuidePicto);
                 }
             }
 
@@ -634,9 +641,7 @@ class NightlyHandler
 
             if($nextSkill !== null && $citizen->getUser()->getAllHeroDaysSpent() >= $nextSkill->getDaysNeeded()){
                 $this->log->info("Citizen <info>{$citizen->getUser()->getUsername()}</info> has unlocked a new skill : <info>{$nextSkill->getTitle()}</info>");
-
-                $null = null;
-
+                
                 switch($nextSkill->getName()){
                     case "brothers":
                         //TODO: add the heroic power
