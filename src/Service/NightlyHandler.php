@@ -821,10 +821,19 @@ class NightlyHandler
         $this->stage2_surprise_attack($town);
 
         /** @var CitizenWatch[] $watchers */
-        $watchers = $this->entity_manager->getRepository(CitizenWatch::class)->findWatchersOfDay($town, $town->getDay() - 1); // -1 because day has been advanced before stage2
+        $AllWatchers = $this->entity_manager->getRepository(CitizenWatch::class)->findWatchersOfDay($town, $town->getDay() - 1); // -1 because day has been advanced before stage2
 
-        $inactive_watchers = array_filter( $watchers, fn(CitizenWatch $w) => $w->getCitizen()->getZone() !== null || !$w->getCitizen()->getAlive() );
-        $watchers = array_filter( $watchers, fn(CitizenWatch $w) => $w->getCitizen()->getZone() === null && $w->getCitizen()->getAlive() );
+        $inactive_watchers = [];
+        $watchers = [];
+
+        foreach($AllWatchers as $w){
+            if($w->getCitizen()->getZone() !== null || !$w->getCitizen()->getAlive()){
+              $inactive_watchers[] = $w;
+            } else{
+                $watchers[] = $w;
+            }
+
+        }
 
         $this->entity_manager->persist( $this->logTemplates->nightlyAttackBegin2($town) );
         $this->entity_manager->persist( $this->logTemplates->nightlyAttackSummary($town, $town->getDoor(), $overflow, count($watchers) > 0 && $has_nightwatch));
