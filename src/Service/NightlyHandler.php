@@ -1020,71 +1020,72 @@ class NightlyHandler
         $this->log->debug("<info>{$attacking}</info> Zombies are attacking <info>" . count($targets) . "</info> citizens!");
         if (!empty($targets)) $this->entity_manager->persist( $this->logTemplates->nightlyAttackLazy($town, $attacking) );
 
-		$repartition = array_fill(0, count($targets), 0);
-		for ($i = 0; $i < count($repartition); $i++) {
-			$repartition[$i] = mt_rand() / mt_getrandmax(); //random value between 0 and 1.0 with many decimals
-		}
-		
-		if(count($repartition) != 0) {
-			//one citizen gets especially unlucky
-			$repartition[mt_rand(0, count($repartition)-1)] += 0.3;
-		}
-		
-		$sum = array_sum($repartition);
-
-		$attacking_cache = $attacking;
-		for ($i = 0; $i < count($repartition); $i++) {
-			$repartition[$i] /= $sum;
-			$repartition[$i] = max(0,min($attacking_cache, round($repartition[$i]*$attacking)));
-            $attacking_cache -= $repartition[$i];
-		}
-
-		while ($attacking_cache > 0 && count($repartition) > 0) {
-            $repartition[mt_rand(0, count($repartition)-1)] += 1;
-            $attacking_cache--;
-        }
-
         $deaths = 0;
 
-        //FIXME: Is this just to write in the gazette in order?
-		rsort($repartition);
+        $repartition = array_fill(0, count($targets), 0);
+        if(count($repartition) != 0) {
 
-        for ($i = 0; $i < count($repartition); $i++) {
-            $force = $repartition[$i];
-            if($force == 0) continue;
-            $home = $targets[$i]->getHome();
-			
-
-            $def = $this->town_handler->calculate_home_def($home);
-            $this->log->debug("Citizen <info>{$targets[$i]->getUser()->getUsername()}</info> is attacked by <info>{$force}</info> zombies and protected by <info>{$def}</info> home defense!");
-		
-            if ($force > $def){
-                $this->kill_wrap($targets[$i], $cod, false, $force);
-                $deaths++;
-				
-                // citizen dies from the attack, citizen validate the new day
-                $gazette->setDeaths($gazette->getDeaths() + 1);
+            for ($i = 0; $i < count($repartition); $i++) {
+                $repartition[$i] = mt_rand() / mt_getrandmax(); //random value between 0 and 1.0 with many decimals
             }
-            else {
-                $this->entity_manager->persist($this->logTemplates->citizenZombieAttackRepelled( $targets[$i], $def, $force));
-                // Calculate decoration
-                $deco = $this->citizen_handler->getDecoPoints($targets[$i]);
 
-                if (!$has_kino && !$this->citizen_handler->hasStatusEffect($targets[$i], $status_terror)) {
-                    if ($this->random->chance(1 - ($deco / 100))) {
-                        $this->citizen_handler->inflictStatus( $targets[$i], $status_terror );
-                        $this->log->debug("Citizen <info>{$targets[$i]->getUser()->getUsername()}</info> now suffers from <info>{$status_terror->getLabel()}</info>");
+            //one citizen gets especially unlucky
+            $repartition[mt_rand(0, count($repartition) - 1)] += 0.3;
 
-                        $this->crow->postAsPM($targets[$i], '', '', PrivateMessage::TEMPLATE_CROW_TERROR, $force);
+            $sum = array_sum($repartition);
 
-                        $gazette->setTerror($gazette->getTerror() + 1);
-                    } else {
-                        $this->crow->postAsPM($targets[$i], '', '', PrivateMessage::TEMPLATE_CROW_AVOID_TERROR, $force);
+            $attacking_cache = $attacking;
+            for ($i = 0; $i < count($repartition); $i++) {
+                $repartition[$i] /= $sum;
+                $repartition[$i] = max(0, min($attacking_cache, round($repartition[$i] * $attacking)));
+                $attacking_cache -= $repartition[$i];
+            }
+
+            while ($attacking_cache > 0) {
+                $repartition[mt_rand(0, count($repartition) - 1)] += 1;
+                $attacking_cache--;
+            }
+
+
+            //FIXME: Is this just to write in the gazette in order?
+            rsort($repartition);
+
+            for ($i = 0; $i < count($repartition); $i++) {
+                $force = $repartition[$i];
+                if ($force == 0) continue;
+                $home = $targets[$i]->getHome();
+
+
+                $def = $this->town_handler->calculate_home_def($home);
+                $this->log->debug("Citizen <info>{$targets[$i]->getUser()->getUsername()}</info> is attacked by <info>{$force}</info> zombies and protected by <info>{$def}</info> home defense!");
+
+                if ($force > $def) {
+                    $this->kill_wrap($targets[$i], $cod, false, $force);
+                    $deaths++;
+
+                    // citizen dies from the attack, citizen validate the new day
+                    $gazette->setDeaths($gazette->getDeaths() + 1);
+                } else {
+                    $this->entity_manager->persist($this->logTemplates->citizenZombieAttackRepelled($targets[$i], $def, $force));
+                    // Calculate decoration
+                    $deco = $this->citizen_handler->getDecoPoints($targets[$i]);
+
+                    if (!$has_kino && !$this->citizen_handler->hasStatusEffect($targets[$i], $status_terror)) {
+                        if ($this->random->chance(1 - ($deco / 100))) {
+                            $this->citizen_handler->inflictStatus($targets[$i], $status_terror);
+                            $this->log->debug("Citizen <info>{$targets[$i]->getUser()->getUsername()}</info> now suffers from <info>{$status_terror->getLabel()}</info>");
+
+                            $this->crow->postAsPM($targets[$i], '', '', PrivateMessage::TEMPLATE_CROW_TERROR, $force);
+
+                            $gazette->setTerror($gazette->getTerror() + 1);
+                        } else {
+                            $this->crow->postAsPM($targets[$i], '', '', PrivateMessage::TEMPLATE_CROW_AVOID_TERROR, $force);
+                        }
                     }
                 }
             }
         }
-
+        
         if ($deaths > 0)
             $this->entity_manager->persist($this->logTemplates->citizenDeathsDuringAttack($town, $deaths));
         $this->entity_manager->persist($gazette);
