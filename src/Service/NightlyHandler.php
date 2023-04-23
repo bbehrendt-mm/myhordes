@@ -1101,6 +1101,7 @@ class NightlyHandler
 		
 		$attacking = min($max_active, $overflow);
 
+        //FIXME: Wouldn't shuffle() do the same thing?
 		$targets = $this->random->pick($targets, $in_town, true);
 
         $this->log->debug("<info>{$attacking}</info> Zombies are attacking <info>" . count($targets) . "</info> citizens!");
