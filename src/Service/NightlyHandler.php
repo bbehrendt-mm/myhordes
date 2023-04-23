@@ -438,6 +438,11 @@ class NightlyHandler
         $this->log->info('<info>Processing building functions</info> ...');
 
         if (!$town->getDevastated()) {
+            //FIXME: This could be much more efficient, but I'm not a good enough PHP engineer to do :D
+            //In essence, this is what I think we should do: first, reduce the array down to Upgradeable Buildings,
+            //Then, get the elements using array_keys($upgradeableBuildings, max($upgradeableBuildings)). This approach should
+            //be twice as fast, although I'm not sure if the reducing step can be done at a low cost.
+            //One thing that would really help is having the object Building itself return -1 as a dailyUpgradeVote if un-upgradeable.
             $buildings = []; $max_votes = -1;
             foreach ($town->getBuildings() as $b) if ($b->getComplete())
                 if ($b->getPrototype()->getMaxLevel() > 0 && $b->getPrototype()->getMaxLevel() > $b->getLevel()) {
