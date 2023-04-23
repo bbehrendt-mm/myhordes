@@ -105,16 +105,7 @@ class CronCommand extends Command implements SelfSchedulingCommand
         parent::__construct();
     }
 
-    /**
-     * @param mixed $try_limit
-     * @param mixed $town_id
-     * @param $schedule_id
-     * @param OutputInterface $output
-     * @param $i
-     * @param $num
-     * @param $ret
-     * @return array
-     */
+
     public function processAttackForTown(mixed $try_limit, mixed $town_id, $schedule_id, OutputInterface $output,int $i, int $num): array
     {
         $failures = [];
