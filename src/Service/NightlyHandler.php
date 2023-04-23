@@ -1911,7 +1911,7 @@ class NightlyHandler
      * @param Town $town
      * @return array
      */
-    public function damageBuildings(float $zombies, mixed $initial_overflow, mixed $overflow, Town $town): array
+    public function damageBuildings(float $zombies, mixed $initial_overflow, mixed $overflow, Town $town): void
     {
         // In panda, built buildings get damaged every night
         // Only 20% of the attack is inflicted to buildings
@@ -1971,7 +1971,7 @@ class NightlyHandler
      * @param mixed $town
      * @return array
      */
-    public function destroyDefenseObjects(?TownDefenseSummary $def_summary, ZombieEstimation $est, mixed $town): array
+    public function destroyDefenseObjects(?TownDefenseSummary $def_summary, ZombieEstimation $est, mixed $town): void
     {
         // Panda towns sees their defense object in the bank destroyed
         $number = $def_summary ? max(1, min(ceil($est->getZombies() - $def_summary->withoutItemDefense()) * 0.5, 20)) : 0;
@@ -1981,12 +1981,13 @@ class NightlyHandler
         shuffle($items);
         $destroyed_count = 0;
         $itemsForLog = [];
+
         while ($destroyed_count < $number && count($items) > 0) {
             foreach ($items as $item) {
                 if ($destroyed_count >= $number) break;
-
-                $this->log->debug("selecting between 1 and " . min($item->getCount(), $number - $destroyed_count));
-                $delete = mt_rand(1, min($item->getCount(), $number - $destroyed_count));
+                $maxDestroyCount = min($item->getCount(), $number - $destroyed_count);
+                $this->log->debug("selecting between 1 and " . $maxDestroyCount);
+                $delete = mt_rand(1, $maxDestroyCount);
                 $destroyed_count += $delete;
                 $this->log->info("Destroying $delete <info>{$item->getPrototype()->getName()}</info> due to the attack");
                 $this->inventory_handler->forceRemoveItem($item, $delete);
