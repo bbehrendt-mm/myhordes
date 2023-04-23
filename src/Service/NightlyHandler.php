@@ -396,7 +396,6 @@ class NightlyHandler
         $this->log->info('<info>Processing building before the attack</info> ...');
 
         $reactor = $this->town_handler->getBuilding($town, 'small_arma_#00', true);
-        $cod = $this->entity_manager->getRepository(CauseOfDeath::class)->findOneBy(['ref' => CauseOfDeath::Radiations]);
 
         if ($reactor) {
             $damages = mt_rand(50, 125);
@@ -410,6 +409,7 @@ class NightlyHandler
             $reactor->setDefense($newDef);
 
             if($reactor->getHp() <= 0){
+                $cod = $this->entity_manager->getRepository(CauseOfDeath::class)->findOneBy(['ref' => CauseOfDeath::Radiations]);
 
                 $gazette = $town->findGazette( $town->getDay(), true );
                 $this->deferred_log_entries[] = $this->logTemplates->constructionsDestroy($town, $reactor->getPrototype(), $damages );
