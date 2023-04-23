@@ -975,98 +975,11 @@ class NightlyHandler
         }
 
         if ($this->conf->getTownConfiguration($town)->get(TownConf::CONF_MODIFIER_BUILDING_DAMAGE, false)) {
-            // In panda, built buildings get damaged every night
-            // Only 20% of the attack is inflicted to buildings
-            // zombies - amount of zombies killed by the watch
-            $damageInflicted = round(($zombies - ( $initial_overflow - $overflow )) * 0.2);
-
-            $this->log->info("Inflicting <info>$damageInflicted</info> damage to the buildings in town...");
-
-            $targets = [];
-
-            foreach ($town->getBuildings() as $building) {
-                // Only built buildings AND buildings with HP can get damaged
-                if (!$building->getComplete() || $building->getPrototype()->getHp() <= 0 || $building->getPrototype()->getImpervious()) continue;
-
-                $targets[] = $building;
-            }
-
-            shuffle($targets);
-
-            while ($damageInflicted > 0 && !empty($targets)) {
-                $target = array_pop($targets);
-
-                //$damages = min($damageInflicted, $target->getHp(), mt_rand(ceil($target->getPrototype()->getHp() * 0.1), ceil($target->getPrototype()->getHp() * 0.7)));
-                $damages = min($damageInflicted, $target->getHp(), mt_rand(ceil($target->getPrototype()->getHp() * 0.1), $target->getPrototype()->getHp()));
-
-                if ($damages <= 0) continue;
-
-                $realDamage = min($damages, ceil($target->getPrototype()->getHp() * 0.7));
-
-                $this->log->info("The <info>{$target->getPrototype()->getLabel()}</info> has taken <info>$realDamage</info> damages.");
-                $target->setHp(max(0, $target->getHp() - $realDamage));
-
-                $this->gps->recordBuildingDamaged( $target->getPrototype(), $town, $realDamage );
-
-                if($target->getPrototype()->getDefense() > 0){
-                    $newDef = round(max(0, $target->getPrototype()->getDefense() * $target->getHp() / $target->getPrototype()->getHp()));
-                    $this->log->debug("It now has <info>$newDef</info> defense...");
-                    $target->setDefense($newDef);
-                }
-
-                if($target->getHp() <= 0){
-                    $this->log->info("<info>{$target->getPrototype()->getLabel()}</info> is now destroyed !");
-                    $this->entity_manager->persist($this->logTemplates->constructionsDestroy($town, $target->getPrototype(), $realDamage ));
-                    $this->town_handler->destroy_building($town, $target);
-                    $this->gps->recordBuildingDestroyed( $target->getPrototype(), $town, 'attack' );
-                } else {
-                    $this->entity_manager->persist($this->logTemplates->constructionsDamage($town, $target->getPrototype(), $realDamage ));
-                }
-
-                $damageInflicted -= $damages;
-            }
+            $this->damageBuildings($zombies, $initial_overflow, $overflow, $town);
         }
 
         if ($this->conf->getTownConfiguration($town)->get(TownConf::CONF_MODIFIER_DO_DESTROY, false)) {
-            // Panda towns sees their defense object in the bank destroyed
-            $number = $def_summary ? max(1, min(ceil($est->getZombies() - $def_summary->withoutItemDefense()) * 0.5, 20)) : 0;
-            $items = $this->inventory_handler->fetchSpecificItems($town->getBank(), [new ItemRequest('defence', $number, false, null, true)]);
-            $this->log->info("We destroy <info>$number</info> items");
-            $this->log->info("We fetched <info>". count($items) . "</info> items");
-            shuffle($items);
-            $destroyed_count = 0;
-            $itemsForLog = [];
-            while($destroyed_count < $number && count($items) > 0) {
-                foreach ($items as $item) {
-                    if ($destroyed_count >= $number) break;
-
-                    $this->log->debug("selecting between 1 and " . min($item->getCount(), $number - $destroyed_count));
-                    $delete = mt_rand(1, min($item->getCount(), $number - $destroyed_count));
-                    $destroyed_count += $delete;
-                    $this->log->info("Destroying $delete <info>{$item->getPrototype()->getName()}</info> due to the attack");
-                    $this->inventory_handler->forceRemoveItem($item, $delete);
-                    if(isset($itemsForLog[$item->getPrototype()->getId()])) {
-                        $itemsForLog[$item->getPrototype()->getId()]['count']+= $delete;
-                    } else {
-                        $itemsForLog[$item->getPrototype()->getId()] = [
-                            'item' => $item->getPrototype(),
-                            'count' => $delete
-                        ];
-                    }
-                    if ($delete === $item->getCount()) {
-                        array_pop($items);
-                    }
-                }
-            }
-
-            $total = 0;
-            foreach ($itemsForLog as $item) {
-                $total += $item["count"];
-            }
-
-            if (!empty($itemsForLog)) {
-                $this->entity_manager->persist($this->logTemplates->nightlyAttackBankItemsDestroy($town, $itemsForLog, $total));
-            }
+            $this->destroyDefenseObjects($def_summary, $est, $town);
         }
 
         if ($overflow <= 0) {
@@ -1987,6 +1900,116 @@ class NightlyHandler
             // Set zone blueprint.
             $citizen->getZone()->setBlueprint(Zone::BlueprintFound);
             $this->log->debug("Citizen <info>{$citizen->getUser()->getUsername()}</info> dropped a blueprint <info>{$bp_name}</info>.");
+        }
+    }
+
+    /**
+     * @param float $zombies
+     * @param mixed $initial_overflow
+     * @param mixed $overflow
+     * @param Town $town
+     * @return array
+     */
+    public function damageBuildings(float $zombies, mixed $initial_overflow, mixed $overflow, Town $town): array
+    {
+        // In panda, built buildings get damaged every night
+        // Only 20% of the attack is inflicted to buildings
+        // zombies - amount of zombies killed by the watch
+        $damageInflicted = round(($zombies - ($initial_overflow - $overflow)) * 0.2);
+
+        $this->log->info("Inflicting <info>$damageInflicted</info> damage to the buildings in town...");
+
+        $targets = [];
+
+        foreach ($town->getBuildings() as $building) {
+            // Only built buildings AND buildings with HP can get damaged
+            if (!$building->getComplete() || $building->getPrototype()->getHp() <= 0 || $building->getPrototype()->getImpervious()) continue;
+
+            $targets[] = $building;
+        }
+
+        shuffle($targets);
+
+        while ($damageInflicted > 0 && !empty($targets)) {
+            $target = array_pop($targets);
+
+            //$damages = min($damageInflicted, $target->getHp(), mt_rand(ceil($target->getPrototype()->getHp() * 0.1), ceil($target->getPrototype()->getHp() * 0.7)));
+            $damages = min($damageInflicted, $target->getHp(), mt_rand(ceil($target->getPrototype()->getHp() * 0.1), $target->getPrototype()->getHp()));
+
+            if ($damages <= 0) continue;
+
+            $realDamage = min($damages, ceil($target->getPrototype()->getHp() * 0.7));
+
+            $this->log->info("The <info>{$target->getPrototype()->getLabel()}</info> has taken <info>$realDamage</info> damages.");
+            $target->setHp(max(0, $target->getHp() - $realDamage));
+
+            $this->gps->recordBuildingDamaged($target->getPrototype(), $town, $realDamage);
+
+            if ($target->getPrototype()->getDefense() > 0) {
+                $newDef = round(max(0, $target->getPrototype()->getDefense() * $target->getHp() / $target->getPrototype()->getHp()));
+                $this->log->debug("It now has <info>$newDef</info> defense...");
+                $target->setDefense($newDef);
+            }
+
+            if ($target->getHp() <= 0) {
+                $this->log->info("<info>{$target->getPrototype()->getLabel()}</info> is now destroyed !");
+                $this->entity_manager->persist($this->logTemplates->constructionsDestroy($town, $target->getPrototype(), $realDamage));
+                $this->town_handler->destroy_building($town, $target);
+                $this->gps->recordBuildingDestroyed($target->getPrototype(), $town, 'attack');
+            } else {
+                $this->entity_manager->persist($this->logTemplates->constructionsDamage($town, $target->getPrototype(), $realDamage));
+            }
+
+            $damageInflicted -= $damages;
+        }
+    }
+
+    /**
+     * @param TownDefenseSummary|null $def_summary
+     * @param ZombieEstimation $est
+     * @param mixed $town
+     * @return array
+     */
+    public function destroyDefenseObjects(?TownDefenseSummary $def_summary, ZombieEstimation $est, mixed $town): array
+    {
+        // Panda towns sees their defense object in the bank destroyed
+        $number = $def_summary ? max(1, min(ceil($est->getZombies() - $def_summary->withoutItemDefense()) * 0.5, 20)) : 0;
+        $items = $this->inventory_handler->fetchSpecificItems($town->getBank(), [new ItemRequest('defence', $number, false, null, true)]);
+        $this->log->info("We destroy <info>$number</info> items");
+        $this->log->info("We fetched <info>" . count($items) . "</info> items");
+        shuffle($items);
+        $destroyed_count = 0;
+        $itemsForLog = [];
+        while ($destroyed_count < $number && count($items) > 0) {
+            foreach ($items as $item) {
+                if ($destroyed_count >= $number) break;
+
+                $this->log->debug("selecting between 1 and " . min($item->getCount(), $number - $destroyed_count));
+                $delete = mt_rand(1, min($item->getCount(), $number - $destroyed_count));
+                $destroyed_count += $delete;
+                $this->log->info("Destroying $delete <info>{$item->getPrototype()->getName()}</info> due to the attack");
+                $this->inventory_handler->forceRemoveItem($item, $delete);
+                if (isset($itemsForLog[$item->getPrototype()->getId()])) {
+                    $itemsForLog[$item->getPrototype()->getId()]['count'] += $delete;
+                } else {
+                    $itemsForLog[$item->getPrototype()->getId()] = [
+                        'item' => $item->getPrototype(),
+                        'count' => $delete
+                    ];
+                }
+                if ($delete === $item->getCount()) {
+                    array_pop($items);
+                }
+            }
+        }
+
+        $total = 0;
+        foreach ($itemsForLog as $item) {
+            $total += $item["count"];
+        }
+
+        if (!empty($itemsForLog)) {
+            $this->entity_manager->persist($this->logTemplates->nightlyAttackBankItemsDestroy($town, $itemsForLog, $total));
         }
     }
 }
