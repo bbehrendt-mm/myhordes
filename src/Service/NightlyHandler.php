@@ -1130,20 +1130,17 @@ class NightlyHandler
             $attacking_cache--;
         }
 
-		//remove citizen receiving 0 zombie
-		foreach (array_keys($repartition, 0) as $key) {
-			unset($repartition[$key]);
-		}
-
         $deaths = 0;
 
+        //FIXME: Is this just to write in the gazette in order?
 		rsort($repartition);
 
         for ($i = 0; $i < count($repartition); $i++) {
+            $force = $repartition[$i];
+            if($force == 0) continue;
             $home = $targets[$i]->getHome();
 			
-			$force = $repartition[$i];
-			
+
             $def = $this->town_handler->calculate_home_def($home);
             $this->log->debug("Citizen <info>{$targets[$i]->getUser()->getUsername()}</info> is attacked by <info>{$force}</info> zombies and protected by <info>{$def}</info> home defense!");
 		
