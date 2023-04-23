@@ -2000,6 +2000,11 @@ class NightlyHandler
                     ];
                 }
                 if ($delete === $item->getCount()) {
+                    //FIXME: this removes the LAST item of the array, not the current one
+                    //FIXME: So this will not have the intended effect (at least the one I'm guessing
+                    //FIXME: from reading the code). Recommended: use array_splice($items, $i, $i), remove
+                    //FIXME: the foreach loop and use $i to iterate through the array. This will also reduce code complexity
+                    //FIXME: by removing a loop :)
                     array_pop($items);
                 }
             }
