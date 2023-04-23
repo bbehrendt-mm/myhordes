@@ -4,18 +4,19 @@ The whole folder is under [CC-BY-NC-SA-4.0 license](https://creativecommons.org/
 # Development Installation
 #### Tested on Debian 10, Ubuntu 19.04 
 
-## Requierements
+## Requirements
 
 * zip
 * unzip
 * imagemagick
-* php (>=8.1)
+* php (>=8.1) ZTS
 * php-xml
 * php-intl
 * php-zip
 * php-imagick
 * php-curl
 * php-mbstring
+* php-parallel
 * apache2
 
 Depending on the database engine you want to use you will need the following:

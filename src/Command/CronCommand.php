@@ -33,6 +33,7 @@ use DirectoryIterator;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use parallel\{Runtime, Future};
 use SplFileInfo;
 use Symfony\Bundle\FrameworkBundle\Translation\Translator;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -102,6 +103,24 @@ class CronCommand extends Command implements SelfSchedulingCommand
 
         $this->db = $db;
         parent::__construct();
+    }
+
+    /**
+     * @param mixed $try_limit
+     * @param mixed $town_id
+     * @param $schedule_id
+     * @param OutputInterface $output
+     * @param $i
+     * @param $num
+     * @param $ret
+     * @return array
+     */
+    public function processAttackForTown(mixed $try_limit, mixed $town_id, $schedule_id, OutputInterface $output,int $i, int $num): array
+    {
+        $failures = [];
+        while (count($failures) < $try_limit && !$this->helper->capsule("app:cron attack $town_id $schedule_id", $output, "Processing town <info>{$town_id}</info> <comment>($i/$num)</comment>... ", true, $ret))
+            $failures[] = $ret;
+        return ["failures" => $failures, "town_id" => $town_id];
     }
 
     protected function configure()
@@ -198,22 +217,30 @@ class CronCommand extends Command implements SelfSchedulingCommand
                 ->getScalarResult(), 'id');
 
             $this->entityManager->clear();
+            $runtimes = [];
 
-            $i = 1; $num = count($town_ids);
             foreach ( $town_ids as $town_id ) {
+                $runtimes[] = new Runtime();
+            }
 
-                $failures = [];
-                while (count($failures) < $try_limit && !$this->helper->capsule("app:cron attack $town_id $schedule_id", $output, "Processing town <info>{$town_id}</info> <comment>($i/$num)</comment>... ", true, $ret))
-                    $failures[] = $ret;
-
+            // Start tasks in parallel
+            $i = 1; $num = count($town_ids);
+            $futures = [];
+            foreach ($town_ids as $index => $town_id) {
+                $futures[] = $runtimes[$index]->run('processAttackForTown', [$try_limit, $town_id, $schedule_id, $output, $i, $num]);
                 $i++;
+            }
 
-                if (!empty($failures)) {
+            // Retrieve results and quarantine broken towns
+            foreach ($futures as $future) {
+                $result = $future->value();
+
+                if (!empty($result['failures'])) {
                     // If we exceed the number of allowed processing tries, quarantine the town
-                    if (count($failures) >= $try_limit) {
+                    if (count($result['failures']) >= $try_limit) {
                         /** @var Town $town */
-                        $town = $this->entityManager->getRepository(Town::class)->find($town_id);
-                        $town->setAttackFails( count($failures) );
+                        $town = $this->entityManager->getRepository(Town::class)->find($result['town_id']);
+                        $town->setAttackFails( count($result['failures']) );
                         foreach ($town->getCitizens() as $citizen) if ($citizen->getAlive())
                             $this->entityManager->persist(
                                 $this->crowService->createPM_townQuarantine( $citizen->getUser(), $town->getName(), true )
@@ -222,10 +249,10 @@ class CronCommand extends Command implements SelfSchedulingCommand
                         $this->entityManager->flush();
                         $this->entityManager->clear();
                     }
-
                 }
-
             }
+
+
 
             $s = $this->entityManager->getRepository(AttackSchedule::class)->find($schedule_id);
             $this->entityManager->persist($s->setCompleted(true));
