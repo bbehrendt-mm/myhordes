@@ -111,8 +111,8 @@ Bild-URL: Bild-URL
 'Liste der Themen aktualisieren': 'Liste der Themen aktualisieren'
 'Dieses Thema enthält offizielle Ansagen der Website Administratoren.': 'Dieses Thema enthält offizielle Ansagen der Website Administratoren.'
 'Dieses Thema enthält Ansagen von Community-Vertretern.': 'Dieses Thema enthält Ansagen von Community-Vertretern.'
-'Dieses Thema enthält {count} offizielle Ansage(n) der MyHordes-Administratoren:': 'Dieses Thema enthält {count} offizielle Ansage(n) der MyHordes-Administratoren:'
-'Dieses Thema enthält {count} Ansage(n) von Community-Vertretern:': 'Dieses Thema enthält {count} Ansage(n) von Community-Vertretern:'
+'Dieses Thema enthält {count} offizielle Ansage(n) der MyHordes-Administratoren:': '{ref__icu, select,\n                on {\n                    {raw_count, plural,\n                        one {Dieses Thema enthält {count} offizielle Ansage der MyHordes-Administratoren:}\n                        other {Dieses Thema enthält {count} offizielle Ansagen der MyHordes-Administratoren:}\n                    }\n                }\n                other {Dieses Thema enthält {count} offizielle Ansage(n) der MyHordes-Administratoren:}\n            }'
+'Dieses Thema enthält {count} Ansage(n) von Community-Vertretern:': '{ref__icu, select,\n                on {\n                    {raw_count, plural,\n                        one {Dieses Thema enthält {count} Ansage von Community-Vertretern:}\n                        other {Dieses Thema enthält {count} Ansagen von Community-Vertretern:}\n                    }\n                }\n                other {Dieses Thema enthält {count} Ansage(n) von Community-Vertretern:}\n            }'
 Zitieren: Zitieren
 Version: Version
 Sprache: Sprache

@@ -202,7 +202,7 @@
         <div class="row">
             <div class="cell padded rw-8 ro-2">
                 <div class="adminAnnounces announces">
-                    <span class="announce">{{'Dieses Thema enthält {count} offizielle Ansage(n) der MyHordes-Administratoren:'|trans({"{count}": announces.admin|length}, 'global')}}</span>
+                    <span class="announce">{{'Dieses Thema enthält {count} offizielle Ansage(n) der MyHordes-Administratoren:'|trans({"{count}": announces.admin|length, "raw_count": announces.admin|length > 1 ? 'many' : 'one'}, 'global')}}</span>
                     <ul>
                         {% for adminannounce in announces.admin %}
                             <li x-ajax-target="#content" x-ajax-href="{{path('forum_jump_view', {pid: adminannounce.id})}}">[{{adminannounce.date|format_datetime('medium', 'none')}}] {{adminannounce.text|striptags|slice(0, 50)}}[...]</li>
@@ -218,7 +218,7 @@
             <div class="row">
                 <div class="cell padded rw-8 ro-2">
                     <div class="oracleAnnounces announces">
-                        <span class="announce">{{'Dieses Thema enthält {count} Ansage(n) von Community-Vertretern:'|trans({"{count}": announces.oracle|length}, 'global')}}</span>
+                        <span class="announce">{{'Dieses Thema enthält {count} Ansage(n) von Community-Vertretern:'|trans({"{count}": announces.oracle|length, "raw_count": announces.admin|oracle > 1 ? 'many' : 'one'}, 'global')}}</span>
                         <ul>
                             {% for oracleannounce in announces.oracle %}
                                 <li x-ajax-target="#content" x-ajax-href="{{path('forum_jump_view', {pid: oracleannounce.id})}}">[{{oracleannounce.date|format_datetime('medium', 'none')}}] {{oracleannounce.text|striptags|slice(0, 50)}}[...]</li>

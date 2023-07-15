@@ -2,7 +2,7 @@
 
 {% block home_content %}
     <div class="row">
-        {{ 'Du hast {num} anonyme Anzeige(n) erhalten.'|trans({'{num}': '<b>' ~ complaints|length ~ '</b>'}, 'game')|raw }}
+        {{ 'Du hast {num} anonyme Anzeige(n) erhalten.'|trans({'{num}': '<b>' ~ complaints|length ~ '</b>', '{count}': complaints|length > 1 ? 'many' : 'one'}, 'game')|raw }}
         {% if not citizen.banished %}
             {{'Sollte diese Zahl auf 8 ansteigen, wirst du verbannt!'|trans({}, 'game')}}
         {% endif %}

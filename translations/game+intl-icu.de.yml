@@ -82,7 +82,7 @@ Truhe: Truhe
 Bauarbeiten: Bauarbeiten
 'Dein Beschreibungstext': 'Dein Beschreibungstext'
 Speichern: Speichern
-'Du hast {num} anonyme Anzeige(n).': 'Du hast {num} anonyme Anzeige(n).'
+'Du hast {num} anonyme Anzeige(n).': '{ref__icu, select,\n                on {\n                    {count, plural,\n                        one {Du hast {num} anonyme Anzeige.}\n                        other {Du hast {num} anonyme Anzeigen.}\n                    }\n                }\n                other {Du hast {num} anonyme Anzeige(n).}\n            }'
 'Anzeigen können zu deiner Verbannung oder sogar Hinrichtung führen. Vielleicht solltest du das Verhältnis zwischen dir und dem Rest der Stadt verbessern ...': 'Anzeigen können zu deiner Verbannung oder sogar Hinrichtung führen. Vielleicht solltest du das Verhältnis zwischen dir und dem Rest der Stadt verbessern ...'
 'Meine Spezialaktionen': 'Meine Spezialaktionen'
 'Rucksack ausleeren': 'Rucksack ausleeren'
@@ -1559,8 +1559,8 @@ Gemeinschaftsfreak: Gemeinschaftsfreak
 'Einen Bürger heimbringen:': 'Einen Bürger heimbringen:'
 '{citizen} hat einen Teil seines Heißhungers gestillt, indem er Teile seiner Mitbürger gegessen hat. Um sicherzustellen, dass so etwas nicht noch einmal passiert, übergieße die Verstorbenen das nächste Mal mit Wasser...': '{citizen} hat einen Teil seines Heißhungers gestillt, indem er Teile seiner Mitbürger gegessen hat. Um sicherzustellen, dass so etwas nicht noch einmal passiert, übergieße die Verstorbenen das nächste Mal mit Wasser...'
 Anzeigen: Anzeigen
-'Du hast {num} anonyme Anzeige(n) erhalten.': 'Du hast {num} anonyme Anzeige(n) erhalten.'
-'Sollte diese Zahl auf 8 ansteigen, wirst du verbannt!': 'Sollte diese Zahl auf 8 ansteigen, wirst du verbannt!'
+'Du hast {num} anonyme Anzeige(n) erhalten.': '{ref__icu, select,\n                on {\n                    {count, plural,\n                        one {Du hast {num} anonyme Anzeige erhalten.}\n                        other {Du hast {num} anonyme Anzeigen erhalten.}\n                    }\n                }\n                other {Du hast {num} anonyme Anzeige(n) erhalten.}\n            }'
+'Sollte diese Zahl auf 8 ansteigen, wirst du verbannt!': '{ref__icu, select,\n                on {\n                    {ref__gender, select,\n                        female {Sollte diese Zahl auf 8 ansteigen, wirst du verbannt!}\n                        other {Sollte diese Zahl auf 8 ansteigen, wirst du verbannt!}\n                    }\n                }\n                other {Sollte diese Zahl auf 8 ansteigen, wirst du verbannt!}\n            }'
 'Grund:': 'Grund:'
 Wählen: Wählen
 'Beta-Tester der neuen Zeit': 'Beta-Tester der neuen Zeit'
@@ -1901,7 +1901,7 @@ Weihnachten: Weihnachten
 'Du hast die <strong>Kontrolle über diese Zone verloren</strong> (dies kann passieren, wenn ein anderer Bürger ohne dich gegangen ist)! Wenn du nicht festsitzen möchtest, kannst du noch flüchten. Es bleiben dir :': 'Du hast die <strong>Kontrolle über diese Zone verloren</strong> (dies kann passieren, wenn ein anderer Bürger ohne dich gegangen ist)! Wenn du nicht festsitzen möchtest, kannst du noch flüchten. Es bleiben dir :'
 'Glücklicherweise kannst du dich dank deines {img_scout} <strong>Tarnanzug</strong> unerkannt weiterbewegen.': 'Glücklicherweise kannst du dich dank deines {img_scout} <strong>Tarnanzug</strong> unerkannt weiterbewegen.'
 'Achtung: Jede Aktion in der Zone sorgt dafür, dass deine <strong>Tarnung auffliegt</strong>. (Es können nur Aktionen ausgeführt werden, die mit einem Icon {img_scout_ok} gekennzeichnet sind)!': 'Achtung: Jede Aktion in der Zone sorgt dafür, dass deine <strong>Tarnung auffliegt</strong>. (Es können nur Aktionen ausgeführt werden, die mit einem Icon {img_scout_ok} gekennzeichnet sind)!'
-'Mit deinem {img_scout} <strong>Tarnanzug</strong> kannst du dich bewegen ohne dabei entdeckt zu werden.': 'Mit deinem {img_scout} <strong>Tarnanzug</strong> kannst du dich bewegen ohne dabei entdeckt zu werden.'
+'Mit deinem {img_scout} <strong>Tarnanzug</strong> kannst du dich bewegen ohne dabei entdeckt zu werden.': '{ref__icu, select,\n                on {\n                    {ref__gender, select,\n                        female {Mit deinem {img_scout} <strong>Tarnanzug</strong> kannst du dich bewegen ohne dabei entdeckt zu werden.}\n                        other {Mit deinem {img_scout} <strong>Tarnanzug</strong> kannst du dich bewegen ohne dabei entdeckt zu werden.}\n                    }\n                }\n                other {Mit deinem {img_scout} <strong>Tarnanzug</strong> kannst du dich bewegen ohne dabei entdeckt zu werden.}\n            }\n'
 '{building} hat {num} Batterien verbraucht.': '{building} hat {num} Batterien verbraucht.'
 '{watchers} Nachtwächter haben am Stadtrand Stellung bezogen. Wild entschlossen haben sie sich vorgenommen, die Stadt gegen die Zombies zu verteidigen.': '{watchers} Nachtwächter haben am Stadtrand Stellung bezogen. Wild entschlossen haben sie sich vorgenommen, die Stadt gegen die Zombies zu verteidigen.'
 'Diese Aktion ermöglicht die Reinigung der Zone durch herabfallenden Regen. Dieser kann den Brunnen in der Stadt füllen oder eine vernichtende Wirkung auf die umliegenden Zombies entfalten.': 'Diese Aktion ermöglicht die Reinigung der Zone durch herabfallenden Regen. Dieser kann den Brunnen in der Stadt füllen oder eine vernichtende Wirkung auf die umliegenden Zombies entfalten.'
