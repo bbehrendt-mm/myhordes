@@ -210,19 +210,19 @@ Einwohner: Einwohner
 'Wähle einen Beruf': 'Wähle einen Beruf'
 'Alle Einträge anzeigen': 'Alle Einträge anzeigen'
 Tag: Tag
-Clean: Clean
+Clean: '{ref__icu, select,\n                on {\n                    {ref__gender, select,\n                        female {Clean}\n                        other {Clean}\n                    }\n                }\n                other {Clean}\n            }\n'
 Getrunken: Getrunken
-Satt: Satt
+Satt: '{ref__icu, select,\n                on {\n                    {ref__gender, select,\n                        female {Satt}\n                        other {Satt}\n                    }\n                }\n                other {Satt}\n            }\n'
 'Umsichtiger Camper': 'Umsichtiger Camper'
-Immunisiert: Immunisiert
+Immunisiert: '{ref__icu, select,\n                on {\n                    {ref__gender, select,\n                        female {Immunisiert}\n                        other {Immunisiert}\n                    }\n                }\n                other {Immunisiert}\n            }\n'
 'Den Tod besiegen': 'Den Tod besiegen'
-Erschöpfung: Erschöpfung
-Angststarre: Angststarre
+Erschöpfung: '{ref__icu, select,\n                on {\n                    {ref__gender, select,\n                        female {Erschöpfung}\n                        other {Erschöpfung}\n                    }\n                }\n                other {Erschöpfung}\n            }\n'
+Angststarre: '{ref__icu, select,\n                on {\n                    {ref__gender, select,\n                        female {Angststarre}\n                        other {Angststarre}\n                    }\n                }\n                other {Angststarre}\n            }\n'
 Durst: Durst
-Dehydriert: Dehydriert
-Rauschzustand: Rauschzustand
-Drogenabhängig: Drogenabhängig
-Infektion: Infektion
+Dehydriert: '{ref__icu, select,\n                on {\n                    {ref__gender, select,\n                        female {Dehydriert}\n                        other {Dehydriert}\n                    }\n                }\n                other {Dehydriert}\n            }\n'
+Rauschzustand: '{ref__icu, select,\n                on {\n                    {ref__gender, select,\n                        female {Rauschzustand}\n                        other {Rauschzustand}\n                    }\n                }\n                other {Rauschzustand}\n            }\n'
+Drogenabhängig: '{ref__icu, select,\n                on {\n                    {ref__gender, select,\n                        female {Drogenabhängig}\n                        other {Drogenabhängig}\n                    }\n                }\n                other {Drogenabhängig}\n            }\n'
+Infektion: '{ref__icu, select,\n                on {\n                    {ref__gender, select,\n                        female {Infektion}\n                        other {Infektion}\n                    }\n                }\n                other {Infektion}\n            }\n'
 Trunkenheit: Trunkenheit
 Kater: Kater
 'Verwundung - Kopf': 'Verwundung - Kopf'
@@ -232,7 +232,7 @@ Kater: Kater
 'Verwundung - Auge': 'Verwundung - Auge'
 'Verwundung - Fuß': 'Verwundung - Fuß'
 Ghul: Ghul
-Bandagiert: Bandagiert
+Bandagiert: '{ref__icu, select,\n                on {\n                    {ref__gender, select,\n                        female {Bandagiert}\n                        other {Bandagiert}\n                    }\n                }\n                other {Bandagiert}\n            }\n'
 'Abgelegenes Haus': 'Abgelegenes Haus'
 'Albi Supermarkt': 'Albi Supermarkt'
 'Alte Höhle': 'Alte Höhle'
@@ -1076,7 +1076,7 @@ Quarantäne: Quarantäne
 'Es ist Zeit, sich seinen Mitmenschen in der Hölle anschließen!': 'Es ist Zeit, sich seinen Mitmenschen in der Hölle anschließen!'
 "Hiermit kannst du den Namen eines zufälligen Bürgers in deinen Post anfügen.\n                                                    Bei Bedarf kannst du die Auswahl auf bestimmte Berufe, Helden oder bereits gestorbene Bürger eingrenzen.": "Hiermit kannst du den Namen eines zufälligen Bürgers in deinen Post anfügen.\n                                                    Bei Bedarf kannst du die Auswahl auf bestimmte Berufe, Helden oder bereits gestorbene Bürger eingrenzen."
 'Du bist': 'Du bist'
-Erschöpft: Erschöpft
+Erschöpft: '{ref__icu, select,\n                on {\n                    {ref__gender, select,\n                        female {Erschöpft}\n                        other {Erschöpft}\n                    }\n                }\n                other {Erschöpft}\n            }\n'
 Spielzeit: Spielzeit
 "Baupunkte können in der Werkstatt und auf Baustellen verwendet werden, wo sie wie Aktionspunkte\n                            zählen. Wenn möglich werden immer zuerst Baupunkte verbraucht, bevor Aktionspunkte eingesetzt\n                            werden. Bedenke, dass Baupunkte nicht eingesetzt werden können wenn du erschöpft bist!": "Baupunkte können in der Werkstatt und auf Baustellen verwendet werden, wo sie wie Aktionspunkte\n                            zählen. Wenn möglich werden immer zuerst Baupunkte verbraucht, bevor Aktionspunkte eingesetzt\n                            werden. Bedenke, dass Baupunkte nicht eingesetzt werden können wenn du erschöpft bist!"
 Stadtrat: Stadtrat
@@ -1495,7 +1495,7 @@ Expeditionen: Expeditionen
 'Die Außenwelt': 'Die Außenwelt'
 'Ein beunruhigender Sonnenuntergang': 'Ein beunruhigender Sonnenuntergang'
 'Eine eisige Nacht': 'Eine eisige Nacht'
-'... allein': '... allein'
+'... allein': '{ref__icu, select,\n                on {\n                    {ref__gender, select,\n                        female {... allein}\n                        other {... allein}\n                    }\n                }\n                other {... allein}\n            }\n'
 'an der Seite von {citizen}': 'an der Seite von {citizen}'
 'irgendwo {location} der Stadt...': 'irgendwo {location} der Stadt...'
 'in einer unheimlichen Ruine {location}': 'in einer unheimlichen Ruine {location}'
@@ -1579,7 +1579,7 @@ Wählen: Wählen
 'Du hast dafür {count} Aktionspunkt(e) verbraucht.': "{ref__icu, select,\n          on {\n            {raw_count, plural,\n              one {Du hast dafür {count} Aktionspunkt verbraucht.}\n              other {Du hast dafür {count} Aktionspunkte verbraucht.}\n            }\n          }\n            other {Du hast dafür {count} Aktionspunkt(e) verbraucht.}\n          }"
 'Was für eine schreckliche Nacht!': 'Was für eine schreckliche Nacht!'
 'Heute Nacht ist dir der Arsch so richtig auf Grundeis gegangen! Als du ihr Grunzen und Stöhnen gehört hattest, war dir klar: Sie würden bei dir daheim eindringen. So kam es dann auch: Deine Haustür splitterte unter der Last ihrer Angriffe. Panisch bist du ins Schlafzimmer gerannt, um dich unter deinem Bett zu verstecken. Sie blieben ein paar Minuten, die dir wie eine Ewigkeit vorkamen, und schnüffelten sich durch alle Zimmer. Innerlich zitternd, hast du zu Gott gebetet, dass sie dich verschonen mögen. Dann war plötzlich wieder alles still. Hechelnd und schnaufend bist du aus deinem Versteck hervorgekrochen und heulend auf deinem Bett zusammengesunken.': 'Heute Nacht ist dir der Arsch so richtig auf Grundeis gegangen! Als du ihr Grunzen und Stöhnen gehört hattest, war dir klar: Sie würden bei dir daheim eindringen. So kam es dann auch: Deine Haustür splitterte unter der Last ihrer Angriffe. Panisch bist du ins Schlafzimmer gerannt, um dich unter deinem Bett zu verstecken. Sie blieben ein paar Minuten, die dir wie eine Ewigkeit vorkamen, und schnüffelten sich durch alle Zimmer. Innerlich zitternd, hast du zu Gott gebetet, dass sie dich verschonen mögen. Dann war plötzlich wieder alles still. Hechelnd und schnaufend bist du aus deinem Versteck hervorgekrochen und heulend auf deinem Bett zusammengesunken.'
-'Du wurdest verbannt!': 'Du wurdest verbannt!'
+'Du wurdest verbannt!': '{ref__icu, select,\n                on {\n                    {ref__gender, select,\n                        female {Du wurdest verbannt!}\n                        other {Du wurdest verbannt!}\n                    }\n                }\n                other {Du wurdest verbannt!}\n            }\n'
 'Status:': 'Status:'
 'Eine Revolte liegt in weiter Ferne...': 'Eine Revolte liegt in weiter Ferne...'
 'Erste Spannungen bilden sich.': 'Erste Spannungen bilden sich.'
@@ -1807,7 +1807,7 @@ Anfängermodus: Anfängermodus
 '(Du bist gerade im <strong>Expertenmodus</strong>)': '(Du bist gerade im <strong>Expertenmodus</strong>)'
 'Du besitzt eine <strong>Karte</strong>. Benutze den Knopf hier oben, um nicht verloren zu gehen!': 'Du besitzt eine <strong>Karte</strong>. Benutze den Knopf hier oben, um nicht verloren zu gehen!'
 "Für viele Aktionen, wie beispielsweise die Erkundung der Aussenwelt oder der Arbeit auf einer Baustelle,\n                                benötigst du Aktionspunkte. Deine Aktionspunkte werden jede Nacht nach dem Angriff aufgefüllt. Außerdem\n                                kannst du sie durch den Einsatz bestimmter Gegenstände sowie einmal pro Tag durch Essen und Trinken neu\n                                auffüllen.": "Für viele Aktionen, wie beispielsweise die Erkundung der Aussenwelt oder der Arbeit auf einer Baustelle,\n                                benötigst du Aktionspunkte. Deine Aktionspunkte werden jede Nacht nach dem Angriff aufgefüllt. Außerdem\n                                kannst du sie durch den Einsatz bestimmter Gegenstände sowie einmal pro Tag durch Essen und Trinken neu\n                                auffüllen."
-'Du wurdest zum Schamanen gewählt!': 'Du wurdest zum Schamanen gewählt!'
+'Du wurdest zum Schamanen gewählt!': '{ref__icu, select,\n                on {\n                    {ref__gender, select,\n                        female {Du wurdest zum Schamanen gewählt!}\n                        other {Du wurdest zum Schamanen gewählt!}\n                    }\n                }\n                other {Du wurdest zum Schamanen gewählt!}\n            }\n'
 'Du wachst heute Morgen mit einer schrecklichen Migräne auf und hast Schwierigkeiten, zu sehen... Du beschließt, aus deinem Zelt zu gehen. Die Nachbarn an denen du vorbeiläufst, neigen ihr Haupt vor dir.': 'Du wachst heute Morgen mit einer schrecklichen Migräne auf und hast Schwierigkeiten, zu sehen... Du beschließt, aus deinem Zelt zu gehen. Die Nachbarn an denen du vorbeiläufst, neigen ihr Haupt vor dir.'
 'Was ist letzte Nacht nur passiert? Du hast wohl zu heftig gefeiert. Als du die Stadtmauer erreichst, kannst du ein kleines blaues Leuchten sehen... Ja, ja, du bist in der Tat der Ausgewählte. Der Zweifel verschwindet, als du dir die Hand an den Kopf hälst: eine lächerliche Maske klebt an deinem Gesicht und reduziert dein Sehvermögen erheblich.': 'Was ist letzte Nacht nur passiert? Du hast wohl zu heftig gefeiert. Als du die Stadtmauer erreichst, kannst du ein kleines blaues Leuchten sehen... Ja, ja, du bist in der Tat der Ausgewählte. Der Zweifel verschwindet, als du dir die Hand an den Kopf hälst: eine lächerliche Maske klebt an deinem Gesicht und reduziert dein Sehvermögen erheblich.'
 'Du bist nun der Schamane.': 'Du bist nun der Schamane.'
