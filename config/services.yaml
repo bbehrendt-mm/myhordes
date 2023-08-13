@@ -110,6 +110,10 @@ services:
         arguments:
             $translator: '@app.decoration.translator.inner'
 
+    App\Command\Town\TownFindSeedCommand:
+        arguments:
+            $translator: '@app.decoration.translator.inner'
+
     App\EventSubscriber\DebugSubscriber:
         tags: []
         autoconfigure: false

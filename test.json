@@ -1,0 +1,1085 @@
+{
+	"well": {
+		"min": 150,
+		"max": null
+	},
+	"map": {
+		"size": {
+			"min": null,
+			"max": null
+		}
+	},
+	"ruins": {
+		"bunker": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"police": {
+			"present": true,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": -10,
+					"max": -5
+				},
+				"y": {
+					"min": 5,
+					"max": null
+				}
+			}
+		},
+		"tent": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"bar2": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"tank": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"army": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"trench": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"cave3": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"home": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"albi": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"cave": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"pump": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"bike": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"freight": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"hospital": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"aerodrome": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"cafe": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"autobahn": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"cars": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"obi": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"container": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"doner": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"duke": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"woods": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"mine": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"quarry": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"ufo": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"ekea": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"mczombie": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"plane": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"shed": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"cave2": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"fair": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"house": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"water": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"lab": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"ambulance": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"warehouse": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"carpark": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"motel": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"post": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"dll": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"emma": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"mayor": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"lkw": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"school": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"office": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"villa": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"construction": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"silo": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"street": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"park": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"guns": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"warehouse2": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"pharma": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"bar": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"supermarket": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"tomb": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"well": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"deserted_bunker": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"deserted_hotel": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"deserted_hospital": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		},
+		"cemetary": {
+			"present": null,
+			"distance": {
+				"min": null,
+				"max": null
+			},
+			"position": {
+				"x": {
+					"min": null,
+					"max": null
+				},
+				"y": {
+					"min": null,
+					"max": null
+				}
+			}
+		}
+	}
+}

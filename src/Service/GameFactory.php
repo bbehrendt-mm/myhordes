@@ -471,29 +471,66 @@ class GameFactory
         return $this->evaluateNameSchema( $schema = $this->generateNameSchema( $language, $mutator ) ) ?? 'TOWN_NAME_GENERATOR_FAILED';
     }
 
-    public function createTown( TownSetup $townSetup ): ?Town {
+	public function timer($label) {
+		$this->timers[$label] = hrtime(true);
+	}
+
+	public function timerEnd($output, $label) {
+		if(!$output) return;
+		$output->writeln($label.': '.number_format((hrtime(true) - $this->timers[$label]) / 1000000, 2).'ms');
+	}
+
+    public function createTown( TownSetup $townSetup , $output = null): ?Town {
+		$this->timers = [];
+
+		$this->timer('validation');
         if (!$this->validator->validateTownType($townSetup->type))
             return null;
 
-        if ($townSetup->seeds) mt_srand($townSetup->seed);
+		$this->timerEnd($output, 'validation');
 
+		$this->timer('rand seed');
+        if ($townSetup->seeds) mt_srand($townSetup->seed);
+		$this->timerEnd($output, 'rand seed');
+
+
+		$this->timer('get class');
         $townClass = $this->entity_manager->getRepository(TownClass::class)->findOneBy([ 'name' => $townSetup->type ]);
 
+		$this->timerEnd($output, 'get class');
+
+
+		$this->timer('initial');
         // Initial: Create town
         $town = new Town();
         $town
             ->setType($townClass)
             ->setConf($townSetup->customConf);
 
+		$this->timerEnd($output, 'initial');
+
+
+		$this->timer('derive');
         if ($townSetup->derives)
             $town->setDeriveConfigFrom( $townSetup->typeDeriveFrom );
 
+		$this->timerEnd($output, 'derive');
+
+
+		$this->timer('get season');
         $currentSeason = $this->entity_manager->getRepository(Season::class)->findOneBy(['current' => true]);
 
+		$this->timerEnd($output, 'get season');
+
+		$this->timer('set season');
         $town->setSeason($currentSeason);
+		$this->timerEnd($output, 'set season');
 
+		$this->timer('get conf');
         $conf = $this->conf->getTownConfiguration($town);
+		$this->timerEnd($output, 'get conf');
 
+		$this->timer('setters');
         if ($townSetup->population === null) $townSetup->population = mt_rand( $conf->get(TownConf::CONF_POPULATION_MIN, 0), $conf->get(TownConf::CONF_POPULATION_MAX, 0) );
         if ($townSetup->population <= 0 || $townSetup->population < $conf->get(TownConf::CONF_POPULATION_MIN, 0) || $townSetup->population > $conf->get(TownConf::CONF_POPULATION_MAX, 0))
             return null;
@@ -508,13 +545,17 @@ class GameFactory
             ->setLanguage( $townSetup->language )
             ->setBank( new Inventory() )
             ->setWell( mt_rand( $conf->get(TownConf::CONF_WELL_MIN, 0), $conf->get(TownConf::CONF_WELL_MAX, 0) ) );
+		$this->timerEnd($output, 'setters');
 
+		$this->timer('add buildings');
         foreach ($this->entity_manager->getRepository(BuildingPrototype::class)->findProspectivePrototypes($town, 0) as $prototype)
             if (!in_array($prototype->getName(), $conf->get(TownConf::CONF_DISABLED_BUILDINGS))) {
                 $this->town_handler->addBuilding($town, $prototype);
                 $this->gps->recordBuildingDiscovered( $prototype, $town, null, 'always' );
             }
+		$this->timerEnd($output, 'add buildings');
 
+		$this->timer('unlock buildings');
         $buildings_to_unlock = array_unique( array_merge( $conf->get(TownConf::CONF_BUILDINGS_UNLOCKED), $conf->get(TownConf::CONF_BUILDINGS_CONSTRUCTED) ) );
         $failed_unlocks = $last_failed_unlocks = 0;
         do {
@@ -531,7 +572,9 @@ class GameFactory
                 }
         } while ($failed_unlocks > 0 && $failed_unlocks !== $last_failed_unlocks);
 
+		$this->timerEnd($output, 'unlock buildings');
 
+		$this->timer('construct buildings');
         foreach ($conf->get(TownConf::CONF_BUILDINGS_CONSTRUCTED) as $str_prototype) {
             if (in_array($str_prototype, $conf->get(TownConf::CONF_DISABLED_BUILDINGS)))
                 continue;
@@ -542,11 +585,17 @@ class GameFactory
             $b->setAp( $proto->getAp() )->setComplete( true )->setHp($proto->getHp());
             $this->gps->recordBuildingConstructed( $proto, $town, null, 'config' );
         }
+		$this->timerEnd($output, 'construct buildings');
 
+		$this->timer('attacks');
         $this->town_handler->calculate_zombie_attacks( $town, 3 );
+		$this->timerEnd($output, 'attacks');
 
+		$this->timer('create map');
         $this->map_maker->createMap( $town );
+		$this->timerEnd($output, 'create map');
 
+		$this->timer('create forums');
         $town->setForum((new Forum())->setTitle($town->getName()));
         foreach ($this->entity_manager->getRepository(ThreadTag::class)->findBy(['name' => ['help','rp','event','dsc_disc','dsc_guide','dsc_orga']]) as $tag)
             $town->getForum()->addAllowedTag($tag);
@@ -572,12 +621,15 @@ class GameFactory
                 Thread::SEMANTIC_CONSTRUCTIONS
             ]
         );
+		$this->timerEnd($output, 'create forums');
 
+		$this->timer('create gazette');
         /** @var Gazette $gazette */
         $gazette = new Gazette();
         $gazette->setTown($town)->setDay($town->getDay());
         $town->addGazette($gazette);
         $this->entity_manager->persist($gazette);
+		$this->timerEnd($output, 'create gazette');
 
         return $town;
     }
