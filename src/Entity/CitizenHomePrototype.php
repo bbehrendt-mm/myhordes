@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use App\Structures\RandomGroupObject;
+use App\Structures\RandomGroupObjectEntry;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Table;
 use Doctrine\ORM\Mapping\UniqueConstraint;
@@ -39,6 +41,9 @@ class CitizenHomePrototype
     private $allowSubUpgrades;
     #[ORM\Column(type: 'boolean')]
     private $theftProtection;
+
+    private ItemGroup|RandomGroupObject|null $resources_and_urbanism = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -127,21 +132,25 @@ class CitizenHomePrototype
 
         return $this;
     }
-    public function getResourcesAndResourcesUrbanism(): ?ItemGroup
+    public function getResourcesAndResourcesUrbanism(): ItemGroup|RandomGroupObject|null
     {
-        if(isset($this->resources_and_urbanism)) return $this->resources_and_urbanism;
+        if ($this->resources_and_urbanism) return $this->resources_and_urbanism;
+
         $required_items = $this->getResources();
-        if(!$required_items) {
-            $required_items = $this->getResourcesUrbanism();
-        }
+        if (!$required_items)
+            return $this->getResourcesUrbanism();
         else {
-            foreach($this->getResourcesUrbanism() as $resource => $quantity) {
-                if($required_items[$resource]) $required_items[$resource] += $quantity;
-                else $required_items[$resource] = $quantity;
+            $map = [];
+            foreach ($required_items->getEntries() as $item) $map[$item->getPrototype()->getName()] = [$item->getPrototype(),$item->getChance()];
+
+            foreach($this->getResourcesUrbanism()?->getEntries() ?? [] as $item) {
+                if (!isset( $map[$item->getPrototype()->getName()] )) $map[$item->getPrototype()->getName()] = [$item->getPrototype(),0];
+                $map[$item->getPrototype()->getName()][1] += $item->getChance();
             }
+            $this->resources_and_urbanism = new RandomGroupObject();
+            foreach ($map as [$p,$c]) $this->resources_and_urbanism->getEntries()->add( new RandomGroupObjectEntry($p,$c) );
+            return $this->resources_and_urbanism;
         }
-        $this->resources_and_urbanism = $required_items;
-        return $this->resources_and_urbanism;
     }
     public function getRequiredBuilding(): ?BuildingPrototype
     {
