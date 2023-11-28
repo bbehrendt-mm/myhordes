@@ -1897,8 +1897,11 @@ class TownController extends InventoryAwareController
             $item_list_p = [];
 
             $has_recycled = false;
-            shuffle($resources);
-            foreach ($resources as $item_name => &$count) {
+
+            $item_names = array_keys($resources);
+            shuffle($item_names);
+            foreach ($item_names as $item_name) {
+                $count = $resources[$item_name];
                 $count = min($recycleReturn, (int)floor($count * 0.4));
                 $recycleReturn -= $count;
                 if ($count > 0) {
