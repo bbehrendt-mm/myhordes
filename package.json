@@ -1,12 +1,12 @@
 {
     "devDependencies": {
-        "@babel/core": "7.24.4",
-        "@babel/preset-env": "7.24.4",
+        "@babel/core": "7.24.5",
+        "@babel/preset-env": "7.24.5",
         "@babel/preset-react": "7.24.1",
         "@fortawesome/fontawesome-free": "6.5.2",
         "@symfony/webpack-encore": "4.6.1",
         "@types/uuid": "^9",
-        "core-js": "3.36.1",
+        "core-js": "3.37.0",
         "favicons": "^7.0.2",
         "favicons-webpack-plugin": "^6.0.0",
         "file-loader": "6.2.0",
@@ -14,7 +14,7 @@
         "less-loader": "11.1.4",
         "regenerator-runtime": "0.14.1",
         "ts-loader": "9.5.1",
-        "typescript": "5.4.4",
+        "typescript": "5.4.5",
         "webpack": "5.91.0",
         "webpack-cli": "5.1.4",
         "webpack-notifier": "1.15.0"
@@ -31,21 +31,21 @@
         "build": "encore production --progress"
     },
     "dependencies": {
-        "@ruffle-rs/ruffle": "0.1.0-nightly.2024.4.5",
-        "@types/react-dom": "18.2.24",
+        "@ruffle-rs/ruffle": "0.1.0-nightly.2024.5.10",
+        "@types/react-dom": "18.3.0",
         "buffer": "6.0.3",
         "js-md5": "^0.8.3",
         "latest-createjs": "1.0.24",
         "process": "0.11.10",
         "prop-types": "15.8.1",
-        "react": "18.2.0",
-        "react-dom": "18.2.0",
+        "react": "18.3.1",
+        "react-dom": "18.3.1",
         "stream": "0.0.2",
         "stream-browserify": "3.0.0",
         "string.prototype.matchall": "4.0.11",
-        "swagger-ui": "5.13.0",
+        "swagger-ui": "5.17.7",
         "ua-parser-js": "1.0.37",
         "uuid": "9.0.1"
     },
-    "packageManager": "yarn@4.1.1"
+    "packageManager": "yarn@4.2.2"
 }
