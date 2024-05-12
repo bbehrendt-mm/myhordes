@@ -621,3 +621,4 @@ Testbenachrichtiung: Test notification
 'Dies ist Meldung #{num}.': 'This is the message #{num}.'
 Community-Event: Community Event
 'Die erhälst die gekennzeichneten Benachrichtigungen nur, wenn sie deiner gewählten Sprache entsprechen. Wenn du die entsprechenden Einstellungen änderst oder deine Sprache wechselst, kann es bis zu 24 Stunden dauern, bis die Änderungen für Benachrichtigungen übernommen werden.': 'You will only receive marked notifications if they match the selected language. If you change the affected settings or change your language, notifications may take up to 24 hours to reflect the changes.'
+'Alternativ zu einer E-Mail Adresse kannst du hier auch eine URL eintragen, auf der Spieler eine Kontaktmöglichkeit zu dir finden.': 'Alternativ zu einer E-Mail Adresse kannst du hier auch eine URL eintragen, auf der Spieler eine Kontaktmöglichkeit zu dir finden.'
