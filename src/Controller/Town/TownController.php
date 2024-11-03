@@ -9,10 +9,8 @@ use App\Controller\InventoryAwareController;
 use App\Entity\AccountRestriction;
 use App\Entity\ActionCounter;
 use App\Entity\ActionEventLog;
-use App\Entity\AdminReport;
 use App\Entity\BlackboardEdit;
 use App\Entity\Building;
-use App\Entity\BuildingPrototype;
 use App\Entity\BuildingVote;
 use App\Entity\Citizen;
 use App\Entity\CitizenHomePrototype;
@@ -24,12 +22,9 @@ use App\Entity\CitizenWatch;
 use App\Entity\Complaint;
 use App\Entity\ComplaintReason;
 use App\Entity\ExpeditionRoute;
-use App\Entity\ForumThreadSubscription;
 use App\Entity\HomeIntrusion;
 use App\Entity\Item;
-use App\Entity\ItemProperty;
 use App\Entity\ItemPrototype;
-use App\Entity\LogEntryTemplate;
 use App\Entity\PictoPrototype;
 use App\Entity\PrivateMessage;
 use App\Entity\ShoutboxEntry;
@@ -42,15 +37,10 @@ use App\Entity\ZombieEstimation;
 use App\Entity\Zone;
 use App\Entity\ZoneActivityMarker;
 use App\Enum\ActionHandler\PointType;
-use App\Enum\AdminReportSpecification;
 use App\Enum\Configuration\CitizenProperties;
 use App\Enum\EventStages\BuildingValueQuery;
-use App\Enum\ItemPoisonType;
 use App\Enum\ZoneActivityMarkerType;
-use App\Event\Game\Town\Basic\Buildings\BuildingConstructionEvent;
 use App\Event\Game\Town\Basic\Well\WellExtractionCheckEvent;
-use App\Service\BankAntiAbuseService;
-use App\Service\ConfMaster;
 use App\Service\EventFactory;
 use App\Service\EventProxyService;
 use App\Service\GameEventService;
@@ -386,8 +376,8 @@ class TownController extends InventoryAwareController
             'complaint' => $active_complaint,
             'complaints' => $this->entity_manager->getRepository(Complaint::class)->matching( $criteria ),
             'complaintreasons' => $this->entity_manager->getRepository(ComplaintReason::class)->findAll(),
-            'chest' => $home->getChest(),
-            'chest_size' => $this->inventory_handler->getSize($home->getChest()),
+            'has_items' => !$home->getChest()->getItems()->filter(fn(Item $i) => !$i->getHidden() && !$i->getPrototype()->getHideInForeignChest())->isEmpty(),
+            'own_chest_id' => $this->getActiveCitizen()->getHome()->getChest()->getId(),
             'has_cremato' => $this->town_handler->getBuilding($town, 'item_hmeat_#00', true) !== null,
             'lastActionText' => $lastActionText,
             'def' => $summary,
@@ -741,37 +731,6 @@ class TownController extends InventoryAwareController
 
     /**
      * @param int $id
-     * @param JSONRequestParser $parser
-     * @param EntityManagerInterface $em
-     * @return Response
-     */
-    #[Route(path: 'api/town/visit/{id}/item', name: 'town_visit_item_controller')]
-    public function item_visit_api(int $id, JSONRequestParser $parser, EntityManagerInterface $em, EventFactory $ef, EventDispatcherInterface $ed): Response {
-        if ($id === $this->getActiveCitizen()->getId())
-            return AjaxResponse::error(ErrorHelper::ErrorActionNotAvailable );
-
-        $ac = $this->getActiveCitizen();
-
-        /** @var Citizen $c */
-        $c = $em->getRepository(Citizen::class)->find( $id );
-        if (!$c || $c->getTown()->getId() !== $this->getActiveCitizen()->getTown()->getId())
-            return AjaxResponse::error(ErrorHelper::ErrorActionNotAvailable );
-
-        $intrusion = null;
-        if ($c->getAlive() && !$intrusion = $em->getRepository(HomeIntrusion::class)->findOneBy(['intruder' => $ac, 'victim' => $c]))
-            return AjaxResponse::error(ErrorHelper::ErrorActionNotAvailable );
-
-        $direction = $parser->get('direction', '');
-        if ($c->getAlive() && $intrusion && (($intrusion->getSteal() && $direction === 'down') || (!$intrusion->getSteal() && $direction === 'up')))
-            return AjaxResponse::error(ErrorHelper::ErrorActionNotAvailable );
-
-        $up_inv   = ($direction === 'down' || $c->getAlive()) ? $ac->getInventory() : $ac->getHome()->getChest();
-        $down_inv = $c->getHome()->getChest();
-        return $this->generic_item_api( $up_inv, $down_inv, false, $parser, $ef, $ed);
-    }
-
-    /**
-     * @param int $id
      * @return Response
      */
     #[Route(path: 'api/town/remove_password', name: 'town_remove_password')]
@@ -839,31 +798,8 @@ class TownController extends InventoryAwareController
             'item_defense' => $defSummary->item_defense,
             'item_def_factor' => $item_def_factor,
             'item_def_count' => $this->inventory_handler->countSpecificItems($town->getBank(),$th->getPrototypesForDefenceItems(), false, false),
-            'bank' => $this->renderInventoryAsBank( $town->getBank() ),
             'day' => $town->getDay(),
         ]) );
-    }
-
-    /**
-     * @param JSONRequestParser $parser
-     * @return Response
-     */
-    #[Route(path: 'api/town/bank/item', name: 'town_bank_item_controller')]
-    public function item_bank_api(JSONRequestParser $parser, EventFactory $ef, EventDispatcherInterface $ed): Response {
-        $item_id = $parser->get_int('item', -1);
-        $direction = $parser->get('direction', '');
-
-        if ($item_id > 0 && $direction === 'up') {
-            /** @var Item $i */
-            $i = $this->entity_manager->getRepository(Item::class)->find( $item_id );
-            if ($i && !$this->getActiveCitizen()->getTown()->getBank()->getItems()->contains( $i ))
-                return AjaxResponse::errorMessage( $this->translator->trans( 'Ein anderer Bürger hat sich in der Zwischenzeit diesen Gegenstand geschnappt.', [], 'game' ) );
-        }
-
-        $up_inv   = $this->getActiveCitizen()->getInventory();
-        $down_inv = $this->getActiveCitizen()->getTown()->getBank();
-
-        return $this->generic_item_api( $up_inv, $down_inv, true, $parser, $ef, $ed);
     }
 
     /**

@@ -892,7 +892,7 @@ button, *.button, *.modal-button {
   }
 }
 
-input[type='text'],input[type='number'],input[type='password'],input[type='email'],input[type='url'],input[type='date'],input[type='datetime-local'],textarea {
+input[type='text'],input[type='search'],input[type='number'],input[type='password'],input[type='email'],input[type='url'],input[type='date'],input[type='datetime-local'],textarea {
   transition: outline-color 0.5s; outline: 1px solid rgba(0,0,0,0); color: black;
   &:not(textarea) { background: @myhordes-input-background; }
   &:not(input)    { background: @myhordes-input-text-background; resize: vertical; max-width: 100%; min-height: 250px; }
@@ -918,6 +918,7 @@ ul.inventory {
     margin: 0;
   }
   font-size: 1.1rem; font-variant: small-caps;
+
   &>li {
     &:not(.category) { display: inline-block; border: 1px solid @myhordes-input-border;}
     &.category { font-size: 1rem; font-weight: bold; }
@@ -949,6 +950,27 @@ ul.inventory {
       border-radius: 4px;
     }
   }
+
+  &.inventory-react {
+    display: flex; flex-wrap: wrap; gap: 2px; align-items: center; justify-content: flex-start;
+    &>li {
+      margin: 0;
+      &.category:not(.label) {
+        flex-basis: 100%;
+        &:not(:first-child) {padding-top: 12px;}
+      }
+      &.placeholder {
+        border: none; flex-grow: 1;
+      }
+      &.item.pending {
+        height: 18px; width: 18px; position: relative;
+        &::before {
+          position: absolute; inset: 4px; content: " "; background: #EFDBA8;
+        }
+      }
+    }
+  }
+
   &.soul {
     background: url("../img/background/inventory/inv_soul.gif") no-repeat top left;
     li {
@@ -1172,7 +1194,7 @@ div.game-menu-area {
       }
     }
 
-    &>ul,&>div.ulcont {
+    &>ul,&>div.ulcont,&>.ul {
       display: inline-block; padding: 0; margin: 0;
       &.ulcont+.ulcont { margin-right: 4px !important; }
       & li {display: inline-block; list-style: none;}

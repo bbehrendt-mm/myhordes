@@ -14,6 +14,7 @@ use App\Entity\HomeIntrusion;
 use App\Entity\Inventory;
 use App\Entity\Item;
 use App\Entity\PrivateMessage;
+use App\Enum\ActionHandler\PointType;
 use App\Enum\Configuration\CitizenProperties;
 use App\Enum\Game\TransferItemModality;
 use App\Enum\Game\TransferItemOption;
@@ -168,6 +169,15 @@ final class TransferItemListener implements ServiceSubscriberInterface
         $event->type_from = $type_from;
         $event->type_to = $type_to;
 
+        // Validate modality
+        if ($event->modality === TransferItemModality::BankTheft && ($type_from !== TransferItemType::Bank || $type_to !== TransferItemType::Rucksack)) {
+            $event->pushError(InventoryHandler::ErrorInvalidTransfer);
+            return;
+        }
+        if ($event->modality === TransferItemModality::HideItem && ($type_from !== TransferItemType::Rucksack || $type_to !== TransferItemType::Local)) {
+            $event->pushError(InventoryHandler::ErrorInvalidTransfer);
+            return;
+        }
 
         // Check inventory size
         if (!$opt_enforce_placement && ($event->to && ($max_size = $this->getService(InventoryHandler::class)->getSize($event->to)) > 0 && count($event->to->getItems()) >= $max_size ) ) {
@@ -333,6 +343,7 @@ final class TransferItemListener implements ServiceSubscriberInterface
                 $this->getService(InventoryHandler::class)->forceRemoveItem($event->item);
 
                 // Prematurely end the event chain
+                $event->hasSideEffects = true;
                 $event->markModified()->shouldPersist();
                 $event->stopPropagation();
 
@@ -407,6 +418,7 @@ final class TransferItemListener implements ServiceSubscriberInterface
             if (!$victim_home) return;
 
             $this->getService(CitizenHandler::class)->inflictStatus($event->actor, 'tg_steal');
+            $event->hasSideEffects = true;
 
             // Give picto steal
             $pictoName = $victim_home->getCitizen()->getAlive() ? "r_theft_#00" : "r_plundr_#00";
@@ -451,9 +463,11 @@ final class TransferItemListener implements ServiceSubscriberInterface
                             default => CauseOfDeath::Unknown
                         });
                         $this->getService(EntityManagerInterface::class)->persist($this->getService(LogTemplateHandler::class)->citizenDeath( $event->actor ) );
+                        $event->hasSideEffects = true;
                     }
                     else {
                         $this->getService(CitizenHandler::class)->inflictWound( $event->actor );
+                        $event->hasSideEffects = true;
                     }
 
                     if ($hasExplodingDoormat) {
@@ -518,7 +532,10 @@ final class TransferItemListener implements ServiceSubscriberInterface
             }
 
             $intrusion = $this->getService(EntityManagerInterface::class)->getRepository(HomeIntrusion::class)->findOneBy(['intruder' => $event->actor, 'victim' => $victim_home->getCitizen()]);
-            if ($intrusion) $this->getService(EntityManagerInterface::class)->remove($intrusion);
+            if ($intrusion) {
+                $this->getService(EntityManagerInterface::class)->remove($intrusion);
+                $event->hasSideEffects = true;
+            }
 
             $event->markModified()->shouldPersist();
         }

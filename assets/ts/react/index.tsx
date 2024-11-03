@@ -253,7 +253,9 @@ export abstract class Shim<ReactType extends ShimLoader> extends HTMLElement {
 
     public constructor() {
         super();
-        this.addEventListener('x-react-degenerate', () => this.selfUnmount());
+        this.addEventListener('x-react-degenerate', () => {
+            this.selfUnmount()
+        });
         if (this.mountsLazily()) {
             const minHeightBefore = this.style.minHeight;
             this.style.minHeight = '1px';
@@ -278,6 +280,15 @@ export abstract class Shim<ReactType extends ShimLoader> extends HTMLElement {
 
 export abstract class PersistentShim<ReactType extends ShimLoader> extends Shim<ReactType> {
     protected allow_migration: boolean = true;
+
+    public constructor() {
+        super();
+        if (!this.dataset.reactMount || !this.id) {
+            const uuid = window.crypto.randomUUID();
+            if (!this.dataset.reactMount) this.dataset.reactMount = `auto-${uuid}`;
+            if (!this.id) this.setAttribute('id', `auto-${uuid}`);
+        }
+    }
 }
 
 export abstract class ReactDialogMounter<PropDef extends object> {

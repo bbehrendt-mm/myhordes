@@ -69,7 +69,7 @@ class TownHomeController extends TownController
                 'special_actions' => $this->getSpecialActions(),
                 'actions' => $this->getItemActions(),
                 'recipes' => $this->getItemCombinations(true),
-            ], $this->house_partial_inventory_args(), $this->house_partial_complaints_args())) );
+            ], $this->house_partial_deco_args(), $this->house_partial_complaints_args())) );
     }
 
     /**
@@ -346,19 +346,6 @@ class TownHomeController extends TownController
         ];
     }
 
-    protected function house_partial_inventory_args(): array {
-        $citizen = $this->getActiveCitizen();
-
-        return array_merge([
-            'home' => $citizen->getHome(),
-            'citizen' => $citizen,
-            'rucksack' => $citizen->getInventory(),
-            'chest' => $citizen->getHome()->getChest(),
-            'rucksack_size' => $this->inventory_handler->getSize( $citizen->getInventory() ),
-            'chest_size' => $this->inventory_handler->getSize($citizen->getHome()->getChest()),
-        ], $this->house_partial_deco_args());
-    }
-
     protected function house_partial_complaints_args(): array {
         $citizen = $this->getActiveCitizen();
 
@@ -369,28 +356,6 @@ class TownHomeController extends TownController
         return [
             'complaints' => $this->entity_manager->getRepository(Complaint::class)->matching( $criteria ),
         ];
-    }
-
-    /**
-     * @return Response
-     */
-    #[Route(path: 'jx/town/partial/house/inventory', name: 'house_partial_inventory')]
-    public function house_partial_inventory(): Response
-    {
-        return $this->render( 'ajax/game/town/partials/inventory.standalone.html.twig', $this->house_partial_inventory_args() );
-    }
-
-    /**
-     * @param JSONRequestParser $parser
-     * @param EventFactory $ef
-     * @param EventDispatcherInterface $ed
-     * @return Response
-     */
-    #[Route(path: 'api/town/house/item', name: 'town_house_item_controller')]
-    public function item_house_api(JSONRequestParser $parser, EventFactory $ef, EventDispatcherInterface $ed): Response {
-        $up_inv   = $this->getActiveCitizen()->getInventory();
-        $down_inv = $this->getActiveCitizen()->getHome()->getChest();
-        return $this->generic_item_api( $up_inv, $down_inv, true, $parser, $ef, $ed);
     }
 
     /**
