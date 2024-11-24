@@ -35,7 +35,6 @@ class CustomAbstractCoreController extends AbstractController {
             return $item['generate'];
         });
         $this->generatedLangsCodes = array_map(function($item) {return $item['code'];}, $this->generatedLangs);
-
     }
 
     public function getUserLanguage( bool $ignore_profile_language = false ): string {

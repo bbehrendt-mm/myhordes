@@ -6,13 +6,15 @@
 // Import the actual react code
 import {GroupResponse, HordesUserSearchBar, UserResponse} from "../react/user-search/Wrapper";
 import {HordesDistinctions} from "../react/distinctions/Wrapper";
-import {Shim} from "../react";
+import {PersistentShim, Shim} from "../react";
 import {HordesTooltip} from "../react/tooltip/Wrapper";
 import {HordesContentReport} from "../react/content-report/Wrapper";
 import {HordesIssueReport} from "../react/issue-report/Wrapper";
 import {HordesServiceWorkerIndicator} from "../react/service-worker-state/Wrapper";
 import {HordesProgressBar} from "../react/progress-bar/Wrapper";
 import {HordesHxpLog} from "../react/hxp-log/Wrapper";
+import {HordesBuildingPage} from "../react/buildings/Wrapper";
+import {HordesPageHeader} from "../react/header/Wrapper";
 
 // Define web component <hordes-user-search />
 export class HordesUserSearchElement extends Shim<HordesUserSearchBar> {
@@ -196,6 +198,30 @@ customElements.define('hordes-hxp-log', class HordesHxpLogElement extends Shim<H
         return ['data-focus'];
     }
 
+}, {  });
+
+customElements.define('hordes-page-header', class HordesPageHeaderElement extends PersistentShim<HordesPageHeader> {
+    protected generateInstance(): HordesPageHeader {
+        return new HordesPageHeader();
+    }
+
+    protected generateProps(): object | null {
+        return {
+            user: parseInt(this.dataset.user),
+            town: parseInt(this.dataset.town),
+            day: parseInt(this.dataset.day ?? '-1'),
+            impersonating: parseInt(this.dataset.impersonator ?? '0') !== 0
+        }
+    }
+
+    protected static observedAttributeNames() {
+        return [
+            'data-user',
+            'data-town',
+            'data-impersonator',
+            'data-day'
+        ];
+    }
 }, {  });
 
 require('./twino-editor')

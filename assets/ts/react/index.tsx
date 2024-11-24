@@ -306,7 +306,7 @@ export abstract class BaseMounter<PropDef extends object> {
     protected props: PropDef = null;
 
     protected renderError(error: string) {
-        return <div style={{background: '#650000', padding: '3px', fontSize: '10px'}}>
+        return <div style={{background: '#650000', color: 'white', padding: '3px', fontSize: '10px'}}>
             <b>⚠ Critical Failure:</b> A component on this page has crashed.
             Details have been sent to the browser console.
             <code style={{fontSize: '8px', display: "block", background: "rgba(0,0,0,0.1)", padding: '2px', margin: "2px 0"}}>{error}</code>

@@ -59,6 +59,7 @@ class CustomAbstractController extends CustomAbstractCoreController {
         $data['menu_section'] = $section;
 
         $activeCitizen = $this->getActiveCitizen();
+        $data['day'] = $activeCitizen?->getTown()->getDay() ?? null;
         $data['clock'] = [
             'desc'      => $activeCitizen?->getTown()->getName() ?? $this->translator->trans('Worauf warten Sie noch?', [], 'ghost'),
             'day'       => $activeCitizen?->getTown()->getDay() ?? '',
@@ -82,8 +83,6 @@ class CustomAbstractController extends CustomAbstractCoreController {
         $data["langsCodes"] = $this->generatedLangsCodes;
         $data["allLangs"] = $allLangs;
         $data['quote'] = $quotes[0];
-
-        $data['apps'] = $this->entity_manager->getRepository(ExternalApp::class)->findBy(['active' => true]);
 
         $data['adminActions'] = AdminActionController::getAdminActions();
         $data['comActions']   = AdminActionController::getCommunityActions();
@@ -110,7 +109,7 @@ class CustomAbstractController extends CustomAbstractCoreController {
             $data['rucksack_id'] = $activeCitizen->getProfession()->getName() !== CitizenProfession::DEFAULT ? $activeCitizen->getInventory()->getId() : null;
             $data['pm'] = $activeCitizen->getPm();
             $data['max_pm'] = $this->citizen_handler->getMaxPM($activeCitizen);
-            $data['username'] = $this->getUser()->getName();
+            //$data['username'] = $this->getUser()->getName();
             $data['is_shaman'] = $is_shaman;
             $data['is_shaman_job'] = $activeCitizen->getProfession()->getName() == 'shaman';
             $data['is_shaman_role'] = $this->citizen_handler->hasRole($activeCitizen, 'shaman');
