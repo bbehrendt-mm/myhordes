@@ -48,10 +48,10 @@
                     <h4>{% trans from 'admin' %}Community Dashboard{% endtrans %}</h4>
                 {% endif %}
                 <br />
-                {% if is_granted('ROLE_ELEVATED') %}
+                {% if actions is not empty %}
                     <h5>{{ 'Aktionen'|trans({},'admin') }}</h5>
-                    {% for id, action in actions %}
-                        <button x-ajax-href="{{ path('admin_action', {id: id}) }}">{{ action.name|trans({},'admin') }}</button>
+                    {% for name, url in actions %}
+                        <button x-ajax-href="{{ url }}">{{ name }}</button>
                     {% endfor %}
                 {% else %}
                     <button class="noa-teaser">{{ 'Soldatenberuf freischalten'|trans({},'admin') }}</button>

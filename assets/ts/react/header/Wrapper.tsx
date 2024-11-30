@@ -1,9 +1,9 @@
 import * as React from "react";
 import {Global} from "../../defaults";
 import {BaseMounter} from "../index";
-import {useContext, useEffect, useRef, useState} from "react";
+import {useContext, useEffect, useLayoutEffect, useRef, useState} from "react";
 import {TranslationStrings} from "./strings";
-import {App, HeaderAPI} from "./api";
+import {App, ClockResponse, HeaderAPI, Tool} from "./api";
 import {Tooltip} from "../tooltip/Wrapper";
 
 declare var $: Global;
@@ -11,7 +11,10 @@ declare var $: Global;
 interface mountProps {
     user: number
     town: number
-    impersonating: boolean
+    impersonating: boolean,
+    day: number,
+    schedule: number,
+    mod: boolean,
 }
 
 type Globals = {
@@ -39,13 +42,13 @@ const HordesPageHeaderWrapper = (props: mountProps) => {
         return () => { console.log('!!!!!') }
     }, []);
 
-    console.log('S', test.current, props, strings);
-
     return <Globals.Provider value={{api: api.current, strings}}>
         { strings && <div className="main-header">
             {props.impersonating && <ImpersonationWidget/>}
             <AppWidget user={props.user}/>
             <LogoutWidget user={props.user}/>
+            <ClockWidget town={props.town} day={props.day} schedule={props.schedule}/>
+            <ToolWidget mod={props.mod}/>
         </div> }
     </Globals.Provider>
 };
@@ -106,12 +109,85 @@ const AppWidget = (props: {user: number}) => {
     </div>
 }
 
-//const ClockWidget = (props: {town: number}) => {
-//    const globals = useContext(Globals);
-//
-//    const [clock, setClock] = useState(null);
-//
-//    return clock && <ul className="clock">
-//
-//    </ul>
-//}
+const ClockWidget = (props: {town: number, day: number, schedule: number}) => {
+    const globals = useContext(Globals);
+
+    const [clock, setClock] = useState<ClockResponse>(null);
+    const [tick, setTick] = useState(0);
+
+    const serverTimeElement = useRef<HTMLSpanElement>()
+    const nextAttackElement = useRef<HTMLSpanElement>()
+
+    const tsNextFullMinute = (d: Date = null) => {
+        const ref = d ?? new Date();
+        const interim = new Date(Math.ceil(ref.getTime() / 60000) * 60000);
+        if (interim.getTime() > ref.getTime()) return interim;
+        else {
+            interim.setTime(ref.getTime() + 60000);
+            return interim;
+        }
+    }
+
+    useEffect(() => {
+        globals.api.clock().then(v => setClock(v));
+    }, [props.day, props.schedule, props.town]);
+
+    useLayoutEffect(() => {
+        if (!clock) return;
+
+        if (serverTimeElement.current) {
+            const date = new Date();
+            const tsOffset = 1000 * (clock.offset + ((new Date()).getTimezoneOffset() * 60));
+
+            date.setTime(date.getTime() + tsOffset);
+            serverTimeElement.current.innerText = `${ `${date.getHours()}`.padStart(2, '0') }:${ `${date.getMinutes()}`.padStart(2, '0') }`;
+        }
+
+        if (nextAttackElement.current) {
+            const diff = Math.ceil(((clock.attack * 1000) - (new Date()).getTime())/60000);
+            nextAttackElement.current.innerText = `~${ Math.floor(diff / 60) }:${ `${ diff % 60 }`.padStart(2, '0') }`;
+        }
+
+        const t = setTimeout(() => setTick(tick+1), tsNextFullMinute().getTime() - (new Date()).getTime());
+        return () => { clearTimeout(t) }
+    }, [clock, tick])
+
+    return clock && <ul className="clock">
+        <li className="town-name">{ clock.town ?? globals.strings.clock.no_town }</li>
+        { clock.town && <li>
+            {clock.hc && <span className="hardcore">{globals.strings.clock.hardcore}</span>}
+            <span>{globals.strings.clock.day.replace('{day}', `${props.day}`)}</span>
+        </li> }
+        <li>
+            <span ref={serverTimeElement}>{ clock.offset }</span>
+            <Tooltip html={globals.strings.clock.time}/>
+        </li>
+        <li>
+            <span ref={nextAttackElement}>{ clock.attack }</span>
+            <Tooltip html={globals.strings.clock.next}/>
+        </li>
+    </ul>
+}
+
+const ToolWidget = (props: {mod: boolean}) => {
+    const globals = useContext(Globals);
+
+    const [tools, setTools] = useState<Tool[]>([]);
+
+    useEffect(() => {
+        globals.api.tools().then(v => setTools(v.tools));
+    }, [props.mod]);
+
+    return tools.length > 0 && <div className="tools">
+        <h1><span>{ props.mod ? globals.strings.tools.admin : globals.strings.tools.community }</span></h1>
+        <div className="scrollMenu">
+            <ul>
+                { tools.map((tool,i) => <li key={i}>
+                    <a href={tool.u}>
+                        <span>{tool.n}</span>
+                    </a>
+                </li>) }
+            </ul>
+        </div>
+    </div>
+}

@@ -9,8 +9,10 @@ use App\Service\PermissionHandler;
 use App\Service\UserHandler;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Container\ContainerInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class UserCapabilityService implements ServiceSubscriberInterface
 {
@@ -26,6 +28,8 @@ class UserCapabilityService implements ServiceSubscriberInterface
             PermissionHandler::class,
             RoleHierarchyInterface::class,
             UserHandler::class,
+            UrlGeneratorInterface::class,
+            TranslatorInterface::class
         ];
     }
 
@@ -91,5 +95,41 @@ class UserCapabilityService implements ServiceSubscriberInterface
         return count(array_intersect( $roles, $this->getEffectiveRoles( $user, $allow_inheritance_from_pivot ) )) === count($roles);
     }
 
+    /**
+     * @param User $user
+     * @param int $referenceType
+     * @return string[]
+     */
+    public function adminTools( User $user, int $referenceType = UrlGeneratorInterface::ABSOLUTE_URL ): array {
+
+        $trans = $this->getService(TranslatorInterface::class);
+        $url = $this->getService(UrlGeneratorInterface::class);
+
+        if ( $this->hasRole($user, 'ROLE_CROW') )
+            return [
+                $trans->trans('Dashboard', [], 'admin')    => $url->generate('admin_dashboard', referenceType: $referenceType),
+                $trans->trans('Kampagnen', [], 'admin')    => $url->generate('admin_campaigns', referenceType: $referenceType),
+                $trans->trans('Users', [], 'admin')        => $url->generate('admin_users', referenceType: $referenceType),
+                $trans->trans('Foren-Mod.', [], 'admin')   => $url->generate('admin_reports_forum_posts', referenceType: $referenceType),
+                $trans->trans('Städte', [], 'admin')       => $url->generate('admin_town_list', referenceType: $referenceType),
+                $trans->trans('Zukunft', [], 'admin')      => $url->generate('admin_changelogs', referenceType: $referenceType),
+                $trans->trans('AntiSpam', [], 'admin')     => $url->generate('admin_spam_domain_view', referenceType: $referenceType),
+                $trans->trans('Apps', [], 'admin')         => $url->generate('admin_app_view', referenceType: $referenceType),
+                $trans->trans('Saisons', [], 'admin')      => $url->generate('admin_seasons_view', referenceType: $referenceType),
+                $trans->trans('Gruppen', [], 'admin')      => $url->generate('admin_group_view', referenceType: $referenceType),
+                $trans->trans('Dateisystem', [], 'admin')  => $url->generate('admin_file_system_dash', referenceType: $referenceType),
+                $trans->trans('Angriffsplan', [], 'admin') => $url->generate('admin_schedule_attacks', referenceType: $referenceType),
+            ];
+
+        if ( $this->hasRole($user, 'ROLE_ELEVATED') )
+            return [
+                $trans->trans('Dashboard', [], 'admin') => $url->generate('admin_dashboard', referenceType: $referenceType),
+                $trans->trans('Kampagnen', [], 'admin') => $url->generate('admin_campaigns', referenceType: $referenceType),
+                $trans->trans('Zukunft', [], 'admin')   => $url->generate('admin_changelogs', referenceType: $referenceType),
+                $trans->trans('Kurztexte', [], 'admin') => $url->generate('admin_reports_snippets', referenceType: $referenceType)
+            ];
+
+        return [];
+    }
 
 }

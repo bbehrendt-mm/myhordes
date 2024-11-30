@@ -22,7 +22,7 @@ class AttackScheduleRepository extends ServiceEntityRepository
         parent::__construct($registry, AttackSchedule::class);
     }
 
-    public function findNext(?DateTimeInterface $time): ?AttackSchedule
+    public function findNext(?DateTimeInterface $time = null): ?AttackSchedule
     {
         try {
             return $this->createQueryBuilder('a')
@@ -65,7 +65,7 @@ class AttackScheduleRepository extends ServiceEntityRepository
         }
     }
 
-    public function findPrevious(?DateTimeInterface $time): ?AttackSchedule
+    public function findPrevious(?DateTimeInterface $time = null): ?AttackSchedule
     {
         try {
             return $this->createQueryBuilder('a')

@@ -210,6 +210,8 @@ customElements.define('hordes-page-header', class HordesPageHeaderElement extend
             user: parseInt(this.dataset.user),
             town: parseInt(this.dataset.town),
             day: parseInt(this.dataset.day ?? '-1'),
+            mod: parseInt(this.dataset.mod ?? '0') > 0,
+            schedule: parseInt(this.dataset.schedule ?? '-1'),
             impersonating: parseInt(this.dataset.impersonator ?? '0') !== 0
         }
     }
@@ -219,7 +221,9 @@ customElements.define('hordes-page-header', class HordesPageHeaderElement extend
             'data-user',
             'data-town',
             'data-impersonator',
-            'data-day'
+            'data-day',
+            'data-mod',
+            'data-schedule'
         ];
     }
 }, {  });

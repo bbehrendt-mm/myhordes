@@ -9,24 +9,13 @@
                     'data-user': app.user ? app.user.id : 0,
                     'data-town': citizen is defined and citizen is not null ? citizen.town.id : 0,
                     'data-day': day is defined and day is not null ? day : -1,
-                    'data-impersonator': is_granted('IS_IMPERSONATOR') ? 1 : false
+                    'data-impersonator': is_granted('IS_IMPERSONATOR') ? 1 : false,
+                    'data-schedule': sched is defined and sched is not null ? sched : -1,
+                    'data-mod': is_granted('ROLE_CROW') ? 1 : 0
                 }|attributes }}
         ></hordes-page-header>
     </div>
 
-    {% if (is_granted('ROLE_CROW') and adminActions is defined) or (is_granted('ROLE_ELEVATED') and comActions is defined and (clock is not defined or clock.attack != 0)) %}
-        <div id="modeCommand">
-            <h1><span>{{ is_granted('ROLE_CROW') ? 'Moderation'|trans({},'global') : 'Community-Tools'|trans({},'global') }}</span></h1>
-            <div id="scrollMenu">
-                <ul>
-                    {% for adminId, adminAction in (is_granted('ROLE_CROW') ? adminActions : comActions) %}
-                        {# @var adminAction \App\Entity\AdminAction #}
-                        <li><a class="link" {% if app.user.openModToolsSameWindow %}x-ajax-{% endif %}href="{{ path('admin_action', { 'id': adminId }) }}"><span>{{ adminAction.name|trans({},'admin') }}</span></a></li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
-    {% endif %}
     <div id="gma" class="game-menu-area">
         {% block gma %}
             <div class="game-bar">
@@ -40,7 +29,7 @@
                     </div>
                     <img alt="" src="{{ asset('build/images/icons/small_talk.gif') }}" /> {{ 'Forum'|trans({},'global') }}</li>
                     {% block menu_text %}
-                        {% if app.user and (clock is not defined or clock.attack != 0) %}
+                        {% if app.user and (is_during_attack is not defined or not is_during_attack) %}
                             {% if app.user.activeCitizen %}
                                 <li class="town-news" x-ajax-href="{{ url('game_newspaper') }}">
                                 	<div class="tooltip help">
@@ -72,7 +61,7 @@
                             {% endif %}
                         {% endif %}
                     {% endblock %}
-                    {% if is_granted('ROLE_USER') and (clock is not defined or clock.attack != 0) %}
+                    {% if is_granted('ROLE_USER') and (is_during_attack is not defined or not is_during_attack) %}
                         <li class="soul" x-ajax-href="{{ url('soul_me') }}">
                         	<div class="tooltip help">
                     			<p>{{ 'Deine Seele'|trans({},'global') }}</p>

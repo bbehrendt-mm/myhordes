@@ -13,5 +13,16 @@ export type TranslationStrings = {
         test: string,
         help: string,
         icon: string
+    },
+    clock: {
+        day: string,
+        hardcore: string,
+        next: string,
+        time: string,
+        no_town: string,
+    },
+    tools: {
+        admin: string,
+        community: string
     }
 }

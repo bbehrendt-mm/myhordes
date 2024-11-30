@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Controller\Admin\AdminActionController;
+use App\Entity\AttackSchedule;
 use App\Entity\CitizenProfession;
 use App\Entity\ExternalApp;
 use App\Entity\GlobalPoll;
@@ -60,14 +61,8 @@ class CustomAbstractController extends CustomAbstractCoreController {
 
         $activeCitizen = $this->getActiveCitizen();
         $data['day'] = $activeCitizen?->getTown()->getDay() ?? null;
-        $data['clock'] = [
-            'desc'      => $activeCitizen?->getTown()->getName() ?? $this->translator->trans('Worauf warten Sie noch?', [], 'ghost'),
-            'day'       => $activeCitizen?->getTown()->getDay() ?? '',
-            'timestamp' => new DateTime('now'),
-            'attack'    => $this->time_keeper->secondsUntilNextAttack(null, true),
-            'towntype'  => $activeCitizen?->getTown()->getType()->getName() ?? '',
-            'offset'    => timezone_offset_get( timezone_open( date_default_timezone_get ( ) ), new DateTime() )
-        ];
+        $data['sched'] = $this->time_keeper->getCurrentAttackSchedule()?->getId() ?? -1;
+        $data['is_during_attack'] = $this->time_keeper->isDuringAttack();
 
         $locale = $this->container->get('request_stack')->getCurrentRequest()->getLocale();
         if ($locale) $locale = explode('_', $locale)[0];
@@ -84,8 +79,6 @@ class CustomAbstractController extends CustomAbstractCoreController {
         $data["allLangs"] = $allLangs;
         $data['quote'] = $quotes[0];
 
-        $data['adminActions'] = AdminActionController::getAdminActions();
-        $data['comActions']   = AdminActionController::getCommunityActions();
         $data['swapPivots']   = $this->getUser() ? $this->entity_manager->getRepository(UserSwapPivot::class)->findBy( ['principal' => $this->getUser()] ) : [];
 
         $data["poll"] = array_values(array_filter(

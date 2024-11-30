@@ -28,6 +28,7 @@ use App\Service\JSONRequestParser;
 use App\Service\LogTemplateHandler;
 use App\Service\TimeKeeperService;
 use App\Service\TownHandler;
+use App\Service\User\UserCapabilityService;
 use App\Service\UserHandler;
 use App\Service\ZoneHandler;
 use App\Translation\T;
@@ -57,31 +58,6 @@ class AdminActionController extends CustomAbstractController
 
     protected InvalidateTagsInAllPoolsAction $clear;
 
-    public static function getAdminActions(): array {
-        return [
-            ['name' => T::__('Dashboard', 'admin'),   'route' => 'admin_dashboard'],
-            ['name' => T::__('Kampagnen', 'admin'),   'route' => 'admin_campaigns'],
-            ['name' => T::__('Users', 'admin'),       'route' => 'admin_users'],
-            ['name' => T::__('Foren-Mod.', 'admin'),  'route' => 'admin_reports_forum_posts'],
-            ['name' => T::__('Städte', 'admin'),      'route' => 'admin_town_list'],
-            ['name' => T::__('Zukunft', 'admin'),     'route' => 'admin_changelogs'],
-            ['name' => T::__('AntiSpam', 'admin'),    'route' => 'admin_spam_domain_view'],
-            ['name' => T::__('Apps', 'admin'),        'route' => 'admin_app_view'],
-            ['name' => T::__('Saisons', 'admin'),     'route' => 'admin_seasons_view'],
-            ['name' => T::__('Gruppen', 'admin'),     'route' => 'admin_group_view'],
-            ['name' => T::__('Dateisystem', 'admin'), 'route' => 'admin_file_system_dash'],
-            ['name' => T::__('Angriffsplan', 'admin'),'route' => 'admin_schedule_attacks'],
-        ];
-    }
-
-    public static function getCommunityActions(): array {
-        return [
-            ['name' => T::__('Dashboard', 'admin'),  'route' => 'admin_dashboard'],
-            ['name' => T::__('Kampagnen', 'admin'),  'route' => 'admin_campaigns'],
-            ['name' => T::__('Zukunft', 'admin'),    'route' => 'admin_changelogs'],
-            ['name' => T::__('Kurztexte', 'admin'),  'route' => 'admin_reports_snippets'],
-        ];
-    }
 
     public function __construct(EntityManagerInterface $em, ConfMaster $conf, LogTemplateHandler $lth, TranslatorInterface $translator, ZoneHandler $zh, TimeKeeperService $tk, CitizenHandler $ch, InventoryHandler $ih, UserHandler $uh, CrowService $crow, AdminLog $adminLogger, UrlGeneratorInterface $urlGenerator, AdminHandler $adminHandler, TownHandler $townHandler, HookExecutor $hookExecutor, InvalidateTagsInAllPoolsAction $clear)
     {
@@ -110,10 +86,10 @@ class AdminActionController extends CustomAbstractController
      * @return Response
      */
     #[Route(path: 'jx/admin/com/dash', name: 'admin_dashboard')]
-    public function dash(): Response
+    public function dash(UserCapabilityService $capabilityService): Response
     {
         return $this->render( 'ajax/admin/dash.html.twig', $this->addDefaultTwigArgs(null, [
-            'actions' => $this->isGranted('ROLE_CROW') ? self::getAdminActions() : self::getCommunityActions(),
+            'actions' => $capabilityService->adminTools( $this->getUser(), UrlGeneratorInterface::ABSOLUTE_PATH ),
         ]));
     }
 
@@ -133,20 +109,6 @@ class AdminActionController extends CustomAbstractController
         }
 
         return AjaxResponse::success();
-    }
-
-    /**
-     * @param int $id
-     * @return Response
-     */
-    #[Route(path: 'jx/admin/com/action/{id}', name: 'admin_action', requirements: ['id' => '\d+'])]
-    public function index(int $id): Response
-    {
-        $actions = $this->isGranted('ROLE_CROW') ? self::getAdminActions() : self::getCommunityActions();
-        if (isset($actions[$id]) && isset($actions[$id]['route']))
-            return $this->redirect($this->generateUrl($actions[$id]['route']));
-
-        return AjaxResponse::error(ErrorHelper::ErrorPermissionError);
     }
 
 	public function getOrderedItemPrototypes($lang): array {

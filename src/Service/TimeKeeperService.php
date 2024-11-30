@@ -15,10 +15,28 @@ class TimeKeeperService
     private EntityManagerInterface $entity_manager;
     private string $env;
 
+    private ?AttackSchedule $cache_last = null;
+    private ?AttackSchedule $cache_current = null;
+    private ?AttackSchedule $cache_next = null;
+
     public function __construct(EntityManagerInterface $em, string $env)
     {
         $this->entity_manager = $em;
         $this->env = $env;
+    }
+
+    public function getNextAttackSchedule( ?DateTimeInterface $time = null ): ?AttackSchedule {
+        if ($time === null) return $this->cache_next ?? ($this->cache_next = $this->entity_manager->getRepository( AttackSchedule::class )->findNext());
+        return $this->entity_manager->getRepository( AttackSchedule::class )->findNext( $time );
+    }
+
+    public function getCurrentAttackSchedule(): ?AttackSchedule {
+        return $this->cache_current ?? ($this->cache_current = $this->entity_manager->getRepository( AttackSchedule::class )->findNextUncompleted());
+    }
+
+    public function getPrevAttackSchedule( ?DateTimeInterface $time = null ): ?AttackSchedule {
+        if ($time === null) return $this->cache_last ?? ($this->cache_last = $this->entity_manager->getRepository( AttackSchedule::class )->findPrevious());
+        return $this->entity_manager->getRepository( AttackSchedule::class )->findPrevious( $time );
     }
 
     /**
@@ -27,9 +45,7 @@ class TimeKeeperService
      * @return DateTimeInterface
      */
     public function getLastAttackTime( ?DateTimeInterface $time = null ): DateTimeInterface {
-        /** @var AttackSchedule|null $s */
-        $s = $this->entity_manager->getRepository( AttackSchedule::class )->findPrevious( $time );
-        return $s ? $s->getTimestamp() : (new DateTime('2020-01-01 00:00:00'));
+        return $this->getPrevAttackSchedule( $time )?->getTimestamp() ?? (new DateTime('2020-01-01 00:00:00'));
     }
 
     /**
@@ -38,12 +54,10 @@ class TimeKeeperService
      * @return DateTimeInterface
      */
     public function getNextAttackTime( ?DateTimeInterface $time = null ): DateTimeInterface {
-        /** @var AttackSchedule|null $s */
-        $s = $this->entity_manager->getRepository( AttackSchedule::class )->findNext( $time );
-        if ($s) return $s->getTimestamp();
-        else {
-            if ($time === null) $time = new DateTime('now');
-            return ((clone $time))->modify( 'tomorrow' );
+        try {
+            return $this->getNextAttackSchedule($time)?->getTimestamp() ?? (clone($time ?? new DateTime('now')))->modify('tomorrow');
+        } catch (\DateMalformedStringException $e) {
+            return new DateTime('tomorrow');
         }
     }
 
@@ -54,10 +68,7 @@ class TimeKeeperService
      * @return DateTimeInterface
      */
     public function getCurrentAttackTime( ): DateTimeInterface {
-        /** @var AttackSchedule|null $s */
-        $s = $this->entity_manager->getRepository( AttackSchedule::class )->findNextUncompleted( );
-        return $s ? $s->getTimestamp() : ((new DateTime('now'))->modify( 'tomorrow' ));
-        //return $this->isDuringAttack( $time ) ? $this->getLastAttackTime( $time ) : $this->getNextAttackTime( $time );
+        return $this->getCurrentAttackSchedule()?->getTimestamp() ?? new DateTime('tomorrow');
     }
 
     public function sinceLastAttack( ?DateTimeInterface $time = null ): DateInterval {
