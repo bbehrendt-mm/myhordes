@@ -33,7 +33,7 @@ class Forum
     #[ORM\Column(type: 'text', nullable: true)]
     private $description;
     #[ORM\Column(type: 'string', length: 190, nullable: true)]
-    private $icon;
+    private $banner;
     #[ORM\ManyToMany(targetEntity: ThreadTag::class)]
     private $allowedTags;
     #[ORM\Column(type: 'string', length: 2, nullable: true)]
@@ -148,13 +148,13 @@ class Forum
 
         return $this;
     }
-    public function getIcon(): ?string
+    public function getBanner(): ?string
     {
-        return $this->icon;
+        return $this->banner;
     }
-    public function setIcon(?string $icon): self
+    public function setBanner(?string $banner): self
     {
-        $this->icon = $icon;
+        $this->banner = $banner;
 
         return $this;
     }

@@ -13,8 +13,8 @@
     <div x-ajax-href="{{ url('forum_view', {id: forum.id}) }}" class="forum-preview {{ has_new_posts ? 'new' : ''}} {% if forum.description is not empty %}forum-preview-desc{% endif %}">
         {% if forum.town %}
             <img alt="" src="{{ asset('build/images/forum/banner/bannerForumVille.gif') }}">
-        {% elseif forum.icon is not empty %}
-            <img alt="" src="{{ asset('build/images/forum/banner/' ~ forum.icon) }}">
+        {% elseif forum.banner is not empty %}
+            <img alt="" src="{{ asset('build/images/forum/banner/' ~ forum.banner) }}">
         {% else %}
             <img alt="" src="{{ asset('build/images/forum/banner/bannerForumVoid.gif') }}">
         {% endif %}
