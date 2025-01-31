@@ -2,7 +2,7 @@
     {% if has_fv %}
         <li {{ { 'tab': true, selected: tab == "fv" }|classes }}>
             <div class="tab-link" x-ajax-sticky x-ajax-href="{{ path('forum_town_redirect') }}">
-                <img src="{{ asset('build/images/assets/img/log/door_closed.gif') }}" alt=""/>
+                <img src="{{ asset('build/images/forum/icon/town.png') }}" alt=""/>
                 <span class="hide-sm">{{ 'Stadtforum'|trans({},'global') }}</span>
             </div>
         </li>
@@ -16,7 +16,7 @@
     {% if tab == 'fm' and name is defined and id is defined and (not app.user or id not in app.user.pinnedForums|map(p => p.forum.id)) %}
         <li {{ { 'tab': true, selected: true }|classes }}>
             <div class="tab-link" x-ajax-sticky x-ajax-href="{{ path('forum_view', {id: id}) }}">
-                <img src="{{ asset('build/images/icons/small_rp.gif') }}" alt=""/>
+                <img src="{{ id is defined and icon is defined and icon ? asset('build/images/forum/icon/' ~ icon) : asset('build/images/icons/small_rp.gif') }}" alt=""/>
                 <span class="hide-sm">{{ name }}</span>
             </div>
         </li>
@@ -26,7 +26,7 @@
             {% for pinned_forum in app.user.pinnedForums|sort((a, b) => a.position <=> b.position) %}
                 <li {{ { 'sortable-item': true, 'tab': true, selected: id is defined and id == pinned_forum.forum.id }|classes }} data-id="{{ pinned_forum.forum.id }}" title="{{ pinned_forum.forum.localizedTitle(app.locale) }}">
                     <div class="tab-link">
-                        <img class="drag-handle" src="{{ asset('build/images/icons/small_rp.gif') }}" alt=""/>
+                        <img class="drag-handle" src="{{ pinned_forum.forum.icon ? asset('build/images/forum/icon/' ~ pinned_forum.forum.icon) : asset('build/images/icons/small_rp.gif') }}" alt=""/>
                         <span x-ajax-sticky x-ajax-href="{{ path('forum_view', {id: pinned_forum.forum.id}) }}">
                             <span class="hide-sm hide-md hide-lg">
                                 {{ (app.user.pinnedForums.count >= 4 and slugify is defined and slugify) ? pinned_forum.forum.localizedSlug(app.locale) : pinned_forum.forum.localizedTitle(app.locale) }}
