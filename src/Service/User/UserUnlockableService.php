@@ -5,6 +5,7 @@ namespace App\Service\User;
 use App\Entity\Citizen;
 use App\Entity\CitizenRankingProxy;
 use App\Entity\HeroExperienceEntry;
+use App\Entity\HeroSkillPoint;
 use App\Entity\HeroSkillPrototype;
 use App\Entity\HeroSkillUnlock;
 use App\Entity\LogEntryTemplate;
@@ -28,6 +29,7 @@ use Doctrine\Common\Collections\Order;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\QueryBuilder;
 use Psr\Cache\InvalidArgumentException;
 use Psr\Container\ContainerInterface;
@@ -145,22 +147,23 @@ class UserUnlockableService implements ServiceSubscriberInterface
     /**
      * Returns the amount of resets the user has done
      * @param User $user User
-     * @param \DateTimeImmutable|null $end
+     * @param Collection<HeroSkillPoint>|null $points
      * @return int
      */
-    public function getResetPackPoints(User $user, ?\DateTimeImmutable &$end = null): int {
-        $end = null;
-        $logs = $this->generateDefaultQuery($user, true)
-            ->select('COUNT(x.id)', 'MIN(x.created)')
-            ->andWhere('x.type != :legacy')->setParameter('legacy', HeroXPType::Legacy->value)
-            ->andWhere('x.created >= :cutoff')->setParameter('cutoff', new \DateTime('now - 120days'))
-            ->andWhere('x.subject = :subject')->setParameter('subject', 'paid_skill_reset')
-            ->getQuery()->getOneOrNullResult();
-
-        if ($logs[1] === 0) return 0;
-        $end = \DateTimeImmutable::createFromFormat( 'Y-m-d H:i:s', $logs[2] )->modify('+ 120days');
-
-        return $logs[1];
+    public function getResetPackPoints(User $user, ?Collection &$points = null): int {
+        try {
+            $points = $this->getService(EntityManagerInterface::class)->getRepository(HeroSkillPoint::class)->matching(
+                (new Criteria())
+                    ->where(Criteria::expr()->eq( 'user', $user ))
+                    ->andWhere(Criteria::expr()->gt('days', 0))
+                    ->orderBy(['received_at' => Order::Ascending])
+                    ->setMaxResults(2)
+            );
+            return $points->count();
+        } catch (NoResultException|NonUniqueResultException $e) {
+            $points = null;
+            return 0;
+        }
     }
 
     public function getTemporaryPackPoints(User $user, ?\DateTimeImmutable &$end = null): int {
@@ -476,7 +479,7 @@ class UserUnlockableService implements ServiceSubscriberInterface
         return true;
     }
 
-    public function performSkillResetForUser(User $user, Season|true $season, ?array $skill_ids = null): bool {
+    public function performSkillResetForUser(User $user, Season|true $season, ?array $skill_ids = null, int $for = 100): bool {
         $em = $this->getService(EntityManagerInterface::class);
 
         if ($season === true)
@@ -496,6 +499,14 @@ class UserUnlockableService implements ServiceSubscriberInterface
 
         /** @var Collection<HeroSkillUnlock> $unlocks */
         $unlocks = $em->getRepository(HeroSkillUnlock::class)->matching($unlockCriteria);
+
+        $em->persist( (new HeroSkillPoint())
+            ->setUser( $user )
+            ->setSeason( $season )
+            ->setReceivedAt( new \DateTimeImmutable() )
+            ->setOriginalDays( $for )
+            ->setDays( $for )
+        );
 
         foreach ($allEntries as $entry)
             $em->persist( $entry->setReset( $entry->getReset() + 1 ) );
