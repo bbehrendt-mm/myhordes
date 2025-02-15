@@ -35,6 +35,7 @@ use App\Enum\EventStages\BuildingValueQuery;
 use App\Enum\EventStages\CitizenValueQuery;
 use App\Service\Maps\MapMaker;
 use App\Service\Maps\MazeMaker;
+use App\Service\User\UserUnlockableService;
 use App\Structures\EventConf;
 use App\Structures\ItemRequest;
 use App\Structures\TownConf;
@@ -76,11 +77,14 @@ class NightlyHandler
     private EventProxyService $events;
 	private GameEventService $gameEvents;
 
+    private UserUnlockableService $unlockableService;
+
     public function __construct(EntityManagerInterface $em, LoggerInterface $log, CitizenHandler $ch, InventoryHandler $ih,
                               RandomGenerator $rg, DeathHandler $dh, TownHandler $th, ZoneHandler $zh, PictoHandler $ph,
                               ItemFactory $if, LogTemplateHandler $lh, ConfMaster $conf, ActionHandler $ah, MazeMaker $maze,
                               CrowService $crow, UserHandler $uh, GameFactory $gf, GazetteService $gs, GameProfilerService $gps,
                               TimeKeeperService $timeKeeper, MapMaker $mapMaker, EventProxyService $events, GameEventService $gameEvents,
+                              UserUnlockableService $unlockableService,
     )
     {
         $this->entity_manager = $em;
@@ -1167,6 +1171,10 @@ class NightlyHandler
 
             $aliveCitizen++;
             $citizen->setHasSeenGazette(false);
+
+            $this->unlockableService->getResetPackPoints( $citizen->getUser(), $points );
+            foreach ($points as $point)
+                $this->entity_manager->persist( $point->setDays( max(0, $point->getDays() - 1 ) ) );
 
             if($citizen->getZone() === null)
                 $aliveCitizenInTown++;

@@ -17,6 +17,7 @@ use App\Entity\TownLogEntry;
 use App\Entity\Zone;
 use App\Entity\ZoneTag;
 use App\Enum\Configuration\TownSetting;
+use App\Enum\Game\CitizenPersistentCache;
 use App\Response\AjaxResponse;
 use App\Service\Actions\Cache\CalculateBlockTimeAction;
 use App\Service\Actions\Cache\InvalidateLogCacheAction;
@@ -221,7 +222,8 @@ class TownOnboardingController extends AbstractController
                 $pts_sum += $skill->getLevel();
             }
 
-            if ($pts_sum > $unlockService->getPackPoints( $activeCitizen->getUser() ))
+            $pts = $unlockService->getPackPoints( $activeCitizen->getUser() ) + $activeCitizen->getPropFromPersistentCache( CitizenPersistentCache::GraceSkillPoints );
+            if ($pts_sum > $pts )
                 return new JsonResponse([], Response::HTTP_BAD_REQUEST);
 
         } else $skills = $unlockService->getUnlockedLegacyHeroicPowersByUser( $activeCitizen->getUser() );
@@ -292,7 +294,7 @@ class TownOnboardingController extends AbstractController
                 ], $legacy_skills))
             ],
             'skills' => [
-                'pts' => $unlockService->getPackPoints( $activeCitizen->getUser() ),
+                'pts' => $unlockService->getPackPoints( $activeCitizen->getUser() ) + $activeCitizen->getPropFromPersistentCache( CitizenPersistentCache::GraceSkillPoints ),
                 'groups' => array_map(fn(string $s) => $trans->trans($s, [], 'game'), $skill_groups),
                 'unlock_url' => $can_unlock ? $this->generateUrl('soul_heroskill') : null,
                 'list' => array_values(array_map(fn(HeroSkillPrototype $p) => [

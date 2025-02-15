@@ -14,6 +14,7 @@ use App\Entity\PrivateMessage;
 use App\Entity\TeamTicket;
 use App\Entity\TownSlotReservation;
 use App\Entity\UserGroup;
+use App\Enum\Game\CitizenPersistentCache;
 use App\Event\Game\Town\Basic\Core\AfterJoinTownEvent;
 use App\Event\Game\Town\Basic\Core\JoinTownEvent;
 use App\EventListener\ContainerTypeTrait;
@@ -24,6 +25,7 @@ use App\Service\InventoryHandler;
 use App\Service\ItemFactory;
 use App\Service\PermissionHandler;
 use App\Service\TownHandler;
+use App\Service\User\UserUnlockableService;
 use App\Service\UserHandler;
 use App\Structures\TownConf;
 use Doctrine\ORM\EntityManagerInterface;
@@ -33,10 +35,11 @@ use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-#[AsEventListener(event: JoinTownEvent::class, method: 'createCitizen', priority: 0)]
 #[AsEventListener(event: JoinTownEvent::class, method: 'handleTeamTicket', priority: 1)]
+#[AsEventListener(event: JoinTownEvent::class, method: 'createCitizen', priority: 0)]
 #[AsEventListener(event: AfterJoinTownEvent::class, method: 'handleGPS', priority: -1)]
 #[AsEventListener(event: AfterJoinTownEvent::class, method: 'handleWelcomePM', priority: -1)]
+#[AsEventListener(event: AfterJoinTownEvent::class, method: 'decreaseSkillPointCounter', priority: -2)]
 final class CitizenInitializerListener implements ServiceSubscriberInterface
 {
     use ContainerTypeTrait;
@@ -56,6 +59,7 @@ final class CitizenInitializerListener implements ServiceSubscriberInterface
             GameProfilerService::class,
             InventoryHandler::class,
             CrowService::class,
+            UserUnlockableService::class
         ];
     }
 
@@ -129,6 +133,16 @@ final class CitizenInitializerListener implements ServiceSubscriberInterface
     public function handleGPS(AfterJoinTownEvent $event): void
     {
         $this->getService(GameProfilerService::class)->recordCitizenJoined( $event->before->subject->getActiveCitizen(), $event->before->auto ? 'follow' : 'create' );
+    }
+
+    public function decreaseSkillPointCounter(AfterJoinTownEvent $event): void
+    {
+        $this->getService(UserUnlockableService::class)->getResetPackPoints( $event->before->subject, $points );
+        foreach ($points as $point) {
+            if ($point->getDays() === 1)
+                $event->before->subject->getActiveCitizen()->registerPropInPersistentCache( CitizenPersistentCache::GraceSkillPoints );
+            $this->getService(EntityManagerInterface::class)->persist( $point->setDays( max(0, $point->getDays() - 1) ) );
+        }
     }
 
     public function handleWelcomePM(AfterJoinTownEvent $event): void {

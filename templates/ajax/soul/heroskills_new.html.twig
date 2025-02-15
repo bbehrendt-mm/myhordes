@@ -161,11 +161,11 @@
                                 {% if pack_reset > 0 %}
                                     <div class="small">
                                         {{ 'Verbleibende Zeit'|trans({},'soul') }}:
-                                        {% if (pack_reset_end-date().timestamp) < 259200 %}
-                                            <b x-countdown-to="{{ pack_reset_end }}" x-countdown-force-hours="1" countdown-clock="true"></b>
-                                        {% else %}
-                                            <b>{{ '{d} Tage'|trans({d: ((pack_reset_end-date().timestamp)/86400)|round}, 'soul') }}</b>
-                                        {% endif %}
+                                        <ul>
+                                            {% for reset in pack_resets %}
+                                                <li><b>{{ '{d} Tage'|trans({d: reset.days ~ '/' ~ reset.originalDays}, 'soul') }}</b></li>
+                                            {% endfor %}
+                                        </ul>
                                     </div>
                                     <br />
                                 {% endif %}
