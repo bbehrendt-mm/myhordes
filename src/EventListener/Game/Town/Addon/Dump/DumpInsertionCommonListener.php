@@ -7,6 +7,7 @@ namespace App\EventListener\Game\Town\Addon\Dump;
 use App\Controller\Town\TownController;
 use App\Entity\ActionCounter;
 use App\Entity\ItemPrototype;
+use App\Enum\ActionCounterType;
 use App\Event\Game\Town\Addon\Dump\DumpInsertionCheckData;
 use App\Event\Game\Town\Addon\Dump\DumpInsertionCheckEvent;
 use App\Event\Game\Town\Addon\Dump\DumpInsertionExecuteEvent;
@@ -130,7 +131,7 @@ final readonly class DumpInsertionCommonListener implements ServiceSubscriberInt
         $inventoryHandler = $this->container->get(InventoryHandler::class);
 
         // You don't have enough AP (the first dump is free)
-        if ($event->citizen->getSpecificActionCounterValue(ActionCounter::ActionTypeDumpInsertion) > 0 && $event->citizen->getAp() < $event->ap_cost) {
+        if ($event->citizen->getSpecificActionCounterValue(ActionCounterType::DumpInsertion) > 0 && $event->citizen->getAp() < $event->ap_cost) {
             $event->pushErrorCode(ErrorHelper::ErrorNoAP)->stopPropagation();
             return;
         }
@@ -172,7 +173,7 @@ final readonly class DumpInsertionCommonListener implements ServiceSubscriberInt
         }
 
         // Reduce AP
-        if ($event->citizen->getSpecificActionCounterValue(ActionCounter::ActionTypeDumpInsertion) > 0)
+        if ($event->citizen->getSpecificActionCounterValue(ActionCounterType::DumpInsertion) > 0)
             $event->citizen->setAp( $event->citizen->getAp() - $event->check->ap_cost );
 
         // Increase def
@@ -181,7 +182,7 @@ final readonly class DumpInsertionCommonListener implements ServiceSubscriberInt
         $event->addedDefense = $event->quantity * $dump_def;
 
         // Set ActionCounter
-        $counter = $event->citizen->getSpecificActionCounter(ActionCounter::ActionTypeDumpInsertion);
+        $counter = $event->citizen->getSpecificActionCounter(ActionCounterType::DumpInsertion);
         $counter->setCount($counter->getCount() + 1);
 
         $event->markModified();

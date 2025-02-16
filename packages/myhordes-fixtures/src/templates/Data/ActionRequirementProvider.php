@@ -4,6 +4,7 @@ namespace MyHordes\Fixtures\Data;
 
 use App\Entity\ActionCounter;
 use App\Entity\Requirement;
+use App\Enum\ActionCounterType;
 use App\Enum\ActionHandler\PointType;
 use App\Enum\Configuration\CitizenProperties;
 use App\Service\Actions\Game\AtomProcessors\Require\Custom\GuardTowerUseIsNotMaxed;
@@ -192,21 +193,21 @@ class ActionRequirementProvider
         //</editor-fold>
 
         //<editor-fold desc="CounterRequirements">
-        $requirement_container->add()->identifier('lab_counter_below_1')->type( Requirement::CrossOnFail )->add( (new CounterRequirement())->counter(ActionCounter::ActionTypeHomeLab)->max( 0 ) )->commit();
-        $requirement_container->add()->identifier('lab_counter_below_4')->type( Requirement::CrossOnFail )->add( (new CounterRequirement())->counter(ActionCounter::ActionTypeHomeLab)->max( 3 ) )->commit();
-        $requirement_container->add()->identifier('lab_counter_below_6')->type( Requirement::CrossOnFail )->add( (new CounterRequirement())->counter(ActionCounter::ActionTypeHomeLab)->max( 5 ) )->commit();
-        $requirement_container->add()->identifier('lab_counter_below_9')->type( Requirement::CrossOnFail )->add( (new CounterRequirement())->counter(ActionCounter::ActionTypeHomeLab)->max( 8 ) )->commit();
-        $requirement_container->add()->identifier('kitchen_counter_below_1')->type( Requirement::CrossOnFail )->add( (new CounterRequirement())->counter(ActionCounter::ActionTypeHomeKitchen)->max( 0 ) )->commit();
-        $requirement_container->add()->identifier('kitchen_counter_below_2')->type( Requirement::CrossOnFail )->add( (new CounterRequirement())->counter(ActionCounter::ActionTypeHomeKitchen)->max( 1 ) )->commit();
-        $requirement_container->add()->identifier('kitchen_counter_below_3')->type( Requirement::CrossOnFail )->add( (new CounterRequirement())->counter(ActionCounter::ActionTypeHomeKitchen)->max( 2 ) )->commit();
-        $requirement_container->add()->identifier('kitchen_counter_below_4')->type( Requirement::CrossOnFail )->add( (new CounterRequirement())->counter(ActionCounter::ActionTypeHomeKitchen)->max( 3 ) )->commit();
-        $requirement_container->add()->identifier('kitchen_counter_below_5')->type( Requirement::CrossOnFail )->add( (new CounterRequirement())->counter(ActionCounter::ActionTypeHomeKitchen)->max( 4 ) )->commit();
-        $requirement_container->add()->identifier('kitchen_counter_below_6')->type( Requirement::CrossOnFail )->add( (new CounterRequirement())->counter(ActionCounter::ActionTypeHomeKitchen)->max( 5 ) )->commit();
+        $requirement_container->add()->identifier('lab_counter_below_1')->type( Requirement::CrossOnFail )->add( (new CounterRequirement())->counter(ActionCounterType::HomeLab)->max( 0 ) )->commit();
+        $requirement_container->add()->identifier('lab_counter_below_4')->type( Requirement::CrossOnFail )->add( (new CounterRequirement())->counter(ActionCounterType::HomeLab)->max( 3 ) )->commit();
+        $requirement_container->add()->identifier('lab_counter_below_6')->type( Requirement::CrossOnFail )->add( (new CounterRequirement())->counter(ActionCounterType::HomeLab)->max( 5 ) )->commit();
+        $requirement_container->add()->identifier('lab_counter_below_9')->type( Requirement::CrossOnFail )->add( (new CounterRequirement())->counter(ActionCounterType::HomeLab)->max( 8 ) )->commit();
+        $requirement_container->add()->identifier('kitchen_counter_below_1')->type( Requirement::CrossOnFail )->add( (new CounterRequirement())->counter(ActionCounterType::HomeKitchen)->max( 0 ) )->commit();
+        $requirement_container->add()->identifier('kitchen_counter_below_2')->type( Requirement::CrossOnFail )->add( (new CounterRequirement())->counter(ActionCounterType::HomeKitchen)->max( 1 ) )->commit();
+        $requirement_container->add()->identifier('kitchen_counter_below_3')->type( Requirement::CrossOnFail )->add( (new CounterRequirement())->counter(ActionCounterType::HomeKitchen)->max( 2 ) )->commit();
+        $requirement_container->add()->identifier('kitchen_counter_below_4')->type( Requirement::CrossOnFail )->add( (new CounterRequirement())->counter(ActionCounterType::HomeKitchen)->max( 3 ) )->commit();
+        $requirement_container->add()->identifier('kitchen_counter_below_5')->type( Requirement::CrossOnFail )->add( (new CounterRequirement())->counter(ActionCounterType::HomeKitchen)->max( 4 ) )->commit();
+        $requirement_container->add()->identifier('kitchen_counter_below_6')->type( Requirement::CrossOnFail )->add( (new CounterRequirement())->counter(ActionCounterType::HomeKitchen)->max( 5 ) )->commit();
 
-        $requirement_container->add()->identifier('scav_building_counter_below_1')->type( Requirement::CrossOnFail )->add( (new CounterRequirement())->counter(ActionCounter::ActionTypeSpecialDigScavenger)->max( 0 ) )->commit();
-        $requirement_container->add()->identifier('scav_building_counter_below_3')->type( Requirement::CrossOnFail )->add( (new CounterRequirement())->counter(ActionCounter::ActionTypeSpecialDigScavenger)->max( 2 ) )->commit();
-        $requirement_container->add()->identifier('surv_building_counter_below_1')->type( Requirement::CrossOnFail )->add( (new CounterRequirement())->counter(ActionCounter::ActionTypeSpecialActionSurv)->max( 0 ) )->commit();
-        $requirement_container->add()->identifier('hunter_building_counter_below_1')->type( Requirement::CrossOnFail )->add( (new CounterRequirement())->counter(ActionCounter::ActionTypeSpecialActionHunter)->max( 0 ) )->commit();
+        $requirement_container->add()->identifier('scav_building_counter_below_1')->type( Requirement::CrossOnFail )->add( (new CounterRequirement())->counter(ActionCounterType::SpecialDigScavenger)->max( 0 ) )->commit();
+        $requirement_container->add()->identifier('scav_building_counter_below_3')->type( Requirement::CrossOnFail )->add( (new CounterRequirement())->counter(ActionCounterType::SpecialDigScavenger)->max( 2 ) )->commit();
+        $requirement_container->add()->identifier('surv_building_counter_below_1')->type( Requirement::CrossOnFail )->add( (new CounterRequirement())->counter(ActionCounterType::SpecialActionSurv)->max( 0 ) )->commit();
+        $requirement_container->add()->identifier('hunter_building_counter_below_1')->type( Requirement::CrossOnFail )->add( (new CounterRequirement())->counter(ActionCounterType::SpecialActionHunter)->max( 0 ) )->commit();
         //</editor-fold>
 
         //<editor-fold desc="BuildingRequirements">

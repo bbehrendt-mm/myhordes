@@ -9,6 +9,7 @@ use App\Entity\BuildingPrototype;
 use App\Entity\Citizen;
 use App\Entity\Town;
 use App\Entity\Zone;
+use App\Enum\ActionCounterType;
 use App\Enum\Configuration\TownSetting;
 use App\Event\Game\Town\Basic\Buildings\BuildingConstructionEvent;
 use App\Service\CommandHelper;
@@ -223,7 +224,7 @@ class TownInspectorCommand extends Command
 
             /** @var ActionCounter[] $wells */
             $wells = array_map( function (Citizen $c): ActionCounter {
-                return $c->getSpecificActionCounter(ActionCounter::ActionTypeWell);
+                return $c->getSpecificActionCounter(ActionCounterType::Well);
             }, $citizen ? [$citizen] : $town->getCitizens()->getValues() );
 
             $num = 0;

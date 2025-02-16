@@ -22,6 +22,7 @@ use App\Entity\RuinExplorerStats;
 use App\Entity\Zone;
 use App\Entity\ZoneActivityMarker;
 use App\Entity\ZoneTag;
+use App\Enum\ActionCounterType;
 use App\Enum\ActionHandler\PointType;
 use App\Enum\Configuration\CitizenProperties;
 use App\Enum\Configuration\MyHordesSetting;
@@ -189,7 +190,7 @@ class BeyondController extends InventoryAwareController
             $this->getActiveCitizen()->getInventory(), $this->entity_manager->getRepository(ItemPrototype::class)->findOneBy(['name' => 'vest_on_#00'])
         ) > 0;
 
-        $trash_count = ($this->getActiveCitizen()->getBanished() || $this->getActiveCitizen()->getTown()->getDevastated()) ? $this->getActiveCitizen()->getSpecificActionCounterValue(ActionCounter::ActionTypeTrash) : 0;
+        $trash_count = ($this->getActiveCitizen()->getBanished() || $this->getActiveCitizen()->getTown()->getDevastated()) ? $this->getActiveCitizen()->getSpecificActionCounterValue(ActionCounterType::Trash) : 0;
 
         $zone_players = count($zone->getCitizens());
 
@@ -494,7 +495,7 @@ class BeyondController extends InventoryAwareController
 
         $this->clearZoneCache();
 
-        $trashlock = $citizen->getSpecificActionCounter(ActionCounter::ActionTypeTrash);
+        $trashlock = $citizen->getSpecificActionCounter(ActionCounterType::Trash);
 
         $limit =
             $citizen->property( CitizenProperties::TrashSearchLimit ) +

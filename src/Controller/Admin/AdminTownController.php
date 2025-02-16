@@ -1360,6 +1360,7 @@ class AdminTownController extends AdminActionController
 
         /** @var Inventory[] $inventories */
         $inventories = [];
+        $bank_mode = false;
 
         foreach (array_unique($targets['chest'] ?? []) as $target) {
             /** @var CitizenHome $home */
@@ -1391,11 +1392,15 @@ class AdminTownController extends AdminActionController
         foreach (array_unique($targets['bank'] ?? []) as $target) {
             if ($target !== $town->getId()) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
 
-            $inventories[] = $town->getBank();
+            $inventories = [$town->getBank()];
+            $bank_mode = true;
         }
 
         foreach ($inventories as $inventory) {
-            for ($i = 0; $i < $number; $i++) {
+            if ($bank_mode)
+                foreach ($itemPrototype as $proto)
+                    $handler->forceMoveItem($inventory, $itemFactory->createItem($proto->getName(), $broken, $poison)->setEssential($essential)->setHidden(false)->setCount( $number ), max(1,$number));
+            else for ($i = 0; $i < $number; $i++) {
                 if ($hidden && $inventory->getZone()) $inventory->getZone()->setItemsHiddenAt( new \DateTimeImmutable() );
                 foreach ($itemPrototype as $proto) {
                     $handler->forceMoveItem($inventory, $itemFactory->createItem($proto->getName(), $broken, $poison)->setEssential($essential)->setHidden($hidden && $inventory->getZone()));

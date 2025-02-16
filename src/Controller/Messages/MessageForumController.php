@@ -21,6 +21,7 @@ use App\Entity\Thread;
 use App\Entity\ThreadReadMarker;
 use App\Entity\ThreadTag;
 use App\Entity\User;
+use App\Enum\ActionCounterType;
 use App\Enum\Configuration\CitizenProperties;
 use App\Response\AjaxResponse;
 use App\Service\Actions\Cache\InvalidateTagsInAllPoolsAction;
@@ -580,7 +581,7 @@ class MessageForumController extends MessageController
 
         $town_citizen = $forum->getTown() ? $user->getCitizenFor( $forum->getTown() ) : null;
         $anon_post_limit = $town_citizen?->property( CitizenProperties::AnonymousPostLimit ) ?? 0;
-        $can_post_anon = ($anon_post_limit < 0) || ($anon_post_limit > ($town_citizen?->getSpecificActionCounterValue( ActionCounter::ActionTypeAnonPost ) ?? 0));
+        $can_post_anon = ($anon_post_limit < 0) || ($anon_post_limit > ($town_citizen?->getSpecificActionCounterValue( ActionCounterType::AnonPost ) ?? 0));
 
         $type = $parser->get('type') ?? 'USER';
         $valid = ['USER'];
@@ -624,7 +625,7 @@ class MessageForumController extends MessageController
 
         $thread->addPost($post)->setLastPost( $post->getDate() );
         if ($type === 'GLORY') $this->userHandler->checkFeatureUnlock( $user, 'f_glory_temp', true );
-        if ($type === 'ANON') $em->persist( $town_citizen->getSpecificActionCounter( ActionCounter::ActionTypeAnonPost )->increment() );
+        if ($type === 'ANON') $em->persist( $town_citizen->getSpecificActionCounter( ActionCounterType::AnonPost )->increment() );
 
         try {
             $em->persist($thread);
@@ -1372,7 +1373,7 @@ class MessageForumController extends MessageController
 
             'username' => $town_citizen?->getName() ?? $user->getName(),
             'town_controls' => !!$forum->getTown(),
-            'anon' => ($anon_post_limit < 0) || ($anon_post_limit > ($town_citizen?->getSpecificActionCounterValue( ActionCounter::ActionTypeAnonPost ) ?? 0)),
+            'anon' => ($anon_post_limit < 0) || ($anon_post_limit > ($town_citizen?->getSpecificActionCounterValue( ActionCounterType::AnonPost ) ?? 0)),
             'tags' => $tags,
             'current_tag' => $thread->getTag()?->getName() ?? '',
             'alias' => !!$town_citizen

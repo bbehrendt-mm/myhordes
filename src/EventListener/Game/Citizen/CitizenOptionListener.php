@@ -5,6 +5,7 @@ namespace App\EventListener\Game\Citizen;
 
 use App\Entity\ActionCounter;
 use App\Entity\Recipe;
+use App\Enum\ActionCounterType;
 use App\Event\Game\Citizen\CitizenWorkshopOptionsEvent;
 use App\EventListener\ContainerTypeTrait;
 use App\Service\TownHandler;
@@ -40,7 +41,7 @@ final class CitizenOptionListener implements ServiceSubscriberInterface
 
         if ($this->getService(TownHandler::class)->getBuilding( $event->town, 'small_techtable_#00' )) {
             $trans = $this->getService(TranslatorInterface::class);
-            $counter = $event->citizen->getSpecificActionCounterValue( ActionCounter::ActionTypeSpecialActionTech );
+            $counter = $event->citizen->getSpecificActionCounterValue( ActionCounterType::SpecialActionTech );
             $event->pushOption(
                 Recipe::WorkshopTypeTechSpecific,
                 $counter >= 1,

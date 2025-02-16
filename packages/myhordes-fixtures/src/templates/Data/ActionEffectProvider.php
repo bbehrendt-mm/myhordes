@@ -4,6 +4,7 @@ namespace MyHordes\Fixtures\Data;
 
 use App\Entity\ActionCounter;
 use App\Entity\CauseOfDeath;
+use App\Enum\ActionCounterType;
 use App\Enum\ActionHandler\ItemDropTarget;
 use App\Enum\ActionHandler\PointType;
 use App\Enum\ActionHandler\RelativeMaxPoint;
@@ -492,8 +493,8 @@ class ActionEffectProvider
             ->commit();
         $effects_container->add()->identifier('eat_ap4')->add( (new StatusEffect())->point( PointType::AP, 4, relativeToMax: false )->addsStatus('haseaten'))->add((new MessageEffect())->escort(false)->text( 'Es schmeckt wirklich komisch... aber es erfüllt seinen Zweck: Dein Hunger ist gestillt. Glaub aber nicht, dass du dadurch zusätzliche APs erhältst...'))->commit();
 
-        $effects_container->add()->identifier('increase_lab_counter')->add( (new StatusEffect())->count(ActionCounter::ActionTypeHomeLab))->commit();
-        $effects_container->add()->identifier('increase_kitchen_counter')->add( (new StatusEffect())->count(ActionCounter::ActionTypeHomeKitchen))->commit();
+        $effects_container->add()->identifier('increase_lab_counter')->add( (new StatusEffect())->count(ActionCounterType::HomeLab))->commit();
+        $effects_container->add()->identifier('increase_kitchen_counter')->add( (new StatusEffect())->count(ActionCounterType::HomeKitchen))->commit();
 
         $effects_container->add()->identifier('heal_ghoul')->add( (new StatusEffect())->role('ghoul', false)->ghoulHunger(-9999999, true))->commit();
         $effects_container->add()->identifier('satisfy_ghoul_50')->add( (new StatusEffect())->ghoulHunger(-50))->commit();
@@ -523,9 +524,9 @@ class ActionEffectProvider
         $effects_container->add()->identifier('status_home_heal_2')->add( (new StatusEffect())->addsStatus('tg_home_heal_2'))->commit();
         $effects_container->add()->identifier('status_home_defbuff')->add( (new StatusEffect())->addsStatus('tg_home_defbuff'))->commit();
         $effects_container->add()->identifier('status_rested')->add( (new StatusEffect())->addsStatus('tg_rested'))->commit();
-        $effects_container->add()->identifier('status_clothes')->add( (new StatusEffect())->count(ActionCounter::ActionTypeClothes)->addsStatus('tg_clothes'))->commit();
-        $effects_container->add()->identifier('status_home_clean')->add( (new StatusEffect())->count(ActionCounter::ActionTypeHomeCleanup)->addsStatus('tg_home_clean'))->commit();
-        $effects_container->add()->identifier('status_home_shower')->add( (new StatusEffect())->count(ActionCounter::ActionTypeShower)->addsStatus('tg_home_shower'))->commit();
+        $effects_container->add()->identifier('status_clothes')->add( (new StatusEffect())->count(ActionCounterType::Clothes)->addsStatus('tg_clothes'))->commit();
+        $effects_container->add()->identifier('status_home_clean')->add( (new StatusEffect())->count(ActionCounterType::HomeCleanup)->addsStatus('tg_home_clean'))->commit();
+        $effects_container->add()->identifier('status_home_shower')->add( (new StatusEffect())->count(ActionCounterType::Shower)->addsStatus('tg_home_shower'))->commit();
 
         $effects_container->add()->identifier('ghoul_25_4')->add( (new StatusEffect())->role('ghoul')->probability(4)->ghoulHunger(25, true))->commit();
         $effects_container->add()->identifier('ghoul_25_5')->add( (new StatusEffect())->role('ghoul')->probability(5)->ghoulHunger(25, true))->commit();
@@ -547,10 +548,10 @@ class ActionEffectProvider
         $effects_container->add()->identifier('minus_1sp')->add( (new StatusEffect())->point( PointType::SP, -1, relativeToMax: false ) )->commit();
         $effects_container->add()->identifier('minus_2sp')->add( (new StatusEffect())->point( PointType::SP, -2, relativeToMax: false ) )->commit();
 
-        $effects_container->add()->identifier('status_count_scavenger')->add( (new StatusEffect())->count(ActionCounter::ActionTypeSpecialDigScavenger))->commit();
-        $effects_container->add()->identifier('status_count_surv')->add( (new StatusEffect())->count(ActionCounter::ActionTypeSpecialActionSurv))->commit();
-        $effects_container->add()->identifier('status_count_hunter')->add( (new StatusEffect())->count(ActionCounter::ActionTypeSpecialActionHunter))->commit();
-        $effects_container->add()->identifier('status_count_ap_loan')->add( (new StatusEffect())->count(ActionCounter::ActionTypeSpecialActionAPLoan))->commit();
+        $effects_container->add()->identifier('status_count_scavenger')->add( (new StatusEffect())->count(ActionCounterType::SpecialDigScavenger))->commit();
+        $effects_container->add()->identifier('status_count_surv')->add( (new StatusEffect())->count(ActionCounterType::SpecialActionSurv))->commit();
+        $effects_container->add()->identifier('status_count_hunter')->add( (new StatusEffect())->count(ActionCounterType::SpecialActionHunter))->commit();
+        $effects_container->add()->identifier('status_count_ap_loan')->add( (new StatusEffect())->count(ActionCounterType::SpecialActionAPLoan))->commit();
         $effects_container->add()->identifier('status_start_sp')->add( (new StatusEffect())->addsStatus('tg_start_sp'))->commit();
 
         $effects_container->add()->identifier('just_ap1')->add( (new StatusEffect())->point( PointType::AP, 1, relativeToMax: false, exceedMax: 1 ) )->commit();

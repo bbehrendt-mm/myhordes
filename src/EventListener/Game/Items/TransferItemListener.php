@@ -15,6 +15,7 @@ use App\Entity\Inventory;
 use App\Entity\Item;
 use App\Entity\ItemPrototype;
 use App\Entity\PrivateMessage;
+use App\Enum\ActionCounterType;
 use App\Enum\ActionHandler\PointType;
 use App\Enum\Configuration\CitizenProperties;
 use App\Enum\Game\TransferItemModality;
@@ -192,7 +193,7 @@ final class TransferItemListener implements ServiceSubscriberInterface
         }
 
         // Cannot steal from a citizen you've previously sent items to
-        if ($type_from === TransferItemType::Steal && $event->actor->getSpecificActionCounterValue(ActionCounter::ActionTypeSendPMItem, $event->from->getHome()?->getCitizen()?->getId() ?? -1) > 0) {
+        if ($type_from === TransferItemType::Steal && $event->actor->getSpecificActionCounterValue(ActionCounterType::SendPMItem, $event->from->getHome()?->getCitizen()?->getId() ?? -1) > 0) {
             $event->pushError(InventoryHandler::ErrorTransferStealPMBlock);
             return;
         }

@@ -35,6 +35,7 @@ use App\Entity\UserGroupAssociation;
 use App\Entity\ZombieEstimation;
 use App\Entity\Zone;
 use App\Entity\ZoneActivityMarker;
+use App\Enum\ActionCounterType;
 use App\Enum\Configuration\CitizenProperties;
 use App\Enum\Configuration\MyHordesSetting;
 use App\Enum\EventStages\BuildingValueQuery;
@@ -634,7 +635,7 @@ class TownController extends InventoryAwareController
         $existing_complaint = $em->getRepository( Complaint::class )->findByCitizens($author, $culprit);
 
         if ($severity > Complaint::SeverityNone) {
-            $counter = $this->getActiveCitizen()->getSpecificActionCounter(ActionCounter::ActionTypeComplaint);
+            $counter = $this->getActiveCitizen()->getSpecificActionCounter(ActionCounterType::Complaint);
             if ($counter->getCount() >= $this->getActiveCitizen()->property( CitizenProperties::ComplaintLimit ))
                 return AjaxResponse::error(self::ErrorComplaintLimitHit );
             $counter->increment();
@@ -778,7 +779,7 @@ class TownController extends InventoryAwareController
             if ($this->citizen_handler->hasStatusEffect($this->getActiveCitizen(), 'tg_steal') && !$this->getActiveCitizen()->getTown()->getChaos())
                 return AjaxResponse::error(ErrorHelper::ErrorActionNotAvailable );
 
-            if ($action > 0 && $this->getActiveCitizen()->getSpecificActionCounterValue(ActionCounter::ActionTypeSendPMItem, $victim->getId()) > 0)
+            if ($action > 0 && $this->getActiveCitizen()->getSpecificActionCounterValue(ActionCounterType::SendPMItem, $victim->getId()) > 0)
                 return AjaxResponse::error(InventoryHandler::ErrorTransferStealPMBlock);
         }
 

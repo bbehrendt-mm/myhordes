@@ -8,6 +8,7 @@ use App\Entity\CitizenWatch;
 use App\Entity\ItemGroup;
 use App\Entity\Zone;
 use App\Entity\ZoneActivityMarker;
+use App\Enum\ActionCounterType;
 use App\Enum\ActionHandler\CountType;
 use App\Enum\Configuration\CitizenProperties;
 use App\Enum\ScavengingActionType;
@@ -57,7 +58,7 @@ final class BuildingActionListener implements ServiceSubscriberInterface
         switch ($event->type) {
             // Pool
             case 100:
-                $counter = $event->citizen->getSpecificActionCounter( ActionCounter::ActionTypePool );
+                $counter = $event->citizen->getSpecificActionCounter( ActionCounterType::Pool );
                 $previousWatches = $this->getService(EntityManagerInterface::class)->getRepository(CitizenWatch::class)->matching((new Criteria())
                     ->andWhere(Criteria::expr()->eq('citizen', $event->citizen))
                     ->andWhere(Criteria::expr()->lt('day', $event->town->getDay()))

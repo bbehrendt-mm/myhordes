@@ -16,6 +16,7 @@ use App\Entity\PrivateMessage;
 use App\Entity\PrivateMessageThread;
 use App\Entity\Town;
 use App\Entity\User;
+use App\Enum\ActionCounterType;
 use App\Enum\Configuration\CitizenProperties;
 use App\Response\AjaxResponse;
 use App\Service\CrowService;
@@ -64,7 +65,7 @@ class MessageTownMessageController extends MessageController
         $sender = $this->getUser()->getActiveCitizen();
 
         $anon_post_limit = $sender?->property( CitizenProperties::AnonymousMessageLimit ) ?? 0;
-        $can_post_anon = ($anon_post_limit < 0) || ($anon_post_limit > $sender->getSpecificActionCounterValue( ActionCounter::ActionTypeAnonMessage ));
+        $can_post_anon = ($anon_post_limit < 0) || ($anon_post_limit > $sender->getSpecificActionCounterValue( ActionCounterType::AnonMessage ));
 
         $allowed_roles = ['USER'];
         if ($can_post_anon && $type !== 'global') $allowed_roles[] = 'ANON';
@@ -152,7 +153,7 @@ class MessageTownMessageController extends MessageController
                     if($recipient->getZone())
                         return AjaxResponse::error(self::ErrorPMItemChaosOut);
                     else {
-                        $counter = $sender->getSpecificActionCounter(ActionCounter::ActionTypeSendPMItem, 0);
+                        $counter = $sender->getSpecificActionCounter(ActionCounterType::SendPMItem, 0);
                         if($counter->getCount() > 3)
                             return AjaxResponse::error(ErrorHelper::ErrorActionNotAvailable);
                         else if ($counter->getCount() + count($linked_items) > 3)
@@ -248,13 +249,13 @@ class MessageTownMessageController extends MessageController
             }
 
             if ( !empty($items_prototype) ) {
-                $personal_counter = $sender->getSpecificActionCounter(ActionCounter::ActionTypeSendPMItem, $recipient->getId());
+                $personal_counter = $sender->getSpecificActionCounter(ActionCounterType::SendPMItem, $recipient->getId());
                 $personal_counter->increment();
                 $em->persist($personal_counter);
             }
 
             if ($role === 'ANON')
-                $em->persist($sender->getSpecificActionCounter(ActionCounter::ActionTypeAnonMessage)->increment());
+                $em->persist($sender->getSpecificActionCounter(ActionCounterType::AnonMessage)->increment());
 
             $post->setItems($items_prototype);
 
@@ -493,7 +494,7 @@ class MessageTownMessageController extends MessageController
             return new Response("");
 
         $anon_post_limit = $user->getActiveCitizen()?->property( CitizenProperties::AnonymousMessageLimit ) ?? 0;
-        $can_post_anon = ($anon_post_limit < 0) || ($anon_post_limit > $user->getActiveCitizen()->getSpecificActionCounterValue( ActionCounter::ActionTypeAnonMessage ));
+        $can_post_anon = ($anon_post_limit < 0) || ($anon_post_limit > $user->getActiveCitizen()->getSpecificActionCounterValue( ActionCounterType::AnonMessage ));
 
         return $this->render( 'ajax/editor/pm-thread.html.twig', [
             'username' => $user->getActiveCitizen()->getName(),

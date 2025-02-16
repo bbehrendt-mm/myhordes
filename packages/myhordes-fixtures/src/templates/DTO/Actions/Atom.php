@@ -8,12 +8,18 @@ use App\Enum\Configuration\TownSetting;
 use App\Enum\SortDefinitionWord;
 use App\Structures\SortDefinition;
 use App\Structures\TownConf;
+use BackedEnum;
 use MyHordes\Fixtures\DTO\ArrayDecoratorReadInterface;
 
 abstract class Atom implements ArrayDecoratorReadInterface {
 
     protected array $data;
     public readonly SortDefinition $sort;
+
+    /**
+     * @var array<string, class-string<BackedEnum>>
+     */
+    protected static array $enumCasts = [];
 
     protected ?Citizen $contextCitizen = null;
     protected ?TownConf $contextTown = null;
@@ -47,10 +53,16 @@ abstract class Atom implements ArrayDecoratorReadInterface {
     }
 
     protected static function beforeSerialization(array $data): array {
+        foreach (static::$enumCasts as $property => $enum)
+            $data[$property] = ($data[$property] ?? null) !== null ? $data[$property]->value : null;
+
         return $data;
     }
 
     protected static function afterSerialization(array $data): array {
+        foreach (static::$enumCasts as $property => $enum)
+            $data[$property] = ($data[$property] ?? null) !== null ? $enum::from( $data[$property] ) : null;
+
         return $data;
     }
 

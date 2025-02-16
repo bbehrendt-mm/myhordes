@@ -9,6 +9,7 @@ use App\Entity\CitizenWatch;
 use App\Entity\RuinZonePrototype;
 use App\Entity\Zone;
 use App\Entity\ZonePrototype;
+use App\Enum\ActionCounterType;
 use App\Enum\Configuration\CitizenProperties;
 use App\Enum\Configuration\TownSetting;
 use App\Enum\EventStages\CitizenValueQuery;
@@ -108,7 +109,7 @@ final class CitizenChanceQueryListener implements ServiceSubscriberInterface
         ];
 
         // Previous Bath
-        $log_info["baths"] = ($nbBath = $citizen->getSpecificActionCounterValue(ActionCounter::ActionTypePool));
+        $log_info["baths"] = ($nbBath = $citizen->getSpecificActionCounterValue(ActionCounterType::Pool));
         if ($event->deathChance > $minChances) {
             $event->deathChance = max($minChances, $event->deathChance - ($nbBath * 0.01)); // Each bath gives 1% chance, but it's capped to the base value of the job
             $log_info["death after baths"] = round($event->deathChance, 4);;

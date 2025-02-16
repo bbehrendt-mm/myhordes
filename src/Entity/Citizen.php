@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Enum\ActionHandler\PointType;
 use App\Enum\Game\CitizenPersistentCache;
+use App\Traits\Entity\ActionCounters;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -19,12 +20,14 @@ use Doctrine\ORM\PersistentCollection;
 )]
 class Citizen
 {
-    const Thrown = 1;
-    const Watered = 2;
-    const Cooked = 3;
-    const Ghoul = 4;
-    const Burned = 5;
-    const BurnedUseless = 6;
+    use ActionCounters;
+
+    const int Thrown = 1;
+    const int Watered = 2;
+    const int Cooked = 3;
+    const int Ghoul = 4;
+    const int Burned = 5;
+    const int BurnedUseless = 6;
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
@@ -35,49 +38,49 @@ class Citizen
     private int $ap = 6;
     #[ORM\Column(type: 'boolean')]
     private bool $active = true;
-    #[ORM\ManyToOne(targetEntity: 'App\Entity\User', inversedBy: 'citizens')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'citizens')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user;
-    #[ORM\ManyToMany(targetEntity: 'App\Entity\CitizenStatus')]
+    #[ORM\ManyToMany(targetEntity: CitizenStatus::class)]
     private Collection $status;
-    #[ORM\ManyToOne(targetEntity: 'App\Entity\CitizenProfession')]
+    #[ORM\ManyToOne(targetEntity: CitizenProfession::class)]
     #[ORM\JoinColumn(nullable: false)]
     private ?CitizenProfession $profession = null;
-    #[ORM\ManyToMany(targetEntity: 'App\Entity\CitizenRole')]
+    #[ORM\ManyToMany(targetEntity: CitizenRole::class)]
     private Collection $roles;
-    #[ORM\ManyToMany(targetEntity: 'App\Entity\CitizenVote', orphanRemoval: true, cascade: ['persist', 'remove'])]
+    #[ORM\ManyToMany(targetEntity: CitizenVote::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $votes;
-    #[ORM\OneToOne(targetEntity: 'App\Entity\Inventory', inversedBy: 'citizen', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(inversedBy: 'citizen', targetEntity: Inventory::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Inventory $inventory = null;
-    #[ORM\ManyToOne(targetEntity: 'App\Entity\Town', inversedBy: 'citizens')]
+    #[ORM\ManyToOne(targetEntity: Town::class, inversedBy: 'citizens')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Town $town = null;
-    #[ORM\OneToOne(targetEntity: 'App\Entity\CitizenHome', inversedBy: 'citizen', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(inversedBy: 'citizen', targetEntity: CitizenHome::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?CitizenHome $home = null;
-    #[ORM\ManyToOne(targetEntity: 'App\Entity\Zone', inversedBy: 'citizens', fetch: 'EXTRA_LAZY')]
+    #[ORM\ManyToOne(targetEntity: Zone::class, fetch: 'EXTRA_LAZY', inversedBy: 'citizens')]
     private ?Zone $zone = null;
-    #[ORM\OneToMany(targetEntity: 'App\Entity\DigTimer', mappedBy: 'citizen', orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'citizen', targetEntity: DigTimer::class, orphanRemoval: true)]
     private Collection $digTimers;
-    #[ORM\OneToOne(targetEntity: 'App\Entity\DailyUpgradeVote', mappedBy: 'citizen', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(mappedBy: 'citizen', targetEntity: DailyUpgradeVote::class, cascade: ['persist', 'remove'])]
     private ?DailyUpgradeVote $dailyUpgradeVote = null;
     #[ORM\Column(type: 'integer')]
     private int $walkingDistance = 0;
     #[ORM\Column(type: 'integer')]
     private int $survivedDays = 0;
-    #[ORM\ManyToOne(targetEntity: 'App\Entity\CauseOfDeath')]
+    #[ORM\ManyToOne(targetEntity: CauseOfDeath::class)]
     #[ORM\JoinColumn(nullable: false)]
     private ?CauseOfDeath $causeOfDeath;
     #[ORM\Column(type: 'integer')]
     private int $Bp = 0;
-    #[ORM\OneToMany(targetEntity: 'App\Entity\ExpeditionRoute', mappedBy: 'owner', orphanRemoval: true, cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: ExpeditionRoute::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $expeditionRoutes;
     #[ORM\Column(type: 'boolean')]
     private bool $banished = false;
-    #[ORM\OneToMany(targetEntity: 'App\Entity\Complaint', mappedBy: 'culprit', orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'culprit', targetEntity: Complaint::class, orphanRemoval: true)]
     private Collection $complaints;
-    #[ORM\ManyToMany(targetEntity: 'App\Entity\HeroicActionPrototype')]
+    #[ORM\ManyToMany(targetEntity: HeroicActionPrototype::class)]
     private Collection $heroicActions;
     #[ORM\Column(type: 'integer')]
     private int $campingCounter = 0;
@@ -85,41 +88,41 @@ class Citizen
     private int $campingTimestamp = 0;
     #[ORM\Column(type: 'float')]
     private float $campingChance = 0;
-    #[ORM\OneToMany(targetEntity: 'App\Entity\ActionCounter', mappedBy: 'citizen', orphanRemoval: true, cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(mappedBy: 'citizen', targetEntity: ActionCounter::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $actionCounters;
     #[ORM\Column(type: 'integer')]
     private int $lastActionTimestamp = 0;
     #[ORM\Column(type: 'integer')]
     private int $pm = 0;
-    #[ORM\OneToOne(targetEntity: 'App\Entity\CitizenEscortSettings', inversedBy: 'citizen', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToOne(inversedBy: 'citizen', targetEntity: CitizenEscortSettings::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     private ?CitizenEscortSettings $escortSettings = null;
-    #[ORM\OneToMany(targetEntity: 'App\Entity\CitizenEscortSettings', mappedBy: 'leader')]
+    #[ORM\OneToMany(mappedBy: 'leader', targetEntity: CitizenEscortSettings::class)]
     private Collection $leadingEscorts;
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $lastWords = null;
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $comment = null;
-    #[ORM\Column(type: 'text', nullable: true, length: 24)]
+    #[ORM\Column(type: 'text', length: 24, nullable: true)]
     private ?string $alias = null;
     #[ORM\Column(type: 'integer', nullable: true)]
     private ?int $disposed = null;
-    #[ORM\ManyToMany(targetEntity: 'App\Entity\Citizen')]
+    #[ORM\ManyToMany(targetEntity: Citizen::class)]
     #[ORM\JoinTable(name: 'citizen_disposed')]
     #[ORM\JoinColumn(name: 'id', referencedColumnName: 'id', unique: true)]
     #[ORM\InverseJoinColumn(name: 'disposed_by_id', referencedColumnName: 'id')]
     private Collection $disposedBy;
-    #[ORM\OneToMany(targetEntity: 'App\Entity\CitizenWatch', mappedBy: 'citizen', orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'citizen', targetEntity: CitizenWatch::class, orphanRemoval: true)]
     private Collection $citizenWatch;
     #[ORM\Column(type: 'integer')]
     private int $ghulHunger = 0;
-    #[ORM\OneToMany(targetEntity: PrivateMessageThread::class, mappedBy: 'recipient', orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'recipient', targetEntity: PrivateMessageThread::class, orphanRemoval: true)]
     private Collection $privateMessageThreads;
-    #[ORM\OneToOne(targetEntity: CitizenRankingProxy::class, mappedBy: 'citizen', cascade: ['persist'])]
+    #[ORM\OneToOne(mappedBy: 'citizen', targetEntity: CitizenRankingProxy::class, cascade: ['persist'])]
     private ?CitizenRankingProxy $rankingEntry = null;
-    #[ORM\OneToMany(targetEntity: RuinExplorerStats::class, mappedBy: 'citizen', orphanRemoval: true, cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(mappedBy: 'citizen', targetEntity: RuinExplorerStats::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $explorerStats;
-    #[ORM\OneToOne(targetEntity: BuildingVote::class, mappedBy: 'citizen', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(mappedBy: 'citizen', targetEntity: BuildingVote::class, cascade: ['persist', 'remove'])]
     private ?BuildingVote $buildingVote = null;
     #[ORM\ManyToMany(targetEntity: HelpNotificationMarker::class)]
     private Collection $helpNotifications;
@@ -134,7 +137,7 @@ class Citizen
     #[ORM\ManyToMany(targetEntity: HeroicActionPrototype::class)]
     #[ORM\JoinTable(name: 'citizen_used_heroic_action_prototype')]
     private Collection $usedHeroicActions;
-    #[ORM\ManyToMany(targetEntity: Zone::class, orphanRemoval: true, cascade: ['persist'])]
+    #[ORM\ManyToMany(targetEntity: Zone::class, cascade: ['persist'], orphanRemoval: true)]
     #[ORM\JoinTable(name: 'citizen_visited_zones')]
     private Collection $visitedZones;
     #[ORM\Column(type: 'boolean')]
@@ -220,7 +223,7 @@ class Citizen
         return $this;
     }
     /**
-     * @return Collection|CitizenStatus[]
+     * @return Collection<int, CitizenStatus>
      */
     public function getStatus(): Collection
     {
@@ -270,14 +273,14 @@ class Citizen
         return $this;
     }
     /**
-     * @return Collection|CitizenRole[]
+     * @return Collection<int, CitizenRole>
      */
     public function getRoles(): Collection
     {
         return $this->roles;
     }
     /**
-     * @return Collection|CitizenRole[]
+     * @return Collection<int, CitizenRole>
      */
     public function getVisibleRoles(): Collection
     {
@@ -305,7 +308,7 @@ class Citizen
         return false;
     }
     /**
-     * @return Collection|CitizenVote[]
+     * @return Collection<int, CitizenVote>
      */
     public function getVotes(): Collection
     {
@@ -475,7 +478,7 @@ class Citizen
         return $this;
     }
     /**
-     * @return Collection|ExpeditionRoute[]
+     * @return Collection<int, ExpeditionRoute>
      */
     public function getExpeditionRoutes(): Collection
     {
@@ -513,7 +516,7 @@ class Citizen
         return $this;
     }
     /**
-     * @return Collection|Complaint[]
+     * @return Collection<int, Complaint>
      */
     public function getComplaints(): Collection
     {
@@ -541,7 +544,7 @@ class Citizen
         return $this;
     }
     /**
-     * @return Collection|HeroicActionPrototype[]
+     * @return Collection<int, HeroicActionPrototype>
      */
     public function getHeroicActions(): Collection
     {
@@ -594,7 +597,7 @@ class Citizen
         return $this;
     }
     /**
-     * @return Collection|ActionCounter[]
+     * @return Collection<int, ActionCounter>
      */
     public function getActionCounters(): Collection
     {
@@ -621,20 +624,7 @@ class Citizen
 
         return $this;
     }
-    public function getSpecificActionCounterValue( int $type, ?int $ref = null ): int {
-        foreach ($this->getActionCounters() as $c)
-            if ($c->getType() === $type && ($ref === null || $c->getReferenceID() === $ref)) return $c->getCount();
-        return 0;
-    }
-    public function getSpecificActionCounter( int $type, ?int $ref = null ): ActionCounter {
-        foreach ($this->getActionCounters() as $c)
-            if ($c->getType() === $type && ($ref === null || $c->getReferenceID() === $ref)) return $c;
-        $a = (new ActionCounter())->setType($type);
-        if ($ref !== null) $a->setReferenceID( $ref );
 
-        $this->addActionCounter($a);
-        return $a;
-    }
     public function isOnline(): bool {
         $ts = $this->getLastActionTimestamp();
         return $ts ? (time() - $ts) < 300 : false;
@@ -708,7 +698,7 @@ class Citizen
         return $this;
     }
     /**
-     * @return Collection|CitizenEscortSettings[]
+     * @return Collection<int, CitizenEscortSettings>
      */
     public function getLeadingEscorts(): Collection
     {
@@ -775,7 +765,7 @@ class Citizen
         return $this;
     }
     /**
-     * @return Collection|Citizen[]
+     * @return Collection<int, Citizen>
      */
     public function getDisposedBy(): Collection
     {
@@ -798,9 +788,9 @@ class Citizen
         return $this;
     }
     /**
-     * @return Collection|CitizenWatch[]
+     * @return Collection<int, CitizenWatch>
      */
-    public function getCitizenWatch()
+    public function getCitizenWatch(): Collection
     {
         return $this->citizenWatch;
     }
@@ -829,7 +819,7 @@ class Citizen
         return $this;
     }
     /**
-     * @return Collection|PrivateMessageThread[]
+     * @return Collection<int, PrivateMessageThread>
      */
     public function getPrivateMessageThreads(): Collection
     {
@@ -896,7 +886,7 @@ class Citizen
         return (($ex = $this->currentExplorerStats()) && $ex->getActive()) ? $ex : null;
     }
     /**
-     * @return Collection|RuinExplorerStats[]
+     * @return Collection<int, RuinExplorerStats>
      */
     public function getExplorerStats(): Collection
     {
@@ -941,7 +931,7 @@ class Citizen
         return $this;
     }
     /**
-     * @return Collection|HelpNotificationMarker[]
+     * @return Collection<int, HelpNotificationMarker>
      */
     public function getHelpNotifications(): Collection
     {
@@ -989,7 +979,7 @@ class Citizen
         return $this;
     }
     /**
-     * @return Collection|SpecialActionPrototype[]
+     * @return Collection<int, SpecialActionPrototype>
      */
     public function getSpecialActions(): Collection
     {
@@ -1020,7 +1010,7 @@ class Citizen
         return $this;
     }
     /**
-     * @return Collection|HeroicActionPrototype[]
+     * @return Collection<int, HeroicActionPrototype>
      */
     public function getUsedHeroicActions(): Collection
     {
@@ -1041,7 +1031,7 @@ class Citizen
         return $this;
     }
     /**
-     * @return Collection|Zone[]
+     * @return Collection<int, Zone>
      */
     public function getVisitedZones(): Collection
     {

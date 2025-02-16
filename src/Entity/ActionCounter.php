@@ -2,59 +2,34 @@
 
 namespace App\Entity;
 
+use App\Enum\ActionCounterType;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Table;
 use Doctrine\ORM\Mapping\UniqueConstraint;
 
 #[ORM\Entity(repositoryClass: 'App\Repository\ActionCounterRepository')]
 #[Table]
-#[UniqueConstraint(name: 'action_counter_assoc_unique', columns: ['citizen_id', 'type', 'reference_id'])]
+#[UniqueConstraint(name: 'action_counter_assoc_unique', columns: ['citizen_id', 'town_id', 'type', 'reference_id'])]
 class ActionCounter
 {
-    const ActionTypeWell        		= 1;
-    const ActionTypeHomeKitchen 		= 2;
-    const ActionTypeHomeLab     		= 3;
-    const ActionTypeTrash       		= 4;
-    const ActionTypeComplaint   		= 5;
-    const ActionTypeRemoveLog   		= 6;
-    const ActionTypeSendPMItem  		= 7;
-    const ActionTypeSandballHit 		= 8;
-    const ActionTypeClothes     		= 9;
-    const ActionTypeHomeCleanup 		= 10;
-    const ActionTypeShower      		= 11;
-    const ActionTypeReceiveHeroic 		= 12;
-	const ActionTypePool      			= 13;
-    const ActionTypeSpecialDigScavenger = 14;
-	const ActionTypeDumpInsertion 		= 15;
-    const ActionTypeSpecialActionTech	= 16;
-    const ActionTypeSpecialActionSurv	= 17;
-    const ActionTypeSpecialActionHunter	= 18;
-    const ActionTypeSpecialActionAPLoan	= 19;
-    const ActionTypeAnonMessage     	= 20;
-    const ActionTypeAnonPost         	= 21;
-    const ActionTypePurgeLog   		    = 22;
-    const PerGameActionTypes = [
-        self::ActionTypeRemoveLog,
-        self::ActionTypePurgeLog,
-		self::ActionTypePool,
-		self::ActionTypeAnonMessage,
-		self::ActionTypeAnonPost,
-    ];
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private int $id;
+    #[ORM\Column(type: 'integer', enumType: ActionCounterType::class)]
+    private ?ActionCounterType $type;
     #[ORM\Column(type: 'integer')]
-    private $type;
-    #[ORM\Column(type: 'integer')]
-    private $count = 0;
-    #[ORM\ManyToOne(targetEntity: 'App\Entity\Citizen', inversedBy: 'actionCounters')]
-    #[ORM\JoinColumn(nullable: false)]
-    private $citizen;
+    private int $count = 0;
+    #[ORM\ManyToOne(targetEntity: Citizen::class, inversedBy: 'actionCounters')]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Citizen $citizen;
+    #[ORM\ManyToOne(targetEntity: Town::class, inversedBy: 'actionCounters')]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Town $town;
     #[ORM\Column(type: 'datetime', nullable: true)]
-    private $last;
+    private ?\DateTimeInterface $last = null;
     #[ORM\Column(type: 'integer')]
-    private $referenceID = 0;
+    private int $referenceID = 0;
 
     #[ORM\Column(nullable: true)]
     private ?array $additionalData = [];
@@ -62,11 +37,11 @@ class ActionCounter
     {
         return $this->id;
     }
-    public function getType(): ?int
+    public function getType(): ?ActionCounterType
     {
         return $this->type;
     }
-    public function setType(int $type): self
+    public function setType(ActionCounterType $type): self
     {
         $this->type = $type;
         return $this;
@@ -95,6 +70,16 @@ class ActionCounter
 
         return $this;
     }
+    public function getTown(): ?Town
+    {
+        return $this->town;
+    }
+    public function setTown(?Town $town): self
+    {
+        $this->town = $town;
+
+        return $this;
+    }
     public function getLast(): ?\DateTimeInterface
     {
         return $this->last;
@@ -107,7 +92,7 @@ class ActionCounter
     }
     public function getDaily(): ?bool
     {
-        return !in_array($this->type, self::PerGameActionTypes);
+        return !$this->type?->isPerGameActionType() ?? null;
     }
     public function getReferenceID(): ?int
     {
