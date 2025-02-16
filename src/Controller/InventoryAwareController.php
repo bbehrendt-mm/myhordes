@@ -25,6 +25,7 @@ use App\Entity\PrivateMessage;
 use App\Entity\Recipe;
 use App\Entity\RuinZone;
 use App\Entity\SpecialActionPrototype;
+use App\Enum\ActionCounterType;
 use App\Enum\Configuration\CitizenProperties;
 use App\Enum\Configuration\MyHordesSetting;
 use App\Enum\Game\CitizenPersistentCache;
@@ -138,7 +139,7 @@ class InventoryAwareController extends CustomAbstractController
             $activeCitizen->addHelpNotification( $this->doctrineCache->getEntityByIdentifier(HelpNotificationMarker::class, 'stranger') );
             $this->entity_manager->persist($activeCitizen);
             $this->entity_manager->flush();
-        } else if ( !empty( $records = array_filter( $activeCitizen->getSpecificActionCounter( ActionCounter::ActionTypeReceiveHeroic )->getAdditionalData() ?? [],
+        } else if ( !empty( $records = array_filter( $activeCitizen->getSpecificActionCounter( ActionCounterType::ReceiveHeroic )->getAdditionalData() ?? [],
             fn($record) => is_array($record) && !( $record['seen'] ?? true ) && ( $record['valid'] ?? false )
         ) ) ) {
             $key = array_key_first( $records );
@@ -153,7 +154,7 @@ class InventoryAwareController extends CustomAbstractController
                 ));
 
             $this->entity_manager->persist(
-                $activeCitizen->getSpecificActionCounter( ActionCounter::ActionTypeReceiveHeroic )->setRecord( $key, true, 'seen' )
+                $activeCitizen->getSpecificActionCounter( ActionCounterType::ReceiveHeroic )->setRecord( $key, true, 'seen' )
             );
             $this->entity_manager->flush();
         }
@@ -212,7 +213,7 @@ class InventoryAwareController extends CustomAbstractController
 
             foreach ($this->getActiveCitizen()->getTown()->getCitizens() as $citizen)
                 if ($citizen->getAlive() && $citizen != $this->getActiveCitizen() && $citizen->getZone() === $this->getActiveCitizen()->getZone()) {
-                    if ($definition->getSpawner() !== ItemTargetDefinition::ItemCitizenOnZoneSBType || $citizen->getSpecificActionCounter(ActionCounter::ActionTypeSandballHit)->getLast() === null || $citizen->getSpecificActionCounter(ActionCounter::ActionTypeSandballHit)->getLast()->getTimestamp() < (time() - 1800))
+                    if ($definition->getSpawner() !== ItemTargetDefinition::ItemCitizenOnZoneSBType || $citizen->getSpecificActionCounter(ActionCounterType::SandballHit)->getLast() === null || $citizen->getSpecificActionCounter(ActionCounterType::SandballHit)->getLast()->getTimestamp() < (time() - 1800))
                         $targets[] = [ $citizen->getId(), $citizen->getName(), "build/images/professions/{$citizen->getProfession()->getIcon()}.gif" ];
                 }
             break;
@@ -223,7 +224,7 @@ class InventoryAwareController extends CustomAbstractController
                         $targets[] = [ $citizen->getId(), $citizen->getName(), "build/images/item/item_cart.gif", null, 'Player' ];
 
                 //$giftedActions = array_values(array_column( array_filter(
-                //    $this->getActiveCitizen()->getSpecificActionCounter( ActionCounter::ActionTypeReceiveHeroic )->getAdditionalData(),
+                //    $this->getActiveCitizen()->getSpecificActionCounter( ActionCounterType::ReceiveHeroic )->getAdditionalData(),
                 //    fn($entry) => $entry['valid']
                 //), 'action'));
                 $giftedActions = [];
@@ -248,7 +249,7 @@ class InventoryAwareController extends CustomAbstractController
         $this->action_handler->getAvailableIHeroicActions( $this->getActiveCitizen(),  $available, $crossed, $used );
         if (empty($available) && empty($crossed) && empty($used) ) return [];
 
-        $giftedActions = array_filter( $this->getActiveCitizen()->getSpecificActionCounter( ActionCounter::ActionTypeReceiveHeroic )->getAdditionalData() ?? [],
+        $giftedActions = array_filter( $this->getActiveCitizen()->getSpecificActionCounter( ActionCounterType::ReceiveHeroic )->getAdditionalData() ?? [],
             fn($record) => is_array($record) && ( $record['valid'] ?? false )
         );
 
@@ -690,7 +691,7 @@ class InventoryAwareController extends CustomAbstractController
             if (!$return->getAlive() || $return->getZone() !== $this->getActiveCitizen()->getZone()) {
                 $return = null;
                 return false;
-            } else if ( $target->getSpawner() === ItemTargetDefinition::ItemCitizenOnZoneSBType && $return->getSpecificActionCounter(ActionCounter::ActionTypeSandballHit)->getLast() !== null && $return->getSpecificActionCounter(ActionCounter::ActionTypeSandballHit)->getLast()->getTimestamp() >= (time() - 1800) ) {
+            } else if ( $target->getSpawner() === ItemTargetDefinition::ItemCitizenOnZoneSBType && $return->getSpecificActionCounter(ActionCounterType::SandballHit)->getLast() !== null && $return->getSpecificActionCounter(ActionCounterType::SandballHit)->getLast()->getTimestamp() >= (time() - 1800) ) {
                 $return = null;
                 return false;
             }
@@ -715,7 +716,7 @@ class InventoryAwareController extends CustomAbstractController
                     return false;
 
                 //$giftedActions = array_values(array_column( array_filter(
-                //                                                $player->getSpecificActionCounter( ActionCounter::ActionTypeReceiveHeroic )->getAdditionalData(),
+                //                                                $player->getSpecificActionCounter( ActionCounterType::ReceiveHeroic )->getAdditionalData(),
                 //                                                fn($entry) => $entry['valid']
                 //                                            ), 'action'));
                 $giftedActions = [];
@@ -756,12 +757,12 @@ class InventoryAwareController extends CustomAbstractController
             $citizen->addUsedHeroicAction($heroic);
 
             // If the action was gifted, set "used" to true
-            $records = array_filter( $citizen->getSpecificActionCounter( ActionCounter::ActionTypeReceiveHeroic )->getAdditionalData() ?? [],
+            $records = array_filter( $citizen->getSpecificActionCounter( ActionCounterType::ReceiveHeroic )->getAdditionalData() ?? [],
                 fn($record) => is_array($record) && ($record['action'] ?? null) === $heroic->getName() && !( $record['used'] ?? false ) && ( $record['valid'] ?? false )
             );
             if (!empty($records))
                 $this->entity_manager->persist(
-                    $citizen->getSpecificActionCounter( ActionCounter::ActionTypeReceiveHeroic )->setRecord( array_key_first( $records ), true, 'used' )
+                    $citizen->getSpecificActionCounter( ActionCounterType::ReceiveHeroic )->setRecord( array_key_first( $records ), true, 'used' )
                 );
 
             // Add the picto Heroic Action

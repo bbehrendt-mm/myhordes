@@ -6,6 +6,7 @@ namespace App\EventListener\Game\Town\Basic\Well;
 
 use App\Controller\Town\TownController;
 use App\Entity\ActionCounter;
+use App\Enum\ActionCounterType;
 use App\Enum\ItemPoisonType;
 use App\Event\Game\Town\Basic\Well\WellExtractionCheckEvent;
 use App\Event\Game\Town\Basic\Well\WellExtractionExecuteEvent;
@@ -56,7 +57,7 @@ final class WellExtractionCommonListener implements ServiceSubscriberInterface
 
     public function onCheckDefaults( WellExtractionCheckEvent $event ): void {
         $event->allowed_to_take = 1;
-        $event->already_taken = $event->citizen->getSpecificActionCounter(ActionCounter::ActionTypeWell)->getCount();
+        $event->already_taken = $event->citizen->getSpecificActionCounter(ActionCounterType::Well)->getCount();
     }
 
     public function onCheckPumpExtension(WellExtractionCheckEvent $event ): void {
@@ -139,7 +140,7 @@ final class WellExtractionCommonListener implements ServiceSubscriberInterface
     public function onUpdateCounters(WellExtractionExecuteEvent $event ): void {
         $ba = $this->container->get(BankAntiAbuseService::class);
         $em = $this->container->get(EntityManagerInterface::class);
-        $counter = $event->citizen->getSpecificActionCounter(ActionCounter::ActionTypeWell);
+        $counter = $event->citizen->getSpecificActionCounter(ActionCounterType::Well);
 
         $em->persist( $counter->increment( $event->check->trying_to_take ) );
         $event->town->setWell( max(0,$event->town->getWell() - $event->check->trying_to_take) );

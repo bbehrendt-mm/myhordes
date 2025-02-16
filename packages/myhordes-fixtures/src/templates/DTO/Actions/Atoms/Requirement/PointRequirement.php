@@ -17,19 +17,14 @@ use MyHordes\Fixtures\DTO\Actions\RequirementsAtom;
  * @property ?bool $fromLimit
  */
 class PointRequirement extends RequirementsAtom {
+
+    public static array $enumCasts = [
+        'require' => PointType::class,
+    ];
+
     public function getClass(): string
     {
         return ProcessPointRequirement::class;
-    }
-
-    protected static function beforeSerialization(array $data): array {
-        $data['require'] = ($data['require'] ?? PointType::AP)->value;
-        return parent::beforeSerialization( $data );
-    }
-
-    protected static function afterSerialization(array $data): array {
-        $data['require'] = PointType::from( ($data['require'] ?? PointType::AP->value) );
-        return parent::afterSerialization( $data );
     }
 
     public function __call(string $name, array $arguments): self

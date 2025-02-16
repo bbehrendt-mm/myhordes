@@ -12,6 +12,7 @@ use App\Entity\LogEntryTemplate;
 use App\Entity\Town;
 use App\Entity\TownLogEntry;
 use App\Entity\Zone;
+use App\Enum\ActionCounterType;
 use App\Enum\Configuration\CitizenProperties;
 use App\Enum\Game\LogHiddenType;
 use App\Response\AjaxResponse;
@@ -284,8 +285,8 @@ class LogController extends CustomAbstractCoreController
         if (!$citizen->getAlive() || $type === LogHiddenType::Visible) return 0;
 
         [$prop, $counter] = match($type) {
-            LogHiddenType::Hidden => [CitizenProperties::LogManipulationLimit, ActionCounter::ActionTypeRemoveLog],
-            LogHiddenType::Deleted => [CitizenProperties::LogPurgeLimit, ActionCounter::ActionTypePurgeLog],
+            LogHiddenType::Hidden => [CitizenProperties::LogManipulationLimit, ActionCounterType::RemoveLog],
+            LogHiddenType::Deleted => [CitizenProperties::LogPurgeLimit, ActionCounterType::PurgeLog],
             default => [null,null]
         };
 
@@ -369,7 +370,7 @@ class LogController extends CustomAbstractCoreController
         $invalidate($entry);
         $entry->setHidden( $type )->setHiddenBy( $active_citizen );
         $em->persist( $entry );
-        $em->persist( $active_citizen->getSpecificActionCounter($purge ? ActionCounter::ActionTypePurgeLog : ActionCounter::ActionTypeRemoveLog)->increment() );
+        $em->persist( $active_citizen->getSpecificActionCounter($purge ? ActionCounterType::PurgeLog : ActionCounterType::RemoveLog)->increment() );
 
         $em->flush();
 

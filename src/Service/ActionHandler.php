@@ -21,6 +21,7 @@ use App\Entity\Requirement;
 use App\Entity\Result;
 use App\Entity\RuinZone;
 use App\Entity\ZonePrototype;
+use App\Enum\ActionCounterType;
 use App\Enum\ActionHandler\ActionValidity;
 use App\Enum\ActionHandler\PointType;
 use App\Enum\Configuration\CitizenProperties;
@@ -206,7 +207,7 @@ class ActionHandler
 
     public function getHeroicDonatedFromCitizen(HeroicActionPrototype $heroic, Citizen $citizen, bool $used = false ): ?Citizen {
         $giftedActions = array_column( array_filter(
-            $citizen->getSpecificActionCounter( ActionCounter::ActionTypeReceiveHeroic )->getAdditionalData() ?? [],
+            $citizen->getSpecificActionCounter( ActionCounterType::ReceiveHeroic )->getAdditionalData() ?? [],
             fn($entry) => ($entry['valid'] && ($entry['used'] ?? false) === $used)
         ), null, 'action');
 
@@ -535,7 +536,7 @@ class ActionHandler
         $this->citizen_handler->deductPointsWithFallback( $citizen, PointType::AP, PointType::CP, $ap, $used_ap, $used_bp);
 
         if ($recipe->getType() === Recipe::WorkshopTypeTechSpecific)
-            $citizen->getSpecificActionCounter(ActionCounter::ActionTypeSpecialActionTech)->increment();
+            $citizen->getSpecificActionCounter(ActionCounterType::SpecialActionTech)->increment();
 
         $new_items = [];
         if ($recipe->isMultiOut())

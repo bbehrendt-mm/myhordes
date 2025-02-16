@@ -17,6 +17,7 @@ use App\Entity\Recipe;
 use App\Entity\LogEntryTemplate;
 use App\Entity\ZombieEstimation;
 use App\Entity\Zone;
+use App\Enum\ActionCounterType;
 use App\Enum\Configuration\CitizenProperties;
 use App\Enum\Configuration\MyHordesSetting;
 use App\Enum\EventStages\BuildingValueQuery;
@@ -745,6 +746,7 @@ class TownAddonsController extends TownController
                 '{item}' => "<span class='tool'><img alt='' src='{$this->asset->getUrl( 'build/images/item/item_' . $spawn->getPrototype()->getIcon() . '.gif' )}'>{$this->translator->trans($spawn->getPrototype()->getLabel(), [], 'items')}{$times}</span>"
             ], 'game' ));
 
+            $this->entity_manager->persist( $town->getSpecificActionCounter( ActionCounterType::TamerClinicUsed )->increment() );
             $this->inventory_handler->forceMoveItem( $this->getActiveCitizen()->getTown()->getBank(), $spawn );
             $this->entity_manager->persist($log->clinicConvert( $this->getActiveCitizen(), $list1, [['count' => $count, 'item' => $spawn->getPrototype()]] ));
         } else {

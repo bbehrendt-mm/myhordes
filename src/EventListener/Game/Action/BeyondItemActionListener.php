@@ -8,6 +8,7 @@ use App\Entity\Citizen;
 use App\Entity\EventActivationMarker;
 use App\Entity\ItemPrototype;
 use App\Entity\Zone;
+use App\Enum\ActionCounterType;
 use App\Enum\Game\TransferItemModality;
 use App\Event\Game\Actions\CustomActionProcessorEvent;
 use App\EventListener\ContainerTypeTrait;
@@ -84,7 +85,7 @@ final class BeyondItemActionListener implements ServiceSubscriberInterface
                 if ($event->target === null) {
                     // Hordes-like - there is no target, there is only ZUUL
                     $list = $event->citizen->getZone()->getCitizens()->filter( function(Citizen $c) use ($event): bool {
-                        return $c->getAlive() && $c !== $event->citizen && ($c->getSpecificActionCounter(ActionCounter::ActionTypeSandballHit, $event->citizen->getId())->getLast() === null || $c->getSpecificActionCounter(ActionCounter::ActionTypeSandballHit, $event->citizen->getId())->getLast()->getTimestamp() < (time() - 1800));
+                        return $c->getAlive() && $c !== $event->citizen && ($c->getSpecificActionCounter(ActionCounterType::SandballHit, $event->citizen->getId())->getLast() === null || $c->getSpecificActionCounter(ActionCounterType::SandballHit, $event->citizen->getId())->getLast()->getTimestamp() < (time() - 1800));
                     } )->getValues();
                     $sandball_target = $this->getService(RandomGenerator::class)->pick( $list );
 
@@ -100,7 +101,7 @@ final class BeyondItemActionListener implements ServiceSubscriberInterface
                     $event->cache->addConsumedItem($event->item);
 
                     $event->cache->setTargetCitizen($sandball_target);
-                    $sandball_target->getSpecificActionCounter(ActionCounter::ActionTypeSandballHit, $event->citizen->getId())->increment();
+                    $sandball_target->getSpecificActionCounter(ActionCounterType::SandballHit, $event->citizen->getId())->increment();
 
                     $hurt = !$this->getService(CitizenHandler::class)->isWounded($sandball_target) && $this->getService(RandomGenerator::class)->chance( $event->townConfig->get(TownConf::CONF_MODIFIER_SANDBALL_NASTYNESS, 0.0) );
                     if ($hurt) $this->getService(CitizenHandler::class)->inflictWound($sandball_target);

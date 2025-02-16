@@ -6,6 +6,7 @@ namespace App\EventListener\Game\Town\Addon\Dump;
 
 use App\Entity\ActionCounter;
 use App\Entity\ItemPrototype;
+use App\Enum\ActionCounterType;
 use App\Event\Game\Town\Addon\Dump\DumpInsertionCheckData;
 use App\Event\Game\Town\Addon\Dump\DumpInsertionCheckEvent;
 use App\Event\Game\Town\Addon\Dump\DumpInsertionExecuteEvent;
@@ -50,7 +51,7 @@ final readonly class DumpUpgradesCheckListener implements ServiceSubscriberInter
         $event->food_dump_built = $dump?->getLevel() >= 1;
         $event->defense_dump_built = $dump?->getLevel() >= 2;
         $event->dump_upgrade_built = (bool)$this->container->get(TownHandler::class)->getBuilding($event->town, 'small_trash_#06', true);
-        $event->ap_cost = $event->citizen->getSpecificActionCounterValue(ActionCounter::ActionTypeDumpInsertion) == 0 ? 0 : ($event->free_dump_built ? 1 : 2);
+        $event->ap_cost = $event->citizen->getSpecificActionCounterValue(ActionCounterType::DumpInsertion) == 0 ? 0 : ($event->free_dump_built ? 1 : 2);
     }
 
     public static function getDumpItemDef(ItemPrototype $proto, DumpInsertionCheckEvent|DumpRetrieveCheckEvent $event): int {

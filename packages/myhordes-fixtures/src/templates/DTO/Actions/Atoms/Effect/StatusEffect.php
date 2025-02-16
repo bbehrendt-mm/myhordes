@@ -2,6 +2,7 @@
 
 namespace MyHordes\Fixtures\DTO\Actions\Atoms\Effect;
 
+use App\Enum\ActionCounterType;
 use App\Enum\ActionHandler\PointType;
 use App\Enum\ActionHandler\RelativeMaxPoint;
 use App\Enum\Configuration\CitizenProperties;
@@ -9,7 +10,6 @@ use App\Enum\SortDefinitionWord;
 use App\Service\Actions\Game\AtomProcessors\Effect\ProcessStatusEffect;
 use App\Structures\SortDefinition;
 use MyHordes\Fixtures\DTO\Actions\EffectAtom;
-use phpDocumentor\Reflection\Types\Boolean;
 
 /**
  * @property-read ?PointType pointType
@@ -18,7 +18,7 @@ use phpDocumentor\Reflection\Types\Boolean;
  * @property-read ?int pointExceedMax
  * @property-read ?int pointCapAt
  * @property-read ?bool resetThirstCounter
- * @property-read ?int actionCounterType
+ * @property-read ?ActionCounterType actionCounterType
  * @property-read ?int actionCounterValue
  * @property-read ?string statusFrom
  * @property-read ?string statusTo
@@ -35,6 +35,12 @@ use phpDocumentor\Reflection\Types\Boolean;
  * @property-read  ?bool appliesToTarget
  */
 class StatusEffect extends EffectAtom {
+
+    protected static array $enumCasts = [
+        'pointType' => PointType::class,
+        'pointRelativeToMax' => RelativeMaxPoint::class,
+        'actionCounterType' => ActionCounterType::class,
+    ];
 
     protected static function defaultSortDefinition(): SortDefinition {
         return new SortDefinition(SortDefinitionWord::Start);
@@ -69,7 +75,7 @@ class StatusEffect extends EffectAtom {
         return $this;
     }
 
-    public function count(int $counter, int $value = 1): self {
+    public function count(ActionCounterType $counter, int $value = 1): self {
         $this->actionCounterType = $counter;
         $this->actionCounterValue = $value;
         return $this;
@@ -139,17 +145,4 @@ class StatusEffect extends EffectAtom {
     public function getSpCost(): int {
         return ($this->pointType === PointType::SP && !$this->pointRelativeToMax->isRelative()) ? $this->pointValue : 0;
     }
-
-    protected static function beforeSerialization(array $data): array {
-        $data['pointType'] = ($data['pointType'] ?? null) !== null ? $data['pointType']->value : null;
-        $data['pointRelativeToMax'] = ($data['pointRelativeToMax'] ?? null) !== null ? $data['pointRelativeToMax']->value : null;
-        return parent::beforeSerialization( $data );
-    }
-
-    protected static function afterSerialization(array $data): array {
-        $data['pointType'] = ($data['pointType'] ?? null) !== null ? PointType::from( $data['pointType'] ) : null;
-        $data['pointRelativeToMax'] = ($data['pointRelativeToMax'] ?? null) !== null ? RelativeMaxPoint::from( $data['pointRelativeToMax'] ) : null;
-        return parent::afterSerialization( $data );
-    }
-
 }

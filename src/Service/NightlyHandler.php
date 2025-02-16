@@ -27,6 +27,7 @@ use App\Entity\TownRankingProxy;
 use App\Entity\ZombieEstimation;
 use App\Entity\Zone;
 use App\Entity\ZoneTag;
+use App\Enum\ActionCounterType;
 use App\Enum\Configuration\CitizenProperties;
 use App\Enum\Configuration\MyHordesSetting;
 use App\Enum\Configuration\TownSetting;
@@ -394,7 +395,7 @@ class NightlyHandler
 
                 // hero_generic_immune
                 // If the action was gifted, set "used" to true
-                $records = array_filter( $citizen->getSpecificActionCounter( ActionCounter::ActionTypeReceiveHeroic )->getAdditionalData() ?? [],
+                $records = array_filter( $citizen->getSpecificActionCounter( ActionCounterType::ReceiveHeroic )->getAdditionalData() ?? [],
                     fn($record) => is_array($record) && ($record['action'] ?? null) === 'hero_generic_immune' && ( $record['used'] ?? false ) && ( $record['valid'] ?? false )
                 );
 
@@ -1219,7 +1220,7 @@ class NightlyHandler
             $citizen->setWalkingDistance(0);
 
             // AP deduction
-            $loan = min($citizen->getSpecificActionCounterValue(ActionCounter::ActionTypeSpecialActionAPLoan), 1);
+            $loan = min($citizen->getSpecificActionCounterValue(ActionCounterType::SpecialActionAPLoan), 1);
             $this->citizen_handler->setAP($citizen,false,max(1, $this->citizen_handler->getMaxAP( $citizen ) - $loan) ,0);
             if ($loan > 0) $this->crow->postAsPM($citizen, '', '', PrivateMessage::TEMPLATE_CROW_REDUCED_AP_REGEN);
 
@@ -1283,6 +1284,12 @@ class NightlyHandler
                     $citizen->setGhulHunger(45);
             }
         }
+
+        foreach ($town->getActionCounters() as $counter)
+            if ($counter->getDaily()) {
+                $town->removeActionCounter($counter);
+                $this->entity_manager->remove($counter);
+            }
 
         foreach ($town->getZones() as $zone)
             foreach ($zone->getActivityMarkers() as $marker)

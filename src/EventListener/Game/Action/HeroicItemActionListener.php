@@ -8,6 +8,7 @@ use App\Entity\Citizen;
 use App\Entity\HeroicActionPrototype;
 use App\Entity\HomeIntrusion;
 use App\Entity\ItemPrototype;
+use App\Enum\ActionCounterType;
 use App\Enum\ActionHandler\CountType;
 use App\Enum\ActionHandler\PointType;
 use App\Enum\Game\TransferItemModality;
@@ -265,7 +266,7 @@ final class HeroicItemActionListener implements ServiceSubscriberInterface
                 }
 
                 $event->target->citizen()->getSpecificActionCounter(
-                    ActionCounter::ActionTypeReceiveHeroic
+                    ActionCounterType::ReceiveHeroic
                 )->increment()->addRecord( [
                                                'action' => $event->target->action()->getName(),
                                                'from' => $event->citizen->getId(),

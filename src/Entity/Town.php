@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Enum\GameProfileEntryType;
 use App\Enum\TownRevisionType;
+use App\Traits\Entity\ActionCounters;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -20,6 +21,8 @@ use Doctrine\ORM\PersistentCollection;
 #[ORM\HasLifecycleCallbacks]
 class Town
 {
+    use ActionCounters;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
@@ -107,6 +110,9 @@ class Town
     #[ORM\Column(type: 'boolean')]
     private bool $brokenDoor = false;
 
+    #[ORM\OneToMany(mappedBy: 'town', targetEntity: ActionCounter::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    private Collection $actionCounters;
+
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $scheduledFor = null;
 
@@ -142,6 +148,7 @@ class Town
         $this->gazettes = new ArrayCollection();
         $this->profilerVersion = GameProfileEntryType::latest_version();
         $this->revisions = new ArrayCollection();
+        $this->actionCounters = new ArrayCollection();
     }
     public function getId(): ?int
     {
@@ -926,6 +933,35 @@ class Town
     public function setMayor(bool $mayor): static
     {
         $this->mayor = $mayor;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ActionCounter>
+     */
+    public function getActionCounters(): Collection
+    {
+        return $this->actionCounters;
+    }
+    public function addActionCounter(ActionCounter $actionCounter): self
+    {
+        if (!$this->actionCounters->contains($actionCounter)) {
+            $this->actionCounters[] = $actionCounter;
+            $actionCounter->setTown($this);
+        }
+
+        return $this;
+    }
+    public function removeActionCounter(ActionCounter $actionCounter): self
+    {
+        if ($this->actionCounters->contains($actionCounter)) {
+            $this->actionCounters->removeElement($actionCounter);
+            // set the owning side to null (unless already changed)
+            if ($actionCounter->getTown() === $this) {
+                $actionCounter->setTown(null);
+            }
+        }
 
         return $this;
     }
