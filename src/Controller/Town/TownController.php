@@ -540,7 +540,7 @@ class TownController extends InventoryAwareController
         if ($ac->getAp() < 2 || $this->citizen_handler->isTired( $ac ))
             return AjaxResponse::error( ErrorHelper::ErrorNoAP );
 
-        $items = $this->inventory_handler->fetchSpecificItems($ac->getInventory(), [new ItemRequest("torch_#00", 1)]);
+        $items = $this->inventory_handler->fetchSpecificItems([$ac->getInventory(),$ac->getHome()->getChest()], [new ItemRequest("torch_#00", 1)]);
         if (count($items) === 0)
             return AjaxResponse::error(ErrorHelper::ErrorItemsMissing);
 
