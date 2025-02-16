@@ -58,7 +58,7 @@ class BuildingPrototypeDataElement extends Element implements LabeledIconElement
             $entity
                 ->setLabel( $this->label )
                 ->setDescription( $this->description )
-                ->setTemp( $this->isTemporary )
+                ->setTemp( $this->isTemporary ?? false )
                 ->setAp( $this->ap ?? 0 )
                 ->setBlueprint( $this->blueprintLevel ?? 0 )
                 ->setDefense( $this->defense ?? 0 )

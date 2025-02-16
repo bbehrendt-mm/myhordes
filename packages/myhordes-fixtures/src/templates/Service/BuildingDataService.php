@@ -437,10 +437,10 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->isTemporary(0)->defense(60)->ap(30)->health(30)->blueprintLevel(2)->resources(["metal_#00" => 2,"wood_beam_#00" => 3,"meca_parts_#00" => 1,"ryebag_#00" => 1,"pet_pig_#00" => 1,])->orderBy(1)->commit();
         $container->add()->parentBuilding($small_round_path)
             ->icon('small_armor')->label('Kleine Waffenschmiede')->description('Nach dem harten Kampf mit Fäusten und Füßen ist es an der Zeit, zu etwas Ernsthafterem überzugehen. Mit einem Waffenvorrat in der Nähe der Stadtmauer wirst du nicht mehr mit leeren Händen auf die Wache zugehen.')
-            ->isTemporary(0)->defense(0)->ap(40)->health(40)->blueprintLevel(0)->resources(["meca_parts_#00" => 1,"wood2_#00" => 10,"metal_#00" => 8,"plate_#00" => 2,"rustine_#00" => 2,])->orderBy(2)->commit();
+            ->isTemporary(0)->defense(0)->ap(40)->health(40)->blueprintLevel(0)->resources(["meca_parts_#00" => 1,"wood2_#00" => 10,"metal_#00" => 8,"plate_#00" => 2,"rustine_#00" => 2,])->orderBy(2)->commit($small_armor);
         $container->add()->parentBuilding($small_watchmen)
             ->icon('small_ikea')->label('Schwedische Schreinerei')->description('Dieser kleine Laden verbessert die Effektivität jedes Möbelstücks, das auf der Wache benutzt wird um 30%. Hach ja, die Schweden... Nie gab es bessere Billigmöbel!')
-            ->isTemporary(0)->defense(0)->ap(50)->health(50)->blueprintLevel(3)->resources(["meca_parts_#00" => 2,"wood2_#00" => 10,"metal_#00" => 10,"plate_#00" => 2,"concrete_wall_#00" => 3,"wood_beam_#00" => 5,"radio_on_#00" => 1,])->orderBy(0)->commit($small_armor);
+            ->isTemporary(0)->defense(0)->ap(50)->health(50)->blueprintLevel(3)->resources(["meca_parts_#00" => 2,"wood2_#00" => 10,"metal_#00" => 10,"plate_#00" => 2,"concrete_wall_#00" => 3,"wood_beam_#00" => 5,"radio_on_#00" => 1,])->orderBy(0)->commit();
 
         $container->add()->parentBuilding($item_tagger)
             ->icon('small_watchmen')->label('Rückzugsort für Aufklärer')->description('Die Aufklärer haben dich schon immer fasziniert und nie verraten, was sie unter ihrer Haube verbergen... Aber vielleicht ist es das Beste, sie in Ruhe zu lassen. Mit diesem speziellen Rückzugsort können sie sich endlich an die Arbeit machen, ohne die Stadt verlassen zu müssen.')
@@ -649,7 +649,7 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->icon('small_sewers')->label('Filtrierende Rinnen')->description('Ein ausgeklügeltes System zur Rückgewinnung der unvermeidlichen Spritzer reinen Wassers während der Wacht. Es filtert auch Gehirnspritzer. Wasserwaffen sind während der Wacht 30% effektiver.')
             ->isTemporary(0)->defense(0)->ap(35)->blueprintLevel(3)->resources(["wood2_#00" => 10,"metal_beam_#00" => 3,"tube_#00" => 3,"concrete_wall_#00" => 1,"plate_#00" => 1,"oilcan_#00" => 1,])->orderBy(4)->commit();
 
-        $container->add()->parentBuilding($small_round_path)
+        $container->add()->parentBuilding($item_meat)
             ->icon('small_pet')->label('Experimentelle Klinik der Dompteure')->description('Manche nennen es unschuldig eine "Tierklinik". Aber jeden Abend wecken die Schreie der Tiere das gesamte Südviertel auf. Auf jeden Fall funktioniert es: Unsere Haustiere sind verspielt, sauber, fröhlich und stürzen sich durch ihr Training routiniert auf Zombies, die dreißigmal so schwer sind wie sie.')
             ->isTemporary(0)->defense(0)->ap(40)->blueprintLevel(3)->resources(["wood2_#00" => 4,"water_#00" => 10,"meca_parts_#00" => 1,"drug_#00" => 1,])->orderBy(3)->commit();
 
@@ -793,7 +793,9 @@ class BuildingDataService implements FixtureProcessorInterface {
             //Verteidigungsanlage
             ->modify('item_meca_parts_#00')->parentBuilding($small_building)->commit()
             // Baumarkt
-            ->modify('small_strategy_#01')->parentBuilding($small_refine_1);
+            ->modify('small_strategy_#01')->parentBuilding($small_refine_1)->commit()
+            // Tamer clinic
+            ->modify('small_pet_#00')->icon('caged_animal')->commit();
 
         // Delete stubs
         // Previous sub-constructions, their effects will be included into Müllhalde evolutions
