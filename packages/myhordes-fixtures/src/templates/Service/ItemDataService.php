@@ -391,6 +391,10 @@ class ItemDataService implements FixtureProcessorInterface {
         $container->add()->label('Cellokasten')->icon('cello_box')->category('Box')->deco(0)->heavy(true)->watchpoint(0)->commit(); // Cello box
         $container->add()->label('Blutapfel')->icon('apple')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->commit(); //Bloody Apple
         $container->add()->label('Improvisierte Säge')->icon('saw_tool_temp')->category('Misc')->deco(0)->heavy(false)->watchpoint(0)->commit(); // Improvised saw
+        $container->add()->label('Feuchte Essenskrümel')->icon('moldy_food_subpart')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->commit(); // Pile of moldy food
+        $container->add()->label('Gewürzte Essenskrümel')->icon('moldy_food_spicy')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->commit(); // Spicy moldy food
+        $container->add()->label('Unappetitliche Überbleibsel')->icon('moldy_food_part')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->commit(); // Spicy moldy food
+        $container->add()->label('Überbleibsel-Rostbraten')->icon('moldy_food')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->commit(); // Spicy moldy food
 
         $container->modify('water_#00')->description('Das Wasser gibt dir einmal pro Tag deine Aktionpunkte zurück oder löscht alternativ deinen Durst (unbegrenzt).')->commit();
         $container->modify('pile_#00')->description('Die Batterie ist für vieles nützlich. Allerdings ist sie auch ziemlich schnell leer ...')->commit();
@@ -767,6 +771,10 @@ class ItemDataService implements FixtureProcessorInterface {
         $container->modify('cello_box_#00')->description('Du weißt nicht einmal mehr, wo du das her hast... Die Farbe fängt schon an, sich abzulösen. Ist das Teil wirklich nützlich?')->commit(); // Cello box
         $container->modify('apple_#00')->description('Anders als die restlichen Äpfel an diesem Baum erstrahlt dieser in einem leuchtenden Rot. Das ist schon merkwürdig, einen Apfel mit einer solchen untypischen Farbe in der Hand zu halten... Ob es so eine gute Idee ist, ihn zu essen?')->commit(); //Bloody Apple
         $container->modify('saw_tool_temp_#00')->description('Mit ein bisschen Fantasie kann man dieses Teil als eine Säge bezeichnen. Mit ein bisschen mehr Fantasie kann man es vielleicht sogar benutzen.')->commit(); // Makeshift hacksaw
+        $container->modify('moldy_food_subpart_#00')->description('Krümel von nicht länger identifizierbaren Lebensmitteln, großzügig gewürzt mit Feuchtigkeit und Verzweiflung. Kaum genießbar. Wird dich wahrscheinlich nicht umbringen. Wahrscheinlich...')->commit(); // Crumbs of moisty food
+        $container->modify('moldy_food_spicy_#00')->description('Dieses feuchte Durcheinander ist jetzt aufgepeppt! Der fragwürdige Geschmack ist immer noch da, er brennt nur etwas aggressiver am Gaumen.')->commit(); // Spicy moisty food
+        $container->modify('moldy_food_part_#00')->description('Was passiert, wenn man feuchte Krümel verschiedenster Lebensmitteln mischt? Man bekommt einen größeren, noch fragwürdigeren Haufen. Völlig ungenießbar, selbst für die Verzweifelten.')->commit(); // Unappetizing leftovers
+        $container->modify('moldy_food_#00')->description('Ein gebackenes Gericht, aus fragwürdigen Resten hergestellt, das fast wie richtiges Essen aussieht. Es ist warm, es hält zusammen... das zählt doch als Mahlzeit, oder?')->commit(); // Leftovers roast roast
 
         // Installed Crow Garland
         $container->clone('xmas_gift_#00')->label('Aufgehängte Krähengirlande')->deco(5)->commit();

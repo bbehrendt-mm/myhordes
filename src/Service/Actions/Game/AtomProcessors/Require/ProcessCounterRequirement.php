@@ -18,7 +18,7 @@ class ProcessCounterRequirement extends AtomRequirementProcessor
         }
         if ($data->max !== null) {
             $cache->addTranslationKey("counter_max", $data->max);
-            $cache->addTranslationKey("counter_{$data->counter}_max", $data->max);
+            $cache->addTranslationKey("counter_{$data->counter->value}_max", $data->max);
         }
 
         $counter_value = $cache->citizen->getSpecificActionCounterValue( $data->counter );

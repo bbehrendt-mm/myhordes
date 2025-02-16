@@ -739,16 +739,48 @@ class TownAddonsController extends TownController
             )
         );
 
-        if ($count > 0 && $prototype !== null) {
-            $spawn = $if->createItem($prototype)->setCount($count);
-            $times = $count > 1 ? " × {$count}" : '';
-            $this->addFlash( 'notice', $this->translator->trans( 'Nicht schlecht. Mit deinem Köder hast du es geschafft, {item} anzulocken!<hr/>Du hast es zur sicheren Aufbewahrung in die Bank gebracht.', [
-                '{item}' => "<span class='tool'><img alt='' src='{$this->asset->getUrl( 'build/images/item/item_' . $spawn->getPrototype()->getIcon() . '.gif' )}'>{$this->translator->trans($spawn->getPrototype()->getLabel(), [], 'items')}{$times}</span>"
-            ], 'game' ));
+        if ($prototype !== null) $prototype = $this->entity_manager->getRepository( ItemPrototype::class )->findOneByName( $prototype );
 
-            $this->entity_manager->persist( $town->getSpecificActionCounter( ActionCounterType::TamerClinicUsed )->increment() );
+        $previous_uses = $town->getSpecificActionCounterValue( ActionCounterType::TamerClinicUsed );
+        $failure_rate = match(true) {
+            $previous_uses < 100 => 0.00,        // 0% failure rate for the first 100 uses
+            $previous_uses < 200 => 0.15,        // 15% failure rate for uses 101 - 200
+            $previous_uses < 300 => 0.25,        // 25% failure rate for uses 201 - 300
+            default              => 0.30,        // 30% failure rate for uses beyond 300
+        };
+
+        if ($count > 0 && $prototype !== null) {
+
+            $fail = $this->random_generator->chance( $failure_rate );
+            $times = $count > 1 ? " × {$count}" : '';
+            $icon = $this->asset->getUrl( 'build/images/item/item_' . $prototype->getIcon() . '.gif' );
+            $label = $this->translator->trans($prototype->getLabel(), [], 'items');
+
+            if (!$fail) {
+
+                $this->addFlash( 'notice', $this->translator->trans( 'Nicht schlecht. Mit deinem Köder hast du es geschafft, {item} anzulocken!<hr/>Du hast es zur sicheren Aufbewahrung in die Bank gebracht.', [
+                    '{item}' => "<span class='tool'><img alt='' src='{$icon}'>{$label}{$times}</span>"
+                ], 'game' ));
+
+                $spawn = $if->createItem($prototype)->setCount($count);
+                $this->entity_manager->persist( $town->getSpecificActionCounter( ActionCounterType::TamerClinicUsed )->increment() );
+
+            } else {
+                $spawn = $if->createItem('moldy_food_subpart_#00')->setCount(1);
+
+                $this->addFlash( 'notice', $this->translator->trans( 'Du hast es geschafft, {item} anzulocken... aber das Einfangen ist dir weniger geglückt.<hr/>Enttäuscht hebst du die Reste des verschlungenen Futters auf und legst sie als {leftovers} in die Bank.', [
+                    '{item}' => "<span class='tool'><img alt='' src='{$icon}'>{$label}{$times}</span>",
+                    '{leftovers}' => "<span class='tool'><img alt='' src='{$this->asset->getUrl( 'build/images/item/item_' . $spawn->getPrototype()->getIcon() . '.gif' )}'>{$this->translator->trans($spawn->getPrototype()->getLabel(), [], 'items')}</span>"
+                ], 'game' ));
+            }
+
             $this->inventory_handler->forceMoveItem( $this->getActiveCitizen()->getTown()->getBank(), $spawn );
-            $this->entity_manager->persist($log->clinicConvert( $this->getActiveCitizen(), $list1, [['count' => $count, 'item' => $spawn->getPrototype()]] ));
+            $this->entity_manager->persist($log->clinicConvert( $this->getActiveCitizen(),
+                                                                $list1,
+                                                                [['count' => $count, 'item' => $prototype]],
+                                                                $fail ? [['count' => 1, 'item' => $spawn->getPrototype()]] : [],
+                                                                $fail
+            ));
         } else {
             $this->addFlash('notice', $this->translator->trans('Es ist dir nicht gelungen, ein Tier anzulocken. Was für eine Verschwendung...', [], 'game'));
             $this->entity_manager->persist($log->clinicConvert( $this->getActiveCitizen(), $list1, [] ));

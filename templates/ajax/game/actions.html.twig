@@ -89,7 +89,7 @@
                                 {% if scout and recipe.stealthy %}
                                     <img class="float-right" src="{{ asset('build/images/icons/small_stealthy.gif') }}" alt="">
                                 {% endif %}
-                                <span>{{ 'Zusammenbauen'|trans({},'game') }}:
+                                <span>{{ recipe.action ? recipe.action|trans({},'game') : 'Zusammenbauen'|trans({},'game') }}:
                                     {{ recipe.provoking[0].label|trans({}, 'items') }}
                                     {% if not app.user.expert %}
                                     {% for entry in recipe.source.entries %}
