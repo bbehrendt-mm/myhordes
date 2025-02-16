@@ -3189,3 +3189,7 @@ Tierklinik: crwdns210946:0crwdne210946:0
 'Du hast {item} hergestellt. Die Gegenstände wurden in der Bank abgelegt.<hr />Du hast dafür <strong>{ap} Aktionspunkt(e)</strong> und <strong>{cp} Baupunkt(e)</strong> verbraucht.': 'crwdns211576:0{item}crwdnd211576:0{ap}crwdnd211576:0{cp}crwdne211576:0'
 'Ups, dein(e) {item} scheint dabei kaputt gegangen zu sein...': 'crwdns211578:0{item}crwdne211578:0'
 'Du hast bei der Reparatur des Gebäudes {plan} mitgeholfen.': 'crwdns211584:0{plan}crwdne211584:0'
+'Du hast es geschafft, {item} anzulocken... aber das Einfangen ist dir weniger geglückt.<hr/>Enttäuscht hebst du die Reste des verschlungenen Futters auf und legst sie als {leftovers} in die Bank.': 'crwdns211628:0{item}crwdnd211628:0{leftovers}crwdne211628:0'
+'Du hast einen zusätzlichen Fähigkeitenpunkt erhalten!': 'crwdns211630:0crwdne211630:0'
+'{cost} Erfahrungspunkte ausgegeben, um einen zusätzlichen Fähigkeitenpunkt zu erhalten; {sold} Erfahrungspunkte durch den Verkauf freigeschalteter Fähigkeiten erhalten.': 'crwdns211632:0{cost}crwdnd211632:0{sold}crwdne211632:0'
+'{citizen} hat mit {list1} erfolgreich {list2} in die Stadt gelockt... und entkommen lassen. Nur etwas {list3} ist übrig geblieben...': 'crwdns211634:0{citizen}crwdnd211634:0{list1}crwdnd211634:0{list2}crwdnd211634:0{list3}crwdne211634:0'
