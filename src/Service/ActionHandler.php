@@ -24,12 +24,14 @@ use App\Entity\ZonePrototype;
 use App\Enum\ActionCounterType;
 use App\Enum\ActionHandler\ActionValidity;
 use App\Enum\ActionHandler\PointType;
+use App\Enum\ClientSignal;
 use App\Enum\Configuration\CitizenProperties;
 use App\Enum\ItemPoisonType;
 use App\Service\Actions\Game\AtomProcessors\Effect\AtomEffectProcessor;
 use App\Service\Actions\Game\AtomProcessors\Require\AtomRequirementProcessor;
 use App\Service\Actions\Game\DecodeConditionalMessageAction;
 use App\Service\Actions\Game\WrapObjectsForOutputAction;
+use App\Service\Globals\ResponseGlobal;
 use App\Structures\ActionHandler\Evaluation;
 use App\Structures\ActionHandler\Execution;
 use App\Structures\EscortItemActionSet;
@@ -64,6 +66,7 @@ class ActionHandler
         private readonly EventProxyService $proxyService,
         private readonly WrapObjectsForOutputAction $wrapObjectsForOutputAction,
         private readonly DecodeConditionalMessageAction $messageDecoder,
+        private readonly ResponseGlobal $response,
     ) {}
 
     protected function evaluate( Citizen $citizen, ?Item $item, $target, ItemAction $action, ?string &$message, ?Evaluation &$cache = null, ?Citizen $contextCitizen = null ): ActionValidity {
@@ -558,8 +561,8 @@ class ActionHandler
             case Recipe::WorkshopTypeShamanSpecific:
             case Recipe::WorkshopTypeTechSpecific:
               $base = match ($recipe->getAction()) {
-                  "Öffnen"      => T::__('Du hast {item_list} in der Werkstatt geöffnet und erhälst {item}.', 'game'),
-                  "Zerlegen"    => T::__('Du hast {item_list} in der Werkstatt zu {item} zerlegt.', 'game'),
+                  "Öffnen"      => T::__('Du hast {item_list} in der Werkstatt geöffnet und erhälst {item}.<hr />Du hast dafür <strong>{ap} Aktionspunkt(e)</strong> verbraucht.', 'game'),
+                  "Zerlegen"    => T::__('Du hast {item_list} in der Werkstatt zu {item} zerlegt.<hr />Du hast dafür <strong>{ap} Aktionspunkt(e)</strong> verbraucht.', 'game'),
                   default       => match (true) {
                       count($new_items) === 1 && $used_bp === 0                 => T::__('Du hast ein(e,n) {item} hergestellt. Der Gegenstand wurde in der Bank abgelegt.<hr />Du hast dafür <strong>{ap} Aktionspunkt(e)</strong> verbraucht.', 'game'),
                       count($new_items) === 1 && $used_bp > 0 && $used_ap <= 0  => T::__('Du hast ein(e,n) {item} hergestellt. Der Gegenstand wurde in der Bank abgelegt.<hr />Du hast dafür <strong>{cp} Baupunkt(e)</strong> verbraucht.', 'game'),
@@ -592,6 +595,7 @@ class ActionHandler
             $message .= '<hr/>' . $this->translator->trans( 'Ups, dein(e) {item} scheint dabei kaputt gegangen zu sein...', [
                     '{item}' => $this->wrap( $break_item->getPrototype() ),
                 ], 'game' );
+            $this->response->withSignal( ClientSignal::InventoryUpdated );
             $this->entity_manager->persist( $break_item->setBroken(true) );
         }
 
