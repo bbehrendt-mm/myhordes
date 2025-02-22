@@ -366,6 +366,23 @@ const BuildingActions= (props: BuildingCompleteProps) => {
 
     const [inputValid, setInputValid] = useState<boolean>(true);
 
+    const confirm = () => {
+        setLoading(true);
+        globals.api.build(props.building.i, parseInt(input.current.value))
+            .then(m => {
+                if (m.message) $.html.message( m.success ? 'notice' : 'error', m.message );
+                if (m.success) {
+                    globals.selectedBuilding.setValue(null);
+                    document.querySelectorAll('hordes-log[data-etag]').forEach((logElem) => {
+                        const [et_static, et_custom = '0'] = (logElem as HTMLElement).dataset.etag.split('-');
+                        (logElem as HTMLElement).dataset.etag = `${et_static}-${parseInt(et_custom)+1}`;
+                    });
+                }
+                if (m.building) globals.updateBuilding(m.building);
+            })
+        .finally( () => setLoading(false) )
+    }
+
     return <div className="building_action cell">
         { !props.locked && ( !props.building.c || props.building.a[0] < props.building.a[1] ) && <div className="relative">
             <button
@@ -386,26 +403,15 @@ const BuildingActions= (props: BuildingCompleteProps) => {
                         else if (parseInt( input.current.value ) < Math.min(1, props.missing_ap)) setInputValid(false);
                         else setInputValid(true);
                     }}
+                    onKeyDown={e => {
+                        if (e.key === "Enter") confirm();
+                        else if (e.key === "Escape") globals.selectedBuilding.setValue(null);
+                    }}
                 />
                 <button
                     disabled={!inputValid}
                     className="button center"
-                    onClick={() => {
-                        setLoading(true);
-                        globals.api.build(props.building.i, parseInt(input.current.value))
-                            .then(m => {
-                                if (m.message) $.html.message( m.success ? 'notice' : 'error', m.message );
-                                if (m.success) {
-                                    globals.selectedBuilding.setValue(null);
-                                    document.querySelectorAll('hordes-log[data-etag]').forEach((logElem) => {
-                                        const [et_static, et_custom = '0'] = (logElem as HTMLElement).dataset.etag.split('-');
-                                        (logElem as HTMLElement).dataset.etag = `${et_static}-${parseInt(et_custom)+1}`;
-                                    });
-                                }
-                                if (m.building) globals.updateBuilding(m.building);
-                            })
-                            .finally( () => setLoading(false) )
-                    } }
+                    onClick={() => confirm() }
                 >{ globals.strings.page.participate }</button>
                 <div onClick={()=> globals.selectedBuilding.setValue(null)} className="small link right">{ globals.strings.page.abort }</div>
             </div>}
