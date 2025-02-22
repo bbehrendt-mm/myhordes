@@ -3,10 +3,13 @@
 namespace App\EventListener\Game;
 
 use App\Entity\Item;
+use App\Enum\ClientSignal;
 use App\Event\Game\GameInteractionEvent;
 use App\Event\Traits\FlashMessageTrait;
 use App\Event\Traits\ItemProducerTrait;
+use App\EventListener\ContainerTypeTrait;
 use App\Service\EventProxyService;
+use App\Service\Globals\ResponseGlobal;
 use App\Service\InventoryHandler;
 use App\Service\ItemFactory;
 use App\Service\LogTemplateHandler;
@@ -20,6 +23,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[AsEventListener(event: GameInteractionEvent::class, method: 'onProcessCommonEffects', priority: 0)]
 final class CommonEffectListener implements ServiceSubscriberInterface
 {
+    use ContainerTypeTrait;
+
     public function __construct(
         private readonly ContainerInterface $container,
     ) {}
@@ -31,6 +36,7 @@ final class CommonEffectListener implements ServiceSubscriberInterface
             EventProxyService::class,
             TranslatorInterface::class,
             LogTemplateHandler::class,
+            ResponseGlobal::class,
         ];
     }
 
@@ -53,7 +59,10 @@ final class CommonEffectListener implements ServiceSubscriberInterface
                 $event->pushErrorCode( $error )->cancelPersist()->stopPropagation();
                 return;
 
-            } else $event->markModified();
+            } else {
+                $this->getService( ResponseGlobal::class )->withSignal( ClientSignal::InventoryUpdated );
+                $event->markModified();
+            }
 
         $event->itemCreationCompleted();
     }
