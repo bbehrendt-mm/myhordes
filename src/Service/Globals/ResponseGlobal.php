@@ -10,16 +10,15 @@ class ResponseGlobal
 {
     protected array $signals = [];
 
-    public function withSignal(ClientSignal $signal, ...$signals): void {
+    public function withSignal(ClientSignal ...$signals): void {
         $this->signals = [
             ...$this->signals,
-            $signal->value,
             ...array_map(fn(ClientSignal $s) => $s->value, $signals)
         ];
     }
 
-    public function withConditionalSignal(mixed $condition, ClientSignal $signal, ...$signals): void {
-        if (!!$condition) $this->withSignal( $signal, ...$signals );
+    public function withConditionalSignal(mixed $condition, ClientSignal ...$signals): void {
+        if (!!$condition) $this->withSignal( ...$signals );
     }
 
     public function getSignals(): array {
