@@ -36,6 +36,7 @@ use App\Entity\ZombieEstimation;
 use App\Entity\Zone;
 use App\Entity\ZoneActivityMarker;
 use App\Enum\ActionCounterType;
+use App\Enum\ClientSignal;
 use App\Enum\Configuration\CitizenProperties;
 use App\Enum\Configuration\MyHordesSetting;
 use App\Enum\EventStages\BuildingValueQuery;
@@ -44,6 +45,7 @@ use App\Event\Game\Town\Basic\Well\WellExtractionCheckEvent;
 use App\Service\EventFactory;
 use App\Service\GameEventService;
 use App\Service\GameProfilerService;
+use App\Service\Globals\ResponseGlobal;
 use App\Service\InventoryHandler;
 use App\Service\ItemFactory;
 use App\Service\JSONRequestParser;
@@ -512,7 +514,7 @@ class TownController extends InventoryAwareController
     }
 
     #[Route(path: 'api/town/visit/{id}/burn', name: 'town_visit_burn_controller')]
-    public function burnCadaver(int $id, LogTemplateHandler $primeLog, ItemFactory $itemFactory): Response {
+    public function burnCadaver(int $id, LogTemplateHandler $primeLog, ItemFactory $itemFactory, ResponseGlobal $response): Response {
         if ($id === $this->getActiveCitizen()->getId())
             return AjaxResponse::error(ErrorHelper::ErrorActionNotAvailable );
 
@@ -548,11 +550,20 @@ class TownController extends InventoryAwareController
         $this->citizen_handler->setAP($ac, true, -2);
         $items[0]->setPrototype($this->entity_manager->getRepository(ItemPrototype::class)->findOneBy(['name' => 'torch_off_#00']));
         $this->entity_manager->persist($items[0]);
+        $response->withSignal( ClientSignal::StatusUpdated, ClientSignal::InventoryUpdated );
 
-        $garden = $this->town_handler->getBuilding($c->getTown(), 'item_vegetable_tasty_#00');
-        if ($garden) {
-            // We add a corpse to the Garden to mark it as fertilized with the ashes
-            $this->inventory_handler->forceMoveItem($garden->getInventory(), $itemFactory->createItem('cadaver_#00'));
+
+        $gardens = ['item_vegetable_tasty_#00', 'small_appletree_#00'];
+        $usefull = false;
+        foreach ($gardens as $garden_building) {
+            $garden = $this->town_handler->getBuilding($c->getTown(), $garden_building);
+            if ($garden) {
+                // We add a corpse to the Garden to mark it as fertilized with the ashes
+                $this->inventory_handler->forceMoveItem($garden->getInventory(), $itemFactory->createItem('cadaver_#00'));
+                $usefull = true;
+            }
+        }
+        if ($usefull) {
             $c->setDisposed(Citizen::Burned);
         } else $c->setDisposed(Citizen::BurnedUseless);
 

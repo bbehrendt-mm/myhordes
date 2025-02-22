@@ -155,7 +155,7 @@ final class BuildingEffectListener implements ServiceSubscriberInterface
                 $event->produceDailyBlueprint = array_merge( $event->produceDailyBlueprint, $bps[$event->building->getLevel()] );
                 break;
 
-            case 'item_vegetable_tasty_#00':
+            case 'item_vegetable_tasty_#00':case 'small_appletree_#00':
                 $cadavers = $inventoryHandler->fetchSpecificItems($event->building->getInventory(), [new ItemRequest('cadaver_#00')]);
                 $maximizeProd = count($cadavers) > 0;
                 foreach ($cadavers as $cadaver) {

@@ -111,6 +111,7 @@ class NightlyHandler
         $this->map = $mapMaker;
         $this->events = $events;
 		$this->gameEvents = $gameEvents;
+        $this->unlockableService = $unlockableService;
     }
 
     private function check_town(Town $town): bool {
