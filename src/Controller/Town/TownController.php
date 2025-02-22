@@ -418,7 +418,7 @@ class TownController extends InventoryAwareController
      * @return Response
      */
     #[Route(path: 'api/town/visit/{id}/dispose', name: 'town_visit_dispose_controller')]
-    public function dispose_visit_api(int $id, EntityManagerInterface $em, JSONRequestParser $parser, ItemFactory $if): Response {
+    public function dispose_visit_api(int $id, EntityManagerInterface $em, JSONRequestParser $parser, ItemFactory $if, ResponseGlobal $response): Response {
         if ($id === $this->getActiveCitizen()->getId())
             return AjaxResponse::error(ErrorHelper::ErrorActionNotAvailable );
 
@@ -457,6 +457,7 @@ class TownController extends InventoryAwareController
                 if ($ac->getAp() < 2 || $this->citizen_handler->isTired( $ac ))
                     return AjaxResponse::error( ErrorHelper::ErrorNoAP );
                 $this->citizen_handler->setAP($ac, true, -2);
+                $response->withSignal(ClientSignal::StatusUpdated );
                 $pictoName = "r_cgarb_#00";
                 $message = $this->translator->trans('Du hast die Leiche von {disposed} außerhalb der Stadt entsorgt. Eine gute Sache, die Sie getan haben!', ['{disposed}' => '<span>' . $c->getName() . '</span>'], 'game');
                 $c->setDisposed(Citizen::Thrown);
@@ -467,6 +468,7 @@ class TownController extends InventoryAwareController
                 $items = $this->inventory_handler->fetchSpecificItems( [$ac->getInventory(),$ac->getHome()->getChest()], [new ItemRequest('water_#00', 1, null, false)] );
                 if (!$items) return AjaxResponse::error(ErrorHelper::ErrorItemsMissing );
                 $this->inventory_handler->forceRemoveItem( $items[0] );
+                $response->withSignal(ClientSignal::InventoryUpdated );
                 $pictoName = "r_cwater_#00";
                 $message = $this->translator->trans('Der Körper verflüssigte sich zu einer ekelerregenden, übel riechenden Pfütze. Deine Schuhe haben ganz schön was abgekriegt, das steht fest...', [], 'game');
                 $c->setDisposed(Citizen::Watered);
