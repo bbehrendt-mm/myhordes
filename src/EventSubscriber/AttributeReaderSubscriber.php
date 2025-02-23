@@ -47,8 +47,6 @@ class AttributeReaderSubscriber implements EventSubscriberInterface
         $request = $event->getRequest();
         foreach ($cache as $key => $value)
             $request->attributes->set("_{$key}", $value);
-
-        //dump(get_class( $controller[0] ), $controller[1], $cache);
     }
 
     public static function getSubscribedEvents(): array

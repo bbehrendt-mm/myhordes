@@ -98,8 +98,6 @@ final readonly class DumpInsertionCommonListener implements ServiceSubscriberInt
             return ($a[2] === $b[2]) ? ( $a[0]->getId() < $b[0]->getId() ? -1 : 1 ) : ($a[2] < $b[2] ? 1 : -1);
         } );
 
-        dump($cache);
-
         $event->dumpableItems = $cache;
     }
 
