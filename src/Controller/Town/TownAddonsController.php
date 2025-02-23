@@ -744,9 +744,9 @@ class TownAddonsController extends TownController
         $previous_uses = $town->getSpecificActionCounterValue( ActionCounterType::TamerClinicUsed );
         $failure_rate = match(true) {
             $previous_uses < 100 => 0.00,        // 0% failure rate for the first 100 uses
-            $previous_uses < 200 => 0.15,        // 15% failure rate for uses 101 - 200
-            $previous_uses < 300 => 0.25,        // 25% failure rate for uses 201 - 300
-            default              => 0.30,        // 30% failure rate for uses beyond 300
+            $previous_uses < 200 => 0.13,        // 13% failure rate for uses 101 - 200
+            $previous_uses < 300 => 0.26,        // 26% failure rate for uses 201 - 300
+            default              => 0.39,        // 39% failure rate for uses beyond 300
         };
 
         if ($count > 0 && $prototype !== null) {
