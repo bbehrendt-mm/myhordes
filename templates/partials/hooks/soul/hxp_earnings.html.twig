@@ -46,19 +46,21 @@
             </div>
             {% for entry in pictos %}
                 <div class="row">
-                    <div class="padded cell rw-2 center">
-                        {{ entry['value'] }}
-                    </div>
-                    <div class="padded cell rw-2 center">
-                        {% if not entry['repeat'] and entry['achieved'] %}
-                            <img alt="" src="{{ asset('build/images/assets/img/icons/tickOn.gif') }}" />
-                        {% elseif not entry['repeat'] and not entry['achieved'] %}
-                            <img alt="" src="{{ asset('build/images/assets/img/icons/tickOff.gif') }}" />
-                        {% elseif entry['repeat'] and entry['total'] > 0 %}
-                            {{ entry['total'] }}
-                        {% endif %}
-                    </div>
-                    <div class="padded cell rw-8">
+                    <div class="cell rw-12">
+                        <div class="row">
+                            <div class="padded cell rw-2 center">
+                                {{ entry['value'] }}
+                            </div>
+                            <div class="padded cell rw-2 center">
+                                {% if not entry['repeat'] and entry['achieved'] %}
+                                    <img alt="" src="{{ asset('build/images/assets/img/icons/tickOn.gif') }}" />
+                                {% elseif not entry['repeat'] and not entry['achieved'] %}
+                                    <img alt="" src="{{ asset('build/images/assets/img/icons/tickOff.gif') }}" />
+                                {% elseif entry['repeat'] and entry['total'] > 0 %}
+                                    {{ entry['total'] }}
+                                {% endif %}
+                            </div>
+                            <div class="padded cell rw-8">
                         <span class="tool">
                             <img alt="" src="{{ asset('build/images/pictos/' ~ entry['icon'] ~ '.gif') }}" />
                             {{ entry['name'] }}
@@ -66,12 +68,38 @@
                                 <span class="small">{{ entry['valuePost'] }}</span>
                             {% endif %}
                         </span>
-                        {% if entry['valueNote'] is not null %}
-                            <div class="small"><b>{{ entry['valueNote'] }}</b></div>
-                        {% endif %}
-                        {% if entry['repeat'] %}
-                            <div class="small">{{ 'Kann beliebig oft in einer Saison verdient werden!'|trans({},'soul') }}</div>
-                        {% endif %}
+                                {% if entry['valueNote'] is not null %}
+                                    <div class="small"><b>{{ entry['valueNote'] }}</b></div>
+                                {% endif %}
+                                {% if entry['repeat'] %}
+                                    <div class="small">{{ 'Kann beliebig oft in einer Saison verdient werden!'|trans({},'soul') }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% for subValue in entry.sub %}
+                            <div class="row small">
+                                <div class="padded cell rw-2 center" style="padding-top: 0">
+                                    {{ subValue['value'] }}
+                                </div>
+                                <div class="padded cell rw-2 center" style="padding-top: 0"></div>
+                                <div class="padded cell rw-8" style="padding-top: 0">
+                                    <div class="flex wrap large-gap">
+                                        {% for sub in subValue.list %}
+                                            <div>
+                                                {% if not entry['repeat'] and sub['achieved'] %}
+                                                    <img alt="" src="{{ asset('build/images/assets/img/icons/tickOn.gif') }}" />
+                                                {% elseif not entry['repeat'] and not sub['achieved'] %}
+                                                    <img alt="" src="{{ asset('build/images/assets/img/icons/tickOff.gif') }}" />
+                                                {% elseif entry['repeat'] and sub['total'] > 0 %}
+                                                    {{ sub['total'] }}
+                                                {% endif %}
+                                                {{ sub['name'] }}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
                     </div>
                 </div>
             {% endfor %}
