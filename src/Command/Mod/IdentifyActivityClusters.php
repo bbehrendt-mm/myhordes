@@ -55,7 +55,7 @@ class IdentifyActivityClusters extends Command
         , 'c', 'ip');
 
         $output->writeln(
-            sprintf('Found <fg=green>%d</> suspicious clusters, the most suspicious one containing <fg=red>%d</> users.', count($cluster_ids), $cluster_ids[array_key_first($cluster_ids)]),
+            sprintf('Found <fg=green>%d</> suspicious clusters, the most suspicious one containing <fg=red>%d</> users.', count($cluster_ids), $cluster_ids[array_key_first($cluster_ids)] ?? 0),
             OutputInterface::VERBOSITY_VERBOSE
         );
 
