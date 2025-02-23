@@ -270,6 +270,7 @@ class SkillController extends CustomAbstractCoreController
     }
 
     /**
+     * @param Request $request
      * @param UserUnlockableService $unlockableService
      * @param Locksmith $locksmith
      * @return JsonResponse
@@ -325,7 +326,7 @@ class SkillController extends CustomAbstractCoreController
         $debited = $unlockableService->recordHeroicExperience($user, HeroXPType::Global, $sell_value - 200, 'hxp_paid_skill_reset', 'paid_skill_reset', [
             'cost' => 200,
             'sold' => $sell_value
-        ], null, null, true);
+        ], null, null, true, force: true);
 
         if (!$debited || !$unlockableService->performSkillResetForUser($user, true, $sell_skill_ids))
             return new JsonResponse([], Response::HTTP_INTERNAL_SERVER_ERROR);
