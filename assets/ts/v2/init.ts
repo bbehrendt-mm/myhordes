@@ -235,6 +235,7 @@ function handleSharedWorkerResponse(data: any, shim: boolean = false, port_send:
 export function init () {
     initLive();
     window.addEventListener('DOMContentLoaded', () => initOnceLoaded());
+    window.addEventListener('beforeunload', () => document.body.dataset.deconstructing = '1');
 }
 
 
