@@ -312,9 +312,10 @@ class UserUnlockableService implements ServiceSubscriberInterface
         Citizen|CitizenRankingProxy|null $citizen = null,
         Season|true|null $season = null,
         ?\DateTimeInterface $date = null,
+        bool $force = false,
     ): bool {
 
-        if ($value === 0) return false;
+        if (!$force && $value === 0) return false;
 
         if (is_a($town, Town::class)) $town = $town->getRankingEntry();
         if (is_a($citizen, Citizen::class)) $citizen = $citizen->getRankingEntry();
