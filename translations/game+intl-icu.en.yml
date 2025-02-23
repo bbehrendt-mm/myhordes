@@ -3193,3 +3193,6 @@ Tierklinik: Experiment Center
 'Du hast einen zusätzlichen Fähigkeitenpunkt erhalten!': 'You have received an additional skill point!'
 '{cost} Erfahrungspunkte ausgegeben, um einen zusätzlichen Fähigkeitenpunkt zu erhalten; {sold} Erfahrungspunkte durch den Verkauf freigeschalteter Fähigkeiten erhalten.': 'Spent {cost} experience points for an additional skill point; got {sold} experience points from selling previously unlocked skills.'
 '{citizen} hat mit {list1} erfolgreich {list2} in die Stadt gelockt... und entkommen lassen. Nur etwas {list3} ist übrig geblieben...': '{citizen} has successfully lured {list2} into the city with {list1}... and let them escape. Only some {list3} is left...'
+'Du hast {item_list} in der Werkstatt geöffnet und erhälst {item}.<hr />Du hast dafür <strong>{ap} Aktionspunkt(e)</strong> verbraucht.': 'You opened {item_list} in the Workshop and received {item}.<hr />You spent <strong>{ap} action points</strong> to do so.'
+'Du hast {item_list} in der Werkstatt zu {item} zerlegt.<hr />Du hast dafür <strong>{ap} Aktionspunkt(e)</strong> verbraucht.': 'You split {item_list} into {item} in the Workshop.<hr />You spent <strong>{ap} action points</strong> to do so.'
+'Die ersten 10 Tage in der Pandämonium-Stadt "{town}" überlebt.': 'Survived the first 10 days in the Hardcore town "{town}".'
