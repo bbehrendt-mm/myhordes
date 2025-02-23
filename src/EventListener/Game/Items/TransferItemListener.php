@@ -239,6 +239,7 @@ final class TransferItemListener implements ServiceSubscriberInterface
             foreach($soul_names as $soul_name) {
                 if ($this->getService(InventoryHandler::class)->countSpecificItems($event->to, $soul_name) > 0) {
                     $event->pushError(InventoryHandler::ErrorTooManySouls);
+                    $event->stopPropagation();
                     return;
                 }
             }
