@@ -10,6 +10,7 @@ use App\Entity\HeroSkillPrototype;
 use App\Entity\HeroSkillUnlock;
 use App\Entity\LogEntryTemplate;
 use App\Entity\Picto;
+use App\Entity\PictoOffsetCounter;
 use App\Entity\PictoPrototype;
 use App\Entity\Season;
 use App\Entity\Town;
@@ -50,7 +51,8 @@ class UserUnlockableService implements ServiceSubscriberInterface
         return [
             EntityManagerInterface::class,
             InvalidateTagsInAllPoolsAction::class,
-            ConfMaster::class
+            ConfMaster::class,
+            PictoService::class
         ];
     }
 
@@ -173,7 +175,7 @@ class UserUnlockableService implements ServiceSubscriberInterface
                 ->where('c.user = :user')->setParameter('user', $user)
                 ->andWhere('c.end IS NOT NULL')
                 ->andWhere('c.end >= :cutoff')
-                ->setParameter('cutoff', new \DateTime('now - 3days'))
+                ->setParameter('cutoff', new \DateTime('now - 7days'))
                 ->orderBy('c.end', 'ASC')
                 ->setMaxResults(1)->getQuery()->getOneOrNullResult();
         } catch (NonUniqueResultException $t) {
@@ -194,7 +196,7 @@ class UserUnlockableService implements ServiceSubscriberInterface
             ->setMaxResults(1)->getQuery()->getOneOrNullResult();
 
         if ($lms_picto) {
-            $end = \DateTimeImmutable::createFromInterface( $latest_citizen->getEnd() )->modify('+3 days');
+            $end = \DateTimeImmutable::createFromInterface( $latest_citizen->getEnd() )->modify('+7 days');
             return 1;
         } else return 0;
     }
@@ -265,6 +267,8 @@ class UserUnlockableService implements ServiceSubscriberInterface
         ?string $subject = null,
         Season|true $season = null,
         ?int &$total = null,
+        int|true $reset = 0,
+        int &$count = 0,
     ): bool {
         if ($season === true) $season = $this->getService(EntityManagerInterface::class)->getRepository(Season::class)->findOneBy(['current' => true]);
         if (is_string( $template )) {
@@ -276,8 +280,12 @@ class UserUnlockableService implements ServiceSubscriberInterface
 
         $qb = $this->generateDefaultQuery($user)
             ->select('COUNT(x.id)', 'SUM(x.value)')
-            ->andWhere('x.season = :season')->setParameter('season', $season)
-            ->andWhere('x.reset = 0');
+            ->andWhere('x.season = :season')->setParameter('season', $season);
+
+        if ($reset === true)
+            $qb->andWhere('x.reset > 0');
+        else
+            $qb->andWhere('x.reset = :resets')->setParameter('resets', $reset);
 
         if ($template !== null)
             $qb->andWhere('x.logEntryTemplate = :template')->setParameter('template', $template);
@@ -287,7 +295,7 @@ class UserUnlockableService implements ServiceSubscriberInterface
         $data = $qb->getQuery()->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
 
         $total = (int)($data[2] ?? 0);
-        return $data[1] > 0;
+        return ($count = ($data[1] ?? 0)) > 0;
     }
 
     /**
@@ -512,6 +520,18 @@ class UserUnlockableService implements ServiceSubscriberInterface
             $em->persist( $entry->setReset( $entry->getReset() + 1 ) );
         foreach ($unlocks as $unlock)
             $em->remove($unlock);
+
+        $pictoCache = $em->getRepository(PictoOffsetCounter::class)->findOneBy([
+            'user' => $user->getId(),
+            'season' => $season->getId(),
+        ]) ?? (new PictoOffsetCounter())
+            ->setUser( $user )
+            ->setSeason($season);
+
+        foreach ($this->getService(PictoService::class)->getPictoGroup( $user, season: $season ) as $rollup)
+            $pictoCache->setPictoCount( $rollup->getPrototype(), $rollup->getCount() );
+
+        $em->persist( $pictoCache );
 
         $em->flush();
         ($this->getService(InvalidateTagsInAllPoolsAction::class))("user-{$user->getId()}-hxp");
