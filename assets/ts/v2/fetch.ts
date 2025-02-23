@@ -279,8 +279,10 @@ export class Fetch {
 
     private async process_network_failure( error: any = undefined, options: FetchOptions ) {
         if ( typeof error !== "undefined") {
-            if (options.error_messages)
-                $.html.error( typeof error === 'string' ? `${c.errors['net']}<br/><code>${error}</code>` : c.errors['net']);
+            if (options.error_messages) {
+                if (document && document.body?.dataset?.deconstructing !== "1")
+                    $.html.error(typeof error === 'string' ? `${c.errors['net']}<br/><code>${error}</code>` : c.errors['net']);
+            }
             else if (error) console.error(error);
 
             throw options.throw_response_on_error ? null : error;
