@@ -56,7 +56,7 @@ Routen: Expedición
 Stadttor: El Portal
 Karte: Mapa
 'Bitte wähle einen Gegenstand:': 'Selecciona un objeto:'
-'Du verfügst über keine geeigneten Gegenstände': 'No tienes ningún item adecuado para esto.'
+'Du verfügst über keine geeigneten Gegenstände': 'No tienes ningún objeto adecuado para esto.'
 Herstellen: Ensamblar
 aus: requiere
 Kombinieren: Combinar
@@ -3193,3 +3193,6 @@ Tierklinik: Centro de pruebas
 'Du hast einen zusätzlichen Fähigkeitenpunkt erhalten!': '¡Has recibido un punto de habilidad adicional!'
 '{cost} Erfahrungspunkte ausgegeben, um einen zusätzlichen Fähigkeitenpunkt zu erhalten; {sold} Erfahrungspunkte durch den Verkauf freigeschalteter Fähigkeiten erhalten.': 'Gasté {cost} puntos de experiencia para obtener un punto de habilidad adicional; obtuve {sold} puntos de experiencia al vender habilidades desbloqueadas previamente.'
 '{citizen} hat mit {list1} erfolgreich {list2} in die Stadt gelockt... und entkommen lassen. Nur etwas {list3} ist übrig geblieben...': '{citizen} logró atraer a {list2} a la ciudad con {list1}... y los dejó escapar. Sólo quedan unos pocos {list3}...'
+'Du hast {item_list} in der Werkstatt geöffnet und erhälst {item}.<hr />Du hast dafür <strong>{ap} Aktionspunkt(e)</strong> verbraucht.': 'Has obtenido {item} en el taller (abriendo {item_list}).<hr />Para ello has utilizado <strong>{ap} puntos de acción</strong>.'
+'Du hast {item_list} in der Werkstatt zu {item} zerlegt.<hr />Du hast dafür <strong>{ap} Aktionspunkt(e)</strong> verbraucht.': 'Has producido {item} en el taller (usando {item_list}).<hr />Para ello has utilizado <strong>{ap} puntos de acción</strong>.'
+'Die ersten 10 Tage in der Pandämonium-Stadt "{town}" überlebt.': 'Ha sobrevivido los primeros 10 días en el pueblo Pandemonio « {town} ».'

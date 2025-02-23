@@ -3193,3 +3193,6 @@ Tierklinik: crwdns210946:0crwdne210946:0
 'Du hast einen zusätzlichen Fähigkeitenpunkt erhalten!': 'crwdns211630:0crwdne211630:0'
 '{cost} Erfahrungspunkte ausgegeben, um einen zusätzlichen Fähigkeitenpunkt zu erhalten; {sold} Erfahrungspunkte durch den Verkauf freigeschalteter Fähigkeiten erhalten.': 'crwdns211632:0{cost}crwdnd211632:0{sold}crwdne211632:0'
 '{citizen} hat mit {list1} erfolgreich {list2} in die Stadt gelockt... und entkommen lassen. Nur etwas {list3} ist übrig geblieben...': 'crwdns211634:0{citizen}crwdnd211634:0{list1}crwdnd211634:0{list2}crwdnd211634:0{list3}crwdne211634:0'
+'Du hast {item_list} in der Werkstatt geöffnet und erhälst {item}.<hr />Du hast dafür <strong>{ap} Aktionspunkt(e)</strong> verbraucht.': 'crwdns211683:0{item_list}crwdnd211683:0{item}crwdnd211683:0{ap}crwdne211683:0'
+'Du hast {item_list} in der Werkstatt zu {item} zerlegt.<hr />Du hast dafür <strong>{ap} Aktionspunkt(e)</strong> verbraucht.': 'crwdns211685:0{item_list}crwdnd211685:0{item}crwdnd211685:0{ap}crwdne211685:0'
+'Die ersten 10 Tage in der Pandämonium-Stadt "{town}" überlebt.': 'crwdns211687:0{town}crwdne211687:0'
