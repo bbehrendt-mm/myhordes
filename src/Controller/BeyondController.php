@@ -1644,7 +1644,7 @@ class BeyondController extends InventoryAwareController
         /** @var Citizen|null $target_citizen */
         $target_citizen = $this->entity_manager->getRepository(Citizen::class)->find( $cid );
 
-        if (!$target_citizen || $target_citizen->getZone()->getId() !== $citizen->getZone()->getId())
+        if (!$target_citizen || $target_citizen->getZone()?->getId() !== $citizen->getZone()->getId())
             return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
 
         if ($target_citizen->activeExplorerStats() || ($citizen->getZone()->getX() == 0 && $citizen->getZone()->getY() == 0) )
