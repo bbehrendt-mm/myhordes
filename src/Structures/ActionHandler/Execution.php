@@ -161,7 +161,7 @@ class Execution extends Base
 
         return [
             ...$dynamic,
-            '{combination}'   => $wrapper(rand(0,9),(rand(0,9),(rand(0,9),(rand(0,9)),
+            '{combination}'   => $wrapper(rand(0,9),rand(0,9),rand(0,9),rand(0,9)),
             '{user}'          => $wrapper($this->citizen),
             '{citizen}'       => $wrapper($this->target_citizen),
             '{target}'        => $wrapper($this->originalTargetPrototype),
