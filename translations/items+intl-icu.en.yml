@@ -344,7 +344,7 @@ Essen: Eat
 Einnehmen: Consume
 Einsetzen: Use
 'Du hast dein <span class="tool">{item}</span> ausgepackt und <span class="tool">{items_spawn}</span> erhalten!': 'You unpacked your <span class="tool">{item}</span> and received <span class="tool">{items_spawn}</span> !'
-'<nt-spawned>Trotz aller Anstrengungen ist es dir nicht gelungen, den {item} zu öffnen...</nt-spawned><t-spawned>Du hast die {item} geöffnet und darin {items_spawn} gefunden!</t-spawned>': '<nt-spawned>You waste precious time looking for the combination to the {item}.<hr />You have used <strong>1 action point</strong>.</nt-spawned><t-spawned>Nice one! You have found the secret combination for the {item}! The code was 4715... You find the {items_spawn} inside.<hr />You have used <strong>1 action point</strong>.</t-spawned>'
+'<nt-spawned>Trotz aller Anstrengungen ist es dir nicht gelungen, den {item} zu öffnen...</nt-spawned><t-spawned>Du hast die {item} geöffnet und darin {items_spawn} gefunden!</t-spawned>': '<nt-spawned>You waste precious time looking for the combination to the {item}.<hr />You have used <strong>1 action point</strong>.</nt-spawned><t-spawned>Nice one! You have found the secret combination for the {item}! The code was {combination}... You find the {items_spawn} inside.<hr />You have used <strong>1 action point</strong>.</t-spawned>'
 Laden: Build
 'Du hast eine {items_consume} in dein/e/n {item_from} eingelegt und {item_to} erhalten!': 'You inserted a {items_consume} into your {item_from} and received a {item_to}!'
 'Waffe einsetzen': 'Attack'
