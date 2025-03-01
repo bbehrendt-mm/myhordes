@@ -482,7 +482,7 @@ class TownHandler
         $rand_backup = mt_rand(PHP_INT_MIN, PHP_INT_MAX);
         mt_srand($est->getSeed() ?? $town->getDay() + $town->getId());
         $cc_offset = $watchtower_offset ?? $this->conf->getTownConfiguration($town)->get(TownSetting::OptModifierWtOffset);
-        $this->calculate_offsets($offsetMin, $offsetMax, $est->getCitizens()->count() * $ratio + $cc_offset, $this->conf->getTownConfiguration($town)->get(TownConf::CONF_ESTIM_SPREAD, 10) - $this->conf->getTownConfiguration($town)->get(TownConf::CONF_ESTIM_INITIAL_SHIFT, 0));
+        $this->calculate_offsets($offsetMin, $offsetMax, $est->getCitizens()->count() * $ratio + $cc_offset, $this->conf->getTownConfiguration($town)->get(TownSetting::OptModifierEstimSpread) - $this->conf->getTownConfiguration($town)->get(TownSetting::OptModifierEstimInitialShift));
 
         $min = round($est->getTargetMin() - ($est->getTargetMin() * $offsetMin / 100));
         $max = round($est->getTargetMax() + ($est->getTargetMax() * $offsetMax / 100));
@@ -520,7 +520,7 @@ class TownHandler
             $offsetMin = $est->getOffsetMin();
             $offsetMax = $est->getOffsetMax();
 
-            $this->calculate_offsets($offsetMin, $offsetMax, $calculateUntil,  $this->conf->getTownConfiguration($town)->get(TownConf::CONF_ESTIM_SPREAD, 10));
+            $this->calculate_offsets($offsetMin, $offsetMax, $calculateUntil,  $this->conf->getTownConfiguration($town)->get(TownSetting::OptModifierEstimSpread));
 
             $min2 = round($est->getTargetMin() - ($est->getTargetMin() * $offsetMin / 100));
             $max2 = round($est->getTargetMax() + ($est->getTargetMax() * $offsetMax / 100));
@@ -603,14 +603,14 @@ class TownHandler
                 if ($value > ($min + 0.5 * ($max-$min))) $value = mt_rand($min,$max);
 
                 $off_min = mt_rand(
-                    $this->conf->getTownConfiguration( $town )->get(TownConf::CONF_ESTIM_OFFSET_MIN, 15) - $this->conf->getTownConfiguration( $town )->get(TownConf::CONF_ESTIM_INITIAL_SHIFT, 0),
-                    $this->conf->getTownConfiguration( $town )->get(TownConf::CONF_ESTIM_OFFSET_MAX, 36) - $this->conf->getTownConfiguration( $town )->get(TownConf::CONF_ESTIM_INITIAL_SHIFT, 0)
+                    $this->conf->getTownConfiguration( $town )->get(TownSetting::OptModifierEstimOffsetMin) - $this->conf->getTownConfiguration( $town )->get(TownSetting::OptModifierEstimInitialShift),
+                    $this->conf->getTownConfiguration( $town )->get(TownSetting::OptModifierEstimOffsetMax) - $this->conf->getTownConfiguration( $town )->get(TownSetting::OptModifierEstimInitialShift)
                 );
 
-                $off_max = $this->conf->getTownConfiguration( $town )->get(TownConf::CONF_ESTIM_VARIANCE, 48) - (2*$this->conf->getTownConfiguration( $town )->get(TownConf::CONF_ESTIM_INITIAL_SHIFT, 0)) - $off_min;
+                $off_max = $this->conf->getTownConfiguration( $town )->get(TownSetting::OptModifierEstimVariance) - (2*$this->conf->getTownConfiguration( $town )->get(TownSetting::OptModifierEstimInitialShift)) - $off_min;
 
-                $shift_min = mt_rand(0, $this->conf->getTownConfiguration( $town )->get(TownConf::CONF_ESTIM_INITIAL_SHIFT, 0) * 100) / 10000;
-                $shift_max = ($this->conf->getTownConfiguration( $town )->get(TownConf::CONF_ESTIM_INITIAL_SHIFT, 0) / 100) - $shift_min;
+                $shift_min = mt_rand(0, $this->conf->getTownConfiguration( $town )->get(TownSetting::OptModifierEstimInitialShift) * 100) / 10000;
+                $shift_max = ($this->conf->getTownConfiguration( $town )->get(TownSetting::OptModifierEstimInitialShift) / 100) - $shift_min;
 
                 $town->addZombieEstimation(
                     (new ZombieEstimation())

@@ -278,15 +278,15 @@ class NightlyHandler
     private function stage1_prepare(Town $town) {
         // Initialize spiritual guide on D1
         $town_conf = $this->conf->getTownConfiguration($town);
-        if ($town_conf->get(TownConf::CONF_GUIDE_ENABLED, false)) {
+        if ($town_conf->get(TownSetting::OptFeatureGuideEnabled)) {
 
             $this->log->debug( "This town is eligible for the <info>spiritual guide</info> picto, checking citizens..." );
 
             // When the guide is enabled and enough citizens are below the SP threshold...
-            $th = $town_conf->get(TownConf::CONF_GUIDE_SP_LIMIT, 100);
+            $th = $town_conf->get(TownSetting::OptFeatureGuideSpLimit);
             if ($town->getCitizens()->filter(function (Citizen $c) use ($th) {
                 return $this->user_handler->fetchSoulPoints( $c->getUser(), true, true ) < $th;
-            })->count() >= ($town_conf->get(TownConf::CONF_GUIDE_CTC_LIMIT, 0.5) * $town->getPopulation()))
+            })->count() >= ($town_conf->get(TownSetting::OptFeatureGuideCtcLimit) * $town->getPopulation()))
 
                 // Each citizen above the threshold gets assigned the potential guide status
                 foreach ($town->getCitizens()->filter(function (Citizen $c) use ($th) {
