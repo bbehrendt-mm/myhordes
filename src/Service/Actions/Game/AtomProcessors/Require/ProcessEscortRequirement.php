@@ -2,6 +2,7 @@
 
 namespace App\Service\Actions\Game\AtomProcessors\Require;
 
+use App\Enum\Configuration\TownSetting;
 use App\Structures\ActionHandler\Evaluation;
 use App\Structures\TownConf;
 use MyHordes\Fixtures\DTO\Actions\Atoms\Requirement\EscortRequirement;
@@ -16,7 +17,7 @@ class ProcessEscortRequirement extends AtomRequirementProcessor
 
         if ($data->minFollowers !== null && $followers < $data->minFollowers) return false;
         if ($data->maxFollowers !== null && $followers > $data->maxFollowers) return false;
-        if ($data->full !== null && $data->full !== ( $followers === $cache->conf->get( TownConf::CONF_FEATURE_ESCORT_SIZE, 5 ) ) ) return false;
+        if ($data->full !== null && $data->full !== ( $followers === $cache->conf->get( TownSetting::OptFeatureEscortSize ) ) ) return false;
 
         return true;
     }

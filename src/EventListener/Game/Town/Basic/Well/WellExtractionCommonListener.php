@@ -7,6 +7,7 @@ namespace App\EventListener\Game\Town\Basic\Well;
 use App\Controller\Town\TownController;
 use App\Entity\ActionCounter;
 use App\Enum\ActionCounterType;
+use App\Enum\Configuration\TownSetting;
 use App\Enum\ItemPoisonType;
 use App\Event\Game\Town\Basic\Well\WellExtractionCheckEvent;
 use App\Event\Game\Town\Basic\Well\WellExtractionExecuteEvent;
@@ -106,7 +107,7 @@ final class WellExtractionCommonListener implements ServiceSubscriberInterface
     public function onItemTransfer(WellExtractionExecuteEvent $event ): void {
         for ($i = 0; $i < $event->check->trying_to_take; $i++) {
             $item = $this->container->get(ItemFactory::class)->createItem( 'water_#00' );
-            if ($event->townConfig->get( TownConf::CONF_MODIFIER_STRANGE_SOIL, false ))
+            if ($event->townConfig->get( TownSetting::OptModifierStrangeSoil ))
                 $item->setPoison( ItemPoisonType::Strange );
             $event->addItem( $item, $event->check->trying_to_take );
         }

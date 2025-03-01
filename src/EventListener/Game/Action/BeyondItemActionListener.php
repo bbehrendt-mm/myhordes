@@ -9,6 +9,7 @@ use App\Entity\EventActivationMarker;
 use App\Entity\ItemPrototype;
 use App\Entity\Zone;
 use App\Enum\ActionCounterType;
+use App\Enum\Configuration\TownSetting;
 use App\Enum\Game\TransferItemModality;
 use App\Event\Game\Actions\CustomActionProcessorEvent;
 use App\EventListener\ContainerTypeTrait;
@@ -103,7 +104,7 @@ final class BeyondItemActionListener implements ServiceSubscriberInterface
                     $event->cache->setTargetCitizen($sandball_target);
                     $sandball_target->getSpecificActionCounter(ActionCounterType::SandballHit, $event->citizen->getId())->increment();
 
-                    $hurt = !$this->getService(CitizenHandler::class)->isWounded($sandball_target) && $this->getService(RandomGenerator::class)->chance( $event->townConfig->get(TownConf::CONF_MODIFIER_SANDBALL_NASTYNESS, 0.0) );
+                    $hurt = !$this->getService(CitizenHandler::class)->isWounded($sandball_target) && $this->getService(RandomGenerator::class)->chance( $event->townConfig->get(TownSetting::OptModifierSandballNastyness) );
                     if ($hurt) $this->getService(CitizenHandler::class)->inflictWound($sandball_target);
 
                     $this->getService(EntityManagerInterface::class)->persist( $this->getService(LogTemplateHandler::class)->sandballAttack( $event->citizen, $sandball_target, $hurt ) );

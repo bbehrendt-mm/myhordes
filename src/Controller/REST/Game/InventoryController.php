@@ -14,6 +14,7 @@ use App\Entity\ItemCategory;
 use App\Entity\ItemPrototype;
 use App\Entity\RuinExplorerStats;
 use App\Enum\ActionHandler\PointType;
+use App\Enum\Configuration\TownSetting;
 use App\Enum\Game\TransferItemModality;
 use App\Enum\Game\TransferItemOption;
 use App\Enum\ItemPoisonType;
@@ -213,7 +214,7 @@ class InventoryController extends CustomAbstractCoreController
             ->groupBy('i.prototype');
 
         // Add group by poison state if poison stacking is disabled
-        if (!$this->conf->getTownConfiguration($citizen->getTown())->get(TownConf::CONF_MODIFIER_POISON_STACK, false))
+        if (!$this->conf->getTownConfiguration($citizen->getTown())->get(TownSetting::OptModifierPoisonStack))
             $qb->andWhere('i.poison = :poison')->setParameter('poison', ItemPoisonType::None->value);
 
         $data = $qb->getQuery()->getResult(AbstractQuery::HYDRATE_ARRAY);
@@ -240,7 +241,7 @@ class InventoryController extends CustomAbstractCoreController
             ->where('i.inventory = :inv')->setParameter('inv', $inventory);
 
         // Add group by to separate broken/unbroken items, additionally group by poison state if poison stacking is disabled
-        if ($this->conf->getTownConfiguration($citizen->getTown())->get(TownConf::CONF_MODIFIER_POISON_STACK, false))
+        if ($this->conf->getTownConfiguration($citizen->getTown())->get(TownSetting::OptModifierPoisonStack))
             $qb->groupBy('i.prototype', 'i.broken');
         else $qb->groupBy('i.prototype', 'i.broken', 'i.poison');
 
@@ -431,7 +432,7 @@ class InventoryController extends CustomAbstractCoreController
                                                              $mod === 'theft' => TransferItemModality::BankTheft,
                                                              ($mod === 'hide' && $hide_should_succeed) => TransferItemModality::HideItem,
                                                              default => TransferItemModality::None
-                                                         }, $this->conf->getTownConfiguration($citizen->getTown())->get(TownConf::CONF_MODIFIER_CARRY_EXTRA_BAG, false) ? [ TransferItemOption::AllowExtraBag ] : [] )
+                                                         }, $this->conf->getTownConfiguration($citizen->getTown())->get(TownSetting::OptModifierCarryExtraBag) ? [ TransferItemOption::AllowExtraBag ] : [] )
                     , autoFlush: false, error_messages: $error_messages, lastEvent: $event )) !== null)
 
                 $errors[] = $error;

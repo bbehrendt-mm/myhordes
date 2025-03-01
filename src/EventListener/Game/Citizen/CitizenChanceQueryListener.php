@@ -333,8 +333,8 @@ final class CitizenChanceQueryListener implements ServiceSubscriberInterface
                 // A depleted zone have 35% chance of giving an item
                 // A non-depleted one have 60% chance of giving an item, + the profession bonus
                 $chance = ($event->empty)
-                    ? $event->townConfig->get(TownConf::CONF_DIG_CHANCES_DEPLETED, 0.35)
-                    : ($event->townConfig->get(TownConf::CONF_DIG_CHANCES_BASE, 0.60) + $event->citizen->getProfession()->getDigBonus());
+                    ? $event->townConfig->get(TownSetting::MapParamsDigChancesDepleted)
+                    : ($event->townConfig->get(TownSetting::MapParamsDigChancesBase) + $event->citizen->getProfession()->getDigBonus());
 
                 // We apply the night malus
                 $chance -= $this->applyNightMalus( $event->citizen, $base_night_malus, $event->distance );

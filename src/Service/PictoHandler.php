@@ -31,7 +31,7 @@ class PictoHandler
         if ($count <= 0) return false;
 
         $conf = $this->conf->getTownConfiguration($citizen->getTown());
-        if (!$conf->get(TownConf::CONF_FEATURE_PICTOS, true)) return false;
+        if (!$conf->get(TownSetting::OptFeaturePictos)) return false;
 
         if( is_string($pictoPrototype) ){
             $pictoPrototype = $this->entity_manager->getRepository(PictoPrototype::class)->findOneBy(['name' => $pictoPrototype]);
@@ -47,7 +47,7 @@ class PictoHandler
             if (in_array($pictoPrototype->getName(), $this->conf->getTownConfiguration($citizen->getTown())->get(TownConf::CONF_INSTANT_PICTOS, [])))
                 $persist = true;
             else {
-                $dayLimit = ($this->conf->getTownConfiguration($citizen->getTown())->get(TownConf::CONF_MODIFIER_STRICT_PICTOS, false) && $citizen->getUser()->getAllSoulPoints() >= 100) ? 8 : 5;
+                $dayLimit = ($this->conf->getTownConfiguration($citizen->getTown())->get(TownSetting::OptModifierStrictPictos) && $citizen->getUser()->getAllSoulPoints() >= 100) ? 8 : 5;
                 $persist = $citizen->getTown()->getDay() >= $dayLimit;
             }
 
@@ -92,7 +92,7 @@ class PictoHandler
         // To show "You could have earn those if you survived X more days"
         // In Small Towns, if the user has 100 soul points or more, he must survive at least 8 days or die from the attack during day 7 to 8
         // to validate the picto (set them as persisted)
-        $update_persistance = !($this->conf->getTownConfiguration($citizen->getTown())->get(TownConf::CONF_MODIFIER_STRICT_PICTOS, false) && $citizen->getUser()->getAllSoulPoints() >= 100) || $citizen->getTown()->getDay() >= 8;
+        $update_persistance = !($this->conf->getTownConfiguration($citizen->getTown())->get(TownSetting::OptModifierStrictPictos) && $citizen->getUser()->getAllSoulPoints() >= 100) || $citizen->getTown()->getDay() >= 8;
 
         foreach ($pictos as $picto) {
             /** @var Picto $picto */
@@ -120,7 +120,7 @@ class PictoHandler
         $conf = $this->conf->getTownConfiguration($citizen->getTown());
 
         // In private towns, we get only 1/3 of all pictos and no rare, unless it is specified otherwise
-        if(!$conf->get(TownConf::CONF_FEATURE_GIVE_ALL_PICTOS, true)){
+        if(!$conf->get(TownSetting::OptFeatureGiveAllPictos)){
 
             $keepPictos = [];
             $pictos = $this->entity_manager->getRepository(Picto::class)->findBy(['user' => $citizen->getUser(), 'town' => $citizen->getTown(), "persisted" => 1]);

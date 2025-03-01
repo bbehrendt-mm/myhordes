@@ -208,7 +208,7 @@ class BeyondController extends InventoryAwareController
             'zone_players' => $zone_players,
             'zone_zombies' => max(0,$zone->getZombies()),
             'zone_splatter' => max(0, $zone->getInitialZombies() - $zone->getZombies()),
-            'can_attack_citizen' => !$this->citizen_handler->isTired($this->getActiveCitizen()) && $this->getActiveCitizen()->getAp() >= $this->getTownConf()->get(TownConf::CONF_MODIFIER_ATTACK_AP, 5) && !$this->citizen_handler->isWounded($this->getActiveCitizen()) && !$zone->isTownZone(),
+            'can_attack_citizen' => !$this->citizen_handler->isTired($this->getActiveCitizen()) && $this->getActiveCitizen()->getAp() >= $this->getTownConf()->get(TownSetting::OptModifierAttackAp) && !$this->citizen_handler->isWounded($this->getActiveCitizen()) && !$zone->isTownZone(),
             'can_devour_citizen' => $this->getActiveCitizen()->hasRole('ghoul') && !$zone->isTownZone(),
             'allow_devour_citizen' => !$this->citizen_handler->hasStatusEffect($this->getActiveCitizen(), 'tg_ghoul_eat'),
             'zone_cp' => $cp,
@@ -289,7 +289,7 @@ class BeyondController extends InventoryAwareController
 
             $require_ap = ($is_on_zero && $th->getBuilding($town, 'small_labyrinth_#00',  true));
 
-            if (!$is_on_zero && $this->getTownConf()->get(TownConf::CONF_FEATURE_CAMPING, false)) {
+            if (!$is_on_zero && $this->getTownConf()->get(TownSetting::OptFeatureCamping)) {
                 $zone_camping_base = ($zone->getPrototype() ? $zone->getPrototype()->getCampingLevel() : 0) + ($zone->getImprovementLevel() );
 
                 // Camping Information
@@ -1276,7 +1276,7 @@ class BeyondController extends InventoryAwareController
             $target_citizens = [$t];
         } else $target_citizens = [];
 
-        $allow_redig = $this->conf->getTownConfiguration($citizen->getTown())->get(TownConf::CONF_MODIFIER_ALLOW_REDIGS, false);
+        $allow_redig = $this->conf->getTownConfiguration($citizen->getTown())->get(TownSetting::OptModifierAllowRedigs);
 
         foreach ($target_citizens as $target_citizen)
             try {
@@ -1535,7 +1535,7 @@ class BeyondController extends InventoryAwareController
      */
     #[Route(path: 'api/beyond/desert/escort/self', name: 'beyond_desert_escort_self_controller')]
     public function desert_escort_self_api(JSONRequestParser $parser, ConfMaster $conf): Response {
-        if (!$conf->getTownConfiguration($this->getActiveCitizen()->getTown())->get( TownConf::CONF_FEATURE_ESCORT, true ))
+        if (!$conf->getTownConfiguration($this->getActiveCitizen()->getTown())->get( TownSetting::OptFeatureEscort ))
             return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
 
         if ($this->citizen_handler->citizenIsCamping($this->getActiveCitizen())) return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
@@ -1580,7 +1580,7 @@ class BeyondController extends InventoryAwareController
      */
     #[Route(path: 'api/beyond/desert/escort/{cid<\d+>}', name: 'beyond_desert_escort_controller')]
     public function desert_escort_api(int $cid, JSONRequestParser $parser, ConfMaster $conf): Response {
-        if (!$conf->getTownConfiguration($this->getActiveCitizen()->getTown())->get( TownConf::CONF_FEATURE_ESCORT, true ))
+        if (!$conf->getTownConfiguration($this->getActiveCitizen()->getTown())->get( TownSetting::OptFeatureEscort ))
             return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
 
         if (!$this->citizen_handler->citizenCanAct($this->getActiveCitizen())) return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
@@ -1605,7 +1605,7 @@ class BeyondController extends InventoryAwareController
         if ($on && !$citizen->getUser()->getExpert())
             return AjaxResponse::errorMessage( $this->translator->trans( 'Du kannst diese Aktion im Lernmodus nicht ausführen. <strong>Zuerst musst du noch etwas Spielerfahrung sammeln</strong>.<hr/>Klicke auf den Link bei Lernmodus, um diesen Modus zu deaktivieren.', [], 'game' ) );
 
-        $max_escort_size = $conf->getTownConfiguration($citizen->getTown())->get(TownConf::CONF_FEATURE_ESCORT_SIZE, 4);
+        $max_escort_size = $conf->getTownConfiguration($citizen->getTown())->get(TownSetting::OptFeatureEscortSize);
 
         if ($on && $citizen->getLeadingEscorts()->count() >= $max_escort_size)
             return AjaxResponse::error( self::ErrorEscortLimitHit );
@@ -1646,7 +1646,7 @@ class BeyondController extends InventoryAwareController
      */
     #[Route(path: 'api/beyond/desert/escort/all', name: 'beyond_desert_escort_drop_controller')]
     public function desert_escort_api_drop_all(ConfMaster $conf): Response {
-        if (!$conf->getTownConfiguration($this->getActiveCitizen()->getTown())->get( TownConf::CONF_FEATURE_ESCORT, true ))
+        if (!$conf->getTownConfiguration($this->getActiveCitizen()->getTown())->get( TownSetting::OptFeatureEscort ))
             return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
 
         if (!$this->citizen_handler->citizenCanAct($this->getActiveCitizen())) return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );

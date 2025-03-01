@@ -3,6 +3,7 @@
 namespace App\Service\Actions\Game\AtomProcessors\Require;
 
 use App\Entity\ItemPrototype;
+use App\Enum\Configuration\TownSetting;
 use App\Service\InventoryHandler;
 use App\Structures\ActionHandler\Evaluation;
 use App\Structures\ItemRequest;
@@ -20,7 +21,7 @@ class ProcessItemRequirement extends AtomRequirementProcessor
 
         $inventoryHandler = $this->container->get(InventoryHandler::class);
 
-        if ( $cache->conf->get( TownConf::CONF_MODIFIER_POISON_TRANS, false ) && $data->poison !== true )
+        if ( $cache->conf->get( TownSetting::OptModifierPoisonTrans ) && $data->poison !== true )
             $poison = null;
         else $poison = $data->poison;
 

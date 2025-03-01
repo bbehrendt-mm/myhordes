@@ -19,6 +19,7 @@ use App\Entity\TwinoidImport;
 use App\Entity\User;
 use App\Entity\ZombieEstimation;
 use App\Enum\Configuration\MyHordesSetting;
+use App\Enum\Configuration\TownSetting;
 use App\Enum\EventStages\BuildingValueQuery;
 use App\Service\CitizenHandler;
 use App\Service\CommandHelper;
@@ -587,7 +588,7 @@ class DebugCommand extends LanguageCommand
 
 			$redsouls = $this->townHandler->get_red_soul_count($town);
 			$red_soul_penality = $this->events->queryTownParameter( $town, BuildingValueQuery::NightlyRedSoulPenalty );
-			$soulFactor = min(1 + ($red_soul_penality * $redsouls), (float)$this->conf->getTownConfiguration($town)->get(TownConf::CONF_MODIFIER_RED_SOUL_FACTOR, 1.2));
+			$soulFactor = min(1 + ($red_soul_penality * $redsouls), (float)$this->conf->getTownConfiguration($town)->get(TownSetting::OptModifierRedSoulFactor));
 
             $output->writeln("Attack for day {$est->getDay()} : <info>{$est->getZombies()}</info>, soul factor is <info>$soulFactor</info>, real attack will be <info>" . ($est->getZombies() * $soulFactor) . "</info>");
 

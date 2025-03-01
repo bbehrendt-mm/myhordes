@@ -84,7 +84,7 @@
                     <li class="action" x-recipe-id="{{ recipe.id }}">
                         {# @var recipe \App\Entity\Recipe #}
                         {% if recipe.result.entries.count == 1 %}
-                            {% if recipe.source and not conf.get(constant('App\\Structures\\TownConf::CONF_MODIFIER_PRE_ASSEMBLY'),false) %}
+                            {% if recipe.source and not conf.get(constant('App\\Enum\\Configuration\\TownSetting::OptModifierPreAssembly')) %}
                                 <img src="{{ asset('build/images/item/item_' ~ recipe.provoking[0].icon ~ '.gif') }}" alt="{{ recipe.provoking[0].label|trans({},'items') }}">
                                 {% if scout and recipe.stealthy %}
                                     <img class="float-right" src="{{ asset('build/images/icons/small_stealthy.gif') }}" alt="">
