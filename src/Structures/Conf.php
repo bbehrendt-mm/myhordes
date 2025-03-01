@@ -54,23 +54,19 @@ class Conf
         return $this->data;
     }
 
+
     public function get(string|Configuration $key, $default = null) {
         if ( is_a( $key, Configuration::class ) ) {
 
             if ($key->abstract())
-                /** @noinspection PhpUnhandledExceptionInspection */
-                throw new Exception("Cannot read data from abstract setting '{$key->name()}'.");
+                /** @noinspection PhpUnhandledExceptionInspection */ throw new Exception("Cannot read data from abstract setting '{$key->name()}'.");
             return $this->dot->get( $key->key(), $key->default() ?? $default );
 
         } else return $this->dot->get( $key, $default );
     }
 
-    /**
-     * @throws Exception
-     * @deprecated
-     */
-    public function getSubKey(string $key, string $subKey, $default = null) {
-        return $this->get( "{$key}.{$subKey}", $default );
+    public function getSubKey(Configuration $key, string $subKey, $default = null) {
+        return $this->get( "{$key->key()}.{$subKey}", $default );
     }
 
     /**

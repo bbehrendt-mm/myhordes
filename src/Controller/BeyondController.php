@@ -1361,7 +1361,7 @@ class BeyondController extends InventoryAwareController
 
                 if (!empty($event_confs)) $event_conf = $this->random_generator->pick( $event_confs );
 
-                $named_groups = $this->getTownConf()->get( TownConf::CONF_OVERRIDE_NAMED_DROPS, [] );
+                $named_groups = $this->getTownConf()->get( TownSetting::OptModifierOverrideNamedDrops );
                 $group = $event_conf
                     ? ( $this->random_generator->chance($event_conf['chance'])
                         ? $this->entity_manager->getRepository(ItemGroup::class)->findOneBy(['name' => $event_conf['group']])

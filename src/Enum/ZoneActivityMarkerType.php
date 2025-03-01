@@ -50,7 +50,7 @@ enum ZoneActivityMarkerType: int {
             ZoneActivityMarkerType::ExplorableBlueprintU => $conf->get( TownSetting::ERuinBPUnusual ),
             ZoneActivityMarkerType::ExplorableBlueprintR => $conf->get( TownSetting::ERuinBPRare ),
             ZoneActivityMarkerType::ExplorableBlueprintE => $conf->get( TownSetting::ERuinBPEpic ),
-            ZoneActivityMarkerType::ScavengeBlueprintBag => $conf->get( TownConf::CONF_SCAVENGING_PLAN_LIMIT_B, -1 ),
+            ZoneActivityMarkerType::ScavengeBlueprintBag => $conf->get( TownSetting::OptModifierScavengingPlanLimitB ),
             default => -1
         };
     }

@@ -175,6 +175,9 @@ enum TownSetting: string implements Configuration
     case OptFeatureSurvivalPicto  = 'features.survival_picto';
     case OptFeatureNoSpRequired  = 'features.free_for_all';
     case OptFeatureNoTeams  = 'features.free_from_teams';
+    case OptFeatureGuideEnabled    = 'spiritual_guide.enabled';
+    case OptFeatureGuideSpLimit   = 'spiritual_guide.sp_limit';
+    case OptFeatureGuideCtcLimit  = 'spiritual_guide.citizen';
     //</editor-fold>
 
     //<editor-fold desc="Town Modifiers">
@@ -221,6 +224,24 @@ enum TownSetting: string implements Configuration
     case OptModifierGuardtowerUnit    = 'modifiers.guard_tower.per_use';
     case OptModifierStrangeSoil        = 'modifiers.strange_soil';
     case OptModifierSoulGenerationCoef = 'modifiers.soul_generation_coef';
+    case OptModifierInstantPictos = 'instant_pictos';
+
+    case OptModifierEstimInitialShift  = 'estimation.shift';
+    case OptModifierEstimSpread         = 'estimation.spread';
+    case OptModifierEstimVariance       = 'estimation.variance';
+    case OptModifierEstimOffsetMin     = 'estimation.offset.min';
+    case OptModifierEstimOffsetMax     = 'estimation.offset.max';
+
+    case OptModifierScavengingPlanLimitB = 'zone_items.plan_limits.bag';
+
+    case OptModifierBankAbuseLimit       = 'bank_abuse.limit';
+    case OptModifierBankAbuseLimitChaos = 'bank_abuse.chaos_limit';
+    case OptModifierBankAbuseBase        = 'bank_abuse.base_range_min';
+    case OptModifierBankAbuseLock        = 'bank_abuse.lock_range_min';
+
+    case OptModifierOverrideItemGroup  = 'overrides.item_groups';
+    case OptModifierOverrideNamedDrops = 'overrides.named_drops';
+
     //</editor-fold>
 
     //</editor-fold>
@@ -361,7 +382,10 @@ enum TownSetting: string implements Configuration
             self::OptFeatureLastDeathDay,
             self::OptFeatureSurvivalPicto,
             self::OptFeatureNoSpRequired,
-            self::OptFeatureNoTeams => self::Section_Opts_Features,
+            self::OptFeatureNoTeams,
+            self::OptFeatureGuideEnabled,
+            self::OptFeatureGuideSpLimit,
+            self::OptFeatureGuideCtcLimit => self::Section_Opts_Features,
 
             self::OptModifierComplaintsShun,
             self::OptModifierComplaintsKill,
@@ -403,7 +427,21 @@ enum TownSetting: string implements Configuration
             self::OptModifierGuardtowerMax,
             self::OptModifierGuardtowerUnit,
             self::OptModifierStrangeSoil,
-            self::OptModifierSoulGenerationCoef => self::Section_Opts_Modifiers,
+            self::OptModifierSoulGenerationCoef,
+            self::OptModifierInstantPictos,
+            self::OptModifierEstimInitialShift,
+            self::OptModifierEstimSpread,
+            self::OptModifierEstimVariance,
+            self::OptModifierEstimOffsetMin,
+            self::OptModifierEstimOffsetMax,
+            self::OptModifierScavengingPlanLimitB,
+            self::OptModifierBankAbuseLimit,
+            self::OptModifierBankAbuseLimitChaos,
+            self::OptModifierBankAbuseBase,
+            self::OptModifierBankAbuseLock,
+            self::OptModifierOverrideItemGroup,
+            self::OptModifierOverrideNamedDrops,
+                => self::Section_Opts_Modifiers,
 
             default => null
         };
@@ -527,6 +565,9 @@ enum TownSetting: string implements Configuration
             self::OptFeatureSurvivalPicto => null,
             self::OptFeatureNoSpRequired => false,
             self::OptFeatureNoTeams => false,
+            self::OptFeatureGuideEnabled => false,
+            self::OptFeatureGuideSpLimit => 100,
+            self::OptFeatureGuideCtcLimit => 0.5,
 
             self::OptModifierComplaintsShun => 8,
             self::OptModifierComplaintsKill => 6,
@@ -569,6 +610,19 @@ enum TownSetting: string implements Configuration
             self::OptModifierGuardtowerUnit => 10,
             self::OptModifierStrangeSoil => false,
             self::OptModifierSoulGenerationCoef => 1.0,
+            self::OptModifierInstantPictos => [],
+            self::OptModifierEstimInitialShift => 0,
+            self::OptModifierEstimSpread => 10,
+            self::OptModifierEstimVariance => 48,
+            self::OptModifierEstimOffsetMin => 15,
+            self::OptModifierEstimOffsetMax => 36,
+            self::OptModifierScavengingPlanLimitB => -1,
+            self::OptModifierBankAbuseLimit => 5,
+            self::OptModifierBankAbuseLimitChaos => 10,
+            self::OptModifierBankAbuseBase => 5,
+            self::OptModifierBankAbuseLock => 15,
+            self::OptModifierOverrideItemGroup => [],
+            self::OptModifierOverrideNamedDrops => [],
 
             default => null,
         };

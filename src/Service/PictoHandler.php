@@ -44,7 +44,7 @@ class PictoHandler
 
         if ($persist === null) {
 
-            if (in_array($pictoPrototype->getName(), $this->conf->getTownConfiguration($citizen->getTown())->get(TownConf::CONF_INSTANT_PICTOS, [])))
+            if (in_array($pictoPrototype->getName(), $this->conf->getTownConfiguration($citizen->getTown())->get(TownSetting::OptModifierInstantPictos)))
                 $persist = true;
             else {
                 $dayLimit = ($this->conf->getTownConfiguration($citizen->getTown())->get(TownSetting::OptModifierStrictPictos) && $citizen->getUser()->getAllSoulPoints() >= 100) ? 8 : 5;
@@ -84,7 +84,7 @@ class PictoHandler
     public function nightly_validate_picto(Citizen $citizen):void {
         // Also, the RP, Sandball, ban, theft and soul collector pictos are always validated
         // In small town, we add the Guide and Nightwatch pictos
-        $pictoAlwaysPersisted = $this->conf->getTownConfiguration($citizen->getTown())->get(TownConf::CONF_INSTANT_PICTOS, []);
+        $pictoAlwaysPersisted = $this->conf->getTownConfiguration($citizen->getTown())->get(TownSetting::OptModifierInstantPictos);
 
         $pictos = $this->entity_manager->getRepository(Picto::class)->findBy(['user' => $citizen->getUser(), 'town' => $citizen->getTown(), "persisted" => 0]);
 

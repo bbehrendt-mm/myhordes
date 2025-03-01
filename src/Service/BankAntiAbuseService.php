@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Entity\ActionEventLog;
 use App\Entity\Citizen;
+use App\Enum\Configuration\TownSetting;
 use App\Structures\TownConf;
 use DateInterval;
 use Doctrine\ORM\EntityManagerInterface;
@@ -31,8 +32,8 @@ class BankAntiAbuseService {
 
         $town = $citizen->getTown();
 
-        $nbObjectMax = $this->conf->getTownConfiguration($town)->get($town->getChaos() ? TownConf::CONF_BANK_ABUSE_LIMIT_CHAOS : TownConf::CONF_BANK_ABUSE_LIMIT, 5);
-        $limit = $this->conf->getTownConfiguration($citizen->getTown())->get(TownConf::CONF_BANK_ABUSE_LOCK, 15);
+        $nbObjectMax = $this->conf->getTownConfiguration($town)->get($town->getChaos() ? TownSetting::OptModifierBankAbuseLimitChaos : TownSetting::OptModifierBankAbuseLimit);
+        $limit = $this->conf->getTownConfiguration($citizen->getTown())->get(TownSetting::OptModifierBankAbuseLock);
 
         $cutoff = (new \DateTime())->sub(DateInterval::createFromDateString("{$limit}min"));
 

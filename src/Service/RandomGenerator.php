@@ -12,6 +12,7 @@ use App\Entity\ItemPrototype;
 use App\Entity\Result;
 use App\Entity\Zone;
 use App\Entity\ZonePrototype;
+use App\Enum\Configuration\TownSetting;
 use App\Enum\DropMod;
 use App\Interfaces\RandomEntry;
 use App\Interfaces\RandomGroup;
@@ -128,7 +129,7 @@ class RandomGenerator
      * @return ItemPrototype|null
      */
     function pickItemPrototypeFromGroup(ItemGroup $g, ?TownConf $tc = null, array $eventConfs = []): ?ItemPrototype {
-        if ($tc && $g->getName() && ($replace = $tc->getSubKey(TownConf::CONF_OVERRIDE_ITEM_GROUP, $g->getName())) )
+        if ($tc && $g->getName() && ($replace = $tc->getSubKey(TownSetting::OptModifierOverrideItemGroup, $g->getName())) )
             return $this->pickItemPrototypeFromGroup( $this->em->getRepository(ItemGroup::class)->findOneByName($replace), $tc );
 
         $modContent =  $tc?->dropMods() ?? DropMod::defaultMods();
