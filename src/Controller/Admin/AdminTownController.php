@@ -1301,7 +1301,7 @@ class AdminTownController extends AdminActionController
 
         $town_conf = $cf->getTownConfiguration($citizen->getTown());
 
-        $citizen_alias_active = $town_conf->get(TownConf::CONF_FEATURE_CITIZEN_ALIAS, false);
+        $citizen_alias_active = $town_conf->get(TownSetting::OptFeatureCitizenAlias);
 
         if(!$citizen_alias_active)
             return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);

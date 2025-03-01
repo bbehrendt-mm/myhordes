@@ -26,6 +26,7 @@ use App\Enum\ActionHandler\ActionValidity;
 use App\Enum\ActionHandler\PointType;
 use App\Enum\ClientSignal;
 use App\Enum\Configuration\CitizenProperties;
+use App\Enum\Configuration\TownSetting;
 use App\Enum\ItemPoisonType;
 use App\Service\Actions\Game\AtomProcessors\Effect\AtomEffectProcessor;
 use App\Service\Actions\Game\AtomProcessors\Require\AtomRequirementProcessor;
@@ -520,7 +521,7 @@ class ActionHandler
         $source_inv = in_array($recipe->getType(), $workshop_types) ? [ $t_inv ] : ($citizen->getZone() ? [$c_inv] : [$c_inv, $citizen->getHome()->getChest() ]);
         $target_inv = in_array($recipe->getType(), $workshop_types) ? [ $t_inv ] : ($citizen->getZone() ? ($citizen->getZone()->getX() != 0 || $citizen->getZone()->getY() != 0 ? [$c_inv,$citizen->getZone()->getFloor()] : [$c_inv])  : [$c_inv, $citizen->getHome()->getChest()]);
 
-        if (!in_array($recipe->getType(), $workshop_types) && $citizen->getZone() && $this->conf->getTownConfiguration($town)->get(TownConf::CONF_MODIFIER_FLOOR_ASMBLY, false))
+        if (!in_array($recipe->getType(), $workshop_types) && $citizen->getZone() && $this->conf->getTownConfiguration($town)->get(TownSetting::OptModifierFloorAsmbly))
             $source_inv[] = $citizen->getZone()->getFloor();
 
         $items = $this->inventory_handler->fetchSpecificItems( $source_inv, $recipe->getSource() );

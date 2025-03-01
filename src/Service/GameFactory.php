@@ -630,7 +630,7 @@ class GameFactory
         // Prevent lang restricted player from joining a different lang
         if (!$internal
             && $this->user_handler->isRestricted($user, AccountRestriction::RestrictionGameplayLang)
-            && !$this->conf->getTownConfiguration( $town )->get( TownConf::CONF_FEATURE_NO_TEAMS )
+            && !$this->conf->getTownConfiguration( $town )->get( TownSetting::OptFeatureNoTeams )
             && !$town->getRankingEntry()?->getEvent()
             && $town->getLanguage() !== 'multi'
             && $town->getLanguage() !== $user->getTeam())
@@ -643,7 +643,7 @@ class GameFactory
 
         $conf = $this->conf->getGlobalConf();
 
-        if (!$internal && !$this->conf->getTownConfiguration( $town )->get( TownConf::CONF_FEATURE_NO_SP_REQUIRED )) {
+        if (!$internal && !$this->conf->getTownConfiguration( $town )->get( TownSetting::OptFeatureNoSpRequired )) {
 
             $sp = $this->user_handler->fetchSoulPoints($user);
             $allowed = false;

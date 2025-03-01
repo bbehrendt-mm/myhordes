@@ -5,6 +5,7 @@ namespace App\EventListener\Game\Town\Basic\Buildings;
 
 use App\Entity\CitizenStatus;
 use App\Entity\ItemPrototype;
+use App\Enum\Configuration\TownSetting;
 use App\Enum\ItemPoisonType;
 use App\Event\Game\Town\Basic\Buildings\BuildingEffectEvent;
 use App\Event\Game\Town\Basic\Buildings\BuildingEffectPostAttackEvent;
@@ -323,7 +324,7 @@ final class BuildingEffectListener implements ServiceSubscriberInterface
             $this->getService(EntityManagerInterface::class)->persist( $this->getService(LogTemplateHandler::class)->nightlyAttackProduction( $event->building, $local_log ) );
 
         if (!empty($local)) {
-            $strange = $event->townConfig->get( TownConf::CONF_MODIFIER_STRANGE_SOIL, false );
+            $strange = $event->townConfig->get( TownSetting::OptModifierStrangeSoil );
             foreach ($local as ['item' => $item_proto, 'count' => $count])
                 for ($i = 0; $i < $count; $i++) {
                     $item = $this->getService(ItemFactory::class)->createItem( $item_proto );

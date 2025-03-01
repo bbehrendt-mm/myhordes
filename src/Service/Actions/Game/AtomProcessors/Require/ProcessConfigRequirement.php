@@ -2,6 +2,7 @@
 
 namespace App\Service\Actions\Game\AtomProcessors\Require;
 
+use App\Enum\Configuration\TownSetting;
 use App\Service\ConfMaster;
 use App\Structures\ActionHandler\Evaluation;
 use MyHordes\Fixtures\DTO\Actions\Atoms\Requirement\ConfigRequirement;
@@ -11,9 +12,10 @@ class ProcessConfigRequirement extends AtomRequirementProcessor
 {
     public function __invoke(Evaluation $cache, RequirementsAtom|ConfigRequirement $data): bool
     {
-        foreach ($data->getConfigRequirements() as list( $setting, $expected ))
-            if ($cache->conf->get( $setting ) !== $expected)
+        foreach ($data->getConfigRequirements() as list( $setting, $expected )) {
+            if ($cache->conf->get(TownSetting::tryFrom( $setting ) ?? $setting) !== $expected)
                 return false;
+        }
 
         if ($data->event) {
             $confMaster = $this->container->get(ConfMaster::class);

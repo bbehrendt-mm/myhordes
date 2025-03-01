@@ -20,6 +20,7 @@ use App\Entity\Zone;
 use App\Enum\ActionCounterType;
 use App\Enum\Configuration\CitizenProperties;
 use App\Enum\Configuration\MyHordesSetting;
+use App\Enum\Configuration\TownSetting;
 use App\Enum\EventStages\BuildingValueQuery;
 use App\Event\Game\Citizen\CitizenQueryNightwatchDeathChancesEvent;
 use App\Event\Game\Citizen\CitizenQueryNightwatchDefenseEvent;
@@ -363,10 +364,10 @@ class TownAddonsController extends TownController
             return $this->redirect($this->generateUrl('game_newspaper'));
 
         $town = $this->getActiveCitizen()->getTown();
-        if (!$this->getTownConf()->get(TownConf::CONF_FEATURE_NIGHTWATCH, true))
+        if (!$this->getTownConf()->get(TownSetting::OptFeatureNightwatch))
             return $this->redirect($this->generateUrl('town_dashboard'));
 
-        if (!$th->getBuilding($town, 'small_round_path_#00', true) && !$this->getTownConf()->get(TownConf::CONF_FEATURE_NIGHTWATCH_INSTANT, false))
+        if (!$th->getBuilding($town, 'small_round_path_#00', true) && !$this->getTownConf()->get(TownSetting::OptFeatureNightwatchInstant))
             return $this->redirect($this->generateUrl('town_dashboard'));
 
         $citizenWatch = $this->entity_manager->getRepository(CitizenWatch::class)->findCurrentWatchers($town);
@@ -448,10 +449,10 @@ class TownAddonsController extends TownController
     public function api_nightwatch_gowatch(TownHandler $th, JSONRequestParser $parser, EventProxyService $proxy): Response
     {
         $town = $this->getActiveCitizen()->getTown();
-        if (!$this->getTownConf()->get(TownConf::CONF_FEATURE_NIGHTWATCH, true))
+        if (!$this->getTownConf()->get(TownSetting::OptFeatureNightwatch))
             return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
 
-        if (!$th->getBuilding($town, 'small_round_path_#00', true) && !$this->getTownConf()->get(TownConf::CONF_FEATURE_NIGHTWATCH_INSTANT, false))
+        if (!$th->getBuilding($town, 'small_round_path_#00', true) && !$this->getTownConf()->get(TownSetting::OptFeatureNightwatchInstant))
             return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
 
         $action = $parser->get("action");

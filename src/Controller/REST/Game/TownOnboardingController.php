@@ -154,7 +154,7 @@ class TownOnboardingController extends AbstractController
         return new JsonResponse([
             'features' => [
                 'job'       => true,
-                'alias'     => !$activeCitizen->getProperties() && $townConf->get( TownConf::CONF_FEATURE_CITIZEN_ALIAS, false ),
+                'alias'     => !$activeCitizen->getProperties() && $townConf->get( TownSetting::OptFeatureCitizenAlias ),
                 'skills'    => !$activeCitizen->getProperties() && $townConf->get( TownSetting::SkillMode ),
             ]
         ]);
@@ -199,7 +199,7 @@ class TownOnboardingController extends AbstractController
         $alias = $parser->trimmed('identity.name');
         if ($alias !== null) {
             if (
-                !$townConf->get( TownConf::CONF_FEATURE_CITIZEN_ALIAS, false ) ||
+                !$townConf->get( TownSetting::OptFeatureCitizenAlias ) ||
                 !is_string($alias) ||
                 mb_strlen($alias) < 4 || mb_strlen($alias) > 22
             ) return new JsonResponse([], Response::HTTP_BAD_REQUEST);

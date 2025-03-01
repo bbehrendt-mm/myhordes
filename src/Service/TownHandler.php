@@ -481,7 +481,7 @@ class TownHandler
 
         $rand_backup = mt_rand(PHP_INT_MIN, PHP_INT_MAX);
         mt_srand($est->getSeed() ?? $town->getDay() + $town->getId());
-        $cc_offset = $watchtower_offset ?? $this->conf->getTownConfiguration($town)->get(TownConf::CONF_MODIFIER_WT_OFFSET, 0);
+        $cc_offset = $watchtower_offset ?? $this->conf->getTownConfiguration($town)->get(TownSetting::OptModifierWtOffset);
         $this->calculate_offsets($offsetMin, $offsetMax, $est->getCitizens()->count() * $ratio + $cc_offset, $this->conf->getTownConfiguration($town)->get(TownConf::CONF_ESTIM_SPREAD, 10) - $this->conf->getTownConfiguration($town)->get(TownConf::CONF_ESTIM_INITIAL_SHIFT, 0));
 
         $min = round($est->getTargetMin() - ($est->getTargetMin() * $offsetMin / 100));
@@ -489,7 +489,7 @@ class TownHandler
 
 		$redsouls = $this->get_red_soul_count($town);
 		$red_soul_penality = $this->proxy->queryTownParameter( $town, BuildingValueQuery::NightlyRedSoulPenalty );
-		$soulFactor = min(1 + ($red_soul_penality * $redsouls), (float)$this->conf->getTownConfiguration($town)->get(TownConf::CONF_MODIFIER_RED_SOUL_FACTOR, 1.2));
+		$soulFactor = min(1 + ($red_soul_penality * $redsouls), (float)$this->conf->getTownConfiguration($town)->get(TownSetting::OptModifierRedSoulFactor));
         $min = round($min * $soulFactor);
         $max = round($max * $soulFactor);
 
@@ -587,7 +587,7 @@ class TownHandler
                 $const_ratio_base = 0.5;
                 $const_ratio_low = 0.75;
 
-                $max_ratio = match( $this->conf->getTownConfiguration( $town )->get(TownConf::CONF_FEATURE_ATTACKS, 'normal') ) {
+                $max_ratio = match( $this->conf->getTownConfiguration( $town )->get(TownSetting::OptFeatureAttacks) ) {
                     'hard' => 3.1,
                     'easy' => $const_ratio_low,
                     default => 1.1,

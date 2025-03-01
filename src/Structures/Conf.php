@@ -54,13 +54,12 @@ class Conf
         return $this->data;
     }
 
-    /**
-     * @throws Exception
-     */
     public function get(string|Configuration $key, $default = null) {
         if ( is_a( $key, Configuration::class ) ) {
 
-            if ($key->abstract()) throw new Exception("Cannot read data from abstract setting '{$key->name()}'.");
+            if ($key->abstract())
+                /** @noinspection PhpUnhandledExceptionInspection */
+                throw new Exception("Cannot read data from abstract setting '{$key->name()}'.");
             return $this->dot->get( $key->key(), $key->default() ?? $default );
 
         } else return $this->dot->get( $key, $default );
@@ -77,7 +76,7 @@ class Conf
     /**
      * @throws Exception
      */
-    public function is(string $key, $values, $default = null): bool {
+    public function is(string|Configuration $key, $values, $default = null): bool {
         return is_array( $values )
             ? in_array( $this->get($key,$default), $values )
             : $this->get($key,$default) === $values;

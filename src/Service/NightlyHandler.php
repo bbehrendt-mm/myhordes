@@ -421,7 +421,7 @@ class NightlyHandler
 
             if (!in_array('infection', $protection_list) && $citizen->getStatus()->contains( $status_infected ) && !$ghoul) {
                 $this->log->debug( "Citizen <info>{$citizen->getUser()->getUsername()}</info> has <info>{$status_infected->getLabel()}</info>." );
-                if ($this->random->chance($this->conf->getTownConfiguration($town)->get( TownConf::CONF_MODIFIER_INFECT_DEATH, 0.5 ))) {
+                if ($this->random->chance($this->conf->getTownConfiguration($town)->get( TownSetting::OptModifierInfectDeath ))) {
                     $this->kill_wrap( $citizen, $cod_infect, true, 0, false, $town->getDay()+1 );
                     continue;
                 }
@@ -673,7 +673,7 @@ class NightlyHandler
 
         $redsouls = $this->town_handler->get_red_soul_count($town);
         $red_soul_penality = $this->events->queryTownParameter( $town, BuildingValueQuery::NightlyRedSoulPenalty );
-        $soulFactor = min(1 + ($red_soul_penality * $redsouls), (float)$this->conf->getTownConfiguration($town)->get(TownConf::CONF_MODIFIER_RED_SOUL_FACTOR, 1.2));
+        $soulFactor = min(1 + ($red_soul_penality * $redsouls), (float)$this->conf->getTownConfiguration($town)->get(TownSetting::OptModifierRedSoulFactor));
 
         $zombies *= $soulFactor;
         $zombies = round($zombies);
@@ -874,7 +874,7 @@ class NightlyHandler
             $this->entity_manager->persist($this->logTemplates->nightlyAttackWatchersZombieAllStopped($town));
         }
 
-        if ($this->conf->getTownConfiguration($town)->get(TownConf::CONF_MODIFIER_BUILDING_DAMAGE, false)) {
+        if ($this->conf->getTownConfiguration($town)->get(TownSetting::OptModifierBuildingDamage)) {
             // In panda, built buildings get damaged every night
             // Only 20% of the attack is inflicted to buildings
             // zombies - amount of zombies killed by the watch
@@ -927,13 +927,13 @@ class NightlyHandler
             }
         }
 
-        if ($this->conf->getTownConfiguration($town)->get(TownConf::CONF_MODIFIER_DO_DESTROY, false)) {
+        if ($this->conf->getTownConfiguration($town)->get(TownSetting::OptModifierDoDestroy)) {
             // Panda towns sees their defense object in the bank destroyed
 			// REVAMPED FROM: https://github.com/motion-twin/WebGamesArchives/blob/main/Hordes/src/HordeAttack.hx#L226
 			$zombiesOnDef = max($est->getZombies() - $def_summary->building_defense, 0);
-			$number = min(floor($zombiesOnDef / $this->conf->getTownConfiguration($town)->get(TownConf::CONF_MODIFIER_DO_DESTROY_RATIO, 50)), $this->conf->getTownConfiguration($town)->get(TownConf::CONF_MODIFIER_DO_DESTROY_MAX, 20));
+			$number = min(floor($zombiesOnDef / $this->conf->getTownConfiguration($town)->get(TownSetting::OptModifierDoDestroy)), $this->conf->getTownConfiguration($town)->get(TownSetting::OptModifierDoDestroyMax));
 
-			$this->log->info("There are <info>$zombiesOnDef</info> zombies attacking the bank (with a ratio of {$this->conf->getTownConfiguration($town)->get(TownConf::CONF_MODIFIER_DO_DESTROY_RATIO, 50)})");
+			$this->log->info("There are <info>$zombiesOnDef</info> zombies attacking the bank (with a ratio of {$this->conf->getTownConfiguration($town)->get(TownSetting::OptModifierDoDestroyRatio)})");
 			if ($number > 0) {
 				$items = $this->inventory_handler->fetchSpecificItems($town->getBank(), [new ItemRequest('defence', $number, false, null, true)]);
 				$this->log->info("We destroy <info>$number</info> items</info>");
@@ -1130,9 +1130,9 @@ class NightlyHandler
         $aliveCitizenInTown = 0;
         $aliveCitizen = 0;
 
-        $ghoul_mode  = $this->conf->getTownConfiguration($town)->get(TownConf::CONF_FEATURE_GHOUL_MODE, 'normal');
-        $ghoul_begin = $this->conf->getTownConfiguration($town)->get(TownConf::CONF_MODIFIER_AUTOGHOUL_FROM, 5);
-        $ghoul_next = $this->conf->getTownConfiguration($town)->get(TownConf::CONF_MODIFIER_AUTOGHOUL_NEXT, 5);
+        $ghoul_mode  = $this->conf->getTownConfiguration($town)->get(TownSetting::OptFeatureGhoulMode);
+        $ghoul_begin = $this->conf->getTownConfiguration($town)->get(TownSetting::OptModifierAutoghoulFrom);
+        $ghoul_next = $this->conf->getTownConfiguration($town)->get(TownSetting::OptModifierAutoghoulNext);
 
         // Check if we need to ghoulify someone
         if (in_array($ghoul_mode, ['airborne', 'airbnb']) && $town->getDay() >= $ghoul_begin) {
@@ -1281,7 +1281,7 @@ class NightlyHandler
                 $this->citizen_handler->removeStatus($citizen, 'tg_air_infected');
                 $this->citizen_handler->addRole($citizen, 'ghoul');
                 $this->citizen_handler->inflictStatus($citizen, 'tg_air_ghoul');
-                if ($this->conf->getTownConfiguration( $town )->get( TownConf::CONF_FEATURE_GHOULS_HUNGRY, false ))
+                if ($this->conf->getTownConfiguration( $town )->get( TownSetting::OptFeatureGhoulsHungry ))
                     $citizen->setGhulHunger(45);
             }
         }
@@ -1323,7 +1323,7 @@ class NightlyHandler
             if ($aliveCitizenInTown == 0) {
                 $this->log->debug("There is <info>$aliveCitizenInTown</info> citizens alive AND in town, setting the town to <info>devastated</info> mode and to <info>chaos</info> mode");
 
-                $last_stand_day = $this->conf->getTownConfiguration($town)->get(TownConf::CONF_FEATURE_LAST_DEATH_DAY, 5);
+                $last_stand_day = $this->conf->getTownConfiguration($town)->get(TownSetting::OptFeatureLastDeathDay);
                 if($town->getDay() > $last_stand_day){ // Strictly superior, since $town->getDay() is the day AFTER the attack
                     $this->log->debug("Town has lived for $last_stand_day days or more, we give the <info>Last Man Standing</info> picto to a lucky citizen that died in town");
                     $citizen_eligible = [];
@@ -1340,7 +1340,7 @@ class NightlyHandler
                         $citizen_eligible[] = $citizen;
                     }
 
-                    $last_stand_pictos = $this->conf->getTownConfiguration($town)->get(TownConf::CONF_FEATURE_LAST_DEATH, ['r_surlst_#00']);
+                    $last_stand_pictos = $this->conf->getTownConfiguration($town)->get(TownSetting::OptFeatureLastDeath);
                     if (!empty($last_stand_pictos) && count($citizen_eligible) > 0) {
                         /** @var Citizen $winner */
                         $winner = $this->random->pick($citizen_eligible);
@@ -1352,8 +1352,8 @@ class NightlyHandler
                         elseif ($winner->getSurvivedDays() < 15) $wonHeroDays = 3;
                         elseif ($winner->getSurvivedDays() < 20) $wonHeroDays = 4;
                         else $wonHeroDays = 5;
-                        if ($this->conf->getTownConfiguration($town)->get(TownConf::CONF_FEATURE_GIVE_ALL_PICTOS, true))
-                            $wonHeroDays = floor($wonHeroDays * $this->conf->getTownConfiguration($town)->get(TownConf::CONF_MODIFIER_GENEROSITY_LAST, 1) );
+                        if ($this->conf->getTownConfiguration($town)->get(TownSetting::OptFeatureGiveAllPictos))
+                            $wonHeroDays = floor($wonHeroDays * $this->conf->getTownConfiguration($town)->get(TownSetting::OptModifierGenerosityLast) );
                         else $wonHeroDays = 0;
                         if ($wonHeroDays > 0) $winner->giveGenerosityBonus( $wonHeroDays );
 
@@ -1437,7 +1437,7 @@ class NightlyHandler
         $reco_counter = [0,0];
 
         $maze_zeds = $this->conf->getTownConfiguration($town)->get(TownSetting::ERuinZombiesDaily);
-        $wind_dist = $this->conf->getTownConfiguration($town)->get(TownConf::CONF_MODIFIER_WIND_DISTANCE, 2);
+        $wind_dist = $this->conf->getTownConfiguration($town)->get(TownSetting::OptModifierWindDistance);
 
         foreach ($town->getZones() as $zone) {
             /** @var Zone $zone */
@@ -1482,7 +1482,7 @@ class NightlyHandler
         }
         $this->log->debug("Recovered <info>{$reco_counter[0]}</info>/<info>{$reco_counter[1]}</info> zones." );
 
-        if ($this->conf->getTownConfiguration($town)->is( TownConf::CONF_FEATURE_SHAMAN_MODE, ['normal','both'], 'normal' )) {
+        if ($this->conf->getTownConfiguration($town)->is( TownSetting::OptFeatureShamanMode, ['normal','both'] )) {
             $this->log->debug("Processing <info>souls</info> mutations.");
 
             $blue_souls = $this->inventory_handler->getAllItems($town, 'soul_blue_#00', true, true, true, true, true, false);

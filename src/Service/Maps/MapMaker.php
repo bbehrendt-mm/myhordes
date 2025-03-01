@@ -128,11 +128,11 @@ class MapMaker
                 ->setPrototype( $target_ruin )
                 ->setRuinDigs($ruinDigCount);
 
-            if ($conf->get(TownConf::CONF_FEATURE_CAMPING, false))
+            if ($conf->get(TownSetting::OptFeatureCamping))
                 $zone_list[$i+$o]->setBlueprint(Zone::BlueprintAvailable);
 
-            if ($this->random->chance($conf->get(TownConf::CONF_MAP_BURIED_PROB, 0.5)))
-                $zone_list[$i+$o]->setBuryCount( mt_rand($conf->get(TownConf::CONF_MAP_BURIED_DIGS_MIN, 1), $conf->get(TownConf::CONF_MAP_BURIED_DIGS_MAX, 19)) );
+            if ($this->random->chance($conf->get(TownSetting::MapParamsBuriedProb)))
+                $zone_list[$i+$o]->setBuryCount( mt_rand($conf->get(TownSetting::MapParamsBuriedDigsMin), $conf->get(TownSetting::MapParamsBuriedDigsMax)) );
         }
 
         $spawn_explorable_ruins = $conf->get(TownSetting::MapExplorableRuinCount);
@@ -260,10 +260,10 @@ class MapMaker
             $set($zone, 0);
         }
 
-        $min_dist = $conf->get(TownConf::CONF_MAP_FREE_SPAWN_DIST, 0);
+        $min_dist = $conf->get(TownSetting::MapParamsFreeSpawnDist);
         $spawn_zones = $this->random->draw(
             $empty_zones,
-            $conf->get(TownConf::CONF_MAP_FREE_SPAWN_COUNT, 3),
+            $conf->get(TownSetting::MapParamsFreeSpawnCount),
             true,
             fn(Zone $zone) => $zone->getDistance() >= $min_dist,
         );
@@ -316,7 +316,7 @@ class MapMaker
         };
 
         $day ??= is_a($data, Town::class) ? $data->getDay() : 1;
-        return $zombies >= $conf->get( TownConf::CONF_MODIFIER_RESPAWN_THRESHOLD, 50 ) * $day * $conf->get( TownConf::CONF_MODIFIER_RESPAWN_FACTOR, 0.5 ) * $factor;
+        return $zombies >= $conf->get( TownSetting::OptModifierRespawnThreshold ) * $day * $conf->get( TownSetting::OptModifierRespawnFactor ) * $factor;
     }
 
     private function spreadCycleH(bool $observe_despair, array &$zone_db, array $despair_db, array $ctx_db): int {
