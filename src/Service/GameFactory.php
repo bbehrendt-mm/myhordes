@@ -517,18 +517,18 @@ class GameFactory
             $town->setWordsOfHeroes( $bb_override );
 
         foreach ($this->entity_manager->getRepository(BuildingPrototype::class)->findProspectivePrototypes($town, 0) as $prototype)
-            if (!in_array($prototype->getName(), $conf->get(TownConf::CONF_DISABLED_BUILDINGS))) {
+            if (!in_array($prototype->getName(), $conf->get(TownSetting::DisabledBuildings))) {
                 $this->town_handler->addBuilding($town, $prototype);
                 $this->gps->recordBuildingDiscovered( $prototype, $town, null, 'always' );
             }
 
-        $buildings_to_unlock = array_unique( array_merge( $conf->get(TownConf::CONF_BUILDINGS_UNLOCKED), $conf->get(TownConf::CONF_BUILDINGS_CONSTRUCTED) ) );
+        $buildings_to_unlock = array_unique( array_merge( $conf->get(TownSetting::TownInitialBuildingsUnlocked), $conf->get(TownSetting::TownInitialBuildingsConstructed) ) );
         $failed_unlocks = $last_failed_unlocks = 0;
         do {
             $last_failed_unlocks = $failed_unlocks;
             $failed_unlocks = 0;
             foreach ($buildings_to_unlock as $str_prototype)
-                if (!in_array($str_prototype, $conf->get(TownConf::CONF_DISABLED_BUILDINGS))) {
+                if (!in_array($str_prototype, $conf->get(TownSetting::DisabledBuildings))) {
                     $prototype = $this->entity_manager->getRepository(BuildingPrototype::class)->findOneBy(['name' => $str_prototype]);
                     if ($prototype) {
                         if ($this->town_handler->addBuilding($town, $prototype))
@@ -539,8 +539,8 @@ class GameFactory
         } while ($failed_unlocks > 0 && $failed_unlocks !== $last_failed_unlocks);
 
 
-        foreach ($conf->get(TownConf::CONF_BUILDINGS_CONSTRUCTED) as $str_prototype) {
-            if (in_array($str_prototype, $conf->get(TownConf::CONF_DISABLED_BUILDINGS)))
+        foreach ($conf->get(TownSetting::TownInitialBuildingsConstructed) as $str_prototype) {
+            if (in_array($str_prototype, $conf->get(TownSetting::DisabledBuildings)))
                 continue;
 
             /** @var BuildingPrototype $proto */

@@ -229,7 +229,7 @@ class AdminTownController extends AdminActionController
 		$town = $this->entity_manager->getRepository(Town::class)->find($id);
 		if ($town === null) return $this->redirect($this->generateUrl('admin_town_list'));
 
-		$disabled_profs = $this->conf->getTownConfiguration($town)->get(TownConf::CONF_DISABLED_JOBS, []);
+		$disabled_profs = $this->conf->getTownConfiguration($town)->get(TownSetting::DisabledJobs);
 		$professions = array_filter($this->entity_manager->getRepository( CitizenProfession::class )->findSelectable(),
 			fn(CitizenProfession $p) => !in_array($p->getName(),$disabled_profs)
 		);
@@ -748,7 +748,7 @@ class AdminTownController extends AdminActionController
                     else $users[] = $selected_user;
                 }
 
-                $disabled_profs = $this->conf->getTownConfiguration($town)->get(TownConf::CONF_DISABLED_JOBS, []);
+                $disabled_profs = $this->conf->getTownConfiguration($town)->get(TownSetting::DisabledJobs);
                 $professions = array_filter($this->entity_manager->getRepository( CitizenProfession::class )->findSelectable(),
                     fn(CitizenProfession $p) => !in_array($p->getName(),$disabled_profs)
                 );
@@ -1599,7 +1599,7 @@ class AdminTownController extends AdminActionController
         $pro_id = $parser->get_int('profession');
         $targets = $parser->get_array('targets');
 
-        $disabled_profs = $this->conf->getTownConfiguration($town)->get(TownConf::CONF_DISABLED_JOBS, []);
+        $disabled_profs = $this->conf->getTownConfiguration($town)->get(TownSetting::DisabledJobs);
 
         if (empty($targets))
             return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);

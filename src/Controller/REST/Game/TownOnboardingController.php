@@ -180,7 +180,7 @@ class TownOnboardingController extends AbstractController
 
         $townConf = $conf->getTownConfiguration($town);
 
-        $disabledJobs = $conf->getTownConfiguration($town)->get(TownConf::CONF_DISABLED_JOBS, ['shaman']);
+        $disabledJobs = $conf->getTownConfiguration($town)->get(TownSetting::DisabledJobs);
         $profession = $em->getRepository(CitizenProfession::class)->find( $parser->get_int( 'profession.id', -1 ) );
         if (!$profession || $profession->getName() === CitizenProfession::DEFAULT || in_array( $profession->getName(), $disabledJobs, true ))
             return new JsonResponse([], Response::HTTP_BAD_REQUEST);
@@ -243,7 +243,7 @@ class TownOnboardingController extends AbstractController
         $jobs = $em->getRepository(CitizenProfession::class)->findSelectable();
         $town = $activeCitizen->getTown();
 
-        $disabledJobs = $conf->getTownConfiguration($town)->get(TownConf::CONF_DISABLED_JOBS, ['shaman']);
+        $disabledJobs = $conf->getTownConfiguration($town)->get(TownSetting::DisabledJobs);
 
         return new JsonResponse(array_values(array_map(fn(CitizenProfession $profession) => [
             'id'     => $profession->getId(),

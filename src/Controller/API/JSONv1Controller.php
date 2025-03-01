@@ -637,6 +637,9 @@ class JSONv1Controller extends CoreController {
                     case "rarity":
                         $data[$field] = $prototype->getBlueprint();
                         break;
+                    case "rarity":
+                        $data[$field] = $prototype->getBlueprint();
+                        break;
                     case "temporary":
                         $data[$field] = $prototype->getTemp();
                         break;

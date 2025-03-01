@@ -21,6 +21,10 @@ enum TownSetting: string implements Configuration
     case PopulationMin = 'population.min';
     case PopulationMax = 'population.max';
     case SkillMode = 'skill_mode';
+
+    case DisabledJobs = 'disabled_jobs';
+    case DisabledRoles = 'disabled_roles';
+    case DisabledBuildings = 'disabled_buildings';
     //</editor-fold>
 
     //<editor-fold desc="Town Well Settings">
@@ -38,15 +42,21 @@ enum TownSetting: string implements Configuration
     case MapSizeMax = 'map.max';
     case MapSafeMargin = 'map.margin';
 
-    const MapUseCustomMargin = 'margin_custom.enabled';
-    const MapCustomMarginNorth = 'margin_custom.north';
-    const MapCustomMarginSouth = 'margin_custom.south';
-    const MapCustomMarginWest = 'margin_custom.west';
-    const MapCustomMarginEast = 'margin_custom.east';
+    case MapUseCustomMargin = 'margin_custom.enabled';
+    case MapCustomMarginNorth = 'margin_custom.north';
+    case MapCustomMarginSouth = 'margin_custom.south';
+    case MapCustomMarginWest = 'margin_custom.west';
+    case MapCustomMarginEast = 'margin_custom.east';
 
-    const MapZoneDropCountInitializer = 'zone_items.min';
-    const MapZoneDropCountThreshold = 'zone_items.max';
-    const MapZoneDropCountRefresh = 'zone_items.refresh_max';
+    case MapZoneDropCountInitializer = 'zone_items.min';
+    case MapZoneDropCountThreshold = 'zone_items.max';
+    case MapZoneDropCountRefresh = 'zone_items.refresh_max';
+
+    case MapRuinCount = 'ruins';
+    case MapExplorableRuinCount = 'explorable_ruins';
+
+    case MapRuinItemsMin = 'ruin_items.min';
+    case MapRuinItemsMax = 'ruin_items.max';
     //</editor-fold>
 
     //</editor-fold>
@@ -115,6 +125,16 @@ enum TownSetting: string implements Configuration
     case PictoClassicCullMode = 'features.picto_classic_cull_mode';
     //</editor-fold>
 
+    //</editor-fold>
+
+    //<editor-fold desc="Town Initializer Settings">
+    case Section_Initial = '--section--/Initial';
+
+    case TownInitialBuildingsConstructed = 'initial_buildings';
+    case TownInitialBuildingsUnlocked    = 'unlocked_buildings';
+    case TownInitialDistributesItems     = 'distribute_items';
+    case TownInitialDistributionDistance = 'distribution_distance';
+    case TownInitialChestItems   = 'initial_chest';
 
     //</editor-fold>
 
@@ -135,6 +155,7 @@ enum TownSetting: string implements Configuration
             self::Section_Timing_Exploration,
             self::Section_Rewards,
             self::Section_Rewards_Pictos,
+            self::Section_Initial,
                 => true,
 
             default => false
@@ -150,7 +171,10 @@ enum TownSetting: string implements Configuration
             self::LockDoorUntilTownIsFull,
             self::PopulationMin,
             self::PopulationMax,
-            self::SkillMode => self::Section_TownStartMeta,
+            self::SkillMode,
+            self::DisabledJobs,
+            self::DisabledRoles,
+            self::DisabledBuildings => self::Section_TownStartMeta,
 
             self::DefaultWellFillMin,
             self::DefaultWellFillMax => self::Section_Well,
@@ -166,14 +190,18 @@ enum TownSetting: string implements Configuration
             self::MapCustomMarginEast,
             self::MapZoneDropCountInitializer,
             self::MapZoneDropCountThreshold,
-            self::MapZoneDropCountRefresh => self::Section_Map_Beyond,
+            self::MapZoneDropCountRefresh,
+            self::MapRuinCount,
+            self::MapExplorableRuinCount,
+            self::MapRuinItemsMin,
+            self::MapRuinItemsMax => self::Section_Map_Beyond,
 
             self::ERuinItemFillrate,
             self::ERuinMaxDistanceFromTown,
             self::Section_Explorable_Rooms,
             self::Section_Explorable_Space,
             self::Section_Explorable_BP,
-            self::Section_Explorable_Zombies => self::Section_Explorable,
+            self::Section_Explorable_Zombies  => self::Section_Explorable,
 
             self::ERuinRoomLockDistance,
             self::ERuinRoomDistance,
@@ -204,6 +232,12 @@ enum TownSetting: string implements Configuration
 
             self::Section_Rewards_Pictos => self::Section_Rewards,
             self::PictoClassicCullMode => self::Section_Rewards_Pictos,
+
+            self::TownInitialBuildingsConstructed,
+            self::TownInitialBuildingsUnlocked,
+            self::TownInitialDistributesItems,
+            self::TownInitialDistributionDistance,
+            self::TownInitialChestItems => self::Section_Initial,
 
             default => null
         };
@@ -237,6 +271,9 @@ enum TownSetting: string implements Configuration
             self::PopulationMin                         =>  0,
             self::PopulationMax                         =>  0,
             self::SkillMode                             =>  false,
+            self::DisabledJobs                          =>  ['shaman'],
+            self::DisabledRoles                         =>  [],
+            self::DisabledBuildings                     =>  [],
 
             self::DefaultWellFillMin => 0,
             self::DefaultWellFillMax => 0,
@@ -253,6 +290,10 @@ enum TownSetting: string implements Configuration
             self::MapZoneDropCountInitializer => 5,
             self::MapZoneDropCountThreshold   => 10,
             self::MapZoneDropCountRefresh     => 5,
+            self::MapRuinCount               => 0,
+            self::MapExplorableRuinCount     => 0,
+            self::MapRuinItemsMin            => 8,
+            self::MapRuinItemsMax            => 8,
 
             self::ERuinItemFillrate => 7,
             self::ERuinMaxDistanceFromTown => 10,
@@ -282,6 +323,12 @@ enum TownSetting: string implements Configuration
             self::TimingExplorationCollector => '+7min30sec',
 
             self::PictoClassicCullMode => true,
+
+            self::TownInitialBuildingsConstructed => [],
+            self::TownInitialBuildingsUnlocked => [],
+            self::TownInitialDistributesItems => [],
+            self::TownInitialDistributionDistance => [],
+            self::TownInitialChestItems => [],
 
             default => null,
         };
