@@ -58,7 +58,7 @@ class MapMaker
                 $town->addZone( $zone );
             }
 
-        $spawn_ruins = $conf->get(TownConf::CONF_NUM_RUINS, 0);
+        $spawn_ruins = $conf->get(TownSetting::MapRuinCount);
 
         $ruin_km_range = [
             $this->entity_manager->getRepository(ZonePrototype::class)->findMinRuinDistance(false),
@@ -121,7 +121,8 @@ class MapMaker
             else $previous[$target_ruin->getId()]++;
 
             //Hordes Dig Count is N + rand(N), where rand is between 0 included and N excluded
-            $ruinDigCount = ceil($conf->get(TownConf::CONF_RUIN_ITEMS_MIN, 8)*0.7) + mt_rand(0,$conf->get(TownConf::CONF_RUIN_ITEMS_MIN, 8)-1 ) ;
+            $conf_min = $conf->get(TownSetting::MapRuinItemsMin);
+            $ruinDigCount = ceil($conf_min*0.7) + mt_rand(0,$conf_min-1 ) ;
 
             $zone_list[$i+$o]
                 ->setPrototype( $target_ruin )
@@ -134,7 +135,7 @@ class MapMaker
                 $zone_list[$i+$o]->setBuryCount( mt_rand($conf->get(TownConf::CONF_MAP_BURIED_DIGS_MIN, 1), $conf->get(TownConf::CONF_MAP_BURIED_DIGS_MAX, 19)) );
         }
 
-        $spawn_explorable_ruins = $conf->get(TownConf::CONF_NUM_EXPLORABLE_RUINS, 0);
+        $spawn_explorable_ruins = $conf->get(TownSetting::MapExplorableRuinCount);
         $all_explorable_ruins = $explorable_ruins = [];
         if ($spawn_explorable_ruins > 0)
             $all_explorable_ruins = $this->entity_manager->getRepository(ZonePrototype::class)->findBy( ['explorable' => true] );
@@ -162,11 +163,11 @@ class MapMaker
             }
         }
 
-        $item_spawns = $conf->get(TownConf::CONF_DISTRIBUTED_ITEMS, []);
+        $item_spawns = $conf->get(TownSetting::TownInitialDistributesItems);
         $distribution = [];
 
         $zone_list = $town->getZones()->getValues();
-        foreach ($conf->get(TownConf::CONF_DISTRIBUTION_DISTANCE, []) as $dd) {
+        foreach ($conf->get(TownSetting::TownInitialDistributionDistance) as $dd) {
             $distribution[$dd['item']] = ['min' => $dd['min'], 'max' => $dd['max']];
         }
         for ($i = 0; $i < count($item_spawns); $i++) {

@@ -98,7 +98,7 @@ class TownHandler
         // Add building
         $town->addBuilding( $b = (new Building())->setPrototype( $prototype )->setPosition($prototype->getOrderBy()) );
 		$b->setInventory((new Inventory())->setBuilding($b));
-        $blocked = $this->conf->getTownConfiguration($town)->get(TownConf::CONF_DISABLED_BUILDINGS);
+        $blocked = $this->conf->getTownConfiguration($town)->get(TownSetting::DisabledBuildings);
 
         // Add all children that do not require blueprints
         if ($b)
@@ -791,7 +791,7 @@ class TownHandler
         if (!$this->proxy->queryTownRoleEnabled( $town, $role )) return false;
 
         // If the role is disabled, no vote is needed
-        if (in_array( $role->getName(), $this->conf->getTownConfiguration($town)->get(TownConf::CONF_DISABLED_ROLES, []) ))
+        if (in_array( $role->getName(), $this->conf->getTownConfiguration($town)->get(TownSetting::DisabledRoles) ))
             return false;
 
         $limit = ($duringNightly ? 1 : 0);

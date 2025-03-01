@@ -4,6 +4,7 @@ namespace App\Service\Actions\Game\AtomProcessors\Effect;
 
 use App\Entity\BuildingPrototype;
 use App\Enum\ActionHandler\CountType;
+use App\Enum\Configuration\TownSetting;
 use App\Service\GameProfilerService;
 use App\Service\LogTemplateHandler;
 use App\Service\RandomGenerator;
@@ -32,7 +33,7 @@ class ProcessTownEffect extends AtomEffectProcessor
         if ($data->unlocksBlueprint()) {
             $town = $cache->citizen->getTown();
 
-            $blocked = $cache->conf->get(TownConf::CONF_DISABLED_BUILDINGS);
+            $blocked = $cache->conf->get(TownSetting::DisabledBuildings);
             $possible = $cache->em->getRepository(BuildingPrototype::class)->findProspectivePrototypes( $town );
             $filtered = array_filter( $possible, fn(BuildingPrototype $proto) => match(true) {
                 in_array($proto->getName(), $blocked) => false,

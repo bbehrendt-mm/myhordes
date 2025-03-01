@@ -37,6 +37,7 @@ use App\Entity\UserReferLink;
 use App\Entity\UserSponsorship;
 use App\Entity\UserSwapPivot;
 use App\Enum\Configuration\MyHordesSetting;
+use App\Enum\Configuration\TownSetting;
 use App\Enum\DomainBlacklistType;
 use App\Enum\ServerSetting;
 use App\Response\AjaxResponse;
@@ -1350,7 +1351,7 @@ class AdminUserController extends AdminActionController
             return strcmp($this->translator->trans($a->getLabel(), [], 'game'), $this->translator->trans($b->getLabel(), [], 'game'));
         });
 
-        $disabled_profs = $town ? $this->conf->getTownConfiguration($town)->get(TownConf::CONF_DISABLED_JOBS, []) : [];
+        $disabled_profs = $town ? $this->conf->getTownConfiguration($town)->get(TownSetting::DisabledJobs) : [];
         $professions = array_filter($this->entity_manager->getRepository( CitizenProfession::class )->findSelectable(),
             fn(CitizenProfession $p) => !in_array($p->getName(),$disabled_profs)
         );
