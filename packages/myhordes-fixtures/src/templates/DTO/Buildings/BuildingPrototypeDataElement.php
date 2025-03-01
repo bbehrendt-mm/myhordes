@@ -33,17 +33,26 @@ use MyHordes\Fixtures\DTO\LabeledIconElementInterface;
  * @method self health(int $v)
  * @property int $ap
  * @method self ap(int $v)
+ * @property int $hardAp
+ * @method self hardAp(int $v)
  * @property int $blueprintLevel
  * @method self blueprintLevel(int $v)
  * @property array $resources
  * @method self resources(array $v)
  * @method self resource(string $key, int $value)
+ * @property array $hardResources
+ * @method self hardResources(array $v)
+ * @method self hardResource(string $key, int $value)
  * @property int $voteLevel
  * @method self voteLevel(int $v)
  * @property string $baseVoteText
  * @method self baseVoteText(string $v)
  * @property string[] $upgradeTexts
  * @method self upgradeTexts(array $v)
+ * @property bool $hasHardMode
+ * @method self hasHardMode(bool $v)
+ * @method self withHardMode(int $ap, array $resources)
+ * @method self adjustForHardMode(?int $ap, ?array $resources)
  *
  * @method BuildingPrototypeDataContainer commit(string &$id = null)
  * @method BuildingPrototypeDataContainer discard()
@@ -107,6 +116,25 @@ class BuildingPrototypeDataElement extends Element implements LabeledIconElement
             if ($value <= 0) unset( $r[$key] );
             else $r[$key] = $value;
             return $this->resources($r);
+        } elseif ($name === 'hardResource' && count($arguments) === 2) {
+            [$key, $value] = $arguments;
+            $r = $this->hardResources ?? [];
+            if ($value <= 0) unset( $r[$key] );
+            else $r[$key] = $value;
+            return $this->hardResources($r);
+        } elseif ($name === 'withHardMode' && count($arguments) === 2) {
+            [$ap, $resources] = $arguments;
+            $this->hasHardMode = true;
+            $this->hardAp = $ap;
+            return $this->hardResources($resources);
+        } elseif ($name === 'adjustForHardMode' && count($arguments) === 2) {
+            [$ap, $resources] = $arguments;
+            $this->hasHardMode = true;
+            $this->hardAp = $ap ?? $this->ap;
+            $this->hardResources = $this->resources;
+            foreach ($resources ?? [] as $k => $v)
+                $this->hardResource($k, $v);
+            return $this;
         } else return parent::__call($name, $arguments);
     }
 

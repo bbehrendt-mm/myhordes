@@ -241,6 +241,7 @@ enum TownSetting: string implements Configuration
 
     case OptModifierOverrideItemGroup  = 'overrides.item_groups';
     case OptModifierOverrideNamedDrops = 'overrides.named_drops';
+    case OptModifierOverrideBuildingRarity = 'overrides.building_rarity';
 
     //</editor-fold>
 
@@ -441,6 +442,7 @@ enum TownSetting: string implements Configuration
             self::OptModifierBankAbuseLock,
             self::OptModifierOverrideItemGroup,
             self::OptModifierOverrideNamedDrops,
+            self::OptModifierOverrideBuildingRarity,
                 => self::Section_Opts_Modifiers,
 
             default => null
@@ -623,6 +625,7 @@ enum TownSetting: string implements Configuration
             self::OptModifierBankAbuseLock => 15,
             self::OptModifierOverrideItemGroup => [],
             self::OptModifierOverrideNamedDrops => [],
+            self::OptModifierOverrideBuildingRarity => [],
 
             default => null,
         };

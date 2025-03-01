@@ -37,7 +37,7 @@ class ProcessTownEffect extends AtomEffectProcessor
             $possible = $cache->em->getRepository(BuildingPrototype::class)->findProspectivePrototypes( $town );
             $filtered = array_filter( $possible, fn(BuildingPrototype $proto) => match(true) {
                 in_array($proto->getName(), $blocked) => false,
-                $data->unlockBlueprintType !== null && $data->unlockBlueprintType === $proto->getBlueprint() => true,
+                $data->unlockBlueprintType !== null && $data->unlockBlueprintType === $cache->conf->getBuildingRarity( $proto ) => true,
                 default => in_array($proto->getName(), $data->unlockBlueprintList ?? [])
             });
 

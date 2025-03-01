@@ -824,7 +824,10 @@ class AdminTownController extends AdminActionController
 
             case 'dbg_unlock_buildings':
                 do {
-                    $possible = array_filter( $this->entity_manager->getRepository(BuildingPrototype::class)->findProspectivePrototypes( $town ), fn(BuildingPrototype $p) => $p->getBlueprint() === null || $p->getBlueprint() < 5 );
+                    $possible = array_filter( $this->entity_manager->getRepository(BuildingPrototype::class)->findProspectivePrototypes( $town ), function(BuildingPrototype $p) use ($town) {
+                        $bp = $this->conf->getTownConfiguration( $town )->getBuildingRarity( $p );
+                        return $bp === null || $bp < 5;
+                    } );
                     $found = !empty($possible);
                     foreach ($possible as $proto) {
                         $townHandler->addBuilding($town, $proto);
