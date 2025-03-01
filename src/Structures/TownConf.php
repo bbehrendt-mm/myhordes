@@ -3,6 +3,7 @@
 
 namespace App\Structures;
 
+use App\Entity\BuildingPrototype;
 use App\Enum\Configuration\Configuration;
 use App\Enum\Configuration\TownSetting;
 use App\Enum\DropMod;
@@ -48,5 +49,12 @@ class TownConf extends Conf
         if (!$this->get( TownSetting::OptFeatureCamping )) $remove[] = DropMod::Camp;
 
         return array_filter( $base, fn(DropMod $d) => !in_array( $d, $remove) );
+    }
+
+    public function getBuildingRarity(BuildingPrototype $prototype): ?int {
+        return $this->getSubKey(
+            TownSetting::OptModifierOverrideBuildingRarity, $prototype->getName(),
+            $this->getSubKey( TownSetting::OptModifierOverrideBuildingRarity, '*', $prototype->getBlueprint() )
+        );
     }
 }

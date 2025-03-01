@@ -31,37 +31,57 @@ class BuildingDataService implements FixtureProcessorInterface {
 
         $container->add()->parentBuilding($small_gather)
             ->icon('small_waterhole')->label('Wassergraben')->description('Eine verbesserte Version des Großen Grabens. Muss mit Wasser gefüllt werden...')
-            ->isTemporary(0)->defense(60)->ap(60)->health(60)->blueprintLevel(0)->resources(["water_#00" => 20,])->orderBy(0)->commit();
+            ->isTemporary(0)->defense(60)
+            ->ap(60)->health(60)->resources(["water_#00" => 20,])
+            ->adjustForHardMode(null, ["water_#00" => 60,])
+            ->blueprintLevel(0)->orderBy(0)->commit();
 
         $container->add()->parentBuilding($small_wallimprove)
             ->icon('item_plate')->label('Rasierklingenmauer')->description('Die Rasierklingenmauer folgt einem ganz einfachen Prinzip: Man nehme allerlei Eisenstücke, schärfe und spitze sie an und verteile sie anschließend über die ganze Stadtmauer. Die Mauer verwandelt sich so in eine überdimensionale Zombiefeile.')
             ->isTemporary(0)->defense(50)->ap(40)->health(40)->blueprintLevel(1)->resources(["metal_#00" => 15,"meca_parts_#00" => 2,])->orderBy(0)->commit();
         $container->add()->parentBuilding($small_gather)
             ->icon('small_spears')->label('Pfahlgraben')->description('Ein guter Weg, um die Große Grube zu füllen, mit scharfen Pfählen, um zu sehen, wie sich die Zombies dort aufspießen.')
-            ->isTemporary(0)->defense(45)->ap(35)->health(35)->blueprintLevel(0)->resources(["metal_#00" => 2,"wood_beam_#00" => 8,])->orderBy(1)->commit();
+            ->isTemporary(0)->defense(45)
+            ->ap(35)->health(35)->resources(["metal_#00" => 2,"wood_beam_#00" => 8,])
+            ->adjustForHardMode(null, ["metal_#00" => 8,"wood_beam_#00" => 24,])
+            ->blueprintLevel(0)->orderBy(1)->commit();
         $container->add()->parentBuilding($small_wallimprove)
             ->icon('small_barbed')->label('Stacheldraht')->description('Bedecken wir die Mauern mit Stacheldraht, so dass ein paar kleine Stücke an der Passage hängen bleiben.')
-            ->isTemporary(0)->defense(20)->ap(10)->health(10)->blueprintLevel(0)->resources(["metal_#00" => 1,"wire_#00" => 2,])->orderBy(6)->commit($small_barbed);
+            ->isTemporary(0)->defense(20)
+            ->ap(10)->health(10)->resources(["metal_#00" => 1,"wire_#00" => 2,])
+            ->adjustForHardMode(null, ["metal_#00" => 4,"wire_#00" => 6,])
+            ->blueprintLevel(0)->orderBy(6)->commit($small_barbed);
 
         $container->add()->parentBuilding($small_barbed)
             ->icon('small_meatbarbed')->label('Köder')->description('Mit diesem an einem Stacheldraht befestigtem Stück Fleisch kann man ein paar Zombies \'ne Zeit lang beschäftigen')
-            ->isTemporary(1)->defense(30)->ap(10)->health(0)->blueprintLevel(0)->resources(["bone_meat_#00" => 2,])->orderBy(0)->commit();
-
+            ->isTemporary(1)->defense(30)
+            ->ap(10)->health(0)->resources(["bone_meat_#00" => 2,])
+            ->adjustForHardMode(null, ["bone_meat_#00" => 4,])
+            ->blueprintLevel(0)->orderBy(0)->commit();
 
         $container->add()->parentBuilding($small_wallimprove)
             ->icon('small_wallimprove')->label('Weiterentwickelte Stadtmauer')->description('Auf die Verteidigungsvorichtungen müssen wir heute Nacht verzichten, aber diese intelligent gebaute und ausbaufähige Stadtmauer hat mehr drauf, als man denkt.')
-            ->isTemporary(0)->defense(20)->ap(40)->health(40)->blueprintLevel(0)->resources(["meca_parts_#00" => 2,"wood_beam_#00" => 5,"metal_beam_#00" => 5,])->orderBy(3)->commit($small_wallimprove1);
+            ->isTemporary(0)->defense(20)
+            ->ap(40)->health(40)->resources(["meca_parts_#00" => 2,"wood_beam_#00" => 5,"metal_beam_#00" => 5,])
+            ->adjustForHardMode( null, ["meca_parts_#00" => 6,"wood_beam_#00" => 15,"metal_beam_#00" => 15,] )
+            ->blueprintLevel(0)->orderBy(3)->commit($small_wallimprove1);
         $container->add()->parentBuilding($small_wallimprove1)
            ->icon('item_plate')->label('Verstärkende Balken')->description('Eine verstärkte Struktur für die schwächeren Teile der Mauer.')
            ->isTemporary(0)->defense(35)->ap(15)->health(15)->blueprintLevel(1)->resources(["wood_beam_#00" => 5,"metal_beam_#00" => 3,])->orderBy(3)->commit($item_plate);
 
         $container->add()->parentBuilding($small_wallimprove1)
             ->icon('item_plate')->label('Zackenmauer')->description('Diese Mauer ist mit einer großen Anzahl an Metallspitzen gespickt, damit die Stadtbewohner beim Angriff um Mitternacht ein paar nette Spieße Zombieschaschlik herstellen können.')
-            ->isTemporary(0)->defense(45)->ap(35)->health(35)->blueprintLevel(1)->resources(["wood2_#00" => 5,"metal_#00" => 2,"concrete_wall_#00" => 1,])->orderBy(4)->commit($item_plate_2);
+            ->isTemporary(0)->defense(45)
+            ->ap(35)->health(35)->resources(["wood2_#00" => 5,"metal_#00" => 2,"concrete_wall_#00" => 1,])
+            ->adjustForHardMode(null, ["wood2_#00" => 20,"metal_#00" => 8,"concrete_wall_#00" => 3,])
+            ->blueprintLevel(1)->orderBy(4)->commit($item_plate_2);
 
         $container->add()->parentBuilding($small_wallimprove1)
             ->icon('item_plate')->label('Groooße Mauer')->description('Eine Mauer ist gut, eine große Mauer ist besser.')
-            ->isTemporary(0)->defense(80)->ap(50)->health(50)->blueprintLevel(1)->resources(["wood2_#00" => 10, "metal_#00" => 10,"concrete_wall_#00" => 2,"wood_beam_#00" => 10,"metal_beam_#00" => 10,])->orderBy(1)->commit();
+            ->isTemporary(0)->defense(80)
+            ->ap(50)->health(50)->resources(["wood2_#00" => 10, "metal_#00" => 10,"concrete_wall_#00" => 2,"wood_beam_#00" => 10,"metal_beam_#00" => 10,])
+            ->adjustForHardMode(null, ["wood2_#00" => 40, "metal_#00" => 40,"concrete_wall_#00" => 6,"wood_beam_#00" => 30,"metal_beam_#00" => 30,])
+            ->blueprintLevel(1)->orderBy(1)->commit();
 
         $container->add()->parentBuilding($small_wallimprove1)
             ->icon('item_plate')->label('Zweite Schicht')->description('Damit selbst hartnäckige Zombies draußen bleiben, bekommt die gesamte Stadtmauer eine zusätzliche Schicht verpasst.')
@@ -73,7 +93,10 @@ class BuildingDataService implements FixtureProcessorInterface {
 
         $container->add()->parentBuilding($small_wallimprove1)
             ->icon('item_home_def')->label('Entwicklungsfähige Stadtmauer')->description('Die Stadtmauer wird mit einem Eisengestell verstärkt und kann ab sofort jeden Tag ganz leicht um ein Stück erweitert werden!')
-            ->isTemporary(0)->defense(55)->ap(65)->health(65)->blueprintLevel(3)->resources(["wood2_#00" => 5,"metal_#00" => 15,"concrete_wall_#00" => 2])->orderBy(2)
+            ->isTemporary(0)->defense(55)
+            ->ap(65)->health(65)->resources(["wood2_#00" => 5,"metal_#00" => 15,"concrete_wall_#00" => 2])
+            ->adjustForHardMode(null, ["wood2_#00" => 20,"metal_#00" => 60,"concrete_wall_#00" => 6])
+            ->blueprintLevel(3)->orderBy(2)
             ->voteLevel(5)->baseVoteText('Die entwicklungsfähige Stadtmauer bringt der Stadt 55 Verteidigungspunkte.')
             ->upgradeTexts([
                                'Der Verteidigungsbonus der Stadtmauer steigt dauerhaft um 30.',
@@ -93,7 +116,10 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->isTemporary(0)->defense(55)->ap(40)->health(40)->blueprintLevel(1)->resources(["meca_parts_#00" => 3,"metal_beam_#00" => 5,"metal_#00" => 15,"plate_#00" => 1,"wire_#00" => 1,])->orderBy(1)->commit();
         $container->add()->parentBuilding($small_gather)
             ->icon('small_gather')->label('Fallgruben')->description('Mit tieferen Löchern und darüber ausgelegten Planen, einfach abwarten und zusehen, wie etwas (oder jemand?) hineinfällt!')
-            ->isTemporary(0)->defense(35)->ap(25)->health(25)->blueprintLevel(0)->resources(["metal_beam_#00" => 1, "plate_#00" => 2,])->orderBy(2)->commit();
+            ->isTemporary(0)->defense(35)
+            ->ap(25)->resources(["metal_beam_#00" => 1, "plate_#00" => 2,])
+            ->adjustForHardMode(null, ["metal_beam_#00" => 3, "plate_#00" => 6,])
+            ->health(25)->blueprintLevel(0)->orderBy(2)->commit();
         $container->add()->parentBuilding($small_wallimprove)
             ->icon('small_fence')->label('Zaun (Baustellen)')->description('Holzzäune, die vor der Mauer errichtet wurden, um die auf die Stadt zustürmenden Zombies zu verlangsamen (oder es zumindest zu versuchen).')
             ->isTemporary(0)->defense(40)->ap(60)->health(60)->blueprintLevel(0)->resources(["wood2_#00" => 15,"wood_beam_#00" => 5,])->orderBy(5)->commit($small_fence);
@@ -105,22 +131,37 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->isTemporary(0)->defense(60)->ap(35)->health(35)->blueprintLevel(0)->resources(["metal_#00" => 10, "water_#00" => 10,"tube_#00" => 1,"plate_#00" => 2,"pharma_#00" => 2,])->orderBy(4)->commit($small_wallimprove3);
         $container->add()->parentBuilding($small_wallimprove)
             ->icon('small_waterspray')->label('Zerstäuber')->description('Ein handliches, hydraulisch betriebenes Gerät, das Wasserdampf versprühen kann (und weitere amüsante Chemikalien).')
-            ->isTemporary(0)->defense(0)->ap(50)->health(50)->blueprintLevel(0)->resources(["meca_parts_#00" => 2,"metal_#00" => 8,"tube_#00" => 2,"metal_beam_#00" => 2,"wire_#00" => 2,"deto_#00" => 1,])->orderBy(5)->commit($small_waterspray);
+            ->isTemporary(0)->defense(0)
+            ->ap(50)->health(50)->resources(["meca_parts_#00" => 2,"metal_#00" => 8,"tube_#00" => 2,"metal_beam_#00" => 2,"wire_#00" => 2,"deto_#00" => 1,])
+            ->adjustForHardMode(null, ["meca_parts_#00" => 6,"metal_#00" => 32,"tube_#00" => 6,"metal_beam_#00" => 6,"wire_#00" => 6,"deto_#00" => 3,] )
+            ->blueprintLevel(0)->orderBy(5)->commit($small_waterspray);
 
         $container->add()->parentBuilding($small_waterspray)
             ->icon('small_acidspray')->label('Säurespray')->description('Das Hinzufügen einiger Chemikalien zum verwendeten Wasser wird das hübsche Gesicht der Zombies vor der Stadt definitiv nicht verschönern.')
-            ->isTemporary(1)->defense(40)->ap(25)->blueprintLevel(1)->resources(["water_#00" => 3,"pharma_#00" => 2,])->orderBy(1)->commit();
+            ->isTemporary(1)->defense(40)
+            ->ap(25)->resources(["water_#00" => 3,"pharma_#00" => 2,])
+            ->adjustForHardMode(null, ["water_#00" => 9,"pharma_#00" => 8,])
+            ->blueprintLevel(1)->orderBy(1)->commit();
 
         $container->add()->parentBuilding($small_waterspray)
             ->icon('small_gazspray')->label('Spraykanone')->description('Oft wird vergessen, dass Zombies ein Gehirn haben. Manchmal sogar zwei, wenn sie Glück haben. Trifft sich gut: Das mit dieser Kanone geschossene Konzentrat hat die erstaunliche Fähigkeit, Gehirne in Matsch zu verwandeln. Es könnte allerdings sein, dass sie auf eure Wächter herunterfällt... aber wo gehobelt wird, da fallen Späne.')
-            ->isTemporary(false)->defense(140)->ap(60)->health(60)->blueprintLevel(1)->resources(["metal_beam_#00" => 5,"water_#00" => 5,"meca_parts_#00" => 1,"tube_#00" => 1,"pharma_#00" => 2,"poison_part_#00" => 1,])->orderBy(2)->commit();
+            ->isTemporary(false)->defense(140)
+            ->ap(60)->health(60)->resources(["metal_beam_#00" => 5,"water_#00" => 5,"meca_parts_#00" => 1,"tube_#00" => 1,"pharma_#00" => 2,"poison_part_#00" => 1,])
+            ->adjustForHardMode(null, ["metal_beam_#00" => 15,"water_#00" => 15,"meca_parts_#00" => 3,"tube_#00" => 4,"pharma_#00" => 8,"poison_part_#00" => 2,])
+            ->blueprintLevel(1)->orderBy(2)->commit();
 
         $container->add()->parentBuilding($small_wallimprove)
             ->icon('item_plate')->label('Rüstungsplatten')->description('Ein simpler Verteidigungsgegenstand, aber du wirst ihn zu schätzen wissen, wenn dein Ex-Nachbar Kevo versuchen sollte, an deinem Gehirn rumzuknabbern..')
-            ->isTemporary(0)->defense(30)->ap(30)->health(30)->blueprintLevel(0)->resources(["wood2_#00" => 10,])->orderBy(8)->commit();
+            ->isTemporary(0)->defense(30)
+            ->ap(30)->health(30)->resources(["wood2_#00" => 10,])
+            ->adjustForHardMode(null, ["wood2_#00" => 40,])
+            ->blueprintLevel(0)->orderBy(8)->commit();
         $container->add()->parentBuilding($small_wallimprove)
             ->icon('item_plate')->label('Rüstungsplatten 2.0')->description('Es ist nicht sehr fortschrittlich oder gut durchdacht, aber es erfüllt seinen Zweck ... es verzögert unseren Tod. Ein wenig.')
-            ->isTemporary(0)->defense(30)->ap(30)->health(30)->blueprintLevel(0)->resources(["metal_#00" => 10,])->orderBy(9)->commit();
+            ->isTemporary(0)->defense(30)
+            ->ap(30)->health(30)->resources(["metal_#00" => 10,])
+            ->adjustForHardMode(null, ["metal_#00" => 40,])
+            ->blueprintLevel(0)->orderBy(9)->commit();
         $container->add()->parentBuilding($small_wallimprove)
             ->icon('item_plate')->label('Rüstungsplatten 3.0')->description('Simpel aber stabil: Was will man mehr?')
             ->isTemporary(0)->defense(45)->ap(30)->health(30)->blueprintLevel(0)->resources(["wood2_#00" => 8,"metal_#00" => 8,])->orderBy(10)->commit();
@@ -129,10 +170,16 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->isTemporary(0)->defense(15)->ap(30)->health(30)->blueprintLevel(0)->resources(["wood2_#00" => 2,"metal_#00" => 2,])->orderBy(7)->commit($item_plate9);
         $container->add()->parentBuilding($small_wallimprove)
             ->icon('item_plate')->label('Extramauer')->description('Schützt das Herz der Stadt mit einer zusätzlichen Mauer. Man muss keine helle Leuchte sein, um auf diese Idee zu kommen, aber es kann auch nicht schaden.')
-            ->isTemporary(0)->defense(50)->ap(25)->health(25)->blueprintLevel(1)->resources(["wood2_#00" => 15,"metal_#00" => 15,])->orderBy(11)->commit();
+            ->isTemporary(0)->defense(50)
+            ->ap(25)->health(25)->resources(["wood2_#00" => 15,"metal_#00" => 15,])
+            ->adjustForHardMode(null, ["wood2_#00" => 60,"metal_#00" => 60,])
+            ->blueprintLevel(1)->orderBy(11)->commit();
         $container->add()->parentBuilding($small_wallimprove)
             ->icon('small_round_path')->label('Brustwehr')->description('Wenn die Bürger die Nacht auf der Spitze des Wachturms tanzen, sollte dies die Aufmerksamkeit einiger Zombies auf sich ziehen. Wir wünschen den Freiwilligen viel Glück.')
-            ->isTemporary(0)->defense(0)->ap(25)->health(25)->blueprintLevel(0)->resources(["wood2_#00" => 6,"wood_beam_#00" => 2,"metal_beam_#00" => 2,"meca_parts_#00" => 1,])->orderBy(3)
+            ->isTemporary(0)->defense(0)
+            ->ap(25)->health(25)->resources(["wood2_#00" => 6,"wood_beam_#00" => 2,"metal_beam_#00" => 2,"meca_parts_#00" => 1,])
+            ->adjustForHardMode(null, ["wood2_#00" => 24,"wood_beam_#00" => 6,"metal_beam_#00" => 6,"meca_parts_#00" => 3,])
+            ->blueprintLevel(0)->orderBy(3)
             ->voteLevel(3)->baseVoteText('Diese Brustwehr um die Stadt erlaubt es einigen Wächtern, die Stadt von der Mauer aus zu schützen.')
             ->upgradeTexts([
                                'Indem man die Zinnen etwas erweitert, können mehr Wächter während des Angriffs kämpfen.',
@@ -156,11 +203,17 @@ class BuildingDataService implements FixtureProcessorInterface {
 
         $container->add()->parentBuilding($small_water)
             ->icon('item_jerrycan')->label('Wasserreiniger')->description('Verwandelt in der Wüste gefundenes Kanisterwasser in Trinkwasser.')
-            ->isTemporary(0)->defense(0)->ap(75)->health(75)->blueprintLevel(0)->resources(["meca_parts_#00" => 1,"wood2_#00" => 5,"metal_#00" => 5,"tube_#00" => 2,"oilcan_#00" => 2,])->orderBy(4)->commit($item_jerrycan);
+            ->isTemporary(0)->defense(0)
+            ->ap(75)->health(75)->resources(["meca_parts_#00" => 1,"wood2_#00" => 5,"metal_#00" => 5,"tube_#00" => 2,"oilcan_#00" => 2,])
+            ->adjustForHardMode(null, ["meca_parts_#00" => 3,"wood2_#00" => 20,"metal_#00" => 20,"tube_#00" => 8,"oilcan_#00" => 8,])
+            ->blueprintLevel(0)->orderBy(4)->commit($item_jerrycan);
 
         $container->add()->parentBuilding($item_jerrycan)
             ->icon('item_bgrenade')->label('Minen')->description('Raketenpulver, Zünder und reines Wasser: Das sind die Zutaten für einen saftigen Brei aus vermodertem Fleisch diese Nacht. Eine mächtige Verteidigung, leider kann sie nur einmal verwendet werden.')
-            ->isTemporary(1)->defense(115)->ap(50)->health(0)->blueprintLevel(1)->resources(["water_#00" => 10,"metal_#00" => 3,"explo_#00" => 1,"deto_#00" => 1,])->orderBy(10)->commit();
+            ->isTemporary(1)->defense(115)
+            ->ap(50)->health(0)->resources(["water_#00" => 10,"metal_#00" => 3,"explo_#00" => 1,"deto_#00" => 1,])
+            ->adjustForHardMode(null, ["water_#00" => 30,"metal_#00" => 12,"explo_#00" => 3,"deto_#00" => 3,])
+            ->blueprintLevel(1)->orderBy(10)->commit();
         $container->add()->parentBuilding($item_jerrycan)
             ->icon('item_jerrycan')->label('Wasserfilter')->description('Verbessert die Ausbeute des Wasserreinigers erheblich (hoher Wirkungsgrad).')
             ->isTemporary(0)->defense(0)->ap(50)->health(50)->blueprintLevel(3)->resources(["metal_#00" => 10,"electro_#00" => 2,"wire_#00" => 1,"oilcan_#00" => 1,"fence_#00" => 1,])->orderBy(0)->commit();
@@ -179,7 +232,10 @@ class BuildingDataService implements FixtureProcessorInterface {
 
         $container->add()->parentBuilding($item_vegetable_tasty)
             ->icon('item_bgrenade')->label('Granatapfel')->description('Ein gewaltiger wissenschaftlicher Durchbruch: Durch die Aussaat von Dynamitstangen und gaaanz vorsichtiges Gießen, könnt ihr Granatäpfel anbauen!')
-            ->isTemporary(0)->defense(0)->ap(40)->health(40)->blueprintLevel(2)->resources(["water_#00" => 10,"wood2_#00" => 5,"explo_#00" => 5,'oilcan_#00' => 1])->orderBy(1)->commit($item_bgrenade);
+            ->isTemporary(0)->defense(0)
+            ->ap(40)->health(40)->resources(["water_#00" => 10,"wood2_#00" => 5,"explo_#00" => 5,'oilcan_#00' => 1])
+            ->adjustForHardMode(null, ["water_#00" => 30,"wood2_#00" => 20,"explo_#00" => 15,'oilcan_#00' => 4])
+            ->blueprintLevel(2)->orderBy(1)->commit($item_bgrenade);
         $container->add()->parentBuilding($item_vegetable_tasty)
             ->icon('item_digger')->label('Dünger')->description('Erhöht den Ertrag des Gemüsegartens und aller umliegenden Gärten erheblich.')
             ->isTemporary(0)->defense(0)->ap(30)->health(30)->blueprintLevel(3)->resources(["water_#00" => 10,"drug_#00" => 2,"metal_#00" => 5,"pharma_#00" => 8,'ryebag_#00' => 3])->orderBy(0)->commit();
@@ -190,7 +246,10 @@ class BuildingDataService implements FixtureProcessorInterface {
 
         $container->add()->parentBuilding($small_water)
             ->icon('small_eden')->label('Projekt Eden')->description('Eine radikale Lösung, wenn mal das Wasser ausgehen sollte: Mit ein paar gezielten Sprengungen können tiefergelegene Wasserschichten erschlossen und das Wasserreservoir vergrößert werden.')
-            ->isImpervious(true)->isTemporary(0)->defense(0)->ap(50)->health(0)->blueprintLevel(2)->resources(["wood2_#00" => 10,"explo_#00" => 2,"deto_#00" => 1,"metal_beam_#00" => 5,])->orderBy(2)->commit($small_eden);
+            ->isImpervious(true)->isTemporary(0)->defense(0)
+            ->ap(50)->health(0)->resources(["wood2_#00" => 10,"explo_#00" => 2,"deto_#00" => 1,"metal_beam_#00" => 5,])
+            ->adjustForHardMode(null, ["wood2_#00" => 40,"explo_#00" => 6,"deto_#00" => 3,"metal_beam_#00" => 15,])
+            ->blueprintLevel(2)->orderBy(2)->commit($small_eden);
 
         $container->add()->parentBuilding($small_water)
             ->icon('item_firework_tube')->label('Wasserleitungsnetz')->description('Indem du die ganze Stadt mit einem ganzen Netz von Rohren verbindest, kannst du starke wasserbasierte Verteidigungsanlagen in der Stadt aufbauen... Und wer weiß, vielleicht verbessern Sie nebenbei auch noch die Körperhygiene?')
@@ -198,20 +257,32 @@ class BuildingDataService implements FixtureProcessorInterface {
 
         $container->add()->parentBuilding($small_waterspray)
             ->icon('small_waterspray')->label('Kärcher')->description('Dieser leistungsstarke Dampfstrahlreiniger versprüht feinen, siedend heißen Wasserdampf. Deine muffigen Freunde werden beim Anblick dieses Geräts wortwörtlich dahinschmelzen.')
-            ->isTemporary(0)->defense(60)->ap(40)->health(40)->blueprintLevel(1)->resources(["water_#00" => 10,"tube_#00" => 1,"wood2_#00" => 10,"metal_beam_#00" => 5,"oilcan_#00" => 1,])->orderBy(0)->commit();
+            ->isTemporary(0)->defense(60)
+            ->ap(40)->health(40)->resources(["water_#00" => 10,"tube_#00" => 1,"wood2_#00" => 10,"metal_beam_#00" => 5,"oilcan_#00" => 1,])
+            ->adjustForHardMode(null, ["water_#00" => 30,"tube_#00" => 3,"wood2_#00" => 40,"metal_beam_#00" => 15,"oilcan_#00" => 4,])
+            ->blueprintLevel(1)->orderBy(0)->commit();
         $container->add()->parentBuilding($item_firework_tube)
             ->icon('small_grinder')->label('Kreischender Rotor')->description('Es handelt sich um ein einfallsreiches und SEHR effektives System! Zwei schnell kreisende und mit geschliffenen Eisenstangen bestückte Drehscheiben, die von einem Kolbenmechanismus angetrieben werden, zerfetzen alles und jeden, der sich im Toreingang befindet!')
-            ->isTemporary(0)->defense(50)->ap(55)->health(55)->blueprintLevel(1)->resources(["plate_#00" => 2,"tube_#00" => 2,"wood_beam_#00" => 4,"metal_beam_#00" => 10,])->orderBy(4)->commit();
+            ->isTemporary(0)->defense(50)
+            ->ap(55)->resources(["plate_#00" => 2,"tube_#00" => 2,"wood_beam_#00" => 4,"metal_beam_#00" => 10,])
+            ->adjustForHardMode(null, ["plate_#00" => 6,"tube_#00" => 8,"wood_beam_#00" => 12,"metal_beam_#00" => 30,])
+            ->health(55)->blueprintLevel(1)->orderBy(4)->commit();
         $container->add()->parentBuilding($small_waterspray)
             ->icon('small_sprinkler')->label('Sprinkleranlage')->description('Wie jeder weiß, wird eine Sprinkleranlage für gewöhnlich im Garten eingesetzt. Die wenigsten wissen jedoch, dass sie sich auch hervorragend gegen Zombiehorden eignet. Einziger Wermutstropfen: Die Anlage verbraucht relativ viel Wasser und die Mauer wird etwas rutschiger. Immer vorsichtig laufen!')
-            ->isTemporary(0)->defense(185)->ap(85)->health(85)->blueprintLevel(3)->resources(["water_#00" => 20,"tube_#00" => 1,"wood_beam_#00" => 7,"metal_beam_#00" => 15,'diode_#00' => 1])->orderBy(3)->commit();
+            ->isTemporary(0)->defense(185)
+            ->ap(85)->health(85)->resources(["water_#00" => 20,"tube_#00" => 1,"wood_beam_#00" => 7,"metal_beam_#00" => 15,'diode_#00' => 1])
+            ->adjustForHardMode(null, ["water_#00" => 60,"tube_#00" => 4,"wood_beam_#00" => 21,"metal_beam_#00" => 45,'diode_#00' => 3])
+            ->blueprintLevel(3)->orderBy(3)->commit();
         $container->add()->parentBuilding($item_firework_tube)
             ->icon('small_shower')->label('Dusche')->description('Nein, ganz ehrlich, dieser... dieser... Geruch ist einfach nicht auszuhalten: Nimm eine Dusche. Sofort!')
             ->isTemporary(0)->defense(0)->ap(25)->health(25)->blueprintLevel(1)->resources(["water_#00" => 5,"wood2_#00" => 4,"metal_#00" => 1,"tube_#00" => 1,'oilcan_#00' => 1])->orderBy(3)->commit();
 
         $container->add()->parentBuilding($small_water)
             ->icon('item_tube')->label('Wasserturm')->description('Mit dieser revolutionären Verteidigungsanlage ist die Stadt imstande, große Wasserdampfwolken zu erzeugen. Ein wohlig-warmes Dampfbad wird den vor den Stadtmauern herumlungernden Zombies gut tun und sie grundlegend "reinigen". Die Leistung kann mit ein wenig Feintuning noch gesteigert werden.')
-            ->isTemporary(0)->defense(70)->ap(50)->health(50)->blueprintLevel(3)->resources(["water_#00" => 25,"tube_#00" => 6,"metal_beam_#00" => 10,])->orderBy(6)
+            ->isTemporary(0)->defense(70)
+            ->ap(50)->health(50)->resources(["water_#00" => 25,"tube_#00" => 6,"metal_beam_#00" => 10,])
+            ->adjustForHardMode(null, ["water_#00" => 75,"tube_#00" => 24,"metal_beam_#00" => 30,])
+            ->blueprintLevel(3)->orderBy(6)
             ->voteLevel(5)->baseVoteText('Der Wasserwerfer gibt 70 zusätzliche Verteidigungspunkte.')
             ->upgradeTexts([
                                'Der Wasserturm verbraucht beim nächtlichen Angriff 2 Rationen Wasser und steigert seinen Verteidigungswert dafür um 56.',
@@ -224,13 +295,22 @@ class BuildingDataService implements FixtureProcessorInterface {
 
         $container->add()->parentBuilding($small_water)
             ->icon('item_tube')->label('Wasserfänger')->description('Wenn es um Wasser geht, zählt jeder Tropfen. Dieses Bauwerk fügt dem Brunnen +2 Rationen Wasser hinzu und kann jeden Tag gebaut werden.')
-            ->isTemporary(1)->defense(0)->ap(10)->health(0)->blueprintLevel(1)->resources(["wood2_#00" => 2,"metal_#00" => 2,])->orderBy(0)->commit();
+            ->isTemporary(1)->defense(0)
+            ->ap(10)->health(0)->resources(["wood2_#00" => 2,"metal_#00" => 2,])
+            ->adjustForHardMode(null, ["wood2_#00" => 8,"metal_#00" => 8,])
+            ->blueprintLevel(1)->orderBy(0)->commit();
         $container->add()->parentBuilding($small_waterspray)
             ->icon('small_watercanon')->label('Wasserkanone')->description('Ein hübscher kleiner Wasserstrahl, um die wachsende Zombiemeute beim Stadttor zu sprengen.')
-            ->isTemporary(0)->defense(80)->ap(40)->health(40)->blueprintLevel(2)->resources(["water_#00" => 15,"wood2_#00" => 5,"metal_#00" => 5,"metal_beam_#00" => 5,])->orderBy(4)->commit();
+            ->isTemporary(0)->defense(80)
+            ->ap(40)->health(40)->resources(["water_#00" => 15,"wood2_#00" => 5,"metal_#00" => 5,"metal_beam_#00" => 5,])
+            ->adjustForHardMode(null, ["water_#00" => 45,"wood2_#00" => 20,"metal_#00" => 20,"metal_beam_#00" => 15,])
+            ->blueprintLevel(2)->orderBy(4)->commit();
         $container->add()->parentBuilding($item_vegetable_tasty)
             ->icon('small_appletree')->label('Apfelbaum')->description('Dieser Apfelbaum erinnert eher an einen verkümmerten und halbtoten Busch, aber er trägt wunderschöne blaue Äpfel. Äh, Moment mal,... wie bitte?')
-            ->isTemporary(0)->defense(0)->ap(30)->health(0)->blueprintLevel(3)->resources(["water_#00" => 10,"hmeat_#00" => 2,"pharma_#00" => 3,"wood_beam_#00" => 1,])->orderBy(2)->commit();
+            ->isTemporary(0)->defense(0)
+            ->ap(30)->health(0)->resources(["water_#00" => 10,"hmeat_#00" => 2,"pharma_#00" => 3,"wood_beam_#00" => 1,])
+            ->resources(["water_#00" => 30,"hmeat_#00" => 6,"pharma_#00" => 12,"wood_beam_#00" => 3,])
+            ->blueprintLevel(3)->orderBy(2)->commit();
         $container->add()->parentBuilding($item_firework_tube)
             ->icon('small_shower')->label('Schleuse')->description('Selbst das Abwasser der Stadt kann noch genutzt werden: Wir müssen bloß alle Toiletten der Stadt über ein ausgeklügeltes System aus Rohren und Schlitten miteinander verbinden und dann um Mitternacht die Schleusen öffnen. Hat auch jeder sein Zelt korrekt aufgebaut?')
             ->isTemporary(0)->defense(60)->ap(50)->health(50)->blueprintLevel(1)->resources(["water_#00" => 15,"wood2_#00" => 8,"tube_#00" => 1,])->orderBy(2)->commit();
@@ -246,11 +326,17 @@ class BuildingDataService implements FixtureProcessorInterface {
 
         $container->add()
             ->icon('item_meat')->label('Metzgerei')->description('In der Metzgerei könnt ihr eure kleinen treuen Begleiter (Hunde, Katzen, Schlangen ...) in Lebensmittel verwandeln. Da gibt es doch tatsächlich noch Leute, die Vegetarier sind...')
-            ->isTemporary(0)->defense(0)->ap(40)->health(40)->blueprintLevel(0)->resources(["wood2_#00" => 9,"metal_#00" => 4,])->orderBy(2)->commit($item_meat);
+            ->isTemporary(0)->defense(0)
+            ->ap(40)->health(40)->resources(["wood2_#00" => 9,"metal_#00" => 4,])
+            ->adjustForHardMode(null, ["wood2_#00" => 36,"metal_#00" => 16,])
+            ->blueprintLevel(0)->orderBy(2)->commit($item_meat);
 
         $container->add()->parentBuilding($item_meat)
             ->icon('item_hmeat')->label('Kremato-Cue')->description('Jeder weiß, was ein Krematorium ist, richtig? Und jeder weiß, wozu man einen Barbecuegrill verwendet? Dann einfach eins und eins zusammenzählen, dann wisst ihr auch wie ein "Kremato-Cue" funktioniert. Die Zeiten des Hungerns sind jedenfalls vorbei...')
-            ->isTemporary(0)->defense(0)->ap(40)->health(40)->blueprintLevel(2)->resources(["wood_beam_#00" => 6,"metal_beam_#00" => 1,])->orderBy(1)->commit();
+            ->isTemporary(0)->defense(0)
+            ->ap(40)->health(40)->resources(["wood_beam_#00" => 6,"metal_beam_#00" => 1,])
+            ->adjustForHardMode(null, ["wood_beam_#00" => 18,"metal_beam_#00" => 3,])
+            ->blueprintLevel(2)->orderBy(1)->commit();
 
         $container->add()
             ->icon('small_refine')->label('Werkstatt')->description('Die Entwicklung einer jeden Stadt hängt vom Bau einer verdreckten Werkstatt ab. Sie ist die Voraussetzung für alle weiter entwickelten Gebäude.')
@@ -267,7 +353,10 @@ class BuildingDataService implements FixtureProcessorInterface {
 
         $container->add()->parentBuilding($small_refine)
             ->icon('item_meca_parts')->label('Verteidigungsanlage')->description('Für diese raffiniert durchdachte Anlage können alle Arten von Platten (z.B. Blech) verwendet werden. Jeder in der Bank abgelegte Verteidigungsgegenstand steuert zusätzliche Verteidigungspunkte bei!')
-            ->isTemporary(0)->defense(0)->ap(50)->blueprintLevel(0)->resources(["meca_parts_#00" => 3,"wood_beam_#00" => 8,"metal_beam_#00" => 8,])->orderBy(7)
+            ->isTemporary(0)->defense(0)
+            ->ap(50)->resources(["meca_parts_#00" => 3,"wood_beam_#00" => 8,"metal_beam_#00" => 8,])
+            ->adjustForHardMode(null, ["meca_parts_#00" => 8,"wood_beam_#00" => 24,"metal_beam_#00" => 24,])
+            ->blueprintLevel(0)->orderBy(7)
             ->voteLevel(3)->baseVoteText('Jeder in der Bank abgelegte Verteidigungsgegenstand bringt der Stadt 1.5 Verteidigungspunkte zusätzlich ein.')->upgradeTexts([
                                'Der Verteidigungsbonus von Gegenständen in der Bank steigt um 100%.',
                                'Der Verteidigungsbonus von Gegenständen in der Bank steigt um 150%.',
@@ -362,7 +451,10 @@ class BuildingDataService implements FixtureProcessorInterface {
 
         $container->add()->parentBuilding($item_tagger)
             ->icon('item_courroie')->label('Katapult')->description('Das Katapult ist ein äußerst mächtiges Werkzeug, mit dem die Stadt jede Art von Gegenstand in die Wüste schießen kann. Das ist sehr nützlich, wenn man weit entfernte Bürger versorgen möchte (Lebensmittel, Wasser, Waffen etc...).')
-            ->isTemporary(0)->defense(0)->ap(40)->health(40)->blueprintLevel(1)->resources(["wood2_#00" => 2,"metal_#00" => 1,"wood_beam_#00" => 1,"metal_beam_#00" => 1,])->orderBy(4)->commit($item_courroie);
+            ->isTemporary(0)->defense(0)
+            ->ap(40)->health(40)->resources(["wood2_#00" => 2,"metal_#00" => 1,"wood_beam_#00" => 1,"metal_beam_#00" => 1,])
+            ->adjustForHardMode(null, ["wood2_#00" => 8,"metal_#00" => 4,"wood_beam_#00" => 3,"metal_beam_#00" => 3,])
+            ->blueprintLevel(1)->orderBy(4)->commit($item_courroie);
 
         $container->add()->parentBuilding($item_courroie)
             ->icon('item_courroie')->label('Verbesserter Katapult')->description('Dieses erheblich verbesserte Katapult ist einfacher zu bedienen und benötigt weniger AP, um mit einem Gegenstand beladen zu werden!')
@@ -373,10 +465,16 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->isTemporary(0)->defense(0)->ap(20)->health(20)->blueprintLevel(1)->resources(["metal_#00" => 5,"pile_#00" => 2,"diode_#00" => 1,"electro_#00" => 1,"radio_on_#00" => 2,])->orderBy(0)->commit();
         $container->add()->parentBuilding($item_tagger)
             ->icon('item_electro')->label('Verbesserte Karte')->description('Diese simple elektronische Konstruktion erleichtert das Lesen der Außenweltkarte. Konkret: Du erfährst die genaue Zombieanzahl jeder Zone und musst somit nicht mehr planlos in der Wüste rumlaufen...')
-            ->isTemporary(0)->defense(0)->ap(25)->health(25)->blueprintLevel(1)->resources(["pile_#00" => 2,"metal_#00" => 5,"plate_#00" => 1,"diode_#00" => 1,"radio_on_#00" => 2,])->orderBy(1)->commit();
+            ->isTemporary(0)->defense(0)
+            ->ap(25)->health(25)->resources(["pile_#00" => 2,"metal_#00" => 5,"plate_#00" => 1,"diode_#00" => 1,"radio_on_#00" => 2,])
+            ->adjustForHardMode(null, ["pile_#00" => 8,"metal_#00" => 20,"plate_#00" => 3,"diode_#00" => 3,"radio_on_#00" => 8,])
+            ->blueprintLevel(1)->orderBy(1)->commit();
         $container->add()->parentBuilding($item_tagger)
             ->icon('item_tagger')->label('Rechenmaschine')->description('Die Rechenmaschine ist ein etwas rustikaler Taschenrechner, mit dem man die Angriffsstärke des MORGIGEN Tages berechnen kann!')
-            ->isTemporary(0)->defense(0)->ap(20)->health(20)->blueprintLevel(1)->resources(["rustine_#00" => 1,"electro_#00" => 1,])->orderBy(1)->commit();
+            ->isTemporary(0)->defense(0)
+            ->ap(20)->health(20)->resources(["rustine_#00" => 1,"electro_#00" => 1,])
+            ->adjustForHardMode(null, ["rustine_#00" => 4,"electro_#00" => 3,])
+            ->blueprintLevel(1)->orderBy(1)->commit();
 
         $container->add()->parentBuilding($item_tagger)
             ->icon('small_gather')->label('Forschungsturm')->description('Mit dem Forschungsturm können in bereits "abgesuchten" Wüstenzonen jeden Tag neue Gegenstände gefunden werden! Der Forschungsturm versetzt dich in die Lage, jene anormalen meteorologischen Phänomene aufzuzeichnen und auszuwerten, die sich nachts in der Wüste abspielen. Die entsprechenden Fundstellen werden anschließend in der Zeitung veröffentlicht.')
@@ -393,41 +491,74 @@ class BuildingDataService implements FixtureProcessorInterface {
 
         $container->add()->parentBuilding($small_wallimprove)
             ->icon('status_terror')->label('Notfallkonstruktion')->description('Um mit bestimmten unvorhergesehenen Ereignissen fertig zu werden, ist es manchmal notwendig, ein paar Verteidigungsanlagen für den Notfall zu bauen, ohne sich Sorgen zu machen, dass sie länger als eine Nacht halten werden. Achten wir sollten darauf achten, nicht zu viele Ressourcen und Energie für dieses Provisorium ausgeben!')
-            ->isTemporary(0)->defense(0)->ap(40)->health(40)->blueprintLevel(0)->resources(["wood2_#00" => 5,"metal_#00" => 5,])->orderBy(13)->commit($status_terror);
+            ->isTemporary(0)->defense(0)->blueprintLevel(0)
+            ->ap(40)->health(40)->resources(["wood2_#00" => 5,"metal_#00" => 5,])
+            ->adjustForHardMode(null, ["wood2_#00" => 20,"metal_#00" => 20,])
+            ->orderBy(13)->commit($status_terror);
 
         $container->add()->parentBuilding($status_terror)
             ->icon('item_wood_plate')->label('Notfallabstützung')->description('Wir verstärken alles, was wir können, mit ein paar Holzbrettern und drücken die Daumen, dass es in der Nacht hält.')
-            ->isTemporary(1)->defense(40)->ap(20)->health(0)->blueprintLevel(0)->resources(["wood2_#00" => 6,])->orderBy(0)->commit();
+            ->isTemporary(1)->defense(40)
+            ->ap(20)->health(0)->resources(["wood2_#00" => 6,])
+            ->adjustForHardMode(null, ["wood2_#00" => 24,])
+            ->blueprintLevel(0)->orderBy(0)->commit();
         $container->add()->parentBuilding($status_terror)
             ->icon('small_trap')->label('Verteidigungspfähle')->description('Indem wir schnell ein paar scharfe Holzpfähle in die Mitte des Haufens pflanzen, wird uns das hoffentlich über die Nacht retten.')
-            ->isTemporary(1)->defense(30)->ap(15)->health(0)->blueprintLevel(0)->resources(["wood2_#00" => 5,])->orderBy(1)->commit();
+            ->isTemporary(1)->defense(30)
+            ->ap(15)->health(0)->resources(["wood2_#00" => 5,])
+            ->adjustForHardMode(null, ["wood2_#00" => 20,])
+            ->blueprintLevel(0)->orderBy(1)->commit();
         $container->add()->parentBuilding($status_terror)
             ->icon('small_trap')->label('Guerilla')->description('Dieses Arsenal an einfallsreichen Guerillafallen ermöglicht dir, die Zombiereihen zu lichten und die Last des Angriffs entscheidend zu senken.')
-            ->isTemporary(1)->defense(60)->ap(30)->blueprintLevel(0)->resources(["wood_beam_#00" => 3,"metal_beam_#00" => 3,"metal_#00" => 5,"rustine_#00" => 1,"wire_#00" => 1,])->orderBy(1)->commit();
+            ->isTemporary(1)->defense(60)
+            ->ap(30)->resources(["wood_beam_#00" => 3,"metal_beam_#00" => 3,"metal_#00" => 5,"rustine_#00" => 1,"wire_#00" => 1,])
+            ->adjustForHardMode(null, ["wood_beam_#00" => 9,"metal_beam_#00" => 9,"metal_#00" => 20,"rustine_#00" => 4,"wire_#00" => 3,])
+            ->blueprintLevel(0)->orderBy(1)->commit();
         $container->add()->parentBuilding($status_terror)
             ->icon('small_dig')->label('Abfallberg')->description('Wenn wirklich gar nichts mehr geht, sammelst du alles ein, was du findest und formst daraus einen großen Abfallhaufen... jetzt heißt es Daumen drücken und hoffen, dass das die Horde irgendwie aufhält... Ach ja, wenn du möchtest, kannst du diesen Abfallberg auch mit Fallen spicken.')
-            ->isTemporary(1)->defense(5)->ap(10)->health(0)->blueprintLevel(0)->resources(["wood2_#00" => 2,"metal_#00" => 2,])->orderBy(2)->commit($small_dig_1);
+            ->isTemporary(1)->defense(5)
+            ->ap(10)->health(0)->resources(["wood2_#00" => 2,"metal_#00" => 2,])
+            ->adjustForHardMode(null, ["wood2_#00" => 8,"metal_#00" => 8,])
+            ->blueprintLevel(0)->orderBy(2)->commit($small_dig_1);
 
         $container->add()->parentBuilding($small_dig_1)
             ->icon('small_dig')->label('Trümmerberg')->description('Hast du erst mal einen großen Haufen Müll aufgeschüttet, kannst du ihn einfach noch mit Stacheln versehen, die ebenso rostig wie tödlich sind!')
-            ->isTemporary(1)->defense(60)->ap(40)->health(0)->blueprintLevel(1)->resources(["metal_#00" => 2,])->orderBy(0)->commit();
+            ->isTemporary(1)->defense(60)
+            ->ap(40)->health(0)->resources(["metal_#00" => 2,])
+            ->adjustForHardMode(null, ["metal_#00" => 8,])
+            ->blueprintLevel(1)->orderBy(0)->commit();
 
         $container->add()->parentBuilding($small_dig_1)
             ->icon('small_trap')->label('Wolfsfalle')->description('Das Hinzufügen von Metall auf Bodenhöhe wird die Zombies nicht aufhalten, aber es könnte sie verlangsamen.')
-            ->isTemporary(1)->defense(30)->ap(15)->health(0)->blueprintLevel(0)->resources(["metal_#00" => 5,"hmeat_#00" => 1,])->orderBy(2)->commit();
+            ->isTemporary(1)->defense(30)
+            ->ap(15)->health(0)->resources(["metal_#00" => 5,"hmeat_#00" => 1,])
+            ->adjustForHardMode(null, ["metal_#00" => 20,"hmeat_#00" => 3,])
+            ->blueprintLevel(0)->orderBy(2)->commit();
         $container->add()->parentBuilding($status_terror)
             ->icon('small_tnt')->label('Sprengfalle')->description('Dynamit, Zombies, Blut.')
-            ->isTemporary(1)->defense(35)->ap(30)->health(0)->blueprintLevel(1)->resources(["explo_#00" => 2,])->orderBy(3)->commit();
+            ->isTemporary(1)->defense(35)
+            ->ap(30)->health(0)->resources(["explo_#00" => 2,])
+            ->adjustForHardMode(null, ["explo_#00" => 8,])
+            ->blueprintLevel(1)->orderBy(3)->commit();
         $container->add()->parentBuilding($status_terror)
             ->icon('status_terror')->label('Nackte Panik')->description('Falls die Lage wirklich verzweifelt ist, könnt ihr beschließen loszuschreien und in Panik zu verfallen. Falls alle Überlebenden mitmachen, wird es die Zombies verwirren (denn sie können mit dieser Art Stress nicht umgehen) und euch einige virtuelle Verteidigungespuntke einbringen... Genau, das ist natürlich Unsinn.')
-            ->isTemporary(1)->defense(70)->ap(25)->health(25)->blueprintLevel(1)->resources(["water_#00" => 2,"wood2_#00" => 5,"metal_#00" => 5, 'meca_parts_#00' => 1])->orderBy(4)->commit();
+            ->isTemporary(1)->defense(70)
+            ->ap(25)->resources(["water_#00" => 2,"wood2_#00" => 5,"metal_#00" => 5, 'meca_parts_#00' => 1])
+            ->adjustForHardMode(null, ["water_#00" => 6,"wood2_#00" => 20,"metal_#00" => 20, 'meca_parts_#00' => 3])
+            ->health(25)->blueprintLevel(1)->orderBy(4)->commit();
         $container->add()->parentBuilding($status_terror)
             ->icon('small_bamba')->label('Dollhouse')->description('Feiern bis zum Abwinken ist immer noch die beste Art, all die schrecklichen Dinge der Außenwelt zu vergessen. Glücklicherweise sorgen die Zombies schon dafür, dass die Dinge nicht zu sehr ausschweifen.')
-            ->isTemporary(1)->defense(50)->ap(20)->health(0)->blueprintLevel(1)->resources(["wood2_#00" => 3,"diode_#00" => 1,"radio_on_#00" => 3,"guitar_#00" => 1,])->orderBy(5)->commit();
+            ->isTemporary(1)->defense(50)
+            ->ap(20)->health(0)->resources(["wood2_#00" => 3,"diode_#00" => 1,"radio_on_#00" => 3,"guitar_#00" => 1,])
+            ->adjustForHardMode(null, ["metal_#00" => 20, "wood2_#00" => 12,"diode_#00" => 3,"radio_on_#00" => 12,"guitar_#00" => 3,])
+            ->blueprintLevel(1)->orderBy(5)->commit();
 
         $container->add()->parentBuilding($small_round_path)
             ->icon('small_watchmen')->label('Wächter-Turm')->description('Die Installation eines großen Turms, der den Wächtern gewidmet ist, in der Mitte der Festungsmauern, um ihre Effizienz zu verbessern. Von nun an werden die heldenhaften Wächter in der Lage sein, dort während ihrer Ruhezeiten  die Verteidigung der Stadt gegen ein wenig von ihrer Energie zu verbessern.')
-            ->isTemporary(0)->defense(0)->ap(35)->health(35)->blueprintLevel(3)->resources(["meca_parts_#00" => 1,"plate_#00" => 1,"wood_beam_#00" => 10,"metal_beam_#00" => 2,])->orderBy(0)->commit($small_watchmen);
+            ->isTemporary(0)->defense(0)
+            ->ap(35)->health(35)->resources(["meca_parts_#00" => 1,"plate_#00" => 1,"wood_beam_#00" => 10,"metal_beam_#00" => 2,])
+            ->adjustForHardMode(null, ["meca_parts_#00" => 3,"plate_#00" => 3,"wood_beam_#00" => 30,"metal_beam_#00" => 6,])
+            ->blueprintLevel(3)->orderBy(0)->commit($small_watchmen);
 
         $container->add()->parentBuilding($small_water)
             ->icon('small_tourello')->label('Schießstand')->description('Ein Geschützturm, der Wasserbomben abfeuert. Unhandlich, aber mit gutem Flächenschaden, jeder wird ihn von der Stadtmauer abreißen wollen!')
@@ -437,17 +568,26 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->isTemporary(0)->defense(60)->ap(30)->health(30)->blueprintLevel(2)->resources(["metal_#00" => 2,"wood_beam_#00" => 3,"meca_parts_#00" => 1,"ryebag_#00" => 1,"pet_pig_#00" => 1,])->orderBy(1)->commit();
         $container->add()->parentBuilding($small_round_path)
             ->icon('small_armor')->label('Kleine Waffenschmiede')->description('Nach dem harten Kampf mit Fäusten und Füßen ist es an der Zeit, zu etwas Ernsthafterem überzugehen. Mit einem Waffenvorrat in der Nähe der Stadtmauer wirst du nicht mehr mit leeren Händen auf die Wache zugehen.')
-            ->isTemporary(0)->defense(0)->ap(40)->health(40)->blueprintLevel(0)->resources(["meca_parts_#00" => 1,"wood2_#00" => 10,"metal_#00" => 8,"plate_#00" => 2,"rustine_#00" => 2,])->orderBy(2)->commit($small_armor);
+            ->isTemporary(0)->defense(0)
+            ->ap(40)->health(40)->resources(["meca_parts_#00" => 1,"wood2_#00" => 10,"metal_#00" => 8,"plate_#00" => 2,"rustine_#00" => 2,])
+            ->adjustForHardMode(null, ["meca_parts_#00" => 3,"wood2_#00" => 40,"metal_#00" => 32,"plate_#00" => 6,"rustine_#00" => 12,])
+            ->blueprintLevel(0)->orderBy(2)->commit($small_armor);
         $container->add()->parentBuilding($small_watchmen)
             ->icon('small_ikea')->label('Schwedische Schreinerei')->description('Dieser kleine Laden verbessert die Effektivität jedes Möbelstücks, das auf der Wache benutzt wird um 30%. Hach ja, die Schweden... Nie gab es bessere Billigmöbel!')
             ->isTemporary(0)->defense(0)->ap(50)->health(50)->blueprintLevel(3)->resources(["meca_parts_#00" => 2,"wood2_#00" => 10,"metal_#00" => 10,"plate_#00" => 2,"concrete_wall_#00" => 3,"wood_beam_#00" => 5,"radio_on_#00" => 1,])->orderBy(0)->commit();
 
         $container->add()->parentBuilding($item_tagger)
             ->icon('small_watchmen')->label('Rückzugsort für Aufklärer')->description('Die Aufklärer haben dich schon immer fasziniert und nie verraten, was sie unter ihrer Haube verbergen... Aber vielleicht ist es das Beste, sie in Ruhe zu lassen. Mit diesem speziellen Rückzugsort können sie sich endlich an die Arbeit machen, ohne die Stadt verlassen zu müssen.')
-            ->isTemporary(0)->defense(0)->ap(25)->health(25)->blueprintLevel(3)->resources(["tube_#00" => 1,"scope_#00" => 1,"metal_beam_#00" => 3,"wood2_#00" => 2,"plate_#00" => 1,"tagger_#00" => 2,"pile_#00" => 1,])->orderBy(2)->commit();
+            ->isTemporary(0)->defense(0)
+            ->ap(25)->health(25)->resources(["tube_#00" => 1,"scope_#00" => 1,"metal_beam_#00" => 3,"wood2_#00" => 2,"plate_#00" => 1,"tagger_#00" => 2,"pile_#00" => 1,])
+            ->adjustForHardMode(null, ["tube_#00" => 4,"scope_#00" => 2,"metal_beam_#00" => 9,"wood2_#00" => 8,"plate_#00" => 3,"tagger_#00" => 6,"pile_#00" => 4,])
+            ->blueprintLevel(3)->orderBy(2)->commit();
         $container->add()->parentBuilding($item_tagger)
             ->icon('small_novlamps')->label('Straßenbeleuchtung')->description('Selbst in der tiefsten Nacht erlaubt dir der fahle Schein der Laternenmasten, deine Ausgrabungen in der Wüste fortzusetzen. Keine Ausreden mehr, um früh ins Bett zu gehen.')
-            ->isTemporary(0)->defense(0)->ap(25)->blueprintLevel(1)->resources(["meca_parts_#00" => 1,"deto_#00" => 1,"lens_#00" => 2,"diode_#00" => 2,"metal_beam_#00" => 8,"wire_#00" => 1, "pile_#00" => 4])->orderBy(7)
+            ->isTemporary(0)->defense(0)
+            ->ap(25)->resources(["meca_parts_#00" => 1,"deto_#00" => 1,"lens_#00" => 2,"diode_#00" => 2,"metal_beam_#00" => 8,"wire_#00" => 1, "pile_#00" => 4])
+            ->adjustForHardMode(null, ["meca_parts_#00" => 3,"deto_#00" => 3,"lens_#00" => 6,"diode_#00" => 6,"metal_beam_#00" => 24,"wire_#00" => 3, "pile_#00" => 16])
+            ->blueprintLevel(1)->orderBy(7)
             ->voteLevel(1)->baseVoteText('Die Verringerung der Fundchancen bei Nacht wird im Umkreis von 6km um die Stadt negiert.')
             ->upgradeTexts([
                                'Die Verringerung der Fundchancen bei Nacht wird auf der gesamten Karte negiert, pro Tag werden 2 Batterien verbraucht.',
@@ -463,13 +603,19 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->isTemporary(0)->defense(300)->ap(300)->health(300)->blueprintLevel(3)->resources(["wood2_#00" => 20,"metal_#00" => 20,"concrete_wall_#00" => 5,"wood_beam_#00" => 10,"metal_beam_#00" => 10,])->orderBy(0)->commit();
         $container->add()->parentBuilding($small_eden)
             ->icon('small_derrick')->label('Bohrturm')->description('Auch der Bohrturm ist eine absurde Konstruktion. Mit ihm können selbst tiefste wasserführende Schichten angezapft werden! Er fügt +75 Rationen an Wasser dem Brunnen hinzu.')
-            ->isImpervious(true)->isTemporary(0)->defense(0)->ap(86)->health(0)->blueprintLevel(3)->resources(["wood2_#00" => 5,"wood_beam_#00" => 10,"metal_beam_#00" => 15,"tube_#00" => 1,])->orderBy(0)->commit();
+            ->isImpervious(true)->isTemporary(0)->defense(0)
+            ->ap(86)->health(0)->resources(["wood2_#00" => 5,"wood_beam_#00" => 10,"metal_beam_#00" => 15,"tube_#00" => 1,])
+            ->adjustForHardMode(null, ["wood2_#00" => 20,"wood_beam_#00" => 30,"metal_beam_#00" => 45,"tube_#00" => 4,])
+            ->blueprintLevel(3)->orderBy(0)->commit();
         $container->add()->parentBuilding($small_building)
             ->icon('small_falsecity')->label('Falsche Stadt')->description('Es ist weithin bekannt, dass die Zombies nicht so ganz helle sind... Wenn ihr es schafft, eine Stadt nachzubauen, könntet ihr den überwiegenden Großteil des Angriffs auf diesen Nachbau umlenken...')
             ->isTemporary(0)->defense(400)->ap(400)->health(400)->blueprintLevel(3)->resources(["meca_parts_#00" => 15,"wood2_#00" => 20,"metal_#00" => 20,"wood_beam_#00" => 20,"metal_beam_#00" => 20,])->orderBy(1)->commit();
         $container->add()->parentBuilding($item_firework_tube)
             ->icon('small_valve')->label('Wasserhahn')->description('Dank dieses kleinen, am Brunnen angebrachten Wasserhahns, kannst Du nun die Wassermengen abschöpfen, die ansonten durch das Filtersystem verschwendet werden (es braucht kein zusätzliches Brunnen-Wasser). Du kannst mit diesem Wasser alle auf Wasser basierenden Waffen KOSTENLOS auffüllen (Wasserbombe, Wasserkanone,...)!')
-            ->isTemporary(0)->defense(0)->ap(130)->health(130)->blueprintLevel(3)->resources(["engine_#00" => 1,"meca_parts_#00" => 4,"metal_#00" => 10,"wood_beam_#00" => 6,"metal_beam_#00" => 3,'oilcan_#00' => 3])->orderBy(0)->commit();
+            ->isTemporary(0)->defense(0)
+            ->ap(130)->health(130)->resources(["engine_#00" => 1,"meca_parts_#00" => 4,"metal_#00" => 10,"wood_beam_#00" => 6,"metal_beam_#00" => 3,'oilcan_#00' => 3])
+            ->adjustForHardMode(null, ["engine_#00" => 2,"meca_parts_#00" => 12,"metal_#00" => 40,"wood_beam_#00" => 18,"metal_beam_#00" => 9,'oilcan_#00' => 12])
+            ->blueprintLevel(3)->orderBy(0)->commit();
         $container->add()->parentBuilding($small_building)
             ->icon('small_scarecrow')->label('Vogelscheuche')->description('Um Tiere (und vor allem diese verdammten Raben) von deiner Plantage fernzuhalten, hast du beschlossen, ein paar alte Holzbretter mit dem Outfit deines alten Nachbarn zu verkleiden. In der Hoffnung, dass er es dir nicht übel nehmen wird!')
             ->defense(15)->ap(40)->health(40)->blueprintLevel(3)->resources(["wood2_#00" => 5,"wood_beam_#00" => 3,"rustine_#00" => 3,])->orderBy(0)->commit();
@@ -502,10 +648,16 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->isTemporary(0)->defense(0)->ap(40)->health(0)->blueprintLevel(0)->resources(["meca_parts_#00" => 2,"metal_#00" => 8,"chair_basic_#00" => 1,"metal_beam_#00" => 1,])->orderBy(8)->commit();
         $container->add()->parentBuilding($item_tagger)
             ->icon('small_lighthouse')->label('Leuchtturm')->description('Dieser schöne, hohe Leuchtturm wird Licht in lange Winternächte bringen (hat er im Sommer eigentlich irgendeinen Nutzen?). Alle Stadtbewohner auf Camping-Ausflug haben eine höhere Überlebens-Chance.')
-            ->isTemporary(0)->defense(0)->ap(30)->health(30)->blueprintLevel(3)->resources(["electro_#00" => 2,"wood_beam_#00" => 5,"metal_beam_#00" => 5,"pile_#00" => 1,"diode_#00" => 1,])->orderBy(2)->commit();
+            ->isTemporary(0)->defense(0)
+            ->ap(30)->health(30)->resources(["electro_#00" => 2,"wood_beam_#00" => 5,"metal_beam_#00" => 5,"pile_#00" => 1,"diode_#00" => 1,])
+            ->adjustForHardMode(null, ["electro_#00" => 6,"wood_beam_#00" => 15,"metal_beam_#00" => 15,"pile_#00" => 4,"diode_#00" => 3,])
+            ->blueprintLevel(3)->orderBy(2)->commit();
         $container->add()->parentBuilding($small_building)
             ->icon('small_city_up')->label('Befestigungen')->description('Da Bürger normalerweise nicht direkt von Verteidigungsbauten profitieren, wollen wir uns mal nicht beschweren. Alle Bürgerbehausungen erhalten +4 Verteidigung.')
-            ->isTemporary(0)->defense(0)->ap(50)->health(0)->blueprintLevel(2)->resources(["concrete_wall_#00" => 2,"wood_beam_#00" => 15,"metal_beam_#00" => 10,'metal_#00' => 5])->orderBy(6)->commit($small_city_up);
+            ->isTemporary(0)->defense(0)
+            ->ap(50)->health(0)->resources(["concrete_wall_#00" => 2,"wood_beam_#00" => 15,"metal_beam_#00" => 10,'metal_#00' => 5])
+            ->adjustForHardMode(null, ["concrete_wall_#00" => 6,"wood_beam_#00" => 45,"metal_beam_#00" => 30,'metal_#00' => 20])
+            ->blueprintLevel(2)->orderBy(6)->commit($small_city_up);
         $container->add()->parentBuilding($small_building)
             ->icon('small_score')->label('Leuchtfeuer')->description('Ein großes Leuchtfeuer, irgendwo weit abseits von der Stadt entzündet, soll die Zombies von unseren Häusern weglocken.')
             ->isTemporary(1)->defense(30)->ap(15)->health(15)->blueprintLevel(2)->resources(["lights_#00" => 1,"wood2_#00" => 5,])->orderBy(11)->commit();
@@ -526,10 +678,16 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->isTemporary(0)->defense(0)->ap(80)->health(80)->blueprintLevel(4)->resources(["wood2_#00" => 2,"meca_parts_#00" => 1,"lights_#00" => 1,"sheet_#00" => 2,"wood_beam_#00" => 5,"metal_beam_#00" => 5,])->orderBy(12)->commit();
         $container->add()->parentBuilding($small_building)
             ->icon('small_labyrinth')->label('Labyrinth')->description('Zombies sind bekanntermaßen einfach gestrickt. Warum ihnen dann nicht einfach ein kleines Labyrinth vor die Nase (das Stadttor) setzen und dabei zusehen, wie ihr Angriff an Schwung verliert. Das Ganze ist äußerst effektiv. Doch jeder Bürger, der die Stadt betreten will, muss dann 1 AP aufbringen.')
-            ->isTemporary(0)->defense(150)->ap(200)->health(200)->blueprintLevel(3)->resources(["meca_parts_#00" => 2,"wood2_#00" => 20,"metal_#00" => 10,"concrete_wall_#00" => 4,])->orderBy(3)->commit();
+            ->isTemporary(0)->defense(150)
+            ->ap(200)->health(200)->resources(["meca_parts_#00" => 2,"wood2_#00" => 20,"metal_#00" => 10,"concrete_wall_#00" => 4,])
+            ->adjustForHardMode(null, ["meca_parts_#00" => 6,"wood2_#00" => 80,"metal_#00" => 40,"concrete_wall_#00" => 12,])
+            ->blueprintLevel(3)->orderBy(3)->commit();
         $container->add()->parentBuilding($small_building)
             ->icon('small_lastchance')->label('Alles oder nichts')->description('Nicht mehr als ein Akt der Verzweiflung! Alle Gegenstände in der Bank werden zerstört und bringen jeweils +2 vorübergehende Verteidigung.')
-            ->isImpervious(true)->isTemporary(0)->defense(50)->ap(200)->health(200)->blueprintLevel(0)->resources(["meca_parts_#00" => 1,"wood2_#00" => 10,"metal_#00" => 15,])->orderBy(5)->commit();
+            ->isImpervious(true)->isTemporary(0)->defense(50)
+            ->ap(200)->health(200)->resources(["meca_parts_#00" => 1,"wood2_#00" => 10,"metal_#00" => 15,])
+            ->adjustForHardMode(null, ["meca_parts_#00" => 3,"wood2_#00" => 40,"metal_#00" => 60,])
+            ->blueprintLevel(0)->orderBy(5)->commit();
         $container->add()->parentBuilding($small_building)
             ->icon('small_rocket')->label('Luftschlag')->description('Vier feine Raketen werden gestartet und auf vier strategische Ziele rund um die Stadt (Norden, Süden, Osten, Westen) abgefeuert. Auf ihrem Weg töten sie jeden Zombie.')
             ->isTemporary(1)->defense(0)->ap(50)->health(0)->blueprintLevel(3)->resources(["water_#00" => 10,"meca_parts_#00" => 1,"diode_#00" => 1,"metal_#00" => 5,"explo_#00" => 1,"deto_#00" => 2,])->orderBy(9)->commit();
@@ -541,16 +699,28 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->isImpervious(true)->isTemporary(0)->defense(0)->ap(24)->blueprintLevel(1)->resources(["pet_pig_#00" => 1,"wood_beam_#00" => 3,"metal_beam_#00" => 2,])->orderBy(4)->commit();
         $container->add()->parentBuilding($small_building)
             ->icon('small_pmvbig')->label('Riesiger KVF')->description('Ein wirklich riesiger KVF, auf dem die Namen aller Bürger der Stadt eingraviert sind, erhebt sich stolz in den Himmel... äh. Genau, ein KVF. Niemand weiß warum, aber jemand hat am Fuße des Bauwerks "Eigentum der tiefsinnigen Nacht" eingraviert. Dieses Wunderwerk strahlt im Glanze seiner Nutzlosigkeit: Seine Errichtung bringt allen Bürgern der Stadt eine seltene Auszeichnung ein.')
-            ->isImpervious(true)->isTemporary(0)->defense(0)->ap(300)->health(0)->blueprintLevel(4)->resources(["meca_parts_#00" => 2,"metal_#00" => 30,])->orderBy(13)->commit();
+            ->isImpervious(true)->isTemporary(0)->defense(0)
+            ->ap(300)->health(0)->resources(["meca_parts_#00" => 2,"metal_#00" => 150,])
+            ->adjustForHardMode(null, ["meca_parts_#00" => 15,"metal_#00" => 30,])
+            ->blueprintLevel(4)->orderBy(13)->commit();
         $container->add()->parentBuilding($small_building)
             ->icon('small_wheel')->label('Dayan Riesenrad')->description('Es ist wirklich eine enorme und beeindruckente Konstruktion, entworfen von einem Verrückten aus einem fernen Land. Ihr habt eure kostbarsten Materialien an dieses verdammte Ding verschwendet, und denoch seid ihr irgendwie stolz darauf. Dieses Wunderwerk strahlt im Glanze seiner Nutzlosigkeit: Seine Errichtung bringt allen Bürgern der Stadt eine seltene Auszeichnung ein.')
-            ->isImpervious(true)->isTemporary(0)->defense(0)->ap(300)->health(0)->blueprintLevel(4)->resources(["water_#00" => 20,"meca_parts_#00" => 5,"concrete_wall_#00" => 3,"metal_beam_#00" => 5,])->orderBy(14)->commit();
+            ->isImpervious(true)->isTemporary(0)->defense(0)
+            ->ap(300)->health(0)->resources(["water_#00" => 20,"meca_parts_#00" => 5,"concrete_wall_#00" => 3,"metal_beam_#00" => 5,])
+            ->adjustForHardMode(null, ["water_#00" => 100,"meca_parts_#00" => 25,"concrete_wall_#00" => 10,"metal_beam_#00" => 35,])
+            ->blueprintLevel(4)->orderBy(14)->commit();
         $container->add()->parentBuilding($small_building)
             ->icon('small_castle')->label('Riesige Sandburg')->description('Wenn es eines gibt, woran hier wahrlich kein Mangel herrscht, dann ist es Sand. Dieses Wunderwerk strahlt im Glanze seiner Nutzlosigkeit: Seine Errichtung bringt allen Bürgern der Stadt eine seltene Auszeichnung ein.')
-            ->isImpervious(true)->isTemporary(0)->defense(0)->ap(300)->health(0)->blueprintLevel(4)->resources(["water_#00" => 30,"wood_beam_#00" => 15,"metal_beam_#00" => 10,])->orderBy(15)->commit();
+            ->isImpervious(true)->isTemporary(0)->defense(0)
+            ->ap(300)->health(0)->resources(["water_#00" => 30,"wood_beam_#00" => 15,"metal_beam_#00" => 10,])
+            ->adjustForHardMode(null, ["water_#00" => 150,"wood_beam_#00" => 60,"metal_beam_#00" => 40,])
+            ->blueprintLevel(4)->orderBy(15)->commit();
         $container->add()->parentBuilding($small_building)
             ->icon('small_arma')->label('Reaktor')->description('Dieses furchterregende Konstrukt stammt aus einem sowjetischen U-Boot und sendet gleißende Blitze knisternder Elektrizität rund um die Stadt aus. Einziger Haken an der Sache: Es muss jeden Tag repariert werden. Falls es zerstört wird, würde die Stadt mitsamt der gesamten Umgebung augenblicklich ausradiert werden (inklusive euch). Das Schild am Reaktor besagt: sowjetische Bauweise, hergestellt in « вшивый ».')
-            ->isImpervious(true)->isTemporary(0)->defense(500)->ap(100)->health(250)->blueprintLevel(4)->resources(["pile_#00" => 10,"engine_#00" => 1,"electro_#00" => 4,"concrete_wall_#00" => 2,"metal_beam_#00" => 15,])->orderBy(16)->commit();
+            ->isImpervious(true)->isTemporary(0)->defense(500)
+            ->ap(100)->health(250)->resources(["pile_#00" => 10,"engine_#00" => 1,"electro_#00" => 4,"concrete_wall_#00" => 2,"metal_beam_#00" => 15,])
+            ->adjustForHardMode(null, ["pile_#00" => 25,"engine_#00" => 2,"electro_#00" => 8,"concrete_wall_#00" => 10,"metal_beam_#00" => 50,])
+            ->blueprintLevel(4)->orderBy(16)->commit();
 
         $container->add()->parentBuilding($small_wallimprove)
             ->icon('small_door_closed')->label('Portal')->description('Eine rustikal anmutende Konstruktion, mit der die Öffnung des Stadttors nach 23:40 erfolgreich verhindert werden kann (es dürfte äußerst selten vorkommen, dass das Tor danach nochmal geöffnet werden muss). Das Stadttor muss nichtsdestotrotz zusätzlich noch per Hand geschlossen werden.')
@@ -585,11 +755,17 @@ class BuildingDataService implements FixtureProcessorInterface {
 
         $container->add()->parentBuilding($small_gather)
             ->icon('small_gallery')->label('Buddelgruben')->description('Seitengänge, die Buddler direkt vom Großen Grube aus in die Wüste treiben, um noch nie zuvor ausgebeutete Bereiche zu erkunden. Hoffentlich finden sie dort einige interessante Dinge!')
-            ->isTemporary(0)->defense(0)->ap(30)->health(30)->blueprintLevel(3)->resources(["explo_#00" => 1, "wood_beam_#00" => 3, "deto_#00" => 1,])->orderBy(3)->commit();
+            ->isTemporary(0)->defense(0)
+            ->ap(30)->resources(["explo_#00" => 1, "wood_beam_#00" => 3, "deto_#00" => 1,])
+            ->withHardMode(null, ["explo_#00" => 3, "wood_beam_#00" => 9, "deto_#00" => 3,])
+            ->health(30)->blueprintLevel(3)->orderBy(3)->commit();
 
         $container->add()->parentBuilding($item_firework_tube)
             ->icon('small_survarea')->label('Naturbereich der Überlebenskünstler')->description('Ein kleines Stück Paradies, das aus ein paar Grashalmen im Schatten von Dächern und halbierten Dosen besteht, die senkrecht in den Himmel gehoben werden, so eine geheimnisvolle Theorie aus dem Survival-Handbuch der Einsiedler. Angeblich soll dies „die Brise einfangen“ ... ein Rätsel. Aber der Punkt ist, dass man dadurch ein wenig Wasser sammeln kann!')
-            ->isTemporary(0)->defense(0)->ap(30)->blueprintLevel(3)->resources(["ryebag_#00" => 2,"wood2_#00" => 5,"radio_on_#00" => 1,"oilcan_#00" => 2,])->orderBy(4)->commit();
+            ->isTemporary(0)->defense(0)
+            ->ap(30)->resources(["ryebag_#00" => 2,"wood2_#00" => 5,"radio_on_#00" => 1,"oilcan_#00" => 2,])
+            ->adjustForHardMode(null, ["ryebag_#00" => 8,"wood2_#00" => 20,"radio_on_#00" => 4,"oilcan_#00" => 8,])
+            ->blueprintLevel(3)->orderBy(4)->commit();
 
         $container->add()->parentBuilding($item_bgrenade)
             ->icon('item_boomfruit')->label('Granatwerfer')->description('Ein Mini-Katapult auf der Stadtmauer, garniert mit explosiven Pampelmusen. Alles, was ihr tun müsst, ist warten und schießen! Mit ein wenig extra Arbeit können wir ihn sogar automatisieren und seine Leistung verbessern.')
@@ -606,7 +782,10 @@ class BuildingDataService implements FixtureProcessorInterface {
 
         $container->add()->parentBuilding($item_bgrenade)
             ->icon('item_boomfruit')->label('Vitaminen')->description('Wenn wir ein paar explosive Pampelmusen in der Nähe der Stadtmauer in den Boden stecken, sollten wir heute Abend ein schönes Leichenfeuerwerk sehen. Aber morgen müssen wir wieder ganz von vorne anfangen...')
-            ->isTemporary(1)->defense(100)->ap(40)->blueprintLevel(3)->resources(["metal_beam_#00" => 2,"wire_#00" => 1,"deto_#00" => 1,"boomfruit_#00" => 5,])->orderBy(1)->commit();
+            ->isTemporary(1)->defense(100)
+            ->ap(40)->resources(["metal_beam_#00" => 2,"wire_#00" => 1,"deto_#00" => 1,"boomfruit_#00" => 5,])
+            ->adjustForHardMode(null, ["metal_beam_#00" => 6,"wire_#00" => 3,"deto_#00" => 3,"boomfruit_#00" => 15,])
+            ->blueprintLevel(3)->orderBy(1)->commit();
 
         $container->add()->parentBuilding($item_vegetable_tasty)
             ->icon('item_pumpkin_raw')->label('Wüste Kürbisse')->description('Ein düsterer Ort, den man nur ungern zu betreten wagt, der aber seltsamerweise schöne Kürbisse hervorbringt... Man muss sie nur transportieren können.')
@@ -614,7 +793,10 @@ class BuildingDataService implements FixtureProcessorInterface {
 
         $container->add()->parentBuilding($item_rp_book2)
             ->icon('small_techtable')->label('Techniker-Werkstatt')->description('Mit einem eigenen Arbeitsplatz sind Techniker in der Lage, McGyver zu spielen und aus allem, was herumliegt, nützliches Zeug zu bauen.')
-            ->isTemporary(0)->defense(0)->ap(60)->health(60)->blueprintLevel(3)->resources(["wood_beam_#00" => 5,"metal_beam_#00" => 10,"plate_#00" => 1,"wire_#00" => 2,"ryebag_#00" => 1,"lens_#00" => 1,"coffee_machine_#00" => 1,])->orderBy(2)->commit($small_techtable);
+            ->isTemporary(0)->defense(0)
+            ->ap(60)->health(60)->resources(["wood_beam_#00" => 5,"metal_beam_#00" => 10,"plate_#00" => 1,"wire_#00" => 2,"ryebag_#00" => 1,"lens_#00" => 1,"coffee_machine_#00" => 1,])
+            ->adjustForHardMode(null, ["wood_beam_#00" => 15,"metal_beam_#00" => 30,"plate_#00" => 3,"wire_#00" => 6,"ryebag_#00" => 4,"lens_#00" => 3,"coffee_machine_#00" => 2])
+            ->blueprintLevel(3)->orderBy(2)->commit($small_techtable);
 
         $container->add()->parentBuilding($item_meat)
             ->icon('item_pet_pig')->label('Schweinestall')->description('Seit ihr erfolgreich mit der Schweinezucht begonnen habt, kommt jeden Morgen frisches Fleisch in der Bank an. Ihr solltet nur über die Arbeitshygiene niemals nachdenken... ')
@@ -635,7 +817,10 @@ class BuildingDataService implements FixtureProcessorInterface {
 
         $container->add()->parentBuilding($small_round_path)
             ->icon('small_watchmen')->label('Wachstube')->description('Ein alter Raum, der nach Kaffee und Tabak riecht, in dem man sich aber viel besser auf die langen Nächte vorbereiten kann, die die Bürger auf der Stadtmauer erwarten.')
-            ->isTemporary(0)->defense(0)->ap(50)->blueprintLevel(3)->resources(["wood_beam_#00" => 6,"metal_#00" => 10,"meca_parts_#00" => 2,"metal_beam_#00" => 5,"ryebag_#00" => 2,"lights_#00" => 1,"coffee_machine_#00" => 1,"cigs_#00" => 1,"trestle_#00" => 1,"chair_basic_#00" => 2,])->orderBy(1)->commit();
+            ->isTemporary(0)->defense(0)
+            ->ap(50)->resources(["wood_beam_#00" => 6,"metal_#00" => 10,"meca_parts_#00" => 2,"metal_beam_#00" => 5,"ryebag_#00" => 2,"lights_#00" => 1,"coffee_machine_#00" => 1,"cigs_#00" => 1,"trestle_#00" => 1,"chair_basic_#00" => 2,])
+            ->adjustForHardMode(null, ["wood_beam_#00" => 18,"metal_#00" => 40,"meca_parts_#00" => 6,"metal_beam_#00" => 15,"ryebag_#00" => 8,"lights_#00" => 2,"coffee_machine_#00" => 2,"cigs_#00" => 2,"trestle_#00" => 3,"chair_basic_#00" => 3,])
+            ->blueprintLevel(3)->orderBy(1)->commit();
 
         $container->add()->parentBuilding($small_armor)
             ->icon('small_grinder2')->label('Handschleifer')->description('Indem man jede Klinge vor Einbruch der Nacht gewissenhaft schärft, kann die Wacht nun noch effektiver werden. Jede scharfe Waffe hat einen 20%igen Wächterbonus.')
@@ -651,7 +836,10 @@ class BuildingDataService implements FixtureProcessorInterface {
 
         $container->add()->parentBuilding($item_meat)
             ->icon('small_pet')->label('Experimentelle Klinik der Dompteure')->description('Manche nennen es unschuldig eine "Tierklinik". Aber jeden Abend wecken die Schreie der Tiere das gesamte Südviertel auf. Auf jeden Fall funktioniert es: Unsere Haustiere sind verspielt, sauber, fröhlich und stürzen sich durch ihr Training routiniert auf Zombies, die dreißigmal so schwer sind wie sie.')
-            ->isTemporary(0)->defense(0)->ap(40)->blueprintLevel(3)->resources(["wood2_#00" => 4,"water_#00" => 10,"meca_parts_#00" => 1,"drug_#00" => 1,])->orderBy(3)->commit();
+            ->isTemporary(0)->defense(0)
+            ->ap(40)->resources(["wood2_#00" => 4,"water_#00" => 10,"meca_parts_#00" => 1,"drug_#00" => 1,])
+            ->resources(["wood2_#00" => 16,"water_#00" => 30,"meca_parts_#00" => 3,"drug_#00" => 3,])
+            ->blueprintLevel(3)->orderBy(3)->commit();
 
         $container->add()->parentBuilding($small_building)
             ->icon('small_underground')->label('Unterirdische Stadt')->description('Indem wir einen großen Teil der Stadt unter der Erde vergraben, schaffen wir neuen Platz für die Verteidigungsanlagen über unseren Köpfen. Sehr es positiv: wir sind dann vor der Sonne geschützt.')

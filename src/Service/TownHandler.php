@@ -101,10 +101,9 @@ class TownHandler
         $blocked = $this->conf->getTownConfiguration($town)->get(TownSetting::DisabledBuildings);
 
         // Add all children that do not require blueprints
-        if ($b)
-            foreach ( $prototype->getChildren() as $child )
-                if ($child->getBlueprint() == 0 && !in_array($child->getName(), $blocked) && !$this->getBuilding( $town, $child, false ))
-                    $this->internalAddBuilding($town, $child);
+        foreach ( $prototype->getChildren() as $child )
+            if ($this->conf->getTownConfiguration( $town )->getBuildingRarity( $child ) == 0 && !in_array($child->getName(), $blocked) && !$this->getBuilding( $town, $child, false ))
+                $this->internalAddBuilding($town, $child);
         return $b;
     }
 

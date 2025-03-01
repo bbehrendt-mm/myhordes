@@ -44,6 +44,7 @@ class CommandHelper
     private TranslatorInterface $trans;
 
     private $language = 'en';
+    private $output_language = 'en';
 
     public function __construct(EntityManagerInterface $em, KernelInterface $kernel, TranslatorInterface $trans) {
         $this->entity_manager = $em;
@@ -51,8 +52,9 @@ class CommandHelper
         $this->trans = $trans;
     }
 
-    public function setLanguage(string $language): void {
+    public function setLanguage(string $language, ?string $output_language = null): void {
         $this->language = $language;
+        $this->output_language = $output_language ?? $language;
     }
 
     public function leChunk(
@@ -172,16 +174,16 @@ class CommandHelper
                 return "Citizen #{$e->getId()} <comment>{$e->getUser()->getUsername()}</comment> ({$e->getProfession()->getLabel()} in {$e->getTown()->getName()})";
             case ItemPrototype::class:
                 /** @var ItemPrototype $e */
-                return "Item Type #{$e->getId()} <comment>{$this->trans->trans($e->getLabel(), [], $e::getTranslationDomain(), $this->language)}</comment> ({$e->getName()})";
+                return "Item Type #{$e->getId()} <comment>{$this->trans->trans($e->getLabel(), [], $e::getTranslationDomain(), $this->output_language)}</comment> ({$e->getName()})";
             case ItemProperty::class:
                 /** @var ItemProperty $e */
                 return "Item Property #{$e->getId()} <comment>{$e->getName()}</comment>";
             case PictoPrototype::class:
                 /** @var PictoPrototype $e */
-                return "Picto Type #{$e->getId()} <comment>{$this->trans->trans($e->getLabel(), [], $e::getTranslationDomain(), $this->language)}</comment> ({$e->getName()})";
+                return "Picto Type #{$e->getId()} <comment>{$this->trans->trans($e->getLabel(), [], $e::getTranslationDomain(), $this->output_language)}</comment> ({$e->getName()})";
             case BuildingPrototype::class:
                 /** @var BuildingPrototype $e */
-                return "Building Type #{$e->getId()} <comment>{$this->trans->trans($e->getLabel(), [], $e::getTranslationDomain(), $this->language)}</comment> ({$e->getName()})";
+                return "Building Type #{$e->getId()} <comment>{$this->trans->trans($e->getLabel(), [], $e::getTranslationDomain(), $this->output_language)}</comment> ({$e->getName()})";
             case Town::class:
                 /** @var Town $e */
                 return "Town #{$e->getId()} <comment>{$e->getName()}</comment> ({$e->getLanguage()}, Day {$e->getDay()})";
@@ -209,13 +211,13 @@ class CommandHelper
                 else if ($e->getRuinZoneRoom()) return "Inventory #{$e->getId()} (Room Floor of {$e->getRuinZoneRoom()->getX()}/{$e->getRuinZoneRoom()->getY()} at {$e->getRuinZoneRoom()->getZone()->getX()}/{$e->getRuinZoneRoom()->getZone()->getY()} in {$e->getRuinZoneRoom()->getZone()->getTown()->getName()})";
                 else return "Inventory #{$e->getId()} (unknown)";
 			case ZonePrototype::class:
-				return "Ruin Prototype #{$e->getId()} <comment>{$this->trans->trans($e->getLabel(), [], $e::getTranslationDomain(), $this->language)}</comment> ({$e->getLabel()})";
+				return "Ruin Prototype #{$e->getId()} <comment>{$this->trans->trans($e->getLabel(), [], $e::getTranslationDomain(), $this->output_language)}</comment> ({$e->getLabel()})";
             default:
                 $cls_ex = explode('\\', get_class($e));
                 $niceName =  preg_replace('/(\w)([ABCDEFGHIJKLMNOPQRSTUVWXYZ\d])/', '$1 $2', array_pop($cls_ex));
                 $niceName = get_class($e);
                 if (is_a($e, NamedEntity::class))
-                    return "$niceName #{$e->getId()} <comment>{$this->trans->trans($e->getLabel(), [], $e::getTranslationDomain(), $this->language)}</comment> ({$e->getName()})";
+                    return "$niceName #{$e->getId()} <comment>{$this->trans->trans($e->getLabel(), [], $e::getTranslationDomain(), $this->output_language)}</comment> ({$e->getName()})";
                 else return "$niceName #{$e->getId()}";
         }
     }
@@ -259,6 +261,7 @@ class CommandHelper
         $this->_db[Town::class][IdentifierSemantic::GuessMatch] =  ['%name'];
         foreach ([ItemPrototype::class,BuildingPrototype::class,PictoPrototype::class] as $c) {
             $this->_db[$c][IdentifierSemantic::LikelyMatch][] = ":{$c::getTranslationDomain()}:label";
+            $this->_db[$c][IdentifierSemantic::LikelyMatch][] = "%label";
             $this->_db[$c][IdentifierSemantic::LikelyMatch][] = 'name';
         }
 
@@ -285,6 +288,10 @@ class CommandHelper
         $this->_db[ItemProperty::class][IdentifierSemantic::PerfectMatch] = ['#id'];
         $this->_db[ItemProperty::class][IdentifierSemantic::LikelyMatch]  = ['name'];
         $this->_db[ItemProperty::class][IdentifierSemantic::GuessMatch]   = ['%name'];
+
+        $this->_db = array_map( fn(array $a) => array_filter($a, fn(array $b) => !empty($b)), $this->_db );
+        $this->_db = array_filter( $this->_db, fn(array $b) => !empty($b) );
+
         return $this->_db;
     }
 

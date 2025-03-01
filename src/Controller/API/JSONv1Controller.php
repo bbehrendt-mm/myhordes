@@ -566,6 +566,9 @@ class JSONv1Controller extends CoreController {
                             case "rarity":
                                 $data_building[$field] = $building->getPrototype()->getBlueprint();
                                 break;
+                            case "rarityCurrent":
+                                $data_building[$field] = $this->conf->getTownConfiguration($this->town)->getBuildingRarity( $building->getPrototype() );
+                                break;
                             case "temporary":
                                 $data_building[$field] = $building->getPrototype()->getTemp();
                                 break;
@@ -638,8 +641,8 @@ class JSONv1Controller extends CoreController {
                     case "rarity":
                         $data[$field] = $prototype->getBlueprint();
                         break;
-                    case "rarity":
-                        $data[$field] = $prototype->getBlueprint();
+                    case "rarityCurrent":
+                        $data[$field] = $this->conf->getTownConfiguration($this->town)->getBuildingRarity( $prototype );
                         break;
                     case "temporary":
                         $data[$field] = $prototype->getTemp();
