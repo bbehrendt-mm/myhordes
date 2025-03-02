@@ -4,6 +4,7 @@
 namespace App\EventListener\Game\Citizen;
 
 use App\Entity\ItemPrototype;
+use App\Enum\Configuration\TownSetting;
 use App\Event\Game\Citizen\CitizenPostDeathEvent;
 use App\EventListener\ContainerTypeTrait;
 use App\Service\InventoryHandler;
@@ -40,7 +41,7 @@ final class CitizenDeathListener implements ServiceSubscriberInterface
     }
 
     public function onSpawnSouls( CitizenPostDeathEvent $event ): void {
-        if ( $event->townConfig->get(TownConf::CONF_FEATURE_SHAMAN_MODE, 'normal') != 'none' ) {
+        if ( $event->townConfig->get(TownSetting::OptFeatureShamanMode) != 'none' ) {
             $minDistance = min(10, 3 + intval($event->town->getDay() * 0.75));
             $maxDistance = min(15, 6 + $event->town->getDay());
             if ($this->getService(TownHandler::class)->getBuilding($event->town, 'small_spa4souls_#00', true)) {

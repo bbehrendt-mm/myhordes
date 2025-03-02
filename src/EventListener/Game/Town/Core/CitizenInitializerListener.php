@@ -14,6 +14,7 @@ use App\Entity\PrivateMessage;
 use App\Entity\TeamTicket;
 use App\Entity\TownSlotReservation;
 use App\Entity\UserGroup;
+use App\Enum\Configuration\TownSetting;
 use App\Enum\Game\CitizenPersistentCache;
 use App\Event\Game\Town\Basic\Core\AfterJoinTownEvent;
 use App\Event\Game\Town\Basic\Core\JoinTownEvent;
@@ -65,7 +66,7 @@ final class CitizenInitializerListener implements ServiceSubscriberInterface
 
     public function handleTeamTicket(JoinTownEvent $event): void {
         if (!$this->getService(UserHandler::class)->hasRole( $event->subject, 'ROLE_CROW' ))
-            if (!$event->townConfig->get( TownConf::CONF_FEATURE_NO_TEAMS ) && $event->town->getLanguage() !== null && $event->town->getLanguage() !== 'multi' && $event->town->getRankingEntry() && !$event->town->getRankingEntry()->getEvent() && $event->town->getSeason())
+            if (!$event->townConfig->get( TownSetting::OptFeatureNoTeams ) && $event->town->getLanguage() !== null && $event->town->getLanguage() !== 'multi' && $event->town->getRankingEntry() && !$event->town->getRankingEntry()->getEvent() && $event->town->getSeason())
                 $this->getService(EntityManagerInterface::class)->persist(
                     (new TeamTicket())
                         ->setTown( $event->town->getRankingEntry() )

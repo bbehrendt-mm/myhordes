@@ -6,6 +6,7 @@ use App\Entity\Item;
 use App\Entity\ItemAction;
 use App\Entity\ItemPrototype;
 use App\Enum\ActionHandler\ItemDropTarget;
+use App\Enum\Configuration\TownSetting;
 use App\Enum\ItemPoisonType;
 use App\Service\ActionHandler;
 use App\Service\EventProxyService;
@@ -60,7 +61,7 @@ class ProcessItemEffect extends AtomEffectProcessor
                 }
 
             $poison = (
-                $item_req?->poison || $cache->conf->get( TownConf::CONF_MODIFIER_POISON_TRANS, false )
+                $item_req?->poison || $cache->conf->get( TownSetting::OptModifierPoisonTrans )
             ) ? null : false;
             $items = $ih->fetchSpecificItems( $source,
                 [new ItemRequest( name: $data->consumeItem, count: $data->consumeItemCount, poison: $poison )]);
@@ -70,7 +71,7 @@ class ProcessItemEffect extends AtomEffectProcessor
                 if ($consume_item->getPoison()->poisoned()) {
                     if ($consume_item->getPoison() === ItemPoisonType::Deadly && ($cache->getAction()->getPoisonHandler() & ItemAction::PoisonHandlerConsume) > 0) $cache->addFlag('kill_by_poison');
                     if ($consume_item->getPoison() === ItemPoisonType::Infectious && ($cache->getAction()->getPoisonHandler() & ItemAction::PoisonHandlerConsume) > 0) $cache->addFlag('infect_by_poison');
-                    if ($cache->conf->get( TownConf::CONF_MODIFIER_POISON_TRANS, false ) && ($cache->getAction()->getPoisonHandler() & ItemAction::PoisonHandlerTransgress)) $cache->addFlag("transgress_poison_{$consume_item->getPoison()->value}");
+                    if ($cache->conf->get( TownSetting::OptModifierPoisonTrans ) && ($cache->getAction()->getPoisonHandler() & ItemAction::PoisonHandlerTransgress)) $cache->addFlag("transgress_poison_{$consume_item->getPoison()->value}");
                 }
 
                 $ih->forceRemoveItem( $consume_item );

@@ -154,7 +154,7 @@ class TownOnboardingController extends AbstractController
         return new JsonResponse([
             'features' => [
                 'job'       => true,
-                'alias'     => !$activeCitizen->getProperties() && $townConf->get( TownConf::CONF_FEATURE_CITIZEN_ALIAS, false ),
+                'alias'     => !$activeCitizen->getProperties() && $townConf->get( TownSetting::OptFeatureCitizenAlias ),
                 'skills'    => !$activeCitizen->getProperties() && $townConf->get( TownSetting::SkillMode ),
             ]
         ]);
@@ -180,7 +180,7 @@ class TownOnboardingController extends AbstractController
 
         $townConf = $conf->getTownConfiguration($town);
 
-        $disabledJobs = $conf->getTownConfiguration($town)->get(TownConf::CONF_DISABLED_JOBS, ['shaman']);
+        $disabledJobs = $conf->getTownConfiguration($town)->get(TownSetting::DisabledJobs);
         $profession = $em->getRepository(CitizenProfession::class)->find( $parser->get_int( 'profession.id', -1 ) );
         if (!$profession || $profession->getName() === CitizenProfession::DEFAULT || in_array( $profession->getName(), $disabledJobs, true ))
             return new JsonResponse([], Response::HTTP_BAD_REQUEST);
@@ -199,7 +199,7 @@ class TownOnboardingController extends AbstractController
         $alias = $parser->trimmed('identity.name');
         if ($alias !== null) {
             if (
-                !$townConf->get( TownConf::CONF_FEATURE_CITIZEN_ALIAS, false ) ||
+                !$townConf->get( TownSetting::OptFeatureCitizenAlias ) ||
                 !is_string($alias) ||
                 mb_strlen($alias) < 4 || mb_strlen($alias) > 22
             ) return new JsonResponse([], Response::HTTP_BAD_REQUEST);
@@ -243,7 +243,7 @@ class TownOnboardingController extends AbstractController
         $jobs = $em->getRepository(CitizenProfession::class)->findSelectable();
         $town = $activeCitizen->getTown();
 
-        $disabledJobs = $conf->getTownConfiguration($town)->get(TownConf::CONF_DISABLED_JOBS, ['shaman']);
+        $disabledJobs = $conf->getTownConfiguration($town)->get(TownSetting::DisabledJobs);
 
         return new JsonResponse(array_values(array_map(fn(CitizenProfession $profession) => [
             'id'     => $profession->getId(),

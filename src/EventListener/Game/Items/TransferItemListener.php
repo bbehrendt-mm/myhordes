@@ -18,6 +18,7 @@ use App\Entity\PrivateMessage;
 use App\Enum\ActionCounterType;
 use App\Enum\ActionHandler\PointType;
 use App\Enum\Configuration\CitizenProperties;
+use App\Enum\Configuration\TownSetting;
 use App\Enum\Game\TransferItemModality;
 use App\Enum\Game\TransferItemOption;
 use App\Enum\Game\TransferItemType;
@@ -586,7 +587,7 @@ final class TransferItemListener implements ServiceSubscriberInterface
             $event->item->setFirstPick(false);
 
             // In the "Job" version of the shaman, the one that pick a blue soul for the 1st time gets the "r_collec" picto
-            if ($event->townConfig->is(TownConf::CONF_FEATURE_SHAMAN_MODE, ['job', 'both'], "normal"))
+            if ($event->townConfig->is(TownSetting::OptFeatureShamanMode, ['job', 'both']))
                 $this->getService(PictoHandler::class)->give_picto($event->to->getCitizen(), "r_collec2_#00");
 
             // Persist item

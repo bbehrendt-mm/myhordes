@@ -28,6 +28,7 @@ use App\Entity\SpecialActionPrototype;
 use App\Enum\ActionCounterType;
 use App\Enum\Configuration\CitizenProperties;
 use App\Enum\Configuration\MyHordesSetting;
+use App\Enum\Configuration\TownSetting;
 use App\Enum\Game\CitizenPersistentCache;
 use App\Response\AjaxResponse;
 use App\Service\ActionHandler;
@@ -288,7 +289,7 @@ class InventoryAwareController extends CustomAbstractController
 
     protected function getCampingActions(): array {
         $ret = [];
-        if (!$this->getTownConf()->get(TownConf::CONF_FEATURE_CAMPING, false)) return $ret;
+        if (!$this->getTownConf()->get(TownSetting::OptFeatureCamping)) return $ret;
 
         $this->action_handler->getAvailableCampingActions( $this->getActiveCitizen(), $available, $crossed );
 
@@ -318,7 +319,7 @@ class InventoryAwareController extends CustomAbstractController
         $av_inv = [$this->getActiveCitizen()->getInventory() ];
 
         if($this->getActiveCitizen()->getZone()) {
-            if ($this->conf->getTownConfiguration($this->getActiveCitizen()->getTown())->get(TownConf::CONF_MODIFIER_FLOOR_ASMBLY, false)) {
+            if ($this->conf->getTownConfiguration($this->getActiveCitizen()->getTown())->get(TownSetting::OptModifierFloorAsmbly)) {
                 if(!$this->getActiveCitizen()->activeExplorerStats())
                     $av_inv[] =  $this->getActiveCitizen()->getZone()->getFloor();
                 else {
@@ -351,7 +352,7 @@ class InventoryAwareController extends CustomAbstractController
         $town = $this->getActiveCitizen()->getTown();
         $source_inv = $this->getActiveCitizen()->getZone() ? [ $this->getActiveCitizen()->getInventory() ] : [ $this->getActiveCitizen()->getInventory(), $this->getActiveCitizen()->getHome()->getChest() ];
 
-        if ($this->getActiveCitizen()->getZone() && $this->getTownConf()->get( TownConf::CONF_MODIFIER_FLOOR_ASMBLY, false )) $source_inv[] = $this->getActiveCitizen()->getZone()->getFloor();
+        if ($this->getActiveCitizen()->getZone() && $this->getTownConf()->get( TownSetting::OptModifierFloorAsmbly )) $source_inv[] = $this->getActiveCitizen()->getZone()->getFloor();
 
         $recipes = $this->entity_manager->getRepository(Recipe::class)->findByType( [Recipe::ManualAnywhere, $inside ? Recipe::ManualInside : Recipe::ManualOutside] );
         $out = [];
@@ -441,9 +442,9 @@ class InventoryAwareController extends CustomAbstractController
             $aggressor->setGhulHunger( max(0, $aggressor->getGhulHunger() - 65) );
             $this->picto_handler->give_picto($aggressor, 'r_cannib_#00');
             $this->citizen_handler->removeStatus($aggressor, 'tg_air_ghoul');
-            if ($this->getTownConf()->get(TownConf::CONF_FEATURE_GIVE_ALL_PICTOS, true))
+            if ($this->getTownConf()->get(TownSetting::OptFeatureGiveAllPictos))
                 $aggressor
-                    ->giveGenerosityBonus( $this->getTownConf()->get( TownConf::CONF_MODIFIER_GENEROSITY_GHOUL, 1 ) )
+                    ->giveGenerosityBonus( $this->getTownConf()->get( TownSetting::OptModifierGenerosityGhoul ) )
                     ->registerPropInPersistentCache( CitizenPersistentCache::Ghoul_Aggression );
 
             $stat_down = false;
@@ -517,11 +518,11 @@ class InventoryAwareController extends CustomAbstractController
                 return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
         }
 
-        $ap = $this->getTownConf()->get(TownConf::CONF_MODIFIER_ATTACK_AP, 5);
+        $ap = $this->getTownConf()->get(TownSetting::OptModifierAttackAp);
         if ($this->citizen_handler->isTired($aggressor) || $aggressor->getAp() < $ap)
             return AjaxResponse::error( ErrorHelper::ErrorNoAP );
 
-        $attack_protect = $this->getTownConf()->get(TownConf::CONF_MODIFIER_ATTACK_PROTECT, false) ||
+        $attack_protect = $this->getTownConf()->get(TownSetting::OptModifierAttackProtect) ||
             ($aggressor->getUser()->getAllSoulPoints() < $this->conf->getGlobalConf()->get(MyHordesSetting::AntiGriefMinSp));
         if ($attack_protect) {
             foreach ($aggressor->getTown()->getCitizens() as $c)
@@ -552,7 +553,7 @@ class InventoryAwareController extends CustomAbstractController
         } else {
 
             $this->citizen_handler->setAP( $aggressor, true, -$ap );
-            $wound = $this->random_generator->chance( $this->getTownConf()->get(TownConf::CONF_MODIFIER_ATTACK_CHANCE, 0.5) );
+            $wound = $this->random_generator->chance( $this->getTownConf()->get(TownSetting::OptModifierAttackChance) );
             $this->entity_manager->persist($this->log->citizenAttack($aggressor, $defender, $wound));
             if ($wound) {
                 $this->addFlash('notice',
@@ -882,7 +883,7 @@ class InventoryAwareController extends CustomAbstractController
     }
 
     public function generic_camping_action_api(JSONRequestParser $parser): Response {
-        if (!$this->getTownConf()->get(TownConf::CONF_FEATURE_CAMPING, false))
+        if (!$this->getTownConf()->get(TownSetting::OptFeatureCamping))
             return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
 
         $action_id = (int)$parser->get('action', -1);
@@ -952,7 +953,7 @@ class InventoryAwareController extends CustomAbstractController
 
         // $secondary_inv = $zone ? $zone->getFloor() : $citizen->getHome()->getChest();
         if($zone) {
-            if($this->conf->getTownConfiguration($this->getActiveCitizen()->getTown())->get(TownConf::CONF_MODIFIER_FLOOR_ASMBLY, false)) {
+            if($this->conf->getTownConfiguration($this->getActiveCitizen()->getTown())->get(TownSetting::OptModifierFloorAsmbly, false)) {
                 if(!$this->getActiveCitizen()->activeExplorerStats()) {
                     $secondary_inv = $zone->getFloor();
                 } else {

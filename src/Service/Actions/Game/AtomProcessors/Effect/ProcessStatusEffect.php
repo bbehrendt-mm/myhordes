@@ -4,6 +4,7 @@ namespace App\Service\Actions\Game\AtomProcessors\Effect;
 
 use App\Entity\Citizen;
 use App\Enum\ActionHandler\RelativeMaxPoint;
+use App\Enum\Configuration\TownSetting;
 use App\Service\CitizenHandler;
 use App\Service\DeathHandler;
 use App\Service\LogTemplateHandler;
@@ -61,8 +62,8 @@ class ProcessStatusEffect extends AtomEffectProcessor
                 $target->getSpecificActionCounter( $data->actionCounterType )->increment( $data->actionCounterValue );
 
             if ($data->ghoulHunger) {
-                $ghoul_mode = $cache->conf->get(TownConf::CONF_FEATURE_GHOUL_MODE, 'normal');
-                $hungry_ghouls = $cache->conf->get(TownConf::CONF_FEATURE_GHOULS_HUNGRY, false);
+                $ghoul_mode = $cache->conf->get(TownSetting::OptFeatureGhoulMode);
+                $hungry_ghouls = $cache->conf->get(TownSetting::OptFeatureGhoulsHungry);
                 if (($hungry_ghouls || $target->hasRole('ghoul')) && ($data->ghoulHungerForced || !in_array($ghoul_mode, ['bloodthirst','airbnb'])))
                     $target->setGhulHunger( max(0,$target->getGhulHunger() + $data->ghoulHunger) );
             }

@@ -5,6 +5,7 @@ namespace App\EventListener\Game\Town\Basic\Buildings;
 
 use App\Entity\ItemPrototype;
 use App\Entity\Town;
+use App\Enum\Configuration\TownSetting;
 use App\Enum\EventStages\BuildingValueQuery;
 use App\Event\Game\Town\Basic\Buildings\BuildingAddonProviderEvent;
 use App\Event\Game\Town\Basic\Buildings\BuildingCatapultItemTransformEvent;
@@ -208,7 +209,7 @@ final class BuildingQueryListener implements ServiceSubscriberInterface
     }
 
     public function onCollectAddons( BuildingAddonProviderEvent $event ): void {
-        if ($event->townConfig->get(TownConf::CONF_FEATURE_NIGHTWATCH_INSTANT, false) && $event->townConfig->get(TownConf::CONF_FEATURE_NIGHTWATCH, true))
+        if ($event->townConfig->get(TownSetting::OptFeatureNightwatchInstant) && $event->townConfig->get(TownSetting::OptFeatureNightwatch))
             $event->addAddon( T::__('Wächt', 'game'), 'battlement', 'town_nightwatch', 3 );
 
         foreach ($event->town->getBuildings() as $b) if ($b->getComplete()) {
@@ -222,7 +223,7 @@ final class BuildingQueryListener implements ServiceSubscriberInterface
             if ($b->getPrototype()->getName() === 'small_refine_#00')
                 $event->addAddon( T::__('Werkstatt (building)', 'game'), 'workshop', 'town_workshop', 2 );
 
-            if (($b->getPrototype()->getName() === 'small_round_path_#00' && !$event->townConfig->get(TownConf::CONF_FEATURE_NIGHTWATCH_INSTANT, false)) && $event->townConfig->get(TownConf::CONF_FEATURE_NIGHTWATCH, true))
+            if (($b->getPrototype()->getName() === 'small_round_path_#00' && !$event->townConfig->get(TownSetting::OptFeatureNightwatchInstant)) && $event->townConfig->get(TownSetting::OptFeatureNightwatch))
                 $event->addAddon( T::__('Wächt', 'game'), 'battlement', 'town_nightwatch', 3 );
 
             if ($b->getPrototype()->getName() === 'small_trash_#00')

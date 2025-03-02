@@ -165,7 +165,7 @@
             </p>
         </div>
     {% else %}
-        {% if (zone.x != 0 or zone.y != 0) and conf.get(constant('App\\Structures\\TownConf::CONF_FEATURE_CAMPING'),false) %}
+        {% if (zone.x != 0 or zone.y != 0) and conf.get(constant('App\\Enum\\Configuration\\TownSetting::OptFeatureCamping')) %}
             <div class="row">
                 <div class="cell rw-12 zone-camp">
                     <input type="checkbox" name="zone-camp" id="zone-camp"{% if citizen_hidden or sect == 'ca' %} checked="checked"{% endif %} /><label for="zone-camp">{% trans from 'game' %}Die Zone untersuchen{% endtrans %}</label>
@@ -299,20 +299,20 @@
                         {% if not citizen_hidden %}
                             {% if not digging %}
                                 {% if zone_blocked %}
-                                {% elseif citizen.digTimeout > 0 and conf.get(constant('App\\Structures\\TownConf::CONF_MODIFIER_ALLOW_REDIGS'),false) %}
+                                {% elseif citizen.digTimeout > 0 and conf.get(constant('App\\Enum\\Configuration\\TownSetting::OptModifierAllowRedigs')) %}
                                     <div class="note note-light" id="mgd-digging-note">
                                         <img class="icon left" alt="" src="{{ asset('build/images/icons/lock.gif') }}" />
                                         {% trans from 'game' %}Du hast hier bereits vor Kurzem gegraben. Die nächste Ausgrabung ist möglich in:{% endtrans %}
                                         <b x-countdown-to="{{ citizen.currentDigTimer.timestamp.timestamp }}" x-on-expire="reload">...</b>
                                     </div>
-                                {% elseif citizen.passiveDigTimer and not conf.get(constant('App\\Structures\\TownConf::CONF_MODIFIER_ALLOW_REDIGS'),false) %}
+                                {% elseif citizen.passiveDigTimer and not conf.get(constant('App\\Enum\\Configuration\\TownSetting::OptModifierAllowRedigs')) %}
                                     <div class="note note-light" id="mgd-digging-note">
                                         <img class="icon left" alt="" src="{{ asset('build/images/icons/lock.gif') }}" />
                                         {% trans from 'game' %}Du hast hier bereits vor Kurzem gegraben. Die nächste Ausgrabung ist erst morgen wieder möglich.{% endtrans %}
                                     </div>
                                 {% endif %}
                                 <div style="margin-bottom: 5px;" id="mgd-dig_button-container">
-                                    <button id="dig_button" {% if zone_blocked or citizen.digTimeout > 0 or ( citizen.passiveDigTimer and not conf.get(constant('App\\Structures\\TownConf::CONF_MODIFIER_ALLOW_REDIGS'),false) ) %}disabled{% endif %}>
+                                    <button id="dig_button" {% if zone_blocked or citizen.digTimeout > 0 or ( citizen.passiveDigTimer and not conf.get(constant('App\\Enum\\Configuration\\TownSetting::OptModifierAllowRedigs')) ) %}disabled{% endif %}>
                                         {% if zone.digs <= 0 %}
                                             <img class="icon left" alt="" src="{{ asset('build/images/icons/Small_broken.gif') }}" />
                                             {% trans from 'game' %}In der (<strong>leeren</strong>) Zone graben{% endtrans %}
@@ -394,7 +394,7 @@
                             {% endif %}
                             <div style="margin-bottom: 5px;" id="mgd-town-enter_button-container">
                                 <button id="town-enter" {% if not doors_open %}disabled{% endif %}>
-                                    <img alt="" src="{{ asset('build/images/emotes/arrowright.gif') }}"> {% trans from 'game' %}Stadt betreten{% endtrans %} {% if conf.get(constant('App\\Structures\\TownConf::CONF_FEATURE_ESCORT'),true) and citizen.validLeadingEscorts|length > 0 %}{{ '(Allein)'|trans({}, 'game') }}{% endif %}
+                                    <img alt="" src="{{ asset('build/images/emotes/arrowright.gif') }}"> {% trans from 'game' %}Stadt betreten{% endtrans %} {% if conf.get(constant('App\\Enum\\Configuration\\TownSetting::OptFeatureEscort')) and citizen.validLeadingEscorts|length > 0 %}{{ '(Allein)'|trans({}, 'game') }}{% endif %}
                                     {% if enter_costs_ap %}
                                         (<div class="ap">1</div>)
                                     {% endif %}
@@ -403,7 +403,7 @@
                                     <div class="tooltip">{{ 'Das Stadttor ist <strong>geschlossen</strong>! Vielleicht kannst du im Forum nach Hilfe fragen...'|trans({},'game')|raw }}</div>
                                 {% endif %}
                             </div>
-                            {% if conf.get(constant('App\\Structures\\TownConf::CONF_FEATURE_ESCORT'),true) and citizen.validLeadingEscorts|length > 0 %}
+                            {% if conf.get(constant('App\\Enum\\Configuration\\TownSetting::OptFeatureEscort')) and citizen.validLeadingEscorts|length > 0 %}
                                 <button id="town-enter-escort" {% if not doors_open %}disabled{% endif %}>
                                     <img alt="" src="{{ asset('build/images/emotes/arrowright.gif') }}" />
                                     <img alt="" src="{{ asset('build/images/icons/escort_in.gif') }}" {{ {'hide-desktop hide-lg hide-md': true, 'hide-sm': not (app.user.setting( constant("\\App\\Enum\\UserSetting::ReorderActionButtonsBeyond") ) and app.user.expert)}|classes }} />
@@ -534,7 +534,7 @@
         {% if other_citizens|length == 1 %}
             <em>{{"Sie sind allein in dieser Gegend..."|trans({}, 'game')}}</em>
         {% else %}
-            {% if conf.get(constant('App\\Structures\\TownConf::CONF_FEATURE_ESCORT'),true) and citizen.validLeadingEscorts|length > 0 %}
+            {% if conf.get(constant('App\\Enum\\Configuration\\TownSetting::OptFeatureEscort')) and citizen.validLeadingEscorts|length > 0 %}
                 <h5 class="row">
                     <span class="cell rw-4 rw-lg-6 rw-md-4 rw-sm-9">{% trans from 'game' %}Deine Eskorte{% endtrans %}</span>
                     <span class="cell rw-4 rw-4 rw-lg-2 rw-md-4 hide-sm">{{ 'Infos'|trans({}, 'game') }}</span>
@@ -574,7 +574,7 @@
                                         <ul class="status">
                                             {% if zone.x != 0 or zone.y != 0 %}
                                                 {% if not other_citizen.digging %}
-                                                    {% if other_citizen.digTimeout > 0 and conf.get(constant('App\\Structures\\TownConf::CONF_MODIFIER_ALLOW_REDIGS'),false) %}
+                                                    {% if other_citizen.digTimeout > 0 and conf.get(constant('App\\Enum\\Configuration\\TownSetting::OptModifierAllowRedigs')) %}
                                                         <li class="status">
                                                             <img src="{{ asset('build/images/icons/small_nogather.gif') }}" alt="{{ 'In dieser Zone graben'|trans({},'game') }}">
                                                             <div class="tooltip">
@@ -582,7 +582,7 @@
                                                                 <div class="center"><span x-countdown-to="{{ other_citizen.currentDigTimer.timestamp.timestamp }}" x-on-expire="">...</span></div>
                                                             </div>
                                                         </li>
-                                                    {% elseif other_citizen.passiveDigTimer and not conf.get(constant('App\\Structures\\TownConf::CONF_MODIFIER_ALLOW_REDIGS'),false) %}
+                                                    {% elseif other_citizen.passiveDigTimer and not conf.get(constant('App\\Enum\\Configuration\\TownSetting::OptModifierAllowRedigs')) %}
                                                         <li class="status">
                                                             <img src="{{ asset('build/images/icons/small_nogather.gif') }}" alt="{{ 'In dieser Zone graben'|trans({},'game') }}">
                                                             <div class="tooltip">
@@ -648,7 +648,7 @@
                                         {% endif %}
 
                                         <button {% if not can_attack_citizen %}disabled{% endif %} x-attack-citizen="{{ path('beyond_desert_attack_citizen_controller', {cid: other_citizen.id}) }}" class="small inline"><img alt="" src="{{ asset('build/images/icons/fist.gif') }}" style="margin-right: 0;"/>
-                                            <div class="tooltip">{{ '{citizen} angreifen. Diese Aktion kostet dich {ap}.'|trans({'{citizen}': other_citizen.name,'{ap}': '<div class="ap">' ~ conf.get(constant('App\\Structures\\TownConf::CONF_MODIFIER_ATTACK_AP'),5) ~ '</div>'},'game')|raw }}</div>
+                                            <div class="tooltip">{{ '{citizen} angreifen. Diese Aktion kostet dich {ap}.'|trans({'{citizen}': other_citizen.name,'{ap}': '<div class="ap">' ~ conf.get(constant('App\\Enum\\Configuration\\TownSetting::OptModifierAttackAp')) ~ '</div>'},'game')|raw }}</div>
                                         </button>
                                         {% if can_devour_citizen %}
                                             <button {% if not allow_devour_citizen %}disabled{% endif %} x-devour-citizen="{{ path('beyond_desert_devour_citizen_controller', {cid: other_citizen.id}) }}" class="small inline">
@@ -778,7 +778,7 @@
                                 <div class="padded cell rw-4 rw-sm-3 right">
                                     {% if not other_citizen.activeExplorerStats and other_citizen != citizen and (citizen.escortSettings is null or citizen.escortSettings.leader is null) %}
                                         <button {% if not can_attack_citizen or citizen_hidden %}disabled{% endif %} x-attack-citizen="{{ path('beyond_desert_attack_citizen_controller', {cid: other_citizen.id}) }}" class="small inline"><img alt="" src="{{ asset('build/images/icons/fist.gif') }}" style="margin-right: 0;" />
-                                            <div class="tooltip">{{ '{citizen} angreifen. Diese Aktion kostet dich {ap}.'|trans({'{citizen}': other_citizen.name,'{ap}': '<div class="ap">' ~ conf.get(constant('App\\Structures\\TownConf::CONF_MODIFIER_ATTACK_AP'),5) ~ '</div>'},'game')|raw }}</div>
+                                            <div class="tooltip">{{ '{citizen} angreifen. Diese Aktion kostet dich {ap}.'|trans({'{citizen}': other_citizen.name,'{ap}': '<div class="ap">' ~ conf.get(constant('App\\Enum\\Configuration\\TownSetting::OptModifierAttackAp')) ~ '</div>'},'game')|raw }}</div>
                                         </button>
                                         {% if can_devour_citizen %}
                                             <button {% if not allow_devour_citizen or citizen_hidden %}disabled{% endif %} x-devour-citizen="{{ path('beyond_desert_devour_citizen_controller', {cid: other_citizen.id}) }}" class="small inline">
@@ -800,7 +800,7 @@
             {% endif %}
         {% endif %}
 
-        {% if not citizen.camping and conf.get(constant('App\\Structures\\TownConf::CONF_FEATURE_ESCORT'),true) %}
+        {% if not citizen.camping and conf.get(constant('App\\Enum\\Configuration\\TownSetting::OptFeatureEscort')) %}
             <div class="row">
                 {% if citizen.escortSettings is null and citizen.validLeadingEscorts|length == 0 %}
                     <div class="cell padded rw-12"><button x-toggle-escort="1"><img alt="" src="{{ asset('build/images/icons/escort_on.gif') }}" />{{ 'Eskorte aktivieren'|trans({},'game') }}</button></div>

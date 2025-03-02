@@ -173,6 +173,7 @@ parameters:
           max_def: 150
         strange_soil: false
         soul_generation_coef: 1.00
+        building_difficulty: 0
 
       features:
         camping: true
@@ -201,6 +202,7 @@ parameters:
         survival_picto: null
         free_for_all: false
         free_from_teams: false
+        blueprint_mode: 'unlock'
 
       disabled_jobs: ['shaman']
       disabled_roles: []
@@ -304,6 +306,7 @@ parameters:
           from_ghoul: 1
           from_last_death_factor: 2
         soul_generation_coef: 1.75
+        building_difficulty: -1
 
       features:
         last_death:
@@ -311,6 +314,7 @@ parameters:
         last_death_day: 6
         survival_picto: 'r_pande_#00'
         ghoul_mode: airborne
+        blueprint_mode: 'improve'
 
       ruins: 25
       explorable_ruins: 2
@@ -322,6 +326,117 @@ parameters:
 
       explorable_ruin_params:
         max_distance: 100
+
+      unlocked_buildings:
+        - small_wallimprove_#00
+        - status_terror_#00
+        - small_dig_#01
+        - small_trap_#00
+        - small_dig_#02
+        - small_trap_#02
+        - small_tnt_#00
+        - item_wood_plate_#00
+        - small_bamba_#00
+        - small_trap_#01
+        - status_terror_#01
+        - small_door_closed_#00
+        - small_grinder_#00
+        - small_gather_#00
+        - small_gallery_#00
+        - small_gather_#01
+        - small_spears_#00
+        - small_waterhole_#00
+        - small_barbed_#00
+        - small_meatbarbed_#00
+        - small_wallimprove_#01
+        - item_plate_#02
+        - item_home_def_#00
+        - item_plate_#03
+        - item_plate_#06
+        - item_plate_#07
+        - item_plate_#10
+        - small_water_#00
+        - small_waterspray_#00
+        - small_waterspray_#01
+        - small_watercanon_#00
+        - small_gazspray_#00
+        - small_sprinkler_#00
+        - small_acidspray_#00
+        - item_jerrycan_#00
+        - item_vegetable_tasty_#00
+        - item_bgrenade_#01
+        - item_boomfruit_#01
+        - small_appletree_#00
+        - item_bgrenade_#00
+        - small_eden_#00
+        - small_derrick_#00
+        - item_firework_tube_#00
+        - small_valve_#00
+        - small_survarea_#00
+        - item_tube_#00
+        - item_tube_#01
+        - small_refine_#00
+        - item_meat_#00
+        - item_hmeat_#00
+        - small_factory_#00
+        - r_dhang_#00
+        - small_fleshcage_#00
+        - small_techtable_#00
+        - item_tagger_#00
+        - item_tagger_#02
+        - small_gather_#02
+        - item_courroie_#00
+        - small_lighthouse_#00
+        - small_round_path_#00
+        - small_armor_#00
+        - small_watchmen_#00
+        - small_watchmen_#02
+        - small_pet_#00
+        - small_novlamps_#00
+        - item_scope_#00
+        - item_electro_#00
+        - small_watchmen_#01
+        - small_building_#00
+        - item_meca_parts_#00
+        - small_city_up_#00
+        - small_castle_#00
+        - small_pmvbig_#00
+        - small_wheel_#00
+        - small_lastchance_#00
+        - small_fireworks_#00
+        - small_labyrinth_#00
+        - small_arma_#00
+        - small_spa4souls_#01
+        - small_infirmary_#00
+        - small_crow_#00
+        - small_thermal_#00
+        - item_soul_blue_static_#00
+        - small_spa4souls_#00
+
+      overrides:
+        building_rarity:
+          small_dig_#01: 1
+          small_trap_#00: 1
+          small_trap_#02: 1
+          item_wood_plate_#00: 1
+          small_trap_#01: 1
+          small_waterhole_#00: 1
+          small_barbed_#00: 1
+          small_meatbarbed_#00: 1
+          status_terror_#00: 2
+          small_gather_#01: 2
+          small_spears_#00: 2
+          small_wallimprove_#01: 2
+          item_plate_#06: 2
+          item_plate_#07: 2
+          small_waterspray_#00: 2
+          item_meat_#00: 2
+          small_fireworks_#00: 2
+          small_lastchance_#00: 2
+          small_round_path_#00: 2
+          small_armor_#00: 2
+          item_jerrycan_#00: 2
+          item_meca_parts_#00: 3
 
     custom:
       open_town_limit: 2

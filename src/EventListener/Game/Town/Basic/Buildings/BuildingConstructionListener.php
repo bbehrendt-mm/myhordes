@@ -8,6 +8,7 @@ use App\Entity\Complaint;
 use App\Entity\ItemPrototype;
 use App\Entity\PictoPrototype;
 use App\Entity\Zone;
+use App\Enum\Configuration\TownSetting;
 use App\Event\Game\Town\Basic\Buildings\BuildingConstructionEvent;
 use App\EventListener\ContainerTypeTrait;
 use App\Service\CitizenHandler;
@@ -190,7 +191,7 @@ final readonly class BuildingConstructionListener implements ServiceSubscriberIn
                 $em = $this->getService(EntityManagerInterface::class);
 
                 // Only insta-kill on building completion when shunning is enabled
-                if ($event->townConfig->get(TownConf::CONF_FEATURE_SHUN, true))
+                if ($event->townConfig->get(TownSetting::OptFeatureShun))
                     foreach ($event->town->getCitizens() as $citizen)
                         if ($citizenHandler->updateBanishment( $citizen, ($event->building->getPrototype()->getName() === 'r_dhang_#00' || $event->building->getPrototype()->getName() === 'small_eastercross_#00') ? $event->building : ($townHandler->getBuilding( $event->town, 'r_dhang_#00', true ) ?? $townHandler->getBuilding( $event->town, 'small_eastercross_#00', true )), $event->building->getPrototype()->getName() === 'small_fleshcage_#00' ? $event->building : $townHandler->getBuilding( $event->town, 'small_fleshcage_#00', true ) ))
                             $em->persist($event->town);

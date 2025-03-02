@@ -5,6 +5,7 @@ namespace App\EventListener\Game\Action;
 
 use App\Entity\ItemPrototype;
 use App\Enum\ActionHandler\PointType;
+use App\Enum\Configuration\TownSetting;
 use App\Event\Game\Actions\CustomActionProcessorEvent;
 use App\EventListener\ContainerTypeTrait;
 use App\Service\CitizenHandler;
@@ -45,8 +46,8 @@ final class VariousItemActionListener implements ServiceSubscriberInterface
             // Increase town temp defense for the watchtower
             case 13: {
                 $cn = $this->getService(TownHandler::class)->getBuilding( $event->citizen->getTown(), 'small_watchmen_#00', true );
-                $max = $event->townConfig->get( TownConf::CONF_MODIFIER_GUARDTOWER_MAX, 150 );
-                $use = $event->townConfig->get( TownConf::CONF_MODIFIER_GUARDTOWER_UNIT, 10 );
+                $max = $event->townConfig->get( TownSetting::OptModifierGuardtowerMax );
+                $use = $event->townConfig->get( TownSetting::OptModifierGuardtowerUnit );
 
                 if ($max <= 0) $max = PHP_INT_MAX;
 
@@ -92,7 +93,7 @@ final class VariousItemActionListener implements ServiceSubscriberInterface
 
             // Chance to infect in a contaminated zone
             case 22:
-                if ($event->townConfig->get(TownConf::CONF_FEATURE_ALL_POISON, false)) {
+                if ($event->townConfig->get(TownSetting::OptFeatureAllPoison)) {
 
                     if ($this->getService(RandomGenerator::class)->chance(0.05) && !$this->getService(CitizenHandler::class)->hasStatusEffect($event->citizen, 'infection')) {
 

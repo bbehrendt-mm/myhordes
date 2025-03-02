@@ -19,41 +19,56 @@ class BuildingPrototype implements NamedEntity
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private ?int $id;
     #[ORM\Column(type: 'string', length: 64)]
-    private $name;
+    private ?string $name;
     #[ORM\Column(type: 'string', length: 190)]
-    private $label;
+    private ?string $label;
     #[ORM\Column(type: 'text', nullable: true)]
-    private $description;
+    private ?string $description;
     #[ORM\Column(type: 'boolean')]
-    private $temp;
+    private ?bool $temp;
     #[ORM\Column(type: 'string', length: 64)]
-    private $icon;
+    private ?string $icon;
     #[ORM\Column(type: 'integer')]
-    private $blueprint;
+    private ?int $blueprint;
     #[ORM\Column(type: 'integer')]
-    private $ap;
+    private ?int $ap;
     #[ORM\Column(type: 'integer')]
-    private $defense;
+    private ?int $defense;
     #[ORM\ManyToOne(targetEntity: 'App\Entity\ItemGroup', cascade: ['persist'])]
-    private $resources;
+    private ?ItemGroup $resources;
     #[ORM\ManyToOne(targetEntity: 'App\Entity\BuildingPrototype', inversedBy: 'children')]
-    private $parent;
-    #[ORM\OneToMany(targetEntity: 'App\Entity\BuildingPrototype', mappedBy: 'parent')]
-    private $children;
+    private ?BuildingPrototype $parent;
+    #[ORM\OneToMany(mappedBy: 'parent', targetEntity: 'App\Entity\BuildingPrototype')]
+    private Collection $children;
     #[ORM\Column(type: 'integer')]
-    private $maxLevel = 0;
+    private int $maxLevel = 0;
     #[ORM\Column(type: 'json', nullable: true)]
-    private $upgradeTexts = [];
+    private ?array $upgradeTexts = [];
     #[ORM\Column(type: 'integer')]
-    private $orderBy = 0;
+    private int $orderBy = 0;
     #[ORM\Column(type: 'integer')]
-    private $hp;
+    private ?int $hp;
     #[ORM\Column(type: 'boolean')]
-    private $impervious;
+    private ?bool $impervious;
     #[ORM\Column(type: 'text', nullable: true)]
-    private $zeroLevelText;
+    private ?string $zeroLevelText;
+
+    #[ORM\Column]
+    private ?bool $hasHardMode = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $hardAp = null;
+
+    #[ORM\ManyToOne(cascade: ['persist'])]
+    private ?ItemGroup $hardResources = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $easyAp = null;
+
+    #[ORM\ManyToOne(cascade: ['persist'])]
+    private ?ItemGroup $easyResources = null;
     public function __construct()
     {
         $this->children = new ArrayCollection();
@@ -253,5 +268,65 @@ class BuildingPrototype implements NamedEntity
     public static function getTranslationDomain(): ?string
     {
         return 'buildings';
+    }
+
+    public function isHasHardMode(): ?bool
+    {
+        return $this->hasHardMode;
+    }
+
+    public function setHasHardMode(bool $hasHardMode): static
+    {
+        $this->hasHardMode = $hasHardMode;
+
+        return $this;
+    }
+
+    public function getHardAp(): ?int
+    {
+        return $this->hardAp;
+    }
+
+    public function setHardAp(?int $hardAp): static
+    {
+        $this->hardAp = $hardAp;
+
+        return $this;
+    }
+
+    public function getHardResources(): ?ItemGroup
+    {
+        return $this->hardResources;
+    }
+
+    public function setHardResources(?ItemGroup $hardResources): static
+    {
+        $this->hardResources = $hardResources;
+
+        return $this;
+    }
+
+    public function getEasyAp(): ?int
+    {
+        return $this->easyAp;
+    }
+
+    public function setEasyAp(?int $easyAp): static
+    {
+        $this->easyAp = $easyAp;
+
+        return $this;
+    }
+
+    public function getEasyResources(): ?ItemGroup
+    {
+        return $this->easyResources;
+    }
+
+    public function setEasyResources(?ItemGroup $easyResources): static
+    {
+        $this->easyResources = $easyResources;
+
+        return $this;
     }
 }

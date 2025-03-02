@@ -5,6 +5,7 @@ namespace App\EventListener\Maintenance\ContentMigrations;
 
 use App\Entity\Building;
 use App\Entity\BuildingPrototype;
+use App\Enum\Configuration\TownSetting;
 use App\Event\Game\Town\Maintenance\TownContentMigrationEvent;
 use App\Service\TownHandler;
 use App\Structures\TownConf;
@@ -53,7 +54,7 @@ class TownContentMigrateBuildingTreeListener extends TownContentMigrationListene
         $em = $this->getService(EntityManagerInterface::class);
         $th = $this->getService(TownHandler::class);
 
-        $blocked = $event->townConfig->get(TownConf::CONF_DISABLED_BUILDINGS, []) ?? [];
+        $blocked = $event->townConfig->get(TownSetting::DisabledBuildings) ?? [];
         foreach ($em->getRepository(BuildingPrototype::class)->findBy(['blueprint' => 0]) as $base_prototype)
             if (!in_array($base_prototype->getName(), $blocked) && !($th->getBuilding( $event->town, $base_prototype, false ))) {
                 $event->debug( "Default building <fg=green>[{$base_prototype->getId()}]</> <fg=yellow>{$base_prototype->getLabel()}</> is not unlocked." );

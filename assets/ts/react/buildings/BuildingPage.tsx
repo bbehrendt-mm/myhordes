@@ -52,7 +52,7 @@ export const HordesBuildingPageWrapper = (props: mountPageProps) => {
     const getItemPrototypeIDs = (b: Building[]): number[] => [
         ...new Set(b
             .filter(v => !v.c)
-            .map(v => vaultData[v.p]?.rsc?.map( v => v.p ))
+            .map(v => (v.r ?? vaultData[v.p]?.rsc)?.map( v => v.p ))
             .filter(v => !!v)
             .reduce((v: number[], c: number[]) => [...v, ...c], [])
         )
@@ -224,6 +224,7 @@ const BuildingGroup = (props: BuildingGroupProps) => {
         complete: props.building.c,
         voted: props.building.v,
         empty: props.locked || (props.building.c && !needs_repair),
+        hc: (props.building.dl ?? 0) < 0,
         ...Object.fromEntries([[`lv-${Math.min(props.level,6)}`, props.level > 0]])
     }}>
             <div className="type_indicator"/>
@@ -314,6 +315,8 @@ const BuildingResources = (props: BuildingCompleteProps) => {
 
     const needs_repair = (props.building.c && props.building.a[0] < props.building.a[1]);
 
+    const rsc = props.building.r ?? props.prototype.rsc;
+
     return <Tag className="building_resources padded cell" classNames={{to_repair: needs_repair}}>
         {((!props.building.c && props.building.a[0] > 0) || needs_repair) && <>
             <div className="ap-bar">
@@ -349,8 +352,8 @@ const BuildingResources = (props: BuildingCompleteProps) => {
             </div>
         </>}
 
-        { !props.building.c && props.prototype.rsc.length > 0 && !props.locked && <div className="build-req-items">
-            { props.prototype.rsc.map(({p,c}) => <React.Fragment key={p}>
+        { !props.building.c && rsc.length > 0 && !props.locked && <div className="build-req-items">
+            { rsc.map(({p,c}) => <React.Fragment key={p}>
                 <BuildingResourceItem item={(globals.itemVault ?? {})[p]} having={globals.itemCount[p] ?? null} needed={c}/>
             </React.Fragment>) }
         </div> }
