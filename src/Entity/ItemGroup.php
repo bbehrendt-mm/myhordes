@@ -14,11 +14,11 @@ class ItemGroup implements RandomGroup
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private ?int $id;
     #[ORM\Column(type: 'string', length: 64)]
-    private $name;
-    #[ORM\OneToMany(targetEntity: 'App\Entity\ItemGroupEntry', mappedBy: 'itemGroup', orphanRemoval: true, cascade: ['persist', 'detach'], fetch: 'EAGER')]
-    private $entries;
+    private string $name;
+    #[ORM\OneToMany(mappedBy: 'itemGroup', targetEntity: ItemGroupEntry::class, cascade: ['persist', 'detach'], fetch: 'EAGER', orphanRemoval: true)]
+    private Collection $entries;
     public function __construct()
     {
         $this->entries = new ArrayCollection();

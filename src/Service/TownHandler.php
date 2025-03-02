@@ -96,7 +96,11 @@ class TownHandler
     private function internalAddBuilding( Town &$town, BuildingPrototype $prototype ): ?Building {
 
         // Add building
-        $town->addBuilding( $b = (new Building())->setPrototype( $prototype )->setPosition($prototype->getOrderBy()) );
+        $town->addBuilding( $b = (new Building())
+            ->setPrototype( $prototype )
+            ->setPosition($prototype->getOrderBy())
+            ->setDifficultyLevel( $prototype->isHasHardMode() ? $this->conf->getTownConfiguration($town)->get(TownSetting::OptModifierBuildingDifficulty) : 0 )
+        );
 		$b->setInventory((new Inventory())->setBuilding($b));
         $blocked = $this->conf->getTownConfiguration($town)->get(TownSetting::DisabledBuildings);
 
