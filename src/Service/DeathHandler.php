@@ -15,6 +15,7 @@ use App\Entity\PictoPrototype;
 use App\Entity\RuinZone;
 use App\Entity\TownRankingProxy;
 use App\Entity\UserGroup;
+use App\Enum\Configuration\TownSetting;
 use App\Enum\Game\CitizenPersistentCache;
 use App\Structures\TownConf;
 use Doctrine\ORM\EntityManagerInterface;
@@ -65,7 +66,7 @@ class DeathHandler
         if (!$citizen->getAlive()) return;
         if (is_int($cod)) $cod = $this->entity_manager->getRepository(CauseOfDeath::class)->findOneBy( ['ref' => $cod] );
 
-        if (!$this->conf->getTownConfiguration($citizen->getTown())->get(TownConf::CONF_FEATURE_GIVE_ALL_PICTOS, true))
+        if (!$this->conf->getTownConfiguration($citizen->getTown())->get(TownSetting::OptFeatureGiveAllPictos))
             $citizen->registerPropInPersistentCache( CitizenPersistentCache::ForceBaseHXP );
 
         $rucksack = $citizen->getInventory();
@@ -121,7 +122,7 @@ class DeathHandler
         if (!$died_outside) {
             $zone = null;
             $citizen->getHome()->setHoldsBody( true );
-            if ($this->conf->getTownConfiguration( $citizen->getTown() )->get(TownConf::CONF_MODIFIER_BONES_IN_TOWN, false))
+            if ($this->conf->getTownConfiguration( $citizen->getTown() )->get(TownSetting::OptModifierBonesInTown, false))
                 $this->events->placeItem( $citizen, $this->item_factory->createItem('bone_meat_#00'),
                     [$citizen->getHome()->getChest(),$citizen->getTown()->getBank()]
                 );
@@ -182,11 +183,11 @@ class DeathHandler
         $this->entity_manager->persist( TownRankingProxy::fromTown( $citizen->getTown(), true ) );
 
         // Give soul point
-        if (!$this->conf->getTownConfiguration($citizen->getTown())->get(TownConf::CONF_FEATURE_GIVE_SOULPOINTS, true))
+        if (!$this->conf->getTownConfiguration($citizen->getTown())->get(TownSetting::OptFeatureGiveSoulpoints))
             $citizen->getRankingEntry()->setPoints(0);
 
         // Give special picto
-        if(($picto = $this->conf->getTownConfiguration($citizen->getTown())->get(TownConf::CONF_FEATURE_SURVIVAL_PICTO, null))) {
+        if(($picto = $this->conf->getTownConfiguration($citizen->getTown())->get(TownSetting::OptFeatureSurvivalPicto))) {
             $days = $citizen->getSurvivedDays();
             $nbPicto = pow(($days - 3), 1.5);
             $this->picto_handler->give_validated_picto($citizen, $picto, (int)floor($nbPicto));
@@ -217,7 +218,7 @@ class DeathHandler
             $this->picto_handler->give_validated_picto($citizen, $pictoDeath);
         }
 
-        if (!$this->conf->getTownConfiguration($citizen->getTown())->get(TownConf::CONF_FEATURE_GIVE_SOULPOINTS, true))
+        if (!$this->conf->getTownConfiguration($citizen->getTown())->get(TownSetting::OptFeatureGiveSoulpoints))
             $sp = 0;
         else $sp = $this->citizen_handler->getSoulpoints($citizen);
         

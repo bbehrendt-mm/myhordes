@@ -21,6 +21,7 @@ use App\Enum\ActionHandler\PointType;
 use App\Enum\ClientSignal;
 use App\Enum\Configuration\CitizenProperties;
 use App\Enum\Configuration\MyHordesSetting;
+use App\Enum\Configuration\TownSetting;
 use App\Enum\Game\CitizenPersistentCache;
 use App\Response\AjaxResponse;
 use App\Service\ActionHandler;
@@ -489,7 +490,7 @@ class TownHomeController extends TownController
 
         // Create log & persist
         try {
-            if (!$this->conf->getTownConfiguration($citizen->getTown())->get(TownConf::CONF_MODIFIER_HIDE_HOME_UPGRADE, false))
+            if (!$this->conf->getTownConfiguration($citizen->getTown())->get(TownSetting::OptModifierHideHomeUpgrade))
                 $em->persist( $this->log->homeUpgrade( $citizen ) );
 
             $em->persist($home);

@@ -46,7 +46,7 @@
 <script>
     {% block js %}
         {% if allow_floor_access %}
-            {% if conf.get(constant('App\\Structures\\TownConf::CONF_FEATURE_ESCORT'),true) %}
+            {% if conf.get(constant('App\\Enum\\Configuration\\TownSetting::OptFeatureEscort')) %}
                 $.html.addEventListenerAll( '.rucksack-escort>.item.plus[x-escort-id]:not(.locked)', 'click', function(e,elem) {
                     const eid = elem.getAttribute('x-escort-id');
 

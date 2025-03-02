@@ -39,6 +39,7 @@ use App\Enum\ActionCounterType;
 use App\Enum\ClientSignal;
 use App\Enum\Configuration\CitizenProperties;
 use App\Enum\Configuration\MyHordesSetting;
+use App\Enum\Configuration\TownSetting;
 use App\Enum\EventStages\BuildingValueQuery;
 use App\Enum\ZoneActivityMarkerType;
 use App\Event\Game\Town\Basic\Well\WellExtractionCheckEvent;
@@ -130,8 +131,8 @@ class TownController extends InventoryAwareController
         $data["new_message"] = $this->citizen_handler->hasNewMessage($this->getActiveCitizen());
         $data['can_do_insurrection'] = $this->getActiveCitizen()->getBanished() && !$this->citizen_handler->hasStatusEffect($this->getActiveCitizen(), "tg_insurrection") && $town->getInsurrectionProgress() < 100;
         $data['has_insurrection_part'] = $this->citizen_handler->hasStatusEffect($this->getActiveCitizen(), "tg_insurrection");
-        $data['has_battlement']    = $this->town_handler->getBuilding($town, 'small_round_path_#00') && !$this->getTownConf()->get(TownConf::CONF_FEATURE_NIGHTWATCH_INSTANT, false) && $this->getTownConf()->get(TownConf::CONF_FEATURE_NIGHTWATCH, true);
-        $data['act_as_battlement'] = $this->getTownConf()->get(TownConf::CONF_FEATURE_NIGHTWATCH_INSTANT, false) && $this->getTownConf()->get(TownConf::CONF_FEATURE_NIGHTWATCH, true);
+        $data['has_battlement']    = $this->town_handler->getBuilding($town, 'small_round_path_#00') && !$this->getTownConf()->get(TownSetting::OptFeatureNightwatchInstant) && $this->getTownConf()->get(TownSetting::OptFeatureNightwatch);
+        $data['act_as_battlement'] = $this->getTownConf()->get(TownSetting::OptFeatureNightwatchInstant) && $this->getTownConf()->get(TownSetting::OptFeatureNightwatch);
         return parent::addDefaultTwigArgs( $section, $data );
     }
 
@@ -361,7 +362,7 @@ class TownController extends InventoryAwareController
         $criteria->andWhere($criteria->expr()->gte('severity', Complaint::SeverityBanish));
         $criteria->andWhere($criteria->expr()->eq('culprit', $c));
 
-        $recycleAP = $this->getTownConf()->get(TownConf::CONF_MODIFIER_RECYCLING_AP, 15);
+        $recycleAP = $this->getTownConf()->get(TownSetting::OptModifierRecyclingAp);
         $can_recycle = !$c->getAlive() && $c->getHome()->getPrototype()->getLevel() > 1 && $c->getHome()->getRecycling() < $recycleAP;
         $protected = $this->citizen_handler->houseIsProtected($c, true);
 
@@ -374,7 +375,7 @@ class TownController extends InventoryAwareController
         return $this->render( 'ajax/game/town/home_foreign.html.twig', $this->addDefaultTwigArgs('citizens', [
             'owner' => $c,
             'master_thief' => $this->getActiveCitizen()->property( CitizenProperties::EnableAdvancedTheft ),
-            'can_attack' => !$this->getActiveCitizen()->getBanished() && !$this->citizen_handler->isTired($this->getActiveCitizen()) && $this->getActiveCitizen()->getAp() >= $this->getTownConf()->get( TownConf::CONF_MODIFIER_ATTACK_AP, 5 ),
+            'can_attack' => !$this->getActiveCitizen()->getBanished() && !$this->citizen_handler->isTired($this->getActiveCitizen()) && $this->getActiveCitizen()->getAp() >= $this->getTownConf()->get( TownSetting::OptModifierAttackAp ),
             'can_devour' => $this->getActiveCitizen()->hasRole('ghoul'),
             'allow_devour' => !$this->getActiveCitizen()->getBanished() && !$this->citizen_handler->hasStatusEffect($this->getActiveCitizen(), 'tg_ghoul_eat'),
             'allow_devour_corpse' => !$this->citizen_handler->hasStatusEffect($this->getActiveCitizen(), 'tg_ghoul_corpse'),
@@ -402,7 +403,7 @@ class TownController extends InventoryAwareController
             'protect' => $protected,
             'hasClairvoyance' => $hasClairvoyance,
             'clairvoyanceLevel' => $clairvoyanceLevel,
-            'attackAP' => $this->getTownConf()->get( TownConf::CONF_MODIFIER_ATTACK_AP, 5 ),
+            'attackAP' => $this->getTownConf()->get( TownSetting::OptModifierAttackAp ),
             'can_recycle' => $can_recycle,
             'has_omniscience' => $hasClairvoyance && $this->getActiveCitizen()->property( CitizenProperties::EnableOmniscience ),
             'intruding' => $intrusion === null ? 0 : ( $intrusion->getSteal() ? 1 : -1 ),
@@ -1325,7 +1326,7 @@ class TownController extends InventoryAwareController
      */
     #[Route(path: 'api/town/dashboard/wordofheroes', name: 'town_dashboard_save_woh')]
     public function dashboard_save_wordofheroes_api(JSONRequestParser $parser, RateLimitingFactoryProvider $rateLimiter ): Response {
-        if (!$this->getTownConf()->get(TownConf::CONF_FEATURE_WORDS_OF_HEROS, false) || !$this->getActiveCitizen()->getProfession()->getHeroic())
+        if (!$this->getTownConf()->get(TownSetting::OptFeatureWordsOfHeros) || !$this->getActiveCitizen()->getProfession()->getHeroic())
             return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable);
 
         if ($this->getActiveCitizen()->getBanished())
@@ -1544,8 +1545,8 @@ class TownController extends InventoryAwareController
         if ($id === $this->getActiveCitizen()->getId())
             return AjaxResponse::error(ErrorHelper::ErrorActionNotAvailable );
 
-        $recycleAP = $this->getTownConf()->get(TownConf::CONF_MODIFIER_RECYCLING_AP, 15);
-        $recycleReturn = $this->getTownConf()->get(TownConf::CONF_MODIFIER_RECYCLING_RETURN, 5);
+        $recycleAP = $this->getTownConf()->get(TownSetting::OptModifierRecyclingAp);
+        $recycleReturn = $this->getTownConf()->get(TownSetting::OptModifierRecyclingReturn);
 
         $citizen = $this->getActiveCitizen();
         /** @var Citizen $c */

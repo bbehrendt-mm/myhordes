@@ -24,6 +24,7 @@ use App\Entity\User;
 use App\Entity\Zone;
 use App\Entity\ZonePrototype;
 use App\Entity\ZoneTag;
+use App\Enum\Configuration\TownSetting;
 use App\Enum\ExternalAPIError;
 use App\Enum\ExternalAPIInterface;
 use App\Structures\TownConf;
@@ -565,6 +566,9 @@ class JSONv1Controller extends CoreController {
                             case "rarity":
                                 $data_building[$field] = $building->getPrototype()->getBlueprint();
                                 break;
+                            case "rarityCurrent":
+                                $data_building[$field] = $this->conf->getTownConfiguration($this->town)->getBuildingRarity( $building->getPrototype() );
+                                break;
                             case "temporary":
                                 $data_building[$field] = $building->getPrototype()->getTemp();
                                 break;
@@ -636,6 +640,9 @@ class JSONv1Controller extends CoreController {
                         break;
                     case "rarity":
                         $data[$field] = $prototype->getBlueprint();
+                        break;
+                    case "rarityCurrent":
+                        $data[$field] = $this->conf->getTownConfiguration($this->town)->getBuildingRarity( $prototype );
                         break;
                     case "temporary":
                         $data[$field] = $prototype->getTemp();
@@ -977,7 +984,7 @@ class JSONv1Controller extends CoreController {
             $fields = ['days', 'min', 'max', 'maxed'];
         }
 
-        $wtt = $this->conf->getTownConfiguration($this->town)->get(TownConf::CONF_MODIFIER_WT_THRESHOLD, 33);
+        $wtt = $this->conf->getTownConfiguration($this->town)->get(TownSetting::OptModifierWtThreshold);
         $estimTown = $this->town_handler->get_zombie_estimation($this->town);
 
 
@@ -1186,7 +1193,7 @@ class JSONv1Controller extends CoreController {
             }
         }
 
-		if (!$this->conf->getTownConfiguration($this->town)->get(TownConf::CONF_FEATURE_XML, true)) {
+		if (!$this->conf->getTownConfiguration($this->town)->get(TownSetting::OptFeatureXml)) {
 			return [
 				'error' => 'ApiDisabled'
 			];

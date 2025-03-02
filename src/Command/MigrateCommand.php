@@ -945,7 +945,7 @@ class MigrateCommand extends Command
             foreach ($towns as $town) {
 
                 $output->writeln("Checking town <info>{$town->getId()}</info>");
-                $n = $this->conf->getTownConfiguration($town)->get(TownConf::CONF_NUM_EXPLORABLE_RUINS);
+                $n = $this->conf->getTownConfiguration($town)->get(TownSetting::MapExplorableRuinCount);
 
                 $ex = 0;
                 foreach ($town->getZones() as $zone)

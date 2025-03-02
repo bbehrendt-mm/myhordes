@@ -11,6 +11,7 @@ use App\Entity\HeroSkillPrototype;
 use App\Entity\ItemPrototype;
 use App\Entity\SpecialActionPrototype;
 use App\Entity\Town;
+use App\Enum\Configuration\TownSetting;
 use App\Response\AjaxResponse;
 use App\Service\CitizenHandler;
 use App\Service\ConfMaster;
@@ -158,7 +159,7 @@ readonly class OnboardCitizenIntoTownAction
             return false;
         }
 
-        $item_spawns = $this->confMaster->getTownConfiguration($town)->get(TownConf::CONF_DEFAULT_CHEST_ITEMS, []);
+        $item_spawns = $this->confMaster->getTownConfiguration($town)->get(TownSetting::TownInitialChestItems);
         $chest = $citizen->getHome()->getChest();
 
         foreach ($item_spawns as $spawn)

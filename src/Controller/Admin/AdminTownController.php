@@ -229,7 +229,7 @@ class AdminTownController extends AdminActionController
 		$town = $this->entity_manager->getRepository(Town::class)->find($id);
 		if ($town === null) return $this->redirect($this->generateUrl('admin_town_list'));
 
-		$disabled_profs = $this->conf->getTownConfiguration($town)->get(TownConf::CONF_DISABLED_JOBS, []);
+		$disabled_profs = $this->conf->getTownConfiguration($town)->get(TownSetting::DisabledJobs);
 		$professions = array_filter($this->entity_manager->getRepository( CitizenProfession::class )->findSelectable(),
 			fn(CitizenProfession $p) => !in_array($p->getName(),$disabled_profs)
 		);
@@ -748,7 +748,7 @@ class AdminTownController extends AdminActionController
                     else $users[] = $selected_user;
                 }
 
-                $disabled_profs = $this->conf->getTownConfiguration($town)->get(TownConf::CONF_DISABLED_JOBS, []);
+                $disabled_profs = $this->conf->getTownConfiguration($town)->get(TownSetting::DisabledJobs);
                 $professions = array_filter($this->entity_manager->getRepository( CitizenProfession::class )->findSelectable(),
                     fn(CitizenProfession $p) => !in_array($p->getName(),$disabled_profs)
                 );
@@ -824,7 +824,10 @@ class AdminTownController extends AdminActionController
 
             case 'dbg_unlock_buildings':
                 do {
-                    $possible = array_filter( $this->entity_manager->getRepository(BuildingPrototype::class)->findProspectivePrototypes( $town ), fn(BuildingPrototype $p) => $p->getBlueprint() === null || $p->getBlueprint() < 5 );
+                    $possible = array_filter( $this->entity_manager->getRepository(BuildingPrototype::class)->findProspectivePrototypes( $town ), function(BuildingPrototype $p) use ($town) {
+                        $bp = $this->conf->getTownConfiguration( $town )->getBuildingRarity( $p );
+                        return $bp === null || $bp < 5;
+                    } );
                     $found = !empty($possible);
                     foreach ($possible as $proto) {
                         $townHandler->addBuilding($town, $proto);
@@ -1301,7 +1304,7 @@ class AdminTownController extends AdminActionController
 
         $town_conf = $cf->getTownConfiguration($citizen->getTown());
 
-        $citizen_alias_active = $town_conf->get(TownConf::CONF_FEATURE_CITIZEN_ALIAS, false);
+        $citizen_alias_active = $town_conf->get(TownSetting::OptFeatureCitizenAlias);
 
         if(!$citizen_alias_active)
             return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
@@ -1599,7 +1602,7 @@ class AdminTownController extends AdminActionController
         $pro_id = $parser->get_int('profession');
         $targets = $parser->get_array('targets');
 
-        $disabled_profs = $this->conf->getTownConfiguration($town)->get(TownConf::CONF_DISABLED_JOBS, []);
+        $disabled_profs = $this->conf->getTownConfiguration($town)->get(TownSetting::DisabledJobs);
 
         if (empty($targets))
             return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);

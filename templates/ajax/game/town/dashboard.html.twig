@@ -1,7 +1,7 @@
 {% extends "ajax/game/town/town.html.twig" %}
 {% block title %}{{'Gesamtansicht der Stadt'|trans({}, 'game')|raw}}{% endblock %}
 {% block content %}
-    {% set wtt = conf.get(constant('App\\Structures\\TownConf::CONF_MODIFIER_WT_THRESHOLD'),33) %}
+    {% set wtt = conf.get(constant('App\\Enum\\Configuration\\TownSetting::OptModifierWtThreshold')) %}
 
     <div class="town-header{% if town.type.name == 'panda' %} hardcore{% endif %}">
         <div><b>{{ town.name }}</b></div>
@@ -86,7 +86,7 @@
 	{% endif %}
 
     <div class="row">
-        <div class="padded cell {% if conf.get(constant('App\\Structures\\TownConf::CONF_FEATURE_WORDS_OF_HEROS'),false) %}rw-6{% else %}rw-12{% endif%} rw-lg-12">
+        <div class="padded cell {% if conf.get(constant('App\\Enum\\Configuration\\TownSetting::OptFeatureWordsOfHeros'),false) %}rw-6{% else %}rw-12{% endif%} rw-lg-12">
             <h5>{{ 'Meine täglichen Aufgaben'|trans({}, 'game')}} {{ help_btn(('Du weißt nicht, was du tun sollst? Folge den Empfehlungen hier unten :)'|trans({},'global'))) }}</h5>
             <ul class="overview-checklist">
                 {% if is_dehydrated %}
@@ -159,7 +159,7 @@
                 </ul>
             {% endif %}
         </div>
-        {% if conf.get(constant('App\\Structures\\TownConf::CONF_FEATURE_WORDS_OF_HEROS'),false) and (town.wordsOfHeroes is not empty or can_edit_blackboard) %}
+        {% if conf.get(constant('App\\Enum\\Configuration\\TownSetting::OptFeatureWordsOfHeros'),false) and (town.wordsOfHeroes is not empty or can_edit_blackboard) %}
             <div class="padded cell rw-6 rw-lg-12">
                     <h5>{{ 'Heldentafel'|trans({}, 'game')}}</h5>
                     <div class="words-of-heroes {{ town.language }}">

@@ -20,35 +20,38 @@ class Building
     private $id;
     #[ORM\ManyToOne(targetEntity: 'App\Entity\BuildingPrototype', fetch: 'EAGER')]
     #[ORM\JoinColumn(nullable: false)]
-    private $prototype;
+    private BuildingPrototype $prototype;
     #[ORM\Column(type: 'boolean')]
-    private $complete = false;
+    private bool $complete = false;
     #[ORM\Column(type: 'integer')]
-    private $ap = 0;
+    private int $ap = 0;
     #[ORM\ManyToOne(targetEntity: 'App\Entity\Town', fetch: 'EXTRA_LAZY', inversedBy: 'buildings')]
     #[ORM\JoinColumn(nullable: false)]
-    private $town;
-    #[ORM\OneToMany(targetEntity: 'App\Entity\DailyUpgradeVote', mappedBy: 'building', orphanRemoval: true, fetch: 'EXTRA_LAZY')]
-    private $dailyUpgradeVotes;
+    private Town $town;
+    #[ORM\OneToMany(mappedBy: 'building', targetEntity: 'App\Entity\DailyUpgradeVote', fetch: 'EXTRA_LAZY', orphanRemoval: true)]
+    private Collection $dailyUpgradeVotes;
     #[ORM\Column(type: 'integer')]
-    private $level = 0;
+    private int $level = 0;
     #[ORM\Column(type: 'integer')]
-    private $defenseBonus = 0;
+    private int $defenseBonus = 0;
     #[ORM\Column(type: 'integer')]
-    private $tempDefenseBonus = 0;
+    private int $tempDefenseBonus = 0;
     #[ORM\Column(type: 'integer')]
-    private $position = 0;
+    private int $position = 0;
     #[ORM\Column(type: 'integer')]
-    private $hp = 0;
+    private int $hp = 0;
     #[ORM\Column(type: 'integer')]
-    private $defense = 0;
+    private int $defense = 0;
     #[ORM\OneToMany(mappedBy: 'building', targetEntity: BuildingVote::class, cascade: ['persist', 'remove'], fetch: 'EXTRA_LAZY', orphanRemoval: true)]
-    private $buildingVotes;
+    private Collection $buildingVotes;
     #[ORM\OneToOne(inversedBy: 'building', targetEntity: Inventory::class, cascade: ['persist', 'remove'])]
     private ?Inventory $inventory = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $constructionDate = null;
+
+    #[ORM\Column]
+    private int $difficultyLevel = 0;
 
     public function __construct()
     {
@@ -100,7 +103,7 @@ class Building
         return $this;
     }
     /**
-     * @return Collection|DailyUpgradeVote[]
+     * @return Collection<DailyUpgradeVote>
      */
     public function getDailyUpgradeVotes(): Collection
     {
@@ -188,7 +191,7 @@ class Building
         return $this;
     }
     /**
-     * @return Collection|BuildingVote[]
+     * @return Collection<BuildingVote>
      */
     public function getBuildingVotes(): Collection
     {
@@ -238,5 +241,33 @@ class Building
         $this->constructionDate = $constructionDate;
 
         return $this;
+    }
+
+    public function getDifficultyLevel(): ?int
+    {
+        return $this->difficultyLevel;
+    }
+
+    public function setDifficultyLevel(int $difficultyLevel): static
+    {
+        $this->difficultyLevel = $difficultyLevel;
+
+        return $this;
+    }
+
+    public function getPrototypeAP(): int {
+        return match (true) {
+            $this->difficultyLevel < 0 => $this->prototype->getHardAp(),
+            $this->difficultyLevel > 0 => $this->prototype->getEasyAp(),
+            default => null
+        } ?? $this->prototype->getAp();
+    }
+
+    public function getPrototypeResources(): ?ItemGroup {
+        return match (true) {
+            $this->difficultyLevel < 0 => $this->prototype->getHardResources(),
+            $this->difficultyLevel > 0 => $this->prototype->getEasyResources(),
+            default => null
+        } ?? $this->prototype->getResources();
     }
 }

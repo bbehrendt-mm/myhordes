@@ -33,22 +33,49 @@ use MyHordes\Fixtures\DTO\LabeledIconElementInterface;
  * @method self health(int $v)
  * @property int $ap
  * @method self ap(int $v)
+ * @property int $hardAp
+ * @method self hardAp(int $v)
+ * @property int $easyAp
+ * @method self easyAp(int $v)
  * @property int $blueprintLevel
  * @method self blueprintLevel(int $v)
  * @property array $resources
  * @method self resources(array $v)
  * @method self resource(string $key, int $value)
+ * @property array $hardResources
+ * @method self hardResources(array $v)
+ * @method self hardResource(string $key, int $value)
+ * @property array $easyResources
+ * @method self easyResources(array $v)
+ * @method self easyResource(string $key, int $value)
  * @property int $voteLevel
  * @method self voteLevel(int $v)
  * @property string $baseVoteText
  * @method self baseVoteText(string $v)
  * @property string[] $upgradeTexts
  * @method self upgradeTexts(array $v)
+ * @property bool $hasHardMode
+ * @method self hasHardMode(bool $v)
+ * @method self adjustForHardMode(?int $ap, ?array $resources, int $easyAp = null, ?array $easyResources = null)
  *
  * @method BuildingPrototypeDataContainer commit(string &$id = null)
  * @method BuildingPrototypeDataContainer discard()
  */
 class BuildingPrototypeDataElement extends Element implements LabeledIconElementInterface {
+
+    private function createResourceGroup(EntityManagerInterface $em, array $resources, string $id, string $subkey): ItemGroup {
+        $group = $em->getRepository(ItemGroup::class)->findOneByName("{$id}_{$subkey}") ?? (new ItemGroup())->setName( "{$id}_{$subkey}" );
+        $group->getEntries()->clear();
+
+        foreach ($resources as $item_name => $count) {
+            if (!($item = $em->getRepository(ItemPrototype::class)->findOneBy( ['name' => $item_name] )))
+                throw new Exception( "Item class not found: '$item_name' (when building resource list '{$id}_{$subkey}')." );
+
+            $group->addEntry( (new ItemGroupEntry())->setPrototype( $item )->setChance( $count ) );
+        }
+
+        return $group;
+    }
 
     /**
      * @throws Exception
@@ -65,7 +92,13 @@ class BuildingPrototypeDataElement extends Element implements LabeledIconElement
                 ->setIcon( $this->icon )
                 ->setHp( $this->health ?: $this->ap ?: 0 )
                 ->setImpervious( $this->isImpervious ?? false )
-                ->setOrderBy( $this->orderBy ?? 0 );
+                ->setOrderBy( $this->orderBy ?? 0 )
+                ->setResources( $this->resources ? $this->createResourceGroup($em, $this->resources, $id, 'rsc') : null )
+                ->setHasHardMode( $this->hasHardMode ?? false )
+                ->setHardAp( $this->hasHardMode ? $this->hardAp : null )
+                ->setEasyAp( $this->hasHardMode ? $this->easyAp : null )
+                ->setHardResources( ($this->hasHardMode && $this->hardResources) ? $this->createResourceGroup($em, $this->hardResources, $id, 'hrsc') : null )
+                ->setEasyResources( ($this->hasHardMode && $this->easyResources) ? $this->createResourceGroup($em, $this->easyResources, $id, 'ersc') : null );
 
             if ($this->voteLevel > 0)
                 $entity
@@ -73,21 +106,6 @@ class BuildingPrototypeDataElement extends Element implements LabeledIconElement
                     ->setZeroLevelText( $this->baseVoteText ?? "")
                     ->setUpgradeTexts( array_slice( array_pad($this->upgradeTexts ?? [], $this->voteLevel, "???" ), 0, $this->voteLevel ) );
             else $entity->setMaxLevel( 0 )->setZeroLevelText( null )->setUpgradeTexts( null );
-
-            if ($this->resources) {
-                $group = $em->getRepository(ItemGroup::class)->findOneByName("{$id}_rsc") ?? (new ItemGroup())->setName( "{$id}_rsc" );
-                $group->getEntries()->clear();
-
-                foreach ($this->resources as $item_name => $count) {
-
-                    $item = $em->getRepository(ItemPrototype::class)->findOneBy( ['name' => $item_name] );
-                    if (!$item) throw new Exception( "Item class not found: " . $item_name );
-
-                    $group->addEntry( (new ItemGroupEntry())->setPrototype( $item )->setChance( $count ) );
-                }
-
-                $entity->setResources( $group );
-            } else $entity->setResources( null );
 
         } catch (\Throwable $t) {
             throw new Exception(
@@ -107,6 +125,33 @@ class BuildingPrototypeDataElement extends Element implements LabeledIconElement
             if ($value <= 0) unset( $r[$key] );
             else $r[$key] = $value;
             return $this->resources($r);
+        } elseif ($name === 'hardResource' && count($arguments) === 2) {
+            [$key, $value] = $arguments;
+            $r = $this->hardResources ?? [];
+            if ($value <= 0) unset( $r[$key] );
+            else $r[$key] = $value;
+            return $this->hardResources($r);
+        } elseif ($name === 'easyResource' && count($arguments) === 2) {
+            [$key, $value] = $arguments;
+            $r = $this->easyResources ?? [];
+            if ($value <= 0) unset( $r[$key] );
+            else $r[$key] = $value;
+            return $this->easyResources($r);
+        } elseif ($name === 'adjustForHardMode' && count($arguments) === 2) {
+            [$ap, $resources] = $arguments;
+            $this->hasHardMode = true;
+            $this->hardAp = $ap ?? $this->ap;
+            $this->easyAp = $this->ap;
+            $this->hardResources = $this->resources;
+            $this->easyResources = $this->resources;
+            $original = $this->resources;
+            foreach ($resources ?? [] as $k => $v) {
+                $ov = $original[$k] ?? 0;
+                $this->hardResource($k, $v);
+                if ($ov > 0)
+                    $this->easyResource($k, round($v/(($v / $ov) + 1)));
+            }
+            return $this;
         } else return parent::__call($name, $arguments);
     }
 

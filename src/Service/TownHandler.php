@@ -96,15 +96,18 @@ class TownHandler
     private function internalAddBuilding( Town &$town, BuildingPrototype $prototype ): ?Building {
 
         // Add building
-        $town->addBuilding( $b = (new Building())->setPrototype( $prototype )->setPosition($prototype->getOrderBy()) );
+        $town->addBuilding( $b = (new Building())
+            ->setPrototype( $prototype )
+            ->setPosition($prototype->getOrderBy())
+            ->setDifficultyLevel( $prototype->isHasHardMode() ? $this->conf->getTownConfiguration($town)->get(TownSetting::OptModifierBuildingDifficulty) : 0 )
+        );
 		$b->setInventory((new Inventory())->setBuilding($b));
-        $blocked = $this->conf->getTownConfiguration($town)->get(TownConf::CONF_DISABLED_BUILDINGS);
+        $blocked = $this->conf->getTownConfiguration($town)->get(TownSetting::DisabledBuildings);
 
         // Add all children that do not require blueprints
-        if ($b)
-            foreach ( $prototype->getChildren() as $child )
-                if ($child->getBlueprint() == 0 && !in_array($child->getName(), $blocked) && !$this->getBuilding( $town, $child, false ))
-                    $this->internalAddBuilding($town, $child);
+        foreach ( $prototype->getChildren() as $child )
+            if ($this->conf->getTownConfiguration( $town )->getBuildingRarity( $child ) == 0 && !in_array($child->getName(), $blocked) && !$this->getBuilding( $town, $child, false ))
+                $this->internalAddBuilding($town, $child);
         return $b;
     }
 
@@ -481,15 +484,15 @@ class TownHandler
 
         $rand_backup = mt_rand(PHP_INT_MIN, PHP_INT_MAX);
         mt_srand($est->getSeed() ?? $town->getDay() + $town->getId());
-        $cc_offset = $watchtower_offset ?? $this->conf->getTownConfiguration($town)->get(TownConf::CONF_MODIFIER_WT_OFFSET, 0);
-        $this->calculate_offsets($offsetMin, $offsetMax, $est->getCitizens()->count() * $ratio + $cc_offset, $this->conf->getTownConfiguration($town)->get(TownConf::CONF_ESTIM_SPREAD, 10) - $this->conf->getTownConfiguration($town)->get(TownConf::CONF_ESTIM_INITIAL_SHIFT, 0));
+        $cc_offset = $watchtower_offset ?? $this->conf->getTownConfiguration($town)->get(TownSetting::OptModifierWtOffset);
+        $this->calculate_offsets($offsetMin, $offsetMax, $est->getCitizens()->count() * $ratio + $cc_offset, $this->conf->getTownConfiguration($town)->get(TownSetting::OptModifierEstimSpread) - $this->conf->getTownConfiguration($town)->get(TownSetting::OptModifierEstimInitialShift));
 
         $min = round($est->getTargetMin() - ($est->getTargetMin() * $offsetMin / 100));
         $max = round($est->getTargetMax() + ($est->getTargetMax() * $offsetMax / 100));
 
 		$redsouls = $this->get_red_soul_count($town);
 		$red_soul_penality = $this->proxy->queryTownParameter( $town, BuildingValueQuery::NightlyRedSoulPenalty );
-		$soulFactor = min(1 + ($red_soul_penality * $redsouls), (float)$this->conf->getTownConfiguration($town)->get(TownConf::CONF_MODIFIER_RED_SOUL_FACTOR, 1.2));
+		$soulFactor = min(1 + ($red_soul_penality * $redsouls), (float)$this->conf->getTownConfiguration($town)->get(TownSetting::OptModifierRedSoulFactor));
         $min = round($min * $soulFactor);
         $max = round($max * $soulFactor);
 
@@ -520,7 +523,7 @@ class TownHandler
             $offsetMin = $est->getOffsetMin();
             $offsetMax = $est->getOffsetMax();
 
-            $this->calculate_offsets($offsetMin, $offsetMax, $calculateUntil,  $this->conf->getTownConfiguration($town)->get(TownConf::CONF_ESTIM_SPREAD, 10));
+            $this->calculate_offsets($offsetMin, $offsetMax, $calculateUntil,  $this->conf->getTownConfiguration($town)->get(TownSetting::OptModifierEstimSpread));
 
             $min2 = round($est->getTargetMin() - ($est->getTargetMin() * $offsetMin / 100));
             $max2 = round($est->getTargetMax() + ($est->getTargetMax() * $offsetMax / 100));
@@ -587,7 +590,7 @@ class TownHandler
                 $const_ratio_base = 0.5;
                 $const_ratio_low = 0.75;
 
-                $max_ratio = match( $this->conf->getTownConfiguration( $town )->get(TownConf::CONF_FEATURE_ATTACKS, 'normal') ) {
+                $max_ratio = match( $this->conf->getTownConfiguration( $town )->get(TownSetting::OptFeatureAttacks) ) {
                     'hard' => 3.1,
                     'easy' => $const_ratio_low,
                     default => 1.1,
@@ -603,14 +606,14 @@ class TownHandler
                 if ($value > ($min + 0.5 * ($max-$min))) $value = mt_rand($min,$max);
 
                 $off_min = mt_rand(
-                    $this->conf->getTownConfiguration( $town )->get(TownConf::CONF_ESTIM_OFFSET_MIN, 15) - $this->conf->getTownConfiguration( $town )->get(TownConf::CONF_ESTIM_INITIAL_SHIFT, 0),
-                    $this->conf->getTownConfiguration( $town )->get(TownConf::CONF_ESTIM_OFFSET_MAX, 36) - $this->conf->getTownConfiguration( $town )->get(TownConf::CONF_ESTIM_INITIAL_SHIFT, 0)
+                    $this->conf->getTownConfiguration( $town )->get(TownSetting::OptModifierEstimOffsetMin) - $this->conf->getTownConfiguration( $town )->get(TownSetting::OptModifierEstimInitialShift),
+                    $this->conf->getTownConfiguration( $town )->get(TownSetting::OptModifierEstimOffsetMax) - $this->conf->getTownConfiguration( $town )->get(TownSetting::OptModifierEstimInitialShift)
                 );
 
-                $off_max = $this->conf->getTownConfiguration( $town )->get(TownConf::CONF_ESTIM_VARIANCE, 48) - (2*$this->conf->getTownConfiguration( $town )->get(TownConf::CONF_ESTIM_INITIAL_SHIFT, 0)) - $off_min;
+                $off_max = $this->conf->getTownConfiguration( $town )->get(TownSetting::OptModifierEstimVariance) - (2*$this->conf->getTownConfiguration( $town )->get(TownSetting::OptModifierEstimInitialShift)) - $off_min;
 
-                $shift_min = mt_rand(0, $this->conf->getTownConfiguration( $town )->get(TownConf::CONF_ESTIM_INITIAL_SHIFT, 0) * 100) / 10000;
-                $shift_max = ($this->conf->getTownConfiguration( $town )->get(TownConf::CONF_ESTIM_INITIAL_SHIFT, 0) / 100) - $shift_min;
+                $shift_min = mt_rand(0, $this->conf->getTownConfiguration( $town )->get(TownSetting::OptModifierEstimInitialShift) * 100) / 10000;
+                $shift_max = ($this->conf->getTownConfiguration( $town )->get(TownSetting::OptModifierEstimInitialShift) / 100) - $shift_min;
 
                 $town->addZombieEstimation(
                     (new ZombieEstimation())
@@ -791,7 +794,7 @@ class TownHandler
         if (!$this->proxy->queryTownRoleEnabled( $town, $role )) return false;
 
         // If the role is disabled, no vote is needed
-        if (in_array( $role->getName(), $this->conf->getTownConfiguration($town)->get(TownConf::CONF_DISABLED_ROLES, []) ))
+        if (in_array( $role->getName(), $this->conf->getTownConfiguration($town)->get(TownSetting::DisabledRoles) ))
             return false;
 
         $limit = ($duringNightly ? 1 : 0);

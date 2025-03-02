@@ -7,6 +7,7 @@ use App\Entity\Requirement;
 use App\Enum\ActionCounterType;
 use App\Enum\ActionHandler\PointType;
 use App\Enum\Configuration\CitizenProperties;
+use App\Enum\Configuration\TownSetting;
 use App\Service\Actions\Game\AtomProcessors\Require\Custom\GuardTowerUseIsNotMaxed;
 use App\Service\Actions\Game\AtomProcessors\Require\Custom\RoleVote;
 use App\Structures\TownConf;
@@ -240,7 +241,7 @@ class ActionRequirementProvider
         //</editor-fold>
 
         //<editor-fold desc="ConfigRequirements">
-        $requirement_container->add()->identifier('feature_camping')->type( Requirement::HideOnFail )->add( (new ConfigRequirement())->config(TownConf::CONF_FEATURE_CAMPING, true) )->commit();
+        $requirement_container->add()->identifier('feature_camping')->type( Requirement::HideOnFail )->add( (new ConfigRequirement())->config(TownSetting::OptFeatureCamping, true) )->commit();
         $requirement_container->add()->identifier('during_christmas')->type( Requirement::CrossOnFail )->add( (new ConfigRequirement())->event('christmas') )->text_key('not_in_event')->commit();
         $requirement_container->add()->identifier('must_be_aprils_fools')->type( Requirement::CrossOnFail )->add( (new ConfigRequirement())->event('afools') )->text_key('not_in_event')->commit();
         //</editor-fold>

@@ -1,7 +1,7 @@
 {% extends "ajax/game/town/town.html.twig" %}
 {%block title %}{{'Wachturm'|trans({}, 'game')}}{% endblock %}
 {% block content %}
-    {% set wtt = conf.get(constant('App\\Structures\\TownConf::CONF_MODIFIER_WT_THRESHOLD'),33) %}
+    {% set wtt = conf.get(constant('App\\Enum\\Configuration\\TownSetting::OptModifierWtThreshold')) %}
 
     <h1 class="page-head">{{'Wachturm'|trans({}, 'buildings')}}</h1>
 

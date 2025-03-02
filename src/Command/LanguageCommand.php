@@ -25,6 +25,7 @@ class LanguageCommand extends Command
     protected function configure(): void
     {
         $this->addOption('lang', null, InputOption::VALUE_REQUIRED, 'Select output language', 'en');
+        $this->addOption('query-lang', null, InputOption::VALUE_REQUIRED, 'Select input language', 'en');
     }
 
     #[\Symfony\Contracts\Service\Attribute\Required]
@@ -46,7 +47,7 @@ class LanguageCommand extends Command
 
     protected function initialize(InputInterface $input, OutputInterface $output): void
     {
-        $this->helper->setLanguage( $this->locale = $input->getOption('lang') );
+        $this->helper->setLanguage( $input->getOption('query-lang'), $this->locale = $input->getOption('lang') );
     }
 
 }

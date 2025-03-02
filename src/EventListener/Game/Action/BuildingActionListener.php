@@ -11,6 +11,7 @@ use App\Entity\ZoneActivityMarker;
 use App\Enum\ActionCounterType;
 use App\Enum\ActionHandler\CountType;
 use App\Enum\Configuration\CitizenProperties;
+use App\Enum\Configuration\TownSetting;
 use App\Enum\ScavengingActionType;
 use App\Enum\ZoneActivityMarkerType;
 use App\Event\Game\Actions\CustomActionProcessorEvent;
@@ -112,8 +113,8 @@ final class BuildingActionListener implements ServiceSubscriberInterface
             // Guard building action (anyone)
             case 10201:
                 $cn = $this->getService(TownHandler::class)->getBuilding( $event->citizen->getTown(), 'small_watchmen_#00', true );
-                $max = $event->townConfig->get( TownConf::CONF_MODIFIER_GUARDTOWER_MAX, 150 );
-                $use = round($event->townConfig->get( TownConf::CONF_MODIFIER_GUARDTOWER_UNIT, 10 ) / 2);
+                $max = $event->townConfig->get( TownSetting::OptModifierGuardtowerMax );
+                $use = round($event->townConfig->get( TownSetting::OptModifierGuardtowerUnit ) / 2);
 
                 if ($max <= 0) $max = PHP_INT_MAX;
 

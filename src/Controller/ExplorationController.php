@@ -9,6 +9,7 @@ use App\Entity\RuinZone;
 use App\Entity\Zone;
 use App\Entity\ZoneActivityMarker;
 use App\Entity\ZonePrototype;
+use App\Enum\Configuration\TownSetting;
 use App\Enum\ScavengingActionType;
 use App\Enum\ZoneActivityMarkerType;
 use App\Response\AjaxResponse;
@@ -376,7 +377,7 @@ class ExplorationController extends InventoryAwareController implements HookedIn
         $chances = $proxyService->citizenQueryDigChance( $citizen, $ruinZone, ScavengingActionType::DigExploration, $this->getTownConf()->isNightMode() );
 
         if ($this->random_generator->chance( $chances )) {
-            $group = $ruinZone->getZone()->getPrototype()->getDropByNames( $this->getTownConf()->get( TownConf::CONF_OVERRIDE_NAMED_DROPS, [] ) );
+            $group = $ruinZone->getZone()->getPrototype()->getDropByNames( $this->getTownConf()->get( TownSetting::OptModifierOverrideNamedDrops ) );
 
             $redraw = false; $redraw_count = 0; $itemMarkerType = null;
             do {

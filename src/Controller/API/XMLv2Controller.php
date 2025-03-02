@@ -22,6 +22,7 @@ use App\Entity\User;
 use App\Entity\Zone;
 use App\Entity\ZonePrototype;
 use App\Entity\ZoneTag;
+use App\Enum\Configuration\TownSetting;
 use App\Enum\ExternalAPIError;
 use App\Enum\ExternalAPIInterface;
 use App\Structures\SimpleXMLExtended;
@@ -303,7 +304,7 @@ class XMLv2Controller extends CoreController {
         } else {
             $town = $user->getActiveCitizen()->getTown();
 
-            if (!$this->conf->getTownConfiguration($town)->get(TownConf::CONF_FEATURE_XML, true)) {
+            if (!$this->conf->getTownConfiguration($town)->get(TownSetting::OptFeatureXml)) {
                 $data['error']['attributes'] = ['code' => "disabled_feed"];
                 $data['status']['attributes'] = ['open' => "1", "msg" => ""];
                 $response = new Response($this->arrayToXml( $data, '<hordes xmlns:dc="http://purl.org/dc/elements/1.1" xmlns:content="http://purl.org/rss/1.0/modules/content/" />' ));
@@ -1273,7 +1274,7 @@ class XMLv2Controller extends CoreController {
         if ($has_zombie_est){
             // Zombies estimations
             $estims = $this->town_handler->get_zombie_estimation($town);
-            $watchtrigger = $this->conf->getTownConfiguration($town)->get(TownConf::CONF_MODIFIER_WT_THRESHOLD, 33);
+            $watchtrigger = $this->conf->getTownConfiguration($town)->get(TownSetting::OptModifierWtThreshold);
 
             if($watchtrigger / 100 <= $estims[0]->getEstimation()) {
                 $data['data']['estimations']['list']['items'][] = [

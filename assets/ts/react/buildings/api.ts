@@ -12,7 +12,12 @@ export type Building = {
     dt: number,
     e: boolean,
     a: [number,number],
-    v?: boolean
+    v?: boolean,
+    dl?: number,
+    r?: {
+        p: number,
+        c: number
+    }[]
 }
 
 export type BuildingListResponse = {

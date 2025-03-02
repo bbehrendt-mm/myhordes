@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\BuildingPrototype;
 use App\Entity\Town;
+use App\Structures\TownConf;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\NonUniqueResultException;
@@ -72,23 +73,26 @@ class BuildingPrototypeRepository extends ServiceEntityRepository
      * @param int|null $bp_class
      * @return BuildingPrototype[]
      */
-    public function findProspectivePrototypes( Town $town, ?int $bp_class = null ) {
+    public function findProspectivePrototypes( Town $town, ?TownConf $conf = null, ?int $bp_class = null ): array {
         $include = [];
         foreach ($town->getBuildings() as $building)
             $include[$building->getPrototype()->getId()] = true;
         $include = array_keys($include);
 
         $qb = $this->createQueryBuilder('b');
-        if ($bp_class !== null)
+        if ($bp_class !== null && $conf === null)
             $qb->andWhere('b.blueprint = :bp')->setParameter('bp', $bp_class);
 
         if (!empty($include))
             $qb->andWhere('b.id NOT IN (:existing)')->andWhere('b.parent IN (:existing) OR b.parent IS NULL')->setParameter('existing', $include);
         else $qb->andWhere('b.parent IS NULL');
 
-        $qb->orderBy("b.parent", "ASC")->orderBy("b.orderBy", "ASC");
+        $qb->orderBy("b.parent", "ASC")->addOrderBy("b.orderBy", "ASC");
 
-        return $qb->getQuery()->getResult();
+        $result = $qb->getQuery()->getResult();
+        return ($bp_class !== null && $conf !== null)
+            ? array_filter( $result, fn(BuildingPrototype $p) => $conf->getBuildingRarity( $p ) === $bp_class )
+            : $result;
     }
 
     // /**

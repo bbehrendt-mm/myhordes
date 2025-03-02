@@ -10,7 +10,7 @@
 
 @myhordes-building-complete-text-color: #afacc1;
 
-@myhordes-building-locked-color: #773939;
+@myhordes-building-locked-color: #7c462f;
 @myhordes-building-voted-color: #6B3977;
 
 @myhordes-building-height-root: 29px;
@@ -24,24 +24,24 @@
   background: linear-gradient(90deg, rgba(255,255,255,0) 27%, @row-color 58%);
 }
 
-.b-table() {
+.b-table(@color, @color-odd) {
   &:not(.locked) {
     &:nth-child(2n+0) {
-      background: @myhordes-building-row-color-odd;
+      background: @color-odd;
       &>.cell {
-        background: @myhordes-building-row-color-odd;
+        background: @color-odd;
       }
       .overflowing .extend_resources {
-        .overflow-gradient(@myhordes-building-row-color-odd);
+        .overflow-gradient(@color-odd);
       }
     }
     &:nth-child(2n+1) {
-      background: @myhordes-building-row-color;
+      background: @color;
       &>.cell {
-        background: @myhordes-building-row-color;
+        background: @color;
       }
       .overflowing .extend_resources {
-        .overflow-gradient(@myhordes-building-row-color);
+        .overflow-gradient(@color);
       }
     }
   }
@@ -60,6 +60,14 @@
 }
 
 div.buildings {
+  position: relative;
+  &:before {
+    position: absolute; top: 0; bottom: 0; right: 0; left: calc(41.5% + 3px);
+    content: " ";
+    background: url("../../img/background/constructions_hc_bg.png") repeat, url("../../img/background/constructions_hc_bg2.png") repeat, #5c2b20;
+    z-index: 0;
+  }
+
   margin-top: 0;
 
   &+div.buildings{
@@ -90,8 +98,10 @@ div.buildings {
   }
 
   .building {
-    display: flex;
-    .b-table();
+    display: flex; position: relative;
+    &:not(.hc):not(.locked) { .b-table(@myhordes-building-row-color, @myhordes-building-row-color-odd); }
+    &.hc:not(.locked) { .b-table(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.175)); }
+    &.locked { background: #7b452f }
     &.root > div.cell:first-child>span { font-weight: bold }
     overflow: hidden;
 
@@ -348,6 +358,7 @@ div.buildings {
   }
 
   .buildings_header {
+    position: relative;
     display: flex;
     height: 25px;
     width: 100%;
@@ -437,7 +448,7 @@ div.town-upgrades {
   padding: 0; border: 1px solid @myhordes-smalltext;
 
   &>.row {
-    .b-table();
+    .b-table(@myhordes-building-row-color, @myhordes-building-row-color-odd);
     font-size: 1.2rem;
     strong { font-size: 1.5rem; font-variant: small-caps }
     b { color: @myhordes-smalltext; }
@@ -493,6 +504,8 @@ ul.tabs {
 @media (max-width: (@screen-large-threshold - 1)) {
 
 div.buildings {
+  &:before { left: 0; }
+
   .building {
     .building_info {
       height: unset;

@@ -2302,7 +2302,12 @@
           },
           "rarity": {
             "type": "integer",
-            "description": "Blueprint level (0 if no blueprint, 5 if not unlockable by blueprint)",
+            "description": "Default blueprint level (0 if no blueprint, 5 if not unlockable by blueprint). Field exists for legacy compatibility, consider using rarityCurrent instead. ",
+            "example": 0
+          },
+          "rarityCurrent": {
+            "type": "integer",
+            "description": "Actual blueprint level (0 if no blueprint, 5 if not unlockable by blueprint) with regards to the current town's configuration.",
             "example": 0
           },
           "temporary": {

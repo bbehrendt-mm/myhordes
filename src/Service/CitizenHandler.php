@@ -28,6 +28,7 @@ use App\Entity\Town;
 use App\Entity\Zone;
 use App\Enum\ActionHandler\PointType;
 use App\Enum\Configuration\CitizenProperties;
+use App\Enum\Configuration\TownSetting;
 use App\Enum\EventStages\CitizenValueQuery;
 use App\Enum\Game\CitizenPersistentCache;
 use App\Structures\ItemRequest;
@@ -222,9 +223,9 @@ class CitizenHandler
         $nbComplaint = $this->entity_manager->getRepository(Complaint::class)->countComplaintsFor($citizen, Complaint::SeverityBanish);
 
         $conf = $this->conf->getTownConfiguration( $citizen->getTown() );
-        $complaintNeeded = $conf->get(TownConf::CONF_MODIFIER_COMPLAINTS_SHUN, 8);
-        $complaintNeededKill = $conf->get(TownConf::CONF_MODIFIER_COMPLAINTS_KILL, 6);
-        $shunningEnabled = $conf->get(TownConf::CONF_FEATURE_SHUN, true);
+        $complaintNeeded = $conf->get(TownSetting::OptModifierComplaintsShun);
+        $complaintNeededKill = $conf->get(TownSetting::OptModifierComplaintsKill);
+        $shunningEnabled = $conf->get(TownSetting::OptFeatureShun);
 
         // If the citizen is already shunned and cage/gallows is not built, do nothing
         if ($citizen->getBanished()) {
@@ -378,7 +379,7 @@ class CitizenHandler
 
         if (!$citizen->getRoles()->contains($role)) {
 
-            if ($role->getName() === 'ghoul' && ($this->hasStatusEffect($citizen, 'immune') || $this->conf->getTownConfiguration($citizen->getTown())->get(TownConf::CONF_FEATURE_GHOUL_MODE, 'normal') === 'childtown'))
+            if ($role->getName() === 'ghoul' && ($this->hasStatusEffect($citizen, 'immune') || $this->conf->getTownConfiguration($citizen->getTown())->get(TownSetting::OptFeatureGhoulMode) === 'childtown'))
                 return false;
 
             $citizen->addRole($role);
@@ -729,7 +730,7 @@ class CitizenHandler
 		$chance["tomb"] = ($citizen->getStatus()->contains( $this->entity_manager->getRepository(CitizenStatus::class)->findOneByName( 'tg_tomb' ) ) ? 8 : 0);
 
 		// Hardcore malus
-		$chance["town"] = (int)$config->get(TownConf::CONF_MODIFIER_CAMPING_BONUS, 0);
+		$chance["town"] = (int)$config->get(TownSetting::OptModifierCampingBonus);
 
 		// Zone improvement
 		$chance["zone"] = $zone->getImprovementLevel();
