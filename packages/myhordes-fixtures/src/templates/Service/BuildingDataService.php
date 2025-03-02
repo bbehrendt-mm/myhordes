@@ -589,7 +589,7 @@ class BuildingDataService implements FixtureProcessorInterface {
 
         $container->add()->parentBuilding($item_firework_tube)
             ->icon('small_survarea')->label('Naturbereich der Überlebenskünstler')->description('Ein kleines Stück Paradies, das aus ein paar Grashalmen im Schatten von Dächern und halbierten Dosen besteht, die senkrecht in den Himmel gehoben werden, so eine geheimnisvolle Theorie aus dem Survival-Handbuch der Einsiedler. Angeblich soll dies „die Brise einfangen“ ... ein Rätsel. Aber der Punkt ist, dass man dadurch ein wenig Wasser sammeln kann!')
-            ->isTemporary(0)->defense(0)->ap(30)->blueprintLevel(3)->resources(["ryebag_#00" => 2,"wood2_#00" => 5,"radio_on_#00" => 1,"oilcan_#00" => 2,])->orderBy(4)->commit();
+            ->isTemporary(0)->defense(0)->ap(60)->blueprintLevel(3)->resources(["ryebag_#00" => 2,"wood2_#00" => 5,"radio_on_#00" => 1,"oilcan_#00" => 2,])->orderBy(4)->commit();
 
         $container->add()->parentBuilding($item_bgrenade)
             ->icon('item_boomfruit')->label('Granatwerfer')->description('Ein Mini-Katapult auf der Stadtmauer, garniert mit explosiven Pampelmusen. Alles, was ihr tun müsst, ist warten und schießen! Mit ein wenig extra Arbeit können wir ihn sogar automatisieren und seine Leistung verbessern.')
