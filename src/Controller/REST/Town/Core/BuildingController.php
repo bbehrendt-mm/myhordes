@@ -4,6 +4,7 @@ namespace App\Controller\REST\Town\Core;
 
 use App\Annotations\GateKeeperProfile;
 use App\Controller\CustomAbstractCoreController;
+use App\Controller\REST\Game\DataController;
 use App\Controller\Town\TownController;
 use App\Entity\Building;
 use App\Entity\BuildingVote;
@@ -120,8 +121,12 @@ class BuildingController extends CustomAbstractCoreController
             'dt' => $building->getTempDefenseBonus(),
             'a' => $building->getComplete()
                 ? [$building->getHp(), $building->getPrototype()->getHp()]
-                : [$building->getAp(), $building->getPrototype()->getAp()],
-            ...($voted ? ['v' => true] : [])
+                : [$building->getAp(), $building->getPrototypeAP()],
+            ...($voted ? ['v' => true] : []),
+            ...($building->getDifficultyLevel() !== 0 ? [
+                'dl' => $building->getDifficultyLevel(),
+                'r' => DataController::renderItemGroup( $building->getPrototypeResources() )
+            ] : []),
         ];
     }
 
@@ -213,8 +218,9 @@ class BuildingController extends CustomAbstractCoreController
 
         // Get all resources needed for this building
         $res = $items = [];
-        if (!$building->getComplete() && $building->getPrototype()->getResources())
-            foreach ($building->getPrototype()->getResources()->getEntries() as $entry)
+        $resources = $building->getPrototypeResources();
+        if (!$building->getComplete() && $resources)
+            foreach ($resources->getEntries() as $entry)
                 if (!isset($res[ $entry->getPrototype()->getName() ]))
                     $res[ $entry->getPrototype()->getName() ] = new ItemRequest( $entry->getPrototype()->getName(), $entry->getChance(), false, false, false );
                 else $res[ $entry->getPrototype()->getName() ]->addCount( $entry->getChance() );
@@ -275,7 +281,7 @@ class BuildingController extends CustomAbstractCoreController
                 $res[$item->getPrototype()->getName()]->addCount(-$cc);
             }
 
-            $em->persist( $log->constructionsBuildingComplete( $citizen, $building->getPrototype() ) );
+            $em->persist( $log->constructionsBuildingComplete( $citizen, $building->getPrototype(), $resources ) );
             $events->buildingConstruction( $building, $citizen );
             $votes = $building->getBuildingVotes();
             foreach ($votes as $vote) {

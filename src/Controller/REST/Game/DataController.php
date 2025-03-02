@@ -82,7 +82,7 @@ class DataController extends CustomAbstractCoreController
         ]);
     }
 
-    private static function renderItemGroup(?ItemGroup $g): array {
+    public static function renderItemGroup(?ItemGroup $g): array {
         $data = [];
         foreach (($g?->getEntries() ?? []) as $entry) {
             $p = $entry->getPrototype()->getId();

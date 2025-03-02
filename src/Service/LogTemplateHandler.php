@@ -694,8 +694,26 @@ class LogTemplateHandler
             ->setCitizen( $citizen );
     }
 
-    public function constructionsBuildingComplete( Citizen $citizen, BuildingPrototype $proto ): TownLogEntry {
-        $list = $proto->getResources() ? $proto->getResources()->getEntries()->getValues() : [];
+    public function constructionsImprovedSite( Citizen $citizen, BuildingPrototype $proto ): TownLogEntry {
+        if ($proto->getParent()){
+            $variables = array('citizen' => $citizen->getId(), 'plan' => $proto->getId(), 'parent' => $proto->getParent()->getId());
+            $template = $this->entity_manager->getRepository(LogEntryTemplate::class)->findOneBy(['name' => 'constructionsImprovedSiteDepend']);
+        }
+        else {
+            $variables = array('citizen' => $citizen->getId(), 'plan' => $proto->getId());
+            $template = $this->entity_manager->getRepository(LogEntryTemplate::class)->findOneBy(['name' => 'constructionsImprovedSite']);
+        }
+        return (new TownLogEntry())
+            ->setLogEntryTemplate($template)
+            ->setVariables($variables)
+            ->setTown( $citizen->getTown() )
+            ->setDay( $citizen->getTown()->getDay() )
+            ->setTimestamp( new DateTime('now') )
+            ->setCitizen( $citizen );
+    }
+
+    public function constructionsBuildingComplete( Citizen $citizen, BuildingPrototype $proto, ?ItemGroup $resources = null ): TownLogEntry {
+        $list = ($resources ?? $proto->getResources())?->getEntries()?->getValues() ?? [];
         if (!empty($list)){
             $varlist = array_map( function(ItemGroupEntry $e) { return array('id' => $e->getPrototype()->getId(), 'count' => $e->getChance()); }, $list );
 

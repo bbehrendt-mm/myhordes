@@ -751,13 +751,16 @@ class BuildingDataService implements FixtureProcessorInterface {
 
         $container->add()
             ->icon('small_spa4souls')->label('Hammam')->description('Mit einer solchen Erweiterung der Seelenreinigungsquelle haben es die Seelen noch eiliger, ihn zu erreichen. Ihr könnt sicher sein, dass sie von nun an näher bei euch auftauchen werden.')
-            ->isTemporary(0)->defense(20)->ap(20)->health(20)->blueprintLevel(2)->resources(["wood2_#00" => 2,"plate_#00" => 2,])->orderBy(0)->commit();
+            ->isTemporary(0)->defense(20)
+            ->ap(20)->health(20)->resources(["wood2_#00" => 2,"plate_#00" => 2,])
+            ->adjustForHardMode(null, ["wood2_#00" => 8,"plate_#00" => 6,])
+            ->blueprintLevel(2)->orderBy(0)->commit();
 
         $container->add()->parentBuilding($small_gather)
             ->icon('small_gallery')->label('Buddelgruben')->description('Seitengänge, die Buddler direkt vom Großen Grube aus in die Wüste treiben, um noch nie zuvor ausgebeutete Bereiche zu erkunden. Hoffentlich finden sie dort einige interessante Dinge!')
             ->isTemporary(0)->defense(0)
             ->ap(30)->resources(["explo_#00" => 1, "wood_beam_#00" => 3, "deto_#00" => 1,])
-            ->withHardMode(null, ["explo_#00" => 3, "wood_beam_#00" => 9, "deto_#00" => 3,])
+            ->adjustForHardMode(null, ["explo_#00" => 3, "wood_beam_#00" => 9, "deto_#00" => 3,])
             ->health(30)->blueprintLevel(3)->orderBy(3)->commit();
 
         $container->add()->parentBuilding($item_firework_tube)
@@ -864,7 +867,10 @@ class BuildingDataService implements FixtureProcessorInterface {
 
         $container->add()->parentBuilding($small_spa4souls)
             ->icon('small_infirmary')->label('Krankenstation')->description('Egal ob kleines Wehwehchen oder irreparables Trauma - die Krankenstation empfängt dich mit offenen Armen. Zumindst solange du noch imstande bist, dich selbst zu verarzten, denn diese Einrichtung kommt ganz ohne medizinisches Personal daher.')
-            ->isTemporary(0)->defense(0)->ap(40)->health(40)->blueprintLevel(3)->resources(["pharma_#00" => 6,"disinfect_#00" => 1,"wood_beam_#00" => 5,"metal_beam_#00" => 5,])->orderBy(3)->commit();
+            ->isTemporary(0)->defense(0)
+            ->ap(40)->health(40)->resources(["pharma_#00" => 6,"disinfect_#00" => 1,"wood_beam_#00" => 5,"metal_beam_#00" => 5,])
+            ->adjustForHardMode(null, ["pharma_#00" => 24,"disinfect_#00" => 3,"wood_beam_#00" => 15,"metal_beam_#00" => 15,])
+            ->blueprintLevel(3)->orderBy(3)->commit();
 
 
         $container->add()->parentBuilding($small_spa4souls)
@@ -885,11 +891,17 @@ class BuildingDataService implements FixtureProcessorInterface {
 
         $container->add()->parentBuilding($small_spa4souls)
             ->icon('small_thermal')->label('Blaugoldige Thermalbäder')->description('Die kolossale Menge an Wasser, die für den Bau dieses Gebäudes verbraucht wurde, kann nicht mehr konsumiert oder gegen Zombies eingesetzt werden. Während du dich fragst, was dich dazu gebracht hat, eine so kostbare Ressource zu verschwenden, bemerkst du die in goldenen Buchstaben eingravierte Inschrift auf dem Eingangsbogen: "Non est certamen". Dieses Wunderwerk strahlt im Glanze seiner Nutzlosigkeit: Seine Errichtung bringt allen Bürgern der Stadt eine seltene Auszeichnung ein.')
-            ->isImpervious(true)->isTemporary(0)->defense(0)->ap(300)->health(300)->blueprintLevel(4)->resources(["water_#00" => 100,"metal_beam_#00" => 8,"tube_#00" => 6,"wood_beam_#00" => 6,"concrete_wall_#00" => 2,"fence_#00" => 1,"water_cleaner_#00" => 4,])->orderBy(6)->commit();
+            ->isImpervious(true)->isTemporary(0)->defense(0)
+            ->ap(300)->health(300)->resources(["water_#00" => 100,"metal_beam_#00" => 8,"tube_#00" => 6,"wood_beam_#00" => 6,"concrete_wall_#00" => 2,"fence_#00" => 1,"water_cleaner_#00" => 4,])
+            ->adjustForHardMode(null, ["water_#00" => 250,"metal_beam_#00" => 10,"tube_#00" => 10,"wood_beam_#00" => 10, "concrete_wall_#00" => 5,"fence_#00" => 3,"water_cleaner_#00" => 5,])
+            ->blueprintLevel(4)->orderBy(6)->commit();
 
         $container->add()->parentBuilding($small_spa4souls)
             ->icon('small_crow')->label('Krähenstatue')->description('Huldigt den Raben! Gelobt sei deine Milde und deine erhabene Austrahlung! Befreie uns vom Spam und vergib uns unsere Trollenbeiträge so wie auch wir vergeben anderen Trollen. Dieses Wunderwerk strahlt im Glanze seiner Nutzlosigkeit: Seine Errichtung bringt allen Bürgern der Stadt eine seltene Auszeichnung ein.')
-            ->isImpervious(true)->isTemporary(0)->defense(0)->ap(300)->health(0)->blueprintLevel(4)->resources(["hmeat_#00" => 3,"wood_beam_#00" => 35,])->orderBy(5)->commit();
+            ->isImpervious(true)->isTemporary(0)->defense(0)
+            ->ap(300)->health(0)->resources(["hmeat_#00" => 3,"wood_beam_#00" => 35,])
+            ->adjustForHardMode(null, ["hmeat_#00" => 10,"wood_beam_#00" => 80,])
+            ->blueprintLevel(4)->orderBy(5)->commit();
 
         $container->add()->parentBuilding($small_spa4souls)
             ->icon('small_vaudoudoll')->label('Voodoo-Puppe')->description('Ein über 2 Meter hoher, schimmliger Wollballen, über und über mit Stricken und Nadeln bedeckt. In den mächtigen Händen des Schamanen wird dieses *Ding* zu einem XXL-Püppchen, das etliche Zombies niederstreckt, ehe es wieder eine unförmige, unbewegliche Masse wird.')

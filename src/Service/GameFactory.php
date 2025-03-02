@@ -516,7 +516,7 @@ class GameFactory
         if ($bb_override = $this->conf->getGlobalConf()->getBlackboardOverrideFor( $townSetup->language ))
             $town->setWordsOfHeroes( $bb_override );
 
-        foreach ($this->entity_manager->getRepository(BuildingPrototype::class)->findProspectivePrototypes($town, 0) as $prototype)
+        foreach ($this->entity_manager->getRepository(BuildingPrototype::class)->findProspectivePrototypes($town, $conf, 0) as $prototype)
             if (!in_array($prototype->getName(), $conf->get(TownSetting::DisabledBuildings))) {
                 $this->town_handler->addBuilding($town, $prototype);
                 $this->gps->recordBuildingDiscovered( $prototype, $town, null, 'always' );

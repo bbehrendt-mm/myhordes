@@ -178,6 +178,7 @@ enum TownSetting: string implements Configuration
     case OptFeatureGuideEnabled    = 'spiritual_guide.enabled';
     case OptFeatureGuideSpLimit   = 'spiritual_guide.sp_limit';
     case OptFeatureGuideCtcLimit  = 'spiritual_guide.citizen';
+    case OptFeatureBlueprintMode  = 'features.blueprint_mode';
     //</editor-fold>
 
     //<editor-fold desc="Town Modifiers">
@@ -242,6 +243,7 @@ enum TownSetting: string implements Configuration
     case OptModifierOverrideItemGroup  = 'overrides.item_groups';
     case OptModifierOverrideNamedDrops = 'overrides.named_drops';
     case OptModifierOverrideBuildingRarity = 'overrides.building_rarity';
+    case OptModifierBuildingDifficulty = 'modifiers.building_difficulty';
 
     //</editor-fold>
 
@@ -386,7 +388,8 @@ enum TownSetting: string implements Configuration
             self::OptFeatureNoTeams,
             self::OptFeatureGuideEnabled,
             self::OptFeatureGuideSpLimit,
-            self::OptFeatureGuideCtcLimit => self::Section_Opts_Features,
+            self::OptFeatureGuideCtcLimit,
+            self::OptFeatureBlueprintMode => self::Section_Opts_Features,
 
             self::OptModifierComplaintsShun,
             self::OptModifierComplaintsKill,
@@ -443,6 +446,7 @@ enum TownSetting: string implements Configuration
             self::OptModifierOverrideItemGroup,
             self::OptModifierOverrideNamedDrops,
             self::OptModifierOverrideBuildingRarity,
+            self::OptModifierBuildingDifficulty
                 => self::Section_Opts_Modifiers,
 
             default => null
@@ -463,7 +467,7 @@ enum TownSetting: string implements Configuration
         return $this->value;
     }
 
-    public function default(): null|bool|int|float|string
+    public function default(): null|bool|int|float|string|array
     {
         /** @noinspection PhpDuplicateMatchArmBodyInspection */
         return match ($this) {
@@ -570,6 +574,7 @@ enum TownSetting: string implements Configuration
             self::OptFeatureGuideEnabled => false,
             self::OptFeatureGuideSpLimit => 100,
             self::OptFeatureGuideCtcLimit => 0.5,
+            self::OptFeatureBlueprintMode => 'unlock',
 
             self::OptModifierComplaintsShun => 8,
             self::OptModifierComplaintsKill => 6,
@@ -626,6 +631,7 @@ enum TownSetting: string implements Configuration
             self::OptModifierOverrideItemGroup => [],
             self::OptModifierOverrideNamedDrops => [],
             self::OptModifierOverrideBuildingRarity => [],
+            self::OptModifierBuildingDifficulty => 0,
 
             default => null,
         };

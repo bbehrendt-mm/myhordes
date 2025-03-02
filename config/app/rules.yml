@@ -173,6 +173,7 @@ parameters:
           max_def: 150
         strange_soil: false
         soul_generation_coef: 1.00
+        building_difficulty: 0
 
       features:
         camping: true
@@ -201,6 +202,7 @@ parameters:
         survival_picto: null
         free_for_all: false
         free_from_teams: false
+        blueprint_mode: 'unlock'
 
       disabled_jobs: ['shaman']
       disabled_roles: []
@@ -304,6 +306,7 @@ parameters:
           from_ghoul: 1
           from_last_death_factor: 2
         soul_generation_coef: 1.75
+        building_difficulty: -1
 
       features:
         last_death:
@@ -311,6 +314,7 @@ parameters:
         last_death_day: 6
         survival_picto: 'r_pande_#00'
         ghoul_mode: airborne
+        blueprint_mode: 'improve'
 
       ruins: 25
       explorable_ruins: 2
@@ -411,7 +415,6 @@ parameters:
 
       overrides:
         building_rarity:
-          '*': 5
           small_dig_#01: 1
           small_trap_#00: 1
           small_trap_#02: 1
