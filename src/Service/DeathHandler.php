@@ -89,6 +89,9 @@ class DeathHandler
             if(!$item->getEssential() || $item->getPrototype()->isPersistentEssential())
                 $this->inventory_handler->forceMoveItem($floor, $item->setEssential(false));
 
+        foreach ($citizen->getHome()->getChest()->getItems() as $item)
+            if ($item->getHidden())
+                $this->entity_manager->persist($item->setHidden(false));
 
         foreach ($citizen->getDigTimers() as $dt)
             $remove[] = $dt;
