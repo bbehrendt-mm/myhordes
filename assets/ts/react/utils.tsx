@@ -29,10 +29,9 @@ export function ItemTooltip(props: {
     children?: any
 }) {
     return <Tooltip additionalClasses="item">
-        <h1>
+        <h1 className="flex right large-gap">
             {props.data?.name ?? '???'}
             {props.addendum && <span className={props.addendum.className}>{props.addendum.text}</span>}
-            &nbsp;
             <img src={props.data?.icon ?? ''} alt={props.data?.name ?? '...'}/>
         </h1>
         { props.data?.desc ?? '???' }
