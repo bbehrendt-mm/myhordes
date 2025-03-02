@@ -100,7 +100,7 @@ class SoulHooks extends HooksCore {
             'r_door_#00'   =>  $pt_5,
             'r_explo2_#00' =>  $pt_5,
             'r_ebuild_#00' =>  $pt_5,
-            'r_chstxl_#00' =>  $pt_5,
+            'r_chstxl_#00' =>  [ 1 => 5, 2 => 2, 3 => 2, 5 => 2 ],
 
             'r_dnucl_#00'  =>  $pt_7,
             'r_watgun_#00' =>  $pt_7,
