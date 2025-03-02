@@ -74,6 +74,13 @@ class ActionEffectProvider
 
         //<editor-fold desc="TownEffects">
         $effects_container->add()->identifier('town_well_2')->add((new TownEffect())->well(2))->commit();
+        $effects_container->add()->identifier('town_well_3')->add((new TownEffect())->well(3))->commit();
+        $effects_container->add()->identifier('town_well_4')->add((new TownEffect())->well(4))->commit();
+        $effects_container->add()->identifier('town_well_5')->add((new TownEffect())->well(5))->commit();
+        $effects_container->add()->identifier('town_well_6')->add((new TownEffect())->well(6))->commit();
+        $effects_container->add()->identifier('town_well_7')->add((new TownEffect())->well(7))->commit();
+        $effects_container->add()->identifier('town_well_8')->add((new TownEffect())->well(8))->commit();
+        $effects_container->add()->identifier('town_well_9')->add((new TownEffect())->well(9))->commit();
         $effects_container->add()->identifier('town_well_1_3')->add((new TownEffect())->well(1,3))->commit();
         $effects_container->add()->identifier('town_well_4_9')->add((new TownEffect())->well(4,9))->commit();
         $effects_container->add()->identifier('town_sdef_5')->add((new TownEffect())->soulDefense(5))->commit();
@@ -384,9 +391,14 @@ class ActionEffectProvider
         $effects_container->add()->identifier('spawn_potion')->add((new ItemEffect())->spawnAt(ItemDropTarget::DropTargetFloorOnly)
                                                                        ->addSpawn('potion_#00')
         )->commit();
-
+        $effects_container->add()->identifier('spawn_1_watercup')->add((new ItemEffect())->spawnAt(ItemDropTarget::DropTargetFloorOnly)
+                                                                           ->addSpawn('water_cup_#00')
+        )->commit();
         $effects_container->add()->identifier('spawn_2_watercup')->add((new ItemEffect())->spawnAt(ItemDropTarget::DropTargetFloorOnly)
                                                                            ->addSpawn('water_cup_#00', count: 2)
+        )->commit();
+        $effects_container->add()->identifier('spawn_1_water')->add((new ItemEffect())->spawnAt(ItemDropTarget::DropTargetFloorOnly)
+                                                                        ->addSpawn('water_#00')
         )->commit();
         $effects_container->add()->identifier('spawn_2_water')->add((new ItemEffect())->spawnAt(ItemDropTarget::DropTargetFloorOnly)
                                                                         ->addSpawn('water_#00', count: 2)

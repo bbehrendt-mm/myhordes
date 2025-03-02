@@ -384,21 +384,35 @@ class ActionDataService implements FixtureProcessorInterface {
 
                 'vibrator' => [ 'label' => 'Verwenden', 'meta' => [ 'must_be_inside', 'must_be_terrorized' ], 'result' => [ 'unterrorize', 'picto_masochism', 'morph_vibr_empty' ], 'message' => 'Du machst es dir daheim gemütlich und entspannst dich... doch dann erlebst du ein böse Überraschung: Dieses Ding ist unglaublich schmerzhaft! Du versuchst es weiter bis du Stück für Stück Gefallen daran findest. Die nach wenige Minuten einsetzende Wirkung ist berauschend! Du schwitzt und zitterst und ein wohlig-warmes Gefühl breitet sich in dir aus...Die Batterie ist komplett leer.' ],
 
-                'watercup_1' => [ 'label' => 'Reinigen (Wasser)', 'meta' => [ 'must_be_inside', 'must_have_micropur_in', 'must_not_have_purifier', 'must_not_have_filter', 'must_not_be_banished' ], 'result' => [ 'consume_micropur', 'consume_item', 'picto_ban_emanc', 'spawn_2_watercup' ], 'message_key' => 'item_clean_watercup' ],
-                'watercup_2' => [ 'label' => 'Reinigen (Wasser)', 'meta' => [ 'must_be_outside_or_exploring', 'must_have_micropur' ], 'result' => [ 'consume_micropur', 'consume_item', 'picto_ban_emanc', 'spawn_2_watercup' ], 'message_key' => 'item_clean_watercup' ],
+                'watercup_1' => [ 'label' => 'Reinigen (Wasser)', 'meta' => [ 'must_be_inside', 'must_have_micropur_in', 'must_not_have_purifier', 'must_not_have_filter', 'must_not_be_banished' ], 'result' => [ 'consume_micropur', 'consume_item', 'picto_ban_emanc', 'spawn_1_watercup' ], 'message_key' => 'item_clean_watercup' ],
+                'watercup_2' => [ 'label' => 'Reinigen (Wasser)', 'meta' => [ 'must_be_outside_or_exploring', 'must_have_micropur' ], 'result' => [ 'consume_micropur', 'consume_item', 'picto_ban_emanc', 'spawn_1_watercup' ], 'message_key' => 'item_clean_watercup' ],
                 'watercup_3' => [ 'label' => 'In den Brunnen schütten', 'meta' => [ 'must_be_inside', 'must_have_purifier', 'must_not_be_banished' ], 'result' => [ 'consume_item', 'town_well_2' ], 'message_key' => 'water_to_well' ],
                 'jerrycan_1' => [ 'label' => 'Reinigen (Wasser)', 'meta' => [ 'must_be_inside', 'must_have_micropur_in', 'must_not_have_purifier', 'must_not_be_banished' ], 'result' => [ 'consume_micropur', 'consume_item', ['group' => [
-                    [ 'spawn_2_water', 1 ],
-                    [ 'spawn_3_water', 1 ]
+                    [ 'spawn_2_water', 75 ],
+                    [ 'spawn_3_water', 25 ] //jerrycan + tablet inside town
                 ]] ], 'message_key' => 'item_clean' ],
-                'jerrycan_2' => [ 'label' => 'In den Brunnen schütten', 'meta' => [ 'must_be_inside', 'must_have_purifier', 'must_not_have_filter', 'must_not_be_banished' ], 'result' => [ 'consume_item', 'town_well_1_3' ], 'message_key' => 'water_to_well' ],
-                'jerrycan_3' => [ 'label' => 'In den Brunnen schütten', 'meta' => [ 'must_be_inside', 'must_have_filter', 'must_not_be_banished' ], 'result' => [ 'consume_item', 'town_well_4_9' ], 'message_key' => 'water_to_well' ],
+                'jerrycan_2' => [ 'label' => 'In den Brunnen schütten', 'meta' => [ 'must_be_inside', 'must_have_purifier', 'must_not_have_filter', 'must_not_be_banished' ], 'result' => [ 'consume_item', ['group' => [
+                    [ 'town_well_2', 40 ],
+                    [ 'town_well_3', 35 ],
+                    [ 'town_well_4', 25 ] //jerrycan with purifier
+                ]] ], 'message_key' => 'water_to_well' ],
+                'jerrycan_3' => [ 'label' => 'In den Brunnen schütten', 'meta' => [ 'must_be_inside', 'must_have_filter', 'must_not_be_banished' ], 'result' => [ 'consume_item', ['group' => [
+                    [ 'town_well_3', 5 ],
+                    [ 'town_well_4', 15 ],
+                    [ 'town_well_5', 20 ],
+                    [ 'town_well_6', 20 ],
+                    [ 'town_well_7', 20 ],
+                    [ 'town_well_8', 15 ],
+                    [ 'town_well_9', 5 ] //jerrycan with filter
+                ]] ], 'message_key' => 'water_to_well' ],
+                'jerrycan_4' => [ 'label' => 'Reinigen (Wasser)', 'meta' => [ 'must_be_outside', 'must_have_micropur_in', 'must_not_have_purifier', 'must_not_be_banished' ], 'result' => [ 'consume_micropur', 'consume_item', 'spawn_1_water', 'minus_1ap' ], 'message_key' => 'item_clean' ], //jerrycan + tablet outside town
 
-                'watercup_1b' => [ 'label' => 'Reinigen (Wasser)', 'meta' => [ 'must_be_inside',  'must_have_micropur_in', 'must_be_banished' ], 'result' => [ 'consume_micropur', 'consume_item', 'picto_ban_emanc', 'spawn_2_watercup' ], 'message_key' => 'item_clean_watercup' ],
+                'watercup_1b' => [ 'label' => 'Reinigen (Wasser)', 'meta' => [ 'must_have_micropur_in', 'must_be_banished' ], 'result' => [ 'consume_micropur', 'consume_item', 'picto_ban_emanc', 'spawn_1_watercup' ], 'message_key' => 'item_clean_watercup' ],
                 'jerrycan_1b' => [ 'label' => 'Reinigen (Wasser)', 'meta' => [ 'must_be_inside', 'must_have_micropur_in', 'must_be_banished' ], 'result' => [ 'consume_micropur', 'consume_item', ['group' => [
-                    [ 'spawn_2_water', 1 ],
-                    [ 'spawn_3_water', 1 ]
+                    [ 'spawn_2_water', 75 ],
+                    [ 'spawn_3_water', 25 ] // (shunned) jerrycan + tablet inside town
                 ]] ], 'message_key' => 'item_clean' ],
+                'jerrycan_4b' => [ 'label' => 'Reinigen (Wasser)', 'meta' => [ 'must_be_outside', 'must_have_micropur_in', 'must_be_banished' ], 'result' => [ 'consume_micropur', 'consume_item', 'spawn_1_water', 'minus_1ap'], 'message_key' => 'item_clean' ], //(shunned) jerrycan + tablet outside town
 
                 'home_def_plus'    => [ 'label' => 'Aufstellen', 'meta' => [ 'must_be_inside' ], 'result' => [ 'consume_item', 'picto_home_upgrade', 'home_def_1'], 'message' => 'Sorgfältig befestigst du bei dir daheim ein(e) {item}. So und das hält jetzt, so viel steht schon mal fest.{hr}Dieser Gegenstand gibt deinem Haus permament <strong>{home_defense} zusätzliche Verteidigungspunkt(e).</strong>'],
                 'home_store_plus'  => [ 'label' => 'Aufstellen', 'meta' => [ 'must_be_inside' ], 'result' => [ 'consume_item', 'picto_home_upgrade', 'home_store_1'], 'message' => 'Du stellst den(die) {item} bei dir daheim auf. Zugegeben, es sieht nicht gerade ästhetisch aus, aber mal ganz ehrlich: Wen kümmert das?{hr}Dieser Gegenstand erweitert deine Truhe dauerhaft um soviele freie Plätze: <strong>{home_storage}</strong>.'],
@@ -910,7 +924,7 @@ class ActionDataService implements FixtureProcessorInterface {
                 'bandage_#00'    => ['bandage'],
                 'sport_elec_#00' => ['emt'],
 
-                'jerrycan_#00'       => ['jerrycan_1', 'jerrycan_1b', 'jerrycan_2', 'jerrycan_3'],
+                'jerrycan_#00'       => ['jerrycan_1', 'jerrycan_1b', 'jerrycan_2', 'jerrycan_3', 'jerrycan_4', 'jerrycan_4b'],
                 'water_cup_part_#00' => ['watercup_1', 'watercup_1b', 'watercup_2', 'watercup_3'],
 
                 'cyanure_#00' => ['cyanide'],
