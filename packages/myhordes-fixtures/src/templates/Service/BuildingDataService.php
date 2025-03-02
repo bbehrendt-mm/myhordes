@@ -614,7 +614,7 @@ class BuildingDataService implements FixtureProcessorInterface {
 
         $container->add()->parentBuilding($item_rp_book2)
             ->icon('small_techtable')->label('Techniker-Werkstatt')->description('Mit einem eigenen Arbeitsplatz sind Techniker in der Lage, McGyver zu spielen und aus allem, was herumliegt, nützliches Zeug zu bauen.')
-            ->isTemporary(0)->defense(0)->ap(60)->health(60)->blueprintLevel(3)->resources(["wood_beam_#00" => 5,"metal_beam_#00" => 10,"plate_#00" => 1,"wire_#00" => 2,"ryebag_#00" => 1,"lens_#00" => 1,"coffee_machine_#00" => 1,])->orderBy(2)->commit($small_techtable);
+            ->isTemporary(0)->defense(0)->ap(60)->health(60)->blueprintLevel(3)->resources(["wood_beam_#00" => 5,"metal_beam_#00" => 10,"plate_#00" => 1,"wire_#00" => 2,"ryebag_#00" => 1,"lens_#00" => 1,"meca_parts_#00" => 2, "drug_hero_#00" => 1,])->orderBy(2)->commit($small_techtable);
 
         $container->add()->parentBuilding($item_meat)
             ->icon('item_pet_pig')->label('Schweinestall')->description('Seit ihr erfolgreich mit der Schweinezucht begonnen habt, kommt jeden Morgen frisches Fleisch in der Bank an. Ihr solltet nur über die Arbeitshygiene niemals nachdenken... ')
