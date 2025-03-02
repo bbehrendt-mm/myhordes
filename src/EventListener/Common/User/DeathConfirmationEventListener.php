@@ -230,7 +230,7 @@ final class DeathConfirmationEventListener implements ServiceSubscriberInterface
             'r_door_#00'   =>  [ 'hxp_picto_first', true, 'by_day' => null, 'by_count' => $pt_5 ],
             'r_explo2_#00' =>  [ 'hxp_picto_first', true, 'by_day' => null, 'by_count' => $pt_5 ],
             'r_ebuild_#00' =>  [ 'hxp_picto_first', true, 'by_day' => null, 'by_count' => $pt_5 ],
-            'r_chstxl_#00' =>  [ 'hxp_picto_first', true, 'by_day' => null, 'by_count' => $pt_5 ],
+            'r_chstxl_#00' =>  [ 'hxp_picto_first', true, 'by_day' => null, 'by_count' => [ 1 => 5, 2 => 2, 3 => 2, 5 => 2 ] ],
 
             'r_dnucl_#00'  =>  [ 'hxp_picto_first', true, 'by_day' => null, 'by_count' => $pt_7 ],
             'r_watgun_#00' =>  [ 'hxp_picto_first', true, 'by_day' => null, 'by_count' => $pt_7 ],
