@@ -412,7 +412,9 @@ const BankInventory = (props: InventoryPropsBank) => {
 
     return <>
         <p>
-            <input type="search" placeholder={globals.strings.actions.search} list={`bk-list-${datalistUuid.current}`} value={searchString} onChange={e => setSearchString(e.target.value)} />
+            <input type="search" placeholder={globals.strings.actions.search} list={`bk-list-${datalistUuid.current}`} value={searchString} onChange={
+                e => setSearchString(e.target.value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase())
+            } />
             <datalist id={`bk-list-${datalistUuid.current}`}>
                 { Object.values( vaultData ?? {} ).map(v => <option key={v.id} value={v.name}/>) }
             </datalist>
@@ -422,7 +424,7 @@ const BankInventory = (props: InventoryPropsBank) => {
                 { showCategories && <li className="category">{category_map[c.id][0]}</li> }
                 { c.items.sort(sort).map(i => <React.Fragment key={i.i}>
                     <SingleItem
-                        blur={ searchString === '' ? null : !(vaultData ?? {})[i.p]?.name?.toLowerCase()?.includes( searchString.toLowerCase() ) }
+                        blur={ searchString === '' ? null : !(vaultData ?? {})[i.p]?.name?.normalize("NFD").replace(/[\u0300-\u036f]/g, "")?.toLowerCase()?.includes( searchString.toLowerCase() ) }
                         item={i} mods={props.inventory.mods} data={(vaultData ?? {})[i.p] ?? null}
                         locked={props.locked || i.e} onClick={props.onItemClick}
                     />
