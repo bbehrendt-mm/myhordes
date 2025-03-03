@@ -3196,3 +3196,5 @@ Tierklinik: crwdns210946:0crwdne210946:0
 'Du hast {item_list} in der Werkstatt geöffnet und erhälst {item}.<hr />Du hast dafür <strong>{ap} Aktionspunkt(e)</strong> verbraucht.': 'crwdns211683:0{item_list}crwdnd211683:0{item}crwdnd211683:0{ap}crwdne211683:0'
 'Du hast {item_list} in der Werkstatt zu {item} zerlegt.<hr />Du hast dafür <strong>{ap} Aktionspunkt(e)</strong> verbraucht.': 'crwdns211685:0{item_list}crwdnd211685:0{item}crwdnd211685:0{ap}crwdne211685:0'
 'Die ersten 10 Tage in der Pandämonium-Stadt "{town}" überlebt.': 'crwdns211687:0{town}crwdne211687:0'
+'{citizen} hat einen verbesserten Bauplan für {plan} gefunden - damit werden wir zahlreiche Resourcen beim Bau einsparen. Hurra!': 'crwdns211693:0{citizen}crwdnd211693:0{plan}crwdne211693:0'
+'{citizen} hat einen verbesserten Bauplan für {plan} gefunden - damit werden wir zahlreiche Resourcen beim Bau einsparen... Zumindest, wenn wir vorher {parent} bauen. Hurra!': 'crwdns211695:0{citizen}crwdnd211695:0{plan}crwdnd211695:0{parent}crwdne211695:0'
