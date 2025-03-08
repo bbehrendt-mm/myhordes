@@ -194,12 +194,16 @@ class BuildingController extends CustomAbstractCoreController
         $workshopBonus = $events->queryTownParameter( $town, BuildingValueQuery::ConstructionAPRatio );
         $hpToAp = $events->queryTownParameter( $town, BuildingValueQuery::RepairAPRatio );
 
+        // Rarity
+        $rarity = $this->conf->getTownConfiguration($town)->getBuildingRarity( $building->getPrototype() );
+        $proto_ap = $building->getPrototypeAP( $rarity );
+
         // Remember if the building has already been completed (i.e. this is a repair action)
         $was_completed = $building->getComplete();
 
         // Check out how much AP is missing to complete the building; restrict invested AP to not exceed this
         if (!$was_completed) {
-            $missing_ap = ceil( (round($building->getPrototype()->getAp()*$workshopBonus) - $building->getAp()) * ( $slave_bonus ? (2.0/3.0) : 1 )) ;
+            $missing_ap = ceil( (round($proto_ap * $workshopBonus) - $building->getAp()) * ( $slave_bonus ? (2.0/3.0) : 1 )) ;
         } else {
             $missing_ap = ceil(($building->getPrototype()->getHp() - $building->getHp()) / $hpToAp);
         }
@@ -253,7 +257,7 @@ class BuildingController extends CustomAbstractCoreController
 
         if($missing_ap <= 0 || $missing_ap - $ap <= 0){
             // Missing ap == 0, the building has been completed by the workshop upgrade.
-            $building->setAp($building->getPrototype()->getAp());
+            $building->setAp($proto_ap);
         } else {
             $building->setAp($building->getAp() + $ap_effect);
         }
@@ -263,7 +267,7 @@ class BuildingController extends CustomAbstractCoreController
         // Notice
         $plan = "<strong>{$this->translator->trans($building->getPrototype()->getLabel(), [], 'buildings')}</strong>";
         if(!$was_completed) {
-            if($building->getAp() < $building->getPrototype()->getAp()){
+            if($building->getAp() < $proto_ap){
                 $messages[] = $this->translator->trans("Du hast am Bauprojekt {plan} mitgeholfen.", ["{plan}" => $plan], 'game');
             } else {
                 $messages[] = $this->translator->trans("Hurra! Folgendes Gebäude wurde fertiggestellt: {plan}!", ['{plan}' => $plan], 'game');
@@ -271,7 +275,7 @@ class BuildingController extends CustomAbstractCoreController
         } else $messages[] = $this->translator->trans("Du hast bei der Reparatur des Gebäudes {plan} mitgeholfen.", ["{plan}" => $plan], 'game');
 
         // If the building was not previously completed but reached 100%, complete the building and trigger the completion handler
-        $building->setComplete( $building->getComplete() || $building->getAp() >= $building->getPrototype()->getAp() );
+        $building->setComplete( $building->getComplete() || $building->getAp() >= $proto_ap );
 
         if (!$was_completed && $building->getComplete()) {
             // Remove resources, create a log entry, trigger

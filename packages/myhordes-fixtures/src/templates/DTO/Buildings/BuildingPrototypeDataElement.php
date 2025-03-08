@@ -57,6 +57,7 @@ use MyHordes\Fixtures\DTO\LabeledIconElementInterface;
  * @property bool $hasHardMode
  * @method self hasHardMode(bool $v)
  * @method self adjustForHardMode(?int $ap, ?array $resources, int $easyAp = null, ?array $easyResources = null)
+ * @method self autoEasyMode()
  *
  * @method BuildingPrototypeDataContainer commit(string &$id = null)
  * @method BuildingPrototypeDataContainer discard()
@@ -141,15 +142,24 @@ class BuildingPrototypeDataElement extends Element implements LabeledIconElement
             [$ap, $resources] = $arguments;
             $this->hasHardMode = true;
             $this->hardAp = $ap ?? $this->ap;
-            $this->easyAp = $this->ap;
             $this->hardResources = $this->resources;
+            foreach ($resources ?? [] as $k => $v) $this->hardResource($k, $v);
+            return $this;
+        } elseif ($name === 'adjustForHardMode' && count($arguments) === 4) {
+            [$ap, $resources, $easyAp, $easyResources] = $arguments;
+            $this->hasHardMode = true;
+            $this->hardAp = $ap ?? $this->ap;
+            $this->easyAp = $easyAp ?? $this->ap;
+            $this->hardResources = $this->easyResources = $this->resources;
+            foreach ($resources ?? [] as $k => $v) $this->hardResource($k, $v);
+            foreach ($easyResources ?? [] as $k => $v) $this->hardResource($k, $v);
+            return $this;
+        } elseif ($name === 'autoEasyMode' && count($arguments) === 0) {
             $this->easyResources = $this->resources;
             $original = $this->resources;
-            foreach ($resources ?? [] as $k => $v) {
+            foreach ($this->hardResources ?? [] as $k => $v) {
                 $ov = $original[$k] ?? 0;
-                $this->hardResource($k, $v);
-                if ($ov > 0)
-                    $this->easyResource($k, round($v/(($v / $ov) + 1)));
+                if ($ov > 0) $this->easyResource($k, round($v/(($v / $ov) + 1)));
             }
             return $this;
         } else return parent::__call($name, $arguments);
