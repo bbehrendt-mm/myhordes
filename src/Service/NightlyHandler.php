@@ -1132,17 +1132,22 @@ class NightlyHandler
 
         $ghoul_mode  = $this->conf->getTownConfiguration($town)->get(TownSetting::OptFeatureGhoulMode);
         $ghoul_begin = $this->conf->getTownConfiguration($town)->get(TownSetting::OptModifierAutoghoulFrom);
-        $ghoul_next = $this->conf->getTownConfiguration($town)->get(TownSetting::OptModifierAutoghoulNext);
+        $ghoul_advance = $this->conf->getTownConfiguration($town)->get(TownSetting::OptModifierAutoghoulAdvance);
+        $ghoul_max = $this->conf->getTownConfiguration($town)->get(TownSetting::OptModifierAutoghoulMax);
 
         // Check if we need to ghoulify someone
         if (in_array($ghoul_mode, ['airborne', 'airbnb']) && $town->getDay() >= $ghoul_begin) {
 
-            // Starting with the auto ghoul begin day, every X days a new ghoul is added
-            if (($town->getDay() - $ghoul_begin) % $ghoul_next === 0) {
+            // Starting with last autoghoul day, the chance for a new one increases
+            $last_autoghoul_at = $town->getSpecificActionCounter( ActionCounterType::TamerClinicUsed, default: $ghoul_begin );
+            $chance = min($ghoul_max, ($town->getDay() - $last_autoghoul_at->getCount()) * $ghoul_advance);
+            $this->log->debug("<info>Airborne ghoul infection</info> chance is <info>$chance</info>!");
+
+            if ($this->random->chance( $chance )) {
                 $this->log->debug("Distributing the <info>airborne ghoul infection</info>!");
                 $this->citizen_handler->pass_airborne_ghoul_infection(null,$town);
+                $this->entity_manager->persist($last_autoghoul_at->setCount( $town->getDay() ));
             }
-
 
         }
 

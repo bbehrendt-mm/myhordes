@@ -27,6 +27,7 @@ enum ActionCounterType: int {
     case AnonPost         	= 21;
     case PurgeLog   		= 22;
     case TamerClinicUsed 	= 23;
+    case LastAutoghoulAt 	= 24;
 
     /**
      * @return ActionCounterType[]
@@ -39,6 +40,7 @@ enum ActionCounterType: int {
             self::AnonMessage,
             self::AnonPost,
             self::TamerClinicUsed,
+            self::LastAutoghoulAt,
         ];
     }
 
