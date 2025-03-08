@@ -213,7 +213,8 @@ enum TownSetting: string implements Configuration
     case OptModifierRespawnFactor       = 'modifiers.massive_respawn_factor';
     case OptModifierRespawnThreshold    = 'modifiers.massive_respawn_threshold';
     case OptModifierAutoghoulFrom       = 'modifiers.ghoul_infection_begin';
-    case OptModifierAutoghoulNext       = 'modifiers.ghoul_infection_next';
+    case OptModifierAutoghoulAdvance       = 'modifiers.ghoul_infection_advance';
+    case OptModifierAutoghoulMax       = 'modifiers.ghoul_infection_max';
     case OptModifierDaytimeRange        = 'modifiers.daytime.range';
     case OptModifierDaytimeInvert       = 'modifiers.daytime.invert';
     case OptModifierHideHomeUpgrade    = 'modifiers.hide_home_upgrade';
@@ -420,7 +421,8 @@ enum TownSetting: string implements Configuration
             self::OptModifierRespawnFactor,
             self::OptModifierRespawnThreshold,
             self::OptModifierAutoghoulFrom,
-            self::OptModifierAutoghoulNext,
+            self::OptModifierAutoghoulAdvance,
+            self::OptModifierAutoghoulMax,
             self::OptModifierDaytimeRange,
             self::OptModifierDaytimeInvert,
             self::OptModifierHideHomeUpgrade,
@@ -605,7 +607,8 @@ enum TownSetting: string implements Configuration
             self::OptModifierRespawnFactor => 0.5,
             self::OptModifierRespawnThreshold => 50,
             self::OptModifierAutoghoulFrom => 5,
-            self::OptModifierAutoghoulNext => 5,
+            self::OptModifierAutoghoulAdvance => 0.1,
+            self::OptModifierAutoghoulMax => 0.9,
             self::OptModifierDaytimeRange => [7,18],
             self::OptModifierDaytimeInvert => false,
             self::OptModifierHideHomeUpgrade => false,

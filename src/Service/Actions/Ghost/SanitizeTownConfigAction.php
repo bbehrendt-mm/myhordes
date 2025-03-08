@@ -275,6 +275,8 @@ class SanitizeTownConfigAction
             'modifiers.destroy_defense_objects_attack',
             'modifiers.ghoul_infection_begin',
             'modifiers.ghoul_infection_next',
+            'modifiers.ghoul_infection_advance',
+            'modifiers.ghoul_infection_max',
             'modifiers.hide_home_upgrade',
             'modifiers.infection_death_chance',
             'modifiers.massive_respawn_factor',
