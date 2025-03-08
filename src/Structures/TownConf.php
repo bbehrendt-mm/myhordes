@@ -51,7 +51,7 @@ class TownConf extends Conf
         return array_filter( $base, fn(DropMod $d) => !in_array( $d, $remove) );
     }
 
-    public function getBuildingRarity(BuildingPrototype $prototype): ?int {
+    public function getBuildingRarity(BuildingPrototype $prototype): int {
         return $this->getSubKey(
             TownSetting::OptModifierOverrideBuildingRarity, $prototype->getName(),
             $this->getSubKey( TownSetting::OptModifierOverrideBuildingRarity, '*', $prototype->getBlueprint() )

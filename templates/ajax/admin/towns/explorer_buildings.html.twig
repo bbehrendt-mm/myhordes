@@ -23,16 +23,16 @@
 				{% endfor %}
 				{% if fromTown is not defined %}
                     <label style="">
-						<input type="checkbox" x-prototype-id="{{ building.id }}" x-building-admin-action="addToUnlockList" />
+						<input type="checkbox" data-prototype-id="{{ building.id }}" data-building-admin-action="addToUnlockList" />
 						<div class="tooltip help">Cochez cette case pour ajouter ce chantier à la liste de ceux à débloquer dans la ville.</div>
 					</label>
 					<label>
-						<input type="checkbox" x-prototype-id="{{ building.id }}" x-building-admin-action="addToTown" />
+						<input type="checkbox" data-prototype-id="{{ building.id }}" data-building-admin-action="addToTown" />
 						<div class="tooltip help">Cochez cette case pour débloquer ce chantier.</div>
 					</label>
 				{% else %}
 					<div class="inline-block">
-						<img class="link" src="{{ asset('build/images/icons/small_remove.gif') }}" alt="[X]" x-prototype-id="{{ building.id }}" x-building-admin-action="removeFromTown" />
+						<img class="link" src="{{ asset('build/images/icons/small_remove.gif') }}" alt="[X]" data-prototype-id="{{ building.id }}" data-building-admin-action="removeFromTown" />
 						<div class="tooltip help">
 							Cliquez ici pour supprimer ce chantier de la ville.
 						</div>
@@ -92,13 +92,13 @@
 							<div class="ap-bar">
 								<div class="bar" style="width: {{ 100*(fromTown.ap/building.ap) }}%"></div>
 							</div>
-                        	<img class="ap-bar-start" src="{{ asset('build/images/building/building_barStart.gif' ) }}"/>
+                        	<img alt="" class="ap-bar-start" src="{{ asset('build/images/building/building_barStart.gif' ) }}"/>
 						{% elseif fromTown.complete and fromTown.hp < building.hp %}
 							<div class="ap-bar">
 								<div class="bar" style="width: {{ 100*(fromTown.hp/((building.hp)|round)) }}%;"></div>
 								<div class="tooltip"><em>{{"Zustand:"|trans({}, 'game')}}</em> {{fromTown.hp}}/{{building.hp}}</div>
 							</div>
-                        	<img class="ap-bar-start" src="{{ asset('build/images/building/building_barStartBroken.png' ) }}"/>
+                        	<img alt="" class="ap-bar-start" src="{{ asset('build/images/building/building_barStartBroken.png' ) }}"/>
 						{% endif %}
 
 						{% if not_built %}
@@ -120,7 +120,7 @@
 						<div class="building_action cell" style="width: fit-content; margin-left: auto; flex-grow: 0; margin-top: 2px;">
 							{% if fromTown.complete and building.maxLevel > 0 %}
 								{% if fromTown.level < building.maxLevel %}
-									<button class="inline build-btn small" x-building-id="{{ fromTown.id }}" data-level="{{ fromTown.level + 1 }}" x-building-admin-action="lv">
+									<button class="inline build-btn small" data-building-id="{{ fromTown.id }}" data-level="{{ fromTown.level + 1 }}" data-building-admin-action="lv">
 										<img alt="+" src="{{ asset('build/images/icons/small_more2.gif') }}">
 										<div class="tooltip">
 											{{ building.upgradeTexts[min(building.upgradeTexts|length,fromTown.level)]|trans({},'buildings') }}
@@ -128,7 +128,7 @@
 									</button>
 								{% endif %}
 								{% if fromTown.level > 0 %}
-									<button class="inline build-btn small" x-building-id="{{ fromTown.id }}" data-level="{{ fromTown.level - 1 }}" x-building-admin-action="lv">
+									<button class="inline build-btn small" data-building-id="{{ fromTown.id }}" data-level="{{ fromTown.level - 1 }}" data-building-admin-action="lv">
 										<img alt="-" src="{{ asset('build/images/icons/small_minus.gif') }}">
 										<div class="tooltip">
 											{{ building.upgradeTexts[max(0,fromTown.level - 2)]|trans({},'buildings') }}
@@ -137,12 +137,25 @@
 								{% endif %}
 							{% endif %}
 
-							<button class="inline build-btn small" x-building-id="{{ fromTown.id }}" x-building-admin-action="{% if fromTown.complete %}setHp{% else %}setAp{% endif %}"><img alt="E" src="{% if fromTown.complete %}{{ asset('build/images/icons/small_refine.gif') }}{% else %}{{ asset('build/images/forum/edit.png') }}{% endif %}" /></button>
+                            {% if building.hasHardMode and not fromTown.complete %}
+                                <label>
+                                    <hordes-tooltip class="help">{{ 'Ressourcen- und AP-Vorlage, welches für diese Konstruktion benötigt wird.'|trans({},'admin') }}</hordes-tooltip>
+                                    <select class="small" data-building-id="{{ fromTown.id }}" data-building-admin-action="set_difficulty">
+                                        <option {{ {'selected': fromTown.difficultyLevel == -1}|attributes }} value="-1">{{ 'Teuer'|trans({},'admin') }}</option>
+                                        <option {{ {'selected': fromTown.difficultyLevel == 0}|attributes }} value="0">{{ 'Normal'|trans({},'admin') }}</option>
+                                        <option {{ {'selected': fromTown.difficultyLevel == 1}|attributes }} value="1">{{ 'Billig'|trans({},'admin') }}</option>
+                                        <option {{ {'selected': fromTown.difficultyLevel == 2}|attributes }} value="2">{{ 'Billig+'|trans({},'admin') }}</option>
+                                    </select>
+                                </label>
+
+                            {% endif %}
+
+							<button class="inline build-btn small" data-building-id="{{ fromTown.id }}" data-building-admin-action="{% if fromTown.complete %}setHp{% else %}setAp{% endif %}"><img alt="E" src="{% if fromTown.complete %}{{ asset('build/images/icons/small_refine.gif') }}{% else %}{{ asset('build/images/forum/edit.png') }}{% endif %}" /></button>
 							{% if not fromTown.complete %}
-								<button class="inline build-btn small" x-building-id="{{ fromTown.id }}" x-building-admin-action="complete"><img alt="ok" src="{{ asset('build/images/icons/done.png') }}" /></button>
+								<button class="inline build-btn small" data-building-id="{{ fromTown.id }}" data-building-admin-action="complete"><img alt="ok" src="{{ asset('build/images/icons/done.png') }}" /></button>
 							{% else %}
-								<button class="inline build-btn small" x-building-id="{{ fromTown.id }}" x-building-admin-action="destroy"><img alt="[x]" src="{{ asset('build/images/icons/small_remove.gif') }}" /></button>
-								<button class="inline build-btn small" x-building-id="{{ fromTown.id }}" x-building-admin-action="trigger_n" x-tooltip="title" title="{{ 'Gebäude-Effekt auslösen'|trans({},'admin') }}"><img alt="[n]" src="{{ asset('build/images/icons/small_action.gif') }}" /></button>
+								<button class="inline build-btn small" data-building-id="{{ fromTown.id }}" data-building-admin-action="destroy"><img alt="[x]" src="{{ asset('build/images/icons/small_remove.gif') }}" /></button>
+								<button class="inline build-btn small" data-building-id="{{ fromTown.id }}" data-building-admin-action="trigger_n" x-tooltip="title" title="{{ 'Gebäude-Effekt auslösen'|trans({},'admin') }}"><img alt="[n]" src="{{ asset('build/images/icons/small_action.gif') }}" /></button>
 							{% endif %}
 						</div>
 					{% endif %}
@@ -159,7 +172,7 @@
 
 	{# @var rootBuildings \App\Entity\BuildingPrototype[] #}
 	<div>
-		<button x-building-admin-action="unlockCheckedBuildings" class="inline"><img alt="" src="{{ asset('build/images/pictos/r_door.gif') }}" /> Unlock checked buildings</button>
+		<button data-building-admin-action="unlockCheckedBuildings" class="inline"><img alt="" src="{{ asset('build/images/pictos/r_door.gif') }}" /> Unlock checked buildings</button>
 		<ul class="buildings-tabs tabs plain" x-tab-group="buildings" x-tab-control>
 			<li class="tab" x-tab-id="all">
 				<div class="tab-link">
@@ -184,118 +197,124 @@
 	{% endfor %}
 
 	<div style="margin-top:20px">
-		<button x-building-admin-action="unlockCheckedBuildings"><img alt="" src="{{ asset('build/images/pictos/r_door.gif') }}" /> Unlock checked buildings</button>
+		<button data-building-admin-action="unlockCheckedBuildings"><img alt="" src="{{ asset('build/images/pictos/r_door.gif') }}" /> Unlock checked buildings</button>
 	</div>
 
 {% endblock %}
 {% block js %}
 	{{ parent() }}
 	<script>
-        let buildingBtns = document.querySelectorAll("[x-building-admin-action]");
-        for(let i = 0 ; i < buildingBtns.length ; i++) {
-            buildingBtns[i].addEventListener('click', function() {
-                let action = buildingBtns[i].getAttribute("x-building-admin-action");
-                switch(action) {
-                    case "setAp":
-                        let ap = null, ap_valid = false;
-                        do {
-                            ap = window.prompt("{{ 'Baufortschritt setzen:'|trans({},'admin')|e('js') }}", "1");
-                            if (ap === null) ap_valid = true;
-                            else {
-                                ap = parseInt(ap);
-                                ap_valid = !isNaN(ap) && ap >= 0;
-                            }
-                        } while (!ap_valid);
 
-                        if (ap === null) return;
+        const manage = (action, element) => {
+            switch(action) {
+                case "setAp":
+                    let ap = null, ap_valid = false;
+                    do {
+                        ap = window.prompt("{{ 'Baufortschritt setzen:'|trans({},'admin')|e('js') }}", "1");
+                        if (ap === null) ap_valid = true;
+                        else {
+                            ap = parseInt(ap);
+                            ap_valid = !isNaN(ap) && ap >= 0;
+                        }
+                    } while (!ap_valid);
 
-                        $.ajax.easySend( '{{ path('admin_town_set_building_ap', {id: town.id }) }}', {'building': buildingBtns[i].getAttribute("x-building-id"), 'ap': ap},
-                            function () {
-                                $.ajax.load(null, '{{ path('admin_town_buildings', {id: town.id}) }}', true);
-                            } );
-                        break;
+                    if (ap === null) return;
 
-                    case "setHp":
-                        let hp = null, hp_valid = false;
-                        do {
-                            hp = window.prompt("{{ 'Integrität setzen:'|trans({},'admin')|e('js') }}", "1");
-                            if (hp === null) hp_valid = true;
-                            else {
-                                hp = parseInt(hp);
-                                hp_valid = !isNaN(hp) && hp >= 0;
-                            }
-                        } while (!hp_valid);
+                    $.ajax.easySend( '{{ path('admin_town_set_building_ap', {id: town.id }) }}', {'building': element.dataset.buildingId, 'ap': ap},
+                        function () {
+                            $.ajax.load(null, '{{ path('admin_town_buildings', {id: town.id}) }}', true);
+                        } );
+                    break;
 
-                        if (hp === null) return;
+                case "setHp":
+                    let hp = null, hp_valid = false;
+                    do {
+                        hp = window.prompt("{{ 'Integrität setzen:'|trans({},'admin')|e('js') }}", "1");
+                        if (hp === null) hp_valid = true;
+                        else {
+                            hp = parseInt(hp);
+                            hp_valid = !isNaN(hp) && hp >= 0;
+                        }
+                    } while (!hp_valid);
 
-                        $.ajax.easySend( '{{ path('admin_town_set_building_hp', {id: town.id }) }}', {'building': buildingBtns[i].getAttribute("x-building-id"), 'hp': hp},
-                            function () {
-                                $.ajax.load(null, '{{ path('admin_town_buildings', {id: town.id}) }}', true);
-                            } );
-                        break;
+                    if (hp === null) return;
 
-                    case "complete":
-                        $.ajax.easySend( '{{ path('admin_town_set_building_ap', {id: town.id }) }}', {'building': buildingBtns[i].getAttribute("x-building-id"), 'ap': 99999999},
-                            function () {
-                                $.ajax.load(null, '{{ path('admin_town_buildings', {id: town.id}) }}', true);
-                            } );
-                        break;
-                    case "destroy":
-                        $.ajax.easySend( '{{ path('admin_town_set_building_ap', {id: town.id }) }}', {'building': buildingBtns[i].getAttribute("x-building-id"), 'ap': 0},
-                            function () {
-                                $.ajax.load(null, '{{ path('admin_town_buildings', {id: town.id}) }}', true);
-                            } );
-                        break;
-                    case "trigger_n":
-                        $.ajax.easySend( '{{ path('admin_town_trigger_building_nightly_effect', {id: town.id }) }}', {'building': buildingBtns[i].getAttribute("x-building-id")},
-                            function () {
-                                $.ajax.load(null, '{{ path('admin_town_buildings', {id: town.id}) }}', true);
-                            } );
-                        break;
-                    case "lv":
-                        $.ajax.easySend( '{{ path('admin_town_set_building_level', {id: town.id }) }}', {'building': buildingBtns[i].getAttribute("x-building-id"), 'level': buildingBtns[i].dataset.level ?? -1},
-                            function () {
-                                $.ajax.load(null, '{{ path('admin_town_buildings', {id: town.id}) }}', true);
-                            } );
-                        break;
+                    $.ajax.easySend( '{{ path('admin_town_set_building_hp', {id: town.id }) }}', {'building': element.dataset.buildingId, 'hp': hp},
+                        function () {
+                            $.ajax.load(null, '{{ path('admin_town_buildings', {id: town.id}) }}', true);
+                        } );
+                    break;
 
-                    case "addToTown":
-                        $.ajax.easySend("{{ path('admin_town_add_building', {id: town.id }) }}", {
-                                'prototype_id': buildingBtns[i].getAttribute("x-prototype-id"),
-                                'act': 1
-                            },
-                            function () {
-                                $.ajax.load(null, '{{ path('admin_town_buildings', {id: town.id}) }}', true);
-                            }
-                        );
-                        break;
-                    case "removeFromTown":
-                        $.ajax.easySend("{{ path('admin_town_add_building', {id: town.id }) }}", {
-                                'prototype_id': buildingBtns[i].getAttribute("x-prototype-id"),
-                                'act': 0
-                            },
-                            function () {
-                                $.ajax.load(null, '{{ path('admin_town_buildings', {id: town.id}) }}', true);
-                            }
-                        );
-                        break;
-                    case "unlockCheckedBuildings":
-                        let protos = [];
-                        let checked = document.querySelectorAll('input[x-building-admin-action="addToUnlockList"]:checked');
-                        checked.forEach(function(c) {
-                            protos.push(c.getAttribute('x-prototype-id'));
-                        })
-                        $.ajax.easySend("{{ path('admin_town_add_building', {id: town.id }) }}", {
-                                'prototype_id': protos,
-                                'act': 1
-                            },
-                            function () {
-                                $.ajax.load(null, '{{ path('admin_town_buildings', {id: town.id}) }}', true);
-                            }
-                        );
-                        break;
-                }
-            });
+                case "complete":
+                    $.ajax.easySend( '{{ path('admin_town_set_building_ap', {id: town.id }) }}', {'building': element.dataset.buildingId, 'ap': 99999999},
+                        function () {
+                            $.ajax.load(null, '{{ path('admin_town_buildings', {id: town.id}) }}', true);
+                        } );
+                    break;
+                case "destroy":
+                    $.ajax.easySend( '{{ path('admin_town_set_building_ap', {id: town.id }) }}', {'building': element.dataset.buildingId, 'ap': 0},
+                        function () {
+                            $.ajax.load(null, '{{ path('admin_town_buildings', {id: town.id}) }}', true);
+                        } );
+                    break;
+                case "trigger_n":
+                    $.ajax.easySend( '{{ path('admin_town_trigger_building_nightly_effect', {id: town.id }) }}', {'building': element.dataset.buildingId},
+                        function () {
+                            $.ajax.load(null, '{{ path('admin_town_buildings', {id: town.id}) }}', true);
+                        } );
+                    break;
+                case "set_difficulty":
+                    $.ajax.easySend( '{{ path('admin_town_set_building_difficulty_level', {id: town.id }) }}', {'building': element.dataset.buildingId, 'level': element.dataset.level ?? element.value ?? -1},
+                        function () {
+                            $.ajax.load(null, '{{ path('admin_town_buildings', {id: town.id}) }}', true);
+                        } );
+                    break;
+                case "lv":
+                    $.ajax.easySend( '{{ path('admin_town_set_building_level', {id: town.id }) }}', {'building': element.dataset.buildingId, 'level': element.dataset.level ?? -1},
+                        function () {
+                            $.ajax.load(null, '{{ path('admin_town_buildings', {id: town.id}) }}', true);
+                        } );
+                    break;
+
+                case "addToTown":
+                    $.ajax.easySend("{{ path('admin_town_add_building', {id: town.id }) }}", {
+                            'prototype_id': element.dataset.prototypeId,
+                            'act': 1
+                        },
+                        function () {
+                            $.ajax.load(null, '{{ path('admin_town_buildings', {id: town.id}) }}', true);
+                        }
+                    );
+                    break;
+                case "removeFromTown":
+                    $.ajax.easySend("{{ path('admin_town_add_building', {id: town.id }) }}", {
+                            'prototype_id': element.dataset.prototypeId,
+                            'act': 0
+                        },
+                        function () {
+                            $.ajax.load(null, '{{ path('admin_town_buildings', {id: town.id}) }}', true);
+                        }
+                    );
+                    break;
+                case "unlockCheckedBuildings":
+                    let protos = [];
+                    let checked = document.querySelectorAll('input[data-building-admin-action="addToUnlockList"]:checked');
+                    checked.forEach(function(c) {
+                        protos.push(c.dataset.prototypeId);
+                    })
+                    $.ajax.easySend("{{ path('admin_town_add_building', {id: town.id }) }}", {
+                            'prototype_id': protos,
+                            'act': 1
+                        },
+                        function () {
+                            $.ajax.load(null, '{{ path('admin_town_buildings', {id: town.id}) }}', true);
+                        }
+                    );
+                    break;
+            }
         }
+
+        document.querySelectorAll("button[data-building-admin-action]").forEach( e => e.addEventListener('click', () => manage( e.dataset.buildingAdminAction, e )) )
+        document.querySelectorAll("select[data-building-admin-action]").forEach( e => e.addEventListener('change', () => manage( e.dataset.buildingAdminAction, e )) )
 	</script>
 {% endblock %}

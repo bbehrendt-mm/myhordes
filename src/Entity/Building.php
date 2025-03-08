@@ -255,12 +255,24 @@ class Building
         return $this;
     }
 
-    public function getPrototypeAP(): int {
-        return match (true) {
+    public function getPrototypeAP(?int $override_rarity = null): int {
+        $rarity = $override_rarity ?? $this->prototype->getBlueprint();
+        $baseAp = match (true) {
             $this->difficultyLevel < 0 => $this->prototype->getHardAp(),
             $this->difficultyLevel > 0 => $this->prototype->getEasyAp(),
             default => null
         } ?? $this->prototype->getAp();
+
+        if ($this->difficultyLevel >= 2)
+            return floor( $baseAp * pow( match ( $rarity ) {
+                0, 1    => 0.65,
+                2       => 0.70,
+                3       => 0.75,
+                4       => 0.85,
+                default => 1
+            }, $this->difficultyLevel - 1 ) );
+
+        return $baseAp;
     }
 
     public function getPrototypeResources(): ?ItemGroup {
