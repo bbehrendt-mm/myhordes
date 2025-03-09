@@ -681,10 +681,12 @@ Foren-Posts: Foren-Posts
 '{n} (davon {n2} gelöscht)': '{n} (davon {n2} gelöscht)'
 Heldenerfahrung: Heldenerfahrung
 Zurücksetzen: Zurücksetzen
-Künstler: Kurator des Guten Geschmacks
+Künstler: 'Kurator des Guten Geschmacks'
 'Anzahl der gelisteten Namen: {number}': 'Anzahl der gelisteten Namen: {number}'
 Namen-Suche: Namen-Suche
 'Namen hinzufügen': 'Namen hinzufügen'
 'Namen können als glob-Muster eingegeben werden. Beispielsweise würde *test* alle Namen verhindern, in denen "test" vorkommt. Für eine Übersicht über glob-Syntax, siehe folgenden Link:': 'Namen können als glob-Muster eingegeben werden. Beispielsweise würde *test* alle Namen verhindern, in denen "test" vorkommt. Für eine Übersicht über glob-Syntax, siehe folgenden Link:'
 'Gesperrte Namen': 'Gesperrte Namen'
 'Es existiert bereits ein Changelog für diese Version in der angegebenen Sprache.': 'Es existiert bereits ein Changelog für diese Version in der angegebenen Sprache.'
+'Temporär für Neuregistrierungen sperren': 'Temporär für Neuregistrierungen sperren'
+'Alle Posts löschen': 'Alle Posts löschen'
