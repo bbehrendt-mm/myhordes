@@ -688,3 +688,8 @@ Namen-Suche: crwdns210464:0crwdne210464:0
 'Namen können als glob-Muster eingegeben werden. Beispielsweise würde *test* alle Namen verhindern, in denen "test" vorkommt. Für eine Übersicht über glob-Syntax, siehe folgenden Link:': 'crwdns210468:0crwdne210468:0'
 'Gesperrte Namen': 'crwdns210470:0crwdne210470:0'
 'Es existiert bereits ein Changelog für diese Version in der angegebenen Sprache.': 'crwdns210472:0crwdne210472:0'
+'Ressourcen- und AP-Vorlage, welches für diese Konstruktion benötigt wird.': 'crwdns211717:0crwdne211717:0'
+Teuer: crwdns211719:0crwdne211719:0
+Normal: crwdns211721:0crwdne211721:0
+Billig: crwdns211723:0crwdne211723:0
+Billig+: crwdns211725:0crwdne211725:0
