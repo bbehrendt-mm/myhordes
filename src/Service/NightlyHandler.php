@@ -778,7 +778,7 @@ class NightlyHandler
                     $skip = true;
                 } else {
                     // We must give the nightwatch picto here, because the citizen dies and the additional picto stage does not execute for dead citizens
-                    $this->picto_handler->give_picto($ctz, $picto_nightwatch);
+                    // $this->picto_handler->give_picto($ctz, $picto_nightwatch);
 
                     // The murdering zombie survives!
                     $defBonus = max(0, $defBonus - 1);
@@ -1016,7 +1016,7 @@ class NightlyHandler
         shuffle($targets);
 
         $this->log->debug("<info>{$attacking}</info> Zombies are attacking <info>" . count($targets) . "</info> citizens!");
-        if (!empty($targets)) $this->entity_manager->persist( $this->logTemplates->nightlyAttackLazy($town, $attacking) );
+        if (!empty($targets)) $this->entity_manager->persist( $this->logTemplates->nightlyAttackLazy($town, $attacking + $detracted) );
 
 		$repartition = array_fill(0, count($targets), 0);
 		for ($i = 0; $i < count($repartition); $i++) {
@@ -1072,13 +1072,14 @@ class NightlyHandler
                 if (!$has_kino && !$this->citizen_handler->hasStatusEffect($c, $status_terror)) {
 
                     $quies = $this->inventory_handler->fetchSpecificItems( [$c->getInventory(),$c->getHome()->getChest()], [new ItemRequest('bquies_#00')] );
+                    $clean = $this->citizen_handler->hasStatusEffect( $c, 'tg_clothes' ) || $this->inventory_handler->fetchSpecificItems( [$c->getInventory()], [new ItemRequest('basic_suit_#00')] ) !== null;
 
                     $terror_chance = 100;
                     $terror_chance -= min($deco, 10);
-                    $terror_chance -= $this->citizen_handler->hasStatusEffect( $c, 'tg_clothes' )     ?  3 : 0;
+                    $terror_chance -= $clean                                                                 ?  3 : 0;
                     $terror_chance -= $this->citizen_handler->hasStatusEffect( $c, 'tg_home_clean' )  ?  5 : 0;
                     $terror_chance -= $this->citizen_handler->hasStatusEffect( $c, 'tg_home_shower' ) ? 10 : 0;
-                    $terror_chance -= $quies                                                                          ? 10 : 0;
+                    $terror_chance -= $quies                                                                 ? 10 : 0;
 
                     if ($this->random->chance($terror_chance / 100)) {
                         $this->citizen_handler->inflictStatus( $c, $status_terror );

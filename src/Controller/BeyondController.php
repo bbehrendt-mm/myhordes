@@ -422,7 +422,7 @@ class BeyondController extends InventoryAwareController
 
     protected function desert_partial_inventory_args(): array {
         $citizen = $this->getActiveCitizen();
-        
+
         $escort_actions = [];
         foreach ($this->getActiveCitizen()->getValidLeadingEscorts() as $escort)
             $escort_actions[ $escort->getCitizen()->getId() ] = $this->action_handler->getAvailableItemEscortActions( $escort->getCitizen() );
@@ -1489,7 +1489,7 @@ class BeyondController extends InventoryAwareController
     #[Route(path: 'api/beyond/desert/attack_citizen/{cid<\d+>}', name: 'beyond_desert_attack_citizen_controller')]
     public function desert_attack_api(int $cid): Response {
         $citizen = $this->getActiveCitizen();
-        if (!$this->citizen_handler->citizenCanAct($this->getActiveCitizen())) return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
+        if (!$this->citizen_handler->citizenCanAct($this->getActiveCitizen()) || !$citizen->getZone()) return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
 
         /** @var Citizen|null $target_citizen */
         $target_citizen = $this->entity_manager->getRepository(Citizen::class)->find( $cid );
