@@ -62,6 +62,7 @@ class MessageTownMessageController extends MessageController
         $tid       = $parser->get('tid', -1);
 
         $sender = $this->getUser()->getActiveCitizen();
+        if (!$sender) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
 
         $anon_post_limit = $sender?->property( CitizenProperties::AnonymousMessageLimit ) ?? 0;
         $can_post_anon = ($anon_post_limit < 0) || ($anon_post_limit > $sender->getSpecificActionCounterValue( ActionCounter::ActionTypeAnonMessage ));
