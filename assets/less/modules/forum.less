@@ -762,12 +762,40 @@ ul.subscriptions {
   }
 }
 
+.forum-filter-list {
+  &:not(.manual-toggle-on) {
+    display: none;
+  }
+
+  &.manual-toggle-on {
+    display: flex; flex-direction: column; gap: 2px;
+  }
+
+  label {
+    display: flex; gap: 4px; align-items: center;
+  }
+
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 200px;
+  z-index: 100;
+
+  border: 1px solid #ddab76;
+  background-color: #4a261e;
+  margin: 0;
+  padding: 0.5rem;
+  outline: 1px solid black;
+
+
+}
+
 hordes-twino-editor {
   .forum-button, .forum-button-disabled { margin-bottom: 0 }
 }
 
 .forum-button-bar {
-  margin: 5px 0; padding: 5px 5px 0 5px;
+  margin: 5px 0; padding: 5px 5px 0 5px; position: relative;
 
   .forum-button, .pm-button {
 

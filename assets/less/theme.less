@@ -2315,6 +2315,29 @@ i.h-icon {
   &.limit { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 }
 
+*[data-indicator] {
+  &:not([data-indicator="0"]) {
+    position: relative;
+    &:after {
+      position: absolute;
+      background: red;
+      color: white;
+      font-size: 8px;
+      font-weight: bold;
+      content: attr(data-indicator);
+      height: 10px;
+      width: 10px;
+      top: -5px;
+      right: -5px;
+      z-index: 1;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}
+
 // Header
 html body[data-theme-name="none"] #wrapper:not(.attract) > #header { background-image: url('../img/background/bg_content_header.gif'); }
 html body[data-theme-name="none"][data-theme-primary-modifier="panda"] #wrapper:not(.attract) > #header { background-image: url('../img/background/bg_content_header_hc.gif'); }

@@ -25,7 +25,7 @@ class ThreadRepository extends ServiceEntityRepository
         parent::__construct($registry, Thread::class);
     }
 
-    public function countByForum( Forum $forum, bool $include_hidden = false, ?bool $pinned = null, ?Thread $before = null ): int {
+    public function countByForum( Forum $forum, bool $include_hidden = false, ?bool $pinned = null, ?Thread $before = null, ?array $tags = null ): int {
         try {
             $qb = $this->createQueryBuilder('t')
                 ->select('COUNT(t.id)')
@@ -36,6 +36,9 @@ class ThreadRepository extends ServiceEntityRepository
                 $qb->andWhere('t.pinned = :pinned')->setParameter('pinned', $pinned);
             if ($before)
                 $qb->andWhere('t.lastPost > :deadline')->setParameter('deadline', $before->getLastPost());
+
+            if ($tags !== null)
+                $qb->andWhere('t.tag IN (:tags)')->setParameter('tags', $tags);
 
             return $qb->getQuery()
                 ->getSingleScalarResult();
@@ -63,7 +66,7 @@ class ThreadRepository extends ServiceEntityRepository
         }
     }
 
-    public function findByForum(Forum $forum, $number = null, $offset = null, bool $include_hidden = false)
+    public function findByForum(Forum $forum, $number = null, $offset = null, bool $include_hidden = false, ?array $tags = null)
     {
         $q = $this->createQueryBuilder('t')
             ->andWhere('t.pinned = false')
@@ -73,6 +76,9 @@ class ThreadRepository extends ServiceEntityRepository
         if ($offset !== null) $q->setFirstResult($offset);
         if (!$include_hidden)
             $q->andWhere('t.hidden = false OR t.hidden is NULL');
+
+        if ($tags !== null)
+            $q->andWhere('t.tag IN (:tags)')->setParameter('tags', $tags);
 
         return $q
             ->getQuery()
