@@ -1074,13 +1074,14 @@ class NightlyHandler
                 if (!$has_kino && !$this->citizen_handler->hasStatusEffect($c, $status_terror)) {
 
                     $quies = $this->inventory_handler->fetchSpecificItems( [$c->getInventory(),$c->getHome()->getChest()], [new ItemRequest('bquies_#00')] );
+                    $clean = $this->citizen_handler->hasStatusEffect( $c, 'tg_clothes' ) || $this->inventory_handler->fetchSpecificItems( [$c->getInventory()], [new ItemRequest('basic_suit_#00')] ) !== null;
 
                     $terror_chance = 100;
                     $terror_chance -= min($deco, 10);
-                    $terror_chance -= $this->citizen_handler->hasStatusEffect( $c, 'tg_clothes' )     ?  3 : 0;
+                    $terror_chance -= $clean                                                                 ?  3 : 0;
                     $terror_chance -= $this->citizen_handler->hasStatusEffect( $c, 'tg_home_clean' )  ?  5 : 0;
                     $terror_chance -= $this->citizen_handler->hasStatusEffect( $c, 'tg_home_shower' ) ? 10 : 0;
-                    $terror_chance -= $quies                                                                          ? 10 : 0;
+                    $terror_chance -= $quies                                                                 ? 10 : 0;
 
                     if ($this->random->chance($terror_chance / 100)) {
                         $this->citizen_handler->inflictStatus( $c, $status_terror );
