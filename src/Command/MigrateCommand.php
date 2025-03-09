@@ -806,7 +806,7 @@ class MigrateCommand extends Command
 
                 $forum->getAllowedTags()->clear();
 
-                if ($forum->getTown()) $tag_list = ['help','rp','event','dsc_disc','dsc_guide','dsc_orga'];
+                if ($forum->getTown()) $tag_list = ['help','rp','event','dsc_disc','dsc_guide','dsc_orga','dsc_game','dsc_flood'];
                 else $tag_list = array_map(fn(ThreadTag $t) => $t->getName(), $all_tags);
 
                 foreach ($all_tags as $tag) if (in_array($tag->getName(), $tag_list)) $forum->addAllowedTag($tag);

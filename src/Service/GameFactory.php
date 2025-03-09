@@ -554,7 +554,7 @@ class GameFactory
         $this->map_maker->createMap( $town );
 
         $town->setForum((new Forum())->setTitle($town->getName()));
-        foreach ($this->entity_manager->getRepository(ThreadTag::class)->findBy(['name' => ['help','rp','event','dsc_disc','dsc_guide','dsc_orga']]) as $tag)
+        foreach ($this->entity_manager->getRepository(ThreadTag::class)->findBy(['name' => ['help','rp','event','dsc_disc','dsc_guide','dsc_orga','dsc_game','dsc_flood']]) as $tag)
             $town->getForum()->addAllowedTag($tag);
 
         $create_qa_post = $conf->get(TownSetting::CreateQAPost);
