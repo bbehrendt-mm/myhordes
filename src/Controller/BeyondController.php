@@ -1639,7 +1639,7 @@ class BeyondController extends InventoryAwareController
     #[Route(path: 'api/beyond/desert/attack_citizen/{cid<\d+>}', name: 'beyond_desert_attack_citizen_controller')]
     public function desert_attack_api(int $cid): Response {
         $citizen = $this->getActiveCitizen();
-        if (!$this->activeCitizenCanAct()) return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
+        if (!$this->activeCitizenCanAct() || !$citizen->getZone()) return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
 
         /** @var Citizen|null $target_citizen */
         $target_citizen = $this->entity_manager->getRepository(Citizen::class)->find( $cid );
