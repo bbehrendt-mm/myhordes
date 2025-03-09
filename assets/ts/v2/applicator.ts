@@ -56,8 +56,34 @@ function applyFetchFunctions( node: HTMLElement ) {
     )
 }
 
+function applyToggleFunctions( node: HTMLElement ) {
+    node.querySelectorAll('[data-manual-toggle]').forEach( (node: HTMLElement) => {
+        const sibling = document.querySelector( node.dataset.manualToggleTarget );
+        node.addEventListener('click', () => {
+            node.dataset.manualToggle = (node.dataset.manualToggle === "1") ? "0" : "1";
+            sibling.classList.toggle('manual-toggle-on', node.dataset.manualToggle === "1");
+
+            if (node.dataset.manualToggle === "1") {
+                window.requestAnimationFrame(() => {
+                    const close = (e: MouseEvent) => {
+                        console.log('close triggered');
+                        if ((e.target === sibling || sibling.contains( e.target as Node )) && !(e.target as HTMLElement).closest('[data-close-manual-toggle]') ) return;
+                        node.dataset.manualToggle = "0"
+                        sibling.classList.toggle('manual-toggle-on', false);
+                        document.removeEventListener('click', close);
+                    }
+
+                    document.addEventListener('click', close);
+                })
+
+            }
+        })
+    })
+}
+
 export function dataDrivenFunctions( node: HTMLElement ) {
 
     applyFetchFunctions( node );
+    applyToggleFunctions( node );
 
 }

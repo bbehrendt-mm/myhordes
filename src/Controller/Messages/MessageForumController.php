@@ -64,8 +64,14 @@ class MessageForumController extends MessageController
     protected const ThreadsPerPage = 20;
     protected const PostsPerPage = 10;
 
-    private function default_forum_renderer(int $fid, int $tid, int $pid, int $post_page, EntityManagerInterface $em, JSONRequestParser $parser, CitizenHandler $ch, Locksmith $locksmith): Response {
+    private function default_forum_renderer(
+        int $fid, int $tid, int $pid, int $post_page, EntityManagerInterface $em, JSONRequestParser $parser, CitizenHandler $ch, Locksmith $locksmith,
+        ?array $tags = null
+    ): Response {
         $user = $this->getUser();
+
+        if ($tags !== null)
+            $tags = $em->getRepository(ThreadTag::class)->findBy(['name' => $tags]);
 
         /** @var Forum $forum */
         $forum = $em->getRepository(Forum::class)->find($fid);
@@ -104,19 +110,19 @@ class MessageForumController extends MessageController
         $show_hidden_threads = $this->perm->isPermitted( $permissions, ForumUsagePermissions::PermissionModerate );
 
         if ( $this->perm->isPermitted( $permissions, ForumUsagePermissions::PermissionListThreads ) ) {
-            $pages = floor(max(0,$em->getRepository(Thread::class)->countByForum($forum, $show_hidden_threads, false)-1) / self::ThreadsPerPage) + 1;
+            $pages = floor(max(0,$em->getRepository(Thread::class)->countByForum($forum, $show_hidden_threads, false, tags: $tags)-1) / self::ThreadsPerPage) + 1;
 
             if ($sel_thread && !$sel_thread->getPinned())
-                $page = 1 + floor(($em->getRepository(Thread::class)->countByForum($forum, $show_hidden_threads, false, $sel_thread)) / self::ThreadsPerPage);
+                $page = 1 + floor(($em->getRepository(Thread::class)->countByForum($forum, $show_hidden_threads, false, $sel_thread, tags: $tags)) / self::ThreadsPerPage);
             elseif ($parser->has('page'))
                 $page = min(max(1,$parser->get('page', 1)), $pages);
             else $page = 1;
 
-            $threads = $em->getRepository(Thread::class)->findByForum($forum, self::ThreadsPerPage, ($page-1)*self::ThreadsPerPage, $show_hidden_threads);
+            $threads = $em->getRepository(Thread::class)->findByForum($forum, self::ThreadsPerPage, ($page-1)*self::ThreadsPerPage, $show_hidden_threads, tags: $tags);
         } elseif ( $this->perm->isPermitted( $permissions, ForumUsagePermissions::PermissionModerate ) ) {
 
             $tp = $ttp = 0;
-            $threads = array_filter( $em->getRepository(Thread::class)->findByForum($forum, null, null, $show_hidden_threads), function(Thread $t) use ($tp,$ttp,$sel_thread): bool { $tp++; if ($t === $sel_thread) $ttp = $tp-1; return $t->hasReportedPosts(); } );
+            $threads = array_filter( $em->getRepository(Thread::class)->findByForum($forum, null, null, $show_hidden_threads, tags: $tags), function(Thread $t) use ($tp,$ttp,$sel_thread): bool { $tp++; if ($t === $sel_thread) $ttp = $tp-1; return $t->hasReportedPosts(); } );
             $pages = floor(max(0,count($threads)-1) / self::ThreadsPerPage) + 1;
             if ($sel_thread && !$sel_thread->getPinned())
                 $page = 1 + ($ttp / self::ThreadsPerPage);
@@ -168,7 +174,8 @@ class MessageForumController extends MessageController
             'pages' => $pages,
             'current_page' => $page,
             'paranoid' => $paranoid,
-            'at_night' => $this->time_keeper->isDuringAttack()
+            'at_night' => $this->time_keeper->isDuringAttack(),
+            'tags' => $tags
         ] ));
     }
 
@@ -200,9 +207,10 @@ class MessageForumController extends MessageController
      * @return Response
      */
     #[Route(path: 'jx/forum/{id<\d+>}', name: 'forum_view')]
-    public function forum(int $id, EntityManagerInterface $em, JSONRequestParser $p, CitizenHandler $ch, Locksmith $locksmith): Response
+    public function forum(int $id, Request $request, EntityManagerInterface $em, JSONRequestParser $p, CitizenHandler $ch, Locksmith $locksmith): Response
     {
-        return $this->default_forum_renderer($id,-1,-1, -1, $em, $p, $ch, $locksmith);
+        $tags = array_filter( explode(',', $request->get('tags')), fn(string $s) => !empty($s) );
+        return $this->default_forum_renderer($id,-1,-1, -1, $em, $p, $ch, $locksmith, $tags ?: null);
     }
 
     /**
@@ -215,9 +223,10 @@ class MessageForumController extends MessageController
      * @return Response
      */
     #[Route(path: 'jx/forum/{fid<\d+>}/{tid<\d+>}/{page<\d+>}', name: 'forum_thread_view')]
-    public function forum_thread(int $fid, int $tid, EntityManagerInterface $em, JSONRequestParser $p, CitizenHandler $ch, Locksmith $locksmith, int $page = -1): Response
+    public function forum_thread(int $fid, int $tid, EntityManagerInterface $em, JSONRequestParser $p, CitizenHandler $ch, Locksmith $locksmith, Request $request, int $page = -1): Response
     {
-        return $this->default_forum_renderer($fid,$tid,-1, $page, $em,$p,$ch, $locksmith);
+        $tags = array_filter( explode(',', $request->get('tags')), fn(string $s) => !empty($s) );
+        return $this->default_forum_renderer($fid,$tid,-1, $page, $em,$p,$ch, $locksmith, $tags ?: null);
     }
 
     /**

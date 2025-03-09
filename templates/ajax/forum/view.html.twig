@@ -8,7 +8,7 @@
 {# @var forum \App\Entity\Forum #}
 {# @var permission \App\Structures\ForumPermissionAccessor #}
 
-{% macro display_thread_list( list, fid, icon, title, select, jump, permission, town = false, add_seperators = false, paranoid = false, post_page = -1, icon_image = null ) %}
+{% macro display_thread_list( list, fid, icon, title, select, jump, permission, town = false, add_seperators = false, paranoid = false, post_page = -1, icon_image = null, tags = null ) %}
     <div class="forum-note thread-list-{{ icon }}">
         <b>
             {% if icon_image is null %}<i class="fa {{ icon }}"></i>{% endif%}
@@ -41,7 +41,7 @@
                 </div></div>
             {% endif %}
 
-            <div class="row-flex stretch forum-thread {% if thread.new %}forum-thread-unread{% endif%}" x-public-route="{{ path('forum_thread_view', {fid: fid, tid: thread.id }) }}" {% if postUrl != postUrlFg %}x-post-source-next="{{ postUrlFg }}"{% endif%} {% if page_target > 0 %}x-post-page="{{ page_target }}" x-public-route-next="{{ path('forum_thread_view', {fid: fid, tid: thread.id, page: page_target }) }}"{% endif%} x-post-source="{{ postUrl }}" x-thread-id="{{ thread.id }}">
+            <div class="row-flex stretch forum-thread {% if thread.new %}forum-thread-unread{% endif%}" x-public-route="{{ path('forum_thread_view', {fid: fid, tid: thread.id, tags: tags ? tags|map(t => t.name)|join(',') : null }) }}" {% if postUrl != postUrlFg %}x-post-source-next="{{ postUrlFg }}"{% endif%} {% if page_target > 0 %}x-post-page="{{ page_target }}" x-public-route-next="{{ path('forum_thread_view', {fid: fid, tid: thread.id, page: page_target }) }}"{% endif%} x-post-source="{{ postUrl }}" x-thread-id="{{ thread.id }}">
                 {# @var thread \App\Entity\Thread #}
                 <div class="padded cell factor-0 rw-1 status">
                     {% if thread.locked and not thread.solved %}
@@ -147,7 +147,28 @@
                             {% if select > 0 %}
                                 <div x-ajax-href="{{ url('forum_thread_view', {fid: forum.id, tid: select, page: post_page}) }}" class="forum-button forum-reload-button"><img alt="" src="{{ asset('build/images/forum/refresh.png') }}" /><div class="tooltip forum-tooltip">{{ 'Liste der Themen aktualisieren'|trans({},'global') }}</div></div>
                             {% else %}
-                                <div x-ajax-href="{{ url('forum_view', {id: forum.id}) }}" class="forum-button forum-reload-button"><img alt="" src="{{ asset('build/images/forum/refresh.png') }}" /><div class="tooltip forum-tooltip">{{ 'Liste der Themen aktualisieren'|trans({},'global') }}</div></div>
+                                <div x-ajax-href="{{ url('forum_view', {id: forum.id, tags: tags ? tags|map(t => t.name)|join(',') : null}) }}" class="forum-button forum-reload-button"><img alt="" src="{{ asset('build/images/forum/refresh.png') }}" /><div class="tooltip forum-tooltip">{{ 'Liste der Themen aktualisieren'|trans({},'global') }}</div></div>
+                            {% endif %}
+
+                            {% if forum.allowedTags is not empty %}
+                                <div class="forum-button" data-manual-toggle="0" data-manual-toggle-target=".forum-filter-list" data-indicator="{{ tags is null ? 0 : tags|length }}">
+                                    <img alt="" src="{{ asset('build/images/icons/filter.gif') }}" />
+                                    <div class="tooltip forum-tooltip">{{ 'Themen filtern'|trans({},'global') }}</div>
+                                </div>
+                                <form class="forum-filter-list">
+                                    {% for tag in forum.allowedTags %}
+                                        <label><input name="{{ tag.name }}" type="checkbox" {{ {checked: tags is not null and tag in tags}|attributes  }} />{{ tag.label|trans({}, 'global') }}</label>
+                                    {% endfor %}
+
+                                    {% if select > 0 %}
+                                        <div data-close-manual-toggle="1" data-filter-apply-base="{{ url('forum_thread_view', {fid: forum.id, tid: select, page: post_page}) }}" x-ajax-href="{{ url('forum_thread_view', {fid: forum.id, tid: select, page: post_page, tags: tags ? tags|map(t => t.name)|join(',') : null}) }}" class="forum-button">{{ 'Anwenden'|trans({},'global') }}</div>
+                                        <div data-close-manual-toggle="1" x-ajax-href="{{ url('forum_thread_view', {fid: forum.id, tid: select, page: post_page}) }}" class="forum-button">{{ 'Zurücksetzen'|trans({},'global') }}</div>
+                                    {% else %}
+                                        <div data-close-manual-toggle="1" data-filter-apply-base="{{ url('forum_view', {id: forum.id}) }}"  x-ajax-href="{{ url('forum_view', {id: forum.id, tags: tags ? tags|map(t => t.name)|join(',') : null}) }}" class="forum-button">{{ 'Anwenden'|trans({},'global') }}</div>
+                                        <div data-close-manual-toggle="1" x-ajax-href="{{ url('forum_view', {id: forum.id}) }}" class="forum-button">{{ 'Zurücksetzen'|trans({},'global') }}</div>
+                                    {% endif %}
+
+                                </form>
                             {% endif %}
 
                             {% if not permission.only_mod_access %}
@@ -178,11 +199,11 @@
                     {% endif %}
 
                     {% if pinned_threads %}
-                        {{ _self.display_thread_list(pinned_threads, forum.id, 'fa-thumbtack', 'Sticky'|trans({}, 'global'), select, jump, permission, town, false, false, post_page, asset('build/images/icons/pin3.png')) }}
+                        {{ _self.display_thread_list(pinned_threads, forum.id, 'fa-thumbtack', 'Sticky'|trans({}, 'global'), select, jump, permission, town, false, false, post_page, asset('build/images/icons/pin3.png'), tags) }}
                         <br />
                     {% endif %}
 
-                    {{ _self.display_thread_list(threads, forum.id, 'fa-scroll', forum.localizedTitle(app.locale), select, jump, permission, town, true, paranoid, post_page, asset('build/images/icons/small_rp.gif')) }}
+                    {{ _self.display_thread_list(threads, forum.id, 'fa-scroll', forum.localizedTitle(app.locale), select, jump, permission, town, true, paranoid, post_page, asset('build/images/icons/small_rp.gif'), tags) }}
                     {% if pages > 1 %}
                         <div class="row">
                             <div class="cell rw-12 padded center">
@@ -350,7 +371,18 @@
         if (selection_target) selection_target.click();
 
         $.html.addEventListenerAll( '[x-forum-action="thread-pager"][x-to-page]', 'click',
-            (e,elem) => $.ajax.no_history().load( null, '{{ path('forum_view', {id: forum.id}) }}', false, {page: parseInt( elem.getAttribute('x-to-page') )} ) );
+            (e,elem) => $.ajax.no_history().load( null, '{{ path('forum_view', {id: forum.id, tags: tags ? tags|map(t => t.name)|join(',') : null}) }}', false, {page: parseInt( elem.getAttribute('x-to-page') )} ) );
+
+        const filters = document.querySelector('.forum-filter-list');
+        filters?.addEventListener('click', () => {
+            const tags = Object.entries( $.html.serializeForm( filters ) )
+                .filter(([key,value]) => value)
+                .map(([key,value]) => key)
+                .join(',');
+
+            const apply = document.querySelector('[data-filter-apply-base]');
+            apply?.setAttribute('x-ajax-href', apply?.dataset?.filterApplyBase + '?tags=' + tags)
+        })
 
         $.html.addEventListenerAll( '[x-forum-action="thread-select-page"]', 'click', function(e,elem) {
             e.preventDefault();
@@ -373,8 +405,8 @@
                 if (to_page > {{ pages }})
                     to_page = {{ pages }};
                 if (to_page < 1) to_page = 1;
-                $.ajax.push_history('{{ path('forum_view', {id: forum.id}) }}/' + to_page);
-                $.ajax.no_history().load( null, '{{ path('forum_view', {id: forum.id}) }}', false, {page: to_page});
+                $.ajax.push_history('{{ path('forum_view', {id: forum.id, tags: tags ? tags|map(t => t.name)|join(',') : null}) }}/' + to_page);
+                $.ajax.no_history().load( null, '{{ path('forum_view', {id: forum.id, tags: tags ? tags|map(t => t.name)|join(',') : null}) }}', false, {page: to_page});
             });
         } );
     </script>
