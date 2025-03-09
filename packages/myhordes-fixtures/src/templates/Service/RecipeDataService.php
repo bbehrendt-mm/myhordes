@@ -54,7 +54,7 @@ class RecipeDataService implements FixtureProcessorInterface {
             'com006' => ['type' => Recipe::ManualAnywhere, 'out' => 'wood_plate_#00',         'provoking' => 'wood_plate_part_#00',    'in' => ['wood_plate_part_#00', 'wood2_#00'] ],
             'com007' => ['type' => Recipe::ManualAnywhere, 'out' => 'concrete_wall_#00',      'provoking' => 'concrete_#00',           'in' => ['concrete_#00', 'water_#00'] ],
             'com008' => ['type' => Recipe::ManualAnywhere, 'out' => 'chama_tasty_#00',        'provoking' => 'chama_#00',              'in' => ['chama_#00', 'torch_#00'], 'keep' => ['torch_#00'], 'tooltip' => 'Du hast {item_list} in {item} verwandelt.' ],
-            'com009' => ['type' => Recipe::ManualAnywhere, 'out' => 'food_noodles_hot_#00',   'provoking' => 'spices_#00',             'in' => ['food_noodles_#00', 'spices_#00', 'water_#00'] ],
+            'com009' => ['type' => Recipe::ManualAnywhere, 'out' => 'food_noodles_hot_#00',   'provoking' => 'food_noodles_#00',       'in' => ['food_noodles_#00', 'spices_#00', 'water_#00'] ],
             'com010' => ['type' => Recipe::ManualAnywhere, 'out' => 'coffee_#00',             'provoking' => 'coffee_machine_#00',     'in' => ['pile_#00', 'pharma_#00', 'wood_bad_#00'] ],
 
             'com011' => ['type' => Recipe::ManualAnywhere, 'out' => 'watergun_opt_empty_#00', 'provoking' => 'watergun_opt_part_#00',  'in' => ['watergun_opt_part_#00', 'tube_#00', 'deto_#00', 'grenade_empty_#00', 'rustine_#00' ], "picto"=> "r_watgun_#00"],
@@ -107,7 +107,7 @@ class RecipeDataService implements FixtureProcessorInterface {
 
             'com054' => ['type' => Recipe::ManualAnywhere, 'out' => 'moldy_food_part_#00',      'provoking' => 'moldy_food_subpart_#00',  'in' => ['moldy_food_subpart_#00', 'moldy_food_subpart_#00' ] ],
             'com055' => ['type' => Recipe::ManualAnywhere, 'out' => 'moldy_food_#00',           'provoking' => 'moldy_food_part_#00',     'in' => ['moldy_food_part_#00', 'moldy_food_subpart_#00' ] ],
-            'com056' => ['type' => Recipe::ManualAnywhere, 'out' => 'moldy_food_spicy_#00',     'provoking' => 'moldy_food_subpart_#00',  'in' => ['moldy_food_subpart_#00', 'spices_#00' ], 'action' => 'Würzen'  ],
+            'com056' => ['type' => Recipe::ManualAnywhere, 'out' => 'moldy_food_spicy_#00',     'provoking' => 'spices_#00',              'in' => ['moldy_food_subpart_#00', 'spices_#00' ] ],
         ]);
 
         $add = [];
