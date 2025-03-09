@@ -25,6 +25,8 @@ class ForumThreadTagDataService implements FixtureProcessorInterface {
             'dsc_sugg'   => [ 'color' => null, 'label' => 'Vorschlag' ],
             'dsc_salc'   => [ 'color' => null, 'label' => 'SALC' ],
             'dsc_proj'   => [ 'color' => null, 'label' => 'Projekt' ],
+            'dsc_game'   => [ 'color' => null, 'label' => 'Spiel  (forum)' ],
+            'dsc_flood'  => [ 'color' => null, 'label' => 'Spam  (forum)' ],
         ]);
     }
 }
