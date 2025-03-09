@@ -100,7 +100,7 @@ class ActionHandler
                 $cache->addMessage($thisMessage, translationDomain: 'items');
         }
 
-        $messages = $cache->getMessages( $this->translator, $this->wrapObjectsForOutputAction, $this->messageDecoder, $citizen->fullPropertySet());
+        $messages = $cache->getMessages( $this->translator, $this->wrapObjectsForOutputAction, $this->messageDecoder, ($contextCitizen ?? $citizen)->fullPropertySet());
         $message = !empty($messages) ? implode('<hr />', $messages) : null;
 
         return $current_state;
@@ -474,7 +474,7 @@ class ActionHandler
         }
 
         if($cache->hasMessages())
-            $message = implode('<hr />', $cache->getMessages( $this->translator, $this->wrapObjectsForOutputAction, $this->messageDecoder, $citizen->fullPropertySet()));
+            $message = implode('<hr />', $cache->getMessages( $this->translator, $this->wrapObjectsForOutputAction, $this->messageDecoder, ($contextCitizen ?? $citizen)->fullPropertySet()));
 
         return self::ErrorNone;
     }
