@@ -747,7 +747,7 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->adjustForHardMode(null, ["pile_#00" => 25,"engine_#00" => 2,"electro_#00" => 8,"concrete_wall_#00" => 10,"metal_beam_#00" => 50,])->autoEasyMode()
             ->blueprintLevel(4)->orderBy(16)->commit();
 
-        $container->add()->parentBuilding($small_wallimprove)
+        $container->add()
             ->icon('small_door_closed')->label('Portal')->description('Eine rustikal anmutende Konstruktion, mit der die Öffnung des Stadttors nach 23:40 erfolgreich verhindert werden kann (es dürfte äußerst selten vorkommen, dass das Tor danach nochmal geöffnet werden muss). Das Stadttor muss nichtsdestotrotz zusätzlich noch per Hand geschlossen werden.')
             ->isTemporary(0)->defense(5)->ap(15)->health(15)->blueprintLevel(0)->resources(["metal_#00" => 2,])->orderBy(12)
             ->voteLevel(3)->baseVoteText('Das Portal bringt 5 Verteidigungspunkte.')
