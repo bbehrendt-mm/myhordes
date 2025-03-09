@@ -688,3 +688,8 @@ Namen-Suche: Namen-Suche
 'Namen können als glob-Muster eingegeben werden. Beispielsweise würde *test* alle Namen verhindern, in denen "test" vorkommt. Für eine Übersicht über glob-Syntax, siehe folgenden Link:': 'Namen können als glob-Muster eingegeben werden. Beispielsweise würde *test* alle Namen verhindern, in denen "test" vorkommt. Für eine Übersicht über glob-Syntax, siehe folgenden Link:'
 'Gesperrte Namen': 'Gesperrte Namen'
 'Es existiert bereits ein Changelog für diese Version in der angegebenen Sprache.': 'Es existiert bereits ein Changelog für diese Version in der angegebenen Sprache.'
+'Ressourcen- und AP-Vorlage, welches für diese Konstruktion benötigt wird.': 'Ressourcen- und AP-Vorlage, welches für diese Konstruktion benötigt wird.'
+Teuer: Teuer
+Normal: Normal
+Billig: Billig
+Billig+: Billig+
