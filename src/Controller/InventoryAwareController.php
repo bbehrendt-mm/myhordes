@@ -807,24 +807,24 @@ class InventoryAwareController extends CustomAbstractController
                 return true;
             case ItemTargetDefinition::ItemHeroicRescueType:
                 $return = $this->entity_manager->getRepository(Citizen::class)->find( (int)$id );
-                if ($return->getTown()->getId() !== $this->getActiveCitizen()->getTown()->getId()) {
+                if ($return?->getTown()?->getId() !== $this->getActiveCitizen()->getTown()->getId()) {
                     $return = null;
                     return false;
                 }
                 return true;
             case ItemTargetDefinition::ItemCitizenType: case ItemTargetDefinition::ItemCitizenVoteType:
             $return = $this->entity_manager->getRepository(Citizen::class)->find( (int)$id );
-            if (!$return->getAlive() || $return->getTown()->getId() !== $this->getActiveCitizen()->getTown()->getId()) {
+            if (!$return?->getAlive() || $return?->getTown()?->getId() !== $this->getActiveCitizen()->getTown()->getId()) {
                 $return = null;
                 return false;
             }
             return true;
             case ItemTargetDefinition::ItemCitizenOnZoneType: case ItemTargetDefinition::ItemCitizenOnZoneSBType:
             $return = $this->entity_manager->getRepository(Citizen::class)->find( (int)$id );
-            if (!$return->getAlive() || $return->getZone() !== $this->getActiveCitizen()->getZone()) {
+            if (!$return?->getAlive() || $return?->getZone() !== $this->getActiveCitizen()->getZone()) {
                 $return = null;
                 return false;
-            } else if ( $target->getSpawner() === ItemTargetDefinition::ItemCitizenOnZoneSBType && $return->getSpecificActionCounter(ActionCounter::ActionTypeSandballHit)->getLast() !== null && $return->getSpecificActionCounter(ActionCounter::ActionTypeSandballHit)->getLast()->getTimestamp() >= (time() - 1800) ) {
+            } else if ( $target->getSpawner() === ItemTargetDefinition::ItemCitizenOnZoneSBType && $return?->getSpecificActionCounter(ActionCounter::ActionTypeSandballHit)?->getLast() !== null && $return?->getSpecificActionCounter(ActionCounter::ActionTypeSandballHit)?->getLast()?->getTimestamp() >= (time() - 1800) ) {
                 $return = null;
                 return false;
             }
