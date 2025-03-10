@@ -57,7 +57,7 @@ Routen: Expedición
 Stadttor: El Portal
 Karte: Mapa
 'Bitte wähle einen Gegenstand:': 'Selecciona un objeto:'
-'Du verfügst über keine geeigneten Gegenstände': 'No tienes ningún item adecuado para esto.'
+'Du verfügst über keine geeigneten Gegenstände': 'No tienes ningún objeto adecuado para esto.'
 Herstellen: Ensamblar
 aus: requiere
 Kombinieren: Combinar
@@ -179,7 +179,7 @@ Punkt(e): puntos
 'Hilfe rufen!': '¡Pedir ayuda!'
 'Die Flucht wagen!': '¡Intentar Huir!'
 'Gegen einen Zombie kämpfen!': 'Luchar contra un Zombie'
-'Es muss noch aufgeräumt werden': 'Zona aún no descubeirta'
+'Es muss noch aufgeräumt werden': 'Zona aún no descubierta'
 Ruine: Ruina
 'Diese Zone ist leergesucht. Du wirst hier keine wertvollen Gegenstände mehr finden können.': 'La zona está agotada, no encontrarás nada más que objetos de poco valor...'
 'Stadt betreten': 'Entrar al pueblo'
