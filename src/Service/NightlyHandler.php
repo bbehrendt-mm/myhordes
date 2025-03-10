@@ -780,7 +780,7 @@ class NightlyHandler
                     $skip = true;
                 } else {
                     // We must give the nightwatch picto here, because the citizen dies and the additional picto stage does not execute for dead citizens
-                    // $this->picto_handler->give_picto($ctz, $picto_nightwatch);
+                    $this->picto_handler->give_picto($ctz, $picto_nightwatch);
 
                     // The murdering zombie survives!
                     $defBonus = max(0, $defBonus - 1);
