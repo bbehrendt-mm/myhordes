@@ -172,7 +172,12 @@
 
 	{# @var rootBuildings \App\Entity\BuildingPrototype[] #}
 	<div>
-		<button data-building-admin-action="unlockCheckedBuildings" class="inline"><img alt="" src="{{ asset('build/images/pictos/r_door.gif') }}" /> Unlock checked buildings</button>
+        <div class="flex gap">
+            <button data-building-admin-action="unlockCheckedBuildings" class="inline"><img alt="" src="{{ asset('build/images/pictos/r_door.gif') }}" /> {{ 'Gewählte Gebäude freischalten' }}</button>
+            <span></span>
+            <button data-building-admin-action="resetConstructionSite" class="inline"><img alt="" src="{{ asset('build/images/emotes/trash.gif') }}" /> {{ 'Gesamten Gebäudebaum zurücksetzen' }}</button>
+        </div>
+
 		<ul class="buildings-tabs tabs plain" x-tab-group="buildings" x-tab-control>
 			<li class="tab" x-tab-id="all">
 				<div class="tab-link">
@@ -195,10 +200,6 @@
 	{% for building in rootBuildings %}
 		<div x-tab-group="buildings" style="margin-top:31px" x-tab-id="type_{{ building.icon }}" x-tab-target class="buildings type_{{ building.icon }}">{{ _self.building_entry(building, true, 0, dictBuildings, availBuldings, workshopBonus, hpToAp) }}</div>
 	{% endfor %}
-
-	<div style="margin-top:20px">
-		<button data-building-admin-action="unlockCheckedBuildings"><img alt="" src="{{ asset('build/images/pictos/r_door.gif') }}" /> Unlock checked buildings</button>
-	</div>
 
 {% endblock %}
 {% block js %}
@@ -310,6 +311,12 @@
                             $.ajax.load(null, '{{ path('admin_town_buildings', {id: town.id}) }}', true);
                         }
                     );
+                    break;
+                case "resetConstructionSite":
+                    if (confirm('{{ 'Bestätigen?'|trans({},'global')|e('js') }}'))
+                        $.ajax.easySend("{{ path('admin_town_reset_buildings', {id: town.id }) }}", {},
+                            () => $.ajax.load(null, '{{ path('admin_town_buildings', {id: town.id}) }}', true)
+                        );
                     break;
             }
         }

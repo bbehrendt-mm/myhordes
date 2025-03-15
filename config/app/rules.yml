@@ -73,6 +73,7 @@ parameters:
           daily: 5
 
       initial_buildings:  []
+      fixed_building_rsc_level: []
       unlocked_buildings: []
 
       spiritual_guide:
@@ -413,9 +414,11 @@ parameters:
         - small_thermal_#00
         - item_soul_blue_static_#00
         - small_spa4souls_#00
+        - item_rp_book2_#00
 
       overrides:
         building_rarity:
+          '0>': 5
           small_dig_#01: 1
           small_trap_#00: 1
           small_trap_#02: 1

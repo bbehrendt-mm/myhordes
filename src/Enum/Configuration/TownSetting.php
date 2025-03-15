@@ -140,6 +140,7 @@ enum TownSetting: string implements Configuration
 
     case TownInitialBuildingsConstructed = 'initial_buildings';
     case TownInitialBuildingsUnlocked    = 'unlocked_buildings';
+    case TownBuildingResourceLevelLocked = 'fixed_building_rsc_level';
     case TownInitialDistributesItems     = 'distribute_items';
     case TownInitialDistributionDistance = 'distribution_distance';
     case TownInitialChestItems   = 'initial_chest';
@@ -357,6 +358,7 @@ enum TownSetting: string implements Configuration
 
             self::TownInitialBuildingsConstructed,
             self::TownInitialBuildingsUnlocked,
+            self::TownBuildingResourceLevelLocked,
             self::TownInitialDistributesItems,
             self::TownInitialDistributionDistance,
             self::TownInitialChestItems => self::Section_Initial,
@@ -546,6 +548,7 @@ enum TownSetting: string implements Configuration
 
             self::TownInitialBuildingsConstructed => [],
             self::TownInitialBuildingsUnlocked => [],
+            self::TownBuildingResourceLevelLocked => [],
             self::TownInitialDistributesItems => [],
             self::TownInitialDistributionDistance => [],
             self::TownInitialChestItems => [],

@@ -38,8 +38,9 @@ class ProcessTownEffect extends AtomEffectProcessor
             $possible = match($cache->conf->get(TownSetting::OptFeatureBlueprintMode)) {
                 'unlock' => $cache->em->getRepository(BuildingPrototype::class)->findProspectivePrototypes( $town ),
                 'improve' => $town->getBuildings()
-                    ->filter(fn(Building $b) => !$b->getComplete() && $b->getDifficultyLevel() <= 1 && $b->getPrototype()->isHasHardMode())
+                    ->filter(fn(Building $b) => !$b->getComplete() && $b->getDifficultyLevel() <= 1)
                     ->map(fn(Building $b) => $b->getPrototype())
+                    ->filter(fn(BuildingPrototype $p) => !in_array( $p->getName(), $cache->conf->get(TownSetting::TownBuildingResourceLevelLocked)) && $p->isHasHardMode())
                     ->getValues(),
                 default => [],
             };

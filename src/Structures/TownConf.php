@@ -54,7 +54,9 @@ class TownConf extends Conf
     public function getBuildingRarity(BuildingPrototype $prototype): int {
         return $this->getSubKey(
             TownSetting::OptModifierOverrideBuildingRarity, $prototype->getName(),
-            $this->getSubKey( TownSetting::OptModifierOverrideBuildingRarity, '*', $prototype->getBlueprint() )
+            $this->getSubKey( TownSetting::OptModifierOverrideBuildingRarity, "{$prototype->getBlueprint()}>",
+                $this->getSubKey( TownSetting::OptModifierOverrideBuildingRarity, '*', $prototype->getBlueprint() )
+            ),
         );
     }
 }
