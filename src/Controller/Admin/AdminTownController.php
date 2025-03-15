@@ -53,6 +53,8 @@ use App\Enum\EventStages\BuildingValueQuery;
 use App\Enum\ItemPoisonType;
 use App\Response\AjaxResponse;
 use App\Service\Actions\Cache\InvalidateTagsInAllPoolsAction;
+use App\Service\Actions\Game\GenerateTownNameAction;
+use App\Service\Actions\Game\InitializeTownBuildingsAction;
 use App\Service\AdminLog;
 use App\Service\CrowService;
 use App\Service\CitizenHandler;
@@ -608,7 +610,8 @@ class AdminTownController extends AdminActionController
     public function town_manager(int $id, string $action, ItemFactory $itemFactory, RandomGenerator $random,
                                  NightlyHandler $night, GameFactory $gameFactory, CrowService $crowService,
                                  KernelInterface $kernel, JSONRequestParser $parser, TownHandler $townHandler,
-                                 GameProfilerService $gps, MapMaker $mapMaker): Response
+                                 GameProfilerService $gps, MapMaker $mapMaker, GenerateTownNameAction $townNameAction)
+    : Response
     {
 
         /** @var Town $town */
@@ -693,7 +696,7 @@ class AdminTownController extends AdminActionController
                 $old_name = $town->getName();
                 $schema = null;
                 $new_name = $action === 'dice_name'
-                    ? $gameFactory->createTownName( $town->getLanguage(), $schema )
+                    ? ($townNameAction)($town->getLanguage(), $schema)
                     : trim($param ?? '');
                 if (empty($new_name)) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
                 $town->setName( $new_name )->setNameSchema( $schema );
@@ -1709,7 +1712,7 @@ class AdminTownController extends AdminActionController
     #[Route(path: 'api/admin/town/{tid}/relang', name: 'admin_town_town_lang_control', requirements: ['tid' => '\d+', 'act' => '\d+'])]
     #[IsGranted('ROLE_CROW')]
     #[AdminLogProfile(enabled: true)]
-    public function switch_town_lang(int $tid, JSONRequestParser $parser, GameFactory $gameFactory): Response
+    public function switch_town_lang(int $tid, JSONRequestParser $parser, GameFactory $gameFactory, GenerateTownNameAction $townNameAction): Response
     {
         /** @var TownRankingProxy $town_proxy */
         $town_proxy = $this->entity_manager->getRepository(TownRankingProxy::class)->find($tid);
@@ -1728,9 +1731,11 @@ class AdminTownController extends AdminActionController
 
         if ($rename) {
             $old_name = $town_proxy->getName( );
-            $name = $gameFactory->createTownName( $lang, $schema );
+            $schema = null;
+            $name = ($townNameAction)( $lang, $schema );
             $town_proxy->setName( $name );
             $town_proxy->getTown()?->setName($name)?->setNameSchema($schema);
+            $town_proxy->getTown()?->getForum()?->setTitle( $name );
 
             foreach ($town_proxy->getCitizens() as $citizen)
                 $this->entity_manager->persist($this->crow_service->createPM_moderation( $citizen->getUser(), CrowService::ModerationActionDomainRanking, CrowService::ModerationActionTargetGameName, CrowService::ModerationActionEdit, $town_proxy, $old_name ));
@@ -2233,15 +2238,16 @@ class AdminTownController extends AdminActionController
     }
 
     /**
-     * @param int $id ID of the town
+     * @param Town $town
      * @param JSONRequestParser $parser The JSON request parser
      * @param TownHandler $th The town handler
+     * @param GameProfilerService $gps
      * @return Response
      */
     #[Route(path: 'api/admin/town/{id}/buildings/add', name: 'admin_town_add_building', requirements: ['id' => '\d+'])]
     #[IsGranted('ROLE_SUB_ADMIN')]
     #[AdminLogProfile(enabled: true)]
-    public function town_add_building(Town $town, JSONRequestParser $parser, TownHandler $th, GameProfilerService $gps)
+    public function town_add_building(Town $town, JSONRequestParser $parser, TownHandler $th, GameProfilerService $gps): Response
     {
         if (!$parser->has_all(['prototype_id', 'act'])) {
             return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
@@ -2274,6 +2280,33 @@ class AdminTownController extends AdminActionController
     }
 
     /**
+     * @param Town $town
+     * @param EntityManagerInterface $em
+     * @param ConfMaster $conf
+     * @param InitializeTownBuildingsAction $action
+     * @return Response
+     */
+    #[Route(path: 'api/admin/town/{id}/buildings/reset', name: 'admin_town_reset_buildings')]
+    #[IsGranted('ROLE_SUB_ADMIN')]
+    #[AdminLogProfile(enabled: true)]
+    public function town_reset_buildings(Town $town, EntityManagerInterface $em, ConfMaster $conf, InitializeTownBuildingsAction $action): Response
+    {
+        foreach ($town->getBuildings() as $b)
+            $em->remove( $b );
+        $town->getBuildings()->clear();
+        $this->entity_manager->persist($town);
+        $this->entity_manager->flush();
+
+        ($action)($town, $conf->getTownConfiguration( $town ), false);
+
+        $this->clearTownCaches($town);
+        $this->entity_manager->persist($town);
+        $this->entity_manager->flush();
+
+        return AjaxResponse::success();
+    }
+
+    /**
      * @param int $id ID of the town
      * @param JSONRequestParser $parser The JSON request parser
      * @param EventProxyService $events
@@ -2284,7 +2317,7 @@ class AdminTownController extends AdminActionController
     #[Route(path: 'api/admin/town/{id}/buildings/set-ap', name: 'admin_town_set_building_ap', requirements: ['id' => '\d+'])]
     #[IsGranted('ROLE_SUB_ADMIN')]
     #[AdminLogProfile(enabled: true)]
-    public function town_set_building_ap(int $id, JSONRequestParser $parser, EventProxyService $events)
+    public function town_set_building_ap(int $id, JSONRequestParser $parser, EventProxyService $events): Response
     {
         $town = $this->entity_manager->getRepository(Town::class)->find($id);
         if (!$town) {

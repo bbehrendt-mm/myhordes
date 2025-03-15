@@ -21,6 +21,7 @@ use App\Entity\ZombieEstimation;
 use App\Enum\Configuration\MyHordesSetting;
 use App\Enum\Configuration\TownSetting;
 use App\Enum\EventStages\BuildingValueQuery;
+use App\Service\Actions\Game\GenerateTownNameAction;
 use App\Service\CitizenHandler;
 use App\Service\CommandHelper;
 use App\Service\ConfMaster;
@@ -39,7 +40,6 @@ use DateTime;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
-use Symfony\Bundle\FrameworkBundle\Translation\Translator;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -48,6 +48,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[AsCommand(
     name: 'app:debug',
@@ -55,44 +56,25 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 )]
 class DebugCommand extends LanguageCommand
 {
-    private KernelInterface $kernel;
-
-    private GameFactory $game_factory;
-    private EntityManagerInterface $entity_manager;
-    private CitizenHandler $citizen_handler;
-    private RandomGenerator $randomizer;
-    private Translator $trans;
-    private InventoryHandler $inventory_handler;
-    private ItemFactory $item_factory;
-    private UserPasswordHasherInterface $encoder;
-    private ConfMaster $conf;
-    private TownHandler $townHandler;
-    private TwinoidHandler $twin;
-    private GameProfilerService $gps;
-	private EventProxyService $events;
-
-    public function __construct(KernelInterface $kernel, GameFactory $gf, EntityManagerInterface $em,
-                                RandomGenerator $rg, CitizenHandler $ch, Translator $translator, InventoryHandler $ih,
-                                ItemFactory $if, UserPasswordHasherInterface $passwordEncoder, ConfMaster $c,
-                                TownHandler $th, CommandHelper $h, TwinoidHandler $t, GameProfilerService $gps, EventProxyService $eps)
+    public function __construct(
+        private readonly KernelInterface             $kernel,
+        private readonly GameFactory                 $game_factory,
+        private readonly EntityManagerInterface      $entity_manager,
+        private readonly RandomGenerator             $randomizer,
+        private readonly CitizenHandler              $citizen_handler,
+        protected ?TranslatorInterface               $translator,
+        private readonly InventoryHandler            $inventory_handler,
+        private readonly ItemFactory                 $item_factory,
+        private readonly UserPasswordHasherInterface $encoder,
+        private readonly ConfMaster                  $conf,
+        private readonly TownHandler                 $townHandler,
+        protected ?CommandHelper                     $helper,
+        private readonly TwinoidHandler              $twin,
+        private readonly GameProfilerService         $gps,
+        private readonly EventProxyService           $events,
+        private readonly GenerateTownNameAction      $townNameAction,
+    )
     {
-        $this->kernel = $kernel;
-
-        $this->game_factory = $gf;
-        $this->entity_manager = $em;
-        $this->randomizer = $rg;
-        $this->citizen_handler = $ch;
-        $this->trans = $translator;
-        $this->inventory_handler = $ih;
-        $this->item_factory = $if;
-        $this->encoder = $passwordEncoder;
-        $this->conf = $c;
-        $this->townHandler = $th;
-        $this->helper = $h;
-        $this->twin = $t;
-        $this->gps = $gps;
-		$this->events = $eps;
-
         parent::__construct();
     }
 
@@ -289,7 +271,7 @@ class DebugCommand extends LanguageCommand
                 $output->writeln('<error>Town not found!</error>');
                 return 2;
             }
-            $this->trans->setLocale($town->getLanguage() ?? 'de');
+            $this->translator->setLocale($town->getLanguage() ?? 'de');
 
             $force = $input->getOption('force');
 
@@ -353,7 +335,7 @@ class DebugCommand extends LanguageCommand
                         if ($citizen->getProfession()->getName() !== 'none')
                             $this->gps->recordCitizenProfessionSelected( $joined_citizen );
                         if($joined_citizen !== $citizen) {
-                            $output->writeln("Coalition member <comment>{$joined_citizen->getUser()->getName()}</comment> joins <comment>{$town->getName()}</comment> as a <comment>{$this->trans->trans($pro->getLabel(), [], 'game')}</comment>.");
+                            $output->writeln("Coalition member <comment>{$joined_citizen->getUser()->getName()}</comment> joins <comment>{$town->getName()}</comment> as a <comment>{$this->translator->trans($pro->getLabel(), [], 'game')}</comment>.");
                             $i += 1;
                         }
                     }
@@ -361,7 +343,7 @@ class DebugCommand extends LanguageCommand
 
                     $ii = $i + $town->getCitizenCount() + 1;
 
-                    $output->writeln("<comment>{$user->getName()}</comment> joins <comment>{$town->getName()}</comment> and fills slot {$ii}/{$town->getPopulation()} as a <comment>{$this->trans->trans($pro->getLabel(), [], 'game')}</comment>.");
+                    $output->writeln("<comment>{$user->getName()}</comment> joins <comment>{$town->getName()}</comment> and fills slot {$ii}/{$town->getPopulation()} as a <comment>{$this->translator->trans($pro->getLabel(), [], 'game')}</comment>.");
                     break;
                 }
             }
@@ -488,7 +470,8 @@ class DebugCommand extends LanguageCommand
             $table->setHeaders( ['Schema', 'Name'] );
 
             for ($i = 0; $i < 50; $i++) {
-                $name = $this->game_factory->createTownName($lang, $schema, $mutator ?: null);
+                $schema = null;
+                $name = ($this->townNameAction)($lang, $schema, $mutator ?: null);
                 $table->addRow(["<comment>$schema</comment>", $name ]);
             }
 
