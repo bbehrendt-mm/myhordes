@@ -14,7 +14,10 @@ class BuildingDataService implements FixtureProcessorInterface {
 
         $container->add()
             ->icon('small_wallimprove')->label('Verstärkte Stadtmauer')->description('Mauern um die Stadt zu errichten, darüber müsste man nachdenken! Dies ist der Anfang der Befestigungsanlagen.')
-            ->isTemporary(0)->defense(30)->ap(25)->blueprintLevel(0)->resources(["wood2_#00" => 8,"metal_#00" => 4])->orderBy(0)->commit( $small_wallimprove );
+            ->isTemporary(0)->defense(30)
+            ->ap(25)->resources(["wood2_#00" => 8,"metal_#00" => 4])
+            ->adjustForHardMode(null, ["wood2_#00" => 10,"metal_#00" => 5], null, ["wood2_#00" => 10,"metal_#00" => 5])
+            ->blueprintLevel(0)->orderBy(0)->commit( $small_wallimprove );
 
         $container->add()->parentBuilding($small_wallimprove)
             ->icon('small_gather')->label('Großer Graben')->description('Der Große Graben ist eine sehr wirkungsvolle Verteidigungsmaßnahme, die sich insbesondere auf lange Sicht auszahlt. Der Graben lässt sich mit allerhand Dingen füllen.')
@@ -133,7 +136,7 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->icon('small_waterspray')->label('Zerstäuber')->description('Ein handliches, hydraulisch betriebenes Gerät, das Wasserdampf versprühen kann (und weitere amüsante Chemikalien).')
             ->isTemporary(0)->defense(0)
             ->ap(50)->health(50)->resources(["meca_parts_#00" => 2,"metal_#00" => 8,"tube_#00" => 2,"metal_beam_#00" => 2,"wire_#00" => 2,"deto_#00" => 1,])
-            ->adjustForHardMode(null, ["meca_parts_#00" => 6,"metal_#00" => 32,"tube_#00" => 6,"metal_beam_#00" => 6,"wire_#00" => 6,"deto_#00" => 3,] )->autoEasyMode()
+            ->adjustForHardMode(null, ["meca_parts_#00" => 6,"metal_#00" => 32,"tube_#00" => 8,"metal_beam_#00" => 6,"wire_#00" => 6,"deto_#00" => 3,] )->autoEasyMode()
             ->blueprintLevel(0)->orderBy(5)->commit($small_waterspray);
 
         $container->add()->parentBuilding($small_waterspray)
@@ -473,7 +476,10 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->icon('item_electro')->label('Verbesserte Karte')->description('Diese simple elektronische Konstruktion erleichtert das Lesen der Außenweltkarte. Konkret: Du erfährst die genaue Zombieanzahl jeder Zone und musst somit nicht mehr planlos in der Wüste rumlaufen...')
             ->isTemporary(0)->defense(0)
             ->ap(25)->health(25)->resources(["pile_#00" => 2,"metal_#00" => 5,"plate_#00" => 1,"diode_#00" => 1,"radio_on_#00" => 2,])
-            ->adjustForHardMode(null, ["pile_#00" => 8,"metal_#00" => 20,"plate_#00" => 3,"diode_#00" => 3,"radio_on_#00" => 8,])->autoEasyMode()
+            ->adjustForHardMode(
+                null, ["pile_#00" => 8,"metal_#00" => 20,"electro_#00" => 3,"plate_#00" => 0,"diode_#00" => 3,"radio_on_#00" => 8,],
+                null, ["pile_#00" => 1,"metal_#00" => 4,"electro_#00" => 1,"plate_#00" => 0,"diode_#00" => 1,"radio_on_#00" => 1,],
+            )
             ->blueprintLevel(1)->orderBy(1)->commit();
         $container->add()->parentBuilding($item_tagger)
             ->icon('item_tagger')->label('Rechenmaschine')->description('Die Rechenmaschine ist ein etwas rustikaler Taschenrechner, mit dem man die Angriffsstärke des MORGIGEN Tages berechnen kann!')
@@ -623,7 +629,10 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->icon('small_valve')->label('Wasserhahn')->description('Dank dieses kleinen, am Brunnen angebrachten Wasserhahns, kannst Du nun die Wassermengen abschöpfen, die ansonten durch das Filtersystem verschwendet werden (es braucht kein zusätzliches Brunnen-Wasser). Du kannst mit diesem Wasser alle auf Wasser basierenden Waffen KOSTENLOS auffüllen (Wasserbombe, Wasserkanone,...)!')
             ->isTemporary(0)->defense(0)
             ->ap(130)->health(130)->resources(["engine_#00" => 1,"meca_parts_#00" => 4,"metal_#00" => 10,"wood_beam_#00" => 6,"metal_beam_#00" => 3,'oilcan_#00' => 3])
-            ->adjustForHardMode(null, ["engine_#00" => 2,"meca_parts_#00" => 12,"metal_#00" => 40,"wood_beam_#00" => 18,"metal_beam_#00" => 9,'oilcan_#00' => 12])->autoEasyMode()
+            ->adjustForHardMode(
+                null, ["engine_#00" => 2,"meca_parts_#00" => 12,"metal_#00" => 40, "wood2_#00" => 24, "wood_beam_#00" => 0,"metal_beam_#00" => 9,'oilcan_#00' => 12],
+                null, ["engine_#00" => 1,"meca_parts_#00" => 3,"metal_#00" => 8, "wood2_#00" => 5, "wood_beam_#00" => 0,"metal_beam_#00" => 2,'oilcan_#00' => 2],
+            )
             ->blueprintLevel(3)->orderBy(0)->commit();
         $container->add()->parentBuilding($small_building)
             ->icon('small_scarecrow')->label('Vogelscheuche')->description('Um Tiere (und vor allem diese verdammten Raben) von deiner Plantage fernzuhalten, hast du beschlossen, ein paar alte Holzbretter mit dem Outfit deines alten Nachbarn zu verkleiden. In der Hoffnung, dass er es dir nicht übel nehmen wird!')
@@ -730,7 +739,7 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->isImpervious(true)->isTemporary(0)->defense(0)
             ->ap(300)->health(0)->resources(["water_#00" => 20,"meca_parts_#00" => 5,"concrete_wall_#00" => 3,"metal_beam_#00" => 5,])
             ->adjustForHardMode(
-                null, ["water_#00" => 100,"meca_parts_#00" => 0,"concrete_wall_#00" => 10,"metal_beam_#00" => 35,"metal_#00" => 50,],
+                null, ["water_#00" => 100,"meca_parts_#00" => 0,"concrete_wall_#00" => 10,"metal_beam_#00" => 30,"metal_#00" => 50,],
                 null, ["water_#00" => 15,"meca_parts_#00" => 0,"concrete_wall_#00" => 2,"metal_beam_#00" => 4,"metal_#00" => 4,]
             )
             ->blueprintLevel(4)->orderBy(14)->commit();
@@ -749,7 +758,10 @@ class BuildingDataService implements FixtureProcessorInterface {
 
         $container->add()
             ->icon('small_door_closed')->label('Portal')->description('Eine rustikal anmutende Konstruktion, mit der die Öffnung des Stadttors nach 23:40 erfolgreich verhindert werden kann (es dürfte äußerst selten vorkommen, dass das Tor danach nochmal geöffnet werden muss). Das Stadttor muss nichtsdestotrotz zusätzlich noch per Hand geschlossen werden.')
-            ->isTemporary(0)->defense(5)->ap(15)->health(15)->blueprintLevel(0)->resources(["metal_#00" => 2,])->orderBy(12)
+            ->isTemporary(0)->defense(5)
+            ->ap(15)->health(15)->resources(["metal_#00" => 2,])
+            ->adjustForHardMode(null, ["metal_#00" => 2, "plate_#00" => 1], null, ["metal_#00" => 2,])
+            ->blueprintLevel(0)->orderBy(12)
             ->voteLevel(3)->baseVoteText('Das Portal bringt 5 Verteidigungspunkte.')
             ->upgradeTexts([
                                'Das Portal bringt 20 Verteidigungspunkte.',
@@ -824,7 +836,7 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->isTemporary(0)->defense(0)
             ->ap(60)->health(60)->resources(["wood_beam_#00" => 5,"metal_beam_#00" => 10,"plate_#00" => 1,"wire_#00" => 2,"ryebag_#00" => 1,"lens_#00" => 1,"meca_parts_#00" => 2, "drug_hero_#00" => 1])
             ->adjustForHardMode(
-                null, ["wood_beam_#00" => 15,"metal_beam_#00" => 30,"plate_#00" => 3,"wire_#00" => 4,"ryebag_#00" => 4,"lens_#00" => 3,"meca_parts_#00" => 6, "drug_hero_#00" => 3],
+                null, ["wood_beam_#00" => 15,"metal_beam_#00" => 30,"plate_#00" => 3,"wire_#00" => 6,"ryebag_#00" => 4,"lens_#00" => 3,"meca_parts_#00" => 6, "drug_hero_#00" => 3],
                 null, ["wood_beam_#00" => 3,"metal_beam_#00" => 7,"plate_#00" => 1,"wire_#00" => 1,"ryebag_#00" => 1,"lens_#00" => 1,"meca_parts_#00" => 2, "drug_hero_#00" => 1],
             )
             ->blueprintLevel(3)->orderBy(2)->commit($small_techtable);
@@ -921,14 +933,20 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->icon('small_thermal')->label('Blaugoldige Thermalbäder')->description('Die kolossale Menge an Wasser, die für den Bau dieses Gebäudes verbraucht wurde, kann nicht mehr konsumiert oder gegen Zombies eingesetzt werden. Während du dich fragst, was dich dazu gebracht hat, eine so kostbare Ressource zu verschwenden, bemerkst du die in goldenen Buchstaben eingravierte Inschrift auf dem Eingangsbogen: "Non est certamen". Dieses Wunderwerk strahlt im Glanze seiner Nutzlosigkeit: Seine Errichtung bringt allen Bürgern der Stadt eine seltene Auszeichnung ein.')
             ->isImpervious(true)->isTemporary(0)->defense(0)
             ->ap(300)->health(300)->resources(["water_#00" => 100,"metal_beam_#00" => 8,"tube_#00" => 6,"wood_beam_#00" => 6,"concrete_wall_#00" => 2,"fence_#00" => 1,"water_cleaner_#00" => 4,])
-            ->adjustForHardMode(null, ["water_#00" => 250,"metal_beam_#00" => 10,"tube_#00" => 10,"wood_beam_#00" => 10, "concrete_wall_#00" => 5,"fence_#00" => 3,"water_cleaner_#00" => 5,])->autoEasyMode()
+            ->adjustForHardMode(
+                null, ["water_#00" => 250,"metal_beam_#00" => 20,"tube_#00" => 10,"wood_beam_#00" => 10, "concrete_wall_#00" => 5,"fence_#00" => 3,"water_cleaner_#00" => 5,],
+                null, ["water_#00" => 90,"metal_beam_#00" => 6,"tube_#00" => 4,"wood_beam_#00" => 4, "concrete_wall_#00" => 1,"fence_#00" => 1,"water_cleaner_#00" => 3,],
+            )
             ->blueprintLevel(4)->orderBy(6)->commit();
 
         $container->add()->parentBuilding($small_spa4souls)
             ->icon('small_crow')->label('Krähenstatue')->description('Huldigt den Raben! Gelobt sei deine Milde und deine erhabene Austrahlung! Befreie uns vom Spam und vergib uns unsere Trollenbeiträge so wie auch wir vergeben anderen Trollen. Dieses Wunderwerk strahlt im Glanze seiner Nutzlosigkeit: Seine Errichtung bringt allen Bürgern der Stadt eine seltene Auszeichnung ein.')
             ->isImpervious(true)->isTemporary(0)->defense(0)
             ->ap(300)->health(0)->resources(["hmeat_#00" => 3,"wood_beam_#00" => 35,])
-            ->adjustForHardMode(null, ["hmeat_#00" => 10,"wood_beam_#00" => 80,])->autoEasyMode()
+            ->adjustForHardMode(
+                null, ["hmeat_#00" => 10,"wood_beam_#00" => 80,],
+                null, ["hmeat_#00" => 2,"wood_beam_#00" => 30,],
+            )
             ->blueprintLevel(4)->orderBy(5)->commit();
 
         $container->add()->parentBuilding($small_spa4souls)
