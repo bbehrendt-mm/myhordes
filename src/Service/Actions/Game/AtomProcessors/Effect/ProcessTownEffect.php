@@ -77,7 +77,7 @@ class ProcessTownEffect extends AtomEffectProcessor
 
                         if ($b) {
                             $cache->addDiscoveredBlueprint( $pick );
-                            $cache->em->persist( $b->setDifficultyLevel( min(1, $b->getDifficultyLevel() + 1 )) );
+                            $cache->em->persist( $b->setDifficultyLevel( max(1, $b->getDifficultyLevel() + 1 )) );
                             $cache->em->persist( $log->constructionsImprovedSite( $cache->citizen, $pick ) );
                         }
                         break;
