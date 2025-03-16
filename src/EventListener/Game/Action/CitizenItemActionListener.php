@@ -53,43 +53,38 @@ final class CitizenItemActionListener implements ServiceSubscriberInterface
             }
 
             // Vote for a role
-            case 18:case 19: {
-            $role_name = "";
-            switch($event->type){
-                case 18:
-                    $role_name = "shaman";
+            case 5001:case 5002:case 5003: {
+                $role_name = match ( $event->type ) {
+                    5001 => "shaman",
+                    5002 => "guide",
+                    5003 => "cata",
+                };
+
+                if (!is_a( $event->target, Citizen::class )) break;
+                if(!$event->target->getAlive()) break;
+
+                $role = $this->getService(EntityManagerInterface::class)->getRepository(CitizenRole::class)->findOneBy(['name' => $role_name]);
+                if(!$role) break;
+
+                if ($this->getService(EntityManagerInterface::class)->getRepository(CitizenVote::class)->findOneByCitizenAndRole($event->citizen, $role))
                     break;
-                case 19:
-                    $role_name = "guide";
-                    break;
-            }
 
-            if (!is_a( $event->target, Citizen::class )) break;
+                if (!$this->getService(TownHandler::class)->is_vote_needed($event->citizen->getTown(), $role)) break;
 
-            if(!$event->target->getAlive()) break;
+                // Add our vote !
+                $citizenVote = (new CitizenVote())
+                    ->setAutor($event->citizen)
+                    ->setVotedCitizen($event->target)
+                    ->setRole($role);
 
-            $role = $this->getService(EntityManagerInterface::class)->getRepository(CitizenRole::class)->findOneBy(['name' => $role_name]);
-            if(!$role) break;
+                $event->citizen->addVote($citizenVote);
 
-            if ($this->getService(EntityManagerInterface::class)->getRepository(CitizenVote::class)->findOneByCitizenAndRole($event->citizen, $role))
+                // Persist
+                $this->getService(EntityManagerInterface::class)->persist($citizenVote);
+                $this->getService(EntityManagerInterface::class)->persist($event->citizen);
+
                 break;
-
-            if (!$this->getService(TownHandler::class)->is_vote_needed($event->citizen->getTown(), $role)) break;
-
-            // Add our vote !
-            $citizenVote = (new CitizenVote())
-                ->setAutor($event->citizen)
-                ->setVotedCitizen($event->target)
-                ->setRole($role);
-
-            $event->citizen->addVote($citizenVote);
-
-            // Persist
-            $this->getService(EntityManagerInterface::class)->persist($citizenVote);
-            $this->getService(EntityManagerInterface::class)->persist($event->citizen);
-
-            break;
-        }
+            }
         }
     }
 

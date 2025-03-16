@@ -144,6 +144,72 @@ class CouncilDataService implements FixtureProcessorInterface {
                 ],
                 'variables' => [ 'config' => [ '_mc_constraint' => ['from' => '_mc'], '_winner_constraint' => ['from' => '_winner'], '_council' => ['from' => '_council?'] ] ]
             ],
+            'cata_root_first' => [
+                'semantic' => CouncilEntryTemplate::CouncilNodeRootCataFirst, 'mode' => CouncilEntryTemplate::CouncilBranchModeStructured,
+                'branches' => [
+                    CouncilEntryTemplate::CouncilRootNodeGenericMCIntro,
+                    CouncilEntryTemplate::CouncilRootNodeCataIntroFirst,
+                    CouncilEntryTemplate::CouncilRootNodeCataFollowUpFirst,
+                    CouncilEntryTemplate::CouncilRootNodeCataBeginVoteAny,
+                    CouncilEntryTemplate::CouncilRootNodeCataVoteAny,
+                    CouncilEntryTemplate::CouncilRootNodeCataEndVoteAny,
+                    CouncilEntryTemplate::CouncilRootNodeCataStrawAny,
+                    CouncilEntryTemplate::CouncilRootNodeCataStrawResponseAny,
+                    CouncilEntryTemplate::CouncilRootNodeCataStrawFinalAny,
+                    CouncilEntryTemplate::CouncilRootNodeCataStrawResultAny,
+                    CouncilEntryTemplate::CouncilRootNodeCataStrawResultResponseAny,
+                    CouncilEntryTemplate::CouncilRootNodeCataFinalAny,
+                ],
+                'variables' => [ 'config' => [ '_mc_constraint' => ['from' => '_mc'], '_winner_constraint' => ['from' => '_winner'], '_council' => ['from' => '_council?'] ] ]
+            ],
+
+            'cata_root_next' => [
+                'semantic' => CouncilEntryTemplate::CouncilNodeRootCataNext, 'mode' => CouncilEntryTemplate::CouncilBranchModeStructured,
+                'branches' => [
+                    CouncilEntryTemplate::CouncilRootNodeGenericMCIntro,
+                    CouncilEntryTemplate::CouncilRootNodeCataIntroNext,
+                    CouncilEntryTemplate::CouncilRootNodeCataFollowUpNext,
+                    CouncilEntryTemplate::CouncilRootNodeCataBeginVoteAny,
+                    CouncilEntryTemplate::CouncilRootNodeCataVoteAny,
+                    CouncilEntryTemplate::CouncilRootNodeCataEndVoteAny,
+                    CouncilEntryTemplate::CouncilRootNodeCataStrawAny,
+                    CouncilEntryTemplate::CouncilRootNodeCataStrawResponseAny,
+                    CouncilEntryTemplate::CouncilRootNodeCataStrawFinalAny,
+                    CouncilEntryTemplate::CouncilRootNodeCataStrawResultAny,
+                    CouncilEntryTemplate::CouncilRootNodeCataStrawResultResponseAny,
+                    CouncilEntryTemplate::CouncilRootNodeCataFinalAny,
+                ],
+                'variables' => [ 'config' => [ '_mc_constraint' => ['from' => '_mc'], '_winner_constraint' => ['from' => '_winner'], '_council' => ['from' => '_council?'] ] ]
+            ],
+
+            'cata_root_single' => [
+                'semantic' => CouncilEntryTemplate::CouncilNodeRootCataSingle, 'mode' => CouncilEntryTemplate::CouncilBranchModeStructured,
+                'branches' => [
+                    CouncilEntryTemplate::CouncilRootNodeCataIntroSingle,
+                    CouncilEntryTemplate::CouncilRootNodeCataFinalAny,
+                ],
+                'variables' => [ 'config' => [ '_winner_constraint' => ['from' => '_winner'] ] ]
+            ],
+
+            'cata_root_none' => [
+                'semantic' => CouncilEntryTemplate::CouncilNodeRootCataNone, 'mode' => CouncilEntryTemplate::CouncilBranchModeStructured,
+                'branches' => [
+                    CouncilEntryTemplate::CouncilRootNodeCataIntroNone,
+                ]
+            ],
+
+            'cata_root_few' => [
+                'semantic' => CouncilEntryTemplate::CouncilNodeRootCataFew, 'mode' => CouncilEntryTemplate::CouncilBranchModeStructured,
+                'branches' => [
+                    CouncilEntryTemplate::CouncilRootNodeCataIntroFew,
+                    CouncilEntryTemplate::CouncilRootNodeCataIntroFew2,
+                    CouncilEntryTemplate::CouncilRootNodeCataStrawFew,
+                    CouncilEntryTemplate::CouncilRootNodeCataStrawResultAny,
+                    CouncilEntryTemplate::CouncilRootNodeCataStrawResultResponseAny,
+                    CouncilEntryTemplate::CouncilRootNodeCataFinalAny,
+                ],
+                'variables' => [ 'config' => [ '_mc_constraint' => ['from' => '_mc'], '_winner_constraint' => ['from' => '_winner'], '_council' => ['from' => '_council?'] ] ]
+            ],
 
             'generic_root_mc_intro' => [
                 'semantic' => CouncilEntryTemplate::CouncilRootNodeGenericMCIntro, 'mode' => CouncilEntryTemplate::CouncilBranchModeRandom,
@@ -330,6 +396,96 @@ class CouncilDataService implements FixtureProcessorInterface {
                 'branches' => [CouncilEntryTemplate::CouncilNodeGuideFinalAny]
             ],
 
+            'cata_root_intro_few2' => [
+                'semantic' => CouncilEntryTemplate::CouncilRootNodeCataIntroFew2, 'mode' => CouncilEntryTemplate::CouncilBranchModeRandom,
+                'branches' => [CouncilEntryTemplate::CouncilNodeGenericIntroFew]
+            ],
+
+            'cata_root_intro_first' => [
+                'semantic' => CouncilEntryTemplate::CouncilRootNodeCataIntroFirst, 'mode' => CouncilEntryTemplate::CouncilBranchModeRandom,
+                'branches' => [CouncilEntryTemplate::CouncilNodeCataIntroFirst]
+            ],
+
+            'cata_root_intro_next' => [
+                'semantic' => CouncilEntryTemplate::CouncilRootNodeCataIntroNext, 'mode' => CouncilEntryTemplate::CouncilBranchModeRandom,
+                'branches' => [CouncilEntryTemplate::CouncilNodeCataIntroNext]
+            ],
+
+            'cata_root_intro_single' => [
+                'semantic' => CouncilEntryTemplate::CouncilRootNodeCataIntroSingle, 'mode' => CouncilEntryTemplate::CouncilBranchModeRandom,
+                'branches' => [CouncilEntryTemplate::CouncilNodeCataIntroSingle]
+            ],
+
+            'cata_root_intro_none' => [
+                'semantic' => CouncilEntryTemplate::CouncilRootNodeCataIntroNone, 'mode' => CouncilEntryTemplate::CouncilBranchModeRandom,
+                'branches' => [CouncilEntryTemplate::CouncilNodeCataIntroNone]
+            ],
+
+            'cata_root_intro_few' => [
+                'semantic' => CouncilEntryTemplate::CouncilRootNodeCataIntroFew, 'mode' => CouncilEntryTemplate::CouncilBranchModeRandom,
+                'branches' => [CouncilEntryTemplate::CouncilNodeCataIntroFew]
+            ],
+
+            'cata_root_follow_up_first' => [
+                'semantic' => CouncilEntryTemplate::CouncilRootNodeCataIntroFirst, 'mode' => CouncilEntryTemplate::CouncilBranchModeRandom,
+                'branch_count' => 2, 'branches' => [CouncilEntryTemplate::CouncilNodeCataFollowUpFirst,CouncilEntryTemplate::CouncilNodeCataFollowUpAny,CouncilEntryTemplate::CouncilNodeGenericFollowUpAny]
+            ],
+
+            'cata_root_follow_up_next' => [
+                'semantic' => CouncilEntryTemplate::CouncilRootNodeCataIntroNext, 'mode' => CouncilEntryTemplate::CouncilBranchModeRandom,
+                'branch_count' => 2, 'branches' => [CouncilEntryTemplate::CouncilNodeCataFollowUpNext,CouncilEntryTemplate::CouncilNodeCataFollowUpAny,CouncilEntryTemplate::CouncilNodeGenericFollowUpAny]
+            ],
+
+            'cata_root_begin_vote' => [
+                'semantic' => CouncilEntryTemplate::CouncilRootNodeCataBeginVoteAny, 'mode' => CouncilEntryTemplate::CouncilBranchModeRandom,
+                'branches' => [CouncilEntryTemplate::CouncilNodeCataBeginVoteAny,CouncilEntryTemplate::CouncilNodeGenericBeginVoteAny]
+            ],
+
+            'cata_root_vote' => [
+                'semantic' => CouncilEntryTemplate::CouncilRootNodeCataVoteAny, 'mode' => CouncilEntryTemplate::CouncilBranchModeRandom,
+                'branch_count' => [2,10], 'branches' => [CouncilEntryTemplate::CouncilNodeCataVoteAny,CouncilEntryTemplate::CouncilNodeGenericVoteAny]
+            ],
+
+            'cata_root_end_vote' => [
+                'semantic' => CouncilEntryTemplate::CouncilRootNodeCataEndVoteAny, 'mode' => CouncilEntryTemplate::CouncilBranchModeRandom,
+                'branches' => [CouncilEntryTemplate::CouncilNodeCataEndVoteAny,CouncilEntryTemplate::CouncilNodeGenericEndVoteAny]
+            ],
+
+            'cata_root_straw' => [
+                'semantic' => CouncilEntryTemplate::CouncilRootNodeCataStrawAny, 'mode' => CouncilEntryTemplate::CouncilBranchModeRandom,
+                'branches' => [CouncilEntryTemplate::CouncilNodeCataStrawAny,CouncilEntryTemplate::CouncilNodeGenericStrawAny]
+            ],
+
+            'cata_root_straw_few' => [
+                'semantic' => CouncilEntryTemplate::CouncilRootNodeCataStrawFew, 'mode' => CouncilEntryTemplate::CouncilBranchModeRandom,
+                'branches' => [/*CouncilEntryTemplate::CouncilNodeCataStrawFew,*/CouncilEntryTemplate::CouncilNodeGenericStrawFew]
+            ],
+
+            'cata_root_straw_response' => [
+                'semantic' => CouncilEntryTemplate::CouncilRootNodeCataStrawResponseAny, 'mode' => CouncilEntryTemplate::CouncilBranchModeRandom,
+                'branch_count' => [1,2], 'branches' => [CouncilEntryTemplate::CouncilNodeCataStrawResponseAny,CouncilEntryTemplate::CouncilNodeGenericStrawResponseAny]
+            ],
+
+            'cata_root_straw_final' => [
+                'semantic' => CouncilEntryTemplate::CouncilRootNodeCataStrawFinalAny, 'mode' => CouncilEntryTemplate::CouncilBranchModeRandom,
+                'branches' => [CouncilEntryTemplate::CouncilNodeCataStrawFinalAny,CouncilEntryTemplate::CouncilNodeGenericStrawFinalAny]
+            ],
+
+            'cata_root_straw_result' => [
+                'semantic' => CouncilEntryTemplate::CouncilRootNodeCataStrawResultAny, 'mode' => CouncilEntryTemplate::CouncilBranchModeRandom,
+                'branches' => [CouncilEntryTemplate::CouncilNodeCataStrawResultAny]
+            ],
+
+            'cata_root_straw_result_response' => [
+                'semantic' => CouncilEntryTemplate::CouncilRootNodeCataStrawResultResponseAny, 'mode' => CouncilEntryTemplate::CouncilBranchModeRandom,
+                'branch_count' => [1,3], 'branches' => [CouncilEntryTemplate::CouncilNodeCataStrawResultResponseAny,CouncilEntryTemplate::CouncilNodeGenericStrawResultResponseAny]
+            ],
+
+            'cata_root_final' => [
+                'semantic' => CouncilEntryTemplate::CouncilRootNodeCataFinalAny, 'mode' => CouncilEntryTemplate::CouncilBranchModeRandom,
+                'branches' => [CouncilEntryTemplate::CouncilNodeCataFinalAny]
+            ],
+            
             'generic_follow_up_any_001' => [
                 'semantic' => CouncilEntryTemplate::CouncilNodeGenericFollowUpAny,
                 'text' => 'Wieso darf hier überhaupt {mc} die Leitung übernehmen? Kann mir das mal jemand erklären?', //  Why's [MC] get to run the show anyway? That's what I wanna know!
@@ -689,7 +845,7 @@ class CouncilDataService implements FixtureProcessorInterface {
             ],
 
             'generic_straw_response_001' => [
-                'semantic' => CouncilEntryTemplate::CouncilNodeShamanStrawResponseAny, 'mode' => CouncilEntryTemplate::CouncilBranchModeRandom,
+                'semantic' => CouncilEntryTemplate::CouncilNodeGenericStrawResponseAny, 'mode' => CouncilEntryTemplate::CouncilBranchModeRandom,
                 'branch_count' => 1, 'branches' => ['generic_straw_response_001_r001','generic_straw_response_001_r002'],
                 'text' => 'Warum werfen wir zur Abwechslung nicht mal eine Münze?', //  Why don't we toss a coin for a change?
                 'variables' => [ 'config' => [ 'main' => ['from' => '_council?'] ] ]
@@ -704,7 +860,7 @@ class CouncilDataService implements FixtureProcessorInterface {
             ],
 
             'generic_straw_response_002' => [
-                'semantic' => CouncilEntryTemplate::CouncilNodeShamanStrawResponseAny, 'mode' => CouncilEntryTemplate::CouncilBranchModeRandom,
+                'semantic' => CouncilEntryTemplate::CouncilNodeGenericStrawResponseAny, 'mode' => CouncilEntryTemplate::CouncilBranchModeRandom,
                 'branch_count' => 2, 'branches' => ['generic_straw_response_002_r001','generic_straw_response_002_r002'],
                 'text' => 'Wir wählen aus wer gefressen wird, richtig?', // So we're choosing who's gonna be eaten right?
                 'variables' => [ 'config' => [ 'main' => ['from' => '_council?'] ] ]
@@ -719,7 +875,7 @@ class CouncilDataService implements FixtureProcessorInterface {
             ],
 
             'generic_straw_response_003' => [
-                'semantic' => CouncilEntryTemplate::CouncilNodeShamanStrawResponseAny, 'mode' => CouncilEntryTemplate::CouncilBranchModeRandom,
+                'semantic' => CouncilEntryTemplate::CouncilNodeGenericStrawResponseAny, 'mode' => CouncilEntryTemplate::CouncilBranchModeRandom,
                 'branch_count' => 1, 'branches' => ['generic_straw_response_003_r001','generic_straw_response_003_r002','generic_vote_end_response_b_002'],
                 'text' => 'Und was machen wir bei einem Gleichstand?', // And if it's a draw then what?
                 'variables' => [ 'config' => [ 'main' => ['from' => '_council?'] ] ]
@@ -734,13 +890,13 @@ class CouncilDataService implements FixtureProcessorInterface {
             ],
 
             'generic_straw_response_004' => [
-                'semantic' => CouncilEntryTemplate::CouncilNodeShamanStrawResponseAny,
+                'semantic' => CouncilEntryTemplate::CouncilNodeGenericStrawResponseAny,
                 'text' => 'Oh Mann! Der Einstein hier drüben hat seinen Strohhalm gefressen!', //  Oh man! Einstein over there has already eaten his straw!
                 'variables' => [ 'config' => [ 'main' => ['from' => '_council?'] ] ]
             ],
 
             'generic_straw_response_005' => [
-                'semantic' => CouncilEntryTemplate::CouncilNodeShamanStrawResponseAny, 'mode' => CouncilEntryTemplate::CouncilBranchModeStructured,
+                'semantic' => CouncilEntryTemplate::CouncilNodeGenericStrawResponseAny, 'mode' => CouncilEntryTemplate::CouncilBranchModeStructured,
                 'branch_count' => 2, 'branches' => ['generic_straw_response_005_r001','generic_straw_response_005_r002'],
                 'text' => 'Kann ich meinen Strohhalm essen wenn wir fertig sind?', // Can I eat my straw once we're done?
                 'variables' => [ 'config' => [ 'main' => ['from' => '_council?'] ] ]
@@ -755,7 +911,7 @@ class CouncilDataService implements FixtureProcessorInterface {
             ],
 
             'generic_straw_response_006' => [
-                'semantic' => CouncilEntryTemplate::CouncilNodeShamanStrawResponseAny, 'mode' => CouncilEntryTemplate::CouncilBranchModeRandom,
+                'semantic' => CouncilEntryTemplate::CouncilNodeGenericStrawResponseAny, 'mode' => CouncilEntryTemplate::CouncilBranchModeRandom,
                 'branch_count' => 1, 'branches' => ['generic_straw_response_006_r001','generic_straw_response_006_r002'],
                 'text' => 'Ihr wisst, dass ... nun, .... wie ich schon sagte ... ahhhh, auf mich hört sowieso niemand.', // You know that... well .... as I was saying ... ahhhh, nobody listens to me anyway.
                 'variables' => [ 'config' => [ 'main' => ['from' => '_council?'] ] ]
@@ -1183,6 +1339,49 @@ class CouncilDataService implements FixtureProcessorInterface {
                 'text' => '{winner} wurde zum Führer gewählt. Hoffen wir, dass er uns aus diesem Schlamassel heraushelfen kann...', // [Guide] has been elected as the Guide, let's hope they can help get us out of this mess...
                 'variables' => [ 'types' => [['type'=>"citizen", 'name'=>'winner']], 'config' => [ 'winner' => ['from' => '_winner'] ] ]
             ],
+
+            //CATA
+            'cata_intro_first_001' => [
+                'semantic' => CouncilEntryTemplate::CouncilNodeCataIntroFirst,
+                'text' => 'Der erste Punkt auf der Tagesordnung ist die Wahl eines neuen Katapultbedieners! Habt ihr mal einen Blick in unsere Bank geworfen? Wir haben zu viel Zeug, das muss irgendwie raus aus der Stadt...',
+                'variables' => [ 'config' => [ 'main' => ['from' => '_mc'] ] ]
+            ],
+
+            'cata_intro_next_001' => [
+                'semantic' => CouncilEntryTemplate::CouncilNodeCataIntroNext,
+                'text' => 'Da unser Katapultbediener heute Nacht in den Himmel geflogen ist, müssen wir uns um Ersatz bemühen.',
+                'variables' => [ 'config' => [ 'main' => ['from' => '_mc'] ] ]
+            ],
+
+            'cata_intro_single_001' => [
+                'semantic' => CouncilEntryTemplate::CouncilNodeCataIntroSingle,
+                'text' => 'So, und hiermit erkläre ich mich selbst zum Katapultbediener. Demokratie ist doch etwas feines!',
+                'variables' => [ 'config' => [ 'main' => ['from' => '_winner'] ] ]
+            ],
+
+            'cata_intro_none_001' => [
+                'semantic' => CouncilEntryTemplate::CouncilNodeCataIntroNone, 'vocal' => false,
+                'text' => 'Niemand ist mehr in der Stadt, keiner kann diese Versammlung halten, daher überspringen wir die Wahl zum Katapultbediener.',
+            ],
+
+            'cata_intro_few_001' => [
+                'semantic' => CouncilEntryTemplate::CouncilNodeCataIntroFew,
+                'text' => 'OK, es sind nicht mehr viele von uns übrig, also lasst uns das schnell hinter uns bringen.',
+                'variables' => [ 'config' => [ 'main' => ['from' => '_mc'] ] ]
+            ],
+
+            'cata_straw_result_001' => [
+                'semantic' => CouncilEntryTemplate::CouncilNodeCataStrawResultAny,
+                'text' => 'So, fertig. Wir einen neuen Katapultbediener bekommen: {winner}!',
+                'variables' => [ 'types' => [['type'=>"citizen", 'name'=>'winner']], 'config' => [ 'main' => ['from' => '_mc'], 'winner' => ['from' => '_winner'] ] ]
+            ],
+
+            'cata_final_001' => [
+                'semantic' => CouncilEntryTemplate::CouncilNodeCataFinalAny, 'vocal' => false,
+                'text' => '{winner} ist zum Katapultbediener gewählt worden. Die Bedienungsanleitung ist leider verloren gegangen, aber er wird schon klar kommen.',
+                'variables' => [ 'types' => [['type'=>"citizen", 'name'=>'winner']], 'config' => [ 'winner' => ['from' => '_winner'] ] ]
+            ],
+
         ]);
     }
 }

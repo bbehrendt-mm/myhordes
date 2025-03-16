@@ -116,13 +116,18 @@ class InventoryAwareController extends CustomAbstractController
             $this->entity_manager->persist($activeCitizen);
             $this->entity_manager->flush();
         } else if ($this->citizen_handler->hasRole($activeCitizen, 'shaman') && !$activeCitizen->hasSeenHelpNotification('shaman')) {
-            $this->addFlash('popup-shaman', $this->renderView('ajax/game/notifications/shaman.html.twig'));
+            $this->addFlash('popup-official-role', $this->renderView('ajax/game/notifications/shaman.html.twig'));
             $activeCitizen->addHelpNotification( $this->doctrineCache->getEntityByIdentifier(HelpNotificationMarker::class, 'shaman') );
             $this->entity_manager->persist($activeCitizen);
             $this->entity_manager->flush();
         } else if ($this->citizen_handler->hasRole($activeCitizen, 'guide') && !$activeCitizen->hasSeenHelpNotification('guide')) {
-            $this->addFlash('popup-shaman', $this->renderView('ajax/game/notifications/guide.html.twig'));
+            $this->addFlash('popup-official-role', $this->renderView('ajax/game/notifications/guide.html.twig'));
             $activeCitizen->addHelpNotification( $this->doctrineCache->getEntityByIdentifier(HelpNotificationMarker::class, 'guide') );
+            $this->entity_manager->persist($activeCitizen);
+            $this->entity_manager->flush();
+        } else if ($this->citizen_handler->hasRole($activeCitizen, 'cata') && !$activeCitizen->hasSeenHelpNotification('cata')) {
+            $this->addFlash('popup-official-role', $this->renderView('ajax/game/notifications/cata.html.twig'));
+            $activeCitizen->addHelpNotification( $this->doctrineCache->getEntityByIdentifier(HelpNotificationMarker::class, 'cata') );
             $this->entity_manager->persist($activeCitizen);
             $this->entity_manager->flush();
         } else if ($activeCitizen->getTown()->getInsurrectionProgress() >= 100 && !$activeCitizen->hasSeenHelpNotification('insurrection') ) {

@@ -6,6 +6,7 @@ use App\Controller\Soul\SoulController;
 use App\Entity\Citizen;
 use App\Entity\CitizenProfession;
 use App\Entity\CitizenProperties;
+use App\Entity\CitizenRole;
 use App\Entity\HeroicActionPrototype;
 use App\Entity\HeroSkillPrototype;
 use App\Entity\ItemPrototype;
@@ -141,10 +142,11 @@ readonly class OnboardCitizenIntoTownAction
             if (!empty($doggy)) $this->inventoryHandler->forceRemoveItem($doggy[0]);
         }
 
-        $vote_shaman = $this->entityManager->getRepository(SpecialActionPrototype::class)->findOneBy(['name' => "special_vote_shaman"]);
-        $vote_guide = $this->entityManager->getRepository(SpecialActionPrototype::class)->findOneBy(['name' => "special_vote_guide"]);
-        if ($vote_shaman) $citizen->addSpecialAction($vote_shaman);
-        if ($vote_guide) $citizen->addSpecialAction($vote_guide);
+        $votable_roles = $this->entityManager->getRepository(CitizenRole::class)->findVotable();
+        foreach ($votable_roles as $votable_role) {
+            $vote_action = $this->entityManager->getRepository(SpecialActionPrototype::class)->findOneBy(['name' => "special_vote_{$votable_role->getName()}"]);
+            if ($vote_action) $citizen->addSpecialAction($vote_action);
+        }
 
         if ($this->userHandler->checkFeatureUnlock( $citizen->getUser(), 'f_wtns', true ) )
             $this->citizenHandler->inflictStatus($citizen, 'tg_infect_wtns');

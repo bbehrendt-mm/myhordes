@@ -156,43 +156,6 @@ class TownHandler
         return $changed;
     }
 
-    public function assignCatapultMaster(Town $town, bool $allow_multi = false): ?Citizen {
-
-        $choice = [];
-        $current = 0;
-
-        foreach($town->getCitizens() as $citizen) {
-            if (!$citizen->getAlive() || $citizen->getBanished()) continue;
-            if (!$allow_multi && $citizen->hasRole('cata')) return null;
-
-            $level = 0;
-            if($this->citizen_handler->hasStatusEffect($citizen, 'tg_chk_forum_day')) $level++;
-            if($this->citizen_handler->hasStatusEffect($citizen, 'tg_chk_active')) $level++;
-            if($this->citizen_handler->hasStatusEffect($citizen, 'tg_chk_workshop')) $level++;
-            if($this->citizen_handler->hasStatusEffect($citizen, 'tg_chk_build')) $level++;
-            if($this->citizen_handler->hasStatusEffect($citizen, 'tg_chk_movewb')) $level++;
-
-            if ($citizen->getProfession()->getHeroic()) $level *= 10;
-
-            if ($level > $current) {
-                $choice = [$citizen];
-                $current = $level;
-            } elseif ($level === $current) {
-                $choice[] = $citizen;
-            }
-        }
-
-        /** @var Citizen|null $selected */
-        $selected = empty($choice) ? null : $this->random->pick($choice);
-
-        if ($selected) {
-            $selected->addRole( $this->doctrineCache->getEntityByIdentifier(CitizenRole::class, 'cata'));
-            $this->crowService->postAsPM($selected, '', '', PrivateMessage::TEMPLATE_CROW_CATAPULT, $selected->getId());
-        }
-
-        return $selected;
-    }
-
     /**
      * Add a building to the list of unlocked building
      *

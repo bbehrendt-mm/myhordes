@@ -626,8 +626,9 @@ class ActionEffectProvider
         $effects_container->add()->identifier('hero_tamer_1b')->add((new CustomEffect())->effectIndex(16))->commit();
         $effects_container->add()->identifier('hero_tamer_2b')->add((new CustomEffect())->effectIndex(17))->commit();
 
-        $effects_container->add()->identifier('vote_role_shaman')->add((new CustomEffect())->effectIndex(18))->commit();
-        $effects_container->add()->identifier('vote_role_guide')->add((new CustomEffect())->effectIndex(19))->commit();
+        $effects_container->add()->identifier('vote_role_shaman')->add((new CustomEffect())->effectIndex(5001))->commit();
+        $effects_container->add()->identifier('vote_role_guide')->add((new CustomEffect())->effectIndex(5002))->commit();
+        $effects_container->add()->identifier('vote_role_cata')->add((new CustomEffect())->effectIndex(5003))->commit();
 
         $effects_container->add()->identifier('sandball')->add((new CustomEffect())->effectIndex(20))->commit();
         $effects_container->add()->identifier('flare')->add((new CustomEffect())->effectIndex(21))->commit();

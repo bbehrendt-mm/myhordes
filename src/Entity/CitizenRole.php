@@ -17,27 +17,26 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 #[UniqueConstraint(name: 'citizen_role_name_unique', columns: ['name'])]
 class CitizenRole implements NamedEntity
 {
-    const DEFAULT = 'none';
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private $id;
     #[ORM\Column(type: 'string', length: 16)]
-    private $name;
+    private ?string $name;
     #[ORM\Column(type: 'string', length: 190)]
-    private $label;
+    private ?string $label;
     #[ORM\Column(type: 'string', length: 32)]
-    private $icon;
+    private ?string $icon;
     #[ORM\Column(type: 'boolean')]
-    private $secret;
+    private ?bool $secret;
     #[ORM\Column(type: 'boolean')]
-    private $hidden;
+    private ?bool $hidden;
     #[ORM\Column(type: 'boolean')]
-    private $votable;
+    private ?bool $votable;
     #[ORM\Column(type: 'text', nullable: true)]
-    private $message;
+    private ?string $message;
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $help_section;
+    private ?string $help_section;
     public function __construct()
     {
     }

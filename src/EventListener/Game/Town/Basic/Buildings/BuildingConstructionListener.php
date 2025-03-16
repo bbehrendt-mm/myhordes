@@ -242,11 +242,6 @@ final readonly class BuildingConstructionListener implements ServiceSubscriberIn
                     $em->persist($zone);
                 }
                 break;
-            case "item_courroie_#00":
-                /** @var TownHandler $townHandler */
-                $townHandler = $this->getService(TownHandler::class);
-                $townHandler->assignCatapultMaster($event->town);
-                break;
             case "small_novlamps_#00":
                 /** @var CitizenHandler $citizenHandler */
                 $citizenHandler = $this->getService(CitizenHandler::class);
