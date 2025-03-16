@@ -118,7 +118,8 @@ class CouncilTestCommand extends Command
         switch ($node) {
             case CouncilEntryTemplate::CouncilNodeRootGuideFirst:  case CouncilEntryTemplate::CouncilNodeRootGuideNext:
             case CouncilEntryTemplate::CouncilNodeRootShamanFirst: case CouncilEntryTemplate::CouncilNodeRootShamanNext:
-            case CouncilEntryTemplate::CouncilNodeRootShamanFew:   // case CouncilEntryTemplate::CouncilNodeRootShamanFew:
+            case CouncilEntryTemplate::CouncilNodeRootCataFirst: case CouncilEntryTemplate::CouncilNodeRootCataNext:
+            case CouncilEntryTemplate::CouncilNodeRootGuideFew: case CouncilEntryTemplate::CouncilNodeRootShamanFew: case CouncilEntryTemplate::CouncilNodeRootCataFew:
                 if ($previous_mc && in_array( $previous_mc, $all_citizens ) && !(int)$input->getOption('no-mc') && (int)$input->getOption('same-mc')) {
                     $partition['_mc'] = [$previous_mc];
                     $all_citizens = array_filter($all_citizens, fn(Citizen $c) => $c !== $previous_mc);
@@ -129,11 +130,11 @@ class CouncilTestCommand extends Command
                 $partition['_council?'] = array_slice($all_citizens, 0, (int)$input->getOption('count-discussion'));
                 break;
 
-            case CouncilEntryTemplate::CouncilNodeRootGuideSingle: case CouncilEntryTemplate::CouncilNodeRootShamanSingle:
+            case CouncilEntryTemplate::CouncilNodeRootGuideSingle: case CouncilEntryTemplate::CouncilNodeRootShamanSingle: case CouncilEntryTemplate::CouncilNodeRootCataSingle:
                 $partition['_winner'] = $this->rand->draw( $all_citizens, 1, true );
                 break;
 
-            case CouncilEntryTemplate::CouncilNodeRootGuideNone: case CouncilEntryTemplate::CouncilNodeRootShamanNone:
+            case CouncilEntryTemplate::CouncilNodeRootGuideNone: case CouncilEntryTemplate::CouncilNodeRootShamanNone: case CouncilEntryTemplate::CouncilNodeRootCataNone:
                 break;
 
             default:

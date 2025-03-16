@@ -529,24 +529,8 @@ class TownAddonsController extends TownController
     }
 
     /**
-     * @param TownHandler $townHandler
-     * @return Response
-     */
-    #[Route(path: 'api/town/catapult/assign', name: 'town_catapult_assign_controller')]
-    public function catapult_new_api(TownHandler $townHandler): Response
-    {
-        $selection = $townHandler->assignCatapultMaster( $this->getActiveCitizen()->getTown(), false );
-        if ($selection) {
-            $this->entity_manager->persist($selection);
-            $this->entity_manager->flush();
-            return AjaxResponse::success();
-        } else return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
-    }
-
-    /**
      * @param JSONRequestParser $parser
      * @param CitizenHandler $ch
-     * @param EventProxyService $event
      * @param ItemFactory $if
      * @param Packages $asset
      * @param TranslatorInterface $trans

@@ -1,0 +1,28 @@
+<div class="inner-notification-header">
+    <strong>{{ 'Du wurdest zum Bediener des Katapults gewählt!'|trans({},'game') }}</strong>
+</div>
+<div class="inner-notification-content">
+    <p class="small">
+        <!--<img class="float-left" alt="" src="{{ asset('build/images/professions/select/guide.png') }}">-->
+        {% trans from 'game' %}
+        Du wachst heute Morgen mit Schmerzen in deinem Rücken auf... Du humpelst aus deinem Zelt und... die anderen Bewohner grüßen dich freundlich?
+        {% endtrans %}<br />
+        {% trans from 'game' %}
+        Was ist letzte Nacht nur passiert? Du hast wohl zu heftig gefeiert. Als du die Stadtmauer erreichst, findest du einen kleinen Schlüssel in deiner Tasche... Ja, ja, du bist in der Tat der Ausgewählte. Der Zweifel verschwindet, als der Schlüssel sich mühelos im Schloss drehen lässt und dir den Zugang zum Katapult gewährt.
+        {% endtrans %}<br />
+    </p>
+    <p>
+        <b>{{ 'Du bist nun der Bediener des Katapults.'|trans({},'game') }}</b>
+        {% trans from 'game' %}
+            Ein neuer Horizont öffnet sich für dich: Du bist nicht länger ein gewöhnlicher Bürger, sondern verfügst über ein offizielles Amt!
+        {% endtrans %}
+    </p>
+    <p>
+        {% trans with {'{guide_cata}': ('<a target="_blank" href="' ~ path('help', {'name': 'catapult'}) ~ '">' ~ 'Bedienungsanleitung des Katapults'|trans({},'game') ~ '</a>')} from 'game' %}
+        Schau dir am besten gleich die {guide_cata} an.
+        {% endtrans %}<br />
+        {% trans from 'game' %}
+            Es enthält alle wesentlichen Informationen, um deiner neugewonnen Verantwortung gerecht werden zu können...
+        {% endtrans %}
+    </p>
+</div>

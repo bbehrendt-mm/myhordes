@@ -516,6 +516,7 @@ class ActionDataService implements FixtureProcessorInterface {
                 'special_armag_n'      => [ 'label' => 'Durchgang in Kraft', 'tooltip_key' => 'heroic_arma_tooltip', 'allow_when_terrorized' => true, 'meta' => [ 'must_be_outside', 'must_be_blocked', 'must_be_night'], 'result' => [ ['group' => [ [['do_nothing', 'msg_heroic_arma_fail'], 25], [['msg_heroic_arma_success', 'zone_escape_600_armag', 'kill_1_zombie_s' ], 75]]] ] ],
                 'special_vote_shaman'  => [ 'label' => 'Den Shamane wählen', 'target' => ['type' => ItemTargetDefinition::ItemCitizenVoteType], 'meta' => [ 'must_be_outside', 'profession_heroic', 'vote_shaman_needed', 'vote_shaman_not_given'] , 'result' => [ 'vote_role_shaman' ] ],
                 'special_vote_guide'   => [ 'label' => 'Den Reiseleiter in der Außenwelt wählen', 'target' => ['type' => ItemTargetDefinition::ItemCitizenVoteType], 'meta' => [ 'must_be_outside', 'profession_heroic', 'vote_guide_needed', 'vote_guide_not_given'], 'result' => [ 'vote_role_guide' ] ],
+                'special_vote_cata'    => [ 'label' => 'Den Katapultbediener wählen', 'target' => ['type' => ItemTargetDefinition::ItemCitizenVoteType], 'meta' => [ 'must_be_outside', 'profession_heroic', 'vote_cata_needed', 'vote_cata_not_given'], 'result' => [ 'vote_role_cata' ] ],
 
                 'improve' => [ 'label' => 'Aufbauen', 'meta' => [ 'must_be_outside', 'zone_is_improvable', 'min_1_ap', 'must_be_outside_not_at_doors', 'feature_camping' ], 'result' => [ 'minus_1ap', 'consume_item', 'zone_improve_9' ], 'message' => 'Du befestigst den {item} und bedeckst ihn zur Tarnung mit herumliegendem Müll und vertrockneten Zweigen. Na bitte, das sollte hoffentlich deine Überlebenschancen heute Nacht verbessern. Du hast dafür 1 Aktionspunkt verbraucht.' ], // Each item used as zone improvement gives 9% chance
 
@@ -641,6 +642,7 @@ class ActionDataService implements FixtureProcessorInterface {
                 ['name' => 'special_armag_n', 'icon' => 'armag', 'consumable' => true],
                 ['name' => 'special_vote_shaman', 'icon' => 'hero', 'consumable' => false],
                 ['name' => 'special_vote_guide', 'icon' => 'hero', 'consumable' => false],
+                ['name' => 'special_vote_cata', 'icon' => 'hero', 'consumable' => false],
             ],
 
             'camping' => [

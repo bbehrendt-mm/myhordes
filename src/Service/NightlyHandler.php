@@ -1696,25 +1696,34 @@ class NightlyHandler
 
                 } else $last_mc = null;
                 $semantic = null;
-                switch ($role->getName()) {
-                    case 'shaman':
-                        if ($valid_citizens === 1)
-                            $semantic = CouncilEntryTemplate::CouncilNodeRootShamanSingle;
-                        elseif ( $valid_citizens < 10 )
-                            $semantic = CouncilEntryTemplate::CouncilNodeRootShamanFew;
-                        else
-                            $semantic = $this->entity_manager->getRepository(Citizen::class)->findLastOneByRoleAndTown($role, $town) ? CouncilEntryTemplate::CouncilNodeRootShamanNext : CouncilEntryTemplate::CouncilNodeRootShamanFirst;
-                        break;
-                    case 'guide':
-                        if ($valid_citizens === 1)
-                            $semantic = CouncilEntryTemplate::CouncilNodeRootGuideSingle;
-                        elseif ( $valid_citizens < 10 )
-                            $semantic = CouncilEntryTemplate::CouncilNodeRootGuideFew;
-                        else
-                            $semantic = $this->entity_manager->getRepository(Citizen::class)->findLastOneByRoleAndTown($role, $town) ? CouncilEntryTemplate::CouncilNodeRootGuideNext : CouncilEntryTemplate::CouncilNodeRootGuideFirst;
-                        break;
-                }
-                $this->gazette_service->generateCouncilNodeList( $town, $town->getDay(), $semantic, $partition, $flags );
+
+                $single = $valid_citizens === 1;
+                $few = !$single && $valid_citizens < 10;
+                $next = !$single && !$few && $this->entity_manager->getRepository(Citizen::class)->findLastOneByRoleAndTown($role, $town) !== null;
+
+                $semantic = match (true) {
+                    // Shaman
+                    $role->getName() === 'shaman' && $single => CouncilEntryTemplate::CouncilNodeRootShamanSingle,
+                    $role->getName() === 'shaman' && $few    => CouncilEntryTemplate::CouncilNodeRootShamanFew,
+                    $role->getName() === 'shaman' && $next   => CouncilEntryTemplate::CouncilNodeRootShamanNext,
+                    $role->getName() === 'shaman'            => CouncilEntryTemplate::CouncilNodeRootShamanFirst,
+
+                    // Guide
+                    $role->getName() === 'guide' && $single => CouncilEntryTemplate::CouncilNodeRootGuideSingle,
+                    $role->getName() === 'guide' && $few    => CouncilEntryTemplate::CouncilNodeRootGuideFew,
+                    $role->getName() === 'guide' && $next   => CouncilEntryTemplate::CouncilNodeRootGuideNext,
+                    $role->getName() === 'guide'            => CouncilEntryTemplate::CouncilNodeRootGuideFirst,
+
+                    // Cata
+                    $role->getName() === 'cata' && $single => CouncilEntryTemplate::CouncilNodeRootCataSingle,
+                    $role->getName() === 'cata' && $few    => CouncilEntryTemplate::CouncilNodeRootCataFew,
+                    $role->getName() === 'cata' && $next   => CouncilEntryTemplate::CouncilNodeRootCataNext,
+                    $role->getName() === 'cata'            => CouncilEntryTemplate::CouncilNodeRootCataFirst,
+
+                    default => null
+                };
+
+                if ($semantic) $this->gazette_service->generateCouncilNodeList( $town, $town->getDay(), $semantic, $partition, $flags );
             } else {
                 switch ($role->getName()) {
                     case 'shaman':
@@ -1722,6 +1731,9 @@ class NightlyHandler
                         break;
                     case 'guide':
                         $this->gazette_service->generateCouncilNodeList( $town, $town->getDay(), CouncilEntryTemplate::CouncilNodeRootGuideNone, [], [] );
+                        break;
+                    case 'cata':
+                        $this->gazette_service->generateCouncilNodeList( $town, $town->getDay(), CouncilEntryTemplate::CouncilNodeRootCataNone, [], [] );
                         break;
                 }
             }

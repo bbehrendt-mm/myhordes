@@ -21,10 +21,6 @@ class CitizenRoleRepository extends ServiceEntityRepository
         parent::__construct($registry, CitizenRole::class);
     }
 
-    public function findDefault(): ?CitizenRole {
-        return $this->findOneByName(CitizenRole::DEFAULT);
-    }
-
     public function findOneByName(string $value): ?CitizenRole
     {
         try {
@@ -42,7 +38,7 @@ class CitizenRoleRepository extends ServiceEntityRepository
      * @param bool $votable
      * @return CitizenRole[]
      */
-    public function findVotable(bool $votable = true)
+    public function findVotable(bool $votable = true): array
     {
         return $this->createQueryBuilder('c')
             ->andWhere('c.votable = :val')->setParameter('val', $votable)

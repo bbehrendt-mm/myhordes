@@ -44,6 +44,8 @@ class ActionRequirementProvider
         $requirement_container->add()->identifier('vote_shaman_not_given')->type( Requirement::CrossOnFail )->add( (new CustomClassRequirement())->requirement(RoleVote::class)->args(['hasNotVoted' => 'shaman']) )->commit();
         $requirement_container->add()->identifier('vote_guide_needed')->type( Requirement::HideOnFail )->add( (new CustomClassRequirement())->requirement(RoleVote::class)->args(['needed' => 'guide']) )->commit();
         $requirement_container->add()->identifier('vote_guide_not_given')->type( Requirement::CrossOnFail )->add( (new CustomClassRequirement())->requirement(RoleVote::class)->args(['hasNotVoted' => 'guide']) )->commit();
+        $requirement_container->add()->identifier('vote_cata_needed')->type( Requirement::HideOnFail )->add( (new CustomClassRequirement())->requirement(RoleVote::class)->args(['needed' => 'cata']) )->commit();
+        $requirement_container->add()->identifier('vote_cata_not_given')->type( Requirement::CrossOnFail )->add( (new CustomClassRequirement())->requirement(RoleVote::class)->args(['hasNotVoted' => 'cata']) )->commit();
 
         //<editor-fold desc="ProfessionRoleRequirements">
         $requirement_container->add()->identifier('profession_heroic')->type( Requirement::HideOnFail )->add( (new ProfessionRoleRequirement())->hero(true) )->commit();

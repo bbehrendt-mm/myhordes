@@ -26,12 +26,6 @@
         {% endif %}
     </div>
 
-    {% if catapult_master is null %}
-        <p>
-            <button id="cata_new">{{ 'Einen zufälligen Bürger als Katapult-Bediener auslosen'|trans({},'game') }}</button>
-        </p>
-    {% endif %}
-
     {% if is_catapult_master %}
         <div class="row">
             <div class="cell-small rw-10 ro-7 rw-md-14 ro-md-5 rw-sm-24 ro-sm-0">
@@ -89,15 +83,6 @@
                 }
 
                 $.ajax.easySend( '{{ path('town_catapult_do_controller') }}', {item: item, x: x, y: y},
-                    function () {
-                        $.ajax.load(null, '{{ path('town_catapult') }}', true);
-                    } );
-            });
-        {% endif %}
-
-        {% if catapult_master is null %}
-            $.html.addEventListenerAll('#cata_new', 'click', function () {
-                $.ajax.easySend( '{{ path('town_catapult_assign_controller') }}', {},
                     function () {
                         $.ajax.load(null, '{{ path('town_catapult') }}', true);
                     } );
