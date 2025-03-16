@@ -52,7 +52,10 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->icon('small_barbed')->label('Stacheldraht')->description('Bedecken wir die Mauern mit Stacheldraht, so dass ein paar kleine Stücke an der Passage hängen bleiben.')
             ->isTemporary(0)->defense(20)
             ->ap(10)->health(10)->resources(["metal_#00" => 1,"wire_#00" => 2,])
-            ->adjustForHardMode(null, ["metal_#00" => 4,"wire_#00" => 6,])->autoEasyMode()
+            ->adjustForHardMode(
+                null, ["metal_#00" => 4,"wire_#00" => 6,],
+                null, ["metal_#00" => 1,"wire_#00" => 1,],
+            )
             ->blueprintLevel(0)->orderBy(6)->commit($small_barbed);
 
         $container->add()->parentBuilding($small_barbed)
@@ -83,7 +86,10 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->icon('item_plate')->label('Groooße Mauer')->description('Eine Mauer ist gut, eine große Mauer ist besser.')
             ->isTemporary(0)->defense(80)
             ->ap(50)->health(50)->resources(["wood2_#00" => 10, "metal_#00" => 10,"concrete_wall_#00" => 2,"wood_beam_#00" => 10,"metal_beam_#00" => 10,])
-            ->adjustForHardMode(null, ["wood2_#00" => 40, "metal_#00" => 40,"concrete_wall_#00" => 6,"wood_beam_#00" => 30,"metal_beam_#00" => 30,])->autoEasyMode()
+            ->adjustForHardMode(
+                null, ["wood2_#00" => 40, "metal_#00" => 40,"concrete_wall_#00" => 6,"wood_beam_#00" => 30,"metal_beam_#00" => 30,],
+                null, ["wood2_#00" => 8, "metal_#00" => 8,"concrete_wall_#00" => 1,"wood_beam_#00" => 8,"metal_beam_#00" => 8,],
+            )
             ->blueprintLevel(1)->orderBy(1)->commit();
 
         $container->add()->parentBuilding($small_wallimprove1)
@@ -143,14 +149,20 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->icon('small_acidspray')->label('Säurespray')->description('Das Hinzufügen einiger Chemikalien zum verwendeten Wasser wird das hübsche Gesicht der Zombies vor der Stadt definitiv nicht verschönern.')
             ->isTemporary(1)->defense(40)
             ->ap(25)->resources(["water_#00" => 3,"pharma_#00" => 2,])
-            ->adjustForHardMode(null, ["water_#00" => 9,"pharma_#00" => 8,])->autoEasyMode()
+            ->adjustForHardMode(
+                null, ["water_#00" => 9,"pharma_#00" => 8,],
+                null, ["water_#00" => 1,"pharma_#00" => 1,],
+            )
             ->blueprintLevel(1)->orderBy(1)->commit();
 
         $container->add()->parentBuilding($small_waterspray)
             ->icon('small_gazspray')->label('Spraykanone')->description('Oft wird vergessen, dass Zombies ein Gehirn haben. Manchmal sogar zwei, wenn sie Glück haben. Trifft sich gut: Das mit dieser Kanone geschossene Konzentrat hat die erstaunliche Fähigkeit, Gehirne in Matsch zu verwandeln. Es könnte allerdings sein, dass sie auf eure Wächter herunterfällt... aber wo gehobelt wird, da fallen Späne.')
             ->isTemporary(false)->defense(140)
             ->ap(60)->health(60)->resources(["metal_beam_#00" => 5,"water_#00" => 5,"meca_parts_#00" => 1,"tube_#00" => 1,"pharma_#00" => 2,"poison_part_#00" => 1,])
-            ->adjustForHardMode(null, ["metal_beam_#00" => 15,"water_#00" => 15,"meca_parts_#00" => 3,"tube_#00" => 4,"pharma_#00" => 8,"poison_part_#00" => 2,])->autoEasyMode()
+            ->adjustForHardMode(
+                null, ["metal_beam_#00" => 15,"water_#00" => 15,"meca_parts_#00" => 3,"tube_#00" => 4,"pharma_#00" => 8,"poison_part_#00" => 2,],
+                null, ["metal_beam_#00" => 4,"water_#00" => 4,"meca_parts_#00" => 1,"tube_#00" => 1,"pharma_#00" => 1,"poison_part_#00" => 1,],
+            )
             ->blueprintLevel(1)->orderBy(2)->commit();
 
         $container->add()->parentBuilding($small_wallimprove)
@@ -262,13 +274,19 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->icon('small_waterspray')->label('Kärcher')->description('Dieser leistungsstarke Dampfstrahlreiniger versprüht feinen, siedend heißen Wasserdampf. Deine muffigen Freunde werden beim Anblick dieses Geräts wortwörtlich dahinschmelzen.')
             ->isTemporary(0)->defense(60)
             ->ap(40)->health(40)->resources(["water_#00" => 10,"tube_#00" => 1,"wood2_#00" => 10,"metal_beam_#00" => 5,"oilcan_#00" => 1,])
-            ->adjustForHardMode(null, ["water_#00" => 30,"tube_#00" => 3,"wood2_#00" => 40,"metal_beam_#00" => 15,"oilcan_#00" => 4,])->autoEasyMode()
+            ->adjustForHardMode(
+                null, ["water_#00" => 30,"tube_#00" => 3,"wood2_#00" => 40,"metal_beam_#00" => 15,"oilcan_#00" => 4,],
+                null, ["water_#00" => 7,"tube_#00" => 1,"wood2_#00" => 8,"metal_beam_#00" => 4,"oilcan_#00" => 1,],
+            )->autoEasyMode()
             ->blueprintLevel(1)->orderBy(0)->commit();
         $container->add()->parentBuilding($item_firework_tube)
             ->icon('small_grinder')->label('Kreischender Rotor')->description('Es handelt sich um ein einfallsreiches und SEHR effektives System! Zwei schnell kreisende und mit geschliffenen Eisenstangen bestückte Drehscheiben, die von einem Kolbenmechanismus angetrieben werden, zerfetzen alles und jeden, der sich im Toreingang befindet!')
             ->isTemporary(0)->defense(50)
             ->ap(55)->resources(["plate_#00" => 2,"tube_#00" => 2,"wood_beam_#00" => 4,"metal_beam_#00" => 10,])
-            ->adjustForHardMode(null, ["plate_#00" => 6,"tube_#00" => 8,"wood_beam_#00" => 12,"metal_beam_#00" => 30,])->autoEasyMode()
+            ->adjustForHardMode(
+                null, ["plate_#00" => 6,"tube_#00" => 8,"wood_beam_#00" => 12,"metal_beam_#00" => 30,],
+                null, ["plate_#00" => 1,"tube_#00" => 1,"wood_beam_#00" => 3,"metal_beam_#00" => 8,],
+            )
             ->health(55)->blueprintLevel(1)->orderBy(4)->commit();
         $container->add()->parentBuilding($small_waterspray)
             ->icon('small_sprinkler')->label('Sprinkleranlage')->description('Wie jeder weiß, wird eine Sprinkleranlage für gewöhnlich im Garten eingesetzt. Die wenigsten wissen jedoch, dass sie sich auch hervorragend gegen Zombiehorden eignet. Einziger Wermutstropfen: Die Anlage verbraucht relativ viel Wasser und die Mauer wird etwas rutschiger. Immer vorsichtig laufen!')
@@ -537,26 +555,38 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->icon('small_dig')->label('Trümmerberg')->description('Hast du erst mal einen großen Haufen Müll aufgeschüttet, kannst du ihn einfach noch mit Stacheln versehen, die ebenso rostig wie tödlich sind!')
             ->isTemporary(1)->defense(60)
             ->ap(40)->health(0)->resources(["metal_#00" => 2,])
-            ->adjustForHardMode(null, ["metal_#00" => 8,])->autoEasyMode()
+            ->adjustForHardMode(
+                null, ["metal_#00" => 8,],
+                null, ["metal_#00" => 1],
+            )
             ->blueprintLevel(1)->orderBy(0)->commit();
 
         $container->add()->parentBuilding($small_dig_1)
             ->icon('small_trap')->label('Wolfsfalle')->description('Das Hinzufügen von Metall auf Bodenhöhe wird die Zombies nicht aufhalten, aber es könnte sie verlangsamen.')
             ->isTemporary(1)->defense(30)
             ->ap(15)->health(0)->resources(["metal_#00" => 5,"hmeat_#00" => 1,])
-            ->adjustForHardMode(null, ["metal_#00" => 20,"hmeat_#00" => 3,])->autoEasyMode()
+            ->adjustForHardMode(
+                null, ["metal_#00" => 20,"hmeat_#00" => 3,],
+                null, ["metal_#00" => 2,"hmeat_#00" => 1,],
+            )
             ->blueprintLevel(0)->orderBy(2)->commit();
         $container->add()->parentBuilding($status_terror)
             ->icon('small_tnt')->label('Sprengfalle')->description('Dynamit, Zombies, Blut.')
             ->isTemporary(1)->defense(35)
             ->ap(30)->health(0)->resources(["explo_#00" => 2,])
-            ->adjustForHardMode(null, ["explo_#00" => 8,])->autoEasyMode()
+            ->adjustForHardMode(
+                null, ["explo_#00" => 8,],
+                null, ["explo_#00" => 1,],
+            )
             ->blueprintLevel(1)->orderBy(3)->commit();
         $container->add()->parentBuilding($status_terror)
             ->icon('status_terror')->label('Nackte Panik')->description('Falls die Lage wirklich verzweifelt ist, könnt ihr beschließen loszuschreien und in Panik zu verfallen. Falls alle Überlebenden mitmachen, wird es die Zombies verwirren (denn sie können mit dieser Art Stress nicht umgehen) und euch einige virtuelle Verteidigungespuntke einbringen... Genau, das ist natürlich Unsinn.')
             ->isTemporary(1)->defense(70)
             ->ap(25)->resources(["water_#00" => 2,"wood2_#00" => 5,"metal_#00" => 5, 'meca_parts_#00' => 1])
-            ->adjustForHardMode(null, ["water_#00" => 6,"wood2_#00" => 20,"metal_#00" => 20, 'meca_parts_#00' => 3])->autoEasyMode()
+            ->adjustForHardMode(
+                null, ["water_#00" => 6,"wood2_#00" => 20,"metal_#00" => 20, 'meca_parts_#00' => 3],
+                null, ["water_#00" => 1,"wood2_#00" => 4,"metal_#00" => 4, 'meca_parts_#00' => 1],
+            )
             ->health(25)->blueprintLevel(1)->orderBy(4)->commit();
         $container->add()->parentBuilding($status_terror)
             ->icon('small_bamba')->label('Dollhouse')->description('Feiern bis zum Abwinken ist immer noch die beste Art, all die schrecklichen Dinge der Außenwelt zu vergessen. Glücklicherweise sorgen die Zombies schon dafür, dass die Dinge nicht zu sehr ausschweifen.')
