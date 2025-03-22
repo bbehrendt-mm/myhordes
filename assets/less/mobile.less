@@ -9,6 +9,7 @@
 // Visual Controls
 @media (max-width: (@screen-extra-large-threshold - 1)) {
   .hide-@{screen-extra-large} {display: none !important;};
+  .right-@{screen-extra-large} {text-align: right !important;};
   #post-office {
     backdrop-filter: none !important; padding: 0 !important;
     #post-office-box {
@@ -19,10 +20,12 @@
 }
 @media (min-width: @screen-large-threshold) {
   .hide-desktop {display: none !important;};
+  .right-desktop {text-align: right !important;};
 }
 
 @media (max-width: (@screen-large-threshold - 1)) {
   .hide-mobile {display: none !important;};
+  .right-mobile {text-align: right !important;};
   body {background: black;}
   #wrapper, div.game-menu-area, footer { width: 100%; }
   #wrapper.attract > #header .attract_button { background-image: url("../img/background/bg_attract_button_detached.png") }
@@ -103,6 +106,7 @@
 }
 @media (max-width: (@screen-large-threshold - 1)) and (min-width: @screen-medium-threshold) {
   .hide-@{screen-large} {display: none !important;};
+  .right-@{screen-large} {text-align: right !important;};
   .dashboard .def-estimation { border-right: none; }
   .soul .language-picker {
     flex-wrap: wrap;
@@ -121,6 +125,7 @@
 
 @media (max-width: (@screen-medium-threshold - 1)) and (min-width: @screen-small-threshold) {
   .hide-@{screen-medium} {display: none !important;};
+  .right-@{screen-medium} {text-align: right !important;};
   .dashboard .attack-estimation, .dashboard .def-estimation { border-right: none; }
   .soul .language-picker {
     flex-wrap: wrap;
@@ -163,6 +168,7 @@
 }
 @media (max-width: (@screen-small-threshold - 1)) {
   .hide-@{screen-small} {display: none !important;};
+  .right-@{screen-small} {text-align: right !important;};
   #notifications { width: 100%; left: 0; margin-left: 0; }
   #postbox {
     img { height: 32px; width: 32px; image-rendering: pixelated }
