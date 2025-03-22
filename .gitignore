@@ -65,3 +65,8 @@ phpstan.neon
 *:Zone.Identifier
 .vslist
 
+
+###> phpunit/phpunit ###
+/phpunit.xml
+/.phpunit.cache/
+###< phpunit/phpunit ###
