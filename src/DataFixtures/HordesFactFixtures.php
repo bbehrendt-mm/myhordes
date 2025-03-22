@@ -49,7 +49,8 @@ class HordesFactFixtures extends Fixture {
         $this->hordesFact = $hordesFact;
     }
 
-    public function load(ObjectManager $manager) {
+    public function load(ObjectManager $manager): void
+    {
         $output = new ConsoleOutput();
         $output->writeln( '<info>Installing fixtures: HordesFacts Database</info>' );
         $output->writeln("");

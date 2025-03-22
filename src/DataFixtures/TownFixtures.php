@@ -64,7 +64,8 @@ class TownFixtures extends Fixture
         $progress->finish();
     }
 
-    public function load(ObjectManager $manager) {
+    public function load(ObjectManager $manager): void
+    {
         $output = new ConsoleOutput();
         $output->writeln( '<info>Installing fixtures: Town Content Database</info>' );
         $output->writeln("");

@@ -128,7 +128,8 @@ class AwardFixtures extends Fixture implements DependentFixtureInterface {
         $this->data_aw_feature = $d_feature;
     }
 
-    public function load(ObjectManager $manager) {
+    public function load(ObjectManager $manager): void
+    {
         $output = new ConsoleOutput();
         $output->writeln( '<info>Installing fixtures: AwardPrototype Database</info>' );
         $output->writeln("");
@@ -142,7 +143,7 @@ class AwardFixtures extends Fixture implements DependentFixtureInterface {
     /**
      * @inheritDoc
      */
-    public function getDependencies()
+    public function getDependencies(): array
     {
         return [ PictoFixtures::class ];
     }

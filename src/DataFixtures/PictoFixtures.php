@@ -65,7 +65,8 @@ class PictoFixtures extends Fixture
         $progress->finish();
     }
 
-    public function load(ObjectManager $manager) {
+    public function load(ObjectManager $manager): void
+    {
         $output = new ConsoleOutput();
         $output->writeln('<info>Installing fixtures: Pictos content database</info>');
         $output->writeln("");
