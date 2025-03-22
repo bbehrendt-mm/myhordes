@@ -243,6 +243,7 @@ final class DeathConfirmationEventListener implements ServiceSubscriberInterface
             'r_explor_#00' =>  [ 'hxp_picto_first', true, 'by_day' => null, 'by_count' => $pt_2_6 ],
             'r_collec_#00' =>  [ 'hxp_picto_first', true, 'by_day' => null, 'by_count' => $pt_2_6 ],
             'r_guard_#00'  =>  [ 'hxp_picto_first', true, 'by_day' => null, 'by_count' => $pt_2_6 ],
+            'r_ruine_#00'  =>  [ 'hxp_picto_first', true, 'by_day' => null, 'by_count' => $pt_2_6 ],
 
             'r_repair_#00' =>  [ 'hxp_picto_first', true, 'by_day' => null, 'by_count' => $pt_2_10 ],
             'r_plundr_#00' =>  [ 'hxp_picto_first', true, 'by_day' => null, 'by_count' => $pt_2_10 ],
@@ -258,6 +259,7 @@ final class DeathConfirmationEventListener implements ServiceSubscriberInterface
             'r_jcolle_#00' =>  [ 'hxp_picto_first', true, 'by_day' => null, 'by_count' => $p_job ],
             'r_jguard_#00' =>  [ 'hxp_picto_first', true, 'by_day' => null, 'by_count' => $p_job ],
             'r_jtech_#00'  =>  [ 'hxp_picto_first', true, 'by_day' => null, 'by_count' => $p_job ],
+            'r_jbasic_#00' =>  [ 'hxp_picto_first', true, 'by_day' => null, 'by_count' => $p_job ],
         ];
 
         $pictoCache = $this->getService(EntityManagerInterface::class)->getRepository(PictoOffsetCounter::class)->findOneBy([
