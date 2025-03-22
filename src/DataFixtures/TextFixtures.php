@@ -122,8 +122,9 @@ class TextFixtures extends Fixture
         }
     }
 
-    /** @noinspection PhpHierarchyChecksInspection */
-    public function load(ObjectManager $manager) {
+
+    public function load(ObjectManager $manager): void
+    {
         $output = new ConsoleOutput();
         $output->writeln( '<info>Installing fixtures: Texts</info>' );
         $output->writeln("");

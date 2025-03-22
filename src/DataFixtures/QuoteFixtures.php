@@ -49,7 +49,8 @@ class QuoteFixtures extends Fixture {
         $this->quote_data = $quote_data;
     }
 
-    public function load(ObjectManager $manager) {
+    public function load(ObjectManager $manager): void
+    {
         $output = new ConsoleOutput();
         $output->writeln( '<info>Installing fixtures: Quotes Database</info>' );
         $output->writeln("");

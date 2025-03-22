@@ -130,7 +130,8 @@ class GazetteEntryTemplateFixtures extends Fixture
         $progress->finish();
     }
 
-    public function load(ObjectManager $manager) {
+    public function load(ObjectManager $manager): void
+    {
         $output = new ConsoleOutput();
         $output->writeln( '<info>Installing fixtures: Gazette Entry Templates Database</info>' );
         $output->writeln("");

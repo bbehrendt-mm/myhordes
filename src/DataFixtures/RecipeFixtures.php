@@ -195,7 +195,8 @@ class RecipeFixtures extends Fixture implements DependentFixtureInterface
         $progress->finish();
     }
 
-    public function load(ObjectManager $manager) {
+    public function load(ObjectManager $manager): void
+    {
 
         $output = new ConsoleOutput();
         $output->writeln( '<info>Installing fixtures: Buildings & recipes</info>' );
@@ -214,7 +215,7 @@ class RecipeFixtures extends Fixture implements DependentFixtureInterface
     /**
      * @inheritDoc
      */
-    public function getDependencies()
+    public function getDependencies(): array
     {
         return [ ItemFixtures::class ];
     }

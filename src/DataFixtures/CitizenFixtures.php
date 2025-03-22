@@ -431,7 +431,8 @@ class CitizenFixtures extends Fixture implements DependentFixtureInterface
     }
 
 
-    public function load(ObjectManager $manager) {
+    public function load(ObjectManager $manager): void
+    {
         $output = new ConsoleOutput();
 
         try {

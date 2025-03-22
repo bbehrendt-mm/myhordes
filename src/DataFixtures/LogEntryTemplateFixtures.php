@@ -64,7 +64,8 @@ class LogEntryTemplateFixtures extends Fixture
         $progress->finish();
     }
 
-    public function load(ObjectManager $manager) {
+    public function load(ObjectManager $manager): void
+    {
         $output = new ConsoleOutput();
         $output->writeln( '<info>Installing fixtures: Log Entry Templates Database</info>' );
         $output->writeln("");

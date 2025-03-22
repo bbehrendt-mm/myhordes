@@ -61,7 +61,8 @@ class HeroSkillFixtures extends Fixture implements DependentFixtureInterface {
         $this->heroSkill = $heroSkill;
     }
 
-    public function load(ObjectManager $manager) {
+    public function load(ObjectManager $manager): void
+    {
         $output = new ConsoleOutput();
         $output->writeln( '<info>Installing fixtures: Hero Skills Database</info>' );
         $output->writeln("");

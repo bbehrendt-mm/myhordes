@@ -162,7 +162,8 @@ class ItemFixtures extends Fixture
         $out->writeln('<info>Done!</info>');
     }
 
-    public function load(ObjectManager $manager) {
+    public function load(ObjectManager $manager): void
+    {
 
         $output = new ConsoleOutput();
         $output->writeln( '<info>Installing fixtures: Item Database</info>' );
