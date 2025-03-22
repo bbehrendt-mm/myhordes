@@ -113,6 +113,7 @@ class SoulHooks extends HooksCore {
             'r_explor_#00' =>  $pt_2_6,
             'r_collec_#00' =>  $pt_2_6,
             'r_guard_#00'  =>  $pt_2_6,
+            'r_ruine_#00'  =>  $pt_2_6,
 
             'r_repair_#00' =>  $pt_2_10,
             'r_plundr_#00' =>  $pt_2_10,
@@ -122,6 +123,7 @@ class SoulHooks extends HooksCore {
             'r_theft_#00'  =>  $pt_2_15,
             'r_cgarb_#00'  =>  $pt_2_15,
 
+            'r_jbasic_#00' =>  $p_job,
             'r_jtamer_#00' =>  $p_job,
             'r_jrangr_#00' =>  $p_job,
             'r_jermit_#00' =>  $p_job,
