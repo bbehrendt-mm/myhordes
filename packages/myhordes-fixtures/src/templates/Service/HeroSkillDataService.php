@@ -239,11 +239,12 @@ class HeroSkillDataService implements FixtureProcessorInterface {
                           'Ein zusätzlicher Platz im Rucksack',
                           'Ein zusätzlicher Platz in der Truhe',
                           'Wildstyle Uppercut',
-                          'Zweite Lunge (4 EP)',
+                          'Zweite Lunge (2 AP, 2 EP)',
                       ])
             ->addCitizenProperty(CitizenProperties::InventorySpaceBonus, 1)
             ->addCitizenProperty(CitizenProperties::ChestSpaceBonus, 1)
-            ->addCitizenProperty(CitizenProperties::HeroSecondWindBaseSP, 4)
+            ->addCitizenProperty(CitizenProperties::HeroSecondWindBonusAP, 2)
+            ->addCitizenProperty(CitizenProperties::HeroSecondWindBaseSP, 2)
             ->unlocksAction('hero_generic_punch')
             ->unlocksAction('hero_generic_ap')
             ->level(0)->unlockAt(0)->commit();
@@ -253,25 +254,25 @@ class HeroSkillDataService implements FixtureProcessorInterface {
                           'Ein weiterer zusätzlicher Platz im Rucksack',
                           'Ein weiterer zusätzlicher Platz in der Truhe',
                           'Verbesserung Wildstyle Uppercut (3 Zombies)',
-                          'Verbesserung Zweite Lunge (6 EP)',
+                          'Verbesserung Zweite Lunge (2 AP, 4 EP)',
                       ])
             ->addCitizenProperty(CitizenProperties::InventorySpaceBonus, 2)
             ->addCitizenProperty(CitizenProperties::ChestSpaceBonus, 2)
             ->addCitizenProperty( CitizenProperties::HeroPunchKills, 3 )
-            ->addCitizenProperty(CitizenProperties::HeroSecondWindBaseSP, 6)
+            ->addCitizenProperty(CitizenProperties::HeroSecondWindBaseSP, 4)
             ->level(1)->unlockAt(0)->commit();
         $container->clone('super_enduring_1')
             ->icon('super_e2')->name('super_enduring_2')
             ->bullets([
                           '1 Gegenstand in der Truhe ist versteckt',
                           'Verbesserung Wildstyle Uppercut (4 Zombies)',
-                          'Verbesserung Zweite Lunge (2 AP, 6 EP)',
+                          'Verbesserung Zweite Lunge (4 AP, 4 EP)',
                           '15 Extra-O² in begehbaren Ruinen',
                       ])
             ->addCitizenProperty( CitizenProperties::ChestHiddenStashLimit, 1 )
             ->addCitizenProperty( CitizenProperties::HeroPunchKills, 4 )
             ->addCitizenProperty( CitizenProperties::OxygenTimeBonus, 45 )
-            ->addCitizenProperty(CitizenProperties::HeroSecondWindBonusAP, 2)
+            ->addCitizenProperty(CitizenProperties::HeroSecondWindBonusAP, 4)
             ->level(2)->unlockAt(40)->commit();
         $container->clone('super_enduring_2')
             ->icon('super_e3')->name('super_enduring_3')
@@ -285,7 +286,6 @@ class HeroSkillDataService implements FixtureProcessorInterface {
             ->addCitizenProperty(CitizenProperties::HeroPunchEscapeTime, 30)
             ->addCitizenProperty(CitizenProperties::OxygenTimeBonus, 90)
             ->addCitizenProperty(CitizenProperties::HeroSecondWindBaseSP, 6)
-            ->addCitizenProperty(CitizenProperties::HeroSecondWindBonusAP, 4)
             ->level(3)->unlockAt(80)->commit();
 
         $container->add()->sort(4)
