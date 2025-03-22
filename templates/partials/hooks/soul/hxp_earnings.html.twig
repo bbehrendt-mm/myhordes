@@ -3,19 +3,19 @@
         <h5>{{ 'Durch überleben!'|trans({},'soul') }}</h5>
         <div class="row-table">
             <div class="row header">
-                <div class="padded cell center rw-2">{{ 'Erfahrung'|trans({},'soul') }}</div>
-                <div class="padded cell center rw-2">{{ 'Erworben'|trans({},'soul') }}</div>
-                <div class="padded cell rw-6">{{ 'Beschreibung'|trans({},'soul') }}</div>
+                <div class="padded cell rw-7 rw-md-9 rw-sm-12">{{ 'Beschreibung'|trans({},'soul') }}</div>
+                <div class="padded cell rw-3 hide-sm hide-md">{{ 'Erworben'|trans({},'soul') }}</div>
+                <div class="padded cell center right-md rw-2 rw-md-3 hide-sm">{{ 'Erfahrung'|trans({},'soul') }}</div>
             </div>
             {% for entry in days %}
                 <div class="row">
-                    <div class="padded cell rw-2 center">
-                        {{ entry['value'] }}
-                        {% if entry['valueNote'] is not null %}
-                            <div class="small">{{ entry['valueNote'] }}</div>
+                    <div class="padded cell rw-7 rw-md-12">
+                        {{ entry['description'] }}
+                        {% if entry['repeat'] %}
+                            <div class="small">{{ 'Kann beliebig oft in einer Saison verdient werden!'|trans({},'soul') }}</div>
                         {% endif %}
                     </div>
-                    <div class="padded cell rw-2 center">
+                    <div class="padded cell rw-3 rw-md-6 ">
                         {% if not entry['repeat'] and entry['achieved'] %}
                             <img alt="" src="{{ asset('build/images/assets/img/icons/tickOn.gif') }}" />
                         {% elseif not entry['repeat'] and not entry['achieved'] %}
@@ -24,10 +24,10 @@
                             {{ entry['total'] }}
                         {% endif %}
                     </div>
-                    <div class="padded cell rw-8">
-                        {{ entry['description'] }}
-                        {% if entry['repeat'] %}
-                            <div class="small">{{ 'Kann beliebig oft in einer Saison verdient werden!'|trans({},'soul') }}</div>
+                    <div class="padded cell rw-2 rw-md-6 center right-md right-sm">
+                        {{ entry['value'] }}
+                        {% if entry['valueNote'] is not null %}
+                            <div class="small">{{ entry['valueNote'] }}</div>
                         {% endif %}
                     </div>
                 </div>
@@ -40,34 +40,19 @@
         <h5>{{ 'Durch Auszeichnungen!'|trans({},'soul') }}</h5>
         <div class="row-table">
             <div class="row header">
-                <div class="padded cell center rw-2">{{ 'Erfahrung'|trans({},'soul') }}</div>
-                <div class="padded cell center rw-2">{{ 'Erworben'|trans({},'soul') }}</div>
-                <div class="padded cell rw-6">{{ 'Auszeichnung'|trans({},'soul') }}</div>
+                <div class="padded cell rw-7 rw-md-9 rw-sm-12">{{ 'Auszeichnung'|trans({},'soul') }}</div>
+                <div class="padded cell rw-3 hide-sm hide-md">{{ 'Erworben'|trans({},'soul') }}</div>
+                <div class="padded cell center right-md rw-2 rw-md-3 hide-sm">{{ 'Erfahrung'|trans({},'soul') }}</div>
             </div>
             {% for entry in pictos %}
                 <div class="row">
                     <div class="cell rw-12">
                         <div class="row">
-                            <div class="padded cell rw-2 center">
-                                {{ entry['value'] }}
-                            </div>
-                            <div class="padded cell rw-2 center">
-                                {% if not entry['repeat'] and entry['achieved'] %}
-                                    <img alt="" src="{{ asset('build/images/assets/img/icons/tickOn.gif') }}" />
-                                {% elseif not entry['repeat'] and not entry['achieved'] %}
-                                    <img alt="" src="{{ asset('build/images/assets/img/icons/tickOff.gif') }}" />
-                                {% elseif entry['repeat'] and entry['total'] > 0 %}
-                                    {{ entry['total'] }}
-                                {% endif %}
-                            </div>
-                            <div class="padded cell rw-8">
-                        <span class="tool">
-                            <img alt="" src="{{ asset('build/images/pictos/' ~ entry['icon'] ~ '.gif') }}" />
-                            {{ entry['name'] }}
-                            {% if entry['valuePost'] is not null %}
-                                <span class="small">{{ entry['valuePost'] }}</span>
-                            {% endif %}
-                        </span>
+                            <div class="padded cell rw-7 rw-md-12">
+                                <span class="tool">
+                                    <img alt="" src="{{ asset('build/images/pictos/' ~ entry['icon'] ~ '.gif') }}" />
+                                    {{ entry['name'] }}
+                                </span>
                                 {% if entry['valueNote'] is not null %}
                                     <div class="small"><b>{{ entry['valueNote'] }}</b></div>
                                 {% endif %}
@@ -75,14 +60,26 @@
                                     <div class="small">{{ 'Kann beliebig oft in einer Saison verdient werden!'|trans({},'soul') }}</div>
                                 {% endif %}
                             </div>
+                            <div class="padded cell rw-3 rw-md-6">
+                                {% if not entry['repeat'] and entry['achieved'] %}
+                                    <img alt="" src="{{ asset('build/images/assets/img/icons/tickOn.gif') }}" />
+                                {% elseif not entry['repeat'] and not entry['achieved'] %}
+                                    <img alt="" src="{{ asset('build/images/assets/img/icons/tickOff.gif') }}" />
+                                {% elseif entry['repeat'] and entry['total'] > 0 %}
+                                    {{ entry['total'] }}
+                                {% endif %}
+                                {% if not (entry['repeat'] and entry['total'] > 0) and entry['valuePost'] is not null %}
+                                    <b>{{ entry['valuePost'] }}</b>
+                                {% endif %}
+                            </div>
+                            <div class="padded cell rw-2 rw-md-6 center right-md right-sm">
+                                {{ entry['value'] }}
+                            </div>
                         </div>
                         {% for subValue in entry.sub %}
                             <div class="row small">
-                                <div class="padded cell rw-2 center" style="padding-top: 0">
-                                    {{ subValue['value'] }}
-                                </div>
-                                <div class="padded cell rw-2 center" style="padding-top: 0"></div>
-                                <div class="padded cell rw-8" style="padding-top: 0">
+                                <div class="padded cell rw-7 hide-sm hide-md" style="padding-top: 0"></div>
+                                <div class="padded cell rw-3 rw-md-6" style="padding-top: 0">
                                     <div class="flex wrap large-gap">
                                         {% for sub in subValue.list %}
                                             <div>
@@ -98,6 +95,9 @@
                                         {% endfor %}
                                     </div>
                                 </div>
+                                <div class="padded cell rw-2 rw-md-6 center right-md right-sm" style="padding-top: 0">
+                                    {{ subValue['value'] }}
+                                </div>
                             </div>
                         {% endfor %}
                     </div>
@@ -111,19 +111,19 @@
         <h5>{{ 'Durch sonstige Aktionen!'|trans({},'soul') }}</h5>
         <div class="row-table">
             <div class="row header">
-                <div class="padded cell center rw-2">{{ 'Erfahrung'|trans({},'soul') }}</div>
-                <div class="padded cell center rw-2">{{ 'Erworben'|trans({},'soul') }}</div>
-                <div class="padded cell rw-6">{{ 'Beschreibung'|trans({},'soul') }}</div>
+                <div class="padded cell rw-7 rw-md-9 rw-sm-12">{{ 'Beschreibung'|trans({},'soul') }}</div>
+                <div class="padded cell rw-3 hide-sm hide-md">{{ 'Erfahrung'|trans({},'soul') }}</div>
+                <div class="padded cell center right-md rw-2 rw-md-3 hide-sm">{{ 'Erworben'|trans({},'soul') }}</div>
             </div>
             {% for entry in others %}
                 <div class="row">
-                    <div class="padded cell rw-2 center">
-                        {{ entry['value'] }}
-                        {% if entry['valueNote'] is not null %}
-                            <div class="small">{{ entry['valueNote'] }}</div>
+                    <div class="padded cell rw-7 rw-md-12">
+                        {{ entry['description'] }}
+                        {% if entry['repeat'] %}
+                            <div class="small">{{ 'Kann beliebig oft in einer Saison verdient werden!'|trans({},'soul') }}</div>
                         {% endif %}
                     </div>
-                    <div class="padded cell rw-2 center">
+                    <div class="padded cell rw-3 rw-md-6">
                         {% if not entry['repeat'] and entry['achieved'] %}
                             <img alt="" src="{{ asset('build/images/assets/img/icons/tickOn.gif') }}" />
                         {% elseif not entry['repeat'] and not entry['achieved'] %}
@@ -132,10 +132,10 @@
                             {{ entry['total'] }}
                         {% endif %}
                     </div>
-                    <div class="padded cell rw-8">
-                        {{ entry['description'] }}
-                        {% if entry['repeat'] %}
-                            <div class="small">{{ 'Kann beliebig oft in einer Saison verdient werden!'|trans({},'soul') }}</div>
+                    <div class="padded cell rw-2 rw-md-6 center right-md right-sm">
+                        {{ entry['value'] }}
+                        {% if entry['valueNote'] is not null %}
+                            <div class="small">{{ entry['valueNote'] }}</div>
                         {% endif %}
                     </div>
                 </div>

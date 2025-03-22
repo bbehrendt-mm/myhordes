@@ -165,7 +165,7 @@ class SoulHooks extends HooksCore {
                     $picto_data[$picto_proto->getName()] = [
                         'value' => $value,
                         'valueNote' => null,
-                        'valuePost' => $count > 1 ? "× $count" : null,
+                        'valuePost' =>"× $count",
                         'icon'  => $picto_proto->getIcon(),
                         'name'  => $this->translator->trans($picto_proto->getLabel(), [], 'game'),
                         'repeat' => false,
