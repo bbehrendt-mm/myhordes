@@ -243,7 +243,7 @@
                         </div>
                         <div class="cell padded rw-6 rw-sm-12 right">
                             {% if blocked_ips < known_ips %}
-                                <button class="inline" data-fetch="{{ path('rest_admin_blacklist_spam_add_user_ips', {id: user.id}) }}" data-fetch-method="put" data-fetch-load="{{ path('admin_users_ban_view', {id: user.id}) }}">{{ 'Temporär für Neuregistrierungen sperren' }}</button>
+                                <button class="inline" data-fetch="{{ path('rest_admin_blacklist_spam_add_user_ips', {id: user.id}) }}" data-fetch-method="put" data-fetch-load="{{ path('admin_users_ban_view', {id: user.id}) }}">{{ 'Temporär für Neuregistrierungen sperren'|trans({},'admin') }}</button>
                             {% endif %}
                         </div>
                     </div>
@@ -259,7 +259,7 @@
                             {% endif %}
                         </div>
                         <div class="cell padded rw-3 rw-sm-12 right">
-                            <button class="inline" data-fetch="{{ path('rest_admin_forum_management_purge_user_posts', {id: user.id}) }}" data-fetch-method="delete" data-fetch-load="{{ path('admin_users_ban_view', {id: user.id}) }}" data-fetch-confirm="{{ 'Bestätigen?'|trans({},'global') }}">{{ 'Alle Posts löschen' }}</button>
+                            <button class="inline" data-fetch="{{ path('rest_admin_forum_management_purge_user_posts', {id: user.id}) }}" data-fetch-method="delete" data-fetch-load="{{ path('admin_users_ban_view', {id: user.id}) }}" data-fetch-confirm="{{ 'Bestätigen?'|trans({},'global') }}">{{ 'Alle Posts löschen'|trans({},'admin') }}</button>
                         </div>
                     </div>
                 </div>

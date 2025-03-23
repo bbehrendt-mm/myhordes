@@ -688,6 +688,8 @@ Namen-Suche: Namen-Suche
 'Namen können als glob-Muster eingegeben werden. Beispielsweise würde *test* alle Namen verhindern, in denen "test" vorkommt. Für eine Übersicht über glob-Syntax, siehe folgenden Link:': 'Namen können als glob-Muster eingegeben werden. Beispielsweise würde *test* alle Namen verhindern, in denen "test" vorkommt. Für eine Übersicht über glob-Syntax, siehe folgenden Link:'
 'Gesperrte Namen': 'Gesperrte Namen'
 'Es existiert bereits ein Changelog für diese Version in der angegebenen Sprache.': 'Es existiert bereits ein Changelog für diese Version in der angegebenen Sprache.'
+'Temporär für Neuregistrierungen sperren': 'Temporär für Neuregistrierungen sperren'
+'Alle Posts löschen': 'Alle Posts löschen'
 'Ressourcen- und AP-Vorlage, welches für diese Konstruktion benötigt wird.': 'Ressourcen- und AP-Vorlage, welches für diese Konstruktion benötigt wird.'
 Teuer: Teuer
 Normal: Normal

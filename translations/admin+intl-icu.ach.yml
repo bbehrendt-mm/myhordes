@@ -693,3 +693,696 @@ Teuer: crwdns211719:0crwdne211719:0
 Normal: crwdns211721:0crwdne211721:0
 Billig: crwdns211723:0crwdne211723:0
 Billig+: crwdns211725:0crwdne211725:0
+---
+'Diesen Bürger töten?': 'crwdns59384:0crwdne59384:0'
+Status: crwdns59386:0crwdne59386:0
+Dauer: crwdns59388:0crwdne59388:0
+Grund: crwdns59390:0crwdne59390:0
+'Derzeitiges Leben': 'crwdns59392:0crwdne59392:0'
+'TOD NICHT BESTÄTIGT': 'crwdns59394:0crwdne59394:0'
+Kopfschuss: crwdns59396:0crwdne59396:0
+'Tod bestätigen': 'crwdns59398:0crwdne59398:0'
+'Das Leben dieses Bürgers sofort beenden?': 'crwdns59400:0crwdne59400:0'
+'Tod dieses Bürgers zwangsweise bestätigen?': 'crwdns59402:0crwdne59402:0'
+Forum: crwdns59404:0crwdne59404:0
+Autor: crwdns59406:0crwdne59406:0
+'gemeldet von': 'crwdns59408:0crwdne59408:0'
+Gesehen: crwdns59410:0crwdne59410:0
+Verbannung: crwdns59412:0crwdne59412:0
+Bürger: crwdns59414:0crwdne59414:0
+'Suche:': 'crwdns59416:0crwdne59416:0'
+Account: crwdns59418:0crwdne59418:0
+Benutzername: crwdns59420:0crwdne59420:0
+E-Mail: crwdns59422:0crwdne59422:0
+Validiert: crwdns59424:0crwdne59424:0
+Ja: crwdns59426:0crwdne59426:0
+Nein: crwdns59428:0crwdne59428:0
+Berechtigungsstufe: crwdns59430:0crwdne59430:0
+Spieler: crwdns59432:0crwdne59432:0
+Krähe: crwdns59434:0crwdne59434:0
+Admin: crwdns59436:0crwdne59436:0
+Validierungstokens: crwdns59438:0crwdne59438:0
+Keine: crwdns59440:0crwdne59440:0
+'User administrieren': 'crwdns59442:0crwdne59442:0'
+Validierung: crwdns59444:0crwdne59444:0
+'Erneute Validierung erzwingen': 'crwdns59446:0crwdne59446:0'
+'Manuell validieren': 'crwdns59448:0crwdne59448:0'
+'Offene Token erneut ankündigen': 'crwdns59450:0crwdne59450:0'
+'Offene Token regenerieren': 'crwdns59452:0crwdne59452:0'
+Sicherheit: crwdns59454:0crwdne59454:0
+'Passwort-Reset auslösen': 'crwdns59456:0crwdne59456:0'
+'Passwort-Reset erzwingen': 'crwdns59458:0crwdne59458:0'
+Ausführen: crwdns59460:0crwdne59460:0
+Übersicht: crwdns59462:0crwdne59462:0
+'Posts mit nur einer Meldung werden ausgeblendet.': 'crwdns59464:0crwdne59464:0'
+'Alle anzeigen': 'crwdns59466:0crwdne59466:0'
+Users: crwdns59468:0crwdne59468:0
+Städte: crwdns59470:0crwdne59470:0
+Zukunft: crwdns59472:0crwdne59472:0
+Auszeichnungen: crwdns59474:0crwdne59474:0
+Admin-Wachturm: crwdns59476:0crwdne59476:0
+Ruinenscanner: crwdns59478:0crwdne59478:0
+ID: crwdns59480:0crwdne59480:0
+Stadtname: crwdns59482:0crwdne59482:0
+Sprache: crwdns59484:0crwdne59484:0
+Typ: crwdns59486:0crwdne59486:0
+Population: crwdns59488:0crwdne59488:0
+Saison: crwdns59490:0crwdne59490:0
+Tag: crwdns59492:0crwdne59492:0
+Offen: crwdns59494:0crwdne59494:0
+Chaos: crwdns59496:0crwdne59496:0
+Zerstört: crwdns59498:0crwdne59498:0
+'Tor offen': 'crwdns59500:0crwdne59500:0'
+Brunnen: crwdns59502:0crwdne59502:0
+Angriff: crwdns59504:0crwdne59504:0
+'Bereich Min': 'crwdns59506:0crwdne59506:0'
+'Bereich Max': 'crwdns59508:0crwdne59508:0'
+Position: crwdns59510:0crwdne59510:0
+Distanz: crwdns59512:0crwdne59512:0
+Zombies: crwdns59514:0crwdne59514:0
+Abdruck: crwdns59516:0crwdne59516:0
+Schlüssel: crwdns59518:0crwdne59518:0
+Durchsucht: crwdns59520:0crwdne59520:0
+'Aktuelle Sitzung': 'crwdns59522:0crwdne59522:0'
+Flucht: crwdns59524:0crwdne59524:0
+Raum: crwdns59526:0crwdne59526:0
+Zeit: crwdns59528:0crwdne59528:0
+'Alle Sitzungen': 'crwdns59530:0crwdne59530:0'
+Stadtübersicht: crwdns59532:0crwdne59532:0
+'Liste aller Städte': 'crwdns59534:0crwdne59534:0'
+Pop.: crwdns59536:0crwdne59536:0
+Aktionen: crwdns59538:0crwdne59538:0
+Tot: crwdns59540:0crwdne59540:0
+Getrennt: crwdns59542:0crwdne59542:0
+Details: crwdns59544:0crwdne59544:0
+Titel: crwdns59546:0crwdne59546:0
+Version: crwdns59548:0crwdne59548:0
+'Neue Update': 'crwdns59550:0crwdne59550:0'
+'Dieser Login ist ausschließlich für Administratoren gedacht.': 'crwdns59552:0crwdne59552:0'
+'Admin Dashboard': 'crwdns59554:0crwdne59554:0'
+'Geplante Angriffe': 'crwdns59556:0crwdne59556:0'
+'Überfällig seit {s} Sekunden!': 'crwdns59558:0{s}crwdne59558:0'
+'Soldatenberuf freischalten': 'crwdns59560:0crwdne59560:0'
+'999 AP zuweisen': 'crwdns59562:0crwdne59562:0'
+'Munition erzeugen': 'crwdns59564:0crwdne59564:0'
+'Admin-Berechtigung setzen': 'crwdns59566:0crwdne59566:0'
+'+ 9999 Seelenpunkte': 'crwdns59568:0crwdne59568:0'
+'Geheime Saison freischalten': 'crwdns59570:0crwdne59570:0'
+'Computer sagt nein.': 'crwdns59572:0crwdne59572:0'
+'Du hast dich umgebracht.': 'crwdns59574:0crwdne59574:0'
+'Du gehörst keiner Stadt an.': 'crwdns59576:0crwdne59576:0'
+'Selbstmord begehen': 'crwdns59578:0crwdne59578:0'
+'PM vom Raben': 'crwdns59580:0crwdne59580:0'
+Stadtregister: crwdns59582:0crwdne59582:0
+'Rundmail als Rabe': 'crwdns59584:0crwdne59584:0'
+'Stadt administrieren': 'crwdns59586:0crwdne59586:0'
+'Nächtlicher Angriff': 'crwdns59588:0crwdne59588:0'
+'Quarantäne aufheben': 'crwdns59590:0crwdne59590:0'
+'Unter Quarantäne stellen': 'crwdns59592:0crwdne59592:0'
+'Manueller Tageswechsel': 'crwdns59594:0crwdne59594:0'
+Twinoid-Konto: crwdns59596:0crwdne59596:0
+Orakel: crwdns59598:0crwdne59598:0
+Twinoid-Integration: crwdns59600:0crwdne59600:0
+'Integrationen löschen': 'crwdns59602:0crwdne59602:0'
+'Hauptseele zurücksetzen': 'crwdns59604:0crwdne59604:0'
+'Du hast keine Berechtigung, diesen Benutzer zu administrieren!': 'crwdns59606:0crwdne59606:0'
+Profil: crwdns59608:0crwdne59608:0
+'Neuen Namen eingeben.': 'crwdns59610:0crwdne59610:0'
+Umbenennen: crwdns59612:0crwdne59612:0
+Löschen: crwdns59614:0crwdne59614:0
+Berechtigungen: crwdns59616:0crwdne59616:0
+'Gewähren: {role}': 'crwdns59618:0{role}crwdne59618:0'
+'Berechtigungsstufe zurücksetzen': 'crwdns59620:0crwdne59620:0'
+'Bitte bestätige folgende Aktion:': 'crwdns59622:0crwdne59622:0'
+'Multi-Account Report': 'crwdns59624:0crwdne59624:0'
+Verdacht: crwdns59626:0crwdne59626:0
+'Andere Accounts': 'crwdns59628:0crwdne59628:0'
+Bann: crwdns59630:0crwdne59630:0
+Verwaltung: crwdns59632:0crwdne59632:0
+Annulieren: crwdns59634:0crwdne59634:0
+Verschüttet: crwdns59636:0crwdne59636:0
+'Multi-Account Whitelist': 'crwdns59638:0crwdne59638:0'
+Spieler-ID: crwdns59640:0crwdne59640:0
+'Multi-Account Whitelist-Eintrag hinzufügen': 'crwdns59642:0crwdne59642:0'
+'Verwende folgende Syntax, um deine Suche zu spezifizieren:': 'crwdns59644:0crwdne59644:0'
+'Klick, um Profil in neuem Tab zu öffnen': 'crwdns59646:0crwdne59646:0'
+'STRG+Klick, um zur Whitelist hinzuzufügen': 'crwdns59648:0crwdne59648:0'
+Whitelist: crwdns59650:0crwdne59650:0
+'E-Mail eingeben.': 'crwdns59652:0crwdne59652:0'
+'E-Mail ändern': 'crwdns59654:0crwdne59654:0'
+'Neues Passwort eingeben.': 'crwdns59656:0crwdne59656:0'
+'Neues Passwort setzen': 'crwdns59658:0crwdne59658:0'
+EternalTwin-Integration: crwdns59660:0crwdne59660:0
+'In lokalen Account umwandeln': 'crwdns59662:0crwdne59662:0'
+Kartei: crwdns59664:0crwdne59664:0
+Anzeigename: crwdns59666:0crwdne59666:0
+'Lokal: {account}': 'crwdns59668:0{account}crwdne59668:0'
+'Von EternalTwin verwaltet': 'crwdns59670:0crwdne59670:0'
+'Nur für Administratoren sichtbar': 'crwdns59672:0crwdne59672:0'
+'Verknüpfte Konten': 'crwdns59674:0crwdne59674:0'
+EternalTwin-Konto: crwdns59676:0crwdne59676:0
+Sonstiges: crwdns59678:0crwdne59678:0
+AntiSpam: crwdns59680:0crwdne59680:0
+'Account zur Löschung vorgemerkt!': 'crwdns59682:0crwdne59682:0'
+'Anzahl der gelisteten Domains: {number}': 'crwdns59684:0{number}crwdne59684:0'
+Domain-Suche: crwdns59686:0crwdne59686:0
+'Gewählte entfernen': 'crwdns59688:0crwdne59688:0'
+'Domains hinzufügen': 'crwdns59690:0crwdne59690:0'
+Hinzufügen: crwdns59692:0crwdne59692:0
+'Nachricht?': 'crwdns59694:0crwdne59694:0'
+Foren-Meldungen: crwdns59696:0crwdne59696:0
+PN-Meldungen: crwdns59698:0crwdne59698:0
+Öffnen: crwdns59700:0crwdne59700:0
+Dashboard: crwdns59702:0crwdne59702:0
+'Stadt {townname}': 'crwdns59704:0{townname}crwdne59704:0'
+Bank: crwdns59706:0crwdne59706:0
+Apps: crwdns59708:0crwdne59708:0
+'Einen Gegenstand erzeugen:': 'crwdns59710:0crwdne59710:0'
+'Vergiftet:': 'crwdns59712:0crwdne59712:0'
+'Zerstört:': 'crwdns59714:0crwdne59714:0'
+'Essentiell:': 'crwdns59716:0crwdne59716:0'
+Erzeugen!: crwdns59718:0crwdne59718:0
+Rucksack: crwdns59720:0crwdne59720:0
+Truhe: crwdns59722:0crwdne59722:0
+'Leere Truhe': 'crwdns59724:0crwdne59724:0'
+Anwendung: crwdns59726:0crwdne59726:0
+Besitzer: crwdns59728:0crwdne59728:0
+Kontakt: crwdns59730:0crwdne59730:0
+'Name der Anwendung': 'crwdns59732:0crwdne59732:0'
+Niemand: crwdns59734:0crwdne59734:0
+URL: crwdns59736:0crwdne59736:0
+Anzeige: crwdns59738:0crwdne59738:0
+'Anwendungen im Testbetrieb können nur von ihrem Besitzer verwendet werden.': 'crwdns59740:0crwdne59740:0'
+Testbetrieb: crwdns59742:0crwdne59742:0
+Icon: crwdns59744:0crwdne59744:0
+Datenzugriff: crwdns59746:0crwdne59746:0
+'Anwendungen ohne API-Zugang werden nur als Links eingebunden.': 'crwdns59748:0crwdne59748:0'
+'Zugang zur API': 'crwdns59750:0crwdne59750:0'
+'Wird automatisch generiert': 'crwdns59752:0crwdne59752:0'
+'Schlüssel regenerieren': 'crwdns59754:0crwdne59754:0'
+Foren-Mod.: crwdns59756:0crwdne59756:0
+Kurztexte: crwdns59758:0crwdne59758:0
+Inhalt: crwdns59760:0crwdne59760:0
+'Neuen Kurztext anlegen': 'crwdns59762:0crwdne59762:0'
+'ID eingeben': 'crwdns59764:0crwdne59764:0'
+'Anzahl der Auszeichnungen:': 'crwdns59766:0crwdne59766:0'
+Vergeben!: crwdns59768:0crwdne59768:0
+'Aktuelle Städte': 'crwdns59770:0crwdne59770:0'
+'Fertige Städte': 'crwdns59772:0crwdne59772:0'
+Importiert: crwdns59774:0crwdne59774:0
+'Seite {page}/{total}': 'crwdns59776:0{page}crwdnd59776:0{total}crwdne59776:0'
+'Neue Anwendung registrieren': 'crwdns59778:0crwdne59778:0'
+Anzeigen: crwdns59780:0crwdne59780:0
+'Gegen {culprit}': 'crwdns59782:0{culprit}crwdne59782:0'
+Anwendungen: crwdns59784:0crwdne59784:0
+'Neue Anwendung': 'crwdns59786:0crwdne59786:0'
+'Anwendung "{external_app}"': 'crwdns59788:0{external_app}crwdne59788:0'
+'Eine Auszeichnungen auswählen:': 'crwdns59790:0crwdne59790:0'
+'Einen Status auswählen:': 'crwdns59792:0crwdne59792:0'
+Saisons: crwdns59794:0crwdne59794:0
+'Neue Saison': 'crwdns59796:0crwdne59796:0'
+'Status vergeben': 'crwdns59798:0crwdne59798:0'
+'Status entfernen': 'crwdns59800:0crwdne59800:0'
+'Eine Rolle auswählen:': 'crwdns59802:0crwdne59802:0'
+'Rolle vergeben': 'crwdns59804:0crwdne59804:0'
+'Rolle entfernen': 'crwdns59806:0crwdne59806:0'
+'Bürger nach Sprache': 'crwdns59808:0crwdne59808:0'
+Geöffnet: crwdns59810:0crwdne59810:0
+Leben: crwdns59812:0crwdne59812:0
+Seasons: crwdns59814:0crwdne59814:0
+Akt.: crwdns59816:0crwdne59816:0
+Nummer: crwdns59818:0crwdne59818:0
+Sub-Nummer: crwdns59820:0crwdne59820:0
+Name: crwdns59822:0crwdne59822:0
+'Saison "{season}"': 'crwdns59824:0{season}crwdne59824:0'
+'Saison Nummer': 'crwdns59826:0crwdne59826:0'
+'Saison Sub-Nummer': 'crwdns59828:0crwdne59828:0'
+'Aktuelle Saison': 'crwdns59830:0crwdne59830:0'
+AP: crwdns59832:0crwdne59832:0
+Setzen: crwdns59834:0crwdne59834:0
+Abziehen: crwdns59836:0crwdne59836:0
+Changelogs: crwdns59838:0crwdne59838:0
+Ankündigungen: crwdns59840:0crwdne59840:0
+'Neue Ankündigung': 'crwdns59842:0crwdne59842:0'
+Konstruktionen: crwdns59844:0crwdne59844:0
+'Gib den Namen oder die ID der Stadt ein.': 'crwdns59846:0crwdne59846:0'
+Stimmen: crwdns59848:0crwdne59848:0
+'Für {target}': 'crwdns59850:0{target}crwdne59850:0'
+Ersteller: crwdns59852:0crwdne59852:0
+'Existierende Beschränkungen': 'crwdns59854:0crwdne59854:0'
+'Dieser Spieler hat eine weiße Weste.': 'crwdns59856:0crwdne59856:0'
+'Bestätigt von': 'crwdns59858:0crwdne59858:0'
+Datum: crwdns59860:0crwdne59860:0
+Endet: crwdns59862:0crwdne59862:0
+Info: crwdns59864:0crwdne59864:0
+'Neue Beschränkung hinzufügen': 'crwdns59866:0crwdne59866:0'
+'24 Stunden': 'crwdns59868:0crwdne59868:0'
+'{d} Tage': 'crwdns59870:0{d}crwdne59870:0'
+'Bestätigung erforderlich': 'crwdns59872:0crwdne59872:0'
+'1 Jahr': 'crwdns59874:0crwdne59874:0'
+'Admin-Bestätigung erforderlich': 'crwdns59876:0crwdne59876:0'
+'2 Jahre': 'crwdns59878:0crwdne59878:0'
+Dauerhaft: crwdns59880:0crwdne59880:0
+'Interner Vermerk': 'crwdns59882:0crwdne59882:0'
+'Art der Beschränkung': 'crwdns59884:0crwdne59884:0'
+'Soziale Interaktion verbieten': 'crwdns59886:0crwdne59886:0'
+'Posten in Foren verbieten': 'crwdns59888:0crwdne59888:0'
+'Stadt-interne Kommunikation verbieten': 'crwdns59890:0crwdne59890:0'
+'Stadtübergreifende Kommunikation verbieten': 'crwdns59892:0crwdne59892:0'
+'Kommentare verbieten': 'crwdns59894:0crwdne59894:0'
+'Organisation in Gruppen verbieten': 'crwdns59896:0crwdne59896:0'
+'Spielen verbieten': 'crwdns59898:0crwdne59898:0'
+'Diese Account-Beschränkung muss von einem anderen Moderator bestätigt werden, bevor sie aktiv wird.': 'crwdns59900:0crwdne59900:0'
+'Die Dauer der Beschränkung zählt erst ab dem Moment, wo sie aktiviert wird.': 'crwdns59902:0crwdne59902:0'
+'Diese Account-Beschränkung muss von einem Administrator bestätigt werden, bevor sie aktiv wird.': 'crwdns59904:0crwdne59904:0'
+'Stadt ansehen': 'crwdns59906:0crwdne59906:0'
+'Nicht bestätigt!': 'crwdns59908:0crwdne59908:0'
+Abgelaufen: crwdns59910:0crwdne59910:0
+Deaktiviert: crwdns59912:0crwdne59912:0
+Art: crwdns59914:0crwdne59914:0
+Sozial: crwdns59916:0crwdne59916:0
+Stadt-Kom.: crwdns59918:0crwdne59918:0
+'Globale Kom.': 'crwdns59920:0crwdne59920:0'
+Kommentare: crwdns59922:0crwdne59922:0
+Org.: crwdns59924:0crwdne59924:0
+Spiel: crwdns59926:0crwdne59926:0
+Bestätigen: crwdns59928:0crwdne59928:0
+'Schwarzes Brett': 'crwdns59930:0crwdne59930:0'
+'Stadt füllen': 'crwdns59932:0crwdne59932:0'
+'Bank füllen': 'crwdns59934:0crwdne59934:0'
+'Banksperre aufheben': 'crwdns59936:0crwdne59936:0'
+'Durst aufheben': 'crwdns59938:0crwdne59938:0'
+'Alle Spieler entkoppeln': 'crwdns59940:0crwdne59940:0'
+'Alle Spieler koppeln': 'crwdns59942:0crwdne59942:0'
+Zone: crwdns59944:0crwdne59944:0
+'Leere Zone': 'crwdns59946:0crwdne59946:0'
+'Entkoppelte Leben': 'crwdns59948:0crwdne59948:0'
+Entkoppeln: crwdns59950:0crwdne59950:0
+Punkte: crwdns59952:0crwdne59952:0
+Rollen: crwdns59954:0crwdne59954:0
+'Versteckter Status': 'crwdns59956:0crwdne59956:0'
+'Versteckt:': 'crwdns59958:0crwdne59958:0'
+'Kein Bürger ausgewählt!': 'crwdns59960:0crwdne59960:0'
+BP: crwdns59962:0crwdne59962:0
+MP: crwdns59964:0crwdne59964:0
+'Einen Beruf auswählen:': 'crwdns59966:0crwdne59966:0'
+'Stadt anlegen': 'crwdns59968:0crwdne59968:0'
+Avatar: crwdns59970:0crwdne59970:0
+Profilbeschreibung: crwdns59972:0crwdne59972:0
+'Änderungen am Profil verbieten': 'crwdns59974:0crwdne59974:0'
+'Ändern des Avatars verbieten': 'crwdns59976:0crwdne59976:0'
+'Ändern der Profilbeschreibung verbieten': 'crwdns59978:0crwdne59978:0'
+'Ändern des Titels verbieten': 'crwdns59980:0crwdne59980:0'
+'Anzeigenamen ändern': 'crwdns59982:0crwdne59982:0'
+'Anzeigenamen entfernen': 'crwdns59984:0crwdne59984:0'
+'Avatar entfernen': 'crwdns59986:0crwdne59986:0'
+'Profilbeschreibung entfernen': 'crwdns59988:0crwdne59988:0'
+'Titel & Icon entfernen': 'crwdns59990:0crwdne59990:0'
+'Neuer Füllstand:': 'crwdns59992:0crwdne59992:0'
+'Brunnen-Füllstand setzen': 'crwdns59994:0crwdne59994:0'
+'Alle Gebäude freischalten': 'crwdns59996:0crwdne59996:0'
+'Baufortschritt setzen:': 'crwdns59998:0crwdne59998:0'
+'Integrität setzen:': 'crwdns60000:0crwdne60000:0'
+'Neue Anzahl:': 'crwdns60002:0crwdne60002:0'
+'Heldentage setzen': 'crwdns60004:0crwdne60004:0'
+'Hausverbesserungen:': 'crwdns60006:0crwdne60006:0'
+'Teleportieren:': 'crwdns60008:0crwdne60008:0'
+'In die Stadt': 'crwdns60010:0crwdne60010:0'
+'Zu einer Zone': 'crwdns60012:0crwdne60012:0'
+'Neue Saison registrieren': 'crwdns60014:0crwdne60014:0'
+'Änderungen speichern': 'crwdns60016:0crwdne60016:0'
+Freundschaftswerbung: crwdns60018:0crwdne60018:0
+'Ref-Namen ändern': 'crwdns60020:0crwdne60020:0'
+'Ref-Namen sperren': 'crwdns60022:0crwdne60022:0'
+'Ref-Namen entsprerren': 'crwdns60024:0crwdne60024:0'
+'Sponsor setzen': 'crwdns60026:0crwdne60026:0'
+Ref-Name: crwdns60028:0crwdne60028:0
+'Gesponsort von': 'crwdns60030:0crwdne60030:0'
+'Gesponsorte Spieler': 'crwdns60032:0crwdne60032:0'
+'Zombie-Spread ausführen': 'crwdns60034:0crwdne60034:0'
+'Format: "{x0}/{y0}:{x1}/{y1},{zombies}" (Bereich) oder "{x}/{y},{zombies}" (einzelne Zone), zum Beispiel "-1/3:-4/2,5". Statt der Positionsangabe kann "all" verwendet werden. Statt einem numerischen Wert für die Zahl der Zombies ist folgendes ebenfalls gültig: "today" (Anzahl der Zombies beim letzten Tageswechsel), "initial" (Anzahl der Zombies an Tag 1).': 'crwdns60036:0{x0}crwdnd60036:0{y0}crwdnd60036:0{x1}crwdnd60036:0{y1}crwdnd60036:0{zombies}crwdnd60036:0{x}crwdnd60036:0{y}crwdnd60036:0{zombies}crwdne60036:0'
+'Zombies setzen': 'crwdns60038:0crwdne60038:0'
+'Basierend auf Tag (frei lassen, um aktuellen Tag zu verwenden)': 'crwdns60040:0crwdne60040:0'
+Gruppen: crwdns60042:0crwdne60042:0
+Anon.: crwdns60044:0crwdne60044:0
+Mitglieder: crwdns60046:0crwdne60046:0
+Mitglied: crwdns60048:0crwdne60048:0
+'Die Mitgliederliste ist versteckt.': 'crwdns60050:0crwdne60050:0'
+'Neue Gruppe': 'crwdns60052:0crwdne60052:0'
+'Gruppe "{group}"': 'crwdns60054:0{group}crwdne60054:0'
+Gruppe: crwdns60056:0crwdne60056:0
+Beschreibung: crwdns60058:0crwdne60058:0
+'Anonyme Gruppe': 'crwdns60060:0crwdne60060:0'
+'Neue Gruppe anlegen': 'crwdns60062:0crwdne60062:0'
+'Anzahl der Tage': 'crwdns60064:0crwdne60064:0'
+Vorspulen: crwdns60066:0crwdne60066:0
+'Herauswerfen (ohne Verletzung)': 'crwdns60068:0crwdne60068:0'
+'Herauswerfen (mit Verletzung)': 'crwdns60070:0crwdne60070:0'
+'Timer erhöhen (1min)': 'crwdns60072:0crwdne60072:0'
+'Timer erhöhen (24h)': 'crwdns60074:0crwdne60074:0'
+'Löschen (ermöglicht erneutes Betreten der Ruine)': 'crwdns60076:0crwdne60076:0'
+'Feature freigeben:': 'crwdns60078:0crwdne60078:0'
+Bearbeiten: crwdns60080:0crwdne60080:0
+Werte: crwdns60082:0crwdne60082:0
+Hunger: crwdns60084:0crwdne60084:0
+'Camp Chance': 'crwdns60086:0crwdne60086:0'
+'Camp Zähler': 'crwdns60088:0crwdne60088:0'
+'Verwendung des Schwarzen Bretts verbieten': 'crwdns60090:0crwdne60090:0'
+Passwort-geschützt: crwdns60092:0crwdne60092:0
+'Passwort ändern': 'crwdns60094:0crwdne60094:0'
+'Passwort entfernen': 'crwdns60096:0crwdne60096:0'
+'Passwort setzen': 'crwdns60098:0crwdne60098:0'
+'Format: {zombies} (heutiger Angriff) oder {tag}:{zombies} (Angriff an einem bestimmten Tag). Es können keine Tage in der Vergangenheit gewählt werden.': 'crwdns60100:0{zombies}crwdnd60100:0{tag}crwdnd60100:0{zombies}crwdne60100:0'
+'Stärke des Angriffs setzen': 'crwdns60102:0crwdne60102:0'
+Chaos-Modus: crwdns60104:0crwdne60104:0
+'Stadt zerstören': 'crwdns60106:0crwdne60106:0'
+'Ändern des Spielernamens verbieten': 'crwdns60108:0crwdne60108:0'
+Spielername: crwdns60110:0crwdne60110:0
+'Chaos-Modus deaktivieren': 'crwdns60112:0crwdne60112:0'
+'Stadt reparieren': 'crwdns60114:0crwdne60114:0'
+'Versteckte Statuseffekte': 'crwdns60116:0crwdne60116:0'
+'Ranking-Ausschluss zurücknehmen': 'crwdns60118:0crwdne60118:0'
+'Diese Stadt aus dem Ranking ausschließen': 'crwdns60120:0crwdne60120:0'
+Ranking-Eintrag: crwdns60122:0crwdne60122:0
+'Event-Markierung entfernen': 'crwdns60124:0crwdne60124:0'
+'Als Event-Stadt markieren': 'crwdns60126:0crwdne60126:0'
+'Funktionen für Spezialrollen': 'crwdns60128:0crwdne60128:0'
+'Stadt-ID eingeben.': 'crwdns60130:0crwdne60130:0'
+'Zugang zu Stadtforum gewähren': 'crwdns60132:0crwdne60132:0'
+'Zugang zu Stadtforum entziehen': 'crwdns60134:0crwdne60134:0'
+Spezialrollen: crwdns60136:0crwdne60136:0
+Animateur: crwdns60138:0crwdne60138:0
+'Community Dashboard': 'crwdns60140:0crwdne60140:0'
+Team: crwdns60142:0crwdne60142:0
+Regelsatz: crwdns60144:0crwdne60144:0
+Regel: crwdns60146:0crwdne60146:0
+'Aktiver Wert': 'crwdns60148:0crwdne60148:0'
+'Eskortierte Bürger teleportieren': 'crwdns60150:0crwdne60150:0'
+Seele: crwdns60152:0crwdne60152:0
+Alle: crwdns60154:0crwdne60154:0
+MyHordes: crwdns60156:0crwdne60156:0
+Alt: crwdns60158:0crwdne60158:0
+'Eingeschränkter Import': 'crwdns60160:0crwdne60160:0'
+'Hauptseele ohne Einschränkungen importieren': 'crwdns60162:0crwdne60162:0'
+'Einzigartige Titel oder Icons bearbeiten:': 'crwdns60164:0crwdne60164:0'
+'Neuer Titel': 'crwdns60166:0crwdne60166:0'
+'Neues Icon': 'crwdns60168:0crwdne60168:0'
+Kernel: crwdns60170:0crwdne60170:0
+Update: crwdns60172:0crwdne60172:0
+Unbekannt: crwdns60174:0crwdne60174:0
+Täglich: crwdns60176:0crwdne60176:0
+Wöchentlich: crwdns60178:0crwdne60178:0
+Monatlich: crwdns60180:0crwdne60180:0
+Manuell: crwdns60182:0crwdne60182:0
+'Nicht komprimiert': 'crwdns60184:0crwdne60184:0'
+Systemlogs: crwdns60186:0crwdne60186:0
+Datenbank-Backups: crwdns60188:0crwdne60188:0
+Tags: crwdns60190:0crwdne60190:0
+Datei: crwdns60192:0crwdne60192:0
+'Dateigröße: {s}': 'crwdns60194:0{s}crwdne60194:0'
+Dateisystem: crwdns60196:0crwdne60196:0
+'Alle User': 'crwdns60198:0crwdne60198:0'
+Account-Zustand: crwdns60200:0crwdne60200:0
+Aktiv: crwdns60202:0crwdne60202:0
+Dummy: crwdns60204:0crwdne60204:0
+Spezial: crwdns60206:0crwdne60206:0
+'Zur Löschung vorgemerkt': 'crwdns60208:0crwdne60208:0'
+Gelöscht: crwdns60210:0crwdne60210:0
+Inkarnation: crwdns60212:0crwdne60212:0
+'Zuletzt aktiv': 'crwdns60214:0crwdne60214:0'
+Hauptseele: crwdns60216:0crwdne60216:0
+'Keine Hauptseele': 'crwdns60218:0crwdne60218:0'
+'Verknüpfte Seele': 'crwdns60220:0crwdne60220:0'
+'Beliebige verknüpfte Seele': 'crwdns60222:0crwdne60222:0'
+'Keine verknüpfte Seele': 'crwdns60224:0crwdne60224:0'
+Accountbeschränkung: crwdns60226:0crwdne60226:0
+'Nicht bestätigt': 'crwdns60228:0crwdne60228:0'
+'Nicht aktiv': 'crwdns60230:0crwdne60230:0'
+Rolle: crwdns60232:0crwdne60232:0
+'Aktion bei Klick:': 'crwdns60234:0crwdne60234:0'
+'Verbleibe Zonengrabungen:': 'crwdns60236:0crwdne60236:0'
+'Verbleibende Ruinengrabungen:': 'crwdns60238:0crwdne60238:0'
+'Zurzeit in der Stadt': 'crwdns60240:0crwdne60240:0'
+'Eternal-Twin-Konto verlinkt': 'crwdns60242:0crwdne60242:0'
+Gruppentyp: crwdns60244:0crwdne60244:0
+"Änderungen an '{appname}' speichern": "crwdns136300:0{appname}crwdne136300:0"
+'Diese Auszeichnung wird nicht verdient, wenn der Bürger heute Nacht stirbt.': 'crwdns60248:0crwdne60248:0'
+'Diese Auszeichnung wurde verdient.': 'crwdns60250:0crwdne60250:0'
+Freundesliste: crwdns60252:0crwdne60252:0
+'Spieler, sie sich als Freund hinzugefügt haben': 'crwdns60254:0crwdne60254:0'
+'Spieler werben': 'crwdns60256:0crwdne60256:0'
+Blockierliste: crwdns60258:0crwdne60258:0
+'Blockiert von': 'crwdns60260:0crwdne60260:0'
+'Bürger-Alias ​​ändern:': 'crwdns60262:0crwdne60262:0'
+'Kein Alias ​​angegeben': 'crwdns60264:0crwdne60264:0'
+'Bitte nicht für mehrere Bürger denselben Alias eingeben!': 'crwdns60266:0crwdne60266:0'
+'Bank leeren': 'crwdns60268:0crwdne60268:0'
+Stadt-Event: crwdns60270:0crwdne60270:0
+Koalitionen: crwdns60272:0crwdne60272:0
+Profiler: crwdns60274:0crwdne60274:0
+'Nicht installiert': 'crwdns60276:0crwdne60276:0'
+'Persönliche Beschreibung:': 'crwdns60278:0crwdne60278:0'
+'Letzte Worte:': 'crwdns60280:0crwdne60280:0'
+'Stadtnamen regenerieren': 'crwdns60282:0crwdne60282:0'
+'Sprache wechseln': 'crwdns60284:0crwdne60284:0'
+Fremder: crwdns60286:0crwdne60286:0
+'Mysteriösen Fremden aktivieren': 'crwdns60288:0crwdne60288:0'
+Notiz: crwdns60290:0crwdne60290:0
+'Whitelist von {admin}': 'crwdns60292:0{admin}crwdne60292:0'
+'Whitelist hat keinen Autor': 'crwdns60294:0crwdne60294:0'
+'Whitelist hat keine Notiz': 'crwdns60296:0crwdne60296:0'
+'Alle bannen': 'crwdns60298:0crwdne60298:0'
+Tödlich: crwdns60300:0crwdne60300:0
+Infektiös: crwdns60302:0crwdne60302:0
+'AP zum Freilegen der Ruine:': 'crwdns60304:0crwdne60304:0'
+'Camping-Ausbaulevel:': 'crwdns60306:0crwdne60306:0'
+'Basis:': 'crwdns60308:0crwdne60308:0'
+'MyHordes-Seele wiederherstellen': 'crwdns60310:0crwdne60310:0'
+'Seele zurückgesetzt': 'crwdns60312:0crwdne60312:0'
+'{num} Städte betroffen': 'crwdns60314:0{num}crwdne60314:0'
+'Du siehst aktuell gelöschte Meldungen.': 'crwdns60316:0crwdne60316:0'
+'Zurück zur Meldungsübersicht': 'crwdns60318:0crwdne60318:0'
+'Möchtest du bereits gelöschte Meldungen durchsuchen?': 'crwdns60320:0crwdne60320:0'
+'Zum Papierkorb': 'crwdns60322:0crwdne60322:0'
+'Kurztext bearbeiten ({name})': 'crwdns60324:0{name}crwdne60324:0'
+'Register herunterladen': 'crwdns60326:0crwdne60326:0'
+'Stadtregister herunterladen': 'crwdns60328:0crwdne60328:0'
+'Stadt- und Zonenregister herunterladen (gruppiert nach Zonen)': 'crwdns60330:0crwdne60330:0'
+'Stadt- und Zonenregister herunterladen (gruppiert nach Bürgern)': 'crwdns60332:0crwdne60332:0'
+'Stadt- und Zonenregister herunterladen (chronologisch)': 'crwdns60334:0crwdne60334:0'
+Instanzeigenschaften: crwdns60336:0crwdne60336:0
+Vergiftet: crwdns60338:0crwdne60338:0
+Infiziert: crwdns60340:0crwdne60340:0
+'Noch nicht aufgehoben': 'crwdns60342:0crwdne60342:0'
+'Spielernamen nicht von EternalTwin übernehmen': 'crwdns60344:0crwdne60344:0'
+'Automatische Verwaltung des Spielernamens wiederherstellen': 'crwdns60346:0crwdne60346:0'
+'Nicht von ET verwaltet.': 'crwdns60348:0crwdne60348:0'
+'Leber fressen': 'crwdns60350:0crwdne60350:0'
+'maskiert {playername}': 'crwdns60352:0{playername}crwdne60352:0'
+'Seelenpunkte setzen': 'crwdns60354:0crwdne60354:0'
+'Alle Gegenstände aller Bürger ablegen': 'crwdns60356:0crwdne60356:0'
+'Auszeichnungen wiederherstellen': 'crwdns60358:0crwdne60358:0'
+'Auszeichnungen aller Einwohner dieser Stadt löschen': 'crwdns60360:0crwdne60360:0'
+'Seelenpunkte wiederherstellen': 'crwdns60362:0crwdne60362:0'
+'Seelenpunkte aller Einwohner dieser Stadt löschen': 'crwdns60364:0crwdne60364:0'
+'Alle Sanktionen entfernen': 'crwdns60366:0crwdne60366:0'
+'Stadt nicht in der Seele listen': 'crwdns60368:0crwdne60368:0'
+'Seelenpunkte dieses Bürgers entfernen': 'crwdns60370:0crwdne60370:0'
+'Ranking für diesen Bürger wiederherstellen': 'crwdns60372:0crwdne60372:0'
+'Bürger aus dem Ranking entfernen': 'crwdns60374:0crwdne60374:0'
+'Auszeichnungen dieses Bürgers entfernen': 'crwdns60376:0crwdne60376:0'
+'Seelenpunkte für diesen Bürger wiederherstellen': 'crwdns60378:0crwdne60378:0'
+'Auszeichnungen für diesen Bürger wiederherstellen': 'crwdns60380:0crwdne60380:0'
+'Eine neue Umfrage anlegen': 'crwdns60382:0crwdne60382:0'
+Editoreinstellungen: crwdns60384:0crwdne60384:0
+'Aktuelle Bearbeitungssprache': 'crwdns60386:0crwdne60386:0'
+'Diese Einstellung steuert, welche Eingabefelder sichtbar sind. Unabhängig davon werden Umfragen immer in allen Sprachen erstellt, es müssen also alle Felder in allen Sprachen ausgefüllt werden.': 'crwdns60388:0crwdne60388:0'
+Umfragedaten: crwdns60390:0crwdne60390:0
+'Titel der Umfrage': 'crwdns60392:0crwdne60392:0'
+'Start der Umfrage': 'crwdns60394:0crwdne60394:0'
+'Ende der Umfrage': 'crwdns60396:0crwdne60396:0'
+'Vorläufige Ergebnisse anzeigen': 'crwdns60398:0crwdne60398:0'
+Kurzbeschreibung: crwdns60400:0crwdne60400:0
+'Beschreibung der Umfrage': 'crwdns60402:0crwdne60402:0'
+Antworten: crwdns60404:0crwdne60404:0
+Antwortstext: crwdns60406:0crwdne60406:0
+'Antwort hinzufügen': 'crwdns60408:0crwdne60408:0'
+'Bearbeitung abschließen': 'crwdns60410:0crwdne60410:0'
+'Umfrage erstellen': 'crwdns60412:0crwdne60412:0'
+'Für das Feld "{field}" fehlen Eingaben in folgenden Sprachen: {langs}.': 'crwdns60414:0{field}crwdnd60414:0{langs}crwdne60414:0'
+'Es müssen mindestens zwei Antworten hinzugefügt werden.': 'crwdns60416:0crwdne60416:0'
+'Ergebnisse filtern': 'crwdns60418:0crwdne60418:0'
+'Kein Filter': 'crwdns60420:0crwdne60420:0'
+'Umfrage jetzt beginnen': 'crwdns60422:0crwdne60422:0'
+'Umfrage jetzt beenden': 'crwdns60424:0crwdne60424:0'
+'Umfrage löschen': 'crwdns60426:0crwdne60426:0'
+'Liste vergangener Namen löschen': 'crwdns60428:0crwdne60428:0'
+'Aktiviert alle untergeordneten Beschränkungen.': 'crwdns60430:0crwdne60430:0'
+'Verbietet das Erstellen neuer Threads und Posts sowie das Bearbeiten existierender Posts in allen Foren (Stadt- und Weltforum). Verbietet zudem die Teilnahme an Foren-Umfragen.': 'crwdns60432:0crwdne60432:0'
+'Verbietet die Benutzung des Zonen-Chats und des Schwarzen Bretts, das Versenden von Stadt-PNs sowie die Änderung der persönlichen Ankündigung.': 'crwdns60434:0crwdne60434:0'
+'Verbietet die Verwendung des Schwarzen Bretts.': 'crwdns60436:0crwdne60436:0'
+'Verbietet die Erstellung neuer globaler PNs sowie das Antworten und die Hinzufügung neuer Spieler zu bestehenden PNs.': 'crwdns60438:0crwdne60438:0'
+'Verbietet die Bearbeitung von Stadtkommentaren sowie das Setzen der Letzten Worte.': 'crwdns60440:0crwdne60440:0'
+'Verbietet das Gründen neuer Koalitionen sowie die Mitgliederverwaltung und den Koalitionschat existierender Koalitionen.': 'crwdns60442:0crwdne60442:0'
+'Fortschritt des Aufstands': 'crwdns60444:0crwdne60444:0'
+'Neue Basis-Stadtverteidigung:': 'crwdns74778:0crwdne74778:0'
+'Basis-Stadtverteidigung setzen': 'crwdns74780:0crwdne74780:0'
+'Neue temporäre Stadtverteidigung:': 'crwdns74782:0crwdne74782:0'
+'Temporäre Stadtverteidigung setzen': 'crwdns74784:0crwdne74784:0'
+'Alle Tode bestätigen': 'crwdns136066:0crwdne136066:0'
+'Lege einen Zeitpunkt fest, an dem die Stadt eröffnet werden soll. Leer lassen oder einen Zeitpunkt in der Vergangenheit angeben, um die Stadt sofort zu öffnen.': 'crwdns136342:0crwdne136342:0'
+'Geplant für': 'crwdns136344:0crwdne136344:0'
+'Seelenpunkte:': 'crwdns136366:0crwdne136366:0'
+'Heldentage:': 'crwdns136368:0crwdne136368:0'
+Vergleichswert: crwdns136372:0crwdne136372:0
+Keiner: crwdns136374:0crwdne136374:0
+Basiskonfiguration: crwdns136376:0crwdne136376:0
+'Sonstige Accountmarkierungen': 'crwdns136378:0crwdne136378:0'
+'Strenges Report Rate Limiting': 'crwdns136380:0crwdne136380:0'
+'Du bist im Begriff, eine bestehende Accountbeschränkung zu bearbeiten. Der Spieler wird über die Bearbeitung nicht informiert. Existierende Bestätigungen für diese Beschränkung werden entfernt. Fortsetzen?': 'crwdns136394:0crwdne136394:0'
+Stockwerk: crwdns136596:0crwdne136596:0
+Treppe: crwdns136598:0crwdne136598:0
+'Impersonifizierung beenden': 'crwdns136673:0crwdne136673:0'
+'Benutzer impersonifizieren': 'crwdns136667:0crwdne136667:0'
+Fortfahren: crwdns136669:0crwdne136669:0
+'Tokens erfolgreich erzeugt!': 'crwdns136687:0crwdne136687:0'
+Registrierungstoken: crwdns136689:0crwdne136689:0
+'Registration Token': 'crwdns136691:0crwdne136691:0'
+'Wie viele Token möchtest du erzeugen?': 'crwdns136693:0crwdne136693:0'
+Nachricht: crwdns136729:0crwdne136729:0
+'Stadtnamen ändern': 'crwdns136751:0crwdne136751:0'
+'Registrierungstoken verteilen': 'crwdns136837:0crwdne136837:0'
+Nachrichtentext: crwdns136839:0crwdne136839:0
+CSV: crwdns136841:0crwdne136841:0
+Senden: crwdns136843:0crwdne136843:0
+'Es wurden {success} Nachrichten verschickt.': 'crwdns136845:0{success}crwdne136845:0'
+'Es wurden {success} Nachrichten erfolgreich verschickt, bei {error} Nachrichten tragen Fehler auf.': 'crwdns136847:0{success}crwdnd136847:0{error}crwdne136847:0'
+Entwickler-URL: crwdns136853:0crwdne136853:0
+Heldentage: crwdns136929:0crwdne136929:0
+'Sekundäraccount verknüpfen': 'crwdns168337:0crwdne168337:0'
+'Sekundäre Accounts': 'crwdns168339:0crwdne168339:0'
+'Team setzen': 'crwdns168341:0crwdne168341:0'
+'Versteckt von {player}': 'crwdns168343:0{player}crwdne168343:0'
+Verdächtig: crwdns168345:0crwdne168345:0
+Kampagnen: crwdns168663:0crwdne168663:0
+'Neue Kampagne': 'crwdns168665:0crwdne168665:0'
+'Kampagne "{campaign}"': 'crwdns168667:0{campaign}crwdne168667:0'
+Kampagne: crwdns168669:0crwdne168669:0
+Slug: crwdns168671:0crwdne168671:0
+'Zusätzliche Verwalter': 'crwdns168673:0crwdne168673:0'
+'Neue Kampagne anlegen': 'crwdns168675:0crwdne168675:0'
+Einstiegspunkt: crwdns168677:0crwdne168677:0
+'Geworbene Spieler': 'crwdns168679:0crwdne168679:0'
+'Meldungen für das Schwarze Brett': 'crwdns168689:0crwdne168689:0'
+Stadt: crwdns168691:0crwdne168691:0
+'Gemeldete globale Nachrichten': 'crwdns168693:0crwdne168693:0'
+'Private Nachrichten (Stadt)': 'crwdns168695:0crwdne168695:0'
+'Private Nachrichten (Global)': 'crwdns168697:0crwdne168697:0'
+Bürgertexte: crwdns168699:0crwdne168699:0
+Accounts: crwdns168701:0crwdne168701:0
+'Meldungen für Bürgertexte': 'crwdns168703:0crwdne168703:0'
+'Gemeldete Stadtnachrichten': 'crwdns168705:0crwdne168705:0'
+'Meldungen für Benutzeraccounts': 'crwdns168707:0crwdne168707:0'
+'Änderungen an {appname} speichern': 'crwdns201621:0{appname}crwdne201621:0'
+'Wikis werden separat von anderen Anwendungen angezeigt.': 'crwdns201625:0crwdne201625:0'
+Wiki: crwdns201627:0crwdne201627:0
+Entwickler: crwdns201643:0crwdne201643:0
+Angriffsplan: crwdns201647:0crwdne201647:0
+Uhrzeit: crwdns201649:0crwdne201649:0
+Geplant: crwdns201651:0crwdne201651:0
+'Wartet auf Abarbeitung': 'crwdns201653:0crwdne201653:0'
+'Wartet seit {s} Sekunden': 'crwdns201655:0{s}crwdne201655:0'
+'Wird verarbeitet': 'crwdns201657:0crwdne201657:0'
+'Arbeitet seit {s} Sekunden': 'crwdns201659:0{s}crwdne201659:0'
+Abgeschlossen: crwdns201661:0crwdne201661:0
+Projiziert: crwdns201663:0crwdne201663:0
+'Nächsten Angriff verschieben': 'crwdns201665:0crwdne201665:0'
+'Ausgeführte Angriffe': 'crwdns201667:0crwdne201667:0'
+Start: crwdns201669:0crwdne201669:0
+Ende: crwdns201671:0crwdne201671:0
+'Wartezeit: {s} Sekunden': 'crwdns201673:0{s}crwdne201673:0'
+'Verarbeitungszeit: {s} Sekunden': 'crwdns201675:0{s}crwdne201675:0'
+'{n} Städte in Quarantäne!': 'crwdns201677:0{n}crwdne201677:0'
+Konfiguration: crwdns201679:0crwdne201679:0
+Option: crwdns201681:0crwdne201681:0
+Wert: crwdns201683:0crwdne201683:0
+'Keine Verifizierungsmails versenden': 'crwdns201685:0crwdne201685:0'
+'Spielen in anderen Gemeinden': 'crwdns202465:0crwdne202465:0'
+'Das Spielen in anderen Gemeinden verbieten': 'crwdns202467:0crwdne202467:0'
+'Markieren, um diese Baustelle zur Liste der freizuschaltenden Baustellen in der Stadt hinzuzufügen.': 'crwdns202882:0crwdne202882:0'
+'Markieren, um diese Baustelle freizuschalten.': 'crwdns202884:0crwdne202884:0'
+'Markieren, um diese Baustelle aus der Stadt zu entfernen.': 'crwdns202886:0crwdne202886:0'
+'Dieses Gebäude ist veraltet.': 'crwdns202888:0crwdne202888:0'
+'Level {current} / {max}': 'crwdns202890:0{current}crwdnd202890:0{max}crwdne202890:0'
+'Anzahl Level: {max}': 'crwdns202892:0{max}crwdne202892:0'
+'Gebäude-Effekt auslösen': 'crwdns202894:0crwdne202894:0'
+'Nicht gefunden.': 'crwdns202577:0crwdne202577:0'
+'Eintrag gefunden.': 'crwdns202579:0crwdne202579:0'
+'Erfolgreich hinzugefügt.': 'crwdns202581:0crwdne202581:0'
+'Erfolgreich entfernt.': 'crwdns202583:0crwdne202583:0'
+'E-Mail Domains': 'crwdns202585:0crwdne202585:0'
+Account-IDs: crwdns202587:0crwdne202587:0
+'Anzahl der gelisteten E-Mail-Adressen: {number}': 'crwdns202589:0{number}crwdne202589:0'
+'Anzahl der gelisteten Eternaltwin IDs: {number}': 'crwdns202591:0{number}crwdne202591:0'
+Suche: crwdns202593:0crwdne202593:0
+Prüfen: crwdns202595:0crwdne202595:0
+Entfernen: crwdns202597:0crwdne202597:0
+Beginn: crwdns202738:0crwdne202738:0
+'Max. Aktive Zombies': 'crwdns204364:0crwdne204364:0'
+'Sperre deaktivieren': 'crwdns204684:0crwdne204684:0'
+'Sperre aktivieren': 'crwdns204686:0crwdne204686:0'
+'Stadttor reparieren': 'crwdns204688:0crwdne204688:0'
+'Zerstöre das Stadttor': 'crwdns204690:0crwdne204690:0'
+'Verläufige Ergebnisse anzeigen ab': 'crwdns205054:0crwdne205054:0'
+'Mehrere Antworten möglich (Multiple Choice)': 'crwdns205056:0crwdne205056:0'
+'Raben-Account anlegen': 'crwdns205058:0crwdne205058:0'
+'Zugehöriger User (optional)': 'crwdns205060:0crwdne205060:0'
+'Zugehörige Rabennester': 'crwdns205062:0crwdne205062:0'
+Raben: crwdns205064:0crwdne205064:0
+Fehlerberichte: crwdns205066:0crwdne205066:0
+'Verfassen von Fehlerberichten für Gitlab verbieten': 'crwdns205068:0crwdne205068:0'
+'Zusätzliche Beschreibung:': 'crwdns205070:0crwdne205070:0'
+'Nachricht an den Verfasser?': 'crwdns205314:0crwdne205314:0'
+'Letztes Update': 'crwdns205330:0crwdne205330:0'
+Erstellt: crwdns205332:0crwdne205332:0
+'Reports, die mit "v4" gekennzeichnet sind, neigen dazu Spieler als Multi-Accounts zu kennzeichnen, die sich einen Internetanschluss teilen (z.B. innerhalb derselben Wohnung, Schule, Arbeitsplatz, ...). Mit "v6" gekennzeichnete Reports sind wesentlich besser in der Lage, solche Spieler von echten Multi-Accounts zu trennen.': 'crwdns205334:0crwdne205334:0'
+'{prc}%': 'crwdns205336:0{prc}crwdne205336:0'
+'{hrs} Std. ({prc}%)': 'crwdns205338:0{hrs}crwdnd205338:0{prc}crwdne205338:0'
+'Letzte Woche': 'crwdns205340:0crwdne205340:0'
+'Letzte 3 Tage': 'crwdns205342:0crwdne205342:0'
+'Letzter Tag': 'crwdns205344:0crwdne205344:0'
+'Diese Zeile enthält belastende Informationen über den Spieler.': 'crwdns205346:0crwdne205346:0'
+'Erster Wert:': 'crwdns205348:0crwdne205348:0'
+'Dauer und Gesamtanteil der aktiven Phasen, die sich mit min. einem anderen Spieler dieser Gruppe überschneiden.': 'crwdns205350:0crwdne205350:0'
+'Zweiter Wert:': 'crwdns205352:0crwdne205352:0'
+'Durchschnittliche Dauer und Gesamtanteil der gemeinsamen aktiven Phasen über alle Spieler der Gruppe.': 'crwdns205354:0crwdne205354:0'
+'Dritter Wert:': 'crwdns205356:0crwdne205356:0'
+'Übereinstimmung der von dem Spieler genutzen Endgeräte mit denen des Rests der Gruppe.': 'crwdns205358:0crwdne205358:0'
+'Diese Zeile enthält entlastende Informationen über den Spieler.': 'crwdns205360:0crwdne205360:0'
+'Dauer und Verhältnis der aktiven Phasen dieses Spielers in anderen Gruppen, die keinerlei überschneidung mit den anderen Spielern dieser Gruppe haben.': 'crwdns205362:0crwdne205362:0'
+'Keine Daten': 'crwdns205364:0crwdne205364:0'
+'Multi-Account Report V2': 'crwdns205366:0crwdne205366:0'
+'Letzte {n} Tage': 'crwdns205368:0{n}crwdne205368:0'
+Veraltet!: crwdns205370:0crwdne205370:0
+Klicks: crwdns205374:0crwdne205374:0
+'{number} Auszeichnungen konnten nicht entfernt werden. Möglicherweise sind sie dem Spieler über Städte zugewiesen. In diesem Fall müssen sie über die Städteverwaltung entfernt werden.': 'crwdns205378:0{number}crwdne205378:0'
+'Eingehende Nachrichten als Tickets behandeln': 'crwdns205392:0crwdne205392:0'
+'Ist diese Option aktiviert, so wird eine eingehende Konversation für alle Gruppenmitglieder als "Gelesen" markiert, sobald ein Gruppenmitglied antwortet.': 'crwdns205394:0crwdne205394:0'
+SP: crwdns205920:0crwdne205920:0
+'Es wurden {n} Posts gelöscht.': 'crwdns205554:0{n}crwdne205554:0'
+'Weitere Aktionen': 'crwdns205556:0crwdne205556:0'
+'Bekannte IP-Adressen': 'crwdns205558:0crwdne205558:0'
+'{n} (davon {n2} bereits blockiert)': 'crwdns205560:0{n}crwdnd205560:0{n2}crwdne205560:0'
+Foren-Posts: crwdns205562:0crwdne205562:0
+'{n} (davon {n2} gelöscht)': 'crwdns205564:0{n}crwdnd205564:0{n2}crwdne205564:0'
+Heldenerfahrung: crwdns205922:0crwdne205922:0
+Zurücksetzen: crwdns205924:0crwdne205924:0
+Künstler: 'crwdns211674:0crwdne211674:0'
+'Anzahl der gelisteten Namen: {number}': 'crwdns206812:0{number}crwdne206812:0'
+Namen-Suche: crwdns206814:0crwdne206814:0
+'Namen hinzufügen': 'crwdns206816:0crwdne206816:0'
+'Namen können als glob-Muster eingegeben werden. Beispielsweise würde *test* alle Namen verhindern, in denen "test" vorkommt. Für eine Übersicht über glob-Syntax, siehe folgenden Link:': 'crwdns206818:0crwdne206818:0'
+'Gesperrte Namen': 'crwdns206820:0crwdne206820:0'
+'Es existiert bereits ein Changelog für diese Version in der angegebenen Sprache.': 'crwdns210442:0crwdne210442:0'
+'Temporär für Neuregistrierungen sperren': 'crwdns211737:0crwdne211737:0'
+'Alle Posts löschen': 'crwdns211739:0crwdne211739:0'
