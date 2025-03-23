@@ -178,7 +178,7 @@ export const TownCreatorSectionMods = () => {
         { /* Special rules */ }
         <OptionToggleMulti propName="features" options={[
             ...new Set<string>(globals.default_rules.unlocked_buildings ?? []).size ? [{ value: (new Set<string>(globals.getOption( 'rules.unlocked_buildings' ) as string[] ?? [])).size === 0, name: 'nobuilding', title: mods.special.nobuilding, help: mods.special.nobuilding_help, onChange: e => {
-                globals.setOption('rules.unlocked_buildings', (e.target as HTMLInputElement).checked ? new Set<string>() : [...globals.default_rules.unlocked_buildings]);
+                globals.setOption('rules.unlocked_buildings', (e.target as HTMLInputElement).checked ? [] : [...globals.default_rules.unlocked_buildings]);
             } }] : [],
             { value: globals.getOption( 'rules.features.all_poison' ) as boolean, name: 'all_poison', title: mods.special.poison, help: mods.special.poison_help },
             { value: has_all_beta_items, name: 'beta', title: mods.special.beta, help: mods.special.beta_help, onChange: e => {
