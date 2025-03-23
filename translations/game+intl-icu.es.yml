@@ -1903,7 +1903,7 @@ Weihnachten: Navidad
 'Glücklicherweise kannst du dich dank deines {img_scout} <strong>Tarnanzug</strong> unerkannt weiterbewegen.': 'Felizmente, tu {img_scout} <strong>Traje de camuflaje</strong> te permite seguir tu camino sin ser visto.'
 'Achtung: Jede Aktion in der Zone sorgt dafür, dass deine <strong>Tarnung auffliegt</strong>. (Es können nur Aktionen ausgeführt werden, die mit einem Icon {img_scout_ok} gekennzeichnet sind)!': 'Atención: toda acción en la zona te hará <strong>perder el camuflaje</strong>. (solo las acciones macadas con un icono {img_scout_ok} pueden ser realizadas)'
 'Mit deinem {img_scout} <strong>Tarnanzug</strong> kannst du dich bewegen ohne dabei entdeckt zu werden.': 'Tu {img_scout} <strong>Traje de camuflaje</strong> te permite seguir tu camino sin ser visto.'
-'{building} hat {num} Batterien verbraucht.': '{building} ha usado {num} batería.'
+'{building} hat {num} Batterien verbraucht.': '{building} ha usado {num} pila(s).'
 '{watchers} Nachtwächter haben am Stadtrand Stellung bezogen. Wild entschlossen haben sie sich vorgenommen, die Stadt gegen die Zombies zu verteidigen.': '¡{watchers} centinelas se han ubicado en los extremos del pueblo para contener los ataques zombies!'
 'Diese Aktion ermöglicht die Reinigung der Zone durch herabfallenden Regen. Dieser kann den Brunnen in der Stadt füllen oder eine vernichtende Wirkung auf die umliegenden Zombies entfalten.': 'Purifica la zona regándola con lluvia. Esta lluvia puede llenar un poco el pozo del pueblo o hasta tener un efecto devastador en los zombies que se encuentren cerca.'
 'Du kannst versuchen, diesen Bürger zu heilen, aber nichts ist garantiert... und hüte dich vor Nebenwirkungen!': "Puedes intentar curar a este habitante, no te aseguramos nada.. ¡pero ten cuidado con los efectos secundarios!"
@@ -2217,7 +2217,7 @@ Löschen: Borrar
 'Ein Moderator hat deinen Thread "{threadname}" in das Forum "{forumname}" verschoben. {link_post}': 'Tu tema "{threadname}" ha sido desplazado al Foro "{forumname}" por un moderador. {link_post}'
 'Deine aktuelle Situation erlaubt nicht, dass du diese Aktion durchführst.': 'No puedes realizar esta acción actualmente.'
 'Dieser Bürger scheint völlig verängstigt zu sein! Er bringt keinen Kontrollpunkt in dieser Zone.': '¡Este habitante parece estar totalmente aterrorizado! No ha reportado ningún punto de control.'
-'Die Anwesenheit des Geistigen Beistands unter den Nachtwächtern gibt ihnen jeweils einen Boost von {counsel} Verteidigung.': 'La presencia del discurso motivador entre los centinelas actuales aporta una ganancia de {consejo} puntos de defensa.'
+'Die Anwesenheit des Geistigen Beistands unter den Nachtwächtern gibt ihnen jeweils einen Boost von {counsel} Verteidigung.': 'La presencia del discurso motivador entre los centinelas actuales aporta una ganancia de {counsel} puntos de defensa.'
 '<strong>Herzlichen Glückwunsch</strong>, du hast Folgendes freigeschaltet: {list}': '<strong>Enhorabuena</strong>, has desbloqueado las siguientes recompensas: {list}'
 'Resigniert und untröstlich sahen die Bürger, wie eine Horde von {num} Zombies sich in Richtung Stadt bewegte...': '¡Alerta, algunos compañeros han visto una turba de {num} zombies dirigiéndose hacia el pueblo!'
 'Wie aus dem Nichts stand die Meute auf einmal vor dem Stadttor...': 'Y de pronto, el horror se acrecienta frente al portal del pueblo...'
