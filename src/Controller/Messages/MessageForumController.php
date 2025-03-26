@@ -209,7 +209,7 @@ class MessageForumController extends MessageController
     #[Route(path: 'jx/forum/{id<\d+>}', name: 'forum_view')]
     public function forum(int $id, Request $request, EntityManagerInterface $em, JSONRequestParser $p, CitizenHandler $ch, Locksmith $locksmith): Response
     {
-        $tags = array_filter( explode(',', $request->get('tags')), fn(string $s) => !empty($s) );
+        $tags = array_filter( explode(',', $request->get('tags', '')), fn(string $s) => !empty($s) );
         return $this->default_forum_renderer($id,-1,-1, -1, $em, $p, $ch, $locksmith, $tags ?: null);
     }
 

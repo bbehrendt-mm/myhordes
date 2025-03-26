@@ -782,7 +782,7 @@ class HTMLService {
             /** @var $value Emotes */
             $path = $value->getPath();
             if($value->getI18n())
-                $path = str_replace("{lang}", ($user !== null ? (is_string( $user ) ? $user : $user->getLanguage()) : "de"), $path);
+                $path = str_replace("{lang}", ($user !== null ? (is_string( $user ) ? $user : ($user->getLanguage() ?? 'de')) : "de"), $path);
             $this->emote_cache[$value->getTag()] = $url_only ? $path : "<img alt='{$value->getTag()}' src='{$this->asset->getUrl( $path )}'/>";
         }
         return $this->emote_cache;
