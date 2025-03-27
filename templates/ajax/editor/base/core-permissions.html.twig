@@ -11,6 +11,7 @@
         {% if user %}data-control-glory="{{ user|has_unlocked('f_glory') ? 1 : 0 }}"{% endif %}
         {% if base == 'extended' %}
             data-control-emote="1"
+            {# data-control-ressource="1" #}
             data-control-game="1"
         {% endif %}
         {% if permission %}

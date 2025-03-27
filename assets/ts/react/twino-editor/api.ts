@@ -55,6 +55,11 @@ export class TwinoEditorAPI {
             .request().get() as Promise<EmoteListResponse>;
     }
 
+    public ressources( user: number|null, context: string = 'common' ): Promise<EmoteListResponse> {
+        return this.fetch.from(`/${user ?? 'me'}/unlocks/${context}/ressources`)
+            .request().get() as Promise<EmoteListResponse>;
+    }
+
     public rp( user: number|null, context: string = 'common' ): Promise<EmoteListResponse> {
         return this.fetch.from(`/${user ?? 'me'}/unlocks/${context}/rp`)
             .request().get() as Promise<EmoteListResponse>;
