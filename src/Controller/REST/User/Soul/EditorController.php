@@ -103,6 +103,7 @@ class EditorController extends CustomAbstractCoreController
                     '@-placeholder' => $this->translator->trans('Gib den Namen des Spielers ein', [], 'global'),
 
                     'emotes_img' => $assets->getUrl('build/images/forum/smile.gif'),
+                    'ressources_img' => $assets->getUrl('build/images/item/item_wood2.gif'),
                     'games_img' => $assets->getUrl('build/images/item/item_dice.gif'),
                     'rp_img' => $assets->getUrl('build/images/forum/rp.png'),
                     'mod_img' => $assets->getUrl('build/images/icons/mod.png'),
@@ -340,6 +341,40 @@ class EditorController extends CustomAbstractCoreController
                 'tag' => '{' . $k . '}',
                 'path' => "build/images/forum/{$v}.png",
                 'url' => $assets->getUrl( "build/images/forum/{$v}.png" ),
+                'orderIndex' => $o
+            ], array_keys($data), array_values($data), array_keys(array_values($data)) )
+        ]);
+
+    }
+
+    /**
+     * @param int|null $id
+     * @param User|null $user
+     * @param Packages $assets
+     * @return JsonResponse
+     */
+    #[Route(path: '/me/unlocks/{context}/ressources', name: 'list_ressources_me', methods: ['GET'])]
+    #[Route(path: '/{id}/unlocks/{context}/ressources', name: 'list_ressources', methods: ['GET'])]
+    public function list_ressources(
+        ?int $id,
+        ?User $user,
+        Packages $assets
+    ): JsonResponse {
+        if ($id === null) $user = $this->getUser();
+        elseif ($user !== $this->getUser()) return new JsonResponse([], Response::HTTP_FORBIDDEN);
+
+        $data = [
+            'bone' => 'item_bone',
+            'bag' => 'item_bag',
+            'torch' => 'item_torch',
+            'feather' => 'item_xmas_gift',
+        ];
+
+        return new JsonResponse([
+            'result' => array_map( fn(string $k, string $v, int $o) => [
+                'tag' => '{' . $k . '}',
+                'path' => "build/images/item/{$v}.gif",
+                'url' => $assets->getUrl( "build/images/item/{$v}.gif" ),
                 'orderIndex' => $o
             ], array_keys($data), array_values($data), array_keys(array_values($data)) )
         ]);
