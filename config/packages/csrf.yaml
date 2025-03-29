@@ -2,7 +2,8 @@
 framework:
     form:
         csrf_protection:
-            token_id: submit
+          enabled: false
 
     csrf_protection:
-        stateless_token_ids:
+      enabled: false
+

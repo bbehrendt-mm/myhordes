@@ -87,6 +87,8 @@ services:
       public: true
     App\Service\User\UserUnlockableService:
       public: true
+    App\Service\Actions\XP\GetPictoXPStepsAction:
+      public: true
 
     # This aliases the classes used by the translation tool commands
     translation.tools.loader:
