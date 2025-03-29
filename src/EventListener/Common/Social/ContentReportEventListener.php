@@ -29,7 +29,6 @@ use App\Service\HTMLService;
 use App\Service\UserHandler;
 use DiscordWebhooks\Client;
 use DiscordWebhooks\Embed;
-use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
@@ -171,7 +170,7 @@ final class ContentReportEventListener implements ServiceSubscriberInterface
 
     public function handleReportDiscordNotification(ContentReportEvent $event): void {
         $endpoint = $this->getService(ConfMaster::class)->getGlobalConf()->get( MyHordesSetting::HookModDiscord );
-        $class = ClassUtils::getRealClass(get_class($event->subject));
+        $class = $this->getService(EntityManagerInterface::class)->getClassMetadata( get_class($event->subject) )->getName();
 
         if ($endpoint) {
             $user = $this->getReportedContentUser( $class, $event );
@@ -212,7 +211,7 @@ final class ContentReportEventListener implements ServiceSubscriberInterface
     }
 
     public function handleReportBrowserNotification(ContentReportEvent $event): void {
-        $class = ClassUtils::getRealClass(get_class($event->subject));
+        $class = $this->getService(EntityManagerInterface::class)->getClassMetadata( get_class($event->subject) )->getName();
 
         $users = [];
         $user_ids = [];
