@@ -3206,3 +3206,11 @@ Tierklinik: Tierklinik
 'Schau dir am besten gleich die {guide_cata} an.': 'Schau dir am besten gleich die {guide_cata} an.'
 'Bedienungsanleitung des Katapults': 'Bedienungsanleitung des Katapults'
 'Es enthält alle wesentlichen Informationen, um deiner neugewonnen Verantwortung gerecht werden zu können...': 'Es enthält alle wesentlichen Informationen, um deiner neugewonnen Verantwortung gerecht werden zu können...'
+'Du hast Erfahrungspunkte erhalten!': 'Du hast Erfahrungspunkte erhalten!'
+'In einem Rausch endloser Großzügigkeit hat {citizen} dir einige seiner Erfahrungspunkte gespendet.': "\n            {ref__gender, select,\n                        female {In einem Rausch endloser Großzügigkeit hat {citizen} dir einige ihrer Erfahrungspunkte gespendet.}\n                        other {In einem Rausch endloser Großzügigkeit hat {citizen} dir einige seiner Erfahrungspunkte gespendet.}\n                    }\n"
+'Hoffentlich hat {citizen} die Erzählungen seiner vergangenen Heldentaten nur moderat übertrieben...': "\n            {ref__gender, select,\n                        female {Hoffentlich hat {citizen} die Erzählungen ihrer vergangenen Heldentaten nur moderat übertrieben...}\n                        other {Hoffentlich hat {citizen} die Erzählungen seiner vergangenen Heldentaten nur moderat übertrieben...}\n                    }\n"
+'Zweite Lunge (2 AP, 2 EP)': 'Zweite Lunge (2 AP, 2 EP)'
+'Verbesserung Zweite Lunge (2 AP, 4 EP)': 'Verbesserung Zweite Lunge (2 AP, 4 EP)'
+'Verbesserung Zweite Lunge (4 AP, 4 EP)': 'Verbesserung Zweite Lunge (4 AP, 4 EP)'
+'Heldenerfahrung an {user} in "{town}" weitergegeben.': 'Heldenerfahrung an {user} in "{town}" weitergegeben.'
+'Heldenerfahrung von {user} in "{town}" erhalten.': 'Heldenerfahrung von {user} in "{town}" erhalten.'
