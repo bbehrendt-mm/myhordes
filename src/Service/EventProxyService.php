@@ -74,17 +74,18 @@ use App\Event\Game\Town\Basic\Core\JoinTownEvent;
 use App\Structures\ActionHandler\Execution;
 use App\Structures\FriendshipActionTarget;
 use App\Structures\HTMLParserInsight;
-use Doctrine\Common\Util\ClassUtils;
+use Doctrine\ORM\EntityManagerInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class EventProxyService
+readonly class EventProxyService
 {
     public function __construct(
         private EventDispatcherInterface $ed,
-        private EventFactory $ef
+        private EventFactory             $ef,
+        private EntityManagerInterface   $em,
     ) { }
 
     /**
@@ -331,7 +332,7 @@ class EventProxyService
         Post|GlobalPrivateMessage|PrivateMessage|BlackboardEdit|CitizenRankingProxy|User $subject,
         int $count = 1
     ): void {
-        $this->ed->dispatch( match (ClassUtils::getRealClass(get_class($subject))) {
+        $this->ed->dispatch( match ($this->em->getClassMetadata( get_class($subject) )->getName()) {
             Post::class => (new PostContentReportEvent())->setup( $reporter, $report, $subject, $count ),
             GlobalPrivateMessage::class => (new GlobalPrivateMessageContentReportEvent())->setup( $reporter, $report, $subject, $count ),
             PrivateMessage::class => (new PrivateMessageContentReportEvent())->setup( $reporter, $report, $subject, $count ),
