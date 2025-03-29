@@ -1,3 +1,5 @@
+web_profiler:
+  toolbar: true
 when@local:
     web_profiler:
         toolbar: true

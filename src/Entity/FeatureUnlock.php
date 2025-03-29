@@ -8,10 +8,11 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: FeatureUnlockRepository::class)]
 class FeatureUnlock
 {
-    const FeatureExpirationNone = 0;
-    const FeatureExpirationSeason = 1;
-    const FeatureExpirationTimestamp = 2;
-    const FeatureExpirationTownCount = 3;
+    const int FeatureExpirationNone = 0;
+    const int FeatureExpirationSeason = 1;
+    const int FeatureExpirationTimestamp = 2;
+    const int FeatureExpirationTownCount = 3;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]

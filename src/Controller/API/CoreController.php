@@ -24,6 +24,7 @@ use App\Service\RandomGenerator;
 use App\Service\TimeKeeperService;
 use App\Service\TownHandler;
 use App\Service\User\PictoService;
+use App\Service\User\UserUnlockableService;
 use App\Service\UserHandler;
 use App\Service\ZoneHandler;
 use Doctrine\ORM\EntityManagerInterface;
@@ -79,9 +80,9 @@ abstract class CoreController extends InventoryAwareController {
                                 ConfMaster $conf, ZoneHandler $zh, UserHandler $uh,
                                 CrowService $armbrust, Packages $a, TownHandler $th, GazetteService $gs,
                                 AdminHandler $adminHandler, UrlGeneratorInterface $urlGenerator, DoctrineCacheService $doctrineCache, EventProxyService $events, HookExecutor $hookExecutor,
-                                PictoService $pictoService
+                                PictoService $pictoService, UserUnlockableService $u,
     ) {
-        parent::__construct($em, $ih, $ch, $ah, $dh, $ph, $translator, $lh, $tk, $rg, $conf, $zh, $uh, $armbrust, $th, $a, $doctrineCache, $events, $hookExecutor);
+        parent::__construct($em, $ih, $ch, $ah, $dh, $ph, $translator, $lh, $tk, $rg, $conf, $zh, $uh, $armbrust, $th, $a, $doctrineCache, $events, $hookExecutor, $u);
         $this->gazette_service = $gs;
         $this->adminHandler = $adminHandler;
         $this->urlGenerator = $urlGenerator;
