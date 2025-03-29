@@ -60,6 +60,9 @@ class ItemPrototype implements NamedEntity
     #[ORM\Column]
     private bool $persistentEssential = false;
 
+    #[ORM\Column]
+    private bool $emote = false;
+
     public function __construct()
     {
         $this->properties = new ArrayCollection();
@@ -285,6 +288,18 @@ class ItemPrototype implements NamedEntity
     public function setPersistentEssential(bool $persistentEssential): static
     {
         $this->persistentEssential = $persistentEssential;
+
+        return $this;
+    }
+
+    public function isEmote(): bool
+    {
+        return $this->emote;
+    }
+
+    public function setEmote(bool $emote): static
+    {
+        $this->emote = $emote;
 
         return $this;
     }

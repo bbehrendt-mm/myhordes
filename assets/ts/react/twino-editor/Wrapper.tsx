@@ -6,7 +6,7 @@ import {TranslationStrings} from "./strings";
 import {Const, Global} from "../../defaults";
 import {v4 as uuidv4} from 'uuid';
 import {TwinoEditorControls, TwinoEditorControlsTabList} from "./Controls";
-import {EmoteResponse, TwinoEditorAPI} from "./api";
+import {EmoteListResponse, EmoteResponse, TwinoEditorAPI} from "./api";
 import {Fetch} from "../../v2/fetch";
 import {BaseMounter} from "../index";
 
@@ -189,15 +189,20 @@ export const TwinoEditorWrapper = ( props: HTMLConfig & { onFieldChanged: FieldC
     const [emotes, setEmotes] = useState<EmoteResponse>(null);
     const emoteRef = useRef<EmoteResponse>(null);
 
+    const [resourceEmotes, setResourceEmotes] = useState<EmoteListResponse>(null);
+    const resourceEmoteRef = useRef<EmoteListResponse>(null);
+
     const isEnabled = (f:Feature): boolean => props.features.includes(f);
     const controlAllowed = (c:Control): boolean => props.controls.includes(c);
 
     const emoteResolver = (s:string): [string|null,string] => {
         if (!controlAllowed('emote')) return [null,s];
         const e = emotes ?? emoteRef.current ?? null;
-        if (e === null) return [null,s];
-        s = e.mock[s] ?? s;
-        return [e.result[s]?.url ?? null, s];
+        const r = resourceEmotes ?? resourceEmoteRef.current ?? null;
+        if (e === null && r === null) return [null,s];
+        s = e?.mock[s] ?? s;
+        console.log(s, e?.result, r?.result, [e?.result[s]?.url ?? r?.result[s]?.url ?? null, s]);
+        return [e?.result[s]?.url ?? r?.result[s]?.url ?? null, s];
     }
 
     const submitting = useRef<boolean>(false);
@@ -321,6 +326,16 @@ export const TwinoEditorWrapper = ( props: HTMLConfig & { onFieldChanged: FieldC
                 update( convertToHTML( `${fieldRef.current['body'] ?? ''}` , update) );
             })
         else setEmotes( emoteRef.current = { mock: {}, snippets: null, result: {}} )
+
+        if (controlAllowed('ressource') || controlAllowed('snippet'))
+            apiRef.current.ressources(props.user,props.context).then(data => {
+                setResourceEmotes({...resourceEmoteRef.current = data});
+                const update = (s:string) => {
+                    if (s !== (fieldRef.current['html'] ?? '')) setField('html', s);
+                }
+                update( convertToHTML( `${fieldRef.current['body'] ?? ''}` , update) );
+            })
+        else setResourceEmotes( resourceEmoteRef.current = { result: {}} )
     }, []);
 
     useLayoutEffect(() => {

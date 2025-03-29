@@ -88,7 +88,7 @@ class ItemDataService implements FixtureProcessorInterface {
 		$container->add()->label('Järpen-Tisch')->icon('table')->category('Armor')->deco(3)->heavy(true)->watchpoint(15)->deco_text('Verbessert die Verteidigung')->commit();
 		$container->add()->label('Solide Holzplatte')->icon('wood_plate')->category('Armor')->deco(0)->heavy(true)->watchpoint(0)->deco_text('Verbessert die Verteidigung')->commit();
 		$container->add()->label('Autotür')->icon('car_door')->category('Armor')->deco(0)->heavy(true)->watchpoint(25)->watchimpact(3)->deco_text('Verbessert die Verteidigung')->commit();
-		$container->add()->label('Fackel')->icon('torch')->category('Armor')->deco(0)->heavy(false)->watchpoint(15)->deco_text('Verbessert die Verteidigung')->commit();
+		$container->add()->label('Fackel')->icon('torch')->category('Armor')->deco(0)->heavy(false)->watchpoint(15)->deco_text('Verbessert die Verteidigung')->isEmote(true)->commit();
 		$container->add()->label('Räudiger Dackel')->icon('tekel')->category('Armor')->deco(0)->heavy(false)->watchpoint(18)->deco_text('Verbessert die Verteidigung und verhindert Diebstähle')->commit();
 		$container->add()->label('Aqua-Splash (leer)')->icon('watergun_opt_empty')->category('Weapon')->deco(0)->heavy(false)->watchpoint(0)->commit();
 		$container->add()->label('Kanisterpumpe (leer)')->icon('jerrygun_off')->category('Weapon')->deco(0)->heavy(false)->watchpoint(0)->commit();
@@ -129,7 +129,7 @@ class ItemDataService implements FixtureProcessorInterface {
 		$container->add()->label('Aqua-Splash (1 Ladung)')->icon('watergun_opt_1')->category('Weapon')->deco(0)->heavy(false)->watchpoint(2)->commit();
 		$container->add()->label('Zerstörer (geladen)')->icon('big_pgun')->category('Weapon')->deco(0)->heavy(false)->watchpoint(11)->commit();
 		$container->add()->label('Kanisterpumpe (einsatzbereit)')->icon('jerrygun')->category('Weapon')->deco(0)->heavy(false)->watchpoint(20)->commit();
-		$container->add()->label('Angeknackster menschlicher Knochen')->icon('bone')->category('Weapon')->deco(0)->heavy(false)->watchpoint(5)->commit();
+		$container->add()->label('Angeknackster menschlicher Knochen')->icon('bone')->category('Weapon')->deco(0)->heavy(false)->watchpoint(5)->isEmote(true)->commit();
 		$container->add()->label('Wasserpistole (3 Ladungen)')->icon('watergun_3')->category('Weapon')->deco(0)->heavy(false)->watchpoint(6)->commit();
 		$container->add()->label('Wasserpistole (2 Ladungen)')->icon('watergun_2')->category('Weapon')->deco(0)->heavy(false)->watchpoint(4)->commit();
 		$container->add()->label('Wasserpistole (1 Ladung)')->icon('watergun_1')->category('Weapon')->deco(0)->heavy(false)->watchpoint(2)->commit();
@@ -144,7 +144,7 @@ class ItemDataService implements FixtureProcessorInterface {
 		$container->add()->label('Kalaschni-Splash (leer)')->icon('kalach')->category('Weapon')->deco(0)->heavy(false)->watchpoint(0)->commit();
 		$container->add()->label('Tretmine')->icon('claymo')->category('Weapon')->deco(0)->heavy(false)->watchpoint(40)->commit();
 		$container->add()->label('Einkaufswagen')->icon('cart')->category('Box')->deco(0)->heavy(true)->watchpoint(15)->sort(2)->commit();
-		$container->add()->label('Extra Tasche')->icon('bag')->category('Box')->deco(0)->heavy(false)->watchpoint(0)->sort(2)->commit();
+		$container->add()->label('Extra Tasche')->icon('bag')->category('Box')->deco(0)->heavy(false)->watchpoint(0)->sort(2)->isEmote(true)->commit();
 		$container->add()->label('Superpraktischer Rucksack')->icon('bagxl')->category('Box')->deco(0)->heavy(false)->watchpoint(0)->sort(2)->commit();
 		$container->add()->label('Gürtel mit Tasche')->icon('pocket_belt')->category('Box')->deco(0)->heavy(false)->watchpoint(0)->sort(1)->commit();
 		$container->add()->label('Metallkiste')->icon('chest')->category('Box')->deco(0)->heavy(true)->watchpoint(8)->commit();
@@ -364,7 +364,7 @@ class ItemDataService implements FixtureProcessorInterface {
 		$container->add()->label('Ausgeschnitzter weicher Kürbis')->icon('pumpkin_off')->category('Furniture')->deco(5)->heavy(true)->watchpoint(0)->commit();
 		$container->add()->label('Leuchtender Kürbis')->icon('pumpkin_on')->category('Armor')->deco(15)->heavy(false)->watchpoint(0)->commit();
 		$container->add()->label('Weicher Kürbis')->icon('pumpkin_raw')->category('Misc')->deco(0)->heavy(true)->watchpoint(0)->commit();
-		$container->add()->label('Krähengirlande')->icon('xmas_gift')->category('Furniture')->deco(2)->heavy(false)->watchpoint(0)->commit();
+		$container->add()->label('Krähengirlande')->icon('xmas_gift')->category('Furniture')->deco(2)->heavy(false)->watchpoint(0)->isEmote(true)->commit();
 		$container->add()->label('Mystischer Trank')->icon('potion')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->commit();
 		$container->add()->label('Krähenelfe')->icon('food_xmas')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->commit();
 		$container->add()->label('Logbuch Schokolade')->icon('wood_xmas')->category('Food')->deco(8)->heavy(true)->watchpoint(0)->commit();
@@ -777,7 +777,7 @@ class ItemDataService implements FixtureProcessorInterface {
         $container->modify('moldy_food_#00')->description('Ein gebackenes Gericht, aus fragwürdigen Resten hergestellt, das fast wie richtiges Essen aussieht. Es ist warm, es hält zusammen... das zählt doch als Mahlzeit, oder?')->commit(); // Leftovers roast roast
 
         // Installed Crow Garland
-        $container->clone('xmas_gift_#00')->label('Aufgehängte Krähengirlande')->deco(5)->commit();
+        $container->clone('xmas_gift_#00')->label('Aufgehängte Krähengirlande')->deco(5)->isEmote(false)->commit();
 
         $data = $container->toArray();
     }
