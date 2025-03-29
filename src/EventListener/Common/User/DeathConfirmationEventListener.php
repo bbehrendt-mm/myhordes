@@ -20,6 +20,7 @@ use App\Event\Common\User\DeathConfirmedEvent;
 use App\Event\Common\User\DeathConfirmedPostPersistEvent;
 use App\Event\Common\User\DeathConfirmedPrePersistEvent;
 use App\EventListener\ContainerTypeTrait;
+use App\Service\Actions\XP\GetPictoXPStepsAction;
 use App\Service\DoctrineCacheService;
 use App\Service\EventProxyService;
 use App\Service\User\PictoService;
@@ -56,7 +57,8 @@ final class DeathConfirmationEventListener implements ServiceSubscriberInterface
             EventProxyService::class,
             UserHandler::class,
             UserUnlockableService::class,
-            PictoService::class
+            PictoService::class,
+            GetPictoXPStepsAction::class
         ];
     }
 
@@ -203,63 +205,16 @@ final class DeathConfirmationEventListener implements ServiceSubscriberInterface
     public function awardPrimeHxpForPictos(DeathConfirmedEvent $event): void {
         if ($event->death->getProperty( CitizenPersistentCache::ForceBaseHXP ) > 0) return;
 
-        $pt_2   = [ 1 => 2,  3 => 1,  5 => 1,  8 => 1, 10 => 1 ];
-        $pt_5 = [ 1 => 5, 3 => 2, 5 => 2, 8 => 2, 10 => 2 ];
-        $pt_7 = [ 1 => 7, 3 => 2, 5 => 2, 8 => 2, 10 => 2 ];
-
-        $pt_2_6 = [ 6 => 2, 12 => 1, 18 => 1, 24 => 1 ];
-        $pt_2_10 = [ 10 => 2, 20 => 1, 30 => 1, 50 => 1 ];
-        $pt_2_15 = [ 15 => 2, 30 => 1, 45 => 1, 60 => 1 ];
-
-        $p_job = [50 => 4, 100 => 7];
-
         $picto_db = [
             'r_surgrp_#00' => [ 'hxp_picto', false, 'by_day' => null, 'by_count' => [ 1 => 2 ] ],
             'r_surlst_#00' => [ 'hxp_picto', false, 'by_day' => [0 => 0, 5 => 7, 9 => 14, 14 => 21], 'by_count' => null ],
             'r_suhard_#00' => [ 'hxp_picto', false, 'by_day' => [0 => 0, 5 => 7], 'by_count' => null ],
 
-            'r_thermal_#00' => [ 'hxp_picto_first', true, 'by_day' => null, 'by_count' => $pt_2 ],
-            'r_ebcstl_#00' =>  [ 'hxp_picto_first', true, 'by_day' => null, 'by_count' => $pt_2 ],
-            'r_ebpmv_#00' =>   [ 'hxp_picto_first', true, 'by_day' => null, 'by_count' => $pt_2 ],
-            'r_ebgros_#00' =>  [ 'hxp_picto_first', true, 'by_day' => null, 'by_count' => $pt_2 ],
-            'r_ebcrow_#00' =>  [ 'hxp_picto_first', true, 'by_day' => null, 'by_count' => $pt_2 ],
-            'r_maso_#00'   =>  [ 'hxp_picto_first', true, 'by_day' => null, 'by_count' => $pt_2 ],
-            'r_wondrs_#00' =>  [ 'hxp_picto_first', true, 'by_day' => null, 'by_count' => [15 => 2, 30 => 1, 45 => 1, 60 => 1] ],
-
-            'r_batgun_#00' =>  [ 'hxp_picto_first', true, 'by_day' => null, 'by_count' => $pt_5 ],
-            'r_door_#00'   =>  [ 'hxp_picto_first', true, 'by_day' => null, 'by_count' => $pt_5 ],
-            'r_explo2_#00' =>  [ 'hxp_picto_first', true, 'by_day' => null, 'by_count' => $pt_5 ],
-            'r_ebuild_#00' =>  [ 'hxp_picto_first', true, 'by_day' => null, 'by_count' => $pt_5 ],
-            'r_chstxl_#00' =>  [ 'hxp_picto_first', true, 'by_day' => null, 'by_count' => [ 1 => 5, 2 => 2, 3 => 2, 5 => 2 ] ],
-
-            'r_dnucl_#00'  =>  [ 'hxp_picto_first', true, 'by_day' => null, 'by_count' => $pt_7 ],
-            'r_watgun_#00' =>  [ 'hxp_picto_first', true, 'by_day' => null, 'by_count' => $pt_7 ],
-            'r_cmplst_#00' =>  [ 'hxp_picto_first', true, 'by_day' => null, 'by_count' => $pt_7 ],
-
-            'r_tronco_#00' =>  [ 'hxp_picto_first', true, 'by_day' => null, 'by_count' => [ 1 => 8, 2 => 2, 3 => 2, 5 => 2 ] ],
-
-            'r_cobaye_#00' =>  [ 'hxp_picto_first', true, 'by_day' => null, 'by_count' => $pt_2_6 ],
-            'r_solban_#00' =>  [ 'hxp_picto_first', true, 'by_day' => null, 'by_count' => $pt_2_6 ],
-            'r_explor_#00' =>  [ 'hxp_picto_first', true, 'by_day' => null, 'by_count' => $pt_2_6 ],
-            'r_collec_#00' =>  [ 'hxp_picto_first', true, 'by_day' => null, 'by_count' => $pt_2_6 ],
-            'r_guard_#00'  =>  [ 'hxp_picto_first', true, 'by_day' => null, 'by_count' => $pt_2_6 ],
-            'r_ruine_#00'  =>  [ 'hxp_picto_first', true, 'by_day' => null, 'by_count' => $pt_2_6 ],
-
-            'r_repair_#00' =>  [ 'hxp_picto_first', true, 'by_day' => null, 'by_count' => $pt_2_10 ],
-            'r_plundr_#00' =>  [ 'hxp_picto_first', true, 'by_day' => null, 'by_count' => $pt_2_10 ],
-            'r_camp_#00'   =>  [ 'hxp_picto_first', true, 'by_day' => null, 'by_count' => $pt_2_10 ],
-            'r_digger_#00' =>  [ 'hxp_picto_first', true, 'by_day' => null, 'by_count' => $pt_2_10 ],
-
-            'r_theft_#00'  =>  [ 'hxp_picto_first', true, 'by_day' => null, 'by_count' => $pt_2_15 ],
-            'r_cgarb_#00'  =>  [ 'hxp_picto_first', true, 'by_day' => null, 'by_count' => $pt_2_15 ],
-
-            'r_jtamer_#00' =>  [ 'hxp_picto_first', true, 'by_day' => null, 'by_count' => $p_job ],
-            'r_jrangr_#00' =>  [ 'hxp_picto_first', true, 'by_day' => null, 'by_count' => $p_job ],
-            'r_jermit_#00' =>  [ 'hxp_picto_first', true, 'by_day' => null, 'by_count' => $p_job ],
-            'r_jcolle_#00' =>  [ 'hxp_picto_first', true, 'by_day' => null, 'by_count' => $p_job ],
-            'r_jguard_#00' =>  [ 'hxp_picto_first', true, 'by_day' => null, 'by_count' => $p_job ],
-            'r_jtech_#00'  =>  [ 'hxp_picto_first', true, 'by_day' => null, 'by_count' => $p_job ],
-            'r_jbasic_#00' =>  [ 'hxp_picto_first', true, 'by_day' => null, 'by_count' => $p_job ],
+            ...(
+                $this->getService(GetPictoXPStepsAction::class)()
+                    ->map( fn(array $v) => [ 'hxp_picto_first', true, 'by_day' => null, 'by_count' => $v ] )
+                    ->toArray()
+            ),
         ];
 
         $pictoCache = $this->getService(EntityManagerInterface::class)->getRepository(PictoOffsetCounter::class)->findOneBy([
