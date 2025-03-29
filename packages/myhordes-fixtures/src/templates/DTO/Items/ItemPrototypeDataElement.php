@@ -37,6 +37,8 @@ use MyHordes\Fixtures\DTO\LabeledIconElementInterface;
  * @method self watchimpact(int $v)
  * @property bool $isPersistentWhenEssential
  * @method self isPersistentWhenEssential(bool $v)
+ * @property bool $isEmote
+ * @method self isEmote(bool $v)
  *
  * @method ItemPrototypeDataContainer commit()
  * @method ItemPrototypeDataContainer discard()
@@ -68,7 +70,8 @@ class ItemPrototypeDataElement extends Element implements LabeledIconElementInte
                 ->setWatchpoint($this->watchpoint ?? 0)
                 ->setFragile( $this->fragile ?? false )
 				->setWatchimpact($this->watchimpact ?? 0)
-                ->setPersistentEssential( $this->isPersistentWhenEssential ?? false );
+                ->setPersistentEssential( $this->isPersistentWhenEssential ?? false )
+                ->setEmote( $this->isEmote ?? false );
         } catch (\Throwable $t) {
             throw new \Exception(
                 "Exception when persisting item prototype to database: {$t->getMessage()} \n\nOccurred when processing the following item:\n" . print_r($this->toArray(), true),

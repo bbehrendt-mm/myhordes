@@ -8,6 +8,7 @@ use App\Entity\Award;
 use App\Entity\CitizenProfession;
 use App\Entity\Emotes;
 use App\Entity\ForumModerationSnippet;
+use App\Entity\ItemPrototype;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Cache\InvalidArgumentException;
@@ -358,25 +359,21 @@ class EditorController extends CustomAbstractCoreController
     public function list_ressources(
         ?int $id,
         ?User $user,
-        Packages $assets
+        Packages $assets,
+        EntityManagerInterface $em
     ): JsonResponse {
         if ($id === null) $user = $this->getUser();
         elseif ($user !== $this->getUser()) return new JsonResponse([], Response::HTTP_FORBIDDEN);
 
-        $data = [
-            'bone' => 'item_bone',
-            'bag' => 'item_bag',
-            'torch' => 'item_torch',
-            'feather' => 'item_xmas_gift',
-        ];
+        $items = $em->getRepository(ItemPrototype::class)->findBy(['emote' => true]);
 
         return new JsonResponse([
-            'result' => array_map( fn(string $k, string $v, int $o) => [
-                'tag' => '{' . $k . '}',
-                'path' => "build/images/item/{$v}.gif",
-                'url' => $assets->getUrl( "build/images/item/{$v}.gif" ),
-                'orderIndex' => $o
-            ], array_keys($data), array_values($data), array_keys(array_values($data)) )
+            'result' => array_combine(array_map(fn(ItemPrototype $p) => ":item_{$p->getIcon()}:", $items), array_map( fn(ItemPrototype $p) => [
+                'tag' => ":item_{$p->getIcon()}:",
+                'path' => "build/images/item/item_{$p->getIcon()}.gif",
+                'url' => $assets->getUrl( "build/images/item/item_{$p->getIcon()}.gif" ),
+                'orderIndex' => $p->getSort() ?? 0
+            ], $items ))
         ]);
 
     }
