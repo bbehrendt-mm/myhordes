@@ -114,6 +114,7 @@ Error: Fehler
 'This value is not a valid week.': 'Dieser Wert ist keine gültige Woche.'
 'This value should not be before week "{{ min }}".': 'Dieser Wert darf nicht vor der Woche "{{ min }}" sein.'
 'This value should not be after week "{{ max }}".': 'Dieser Wert darf nicht nach der Woche "{{ max }}" sein.'
+'This value is not a valid slug.': 'Dieser Wert ist kein gültiger Slug.'
 'This form should not contain extra fields.': 'Dieses Formular sollte keine zusätzlichen Felder enthalten.'
 'The uploaded file was too large. Please try to upload a smaller file.': 'Die hochgeladene Datei ist zu groß. Versuchen Sie bitte eine kleinere Datei hochzuladen.'
 'The CSRF token is invalid. Please try to resubmit the form.': 'Der CSRF-Token ist ungültig. Versuchen Sie bitte das Formular erneut zu senden.'

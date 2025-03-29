@@ -54,7 +54,6 @@ class UpdateTranslationsCommand extends Command
         $array = [
             'locale' => $lang,
             '--force' => true,
-            '--sort' => 'asc',
             '--format' => 'yml',
             '--prefix' => '',
         ];

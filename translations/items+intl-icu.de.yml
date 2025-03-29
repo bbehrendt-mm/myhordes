@@ -1141,3 +1141,7 @@ Blutapfel: Blutapfel
 Würzen: Würzen
 'Wasser finden': 'Wasser finden'
 'Den Katapultbediener wählen': 'Den Katapultbediener wählen'
+'Erfahrung teilen': 'Erfahrung teilen'
+'Du gibst 5 Erfahrungspunkte aus, damit ein anderer Spieler 10 Erfahrungspunkte erhält.': 'Du gibst 5 Erfahrungspunkte aus, damit ein anderer Spieler 10 Erfahrungspunkte erhält.'
+'Möchtest du 5 Erfahrungspunkte ausgeben, damit {targetPlayer} 10 Erfahrungspunkte erhält? Hinweis: Pro Saison kannst du dem gleichen Spieler maximal 3x Erfahrung spenden.': 'Möchtest du 5 Erfahrungspunkte ausgeben, damit {targetPlayer} 10 Erfahrungspunkte erhält? Hinweis: Pro Saison kannst du dem gleichen Spieler maximal 3x Erfahrung spenden.'
+'Du hast deine Erfahrung an {citizen} weitergegeben.': 'Du hast deine Erfahrung an {citizen} weitergegeben.'
