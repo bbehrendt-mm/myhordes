@@ -33,6 +33,7 @@ use App\Service\LogTemplateHandler;
 use App\Service\RandomGenerator;
 use App\Service\TimeKeeperService;
 use App\Service\TownHandler;
+use App\Service\User\UserUnlockableService;
 use App\Service\UserHandler;
 use App\Service\ZoneHandler;
 use App\Structures\ItemRequest;
@@ -83,9 +84,9 @@ class ExplorationController extends InventoryAwareController implements HookedIn
         EntityManagerInterface $em, InventoryHandler $ih, CitizenHandler $ch, ActionHandler $ah, TimeKeeperService $tk,
         DeathHandler $dh, PictoHandler $ph, TranslatorInterface $translator, GameFactory $gf, RandomGenerator $rg,
         ItemFactory $if, ZoneHandler $zh, LogTemplateHandler $lh, ConfMaster $conf, Packages $a, UserHandler $uh,
-        CrowService $armbrust, TownHandler $th, DoctrineCacheService $doctrineCache, EventProxyService $events, HookExecutor $hookExecutor)
+        CrowService $armbrust, TownHandler $th, DoctrineCacheService $doctrineCache, EventProxyService $events, HookExecutor $hookExecutor, UserUnlockableService $u)
     {
-        parent::__construct($em, $ih, $ch, $ah, $dh, $ph, $translator, $lh, $tk, $rg, $conf, $zh, $uh, $armbrust, $th, $a, $doctrineCache, $events, $hookExecutor);
+        parent::__construct($em, $ih, $ch, $ah, $dh, $ph, $translator, $lh, $tk, $rg, $conf, $zh, $uh, $armbrust, $th, $a, $doctrineCache, $events, $hookExecutor, $u);
         $this->game_factory = $gf;
         $this->item_factory = $if;
         $this->zone_handler = $zh;

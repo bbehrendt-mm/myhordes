@@ -268,7 +268,7 @@ class UserUnlockableService implements ServiceSubscriberInterface
         Season|true $season = null,
         ?int &$total = null,
         int|true $reset = 0,
-        int &$count = 0,
+        ?int &$count = 0,
     ): bool {
         if ($season === true) $season = $this->getService(EntityManagerInterface::class)->getRepository(Season::class)->findOneBy(['current' => true]);
         if (is_string( $template )) {

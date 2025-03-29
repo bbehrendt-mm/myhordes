@@ -47,6 +47,7 @@ use App\Service\LogTemplateHandler;
 use App\Service\RandomGenerator;
 use App\Service\TimeKeeperService;
 use App\Service\TownHandler;
+use App\Service\User\UserUnlockableService;
 use App\Service\UserHandler;
 use App\Service\ZoneHandler;
 use App\Structures\FriendshipActionTarget;
@@ -84,12 +85,13 @@ class InventoryAwareController extends CustomAbstractController
 
     protected DoctrineCacheService $doctrineCache;
     protected EventProxyService $events;
+    protected UserUnlockableService $userUnlockableService;
 
     public function __construct(
         EntityManagerInterface $em, InventoryHandler $ih, CitizenHandler $ch, ActionHandler $ah, DeathHandler $dh, PictoHandler $ph,
         TranslatorInterface $translator, LogTemplateHandler $lt, TimeKeeperService $tk, RandomGenerator $rd, ConfMaster $conf,
         ZoneHandler $zh, UserHandler $uh, CrowService $armbrust, TownHandler $th, Packages $asset, DoctrineCacheService $doctrineCache,
-        EventProxyService $events, HookExecutor $hookExecutor)
+        EventProxyService $events, HookExecutor $hookExecutor, UserUnlockableService $userUnlockableService)
     {
         parent::__construct($conf, $em, $tk, $ch, $ih, $translator, $hookExecutor);
         $this->action_handler = $ah;
@@ -105,6 +107,7 @@ class InventoryAwareController extends CustomAbstractController
         $this->asset = $asset;
         $this->doctrineCache = $doctrineCache;
         $this->events = $events;
+        $this->userUnlockableService = $userUnlockableService;
     }
 
     public function before(): bool
@@ -161,6 +164,23 @@ class InventoryAwareController extends CustomAbstractController
 
             $this->entity_manager->persist(
                 $activeCitizen->getSpecificActionCounter( ActionCounterType::ReceiveHeroic )->setRecord( $key, true, 'seen' )
+            );
+            $this->entity_manager->flush();
+        } else if (!empty( $records = array_filter( $activeCitizen->getSpecificActionCounter( ActionCounterType::ReceiveXP )->getAdditionalData() ?? [],
+            fn($record) => is_array($record) && !( $record['seen'] ?? true )
+        ) ) ) {
+            $key = array_key_first( $records );
+            $record = $records[$key];
+            $citizen = $this->entity_manager->getRepository(Citizen::class)->find( (int)$record['from'] ?? 0 );
+            if ($citizen && $citizen->getTown() !== $activeCitizen->getTown()) $citizen = null;
+
+            if ($citizen)
+                $this->addFlash('popup-general', $this->renderView('ajax/game/notifications/hero_xp_donation.html.twig', [
+                    'citizen' => $citizen]
+                ));
+
+            $this->entity_manager->persist(
+                $activeCitizen->getSpecificActionCounter( ActionCounterType::ReceiveXP )->setRecord( $key, true, 'seen' )
             );
             $this->entity_manager->flush();
         }
@@ -238,6 +258,25 @@ class InventoryAwareController extends CustomAbstractController
                 foreach ($this->getActiveCitizen()->getHeroicActions() as $action)
                     if ($action->getName() !== 'hero_generic_friendship' && !in_array( $action->getName(), $giftedActions ))
                         $targets[] = [$action->getId(), $this->translator->trans($action->getAction()->getLabel(), [], 'items'), "build/images/actions/hero.gif", null, 'Action'];
+
+                break;
+
+            case ItemTargetDefinition::ItemFriendshipXPType:
+
+                foreach ($this->getActiveCitizen()->getTown()->getCitizens() as $citizen)
+                    if ($citizen !== $this->getActiveCitizen() && $citizen->getAlive() && $citizen->getZone() === $this->getActiveCitizen()->getZone()) {
+
+                        $this->userUnlockableService->hasRecordedHeroicExperienceFor(
+                            $this->getActiveCitizen()->getUser(),
+                            'hxp_bia_given',
+                            "hxp_given_{$citizen->getUser()->getId()}",
+                            true,
+                        count: $count
+                        );
+
+                        if ($count < 3)
+                            $targets[] = [$citizen->getId(), $citizen->getName(), "build/images/item/item_cart.gif", null, 'Player'];
+                    }
 
                 break;
         }
@@ -686,22 +725,22 @@ class InventoryAwareController extends CustomAbstractController
                 }
                 return true;
             case ItemTargetDefinition::ItemCitizenType: case ItemTargetDefinition::ItemCitizenVoteType:
-            $return = $this->entity_manager->getRepository(Citizen::class)->find( (int)$id );
-            if (!$return?->getAlive() || $return?->getTown()?->getId() !== $this->getActiveCitizen()->getTown()->getId()) {
-                $return = null;
-                return false;
-            }
-            return true;
+                $return = $this->entity_manager->getRepository(Citizen::class)->find( (int)$id );
+                if (!$return?->getAlive() || $return?->getTown()?->getId() !== $this->getActiveCitizen()->getTown()->getId()) {
+                    $return = null;
+                    return false;
+                }
+                return true;
             case ItemTargetDefinition::ItemCitizenOnZoneType: case ItemTargetDefinition::ItemCitizenOnZoneSBType:
-            $return = $this->entity_manager->getRepository(Citizen::class)->find( (int)$id );
-            if (!$return?->getAlive() || $return?->getZone() !== $this->getActiveCitizen()->getZone()) {
-                $return = null;
-                return false;
-            } else if ( $target->getSpawner() === ItemTargetDefinition::ItemCitizenOnZoneSBType && $return?->getSpecificActionCounter(ActionCounterType::SandballHit)?->getLast() !== null && $return?->getSpecificActionCounter(ActionCounterType::SandballHit)?->getLast()?->getTimestamp() >= (time() - 1800) ) {
-                $return = null;
-                return false;
-            }
-            return true;
+                $return = $this->entity_manager->getRepository(Citizen::class)->find( (int)$id );
+                if (!$return?->getAlive() || $return?->getZone() !== $this->getActiveCitizen()->getZone()) {
+                    $return = null;
+                    return false;
+                } else if ( $target->getSpawner() === ItemTargetDefinition::ItemCitizenOnZoneSBType && $return?->getSpecificActionCounter(ActionCounterType::SandballHit)?->getLast() !== null && $return?->getSpecificActionCounter(ActionCounterType::SandballHit)?->getLast()?->getTimestamp() >= (time() - 1800) ) {
+                    $return = null;
+                    return false;
+                }
+                return true;
             case ItemTargetDefinition::ItemFriendshipType:
                 $action = null;
                 $player = null;
@@ -732,6 +771,27 @@ class InventoryAwareController extends CustomAbstractController
 
                 $return = new FriendshipActionTarget( $action, $player );
                 return true;
+
+            case ItemTargetDefinition::ItemFriendshipXPType:
+                $player = $this->entity_manager->getRepository(Citizen::class)->find( $id );
+                if (!$player) return false;
+
+                if (!$player->getAlive() || $player->getZone() !== $this->getActiveCitizen()->getZone() || $player === $this->getActiveCitizen() )
+                    return false;
+
+                $this->userUnlockableService->hasRecordedHeroicExperienceFor(
+                    $this->getActiveCitizen()->getUser(),
+                    'hxp_bia_given',
+                    "hxp_given_{$player->getUser()->getId()}",
+                    true,
+                    count: $count
+                );
+
+                if ($count < 3) {
+                    $return = $player;
+                    return true;
+                } else return false;
+
             default: return false;
         }
     }

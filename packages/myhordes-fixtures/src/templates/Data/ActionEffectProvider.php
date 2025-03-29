@@ -635,6 +635,7 @@ class ActionEffectProvider
         $effects_container->add()->identifier('contaminated_zone_infect')->add((new CustomEffect())->effectIndex(22))->commit();
 
         $effects_container->add()->identifier('hero_bia')->add((new CustomEffect())->effectIndex(70))->commit();
+        $effects_container->add()->identifier('hero_sxp')->add((new CustomEffect())->effectIndex(71))->commit();
 
         $effects_container->add()->identifier('hero_tamer_9')->add( (new CustomEffect())->effectIndex(10502) )->commit();
 

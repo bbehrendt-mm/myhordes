@@ -52,6 +52,7 @@ use App\Service\LogTemplateHandler;
 use App\Service\RandomGenerator;
 use App\Service\TimeKeeperService;
 use App\Service\TownHandler;
+use App\Service\User\UserUnlockableService;
 use App\Service\UserHandler;
 use App\Service\ZoneHandler;
 use App\Structures\EventConf;
@@ -131,9 +132,9 @@ class BeyondController extends InventoryAwareController
         DeathHandler $dh, PictoHandler $ph, TranslatorInterface $translator, GameFactory $gf, RandomGenerator $rg,
         ItemFactory $if, ZoneHandler $zh, LogTemplateHandler $lh, ConfMaster $conf, Packages $a, UserHandler $uh,
         CrowService $armbrust, TownHandler $th, DoctrineCacheService $doctrineCache, EventProxyService $events, HookExecutor $hookExecutor,
-        InvalidateTagsInAllPoolsAction $clearCache)
+        InvalidateTagsInAllPoolsAction $clearCache, UserUnlockableService $u)
     {
-        parent::__construct($em, $ih, $ch, $ah, $dh, $ph, $translator, $lh, $tk, $rg, $conf, $zh, $uh, $armbrust, $th, $a, $doctrineCache, $events, $hookExecutor);
+        parent::__construct($em, $ih, $ch, $ah, $dh, $ph, $translator, $lh, $tk, $rg, $conf, $zh, $uh, $armbrust, $th, $a, $doctrineCache, $events, $hookExecutor, $u);
         $this->game_factory = $gf;
         $this->item_factory = $if;
         $this->zone_handler = $zh;

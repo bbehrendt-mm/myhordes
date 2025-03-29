@@ -12,6 +12,7 @@ use App\Enum\ActionCounterType;
 use App\Enum\ActionHandler\CountType;
 use App\Enum\ActionHandler\PointType;
 use App\Enum\Game\TransferItemModality;
+use App\Enum\HeroXPType;
 use App\Event\Game\Actions\CustomActionProcessorEvent;
 use App\EventListener\ContainerTypeTrait;
 use App\Service\ActionHandler;
@@ -23,6 +24,7 @@ use App\Service\InventoryHandler;
 use App\Service\LogTemplateHandler;
 use App\Service\PictoHandler;
 use App\Service\RandomGenerator;
+use App\Service\User\UserUnlockableService;
 use App\Service\UserHandler;
 use App\Service\ZoneHandler;
 use App\Structures\FriendshipActionTarget;
@@ -56,6 +58,7 @@ final class HeroicItemActionListener implements ServiceSubscriberInterface
             UserHandler::class,
             PictoHandler::class,
             ActionHandler::class,
+            UserUnlockableService::class,
 
             InvalidateTagsInAllPoolsAction::class,
             SpanHeroicActionInheritanceTreeAction::class,
@@ -243,56 +246,84 @@ final class HeroicItemActionListener implements ServiceSubscriberInterface
             }
 
             // Friendship
-            case 70:
-                if (!is_a($event->target, FriendshipActionTarget::class)) break;
+            case 70: case 71:
 
                 if (!$this->getService(UserHandler::class)->checkFeatureUnlock($event->citizen->getUser(), 'f_share', true))
                     break;
 
-                $event->citizen->getHeroicActions()->removeElement( $event->target->action() );
-                $event->citizen->getUsedHeroicActions()->add( $event->target->action() );
+                if ($event->type === 70) {
+                    if (!is_a($event->target, FriendshipActionTarget::class)) break;
 
-                $treeService = $this->getService(SpanHeroicActionInheritanceTreeAction::class);
-                $upgrade_actions = ($treeService)( $event->target->action(), 1 );
-                $downgrade_actions = ($treeService)( $event->target->action(), -1 );
+                    $event->citizen->getHeroicActions()->removeElement( $event->target->action() );
+                    $event->citizen->getUsedHeroicActions()->add( $event->target->action() );
 
-                $valid = !$this->getService(CitizenHandler::class)->hasStatusEffect( $event->target->citizen(), 'tg_rec_heroic' );
+                    $treeService = $this->getService(SpanHeroicActionInheritanceTreeAction::class);
+                    $upgrade_actions = ($treeService)( $event->target->action(), 1 );
+                    $downgrade_actions = ($treeService)( $event->target->action(), -1 );
 
-                if ($valid && $event->target->citizen()->getProfession()->getHeroic()) {
-                    if ($event->target->citizen()->getHeroicActions()->contains( $event->target->action() ))
-                        $valid = false;
-                    foreach ( $upgrade_actions as $a ) if ($event->target->citizen()->getHeroicActions()->contains( $a ))
-                        $valid = false;
-                }
+                    $valid = !$this->getService(CitizenHandler::class)->hasStatusEffect( $event->target->citizen(), 'tg_rec_heroic' );
 
-                $event->target->citizen()->getSpecificActionCounter(
-                    ActionCounterType::ReceiveHeroic
-                )->increment()->addRecord( [
-                                               'action' => $event->target->action()->getName(),
-                                               'from' => $event->citizen->getId(),
-                                               'origin' =>
-                                                   ($this->getService(ActionHandler::class)->getHeroicDonatedFromCitizen( $event->target->action(), $event->citizen, false ) ?? $event->citizen)->getId(),
-                                               'valid' => $valid,
-                                               'seen' => false,
-                                               'used' => false,
-                                           ] );
-
-                if ($valid) {
-                    $this->getService(PictoHandler::class)->award_picto_to( $event->citizen, 'r_share_#00' );
-                    $this->getService(CitizenHandler::class)->inflictStatus( $event->target->citizen(), 'tg_rec_heroic' );
-                    $event->cache->setTargetCitizen($event->target->citizen());
-
-                    foreach ( $downgrade_actions as $a ) {
-                        $event->target->citizen()->getHeroicActions()->removeElement( $a );
-                        $event->target->citizen()->getUsedHeroicActions()->removeElement( $a );
+                    if ($valid && $event->target->citizen()->getProfession()->getHeroic()) {
+                        if ($event->target->citizen()->getHeroicActions()->contains( $event->target->action() ))
+                            $valid = false;
+                        foreach ( $upgrade_actions as $a ) if ($event->target->citizen()->getHeroicActions()->contains( $a ))
+                            $valid = false;
                     }
-                    foreach ( $upgrade_actions as $a )
-                        $event->target->citizen()->getUsedHeroicActions()->removeElement( $a );
 
-                    if ($event->target->citizen()->getProfession()->getHeroic())
-                        $event->target->citizen()->getHeroicActions()->add( $event->target->action() );
-                    else $event->target->citizen()->addSpecialAction( $event->target->action()->getSpecialActionPrototype() );
-                } else $event->cache->addMessage(T::__( 'Du bist aber nicht sicher, ob er damit wirklich etwas anfangen kann...', 'items' ), translationDomain: 'items' );
+                    $event->target->citizen()->getSpecificActionCounter(
+                        ActionCounterType::ReceiveHeroic
+                    )->increment()->addRecord( [
+                                                   'action' => $event->target->action()->getName(),
+                                                   'from' => $event->citizen->getId(),
+                                                   'origin' =>
+                                                       ($this->getService(ActionHandler::class)->getHeroicDonatedFromCitizen( $event->target->action(), $event->citizen, false ) ?? $event->citizen)->getId(),
+                                                   'valid' => $valid,
+                                                   'seen' => false,
+                                                   'used' => false,
+                                               ] );
+
+                    if ($valid) {
+                        $this->getService(PictoHandler::class)->award_picto_to( $event->citizen, 'r_share_#00' );
+                        $this->getService(CitizenHandler::class)->inflictStatus( $event->target->citizen(), 'tg_rec_heroic' );
+                        $event->cache->setTargetCitizen($event->target->citizen());
+
+                        foreach ( $downgrade_actions as $a ) {
+                            $event->target->citizen()->getHeroicActions()->removeElement( $a );
+                            $event->target->citizen()->getUsedHeroicActions()->removeElement( $a );
+                        }
+                        foreach ( $upgrade_actions as $a )
+                            $event->target->citizen()->getUsedHeroicActions()->removeElement( $a );
+
+                        if ($event->target->citizen()->getProfession()->getHeroic())
+                            $event->target->citizen()->getHeroicActions()->add( $event->target->action() );
+                        else $event->target->citizen()->addSpecialAction( $event->target->action()->getSpecialActionPrototype() );
+                    } else $event->cache->addMessage(T::__( 'Du bist aber nicht sicher, ob er damit wirklich etwas anfangen kann...', 'items' ), translationDomain: 'items' );
+
+                } else {
+
+                    if (!is_a($event->target, Citizen::class)) break;
+
+                    $event->cache->setTargetCitizen($event->target);
+                    if ($this->getService(UserUnlockableService::class)->recordHeroicExperience( $event->citizen->getUser(), HeroXPType::Global, -5, 'hxp_bia_given', "hxp_given_{$event->target->getUser()->getId()}", variables: [
+                        'user' => $event->target->getUser()->getId(),
+                        'town' => $event->town->getName()
+                    ], town: $event->town, citizen: $event->citizen )) {
+
+                        $this->getService(UserUnlockableService::class)->recordHeroicExperience( $event->target->getUser(), HeroXPType::Global, 10, 'hxp_bia_received', variables: [
+                            'user' => $event->citizen->getUser()->getId(),
+                            'town' => $event->town->getName()
+                        ], town: $event->town, citizen: $event->target );
+
+                        $event->target->getSpecificActionCounter(
+                            ActionCounterType::ReceiveXP
+                        )->increment()->addRecord( [
+                            'from' => $event->citizen->getId(),
+                            'seen' => false,
+                        ] );
+
+                    }
+
+                }
 
                 break;
         }
