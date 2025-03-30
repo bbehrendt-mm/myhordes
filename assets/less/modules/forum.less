@@ -414,7 +414,17 @@
 
     transition: box-shadow 0.1s ease-in-out, top 0.1s ease-in-out, margin-bottom 0.1s ease-in-out;
 
-    &:before {
+    &[data-lang] {
+      &:before {
+        content: " "; display: inline-block; height: 16px; width: 16px; margin-right: 4px;
+      }
+      &[data-lang="de"]:before { background: url("../../img/lang/de.png") center/contain no-repeat }
+      &[data-lang="en"]:before { background: url("../../img/lang/en.png") center/contain no-repeat }
+      &[data-lang="es"]:before { background: url("../../img/lang/es.png") center/contain no-repeat }
+      &[data-lang="fr"]:before { background: url("../../img/lang/fr.png") center/contain no-repeat }
+    }
+
+    &:after {
       content: '▶'; position: absolute; left: 0; top: 0; width: 24px; transform: rotate(0) scale(0.6); text-align: center;
       transition: transform 0.1s ease-in-out; font-style: normal;
     }
@@ -427,7 +437,7 @@
 
     &[data-open="1"] {
       box-shadow: 0 0 5px -5px rgba(0,0,0,0.3); top: 0; margin-bottom: 0;
-      &:before { transform: rotate(90deg) scale(0.6); }
+      &:after { transform: rotate(90deg) scale(0.6); }
       &+.collapsed {
         pointer-events: auto;
         &>* { transform: translateY(0) }
@@ -442,7 +452,7 @@
   div.collapsed>div[data-etog] {
 
     cursor: pointer;
-    &:before {
+    &:after {
       content: '▶'; transform: rotate(270deg) scale(0.6); color: #ddab76; display: inline-block;
     }
 

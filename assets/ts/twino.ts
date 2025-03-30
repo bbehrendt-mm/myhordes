@@ -337,9 +337,12 @@ class TwinoConverterToBlocks {
                     blocks.push( new TwinoInterimBlock(nodeContent, 'div', 'rpText', [['x-nested','1']]) );
                 }
                 changed = true; break;
-            case 'collapse':
+            case 'collapse': case 'lang_de': case 'lang_en': case 'lang_fr': case 'lang_es':
                 if ( match.nodeInfo() ) {
-                    blocks.push( new TwinoInterimBlock(match.nodeInfo(), 'div', 'collapsor', [['data-open', '1']]) );
+                    const attribs = [['data-open', '1']];
+                    if (match.nodeType().startsWith('lang_'))
+                        attribs.push( ['data-lang', match.nodeType().slice(5)] )
+                    blocks.push( new TwinoInterimBlock(match.nodeInfo(), 'div', 'collapsor', attribs as [string,string][]) );
                     blocks.push( new TwinoInterimBlock(nodeContent, 'div', 'collapsed') );
                 } else blocks.push( new TwinoInterimBlock(nodeContent) );
                 changed = true; break;
@@ -540,8 +543,12 @@ class HTMLConverterFromBlocks {
                         ret += HTMLConverterFromBlocks.wrapBlock(block, 'glory');
                     else if (block.hasClass('clear')) {/* Do nothing, as a clearfix tag should be ignored */}
                     else if (block.hasClass('collapsor')) {
-                        if (peek && peek.hasClass('collapsed'))
-                            ret += HTMLConverterFromBlocks.wrapBlock( nextBlock(), 'collapse', block.nodeText )
+                        if (peek && peek.hasClass('collapsed')) {
+                            const lang = block.getAttribute('data-lang');
+                            if (lang)
+                                ret += HTMLConverterFromBlocks.wrapBlock(nextBlock(), `lang_${lang}`, block.nodeText)
+                            else ret += HTMLConverterFromBlocks.wrapBlock(nextBlock(), 'collapse', block.nodeText)
+                        }
                     } else if (block.hasClass('rpauthor')) {
                         if (peek && peek.nodeName === 'div' && peek.hasClass('rpText')) {
                             ret += HTMLConverterFromBlocks.wrapBlock( nextBlock(), 'rp', block.nodeText )

@@ -93,7 +93,7 @@ export const TwinoEditorControls = ({emotes, resources}: {emotes: null|Array<Emo
                     <ControlButtonNodeWrap node="aparte" label={globals.strings.controls.aparte} fa="compress-alt" block={true} />
                     <ControlButtonNodeWrap node="code" label={globals.strings.controls.code} fa="code" block={true} />
                     <ControlButtonInsertWithAttribute node="rp" label={globals.strings.controls.rp} fa="scroll" block={true} dialogTitle={globals.strings.controls['rp-dialog']} attribute={globals.strings.controls['rp-placeholder']} />
-                    <ControlButtonInsertWithAttribute node="collapse" label={globals.strings.controls.collapse} fa="square-caret-down" block={true} dialogTitle={globals.strings.controls['collapse-dialog']} attribute={globals.strings.controls['collapse-placeholder']} />
+                    <ControlButtonInsertCollapse/>
                 </> }
                 { globals.allowControl('glory') && <>
                     <ControlButtonNodeWrap node="glory" label={globals.strings.controls.glory} fa="crown" block={true} />
@@ -374,6 +374,71 @@ const ControlButtonInsertPlayer = () => {
                 }}
                 clearOnCallback={true}
             />
+        </div>
+
+    </ControlButton>
+
+}
+
+const ControlButtonInsertCollapse = () => {
+
+    const globals = useContext(Globals);
+
+    const parent = useRef<HTMLDivElement>()
+    const selected = useRef<{id: number, name: string}>();
+
+    const title = useRef<HTMLInputElement>()
+    const language = useRef<HTMLSelectElement>()
+
+    return <ControlButton fa="square-caret-down" label={globals.strings.controls.collapse} dialogTitle={globals.strings.controls["collapse-dialog"]} manualConfirm={true} handler={() => {
+        const body = `${globals.getField('body') ?? ''}`;
+
+        let before = body.slice(0, globals.selection.start);
+        if (before !== '' && !before.slice(-1).match(/\s/))
+            before = `${before} `;
+
+        let inner = body.slice(globals.selection.start, globals.selection.end);
+
+        let after = body.slice(globals.selection.end);
+        if (after !== '' && !after.slice(0,1).match(/\s/))
+            after = ` ${after}`;
+
+        let insert: string;
+        let offset = 7;
+
+        const lang = language.current.value;
+        const tag = lang.length === 2 ? `lang_${lang}` : 'collapse';
+
+        const titleText = title.current.value;
+
+        if (titleText.length > 0) {
+            insert = `[${tag}=${titleText}]${inner}[/${tag}]`
+            offset = 3 + tag.length + titleText.length;
+        } else {
+            insert = `[${tag}]${inner}[/${tag}]`
+            offset = 2 + tag.length;
+        }
+
+        globals.setField('body', `${before}${insert}${after}`);
+        // should be set to after the open tag and before the end tag
+        globals.selection.update(before.length + offset, before.length + offset + inner.length);
+        selected.current = null;
+    }}>
+        <div ref={parent}>
+            <div className="flex">
+                <div className="modal-form">
+                    <label htmlFor={`${globals.uuid}-form-title`}>{globals.strings.controls["collapse-placeholder"]}</label>
+                    <input type="text" ref={title} id={`${globals.uuid}-form-title`}/>
+                    <label htmlFor={`${globals.uuid}-form-language`}>{globals.strings.controls["collapse-language"]}</label>
+                    <select ref={language} id={`${globals.uuid}-form-language`} defaultValue="">
+                        <option value="">{globals.strings.controls["collapse-language-none"]}</option>
+                        { Object.entries(globals.strings.controls["collapse-languages"]).map(([key, value]) =>
+                            <option key={key} value={key}>{value}</option>
+                        ) }
+                    </select>
+                    <div className="small">{globals.strings.controls["collapse-language-help"]}</div>
+                </div>
+            </div>
         </div>
 
     </ControlButton>

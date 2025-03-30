@@ -78,7 +78,7 @@ class HTMLService {
                 'ul' => [],
                 'ol' => [],
                 'li' => [],
-                'div' => [ 'class', 'x-a', 'x-b' ],
+                'div' => [ 'class', 'x-a', 'x-b', 'data-lang' ],
                 'span' => [ 'class', 'x-a', 'x-b' ],
                 'a' => [ 'href', 'title' ],
                 'figure' => [ 'style' ],
