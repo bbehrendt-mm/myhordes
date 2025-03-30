@@ -66,6 +66,7 @@ export type TranslationStrings = {
         '@-dialog': string,
         '@-placeholder': string,
         emotes_img: string,
+        default_img: string,
         ressources_img: string,
         games_img: string,
         rp_img: string,

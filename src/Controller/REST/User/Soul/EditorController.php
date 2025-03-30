@@ -104,6 +104,7 @@ class EditorController extends CustomAbstractCoreController
                     '@-placeholder' => $this->translator->trans('Gib den Namen des Spielers ein', [], 'global'),
 
                     'emotes_img' => $assets->getUrl('build/images/forum/smile.gif'),
+                    'default_img' => $assets->getUrl('build/images/emotes/middot.gif'),
                     'ressources_img' => $assets->getUrl('build/images/item/item_wood2.gif'),
                     'games_img' => $assets->getUrl('build/images/item/item_dice.gif'),
                     'rp_img' => $assets->getUrl('build/images/forum/rp.png'),
@@ -170,7 +171,8 @@ class EditorController extends CustomAbstractCoreController
                 $data[$entry->getTag()] = [
                     'tag' => $entry->getTag(),
                     'path' => $entry->getI18n() ? str_replace('{lang}', $user->getLanguage() ?? 'de', $entry->getPath()) : $entry->getPath(),
-                    'orderIndex' => $entry->getOrderIndex()
+                    'orderIndex' => $entry->getOrderIndex(),
+                    'groups' => $entry->getGroups(),
                 ];
             }
 
@@ -342,7 +344,7 @@ class EditorController extends CustomAbstractCoreController
                 'tag' => '{' . $k . '}',
                 'path' => "build/images/forum/{$v}.png",
                 'url' => $assets->getUrl( "build/images/forum/{$v}.png" ),
-                'orderIndex' => $o
+                'orderIndex' => $o,
             ], array_keys($data), array_values($data), array_keys(array_values($data)) )
         ]);
 
@@ -372,7 +374,7 @@ class EditorController extends CustomAbstractCoreController
                 'tag' => ":item_{$p->getIcon()}:",
                 'path' => "build/images/item/item_{$p->getIcon()}.gif",
                 'url' => $assets->getUrl( "build/images/item/item_{$p->getIcon()}.gif" ),
-                'orderIndex' => $p->getSort() ?? 0
+                'orderIndex' => ($p->getSort() ?? 0) * 1000 + $p->getId(),
             ], $items ))
         ]);
 

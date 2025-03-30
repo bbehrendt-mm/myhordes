@@ -3,6 +3,7 @@
 
 namespace App\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Table;
 use Doctrine\ORM\Mapping\UniqueConstraint;
@@ -19,17 +20,21 @@ class Emotes
     #[ORM\Column(type: 'integer')]
     private $id;
     #[ORM\Column(type: 'string', length: 32)]
-    private $tag;
+    private string $tag;
     #[ORM\Column(type: 'string', length: 64)]
-    private $path;
+    private string $path;
     #[ORM\Column(type: 'boolean')]
-    private $isActive;
+    private bool $isActive;
     #[ORM\Column(type: 'boolean', nullable: true)]
-    private $requiresUnlock;
+    private bool $requiresUnlock;
     #[ORM\Column(type: 'integer')]
-    private $orderIndex;
+    private int $orderIndex;
     #[ORM\Column(type: 'boolean')]
-    private $i18n = false;
+    private bool $i18n = false;
+
+    #[ORM\Column(type: Types::JSON)]
+    private ?array $groups = [];
+
     public function getOrderIndex(): ?int {
         return $this->orderIndex;
     }
@@ -74,6 +79,18 @@ class Emotes
     public function setI18n(bool $i18n): self
     {
         $this->i18n = $i18n;
+
+        return $this;
+    }
+
+    public function getGroups(): ?array
+    {
+        return $this->groups;
+    }
+
+    public function setGroups(array $groups): static
+    {
+        $this->groups = $groups;
 
         return $this;
     }

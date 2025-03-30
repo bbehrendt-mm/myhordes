@@ -23,6 +23,7 @@ export type Emote = {
     path: string,
     orderIndex: number,
     url: string,
+    groups?: string[]
 }
 
 export type Snippet = {

@@ -6,6 +6,7 @@ use App\Entity\Award;
 use App\Entity\Citizen;
 use App\Entity\Emotes;
 use App\Entity\ForumUsagePermissions;
+use App\Entity\ItemPrototype;
 use App\Entity\Town;
 use App\Entity\User;
 use App\Enum\Configuration\MyHordesSetting;
@@ -777,14 +778,22 @@ class HTMLService {
         if ($this->emote_cache !== null) return $this->emote_cache;
 
         $this->emote_cache = [];
-        $repo = $this->entity_manager->getRepository(Emotes::class);
-        foreach($repo->findAll() as $value){
+
+        foreach($this->entity_manager->getRepository(Emotes::class)->findAll() as $value){
             /** @var $value Emotes */
             $path = $value->getPath();
             if($value->getI18n())
                 $path = str_replace("{lang}", ($user !== null ? (is_string( $user ) ? $user : ($user->getLanguage() ?? 'de')) : "de"), $path);
             $this->emote_cache[$value->getTag()] = $url_only ? $path : "<img alt='{$value->getTag()}' src='{$this->asset->getUrl( $path )}'/>";
         }
+
+        foreach($this->entity_manager->getRepository(ItemPrototype::class)->findBy(['emote' => true]) as $value){
+            /** @var $value ItemPrototype */
+            $tag = ":item_{$value->getIcon()}:";
+            $path = "build/images/item/item_{$value->getIcon()}.gif";
+            $this->emote_cache[$tag] = $url_only ? $path : "<img title='{$this->translator->trans($value->getLabel(), [], 'items')}' alt='{$tag}' src='{$this->asset->getUrl( $path )}'/>";
+        }
+
         return $this->emote_cache;
     }
 
