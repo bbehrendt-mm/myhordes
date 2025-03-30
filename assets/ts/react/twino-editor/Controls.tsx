@@ -35,10 +35,10 @@ type StandaloneNodeDefinition = BaseNodeDefinition & {
     multiline?: boolean
 }
 
-type OverlayTypes = 'emotes'|'ressources'|'games'|'rp';
+type OverlayTypes = 'emotes'|"actions"|'ressources'|'games'|'rp';
 
 
-export const TwinoEditorControls = ({emotes}: {emotes: null|Array<Emote>}) => {
+export const TwinoEditorControls = ({emotes, resources}: {emotes: null|Array<Emote>, resources: null|Array<Emote>}) => {
 
     const globals = useContext(Globals);
 
@@ -116,18 +116,20 @@ export const TwinoEditorControls = ({emotes}: {emotes: null|Array<Emote>}) => {
             </div>
             {overlay_mode && <div className="forum-button-bar-section">
                 { globals.allowControl('emote') && sectionButton('emotes', globals.strings.controls.emotes_img) }
+                { globals.allowControl('emote') && sectionButton('actions', globals.strings.controls.default_img) }
                 { globals.allowControl('ressource') && sectionButton('ressources', globals.strings.controls.ressources_img) }
                 { globals.allowControl('game') && sectionButton('games', globals.strings.controls.games_img) }
                 { globals.allowControl('rp') && sectionButton('rp', globals.strings.controls.rp_img) }
             </div>}
         </div>
         {overlay_mode &&
-            <TwinoEditorControlsTabListOverlay show={showOverlay} current={current} mounted={mounted} emotes={emotes}/>}
+            <TwinoEditorControlsTabListOverlay show={showOverlay} current={current} mounted={mounted} emotes={emotes} ressources={resources}/>}
     </>
 }
 
-export const TwinoEditorControlsTabList = ({emotes, snippets}: {
+export const TwinoEditorControlsTabList = ({emotes, snippets, resources}: {
     emotes: null | Array<Emote>,
+    resources: null | Array<Emote>,
     snippets: null | Array<Snippet>
 }) => {
     const globals = useContext(Globals);
@@ -135,8 +137,9 @@ export const TwinoEditorControlsTabList = ({emotes, snippets}: {
     const langList = snippets?.map(v => v.lang) ?? [];
 
     return <TabbedSection mountOnlyActive={true} keepInactiveMounted={true} className="no-bottom-margin">
-        <Tab icon={globals.strings.controls.emotes_img} id="emotes" if={ globals.allowControl('emote') }><EmoteTabSection emotes={emotes}/></Tab>
-        <Tab icon={globals.strings.controls.ressources_img} id="ressources" if={ globals.allowControl('ressource') }><RessourceTabSection/></Tab>
+        <Tab icon={globals.strings.controls.emotes_img} id="emotes" if={ globals.allowControl('emote') }><EmoteTabSection emotes={emotes?.filter( e => e.groups.includes('emotes') )}/></Tab>
+        <Tab icon={globals.strings.controls.default_img} id="actions" if={ globals.allowControl('emote') }><EmoteTabSection emotes={emotes?.filter( e => e.groups.includes('default') )}/></Tab>
+        <Tab icon={globals.strings.controls.ressources_img} id="ressources" if={ globals.allowControl('ressource') }><EmoteTabSection emotes={resources} /></Tab>
         <Tab icon={ globals.strings.controls.games_img } id="games" if={ globals.allowControl('game') }><GameTabSection/></Tab>
         <Tab icon={ globals.strings.controls.rp_img } id="rp" if={ globals.allowControl('rp') }><RPTabSection/></Tab>
         <TabGroup group="mod" id="mod" icon={ globals.strings.controls.mod_img } if={ globals.allowControl('snippet') && langList.length > 0 }>
@@ -148,10 +151,10 @@ export const TwinoEditorControlsTabList = ({emotes, snippets}: {
     </TabbedSection>
 }
 
-const TwinoEditorControlsTabListOverlay = ({emotes,show,current,mounted}: {emotes: null|Array<Emote>, show: boolean, current: OverlayTypes|null, mounted: OverlayTypes[]}) => {
+const TwinoEditorControlsTabListOverlay = ({emotes,ressources,show,current,mounted}: {emotes: null|Array<Emote>, ressources: null|Array<Emote>, show: boolean, current: OverlayTypes|null, mounted: OverlayTypes[]}) => {
     return <div className={`overlay-controls layered ${show ? 'active' : 'inactive'}`}>
         { mounted.includes('emotes') && <div className={current === 'emotes' ? '' : 'hidden'}><EmoteTabSection emotes={emotes}/></div> }
-        { mounted.includes('ressources') && <div className={current === 'ressources' ? '' : 'hidden'}><RessourceTabSection/></div> }
+        { mounted.includes('ressources') && <div className={current === 'ressources' ? '' : 'hidden'}><EmoteTabSection emotes={ressources}/></div> }
         { mounted.includes('games') && <div className={current === 'games' ? '' : 'hidden'}><GameTabSection/></div> }
         { mounted.includes('rp') && <div className={current === 'rp' ? '' : 'hidden'}><RPTabSection/></div> }
     </div>
@@ -689,8 +692,8 @@ const ControlButtonInsertWithAttribute = ({
 
 const EmoteTabSection = ({emotes}: { emotes: null | Array<Emote> }) => {
     return <div className="lightbox">
-        {emotes === null && <div className="loading"/>}
-        {emotes !== null && <div className="forum-button-grid">
+        {(emotes ?? null) === null && <div className="loading"/>}
+        {(emotes ?? null) !== null && <div className="forum-button-grid">
             {emotes.filter(a => a.orderIndex >= 0).sort((a, b) => a.orderIndex - b.orderIndex).map(emote => <React.Fragment key={emote.tag}>
                 <ControlButtonNodeInsert node={emote.tag} img={emote.url} curley={null}/>
             </React.Fragment>)}
@@ -711,25 +714,6 @@ const GameTabSection = () => {
         {games === null && <div className="loading"/>}
         {games !== null && <div className="forum-button-grid">
             {games.sort((a, b) => a.orderIndex - b.orderIndex).map(emote => <React.Fragment key={emote.tag}>
-                <ControlButtonNodeInsert node={emote.tag} img={emote.url} curley={null}/>
-            </React.Fragment>)}
-        </div>}
-    </div>
-}
-
-const RessourceTabSection = () => {
-    const [ressources, setRessources] = useState<Array<Emote>>(null);
-
-    const globals = useContext(Globals);
-
-    useEffect(() => {
-        globals.api.ressources(globals.uid,globals.context).then(r => setRessources(Object.values(r.result)));
-    }, []);
-
-    return <div className="lightbox">
-        {ressources === null && <div className="loading"/>}
-        {ressources !== null && <div className="forum-button-grid">
-            {ressources.sort((a, b) => a.orderIndex - b.orderIndex).map(emote => <React.Fragment key={emote.tag}>
                 <ControlButtonNodeInsert node={emote.tag} img={emote.url} curley={null}/>
             </React.Fragment>)}
         </div>}

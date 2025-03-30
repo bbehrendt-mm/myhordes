@@ -20,7 +20,7 @@ class ItemDataService implements FixtureProcessorInterface {
         $container->add()->label('Sprengstoff')->icon('explo')->category('Rsc')->deco(0)->heavy(false)->watchpoint(0)->commit();
         $container->add()->label('Klebeband')->icon('rustine')->category('Rsc')->deco(0)->heavy(false)->watchpoint(0)->commit();
         $container->add()->label('Teleskop')->icon('scope')->category('Rsc')->deco(0)->heavy(false)->watchpoint(0)->commit();
-        $container->add()->label('Kupferrohr')->icon('tube')->category('Rsc')->deco(0)->heavy(false)->watchpoint(0)->commit();
+        $container->add()->label('Kupferrohr')->icon('tube')->category('Rsc')->deco(0)->heavy(false)->watchpoint(0)->isEmote(true)->commit();
         $container->add()->label('Elektronisches Bauteil')->icon('electro')->category('Rsc')->deco(0)->heavy(false)->watchpoint(0)->commit();
         $container->add()->label('Zünder')->icon('deto')->category('Rsc')->deco(0)->heavy(false)->watchpoint(0)->commit();
         $container->add()->label('Defektes Elektrogerät')->icon('electro_box')->category('Rsc')->deco(0)->heavy(false)->watchpoint(0)->commit();
@@ -29,14 +29,14 @@ class ItemDataService implements FixtureProcessorInterface {
         $container->add()->label('Trockene Kräuter')->icon('ryebag')->category('Rsc')->deco(0)->heavy(false)->watchpoint(0)->commit();
         $container->add()->label('Ohrstöpsel')->icon('bquies')->category('Rsc')->deco(0)->heavy(false)->watchpoint(0)->commit();
         $container->add()->label('Kaputter Stock')->icon('staff2')->category('Rsc')->deco(0)->heavy(false)->watchpoint(0)->commit();
-        $container->add()->label('Handvoll Schrauben und Muttern')->icon('meca_parts')->category('Rsc')->deco(0)->heavy(false)->watchpoint(0)->commit();
-        $container->add()->label('Batterie')->icon('pile')->category('Rsc')->deco(0)->heavy(false)->watchpoint(0)->commit();
-        $container->add()->label('Krummes Holzbrett')->icon('wood2')->category('Rsc')->deco(0)->heavy(false)->watchpoint(0)->commit();
-        $container->add()->label('Alteisen')->icon('metal')->category('Rsc')->deco(0)->heavy(false)->watchpoint(0)->commit();
-        $container->add()->label('Zusammengeschusterter Holzbalken')->icon('wood_beam')->category('Rsc')->deco(0)->heavy(true)->watchpoint(0)->commit();
-        $container->add()->label('Metallstruktur')->icon('metal_beam')->category('Rsc')->deco(0)->heavy(true)->watchpoint(0)->commit();
-        $container->add()->label('Metalltrümmer')->icon('metal_bad')->category('Rsc')->deco(0)->heavy(false)->watchpoint(0)->commit();
-        $container->add()->label('Verrotteter Baumstumpf')->icon('wood_bad')->category('Rsc')->deco(0)->heavy(false)->watchpoint(0)->commit();
+        $container->add()->label('Handvoll Schrauben und Muttern')->icon('meca_parts')->category('Rsc')->deco(0)->heavy(false)->isEmote(true)->watchpoint(0)->commit();
+        $container->add()->label('Batterie')->icon('pile')->category('Rsc')->deco(0)->heavy(false)->watchpoint(0)->isEmote(true)->commit();
+        $container->add()->label('Krummes Holzbrett')->icon('wood2')->category('Rsc')->deco(0)->heavy(false)->watchpoint(0)->isEmote(true)->commit();
+        $container->add()->label('Alteisen')->icon('metal')->category('Rsc')->deco(0)->heavy(false)->watchpoint(0)->isEmote(true)->commit();
+        $container->add()->label('Zusammengeschusterter Holzbalken')->icon('wood_beam')->category('Rsc')->deco(0)->heavy(true)->isEmote(true)->watchpoint(0)->commit();
+        $container->add()->label('Metallstruktur')->icon('metal_beam')->category('Rsc')->deco(0)->heavy(true)->watchpoint(0)->isEmote(true)->commit();
+        $container->add()->label('Metalltrümmer')->icon('metal_bad')->category('Rsc')->deco(0)->heavy(false)->watchpoint(0)->isEmote(true)->commit();
+        $container->add()->label('Verrotteter Baumstumpf')->icon('wood_bad')->category('Rsc')->deco(0)->heavy(false)->watchpoint(0)->isEmote(true)->commit();
         $container->add()->label('Gut erhaltener Holzscheit')->icon('wood_log')->category('Furniture')->deco(2)->heavy(true)->watchpoint(0)->commit();
         $container->add()->label('Minibar')->icon('machine_3')->category('Furniture')->deco(2)->heavy(true)->watchpoint(15)->commit();
         $container->add()->label('MagLite Kinderlampe (aus)')->icon('maglite_off')->category('Furniture')->deco(5)->heavy(false)->watchpoint(0)->commit();
@@ -53,7 +53,7 @@ class ItemDataService implements FixtureProcessorInterface {
 		$container->add()->label('Kette + Vorhängeschloss')->icon('lock')->category('Furniture')->deco(0)->heavy(false)->watchpoint(0)->deco_text('Verhindert Diebstähle')->commit();
 		$container->add()->label('Fußabstreifer')->icon('door_carpet')->category('Furniture')->deco(5)->heavy(false)->watchpoint(0)->commit();
 		$container->add()->label('Antiker Videoprojektor')->icon('cinema')->category('Weapon')->deco(0)->heavy(true)->watchpoint(10)->commit();
-		$container->add()->label('Nachttischlampe (an)')->icon('lamp_on')->category('Furniture')->deco(3)->heavy(false)->watchpoint(5)->watchimpact(-1)->commit();
+		$container->add()->label('Nachttischlampe (an)')->icon('lamp_on')->category('Furniture')->deco(3)->heavy(false)->watchpoint(5)->watchimpact(-1)->isEmote(true)->commit();
         $container->add()->label('Mini Hi-Fi Anlage (an)')->icon('music')->category('Furniture')->deco(10)->heavy(true)->watchpoint(-30)->watchimpact(-2)->commit();
         $container->add()->label('Ektorp-Gluten Stuhl')->icon('chair_basic')->category('Furniture')->deco(2)->heavy(true)->watchpoint(10)->commit();
 		$container->add()->label('Revolver (entladen)')->icon('gun')->category('Furniture')->deco(5)->heavy(false)->watchpoint(-20)->commit();
@@ -78,7 +78,7 @@ class ItemDataService implements FixtureProcessorInterface {
         $container->add()->label('Großer knuddeliger Kater')->icon('pet_cat')->category('Furniture')->deco(5)->heavy(false)->watchpoint(12)->fragile(true)->deco_text('Macht Miau')->commit();         // -- Out
         $container->add()->label('Kaffeekocher')->icon('coffee_machine')->category('Furniture')->deco(5)->heavy(true)->watchpoint(0)->commit();
 		$container->add()->label('PC-Gehäuse')->icon('pc')->category('Furniture')->deco(3)->heavy(true)->watchpoint(15)->commit();
-		$container->add()->label('Selbstgebaute Gitarre')->icon('guitar')->category('Furniture')->deco(6)->heavy(false)->watchpoint(10)->commit();
+		$container->add()->label('Selbstgebaute Gitarre')->icon('guitar')->category('Furniture')->deco(6)->heavy(false)->watchpoint(10)->isEmote(true)->commit();
 		$container->add()->label('Matratze')->icon('bed')->category('Armor')->deco(3)->heavy(true)->watchpoint(20)->deco_text('Verbessert die Verteidigung')->commit();
         $container->add()->label('Bissiger Hund')->icon('pet_dog')->category('Armor')->deco(0)->heavy(false)->watchpoint(25)->fragile(true)->deco_text('Verbessert die Verteidigung und verhindert Diebstähle')->commit();         // -- Out
         $container->add()->label('Blechplatte')->icon('plate')->category('Armor')->deco(0)->heavy(true)->watchpoint(0)->deco_text('Verbessert die Verteidigung')->commit();
@@ -90,7 +90,7 @@ class ItemDataService implements FixtureProcessorInterface {
 		$container->add()->label('Autotür')->icon('car_door')->category('Armor')->deco(0)->heavy(true)->watchpoint(25)->watchimpact(3)->deco_text('Verbessert die Verteidigung')->commit();
 		$container->add()->label('Fackel')->icon('torch')->category('Armor')->deco(0)->heavy(false)->watchpoint(15)->deco_text('Verbessert die Verteidigung')->isEmote(true)->commit();
 		$container->add()->label('Räudiger Dackel')->icon('tekel')->category('Armor')->deco(0)->heavy(false)->watchpoint(18)->deco_text('Verbessert die Verteidigung und verhindert Diebstähle')->commit();
-		$container->add()->label('Aqua-Splash (leer)')->icon('watergun_opt_empty')->category('Weapon')->deco(0)->heavy(false)->watchpoint(0)->commit();
+		$container->add()->label('Aqua-Splash (leer)')->icon('watergun_opt_empty')->category('Weapon')->deco(0)->heavy(false)->watchpoint(0)->isEmote(true)->commit();
 		$container->add()->label('Kanisterpumpe (leer)')->icon('jerrygun_off')->category('Weapon')->deco(0)->heavy(false)->watchpoint(0)->commit();
 		$container->add()->label('Plastiktüte')->icon('grenade_empty')->category('Weapon')->deco(0)->heavy(false)->watchpoint(0)->commit();
 		$container->add()->label('Plastiktüte mit Sprengstoff')->icon('bgrenade_empty')->category('Weapon')->deco(0)->heavy(false)->watchpoint(0)->commit();
@@ -108,7 +108,7 @@ class ItemDataService implements FixtureProcessorInterface {
 		$container->add()->label('Starker Laserpointer (3 Schuss)')->icon('lpoint3')->category('Weapon')->deco(0)->heavy(false)->watchpoint(15)->commit();
 		$container->add()->label('Starker Laserpointer (2 Schuss)')->icon('lpoint2')->category('Weapon')->deco(0)->heavy(false)->watchpoint(10)->commit();
 		$container->add()->label('Starker Laserpointer (1 Schuss)')->icon('lpoint1')->category('Weapon')->deco(0)->heavy(false)->watchpoint(5)->commit();
-		$container->add()->label('Starker Laserpointer (Leer)')->icon('lpoint')->category('Weapon')->deco(0)->heavy(false)->watchpoint(0)->commit();
+		$container->add()->label('Starker Laserpointer (Leer)')->icon('lpoint')->category('Weapon')->deco(0)->heavy(false)->watchpoint(0)->isEmote(true)->commit();
 		$container->add()->label('Taser')->icon('taser')->category('Weapon')->deco(0)->heavy(false)->watchpoint(5)->watchimpact(1)->commit();
 		$container->add()->label('Handmixer (geladen)')->icon('mixergun')->category('Weapon')->deco(0)->heavy(false)->watchpoint(18)->commit();
 		$container->add()->label('Kettensäge (geladen)')->icon('chainsaw')->category('Weapon')->deco(0)->heavy(true)->watchpoint(30)->commit();
@@ -117,7 +117,7 @@ class ItemDataService implements FixtureProcessorInterface {
 		$container->add()->label('Schraubenzieher')->icon('screw')->category('Weapon')->deco(0)->heavy(false)->watchpoint(5)->commit();
 		$container->add()->label('Großer trockener Stock')->icon('staff')->category('Weapon')->deco(0)->heavy(false)->watchpoint(5)->commit();
 		$container->add()->label('Jagdmesser')->icon('knife')->category('Weapon')->deco(0)->heavy(false)->watchpoint(10)->commit();
-		$container->add()->label('Machete')->icon('cutcut')->category('Weapon')->deco(0)->heavy(false)->watchpoint(15)->commit();
+		$container->add()->label('Machete')->icon('cutcut')->category('Weapon')->deco(0)->heavy(false)->watchpoint(15)->isEmote(true)->commit();
 		$container->add()->label('Lächerliches Taschenmesser')->icon('small_knife')->category('Weapon')->deco(0)->heavy(false)->watchpoint(5)->commit();
 		$container->add()->label('Schweizer Taschenmesser')->icon('swiss_knife')->category('Weapon')->deco(0)->heavy(false)->watchpoint(5)->commit();
 		$container->add()->label('Teppichmesser')->icon('cutter')->category('Weapon')->deco(0)->heavy(false)->watchpoint(7)->commit();
@@ -127,7 +127,7 @@ class ItemDataService implements FixtureProcessorInterface {
 		$container->add()->label('Aqua-Splash (3 Ladungen)')->icon('watergun_opt_3')->category('Weapon')->deco(0)->heavy(false)->watchpoint(6)->commit();
 		$container->add()->label('Aqua-Splash (2 Ladungen)')->icon('watergun_opt_2')->category('Weapon')->deco(0)->heavy(false)->watchpoint(4)->commit();
 		$container->add()->label('Aqua-Splash (1 Ladung)')->icon('watergun_opt_1')->category('Weapon')->deco(0)->heavy(false)->watchpoint(2)->commit();
-		$container->add()->label('Zerstörer (geladen)')->icon('big_pgun')->category('Weapon')->deco(0)->heavy(false)->watchpoint(11)->commit();
+		$container->add()->label('Zerstörer (geladen)')->icon('big_pgun')->category('Weapon')->deco(0)->heavy(false)->watchpoint(11)->isEmote(true)->commit();
 		$container->add()->label('Kanisterpumpe (einsatzbereit)')->icon('jerrygun')->category('Weapon')->deco(0)->heavy(false)->watchpoint(20)->commit();
 		$container->add()->label('Angeknackster menschlicher Knochen')->icon('bone')->category('Weapon')->deco(0)->heavy(false)->watchpoint(5)->isEmote(true)->commit();
 		$container->add()->label('Wasserpistole (3 Ladungen)')->icon('watergun_3')->category('Weapon')->deco(0)->heavy(false)->watchpoint(6)->commit();
@@ -135,7 +135,7 @@ class ItemDataService implements FixtureProcessorInterface {
 		$container->add()->label('Wasserpistole (1 Ladung)')->icon('watergun_1')->category('Weapon')->deco(0)->heavy(false)->watchpoint(2)->commit();
 		$container->add()->label('Aqua-Splash (5 Ladungen)')->icon('watergun_opt_5')->category('Weapon')->deco(0)->heavy(false)->watchpoint(12)->commit();
 		$container->add()->label('Aqua-Splash (4 Ladungen)')->icon('watergun_opt_4')->category('Weapon')->deco(0)->heavy(false)->watchpoint(9)->commit();
-		$container->add()->label('Batteriewerfer Mark II (geladen)')->icon('pilegun_up')->category('Weapon')->deco(0)->heavy(false)->watchpoint(11)->commit();
+		$container->add()->label('Batteriewerfer Mark II (geladen)')->icon('pilegun_up')->category('Weapon')->deco(0)->heavy(false)->watchpoint(11)->isEmote(true)->commit();
 		$container->add()->label('Verbrauchte Fackel')->icon('torch_off')->category('Weapon')->deco(0)->heavy(false)->watchpoint(5)->commit();
 		$container->add()->label('Mobiltelefon')->icon('iphone')->category('Weapon')->deco(0)->heavy(false)->watchpoint(5)->fragile(true)->commit();
 		$container->add()->label('Explosive Pampelmuse')->icon('boomfruit')->category('Weapon')->deco(0)->heavy(false)->watchpoint(12)->fragile(true)->commit();
@@ -148,7 +148,7 @@ class ItemDataService implements FixtureProcessorInterface {
 		$container->add()->label('Superpraktischer Rucksack')->icon('bagxl')->category('Box')->deco(0)->heavy(false)->watchpoint(0)->sort(2)->commit();
 		$container->add()->label('Gürtel mit Tasche')->icon('pocket_belt')->category('Box')->deco(0)->heavy(false)->watchpoint(0)->sort(1)->commit();
 		$container->add()->label('Metallkiste')->icon('chest')->category('Box')->deco(0)->heavy(true)->watchpoint(8)->commit();
-		$container->add()->label('Großer Metallkoffer')->icon('chest_xl')->category('Box')->deco(0)->heavy(true)->watchpoint(10)->commit();
+		$container->add()->label('Großer Metallkoffer')->icon('chest_xl')->category('Box')->deco(0)->heavy(true)->watchpoint(10)->isEmote(true)->commit();
 		$container->add()->label('Werkzeugkiste')->icon('chest_tools')->category('Box')->deco(0)->heavy(true)->watchpoint(5)->commit();
 		$container->add()->label('Habseligkeiten eines Bürgers')->icon('chest_citizen')->category('Box')->deco(0)->heavy(true)->watchpoint(0)->commit();
 		$container->add()->label('Ein Paket')->icon('book_gen_box')->category('Box')->deco(0)->heavy(false)->watchpoint(0)->commit();
@@ -181,11 +181,11 @@ class ItemDataService implements FixtureProcessorInterface {
 		$container->add()->label('LSD')->icon('lsd')->category('Drug')->deco(0)->heavy(false)->watchpoint(0)->commit();
 		$container->add()->label('Kleine Zen-Fibel')->icon('lilboo')->category('Drug')->deco(0)->heavy(false)->watchpoint(0)->commit();
 		$container->add()->label('Beruhigungsspritze')->icon('xanax')->category('Drug')->deco(0)->heavy(false)->watchpoint(0)->commit();
-		$container->add()->label('Anaboles Steroid')->icon('drug')->category('Drug')->deco(0)->heavy(false)->watchpoint(0)->commit();
-		$container->add()->label('Twinoid 500mg')->icon('drug_hero')->category('Drug')->deco(0)->heavy(false)->watchpoint(0)->commit();
+		$container->add()->label('Anaboles Steroid')->icon('drug')->category('Drug')->deco(0)->heavy(false)->watchpoint(0)->isEmote(true)->commit();
+		$container->add()->label('Twinoid 500mg')->icon('drug_hero')->category('Drug')->deco(0)->heavy(false)->watchpoint(0)->isEmote(true)->commit();
 		$container->add()->label('Hydraton 100mg')->icon('drug_water')->category('Drug')->deco(0)->heavy(false)->watchpoint(0)->commit();
-		$container->add()->label('Etikettenloses Medikament')->icon('drug_random')->category('Drug')->deco(0)->heavy(false)->watchpoint(0)->commit();
-		$container->add()->label('Paracetoid 7g')->icon('disinfect')->category('Drug')->deco(0)->heavy(false)->watchpoint(0)->commit();
+		$container->add()->label('Etikettenloses Medikament')->icon('drug_random')->category('Drug')->deco(0)->heavy(false)->watchpoint(0)->isEmote(true)->commit();
+		$container->add()->label('Paracetoid 7g')->icon('disinfect')->category('Drug')->deco(0)->heavy(false)->watchpoint(0)->isEmote(true)->commit();
 		$container->add()->label('Abgelaufene Betapropin-Tablette 5mg')->icon('beta_drug_bad')->category('Drug')->deco(0)->heavy(false)->watchpoint(0)->commit();
 		$container->add()->label('Betapropin-Tablette 5mg')->icon('beta_drug')->category('Drug')->deco(0)->heavy(false)->watchpoint(0)->commit();
 		$container->add()->label('Ghul-Serum')->icon('vagoul')->category('Drug')->deco(0)->heavy(false)->watchpoint(0)->commit();
@@ -235,16 +235,16 @@ class ItemDataService implements FixtureProcessorInterface {
 		$container->add()->label('Leckeres Steak')->icon('meat')->category('Food')->deco(0)->heavy(false)->watchpoint(4)->commit();
 		$container->add()->label('Gewürzte chinesische Nudeln')->icon('food_noodles_hot')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->commit();
 		$container->add()->label('Darmmelone')->icon('vegetable_tasty')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->commit();
-		$container->add()->label('Leckere Speise')->icon('dish_tasty')->category('Food')->deco(0)->heavy(false)->watchpoint(6)->commit();
+		$container->add()->label('Leckere Speise')->icon('dish_tasty')->category('Food')->deco(0)->heavy(false)->watchpoint(6)->isEmote(true)->commit();
 		$container->add()->label('Eine Handvoll Bonbons')->icon('food_candies')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->commit();
 		$container->add()->label('Geröstete Marshmallows')->icon('chama_tasty')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->commit();
 		$container->add()->label('Sägemehlsteak')->icon('woodsteak')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->commit();
 		$container->add()->label('Ei')->icon('egg')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->commit();
 		$container->add()->label('Apfel')->icon('apple_blue')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->commit(); //New regular apple
-		$container->add()->label('Grüne Bierflasche')->icon('vodka_de')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->fragile(true)->commit();
-		$container->add()->label('Vodka Marinostov')->icon('vodka')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->fragile(true)->commit();
-		$container->add()->label("'Wake The Dead'")->icon('rhum')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->fragile(true)->commit();
-		$container->add()->label('Abgestandenes Bier')->icon('fest')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->fragile(true)->commit();
+		$container->add()->label('Grüne Bierflasche')->icon('vodka_de')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->fragile(true)->isEmote(true)->commit();
+		$container->add()->label('Vodka Marinostov')->icon('vodka')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->fragile(true)->isEmote(true)->commit();
+		$container->add()->label("'Wake The Dead'")->icon('rhum')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->fragile(true)->isEmote(true)->commit();
+		$container->add()->label('Abgestandenes Bier')->icon('fest')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->fragile(true)->isEmote(true)->commit();
 		$container->add()->label('Menschenfleisch')->icon('hmeat')->category('Food')->deco(0)->heavy(false)->watchpoint(15)->commit();
 		$container->add()->label('Knochen mit Fleisch')->icon('bone_meat')->category('Food')->deco(0)->heavy(false)->watchpoint(10)->commit();
 		$container->add()->label('Leiche eines Reisenden')->icon('cadaver')->category('Food')->deco(0)->heavy(true)->watchpoint(0)->commit();
@@ -263,19 +263,19 @@ class ItemDataService implements FixtureProcessorInterface {
 		$container->add()->label('Zementsack')->icon('concrete')->category('Misc')->deco(0)->heavy(true)->watchpoint(0)->commit();
 		$container->add()->label('Unvollständiges Kartenspiel')->icon('cards')->category('Misc')->deco(0)->heavy(false)->watchpoint(-10)->commit();
 		$container->add()->label('Vibrator (entladen)')->icon('vibr_empty')->category('Misc')->deco(0)->heavy(false)->watchpoint(0)->commit();
-		$container->add()->label('Metallsäge')->icon('saw_tool')->category('Misc')->deco(0)->heavy(false)->watchpoint(0)->commit();
+		$container->add()->label('Metallsäge')->icon('saw_tool')->category('Misc')->deco(0)->heavy(false)->watchpoint(0)->isEmote(true)->commit();
 		$container->add()->label('Beschädigte Metallsäge')->icon('saw_tool_part')->category('Misc')->deco(0)->heavy(false)->watchpoint(0)->commit();
 		$container->add()->label('Reparatur Fix')->icon('repair_one')->category('Misc')->deco(0)->heavy(false)->watchpoint(0)->commit();
 		$container->add()->label('Unvollständiger Motor')->icon('engine_part')->category('Misc')->deco(0)->heavy(true)->watchpoint(0)->commit();
 		$container->add()->label('Aufgewelltes Blatt')->icon('rp_scroll')->category('Misc')->deco(0)->heavy(false)->watchpoint(0)->commit();
 		$container->add()->label('Unleserliches Notizbuch')->icon('rp_book2')->category('Misc')->deco(0)->heavy(false)->watchpoint(0)->commit();
 		$container->add()->label('Blätterstapel')->icon('rp_sheets')->category('Misc')->deco(0)->heavy(false)->watchpoint(0)->commit();
-		$container->add()->label('Giftfläschchen')->icon('poison')->category('Misc')->deco(0)->heavy(false)->watchpoint(0)->fragile(true)->commit();
+		$container->add()->label('Giftfläschchen')->icon('poison')->category('Misc')->deco(0)->heavy(false)->watchpoint(0)->fragile(true)->isEmote(true)->commit();
 		$container->add()->label('Ätzmittel')->icon('poison_part')->category('Misc')->deco(0)->heavy(false)->watchpoint(0)->commit();
-		$container->add()->label('Normaler Bauplan (gewöhnlich)')->icon('bplan_c')->category('Misc')->deco(0)->heavy(false)->watchpoint(0)->commit();
-		$container->add()->label('Normaler Bauplan (ungewöhnlich)')->icon('bplan_u')->category('Misc')->deco(0)->heavy(false)->watchpoint(0)->commit();
-		$container->add()->label('Normaler Bauplan (selten)')->icon('bplan_r')->category('Misc')->deco(0)->heavy(false)->watchpoint(0)->commit();
-		$container->add()->label('Normaler Bauplan (sehr selten!)')->icon('bplan_e')->category('Misc')->deco(0)->heavy(false)->watchpoint(0)->commit();
+		$container->add()->label('Normaler Bauplan (gewöhnlich)')->icon('bplan_c')->category('Misc')->deco(0)->heavy(false)->watchpoint(0)->isEmote(true)->commit();
+		$container->add()->label('Normaler Bauplan (ungewöhnlich)')->icon('bplan_u')->category('Misc')->deco(0)->heavy(false)->watchpoint(0)->isEmote(true)->commit();
+		$container->add()->label('Normaler Bauplan (selten)')->icon('bplan_r')->category('Misc')->deco(0)->heavy(false)->watchpoint(0)->isEmote(true)->commit();
+		$container->add()->label('Normaler Bauplan (sehr selten!)')->icon('bplan_e')->category('Misc')->deco(0)->heavy(false)->watchpoint(0)->isEmote(true)->commit();
 		$container->add()->label('Hotel-Bauplan (ungewöhnlich)')->icon('hbplan_u')->category('Misc')->deco(0)->heavy(false)->watchpoint(0)->commit();
 		$container->add()->label('Hotel-Bauplan (selten)')->icon('hbplan_r')->category('Misc')->deco(0)->heavy(false)->watchpoint(0)->commit();
 		$container->add()->label('Hotel-Bauplan (sehr selten!)')->icon('hbplan_e')->category('Misc')->deco(0)->heavy(false)->watchpoint(0)->commit();
@@ -287,8 +287,8 @@ class ItemDataService implements FixtureProcessorInterface {
 		$container->add()->label('Hospital-Bauplan (sehr selten!)')->icon('mbplan_e')->category('Misc')->deco(0)->heavy(false)->watchpoint(0)->commit();
 		$container->add()->label('Verirrte Seele')->icon('soul_blue')->category('Misc')->deco(0)->heavy(false)->watchpoint(0)->unstackable(true)->commit();
 		$container->add()->label('Gequälte Seele')->icon('soul_red')->category('Misc')->deco(0)->heavy(false)->watchpoint(0)->unstackable(true)->commit();
-		$container->add()->label('Starke Seele')->icon('soul_yellow')->category('Misc')->deco(0)->heavy(false)->watchpoint(0)->unstackable(true)->commit();
-		$container->add()->label('Schwache Seele')->icon('soul_blue')->category('Misc')->deco(0)->heavy(false)->watchpoint(0)->unstackable(true)->commit();
+		$container->add()->label('Starke Seele')->icon('soul_yellow')->category('Misc')->deco(0)->heavy(false)->watchpoint(0)->unstackable(true)->isEmote(true)->commit();
+		$container->add()->label('Schwache Seele')->icon('soul_blue')->category('Misc')->deco(0)->heavy(false)->watchpoint(0)->unstackable(true)->isEmote(true)->commit();
 		$container->add()->label('Ein Etikett')->icon('rp_scroll')->category('Misc')->deco(0)->heavy(false)->watchpoint(0)->commit();
 		$container->add()->label('Kassettenradio (ohne Strom)')->icon('radio_off')->category('Misc')->deco(0)->heavy(false)->watchpoint(0)->commit();
 		$container->add()->label('Streichholzschachtel')->icon('lights')->category('Misc')->deco(0)->heavy(false)->watchpoint(0)->commit();
@@ -372,7 +372,7 @@ class ItemDataService implements FixtureProcessorInterface {
 		$container->add()->label('Primitiver Hurlingstock')->icon('hurling_stick')->category('Weapon')->deco(0)->heavy(false)->watchpoint(15)->commit();
 		$container->add()->label('Klebriges Pint')->icon('guiness')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->commit();
 		$container->add()->label('Schwarzer Zervixschleim')->icon('april_drug')->category('Drug')->deco(0)->heavy(false)->watchpoint(0)->commit();
-		$container->add()->label('Toxin')->icon('infect_poison')->category('Misc')->deco(0)->heavy(false)->watchpoint(0)->commit();
+		$container->add()->label('Toxin')->icon('infect_poison')->category('Misc')->deco(0)->heavy(false)->watchpoint(0)->isEmote(true)->commit();
         $container->add()->label('Nudelabdruck vom Magnet-Schlüssel')->icon('noodle_prints')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->commit();
         $container->modify('noodle_prints_#00')->icon('noodle_magnetic_print')->commit();
         $container->add()->label('Nudelabdruck vom Schlagschlüssel')->icon('noodle_prints')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->commit();

@@ -402,7 +402,10 @@ export const TwinoEditorWrapper = ( props: HTMLConfig & { onFieldChanged: FieldC
                                           onClick={() => setExpanded(true)}>{strings.common.expand}</span>
                                 </div>}
                             </div>}
-                            <div className={(expanded || controlDialogOpen) ? '' : 'hidden'}><TwinoEditorControls emotes={emoteRef.current === null ? null : Object.values(emoteRef.current.result)}/></div>
+                            <div className={(expanded || controlDialogOpen) ? '' : 'hidden'}><TwinoEditorControls
+                                emotes={emoteRef.current === null ? null : Object.values(emoteRef.current.result)}
+                                resources={resourceEmoteRef.current === null ? null : Object.values(resourceEmoteRef.current.result)}
+                            /></div>
                         </div>
                         <div className={`${padded ? 'padded' : 'overlay-central'} cell rw-12`}>
                             <TwinoEditorEditor
@@ -413,6 +416,7 @@ export const TwinoEditorWrapper = ( props: HTMLConfig & { onFieldChanged: FieldC
                         {padded && <div className={`padded cell rw-12 ${expanded ? '' : 'hidden'}`}>
                             <TwinoEditorControlsTabList
                                 emotes={emoteRef.current === null ? null : Object.values(emoteRef.current.result)}
+                                resources={resourceEmoteRef.current === null ? null : Object.values(resourceEmoteRef.current.result)}
                                 snippets={emoteRef.current === null ? null : Object.values(emoteRef.current.snippets?.list ?? {})}
                             />
                         </div> }

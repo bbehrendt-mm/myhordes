@@ -47,7 +47,8 @@ class EmoteFixtures extends Fixture {
                 ->setIsActive($entry['isactive'])
                 ->setRequiresUnlock($entry['requiresunlock'])
                 ->setOrderIndex($entry['index'])
-                ->setI18n($entry['i18n'] ?? false);
+                ->setI18n($entry['i18n'] ?? false)
+                ->setGroups($entry['groups'] ?? ['default']);
 
             $manager->persist($entity);
             $progress->advance();
