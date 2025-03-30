@@ -152,7 +152,7 @@ class BuildingPrototypeDataElement extends Element implements LabeledIconElement
             $this->easyAp = $easyAp ?? $this->ap;
             $this->hardResources = $this->easyResources = $this->resources;
             foreach ($resources ?? [] as $k => $v) $this->hardResource($k, $v);
-            foreach ($easyResources ?? [] as $k => $v) $this->hardResource($k, $v);
+            foreach ($easyResources ?? [] as $k => $v) $this->easyResource($k, $v);
             return $this;
         } elseif ($name === 'autoEasyMode' && count($arguments) === 0) {
             $this->easyResources = $this->resources;

@@ -79,7 +79,10 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->icon('item_plate')->label('Zackenmauer')->description('Diese Mauer ist mit einer großen Anzahl an Metallspitzen gespickt, damit die Stadtbewohner beim Angriff um Mitternacht ein paar nette Spieße Zombieschaschlik herstellen können.')
             ->isTemporary(0)->defense(45)
             ->ap(35)->health(35)->resources(["wood2_#00" => 5,"metal_#00" => 2,"concrete_wall_#00" => 1,])
-            ->adjustForHardMode(null, ["wood2_#00" => 20,"metal_#00" => 8,"concrete_wall_#00" => 3,])->autoEasyMode()
+            ->adjustForHardMode(
+                null, ["wood2_#00" => 20,"metal_#00" => 8,"concrete_wall_#00" => 3,],
+                null, ["wood2_#00" => 4,"metal_#00" => 1,"concrete_wall_#00" => 1,],
+            )
             ->blueprintLevel(1)->orderBy(4)->commit($item_plate_2);
 
         $container->add()->parentBuilding($small_wallimprove1)
@@ -151,7 +154,7 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->ap(25)->resources(["water_#00" => 3,"pharma_#00" => 2,])
             ->adjustForHardMode(
                 null, ["water_#00" => 9,"pharma_#00" => 8,],
-                null, ["water_#00" => 1,"pharma_#00" => 1,],
+                null, ["water_#00" => 2,"pharma_#00" => 1,],
             )
             ->blueprintLevel(1)->orderBy(1)->commit();
 
@@ -277,7 +280,7 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->adjustForHardMode(
                 null, ["water_#00" => 30,"tube_#00" => 3,"wood2_#00" => 40,"metal_beam_#00" => 15,"oilcan_#00" => 4,],
                 null, ["water_#00" => 7,"tube_#00" => 1,"wood2_#00" => 8,"metal_beam_#00" => 4,"oilcan_#00" => 1,],
-            )->autoEasyMode()
+            )
             ->blueprintLevel(1)->orderBy(0)->commit();
         $container->add()->parentBuilding($item_firework_tube)
             ->icon('small_grinder')->label('Kreischender Rotor')->description('Es handelt sich um ein einfallsreiches und SEHR effektives System! Zwei schnell kreisende und mit geschliffenen Eisenstangen bestückte Drehscheiben, die von einem Kolbenmechanismus angetrieben werden, zerfetzen alles und jeden, der sich im Toreingang befindet!')
@@ -318,7 +321,7 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->icon('item_tube')->label('Wasserfänger')->description('Wenn es um Wasser geht, zählt jeder Tropfen. Dieses Bauwerk fügt dem Brunnen +2 Rationen Wasser hinzu und kann jeden Tag gebaut werden.')
             ->isTemporary(1)->defense(0)
             ->ap(10)->health(0)->resources(["wood2_#00" => 2,"metal_#00" => 2,])
-            ->adjustForHardMode(null, ["metal_#00" => 8,], null, ["metal_#00" => 1,])
+            ->adjustForHardMode(null, ["wood2_#00" => 0,"metal_#00" => 8,], null, ["wood2_#00" => 0,"metal_#00" => 1,])
             ->blueprintLevel(1)->orderBy(0)->commit();
         $container->add()->parentBuilding($small_waterspray)
             ->icon('small_watercanon')->label('Wasserkanone')->description('Ein hübscher kleiner Wasserstrahl, um die wachsende Zombiemeute beim Stadttor zu sprengen.')
@@ -548,7 +551,7 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->icon('small_dig')->label('Abfallberg')->description('Wenn wirklich gar nichts mehr geht, sammelst du alles ein, was du findest und formst daraus einen großen Abfallhaufen... jetzt heißt es Daumen drücken und hoffen, dass das die Horde irgendwie aufhält... Ach ja, wenn du möchtest, kannst du diesen Abfallberg auch mit Fallen spicken.')
             ->isTemporary(1)->defense(5)
             ->ap(10)->health(0)->resources(["wood2_#00" => 2,"metal_#00" => 2,])
-            ->adjustForHardMode(null, ["wood2_#00" => 8,"metal_#00" => 8,])->autoEasyMode()
+            ->adjustForHardMode(null, ["wood2_#00" => 8,"metal_#00" => 8,], null, ["wood2_#00" => 1,"metal_#00" => 1])
             ->blueprintLevel(0)->orderBy(2)->commit($small_dig_1);
 
         $container->add()->parentBuilding($small_dig_1)
@@ -592,7 +595,10 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->icon('small_bamba')->label('Dollhouse')->description('Feiern bis zum Abwinken ist immer noch die beste Art, all die schrecklichen Dinge der Außenwelt zu vergessen. Glücklicherweise sorgen die Zombies schon dafür, dass die Dinge nicht zu sehr ausschweifen.')
             ->isTemporary(1)->defense(50)
             ->ap(20)->health(0)->resources(["wood2_#00" => 3,"diode_#00" => 1,"radio_on_#00" => 3,"guitar_#00" => 1,])
-            ->adjustForHardMode(null, ["metal_#00" => 20, "wood2_#00" => 12,"diode_#00" => 3,"radio_on_#00" => 12,"guitar_#00" => 3,])->autoEasyMode()
+            ->adjustForHardMode(
+                null, ["metal_#00" => 20, "wood2_#00" => 12,"diode_#00" => 3,"radio_on_#00" => 12,"guitar_#00" => 3,],
+                null, ["metal_#00" => 4, "wood2_#00" => 2,"diode_#00" => 1,"radio_on_#00" => 2,"guitar_#00" => 1,],
+            )
             ->blueprintLevel(1)->orderBy(5)->commit();
 
         $container->add()->parentBuilding($small_round_path)
