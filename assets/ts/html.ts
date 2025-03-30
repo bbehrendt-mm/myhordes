@@ -5,6 +5,7 @@ import HordesTwinoEditorElement from "./modules/twino-editor";
 import {GroupResponse, HordesUserSearchBar} from "./react/user-search/Wrapper";
 import {HordesUserSearchElement} from "./modules/common-modules";
 import {LocalZoneSurroundings, MapCoordinate, MapRoute} from "./react/map/typedef";
+import {html} from "./v2/helpers";
 
 declare var $: Global;
 declare var c: Const;
@@ -615,6 +616,11 @@ export default class HTML {
         element?.querySelectorAll('.collapsor:not([data-processed])+.collapsed').forEach( (collapsed: HTMLElement) => {
             const collapsor = collapsed.previousElementSibling as HTMLElement;
             collapsor.dataset.processed = '1';
+
+            if (collapsor.dataset.lang && collapsor.dataset.lang === html()?.dataset?.language )
+                collapsor.dataset.open = '1';
+            else if (collapsor.dataset.lang && collapsor.dataset.lang !== html()?.dataset?.language )
+                collapsor.dataset.open = '0';
 
             if (collapsor.dataset.open === '1') {
                 collapsed.style.maxHeight = null;
