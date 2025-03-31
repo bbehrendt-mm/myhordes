@@ -3206,3 +3206,11 @@ Tierklinik: Experiment Center
 'Schau dir am besten gleich die {guide_cata} an.': 'Take a look at the {guide_cata} right away.'
 'Bedienungsanleitung des Katapults': 'operating instructions for the catapult'
 'Es enthält alle wesentlichen Informationen, um deiner neugewonnen Verantwortung gerecht werden zu können...': 'It contains all the essential information you need to fulfill your newfound responsibility...'
+'Du hast Erfahrungspunkte erhalten!': 'You have obtained expierience points!'
+'In einem Rausch endloser Großzügigkeit hat {citizen} dir einige seiner Erfahrungspunkte gespendet.': "\n            {ref__gender, select,\n                        female {In a frenzy of endless generosity, {citizen} has donated some of her experience points to you.}\n                        other {In a frenzy of endless generosity, {citizen} has donated some of his experience points to you.}\n                    }\n"
+'Hoffentlich hat {citizen} die Erzählungen seiner vergangenen Heldentaten nur moderat übertrieben...': "\n            {ref__gender, select,\n                        female {Hopefully {citizen} has only moderately exaggerated the tales of her past exploits...}\n                        other {Hopefully {citizen} has only moderately exaggerated the tales of his past exploits...}\n                    }\n"
+'Zweite Lunge (2 AP, 2 EP)': 'Second Wind (2 AP, 2 EP)'
+'Verbesserung Zweite Lunge (2 AP, 4 EP)': 'Improved Second Wind (2 AP, 4 EP)'
+'Verbesserung Zweite Lunge (4 AP, 4 EP)': 'Improved Second Wind (4 AP, 4 EP)'
+'Heldenerfahrung an {user} in "{town}" weitergegeben.': 'Hero experience passed on to {user} in "{town}".'
+'Heldenerfahrung von {user} in "{town}" erhalten.': 'Heroic experience received from {user} in "{town}".'

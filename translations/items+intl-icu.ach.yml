@@ -1141,3 +1141,8 @@ Blutapfel: crwdns211560:0crwdne211560:0
 Würzen: crwdns211652:0crwdne211652:0
 'Wasser finden': 'crwdns211691:0crwdne211691:0'
 'Den Katapultbediener wählen': 'crwdns211768:0crwdne211768:0'
+'Erfahrung teilen': 'crwdns211791:0crwdne211791:0'
+'Du gibst 5 Erfahrungspunkte aus, damit ein anderer Spieler 10 Erfahrungspunkte erhält.': 'crwdns211793:0crwdne211793:0'
+'Möchtest du 5 Erfahrungspunkte ausgeben, damit {targetPlayer} 10 Erfahrungspunkte erhält? Hinweis: Pro Saison kannst du dem gleichen Spieler maximal 3x Erfahrung spenden.': 'crwdns211795:0{targetPlayer}crwdne211795:0'
+'Du hast deine Erfahrung an {citizen} weitergegeben.': 'crwdns211797:0{citizen}crwdne211797:0'
+'<nc-HeroSecondWindBonusAP op="gt" val="0">Verschafft dir {cfg_ctp_props_actions_hero_sw_sp} frische Erkundungspunkte.</nc-HeroSecondWindBonusAP><c-HeroSecondWindBonusAP op="gt" val="0">Verschafft dir {cfg_ctp_props_actions_hero_sw_sp} frische Erkundungspunkte, stellt {cfg_ctp_props_actions_hero_sw_ap} AP wieder her und beseitigt deine Müdigkeit.</c-HeroSecondWindBonusAP>': 'crwdns211799:0{cfg_ctp_props_actions_hero_sw_sp}crwdnd211799:0{cfg_ctp_props_actions_hero_sw_sp}crwdnd211799:0{cfg_ctp_props_actions_hero_sw_ap}crwdne211799:0'
