@@ -688,10 +688,10 @@ Namen-Suche: Recherche de nom
 'Namen können als glob-Muster eingegeben werden. Beispielsweise würde *test* alle Namen verhindern, in denen "test" vorkommt. Für eine Übersicht über glob-Syntax, siehe folgenden Link:': 'Les noms peuvent être saisis sous forme de modèle global. Par exemple, *test* empêcherait tous les noms contenant « test ». Pour un aperçu de la syntaxe glob, consultez le lien suivant :'
 'Gesperrte Namen': 'Noms bloqués'
 'Es existiert bereits ein Changelog für diese Version in der angegebenen Sprache.': 'Il existe déjà un changelog pour cette version dans la langue spécifiée.'
+'Temporär für Neuregistrierungen sperren': 'Bloquer temporairement les nouvelles inscriptions'
+'Alle Posts löschen': 'Supprimer toutes les publications'
 'Ressourcen- und AP-Vorlage, welches für diese Konstruktion benötigt wird.': 'Modèle de ressources et de PA nécessaire à cette construction.'
 Teuer: Coûteux
 Normal: Normale
 Billig: Pas cher
 Billig+: Pas cher+
-'Temporär für Neuregistrierungen sperren': 'Bloquer temporairement les nouvelles inscriptions'
-'Alle Posts löschen': 'Supprimer toutes les publications'

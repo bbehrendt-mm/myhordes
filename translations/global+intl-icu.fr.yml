@@ -44,7 +44,7 @@ Französisch: Français
 Spanisch: Espagnol
 Bearbeiten: Modifier
 Hinweis: Note
-Spiel: Jouer
+Spiel: Jeu
 Statistiken: Statistiques
 '{points} Punkte': '{points} points'
 'Dieser Spieler hat bisher noch keine Preise gewonnen...': 'Ce joueur n''a pas encore gagné de distinctions...'
@@ -641,7 +641,9 @@ Verbunden: Connecté
 Angepinnt: Épinglé
 'Dieses Thema wird nicht länger in der Tab-Leiste angezeigt.': 'Ce sujet n''apparaît plus dans la barre d''onglets.'
 'Dieses Thema wird in der Tab-Leiste im oberen Bereich der Forenansicht angeheftet, damit du schneller darauf zugreifen kannst. Du kannst maximal 6 Foren oder Themen anpinnen.': 'Si cette option est activée, ce sujet sera épinglé dans la liste des onglets en haut de la vue forum afin que vous puissiez y accéder plus rapidement. Vous pouvez épingler un maximum de 6 forums ou sujets.'
-'Spiel  (forum)': Jouer
+'Spiel  (forum)': Jeu
 'Spam  (forum)': Flood
 'Themen filtern': 'Filtrer les sujets'
 Zurücksetzen: Réinitialiser
+'Wähle hier eine Sprache aus, um diese Sektion für Spieler mit dieser Sprache automatisch auszuklappen.': 'Sélectionnez une langue ici pour développer automatiquement cette section pour les joueurs utilisant cette langue.'
+'Keine Sprache': 'Aucune langue'

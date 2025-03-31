@@ -2336,7 +2336,7 @@ Stadt/Stadttor: Ville/Portes
 'Huch! Scheint, als würde dein Mitbürger nicht wollen, dass jemand seine Sachen durchstöbert. Unter deinen Füßen ist etwas explodiert und hat dich gegen die Wand geschleudert. Du wurdest verletzt!': 'Oulàlà, un de vos concitoyens ne veut visiblement pas que l''on fouille dans ses affaires. Un petit gadget explosif vient de se déclencher sous vos pieds et vous voilà projeté contre un mur... blessé !'
 'Tja, das hast du davon bei einem paranoiden Pyromanen einbrechen zu wollen. Deine Einzelteile besprenkeln nun seine vier Wände. Das ist lange nicht so spaßig, wie es klingt: Irgendjemand wird hier putzen müssen.': 'Voilà ce qui arrive quand on veut jouer avec un citoyen paranoïaque amateur de gadgets explosifs. Vous voilà maintenant éparpillé aux quatre coins de sa maison. Pas de petits plaisirs cependant, c''est lui qui va devoir se taper le ménage.'
 '{est_min} - {est_max}': '{est_min} à {est_max}'
-'Obwohl du minutenlang den Stadtmüll durchwühlst, findest du <strong>nichts Nützliches</strong>...': 'Vous cherchez pendant de longues minutes minutes quelque chose d''utile dans les déchets de la ville, <strong>mais vous ne trouvez rien</strong>...'
+'Obwohl du minutenlang den Stadtmüll durchwühlst, findest du <strong>nichts Nützliches</strong>...': 'Vous cherchez pendant de longues minutes quelque chose d’utile dans les déchets de la ville, <strong>mais vous ne trouvez rien</strong>…'
 'Du kannst heute nicht hierher zurückkehren... Dein Körper würde das nicht durchstehen.': 'Vous ne pouvez pas y retourner aujourd''hui... Votre organisme ne pourrait le supporter.'
 'Jemand anders untersucht gerade diesen Ort.': 'Il y a déjà quelqu''un qui visite cet endroit.'
 'Ohne die benötigten Elemente kannst du diesen Zauber nicht aussprechen.': 'Vous ne pouvez faire cette incantation, vous ne disposez pas des éléments nécessaires.'
@@ -3206,3 +3206,11 @@ Tierklinik: Centre d'essai
 'Schau dir am besten gleich die {guide_cata} an.': 'Jetez un œil au {guide_cata} dès maintenant.'
 'Bedienungsanleitung des Katapults': 'mode d''emploi de la catapulte'
 'Es enthält alle wesentlichen Informationen, um deiner neugewonnen Verantwortung gerecht werden zu können...': 'Il contient toutes les informations essentielles dont vous avez besoin pour remplir votre nouvelle responsabilité...'
+'Du hast Erfahrungspunkte erhalten!': 'Vous avez reçu des points d''expérience !'
+'In einem Rausch endloser Großzügigkeit hat {citizen} dir einige seiner Erfahrungspunkte gespendet.': "\n            {ref__gender, select,\n                        female {Dans un élan de générosité sans fin, {citizen} vous a fait don de certains de ses points d'expérience.}\n                        other {Dans un élan de générosité sans fin, {citizen} vous a fait don de certains de ses points d'expérience.}\n                    }\n"
+'Hoffentlich hat {citizen} die Erzählungen seiner vergangenen Heldentaten nur moderat übertrieben...': "\n            {ref__gender, select,\n                        female {Espérons que {citizen} n'a que modérément exagérée les récits de ses exploits passés...}\n                        other {Espérons que {citizen} n'a que modérément exagéré les récits de ses exploits passés...}\n                    }\n"
+'Zweite Lunge (2 AP, 2 EP)': 'Second Souffle (2 PA, 2 PE)'
+'Verbesserung Zweite Lunge (2 AP, 4 EP)': 'Amélioration du Second Souffle (2 PA, 4 PE)'
+'Verbesserung Zweite Lunge (4 AP, 4 EP)': 'Amélioration du Second Souffle (4 PA, 4 PE)'
+'Heldenerfahrung an {user} in "{town}" weitergegeben.': 'Expérience héroïque transmise à {user} dans « {town} ».'
+'Heldenerfahrung von {user} in "{town}" erhalten.': 'Expérience héroïque reçue de {user} dans « {town} ».'

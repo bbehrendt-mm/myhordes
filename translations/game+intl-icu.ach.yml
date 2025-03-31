@@ -3206,3 +3206,11 @@ Tierklinik: crwdns210946:0crwdne210946:0
 'Schau dir am besten gleich die {guide_cata} an.': 'crwdns211762:0{guide_cata}crwdne211762:0'
 'Bedienungsanleitung des Katapults': 'crwdns211764:0crwdne211764:0'
 'Es enthält alle wesentlichen Informationen, um deiner neugewonnen Verantwortung gerecht werden zu können...': 'crwdns211766:0crwdne211766:0'
+'Du hast Erfahrungspunkte erhalten!': 'crwdns211773:0crwdne211773:0'
+'In einem Rausch endloser Großzügigkeit hat {citizen} dir einige seiner Erfahrungspunkte gespendet.': "crwdns211775:0ref__gender={ref__gender}crwdnd211775:0citizen={citizen}crwdnd211775:0citizen={citizen}crwdne211775:0"
+'Hoffentlich hat {citizen} die Erzählungen seiner vergangenen Heldentaten nur moderat übertrieben...': "crwdns211777:0ref__gender={ref__gender}crwdnd211777:0citizen={citizen}crwdnd211777:0citizen={citizen}crwdne211777:0"
+'Zweite Lunge (2 AP, 2 EP)': 'crwdns211779:0crwdne211779:0'
+'Verbesserung Zweite Lunge (2 AP, 4 EP)': 'crwdns211781:0crwdne211781:0'
+'Verbesserung Zweite Lunge (4 AP, 4 EP)': 'crwdns211783:0crwdne211783:0'
+'Heldenerfahrung an {user} in "{town}" weitergegeben.': 'crwdns211785:0{user}crwdnd211785:0{town}crwdne211785:0'
+'Heldenerfahrung von {user} in "{town}" erhalten.': 'crwdns211787:0{user}crwdnd211787:0{town}crwdne211787:0'
