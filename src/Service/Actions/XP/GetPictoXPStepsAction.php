@@ -71,7 +71,7 @@ readonly class GetPictoXPStepsAction
             'r_theft_#00'  =>  $pt_2_15,
             'r_cgarb_#00'  =>  $pt_2_15,
             'r_cwater_#00' =>  $pt_2_15,
-            'r_cooked_#00' =>  $pt_2_15,
+            'r_cburn_#00'  =>  $pt_2_15,
 
             'r_jbasic_#00' =>  $p_job,
             'r_jtamer_#00' =>  $p_job,
