@@ -256,7 +256,7 @@ class ActionDataService implements FixtureProcessorInterface {
                 'open_safe'      => [ 'label' => 'Öffnen', 'at00' => true, 'meta' => [ 'min_1_ap', 'not_tired', 'is_not_wounded_hands' ], 'result' => [ 'minus_1ap', ['group' => [ [['do_nothing'], 95], [ ['consume_item', 'spawn_safe' ], 5 ] ]] ], 'message_key' => 'container_optional' ],
                 'open_asafe'     => [ 'label' => 'Öffnen', 'at00' => true, 'meta' => [ 'min_1_ap', 'not_tired', 'is_not_wounded_hands' ], 'result' => [ 'minus_1ap', ['group' => [ [['do_nothing'], 95], [ ['consume_item', 'spawn_asafe' ], 5 ] ]] ], 'message_key' => 'container_optional' ],
 
-                'open_cellobox'  => [ 'label' => 'Öffnen', 'at00' => true, 'meta' => ['is_not_wounded_hands'], 'result' => [ 'consume_item', 'spawn_cellobox' ], 'message_key' => 'container_open' ],
+                'open_cellobox'  => [ 'label' => 'Öffnen', 'at00' => true, 'meta' => ['is_not_wounded_hands'], 'result' => [ 'consume_item', 'spawn_cellobox', 'spawn_cellobox_extra' ], 'message_key' => 'container_open' ],
 
                 'load_pilegun'   => [ 'label' => 'Laden', 'at00' => true, 'meta' => [ 'have_battery' ], 'result' => [ 'consume_battery', 'morph_pilegun' ], 'message_key' => 'item_load' ],
                 'load_pilegun2'  => [ 'label' => 'Laden', 'at00' => true, 'meta' => [ 'have_battery' ], 'result' => [ 'consume_battery', 'morph_pilegun_up' ], 'message_key' => 'item_load' ],

@@ -412,8 +412,17 @@ class ActionEffectProvider
         )->commit();
         $effects_container->add()->identifier('morph_photo_3')->add((new ItemEffect())->morphSource('photo_3_#00'))->commit();
 
-        $effects_container->add()->identifier('spawn_cellobox')->add((new ItemEffect())
-                                                                         ->addSpawnList(['gun_#00', 'pet_cat_#00', 'money_#00', 'knife_#00'])
+        $effects_container->add()->identifier('spawn_cellobox')->add((new ItemEffect())->spawnAt(ItemDropTarget::DropTargetFloorOnly)
+                                                                        ->addSpawn('cutcut_#00', 25)
+                                                                        ->addSpawn('big_pgun_empty_#00', 25)
+                                                                        ->addSpawn('maglite_off_#00', 25)
+                                                                        ->addSpawn('pet_cat_#00', 25)
+        )->commit();
+        $effects_container->add()->identifier('spawn_cellobox_extra')->add((new ItemEffect())->spawnAt(ItemDropTarget::DropTargetFloorOnly)
+                                                                        ->addSpawn('money_#00', 40)
+                                                                        ->addSpawn('lamp_#00', 30)
+                                                                        ->addSpawn('gun_#00', 20)
+                                                                        ->addSpawn('machine_gun_#00', 10)
         )->commit();
         $effects_container->add()->identifier('spawn_drugkit')->add((new ItemEffect())
                                                                         ->addSpawnList(['water_cleaner_#00', 'drug_water_#00'], 200)
