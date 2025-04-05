@@ -6,6 +6,8 @@ import {Tooltip} from "../tooltip/Wrapper";
 import {Global} from "../../defaults";
 import {TwinoEditorWrapper} from "../twino-editor/Wrapper";
 import {BaseMounter} from "../index";
+import {useSignal} from "../../v2/client-modules/Signal";
+import {ServerInducedSignalProps} from "../../v2/fetch";
 
 declare var $: Global;
 
@@ -102,6 +104,11 @@ const HordesLogWrapper = (props: mountProps) => {
             }
         }
     } );
+
+    useSignal<ServerInducedSignalProps>(
+        'log-changed',
+        () => (!sleeping) ? setUpdateID(updateID + 1) : null
+    , [sleeping, updateID]);
 
     useEffect( () => {
         if (sleeping || !loaded.current) return;

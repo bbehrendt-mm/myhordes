@@ -14,6 +14,7 @@ use App\Entity\ItemCategory;
 use App\Entity\ItemPrototype;
 use App\Entity\RuinExplorerStats;
 use App\Enum\ActionHandler\PointType;
+use App\Enum\ClientSignal;
 use App\Enum\Configuration\TownSetting;
 use App\Enum\Game\TransferItemModality;
 use App\Enum\Game\TransferItemOption;
@@ -25,6 +26,7 @@ use App\Service\ConfMaster;
 use App\Service\ErrorHelper;
 use App\Service\EventFactory;
 use App\Service\EventProxyService;
+use App\Service\Globals\ResponseGlobal;
 use App\Service\InventoryHandler;
 use App\Service\JSONRequestParser;
 use App\Service\TownHandler;
@@ -359,6 +361,7 @@ class InventoryController extends CustomAbstractCoreController
         EntityManagerInterface $em,
         EventFactory $ef, EventDispatcherInterface $ed,
         InvalidateTagsInAllPoolsAction $clearAction,
+        ResponseGlobal $response,
     ): JsonResponse
     {
         $citizen = $this->getUser()->getActiveCitizen();
@@ -459,6 +462,9 @@ class InventoryController extends CustomAbstractCoreController
             $this->addFlash('notice', $this->translator->trans('Deine <strong>Tarnung ist aufgeflogen</strong>!', [], 'game'));
             $reload = true;
         }
+
+        if ($success && !$reload)
+            $response->withSignal(ClientSignal::LogUpdated);
 
         try {
             $em->flush();
