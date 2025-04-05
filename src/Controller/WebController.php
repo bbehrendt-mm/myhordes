@@ -130,6 +130,7 @@ class WebController extends CustomAbstractController
             'ticket' => ($this->tokenizer)($request),
             'mercure_token' => $mercure_token,
             'version' => $version, 'debug' => $is_debug_version, 'env' => $this->kernel->getEnvironment(),
+            'status_page' => $this->conf->getGlobalConf()->get('status_page'),
             'devs' => array_map(function($dev) {
                 $dev[3] = match ($dev[1]) {
                     'code' => T::__('Programmierung', 'global'),
@@ -177,6 +178,7 @@ class WebController extends CustomAbstractController
 
         return $this->render(  'web/error_page.twig', [
             'version' => $version, 'debug' => $is_debug_version, 'env' => $this->kernel->getEnvironment(),
+            'status_page' => $this->conf->getGlobalConf()->get('status_page'),
             'devs' => array_map(function($dev) {
                 $dev[3] = match ($dev[1]) {
                     'code' => T::__('Programmierung', 'global'),
