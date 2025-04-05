@@ -13,6 +13,7 @@ enum MyHordesSetting: string implements Configuration
     case URLs = 'urls';
     case DomainRedirect = 'redirect';
     case MailDomainCap = 'mail.slice_domain';
+    case StatusPageUrl = 'status_page';
     //</editor-fold>
 
     //<editor-fold desc="Nightly Attack Settings">
@@ -145,6 +146,8 @@ enum MyHordesSetting: string implements Configuration
             self::DomainRedirect,
                 => [],
             self::MailDomainCap => 0,
+
+            self::StatusPageUrl => null,
 
             self::NightlyAttackRetries => 3,
             self::NightlyAttackDateModifier => 'tomorrow',
