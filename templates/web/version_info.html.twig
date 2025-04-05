@@ -39,5 +39,10 @@
         </div>
     </div>
 {% endif %}
-<div id="current_webserver">{{ "Auf {hostname}"|trans({'hostname': '<pre>' ~ hostname() ~ '</pre>'}, 'global')|raw }}</div>
+    <div id="tech_stats">
+        <div id="current_webserver">{{ "Auf {hostname}"|trans({'hostname': '<pre>' ~ hostname() ~ '</pre>'}, 'global')|raw }}</div>
+        {% if status_page is defined and status_page is not null %}
+            <div id="current_status_page"><a href="{{ status_page }}" target="_blank">Server Status</a></div>
+        {% endif %}
+    </div>
 {% endapply %}

@@ -139,3 +139,4 @@ parameters:
         2: ~
         3: ~
         4: ~
+    status_page: 'https://status.myhordes.de/status/all'
