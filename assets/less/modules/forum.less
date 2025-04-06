@@ -238,12 +238,12 @@
     &:not(:hover) ul.poll:not(.global-poll) {
       border: 1px solid #efdba800;
       &>li {
-        button.small { display: contents; color: #4d5537 !important; }
-        &.q, &.desc { color:#4d5537 !important; }
+        button.small, strong { display: contents; color: #4d5537 !important; }
+        &.q, &.desc { color: #4d5537 !important; }
         &:not(.plain):not(.q):not(.desc):before { display: contents; }
         &:not(.desc)+li { 
             border-top: none;
-            &.div.right { display: contents; } /*TODO: hide the numbers of vote-bar behind spoiler tag*/
+            &.div.right { display: contents; }
           }
         .vote-bar { background: none; }
       }
