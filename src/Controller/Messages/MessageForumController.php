@@ -225,7 +225,7 @@ class MessageForumController extends MessageController
     #[Route(path: 'jx/forum/{fid<\d+>}/{tid<\d+>}/{page<\d+>}', name: 'forum_thread_view')]
     public function forum_thread(int $fid, int $tid, EntityManagerInterface $em, JSONRequestParser $p, CitizenHandler $ch, Locksmith $locksmith, Request $request, int $page = -1): Response
     {
-        $tags = array_filter( explode(',', $request->get('tags')), fn(string $s) => !empty($s) );
+        $tags = array_filter( explode(',', $request->get('tags', '')), fn(string $s) => !empty($s) );
         return $this->default_forum_renderer($fid,$tid,-1, $page, $em,$p,$ch, $locksmith, $tags ?: null);
     }
 
