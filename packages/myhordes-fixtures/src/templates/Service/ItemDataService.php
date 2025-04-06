@@ -218,7 +218,7 @@ class ItemDataService implements FixtureProcessorInterface {
 		$container->add()->label('Angebissene Hähnchenflügel')->icon('food_chick')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->commit();
 		$container->add()->label("Abgelaufene Pim's Kekse")->icon('food_pims')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->commit();
 		$container->add()->label('Fades Gebäck')->icon('food_tarte')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->commit();
-		$container->add()->label('Verschimmelte Stulle')->icon('food_sandw')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->commit();
+		$container->add()->label('Verschimmelte Stulle')->icon('food_sandw')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->isEmote(true)->commit();
 		$container->add()->label('Chinesische Nudeln')->icon('food_noodles')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->commit();
 		$container->add()->label('Verdächtige Speise')->icon('dish')->category('Food')->deco(0)->heavy(false)->watchpoint(4)->commit();
 		$container->add()->label('Wasserspender (1 Ration)')->icon('water_can_1')->category('Food')->deco(0)->heavy(true)->watchpoint(8)->commit();
