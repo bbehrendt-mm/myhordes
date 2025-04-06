@@ -167,7 +167,7 @@
     & blockquote { margin-left: 10px; margin-right: 0; opacity: 1; font-size: 1em; }
   }
 
-  .spoiler { /*new design based on community script : https://userstyles.world/style/18493/forum-hordien, improvements done specifically on MH */
+  .spoiler { /*new design based on community script : https://userstyles.world/style/18493/forum-hordien, improvements done specifically by MH */
     display:inline !important;
     margin-left: 0px !important;
     padding-left: 60px !important;
@@ -222,7 +222,13 @@
     }
     &:has(img) { background-position: 4px 0px !important; }
 
-    /*&:not(:hover) hr { border-color: @myhordes-smalltext }*/ /*TODO: finds a way to display lines hidden behind spoiler but don't makes it obvious*/
+    &:not(:hover) hr { 
+      border-color: #4d5537 !important; visibility: visible !important;
+      border-width: thick;
+      border-right-style: none; border-left-style: none; border-top-style: none;
+      margin-block-start: auto;
+      margin-block-end: auto;
+    }
   
     &:not(:hover) div:not(.cref) *::selection, pre *::selection, blockquote *::selection {
       color:#4d5537 !important;
