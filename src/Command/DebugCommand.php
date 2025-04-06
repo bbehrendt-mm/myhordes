@@ -578,7 +578,7 @@ class DebugCommand extends LanguageCommand
             $table = new Table( $output );
             $table->setHeaders( ['Precision', 'Min', 'Max', 'Off Min', 'Off Max'] );
 
-            $new_way = $this->townHandler->get_zombie_estimation($town, $day, 0);
+            $new_way = $this->townHandler->get_zombie_estimation($town, $day );
             $estim = round($new_way[0]->getEstimation() * 100);
 
             $table->addRow([
@@ -602,7 +602,7 @@ class DebugCommand extends LanguageCommand
                     return 3;
                 }
 
-                $new_way = $this->townHandler->get_zombie_estimation($town, $day, 0);
+                $new_way = $this->townHandler->get_zombie_estimation($town, $day);
                 $estim = round($new_way[0]->getEstimation() * 100);
 
                 $table->addRow([
@@ -640,7 +640,7 @@ class DebugCommand extends LanguageCommand
                         return 3;
                     }
 
-                    $new_way = $this->townHandler->get_zombie_estimation($town, $day + 1, 0);
+                    $new_way = $this->townHandler->get_zombie_estimation($town, $day + 1);
                     $estim = round($new_way[1]->getEstimation() * 100);
 
                     $table->addRow([

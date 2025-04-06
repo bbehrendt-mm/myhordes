@@ -34,6 +34,7 @@ use App\Enum\Configuration\TownSetting;
 use App\Enum\EventStages\BuildingEffectStage;
 use App\Enum\EventStages\BuildingValueQuery;
 use App\Enum\EventStages\CitizenValueQuery;
+use App\Service\Actions\Game\PrepareZombieAttackEstimationAction;
 use App\Service\Maps\MapMaker;
 use App\Service\Maps\MazeMaker;
 use App\Service\User\UserUnlockableService;
@@ -80,12 +81,14 @@ class NightlyHandler
 
     private UserUnlockableService $unlockableService;
 
+    private PrepareZombieAttackEstimationAction $prepareZombieAttackEstimationAction;
+
     public function __construct(EntityManagerInterface $em, LoggerInterface $log, CitizenHandler $ch, InventoryHandler $ih,
                               RandomGenerator $rg, DeathHandler $dh, TownHandler $th, ZoneHandler $zh, PictoHandler $ph,
                               ItemFactory $if, LogTemplateHandler $lh, ConfMaster $conf, ActionHandler $ah, MazeMaker $maze,
                               CrowService $crow, UserHandler $uh, GameFactory $gf, GazetteService $gs, GameProfilerService $gps,
                               TimeKeeperService $timeKeeper, MapMaker $mapMaker, EventProxyService $events, GameEventService $gameEvents,
-                              UserUnlockableService $unlockableService,
+                              UserUnlockableService $unlockableService, PrepareZombieAttackEstimationAction $prepareZombieAttackEstimationAction,
     )
     {
         $this->entity_manager = $em;
@@ -112,6 +115,7 @@ class NightlyHandler
         $this->events = $events;
 		$this->gameEvents = $gameEvents;
         $this->unlockableService = $unlockableService;
+        $this->prepareZombieAttackEstimationAction = $prepareZombieAttackEstimationAction;
     }
 
     private function check_town(Town $town): bool {
@@ -1831,7 +1835,7 @@ class NightlyHandler
 
         $c = count($this->cleanup);
         $this->log->info("It is now <comment>Day {$town->getDay()}</comment> in <info>{$town->getName()}</info>.");
-        $this->town_handler->calculate_zombie_attacks( $town, 3 );
+        $this->prepareZombieAttackEstimationAction->forTown( $town );
         $this->log->debug( "<info>{$c}</info> entities have been marked for removal." );
         $this->log->info( "<comment>Script complete.</comment>" );
 

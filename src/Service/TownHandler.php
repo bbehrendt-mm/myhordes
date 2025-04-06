@@ -32,6 +32,8 @@ use App\Enum\Configuration\CitizenProperties;
 use App\Enum\Configuration\TownSetting;
 use App\Enum\EventStages\BuildingValueQuery;
 use App\Enum\ZoneActivityMarkerType;
+use App\Service\Actions\Game\EstimateZombieAttackAction;
+use App\Service\Actions\Game\PrepareZombieAttackEstimationAction;
 use App\Structures\EventConf;
 use App\Structures\HomeDefenseSummary;
 use App\Structures\TownDefenseSummary;
@@ -47,14 +49,11 @@ class TownHandler
 {
     private EntityManagerInterface $entity_manager;
     private InventoryHandler $inventory_handler;
-    private ItemFactory $item_factory;
     private LogTemplateHandler $log;
     private TimeKeeperService $timeKeeper;
     private CitizenHandler $citizen_handler;
-    private PictoHandler $picto_handler;
     private RandomGenerator $random;
     private ConfMaster $conf;
-    private CrowService $crowService;
 
     private $protoDefenceItems = null;
     private DoctrineCacheService $doctrineCache;
@@ -62,24 +61,26 @@ class TownHandler
 
     private GameEventService $gameEvents;
 
+    private EstimateZombieAttackAction $estimateZombieAttacks;
+
     public function __construct(
-        EntityManagerInterface $em, InventoryHandler $ih, ItemFactory $if, LogTemplateHandler $lh,
-        TimeKeeperService $tk, CitizenHandler $ch, PictoHandler $ph, ConfMaster $conf, RandomGenerator $rand,
-        CrowService $armbrust, DoctrineCacheService $doctrineCache, EventProxyService $proxy, GameEventService $gs)
+        EntityManagerInterface $em, InventoryHandler $ih, LogTemplateHandler $lh,
+        TimeKeeperService $tk, CitizenHandler $ch, ConfMaster $conf, RandomGenerator $rand,
+        DoctrineCacheService $doctrineCache, EventProxyService $proxy, GameEventService $gs,
+        EstimateZombieAttackAction $est,
+    )
     {
         $this->entity_manager = $em;
         $this->inventory_handler = $ih;
-        $this->item_factory = $if;
         $this->log = $lh;
         $this->timeKeeper = $tk;
         $this->citizen_handler = $ch;
-        $this->picto_handler = $ph;
         $this->conf = $conf;
         $this->random = $rand;
-        $this->crowService = $armbrust;
         $this->doctrineCache = $doctrineCache;
         $this->proxy = $proxy;
         $this->gameEvents = $gs;
+        $this->estimateZombieAttacks = $est;
     }
 
     /**
@@ -442,152 +443,61 @@ class TownHandler
             $ratio *= 2;
         }
 
-        $offsetMin = $est->getOffsetMin();
-        $offsetMax = $est->getOffsetMax();
+        $redsouls = $this->get_red_soul_count($town);
+        $red_soul_penality = $this->proxy->queryTownParameter( $town, BuildingValueQuery::NightlyRedSoulPenalty );
+        $soulFactor = min(1 + ($red_soul_penality * $redsouls), (float)$this->conf->getTownConfiguration($town)->get(TownSetting::OptModifierRedSoulFactor));
 
-        $rand_backup = mt_rand(PHP_INT_MIN, PHP_INT_MAX);
-        mt_srand($est->getSeed() ?? $town->getDay() + $town->getId());
-        $cc_offset = $watchtower_offset ?? $this->conf->getTownConfiguration($town)->get(TownSetting::OptModifierWtOffset);
-        $this->calculate_offsets($offsetMin, $offsetMax, $est->getCitizens()->count() * $ratio + $cc_offset, $this->conf->getTownConfiguration($town)->get(TownSetting::OptModifierEstimSpread) - $this->conf->getTownConfiguration($town)->get(TownSetting::OptModifierEstimInitialShift));
+        $today =
+            ($this->estimateZombieAttacks)(
+                $this->conf->getTownConfiguration($town),
+                $est,
+                citizen_ratio: $ratio,
+                penalty_factor: $soulFactor,
+                fallback_seed: $town->getDay() + $town->getId()
+            );
 
-        $min = round($est->getTargetMin() - ($est->getTargetMin() * $offsetMin / 100));
-        $max = round($est->getTargetMax() + ($est->getTargetMax() * $offsetMax / 100));
+        $reached = $today->getEstimation() >= 1;
 
-		$redsouls = $this->get_red_soul_count($town);
-		$red_soul_penality = $this->proxy->queryTownParameter( $town, BuildingValueQuery::NightlyRedSoulPenalty );
-		$soulFactor = min(1 + ($red_soul_penality * $redsouls), (float)$this->conf->getTownConfiguration($town)->get(TownSetting::OptModifierRedSoulFactor));
-        $min = round($min * $soulFactor);
-        $max = round($max * $soulFactor);
+        $override = $this->gameEvents->triggerWatchtowerModifierHooks( $town, $this->conf->getCurrentEvents($town), $today->getMin(), $today->getMax(), 0, $today->getEstimation() );
+        $today->setMin($override?->min ?? $today->getMin());
+        $today->setMax($override?->max ?? $today->getMax());
+        $today->setEstimation($override?->quality ?? $today->getEstimation());
+        $today->setMessage($override?->message ?? null);
+        $today->setFuture(0);
 
-        $quality = min(($cc_offset + $est->getCitizens()->count()*$ratio) / 24, 1);
-        $override = $this->gameEvents->triggerWatchtowerModifierHooks( $town, $this->conf->getCurrentEvents($town), $min, $max, 0, $quality );
-
-        $estim = new WatchtowerEstimation();
-        $estim->setMin($override?->min ?? $min);
-        $estim->setMax($override?->max ?? $max);
-        $estim->setEstimation($override?->quality ?? $quality);
-        $estim->setFuture(0);
-        $estim->setMessage($override?->message);
-
-        $result = [$estim];
+        $result = [$today];
 
         if (!$this->getBuilding($town, 'item_tagger_#02')) {
             return $result;
         }
 
-        if (($est->getCitizens()->count() * $ratio + $cc_offset) >= 24 && !empty($this->getBuilding($town, 'item_tagger_#02'))) {
-            $estim->setEstimation(1);
-            $calculateUntil = ($est->getCitizens()->count() * $ratio + $cc_offset) - 24;
+        if ($reached && !empty($this->getBuilding($town, 'item_tagger_#02'))) {
             $est = $this->entity_manager->getRepository(ZombieEstimation::class)->findOneByTown($town, $town->getDay() + 1);
 
             /** @var ZombieEstimation $est */
             if (!$est) return  $result;
 
-            $offsetMin = $est->getOffsetMin();
-            $offsetMax = $est->getOffsetMax();
+            $tomorrow =
+                ($this->estimateZombieAttacks)(
+                    $this->conf->getTownConfiguration($town),
+                    $est,
+                    citizen_ratio: $ratio,
+                    subtract_weighted_citizens: 24,
+                    blocks: 25,
+                    penalty_factor: $soulFactor,
+                    fallback_seed: $town->getDay() + $town->getId()
+                );;
 
-            $this->calculate_offsets($offsetMin, $offsetMax, $calculateUntil,  $this->conf->getTownConfiguration($town)->get(TownSetting::OptModifierEstimSpread));
-
-            $min2 = round($est->getTargetMin() - ($est->getTargetMin() * $offsetMin / 100));
-            $max2 = round($est->getTargetMax() + ($est->getTargetMax() * $offsetMax / 100));
-
-            $min2 = round($min2 * $soulFactor);
-            $max2 = round($max2 * $soulFactor);
-
-            $min2 = floor($min2 / 25) * 25;
-            $max2 = ceil($max2 / 25) * 25;
-
-            $quality2 = min($calculateUntil / 24, 1);
-
-            $override2 = $this->gameEvents->triggerWatchtowerModifierHooks( $town, $this->conf->getCurrentEvents($town), $min2, $max2, 1, $quality2 );
-
-            $estim2 = new WatchtowerEstimation();
-            $estim2->setMin($override2?->min ?? $min2);
-            $estim2->setMax($override2?->max ?? $max2);
-            $estim2->setEstimation($override2?->quality ?? $quality2);
-            $estim2->setFuture(1);
-            $estim2->setMessage($override2?->message);
-            $result[] = $estim2;
-        }
-
-        // We've set a pre-defined seed before, which will impact randomness of all mt_rand calls after this function
-        // We're trying to set a new random seed to combat side effects
-        try {
-            mt_srand( random_int(PHP_INT_MIN, PHP_INT_MAX) );
-        } catch (\Exception $e) {
-            mt_srand($rand_backup);
+            $override = $this->gameEvents->triggerWatchtowerModifierHooks( $town, $this->conf->getCurrentEvents($town), $tomorrow->getMin(), $tomorrow->getMax(), 1, $tomorrow->getEstimation() );
+            $tomorrow->setMin($override?->min ?? $tomorrow->getMin());
+            $tomorrow->setMax($override?->max ?? $tomorrow->getMax());
+            $tomorrow->setEstimation($override?->quality ?? $tomorrow->getEstimation());
+            $tomorrow->setMessage($override?->message ?? null);
+            $tomorrow->setFuture(1);
+            $result[] = $tomorrow;
         }
 
         return $result;
-    }
-
-    public function calculate_offsets(&$offsetMin, &$offsetMax, $nbRound, $min_spread = 10){
-        $end = min($nbRound, 24);
-
-        for ($i = 0; $i < $end; $i++) {
-            $spendable = (max(0, $offsetMin - 3) + max(0, $offsetMax - 3)) / (24 - $i);
-            $calc_next = fn() => mt_rand( floor($spendable * 250), floor($spendable * 1000) ) / 1000.0;
-
-            if ($offsetMin + $offsetMax > $min_spread) {
-                $increase_min = $this->random->chance($offsetMin / ($offsetMin + $offsetMax));
-                $alter = $calc_next();
-                if ($this->random->chance(0.25)){
-                    $alterMax = $calc_next();
-                    if($offsetMin > 3)
-                        $offsetMin -= $alter;
-                    if($offsetMax > 3)
-                        $offsetMax -= $alterMax;
-                } else {
-                    if ($increase_min && $offsetMin > 3) $offsetMin -= $alter;
-                    elseif ( $offsetMax > 3 ) $offsetMax -= $alter;
-                }
-            }
-        }
-    }
-
-    public function calculate_zombie_attacks(Town &$town, int $future = 2) {
-        if ($future < 0) return;
-        $d = $town->getDay();
-        for ($current_day = $d; $current_day <= ($d+$future); $current_day++)
-            if (!$this->entity_manager->getRepository(ZombieEstimation::class)->findOneByTown($town,$current_day)) {
-                $const_ratio_base = 0.5;
-                $const_ratio_low = 0.75;
-
-                $max_ratio = match( $this->conf->getTownConfiguration( $town )->get(TownSetting::OptFeatureAttacks) ) {
-                    'hard' => 3.1,
-                    'easy' => $const_ratio_low,
-                    default => 1.1,
-                };
-
-                $ratio_min = ($current_day <= 3 ? $const_ratio_low : $max_ratio);
-                $ratio_max = ($current_day <= 3 ? ($current_day <= 1 ? $const_ratio_base : $const_ratio_low) : $max_ratio);
-
-                $min = round( $ratio_min * pow(max(1,$current_day-1) * 0.75 + 2.5,3) );
-                $max = round( $ratio_max * pow($current_day * 0.75 + 3.5,3) );
-
-                $value = mt_rand($min,$max);
-                if ($value > ($min + 0.5 * ($max-$min))) $value = mt_rand($min,$max);
-
-                $off_min = mt_rand(
-                    $this->conf->getTownConfiguration( $town )->get(TownSetting::OptModifierEstimOffsetMin) - $this->conf->getTownConfiguration( $town )->get(TownSetting::OptModifierEstimInitialShift),
-                    $this->conf->getTownConfiguration( $town )->get(TownSetting::OptModifierEstimOffsetMax) - $this->conf->getTownConfiguration( $town )->get(TownSetting::OptModifierEstimInitialShift)
-                );
-
-                $off_max = $this->conf->getTownConfiguration( $town )->get(TownSetting::OptModifierEstimVariance) - (2*$this->conf->getTownConfiguration( $town )->get(TownSetting::OptModifierEstimInitialShift)) - $off_min;
-
-                $shift_min = mt_rand(0, $this->conf->getTownConfiguration( $town )->get(TownSetting::OptModifierEstimInitialShift) * 100) / 10000;
-                $shift_max = ($this->conf->getTownConfiguration( $town )->get(TownSetting::OptModifierEstimInitialShift) / 100) - $shift_min;
-
-                $town->addZombieEstimation(
-                    (new ZombieEstimation())
-                        ->setDay( $current_day )
-                        ->setZombies( $value )
-                        ->setOffsetMin( $off_min )
-                        ->setOffsetMax( $off_max )
-                        ->setTargetMin( round($value - ($value * $shift_min)) )
-                        ->setTargetMax( round($value + ($value * $shift_max)) )
-                );
-            }
     }
 
     public function get_alive_citizens(Town &$town){
