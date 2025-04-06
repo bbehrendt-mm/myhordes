@@ -590,8 +590,8 @@ Passwort-Login: Iniciar sesión con contraseña
 'Wenn du ein animiertes Bild mit einer Auflösung größer als 200×200 Pixel hochlädst, darf dieses aus nicht mehr als 256 Einzelbilder umfassen.': 'Si subes una imagen animada con una resolución superior a 200×200 píxeles, no debe de tener más de 256 fotogramas.'
 'Push-Benachrichrichtigung über neue private Nachrichten erhalten': 'Reciba notificaciones automáticas para mensajes privados'
 Push-Benachrichtigungen: Notificaciones push
-'<b>{u1}</b> hat die Leitung der Koalition an <b>{u2}</b> abgegeben.': '<b>{u1}</b> pasó el control de la coalición a <b>{u2}</b>.'
-'Diesem Spieler die Leitung der Koalition übertragen?': '¿Pasar el control de tu coalición a este jugador?'
+'<b>{u1}</b> hat die Leitung der Koalition an <b>{u2}</b> abgegeben.': '<b>{u1}</b> pasó el control de la alianza a <b>{u2}</b>.'
+'Diesem Spieler die Leitung der Koalition übertragen?': '¿Pasar el control de tu alianza a este jugador?'
 'Diesen Spieler zum Koalitionsleiter machen.': 'Convierte a este jugador en el líder de la alianza.'
 'Die Ergebnisse dieser Umfrage werden ab {date} angezeigt.': 'Los resultados de esta encuesta se publicarán a partir del {date}.'
 'Du kannst mehrere Antworten (oder auch keine Antwort) auswählen.': 'Puede seleccionar varias respuestas (o ninguna respuesta).'

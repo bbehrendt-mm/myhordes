@@ -474,7 +474,7 @@ Kopfschuss: Tiro en la cabeza
 'Du schätzt, dass deine Überlebenschancen hier mittelmäßig sind. Ist allerdings einen Versuch wert.. obwohl, Unfälle passieren schnell...': 'Crees que tus posibilidades de sobrevivir aquí son reducidas, aunque se puede intentar. Tú sabes, podrías sufrir un accidente...'
 'Du schätzt, dass deine Überlebenschancen hier zufriedenstellend sind - vorausgesetzt du erlebst keine böse Überraschung.': 'Crees que tus posibilidades de sobrevivir aquí son aceptables, esperando que no suceda ningún imprevisto.'
 "Du schätzt, dass deine Überlebenschancen hier korrekt sind. Jetzt heißt's nur noch Daumen drücken!": "Crees que tus posibilidades de sobrevivir aquí son buenas. ¡Cruza los dedos!"
-'Du schätzt, dass deine Überlebenschancen hier gut sind. Du müsstest hier problemlos die Nacht verbringen können.': 'Crees que tus posibilidades de sobrevivir aquí son altas. Podías pasar la noche aquí.'
+'Du schätzt, dass deine Überlebenschancen hier gut sind. Du müsstest hier problemlos die Nacht verbringen können.': 'Crees que tus posibilidades de sobrevivir aquí son altas. Podrías pasar la noche aquí.'
 'Du schätzt, dass deine Überlebenschancen hier optimal sind. Niemand wird dich sehen - selbst wenn man mit dem Finger auf dich zeigt.': 'Crees que tus posibilidades de sobrevivir aquí son óptimas. Nadie te verá, ni señalándote con el dedo'
 Wächt: Centinel.
 Müllhalde: Vert.
@@ -1756,7 +1756,7 @@ Wegweiser: Linterna de luz diurna
 '{citizen} hat {items} in der Müllhalde zerstört (+{def} Verteidigung)': '{citizen} destruyó {items} en el vertedero (+{def} defensa)'
 '{username} hat dich angegriffen!': '¡{username} te atacó!'
 'Als du es dir gerade gemütlich machen wolltest, wurdest du von {username} übel angegangen. Du hast einiges abbekommen, aber auch ordentlich ausgeteilt! Zum Glück hast du dir nichts gebrochen.': 'Justo cuando estabas a punto de ponerte cómodo, fuiste atacado por {username}. Has recibido una paliza, pero también le has dado lo suyo. Por suerte no has roto nada.'
-'{username} hat dich angegriffen und verletzt!': '{username} te atacó y te hirió!'
+'{username} hat dich angegriffen und verletzt!': '¡{username} te atacó y te hirió!'
 'Als du es dir gerade gemütlich machen wolltest, wurdest du von {username} übel angegangen. Du hast einiges abbekommen, aber auch ordentlich ausgeteilt! Leider wurdest du bei dem Angriff verletzt!': 'Justo cuando estabas a punto de ponerte cómodo, fuiste atacado por {username}. Has recibido una paliza, pero también le has dado lo suyo. Desgraciadamente, ¡has resultado herido en el ataque!'
 Verletzt: Herido
 'Wir haben zwei Neuigkeiten für dich. Die Gute: du konntest die {count} Zombie(s) abwehren! Die Schlechte: du wurdest dabei verletzt...': 'Tenemos dos noticias para ti. La buena: ¡pudiste defenderte de los {count} zombies! Lo malo: te hirieron...'
@@ -2942,7 +2942,7 @@ Sandkasten-Scharfschütze_f: Francotiradora aislada
 '{player} hat deine Freundschaftserklärung erwidert.': '{player} también te agregó a su lista de amigos.'
 'Hiermit kannst du den Namen eines zufälligen Bürgers in deinen Post anfügen. Bei Bedarf kannst du die Auswahl auf bestimmte Berufe, Helden oder bereits gestorbene Bürger eingrenzen.': 'Puedes usarlo para agregar el nombre de un habitante aleatorio a tu publicación. Si es necesario, puedes limitar la selección a determinadas profesiones, héroes o habitantes que ya hayan muerto.'
 'Zufälliges Koalitionsmitglied': 'Miembro aleatorio'
-'Hiermit kannst du den Namen eines zufälligen Mitglieds deiner Koalition in deinen Post anfügen.': 'Le permite agregar el nombre de un miembro aleatorio de la coalición a tu mensaje.'
+'Hiermit kannst du den Namen eines zufälligen Mitglieds deiner Koalition in deinen Post anfügen.': 'Te permite agregar el nombre de un miembro aleatorio de tu alianza a tu mensaje.'
 '{player} ist der Stadt "{town}" beigetreten. Dort ist noch Platz für dich, du könntest ihm also folgen...': '{ref__gender, select,female {{player} se ha unido a "{town}". Aún hay sitio disponible para ti ahí, la podrías seguir...} other {{player} se ha unido a "{town}". Aún hay sitio disponible para ti ahí, lo podrías seguir...} }'
 '{player} sind der Stadt "{town}" beigetreten. Dort ist noch Platz für dich, du könntest ihnen also folgen...': '{player} se ha unido al pueblo "{town}". Aún hay sitio disponible para ti ahí, podrías seguirle...'
 'Tief durchatmen!': '¡Tomar una respiración profunda!'
