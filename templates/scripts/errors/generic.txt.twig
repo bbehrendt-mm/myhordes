@@ -36,6 +36,8 @@
     }
     return frags.join('<br/>');
 },
+{{ constant('App\\Service\\ErrorHelper::ErrorCaptchaFail') }}: 'Wrong captcha answer',
+{{ constant('App\\Service\\ErrorHelper::ErrorCaptchaRateLimit') }}: 'You failed too many captchas. Please retry later.',
 {{ constant('App\\Service\\ErrorHelper::ErrorNoMP') }}                     : '{{'Für diese Aktion hast du nicht genug MP.'|trans({},'global')|e('js')}}',
 {{ constant('App\\Service\\ErrorHelper::ErrorActionNotAvailableImpersonator') }}                     : '{{'Das kannst du nicht tun, während du einen Benutzer impersonifizierst.'|trans({},'global')|e('js')}}',
 {{ constant('App\\Service\\ErrorHelper::ErrorActionNotAvailableBanished') }} : '{{'Du kannst diese Aktion nicht ausführen, da du <strong>verbannt</strong> wurdest!'|trans({},'global')|e('js')}}',

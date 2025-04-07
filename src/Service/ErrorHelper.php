@@ -49,4 +49,7 @@ class ErrorHelper
     const ErrorActionNotAvailableBanished = 62;
 
     const ErrorBlockedByUser             = 71;
+	
+    const ErrorCaptchaFail = 81;
+    const ErrorCaptchaRateLimit = 82;
 }

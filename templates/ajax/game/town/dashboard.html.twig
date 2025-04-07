@@ -185,12 +185,12 @@
                                 <textarea>{{ town.wordsOfHeroes }}</textarea>
                             </div>
                             <div class="edit">
-                                <a href="#" id="edit-wordsofheroes">{{'Bearbeiten'|trans({}, 'global')}}</a>
+								<a href="#" id="edit-wordsofheroes">{{'Bearbeiten'|trans({}, 'global')}}</a>
                                 {% if bbe_id > 0 %}
                                     <hordes-content-report data-principal-id="{{ bbe_id }}" data-report="blackboard" data-selector="img" data-title="{{ 'Unangemessenen Inhalt melden'|trans({},'global') }}"><img class="pointer" title="{{ 'Unangemessenen Inhalt melden'|trans({},'global') }}" style="margin-left: 10px;" alt="!" src="{{ asset('build/images/forum/warning.png') }}"></hordes-content-report>
                                 {% endif %}
                             </div>
-                            <div class="cancel hidden"><a href="#" id="saveedit-wordsofheroes">{{ 'Speichern'|trans({},'global') }}</a> - <a href="#" id="canceledit-wordsofheroes">{{'Abbrechen'|trans({}, 'global')}}</a></div>
+                            <div class="cancel hidden"><hordes-captcha data-selector="a"><a href="#" id="saveedit-wordsofheroes">{{ 'Speichern'|trans({},'global') }}</a></hordes-captcha> - <a href="#" id="canceledit-wordsofheroes">{{'Abbrechen'|trans({}, 'global')}}</a></div>
                         {% else %}
                             <div class="edit">
                                 {% if not can_edit_blackboard %}
@@ -291,9 +291,15 @@
         $.html.addEventListenerAll("#saveedit-wordsofheroes", "click", function(event){
             event.preventDefault();
             event.stopPropagation();
+
             var content = document.getElementById("words-of-heroes-editor").childNodes[1].value;
             $.ajax.easySend( '{{ path('town_dashboard_save_woh') }}', {content: content},
-                function () {
+                function (response) {
+					console.log('wordsofheroes response', response);
+					if(response.captcha) {
+						document.getElementById("saveedit-wordsofheroes").dataset.captcha = JSON.stringify(response);
+						return;
+					};
                     $.ajax.load(null, '{{ path('town_dashboard') }}', true);
             } );
         });

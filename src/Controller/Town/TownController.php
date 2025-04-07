@@ -6,6 +6,7 @@ use App\Annotations\GateKeeperProfile;
 use App\Annotations\Semaphore;
 use App\Annotations\Toaster;
 use App\Controller\InventoryAwareController;
+use App\Controller\REST\User\CaptchaController;
 use App\Entity\AccountRestriction;
 use App\Entity\ActionCounter;
 use App\Entity\ActionEventLog;
@@ -77,6 +78,7 @@ use Psr\Container\NotFoundExceptionInterface;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -1549,7 +1551,7 @@ class TownController extends InventoryAwareController
      * @return Response
      */
     #[Route(path: 'api/town/dashboard/wordofheroes', name: 'town_dashboard_save_woh')]
-    public function dashboard_save_wordofheroes_api(JSONRequestParser $parser, RateLimitingFactoryProvider $rateLimiter ): Response {
+    public function dashboard_save_wordofheroes_api(JSONRequestParser $parser, RateLimitingFactoryProvider $rateLimiter, SessionInterface $session): Response {
         if (!$this->getTownConf()->get(TownConf::CONF_FEATURE_WORDS_OF_HEROS, false) || !$this->getActiveCitizen()->getProfession()->getHeroic())
             return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable);
 
@@ -1565,10 +1567,29 @@ class TownController extends InventoryAwareController
         $town = $this->getActiveCitizen()->getTown();
 
         // Rate Limiting
-        if (
-            !$rateLimiter->blackboardEditFixed->create( $this->getActiveCitizen()->getId() )->consume(1)->isAccepted() ||
-            !$rateLimiter->blackboardEditSlide->create( $this->getActiveCitizen()->getId() )->consume(1)->isAccepted() )
+        // if (
+        //     !$rateLimiter->blackboardEditFixed->create( $this->getActiveCitizen()->getId() )->consume(1)->isAccepted() ||
+        //     !$rateLimiter->blackboardEditSlide->create( $this->getActiveCitizen()->getId() )->consume(1)->isAccepted() ) {
+        if (true) {
+
+			$session->set(CaptchaController::SESSION_CAPTCHA_USER, $this->getActiveCitizen()->getUser());
+			$session->set(CaptchaController::SESSION_CAPTCHA_CITIZEN, $this->getActiveCitizen());
+			$session->set(CaptchaController::SESSION_CAPTCHA_RATE_LIMITERS, [
+				[
+					"name" => "blackboardEditFixed",
+					"id" => $this->getActiveCitizen()->getId(),
+				],
+				[
+					"name" => "blackboardEditSlide",
+					"id" => $this->getActiveCitizen()->getId(),
+				]
+			]);
+
+			// todo: check if captcha response
+			return $this->redirectToRoute('rest_user_captcha_hordes');
+
             return AjaxResponse::error( ErrorHelper::ErrorRateLimited);
+		}
 
         // No need to update WoH is there is no change
         if ($town->getWordsOfHeroes() === $new_words_of_heroes) return AjaxResponse::success();
