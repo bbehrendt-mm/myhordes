@@ -36,9 +36,9 @@ class CaptchaController extends CustomAbstractCoreController
 			return AjaxResponse::error( ErrorHelper::ErrorPermissionError );
 		}
 
-		if(!$rateLimiter->captchaAttempts->create($user->getId())->consume(1)->isAccepted()) {
-            return AjaxResponse::error( ErrorHelper::ErrorCaptchaRateLimit);
-		}
+		// if(!$rateLimiter->captchaAttempts->create($user->getId())->consume(1)->isAccepted()) {
+        //     return AjaxResponse::error( ErrorHelper::ErrorCaptchaRateLimit);
+		// }
 
 		return new JsonResponse([
 			'strings' => [
@@ -79,9 +79,9 @@ class CaptchaController extends CustomAbstractCoreController
             return AjaxResponse::error( ErrorHelper::ErrorCaptchaRateLimit);
 		}
 
-		$success = $parser && $parser->get('quizz_answer') && $parser->get('quizz_answer') === $session->get(CaptchaController::SESSION_CAPTCHA_TOKEN);
+		$success = $parser && $parser->get('id') && $parser->get('id') === $session->get(CaptchaController::SESSION_CAPTCHA_TOKEN);
 		if(!$success) {
-			$captchaRateLimiter->consume(1);
+			// $captchaRateLimiter->consume(1);
 			$this->clearCaptcha($session);
 			return AjaxResponse::error( ErrorHelper::ErrorCaptchaFail );
 		}
@@ -118,6 +118,8 @@ class CaptchaController extends CustomAbstractCoreController
 
 		$quizz = [
 			'prompt' => $question->getPrompt(),
+			'promptIcon' => $question->getPromptIcon(),
+			'promptContext' => $question->getPromptContext(),
 			'options' => array_map(fn($answer) => ['value'=> $answer], $question->getOptions()),
 		];
 

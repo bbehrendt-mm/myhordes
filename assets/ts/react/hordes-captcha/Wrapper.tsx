@@ -97,9 +97,10 @@ const HordesCaptchaDialog = (props: {
         return () => props.setCallback(null);
     }, []);
 
-    const confirmDialog = () => {
+    const confirmDialog = (id) => {
         setSending(true);
         api.current.submit({
+			id,
             ...$.html.serializeForm(form.current),
         }).then( r => {
 			// $.html.notice( index.strings.common.success );
@@ -139,21 +140,20 @@ const HordesCaptchaDialog = (props: {
 
     return open && <>
         <dialog ref={dialog}>
-            <form method="dialog" action={props.captcha.captchaData.submit} ref={form} onKeyDown={e => {
-                if (e.key === "enter") confirmDialog();
-            }} onSubmit={() => confirmDialog()}>
+            <form method="dialog" action={props.captcha.captchaData.submit} ref={form}>
             	<div className="modal-title">{index.strings.common.title}</div>
                 <div className="modal-content">
-					<p className="small bold">{index.strings.common.prompt}</p>
-					<p className="small">
-						<span>{ index.strings.quizz.prompt }</span>
-						{ index.strings.quizz.options.map( ({id,value}) => <label className="block" key={`opt_${id}`}><input type="radio" name="quizz_answer" value={id} />&nbsp;{value}</label> ) }
+					<p className="small book">{index.strings.common.prompt}</p>
+					<p className="center flex column medium">
+						<span className="center flex middle">{ index.strings.quizz.prompt }{ index.strings.quizz.promptIcon && <img src={ index.strings.quizz.promptIcon } />}</span>
+						{ index.strings.quizz.promptContext && 
+							<span className="small bold italic">{ index.strings.quizz.promptContext }</span>
+						}
+						{ index.strings.quizz.options.map( ({id,value}) =>
+							<button type="button" key={id} disabled={sending} className="modal-button medium pad center" onClick={() => confirmDialog(id)}>{value}</button>
+						) }
 					</p>
                 </div>
-				<div id="modal-actions">
-					<button type="button" disabled={sending} className="modal-button small inline" onClick={() => cancelDialog()}>{ index.strings.common.abort }</button>
-					<button type="button" disabled={sending} className="modal-button small inline" onClick={() => confirmDialog()}>{ index.strings.common.submit }</button>
-				</div>
             </form>
 
         </dialog>

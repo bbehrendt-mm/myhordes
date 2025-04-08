@@ -3,6 +3,8 @@
 namespace App\Security\Captcha\Question;
 
 use App\Service\GameFactory;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Asset\Packages;
 
 /**
  * A question that can be asked in the Captcha
@@ -14,6 +16,8 @@ abstract class Question {
 	 */
 	public function __construct(
         protected readonly GameFactory $gameFactory,
+		protected readonly EntityManagerInterface $entityManager,
+		protected readonly Packages $packages,
 	) {
 		$this->init();
 	}
@@ -29,6 +33,20 @@ abstract class Question {
 	 * Return the prompt for this question
 	 */
 	abstract function getPrompt(): string;
+
+	/**
+	 * Optionally set an icon to be displayed next to the prompt
+	 */
+	function getPromptIcon(): string {
+		return '';
+	}
+
+	/**
+	 * Optionally set a context to ensure a human doesn't get stuck
+	 */
+	function getPromptContext(): string {
+		return '';
+	}
 
 	/**
 	 * Return the available answers for the prompt. The first one should be the correct answer.
@@ -61,5 +79,21 @@ abstract class Question {
 		} while(in_array($n, $different));
 
 		return $n;
+	}
+
+	/**
+	 * Util function to get a random element from and array, and removes this element from said array
+	 * @param array The array to retrieve and remove a random element from
+	 */
+	protected function shiftRandomFromArray(array &$array) {
+		if (empty($array)) {
+			return null;
+		}
+
+		$i = array_rand($array);
+		$element = $array[$i];
+		unset($array[$i]);
+
+		return $element;
 	}
 }

@@ -22,8 +22,8 @@ abstract class CitizenQuestion extends Question {
 		Citizen $citizen
 	): array {
 		return [
-			$factory->create('TownDayQuestion', $citizen),
-			$factory->create('TownNameQuestion', $citizen),
+			// $factory->create('TownDayQuestion', $citizen),
+			// $factory->create('TownNameQuestion', $citizen),
 		];
 	}
 }

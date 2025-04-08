@@ -8,6 +8,8 @@ export type TranslationStrings = {
 
 	quizz: {
 		prompt: string,
+		promptIcon: string,
+		promptContext: string,
 		options: {
 			id: string,
 			value: string,
