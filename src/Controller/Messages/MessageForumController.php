@@ -201,9 +201,11 @@ class MessageForumController extends MessageController
 
     /**
      * @param int $id
+     * @param Request $request
      * @param EntityManagerInterface $em
      * @param JSONRequestParser $p
      * @param CitizenHandler $ch
+     * @param Locksmith $locksmith
      * @return Response
      */
     #[Route(path: 'jx/forum/{id<\d+>}', name: 'forum_view')]
@@ -216,10 +218,12 @@ class MessageForumController extends MessageController
     /**
      * @param int $fid
      * @param int $tid
-     * @param int $page
      * @param EntityManagerInterface $em
      * @param JSONRequestParser $p
      * @param CitizenHandler $ch
+     * @param Locksmith $locksmith
+     * @param Request $request
+     * @param int $page
      * @return Response
      */
     #[Route(path: 'jx/forum/{fid<\d+>}/{tid<\d+>}/{page<\d+>}', name: 'forum_thread_view')]
