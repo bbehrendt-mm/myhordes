@@ -363,7 +363,7 @@ class AdminTownController extends AdminActionController
         foreach ($town->getZombieEstimations() as $estimation) {
             $day = $estimation->getDay();
             $alive_citizens = $town->getCitizens()->filter( fn(Citizen $c) => $c->getAlive() || $c->getDayOfDeath() >= $day )->count();
-            $maxAttacks[$day] = [ $alive_citizens, $proxy->queryTownParameter( $town, BuildingValueQuery::MaxActiveZombies, [$alive_citizens, $day] ) ];
+            $maxAttacks[$day] = [ $alive_citizens, $proxy->queryTownParameter( $town, BuildingValueQuery::MaxActiveZombies, [$alive_citizens] ) ];
         }
 
 		return $this->render('ajax/admin/towns/explorer_estimations.html.twig', $this->addDefaultTwigArgs(null, array_merge([
