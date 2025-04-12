@@ -152,7 +152,8 @@ class TownAddonsController extends TownController
             $estims[0]->getMin(), // Min
             $estims[0]->getMax(),  // Max
             round($estims[0]->getEstimation()*100), // Progress
-            $estims[0]->getMessage()
+            $estims[0]->getMessage(),
+            $estims[0]->getVisible(),
         ];
         $z1 = [
             $has_zombie_est_tomorrow,
@@ -160,7 +161,8 @@ class TownAddonsController extends TownController
             isset($estims[1]) ? $estims[1]->getMin() : 0,
             isset($estims[1]) ? $estims[1]->getMax() : 0,
             isset($estims[1]) ? round($estims[1]->getEstimation()*100) : 0,
-            isset($estims[1]) ? $estims[1]->getMessage() : null
+            isset($estims[1]) ? $estims[1]->getMessage() : null,
+            isset($estims[1]) ? $estims[1]->getVisible() : false,
         ];
 
         /** @var ZombieEstimation $est0 */
@@ -412,7 +414,8 @@ class TownAddonsController extends TownController
             $has_zombie_est_today, // Can see
             $estims[0]->getMin(), // Min
             $estims[0]->getMax(),  // Max
-            round($estims[0]->getEstimation()*100) // Progress
+            round($estims[0]->getEstimation()*100), // Progress
+            $estims[0]->getVisible() // Visible
         ];
 
         $cap = $proxy->queryTownParameter( $town, BuildingValueQuery::NightWatcherCap );

@@ -214,13 +214,15 @@ class TownController extends InventoryAwareController
             $has_zombie_est_today, // Can see
             $estims[0]->getMin(), // Min
             $estims[0]->getMax(),  // Max
-            round($estims[0]->getEstimation()*100) // Progress
+            round($estims[0]->getEstimation()*100), // Progress
+            $estims[0]->getVisible(),  // Visible
         ];
         $zeds_tomorrow = [
             $has_zombie_est_tomorrow,
             isset($estims[1]) ? $estims[1]->getMin() : 0,
             isset($estims[1]) ? $estims[1]->getMax() : 0,
-            isset($estims[1]) ? round($estims[1]->getEstimation()*100) : 0
+            isset($estims[1]) ? round($estims[1]->getEstimation()*100) : 0,
+            isset($estims[1]) ? $estims[1]->getVisible() : false,  // Visible
         ];
 
         $est = $this->entity_manager->getRepository(ZombieEstimation::class)->findOneByTown($town,$town->getDay());
