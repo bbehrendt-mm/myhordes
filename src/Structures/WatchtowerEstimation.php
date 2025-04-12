@@ -7,6 +7,7 @@ class WatchtowerEstimation {
     private int $max;
     private int $future;
     private float $estimation;
+    private bool $visible;
     private ?string $message = null;
 
     /**
@@ -71,6 +72,22 @@ class WatchtowerEstimation {
     public function setFuture(int $future): void
     {
         $this->future = $future;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getVisible(): bool
+    {
+        return $this->visible;
+    }
+
+    /**
+     * @param bool $visible
+     */
+    public function setVisible(bool $visible): void
+    {
+        $this->visible = $visible;
     }
 
     public function setMessage(?string $message) {

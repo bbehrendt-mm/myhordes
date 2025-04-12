@@ -23,6 +23,7 @@ use App\Enum\Configuration\MyHordesSetting;
 use App\Enum\Configuration\TownSetting;
 use App\Service\Actions\Game\GenerateTownNameAction;
 use App\Service\Actions\Game\InitializeTownBuildingsAction;
+use App\Service\Actions\Game\PrepareZombieAttackEstimationAction;
 use App\Service\Maps\MapMaker;
 use App\Structures\TownConf;
 use App\Structures\TownSetup;
@@ -70,6 +71,7 @@ class GameFactory
         private readonly GameProfilerService $gps,
         private readonly EventProxyService $events,
         private readonly InitializeTownBuildingsAction $initializeTownBuildingsAction,
+        private readonly PrepareZombieAttackEstimationAction $prepareZombieAttackEstimationAction,
         private readonly GenerateTownNameAction $townNameAction,
     ) {}
 
@@ -117,8 +119,7 @@ class GameFactory
             $town->setWordsOfHeroes( $bb_override );
 
         ($this->initializeTownBuildingsAction)($town, $conf, true);
-
-        $this->town_handler->calculate_zombie_attacks( $town, 3 );
+        $this->prepareZombieAttackEstimationAction->forTown( $town );
 
         $this->map_maker->createMap( $town );
 

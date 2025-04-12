@@ -12,6 +12,7 @@ use App\Entity\Zone;
 use App\Enum\ActionCounterType;
 use App\Enum\Configuration\TownSetting;
 use App\Event\Game\Town\Basic\Buildings\BuildingConstructionEvent;
+use App\Service\Actions\Game\PrepareZombieAttackEstimationAction;
 use App\Service\CommandHelper;
 use App\Service\ConfMaster;
 use App\Service\EventFactory;
@@ -54,9 +55,13 @@ class TownInspectorCommand extends Command
     private GameProfilerService $gps;
     private EventProxyService $events;
 
+    private PrepareZombieAttackEstimationAction $prepareZombieAttackEstimationAction;
+
     public function __construct(EntityManagerInterface $em, GameFactory $gf, ZoneHandler $zh, TownHandler $th,
                                 NightlyHandler $nh, Translator $translator, MapMaker $map_maker, MazeMaker $maker,
-                                CommandHelper $ch, ConfMaster $conf, GameProfilerService $gps, EventProxyService $events)
+                                CommandHelper $ch, ConfMaster $conf, GameProfilerService $gps, EventProxyService $events,
+                                PrepareZombieAttackEstimationAction $pzae,
+    )
     {
         $this->entityManager = $em;
         $this->gameFactory = $gf;
@@ -70,6 +75,7 @@ class TownInspectorCommand extends Command
         $this->conf = $conf;
         $this->gps = $gps;
         $this->events = $events;
+        $this->prepareZombieAttackEstimationAction = $pzae;
         parent::__construct();
     }
 
@@ -350,7 +356,7 @@ class TownInspectorCommand extends Command
             }
 
         if ($n = $input->getOption('zombie-estimates')) {
-            $this->townHandler->calculate_zombie_attacks( $town, $n );
+            $this->prepareZombieAttackEstimationAction->forTown( $town, $n );
             $this->entityManager->persist( $town );
             $changes = $n > 0;
         }
