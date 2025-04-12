@@ -21,7 +21,7 @@
 					<div class="padded cell rw-2 rw-sm-4">{{ est.offsetMin }}%</div>
 					<div class="padded cell rw-2 rw-sm-4">{{ est.offsetMax }}%</div>
 					<div class="padded cell rw-2 rw-sm-4">
-                        {{ active[est.day][1] }}
+                        {{ (est.zombies * active[est.day][1])|round }}
                         <div class="tooltip">
                             {{ 'Bei {citizens} Bürgern in der Stadt'|trans({citizens: active[est.day][0]},'game') }}
                         </div>

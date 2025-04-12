@@ -96,28 +96,33 @@ final class BuildingQueryListener implements ServiceSubscriberInterface
             $event->defense = (int)floor( $event->defense * (1.0+$single) );
     }
 
-    private function calculateMaxActiveZombies(Town|int $town, int $day): int {
+    private function calculateMaxActiveZombies(Town $town, ?int $citizens, int $door_state): float {
         $targets = 0;
         $b_level = -1;
-        $g_malus = false;
-        if (is_int($town))
-            $targets = $town;
+        if ($citizens !== null)
+            $targets = $citizens;
         else
             foreach ($town->getCitizens() as $citizen)
                 if ($citizen->getAlive() && !$citizen->getZone()) {
-                    $g_malus = $g_malus || $citizen->hasStatus('tg_guitar');
                     $b_level = max($b_level, $citizen->getHome()->getPrototype()->getLevel() ?? 0);
                     $targets++;
                 }
 
-        if ($b_level < 0) {
-            $b_level = 2;
-            $factor = 1.5;
-        } else $factor = 1.0 + (mt_rand(0,50)/100.0);
+        $level =
+            mt_rand(45, 55) +                                   // Base
+            match(true) {
+                $town->getDoor() && $door_state < 1800 => 10,   // Door opened <30min before attack
+                $town->getDoor() => 25,                         // Door open for longer
+                default => 0                                    // Door closed
+            };
 
-        //return round( $day * max(2.0, $day / 10) ) * max(15, $targets);
-        $targets = max($targets, 10);
-        return round(($targets / 3.0) * $day * ($b_level + $factor) * ($g_malus ? 1.1 : 1.0));
+        $level *= (( max(15, $targets) + ( max(0, $b_level) * 2 ) ) / $town->getPopulation() );
+
+        $level +=
+            ($town->getChaos() ? 10 : 0) +                      // Chaos
+            ($town->getDevastated() ? 10 : 0);                  // Devastated
+
+        return max(0, min( $level / 100.0, 1) );
     }
 
     private function level3PortalEffectActive( BuildingQueryTownParameterEvent $event ): bool {
@@ -189,8 +194,12 @@ final class BuildingQueryListener implements ServiceSubscriberInterface
                 ? 0.02
                 : 0.04,
             BuildingValueQuery::MaxActiveZombies => is_array($event->arg)
-                ? $this->calculateMaxActiveZombies(is_int( $event->arg[0] ?? null ) ? $event->arg[0] : $event->town, is_int( $event->arg[1] ?? null ) ? $event->arg[1] : $event->town->getDay() )
-                : $this->calculateMaxActiveZombies(is_int( $event->arg ) ? $event->arg : $event->town, $event->town->getDay() )
+                ? $this->calculateMaxActiveZombies(
+                    $event->town,
+                    is_int( $event->arg[0] ?? null ) ? $event->arg[0] : null,
+                    is_int( $event->arg[2] ?? null ) ? $event->arg[2] : 86400
+                )
+                : $this->calculateMaxActiveZombies( $event->town, null, is_int( $event->arg ) ? $event->arg : 86400 )
         };
     }
 

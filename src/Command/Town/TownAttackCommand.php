@@ -120,7 +120,7 @@ class TownAttackCommand extends Command
             }
 
             $last_op = 'pre';
-            if ($this->night->advance_day($town, $town_events = $this->conf_master->getCurrentEvents( $town ))) {
+            if ($this->night->advance_day($town, $town_events = $this->conf_master->getCurrentEvents( $town ), $schedule)) {
 
                 foreach ($this->night->get_cleanup_container() as $c) $this->entityManager->remove($c);
                 if (!$dry_run) $town->setLastAttack($schedule)->setLastAttackProcessedAt(new \DateTimeImmutable())->setAttackFails(0);

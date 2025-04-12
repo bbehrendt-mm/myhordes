@@ -137,6 +137,9 @@ class Town
     #[ORM\Column]
     private ?bool $mayor = false;
 
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $door_changed_at = null;
+
     public function __construct()
     {
         $this->citizens = new ArrayCollection();
@@ -363,6 +366,7 @@ class Town
     }
     public function setDoor(bool $door): self
     {
+        if ($door !== $this->door) $this->setDoorChangedAt( new \DateTimeImmutable() );
         $this->door = $door;
 
         return $this;
@@ -962,6 +966,18 @@ class Town
                 $actionCounter->setTown(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDoorChangedAt(): ?\DateTimeImmutable
+    {
+        return $this->door_changed_at;
+    }
+
+    public function setDoorChangedAt(?\DateTimeImmutable $door_changed_at): static
+    {
+        $this->door_changed_at = $door_changed_at;
 
         return $this;
     }

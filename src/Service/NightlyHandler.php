@@ -2,6 +2,7 @@
 namespace App\Service;
 
 use App\Entity\ActionCounter;
+use App\Entity\AttackSchedule;
 use App\Entity\Building;
 use App\Entity\CauseOfDeath;
 use App\Entity\Citizen;
@@ -653,7 +654,7 @@ class NightlyHandler
         $this->entity_manager->persist($gazette);
     }
 
-	private function stage2_attack(Town &$town) {
+	private function stage2_attack(Town &$town, ?AttackSchedule $schedule) {
         $this->log->info('<info>Marching the horde</info> ...');
         $cod = $this->entity_manager->getRepository(CauseOfDeath::class)->findOneBy(['ref' => CauseOfDeath::NightlyAttack]);
         $status_terror  = $this->entity_manager->getRepository(CitizenStatus::class)->findOneBy(['name' => 'terror']);
@@ -682,6 +683,10 @@ class NightlyHandler
         $zombies *= $soulFactor;
         $zombies = round($zombies);
         $gazette->setAttack($zombies);
+
+        if ( $schedule?->getTimestamp()?->getTimestamp() !== null && $town->getDoorChangedAt()?->getTimestamp() !== null )
+            $door_state_duration = max(0, $schedule->getTimestamp()->getTimestamp() - $town->getDoorChangedAt()->getTimestamp());
+        else $door_state_duration = null;
 
         $overflow = !$town->getDoor() ? max(0, $zombies - $def) : $zombies;
         $this->log->info("The town has <info>{$def}</info> defense and is attacked by <info>{$zombies}</info> Zombies (<info>{$est->getZombies()}</info> x <info>{$soulFactor}</info>, from <info>{$redsouls}</info> red souls). The door is <info>" . ($town->getDoor() ? 'open' : 'closed') . "</info>!", $def_summary ? $def_summary->toArray() : []);
@@ -990,8 +995,12 @@ class NightlyHandler
             if ($citizen->getAlive() && !$citizen->getZone())
                 $all_targets[$citizen->getId()] = $citizen;
 
-        $max_active = $this->events->queryTownParameter( $town, BuildingValueQuery::MaxActiveZombies );
-		$in_town = min(
+        $active_factor = $this->events->queryTownParameter( $town, BuildingValueQuery::MaxActiveZombies, $door_state_duration );
+        $max_active = round($zombies * $active_factor);
+
+        $this->log->debug("Considering door state <info>" . ($town->getDoor() ? 'open' : 'closed') . "</info> (<info>{$door_state_duration}s</info>), active zombie factor is <info>" . round($active_factor * 100, 2) . "%</info>, capping at <info>{$max_active}</info> Zombies.");
+
+        $in_town = min(
             10 + 2 * floor(max(0, $town->getDay() - 10)/2),
             ceil(count($all_targets) * 1.0)
         );
@@ -1773,7 +1782,7 @@ class NightlyHandler
      * @param EventConf[] $events
      * @return bool
      */
-    public function advance_day(Town $town, array $events): bool {
+    public function advance_day(Town $town, array $events, ?AttackSchedule $schedule = null): bool {
         $this->skip_reanimation = [];
 
         $this->log->info( "Nightly attack request received for town <info>{$town->getId()}</info> (<info>{$town->getName()}</info>)." );
@@ -1808,7 +1817,7 @@ class NightlyHandler
         $this->stage2_day($town);
 
         if (!$town->findGazette( $town->getDay(), true )->getReactorExplosion()) {
-            $this->stage2_attack($town);
+            $this->stage2_attack($town, $schedule);
         }
 
         $this->stage2_post_attack_buildings($town);
