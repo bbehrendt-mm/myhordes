@@ -678,3 +678,5 @@ Verkaufswert: Verkaufswert
 'Ein so erworbener Fähigkeitenpunkt steht dir für insgesamt {num} Tage nach dem Kauf zur Verfügung.': 'Ein so erworbener Fähigkeitenpunkt steht dir für insgesamt {num} Tage nach dem Kauf zur Verfügung.'
 'Du kannst maximal {num} solcher Fähigkeitspunkte zur gleichen Zeit besitzen.': 'Du kannst maximal {num} solcher Fähigkeitspunkte zur gleichen Zeit besitzen.'
 'Fähigkeitenpunkt erwerben...': 'Fähigkeitenpunkt erwerben...'
+'Du kannst keine weiteren Fähigkeitenpunkte erwerben, da du das Limit bereits erreicht hast.': 'Du kannst keine weiteren Fähigkeitenpunkte erwerben, da du das Limit bereits erreicht hast.'
+'Du kannst keine Fähigkeitenpunkte erwerben, während du in einer Stadt spielst.': 'Du kannst keine Fähigkeitenpunkte erwerben, während du in einer Stadt spielst.'

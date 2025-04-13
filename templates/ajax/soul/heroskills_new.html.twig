@@ -175,6 +175,16 @@
                                     {{ 'Ein so erworbener Fähigkeitenpunkt steht dir für insgesamt {num} Tage nach dem Kauf zur Verfügung.'|trans({num: 100}, 'soul') }}
                                     {{ 'Du kannst maximal {num} solcher Fähigkeitspunkte zur gleichen Zeit besitzen.'|trans({num: 2}, 'soul') }}
                                 </div>
+                                {% if not pack_can_reset %}
+                                    <div class="note note-critical">
+                                        {% if pack_reset_limit_reached %}
+                                            <div>{{ 'Du kannst keine weiteren Fähigkeitenpunkte erwerben, da du das Limit bereits erreicht hast.'|trans({}, 'soul') }}</div>
+                                        {% endif %}
+                                        {% if pack_reset_current_town %}
+                                            <div>{{ 'Du kannst keine Fähigkeitenpunkte erwerben, während du in einer Stadt spielst.'|trans({}, 'soul') }}</div>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
                                 <hordes-buy-skill-point
                                         data-proxy="{{ 'Fähigkeitenpunkt erwerben...'|trans({},'soul') }}"
                                         data-enabled="{{ pack_can_reset ? 1 : 0 }}"
