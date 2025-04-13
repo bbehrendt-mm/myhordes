@@ -157,9 +157,7 @@
             });
         {% endif %}
         
-        {% if block('title') is defined %}
-            $.html.setTitleSegmentAddendum( '{{ block('title')|replace({"\n": "", "\r": "", "\t": "", "'": "\\\'", "&amp;":"&"})|raw }}' );
-        {% else %}
+        {% if block('title') is not defined %}
             $.html.setTitleSegmentAddendum( null );
         {% endif %}
 

@@ -1,4 +1,5 @@
 {% extends "ajax/ajax_plain.html.twig" %}
+{% block title %}{{ title }} - {{ 'Seite {page}'|trans({page: current_page}, 'global') }}{% endblock %}
 {% block ajax_base %}
     {% macro icon_master(post) %}
         {% set user = post.owner %}
