@@ -140,7 +140,9 @@ export const HordesBuildingPageWrapper = (props: mountPageProps) => {
 
         { loaded && root_buildings.length > 0 && <>
 
-            { voted_building && <div className="voted-building">
+            { voted_building && <div className="voted-building pointer" onClick={() => {
+                document.querySelector('.buildings .building.voted')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }}>
                 { strings.page.vote.current }<br/>
                 <strong className="name">{ (vaultData ?? {})[voted_building.p]?.name }</strong>
                 <Tooltip additionalClasses="help" html={ strings.page.vote.tooltip }/>
