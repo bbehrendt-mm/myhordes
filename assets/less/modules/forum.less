@@ -181,7 +181,7 @@
       background-color: #4d5537 !important;
       color: #4d5537 !important;
 
-      div, .username, .rpauthor, blockquote, ul, ol, pre {
+      div, .username, .rpauthor, blockquote, ul, ol, pre, hr {
         position: relative;
         &:after {
           position: absolute; top: 0; left: 0; bottom: 0; right: 0; background: #4d5537; content: " ";
@@ -200,6 +200,11 @@
       }
 
       .glory:after { top: -30px; left: -30px; right: -30px; bottom: -15px; }
+      hr {
+        overflow: visible !important;
+        border-color: transparent !important;
+        &:after { top: -7px; bottom: -7px; }
+      }
     }
 
   }
