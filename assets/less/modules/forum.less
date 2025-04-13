@@ -267,7 +267,7 @@
     &:hover .glory { background-color: #301a22 !important; } /*TODO: don't work, glory still has no background-color when hovering spoiler*/
 
     &:not(:hover) .glory {
-      margin: 0; border:1px solid #00000000 !important; box-shadow: 0 0 2px #00000000; border-radius: 0px;
+      margin: 0; padding: 0; border:1px solid #00000000 !important; box-shadow: 0 0 2px #00000000; border-radius: 0px;
       &:before { display: none; } 
     }
   
@@ -276,13 +276,10 @@
       border:1px solid #00000000 !important; box-shadow: 0 0 2px #00000000; border-radius: 0px;
     }
   
-    div:first-child:not(.clear):not(.modAnnounce):not(:has(.modAnnounce)){
+    div:first-child:not(.clear):not(.modAnnounce):not(:has(.modAnnounce)) {
       display:inline !important;
       margin-left:0px !important;
     }
-    &:not(:hover) div.dice-4, &:not(:hover) div.dice-6, &:not(:hover) div.dice-8, &:not(:hover) div.dice-10, &:not(:hover) div.dice-12, &:not(:hover) div.dice-20, &:not(:hover) div.dice-100, &:not(:hover) div.letter-a, &:not(:hover) div.letter-c, &:not(:hover) div.letter-v, &:not(:hover) div.rps, &:not(:hover) div.coin, &:not(:hover) div.card, &:not(:hover) div.coords, &:not(:hover) div.town, &:not(:hover) div.citizen {
-      background: none;
-    } /*TODO: finds a way to display the design once hovered
   }
 
   .sideNote {
@@ -317,7 +314,7 @@
     &:after { content: " :" !important; }
   }
 
-  .rpText { /*new design based on community script : https://userstyles.world/style/18493/forum-hordien, improvements done specifically on MH */
+  .rpText { /*new design based on community script : https://userstyles.world/style/18493/forum-hordien, improvements done specifically by MH */
     clear: left;
     margin: 0px !important; margin-right: 0px !important; padding: 1px 5px 1px 5px !important;
     min-height:20px !important; line-height: 18px;
