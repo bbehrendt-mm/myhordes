@@ -417,7 +417,7 @@ class TownHandler
 
         $count = 0;
         foreach ($watchers as $watcher) {
-            if ($watcher->getCitizen()->getZone() !== null) continue;
+            if ($watcher->getCitizen()->getZone() !== null || !$watcher->getCitizen()->getAlive()) continue;
             $count++;
             $total_def += $this->citizen_handler->getNightWatchDefense($watcher->getCitizen());
             foreach ($watcher->getCitizen()->getInventory()->getItems() as $item)

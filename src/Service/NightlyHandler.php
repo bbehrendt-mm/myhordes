@@ -1630,13 +1630,13 @@ class NightlyHandler
             // Getting vote per role per citizen
             $votes = array();
             foreach ($citizens as $citizen)
-                if($citizen->getAlive() && !in_array( $citizen, $all_winners ) && ($c = $this->entity_manager->getRepository(CitizenVote::class)->count( ['votedCitizen' => $citizen, 'role' => $role] )) > 0)
+                if($citizen->getAlive() && (!$citizen->getBanished() || !$role->isDisallowShunned()) && !in_array( $citizen, $all_winners ) && ($c = $this->entity_manager->getRepository(CitizenVote::class)->count( ['votedCitizen' => $citizen, 'role' => $role] )) > 0)
                     $votes[$citizen->getId()] = $c;  //  ->countCitizenVotesFor($citizen, $role);
 
             if (empty($votes)) {
                 $this->log->debug("No citizen placed votes for the role!");
                 foreach ($citizens as $citizen)
-                    if ($citizen->getAlive()) $votes[$citizen->getId()] = 0;
+                    if ($citizen->getAlive() && (!$citizen->getBanished() || !$role->isDisallowShunned())) $votes[$citizen->getId()] = 0;
             }
 
             $partition = [
@@ -1657,7 +1657,7 @@ class NightlyHandler
 
                 $voted = $this->entity_manager->getRepository(CitizenVote::class)->findOneBy(['autor' => $citizen, 'role' => $role]); //findOneByCitizenAndRole($citizen, $role);
                 /** @var CitizenVote $voted */
-                if ($voted === null || !$voted->getVotedCitizen()->getAlive() || in_array( $voted->getVotedCitizen(), $all_winners )) {
+                if ($voted === null || !$voted->getVotedCitizen()->getAlive() || ($role->isDisallowShunned() && $voted->getVotedCitizen()->getBanished()) || in_array( $voted->getVotedCitizen(), $all_winners )) {
                     $this->log->debug("Citizen {$citizen->getName()} didn't vote, or voted for a dead citizen. We replace the vote.");
                     // He has not voted, or the citizen he voted for is now dead, let's give his vote to someone who has votes
                     $vote_for_id = $this->random->pick(array_keys($votes), 1);

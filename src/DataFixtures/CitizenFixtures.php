@@ -22,6 +22,7 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use MyHordes\Fixtures\DTO\Citizen\RoleDataContainer;
 use MyHordes\Plugins\Fixtures\CitizenComplaint;
 use MyHordes\Plugins\Fixtures\CitizenDeath;
 use MyHordes\Plugins\Fixtures\CitizenHomeLevel;
@@ -357,8 +358,9 @@ class CitizenFixtures extends Fixture implements DependentFixtureInterface
      * @param ConsoleOutputInterface $out
      * @throws Exception
      */
-    protected function insert_roles(ObjectManager $manager, ConsoleOutputInterface $out) {
-        $role_data = $this->role_data->data();
+    protected function insert_roles(ObjectManager $manager, ConsoleOutputInterface $out): void
+    {
+        $role_data = (new RoleDataContainer( $this->role_data->data() ))->all();
         $out->writeln( '<comment>Citizen roles: ' . count($role_data) . ' fixture entries available.</comment>' );
 
         // Set up console
@@ -367,24 +369,14 @@ class CitizenFixtures extends Fixture implements DependentFixtureInterface
 
         // Iterate over all entries
         foreach ($role_data as $entry) {
-            // Get existing entry, or create new one
-            /** @var CitizenRole $entity */
-            $entity = $this->entityManager->getRepository(CitizenRole::class)->findOneBy( ['name' => $entry['name']] );
-            if ($entity === null) $entity = new CitizenRole();
-
-            // Set property
-            $entity
-                ->setName( $entry['name'] )
-                ->setLabel( $entry['label'] )
-                ->setIcon( $entry['icon'] )
-                ->setVotable( $entry['vote'] )
-                ->setHidden( $entry['hidden'] )
-                ->setSecret( $entry['secret'] )
-                ->setMessage( $entry['message'] ?? null)
-                ->setHelpSection($entry['help_section'] ?? null);
+            // Update existing entry, or create new one
+            $entry->toEntity(
+                $entity =
+                    $this->entityManager->getRepository(CitizenRole::class)->findOneBy( ['name' => $entry->name] ) ??
+                    new CitizenRole()
+            );
 
             T::__("Du bist der {rolename} dieser Stadt.", "game");
-
             $manager->persist( $entity );
 
             // Set table entry
