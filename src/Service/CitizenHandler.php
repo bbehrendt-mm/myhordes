@@ -245,8 +245,10 @@ class CitizenHandler
                 $citizen->setBanished(true);
             }
 
-            if ($citizen->hasRole('cata'))
-                $citizen->removeRole($this->entity_manager->getRepository(CitizenRole::class)->findOneBy(['name' => 'cata']));
+            // Remove roles that are disallowed on shunned citizens
+            foreach ($citizen->getRoles() as $role)
+                if ($role->isDisallowShunned())
+                    $citizen->removeRole($role);
 
             // Disable escort on banishment
             foreach ($citizen->getLeadingEscorts() as $escort)

@@ -37,6 +37,9 @@ class CitizenRole implements NamedEntity
     private ?string $message;
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $help_section;
+    #[ORM\Column]
+    private ?bool $disallowShunned = false;
+
     public function __construct()
     {
     }
@@ -127,5 +130,17 @@ class CitizenRole implements NamedEntity
     public static function getTranslationDomain(): ?string
     {
         return 'game';
+    }
+
+    public function isDisallowShunned(): ?bool
+    {
+        return $this->disallowShunned;
+    }
+
+    public function setDisallowShunned(bool $disallowShunned): static
+    {
+        $this->disallowShunned = $disallowShunned;
+
+        return $this;
     }
 }
