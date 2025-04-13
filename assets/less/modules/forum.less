@@ -167,7 +167,7 @@
     & blockquote { margin-left: 10px; margin-right: 0; opacity: 1; font-size: 1em; }
   }
 
-  .spoiler { /*new design based on community script : https://userstyles.world/style/18493/forum-hordien, improvements done specifically by MH */
+  .spoiler { /*Old Hordes design based on community script : https://userstyles.world/style/18493/forum-hordien, improvements done specifically by MH */
     display:inline !important;
     margin-left: 0px !important;
     padding-left: 60px !important;
@@ -181,16 +181,16 @@
       background-color: #4d5537 !important;
       color: #4d5537 !important;
 
-      div, .username, .rpauthor, blockquote, ul, ol, pre, hr {
+      div, .username, .rpauthor, blockquote, span.quoteauthor, ul, ol, pre, hr {
         position: relative;
         &:after {
           position: absolute; top: 0; left: 0; bottom: 0; right: 0; background: #4d5537; content: " ";
         }
       }
 
-      .username { box-shadow: none; &:after { top: -1px; } }
+      .username { box-shadow: none; border-top: transparent; &:after { top: -1px; } }
       pre { overflow: clip !important }
-      pre, blockquote { border-color: transparent !important; }
+      pre, blockquote, div.adminAnnounce, div.modAnnounce, div.oracleAnnounce, ul.poll:not(.global-poll) { border: transparent !important; box-shadow: none; }
       a, b, i, span.bad, div.collapsor {
         &:before { opacity: 0 }
         box-shadow: none !important;
@@ -200,6 +200,7 @@
       }
 
       .glory:after { top: -30px; left: -30px; right: -30px; bottom: -15px; }
+      span.quoteauthor:not(.username)::after { content: " " !important; }
       hr {
         overflow: visible !important;
         border-color: transparent !important;
