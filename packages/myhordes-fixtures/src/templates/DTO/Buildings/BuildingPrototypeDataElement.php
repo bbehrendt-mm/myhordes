@@ -149,7 +149,7 @@ class BuildingPrototypeDataElement extends Element implements LabeledIconElement
             [$ap, $resources, $easyAp, $easyResources] = $arguments;
             $this->hasHardMode = true;
             $this->hardAp = $ap ?? $this->ap;
-            $this->easyAp = $easyAp ?? $this->ap;
+            $this->easyAp = $easyAp < 0 ? ($this->ap - $easyAp) : ($easyAp ?? $this->ap);
             $this->hardResources = $this->easyResources = $this->resources;
             foreach ($resources ?? [] as $k => $v) $this->hardResource($k, $v);
             foreach ($easyResources ?? [] as $k => $v) $this->easyResource($k, $v);
@@ -161,6 +161,9 @@ class BuildingPrototypeDataElement extends Element implements LabeledIconElement
                 $ov = $original[$k] ?? 0;
                 if ($ov > 0) $this->easyResource($k, round($v/(($v / $ov) + 1)));
             }
+            return $this;
+        } elseif ($name === 'easyAp' && count($arguments) === 1 && $arguments[0] < 0) {
+            $this->easyAp = $this->ap + $arguments[0];
             return $this;
         } else return parent::__call($name, $arguments);
     }
