@@ -16,7 +16,7 @@
                 <div class="inline flex middle">
                     {% if steps is not empty and progress > steps[0] %}
                         <img src="{{ asset('build/images/icons/small_hero_up.gif') }}" alt="" />
-                        <span class="small bold">{{ 'Du kannst eine neue {heroskill_link}!'|trans({heroskill_link: '<a href="#" x-ajax-href="' ~ path('soul_heroskill') ~ '">' ~ ('Heldenfähigkeit freischalten'|trans({},'game')) ~ '</a>'},'game')|raw }}</span>
+                        <span class="small bold">{{ 'Du kannst eine neue {heroskill_link}!'|trans({heroskill_link: '<a href="#" x-ajax-href="' ~ path('soul_heroskill') ~ '">' ~ ('Heldenfähigkeit freigeschaltet'|trans({},'game')) ~ '</a>'},'game')|raw }}</span>
                     {% else %}
                         <a class="small" href="#" x-ajax-href="{{ path('soul_heroskill') }}">{{ 'Meine freigeschalteten Fähigkeiten ansehen'|trans({},'game') }}</a>
                     {% endif %}

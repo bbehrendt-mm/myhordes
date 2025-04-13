@@ -440,6 +440,7 @@ class SoulController extends CustomAbstractController
         $pack_reset = $unlockService->getResetPackPoints( $this->getUser(), $points );
         $pack_temp  = $unlockService->getTemporaryPackPoints( $this->getUser(), $end );
 
+
         return $this->render( 'ajax/soul/heroskills_new.html.twig', $this->addDefaultTwigArgs("soul_me", [
             'xp' => $xp,
             'xp_total' => $xp_total,
@@ -450,6 +451,8 @@ class SoulController extends CustomAbstractController
             'pack_tmp' => $pack_temp,
             'pack_tmp_end' => $end?->getTimestamp(),
             'pack_can_reset' => $pack_reset < 2 && !$this->getUser()->getActiveCitizen(),
+            'pack_reset_limit_reached' => $pack_reset >= 2,
+            'pack_reset_current_town' => $this->getUser()->getActiveCitizen() !== null,
             'groups' => $groups,
             'skills' => $allSkills,
             'unlocked' => array_map( fn(HeroSkillPrototype $skill) => $skill->getId(), $unlocked ),
