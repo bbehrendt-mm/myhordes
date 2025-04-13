@@ -678,3 +678,5 @@ Verkaufswert: Sale value
 'Ein so erworbener Fähigkeitenpunkt steht dir für insgesamt {num} Tage nach dem Kauf zur Verfügung.': 'A power point acquired in this way is available to you for a total of {num} days after purchase.'
 'Du kannst maximal {num} solcher Fähigkeitspunkte zur gleichen Zeit besitzen.': 'You can have a maximum of {num} power points of this type at any time.'
 'Fähigkeitenpunkt erwerben...': 'Acquire power point...'
+'Du kannst keine weiteren Fähigkeitenpunkte erwerben, da du das Limit bereits erreicht hast.': 'You cannot acquire any more power points as you have already reached the limit.'
+'Du kannst keine Fähigkeitenpunkte erwerben, während du in einer Stadt spielst.': 'You cannot acquire power points while playing in a town.'

@@ -678,3 +678,5 @@ Verkaufswert: Valeur de vente
 'Ein so erworbener Fähigkeitenpunkt steht dir für insgesamt {num} Tage nach dem Kauf zur Verfügung.': 'Un point de puissance acquis de cette manière est à votre disposition pendant un total de {num} jours après l''achat.'
 'Du kannst maximal {num} solcher Fähigkeitspunkte zur gleichen Zeit besitzen.': 'Vous pouvez avoir un maximum de {num} points de puissance de ce type à tout moment.'
 'Fähigkeitenpunkt erwerben...': 'Acquérir des points de puissance...'
+'Du kannst keine weiteren Fähigkeitenpunkte erwerben, da du das Limit bereits erreicht hast.': 'Vous ne pouvez pas acquérir plus de points de puissance car vous avez déjà atteint la limite.'
+'Du kannst keine Fähigkeitenpunkte erwerben, während du in einer Stadt spielst.': 'Vous ne pouvez pas gagner de points de puissance en jouant dans une ville.'

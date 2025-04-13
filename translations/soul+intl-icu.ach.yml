@@ -678,3 +678,5 @@ Verkaufswert: crwdns211588:0crwdne211588:0
 'Ein so erworbener Fähigkeitenpunkt steht dir für insgesamt {num} Tage nach dem Kauf zur Verfügung.': 'crwdns211610:0{num}crwdne211610:0'
 'Du kannst maximal {num} solcher Fähigkeitspunkte zur gleichen Zeit besitzen.': 'crwdns211612:0{num}crwdne211612:0'
 'Fähigkeitenpunkt erwerben...': 'crwdns211614:0crwdne211614:0'
+'Du kannst keine weiteren Fähigkeitenpunkte erwerben, da du das Limit bereits erreicht hast.': 'crwdns211804:0crwdne211804:0'
+'Du kannst keine Fähigkeitenpunkte erwerben, während du in einer Stadt spielst.': 'crwdns211806:0crwdne211806:0'

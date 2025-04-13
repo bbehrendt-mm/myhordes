@@ -678,3 +678,5 @@ Verkaufswert: Valor de venta
 'Ein so erworbener Fähigkeitenpunkt steht dir für insgesamt {num} Tage nach dem Kauf zur Verfügung.': 'Un punto de habilidad adquirido de esta manera estará disponible para usted durante un total de {num} días después de la compra.'
 'Du kannst maximal {num} solcher Fähigkeitspunkte zur gleichen Zeit besitzen.': 'Puedes tener un máximo de {num} puntos de habilidad de este tipo en cualquier momento.'
 'Fähigkeitenpunkt erwerben...': 'Adquirir puntos de habilidad...'
+'Du kannst keine weiteren Fähigkeitenpunkte erwerben, da du das Limit bereits erreicht hast.': 'No puedes adquirir más puntos de poder porque ya has alcanzado el límite.'
+'Du kannst keine Fähigkeitenpunkte erwerben, während du in einer Stadt spielst.': 'No puedes ganar puntos de poder jugando en una ciudad.'
