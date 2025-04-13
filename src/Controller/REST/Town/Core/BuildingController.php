@@ -121,7 +121,7 @@ class BuildingController extends CustomAbstractCoreController
             'dt' => $building->getTempDefenseBonus(),
             'a' => $building->getComplete()
                 ? [$building->getHp(), $building->getPrototype()->getHp()]
-                : [$building->getAp(), $building->getPrototypeAP()],
+                : [$building->getAp(), $building->getPrototypeAP( $this->conf->getTownConfiguration($building->getTown())->getBuildingRarity( $building->getPrototype() ) )],
             ...($voted ? ['v' => true] : []),
             ...($building->getDifficultyLevel() !== 0 ? [
                 'dl' => $building->getDifficultyLevel(),
