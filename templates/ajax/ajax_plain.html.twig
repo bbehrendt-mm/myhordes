@@ -5,6 +5,9 @@
         {% if is_granted('ROLE_USER') %}
             <script>
                 $.msg.jumpstart();
+                {% if block('title') is defined %}
+                    $.html.setTitleSegmentAddendum( '{{ block('title')|replace({"\n": "", "\r": "", "\t": "", "'": "\\\'", "&amp;":"&"})|raw }}' );
+                {% endif %}
             </script>
         {% endif %}
     {% endblock %}
