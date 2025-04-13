@@ -520,6 +520,7 @@ class ActionHandler
 
         $source_inv = in_array($recipe->getType(), $workshop_types) ? [ $t_inv ] : ($citizen->getZone() ? [$c_inv] : [$c_inv, $citizen->getHome()->getChest() ]);
         $target_inv = in_array($recipe->getType(), $workshop_types) ? [ $t_inv ] : ($citizen->getZone() ? ($citizen->getZone()->getX() != 0 || $citizen->getZone()->getY() != 0 ? [$c_inv,$citizen->getZone()->getFloor()] : [$c_inv])  : [$c_inv, $citizen->getHome()->getChest()]);
+        $target_inv_do = (in_array($recipe->getType(), $workshop_types) || $citizen->getZone()) ? $target_inv : [...$target_inv, $t_inv];
 
         if (!in_array($recipe->getType(), $workshop_types) && $citizen->getZone() && $this->conf->getTownConfiguration($town)->get(TownSetting::OptModifierFloorAsmbly))
             $source_inv[] = $citizen->getZone()->getFloor();
@@ -550,8 +551,10 @@ class ActionHandler
         else
             $new_items[] = $this->random_generator->pickItemPrototypeFromGroup( $recipe->getResult(), $this->conf->getTownConfiguration( $citizen->getTown() ), $this->conf->getCurrentEvents( $citizen->getTown() ) );
 
-        foreach ($new_items as $new_item)
-            $this->proxyService->placeItem( $citizen, $this->item_factory->createItem( $new_item ) , $target_inv, true, $silent );
+        foreach ($new_items as $new_item) {
+            $item = $this->item_factory->createItem($new_item);
+            $this->proxyService->placeItem($citizen, $item, $item->getPrototype()->hasProperty('defence') ? $target_inv_do : $target_inv, true, $silent);
+        }
         $this->gps->recordRecipeExecuted( $recipe, $citizen, $new_items );
 
         if (in_array($recipe->getType(), $workshop_types))
