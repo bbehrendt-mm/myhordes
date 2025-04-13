@@ -3214,3 +3214,4 @@ Tierklinik: crwdns210946:0crwdne210946:0
 'Verbesserung Zweite Lunge (4 AP, 4 EP)': 'crwdns211783:0crwdne211783:0'
 'Heldenerfahrung an {user} in "{town}" weitergegeben.': 'crwdns211785:0{user}crwdnd211785:0{town}crwdne211785:0'
 'Heldenerfahrung von {user} in "{town}" erhalten.': 'crwdns211787:0{user}crwdnd211787:0{town}crwdne211787:0'
+'Heldenfähigkeit freigeschaltet': 'crwdns211808:0crwdne211808:0'

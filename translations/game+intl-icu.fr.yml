@@ -853,7 +853,7 @@ Zusammenbauen: Assembler
 'Von diesem Gegenstand will sich der Bürger nicht trennen.': 'Ce citoyen a refusé d''abandonner cet objet.'
 'Das kannst du mit einem Berufsgegenstand nicht tun.': 'Vous ne pouvez pas faire cela avec votre objet de métier.'
 'Aus der Stadt schleichen': 'Sortir discrètement'
-'Nutze deine heilenden Hände': 'Réaliser un soin curatif'
+'Nutze deine heilenden Hände': 'Utilisez vos pouvoirs de guerrisseur !'
 'Diesen Bürger angreifen!': "Agresser ce citoyen !"
 'Diesen Bürger verspeisen!': 'Dévorer ce citoyen !'
 'Die Leiche verspeisen!': 'Dévorer le cadavre !'
@@ -1986,7 +1986,7 @@ Superheld: Super-héros
 'Die Schätzung des heutigen Tages muss zuerst abgeschlossen werden, um die Schätzung des nächsten Tages zu berechnen.': 'Il faut d''abord calculer l''estimation du jour pour calculer celle du lendemain.'
 'Durch die Konstruktion von {building} wurden eine Menge Zombies in der Außenwelt vernichtet!': 'L''utilisation de {building} a totalement pulvérisé un bon nombre de zombies dans l''Outre-Monde !'
 '<strong>Achtung!</strong> Das Betreten der Stadt erfordert <div class="ap">1</div> (die Kosten sind auf den Bau des <strong>Labyrinths</strong> zurückzuführen)!': '<strong>Attention !</strong> Entrer en ville nécessite <div class="ap">1</div> (ce coût est dû au chantier <strong>Labyrinthe</strong>) !'
-'Unser {building} hat reichhaltigen Ertrag gebracht: {items}': 'Plusieurs légumes ont poussé dans le {building}: {items}'
+'Unser {building} hat reichhaltigen Ertrag gebracht: {items}': 'Plusieurs légumes ont poussé dans le {building}: {items}.'
 Name: Nom
 Kosten: Coût
 'Dieser Bürger hat sich für heute Nacht hier versteckt.': 'Ce citoyen s''est caché pour passer la nuit ici...'
@@ -3214,3 +3214,4 @@ Tierklinik: Centre d'essai
 'Verbesserung Zweite Lunge (4 AP, 4 EP)': 'Amélioration du Second Souffle (4 PA, 4 PE)'
 'Heldenerfahrung an {user} in "{town}" weitergegeben.': 'Expérience héroïque transmise à {user} dans « {town} ».'
 'Heldenerfahrung von {user} in "{town}" erhalten.': 'Expérience héroïque reçue de {user} dans « {town} ».'
+'Heldenfähigkeit freigeschaltet': 'nouvelle compétence de héros'
