@@ -195,13 +195,23 @@
       border-bottom: 1px solid #4d5537 !important;
     }
     &:not(:hover) .sideNote { margin: 0px !important; font-size: 1.6rem; }
-    &:hover div:not(.cref):not(.modAnnounce), &:hover pre, &:hover blockquote, &:hover ul, &:hover ol {
+    &:hover div:not(.cref), &:hover pre, &:hover blockquote, &:hover ul, &:hover ol {
       color: white !important;
       background-color: transparent !important;
     }
-    &:hover div.modAnnounce, &:hover div.adminAnnounce, &:hover div.oracleAnnounce { /*don't work yet for oracle&admin announces : they still have no background color!*/
+    &:hover div.modAnnounce {
       color: white !important;
       background-color: #5c0000 !important;
+    }
+
+    &:hover div.adminAnnounce {
+      color: white !important;
+      background-color: #553C53 !important;
+    }
+
+    &:hover div.oracleAnnounce {
+      color: white !important;
+      background-color: #3b4151 !important;
     }
   
     &:has(div:not(.cref):last-child), &:has(pre:last-child), &:has(blockquote:last-child), &:has(ul:last-child), &:has(ol:last-child) { margin-right: 0px !important; }
