@@ -343,7 +343,7 @@ Essen: crwdns199175:0crwdne199175:0
 Einnehmen: crwdns199177:0crwdne199177:0
 Einsetzen: crwdns199179:0crwdne199179:0
 'Du hast dein <span class="tool">{item}</span> ausgepackt und <span class="tool">{items_spawn}</span> erhalten!': 'crwdns199181:0{item}crwdnd199181:0{items_spawn}crwdne199181:0'
-'<nt-spawned>Trotz aller Anstrengungen ist es dir nicht gelungen, den {item} zu öffnen...</nt-spawned><t-spawned>Du hast die {item} geöffnet und darin {items_spawn} gefunden!</t-spawned>': 'crwdns199183:0{item}crwdnd199183:0{item}crwdnd199183:0{items_spawn}crwdne199183:0'
+'<nt-spawned>Trotz aller Anstrengungen ist es dir nicht gelungen, den {item} zu öffnen...</nt-spawned><t-spawned>Du hast die {item} geöffnet und darin {items_spawn} gefunden!</t-spawned>': 'crwdns211878:0{item}crwdnd211878:0{item}crwdnd211878:0{items_spawn}crwdnd211878:0{combination}crwdne211878:0'
 Laden: crwdns199185:0crwdne199185:0
 'Du hast eine {items_consume} in dein/e/n {item_from} eingelegt und {item_to} erhalten!': 'crwdns199187:0{items_consume}crwdnd199187:0{item_from}crwdnd199187:0{item_to}crwdne199187:0'
 'Waffe einsetzen': 'crwdns199189:0crwdne199189:0'
@@ -1148,3 +1148,4 @@ Würzen: crwdns211652:0crwdne211652:0
 '<nc-HeroSecondWindBonusAP op="gt" val="0">Verschafft dir {cfg_ctp_props_actions_hero_sw_sp} frische Erkundungspunkte.</nc-HeroSecondWindBonusAP><c-HeroSecondWindBonusAP op="gt" val="0">Verschafft dir {cfg_ctp_props_actions_hero_sw_sp} frische Erkundungspunkte, stellt {cfg_ctp_props_actions_hero_sw_ap} AP wieder her und beseitigt deine Müdigkeit.</c-HeroSecondWindBonusAP>': 'crwdns211799:0{cfg_ctp_props_actions_hero_sw_sp}crwdnd211799:0{cfg_ctp_props_actions_hero_sw_sp}crwdnd211799:0{cfg_ctp_props_actions_hero_sw_ap}crwdne211799:0'
 'Übermäßig verführerischer Apfel': 'crwdns211810:0crwdne211810:0'
 'Er ist rund, er ist rot, er glänzt, und du fühlst eine fast unwiderstehliche Versuchung, deine Zähne in ihn zu schlagen. Äh, ist das wirklich nur ein normaler Apfel? Das behauptet jedenfalls die alte Vettel in der Stadt...': 'crwdns211812:0crwdne211812:0'
+'Der „Do It Yourself“-Wahn ist sicherlich gut, aber wenn es um die Werkzeuge selbst geht...? Niemand kann sagen, wie lange diese selbstgebaute Säge hält (Die Säge verringert die Verarbeitungskosten in der Werkstatt um 1 AP. Dafür musst du sie in deinem Rucksack haben).': 'crwdns211874:0crwdne211874:0'

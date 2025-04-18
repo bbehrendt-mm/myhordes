@@ -189,7 +189,7 @@ Ruine: Ruina
 '{ruin} durchsuchen': 'Hurgar: <strong>{ruin}</strong>'
 'Zone freiräumen': 'Despejar la zona'
 'Müll durchwühlen': 'Buscar en los deshechos'
-'Wenn du einen Gegenstand aufnimmst oder ablegst, verlierst du deine Tarnung!': '¡Perderás tu camuflaje si tomas o dejas un objeto!'
+'Wenn du einen Gegenstand aufnimmst oder ablegst, verlierst du deine Tarnung!': 'Si recoges o sueltas un objeto en el suelo, perderás tu camuflaje!'
 Zonenregister: Registro de la Zona
 'Das Stadtregister steht nicht zur Verfügung.': 'El Registro del Pueblo (donde todas las acciones de los habitantes quedan registradas) no es accesible cuando estás en el Ultramundo...'
 'Herzlichen Glückwunsch, du bist TOT!': '¡Felicidades, HAS MUERTO!'
@@ -3215,3 +3215,4 @@ Tierklinik: Centro de pruebas
 'Heldenerfahrung an {user} in "{town}" weitergegeben.': 'Experiencia heroica transmitida a {user} en "{town}".'
 'Heldenerfahrung von {user} in "{town}" erhalten.': 'Experiencia heroica recibida de {user} en "{town}".'
 'Heldenfähigkeit freigeschaltet': 'habilidad de héroe'
+'Du hast es geschafft, diesen Gegenstand zu verarbeiten. Aber als du fast fertig warst, ist das Klebeband gerissen. Ohne dessen Halt ist die Klinge abgerutscht und hat den Stamm zertrümmert. So ist das ganze Ding nicht mehr zu gebrauchen. Wenigstens hast du es ohne einen Splitter überstanden.': 'Has transformado tu objeto exitosamente. Pero el final de la operación rompió el parche. Sin apoyo, la hoja resbaló y luego rompió el tronco. Nada de lo que queda es utilizable. Al menos saliste ileso de esto.'
