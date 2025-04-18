@@ -596,7 +596,10 @@ class ActionHandler
 
         $break = ($break_item && $this->random_generator->chance( $break_chance ));
         if ($break) {
-            $message .= '<hr/>' . $this->translator->trans( 'Ups, dein(e) {item} scheint dabei kaputt gegangen zu sein...', [
+
+            if ($break_item->getPrototype()->getName() === 'saw_tool_temp_#00')
+                $message .= '<hr/>' . $this->translator->trans( 'Du hast es geschafft, diesen Gegenstand zu verarbeiten. Aber als du fast fertig warst, ist das Klebeband gerissen. Ohne dessen Halt ist die Klinge abgerutscht und hat den Stamm zertrümmert. So ist das ganze Ding nicht mehr zu gebrauchen. Wenigstens hast du es ohne einen Splitter überstanden.', [], 'game' );
+            else $message .= '<hr/>' . $this->translator->trans( 'Ups, dein(e) {item} scheint dabei kaputt gegangen zu sein...', [
                     '{item}' => $this->wrap( $break_item->getPrototype() ),
                 ], 'game' );
             $this->response->withSignal( ClientSignal::InventoryUpdated );
