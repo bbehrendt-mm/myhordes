@@ -405,7 +405,7 @@ class ActionDataService implements FixtureProcessorInterface {
                     [ 'town_well_8', 15 ],
                     [ 'town_well_9', 5 ] //jerrycan with filter
                 ]] ], 'message_key' => 'water_to_well' ],
-                'jerrycan_4' => [ 'label' => 'Reinigen (Wasser)', 'meta' => [ 'min_1_ap', 'must_be_outside', 'must_have_micropur_in', 'must_not_be_banished' ], 'result' => [ 'consume_micropur', 'consume_item', 'spawn_1_water', 'minus_1ap' ], 'message_key' => 'item_clean' ], //jerrycan + tablet outside town
+                'jerrycan_4' => [ 'label' => 'Reinigen (Wasser)', 'meta' => [ 'min_1_ap', 'must_be_outside', 'must_have_micropur_in', 'must_not_have_purifier', 'must_not_be_banished' ], 'result' => [ 'consume_micropur', 'consume_item', 'spawn_1_water', 'minus_1ap' ], 'message_key' => 'item_clean' ], //jerrycan + tablet outside town
 
                 'watercup_1b' => [ 'label' => 'Reinigen (Wasser)', 'meta' => [ 'must_have_micropur_in', 'must_be_banished' ], 'result' => [ 'consume_micropur', 'consume_item', 'picto_ban_emanc', 'spawn_1_watercup' ], 'message_key' => 'item_clean_watercup' ],
                 'jerrycan_1b' => [ 'label' => 'Reinigen (Wasser)', 'meta' => [ 'must_be_inside', 'must_have_micropur_in', 'must_be_banished' ], 'result' => [ 'consume_micropur', 'consume_item', ['group' => [
