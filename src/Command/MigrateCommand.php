@@ -151,7 +151,7 @@ class MigrateCommand extends Command
         'd52a872be9d56acc19291eab9d1ba378a99b3abe' => [ ['app:forum:default_posts', [] ] ],
         'bfc4429fcd0054369170e30978b171021bf940ca' => [ ['app:user:sponsorship-repair', [] ] ],
         'b40c92bbca7a4f7323bc6ff28f9103de06166fc4' => [ ['app:utils:reapply-skills', [] ] ],
-        '286934ec84ef95e818ac5d5ce25af06b161d01ac' => [ ['app:utils:hpx-outdate', [] ] ],
+        '286934ec84ef95e818ac5d5ce25af06b161d01ac' => [ ['app:utils:hpx-outdate', ['--outdate-resets' => true] ] ],
         '5e9950daeb4e32d1974174ddc6b84fcf41fde228' => [ ['app:user:convert-skill-points', ['--days 50'] ] ],
         'dedcb658109deff692d1316fdd44ceaec53ce195' => [ ['app:migrate', ['--reassign-thread-tags' => true] ] ],
     ];
