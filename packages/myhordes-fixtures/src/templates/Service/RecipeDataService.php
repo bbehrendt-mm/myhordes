@@ -35,6 +35,8 @@ class RecipeDataService implements FixtureProcessorInterface {
             'ws024' => ['type' => Recipe::WorkshopType, 'in' => 'noodle_prints_#00',   'out' => 'magneticKey_#00', 'action' => 'Wandeln' ],   // Magnetic key
             'ws025' => ['type' => Recipe::WorkshopType, 'in' => 'noodle_prints_#01',   'out' => 'bumpKey_#00', 'action' => 'Wandeln' ],       // Bump key
             'ws026' => ['type' => Recipe::WorkshopType, 'in' => 'noodle_prints_#02',   'out' => 'classicKey_#00', 'action' => 'Wandeln' ],    // Bottle Opener key
+            // Do not rename ws030!
+            'ws030' => ['type' => Recipe::WorkshopType, 'provoking' => 'knife_#00',    'in' => ['wood_log_#00', 'knife_#00', 'rustine_#00' ], 'out' => 'saw_tool_temp_#00', 'action' => 'Wandeln' ], //Makeshift Hacksaw
 
             // Shaman Specific recipes
             'ws022' => ['type' => Recipe::WorkshopTypeShamanSpecific, 'in' => 'soul_blue_#00',      'out' => 'soul_yellow_#00', 'action' => 'Wandeln', "picto"=> "r_mystic2_#00" ],
@@ -43,7 +45,6 @@ class RecipeDataService implements FixtureProcessorInterface {
             'ws027' => ['type' => Recipe::WorkshopTypeTechSpecific, 'provoking' => 'meca_parts_#00',    'in' => ['meca_parts_#00', 'plate_#00', 'plate_#00' ],                                      'out' => 'car_door_#00', 'action' => 'Wandeln' ], //Car door
             'ws028' => ['type' => Recipe::WorkshopTypeTechSpecific, 'provoking' => 'cutter_#00',        'in' => ['pet_snake2_#00', 'pet_snake2_#00', 'cutter_#00', 'wood2_#00', 'wire_#00' ],       'out' => 'sheet_#00', 'action' => 'Wandeln' ], //Groundsheet
             'ws029' => ['type' => Recipe::WorkshopTypeTechSpecific, 'provoking' => 'bone_meat_#00',     'in' => ['bone_meat_#00', 'poison_part_#00' ],                                              'out' => ['bone_#00', 'smelly_meat_#00'], 'multi_out' => true, 'action' => 'Wandeln' ], //Broken human bone + Festering Flesh
-            'ws030' => ['type' => Recipe::WorkshopTypeTechSpecific, 'provoking' => 'knife_#00',         'in' => ['wood_log_#00', 'knife_#00', 'rustine_#00' ],                                      'out' => 'saw_tool_temp_#00', 'action' => 'Wandeln' ], //Makeshift Hacksaw
 
             //Manual transformations recipes
             'com001' => ['type' => Recipe::ManualAnywhere, 'out' => 'coffee_machine_#00',     'provoking' => 'coffee_machine_part_#00','in' => ['coffee_machine_part_#00', 'cyanure_#00', 'electro_#00', 'meca_parts_#00', 'rustine_#00', 'metal_#00', 'tube_#00' ] ],

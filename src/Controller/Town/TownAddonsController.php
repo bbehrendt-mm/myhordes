@@ -261,6 +261,7 @@ class TownAddonsController extends TownController
 
         return $this->render( 'ajax/game/town/workshop.html.twig', $this->addDefaultTwigArgs('workshop', [
             'recipes' => $recipes,
+            'recipes_data' => $recipeData,
             'disabled_types' => $recipeData->disabled_types,
             'penalty' => $recipeData->ap_penalty_types,
             'sections' => $recipeData->section_types,
@@ -305,7 +306,7 @@ class TownAddonsController extends TownController
             return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
 
         // Execute recipe and persist
-        if (($error = $ah->execute_recipe( $citizen, $recipe, $remove, $message, $recipeData->ap_penalty_types[$recipe->getType()] ?? 0 )) !== ActionHandler::ErrorNone )
+        if (($error = $ah->execute_recipe( $citizen, $recipe, $remove, $message, $recipeData->recipePenalty($recipe))) !== ActionHandler::ErrorNone )
             return AjaxResponse::error( $error );
         else try {
             // Set the activity status

@@ -1,7 +1,7 @@
 {% extends "ajax/game/town/town.html.twig" %}
 {%block title %}{{'Werkstatt'|trans({}, 'game')|raw }}{% endblock %}
 
-{% macro workshop_list(source,recipes,result,disabled,need_ap,hint) %}
+{% macro workshop_list(source,recipes,result,disabled,need_ap,hint,data) %}
 
     {% set has_recipes = false %}
     {% for recipe in recipes %}
@@ -98,16 +98,22 @@
                             <button x-recipe-id="{{ recipe.id }}" class="inline small" {{ {'disabled': disabled}|attributes }}>
                                 <img src="{% if recipe.action == "Zerlegen" %}{{ asset('build/images/item/item_classicKey.gif') }}{% elseif recipe.action == "Öffnen" %}{{ asset('build/images/item/item_can_opener.gif') }}{% else %}{{ asset('build/images/icons/small_refine.gif') }}{% endif %}" alt="" />
                                 <span class="hide-lg hide-md hide-sm">
-                                {{ recipe.action|trans({},'items') }}
-                            </span>
+                                    {{ recipe.action|trans({},'items') }}
+                                    {% if data.recipePenalty( recipe ) > 0 %}
+                                        <div class="inline">({{ data.recipePenalty( recipe ) + need_ap }}<div class="ap"></div>)</div>
+                                    {% endif %}
+                                </span>
                             </button>
                         </div>
                         <div class="padded cell rw-3 hide-mobile">
                             <button x-recipe-id="{{ recipe.id }}" {{ {'disabled': disabled}|attributes }}>
                                 <img src="{% if recipe.action == "Zerlegen" %}{{ asset('build/images/item/item_classicKey.gif') }}{% elseif recipe.action == "Öffnen" %}{{ asset('build/images/item/item_can_opener.gif') }}{% else %}{{ asset('build/images/icons/small_refine.gif') }}{% endif %}" alt="" />
                                 <span class="hide-lg hide-md hide-sm">
-                                {{ recipe.action|trans({},'items') }}
-                            </span>
+                                    {{ recipe.action|trans({},'items') }}
+                                    {% if data.recipePenalty( recipe ) > 0 %}
+                                        <div class="inline">({{ data.recipePenalty( recipe ) + need_ap }}<div class="ap"></div>)</div>
+                                    {% endif %}
+                                </span>
                             </button>
                         </div>
                     </div>
@@ -173,12 +179,12 @@
 
         {% for type, section in sections %}
             <div x-tab-group="workshops" x-tab-id="section_{{ type }}" x-tab-target="">
-                {{ _self.workshop_list( source, recipes|filter(r => r.type == type), result, type in disabled_types, need_ap + penalty[type], hints[type] ) }}
+                {{ _self.workshop_list( source, recipes|filter(r => r.type == type), result, type in disabled_types, need_ap + penalty[type], hints[type], recipes_data ) }}
             </div>
         {% endfor %}
     {% else %}
         {% for type, section in sections %}
-            {{ _self.workshop_list( source, recipes|filter(r => r.type == type), result, type in disabled_types, need_ap + penalty[type], hints[type] ) }}
+            {{ _self.workshop_list( source, recipes|filter(r => r.type == type), result, type in disabled_types, need_ap + penalty[type], hints[type], recipes_data ) }}
         {% endfor %}
     {% endif %}
 

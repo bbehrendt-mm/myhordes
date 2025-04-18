@@ -4,6 +4,7 @@ namespace App\Event\Game\Citizen;
 
 
 use App\Entity\Citizen;
+use App\Entity\Recipe;
 use App\Entity\RuinZone;
 use App\Entity\Zone;
 use App\Entity\ZonePrototype;
@@ -34,5 +35,12 @@ class CitizenWorkshopOptionsData extends CitizenBaseData
 
         $this->visible_types = array_values( array_unique( $this->visible_types ) );
         $this->disabled_types = array_values( array_unique( $this->disabled_types ) );
+    }
+
+    public function recipePenalty(Recipe $recipe): int {
+        $type_penalty = $this->ap_penalty_types[$recipe->getType()] ?? 0;
+        $individual_penalty = $recipe->getName() === 'ws030' ? 4 : 0;
+
+        return $type_penalty + $individual_penalty;
     }
 }
