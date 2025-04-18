@@ -30,7 +30,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
     name: 'app:season:manage',
-    description: 'Calculates ranking rewards at the end of a season.'
+    description: 'Creates and switches between seasons.'
 )]
 class SeasonCommand extends Command
 {
