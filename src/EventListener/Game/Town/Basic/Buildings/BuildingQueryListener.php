@@ -99,14 +99,24 @@ final class BuildingQueryListener implements ServiceSubscriberInterface
     private function calculateMaxActiveZombies(Town $town, ?int $citizens, int $door_state): float {
         $targets = 0;
         $b_level = -1;
+        $b_levels = array_fill(0, 30, 0);
         if ($citizens !== null)
             $targets = $citizens;
         else
             foreach ($town->getCitizens() as $citizen)
                 if ($citizen->getAlive() && !$citizen->getZone()) {
-                    $b_level = max($b_level, $citizen->getHome()->getPrototype()->getLevel() ?? 0);
+                    $citizen_b_level = $citizen->getHome()->getPrototype()->getLevel() ?? 0;
+                    $b_level = max($b_level, $citizen_b_level);
+
+                    for ($l = 0; $l <= $citizen_b_level; $l++)
+                        $b_levels[$l]++;
+
                     $targets++;
                 }
+
+        // Use tercile instead
+        $tercile = array_key_last( array_filter( $b_levels, fn(int $l) => $l >= ceil($targets/3) ) );
+        if ($tercile > 0) $b_level = $tercile;
 
         $level =
             mt_rand(45, 55) +                                   // Base
