@@ -28,7 +28,8 @@ class TownContentMigrateBuildingTreeListener extends TownContentMigrationListene
     }
 
     protected function applies( TownContentMigrationEvent $event ): bool {
-        return true;
+        //return true;
+        return false; // S18 starts with the easter event, this migration will mess with it!
     }
 
     protected function unlock( TownContentMigrationEvent $event, BuildingPrototype $prototype ): ?Building {
