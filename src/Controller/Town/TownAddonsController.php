@@ -757,7 +757,7 @@ class TownAddonsController extends TownController
             } else {
                 $spawn = $if->createItem('moldy_food_subpart_#00')->setCount(1);
 
-                $this->addFlash( 'notice', $this->translator->trans( 'Du hast es geschafft, {item} anzulocken... aber das Einfangen ist dir weniger geglückt.<hr/>Enttäuscht hebst du die Reste des verschlungenen Futters auf und legst sie als {leftovers} in die Bank.', [
+                $this->addFlash( 'notice', $this->translator->trans( 'Du hast es geschafft, {item} anzulocken... aber das Einfangen ist dir weniger geglückt.<hr/>Nichts von dem Futter ist übrig geblieben, abgesehen von ein paar von Insekten bedeckten Krümeln. Du legst die {leftovers} in die Bank.', [
                     '{item}' => "<span class='tool'><img alt='' src='{$icon}'>{$label}{$times}</span>",
                     '{leftovers}' => "<span class='tool'><img alt='' src='{$this->asset->getUrl( 'build/images/item/item_' . $spawn->getPrototype()->getIcon() . '.gif' )}'>{$this->translator->trans($spawn->getPrototype()->getLabel(), [], 'items')}</span>"
                 ], 'game' ));
