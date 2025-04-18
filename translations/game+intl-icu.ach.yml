@@ -3216,3 +3216,4 @@ Tierklinik: crwdns210946:0crwdne210946:0
 'Heldenerfahrung von {user} in "{town}" erhalten.': 'crwdns211787:0{user}crwdnd211787:0{town}crwdne211787:0'
 'Heldenfähigkeit freigeschaltet': 'crwdns211808:0crwdne211808:0'
 'Du hast es geschafft, diesen Gegenstand zu verarbeiten. Aber als du fast fertig warst, ist das Klebeband gerissen. Ohne dessen Halt ist die Klinge abgerutscht und hat den Stamm zertrümmert. So ist das ganze Ding nicht mehr zu gebrauchen. Wenigstens hast du es ohne einen Splitter überstanden.': 'crwdns211872:0crwdne211872:0'
+'Du hast es geschafft, {item} anzulocken... aber das Einfangen ist dir weniger geglückt.<hr/>Nichts von dem Futter ist übrig geblieben, abgesehen von ein paar von Insekten bedeckten Krümeln. Du legst die {leftovers} in die Bank.': 'crwdns211896:0{item}crwdnd211896:0{leftovers}crwdne211896:0'

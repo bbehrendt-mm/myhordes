@@ -391,10 +391,10 @@ class ItemDataService implements FixtureProcessorInterface {
         $container->add()->label('Cellokasten')->icon('cello_box')->category('Box')->deco(0)->heavy(true)->watchpoint(0)->commit(); // Cello box
         $container->add()->label('Übermäßig verführerischer Apfel')->icon('apple')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->commit(); //Bloody Apple
         $container->add()->label('Improvisierte Säge')->icon('saw_tool_temp')->category('Misc')->deco(0)->heavy(false)->watchpoint(0)->commit(); // Improvised saw
-        $container->add()->label('Feuchte Essenskrümel')->icon('moldy_food_subpart')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->commit(); // Pile of moldy food
-        $container->add()->label('Gewürzte Essenskrümel')->icon('moldy_food_spicy')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->commit(); // Spicy moldy food
-        $container->add()->label('Unappetitliche Überbleibsel')->icon('moldy_food_part')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->commit(); // Spicy moldy food
-        $container->add()->label('Überbleibsel-Rostbraten')->icon('moldy_food')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->commit(); // Spicy moldy food
+        $container->add()->label('Handvoll Insekten')->icon('moldy_food_subpart')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->commit(); // Pile of moldy food
+        $container->add()->label('Handvoll gewürzte Insekten')->icon('moldy_food_spicy')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->commit(); // Spicy moldy food
+        $container->add()->label('Larven-Marmelade')->icon('moldy_food_part')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->commit(); // Spicy moldy food
+        $container->add()->label('Krabbelnde Krümel')->icon('moldy_food')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->commit(); // Spicy moldy food
 
         $container->modify('water_#00')->description('Das Wasser gibt dir einmal pro Tag deine Aktionpunkte zurück oder löscht alternativ deinen Durst (unbegrenzt).')->commit();
         $container->modify('pile_#00')->description('Die Batterie ist für vieles nützlich. Allerdings ist sie auch ziemlich schnell leer ...')->commit();
@@ -771,10 +771,10 @@ class ItemDataService implements FixtureProcessorInterface {
         $container->modify('cello_box_#00')->description('Du weißt nicht einmal mehr, wo du das her hast... Die Farbe fängt schon an, sich abzulösen. Ist das Teil wirklich nützlich?')->commit(); // Cello box
         $container->modify('apple_#00')->description('Er ist rund, er ist rot, er glänzt, und du fühlst eine fast unwiderstehliche Versuchung, deine Zähne in ihn zu schlagen. Äh, ist das wirklich nur ein normaler Apfel? Das behauptet jedenfalls die alte Vettel in der Stadt...')->commit(); //Bloody Apple
         $container->modify('saw_tool_temp_#00')->description('Der „Do It Yourself“-Wahn ist sicherlich gut, aber wenn es um die Werkzeuge selbst geht...? Niemand kann sagen, wie lange diese selbstgebaute Säge hält (Die Säge verringert die Verarbeitungskosten in der Werkstatt um 1 AP. Dafür musst du sie in deinem Rucksack haben).')->commit(); // Makeshift hacksaw
-        $container->modify('moldy_food_subpart_#00')->description('Krümel von nicht länger identifizierbaren Lebensmitteln, großzügig gewürzt mit Feuchtigkeit und Verzweiflung. Kaum genießbar. Wird dich wahrscheinlich nicht umbringen. Wahrscheinlich...')->commit(); // Crumbs of moisty food
-        $container->modify('moldy_food_spicy_#00')->description('Dieses feuchte Durcheinander ist jetzt aufgepeppt! Der fragwürdige Geschmack ist immer noch da, er brennt nur etwas aggressiver am Gaumen.')->commit(); // Spicy moisty food
-        $container->modify('moldy_food_part_#00')->description('Was passiert, wenn man feuchte Krümel verschiedenster Lebensmitteln mischt? Man bekommt einen größeren, noch fragwürdigeren Haufen. Völlig ungenießbar, selbst für die Verzweifelten.')->commit(); // Unappetizing leftovers
-        $container->modify('moldy_food_#00')->description('Ein gebackenes Gericht, aus fragwürdigen Resten hergestellt, das fast wie richtiges Essen aussieht. Es ist warm, es hält zusammen... das zählt doch als Mahlzeit, oder?')->commit(); // Leftovers roast roast
+        $container->modify('moldy_food_subpart_#00')->description('Ziemlich schleimig, aber genießbar.')->commit(); // Crumbs of moisty food
+        $container->modify('moldy_food_spicy_#00')->description('Ein wenig schleimig, aber appetitlich. Der Hauch von Gewürz verstärkt die Gesamtwirkung auf subtile Weise.')->commit(); // Spicy moisty food
+        $container->modify('moldy_food_part_#00')->description('Ein köstlicher Insektenbrei, der sehr nahrhaft ist. Er ist knusprig und gleichzeitig wirklich saftig!')->commit(); // Unappetizing leftovers
+        $container->modify('moldy_food_#00')->description('Ein köstliches Protein-Dessert! Anscheinend ist es besser, wenn es sich noch bewegt...')->commit(); // Leftovers roast roast
 
         // Installed Crow Garland
         $container->clone('xmas_gift_#00')->label('Aufgehängte Krähengirlande')->deco(5)->isEmote(false)->commit();
