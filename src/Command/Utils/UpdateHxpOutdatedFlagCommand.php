@@ -47,12 +47,24 @@ class UpdateHxpOutdatedFlagCommand extends LanguageCommand
         parent::__construct();
     }
 
+    protected function configure(): void {
+        parent::configure();
+        $this->addOption('outdate-resets', null,InputOption::VALUE_NONE, 'Also marks any reset entries as outdated.');
+    }
+
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $min = $this->confMaster->getGlobalConf()->get( MyHordesSetting::HxpFirstSeason );
-        $this->helper->leChunk( $output, HeroExperienceEntry::class, 500, [], true, false, function (HeroExperienceEntry $entry) use ($min) {
+        $outdate_resets = $input->getOption('outdate-resets');
 
-            $must_outdate = $entry->getType() !== HeroXPType::Legacy && $entry->getSeason()?->getNumber() < $min;
+        $this->helper->leChunk( $output, HeroExperienceEntry::class, 500, [], true, false, function (HeroExperienceEntry $entry) use ($min, $outdate_resets) {
+
+            $must_outdate =
+                $entry->getType() !== HeroXPType::Legacy && $entry->getSeason()?->getNumber() < $min ||
+                (
+                    $outdate_resets && $entry->getReset() > 0
+                );
+
             if ($must_outdate !== $entry->isOutdated()) {
                 $entry->setOutdated($must_outdate);
                 return true;
