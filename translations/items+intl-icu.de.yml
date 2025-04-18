@@ -343,7 +343,7 @@ Essen: Essen
 Einnehmen: Einnehmen
 Einsetzen: Einsetzen
 'Du hast dein <span class="tool">{item}</span> ausgepackt und <span class="tool">{items_spawn}</span> erhalten!': 'Du hast dein <span class="tool">{item}</span> ausgepackt und <span class="tool">{items_spawn}</span> erhalten!'
-'<nt-spawned>Trotz aller Anstrengungen ist es dir nicht gelungen, den {item} zu öffnen...</nt-spawned><t-spawned>Du hast die {item} geöffnet und darin {items_spawn} gefunden!</t-spawned>': '<nt-spawned>Trotz aller Anstrengungen ist es dir nicht gelungen, den {item} zu öffnen...</nt-spawned><t-spawned>Du hast die {item} geöffnet und darin {items_spawn} gefunden!</t-spawned>'
+'<nt-spawned>Trotz aller Anstrengungen ist es dir nicht gelungen, den {item} zu öffnen...</nt-spawned><t-spawned>Du hast die {item} geöffnet und darin {items_spawn} gefunden!</t-spawned>': '<nt-spawned>Trotz aller Anstrengungen ist es dir nicht gelungen, den {item} zu öffnen...</nt-spawned><t-spawned>Du hast die {item} geöffnet und darin {items_spawn} gefunden! Der Code war {combination}</t-spawned>'
 Laden: Laden
 'Du hast eine {items_consume} in dein/e/n {item_from} eingelegt und {item_to} erhalten!': 'Du hast eine {items_consume} in dein/e/n {item_from} eingelegt und {item_to} erhalten!'
 'Waffe einsetzen': 'Waffe einsetzen'
