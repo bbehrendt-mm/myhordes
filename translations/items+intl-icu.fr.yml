@@ -343,8 +343,8 @@ Essen: Manger
 Einnehmen: Utiliser
 Einsetzen: Utiliser
 'Du hast dein <span class="tool">{item}</span> ausgepackt und <span class="tool">{items_spawn}</span> erhalten!': 'Vous avez ouvert <span class="tool">{item}</span>, vous trouvez <span class="tool">{items_spawn}</span> à l''intérieur.'
-'<nt-spawned>Trotz aller Anstrengungen ist es dir nicht gelungen, den {item} zu öffnen...</nt-spawned><t-spawned>Du hast die {item} geöffnet und darin {items_spawn} gefunden!</t-spawned>': '<nt-spawned>Vous perdez un temps précieux à chercher la combinaison de {item}, en vain.<hr />Vous avez utilisé <strong>1 point d''action</strong>.</nt-spawned><t-spawned>Ça y est ! <strong>Vous avez trouvé la combinaison secrète du coffre !</strong> Il s''agissait de 1234... Vous découvrez {items_spawn} à l''intérieur.<hr />Vous avez utilisé <strong>1 point d''action</strong>.</t-spawned>'
-Laden: Assembler 
+'<nt-spawned>Trotz aller Anstrengungen ist es dir nicht gelungen, den {item} zu öffnen...</nt-spawned><t-spawned>Du hast die {item} geöffnet und darin {items_spawn} gefunden!</t-spawned>': '<nt-spawned>Vous perdez un temps précieux à chercher la combinaison de {item}, en vain.<hr />Vous avez utilisé <strong>1 point d''action</strong>.</nt-spawned><t-spawned>Ça y est ! <strong>Vous avez trouvé la combinaison secrète du coffre !</strong> Il s''agissait de {combination}... Vous découvrez {items_spawn} à l''intérieur.<hr />Vous avez utilisé <strong>1 point d''action</strong>.</t-spawned>'
+Laden: Assembler
 'Du hast eine {items_consume} in dein/e/n {item_from} eingelegt und {item_to} erhalten!': 'Vous avez inséré une {items_consume} dans votre {item_from} et reçu {item_to} !'
 'Waffe einsetzen': 'Attaquer avec'
 'Zum Glück sind hier keine Zombies...': 'Il n''y a pas de zombie dans le coin...'

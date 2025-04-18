@@ -343,7 +343,7 @@ Essen: Comer
 Einnehmen: Utilizar
 Einsetzen: Utilizar
 'Du hast dein <span class="tool">{item}</span> ausgepackt und <span class="tool">{items_spawn}</span> erhalten!': 'Has abierto <span class="tool">{item}</span> y has encontrado <span class="tool">{items_spawn}</span>.'
-'<nt-spawned>Trotz aller Anstrengungen ist es dir nicht gelungen, den {item} zu öffnen...</nt-spawned><t-spawned>Du hast die {item} geöffnet und darin {items_spawn} gefunden!</t-spawned>': '<nt-spawned>Pierdes un tiempo precioso buscando la combinación de ese baúl en vano...</nt-spawned><t-spawned>¡Ya está! <strong>¡Encontraste la combinación secreta del baúl!</strong> Era 3141... Y descubres {items_spawn} en su interior.</t-spawned>'
+'<nt-spawned>Trotz aller Anstrengungen ist es dir nicht gelungen, den {item} zu öffnen...</nt-spawned><t-spawned>Du hast die {item} geöffnet und darin {items_spawn} gefunden!</t-spawned>': '<nt-spawned>Pierdes un tiempo precioso buscando la combinación de ese baúl en vano...</nt-spawned><t-spawned>¡Ya está! <strong>¡Encontraste la combinación secreta del baúl!</strong> Era {combination}... Y descubres {items_spawn} en su interior.</t-spawned>'
 Laden: Cargar
 'Du hast eine {items_consume} in dein/e/n {item_from} eingelegt und {item_to} erhalten!': 'Has fabricado {item_to} combinando {items_consume} y {item_from}.'
 'Waffe einsetzen': 'Atacar con'
