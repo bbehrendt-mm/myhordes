@@ -43,7 +43,7 @@ class ItemDataService implements FixtureProcessorInterface {
         $container->add()->label('MagLite Kinderlampe (1 Ladung)')->icon('maglite_1')->category('Furniture')->deco(5)->heavy(false)->watchpoint(0)->commit();
         $container->add()->label('MagLite Kinderlampe (2 Ladungen)')->icon('maglite_2')->category('Furniture')->deco(5)->heavy(false)->watchpoint(0)->commit();
         $container->add()->label('Krebserregender Ofen')->icon('machine_2')->category('Furniture')->deco(2)->heavy(true)->watchpoint(15)->isEmote(true)->commit();
-        $container->add()->label('Alte Waschmaschine')->icon('machine_1')->category('Furniture')->deco(2)->heavy(true)->watchpoint(15)->commit();
+        $container->add()->label('Alte Waschmaschine')->icon('machine_1')->category('Furniture')->deco(2)->heavy(true)->watchpoint(15)->isEmote(true)->commit();
         $container->add()->label('Wütende Mieze (halb verdaut)')->icon('angryc')->category('Furniture')->deco(1)->heavy(false)->watchpoint(18)->fragile(true)->deco_text('Sie ist beängstigend.')->isEmote(true)->commit();         // --
         $container->add()->label('Kassettenradio')->icon('radio_on')->category('Furniture')->deco(2)->heavy(false)->watchpoint(-15)->isEmote(true)->commit();
         $container->add()->label('Schaukelstuhl')->icon('chair')->category('Furniture')->deco(5)->heavy(true)->watchpoint(15)->commit();
@@ -84,7 +84,7 @@ class ItemDataService implements FixtureProcessorInterface {
         $container->add()->label('Blechplatte')->icon('plate')->category('Armor')->deco(0)->heavy(true)->watchpoint(0)->deco_text('Verbessert die Verteidigung')->isEmote(true)->commit();
 		$container->add()->label('Alte Tür')->icon('door')->category('Armor')->deco(0)->heavy(true)->watchpoint(15)->deco_text('Verbessert die Verteidigung')->commit();
 		$container->add()->label('Unförmige Zementblöcke')->icon('concrete_wall')->category('Armor')->deco(0)->heavy(true)->watchpoint(17)->deco_text('Verbessert die Verteidigung')->isEmote(true)->commit();
-		$container->add()->label('Holzbock')->icon('trestle')->category('Armor')->deco(1)->heavy(true)->watchpoint(15)->deco_text('Verbessert die Verteidigung')->commit();
+		$container->add()->label('Holzbock')->icon('trestle')->category('Armor')->deco(1)->heavy(true)->watchpoint(15)->deco_text('Verbessert die Verteidigung')->isEmote(true)->commit();
 		$container->add()->label('Järpen-Tisch')->icon('table')->category('Armor')->deco(3)->heavy(true)->watchpoint(15)->deco_text('Verbessert die Verteidigung')->isEmote(true)->commit();
 		$container->add()->label('Solide Holzplatte')->icon('wood_plate')->category('Armor')->deco(0)->heavy(true)->watchpoint(0)->deco_text('Verbessert die Verteidigung')->commit();
 		$container->add()->label('Autotür')->icon('car_door')->category('Armor')->deco(0)->heavy(true)->watchpoint(25)->watchimpact(3)->deco_text('Verbessert die Verteidigung')->commit();
@@ -169,7 +169,7 @@ class ItemDataService implements FixtureProcessorInterface {
 		$container->add()->label('Gesellschaftsspiel')->icon('game_box')->category('Box')->deco(0)->heavy(false)->watchpoint(0)->commit();
 		$container->add()->label('Geschenkpaket')->icon('postal_box')->category('Box')->deco(0)->heavy(false)->watchpoint(0)->commit();
 		$container->add()->label('Großes Geschenkpaket')->icon('postal_box_xl')->category('Box')->deco(0)->heavy(true)->watchpoint(0)->commit();
-		$container->add()->label('Zeltplane')->icon('sheet')->category('Misc')->deco(0)->heavy(false)->watchpoint(10)->commit();
+		$container->add()->label('Zeltplane')->icon('sheet')->category('Misc')->deco(0)->heavy(false)->watchpoint(10)->isEmote(true)->commit();
 		$container->add()->label('Sperrholzstück')->icon('out_def')->category('Misc')->deco(0)->heavy(false)->watchpoint(0)->commit();
 		$container->add()->label('Ekliger Hautfetzen')->icon('smelly_meat')->category('Misc')->deco(0)->heavy(false)->watchpoint(0)->commit();
 		$container->add()->label('Bandage')->icon('bandage')->category('Drug')->deco(0)->heavy(false)->watchpoint(0)->commit();
@@ -242,7 +242,7 @@ class ItemDataService implements FixtureProcessorInterface {
 		$container->add()->label('Ei')->icon('egg')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->commit();
 		$container->add()->label('Apfel')->icon('apple_blue')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->commit(); //New regular apple
 		$container->add()->label('Grüne Bierflasche')->icon('vodka_de')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->fragile(true)->commit();
-		$container->add()->label('Vodka Marinostov')->icon('vodka')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->fragile(true)->commit();
+		$container->add()->label('Vodka Marinostov')->icon('vodka')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->fragile(true)->isEmote(true)->commit();
 		$container->add()->label("'Wake The Dead'")->icon('rhum')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->fragile(true)->commit();
 		$container->add()->label('Abgestandenes Bier')->icon('fest')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->fragile(true)->commit();
 		$container->add()->label('Menschenfleisch')->icon('hmeat')->category('Food')->deco(0)->heavy(false)->watchpoint(15)->isEmote(true)->commit();
