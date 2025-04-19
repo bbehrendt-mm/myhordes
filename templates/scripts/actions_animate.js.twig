@@ -28,6 +28,7 @@ const item_action_collapse = function( boxClass,toggleClass ) {
                     template.setAttribute('id', template.dataset.proxyTemplate + '--template');
                     const clone = document.createElement('div');
                     clone.setAttribute('id', template.dataset.proxyTemplate + '');
+                    clone.setAttribute('style', template.getAttribute('style'));
                     template.parentElement.insertBefore(clone, template);
                 }
 
