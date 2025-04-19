@@ -646,14 +646,14 @@ Erfahrungsbonus: Bonus d’expérience
 'Du erhälst einen Bonus auf deine eigene Heldenerfahrung, sobald ein geworbener Spieler zum ersten Mal pro Saison eine Fähigkeit erwirbt.': 'Vous recevrez un bonus pour votre propre expérience héroïque dès qu''un joueur parrainé dépense de l''expérience pour une capacité la première fois de la saison.'
 Erfahrung: Expérience
 Erworben: Acquis
-'Kann beliebig oft in einer Saison verdient werden!': 'Peut être gagné autant de fois que vous le souhaitez au cours d’une saison\_!'
+'Kann beliebig oft in einer Saison verdient werden!': 'Peut être gagné autant de fois que vous le souhaitez au cours d’une saison !'
 'pro überlebtem Tag': 'par jour survécu'
 'Überlebe in einer Stadt, solange du kannst!': 'Survivez dans une ville aussi longtemps que vous le pouvez !'
 'Überlebe mindestens {days} Tage in einer Pandämonium-Stadt': 'Survivre au moins {days} jours dans une ville du Pandémonium'
 'Überlebe mindestens {days} Tage als {profession} in einer Stadt.': 'Survivre au moins {days} jours en tant que {profession} dans une ville.'
 'Überlebe insgesamt mindestens {days} Tage in einer Stadt.': 'Survivre au moins {days} jours au total dans une ville.'
-'Wenn du zwischen {day1} und {day2} Tage in der Stadt überlebt hast!': 'Si vous avez survécu dans la ville entre {day1} et {day2}\_jours\_!'
-'Wenn du zwischen mindestens {day} Tage in der Stadt überlebt hast!': 'Si vous avez survécu dans la ville pendant au moins {day} jours\_!'
+'Wenn du zwischen {day1} und {day2} Tage in der Stadt überlebt hast!': 'Si vous avez survécu dans la ville entre {day1} et {day2} jours !'
+'Wenn du zwischen mindestens {day} Tage in der Stadt überlebt hast!': 'Si vous avez survécu dans la ville pendant au moins {day} jours !'
 'pro gefressenem Bürger': 'par citoyen mangé'
 'Dezimiere als Ghul die Bewohner deiner Stadt': 'Décimez les habitants de votre ville en tant que goule'
 'Durch überleben!': 'En survivant !'
