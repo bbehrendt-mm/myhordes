@@ -6,6 +6,7 @@ namespace App\Controller\API;
 use App\Annotations\ExternalAPI;
 use App\Annotations\GateKeeperProfile;
 use App\Entity\AwardPrototype;
+use App\Entity\Building;
 use App\Entity\BuildingPrototype;
 use App\Entity\CauseOfDeath;
 use App\Entity\Citizen;
@@ -87,6 +88,7 @@ class JSONv1Controller extends CoreController {
         switch ($type) {
 			case 'status':
                 $data = [
+                    "version"  => $this->version_manager->getVersion(),
                     "attack"   => $this->time_keeper->isDuringAttack(),
                     "maintain" => is_file($this->getParameter('kernel.project_dir') . "/public/maintenance/.active")
                 ];
@@ -545,6 +547,9 @@ class JSONv1Controller extends CoreController {
                             case "pa":
                                 $data_building[$field] = $building->getPrototype()->getAp();
                                 break;
+                            case "paCurrent":
+                                $data_building[$field] = $building->getPrototypeAP( $this->conf->getTownConfiguration($building->getTown())->getBuildingRarity( $building->getPrototype() ) );
+                                break;
                             case "life":
                                 $data_building[$field] = $building->getHp();
                                 break;
@@ -569,6 +574,12 @@ class JSONv1Controller extends CoreController {
                             case "rarityCurrent":
                                 $data_building[$field] = $this->conf->getTownConfiguration($this->town)->getBuildingRarity( $building->getPrototype() );
                                 break;
+                            case "difficulty":
+                                $data_building[$field] = $building->getDifficultyLevel();
+                                break;
+                            case "order":
+                                $data_building[$field] = $building->getPrototype()->getOrderBy();
+                                break;
                             case "temporary":
                                 $data_building[$field] = $building->getPrototype()->getTemp();
                                 break;
@@ -578,6 +589,9 @@ class JSONv1Controller extends CoreController {
                                 break;
                             case "resources":
                                 $data_building[$field] = $this->getResources($building->getPrototype());
+                                break;
+                            case "resourcesCurrent":
+                                $data_building[$field] = $this->getResources($building);
                                 break;
                             case "actions":
                                 $data_building[$field] = $building->getPrototype()->getAp() - $building->getAp();
@@ -623,7 +637,7 @@ class JSONv1Controller extends CoreController {
                     case "desc":
                         $data[$field] = $this->getTranslate($prototype->getDescription(), 'buildings');
                         break;
-                    case "pa":
+                    case "pa": case "paCurrent":
                         $data[$field] = $prototype->getAp();
                         break;
                     case "maxLife":
@@ -638,11 +652,8 @@ class JSONv1Controller extends CoreController {
                     case "hasUpgrade":
                         $data[$field] = !is_null($prototype->getUpgradeTexts());
                         break;
-                    case "rarity":
+                    case "rarity": case "rarityCurrent":
                         $data[$field] = $prototype->getBlueprint();
-                        break;
-                    case "rarityCurrent":
-                        $data[$field] = $this->conf->getTownConfiguration($this->town)->getBuildingRarity( $prototype );
                         break;
                     case "temporary":
                         $data[$field] = $prototype->getTemp();
@@ -651,7 +662,13 @@ class JSONv1Controller extends CoreController {
                         $data[$field] =
                             (!is_null($prototype->getParent())) ? $prototype->getParent()->getId() : 0;
                         break;
-                    case "resources":
+                    case "order":
+                        $data[$field] = $prototype->getOrderBy();
+                        break;
+                    case "difficulty":
+                        $data[$field] = 0;
+                        break;
+                    case "resources": case "resourcesCurrent":
                         $data[$field] = $this->getResources($prototype);
                         break;
                 }
@@ -1420,15 +1437,17 @@ class JSONv1Controller extends CoreController {
         return $data;
     }
 
-    private function getResources(BuildingPrototype $buildingPrototype, array $fields = []): array {
+    private function getResources(Building|BuildingPrototype $building, array $fields = []): array {
         $data = [];
+
+        $resources = is_a($building,Building::class) ? $building->getPrototypeResources() : $building->getResources();
 
         if (empty($fields)) {
             $fields = ['amount', 'rsc'];
         }
 
-        if (!is_null($buildingPrototype->getResources())) {
-            foreach ($buildingPrototype->getResources()->getEntries() as $resource) {
+        if (!is_null($resources)) {
+            foreach ($resources->getEntries() as $resource) {
                 $data_resources = [];
                 foreach ($fields as $field) {
                     if (is_array($field)) {

@@ -754,7 +754,7 @@ class XMLv2Controller extends CoreController {
                     'secure' => intval($secure),
                     'author' => 'MyHordes',
                     'language' => $language,
-                    'version' => '2.1.12',
+                    'version' => $this->version_manager->getVersion(),
                     'generator' => 'symfony',
                 ],
             ]

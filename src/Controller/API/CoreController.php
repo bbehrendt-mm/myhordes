@@ -28,6 +28,8 @@ use App\Service\User\UserUnlockableService;
 use App\Service\UserHandler;
 use App\Service\ZoneHandler;
 use Doctrine\ORM\EntityManagerInterface;
+use Shivas\VersioningBundle\Service\VersionManager;
+use Shivas\VersioningBundle\Service\VersionManagerInterface;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -47,6 +49,8 @@ abstract class CoreController extends InventoryAwareController {
     protected array $languages;
 
     protected $pictoService;
+
+    protected VersionManagerInterface $version_manager;
 
     /**
      * @param EntityManagerInterface $em
@@ -80,7 +84,7 @@ abstract class CoreController extends InventoryAwareController {
                                 ConfMaster $conf, ZoneHandler $zh, UserHandler $uh,
                                 CrowService $armbrust, Packages $a, TownHandler $th, GazetteService $gs,
                                 AdminHandler $adminHandler, UrlGeneratorInterface $urlGenerator, DoctrineCacheService $doctrineCache, EventProxyService $events, HookExecutor $hookExecutor,
-                                PictoService $pictoService, UserUnlockableService $u,
+                                PictoService $pictoService, UserUnlockableService $u, VersionManagerInterface $version
     ) {
         parent::__construct($em, $ih, $ch, $ah, $dh, $ph, $translator, $lh, $tk, $rg, $conf, $zh, $uh, $armbrust, $th, $a, $doctrineCache, $events, $hookExecutor, $u);
         $this->gazette_service = $gs;
@@ -88,6 +92,7 @@ abstract class CoreController extends InventoryAwareController {
         $this->urlGenerator = $urlGenerator;
         $this->languages = $this->generatedLangsCodes;
         $this->pictoService = $pictoService;
+        $this->version_manager = $version;
     }
 
     abstract public function on_error( ExternalAPIError $message, string $language ): Response;

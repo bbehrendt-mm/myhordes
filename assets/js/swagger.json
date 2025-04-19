@@ -2147,6 +2147,11 @@
             "type": "boolean",
             "example": false,
             "description": "True if the server is in maintenance mode. WARNING: At this moment, the API is not available in maintenance mode!"
+          },
+          "version": {
+            "type": "string",
+            "example": "4.0.1",
+            "description": "Current game version"
           }
         }
       },
@@ -2280,6 +2285,11 @@
             "description": "AP requirement",
             "example": 100
           },
+          "paCurrent": {
+            "type": "integer",
+            "description": "Actual AP requirement with regards to the current town's configuration and building difficulty level.",
+            "example": 100
+          },
           "maxLife": {
             "type": "integer",
             "description": "HP count",
@@ -2310,6 +2320,11 @@
             "description": "Actual blueprint level (0 if no blueprint, 5 if not unlockable by blueprint) with regards to the current town's configuration.",
             "example": 0
           },
+          "difficulty": {
+            "type": "integer",
+            "description": "Difficulty level of the current building. Lower means more difficult. Affects the values in resourcesCurrent and paCurrent.",
+            "example": 0
+          },
           "temporary": {
             "type": "boolean",
             "description": "Always breaks during the nightly attack.",
@@ -2320,8 +2335,18 @@
             "description": "ID of parent building (0 if no parent)",
             "example": 0
           },
+          "order": {
+            "type": "integer",
+            "description": "Ordering of buildings in the MyHordes UI.",
+            "example": 0
+          },
           "resources": {
             "type": "array",
+            "items": {"$ref": "#/components/schemas/JSONItemResourceObject"}
+          },
+          "resourcesCurrent": {
+            "type": "array",
+            "description": "Actual required resources with regards to the current town's configuration and building difficulty level.",
             "items": {"$ref": "#/components/schemas/JSONItemResourceObject"}
           }
         }
