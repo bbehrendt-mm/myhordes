@@ -14,6 +14,7 @@ use App\Entity\PictoOffsetCounter;
 use App\Entity\PictoPrototype;
 use App\Entity\TownClass;
 use App\Entity\TownRankingProxy;
+use App\Enum\Configuration\MyHordesSetting;
 use App\Enum\Game\CitizenPersistentCache;
 use App\Enum\HeroXPType;
 use App\Event\Common\User\DeathConfirmedEvent;
@@ -21,6 +22,7 @@ use App\Event\Common\User\DeathConfirmedPostPersistEvent;
 use App\Event\Common\User\DeathConfirmedPrePersistEvent;
 use App\EventListener\ContainerTypeTrait;
 use App\Service\Actions\XP\GetPictoXPStepsAction;
+use App\Service\ConfMaster;
 use App\Service\DoctrineCacheService;
 use App\Service\EventProxyService;
 use App\Service\User\PictoService;
@@ -58,7 +60,8 @@ final class DeathConfirmationEventListener implements ServiceSubscriberInterface
             UserHandler::class,
             UserUnlockableService::class,
             PictoService::class,
-            GetPictoXPStepsAction::class
+            GetPictoXPStepsAction::class,
+            ConfMaster::class
         ];
     }
 
@@ -235,7 +238,10 @@ final class DeathConfirmationEventListener implements ServiceSubscriberInterface
 
             if ($count <= 0) continue;
 
-            if ( is_array($by_count) && $event->death->getTown()->getSeason() ) {
+            if (
+                is_array($by_count) &&
+                $event->death->getTown()->getSeason()?->getNumber() >= $this->getService(ConfMaster::class)->getGlobalConf()->get( MyHordesSetting::HxpCumulativeFirstSeason ) )
+            {
                 $count = $this->getService(PictoService::class)
                     ->getSinglePictoCount($event->user, $prototype, season: $event->death->getTown()->getSeason());
 
@@ -262,7 +268,5 @@ final class DeathConfirmationEventListener implements ServiceSubscriberInterface
                     $this->hxp($event->death, $template, !$subject, $value, ['town' => $event->death->getTown()->getName(), 'picto' => $prototype->getId()], $subject ? "picto_{$picto}" : null);
             }
         }
-
-
     }
 }
