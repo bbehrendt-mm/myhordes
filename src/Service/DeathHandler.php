@@ -119,7 +119,8 @@ class DeathHandler
         }
 
         foreach ($citizen->getLeadingEscorts() as $escort)
-            $this->entity_manager->persist( $escort->getCitizen()->getEscortSettings()->setLeader(null) );
+            if ( $escort->getCitizen()?->getEscortSettings() )
+                $this->entity_manager->persist( $escort->getCitizen()->getEscortSettings()->setLeader(null) );
 
         $died_outside = $citizen->getZone() !== null;
         if (!$died_outside) {
