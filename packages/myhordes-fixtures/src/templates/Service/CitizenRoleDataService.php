@@ -22,7 +22,7 @@ class CitizenRoleDataService implements FixtureProcessorInterface {
             ->commit();
 
         $container->add()->label('Ghul')
-            ->name('ghoul')->hidden(true)->help('ghouls')->message('Du hast dich in einen Ghul verwandelt! Verrate es niemandem und schau in der Hilfe nach, um mehr zu erfahren.')
+            ->name('ghoul')->secret(true)->help('ghouls')->message('Du hast dich in einen Ghul verwandelt! Verrate es niemandem und schau in der Hilfe nach, um mehr zu erfahren.')
             ->commit();
 
         $data = $container->toArray();
