@@ -43,6 +43,7 @@ parameters:
       inactive_after_days: 5
     hxp:
       first_season: 17
+      first_cumulative_season: 18
     anti-grief:
       min-sp: 20
       reg-limit: 2

@@ -110,6 +110,7 @@ enum MyHordesSetting: string implements Configuration
 
     //<editor-fold desc="General Settings">
     case HxpFirstSeason = 'hxp.first_season';
+    case HxpCumulativeFirstSeason = 'hxp.first_cumulative_season';
     //</editor-fold>
 
     public function abstract(): false
@@ -226,6 +227,7 @@ enum MyHordesSetting: string implements Configuration
                 => null,
 
             self::HxpFirstSeason => 17,
+            self::HxpCumulativeFirstSeason => 18,
 
             default => null,
         };
