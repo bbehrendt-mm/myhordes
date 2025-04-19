@@ -337,6 +337,7 @@ class CitizenHandler
 
         $bank = $citizen->getTown()->getBank();
         foreach ($items as $item) {
+            $item->setHidden(false);
             $this->inventory_handler->forceMoveItem( $bank, $item );
         }
 
