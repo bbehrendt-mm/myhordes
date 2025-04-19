@@ -812,7 +812,7 @@ class BuildingDataService implements FixtureProcessorInterface {
         $container->add()->parentBuilding($small_building)
             ->icon('small_pmvbig')->label('Riesiger KVF')->description('Ein wirklich riesiger KVF, auf dem die Namen aller Bürger der Stadt eingraviert sind, erhebt sich stolz in den Himmel... äh. Genau, ein KVF. Niemand weiß warum, aber jemand hat am Fuße des Bauwerks "Eigentum der tiefsinnigen Nacht" eingraviert. Dieses Wunderwerk strahlt im Glanze seiner Nutzlosigkeit: Seine Errichtung bringt allen Bürgern der Stadt eine seltene Auszeichnung ein.')
             ->isImpervious(true)->isTemporary(0)->defense(0)
-            ->ap(300)->health(0)->resources(["meca_parts_#00" => 2,"metal_#00" => 150,])
+            ->ap(300)->health(0)->resources(["meca_parts_#00" => 2,"metal_#00" => 30])
             ->adjustForHardMode(
                 null, ["meca_parts_#00" => 15,"metal_#00" => 150,],
                 null, ["meca_parts_#00" => 1,"metal_#00" => 25,],
