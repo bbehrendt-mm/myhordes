@@ -2,6 +2,7 @@
 
 namespace MyHordes\Fixtures\DTO\Actions\Atoms\Requirement;
 
+use Adbar\Dot;
 use App\Enum\Configuration\TownSetting;
 use App\Service\Actions\Game\AtomProcessors\Require\ProcessConfigRequirement;
 use MyHordes\Fixtures\DTO\Actions\RequirementsAtom;
@@ -25,7 +26,9 @@ class ConfigRequirement extends RequirementsAtom {
 
     public function getConfigRequirements(): array {
         $list = [];
-        foreach ($this->data as $key => $value)
+
+        $data = new Dot($this->data);
+        foreach ($data->flatten() as $key => $value)
             if (str_starts_with( $key, 'config_' ))
                 $list[] = [substr( $key, 7 ), $value];
         return $list;
