@@ -10,6 +10,7 @@ use App\Entity\Emotes;
 use App\Entity\ForumModerationSnippet;
 use App\Entity\ItemPrototype;
 use App\Entity\User;
+use App\Enum\UserSetting;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
@@ -181,7 +182,7 @@ class EditorController extends CustomAbstractCoreController
                     'tag' => $entry->getTag(),
                     'path' => $entry->getI18n() ? str_replace('{lang}', $user->getLanguage() ?? 'de', $entry->getPath()) : $entry->getPath(),
                     'orderIndex' => $entry->getOrderIndex(),
-                    'groups' => $entry->getGroups(),
+                    'groups' => $user?->getSetting(UserSetting::DisableEmoteCategories) ? ['emotes'] : $entry->getGroups(),
                 ];
             }
 

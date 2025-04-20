@@ -1093,8 +1093,12 @@ class SoulController extends CustomAbstractController
      * @return Response
      */
     #[Route(path: 'api/soul/settings/common', name: 'api_soul_common')]
-    public function soul_settings_common(JSONRequestParser $parser, SessionInterface $session): Response {
+    public function soul_settings_common(JSONRequestParser $parser, SessionInterface $session, InvalidateTagsInAllPoolsAction $clear_cache): Response {
         $user = $this->getUser();
+
+        $disableEmoteCats = (bool)$parser->get('noEmoteGroups', false);
+        if ($disableEmoteCats !== $user->getSetting( UserSetting::DisableEmoteCategories ))
+            ($clear_cache)("user-{$user->getId()}-emote-unlocks");
 
         $user->setPreferSmallAvatars( (bool)$parser->get('sma', false) );
         $user->setDisableFx( (bool)$parser->get('disablefx', false) );
@@ -1108,6 +1112,7 @@ class SoulController extends CustomAbstractController
         $user->setSetting( UserSetting::ReorderTownLocationButtons, (bool)$parser->get('townAltLayout', true) );
         $user->setSetting( UserSetting::PrivateForumsOnTop, (bool)$parser->get('privateForumsOnTop', true) );
         $user->setSetting( UserSetting::LargerPMIcon, (bool)$parser->get('largerPMIcon', false) );
+        $user->setSetting( UserSetting::DisableEmoteCategories, $disableEmoteCats );
         $user->setAdminLang($parser->get("adminLang", null));
         $session->set('_admin_lang',$user->getAdminLang() ?? $user->getLanguage());
         $this->entity_manager->persist( $user );

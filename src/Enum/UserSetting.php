@@ -30,6 +30,7 @@ enum UserSetting: string {
     case PrivateForumsOnTop             = 'private-forums-on-top';
     case PreferredPronounTitle          = 'preferred-pronoun-title';
     case LargerPMIcon                   = 'larger-pm-icon';
+    case DisableEmoteCategories         = 'no-emote-categories';
 
     /**
      * @return UserSetting[]
@@ -63,7 +64,8 @@ enum UserSetting: string {
             UserSetting::PushNotifyOnOfficialGroupChat,
             UserSetting::PushNotifyOnModReport,
             UserSetting::PushNotifyOnAnnounce,
-            UserSetting::PushNotifyOnEvent => true,
+            UserSetting::PushNotifyOnEvent,
+            UserSetting::DisableEmoteCategories => true,
 
             UserSetting::Flag,
             UserSetting::PreferredPronoun,
@@ -102,7 +104,8 @@ enum UserSetting: string {
             UserSetting::PushNotifyOnOfficialGroupChat,
             UserSetting::PushNotifyOnModReport,
             UserSetting::PushNotifyOnAnnounce,
-            UserSetting::PushNotifyOnEvent => true,
+            UserSetting::PushNotifyOnEvent,
+            UserSetting::DisableEmoteCategories => true,
 
             UserSetting::DistinctionTop3          => false,
         };
@@ -139,6 +142,7 @@ enum UserSetting: string {
             UserSetting::PushNotifyOnModReport         => true,
             UserSetting::PushNotifyOnAnnounce          => true,
             UserSetting::PushNotifyOnEvent             => true,
+            UserSetting::DisableEmoteCategories        => false,
         };
     }
 }

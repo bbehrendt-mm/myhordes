@@ -637,6 +637,11 @@
                                     <input x-setting {% if app.user.setting( constant("\\App\\Enum\\UserSetting::LimitTownListSize") ) %}checked{% endif%} type="checkbox" id="setting_limit_town_size">&nbsp;<label for="setting_limit_town_size">{{'Standartmäßig nur 10 Städte auf der Seelenseite anzeigen'|trans({}, 'soul')}}</label>
                                 </div>
                             </div>
+                            <div class="padded cell rw-12">
+                                <div class="note note-lightest">
+                                    <input x-setting {% if app.user.setting( constant("\\App\\Enum\\UserSetting::DisableEmoteCategories") ) %}checked{% endif%} type="checkbox" id="setting_disable_emote_categories">&nbsp;<label for="setting_disable_emote_categories">{{'Emotes im Forum-Editor nicht in unterschieldiche Tabs gruppieren'|trans({}, 'soul')}}</label>
+                                </div>
+                            </div>
                         </div>
 
                         <h5>{{ 'Layout'|trans({},'soul') }}</h5>
@@ -976,6 +981,7 @@
                     townAltLayout: document.getElementById('setting_reorder-location-buttons-town').checked,
                     privateForumsOnTop: document.getElementById('setting_private-forums-on-top').checked,
                     largerPMIcon: document.getElementById('setting_larger-pm-icon').checked,
+                    noEmoteGroups: document.getElementById('setting_disable_emote_categories').checked,
                     {% if is_granted("ROLE_CROW") %}
                     adminLang: document.querySelector("input[name=admin_setting_preferred_language]:checked").value
                     {% endif %}
