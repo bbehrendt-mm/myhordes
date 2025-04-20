@@ -1,12 +1,9 @@
 import {Global} from "../defaults";
 import {createRoot, Root} from "react-dom/client";
 import * as React from "react";
-import {HordesBuildingPageWrapper} from "./buildings/BuildingPage";
-import HTML from "../html";
 import {ErrorBoundary} from "react-error-boundary";
-import {Simulate} from "react-dom/test-utils";
-import error = Simulate.error;
 import {HTMLAttributes, MutableRefObject, ReactHTML} from "react";
+import {randomUUIDv4} from "../shims";
 
 declare var $: Global;
 
@@ -290,7 +287,7 @@ export abstract class PersistentShim<ReactType extends ShimLoader> extends Shim<
     public constructor() {
         super();
         if (!this.dataset.reactMount && !this.id) {
-            const id = `auto-${window.crypto.randomUUID()}`;
+            const id = `auto-${randomUUIDv4()}`;
             this.dataset.reactMount = id;
             this.setAttribute('id',id);
         }
