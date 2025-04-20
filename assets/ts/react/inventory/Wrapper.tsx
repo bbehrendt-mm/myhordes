@@ -18,6 +18,7 @@ import {BaseMounter} from "../index";
 import {emitSignal, useBroadcastSignal, useSignal} from "../../v2/client-modules/Signal";
 import {ServerInducedSignalProps} from "../../v2/fetch";
 import {ItemTooltip} from "../utils";
+import {randomUUIDv4} from "../../shims";
 
 declare var $: Global;
 declare var c: Const;
@@ -397,7 +398,7 @@ const BagInventory = (props: InventoryPropsBag) => {
 const BankInventory = (props: InventoryPropsBank) => {
 
     const globals = useContext(Globals);
-    const datalistUuid = useRef(window.crypto.randomUUID());
+    const datalistUuid = useRef(randomUUIDv4());
 
     const [searchString, setSearchString] = useState<string>('');
 
