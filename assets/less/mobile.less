@@ -385,7 +385,20 @@
     .forum-content-format();
   }
 
-  .rucksack_status_union.status:before { background: url("../img/game-bar/cog2m.png") 0 0 no-repeat !important; }
+  .game-bar {
+    .rucksack_status_union.status:before { background: url("../img/game-bar/cog2m.png") 0 0 no-repeat !important; }
+    .status.rucksack_status_union { min-width: 120px !important; }
+    .rucksack_status_union.expanded:hover + .status.rucksack_status_union {
+      position: absolute; top: 55px; right: 0; z-index: 1;
+      .status-ghoul { left: 0 !important; }
+    }
+
+    .status-ghoul { right: 0 }
+  }
+
+  #content:has(.game-bar .status-ghoul) {
+    margin-top: 45px !important;
+  }
 
   #beyond_chat { height: calc( 100% - 16px ); margin-top: 8px; margin-bottom: 8px; }
   div.beyond-escort-on:not(.beyond-escort-on-all)
