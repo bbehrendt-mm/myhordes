@@ -366,6 +366,9 @@ class InventoryController extends CustomAbstractCoreController
     {
         $citizen = $this->getUser()->getActiveCitizen();
 
+        if ($citizen->getEscortSettings()?->getLeader())
+            return new JsonResponse([], Response::HTTP_CONFLICT);
+
         if (!self::canEnumerate($citizen, $inventory, $restrictive_from))
             return new JsonResponse([], Response::HTTP_NOT_FOUND);
 
