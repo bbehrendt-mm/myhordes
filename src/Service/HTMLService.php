@@ -359,7 +359,7 @@ class HTMLService {
                 $s_value = $value < 9 ? ('' . ($value+2)) : [$this->translator->trans('Bube',[],'items'),$this->translator->trans('Dame',[],'items'),$this->translator->trans('König',[],'items'),$this->translator->trans('Ass',[],'items')][$value-9];
                 $d->nodeValue = $this->translator->trans('{color} {value}', ['{color}' => $s_color, '{value}' => $s_value], 'global');
             },
-            '//div[@class=\'coords\']'   => function (DOMNode $d) use($town, $user, &$insight) { $insight->editable = false; $d->nodeValue = (!$user?->getActiveCitizen()?->getAlive()) ? '???' : ( $user->getActiveCitizen()->getZone() ? "[{$user->getActiveCitizen()->getZone()->getX()}/{$user->getActiveCitizen()->getZone()->getY()}]" : '[0/0]' ); },
+            '//div[@class=\'coords\']'   => function (DOMNode $d) use($town, $user, &$insight) { $insight->editable = false; $d->nodeValue = (!$user?->getActiveCitizen()?->getAlive() || $user?->getActiveCitizen()?->getTown()?->getChaos()) ? '???' : ( $user->getActiveCitizen()->getZone() ? "[{$user->getActiveCitizen()->getZone()->getX()}/{$user->getActiveCitizen()->getZone()->getY()}]" : '[0/0]' ); },
             '//div[@class=\'town\']'     => function (DOMNode $d) use($town, $user, &$insight) { $insight->editable = false; $d->nodeValue = (!$user?->getActiveCitizen()?->getAlive()) ? '???' : $user->getActiveCitizen()->getTown()->getName(); },
             '//div[@class=\'citizen\']'  => function (DOMNode $d) use ($town,&$cache,&$insight,$user) {
                 $insight->editable = false;
