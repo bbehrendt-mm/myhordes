@@ -1484,8 +1484,8 @@ class NightlyHandler
                 if ($zone->getDiscoveryStatus() !== Zone::DiscoveryStateCurrent) {
                     $this->log->debug( "Zone <info>{$zone->getX()}/{$zone->getY()}</info>: Set discovery state to <info>current</info>." );
                     $zone->setDiscoveryStatus(Zone::DiscoveryStateCurrent);
-                    $zone->setZombieStatus( $upgraded_map ? Zone::ZombieStateExact : Zone::ZombieStateEstimate );
                 }
+                $zone->setZombieStatus( $upgraded_map ? Zone::ZombieStateExact : Zone::ZombieStateEstimate );
             } elseif ($zone->getDiscoveryStatus() === Zone::DiscoveryStateCurrent) {
                 $this->log->debug( "Zone <info>{$zone->getX()}/{$zone->getY()}</info>: Set discovery state to <info>past</info>." );
                 $zone->setDiscoveryStatus(Zone::DiscoveryStatePast);
