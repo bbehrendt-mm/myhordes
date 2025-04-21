@@ -37,10 +37,11 @@ class CitizenWorkshopOptionsData extends CitizenBaseData
         $this->disabled_types = array_values( array_unique( $this->disabled_types ) );
     }
 
-    public function recipePenalty(Recipe $recipe): int {
-        $type_penalty = $this->ap_penalty_types[$recipe->getType()] ?? 0;
-        $individual_penalty = $recipe->getName() === 'ws030' ? 4 : 0;
+    public function individualRecipePenalty(Recipe $recipe): int {
+        return $recipe->getName() === 'ws030' ? 4 : 0;
+    }
 
-        return $type_penalty + $individual_penalty;
+    public function recipePenalty(Recipe $recipe): int {
+        return ($this->ap_penalty_types[$recipe->getType()] ?? 0) + $this->individualRecipePenalty( $recipe );
     }
 }
