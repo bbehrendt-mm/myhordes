@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Expr\Comparison;
+use Doctrine\Common\Collections\Order;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinTable;
@@ -1169,16 +1170,16 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
     }
 
     /**
-     * @return Collection<int, Forum>
+     * @return Collection<int, PinnedForum>
      */
     public function getPinnedForums(): Collection
     {
         return $this->pinnedForums->matching(
-            Criteria::create()->orderBy(['position' => Criteria::ASC])
+            Criteria::create()->orderBy(['position' => Order::Ascending])
         );
     }
 
-    public function addPinnedForum(Forum $pinnedForum): static
+    public function addPinnedForum(PinnedForum $pinnedForum): static
     {
         if (!$this->pinnedForums->contains($pinnedForum)) {
             $this->pinnedForums->add($pinnedForum);
@@ -1187,7 +1188,7 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
         return $this;
     }
 
-    public function removePinnedForum(Forum $pinnedForum): static
+    public function removePinnedForum(PinnedForum $pinnedForum): static
     {
         $this->pinnedForums->removeElement($pinnedForum);
 

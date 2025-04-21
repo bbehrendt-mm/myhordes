@@ -5,23 +5,20 @@ namespace App\Service;
 use App\Entity\AccountRestriction;
 use App\Entity\Forum;
 use App\Entity\ForumUsagePermissions;
+use App\Entity\PinnedForum;
 use App\Entity\User;
 use App\Entity\UserGroup;
 use App\Entity\UserGroupAssociation;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\EntityManagerInterface;
 
-class PermissionHandler
+readonly class PermissionHandler
 {
 
-    private EntityManagerInterface $entity_manager;
-    private UserHandler $user_handler;
-
-    public function __construct( EntityManagerInterface $em, UserHandler $uh)
-    {
-        $this->entity_manager = $em;
-        $this->user_handler = $uh;
-    }
+    public function __construct(
+        private EntityManagerInterface $entity_manager,
+        private UserHandler            $user_handler)
+    { }
 
     private function get_assoc( User $user, UserGroup $group): ?UserGroupAssociation {
         return $this->entity_manager->getRepository(UserGroupAssociation::class)->findOneBy(['user' => $user, 'association' => $group]);
@@ -71,6 +68,19 @@ class PermissionHandler
                 ->setRef1($ref1)
         );
         return $existing_assoc;
+    }
+
+    public function repairPinnedForumTabs( User $user ): void {
+        /** @var PinnedForum[] $pinned */
+        $pinned = $user->getPinnedForums()->toArray();
+        if (empty($pinned)) return;
+
+        $forums = array_map( fn(Forum $f) => $f->getId(), $this->getForumsWithPermission( $user ));
+        foreach ($pinned as $pinnedForum) {
+            $f = $pinnedForum?->getForum()?->getId() ?? $pinnedForum->getThread()?->getForum()?->getId();
+            if (!in_array($f, $forums)) $this->entity_manager->remove($pinnedForum);
+        }
+
     }
 
     public function disassociate( User $user, UserGroup $group): bool {
