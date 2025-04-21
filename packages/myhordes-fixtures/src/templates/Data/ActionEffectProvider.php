@@ -400,6 +400,9 @@ class ActionEffectProvider
         $effects_container->add()->identifier('spawn_1_water')->add((new ItemEffect())->spawnAt(ItemDropTarget::DropTargetFloorOnly)
                                                                         ->addSpawn('water_#00')
         )->commit();
+        $effects_container->add()->identifier('spawn_1_water_inv')->add((new ItemEffect())->spawnAt(ItemDropTarget::DropTargetPreferRucksack)
+                                                                        ->addSpawn('water_#00')
+        )->commit();
         $effects_container->add()->identifier('spawn_2_water')->add((new ItemEffect())->spawnAt(ItemDropTarget::DropTargetFloorOnly)
                                                                         ->addSpawn('water_#00', count: 2)
         )->commit();
