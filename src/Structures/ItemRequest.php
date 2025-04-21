@@ -8,12 +8,13 @@ use App\Entity\Item;
 
 class ItemRequest
 {
-    private $name;
-    private $count;
-    private $broken;
-    private $poison;
-    private $is_property;
-    private $all;
+    private string $name;
+    private int $count;
+    private ?bool $broken;
+    private ?bool $poison;
+    private bool $is_property;
+    private bool $all;
+    private bool $incomplete;
 
     public function __construct(string $name, int $count = 1, ?bool $broken = false, ?bool $poison = null, bool $is_prop = false)
     {
@@ -23,10 +24,16 @@ class ItemRequest
         $this->poison = $poison;
         $this->is_property = $is_prop;
         $this->all = false;
+        $this->incomplete = false;
     }
 
     public function fetchAll(bool $b): self {
         $this->all = $b;
+        return $this;
+    }
+
+    public function fetchIncomplete(bool $b): self {
+        $this->incomplete = $b;
         return $this;
     }
 
@@ -53,6 +60,10 @@ class ItemRequest
 
     public function getAll(): bool {
         return $this->all;
+    }
+
+    public function getIncomplete(): bool {
+        return $this->incomplete;
     }
 
     public function getBroken(): bool {

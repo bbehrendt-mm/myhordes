@@ -944,13 +944,18 @@ class NightlyHandler
 
 			$this->log->info("There are <info>$zombiesOnDef</info> zombies attacking the bank (with a ratio of {$this->conf->getTownConfiguration($town)->get(TownSetting::OptModifierDoDestroyRatio)})");
 			if ($number > 0) {
-				$items = $this->inventory_handler->fetchSpecificItems($town->getBank(), [new ItemRequest('defence', $number, false, null, true)]);
+				$items = $this->inventory_handler->fetchSpecificItems($town->getBank(), [(new ItemRequest('defence', $number, false, null, true))->fetchIncomplete(true)]);
 				$this->log->info("We destroy <info>$number</info> items</info>");
 				$this->log->info("We fetched <info>". count($items) . "</info> items");
 				shuffle($items);
 				$destroyed_count = 0;
 				$itemsForLog = [];
+
+                $skip_ids = [];
 				while($destroyed_count < $number && count($items) > 0) {
+
+                    $items = array_filter( $items, fn(Item $i) => $i->getCount() > 0 && !in_array( $i->getId(), $skip_ids ) );
+
 					foreach ($items as $item) {
 						if ($destroyed_count >= $number) break;
 
@@ -958,6 +963,10 @@ class NightlyHandler
 						$delete = mt_rand(1, min($item->getCount(), $number - $destroyed_count));
 						$destroyed_count += $delete;
 						$this->log->info("Destroying $delete <info>{$item->getPrototype()->getName()}</info> due to the attack");
+
+                        if ($delete >= $item->getCount())
+                            $skip_ids[] = $item->getId();
+
 						$this->inventory_handler->forceRemoveItem($item, $delete);
 						if(isset($itemsForLog[$item->getPrototype()->getId()])) {
 							$itemsForLog[$item->getPrototype()->getId()]['count']+= $delete;
@@ -966,9 +975,6 @@ class NightlyHandler
 								'item' => $item->getPrototype(),
 								'count' => $delete
 							];
-						}
-						if ($delete === $item->getCount()) {
-							array_pop($items);
 						}
 					}
 				}

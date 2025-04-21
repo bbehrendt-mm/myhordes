@@ -215,7 +215,7 @@ class InventoryHandler
                 return $inst;
             }, $result));
 
-            if (!$request->getAll() && $n < $request->getCount()) return [];
+            if (!$request->getIncomplete() && !$request->getAll() && $n < $request->getCount()) return [];
         }
 
         return $return;
