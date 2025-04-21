@@ -140,8 +140,8 @@ export const TwinoEditorControlsTabList = ({emotes, snippets, resources}: {
     const emoteGroupDefaults = emotes?.filter( e => e.groups?.includes('default') );
 
     return <TabbedSection mountOnlyActive={true} keepInactiveMounted={true} className="no-bottom-margin">
-        <Tab icon={globals.strings.controls.emotes_img} id="emotes" if={ globals.allowControl('emote') && emoteGroupEmotes.length > 0 }><EmoteTabSection emotes={emoteGroupEmotes}/></Tab>
-        <Tab icon={globals.strings.controls.default_img} id="actions" if={ globals.allowControl('emote') && emoteGroupDefaults.length > 0 }><EmoteTabSection emotes={emoteGroupDefaults}/></Tab>
+        <Tab icon={globals.strings.controls.emotes_img} id="emotes" if={ globals.allowControl('emote') && emoteGroupEmotes?.length > 0 }><EmoteTabSection emotes={emoteGroupEmotes}/></Tab>
+        <Tab icon={globals.strings.controls.default_img} id="actions" if={ globals.allowControl('emote') && emoteGroupDefaults?.length > 0 }><EmoteTabSection emotes={emoteGroupDefaults}/></Tab>
         <Tab icon={globals.strings.controls.ressources_img} id="ressources" if={ globals.allowControl('ressource') }><EmoteTabSection emotes={resources} /></Tab>
         <Tab icon={ globals.strings.controls.games_img } id="games" if={ globals.allowControl('game') }><GameTabSection/></Tab>
         <Tab icon={ globals.strings.controls.rp_img } id="rp" if={ globals.allowControl('rp') }><RPTabSection/></Tab>
