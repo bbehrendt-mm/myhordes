@@ -353,7 +353,10 @@ class BeyondController extends InventoryAwareController
                     $survival_chance >= 1.0    => T::__("Du schätzt, dass deine Überlebenschancen hier optimal sind. Niemand wird dich sehen - selbst wenn man mit dem Finger auf dich zeigt.", 'game'),
                 };
 
-                $camping_improvable = ($survival_chance < $this->citizen_handler->getCampingOdds($citizen))
+                $int_survival_chance = (int)round($survival_chance * 100);
+                $int_current_chance = (int)round($this->citizen_handler->getCampingOdds($citizen) * 100);
+
+                $camping_improvable = ($int_survival_chance < $int_current_chance)
                     ? $this->translator->trans("Nicht weit entfernt von deinem aktuellen Versteck erblickst du ein noch besseres Versteck... Hmmm...vielleicht solltest du umziehen?", [], 'game')
                     : "";
 
