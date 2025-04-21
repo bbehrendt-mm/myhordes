@@ -24,6 +24,7 @@ use App\Entity\ZoneActivityMarker;
 use App\Entity\ZoneTag;
 use App\Enum\ActionCounterType;
 use App\Enum\ActionHandler\PointType;
+use App\Enum\ClientSignal;
 use App\Enum\Configuration\CitizenProperties;
 use App\Enum\Configuration\MyHordesSetting;
 use App\Enum\Configuration\TownSetting;
@@ -43,6 +44,7 @@ use App\Service\ErrorHelper;
 use App\Service\EventProxyService;
 use App\Service\GameFactory;
 use App\Service\GameProfilerService;
+use App\Service\Globals\ResponseGlobal;
 use App\Service\HookExecutor;
 use App\Service\InventoryHandler;
 use App\Service\PictoHandler;
@@ -482,7 +484,7 @@ class BeyondController extends InventoryAwareController
      * @return Response
      */
     #[Route(path: 'api/beyond/trash', name: 'beyond_trash_controller', condition: '')]
-    public function trash_api(EventProxyService $proxy, GameProfilerService $gps): Response {
+    public function trash_api(EventProxyService $proxy, GameProfilerService $gps, ResponseGlobal $response): Response {
 
         if (!$this->citizen_handler->citizenCanAct($this->getActiveCitizen())) return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
 
@@ -516,6 +518,8 @@ class BeyondController extends InventoryAwareController
         $item = $this->item_factory->createItem($proto);
         $gps->recordItemFound( $proto, $citizen, null, 'trash' );
 
+        $response->withSignal( ClientSignal::InventoryUpdated );
+
         if (($error = $proxy->transferItem(
             $citizen, $item,
             $inv_source, $inv_target,
@@ -527,6 +531,8 @@ class BeyondController extends InventoryAwareController
             $this->addFlash( 'notice', $this->translator->trans( 'Beim Durchwühlen des Mülls, der am Stadtrand herumliegt, findest du schließlich folgendes: {item}.<hr />Du hast <strong>1 Aktionspunkt(e)</strong> verbraucht.', [
                 '{item}' => "<span class='tool'> <img alt='' src='{$this->asset->getUrl( "build/images/item/item_{$item->getPrototype()->getIcon()}.gif" )}'> {$this->translator->trans($item->getPrototype()->getLabel(), [], 'items')}</span>"
             ], 'game' ));
+
+
 
             try {
                 $this->entity_manager->persist($item);
