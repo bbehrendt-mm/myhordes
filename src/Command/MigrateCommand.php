@@ -1000,10 +1000,13 @@ class MigrateCommand extends Command
                 }
             };
 
-            $fun_dis_assoc = function (User $user, UserGroup $group) use ($output) {
+            $repair_pinned_forums_for = [];
+
+            $fun_dis_assoc = function (User $user, UserGroup $group) use ($output, &$repair_pinned_forums_for) {
                 if ($this->perm->userInGroup( $user, $group )) {
                     $output->writeln("Removing <info>{$user->getUsername()}</info> from group <info>{$group->getName()}</info>");
                     $this->perm->disassociate( $user, $group );
+                    $repair_pinned_forums_for[$user->getId()] = $user;
                 }
             };
 
@@ -1019,7 +1022,7 @@ class MigrateCommand extends Command
             // Fix group associations
             if (!$input->getOption('skip-group-association')) {
                 $this->helper->leChunk($output, User::class, 100, [], true, false, function(User $current_user) use (
-                    $fun_assoc,$fun_dis_assoc, &$g_users, &$g_elev, &$g_oracle, &$g_mods, &$g_admin, &$g_anim, &$g_dev, &$g_art,
+                    $fun_assoc,$fun_dis_assoc, &$g_users, &$g_elev, &$g_oracle, &$g_mods, &$g_admin, &$g_anim, &$g_dev, &$g_art, &$repair_pinned_forums_for
                 ) {
                     if ($current_user->getValidated()) $fun_assoc($current_user, $g_users); else $fun_dis_assoc($current_user, $g_users);
                     if (
@@ -1067,7 +1070,6 @@ class MigrateCommand extends Command
                 });
             }
 
-
             foreach ($this->entity_manager->getRepository(UserGroup::class)->findBy(['type' => UserGroup::GroupTownInhabitants]) as $town_group)
                 if (!$this->entity_manager->getRepository(Town::class)->find( $town_group->getRef1() )) {
                     $output->writeln("Removing obsolete town group <info>{$town_group->getName()}</info>");
@@ -1075,6 +1077,13 @@ class MigrateCommand extends Command
                 }
 
             $this->entity_manager->flush();
+
+            // Rebuild forum tags
+            if (!empty($repair_pinned_forums_for)) {
+                foreach ($repair_pinned_forums_for as $currentUser)
+                    $this->perm->repairPinnedForumTabs( $currentUser );
+                $this->entity_manager->flush();
+            }
 
             // Fix permissions
             $this->ensureForumPermissions($output,null, $g_oracle,  ForumUsagePermissions::PermissionFormattingOracle);

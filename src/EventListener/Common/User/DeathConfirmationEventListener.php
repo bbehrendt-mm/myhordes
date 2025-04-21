@@ -25,6 +25,7 @@ use App\Service\Actions\XP\GetPictoXPStepsAction;
 use App\Service\ConfMaster;
 use App\Service\DoctrineCacheService;
 use App\Service\EventProxyService;
+use App\Service\PermissionHandler;
 use App\Service\User\PictoService;
 use App\Service\User\UserUnlockableService;
 use App\Service\UserHandler;
@@ -40,6 +41,7 @@ use Symfony\Contracts\Service\ServiceSubscriberInterface;
 #[AsEventListener(event: DeathConfirmedPrePersistEvent::class, method: 'awardLegacyHxp', priority: -155)]
 #[AsEventListener(event: DeathConfirmedPrePersistEvent::class, method: 'mutateLastWords', priority: -200)]
 #[AsEventListener(event: DeathConfirmedPrePersistEvent::class, method: 'persistDeath', priority: -300)]
+#[AsEventListener(event: DeathConfirmedPrePersistEvent::class, method: 'repairPinnedTabs', priority: -400)]
 #[AsEventListener(event: DeathConfirmedPostPersistEvent::class, method: 'dispatchPictoUpdateEvent', priority: 0)]
 #[AsEventListener(event: DeathConfirmedPostPersistEvent::class, method: 'dispatchSoulPointUpdateEvent', priority: -100)]
 #[AsEventListener(event: DeathConfirmedPostPersistEvent::class, method: 'awardPrimeHxpForPictos', priority: -151)]
@@ -61,7 +63,8 @@ final class DeathConfirmationEventListener implements ServiceSubscriberInterface
             UserUnlockableService::class,
             PictoService::class,
             GetPictoXPStepsAction::class,
-            ConfMaster::class
+            ConfMaster::class,
+            PermissionHandler::class
         ];
     }
 
@@ -144,6 +147,10 @@ final class DeathConfirmationEventListener implements ServiceSubscriberInterface
         }
 
         $event->death->setConfirmed(true)->setLastWords( $event->lastWords );
+    }
+
+    public function repairPinnedTabs(DeathConfirmedEvent $event): void {
+        $this->getService(PermissionHandler::class)->repairPinnedForumTabs( $event->user );
     }
 
     public function dispatchPictoUpdateEvent(DeathConfirmedEvent $event): void {
