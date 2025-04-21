@@ -71,7 +71,7 @@ export default class HTML {
     constructor() { this.twinoParser = new TwinoAlikeParser(); }
 
     init(): void {
-        document.getElementById('modal-backdrop')?.addEventListener('pop', () => this.nextPopup())
+        document.getElementById('modal-backdrop')?.addEventListener('pop', () => requestAnimationFrame( () => this.nextPopup() ))
     }
 
     setInitParams( params: HTMLInitParams ): void {
@@ -321,7 +321,7 @@ export default class HTML {
 
     popup(title: string, msg: string|HTMLElement, css: string|null = null, buttons: Array<[string,Array<[string,eventListener]>]>, lastOptionSmall: boolean = false): void {
         this.popupStack.push( [title,msg,css,buttons,lastOptionSmall] );
-        if (!this.popupOpen) this.nextPopup();
+        if (!this.popupOpen) requestAnimationFrame( () => this.nextPopup() );
     }
 
     private maxZ(): number {
