@@ -364,7 +364,7 @@ const BuildingResources = (props: BuildingCompleteProps) => {
 
 const BuildingActions= (props: BuildingCompleteProps) => {
     const globals = useContext(Globals);
-    const res_ok = props.building.c || props.prototype.rsc.reduce((carry,{p,c}) => carry && (globals.itemCount[p] ?? 0) >= c, true)
+    const res_ok = props.building.c || (props.building.r ?? props.prototype.rsc).reduce((carry,{p,c}) => carry && (globals.itemCount[p] ?? 0) >= c, true)
 
     const input = useRef<HTMLInputElement>();
     const [loading, setLoading] = useState<boolean>(false);
