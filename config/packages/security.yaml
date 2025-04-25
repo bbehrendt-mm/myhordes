@@ -73,6 +73,8 @@ security:
         - { path: ^/api/admin/,        roles: ROLE_CROW }
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
+        # Dashboard
+        - { path: ^/system,  roles: ROLE_ELEVATED }
 
 when@test:
     security:

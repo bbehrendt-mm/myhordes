@@ -1,0 +1,14 @@
+{# @var ea \EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext #}
+{# @var field \EasyCorp\Bundle\EasyAdminBundle\Dto\FieldDto #}
+{# @var entity \EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto #}
+{% if field.value %}
+    {% if field.customOption('target') == '_blank' %}
+            <a class="d-inline-flex align-items-center" href="{{ field.formattedValue }}" target="_blank">
+                <span>{{ field.value }}</span>
+                {{ ux_icon('tabler:external-link', {style: 'height: 16px'}) }}
+            </a>
+
+    {% else %}
+        <a href="{{ field.formattedValue }}" {{ field.customOption('target') ? field.customOption('target') : '' }}>{{ field.value }}</a>
+    {% endif %}
+{% endif %}

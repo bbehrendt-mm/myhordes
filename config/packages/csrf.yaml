@@ -2,8 +2,8 @@
 framework:
     form:
         csrf_protection:
-          enabled: false
+          enabled: true
 
     csrf_protection:
-      enabled: false
+      enabled: true
 
