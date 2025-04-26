@@ -13,6 +13,7 @@ use App\Entity\UserGroup;
 use App\Entity\UserGroupAssociation;
 use App\Enum\Configuration\MyHordesSetting;
 use App\Enum\NotificationSubscriptionType;
+use App\Enum\OfficialGroupSemantic;
 use App\Messages\WebPush\WebPushMessage;
 use App\Service\ConfMaster;
 use App\Service\EventProxyService;
@@ -61,7 +62,7 @@ readonly class SupportChannelMessageHandler
 
             $new = true;
             $og = $this->entityManager->getRepository(OfficialGroup::class)
-                ->findOneBy(['lang' => $user->getLanguage() ?? 'en', 'semantic' => OfficialGroup::SEMANTIC_SUPPORT]);
+                ->findOneBy(['lang' => $user->getLanguage() ?? 'en', 'semantic' => OfficialGroupSemantic::Support]);
             if (!$og) throw new UnrecoverableMessageHandlingException( 'No official support group found');
 
             $existing_group = (new UserGroup())

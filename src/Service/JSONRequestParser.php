@@ -4,6 +4,7 @@
 namespace App\Service;
 
 use Adbar\Dot;
+use IntBackedEnum;
 use Symfony\Component\HttpFoundation\Request;
 
 class JSONRequestParser
@@ -108,7 +109,9 @@ class JSONRequestParser
      */
 
     public function get_enum(string $key, string $class, mixed $default = null ) {
-        return $this->has( $key ) ? ($class::tryFrom( $this->get($key) )) : $default;
+        if (is_int( $class::cases()[0]->value ))
+            return $this->has( $key ) ? ($class::tryFrom( $this->get_int($key) )) : $default;
+        else return $this->has( $key ) ? ($class::tryFrom( "{$this->get($key)}" )) : $default;
     }
 
     public function get_base64( string $key, $default = null ) {

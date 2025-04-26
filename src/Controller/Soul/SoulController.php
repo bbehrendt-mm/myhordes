@@ -39,6 +39,7 @@ use App\Entity\UserSponsorship;
 use App\Enum\Configuration\CitizenProperties;
 use App\Enum\Configuration\MyHordesSetting;
 use App\Enum\DomainBlacklistType;
+use App\Enum\OfficialGroupSemantic;
 use App\Enum\StatisticType;
 use App\Enum\UserSetting;
 use App\Response\AjaxResponse;
@@ -1539,7 +1540,7 @@ class SoulController extends CustomAbstractController
     #[Route(path: 'jx/help', name: 'help_me')]
     public function help_me(): Response
     {
-        $support_groups = $this->entity_manager->getRepository(OfficialGroup::class)->findBy(['lang' => $this->getUserLanguage(), 'semantic' => OfficialGroup::SEMANTIC_SUPPORT]);
+        $support_groups = $this->entity_manager->getRepository(OfficialGroup::class)->findBy(['lang' => $this->getUserLanguage(), 'semantic' => OfficialGroupSemantic::Support]);
         return $this->render( 'ajax/help/shell.html.twig', [
             'support' => count($support_groups) === 1 ? $support_groups[0] : null
         ]);

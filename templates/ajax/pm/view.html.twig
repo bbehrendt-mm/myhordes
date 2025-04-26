@@ -47,6 +47,27 @@
                         {% endif %}
                         <li class="tab" x-tab-id="archive"><div class="tab-link"><img src="{{ asset("build/images/icons/small_archive.gif") }}" alt="" /><span class="hide-sm hide-md hide-lg hide-elg"> {{ 'Archiv'|trans({},'global') }}</span></div></li>
                     </ul>
+                    {% if official_groups is not empty %}
+                        <div id="support-filter-bar" class="hidden">
+                            <div class="row-flex">
+                                <div class="padded cell"><label for="support-filter-bar-type"><img alt="" src="{{ asset("build/images/icons/small_star.gif") }}" /></label></div>
+                                <div class="padded cell grow-1">
+                                    <select id="support-filter-bar-type">
+                                        <option value="">{{ 'Alle'|trans({},'game') }}</option>
+                                        {% for semantic in official_groups|map(o => o.semantic.value)|unique %}
+                                            {% if semantic == 1 %}
+                                                <option value="{{ semantic }}">{{ enum("\\App\\Enum\\OfficialGroupSemantic").tryFrom(semantic).label|trans({},'global') }} - {{ 'Alle'|trans({},'game') }}</option>
+                                                <option value="{{ semantic }}-mh">{{ enum("\\App\\Enum\\OfficialGroupSemantic").tryFrom(semantic).label|trans({},'global') }} - MyHordes</option>
+                                                <option value="{{ semantic }}-gitlab">{{ enum("\\App\\Enum\\OfficialGroupSemantic").tryFrom(semantic).label|trans({},'global') }} - Gitlab</option>
+                                            {% else %}
+                                                <option value="{{ semantic }}">{{ enum("\\App\\Enum\\OfficialGroupSemantic").tryFrom(semantic).label|trans({},'global') }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
                     <div id="conv_search_bar" class="hidden">
                         <div class="row-flex">
                             <div class="padded cell"><label for="conv_list_filter"><img alt="" src="{{ asset('build/images/forum/search.png') }}" /></label></div>
@@ -302,14 +323,17 @@
 
             const filter_entry = document.getElementById('conv_list_filter');
             const filter_entry_users = document.getElementById('conv_list_filter_user');
+            const filter_entry_og = document.getElementById('support-filter-bar-type');
             const filter_settings = () => {
+                let og_native = filter_entry_og?.value ?? '';
+                let [og,ogt] = og_native.split('-');
                 if (document.getElementById('conv_search_bar').classList.contains('hidden'))
-                    return {};
+                    return {og,ogt};
 
                 let filter = filter_entry.value;
                 if (filter.length <= 3) filter = null;
                 let user = document.getElementById('search-by-user-bar').classList.contains('hidden') ? null : (filter_entry_users.value ?? [])[0]?.id ?? null;
-                return {filter,user};
+                return {filter,user,og,ogt};
             }
 
             const init_conv_list = function() {
@@ -349,6 +373,9 @@
                     {% endif %}
                     case 'archive': core_list_path = '{{ path('pm_list', {set: 'archive'}) }}'; break;
                 }
+                {% if official_groups is not empty %}
+                    document.getElementById('support-filter-bar')?.classList.toggle( 'hidden', !['support'].includes(e.detail.tab) )
+                {% endif %}
                 document.getElementById('search-by-user-bar').classList.toggle( 'hidden', ['announcements','forum'].includes(e.detail.tab) )
                 init_conv_list();
             });
@@ -369,6 +396,7 @@
             filter_entry.addEventListener('input', filter_function);
             filter_entry.addEventListener('blur', filter_function);
             filter_entry_users.addEventListener('hordes-user-search-callback', () => init_conv_list())
+            filter_entry_og?.addEventListener('change', () => init_conv_list())
 
             const fun_conv_events = function() {
                 $.html.addEventListenerAll('ul.pm-conversation-list>li[x-title][x-endpoint]', 'click', function(e,elem) {
