@@ -9,7 +9,7 @@ use App\Structures\HTMLParserInsight;
 readonly class GPMessageData
 {
     public GlobalPrivateMessage $post;
-    public HTMLParserInsight $insight;
+    public ?HTMLParserInsight $insight;
 
     /**
      * @param GlobalPrivateMessage $post
@@ -17,7 +17,7 @@ readonly class GPMessageData
      * @return GPMessageEvent
      * @noinspection PhpDocSignatureInspection
      */
-    public function setup( GlobalPrivateMessage $post, HTMLParserInsight $insight ): void {
+    public function setup( GlobalPrivateMessage $post, ?HTMLParserInsight $insight ): void {
         $this->post = $post;
         $this->insight = $insight;
     }

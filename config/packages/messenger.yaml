@@ -7,10 +7,18 @@ framework:
             # https://symfony.com/doc/current/messenger.html#transport-configuration
             async:
               dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+              retry_strategy:
+                max_retries: 8
+                multiplier: 2
+                delay: 1000
               options:
                 queue_name: normal
             async_low:
               dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+              retry_strategy:
+                max_retries: 4
+                multiplier: 4
+                delay: 8000
               options:
                 queue_name: low
             failed:
