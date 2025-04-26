@@ -23,8 +23,8 @@
                     <div class="cell padded rw-4 note note-lightest"><label for="group-semantic">{{ 'Gruppentyp'|trans({},'admin') }}</label></div>
                     <div class="cell padded rw-4">
                         <select id="group-semantic">
-                            {% for label, value in types %}
-                                <option value="{{ value }}"{% if current_group is not null and current_group.semantic == value %} selected{% endif %}>{{ label }}</option>
+                            {% for type in types %}
+                                <option value="{{ type.value }}"{% if current_group is not null and current_group.semantic == type %} selected{% endif %}>{{ type.label|trans({},'global') }}</option>
                             {% endfor %}
                         </select>
                     </div>

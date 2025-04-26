@@ -3,12 +3,16 @@
 namespace App\Repository;
 
 use App\Entity\GlobalPrivateMessage;
+use App\Entity\OfficialGroup;
 use App\Entity\OfficialGroupMessageLink;
 use App\Entity\User;
 use App\Entity\UserGroup;
 use App\Entity\UserGroupAssociation;
+use App\Enum\OfficialGroupSemantic;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\Query\Expr\Func;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
@@ -66,7 +70,7 @@ class UserGroupAssociationRepository extends ServiceEntityRepository
      * @param array|null $userFilterGroupAssociation
      * @return int|mixed|string
      */
-    public function findByUserAssociation( User $user, $association = null, array $skip = [], int $limit = 0, bool $archive = false, ?string $filter = null, ?int $user_id = null, ?array $userFilterGroupAssociation = null ) {
+    public function findByUserAssociation( User $user, $association = null, array $skip = [], int $limit = 0, bool $archive = false, ?string $filter = null, ?int $user_id = null, ?array $userFilterGroupAssociation = null, ?OfficialGroupSemantic $semantic = null, ?string $json_payload = null, bool $invert_json_payload = false ) {
         $group_wl = null;
         if ($user_id !== null)
             $group_wl = $this->filter_query($user_id, $userFilterGroupAssociation ?? $association, $archive, $filter)
@@ -82,6 +86,18 @@ class UserGroupAssociationRepository extends ServiceEntityRepository
 
         if ($filter !== null)
             $qb->andWhere('g.name LIKE :filter')->setParameter('filter', "%{$filter}%");
+
+        if ($semantic !== null)
+            $qb
+                ->leftJoin(OfficialGroupMessageLink::class, 'ol', 'WITH', 'g.id = ol.messageGroup')
+                ->leftJoin(OfficialGroup::class, 'og', 'WITH', 'ol.officialGroup = og.id')
+                ->andWhere('og.semantic = :semantic')->setParameter('semantic', $semantic);
+
+        if ($json_payload !== null) {
+            $qb->andWhere('JSON_EXISTS(COALESCE(g.properties,\'[]\'), :properties) = :payload_exp')
+                ->setParameter('properties', "$.{$json_payload}")
+                ->setParameter('payload_exp', !$invert_json_payload);
+        }
 
         if (!empty($skip)) $qb->andWhere('u.id NOT IN (:skip)')->setParameter('skip', $skip);
         if ($limit > 0) $qb->setMaxResults( $limit );

@@ -18,6 +18,7 @@ use App\Entity\User;
 use App\Entity\UserGroup;
 use App\Entity\UserGroupAssociation;
 use App\Entity\UserSwapPivot;
+use App\Enum\OfficialGroupSemantic;
 use App\Messages\Gitlab\GitlabCreateIssueCommentMessage;
 use App\Response\AjaxResponse;
 use App\Service\CrowService;
@@ -247,7 +248,7 @@ class MessageGlobalPMController extends MessageController
                 'response' => $has_response,
                 'archive' => $association->getBref(),
                 'official' => $official_meta ? $official_meta->getOfficialGroup() : null,
-                'official_type' => $official_meta ? $official_meta->getOfficialGroup()->getSemantic() : null,
+                'official_type' => $official_meta ? $official_meta->getOfficialGroup()->getSemantic()->value : null,
                 'title'  => $association->getAssociation()->getName(),
                 'closed' => $association->getAssociationType() === UserGroupAssociation::GroupAssociationTypePrivateMessageMemberInactive,
                 'count'  => $read_only ? $association->getRef3() : $association->getAssociation()->getRef1(),
@@ -402,9 +403,21 @@ class MessageGlobalPMController extends MessageController
         $user_filter = $p->get_num('user', 0);
         if ($user_filter <= 0) $user_filter = null;
 
+        $semantic = $set === 'support' ? $p->get_enum( 'og', OfficialGroupSemantic::class ) : null;
+        $og_type = $set === 'support' ? $p->get('ogt', null, ['mh','gitlab']) : null;
+
+        $path = match($og_type) {
+            'mh', 'gitlab' => 'gitlab.issue_id',
+            default => null,
+        };
+        $invert = match($og_type) {
+            'mh' => true,
+            default => false,
+        };
+
         if (!empty($group_filter))
             $this->render_group_associations( $em->getRepository(UserGroupAssociation::class)->findByUserAssociation($this->getUser(), $group_filter,
-                    $skip['g'] ?? [], $num+1, $set === 'archive', $query, $user_filter, $user_group_filter), $entries );
+                    $skip['g'] ?? [], $num+1, $set === 'archive', $query, $user_filter, $user_group_filter, $semantic, $path, $invert), $entries );
 
         if ($set === 'announcements' || ($set === 'archive'))
             $this->render_announcements( $em->getRepository(Announcement::class)->findByLang($this->getUserLanguage(),

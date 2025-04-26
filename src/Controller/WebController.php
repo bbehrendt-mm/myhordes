@@ -11,6 +11,7 @@ use App\Entity\OfficialGroup;
 use App\Entity\User;
 use App\Entity\UserGroup;
 use App\Enum\Configuration\MyHordesSetting;
+use App\Enum\OfficialGroupSemantic;
 use App\Response\AjaxResponse;
 use App\Service\Actions\Security\GenerateMercureToken;
 use App\Service\Actions\Security\RegisterNewTokenAction;
@@ -162,8 +163,7 @@ class WebController extends CustomAbstractController
         $supporters = self::$supporters;
         shuffle($supporters);
 
-        $support_groups = $this->entity_manager->getRepository(OfficialGroup::class)->findBy(['lang' => $this->getUserLanguage(), 'semantic' => OfficialGroup::SEMANTIC_SUPPORT]);
-
+        $support_groups = $this->entity_manager->getRepository(OfficialGroup::class)->findBy(['lang' => $this->getUserLanguage(), 'semantic' => OfficialGroupSemantic::Support]);
 
         return $this->render(  'web/error_page.twig', [
             'version' => $version, 'debug' => $is_debug_version, 'env' => $this->kernel->getEnvironment(),
@@ -307,16 +307,16 @@ class WebController extends CustomAbstractController
         $group = null;
         switch ($semantic) {
             case 'support':
-                $group = $this->entity_manager->getRepository(OfficialGroup::class)->findOneBy(['lang' => $lang, 'semantic' => OfficialGroup::SEMANTIC_SUPPORT]);
+                $group = $this->entity_manager->getRepository(OfficialGroup::class)->findOneBy(['lang' => $lang, 'semantic' => OfficialGroupSemantic::Support]);
                 break;
             case 'moderation':
-                $group = $this->entity_manager->getRepository(OfficialGroup::class)->findOneBy(['lang' => $lang, 'semantic' => OfficialGroup::SEMANTIC_MODERATION]);
+                $group = $this->entity_manager->getRepository(OfficialGroup::class)->findOneBy(['lang' => $lang, 'semantic' => OfficialGroupSemantic::Moderation]);
                 break;
             case 'animaction':
-                $group = $this->entity_manager->getRepository(OfficialGroup::class)->findOneBy(['lang' => $lang, 'semantic' => OfficialGroup::SEMANTIC_ANIMACTION]);
+                $group = $this->entity_manager->getRepository(OfficialGroup::class)->findOneBy(['lang' => $lang, 'semantic' => OfficialGroupSemantic::Animaction]);
                 break;
             case 'oracle':
-                $group = $this->entity_manager->getRepository(OfficialGroup::class)->findOneBy(['lang' => $lang, 'semantic' => OfficialGroup::SEMANTIC_ORACLE]);
+                $group = $this->entity_manager->getRepository(OfficialGroup::class)->findOneBy(['lang' => $lang, 'semantic' => OfficialGroupSemantic::Oracle]);
                 break;
         }
         if (!$group) return $this->redirect($this->generateUrl('home'));

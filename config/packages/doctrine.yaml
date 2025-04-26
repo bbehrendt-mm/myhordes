@@ -40,7 +40,8 @@ doctrine:
         auto_mapping: true
         dql:
           string_functions:
-            JSON_EXTRACT: Scienta\DoctrineJsonFunctions\Query\AST\Functions\Mysql\JsonExtract
+            JSON_EXTRACT: Scienta\DoctrineJsonFunctions\Query\AST\Functions\Mariadb\JsonExtract
+            JSON_EXISTS: Scienta\DoctrineJsonFunctions\Query\AST\Functions\Mariadb\JsonExists
         mappings:
             App:
                 type: attribute

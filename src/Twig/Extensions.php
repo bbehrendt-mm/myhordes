@@ -79,6 +79,7 @@ class Extensions extends AbstractExtension implements GlobalsInterface
             new TwigFilter('atomize',  [$this, 'atomize']),
             new TwigFilter('cfg',  [$this, 'cfg']),
             new TwigFilter('decodeMessage',  [$this, 'decode']),
+            new TwigFilter('unique',  [$this, 'unique']),
         ];
     }
 
@@ -198,6 +199,10 @@ class Extensions extends AbstractExtension implements GlobalsInterface
 
     public function user_relation(User $user, User $other, int $relation): bool {
         return $this->userHandler->checkRelation($user,$other,$relation);
+    }
+
+    public function unique(mixed $data): mixed {
+        return is_array($data) ? array_unique($data) : $data;
     }
 
     public function format_filesize(int $size): string {
