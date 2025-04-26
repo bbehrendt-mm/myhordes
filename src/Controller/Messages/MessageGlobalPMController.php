@@ -159,7 +159,9 @@ class MessageGlobalPMController extends MessageController
                     $this->entity_manager->flush();
                 } catch (\Exception $e) {}
 
-                foreach ($messages as $message) $message->setText( $this->html->prepareEmotes( $message->getText(), $this->getUser() ) );
+                foreach ($messages as $message)
+                    if ($message->getText())
+                        $message->setText( $this->html->prepareEmotes( $message->getText(), $this->getUser() ) );
                 $focus = $this->render( 'ajax/pm/bubbles.html.twig', ['raw_gp' => $messages, 'raw_gp_owner' => $group_association->getAssociationLevel() == UserGroupAssociation::GroupAssociationLevelFounder] )->getContent();
 
                 break;
