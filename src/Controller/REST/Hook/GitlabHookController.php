@@ -8,6 +8,7 @@ use App\Entity\AccountRestriction;
 use App\Enum\Configuration\MyHordesSetting;
 use App\Messages\Gitlab\GitlabCreateIssueMessage;
 use App\Messages\Gitlab\SupportChannelPostMessage;
+use App\Service\Actions\External\GetGitlabClientAction;
 use App\Service\ConfMaster;
 use App\Service\JSONRequestParser;
 use App\Service\RateLimitingFactoryProvider;
@@ -56,20 +57,25 @@ class GitlabHookController extends CustomAbstractCoreController
     }
 
     #[Route(condition: "request.headers.get('X-Gitlab-Event') === 'Note Hook' or request.headers.get('X-Gitlab-Event') === 'Confidential Note Hook'")]
-    public function note_hook(JSONRequestParser $parser, ConfMaster $conf, MessageBusInterface $bus): JsonResponse {
+    public function note_hook(JSONRequestParser $parser, ConfMaster $conf, MessageBusInterface $bus, GetGitlabClientAction $clientAction): JsonResponse {
 
         $project = $parser->get('project.id', '?');
         $action = $parser->get('object_attributes.action', '?');
 
-        if ($project !== $conf->getGlobalConf()->getSubKey( MyHordesSetting::IssueReportingGitlabToken, 'project-id' ))
+        $project_id = null;
+        $client = ($clientAction)($project_id);
+
+        if ($project !== $project_id)
             return new JsonResponse([], Response::HTTP_BAD_REQUEST);
 
-        if ($parser->get( 'event_type') === 'confidential_note') return new JsonResponse([], Response::HTTP_ACCEPTED);
-
         $issue_id = $parser->get_int('issue.iid');
+        $note_id = $parser->get_int('object_attributes.id');
         $text = $parser->get('object_attributes.description');
 
-        if (!in_array($action, ['create']) || $issue_id <= 0 || empty($text)) return new JsonResponse([], Response::HTTP_ACCEPTED);
+        if (!in_array($action, ['create']) || $issue_id <= 0 || $note_id <= 0 || empty($text)) return new JsonResponse([], Response::HTTP_ACCEPTED);
+
+        $note = json_decode( $client->getHttpClient()->get("api/v4/projects/{$project_id}/issues/{$issue_id}/notes/{$note_id}")->getBody()->getContents(), true );
+        if (Arr::get( $note, 'internal' )) return new JsonResponse([], Response::HTTP_ACCEPTED);
 
         $bus->dispatch( new SupportChannelPostMessage(
             user: null,
