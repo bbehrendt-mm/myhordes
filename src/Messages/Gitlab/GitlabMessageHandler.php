@@ -8,6 +8,7 @@ use App\Entity\User;
 use App\Enum\Configuration\MyHordesSetting;
 use App\Enum\NotificationSubscriptionType;
 use App\Messages\WebPush\WebPushMessage;
+use App\Service\Actions\External\GetGitlabClientAction;
 use App\Service\ConfMaster;
 use ArrayHelpers\Arr;
 use Doctrine\ORM\EntityManagerInterface;
@@ -27,7 +28,7 @@ use WebPush\WebPush;
 readonly class GitlabMessageHandler
 {
     public function __construct(
-        private ConfMaster $confMaster,
+        private GetGitlabClientAction $gitlab,
         private ParameterBagInterface $params,
         private MessageBusInterface $bus
     ) {}
@@ -38,25 +39,10 @@ readonly class GitlabMessageHandler
             "\n";
     }
 
-    private function authenticate(?int &$project): Client {
-        $token = $this->confMaster->getGlobalConf()->getSubKey( MyHordesSetting::IssueReportingGitlabToken, 'token' );
-        $base = $this->confMaster->getGlobalConf()->getSubKey( MyHordesSetting::IssueReportingGitlabToken, 'base' );
-        $project = $this->confMaster->getGlobalConf()->getSubKey( MyHordesSetting::IssueReportingGitlabToken, 'project-id' );
-
-        // If Gitlab access is not configured, fail
-        if (!$token || !$project || !$base)
-            throw new UnrecoverableMessageHandlingException( 'Gitlab token, project id or base URL not set');
-
-        $client = new Client();
-        $client->setUrl( $base );
-        $client->authenticate($token, Client::AUTH_HTTP_TOKEN);
-
-        return $client;
-    }
-
     #[AsMessageHandler]
     public function createIssue( GitlabCreateIssueMessage $message ): void {
-        $client = $this->authenticate( $project );
+        $project = null;
+        $client = ($this->gitlab)( $project );
 
         $filesystem = new Filesystem();
         $tempDir = "{$this->params->get('kernel.project_dir')}/var/tmp/issue_attachments/" . UuidV4::v4()->toRfc4122();
@@ -109,7 +95,8 @@ readonly class GitlabMessageHandler
 
     #[AsMessageHandler]
     public function createComment( GitlabCreateIssueCommentMessage $message ): void {
-        $client = $this->authenticate( $project );
+        $project = null;
+        $client = ($this->gitlab)( $project );
 
         $client->issues()->addNote(
             $project,
