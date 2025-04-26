@@ -244,7 +244,7 @@ readonly class EventProxyService
         $this->ed->dispatch( (new NewEventAnnouncementEvent())->setup( $event ) );
     }
 
-    public function globalPrivateMessageNewPostEvent( GlobalPrivateMessage $post, HTMLParserInsight $insight, bool $new_thread = false ): void {
+    public function globalPrivateMessageNewPostEvent( GlobalPrivateMessage $post, ?HTMLParserInsight $insight, bool $new_thread = false ): void {
         $this->ed->dispatch( ($new_thread ? new GPMessageNewThreadEvent() : new GPMessageNewPostEvent())->setup( $post, $insight ) );
     }
 

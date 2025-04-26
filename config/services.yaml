@@ -8,6 +8,10 @@ parameters:
 imports:
     - { resource: 'app/*.yml' }
 
+when@local:
+  imports:
+    - { resource: 'packages/local/app/*.yml' }
+
 twig:
     globals:
         vapid_public: '%env(WEBPUSH_PUBLIC)%'
