@@ -9,10 +9,12 @@ use App\Entity\CauseOfDeath;
 use App\Entity\Citizen;
 use App\Entity\CitizenHomeUpgrade;
 use App\Entity\CitizenHomeUpgradePrototype;
+use App\Entity\EscortActionGroup;
 use App\Entity\EventActivationMarker;
 use App\Entity\HomeIntrusion;
 use App\Entity\Inventory;
 use App\Entity\Item;
+use App\Entity\ItemAction;
 use App\Entity\ItemPrototype;
 use App\Entity\PrivateMessage;
 use App\Enum\ActionCounterType;
@@ -54,6 +56,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[AsEventListener(event: TransferItemEvent::class, method: 'onPostHandleBankInteraction', priority: -11)]
 #[AsEventListener(event: TransferItemEvent::class, method: 'onPostHandleCitizenTheft', priority: -12)]
 #[AsEventListener(event: TransferItemEvent::class, method: 'onPostHandleChestDrop', priority: -20)]
+#[AsEventListener(event: TransferItemEvent::class, method: 'onPostHandleEscort', priority: -30)]
 #[AsEventListener(event: TransferItemEvent::class, method: 'onPostHandleSoulPickup', priority: -90)]
 #[AsEventListener(event: TransferItemEvent::class, method: 'onPostHandleHiddenPickup', priority: -91)]
 #[AsEventListener(event: TransferItemEvent::class, method: 'onPersistItem', priority: -100)]
@@ -577,6 +580,26 @@ final class TransferItemListener implements ServiceSubscriberInterface
                 $event->item->setHidden(true);
                 $event->markModified()->shouldPersist();
             }
+
+        }
+    }
+
+    private static ?array $all_escort_action_ids = null;
+
+    public function onPostHandleEscort( TransferItemEvent $event ): void {
+        if ($event->type_from === TransferItemType::Escort || $event->type_to === TransferItemType::Escort) {
+
+            if (self::$all_escort_action_ids === null) {
+                $actions = $this->getService(EntityManagerInterface::class)->getRepository(EscortActionGroup::class)->findAll();
+                foreach ($actions as $action) self::$all_escort_action_ids = [
+                    ...(self::$all_escort_action_ids ?? []),
+                    ...array_map( fn(ItemAction $a) => $a->getId(), $action->getActions()->toArray() )
+                ];
+                self::$all_escort_action_ids = array_unique(self::$all_escort_action_ids ?? []);
+            }
+
+            $moved_escort_item = $event->item->getPrototype()->getActions()->reduce( fn(bool $carry, ItemAction $action) => $carry || in_array( $action->getId(), self::$all_escort_action_ids ), false );
+            if ($moved_escort_item) $event->hasSideEffects = true;
 
         }
     }
