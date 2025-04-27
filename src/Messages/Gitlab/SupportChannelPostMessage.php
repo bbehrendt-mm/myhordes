@@ -14,5 +14,7 @@ readonly class SupportChannelPostMessage implements AsyncMessageLowInterface
         public string $title,
         public ?string $body,
         public string $template,
+        public array $images = [],
+        public array $attachments = [],
     ) { }
 }

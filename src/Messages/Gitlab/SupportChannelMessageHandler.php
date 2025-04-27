@@ -98,8 +98,13 @@ readonly class SupportChannelMessageHandler
 
         $issue_link = ($base && $slug) ? "$base/$slug/-/issues/{$message->issue_id}" : '#';
 
+        $text =
+            implode( '', array_map(fn(string $s) => "<div><img alt=\"\" src=\"$s\"/></div>",$message->images) ) .
+            implode( '<hr />', array_map(fn(string $s) => "<div><a href=\"$s\">$s</a></div>",$message->attachments) );
+
         $post = (new GlobalPrivateMessage())
             ->setSenderGroup($og)->setTimestamp( new \DateTime() )->setReceiverGroup($existing_group)
+            ->setText( $text )
             ->setTemplate( $template )->setData( [
                 'body'  => strip_tags($message->body),
                 'issue' => $message->issue_id,
