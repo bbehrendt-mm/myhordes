@@ -199,6 +199,7 @@ class InventoryController extends CustomAbstractCoreController
                 $i->getEssential() ? 1 : 0,
                 $i->getPrototype()->getSort(),
                 -$i->getPrototype()->getId(),
+                $i->getCount(),
                 mt_rand(0,9),
             ]
         ];
