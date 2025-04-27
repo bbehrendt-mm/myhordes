@@ -24,11 +24,11 @@
 				{% if fromTown is not defined %}
                     <label style="">
 						<input type="checkbox" data-prototype-id="{{ building.id }}" data-building-admin-action="addToUnlockList" />
-						<div class="tooltip help">Cochez cette case pour ajouter ce chantier à la liste de ceux à débloquer dans la ville.</div>
+						<div class="tooltip help">{{ 'Klicken, um Baustelle in die Liste der zu entsperrenden Baustellen aufzunehmen.'|trans({},'admin') }}</div>
 					</label>
 					<label>
 						<input type="checkbox" data-prototype-id="{{ building.id }}" data-building-admin-action="addToTown" />
-						<div class="tooltip help">Cochez cette case pour débloquer ce chantier.</div>
+						<div class="tooltip help">{{ 'Klicken, um Baustelle sofort zu entsperren.'|trans({},'admin') }}</div>
 					</label>
 				{% else %}
 					<div class="inline-block">
@@ -173,9 +173,9 @@
 	{# @var rootBuildings \App\Entity\BuildingPrototype[] #}
 	<div>
         <div class="flex gap">
-            <button data-building-admin-action="unlockCheckedBuildings" class="inline"><img alt="" src="{{ asset('build/images/pictos/r_door.gif') }}" /> {{ 'Gewählte Gebäude freischalten' }}</button>
+            <button data-building-admin-action="unlockCheckedBuildings" class="inline"><img alt="" src="{{ asset('build/images/pictos/r_door.gif') }}" /> {{ 'Gewählte Gebäude freischalten'|trans({},'admin') }}</button>
             <span></span>
-            <button data-building-admin-action="resetConstructionSite" class="inline"><img alt="" src="{{ asset('build/images/emotes/trash.gif') }}" /> {{ 'Gesamten Gebäudebaum zurücksetzen' }}</button>
+            <button data-building-admin-action="resetConstructionSite" class="inline"><img alt="" src="{{ asset('build/images/emotes/trash.gif') }}" /> {{ 'Gesamten Gebäudebaum zurücksetzen'|trans({},'admin') }}</button>
         </div>
 
 		<ul class="buildings-tabs tabs plain" x-tab-group="buildings" x-tab-control>
@@ -321,7 +321,7 @@
             }
         }
 
-        document.querySelectorAll("button[data-building-admin-action]").forEach( e => e.addEventListener('click', () => manage( e.dataset.buildingAdminAction, e )) )
+        document.querySelectorAll("button[data-building-admin-action],input[type=\"checkbox\"][data-building-admin-action]").forEach( e => e.addEventListener('click', () => manage( e.dataset.buildingAdminAction, e )) )
         document.querySelectorAll("select[data-building-admin-action]").forEach( e => e.addEventListener('change', () => manage( e.dataset.buildingAdminAction, e )) )
 	</script>
 {% endblock %}
