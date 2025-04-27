@@ -472,6 +472,7 @@ class TownHandler
         }
 
         if ($reached && !empty($this->getBuilding($town, 'item_tagger_#02'))) {
+            $prev_citizens = $est->getCitizens()->count();
             $est = $this->entity_manager->getRepository(ZombieEstimation::class)->findOneByTown($town, $town->getDay() + 1);
 
             /** @var ZombieEstimation $est */
@@ -481,12 +482,13 @@ class TownHandler
                 ($this->estimateZombieAttacks)(
                     $this->conf->getTownConfiguration($town),
                     $est,
+                    citizens: $prev_citizens,
                     citizen_ratio: $ratio,
                     subtract_weighted_citizens: 24,
                     blocks: 25,
                     penalty_factor: $soulFactor,
                     fallback_seed: $town->getDay() + $town->getId()
-                );;
+                );
 
             $override = $this->gameEvents->triggerWatchtowerModifierHooks( $town, $this->conf->getCurrentEvents($town), $tomorrow->getMin(), $tomorrow->getMax(), 1, $tomorrow->getEstimation() );
             $tomorrow->setMin($override?->min ?? $tomorrow->getMin());
