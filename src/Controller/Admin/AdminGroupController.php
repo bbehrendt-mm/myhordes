@@ -9,6 +9,7 @@ use App\Entity\User;
 use App\Entity\UserGroup;
 use App\Entity\UserGroupAssociation;
 use App\Enum\Configuration\MyHordesSetting;
+use App\Enum\OfficialGroupSemantic;
 use App\Response\AjaxResponse;
 use App\Service\ErrorHelper;
 use App\Service\JSONRequestParser;
@@ -56,7 +57,7 @@ class AdminGroupController extends AdminActionController
             'current_group' => null,
             'members' => [],
             'icon_max_size' => $this->conf->getGlobalConf()->get(MyHordesSetting::AvatarMaxSizeUpload),
-            'types' => (new ReflectionClass(OfficialGroup::class))->getConstants()
+            'types' => OfficialGroupSemantic::cases() // (new ReflectionClass(OfficialGroup::class))->getConstants()
         ]));
     }
 
@@ -76,7 +77,7 @@ class AdminGroupController extends AdminActionController
             'current_group' => $group_meta,
             'members' => $perm->usersInGroup($group_meta->getUsergroup()),
             'icon_max_size' => $this->conf->getGlobalConf()->get(MyHordesSetting::AvatarMaxSizeUpload),
-            'types' => (new ReflectionClass(OfficialGroup::class))->getConstants()
+            'types' => OfficialGroupSemantic::cases()
         ]));
     }
 
@@ -108,7 +109,7 @@ class AdminGroupController extends AdminActionController
             ->setAnon( (bool)$parser->get('anon') )
             ->setTicketStyleReadMarkers( (bool)$parser->get('ticket') )
             ->setLang( $parser->get('lang', 'multi', array_merge(['multi'], $this->generatedLangsCodes)) )
-            ->setSemantic( $parser->get_int('type', 0) )
+            ->setSemantic( $parser->get_enum('type', OfficialGroupSemantic::class, OfficialGroupSemantic::None) )
             ->setDescription($parser->get('desc'));
 
         $am = $parser->get_array('m_add');

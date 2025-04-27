@@ -6,6 +6,7 @@ use App\Annotations\GateKeeperProfile;
 use App\Controller\CustomAbstractCoreController;
 use App\Entity\AccountRestriction;
 use App\Enum\Configuration\MyHordesSetting;
+use App\Messages\Gitlab\GitlabCreateIssueMessage;
 use App\Service\ConfMaster;
 use App\Service\JSONRequestParser;
 use App\Service\RateLimitingFactoryProvider;
@@ -18,6 +19,8 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\Exception\ExceptionInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Uid\UuidV4;
@@ -30,6 +33,7 @@ class GitlabController extends CustomAbstractCoreController
         $data = $confMaster->getGlobalConf()->get( MyHordesSetting::IssueReportingGitlabToken ) ?? [];
         return Arr::get( $data, 'token', null ) && Arr::get( $data, 'project-id', null );
     }
+
     private function collectProxyInformation(Request $request, ?VersionManagerInterface $version = null): array {
         $user_profile = $this->generateUrl( 'soul_visit', ['id' => $this->getUser()->getId()], UrlGeneratorInterface::ABSOLUTE_URL );
 
@@ -48,15 +52,9 @@ class GitlabController extends CustomAbstractCoreController
         ] );
     }
 
-    private function makeTable(array $data): string {
-        return "| Key | Value |\n|---|---|\n" .
-            implode("\n", array_map( fn(string $key, string $value) => '| ' . str_replace( '|', ' ', $key ) . ' | ' . str_replace( '|', ' ', $value ) . ' |', array_keys( $data ), array_values( $data ) )) .
-            "\n";
-    }
-
-
     /**
      * @param ConfMaster $confMaster
+     * @param UserHandler $handler
      * @return JsonResponse
      * @throws \Exception
      */
@@ -112,15 +110,17 @@ class GitlabController extends CustomAbstractCoreController
 
 
     /**
-     * @param ParameterBagInterface $params
      * @param JSONRequestParser $parser
      * @param ConfMaster $confMaster
      * @param VersionManagerInterface $version
+     * @param UserHandler $handler
+     * @param RateLimitingFactoryProvider $rateLimiter
+     * @param MessageBusInterface $bus
      * @return JsonResponse
-     * @throws \Exception
+     * @throws ExceptionInterface
      */
     #[Route(path: '', name: 'create_issue', methods: ['PUT'])]
-    public function create_issue(ParameterBagInterface $params, JSONRequestParser $parser, ConfMaster $confMaster, VersionManagerInterface $version, UserHandler $handler, RateLimitingFactoryProvider $rateLimiter): JsonResponse {
+    public function create_issue(JSONRequestParser $parser, ConfMaster $confMaster, VersionManagerInterface $version, UserHandler $handler, RateLimitingFactoryProvider $rateLimiter, MessageBusInterface $bus): JsonResponse {
 
         if (!$this->getUser() || !$this->isGranted('ROLE_USER') || $handler->isRestricted($this->getUser(), AccountRestriction::RestrictionReportToGitlab))
             return new JsonResponse([], Response::HTTP_FORBIDDEN);
@@ -128,72 +128,24 @@ class GitlabController extends CustomAbstractCoreController
         if ( !$this->isGranted('ROLE_ELEVATED') && !$rateLimiter->reportLimiter($this->getUser())->create( $this->getUser()->getId() )->consume( 2 )->isAccepted())
             return new JsonResponse([], Response::HTTP_TOO_MANY_REQUESTS);
 
-        $data = $confMaster->getGlobalConf()->get( MyHordesSetting::IssueReportingGitlabToken ) ?? [];
-        $token = Arr::get( $data, 'token', null );
-        $project = Arr::get( $data, 'project-id', null );
-
-        if (!$token || !$project) return new JsonResponse([], Response::HTTP_PRECONDITION_FAILED);
+        if (!$this->validateConfig( $confMaster )) return new JsonResponse([], Response::HTTP_PRECONDITION_FAILED);
 
         $title = $parser->trimmed('issue_title', null);
         $desc  = $parser->trimmed('issue_details', null);
-        $pass  = $parser->get_array('pass', []);
 
         if (!$title || !$desc)
             return new JsonResponse([], Response::HTTP_BAD_REQUEST);
 
-        $filesystem = new Filesystem();
-        $tempDir = "{$params->get('kernel.project_dir')}/var/tmp/issue_attachments/" . UuidV4::v4()->toRfc4122();
-        $filesystem->mkdir( $tempDir );
-
-        $attachments = $parser->get_array( 'issue_attachments' );
-        $paths = [];
-        $accum = 0;
-        foreach ( $attachments as $content ) {
-            $filename = Arr::get( $content, 'file', null );
-            $extension = Arr::get( $content, 'ext', '' );
-            $content = Arr::get( $content, 'content', '' );
-
-            if (!$filename || !$extension || !$content) continue;
-            $decoded = base64_decode( $content );
-            if (!$decoded || ($accum += strlen( $decoded )) > 3145728) continue;
-
-            $storage_name = "$tempDir/" . UuidV4::v4()->toRfc4122() . $extension;
-            $filesystem->dumpFile($storage_name, $decoded);
-            $paths[$storage_name] = $filename;
-        }
-
-        $client = new Client();
-        try {
-            $client->authenticate($token, Client::AUTH_HTTP_TOKEN);
-
-            $md = array_map( function( $file, $name ) use ($client, $project) {
-                ['url' => $url] = $client->projects()->uploadFile($project, $file);
-                return "![$name]($url)";
-            }, array_keys( $paths ), array_values( $paths ) );
-
-            ['iid' => $issue_id] = $client->issues()->create( $project, [
-                'description' => $desc . (empty($md) ? '' : ("\n### Attachments:\n" .  implode( "\n", $md ))),
-                'issue_type' => 'issue',
-                'confidential' => true,
-                'title' => $title
-            ] );
-
-            $proxy_table = "## Information added by proxy:\n\n" . $this->makeTable( $this->collectProxyInformation( Request::createFromGlobals(), $version ) );
-            $pass_table = !empty($pass) ? ("## Information passed by client:\n\n" . $this->makeTable( $pass ) ) : '';
-
-            $client->issues()->addNote(
-                $project,
-                $issue_id,
-                "This issue was created from inside MyHordes.\n$proxy_table\n$pass_table", [
-                'internal' => true,
-            ] );
-
-        } catch (\Throwable $t) {
-            $filesystem->remove( $tempDir );
-            return new JsonResponse(['info' => $t->getMessage()], Response::HTTP_PROXY_AUTHENTICATION_REQUIRED);
-        }
-
-        $filesystem->remove( $tempDir );
+        $bus->dispatch( new GitlabCreateIssueMessage(
+            owner: $this->getUser()->getId(),
+            title: $title,
+            description: $desc,
+            issue_type: 'issue',
+            confidential: true,
+            trusted_info: $this->collectProxyInformation( Request::createFromGlobals(), $version ),
+            passed_info: $parser->get_array('pass', []),
+            attachments: $parser->get_array( 'issue_attachments' )
+        ) );
 
         return new JsonResponse([
             'success' => true

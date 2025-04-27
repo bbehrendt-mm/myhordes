@@ -10,6 +10,7 @@ use App\Entity\OfficialGroupMessageLink;
 use App\Entity\User;
 use App\Entity\UserGroupAssociation;
 use App\Entity\UserSwapPivot;
+use App\Enum\OfficialGroupSemantic;
 use App\Service\JSONRequestParser;
 use App\Service\PermissionHandler;
 use Doctrine\ORM\EntityManagerInterface;
@@ -105,7 +106,7 @@ class CrowManagementController extends CustomAbstractCoreController
 
         // Add crow to their nests
         foreach ($langs as $lang) {
-            $group_meta = $em->getRepository(OfficialGroup::class)->findOneBy(['lang' => $lang, 'semantic' => OfficialGroup::SEMANTIC_MODERATION]);
+            $group_meta = $em->getRepository(OfficialGroup::class)->findOneBy(['lang' => $lang, 'semantic' => OfficialGroupSemantic::Moderation]);
             if (!$group_meta) continue;
 
             $base_group = $group_meta->getUsergroup();

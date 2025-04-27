@@ -2,40 +2,34 @@
 
 namespace App\Entity;
 
+use App\Enum\OfficialGroupSemantic;
 use App\Repository\OfficialGroupRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\Table;
-use Doctrine\ORM\Mapping\UniqueConstraint;
 
 #[ORM\Entity(repositoryClass: OfficialGroupRepository::class)]
 class OfficialGroup
 {
-    const SEMANTIC_NONE = 0;
-    const SEMANTIC_SUPPORT = 1;
-    const SEMANTIC_MODERATION = 2;
-    const SEMANTIC_ANIMACTION = 3;
-    const SEMANTIC_ORACLE = 4;
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private int $id;
     #[ORM\Column(type: 'string', length: 5)]
-    private $lang;
+    private string $lang;
     #[ORM\Column(type: 'text')]
-    private $description;
+    private string $description;
     #[ORM\Column(type: 'blob')]
     private $icon;
     #[ORM\Column(type: 'boolean')]
     private $anon;
     #[ORM\OneToOne(targetEntity: UserGroup::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
-    private $usergroup;
+    private UserGroup $usergroup;
     #[ORM\Column(type: 'string', length: 32)]
-    private $avatarName;
+    private string $avatarName;
     #[ORM\Column(type: 'string', length: 9)]
-    private $avatarExt;
-    #[ORM\Column(type: 'integer')]
-    private $semantic = 0;
+    private string $avatarExt;
+    #[ORM\Column(type: 'integer', enumType: OfficialGroupSemantic::class)]
+    private OfficialGroupSemantic $semantic = OfficialGroupSemantic::None;
 
     #[ORM\Column]
     private bool $ticketStyleReadMarkers = false;
@@ -113,11 +107,11 @@ class OfficialGroup
 
         return $this;
     }
-    public function getSemantic(): ?int
+    public function getSemantic(): ?OfficialGroupSemantic
     {
         return $this->semantic;
     }
-    public function setSemantic(int $semantic): self
+    public function setSemantic(OfficialGroupSemantic $semantic): self
     {
         $this->semantic = $semantic;
 

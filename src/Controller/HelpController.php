@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Annotations\GateKeeperProfile;
 use App\Entity\OfficialGroup;
+use App\Enum\OfficialGroupSemantic;
 use App\Response\AjaxResponse;
 use App\Service\JSONRequestParser;
 use Exception;
@@ -25,15 +26,15 @@ class HelpController extends CustomAbstractController
             else {
 
                 $support_group = $this->getUser()
-                    ? $this->entity_manager->getRepository(OfficialGroup::class)->findOneBy(['lang' => $this->getUserLanguage(), 'semantic' => OfficialGroup::SEMANTIC_SUPPORT])
+                    ? $this->entity_manager->getRepository(OfficialGroup::class)->findOneBy(['lang' => $this->getUserLanguage(), 'semantic' => OfficialGroupSemantic::Support])
                     : null;
 
                 $oracle_group = $this->getUser()
-                    ? $this->entity_manager->getRepository(OfficialGroup::class)->findOneBy(['lang' => $this->getUserLanguage(), 'semantic' => OfficialGroup::SEMANTIC_ORACLE])
+                    ? $this->entity_manager->getRepository(OfficialGroup::class)->findOneBy(['lang' => $this->getUserLanguage(), 'semantic' => OfficialGroupSemantic::Oracle])
                     : null;
 
                 $animaction_group = $this->getUser()
-                    ? $this->entity_manager->getRepository(OfficialGroup::class)->findOneBy(['lang' => $this->getUserLanguage(), 'semantic' => OfficialGroup::SEMANTIC_ANIMACTION])
+                    ? $this->entity_manager->getRepository(OfficialGroup::class)->findOneBy(['lang' => $this->getUserLanguage(), 'semantic' => OfficialGroupSemantic::Animaction])
                     : null;
 
                 return $this->render( $section ? "$base/$section/$page.html.twig" : "$base/$page.html.twig", $this->addDefaultTwigArgs(null, [
