@@ -552,10 +552,10 @@ class ActionEffectProvider
         $effects_container->add()->identifier('status_home_clean')->add( (new StatusEffect())->count(ActionCounterType::HomeCleanup)->addsStatus('tg_home_clean'))->commit();
         $effects_container->add()->identifier('status_home_shower')->add( (new StatusEffect())->count(ActionCounterType::Shower)->addsStatus('tg_home_shower'))->commit();
 
-        $effects_container->add()->identifier('ghoul_25_4')->add( (new StatusEffect())->role('ghoul')->probability(4)->ghoulHunger(25, true))->commit();
-        $effects_container->add()->identifier('ghoul_25_5')->add( (new StatusEffect())->role('ghoul')->probability(5)->ghoulHunger(25, true))->commit();
-        $effects_container->add()->identifier('ghoul_25_100')->add( (new StatusEffect())->role('ghoul')->probability(100)->ghoulHunger(25, true))->commit();
-        $effects_container->add()->identifier('ghoul_5_100')->add( (new StatusEffect())->role('ghoul')->probability(100)->ghoulHunger(25, true))->commit();
+        $effects_container->add()->identifier('ghoul_25_4')->add( (new StatusEffect(SortDefinition::atStart()))->role('ghoul')->probability(4)->ghoulHunger(25, true))->commit();
+        $effects_container->add()->identifier('ghoul_25_5')->add( (new StatusEffect(SortDefinition::atStart()))->role('ghoul')->probability(5)->ghoulHunger(25, true))->commit();
+        $effects_container->add()->identifier('ghoul_25_100')->add( (new StatusEffect(SortDefinition::atStart()))->role('ghoul')->probability(100)->ghoulHunger(25, true))->commit();
+        $effects_container->add()->identifier('ghoul_5_100')->add( (new StatusEffect(SortDefinition::atStart()))->role('ghoul')->probability(100)->ghoulHunger(25, true))->commit();
 
         $effects_container->add()->identifier('cyanide')->add( (new StatusEffect())->kill( CauseOfDeath::Cyanide))->commit();
         $effects_container->add()->identifier('death_poison')->add( (new StatusEffect())->kill( CauseOfDeath::Poison))->commit();
