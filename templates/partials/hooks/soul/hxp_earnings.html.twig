@@ -112,8 +112,8 @@
         <div class="row-table">
             <div class="row header">
                 <div class="padded cell rw-7 rw-md-9 rw-sm-12">{{ 'Beschreibung'|trans({},'soul') }}</div>
-                <div class="padded cell rw-3 hide-sm hide-md">{{ 'Erfahrung'|trans({},'soul') }}</div>
-                <div class="padded cell center right-md rw-2 rw-md-3 hide-sm">{{ 'Erworben'|trans({},'soul') }}</div>
+                <div class="padded cell rw-3 hide-sm hide-md">{{ 'Erworben'|trans({},'soul') }}</div>
+                <div class="padded cell center right-md rw-2 rw-md-3 hide-sm">{{ 'Erfahrung'|trans({},'soul') }}</div>
             </div>
             {% for entry in others %}
                 <div class="row">
@@ -123,19 +123,19 @@
                             <div class="small">{{ 'Kann beliebig oft in einer Saison verdient werden!'|trans({},'soul') }}</div>
                         {% endif %}
                     </div>
-                    <div class="padded cell rw-3 rw-md-6">
+                    <div class="padded cell rw-2 rw-md-6">
+                        {{ entry['value'] }}
+                        {% if entry['valueNote'] is not null %}
+                            <div class="small">{{ entry['valueNote'] }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="padded cell rw-3 rw-md-6 center right-md right-sm">
                         {% if not entry['repeat'] and entry['achieved'] %}
                             <img alt="" src="{{ asset('build/images/assets/img/icons/tickOn.gif') }}" />
                         {% elseif not entry['repeat'] and not entry['achieved'] %}
                             <img alt="" src="{{ asset('build/images/assets/img/icons/tickOff.gif') }}" />
                         {% elseif entry['repeat'] and entry['total'] > 0 %}
                             {{ entry['total'] }}
-                        {% endif %}
-                    </div>
-                    <div class="padded cell rw-2 rw-md-6 center right-md right-sm">
-                        {{ entry['value'] }}
-                        {% if entry['valueNote'] is not null %}
-                            <div class="small">{{ entry['valueNote'] }}</div>
                         {% endif %}
                     </div>
                 </div>
