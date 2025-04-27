@@ -217,7 +217,7 @@ const BuildingGroup = (props: BuildingGroupProps) => {
 
     const missing_ap = props.building.c
         ? (Math.ceil((props.building.a[1] - props.building.a[0]) / globals.hpRatio))
-        : (Math.round(props.building.a[1] / globals.apRatio) - props.building.a[0]);
+        : (Math.ceil(props.building.a[1] / globals.apRatio) - props.building.a[0]);
 
     return prototype && <>
         <Tag className="building" classNames={{
@@ -323,7 +323,7 @@ const BuildingResources = (props: BuildingCompleteProps) => {
         {((!props.building.c && props.building.a[0] > 0) || needs_repair) && <>
             <div className="ap-bar">
                 <div className="bar"
-                     style={{width: `${100 * props.building.a[0] / (Math.round(props.building.a[1] / ratio))}%`}}></div>
+                     style={{width: `${100 * props.building.a[0] / (Math.ceil(props.building.a[1] / ratio))}%`}}></div>
             </div>
             <img alt="" className="ap-bar-start"
                  src={props.building.c ? globals.strings.page.hp_bar : globals.strings.page.ap_bar}/>
