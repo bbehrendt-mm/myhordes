@@ -747,7 +747,9 @@ export default class HTML {
     }
 
     setTitleSegmentAddendum(add: string|null): void {
-        this.title_segments[2] = add;
+        const s = document.createElement('span');
+        s.innerHTML = add;
+        this.title_segments[2] = s.innerText;
         this.updateTitle(this.title_alt);
     }
 
