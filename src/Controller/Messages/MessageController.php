@@ -7,6 +7,7 @@ use App\Entity\Announcement;
 use App\Entity\Award;
 use App\Entity\Changelog;
 use App\Entity\Citizen;
+use App\Entity\CitizenRole;
 use App\Entity\Emotes;
 use App\Entity\Forum;
 use App\Entity\ForumUsagePermissions;
@@ -122,7 +123,14 @@ class MessageController extends CustomAbstractController
                         }
 
                         $post
-                        ->setNoteIcons(["build/images/professions/{$citizen->getProfession()->getIcon()}.gif", 'build/images/icons/item_map.gif'])
+                        ->setNoteIcons([
+                            ...($citizen->getBanished() ? ['build/images/icons/banished.gif'] : []),
+                            ...$citizen->getRoles()
+                                ->filter( fn(CitizenRole $r) => !$r->getSecret() && $r->getIcon() )
+                                ->map( fn(CitizenRole $r) => "build/images/roles/{$r->getIcon()}.gif" ),
+                            "build/images/professions/{$citizen->getProfession()->getIcon()}.gif",
+                            'build/images/icons/item_map.gif'
+                        ])
                         ->setNote("<span>$note</span>");
                     }
                 } elseif ($post->getType() === 'USER' || $post->getType() === 'GLORY') { // World forum message
