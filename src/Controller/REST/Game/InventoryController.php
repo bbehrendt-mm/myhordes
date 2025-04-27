@@ -448,26 +448,34 @@ class InventoryController extends CustomAbstractCoreController
 
         $success = empty($errors) || count($errors) < count($items) || empty($items);
 
-        if ($success && $should_hide) {
-            $ch->setAP($citizen, true, -2);
-            $reload = true;
+        if ($success) {
+            if ($should_hide) {
+                $ch->setAP($citizen, true, -2);
+                $reload = true;
 
-            if (!$hide_should_succeed)
-                $this->addFlash('notice', $this->translator->trans('Ein oder mehrere nicht-verbannte Bürger in der Umgebung haben dich dabei beobachtet.<hr/>Du hast 2 Aktionspunkte verbraucht.', [], 'game'));
-            else {
-                $citizen->getZone()?->setItemsHiddenAt( new \DateTimeImmutable() );
-                $em->persist($citizen);
-                $this->addFlash('notice', $this->translator->trans('Du brauchst eine Weile, bis du alle Gegenstände versteckt hast, die du bei dir trägst... Ha Ha... Du hast 2 Aktionspunkte verbraucht.', [], 'game'));
+                if (!$hide_should_succeed)
+                    $this->addFlash('notice', $this->translator->trans('Ein oder mehrere nicht-verbannte Bürger in der Umgebung haben dich dabei beobachtet.<hr/>Du hast 2 Aktionspunkte verbraucht.', [], 'game'));
+                else {
+                    $citizen->getZone()?->setItemsHiddenAt( new \DateTimeImmutable() );
+                    $em->persist($citizen);
+                    $this->addFlash('notice', $this->translator->trans('Du brauchst eine Weile, bis du alle Gegenstände versteckt hast, die du bei dir trägst... Ha Ha... Du hast 2 Aktionspunkte verbraucht.', [], 'game'));
+                }
             }
+
+            if ($citizen->getZone() && !$citizen->getExplorerStats()->findFirst(fn(int $k, RuinExplorerStats $a) => $a->getActive()) && !$zh->isZoneUnderControl( $citizen->getZone() ) && $ch->getEscapeTimeout( $citizen ) < 0 && $ch->uncoverHunter($citizen)) {
+                $this->addFlash('notice', $this->translator->trans('Deine <strong>Tarnung ist aufgeflogen</strong>!', [], 'game'));
+                $reload = true;
+            }
+
+            // Reload page if camping item has been moved outside
+            if ($citizen->getZone() && array_reduce( $items, fn(bool $carry, ?Item $i) => $carry || $i?->getPrototype()?->hasProperty('camp_bonus'), false ))
+                $reload = true;
+
+            if (!$reload)
+                $response->withSignal(ClientSignal::LogUpdated);
         }
 
-        if ($success && $citizen->getZone() && !$citizen->getExplorerStats()->findFirst(fn(int $k, RuinExplorerStats $a) => $a->getActive()) && !$zh->isZoneUnderControl( $citizen->getZone() ) && $ch->getEscapeTimeout( $citizen ) < 0 && $ch->uncoverHunter($citizen)) {
-            $this->addFlash('notice', $this->translator->trans('Deine <strong>Tarnung ist aufgeflogen</strong>!', [], 'game'));
-            $reload = true;
-        }
 
-        if ($success && !$reload)
-            $response->withSignal(ClientSignal::LogUpdated);
 
         try {
             $em->flush();
