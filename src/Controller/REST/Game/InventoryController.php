@@ -197,6 +197,7 @@ class InventoryController extends CustomAbstractCoreController
             's' => [
                 ...($custom_sort ? [$custom_sort] : []),
                 $i->getEssential() ? 1 : 0,
+                $i->getHidden() ? 1 : 0,
                 $i->getPrototype()->getSort(),
                 -$i->getPrototype()->getId(),
                 $i->getCount(),
