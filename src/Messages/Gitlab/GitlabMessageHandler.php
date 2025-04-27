@@ -30,7 +30,8 @@ readonly class GitlabMessageHandler
     public function __construct(
         private GetGitlabClientAction $gitlab,
         private ParameterBagInterface $params,
-        private MessageBusInterface $bus
+        private MessageBusInterface $bus,
+        private ConfMaster $confMaster,
     ) {}
 
     private function makeTable(array $data): string {
@@ -49,6 +50,8 @@ readonly class GitlabMessageHandler
         $filesystem->mkdir( $tempDir );
 
         $paths = [];
+        $downloads = [];
+        $images = [];
         $accum = 0;
         foreach ( $message->attachments as $content ) {
             $filename = Arr::get( $content, 'file', null );
@@ -61,14 +64,25 @@ readonly class GitlabMessageHandler
 
             $storage_name = "$tempDir/" . UuidV4::v4()->toRfc4122() . $extension;
             $filesystem->dumpFile($storage_name, $decoded);
-            $paths[$storage_name] = $filename;
+            $paths[$storage_name] = [$filename, $extension];
         }
 
         try {
-            $md = array_map( function( $file, $name ) use ($client, $project) {
+            $md = array_filter( array_map( function( $file, $data ) use ($client, $project, &$images, &$downloads) {
+                [$name, $extension] = $data;
                 ['url' => $url] = $client->projects()->uploadFile($project, $file);
+
+                if (!$url) return null;
+
+                $full_url =
+                    $this->confMaster->getGlobalConf()->getSubKey( MyHordesSetting::IssueReportingGitlabToken, 'base' ) .
+                    "/-/project/{$project}{$url}";
+
+                if (in_array($extension, ['.png', '.jpg', '.jpeg', '.gif', '.webp', '.avif', '.heic', '.bmp'])) $images[] = $full_url;
+                else $downloads[] = $full_url;
+
                 return "![$name]($url)";
-            }, array_keys( $paths ), array_values( $paths ) );
+            }, array_keys( $paths ), array_values( $paths ) ), fn($v) => $v !== null);
 
             $info_table = empty($message->passed_info) ? '' : ("\n## Context information:\n\n" . $this->makeTable( $message->trusted_info ) );
             $proxy_table = empty($message->passed_info) ? '' : ("\n## Information passed by client:\n\n" . $this->makeTable( $message->passed_info ) );
@@ -90,6 +104,8 @@ readonly class GitlabMessageHandler
             title:    mb_substr("[#$issue_id] $message->title", 0, 64),
             body:     $message->description,
             template: 'gitlab_new_issue',
+            images: $images,
+            attachments: $downloads,
         ) );
     }
 
