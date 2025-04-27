@@ -746,11 +746,7 @@ class CitizenHandler
 			$chance["lighthouse"] = 25;
 
 		// Camping items in the backpack
-		$campitems = [
-			$this->entity_manager->getRepository(ItemPrototype::class)->findOneByName( 'smelly_meat_#00' ),
-			$this->entity_manager->getRepository(ItemPrototype::class)->findOneByName( 'sheet_#00' ),
-		];
-		$chance['campitems'] = $this->inventory_handler->countSpecificItems($citizen->getInventory(), $campitems, false, false) * 5; // Each item gives a 5% bonus
+		$chance['campitems'] = $this->inventory_handler->countSpecificItems($citizen->getInventory(), 'camp_bonus', true, false) * 5; // Each item gives a 5% bonus
 
 		// Zombies on the zone
 		$zombieRatio = ($has_scout_protection ? -3 : -7);
