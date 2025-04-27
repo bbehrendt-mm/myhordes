@@ -3,25 +3,26 @@
 namespace App\Entity;
 
 use App\Repository\UserGroupRepository;
+use ArrayHelpers\Arr;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: UserGroupRepository::class)]
 class UserGroup
 {
-    const GroupTypeDefault = 0;
-    const GroupTypeDefaultUserGroup = 1;
-    const GroupTypeDefaultElevatedGroup = 2;
-    const GroupTypeDefaultModeratorGroup = 3;
-    const GroupTypeDefaultAdminGroup = 4;
-    const GroupTypeDefaultOracleGroup = 5;
-    const GroupTypeDefaultAnimactorGroup = 6;
-    const GroupTypeDefaultDevGroup = 7;
-    const GroupTypeDefaultArtisticGroup = 8;
-    const GroupTownInhabitants = 10;
-    const GroupTownAnimaction = 11;
-    const GroupSmallCoalition = 101;
-    const GroupMessageGroup = 201;
-    const GroupOfficialGroup = 301;
+    const int GroupTypeDefault = 0;
+    const int GroupTypeDefaultUserGroup = 1;
+    const int GroupTypeDefaultElevatedGroup = 2;
+    const int GroupTypeDefaultModeratorGroup = 3;
+    const int GroupTypeDefaultAdminGroup = 4;
+    const int GroupTypeDefaultOracleGroup = 5;
+    const int GroupTypeDefaultAnimactorGroup = 6;
+    const int GroupTypeDefaultDevGroup = 7;
+    const int GroupTypeDefaultArtisticGroup = 8;
+    const int GroupTownInhabitants = 10;
+    const int GroupTownAnimaction = 11;
+    const int GroupSmallCoalition = 101;
+    const int GroupMessageGroup = 201;
+    const int GroupOfficialGroup = 301;
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
@@ -38,6 +39,9 @@ class UserGroup
     private $shoutbox;
     #[ORM\Column(type: 'integer', nullable: true)]
     private $ref3;
+
+    #[ORM\Column(nullable: true)]
+    private ?array $properties = null;
     public function getId(): ?int
     {
         return $this->id;
@@ -106,5 +110,29 @@ class UserGroup
         $this->ref3 = $ref3;
 
         return $this;
+    }
+
+    public function getProperties(): ?array
+    {
+        return $this->properties;
+    }
+
+    public function setProperties(?array $properties): static
+    {
+        $this->properties = $properties;
+
+        return $this;
+    }
+
+    public function getProperty(string $key, mixed $default = null): mixed
+    {
+        return Arr::get($this->properties ?? [], $key, $default);
+    }
+
+    public function setProperty(string $key, mixed $value): static
+    {
+        $p = $this->getProperties() ?? [];
+        Arr::set($p, $key, $value);
+        return $this->setProperties( $p );
     }
 }

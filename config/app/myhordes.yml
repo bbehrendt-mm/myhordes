@@ -63,6 +63,8 @@ parameters:
       gitlab:
         token: ~
         project-id: ~
+        project-slug: 'eternaltwin/myhordes/myhordes'
+        base: 'https://gitlab.com'
     twinoid:
       sk: ~
       id: ~

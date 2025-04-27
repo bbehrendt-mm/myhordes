@@ -18,6 +18,8 @@ use App\Entity\User;
 use App\Entity\UserGroup;
 use App\Entity\UserGroupAssociation;
 use App\Entity\UserSwapPivot;
+use App\Enum\OfficialGroupSemantic;
+use App\Messages\Gitlab\GitlabCreateIssueCommentMessage;
 use App\Response\AjaxResponse;
 use App\Service\CrowService;
 use App\Service\ErrorHelper;
@@ -38,7 +40,9 @@ use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -155,7 +159,9 @@ class MessageGlobalPMController extends MessageController
                     $this->entity_manager->flush();
                 } catch (\Exception $e) {}
 
-                foreach ($messages as $message) $message->setText( $this->html->prepareEmotes( $message->getText(), $this->getUser() ) );
+                foreach ($messages as $message)
+                    if ($message->getText())
+                        $message->setText( $this->html->prepareEmotes( $message->getText(), $this->getUser() ) );
                 $focus = $this->render( 'ajax/pm/bubbles.html.twig', ['raw_gp' => $messages, 'raw_gp_owner' => $group_association->getAssociationLevel() == UserGroupAssociation::GroupAssociationLevelFounder] )->getContent();
 
                 break;
@@ -244,7 +250,7 @@ class MessageGlobalPMController extends MessageController
                 'response' => $has_response,
                 'archive' => $association->getBref(),
                 'official' => $official_meta ? $official_meta->getOfficialGroup() : null,
-                'official_type' => $official_meta ? $official_meta->getOfficialGroup()->getSemantic() : null,
+                'official_type' => $official_meta ? $official_meta->getOfficialGroup()->getSemantic()->value : null,
                 'title'  => $association->getAssociation()->getName(),
                 'closed' => $association->getAssociationType() === UserGroupAssociation::GroupAssociationTypePrivateMessageMemberInactive,
                 'count'  => $read_only ? $association->getRef3() : $association->getAssociation()->getRef1(),
@@ -399,9 +405,21 @@ class MessageGlobalPMController extends MessageController
         $user_filter = $p->get_num('user', 0);
         if ($user_filter <= 0) $user_filter = null;
 
+        $semantic = $set === 'support' ? $p->get_enum( 'og', OfficialGroupSemantic::class ) : null;
+        $og_type = $set === 'support' ? $p->get('ogt', null, ['mh','gitlab']) : null;
+
+        $path = match($og_type) {
+            'mh', 'gitlab' => 'gitlab.issue_id',
+            default => null,
+        };
+        $invert = match($og_type) {
+            'mh' => true,
+            default => false,
+        };
+
         if (!empty($group_filter))
             $this->render_group_associations( $em->getRepository(UserGroupAssociation::class)->findByUserAssociation($this->getUser(), $group_filter,
-                    $skip['g'] ?? [], $num+1, $set === 'archive', $query, $user_filter, $user_group_filter), $entries );
+                    $skip['g'] ?? [], $num+1, $set === 'archive', $query, $user_filter, $user_group_filter, $semantic, $path, $invert), $entries );
 
         if ($set === 'announcements' || ($set === 'archive'))
             $this->render_announcements( $em->getRepository(Announcement::class)->findByLang($this->getUserLanguage(),
@@ -654,7 +672,7 @@ class MessageGlobalPMController extends MessageController
      * @return Response
      */
     #[Route(path: 'jx/pm/conversation/group/{id<\d+>}', name: 'pm_conv_group')]
-    public function pm_conversation_group(int $id, EntityManagerInterface $em, JSONRequestParser $p, SessionInterface $s): Response {
+    public function pm_conversation_group(int $id, EntityManagerInterface $em, JSONRequestParser $p, SessionInterface $s, LogTemplateHandler $th): Response {
 
         $group = $em->getRepository( UserGroup::class )->find($id);
         if (!$group || $group->getType() !== UserGroup::GroupMessageGroup) return new Response('not found');
@@ -690,7 +708,21 @@ class MessageGlobalPMController extends MessageController
             $this->entity_manager->flush();
         } catch (\Exception $e) {}
 
-        foreach ($messages as $message) $message->setText( $this->html->prepareEmotes( $message->getText(), $this->getUser() ) );
+        foreach ($messages as $message) {
+            $tx = '';
+            if ($message->getTemplate())
+                try {
+                    $tx .= $this->translator->trans(
+                            $message->getTemplate()->getText(), $th->parseTransParams($message->getTemplate()->getVariableTypes(), $message->getData()), 'game'
+                        ) . $th->processAmendment( $message->getTemplate(), $message->getData() );
+                }
+                catch (\Exception $e) { $tx .= '_TEMPLATE_ERROR_'; }
+
+            if ($message->getText())
+                $tx .= $this->html->prepareEmotes($message->getText(), $this->getUser());
+
+            $message->setText($tx);
+        }
 
         /** @var GlobalPrivateMessage[] $sliced */
         $sliced = array_slice($messages, 0, $num);
@@ -1328,10 +1360,11 @@ class MessageGlobalPMController extends MessageController
      * @param int $id
      * @param JSONRequestParser $parser
      * @param EntityManagerInterface $em
+     * @param EventProxyService $proxy
      * @return Response
      */
     #[Route(path: 'api/pm/{id<\d+>}/answer', name: 'pm_new_post_controller')]
-    public function new_post_api(int $id, JSONRequestParser $parser, EntityManagerInterface $em, EventProxyService $proxy): Response {
+    public function new_post_api(int $id, JSONRequestParser $parser, EntityManagerInterface $em, EventProxyService $proxy, MessageBusInterface $bus): Response {
 
         $user = $this->getUser();
 
@@ -1393,6 +1426,17 @@ class MessageGlobalPMController extends MessageController
         }
 
         $proxy->globalPrivateMessageNewPostEvent( $post, $insight, false );
+
+        $gl_issue_id = $group->getProperty('gitlab.issue_id');
+        if ($gl_issue_id) {
+            $user_profile = $this->generateUrl( 'soul_visit', ['id' => $user->getId()], UrlGeneratorInterface::ABSOLUTE_URL );
+            $bus->dispatch(new GitlabCreateIssueCommentMessage(
+                owner:        $user->getId(),
+                issue_id:     $gl_issue_id,
+                description:  "Message added via MyHordes by [{$user->getName()} #{$user->getId()}]({$user_profile})\n\n```\n" . str_replace( '`', "'", strip_tags($text) ) . "\n```\n",
+                confidential: true
+            ));
+        }
 
         return AjaxResponse::success( true , ['url' => $this->generateUrl('pm_view')] );
     }
