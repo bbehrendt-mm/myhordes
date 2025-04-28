@@ -396,7 +396,7 @@
                 {% endif %}
 
                 {# {% if owner.zone %}<p {% if hidden %}class="hidden with-curtains"{% endif %}>{{ '{citizen} ist ausgegangen...'|trans({'{citizen}': owner.name}, 'game') }} {% endif %}</p>#}
-                {% if has_items and (not hidden or intruding) %}
+                {% if (has_items and (not hidden or intruding)) or intruding %}
                     {% if not intruding %}
                         <p>{{ 'Wenn Sie aus dem Fenster schauen, können Sie die folgenden Dinge im Haus sehen:'|trans({},'game') }}</p>
                     {% endif %}
