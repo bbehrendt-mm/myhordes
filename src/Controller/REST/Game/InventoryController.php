@@ -403,8 +403,11 @@ class InventoryController extends CustomAbstractCoreController
                 in_array($item->getPrototype()->getName(), $carrier_items) &&
                 // item is single...
                 $item->getCount() === 1 &&
-                // no other carriers...
-                $inventory->getItems()->filter(fn(Item $i) => $i->getId() !== $item->getId() && in_array($i->getPrototype()->getName(), $carrier_items))->isEmpty()
+                // no other carriers or full inventory...
+                (
+                    $inventory->getItems()->filter(fn(Item $i) => $i->getId() !== $item->getId() && in_array($i->getPrototype()->getName(), $carrier_items))->isEmpty() ||
+                    $ih->getFreeSize( $inventory ) < 2
+                )
             ));
 
         $items = match(true) {
