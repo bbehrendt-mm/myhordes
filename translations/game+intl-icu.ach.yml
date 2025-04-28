@@ -3218,3 +3218,7 @@ Tierklinik: crwdns212326:0crwdne212326:0
 'Heldenfähigkeit freigeschaltet': 'crwdns212400:0crwdne212400:0'
 'Du hast es geschafft, diesen Gegenstand zu verarbeiten. Aber als du fast fertig warst, ist das Klebeband gerissen. Ohne dessen Halt ist die Klinge abgerutscht und hat den Stamm zertrümmert. So ist das ganze Ding nicht mehr zu gebrauchen. Wenigstens hast du es ohne einen Splitter überstanden.': 'crwdns212402:0crwdne212402:0'
 'Du hast es geschafft, {item} anzulocken... aber das Einfangen ist dir weniger geglückt.<hr/>Nichts von dem Futter ist übrig geblieben, abgesehen von ein paar von Insekten bedeckten Krümeln. Du legst die {leftovers} in die Bank.': 'crwdns212404:0{item}crwdnd212404:0{leftovers}crwdne212404:0'
+'Du erhälst diese Nachricht als Bestätigung, dass deine Fehlermeldung bei uns eingegangen ist. Du kannst auf diese Nachricht antworten, um deiner Fehlermeldung zusätzliche Informationen hinzuzufügen. Unsere Techniker werden dich möglicherweise über diesen Thread kontaktieren, wenn sie Rückfragen haben.<br/><br/>Deine Meldung:<br/>{body}<br/>Link zu deinem Ticket (nur für Projektmitglieder abrufbar): <a href="{link}">#{issue}</a>': 'crwdns213148:0{body}crwdnd213148:0{link}crwdnd213148:0#{issue}crwdne213148:0'
+'Dein Ticket mit der Nummer #{issue} wurde soeben geschlossen.': 'crwdns213150:0#{issue}crwdne213150:0'
+'Dein Ticket mit der Nummer #{issue} wurde soeben erneut geöffnet.': 'crwdns213152:0#{issue}crwdne213152:0'
+'Ein Techniker hat dir eine Nachricht geschrieben:<br/><br/>{body}': 'crwdns213154:0{body}crwdne213154:0'
