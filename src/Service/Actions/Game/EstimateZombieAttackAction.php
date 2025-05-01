@@ -40,7 +40,7 @@ readonly class EstimateZombieAttackAction
     public function __invoke(
         TownConf $conf, ZombieEstimation $estimation,
         ?int $citizens = null, float $citizen_ratio = 1.0,
-        int $subtract_weighted_citizens = 0, int $blocks = 1,
+        int $subtract_weighted_citizens = 0, int|true $blocks = 1,
         float $penalty_factor = 1.0, ?int $fallback_seed = 0,
 
     ): WatchtowerEstimation
@@ -67,6 +67,9 @@ readonly class EstimateZombieAttackAction
         $min = round(($estimation->getTargetMin() - ($estimation->getTargetMin() * $offsetMin / 100)) * $penalty_factor);
         $max = round(($estimation->getTargetMax() + ($estimation->getTargetMax() * $offsetMax / 100)) * $penalty_factor);
 
+        if ($blocks === true) $blocks = ceil( $estimation->getDay() / 5 ) * 5;
+
+        $blocks = max(1, $blocks);
         if ($blocks > 1) {
             $min = floor($min / $blocks) * $blocks;
             $max = ceil($max / $blocks) * $blocks;

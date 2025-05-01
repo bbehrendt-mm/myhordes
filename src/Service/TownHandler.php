@@ -485,7 +485,7 @@ class TownHandler
                     citizens: $prev_citizens,
                     citizen_ratio: $ratio,
                     subtract_weighted_citizens: 24,
-                    blocks: 25,
+                    blocks: true,
                     penalty_factor: $soulFactor,
                     fallback_seed: $town->getDay() + $town->getId()
                 );

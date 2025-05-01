@@ -42,6 +42,7 @@ class AttackEstimationTestCommand extends Command
             ->addArgument('to_day', InputArgument::OPTIONAL, 'Calculate until day')
 
             ->addOption('estimate', null, InputOption::VALUE_NONE, 'Perform estimations')
+            ->addOption('tomorrow', null, InputOption::VALUE_NONE, 'Use with --estimate to run in planner mode')
             //->addOption('data', null, InputOption::VALUE_REQUIRED, 'Data to transmit', '{}')
         ;
     }
@@ -99,6 +100,8 @@ class AttackEstimationTestCommand extends Command
 
         if (!$input->getOption('estimate')) return 0;
 
+        $planner = $input->getOption('tomorrow');
+
         foreach ($days as $day => [$actual, $min, $max]) {
             $c = 0;
 
@@ -106,7 +109,10 @@ class AttackEstimationTestCommand extends Command
 
             do {
                 $est = ($this->estimateZombieAttackAction)(
-                    $conf, $actual, $c,
+                    $conf,
+                    $actual,
+                    $c,
+                    blocks: $planner ? true : 1,
                     fallback_seed: $town->getId() + $day
                 );
 
