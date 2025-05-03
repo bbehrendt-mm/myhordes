@@ -266,11 +266,12 @@ final class DeathConfirmationEventListener implements ServiceSubscriberInterface
             if ($count > 0) {
 
                 if (is_array( $by_count ))
-                    foreach ( $by_count as $min => $bonus )
+                    foreach ( $by_count as $min => $bonus ) {
                         if ($min <= $count && ($value + $bonus > 0))
-                            $this->hxp($event->death, ($template . ( $min > 1 ? "_next" : "" )), !$subject, $value + $bonus,
+                            $this->hxp($event->death, ($template . ($min > 1 ? "_next" : "")), !$subject, $value + $bonus,
                                        ['town' => $event->death->getTown()->getName(), 'picto' => $prototype->getId(), 'num' => $min],
-                                       $subject ? ("picto_{$picto}" . ( $min > 1 ? "__$min" : "" )) : null);
+                                       $subject ? ("picto_{$picto}" . ($min > 1 ? "__$min" : "")) : null);
+                    }
                 elseif ($value > 0)
                     $this->hxp($event->death, $template, !$subject, $value, ['town' => $event->death->getTown()->getName(), 'picto' => $prototype->getId()], $subject ? "picto_{$picto}" : null);
             }
