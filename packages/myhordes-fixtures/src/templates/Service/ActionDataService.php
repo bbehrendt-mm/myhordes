@@ -702,7 +702,7 @@ class ActionDataService implements FixtureProcessorInterface {
                     'watercan1_tl0', 'watercan1_tl1a', 'watercan1_tl1b', 'watercan1_tl2', 'watercan1_g'
                 ]],
                 'ex_eat'   => [ 'icon' => 'eat', 'label' => 'Essen', 'tooltip' => '{citizen} befehlen etwas zu essen.', 'actions' => [
-                    'eat_6ap', 'eat_7ap', 'eat_fleshroom_1', 'eat_fleshroom_2', 'eat_meat_1', 'eat_meat_2'
+                    'eat_6ap', 'eat_7ap', 'eat_fleshroom_1', 'eat_fleshroom_2', 'eat_meat_1', 'eat_meat_2', 'eat_apple'
                 ]],
             ],
 
