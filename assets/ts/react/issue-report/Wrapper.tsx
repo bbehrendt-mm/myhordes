@@ -126,9 +126,9 @@ const ReportIssueDialog = (props: {
             }
         }, attachedFiles)
             .then( r => {
-                $.html.notice( index.strings.common.success );
                 setSending(false);
                 cancelDialog();
+                requestAnimationFrame( () => $.html.notice( index.strings.common.success ) );
             }).catch(error => {
                 setSending(false);
                 if (typeof error === "object") switch ( error.status ?? -1 ) {
