@@ -696,3 +696,7 @@ Teuer: Expensive
 Normal: Normal
 Billig: Cheap
 Billig+: Cheap+
+'Gewählte Gebäude freischalten': 'Unlock selected construction'
+'Gesamten Gebäudebaum zurücksetzen': 'Reset entire building tree'
+'Klicken, um Baustelle in die Liste der zu entsperrenden Baustellen aufzunehmen.': 'Click to add to the list of constructions to unlock'
+'Klicken, um Baustelle sofort zu entsperren.': 'Click to unlock'
