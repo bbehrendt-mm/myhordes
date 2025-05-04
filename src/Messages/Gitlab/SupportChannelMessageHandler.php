@@ -102,6 +102,8 @@ readonly class SupportChannelMessageHandler
             implode( '', array_map(fn(string $s) => "<div><img alt=\"\" src=\"$s\"/></div>",$message->images) ) .
             implode( '<hr />', array_map(fn(string $s) => "<div><a href=\"$s\">$s</a></div>",$message->attachments) );
 
+        if (!empty($text)) $text = "<hr>$text";
+
         $post = (new GlobalPrivateMessage())
             ->setSenderGroup($og)->setTimestamp( new \DateTime() )->setReceiverGroup($existing_group)
             ->setText( $text )
