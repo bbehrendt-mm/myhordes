@@ -979,6 +979,13 @@ ul.inventory {
     }
   }
 
+  &.bank {
+    li.item {
+      width: 31px; position: relative;
+      &.excessive span:not(.item-icon) { position: absolute; top: 0; right: 0 }
+    }
+  }
+
   &.inventory-react {
     display: flex; flex-wrap: wrap; gap: 2px; align-items: center; justify-content: flex-start;
     &>li {
