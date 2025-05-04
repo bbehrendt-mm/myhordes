@@ -276,7 +276,7 @@ const BuildingInfos= (props: BuildingCompleteProps & {level: number}) => {
             <Tag
                 tagName="span" classNames={{'action-vote': globals.canVote && !props.building.c}} className="building_name"
                 onClick={() => {
-                    if (globals.canVote && !props.building.c)
+                    if (globals.canVote && !props.building.c && confirm( globals.strings.common.confirm ))
                         globals.api
                             .vote(props.building.i)
                             .then(m => {

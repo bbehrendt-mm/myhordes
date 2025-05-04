@@ -9,6 +9,7 @@ export type TranslationStrings = {
         level: string,
 
         show_list: string,
+        confirm: string,
         close: string,
     }
     page: {
