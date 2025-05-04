@@ -74,6 +74,7 @@ class BuildingController extends CustomAbstractCoreController
                 'level' => $this->translator->trans('Level {lv}', [], 'game'),
 
                 'show_list' => $this->translator->trans('Gebäudeliste einblenden', [], 'game'),
+                'confirm' => $this->translator->trans('Bestätigen?', [], 'global'),
                 'close' => $this->translator->trans('Schließen', [], 'global'),
             ],
             'page' => [
