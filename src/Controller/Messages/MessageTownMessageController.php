@@ -17,10 +17,12 @@ use App\Entity\PrivateMessageThread;
 use App\Entity\Town;
 use App\Entity\User;
 use App\Enum\ActionCounterType;
+use App\Enum\ClientSignal;
 use App\Enum\Configuration\CitizenProperties;
 use App\Response\AjaxResponse;
 use App\Service\CrowService;
 use App\Service\ErrorHelper;
+use App\Service\Globals\ResponseGlobal;
 use App\Service\InventoryHandler;
 use App\Service\JSONRequestParser;
 use App\Service\RateLimitingFactoryProvider;
@@ -50,7 +52,7 @@ class MessageTownMessageController extends MessageController
      * @return Response
      */
     #[Route(path: 'api/town/house/sendpm', name: 'town_house_send_pm_controller')]
-    public function send_pm_api(EntityManagerInterface $em, JSONRequestParser $parser, TranslatorInterface $t, UserHandler $userHandler): Response {
+    public function send_pm_api(EntityManagerInterface $em, JSONRequestParser $parser, TranslatorInterface $t, UserHandler $userHandler, ResponseGlobal $response): Response {
         if ($userHandler->isRestricted($this->getUser(), AccountRestriction::RestrictionTownCommunication))
             return AjaxResponse::error(ErrorHelper::ErrorPermissionError);
 
@@ -283,8 +285,10 @@ class MessageTownMessageController extends MessageController
             return AjaxResponse::error( ErrorHelper::ErrorInternalError );
         } else {
             // Show confirmation
-            if(count($linked_items) > 0)
+            if(count($linked_items) > 0) {
+                $response->withSignal(ClientSignal::InventoryUpdated );
                 $message = $t->trans("Deine Nachricht und deine ausgewählten Gegenstände wurden überbracht.", [], 'game');
+            }
             else
                 $message = $t->trans('Deine Nachricht wurde korrekt übermittelt!', [], 'game');
 
