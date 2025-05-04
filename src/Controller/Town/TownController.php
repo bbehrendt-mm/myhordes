@@ -803,9 +803,14 @@ class TownController extends InventoryAwareController
             $this->entity_manager->remove($other_intrusion);
 
         if ($action !== 0 && $this->entity_manager->getRepository(CitizenHomeUpgrade::class)->findOneByPrototype( $victim->getHome(), $this->doctrineCache->getEntityByIdentifier(CitizenHomeUpgradePrototype::class, 'alarm' ) ) && $victim->getAlive()) {
-            $this->entity_manager->persist( $this->log->citizenHomeIntrusion( $this->getActiveCitizen(), $victim, true) );
-            $this->addFlash( 'error', $this->translator->trans( 'Du hast das Alarmsystem bei {victim} ausgelöst! Die ganze Stadt weiß jetzt über deinen Einbruch Bescheid.', ['victim' => $victim], 'game' ) );
-            $this->crow->postAsPM( $victim, '', '' . time(), PrivateMessage::TEMPLATE_CROW_INTRUSION, $this->getActiveCitizen()->getId() );
+            $counter = $victim->getSpecificActionCounter( ActionCounterType::IntrusionFrom, $this->getActiveCitizen()->getId(), 0 );
+            if ($counter->getCount() === 0 || $counter->getLast() < new DateTime('-15min')) {
+                $counter->increment();
+                $this->entity_manager->persist($counter);
+                $this->entity_manager->persist( $this->log->citizenHomeIntrusion( $this->getActiveCitizen(), $victim, true) );
+                $this->addFlash( 'error', $this->translator->trans( 'Du hast das Alarmsystem bei {victim} ausgelöst! Die ganze Stadt weiß jetzt über deinen Einbruch Bescheid.', ['victim' => $victim], 'game' ) );
+                $this->crow->postAsPM( $victim, '', '' . time(), PrivateMessage::TEMPLATE_CROW_INTRUSION, $this->getActiveCitizen()->getId() );
+            }
         }
 
         if ($action !== 0)
