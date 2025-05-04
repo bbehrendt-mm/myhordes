@@ -28,7 +28,8 @@ enum ActionCounterType: int {
     case PurgeLog   		= 22;
     case TamerClinicUsed 	= 23;
     case LastAutoghoulAt 	= 24;
-    case ReceiveXP 	= 25;
+    case ReceiveXP 	        = 25;
+    case IntrusionFrom 	    = 26;
 
     /**
      * @return ActionCounterType[]
