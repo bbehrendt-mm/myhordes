@@ -11,7 +11,11 @@
 
         </div>
         <div class="padded-small cell version shrink-0">
-            <div class="version-badge-global"><img alt="" src="{{ asset('build/images/icons/small_world.gif') }}" />&nbsp;<b>{{ version.major }}.{{ version.minor}}.{{ version.patch}}</b></div>
+            {% if version.major == 4 and version.minor == 0 and version.patch == 4 %}
+                <div class="version-badge-global"><img alt="" src="{{ asset('build/images/icons/small_world.gif') }}" />&nbsp;Error <b>{{ version.major }}.{{ version.minor}}.{{ version.patch}}</b> VERSION NOT FOUND</div>
+            {% else %}
+                <div class="version-badge-global"><img alt="" src="{{ asset('build/images/icons/small_world.gif') }}" />&nbsp;<b>{{ version.major }}.{{ version.minor}}.{{ version.patch}}</b></div>
+            {% endif %}
             {% if version.isPreRelease %}
                 {% set prerelease = version.preRelease.toString|split('.') %}
                 {% if prerelease|length > 0 %}
@@ -28,7 +32,11 @@
         {% set link = conf().versionLinkOverrideFor(app.locale) %}
         <div {{ {'version': true, 'pointer': link is not null }|classes }}>
             <{{ (link is not null ? ('a ' ~ 'target="_blank" href="' ~ link ~ '"') : 'div')|raw }} class="version-badge-global">
-                <img alt="" src="{{ asset('build/images/icons/small_world.gif') }}" />&nbsp;<b>{{ version.major }}.{{ version.minor}}.{{ version.patch}}</b>
+                {% if version.major == 4 and version.minor == 0 and version.patch == 4 %}
+                    <div class="version-badge-global"><img alt="" src="{{ asset('build/images/icons/small_world.gif') }}" />&nbsp;Error <b>{{ version.major }}.{{ version.minor}}.{{ version.patch}}</b> VERSION NOT FOUND</div>
+                {% else %}
+                    <div class="version-badge-global"><img alt="" src="{{ asset('build/images/icons/small_world.gif') }}" />&nbsp;<b>{{ version.major }}.{{ version.minor}}.{{ version.patch}}</b></div>
+                {% endif %}
                 {% if version.isPreRelease %}
                     {% set prerelease = version.preRelease.toString|split('.') %}
                     {% if prerelease|length > 0 %}
