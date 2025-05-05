@@ -486,13 +486,13 @@ Katapult: Catapulte
 'Die Wüste erstreckt sich, so weit das Auge reicht... Wie viele Männer sind in dieser Weite verloren gegangen? Wer weiß, ob Sie nicht der Nächste sind?': 'Le désert s''étend à perte de vue... Combien d''hommes se sont perdus dans ces immensités ? Qui sait si vous ne serez pas le prochain ?'
 'Sie sind allein in dieser Gegend...': "{ref__icu, select,\n on {\n {ref__gender, select,\n female {Vous êtes seule dans cette zone...}\n other {Vous êtes seul dans cette zone...}\n }\n }\n other {Vous êtes seul(e) dans cette zone...}\n }"
 Nachricht: Annonce
-'Draußen?': 'Dehors ?'
+'Draußen?': 'Dehors ?'
 Ja: Oui
-'Als du zum Fenster blickst, stellst du fest, dass ein großer Vorhang dir die Sicht versperrt. Du kannst deshalb nicht sehen, was {citizen} bei sich aufbewahrt...': 'En regardant par la fenêtre, vous constatez qu''un gros rideau cache la vue et qu''il n''est pas possible de voir ce que {citizen} a stocké chez lui...'
-'Unsere Verteidigung :': 'Nos défenses :'
-'Geschätzter Angriff :': 'Attaque estimée :'
+'Als du zum Fenster blickst, stellst du fest, dass ein großer Vorhang dir die Sicht versperrt. Du kannst deshalb nicht sehen, was {citizen} bei sich aufbewahrt...': 'En regardant par la fenêtre, vous constatez qu’un gros rideau cache la vue et qu’il n’est pas possible de voir ce que {citizen} a stocké chez lui…'
+'Unsere Verteidigung :': 'Nos défenses :'
+'Geschätzter Angriff :': 'Attaque estimée :'
 Unbekannt: Inconnue
-'Morgiger Angriff :': 'Attaque du lendemain :'
+'Morgiger Angriff :': 'Attaque du lendemain :'
 'Unsere Verteidigung ist stark genug, um dem Angriff heute Nacht standzuhalten.': 'Nos défenses sont suffisantes pour l’attaque de ce soir.'
 'Es ist nicht möglich, unsere Situation angesichts des Angriffs von heute Abend genau einzuschätzen.': 'Il n’est pas possible d’évaluer avec précision notre situation face à l’attaque de ce soir.'
 'Meine täglichen Aufgaben': 'Mes tâches quotidiennes'
@@ -561,7 +561,7 @@ Wasserkanonen: Canons à eau
 Glückspilz: Chanceux
 'Anzahl der großen Metallkoffer, die du in der Außenwelt ausgegraben hast.': 'Nombre de gros coffres en métal que vous avez dégotés dans l''Outre-Monde.'
 Baustellen: Chantiers
-'Anzahl der Aktionspunkte, die du für den Bau neuer Kontruktionen und Stadtgebäude verwendet hast.': 'Points d''action et/ou de chantier investis dans l''avancement d''un chantier en ville.'
+'Anzahl der Aktionspunkte, die du für den Bau neuer Kontruktionen und Stadtgebäude verwendet hast.': 'Points d’action et/ou de chantier investis dans l’avancement d’un chantier en ville.'
 'Anzahl der Punkte, die du erworben hast, indem du in einer Stadt komplett clean geblieben bist.': 'Capacité à rester Clair(e) (aucune drogue consommée) au cours de toute une vie.'
 Kernsammler: Purificateur d'âmes
 'Anzahl der im Ausland gesammelten Seelen verstorbener Bürger': 'Nombre d''âmes de citoyens décédés que vous avez purifiées.'
@@ -578,8 +578,8 @@ Hauseinrichtung: Décoration
 'Letzte Verteidigungslinie': 'Dernière ligne'
 "Du gehörst zu den letzten Bürgern der Stadt, die die Zombiehorde 'empfangen' hat...": "Vous faites partie des derniers à avoir vu les Hordes déferler sur la ville..."
 Drogen: Drogues
-'Anzahl kleiner lustiger Pillen, die du geschluckt oder sonstwie eingenommen hast.': 'Nombre de petits cachets rigolos que vous avez avalés (ou placés ailleurs...).'
-Drogenerfahrungen: Expérimentations
+'Anzahl kleiner lustiger Pillen, die du geschluckt oder sonstwie eingenommen hast.': 'Nombre de petits cachets rigolos que vous avez avalés (ou placés ailleurs…).'
+Drogenerfahrungen: Expérimen­tations
 'Anzahl der gefährlichen Drogen, die du genommen hast.': 'Drogues aux effets dangereux que vous avez avalées.'
 'Gebäude erkunden': 'Exploration de ruine'
 'Anzahl der verlassenen Gebäude, die du untersucht hast.': 'Nombre de fois où vous avez osé pénétrer dans une ruine abandonnée.'
@@ -588,52 +588,52 @@ Drogenerfahrungen: Expérimentations
 Expertenexpeditionen: Explorations très lointaines
 'Anzahl SEHR WEIT entfernter Gebäude, die von dir erkundet wurden.': 'Nombre de bâtiments dans des zones vraiment très éloignées que vous avez explorés.'
 Großzügigkeit: Générosité
-'Anzahl der Heldentage, die du einem anderem Bürger in Not geschenkt hast.': 'Nombre de jours de mode héros/actions héroïques que vous avez offert à un autre citoyen dans le besoin.'
-'Spiritueller Führer': 'Guide Spirituel'
+'Anzahl der Heldentage, die du einem anderem Bürger in Not geschenkt hast.': 'Nombre de journées de mode héros/actions héroïques que vous avez offertes à un autre citoyen dans le besoin.'
+'Spiritueller Führer': 'Guide spirituel'
 'Anzahl der Tage, die du als Führer von Anfängern in den kleinen Regionen verbracht hast.': 'Jours passés en tant que guide pour les noobs en Région non éloignée.'
 Laborant: Laborantin
-'Anzahl der kleinen bunten Pillen aus deinem privaten Hobbylabor.': 'Cachets de Twinoïd produits dans votre Laboratoire personnel.'
+'Anzahl der kleinen bunten Pillen aus deinem privaten Hobbylabor.': 'Cachets de Twinoïde produits dans votre Laboratoire personnel.'
 Diebstähle: Larcins
-'Anzahl der Gegenstände, die du bei deinen (lebenden) Nachbarn geklaut hast.': 'Nombre d''objets volés chez vos voisins (en vie).'
+'Anzahl der Gegenstände, die du bei deinen (lebenden) Nachbarn geklaut hast.': 'Nombre d’objets volés chez vos voisins (en vie).'
 Schusseligkeiten: Maladresses
-'Anzahl der Gegenstände, die du durch seine Tollpatschigkeit kaputt gemacht hast.': 'Nombre d''objets que vous avez cassés au cours de vos expériences maladroites.'
+'Anzahl der Gegenstände, die du durch seine Tollpatschigkeit kaputt gemacht hast.': 'Nombre d’objets que vous avez cassés au cours de vos expériences maladroites.'
 Masochismus: Masochisme
 'Anzahl der Glücksmomente, die du glücklich oder schmerzgeplagt genossen hast.': 'Moments de bonheur dans la souffrance la plus totale.'
-Event-Auszeichnungen: Médailles communautaires
-"Auszeichnung für die Teilnahme an Events bei 'Die Verdammten'.": "Récompenses obtenues dans le cadre d'animations communautaires."
-'Wunderwerk: Sandschloss': 'Merveille : Château de sable'
-'Das hast du nicht wirklich gebaut?': 'Summum de lʼinutile'
-'Wunderwerk: Riesiger KVF': 'Merveille : PMV géant'
-'Huldigt den Riesigen KVF!': 'Gloire au PMV géant !'
-'Wunderwerk: Rad des Schreckens': 'Merveille : Roue de Grostas'
-'Sieh nur, man kann von da oben die Zombies sehen!': 'Regardez, on voit les zombies de là haut !'
-'Wunderwerk: Statue des Raben': 'Merveille : Statue du Corbeau'
+Event-Auszeichnungen: Médailles communau­­taires
+"Auszeichnung für die Teilnahme an Events bei 'Die Verdammten'.": "Récompenses obtenues dans le cadre d’animations communautaires."
+'Wunderwerk: Sandschloss': 'Merveille : Château de sable'
+'Das hast du nicht wirklich gebaut?': 'Vous avez vraiment construit ça ?'
+'Wunderwerk: Riesiger KVF': 'Merveille : PMV géant'
+'Huldigt den Riesigen KVF!': 'Gloire au PMV géant !'
+'Wunderwerk: Rad des Schreckens': 'Merveille : Roue de Grostas'
+'Sieh nur, man kann von da oben die Zombies sehen!': 'Regardez, on voit les zombies de là-haut !'
+'Wunderwerk: Statue des Raben': 'Merveille : Statue du Corbeau'
 'Der Rabe ist gut, der Rabe ist ein Segen für die Stadt. [editiert vom Raben]': 'Le Corbeau est bon, le Corbeau est bienfaisant. [édité par Corbilla Fortuna]'
 Nachrichten: Messages
 'Anzahl der sinnvollen (oder sinnlosen...) Nachrichten, die du im Stadtforum geschrieben hast.': 'Quantité de messages utiles (ou pas) que vous avez laissés sur le forum de la ville.'
 'Anzahl der Tage, an denen du kleine Malteserhunde malträtiert hast.': 'Jours passés à torturer des bichons maltais.'
-'Anzahl der Tage, die du als Aufklärer gespielt hast.': 'Jours passés dans les ombres en tant qu''Éclaireur.'
-'Anzahl der Tage, die du als Einsiedler gespielt hast.': 'Jours passés à manger n''importe quoi en tant qu''Ermite.'
+'Anzahl der Tage, die du als Aufklärer gespielt hast.': 'Jours passés dans les ombres en tant qu’Éclaireur.'
+'Anzahl der Tage, die du als Einsiedler gespielt hast.': 'Jours passés à manger n’importe quoi en tant qu’Ermite.'
 'Anzahl der Tage, die du als Buddler gespielt hast.': 'Jours passés à gratter le sol en tant que Fouineur.'
 'Anzahl der Tage, die du als Wächter gespielt hast.': 'Jours passés avec votre bouclier en tant que Gardien.'
 'Anzahl der Tage, die du als Techniker gespielt hast.': 'Jours passés à jouer avec des outils pointus.'
 'In deinem Bett gestorben': 'Morts dans votre lit'
-'Großmutter, was hast du für große Zähne... Grrrooooaaar!': 'Mère-grand, comme vous avez de grandes dents... GROAR !'
-Dehydrationstode: Morts par Déshydratation
-'Gibt die Anzahl der Dehydrationen an, an denen du gestorben bist. Doch, doch! Wasser ist wichtig !': 'Nombre de morts par déshydratation terminale. Oui oui, l''eau, c''est important.'
-'Tödliche Infektionen': 'Mort par infection'
-'Anzahl der Infektionen, die dich das Leben gekostet haben.': 'Nombre d''extinctions des suites d''une infection virulente.'
+'Großmutter, was hast du für große Zähne... Grrrooooaaar!': 'Mère-grand, comme vous avez de grandes dents… GROAR !'
+Dehydrationstode: Morts par Dés­hydrata­tion
+'Gibt die Anzahl der Dehydrationen an, an denen du gestorben bist. Doch, doch! Wasser ist wichtig !': 'Nombre de morts par déshydratation terminale. Oui oui, l’eau, c’est important.'
+'Tödliche Infektionen': 'Morts par Infection'
+'Anzahl der Infektionen, die dich das Leben gekostet haben.': 'Nombre d’extinctions des suites d’une infection virulente.'
 'Tod durch Entzug': 'Morts par Manque'
-"Die Anzahl der Male, in denen dein unfreiwilliger 'cold turkey' gescheitert ist...": "Nuits que vous n'avez pas passées, par manque de drogue."
+"Die Anzahl der Male, in denen dein unfreiwilliger 'cold turkey' gescheitert ist...": "Nuits que vous n’avez pas passées, par manque de drogue."
 'Letzter Toter': 'Mort Ultime'
-'Du bist die oder der letzte, die draufgeht. Diese Ehre wird nur sehr wenigen Bürgen zuteil.': 'Vous êtes le ou la dernière à mourir ! Très peu de citoyens ont réalisé cet exploit !'
-'Letzter Toter in einer Pandämoniumstadt': 'Mort Ultime du Pandémonium !'
-'Du bist der oder die Letzte, die in einer Pandämoniumstadt draufgeht!': 'Vous êtes le ou la dernière à mourir au cours d''une ville du Pandémonium !'
+'Du bist die oder der letzte, die draufgeht. Diese Ehre wird nur sehr wenigen Bürgen zuteil.': 'Vous êtes le ou la dernière à mourir ! Très peu de citoyens ont réalisé cet exploit !'
+'Letzter Toter in einer Pandämoniumstadt': 'Mort Ultime du Pandé­monium !'
+'Du bist der oder die Letzte, die in einer Pandämoniumstadt draufgeht!': 'Vous êtes le ou la dernière à mourir au cours d’une ville du Pandémonium !'
 Mystic: Mysticisme
-'Wie viele Seelen hat Ihre Stadt befreien können.': 'Nombre d''âmes que votre ville a pu libérer.'
+'Wie viele Seelen hat Ihre Stadt befreien können.': 'Nombre d’âmes que votre ville a pu libérer.'
 Wüstenausflüge: Nuits dans le désert
-'Die Auszeichnung spiegelt die Anzahl der Wüstenausflüge wieder, von denen du nicht mehr zurückgekehrt bist.': 'Petites promenades dehors dont vous n''êtes jamais revenu(e).'
-'Geöffnete Tür': 'Ouverture de porte'
+'Die Auszeichnung spiegelt die Anzahl der Wüstenausflüge wieder, von denen du nicht mehr zurückgekehrt bist.': 'Petites promenades dehors dont vous n’êtes jamais revenu(e).'
+'Geöffnete Tür': 'Ouvertures de porte'
 'Anzahl der verschlossenen Türen, die du in verlassenen Gebäuden geöffnet hast.': 'Nombre de portes déverrouillées par vos soins dans les ruines.'
 Hängend: Pendaisons
 'Anzahl der Städte, in denen Sie nicht mehr unterstützt werden konnten.': 'Nombre de villes au cours desquelles on ne pouvait plus vous supporter.'
@@ -644,49 +644,49 @@ Häuserplünderungen: Pillages de maison
 Reparaturen: Réparations
 'Anzahl kaputter Gegenstände, die du wieder repariert hast.': 'Objets cassés que vous avez remis en état de marche.'
 Gebäudereparaturen: Réparations de chantiers
-'Anzahl der Aktionspunkte, die du in Reparaturen auf der Baustelle gesteckt hast.': 'Points d''action investis dans les réparations sans fin des chantiers.'
+'Anzahl der Aktionspunkte, die du in Reparaturen auf der Baustelle gesteckt hast.': 'Points d’action investis dans les réparations sans fin des chantiers.'
 Textsammler: Rôliste
-'Anzahl der Dokumente und Texte, die du in der Wüste gefunden hast.': 'Documents et autres découvertes ''roleplay''.'
+'Anzahl der Dokumente und Texte, die du in der Wüste gefunden hast.': 'Documents et autres découvertes « roleplay ».'
 Leichenentsorger: Sorteur
-'Anzahl deiner toten Freunde, die du außerhalb der Stadt entsorgt hast.': 'Nombre d''amis morts que vous avez tirés hors de la ville.'
+'Anzahl deiner toten Freunde, die du außerhalb der Stadt entsorgt hast.': 'Nombre d’amis morts que vous avez tirés hors de la ville.'
 Batteriewerferfabrikant: Super lance-piles
 'Anzahl der Batteriewerfer, die du gebaut hast.': 'Nombre de puissants lance-piles que vous avez fabriqués.'
-'Überlebende der Hölle!': 'Survivant de l''enfer !'
-'Sie sind ein wahrer Überlebenskünstler der Hölle.': 'Vous êtes un vrai survivant de l''enfer.'
+'Überlebende der Hölle!': 'Survivant de l’enfer !'
+'Sie sind ein wahrer Überlebenskünstler der Hölle.': 'Vous êtes un vrai survivant de l’enfer.'
 Hausarbeiten: Travaux chez soi
 'Anzahl der Ausbauten, die du an deinem Haus vorgenommen hast.': 'Nombre de petits travaux effectués dans votre maison.'
-Kettensägen: Tronçonneuses
+Kettensägen: Tronçon­neuses
 'Anzahl an Kettensägen, die du gebaut hast.': 'Nombre de tronçonneuses que vous avez assemblées.'
 Stadtwächter: Veilleur
 'Anzahl der Nächte, die du als Stadtwächter überlebt hast.': 'Nombre de nuits survécues en tant que Veilleur.'
 'Gerankte Stadt': 'Ville classée'
-'Anzahl der Städte, in denen Du mitgespielt hast, die es in einer vergangenen Saison ins Ranking geschafft haben.': 'Nombre de villes présentes dans le classement top 15 d''une saison précédente.'
-'Legendäre Stadt': 'Ville légendaire !'
-'Anzahl der Städte, in denen Du mitgespielt hast, die in einer vergangenen Saison als Erste abgeschnitten haben.': 'Nombre de villes arrivées en première place du classement d''une saison précédente.'
+'Anzahl der Städte, in denen Du mitgespielt hast, die es in einer vergangenen Saison ins Ranking geschafft haben.': 'Nombre de villes présentes dans le classement top 15 d’une saison précédente.'
+'Legendäre Stadt': 'Ville légendaire !'
+'Anzahl der Städte, in denen Du mitgespielt hast, die in einer vergangenen Saison als Erste abgeschnitten haben.': 'Nombre de villes arrivées en première place du classement d’une saison précédente.'
 'Teilnehmende Stadt': 'Ville participante'
-'Anzahl der Städte, die in der Top-35-Rangliste einer vergangenen Saison vertreten waren.': 'Nombre de villes présentes dans le classement top 35 d''une saison précédente.'
+'Anzahl der Städte, die in der Top-35-Rangliste einer vergangenen Saison vertreten waren.': 'Nombre de villes présentes dans le classement top 35 d’une saison précédente.'
 'Getötete Zombies': 'Zombies éliminés'
-'Gibt die Gesamtanzahl, der von dir umgebrachten Zombies an. Jede Tötungsmethode wird gezählt.': 'Total de créatures mort-vivantes que vous avez renvoyées sous terre par n''importe quel moyen.'
+'Gibt die Gesamtanzahl, der von dir umgebrachten Zombies an. Jede Tötungsmethode wird gezählt.': 'Nombre de créatures mort-vivantes que vous avez renvoyées sous terre par n’importe quel moyen.'
 'Ehemaliger Beta-Tester': 'Ancien bêta-testeur'
 "Dies ist eine äußert seltene Auszeichnung, die den ersten Spielern von 'MyHordes' vorbehalten ist.": "Distinction rarissime réservée aux tout premiers citoyens de 'Hordes'."
-'Sandbälle! Yeah!': 'Boules de sable !'
-'Anzahl der Sandbälle, die du deinen Mitspielern ins Gesicht geworfen hast. Kicher, kicher...': 'Nombre de boules de sable envoyées au visage d''autres joueurs.'
+'Sandbälle! Yeah!': 'Boules de sable !'
+'Anzahl der Sandbälle, die du deinen Mitspielern ins Gesicht geworfen hast. Kicher, kicher...': 'Nombre de boules de sable envoyées au visage d’autres joueurs.'
 Kreuzigung: Crucifixion
-'Freuen Sie sich, Sie hätten nicht laufen müssen.': 'Réjouissez vous, vous n''aurez pas eu à marcher.'
+'Freuen Sie sich, Sie hätten nicht laufen müssen.': 'Réjouissez-vous, vous n’aurez pas eu à marcher.'
 'Den Weihnachtsmann gibt es nicht': 'Le Père Noël est une ordure'
 'Anzahl der Geschenke, die du deinen Freunden geklaut hast.': 'Nombre de cadeaux volés à vos amis.'
-'Tagelang wurde an den Seelen der Toten herumgepfuscht.': 'Jours passés à trafiquer l''âme des morts.'
+'Tagelang wurde an den Seelen der Toten herumgepfuscht.': 'Jours passés à trafiquer l’âme des morts.'
 '{citizens} Bürger': '{citizens} citoyens'
-'Du hast die Leiche von {disposed} außerhalb der Stadt entsorgt. Eine gute Sache, die Sie getan haben!': 'Vous avez balancé le corps de {disposed} hors de la ville. Une bonne chose de faite !'
-'Der Körper verflüssigte sich zu einer ekelerregenden, übel riechenden Pfütze. Deine Schuhe haben ganz schön was abgekriegt, das steht fest...': 'Le corps s''est liquéfié en une répugnante flaque nauséabonde. Vos chaussures en ont pris un coup, c''est certain...'
+'Du hast die Leiche von {disposed} außerhalb der Stadt entsorgt. Eine gute Sache, die Sie getan haben!': 'Vous avez balancé le corps de {disposed} hors de la ville. Une bonne chose de faite !'
+'Der Körper verflüssigte sich zu einer ekelerregenden, übel riechenden Pfütze. Deine Schuhe haben ganz schön was abgekriegt, das steht fest...': 'Le corps s’est liquéfié en une répugnante flaque nauséabonde. Vos chaussures en ont pris un coup, c’est certain…'
 'Ein nicht freigeschaufeltes Gebäude.': 'Bâtiment non déterré.'
-'Beim Durchsuchen der Ruine merkst du, dass es nichts mehr zu finden gibt. Leider...': 'En parcourant furtivement cette ruine vous constatez qu''il n''y a plus rien à récupérer. Dommage...'
+'Beim Durchsuchen der Ruine merkst du, dass es nichts mehr zu finden gibt. Leider...': 'En parcourant furtivement cette ruine, vous constatez qu’il n’y a plus rien à récupérer. Dommage…'
 Stunde(n): heure(s)
 Minute(n): minute(s)
 Sekunde(n): seconde(s)
 'vor {time}': 'il y a {time}'
-'Der Weihnachtsmann wurde dabei beobachtet, wie er {item} von {victim} gestohlen hat': 'Le Père Noël a été aperçu volant {item} à {victim} !'
-'Wenn du eine zusätzliche Nacht geblieben wärst, hättest du auch die folgenden Preise gewinnen können:': 'Si vous aviez tenu une nuit de plus, vous auriez également pu gagner les distinctions suivantes :'
+'Der Weihnachtsmann wurde dabei beobachtet, wie er {item} von {victim} gestohlen hat': 'Le Père Noël a été aperçu volant {item} à {victim} !'
+'Wenn du eine zusätzliche Nacht geblieben wärst, hättest du auch die folgenden Preise gewinnen können:': 'Si vous aviez tenu une nuit de plus, vous auriez également pu gagner les distinctions suivantes :'
 'Mein Rucksack': 'Mon sac à dos'
 'Dieser Bürger wurde noch nie gesehen...': 'n''a jamais été vu...'
 'Der Bürger wurde zuletzt {time} gesehen.': 'a été aperçu pour la dernière fois <strong>{time}</strong>.'
