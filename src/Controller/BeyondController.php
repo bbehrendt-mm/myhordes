@@ -863,12 +863,6 @@ class BeyondController extends InventoryAwareController
 
             // Scout check
             if ($mover->getProfession()->getName() === 'hunter') {
-                $new_zone->addActivityMarker((new ZoneActivityMarker())
-                    ->setCitizen($mover)
-                    ->setTimestamp(new DateTime())
-                    ->setType(ZoneActivityMarkerType::ScoutVisit)
-                );
-
                 if ($scouts[$mover->getId()] && $cpNewZone < $new_zone->getZombies()) {
 
                     $zedsAboveCps = $new_zone->getZombies() - $cpNewZone;
@@ -891,6 +885,13 @@ class BeyondController extends InventoryAwareController
                         $gps->recordlostHood($mover, $new_zone, "outsideMove");
                     }
                 }
+				
+                // Add activity marker for scout visit after the check for zombie detection
+                $new_zone->addActivityMarker((new ZoneActivityMarker())
+                    ->setCitizen($mover)
+                    ->setTimestamp(new DateTime())
+                    ->setType(ZoneActivityMarkerType::ScoutVisit)
+                );
             }
 
             // Set AP and increase walking distance counter
