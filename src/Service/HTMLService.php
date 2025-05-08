@@ -829,7 +829,7 @@ class HTMLService {
 
     protected function filterLockedEmotes(User $user, string $text): string {
         foreach ($this->getLockedEmoteTags($user) as $emote)
-            $text = str_replace($emote, '', $text);
+            $text = str_replace($emote, str_replace(':', ':​', $emote), $text);
         return $text;
     }
 
