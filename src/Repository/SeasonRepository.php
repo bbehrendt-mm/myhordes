@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Season;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -81,6 +82,23 @@ class SeasonRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+	/**
+	 * @return [Season, 'citizen_count' => int][] Returns an array with Season at index 0 and citizen_count
+	 */
+	public function findSeasonsAndCitizenCountByUser(User $user): array {		
+		return $this->createQueryBuilder('s')
+            ->select('s, COUNT(DISTINCT c.id) as citizen_count')
+            ->leftJoin('s.towns', 't')
+            ->leftJoin('t.citizens', 'c', 'WITH', 'c.user = :user')
+            ->setParameter('user', $user)
+            ->groupBy('s.id')
+            ->orderBy('s.number', 'DESC')
+            ->addOrderBy('s.subNumber', 'DESC')
+            ->getQuery()
+            ->getResult()
+		;
+	}
 
     // /**
     //  * @return Season[] Returns an array of Season objects
