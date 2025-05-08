@@ -2104,6 +2104,14 @@ select {
   outline: 1px solid black;
   cursor: pointer;
   &:not(.small) {width: 100%;}
+
+  option[disabled] {
+    color: #f0ce81;
+    background-color: #965C36;
+    font-style: italic;
+    font-size: 1rem;
+    filter: none;
+  }
 }
 
 i.dagger {
