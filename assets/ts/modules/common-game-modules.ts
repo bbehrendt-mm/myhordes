@@ -15,6 +15,7 @@ import {
 } from "../react/inventory/Wrapper";
 import {InventoryBagData, Item} from "../react/inventory/api";
 import {HordesBuildingList, HordesBuildingPage} from "../react/buildings/Wrapper";
+import { HordesGazette } from '../react/gazette/Wrapper';
 
 customElements.define('hordes-map', class HordesMapElement extends PersistentShim<HordesMap> {
     protected generateInstance(): HordesMap {
@@ -48,6 +49,7 @@ customElements.define('hordes-log', class HordesLogElement extends PersistentShi
             inlineDays: parseInt(this.dataset.inlineDays ?? '0') !== 0,
             chat: parseInt(this.dataset.chat ?? '0') !== 0,
             zone: parseInt(this.dataset.zone ?? '0'),
+			updateGazette: parseInt(this.dataset.updateGazette ?? '0') !== 0,
         }
     }
 
@@ -216,4 +218,25 @@ customElements.define('hordes-building-page', class HordesBuildingPageElement ex
             'data-can-vote'
         ];
     }
+}, {  });
+
+customElements.define('hordes-gazette', class HordesGazetteElement extends PersistentShim<HordesGazette> {
+    protected generateInstance(): HordesGazette {
+        return new HordesGazette();
+    }
+
+    protected generateProps(): object | null {
+        return {
+            initial: JSON.parse(this.dataset.initial),
+			strings: JSON.parse(this.dataset.strings),
+			soul: parseInt(this.dataset.soul ?? '0') !== 0,
+        }
+    }
+
+    protected static observedAttributeNames() {
+        return [
+            'data-initial', 'data-strings'
+        ];
+    }
+
 }, {  });

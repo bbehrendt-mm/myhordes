@@ -21,7 +21,9 @@ interface mountProps {
     indicators: boolean
     inlineDays: boolean
     zone: number,
-    chat: boolean
+    chat: boolean,
+	/** Set to true if changing the current day should update a Gazette on the page */
+    updateGazette?: boolean,
 }
 
 interface DailyCache {
@@ -61,6 +63,13 @@ const HordesLogWrapper = (props: mountProps) => {
 
     const cache = useRef<DailyCache[]>([]);
     const loaded = useRef<boolean>(false);
+
+	const changeCurrentDay = (day: number) => {
+		setCurrentDay(day);
+		if (props.updateGazette) {
+			(window as any).GazetteSetDays?.(day);
+		}
+	};
 
     const setCurrentDataCached = (data: DailyCache, day: number = null) => {
         if (day === null) day = currentDay;
@@ -211,7 +220,7 @@ const HordesLogWrapper = (props: mountProps) => {
                     deleteEntry={(n,p)=>deleteEntry(n,p)}
                 />
             </div>
-            { !props.inlineDays && <HordesLogDaySelector days={props.day} selectedDay={currentDay} setDay={n => setCurrentDay(n)}/> }
+            { !props.inlineDays && <HordesLogDaySelector days={props.day} selectedDay={currentDay} setDay={n => changeCurrentDay(n)}/> }
         </div>
     </Globals.Provider>
 };

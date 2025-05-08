@@ -7,9 +7,7 @@ use App\Annotations\Semaphore;
 use App\Entity\Announcement;
 use App\Entity\Citizen;
 use App\Entity\CitizenProfession;
-use App\Entity\CauseOfDeath;
 use App\Entity\CitizenRole;
-use App\Entity\CouncilEntry;
 use App\Entity\Season;
 use App\Entity\User;
 use App\Response\AjaxResponse;
@@ -104,22 +102,13 @@ class GameController extends CustomAbstractController
      */
     #[Route(path: 'jx/game/raventimes', name: 'game_newspaper')]
     public function newspaper(): Response {
-        $activeCitizen = $this->getActiveCitizen();
-        if ($activeCitizen->getAlive() && $activeCitizen->getProfession()->getName() === CitizenProfession::DEFAULT)
+		$activeCitizen = $this->getActiveCitizen();
+
+        if (!$this->gazette_service->canReadGazette($activeCitizen))
             return $this->redirect($this->generateUrl('game_landing'));
 
         $in_town = $activeCitizen->getZone() === null;
         $town = $activeCitizen->getTown();
-
-        $has_living_citizens = false;
-        foreach ( $town->getCitizens() as $c )
-            if ($c->getAlive()) {
-                $has_living_citizens = true;
-                break;
-            }
-
-        if (!$has_living_citizens && $activeCitizen->getCauseOfDeath()->getRef() != CauseOfDeath::Radiations)
-            return $this->redirect($this->generateUrl('game_landing'));
 
         $citizensWithRole = $this->entity_manager->getRepository(Citizen::class)->findCitizenWithRole($town);
 
@@ -160,14 +149,12 @@ class GameController extends CustomAbstractController
             'show_town_link'  => $in_town,
             'day' => $town->getDay(),
             'gazette' => $this->gazette_service->renderGazette($town),
+			'gazette_strings' => $this->gazette_service->getGazetteStrings(),
             'citizensWithRole' => $citizenRoleList,
             'votesNeeded' => $in_town ? $votesNeeded : [],
             'town' => $town,
             'announcement' => $latest_announcement?->getTimestamp() < new \DateTime('-4weeks') ? null : $latest_announcement,
             'season' => $this->entity_manager->getRepository(Season::class)->findOneBy(['current' => true]),
-            'council' => array_map( fn(CouncilEntry $c) => [$this->gazette_service->parseCouncilLog( $c ), $c->getCitizen()], array_filter( $this->entity_manager->getRepository(CouncilEntry::class)->findBy(['town' => $town, 'day' => $town->getDay()], ['ord' => 'ASC']),
-                fn(CouncilEntry $c) => ($c->getTemplate() && $c->getTemplate()->getText() !== null)
-            ))
         ]));
     }
 

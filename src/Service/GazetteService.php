@@ -5,6 +5,7 @@ namespace App\Service;
 
 use App\Entity\CauseOfDeath;
 use App\Entity\Citizen;
+use App\Entity\CitizenProfession;
 use App\Entity\CouncilEntry;
 use App\Entity\CouncilEntryTemplate;
 use App\Entity\Gazette;
@@ -16,6 +17,7 @@ use App\Translation\T;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\Routing\RouterInterface;
 
 class GazetteService
 {
@@ -23,14 +25,16 @@ class GazetteService
     private LogTemplateHandler $log;
     private TranslatorInterface $translator;
     private RandomGenerator $rand;
+	private RouterInterface $router;
 
     public function __construct(
-        EntityManagerInterface $em, LogTemplateHandler $lh, TranslatorInterface $translator, RandomGenerator $rand)
+        EntityManagerInterface $em, LogTemplateHandler $lh, TranslatorInterface $translator, RandomGenerator $rand, RouterInterface $router)
     {
         $this->entity_manager = $em;
         $this->log = $lh;
         $this->translator = $translator;
         $this->rand = $rand;
+		$this->router = $router;
     }
 
     public function check_gazettes(Town $town) {
@@ -606,6 +610,70 @@ class GazetteService
         return $gazette;
     }
 
+	public function canReadGazette($citizen): bool
+	{
+		if ($citizen->getAlive() && $citizen->getProfession()->getName() === CitizenProfession::DEFAULT)
+			return false;
+
+		$town = $citizen->getTown();
+		$has_living_citizens = false;
+
+		foreach ($town->getCitizens() as $c) {
+			if ($c->getAlive()) {
+				$has_living_citizens = true;
+				break;
+			}
+		}
+
+		if (!$has_living_citizens && $citizen->getCauseOfDeath()->getRef() != CauseOfDeath::Radiations)
+			return false;
+
+		return true;
+	}
+
+	public function getGazetteStrings() {
+		return [
+			'signature' => $this->translator->trans('Der Rabe', [], 'global'),
+
+			'zombies' => $this->translator->trans('Zombies', [], 'game'),
+			'defense' => $this->translator->trans('Verteidigung', [], 'game'),
+
+			'gate_is_open' => $this->translator->trans('Tor ist offen!', [], 'game'),
+			'zombies_have_invaded' => $this->translator->trans('Zombies sind eingedrungen.', [], 'game'),
+			'deaths' => $this->translator->trans('Opfer', [], 'game'),
+
+			'dead_in_town' => $this->translator->trans('Tote in der Stadt', [], 'game'),
+			'victims' => $this->translator->trans('Opfer', [], 'game'),
+			'no_victims' => $this->translator->trans('Keine Opfer', [], 'game'),
+			'other_victims' => $this->translator->trans('Sonstige Opfer', [], 'game'),
+			'paralyzed_by_fear' => $this->translator->trans('vor Angst erstarrt', [], 'game'),
+			'cause_of_death' => $this->translator->trans('Todesursache', [], 'game'),
+			'help' => $this->translator->trans('Hilfe', [], 'global'),
+			'wind_help_tooltip' => $this->translator->trans('Mysteriöse metereologische Phänomene haben gestern Nacht dafür gesorgt, dass sich bestimmte Zonen <strong>{sector} der Stadt</strong> regeneriert haben.<p><em>Es können dort durch Graben wieder Gegenstände gefunden werden, auch wenn die Zone zuvor leergesucht wurde!</em></p>', [], 'game'),
+			'lost_well_water' => $this->translator->trans('Verlorenes Brunnenwasser: {count} Einhet(en)', [], 'game'),
+
+			'no_dead_in_town' => [
+				'no_deaths' => $this->translator->trans('Niemand!', [], 'game'),
+				'with_reactor' => $this->translator->trans('Immerhin wurden alle Bürger aus der Stadt geschleudert...', [], 'game'),
+				'without_reactor' => $this->translator->trans('Das wird aber nicht lange so bleiben...', [], 'game'),
+			],
+			
+			'that_makes_n_days' => $this->translator->trans('Das macht dann... {day} Tage', [], 'game'),
+
+			'dir_nw' => $this->translator->trans('im Nordwesten', [], 'game'),
+			'dir_n' => $this->translator->trans('im Norden', [], 'game'),
+			'dir_ne' => $this->translator->trans('im Nordosten', [], 'game'),
+			'dir_w' => $this->translator->trans('im Westen', [], 'game'),
+			'dir_e' => $this->translator->trans('im Osten', [], 'game'),
+			'dir_sw' => $this->translator->trans('im Südwesten', [], 'game'),
+			'dir_s' => $this->translator->trans('im Süden', [], 'game'),
+			'dir_se' => $this->translator->trans('im Südosten', [], 'game'),
+
+			'turn_over' => $this->translator->trans('Umdrehen', [], 'game'),
+			'town_council' => $this->translator->trans('Stadtrat', [], 'game'),
+		];
+	}
+
     public function renderGazette( Town $town, ?int $day = null, bool $allow_dynamic_creation = false, ?string $lang = null ): array {
         $origLang = $this->translator->getLocale();
         if($lang !== null) {
@@ -623,10 +691,22 @@ class GazetteService
 
         foreach ($gazette->getVictims() as $citizen) {
             if ($citizen->getAlive()) continue;
+			$data = [
+				'id' => $citizen->getId(),
+				'name' => $citizen->getName(),
+				'user' => [
+					'id' => $citizen->getUser()->getId(),
+				],
+				'causeOfDeath' => [
+					'label' => $this->translator->trans($citizen->getCauseOfDeath()->getLabel(), [], 'game'),
+				],
+				'soul_visit' => $this->router->generate('soul_visit', ['id' => $citizen->getUser()->getId()]),
+				'town_visit' => $this->router->generate('town_visit', ['id' => $citizen->getId()]),
+			];
             if ($citizen->getCauseOfDeath()->getRef() == CauseOfDeath::NightlyAttack)
-                $death_inside[] = $citizen;
+                $death_inside[] = $data;
             else
-                $death_outside[] = $citizen;
+                $death_outside[] = $data;
         }
 
         $text = '';
@@ -635,7 +715,7 @@ class GazetteService
         if ($day === 1) {
             $text = "<p>" . $this->translator->trans('Heute Morgen ist kein Artikel erschienen...', [], 'gazette') . "</p>";
             if ($town->isOpen() && !$town->getForceStartAhead()){
-                $text .= "<p>" . $this->translator->trans('Die Stadt wird erst starten, wenn sie <strong>{population} Bürger hat</strong>.', ['{population}' => $town->getPopulation()], 'gazette') . "</p>" . "<a class='help-button'>" . "<div class='tooltip help'>" . $this->translator->trans("Falls sich dieser Zustand auch um Mitternacht noch nicht geändert hat, findet kein Zombieangriff statt. Der Tag wird dann künstlich verlängert.", [], 'global') . "</div>" . $this->translator->trans("Hilfe", [], 'global') . "</a>";
+                $text .= "<p>" . $this->translator->trans('Die Stadt wird erst starten, wenn sie <strong>{population} Bürger hat</strong>.', ['{population}' => $town->getPopulation()], 'gazette') . "</p>" . "<a class='help-button'>" . "<hordes-tooltip class='tooltip help'>" . $this->translator->trans("Falls sich dieser Zustand auch um Mitternacht noch nicht geändert hat, findet kein Zombieangriff statt. Der Tag wird dann künstlich verlängert.", [], 'global') . "</hordes-tooltip>" . $this->translator->trans("Hilfe", [], 'global') . "</a>";
             } else {
                 if($town->getForceStartAhead())
                     $text .= "<p>" . $this->translator->trans('Unsere Späher berichten, dass sie einen Mysteriösen Fremden in der Umgebung der Stadt gesichtet haben...', [], 'gazette') . '</p>';
@@ -715,6 +795,9 @@ class GazetteService
             'wind' => $wind,
             'windDirection' => intval($gazette->getWindDirection()),
             'waterlost' => intval($gazette->getWaterlost()),
+			'council' => array_map( fn(CouncilEntry $c) => [$this->parseCouncilLog( $c ), $c->getCitizen()], array_filter( $this->entity_manager->getRepository(CouncilEntry::class)->findBy(['town' => $town, 'day' => $town->getDay()], ['ord' => 'ASC']),
+                fn(CouncilEntry $c) => ($c->getTemplate() && $c->getTemplate()->getText() !== null)
+            )),
         ];
     }
 

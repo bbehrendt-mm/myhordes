@@ -12,8 +12,7 @@
 	</div>
 
 	<div id="gazette-target">
-		{% embed "ajax/game/gazette_widget.html.twig" with { gazette: gazette, council: council, soul: true } %}
-		{% endembed %}
+		<hordes-gazette id="gazette-widget" data-react-mount="gazette-widget" data-initial="{{ gazette|json_encode }}" data-strings="{{ gazette_strings|json_encode }}" data-soul={{ true }}></hordes-gazette>
 	</div>
 
     <div class="row">

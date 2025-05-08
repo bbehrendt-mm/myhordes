@@ -320,9 +320,7 @@ class AdminTownController extends AdminActionController
 			'day' => $town->getDay(),
 			'tab' => "register",
 			'gazette' => $gazetteService->renderGazette( $town, $town->getDay(), true),
-			'council' => array_map( fn(CouncilEntry $c) => [$gazetteService->parseCouncilLog( $c ), $c->getCitizen()], array_filter( $this->entity_manager->getRepository(CouncilEntry::class)->findBy(['town' => $town, 'day' => $town->getDay()], ['ord' => 'ASC']),
-				fn(CouncilEntry $c) => ($c->getTemplate() && $c->getTemplate()->getText() !== null)
-			)),
+			'gazette_strings' => $gazetteService->getGazetteStrings(),
 		])));
 	}
 

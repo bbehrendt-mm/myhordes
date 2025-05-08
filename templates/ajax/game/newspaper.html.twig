@@ -21,7 +21,7 @@
                 </div>
             </div>
 
-            {% include 'ajax/game/gazette_widget.html.twig' with { gazette: gazette, council: council, soul: not show_register } %}
+			<hordes-gazette id="gazette-widget" data-react-mount="gazette-widget" data-initial="{{ gazette|json_encode }}" data-strings="{{ gazette_strings|json_encode }}" data-soul={{ not show_register }}></hordes-gazette>
 
             {% if citizensWithRole|length > 0 or votesNeeded|length > 0 %}
             <h5 id="gazette-role-title">{{ 'Stadtrat'|trans({}, 'game') }}</h5>
@@ -74,7 +74,7 @@
                 {% endif %}
                 {% if show_register %}
                     <div class="cell padded rw-9 rw-lg-8 rw-md-12">
-                        <hordes-log id="gazette-log" data-react-mount="gazette-log" data-day="{{ day }}" data-etag="{{ date().timestamp }}" data-domain="town" data-citizen="-1" data-entries="50"></hordes-log>
+                        <hordes-log id="gazette-log" data-react-mount="gazette-log" data-day="{{ day }}" data-etag="{{ date().timestamp }}" data-domain="town" data-citizen="-1" data-entries="50" data-update-gazette="{{ true }}"></hordes-log>
                     </div>
                 {% else %}
                     <div class="cell padded rw-9 ro-3 rw-lg-8 ro-lg-4 rw-md-12 ro-md-0">
