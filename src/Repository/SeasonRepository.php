@@ -84,20 +84,20 @@ class SeasonRepository extends ServiceEntityRepository
     }
 
 	/**
-	 * @return [Season, 'citizen_count' => int][] Returns an array with Season at index 0 and citizen_count
+	 * @return ['season' => Season|null, 'citizen_count' => int][]
 	 */
-	public function findSeasonsAndCitizenCountByUser(User $user): array {		
-		return $this->createQueryBuilder('s')
-            ->select('s, COUNT(DISTINCT c.id) as citizen_count')
-            ->leftJoin('s.towns', 't')
-            ->leftJoin('t.citizens', 'c', 'WITH', 'c.user = :user')
-            ->setParameter('user', $user)
-            ->groupBy('s.id')
+	public function findSeasonsAndCitizenCountByUser(User $user): array {
+        $qb = $this->getEntityManager()->createQueryBuilder()
+            ->select('s as season, COUNT(DISTINCT c.id) as citizen_count')
+            ->from('App\Entity\TownRankingProxy', 't')
+            ->leftJoin('App\Entity\Season', 's', 'WITH', 't.season = s.id')
+            ->leftJoin('App\Entity\CitizenRankingProxy', 'c', 'WITH', 'c.town = t.id AND c.user = :userId')
+            ->setParameter('userId', $user->getId())
+            ->groupBy('t.season, s.id')
             ->orderBy('s.number', 'DESC')
-            ->addOrderBy('s.subNumber', 'DESC')
-            ->getQuery()
-            ->getResult()
-		;
+            ->addOrderBy('s.subNumber', 'DESC');
+            
+        return $qb->getQuery()->getResult();
 	}
 
     // /**
