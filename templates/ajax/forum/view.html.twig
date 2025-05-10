@@ -257,9 +257,10 @@
                                                     data-fetch="{{ path('rest_user_settings_options_forum_flag_off', {id: forum.id, flag: 'pin'}) }}"
                                                     data-fetch-method="delete"
                                                 {% else %}
-                                                    {% if app.user.pinnedForums.count >= 6 %}
+													{# No pinned forum limit #}
+                                                    {# {% if app.user.pinnedForums.count >= 6 %}
                                                         disabled="disabled"
-                                                    {% endif %}
+                                                    {% endif %} #}
                                                     data-fetch="{{ path('rest_user_settings_options_forum_flag_on', {id: forum.id, flag: 'pin'}) }}"
                                                     data-fetch-method="put"
                                                 {% endif %}
