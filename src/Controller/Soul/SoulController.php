@@ -180,6 +180,32 @@ class SoulController extends CustomAbstractController
         return $this->render( 'ajax/soul/acc_disabled.html.twig', $this->addDefaultTwigArgs(null, ['restriction' => $largest]));
     }
 
+    public function getSeasonsData(User $user): array {
+        $seasons = $this->entity_manager->getRepository(Season::class)->findSeasonsAndCitizenCountByUser($user);
+
+        $count_by_season = array_reduce($seasons, function($carry, $season) {
+            $carry[$season['season'] ? $season['season']->getId() : -1] = $season['citizen_count'];
+            return $carry;
+        }, []);
+        
+        $has_old_town = array_reduce($seasons, function($carry, $season) {
+            if ($season['season'] === null) return true;
+            return $carry;
+        }, false);
+
+        $has_empty_season = array_reduce($seasons, function($carry, $season) {
+            if ($season['citizen_count'] === 0) return true;
+            return $carry;
+        }, false);
+
+        return [
+            'seasons' => array_filter(array_map(fn(array $s) => $s['season'], $seasons), fn(Season|null $s) => $s !== null && $count_by_season[$s->getId()] > 0),
+            'count_by_season' => $count_by_season,
+            'has_old_town' => $has_old_town,
+            'has_empty_season' => $has_empty_season
+        ];
+    }
+
     /**
      * @param HTMLService $html
      * @return Response
@@ -221,6 +247,8 @@ class SoulController extends CustomAbstractController
             if ($ff = $this->entity_manager->getRepository(FeatureUnlock::class)->findOneActiveForUser($user,$season,$p))
                 $features[] = $ff;
 
+        $seasons_data = $this->getSeasonsData($user);
+
         return $this->render( 'ajax/soul/me.html.twig', $this->addDefaultTwigArgs("soul_me", [
             'user' => $user,
             'features' => $features,
@@ -228,7 +256,10 @@ class SoulController extends CustomAbstractController
             'steps' => $steps,
             'progress' => $progress,
             'skills' => $hasNewSkills,
-            'seasons' => $this->entity_manager->getRepository(Season::class)->findPastAndPresent(),
+            'seasons' => $seasons_data['seasons'],
+            'count_by_season' => $seasons_data['count_by_season'],
+            'has_old_town' =>  $seasons_data['has_old_town'],
+            'has_empty_season' =>  $seasons_data['has_empty_season'],
             'user_desc' => $desc ? $html->prepareEmotes($desc->getText(), $this->getUser()) : null
         ]));
     }
@@ -1358,8 +1389,8 @@ class SoulController extends CustomAbstractController
             return $this->redirect($this->generateUrl( 'soul_death' ));
 
         /** @var User $user */
-    	$user = $this->entity_manager->getRepository(User::class)->find($id);
-    	if($user === null || $user === $current_user) 
+        $user = $this->entity_manager->getRepository(User::class)->find($id);
+        if($user === null || $user === $current_user) 
             return $this->redirect($this->generateUrl('soul_me'));
 
         $returnUrl = null; // TODO: get the referer, it can be empty!
@@ -1371,10 +1402,15 @@ class SoulController extends CustomAbstractController
         $citizen_id = ($cac && $uac && $cac->getAlive() && !$cac->getZone() && $cac->getTown() === $uac->getTown()) ? $uac->getId() : null;
 
         $desc = $this->entity_manager->getRepository(UserDescription::class)->findOneBy(['user' => $user]);
+        
+        $seasons_data = $this->getSeasonsData($user);
 
         return $this->render( 'ajax/soul/visit.html.twig', $this->addDefaultTwigArgs("soul_visit", [
-        	'user' => $user,
-            'seasons' => $this->entity_manager->getRepository(Season::class)->findPastAndPresent(),
+            'user' => $user,
+            'seasons' => $seasons_data['seasons'],
+            'count_by_season' => $seasons_data['count_by_season'],
+            'has_old_town' =>  $seasons_data['has_old_town'],
+            'has_empty_season' =>  $seasons_data['has_empty_season'],
             'returnUrl' => $returnUrl,
             'citizen_id' => $citizen_id,
             'user_desc' => $desc ? $html->prepareEmotes($desc->getText(), $this->getUser()) : null

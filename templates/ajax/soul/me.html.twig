@@ -1,5 +1,10 @@
 {% extends "ajax/soul/shell.html.twig" %}
 {% block title %}{{ 'Meine Seele'|trans({}, 'game') }}{% endblock %}
+
+{% macro season_cities(count) %}
+- ({{ count > 1 ? '{num} Städte'|trans({num: count},'soul') : '1 Stadt'|trans({},'soul') }})
+{% endmacro %}
+
 {% block soul_content %}
     <div class="row me">
         {% include 'ajax/soul/badges.html.twig' with {badger: app.user} %}
@@ -153,26 +158,31 @@
                                 {% if season.number > 0 %}
                                     <option value="{{ season.id }}">
                                         {{ 'Saison {n}'|trans({'{n}': season.number},'soul') }}
-                                        - {{ ('Saison ' ~ season.number ~ '.' ~ season.subNumber)|trans({}, "season") }}
+                                        - {{ ('Saison ' ~ season.number ~ '.' ~ season.subNumber)|trans({}, "season") }} {{ _self.season_cities(count_by_season[season.id]) }}
                                     </option>
                                 {% endif %}
                             {% endfor %}
                             {% for season in seasons %}
                                 {% if season.number == 0 and season.subnumber > 14 %}
                                     <option value="{{ season.id }}">
-                                        {{ 'Beta-Saison'|trans({},'soul') }}
+                                        {{ 'Beta-Saison'|trans({},'soul') }} {{ _self.season_cities(count_by_season[season.id]) }}
                                     </option>
                                 {% endif %}
                             {% endfor %}
-                            <option value="-1">{{ 'Alte Städte'|trans({}, "soul") }}</option>
+                            {% if has_old_town %}
+                                <option value="-1">{{ 'Alte Städte'|trans({}, "soul") }} {{ _self.season_cities(count_by_season[-1]) }}</option>
+                            {% endif %}
                             {% for season in seasons %}
                                 {% if season.number == 0 and season.subnumber <= 14 %}
                                     <option value="{{ season.id }}">
                                         {{ 'Gute Alte Zeit'|trans({},'soul') }} -
-                                        {{ 'Saison {n}'|trans({'{n}': season.subNumber},'soul') }}
+                                        {{ 'Saison {n}'|trans({'{n}': season.subNumber},'soul') }} {{ _self.season_cities(count_by_season[season.id]) }}
                                     </option>
                                 {% endif %}
                             {% endfor %}
+                            {% if has_empty_season %}
+                                <option value="-999" disabled>{{ 'Keine Aktivität in den anderen Saisons...'|trans({},'soul') }}</option>
+                            {% endif %}
                         </select>
                     </div>
                     <div class="cell padded rw-6 right">
