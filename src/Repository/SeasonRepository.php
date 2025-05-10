@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Season;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -81,6 +82,23 @@ class SeasonRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+	/**
+	 * @return ['season' => Season|null, 'citizen_count' => int][]
+	 */
+	public function findSeasonsAndCitizenCountByUser(User $user): array {
+        $qb = $this->getEntityManager()->createQueryBuilder()
+            ->select('s as season, COUNT(DISTINCT c.id) as citizen_count')
+            ->from('App\Entity\TownRankingProxy', 't')
+            ->leftJoin('App\Entity\Season', 's', 'WITH', 't.season = s.id')
+            ->leftJoin('App\Entity\CitizenRankingProxy', 'c', 'WITH', 'c.town = t.id AND c.user = :userId')
+            ->setParameter('userId', $user->getId())
+            ->groupBy('t.season, s.id')
+            ->orderBy('s.number', 'DESC')
+            ->addOrderBy('s.subNumber', 'DESC');
+            
+        return $qb->getQuery()->getResult();
+	}
 
     // /**
     //  * @return Season[] Returns an array of Season objects
