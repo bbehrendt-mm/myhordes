@@ -1,20 +1,20 @@
-<ul class="tabs plain no-top-margin no-bottom-margin">
+<ul id="forum-list" class="flex-tabs plain no-top-margin no-bottom-margin">
     {% if has_fv %}
-        <li {{ { 'tab': true, selected: tab == "fv" }|classes }}>
+        <li {{ { 'tab': true, selected: tab == "fv", 'unsortable-item': true }|classes }}>
             <div class="tab-link" x-ajax-sticky x-ajax-href="{{ path('forum_town_redirect') }}">
                 <img src="{{ asset('build/images/assets/img/log/door_closed.gif') }}" alt=""/>
                 <span class="hide-sm">{{ 'Stadtforum'|trans({},'global') }}</span>
             </div>
         </li>
     {% endif %}
-    <li {{ { 'tab': true, selected: tab == "list" }|classes }}>
+    <li {{ { 'tab': true, selected: tab == "list", 'unsortable-item': true }|classes }}>
         <div class="tab-link" x-ajax-sticky x-ajax-href="{{ path('forum_list') }}">
             <img src="{{ asset('build/images/icons/small_world.gif') }}" alt=""/>
             <span class="hide-sm">{{ 'Weltforen'|trans({},'global') }}</span>
         </div>
     </li>
     {% if tab == 'fm' and name is defined and id is defined and (not app.user or id not in app.user.pinnedForums|map(p => p.forum.id)) %}
-        <li {{ { 'tab': true, selected: true }|classes }}>
+        <li {{ { 'tab': true, selected: true, 'unsortable-item': true }|classes }}>
             <div class="tab-link" x-ajax-sticky x-ajax-href="{{ path('forum_view', {id: id}) }}">
                 <img src="{{ asset('build/images/icons/small_rp.gif') }}" alt=""/>
                 <span class="hide-sm">{{ name }}</span>
@@ -22,53 +22,56 @@
         </li>
     {% endif %}
     {% if app.user %}
-        <span id="pinned-forums">
-            {% for pinned_forum in app.user.pinnedForums|sort((a, b) => a.position <=> b.position) %}
+		{% for pinned_forum in app.user.pinnedForums|sort((a, b) => a.position <=> b.position) %}
 
-                {% set base_title = pinned_forum.thread is not null ? (pinned_forum.thread.translatable ? pinned_forum.thread.title|trans({}, 'game') : pinned_forum.thread.title) : pinned_forum.forum.localizedTitle(app.locale) %}
-                {% set base_slug = pinned_forum.thread is not null ? (pinned_forum.thread.translatable ? pinned_forum.thread.title|trans({}, 'game') : pinned_forum.thread.title)|slice(0,4) : pinned_forum.forum.localizedSlug(app.locale) %}
+			{% set base_title = pinned_forum.thread is not null ? (pinned_forum.thread.translatable ? pinned_forum.thread.title|trans({}, 'game') : pinned_forum.thread.title) : pinned_forum.forum.localizedTitle(app.locale) %}
+			{% set base_slug = pinned_forum.thread is not null ? (pinned_forum.thread.translatable ? pinned_forum.thread.title|trans({}, 'game') : pinned_forum.thread.title)|slice(0,4) : pinned_forum.forum.localizedSlug(app.locale) %}
 
-                <li {{ { 'sortable-item': true, 'tab': true, selected: id is defined and id == pinned_forum.forum.id and pinned_forum.thread is null }|classes }}
-                        data-id="{{ pinned_forum.id }}"
-                        title="{{ base_title }}"
-                >
-                    <div class="tab-link">
-                        <img class="drag-handle" src="{{ asset(pinned_forum.thread is null ? 'build/images/icons/small_rp.gif' : 'build/images/icons/news.gif') }}" alt=""/>
-                        <span x-ajax-sticky x-ajax-href="{{ pinned_forum.thread is null ? path('forum_view', {id: pinned_forum.forum.id}) : path('forum_thread_view', {fid: pinned_forum.forum.id, tid: pinned_forum.thread.id}) }}">
-                            <span class="hide-sm hide-md hide-lg">
-                                {{ (app.user.pinnedForums.count >= 4 and slugify is defined and slugify) ? base_slug : base_title }}
-                            </span>
-                            <span
-                                class="hide-sm hide-md hide-lg"
-                                title="{{ 'Löschen'|trans({},'game') }}"
-                                data-fetch-confirm="{{ 'Bestätigen?'|trans({},'global') }}"
-                                data-fetch-load="{{ id is defined ? path('forum_view', {id: id}) : path('forum_list') }}"
-                                data-fetch="{{ path('rest_user_settings_options_forum_flag_off', pinned_forum.thread is not null ? {id: pinned_forum.forum.id, flag: 'pin', thread: pinned_forum.thread.id} : {id: pinned_forum.forum.id, flag: 'pin'}) }}"
-                                data-fetch-method="delete"
-                            >
-                                <img class="tab-link-delete" alt="x" src="{{ asset('build/images/icons/small_remove.gif') }}">
-                            </span>
-                            <span class="hide-desktop">{{ base_slug }}</span>
-                        </span>
-                    </div>
-                </li>
-            {% endfor %}
-        </span>
+			<li {{ { 'sortable-item': true, 'tab': true, selected: id is defined and id == pinned_forum.forum.id and pinned_forum.thread is null }|classes }}
+					data-id="{{ pinned_forum.id }}"
+					title="{{ base_title }}"
+			>
+				<div class="tab-link">
+					<img class="drag-handle" src="{{ asset(pinned_forum.thread is null ? 'build/images/icons/small_rp.gif' : 'build/images/icons/news.gif') }}" alt=""/>
+					<span x-ajax-sticky x-ajax-href="{{ pinned_forum.thread is null ? path('forum_view', {id: pinned_forum.forum.id}) : path('forum_thread_view', {fid: pinned_forum.forum.id, tid: pinned_forum.thread.id}) }}">
+						<span class="hide-sm hide-md hide-lg">
+							{{ (app.user.pinnedForums.count >= 4 and slugify is defined and slugify) ? base_slug : base_title }}
+						</span>
+						<span
+							class="hide-sm hide-md hide-lg"
+							title="{{ 'Löschen'|trans({},'game') }}"
+							data-fetch-confirm="{{ 'Bestätigen?'|trans({},'global') }}"
+							data-fetch-load="{{ id is defined ? path('forum_view', {id: id}) : path('forum_list') }}"
+							data-fetch="{{ path('rest_user_settings_options_forum_flag_off', pinned_forum.thread is not null ? {id: pinned_forum.forum.id, flag: 'pin', thread: pinned_forum.thread.id} : {id: pinned_forum.forum.id, flag: 'pin'}) }}"
+							data-fetch-method="delete"
+						>
+							<img class="tab-link-delete" alt="x" src="{{ asset('build/images/icons/small_remove.gif') }}">
+						</span>
+						<span class="hide-desktop">{{ base_slug }}</span>
+					</span>
+				</div>
+			</li>
+		{% endfor %}
     {% endif %}
 </ul>
 
 {% block js %}
     <script>
-        let forumList = document.getElementById('pinned-forums');
+        let forumList = document.getElementById('forum-list');
 
             if (forumList) {
                 new window.Sortable(forumList, {
                     animation: 150,
                     ghostClass: 'sortable-ghost',
                     handle: '.drag-handle',
+					onMove: function (evt) {
+						if (evt.related && evt.related.classList.contains('unsortable-item')) {
+							return false; // Prevent moving to unsortable items
+						}
+					},
                     onEnd: function (evt) {
                         let order = [];
-                        document.querySelectorAll("#pinned-forums .sortable-item").forEach((el, index) => {
+                        document.querySelectorAll("#forum-list .sortable-item").forEach((el, index) => {
                             order.push({
                                 id: el.getAttribute('data-id'),
                                 position: index + 1

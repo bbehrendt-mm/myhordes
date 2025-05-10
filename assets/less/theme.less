@@ -1577,6 +1577,109 @@ span.defense-broken,div.defense-broken { .icon_div("../img/icons/small_def_broke
   }
 }
 
+.flex-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 1.2rem;
+  color: #ddab76;
+  border-bottom: 1px solid #ddab76;
+  margin-bottom: 20px;
+  padding: 0 5px;
+  position: relative;
+  top: -2px;
+  margin-left: -2px;
+  list-style-type: none;
+  &:not(.plain) {
+    overflow: visible;
+    border-bottom: 1px solid transparent;
+    background: url(../img/background/box/panel_02t.png) right -4px top -7px no-repeat, url(../img/background/tabs-header.jpg) left / cover;
+    &::before {
+        position: absolute;
+        content: " ";
+        top: 0;
+        left: 27px;
+        right: 28px;
+        height: 3px;
+        background: url(../img/background/box/panel_01.png) 0 -6px repeat-x;
+    }
+    &::after {
+        position: absolute;
+        content: " ";
+        bottom: -55px;
+        top: 100%;
+        left: 5px;
+        right: 2px;
+        background: url(../img/background/below_tabs_bg.gif) left top repeat-x;
+    }
+  }
+  &.plain {
+    background: url(../img/background/tabs-header-plain.gif) top left;
+  }
+
+  &.no-top-margin {
+    margin-top: 0 !important;
+  }
+
+  &.no-bottom-margin {
+    margin-bottom: 0;
+    &~div.lightbox,&~.opt-tab-container>div.lightbox:first-child { margin-top: 0 }
+  }
+
+  .tab {
+    &.inline { display: inline; }
+    overflow: hidden;
+    position: relative;
+
+    .tab-link {
+      float: right;
+      height: 21px;
+      margin-right: 0px;
+      margin-left: 2px;
+      margin-top: 4px;
+      white-space: nowrap;
+      background-image: url(../img/background/tab.gif);
+      background-position: top left;
+      background-repeat: no-repeat;
+      border-left: 1px solid #694023;
+      border-right: 1px solid #694023;
+      cursor: pointer;
+
+      font-family: @myhordes-tab-font;
+      font-size: 1rem;
+      font-variant: small-caps;
+      color: #f0d79e;
+      padding: 2px 4px 0;
+      text-decoration: none;
+
+      img.drag-handle{
+        cursor: move;
+      }
+
+      img.tab-link-delete{
+        width: 10px;
+        opacity: 0.8;
+      }
+    }
+
+    &:not(.tab-floater):hover .tab-link {
+        outline: 1px solid #f0d79e;
+        color: white;
+        text-decoration: none;
+    }
+    &.selected .tab-link {
+      text-decoration: none;
+      color: white;
+      background-image: url(../img/background/tab_active.gif);
+    }
+
+    &.sortable-item.sortable-ghost .tab-link {
+        opacity: 0.5;
+        background-color: #ddd;
+    }
+  }
+  &.plain .tab { float: left; }
+}
+
 .tabs {
   font-size: 1.2rem; color: #ddab76; border-bottom: 1px solid #ddab76;
   margin-bottom: 20px; padding: 0 5px; position: relative; top: -2px; margin-left: -2px;
