@@ -19,6 +19,8 @@ class ExternalApp
     private $id;
     #[ORM\Column(type: 'boolean')]
     private $active = true;
+    #[ORM\Column(type: 'boolean')]
+    private $maintenance = false;
     #[ORM\Column(type: 'string', length: 190)]
     private $name;
     #[ORM\ManyToOne(targetEntity: 'App\Entity\User')]
@@ -58,6 +60,15 @@ class ExternalApp
     {
         $this->active = $active;
 
+        return $this;
+    }
+    public function getMaintenance(): int
+    {
+        return $this->maintenance;
+    }
+    public function setMaintenance(int $maintenance): self
+    {
+        $this->maintenance = $maintenance;
         return $this;
     }
     public function getName(): string

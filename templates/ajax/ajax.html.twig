@@ -4,22 +4,25 @@
     {# @var ex \App\Entity\ExternalApp #}
     {% if not ex.testing or ex.owner == app.user or is_granted('ROLE_SUB_ADMIN') %}
         <li class="app-external" data-id="{{ ex.id }}">
-            <a target="_blank" href="{{ path('disclaimer', { 'id': ex.id }) }}">
-                {% if ex.imageName is not null %}
-                    <img alt="" src="{{ path('app_web_app_icon', { aid: ex.id, name: ex.imageName, ext: ex.imageFormat }) }}" />
-                {% else %}
-                    <img alt="" src="{{ asset('build/images/apps/null.gif') }}" />
-                {% endif %}
-                <div>
-                    <div>{{ ex.name }}</div>
-                    {% if ex.testing %}
-                        <div class="small">{{ 'Testbetrieb'|trans({},'admin') }}</div>
-                    {% endif %}
-                    {% if ex.owner == app.user and not ex.linkOnly %}
-                        <div class="small"><strong>SK:</strong> {{ ex.secret }}</div>
-                    {% endif %}
-                </div>
-            </a>
+			<a target="_blank" href="{{ path('disclaimer', { 'id': ex.id }) }}" {% if ex.maintenance %}class="app-maintenance"{% endif %}>
+				{% if ex.imageName is not null %}
+					<img alt="" src="{{ path('app_web_app_icon', { aid: ex.id, name: ex.imageName, ext: ex.imageFormat }) }}" />
+				{% else %}
+					<img alt="" src="{{ asset('build/images/apps/null.gif') }}" />
+				{% endif %}
+				<div>
+					<div class="app-name">{{ ex.name }}</div>
+					{% if ex.testing %}
+						<div class="small">{{ 'Testbetrieb'|trans({},'admin') }}</div>
+					{% endif %}
+					{% if ex.owner == app.user and not ex.linkOnly %}
+						<div class="small"><strong>SK:</strong> {{ ex.secret }}</div>
+					{% endif %}
+					{% if ex.maintenance %}
+						<hordes-tooltip>{{ 'Aufgrund technischer Probleme ist der Funktionsumfang dieser externen Anwendung aktuell eingeschränkt.'|trans({},'global') }}</hordes-tooltip>
+					{% endif %}
+				</div>
+			</a>
         </li>
     {% endif %}
 {% endmacro %}
@@ -32,11 +35,11 @@
                 <div id="apps-list">
                     <p>{{ 'Die folgenden Links verweisen alle auf Web- und Fanseiten, die von Spielern kreiert wurden. Ihr findet auf ihnen zusätzliche Informationen oder nützliche Tools für das Spiel:'|trans({}, 'global') }}</p>
                     <ul>
-                        {% for ex in apps|filter((a) => not a.wiki)|sort((a, b) => a.testing == b.testing ? a.name <=> b.name : a.testing <=> b.testing) %}
+                        {% for ex in apps|filter((a) => not a.wiki)|sort((a, b) => a.testing == b.testing ? (a.maintenance == b.maintenance ? a.name <=> b.name : a.maintenance <=> b.maintenance) : a.testing <=> b.testing) %}
                             {{ _self.external_app( ex ) }}
                         {% endfor %}
                         <li class="hr"></li>
-                        {% for ex in apps|filter((a) => a.wiki)|sort((a, b) => a.testing == b.testing ? a.name <=> b.name : a.testing <=> b.testing) %}
+                        {% for ex in apps|filter((a) => a.wiki)|sort((a, b) => a.testing == b.testing ? (a.maintenance == b.maintenance ? a.name <=> b.name : a.maintenance <=> b.maintenance) : a.testing <=> b.testing) %}
                             {{ _self.external_app( ex ) }}
                         {% endfor %}
                     </ul>
