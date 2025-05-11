@@ -4,7 +4,7 @@
     {# @var ex \App\Entity\ExternalApp #}
     {% if not ex.testing or ex.owner == app.user or is_granted('ROLE_SUB_ADMIN') %}
         <li class="app-external" data-id="{{ ex.id }}">
-			<a {% if not ex.maintenance %}target="_blank" href="{{ path('disclaimer', { 'id': ex.id }) }}"{% else %} class="app-disabled"{% endif %}>
+			<a target="_blank" href="{{ path('disclaimer', { 'id': ex.id }) }}" {% if ex.maintenance %}class="app-maintenance"{% endif %}>
 				{% if ex.imageName is not null %}
 					<img alt="" src="{{ path('app_web_app_icon', { aid: ex.id, name: ex.imageName, ext: ex.imageFormat }) }}" />
 				{% else %}
@@ -19,7 +19,7 @@
 						<div class="small"><strong>SK:</strong> {{ ex.secret }}</div>
 					{% endif %}
 					{% if ex.maintenance %}
-						<hordes-tooltip>{{ 'Diese externe Anwendung ist derzeit aufgrund eines technischen Problems nicht verfügbar.'|trans({},'global') }}</hordes-tooltip>
+						<hordes-tooltip>{{ 'Aufgrund technischer Probleme ist der Funktionsumfang dieser externen Anwendung aktuell eingeschränkt.'|trans({},'global') }}</hordes-tooltip>
 					{% endif %}
 				</div>
 			</a>
