@@ -6,6 +6,7 @@ namespace App\EventListener\Game\Action;
 use App\Entity\ActionCounter;
 use App\Entity\CitizenWatch;
 use App\Entity\ItemGroup;
+use App\Entity\PictoPrototype;
 use App\Entity\Zone;
 use App\Entity\ZoneActivityMarker;
 use App\Enum\ActionCounterType;
@@ -21,6 +22,7 @@ use App\Service\EventProxyService;
 use App\Service\GameProfilerService;
 use App\Service\ItemFactory;
 use App\Service\LogTemplateHandler;
+use App\Service\PictoHandler;
 use App\Service\RandomGenerator;
 use App\Service\TownHandler;
 use App\Structures\TownConf;
@@ -52,6 +54,7 @@ final class BuildingActionListener implements ServiceSubscriberInterface
             GameProfilerService::class,
             TownHandler::class,
             LogTemplateHandler::class,
+			PictoHandler::class,
         ];
     }
 
@@ -95,6 +98,12 @@ final class BuildingActionListener implements ServiceSubscriberInterface
 
                     $event->cache->addSpawnedItem($item);
                     $event->cache->addMessage(T::__( 'Deine Anstrengungen in den Buddelgruben haben sich gelohnt! Du hast folgendes gefunden: {items_spawn}!', 'game' ));
+
+                    // If we get a Chest XL, we earn a picto
+                    if ($item->getName() == 'chest_xl_#00') {
+                        $pictoPrototype = $this->getService(EntityManagerInterface::class)->getRepository(PictoPrototype::class)->findOneBy(['name' => "r_chstxl_#00"]);
+                        $this->getService(PictoHandler::class)->give_picto($event->citizen, $pictoPrototype);
+                    }
 
                     $item_instance = $this->getService(ItemFactory::class)->createItem($item);
                     $this->getService(GameProfilerService::class)->recordItemFound( $item, $event->citizen, method: 'scavenge_town' );
