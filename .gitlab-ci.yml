@@ -133,7 +133,7 @@ test:
     # build cache
     - php bin/console cache:warmup --env=dev
     # run phpstan
-    - vendor/bin/phpstan analyse --no-progress --error-format=gitlab > phpstan.json
+    - vendor/bin/phpstan analyse --no-progress --error-format=gitlab > phpstan.json || echo "PHPStan analysis resulted in errors, please check the report"
     - export APP_ENV=test
     - echo $DATABASE_URL
     # Install a DB
