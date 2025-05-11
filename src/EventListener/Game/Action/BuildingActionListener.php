@@ -63,7 +63,7 @@ final class BuildingActionListener implements ServiceSubscriberInterface
                 $previousWatches = $this->getService(EntityManagerInterface::class)->getRepository(CitizenWatch::class)->matching((new Criteria())
                     ->andWhere(Criteria::expr()->eq('citizen', $event->citizen))
                     ->andWhere(Criteria::expr()->lt('day', $event->town->getDay()))
-                )->count() + 2;
+                )->count();
 
                 if ($event->citizen->property( CitizenProperties::EnableProWatchman ))
                     $watchMap = [0, 1, 4, 9, 15, 20, 30, 40, 50, 60, 75, 90];
