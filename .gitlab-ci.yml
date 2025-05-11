@@ -9,7 +9,7 @@ image: registry.gitlab.com/eternaltwin/myhordes/myhordes-registry:latest
 # See http://docs.gitlab.com/ee/ci/services/README.html for examples.
 default:
   services:
-    - name: mariadb:latest
+    - name: mariadb:11.7.2
       alias: mariadb
 
 # Set any variables we need
@@ -22,14 +22,14 @@ variables:
   MARIADB_ROOT_PASSWORD: Unbolted5-Overgrown2-Outscore2-Yodel1
 
   # MH environment variables
-  DATABASE_URL: mysql://myhordes-ci:Sullen.Vindicate9.Untruth@mariadb:3306/myhordes?serverVersion=11.2.2-MariaDB
+  DATABASE_URL: mysql://myhordes-ci:Sullen.Vindicate9.Untruth@mariadb:3306/myhordes?serverVersion=mariadb-11.7.2
   DATABASE_DBNAME: myhordes
   DATABASE_HOST: mariadb
   DATABASE_PORT: 3306
   DATABASE_USER: myhordes-ci
   DATABASE_PASSWORD: Sullen.Vindicate9.Untruth
   DATABASE_DRIVER: pdo_mysql
-  DATABASE_VERSION: 11.2.2-MariaDB
+  DATABASE_VERSION: mariadb-11.7.2
   XDEBUG_MODE: coverage
 
 stages:
@@ -136,6 +136,7 @@ test:
     - vendor/bin/phpstan analyse --no-progress --error-format=gitlab > phpstan.json || echo "PHPStan analysis resulted in errors, please check the report"
     - export APP_ENV=test
     - echo $DATABASE_URL
+    - php bin/console cache:clear
     # Install a DB
     - php bin/console app:migrate -i -vvv
     # Run tests
