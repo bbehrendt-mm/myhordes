@@ -173,7 +173,7 @@ Phenol: au phénol
 Ponasulfat: au ponasulfate
 'Es gibt einige, die sich auf unsere Kosten einen Spaß machen, das sage ich euch, zum Beispiel <strong>{citizen1}</strong>, der {random} Mal vorbeikam, um eine Kleinigkeit aus der Bank zu holen... Wir verweigern uns nichts.': 'Il y en a qui se font plaisir sur notre dos je vous le dis, avec (par exemple) <strong>{citizen1}</strong> qui est passé(e) {random} fois prendre un petit quelque chose dans la banque... On ne se refuse rien..'
 '<strong>{citizen1}</strong> ist so oft zur Bank gerannt, dass es ja irgendwann mal auffallen MUSSTE! Allein gestern waren es <strong>{random} Mal</strong>.': 'On notera le bon paquet de fois où <strong>{citizen1}</strong> a été aperçu(e) en train de se servir dans la banque. <strong>{random} fois</strong> rien qu''hier.'
-'in der Nähe des Gemüsegartens': 'près de l''aile Nord'
+'in der Nähe des Gemüsegartens': 'près de l’aile Nord'
 'in der Nähe der südlichen Stadtmauer': 'pas loin de la muraille Sud'
 'am Stadttor': 'à la grande porte'
 'am Aussichtsturm': 'à la façade Ouest'
