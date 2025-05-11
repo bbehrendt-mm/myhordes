@@ -1613,7 +1613,8 @@ span.defense-broken,div.defense-broken { .icon_div("../img/icons/small_def_broke
     }
   }
   &.plain {
-    background: url(../img/background/tabs-header-plain.gif) top left;
+    background: url(../img/background/tabs-header-plain.gif) top left no-repeat;
+    &::before { top: 27px; bottom: 0; left: 0; right: 0; position: absolute; content: " "; background: url(../img/background/tabs-header-plain-snd.gif) right top repeat-y; }
   }
 
   &.no-top-margin {
