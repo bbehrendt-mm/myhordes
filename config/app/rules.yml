@@ -77,8 +77,8 @@ parameters:
       unlocked_buildings: []
 
       spiritual_guide:
-        enabled: false
-        sp_limit: 0
+        enabled: true
+        sp_limit: 100
         citizen: 0
 
       bank_abuse:
