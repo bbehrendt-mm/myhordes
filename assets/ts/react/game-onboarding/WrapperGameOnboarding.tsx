@@ -92,7 +92,7 @@ const TownTableRow = (props: {lang: string, town: Town, locked: boolean}) => {
     const [showCitizenList, enableCitizenList, setCitizenList] = useStickyToggle(false);
     const [showDetails, setShowDetails] = useState(false);
 
-    return <div className="row-flex wrap town-row v-center">
+    return <div className="row-flex wrap town-row v-center" data-town-id={props.town.id}>
         <div className="padded cell rw-1 rw-sm-2">
             <span className="language relative">
                 <img src={globals.strings.flags[props.town.language] ?? globals.strings.flags['multi']}
