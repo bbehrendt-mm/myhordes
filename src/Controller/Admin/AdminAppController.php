@@ -89,6 +89,33 @@ class AdminAppController extends AdminActionController
         return AjaxResponse::success();
     }
 
+    /**
+        * @param int $id
+        * @param JSONRequestParser $parser
+        * @return Response
+        */
+    #[Route(path: 'api/admin/apps/toggle/maintenance/{id<\d+>}', name: 'admin_toggle_ext_app_maintenance')]
+    #[AdminLogProfile(enabled: true)]
+    public function ext_app_toggle_maintenance(int $id, JSONRequestParser $parser): Response {
+        if (!$this->isGranted('ROLE_SUB_ADMIN')) return AjaxResponse::error( ErrorHelper::ErrorPermissionError );
+
+        $app = $this->entity_manager->getRepository(ExternalApp::class)->find($id);
+        if ($app === null ) return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
+
+        $app->setMaintenance( (bool)$parser->get('on', true) );
+
+        $this->entity_manager->persist($app);
+        try {
+            $this->entity_manager->flush();
+        } catch (Exception $e) {
+            AjaxResponse::error( ErrorHelper::ErrorDatabaseException );
+        }
+
+        $this->logger->invoke("Admin <info>{$this->getUser()->getName()}</info> <debug>" . ($app->getActive() ? 'activated' : 'deactivated') . "</debug> the maintenance mode for app <info>{$app->getName()}</info>");
+
+        return AjaxResponse::success();
+    }
+
 	/**
 	 * @param int               $id
 	 * @param JSONRequestParser $parser
