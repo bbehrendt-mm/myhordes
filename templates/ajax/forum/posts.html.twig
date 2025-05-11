@@ -131,7 +131,7 @@
                     {% endif %}
                 </div>
                 <div class="cell padded grow-1 right">
-                    {% if app.user is defined and (app.user.pinnedForums|length < 6 or user_pinned) %}
+                    {% if app.user is defined %}
                         <div
                                 class="forum-button"
                                 data-fetch-load="{{ path('forum_thread_view', {fid: thread.forum.id, tid: thread.id}) }}"

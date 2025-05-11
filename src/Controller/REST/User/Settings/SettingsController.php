@@ -108,9 +108,10 @@ class SettingsController extends AbstractController
                 ]);
 
                 if ($value && !$pinnedForum) {
-                    if ($user->getPinnedForums()->count() >= 6) {
-                        return new JsonResponse(status: Response::HTTP_NOT_ACCEPTABLE);
-                    }
+					// No pinned forum limit
+                    // if ($user->getPinnedForums()->count() >= 6) {
+                    //     return new JsonResponse(status: Response::HTTP_NOT_ACCEPTABLE);
+                    // }
     
                     $newPinnedForum = new PinnedForum();
                     $newPinnedForum->setUser($user);
