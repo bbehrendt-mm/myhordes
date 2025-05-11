@@ -60,6 +60,7 @@ class CustomAbstractController extends CustomAbstractCoreController {
 
         $activeCitizen = $this->getActiveCitizen();
         $data['clock'] = [
+            'id'        => $activeCitizen?->getTown()?->getId() ?? null,
             'desc'      => $activeCitizen?->getTown()->getName() ?? $this->translator->trans('Worauf warten Sie noch?', [], 'ghost'),
             'day'       => $activeCitizen?->getTown()->getDay() ?? '',
             'timestamp' => new DateTime('now'),

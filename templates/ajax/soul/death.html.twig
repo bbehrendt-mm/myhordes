@@ -4,7 +4,7 @@
 
     <div class="row">
         <div class="cell ro-2 rw-8 ro-lg-1 rw-lg-10 ro-md-0 rw-md-12">
-            <div class="death_header">
+            <div class="death_header" data-town-id="{{ dead_citizen.town.baseID }}">
                 <div>
                     {% if obituary %}
                         {{ 'Das Ende deines Lebens in <strong>{town}</strong>'|trans({town: dead_citizen.town.name|upper},'game')|raw }}

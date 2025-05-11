@@ -1,5 +1,5 @@
 {# @var \App\Entity\TownRankingProxy town #}
-<div class="view-town">
+<div class="view-town" data-town-id="{{ town.baseID }}">
     <h5 class="relative">
         {% if town.language is not null %}
             <img src="{{ asset("build/images/lang/" ~ town.language ~".png") }}" alt="{{ town.language }}" />
