@@ -52,7 +52,7 @@
             {% if citizenInfo['stranger'] is defined %}
                 {% if town.strangerEnabled %}
                     <div class="row-flex stretch" style="max-height: 100px;">
-                        <div class="avatar hide-md hide-sm small ua-{{ random(0,9) }} factor-0" style="flex-basis: 92px;background: url('{{ asset('build/images/forum/empty_avatar.gif') }}') center/cover no-repeat;">&nbsp;</div>
+                        <div class="avatar hide-md hide-sm small ua-{{ random(0,9) }} factor-0" style="flex-basis: 92px;background: url('{{ asset('build/images/forum/stranger_avatar.png') }}') center/cover no-repeat;">&nbsp;</div>
                         <div class="cell factor-0 citizen-{{ town.strangerPower > 0 ? 'online' : 'dead' }}" style="flex-basis: 8px;">&nbsp;</div>
 
                         <div class="padded cell factor-1 small content-center-vertical citizen-box citizen-box-name">
