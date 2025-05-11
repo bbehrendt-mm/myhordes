@@ -46,6 +46,13 @@
             </p>
             {% endif %}
 
+            {% if ex.maintenance %}
+            <div class="note note-warning">
+                <strong>{{'Diese Anwendung befindet sich im Wartungsmodus.'|trans({}, 'global')}}</strong>
+                {{ 'Sei vorsichtig, das Betreten geschieht auf eigene Gefahr...'|trans({}, 'global') }}
+            </div>
+            {% endif %}
+
             {% if (key is not empty) or ex.linkOnly %}
                 <form action="{{ url }}" method="{{ ex.linkOnly ? 'get' : 'post' }}" target="_self">
                     {% if not ex.linkOnly %}
