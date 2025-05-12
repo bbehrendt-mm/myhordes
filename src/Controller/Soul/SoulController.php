@@ -187,11 +187,7 @@ class SoulController extends CustomAbstractController
             $carry[$season['season'] ? $season['season']->getId() : -1] = $season['citizen_count'];
             return $carry;
         }, []);
-        
-        $has_old_town = array_reduce($seasons, function($carry, $season) {
-            if ($season['season'] === null) return true;
-            return $carry;
-        }, false);
+        $has_old_town = ($count_by_season[-1] ?? 0) > 0;
 
         $has_empty_season = array_reduce($seasons, function($carry, $season) {
             if ($season['citizen_count'] === 0) return true;
