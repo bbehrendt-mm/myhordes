@@ -3,6 +3,7 @@
 namespace App\Controller\REST\Town\Core;
 
 use App\Annotations\GateKeeperProfile;
+use App\Annotations\Semaphore;
 use App\Controller\CustomAbstractCoreController;
 use App\Controller\REST\Game\DataController;
 use App\Controller\Town\TownController;
@@ -42,6 +43,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[Route(path: '/rest/v1/town/core/building', name: 'rest_town_core_building_', condition: "request.headers.get('Accept') === 'application/json'")]
 #[IsGranted('ROLE_USER')]
 #[GateKeeperProfile(only_alive: true, only_with_profession: true, only_in_town: true)]
+#[Semaphore('town', scope: 'town')]
 class BuildingController extends CustomAbstractCoreController
 {
     use EventChainProcessor;

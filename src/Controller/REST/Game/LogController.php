@@ -3,6 +3,7 @@
 namespace App\Controller\REST\Game;
 
 use App\Annotations\GateKeeperProfile;
+use App\Annotations\Semaphore;
 use App\Annotations\Toaster;
 use App\Controller\BeyondController;
 use App\Controller\CustomAbstractCoreController;
@@ -353,6 +354,7 @@ class LogController extends CustomAbstractCoreController
     #[Route(path: '/{id}', name: 'delete_log_hide', defaults: ['purge' => false], methods: ['DELETE'])]
     #[Route(path: '/{id}/full', name: 'delete_log_purge', defaults: ['purge' => true], methods: ['DELETE'])]
     #[GateKeeperProfile(only_alive: true, only_with_profession: true, only_in_town: true)]
+    #[Semaphore('town', scope: 'town')]
     #[Toaster]
     public function delete_log(bool $purge, TownLogEntry $entry, UserHandler $userHandler, EntityManagerInterface $em, InvalidateLogCacheAction $invalidate): JsonResponse {
         $active_citizen = $this->getUser()->getActiveCitizen();
@@ -447,6 +449,7 @@ class LogController extends CustomAbstractCoreController
      */
     #[Route(path: '/chat/{id}', name: 'chat', methods: ['PUT'])]
     #[GateKeeperProfile(only_alive: true, only_beyond: true)]
+    #[Semaphore('town', scope: 'town')]
     #[Toaster]
     public function chat(Zone $zone, JSONRequestParser $parser, EntityManagerInterface $em, HTMLService $html, CitizenHandler $citizenHandler, LogTemplateHandler $log): JsonResponse {
         $active_citizen = $this->getUser()->getActiveCitizen();
