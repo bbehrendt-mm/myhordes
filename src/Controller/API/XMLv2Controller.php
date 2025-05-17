@@ -168,6 +168,10 @@ class XMLv2Controller extends CoreController {
                     'name' => 'comment',
                     'items' => []
                 ],
+                'list-2' => [
+                    'name' => 'icon',
+                    'items' => []
+                ],
             ];
             if($language !== "all") {
                 $node['attributes']['name'] = $this->translator->trans($picto->getPrototype()->getLabel(), [], 'game');
@@ -186,21 +190,30 @@ class XMLv2Controller extends CoreController {
             $titles = $this->entity_manager->getRepository(AwardPrototype::class)->matching($criteria);
             foreach($titles as $title){
 
-                if (empty($title->getTitle())) continue;
+                if (empty($title->getTitle()) && empty($title->getIcon())) continue;
 
                 /** @var AwardPrototype $title */
                 $nodeTitle = [
                     'attributes' => [
+                        'id' => $title->getId(),
+                        'at' => $title->getUnlockQuantity(),
                     ]
                 ];
-                if($language !== 'all'){
-                    $nodeTitle['attributes']["name"] = $this->translator->trans($title->getTitle(), [], 'game');
-                } else {
-                    foreach ($this->languages as $lang) {
-                        $nodeTitle['attributes']["name-$lang"] = $this->translator->trans($title->getTitle(), [], 'game', $lang);
+
+                if (!empty($title->getTitle())) {
+                    if($language !== 'all'){
+                        $nodeTitle['attributes']["name"] = $this->translator->trans($title->getTitle(), [], 'game');
+                    } else {
+                        foreach ($this->languages as $lang) {
+                            $nodeTitle['attributes']["name-$lang"] = $this->translator->trans($title->getTitle(), [], 'game', $lang);
+                        }
                     }
+                    $node['list-0']['items'][] = $nodeTitle;
+                } else {
+                    $nodeTitle['attributes']["path"] = $this->getIconPath($this->asset->getUrl("build/images/icons/title/{$title->getIcon()}.gif"));
+                    $node['list-2']['items'][] = $nodeTitle;
                 }
-                $node['list-0']['items'][] = $nodeTitle;
+
             }
             $node['list-1']['items'] = array_map( fn( string $s ) => ['attributes' => [], 'cdata_value' => $s], $comments[ $picto->getPrototype()->getId() ] ?? []);
             $data['data']['rewards']['list']['items'][] = $node;
@@ -991,16 +1004,10 @@ class XMLv2Controller extends CoreController {
         ];
 
         // Town roles
-        /** @var Citizen $latest_guide */
-        $latest_guide = $this->entity_manager->getRepository(Citizen::class)->findLastOneByRoleAndTown($this->entity_manager->getRepository(CitizenRole::class)->findOneBy(['name' => 'guide']), $town);
-        if ($latest_guide && $latest_guide->getAlive()) {
-            $data['data']['city']['attributes']['guide'] = $latest_guide->getUser()->getId();
-        }
-
-        /** @var Citizen $latest_shaman */
-        $latest_shaman = $this->entity_manager->getRepository(Citizen::class)->findLastOneByRoleAndTown($this->entity_manager->getRepository(CitizenRole::class)->findOneBy(['name' => 'shaman']), $town);
-        if ($latest_shaman && $latest_shaman->getAlive()) {
-            $data['data']['city']['attributes']['shaman'] = $latest_shaman->getUser()->getId();
+        foreach ($this->entity_manager->getRepository(CitizenRole::class)->findVotable() as $role) {
+            $latest = $this->entity_manager->getRepository(Citizen::class)->findLastOneByRoleAndTown($role, $town);
+            if ($latest?->getAlive())
+                $data['data']['city']['attributes'][$role->getName()] = $latest->getUser()->getId();
         }
 
         // Town buildings
