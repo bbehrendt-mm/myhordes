@@ -57,16 +57,24 @@ class SemaphoreSubscriber implements EventSubscriberInterface
                     SemaphoreScope::None    => null,
                 };
 
-                if ($this->kernel->getEnvironment() === 'dev' || $this->kernel->getEnvironment() === 'local') $this->lock_data[$semaphore->getValue()] = $name;
+                if ($this->kernel->getEnvironment() !== 'prod')
+                    $this->lock_data[$semaphore->getValue()] = $name;
                 if ($name) $this->locks[] = $this->locksmith->waitForLock($name);
             }
     }
 
     public function unlock(ResponseEvent $event) {
-        foreach ($this->locks as $lock) $lock->release();
-        if ($this->kernel->getEnvironment() === 'dev' || $this->kernel->getEnvironment() !== 'local')
+        $d = 0;
+        foreach ($this->locks as $lock) {
+            if ($lock->isAcquired()) $d++;
+            $lock->release();
+        }
+        if ($this->kernel->getEnvironment() !== 'prod')
             foreach ($this->lock_data as $key)
-                if ($key) $event->getResponse()->headers->set('X-Semaphores', $key, false);
+                if ($key)
+                    $event->getResponse()->headers->set('X-Semaphores', $key, false);
+
+        $event->getResponse()->headers->set('X-Semaphores-Acquired', $d, false);
     }
 
     /**

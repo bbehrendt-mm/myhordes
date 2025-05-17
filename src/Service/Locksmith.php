@@ -3,18 +3,19 @@
 
 namespace App\Service;
 
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Lock\LockInterface;
 use Symfony\Component\Lock\Store\FlockStore;
-use Symfony\Component\Lock\Store\SemaphoreStore;
 
-class Locksmith {
+readonly class Locksmith {
 
-    private ?LockFactory $lock_factory = null;
+    private LockFactory $lock_factory;
 
-    public function __construct() {
+    public function __construct(ParameterBagInterface $params) {
         $this->lock_factory = new LockFactory(
-            extension_loaded('sysvmsg') ? new SemaphoreStore() : new FlockStore() );
+            new FlockStore( "{$params->get('kernel.project_dir')}/var/tmp/flock" )
+        );
     }
 
     public function getLock( string $name, ?float $ttl = null ): LockInterface {
