@@ -1304,6 +1304,15 @@ class JSONv1Controller extends CoreController {
                             $data[$field] = $latest_shaman->getUser()->getId();
                         }
                         break;
+                    case "cata":
+                        $latest_cata = $this->entity_manager->getRepository(Citizen::class)
+                            ->findLastOneByRoleAndTown($this->entity_manager->getRepository(CitizenRole::class)
+                                                           ->findOneBy(['name' => 'cata']),
+                                                       $this->town);
+                        if ($latest_cata && $latest_cata->getAlive()) {
+                            $data[$field] = $latest_cata->getUser()->getId();
+                        }
+                        break;
                     case "custom":
                         $data[$field] = $this->town->getType()->getName() === 'custom';
                         break;
@@ -1704,17 +1713,30 @@ class JSONv1Controller extends CoreController {
                     case "comments":
                         $picto_data[$field] = $comments[ $picto->getPrototype()->getId() ] ?? [];
                         break;
-                    case "titles":
+                    case "titles": case "unlocks":
                         $criteria = new Criteria();
                         $criteria->andWhere($criteria->expr()->lte('unlockQuantity', $picto->getCount()));
                         $criteria->andWhere($criteria->expr()->eq('associatedPicto', $picto->getPrototype()));
+                        /** @var AwardPrototype[] $titles */
                         $titles = $this->entity_manager->getRepository(AwardPrototype::class)->matching($criteria);
                         $titles_data = [];
-                        /** @var AwardPrototype $title */
-                        foreach ($titles as $title) {
-                            if ($title->getTitle() === null) continue;
-                            $titles_data[] = $this->getTranslate($title->getTitle(), "game");
-                        }
+
+                        if ($field === 'titles')
+                            foreach ($titles as $title) {
+                                if ($title->getTitle() === null) continue;
+                                $titles_data[] = $this->getTranslate($title->getTitle(), "game");
+                            }
+                        elseif ($field === 'unlocks')
+                            foreach ($titles as $title) {
+                                if ($title->getTitle() === null && $title->getIcon() === null) continue;
+                                $titles_data[] = [
+                                    'id' => $title->getId(),
+                                    'at' => $title->getUnlockQuantity(),
+                                    'type' => $title->getTitle() === null ? 'icon' : 'title',
+                                    'value' => $title->getTitle() === null ? $this->getIconPath($this->asset->getUrl("build/images/icons/title/{$title->getIcon()}.gif")) : $this->getTranslate($title->getTitle(), "game"),
+                                ];
+                            }
+
                         $picto_data[$field] = $titles_data;
                         break;
                     }
@@ -1924,6 +1946,24 @@ class JSONv1Controller extends CoreController {
                         case "cleanup":
                             $data[$fieldName] = $this->getCleanupInfos($citizen, $fieldValues['fields'] ?? []);
                             break;
+                        case "rewards":
+
+                            $rewards = $this->entity_manager->getRepository(Picto::class)->findPictoByUserAndTown($citizen->getUser(), $citizen->getTown());
+                            $rewardsData = [];
+
+                            $sub = $fieldValues['fields'] ?? ['id','number'];
+                            foreach ($rewards as $reward) {
+                                $set = [];
+                                if (in_array('id', $sub)) $set['id'] = $reward->getPrototype()->getId();
+                                if (in_array('rare', $sub)) $set['rare'] = $reward->getPrototype()->getRare();
+                                if (in_array('number', $sub)) $set['number'] = $reward->getCount();
+                                if (in_array('img', $sub)) $set['img'] = $this->getIconPath($this->asset->getUrl("build/images/pictos/{$reward->getPrototype()->getIcon()}.gif"));
+                                if (in_array('name', $sub)) $set['name'] = $this->getTranslate($reward->getPrototype()->getLabel(), 'game');
+                                if (in_array('desc', $sub)) $set['desc'] = $this->getTranslate($reward->getPrototype()->getDescription(), 'game');
+
+                                $rewardsData[$reward->getPrototype()->getId()] = $set;
+                            }
+                            $data["rewards"] = $rewardsData;
                     }
             } else {
                 switch ($field) {

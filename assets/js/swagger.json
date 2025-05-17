@@ -1343,6 +1343,22 @@
             "items": {
               "type": "object",
               "properties": {
+                "id": {
+                  "type": "integer",
+                  "example": 286,
+                  "description": "Unique identifier for the given title.",
+                  "xml": {
+                    "attribute": true
+                  }
+                },
+                "at": {
+                  "type": "integer",
+                  "example": 100,
+                  "description": "Unlock quantity for the given title",
+                  "xml": {
+                    "attribute": true
+                  }
+                },
                 "name": {
                   "type": "string",
                   "description": "Title name (depends on language)",
@@ -1355,6 +1371,42 @@
             },
             "xml": {
               "name": "title",
+              "wrapped": false
+            }
+          },
+          "icon": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "example": 659,
+                  "description": "Unique identifier for the given icon.",
+                  "xml": {
+                    "attribute": true
+                  }
+                },
+                "at": {
+                  "type": "integer",
+                  "example": 100,
+                  "description": "Unlock quantity for the given icon",
+                  "xml": {
+                    "attribute": true
+                  }
+                },
+                "path": {
+                  "type": "string",
+                  "description": "Icon path",
+                  "example": "icons/title/r_ptame.d34db37f.gif",
+                  "xml": {
+                    "attribute": true
+                  }
+                }
+              }
+            },
+            "xml": {
+              "name": "icon",
               "wrapped": false
             }
           },
@@ -1807,6 +1859,30 @@
             "type": "integer",
             "description": "Town position on the map (y)",
             "example": 7,
+            "xml": {
+              "attribute": true
+            }
+          },
+          "guide": {
+            "type": "integer",
+            "description": "User ID for the current guide",
+            "example": 1,
+            "xml": {
+              "attribute": true
+            }
+          },
+          "shaman": {
+            "type": "integer",
+            "description": "User ID for the current shaman",
+            "example": 1,
+            "xml": {
+              "attribute": true
+            }
+          },
+          "cata": {
+            "type": "integer",
+            "description": "User ID for the current catapult master",
+            "example": 1,
             "xml": {
               "attribute": true
             }
@@ -2566,6 +2642,32 @@
             "description": "List of unlocked titles.",
             "items": { "$ref": "#/components/schemas/JSONLanguageDependantField" }
           },
+          "unlocks": {
+            "type": "array",
+            "description": "List of unlocked titles and icons",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "description": "Numeric unlockable ID",
+                  "example": 1
+                },
+                "at": {
+                  "type": "integer",
+                  "description": "Number of distinctions needed for the unlock",
+                  "example": 1
+                },
+                "type": {
+                  "type": "string",
+                  "enum": ["title","icon"],
+                  "description": "Title or icon unlock? If icon, the icon path is contained in value.",
+                  "example": "title"
+                },
+                "value": {"$ref": "#/components/schemas/JSONLanguageDependantField"}
+              }
+            }
+          },
           "comments": {
             "type": "array",
             "description": "Comments attached to this distinction. Usually used to note events where instances of this distinction were earned.",
@@ -2989,6 +3091,11 @@
           "shaman": {
             "type": "integer",
             "description": "User ID of the current shaman",
+            "example": 1
+          },
+          "cata": {
+            "type": "integer",
+            "description": "User ID of the current catapult master",
             "example": 1
           },
           "custom": {
