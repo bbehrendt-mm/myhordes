@@ -3221,3 +3221,8 @@ Tierklinik: Tierklinik
 'Dein Ticket mit der Nummer #{issue} wurde soeben geschlossen.': '<div class="crowmsg">Dein Ticket mit der Nummer #{issue} wurde soeben geschlossen.</div>'
 'Dein Ticket mit der Nummer #{issue} wurde soeben erneut geöffnet.': '<div class="crowmsg">Dein Ticket mit der Nummer #{issue} wurde soeben erneut geöffnet.</div>'
 'Ein Techniker hat dir eine Nachricht geschrieben:<br/><br/>{body}': '<div class="crowmsg">Ein Techniker hat dir eine Nachricht geschrieben:</div><br/><i>{body}</i>'
+'Du hast ein(e,n) {item} hergestellt. Der Gegenstand wurde in der Bank abgelegt.': 'Du hast ein(e,n) {item} hergestellt. Der Gegenstand wurde in der Bank abgelegt.'
+'Du hast {item} hergestellt. Die Gegenstände wurden in der Bank abgelegt.': 'Du hast {item} hergestellt. Die Gegenstände wurden in der Bank abgelegt.'
+'Du hast dafür <strong>{ap} Aktionspunkt(e)</strong> verbraucht.': 'Du hast dafür <strong>{ap, plural, one {einen Aktionspunkt} other {# Aktionspunkte}}</strong> verbraucht.'
+'Du hast dafür <strong>{cp} Baupunkt(e)</strong> verbraucht.': 'Du hast dafür <strong>{cp, plural, one {einen Baupunkt} other {# Baupunkte}}</strong> verbraucht.'
+'Du hast dafür <strong>{ap} Aktionspunkt(e)</strong> und <strong>{cp} Baupunkt(e)</strong> verbraucht.': 'Du hast dafür <strong>{ap, plural, one {einen Aktionspunkt} other {# Aktionspunkte}}</strong> und <strong>{cp, plural, one {einen Baupunkt} other {# Baupunkte}}</strong> verbraucht.'

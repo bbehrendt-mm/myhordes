@@ -3222,3 +3222,8 @@ Tierklinik: Experiment Center
 'Dein Ticket mit der Nummer #{issue} wurde soeben geschlossen.': '<div class="crowmsg">Your ticket with the number #{issue} has just been closed.</div>'
 'Dein Ticket mit der Nummer #{issue} wurde soeben erneut geöffnet.': '<div class="crowmsg">Your ticket with the number #{issue} has just been reopened.</div>'
 'Ein Techniker hat dir eine Nachricht geschrieben:<br/><br/>{body}': '<div class="crowmsg">A technician sent you a message:</div><br/><i>{body}</i>'
+'Du hast ein(e,n) {item} hergestellt. Der Gegenstand wurde in der Bank abgelegt.': 'After some DIY (thumb hammering, sweating, and colorful language), you have obtained a {item} (the object has been placed in the bank).'
+'Du hast {item} hergestellt. Die Gegenstände wurden in der Bank abgelegt.': 'After some DIY (thumb hammering, sweating, and colorful language), you have crafted {item}. The items have been placed in the bank.'
+'Du hast dafür <strong>{ap} Aktionspunkt(e)</strong> verbraucht.': 'You have used <strong>{ap, plural, one {one action point} other {# action points}}</strong>.'
+'Du hast dafür <strong>{cp} Baupunkt(e)</strong> verbraucht.': 'You have used <strong>{cp, plural, one {one construction point} other {# construction points}}</strong>.'
+'Du hast dafür <strong>{ap} Aktionspunkt(e)</strong> und <strong>{cp} Baupunkt(e)</strong> verbraucht.': 'You have used <strong>{ap, plural, one {one action point} other {# action points}}</strong> and <strong>{cp, plural, one {one construction point} other {# construction points}}</strong>.'

@@ -565,17 +565,14 @@ class ActionHandler
             case Recipe::WorkshopTypeShamanSpecific:
             case Recipe::WorkshopTypeTechSpecific:
               $base = match ($recipe->getAction()) {
-                  "Öffnen"      => T::__('Du hast {item_list} in der Werkstatt geöffnet und erhälst {item}.<hr />Du hast dafür <strong>{ap} Aktionspunkt(e)</strong> verbraucht.', 'game'),
-                  "Zerlegen"    => T::__('Du hast {item_list} in der Werkstatt zu {item} zerlegt.<hr />Du hast dafür <strong>{ap} Aktionspunkt(e)</strong> verbraucht.', 'game'),
+                  "Öffnen"      => T::__('Du hast {item_list} in der Werkstatt geöffnet und erhälst {item}.', 'game'),
+                  "Zerlegen"    => T::__('Du hast {item_list} in der Werkstatt zu {item} zerlegt.', 'game'),
                   default       => match (true) {
-                      count($new_items) === 1 && $used_bp === 0                 => T::__('Du hast ein(e,n) {item} hergestellt. Der Gegenstand wurde in der Bank abgelegt.<hr />Du hast dafür <strong>{ap} Aktionspunkt(e)</strong> verbraucht.', 'game'),
-                      count($new_items) === 1 && $used_bp > 0 && $used_ap <= 0  => T::__('Du hast ein(e,n) {item} hergestellt. Der Gegenstand wurde in der Bank abgelegt.<hr />Du hast dafür <strong>{cp} Baupunkt(e)</strong> verbraucht.', 'game'),
-                      count($new_items) === 1                                   => T::__('Du hast ein(e,n) {item} hergestellt. Der Gegenstand wurde in der Bank abgelegt.<hr />Du hast dafür <strong>{ap} Aktionspunkt(e)</strong> und <strong>{cp} Baupunkt(e)</strong> verbraucht.', 'game'),
-                      $used_bp === 0                 => T::__('Du hast {item} hergestellt. Die Gegenstände wurden in der Bank abgelegt.<hr />Du hast dafür <strong>{ap} Aktionspunkt(e)</strong> verbraucht.', 'game'),
-                      $used_bp > 0 && $used_ap <= 0  => T::__('Du hast {item} hergestellt. Die Gegenstände wurden in der Bank abgelegt.<hr />Du hast dafür <strong>{cp} Baupunkt(e)</strong> verbraucht.', 'game'),
-                      default                        => T::__('Du hast {item} hergestellt. Die Gegenstände wurden in der Bank abgelegt.<hr />Du hast dafür <strong>{ap} Aktionspunkt(e)</strong> und <strong>{cp} Baupunkt(e)</strong> verbraucht.', 'game'),
+                      count($new_items) === 1        => T::__('Du hast ein(e,n) {item} hergestellt. Der Gegenstand wurde in der Bank abgelegt.', 'game'),
+                      default                        => T::__('Du hast {item} hergestellt. Die Gegenstände wurden in der Bank abgelegt.', 'game'),
                   }
               };
+
               $this->picto_handler->give_picto($citizen, "r_refine_#00");
               break;
             case Recipe::ManualOutside:case Recipe::ManualInside:case Recipe::ManualAnywhere:default:
@@ -587,12 +584,29 @@ class ActionHandler
             $this->picto_handler->give_picto($citizen, $recipe->getPictoPrototype());
         }
 
-        $message = $this->translator->trans( $base, [
+        $addendum = null;
+        switch ( $recipe->getType() ) {
+            case Recipe::WorkshopType:
+            case Recipe::WorkshopTypeShamanSpecific:
+            case Recipe::WorkshopTypeTechSpecific:
+                $addendum = match (true) {
+                    $used_ap > 0 && $used_bp <= 0  => T::__('Du hast dafür <strong>{ap} Aktionspunkt(e)</strong> verbraucht.', 'game'),
+                    $used_bp > 0 && $used_ap <= 0  => T::__('Du hast dafür <strong>{cp} Baupunkt(e)</strong> verbraucht.', 'game'),
+                    $used_ap > 0 && $used_bp > 0   => T::__('Du hast dafür <strong>{ap} Aktionspunkt(e)</strong> und <strong>{cp} Baupunkt(e)</strong> verbraucht.', 'game'),
+                    default => null,
+                };
+                break;
+        }
+
+        $trans = [
             '{item_list}' => $this->wrap_concat( $list ),
             '{item}' => $this->wrap_concat( $new_items ),
             '{ap}' => $used_ap <= 0 ? "0" : $used_ap,
             '{cp}' => $used_bp <= 0 ? "0" : $used_bp,
-        ], 'game' );
+        ];
+
+        $message = $this->translator->trans( $base, $trans, 'game' );
+        if ($addendum) $message .= '<hr/>' . $this->translator->trans( $addendum, $trans, 'game' );
 
         $break = ($break_item && $this->random_generator->chance( $break_chance ));
         if ($break) {
