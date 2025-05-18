@@ -61,6 +61,7 @@ export class LogAPI {
             .param('filter', filter.join(','), filter.length > 0)
             .param('below', below, below > 0)
             .param('above', above, above > 0)
+            .throwResponseOnError()
             .request().secure().get() as Promise<LogEntryResponse>;
     }
 
