@@ -3222,3 +3222,8 @@ Tierklinik: crwdns212326:0crwdne212326:0
 'Dein Ticket mit der Nummer #{issue} wurde soeben geschlossen.': 'crwdns213166:0#{issue}crwdne213166:0'
 'Dein Ticket mit der Nummer #{issue} wurde soeben erneut geöffnet.': 'crwdns213168:0#{issue}crwdne213168:0'
 'Ein Techniker hat dir eine Nachricht geschrieben:<br/><br/>{body}': 'crwdns213170:0{body}crwdne213170:0'
+'Du hast ein(e,n) {item} hergestellt. Der Gegenstand wurde in der Bank abgelegt.': 'crwdns213192:0{item}crwdne213192:0'
+'Du hast {item} hergestellt. Die Gegenstände wurden in der Bank abgelegt.': 'crwdns213194:0{item}crwdne213194:0'
+'Du hast dafür <strong>{ap} Aktionspunkt(e)</strong> verbraucht.': 'crwdns213196:0ap={ap}crwdne213196:0'
+'Du hast dafür <strong>{cp} Baupunkt(e)</strong> verbraucht.': 'crwdns213198:0cp={cp}crwdne213198:0'
+'Du hast dafür <strong>{ap} Aktionspunkt(e)</strong> und <strong>{cp} Baupunkt(e)</strong> verbraucht.': 'crwdns213200:0ap={ap}crwdnd213200:0cp={cp}crwdne213200:0'

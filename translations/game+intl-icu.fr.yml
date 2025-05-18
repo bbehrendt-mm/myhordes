@@ -3222,3 +3222,8 @@ Tierklinik: Centre d'essai
 'Dein Ticket mit der Nummer #{issue} wurde soeben geschlossen.': '<div class="crowmsg">Votre ticket portant le numéro #{issue} vient d''être clôturé.</div>'
 'Dein Ticket mit der Nummer #{issue} wurde soeben erneut geöffnet.': '<div class="crowmsg">Votre ticket portant le numéro #{issue} vient d''être rouvert.</div>'
 'Ein Techniker hat dir eine Nachricht geschrieben:<br/><br/>{body}': '<div class="crowmsg">Un technicien vous a envoyé un message :</div><br/><i>{body}</i>'
+'Du hast ein(e,n) {item} hergestellt. Der Gegenstand wurde in der Bank abgelegt.': 'Après quelques bricolages, vous avez obtenu {item} (l''objet a été placé en banque).'
+'Du hast {item} hergestellt. Die Gegenstände wurden in der Bank abgelegt.': 'Après quelques bricolages, vous avez fabriqué {item}. Les objets ont été placés dans la banque.'
+'Du hast dafür <strong>{ap} Aktionspunkt(e)</strong> verbraucht.': 'Vous avez utilisé <strong>{ap, plural, one {un point d''action} other {# points d''action}}</strong>.'
+'Du hast dafür <strong>{cp} Baupunkt(e)</strong> verbraucht.': 'Vous avez utilisé <strong>{cp, plural, one {un point de chantiers} other {# points de chantiers}}</strong>.'
+'Du hast dafür <strong>{ap} Aktionspunkt(e)</strong> und <strong>{cp} Baupunkt(e)</strong> verbraucht.': 'Vous avez utilisé <strong>{ap, plural, one {un point d''action} other {# points d''action}}</strong> et <strong>{cp, plural, one {un point de chantiers} other {# points de chantiers}}</strong>.'

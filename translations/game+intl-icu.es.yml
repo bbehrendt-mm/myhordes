@@ -3222,3 +3222,8 @@ Tierklinik: Centro de pruebas
 'Dein Ticket mit der Nummer #{issue} wurde soeben geschlossen.': '<div class="crowmsg">Tu ticket con el número #{issue} acaba de ser cerrado.</div>'
 'Dein Ticket mit der Nummer #{issue} wurde soeben erneut geöffnet.': '<div class="crowmsg">Tu ticket con el número #{issue} acaba de ser reabierto.</div>'
 'Ein Techniker hat dir eine Nachricht geschrieben:<br/><br/>{body}': '<div class="crowmsg">Un técnico te envió un mensaje:</div><br/><i>{body}</i>'
+'Du hast ein(e,n) {item} hergestellt. Der Gegenstand wurde in der Bank abgelegt.': 'Con un poco de ingenio, has obtenido {item} (el objeto ha sido puesto en el Almacén).'
+'Du hast {item} hergestellt. Die Gegenstände wurden in der Bank abgelegt.': 'Después de algunos retoques, has creado {item}. Los objetos han sido depositados en el Almacén.'
+'Du hast dafür <strong>{ap} Aktionspunkt(e)</strong> verbraucht.': 'Has utilizado <strong>{ap, plural, one {un Punto de Acción} other {# Puntos de Acción}}</strong>.'
+'Du hast dafür <strong>{cp} Baupunkt(e)</strong> verbraucht.': 'Has utilizado <strong>{cp, plural, one {un Punto de Construcción} other {# Puntos de Construcción}}</strong>.'
+'Du hast dafür <strong>{ap} Aktionspunkt(e)</strong> und <strong>{cp} Baupunkt(e)</strong> verbraucht.': 'Has utilizado <strong>{ap, plural, one {un Punto de Acción} other {# Puntos de Acción}}</strong> y <strong>{cp, plural, one {un Punto de Construcción} other {# Puntos de Construcción}}</strong>.'
