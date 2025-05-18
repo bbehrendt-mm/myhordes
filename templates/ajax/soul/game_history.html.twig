@@ -58,7 +58,7 @@
                             {% endif %}
                         </div>
                         <div class="cell padded rw-6 bold">
-                            <input {% if incarnation.commentLocked %}readonly{% endif %} x-comment-town-id="{{ incarnation.id }}" type="text" class="comment" value="{{ incarnation.comment }}"/>
+                            <input {% if incarnation.commentLocked %}readonly{% endif %} x-comment-town-id="{{ incarnation.id }}" type="text" class="comment" maxlength="256" value="{{ incarnation.comment }}"/>
                             <button x-town-id="{{ incarnation.id }}" {% if incarnation.commentLocked %}disabled{% endif %} x-update-comment class="inline mt-1">{{ 'Bestätigen'|trans({}, 'global') }}</button>
                         </div>
                     </div>

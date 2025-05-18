@@ -1069,7 +1069,7 @@ class SoulController extends CustomAbstractController
         if ($citizenProxy->getCitizen() !== null && $citizenProxy->getCitizen()->getAlive())
             return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
 
-        $comment = $parser->get("comment");
+        $comment = mb_substr($parser->get("comment"), 0, 256);
         $citizenProxy->setComment($comment);
         $citizenProxy->getCitizen()?->setComment($comment ?? '');
 
