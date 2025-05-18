@@ -49,7 +49,7 @@ class RememberMeAuthenticator extends AbstractAuthenticator
                 'X-AJAX-Navigate' => "{$request->getScheme()}://{$request->getHost()}{$request->getPathInfo()}"
             ] );
 
-        else return new RedirectResponse( $request->getRequestUri() );
+        else return new RedirectResponse( $request->getRequestUri(), status: 307 );
     }
 
     public function authenticate(Request $request): Passport

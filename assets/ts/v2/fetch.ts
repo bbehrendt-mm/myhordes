@@ -17,6 +17,61 @@ export interface ServerInducedSignalProps {
     type: 'fetch'|'xhr',
 }
 
+const enhanceResponse = (r: Response): Response => {
+    let json = null;
+    let text = null;
+
+    let cached = false;
+    let promise = null;
+    let t_promises = [];
+    let j_promises = [];
+    let rejectors = [];
+
+    const cache = (target: Response) => {
+        if (promise === null) {
+            promise = new Promise<any>(e =>
+                target.text().then(v => {
+                    cached = true;
+
+                    text = v;
+                    try {
+                        json = JSON.parse(v);
+                    } catch (_) { json = null }
+
+                    t_promises.forEach(f=>f(text));
+                    j_promises.forEach(f=>f(json));
+                }).catch(v => rejectors.forEach(f=>f(v)))
+            );
+        }
+    }
+
+    return new Proxy<Response>( r, {
+        get(target: Response, p: string|symbol): any {
+            if (p === 'json') {
+                return ()=>new Promise<any>((p,r) => {
+                    if (cached) p(json);
+                    else {
+                        j_promises.push(p);
+                        rejectors.push(r);
+                        cache( target );
+                    }
+                })
+            }
+            if (p === 'text') {
+                return ()=>new Promise<any>((p,r) => {
+                    if (cached) p(text);
+                    else {
+                        t_promises.push(p);
+                        rejectors.push(r);
+                        cache( target );
+                    }
+                })
+            }
+            return target[p];
+        }
+    } )
+}
+
 class FetchCacheEntry {
 
     private content: any = null;
@@ -26,35 +81,6 @@ class FetchCacheEntry {
 
     constructor( fn: () => Promise<any> ) {
         this.generator = fn;
-    }
-
-    private enhanceResponse(r: Response): Response {
-        let json = null;
-        let json_cached = false;
-        let promise = null;
-        let promises = [], rejectors = [];
-        return new Proxy<Response>( r, {
-            get(target: Response, p: string|symbol): any {
-                if (p === 'json') {
-                    return ()=>new Promise<any>((p,r) => {
-                        if (json_cached) p(json);
-                        else {
-                            promises.push(p);
-                            rejectors.push(r);
-                            if (promise === null) {
-                                promise = new Promise<any>(e =>
-                                    target.json().then(v => {
-                                        json_cached = true;
-                                        promises.forEach(f=>f(json = v));
-                                    }).catch(v => rejectors.forEach(f=>f(v)))
-                                );
-                            }
-                        }
-                    })
-                }
-                return target[p];
-            }
-        } )
     }
 
     /**
@@ -72,7 +98,7 @@ class FetchCacheEntry {
                     .then(result => {
                         // If the internal promise is resolved, store the result, delete the generator (as it is no
                         // longer needed) and execute all cached resolvers
-                        const proxy = this.enhanceResponse(result);
+                        const proxy = enhanceResponse(result);
                         this.content = proxy;
                         this.generator = null;
                         this.resolvers.forEach( f => f(proxy) );
@@ -291,9 +317,10 @@ export class Fetch {
 
     private async preprocess_response( response: Response|null, options: FetchOptions ) {
 
+        if (response !== null) response = enhanceResponse(response);
         let data = undefined;
         try {
-            data = await response.json();
+            data = await response?.json();
         } catch (_) {}
 
         let error_code = data?.error ?? null;

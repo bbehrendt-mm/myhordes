@@ -8,6 +8,12 @@ export type TranslationStrings = {
         send: string
     }
 
+    errors: {
+        update: string,
+        com_error: string,
+        toast_error: string,
+    }
+
     content: {
         header: string
         header_part_today: string

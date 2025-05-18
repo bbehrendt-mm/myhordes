@@ -76,6 +76,11 @@ class LogController extends CustomAbstractCoreController
                 'send' => $this->translator->trans('Senden', [], 'game'),
             ],
 
+            'errors' => [
+                'com_error' => $this->translator->trans('Fehler beim Laden der Logeinträge ({error}).', [], 'global'),
+                'toast_error' => $this->translator->trans('Log-Einträge können nicht abgerufen werden, bitte versuche, die Seite neu zu laden.', [], 'global'),
+            ],
+
             'content' => [
                 'header' => $this->translator->trans('Tag {d} {today}', [], 'game'),
                 'header_part_today' => $this->translator->trans('heute', [], 'game'),

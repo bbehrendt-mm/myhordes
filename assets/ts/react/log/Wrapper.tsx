@@ -56,6 +56,9 @@ const HordesLogWrapper = (props: mountProps) => {
     const [manipulations, setManipulations] = useState<number>( 0 );
     const [purges, setPurges] = useState<number>( 0 );
 
+    const [toastError, setToastError] = useState<boolean>( false );
+    const [errorText, setErrorText] = useState<string>( null );
+
     const [refreshID, setRefreshID] = useState<number>( 0 );
     const [updateID, setUpdateID] = useState<number>( 0 );
 
@@ -74,6 +77,23 @@ const HordesLogWrapper = (props: mountProps) => {
             rootMargin: "50px 0px 50px 0px"
         })
     )
+
+    const handleError = (r: Response, notify: boolean): void => {
+        const handle = () => {
+            const e = strings.errors.com_error.replace('{error}', `${r.status} ${r.statusText}`);
+            if (notify) $.html.error(e);
+            else setErrorText(e);
+        }
+
+        if (r.status === 400) {
+            r.text().then(t => {
+                if (t === 'TOAST FAILURE..') setToastError(true);
+                else handle();
+            }).catch( (e) => {
+                handle()
+            } );
+        } else handle();
+    }
 
     useEffect( () => {
         api.index().then( v => setStrings(v) );
@@ -111,7 +131,7 @@ const HordesLogWrapper = (props: mountProps) => {
     , [sleeping, updateID]);
 
     useEffect( () => {
-        if (sleeping || !loaded.current) return;
+        if (toastError || sleeping || !loaded.current) return;
         cache.current = [];
         const day = currentDay;
         setPlaceholder(true);
@@ -121,6 +141,9 @@ const HordesLogWrapper = (props: mountProps) => {
                 applyData(day, v.entries, true, v.entries.length >= v.total);
                 setManipulations( v.manipulations );
                 setPurges( v.purges );
+            }).catch(r => {
+                handleError(r, false);
+            }).finally(() => {
                 setLoading(false);
                 setPlaceholder(false);
             })
@@ -156,7 +179,7 @@ const HordesLogWrapper = (props: mountProps) => {
     }
 
     useEffect( () => {
-        if (sleeping) return;
+        if (sleeping || toastError) return;
         const day = currentDay;
         const target = cache.current[day] ?? null;
         if (target) setCurrentData( {...target} );
@@ -169,6 +192,9 @@ const HordesLogWrapper = (props: mountProps) => {
                     applyData(day, v.entries, true, v.entries.length >= v.total);
                     setManipulations( v.manipulations );
                     setPurges( v.purges );
+                }).catch(r => {
+                    handleError(r, false);
+                }).finally(() => {
                     setLoading(false);
                     setPlaceholder(false);
                 })
@@ -176,17 +202,20 @@ const HordesLogWrapper = (props: mountProps) => {
     }, [props.etag,currentDay,sleeping,updateID] );
 
     const loadMore = ( day: number ) => {
-        if ((cache.current[day] ?? null) === null) return;
+        if (toastError || (cache.current[day] ?? null) === null) return;
         setLoading( true );
         api.logs( props.domain, props.citizen, props.inlineDays ? 0 : day, -1, props.category, cache.current[day].entries[cache.current[day].entries.length-1].id,  -1 )
             .then( v => {
                 applyData( day, v.entries, false, v.entries.length >= v.total);
                 setManipulations( v.manipulations );
                 setPurges( v.purges );
-                setLoading( false );
                 if (v.entries.length < v.total)
                     $.html.notice( strings?.content.noMore )
-            } )
+            } ).catch(r => {
+                handleError(r, true);
+            }).finally(() => {
+                setLoading(false);
+            })
     }
 
     const deleteEntry = ( id: number, purge: boolean ) => {
@@ -203,7 +232,9 @@ const HordesLogWrapper = (props: mountProps) => {
     return <Globals.Provider value={{api, strings}}>
         { props.chat && <HordesChatContainer zone={props.zone} refresh={()=>setUpdateID(updateID+1)}/> }
         <div ref={container} className="log-container" data-disabled={(interactive || loading) ? 'none' : 'blocked'}>
-            <div className="log">
+            <div className={`log ${props.inlineDays ? 'days-inline' : ''}`}>
+                { errorText && !toastError && <div className="note note-critical">{ errorText }</div> }
+                { toastError && <div className="note note-critical">{ strings.errors.toast_error }</div> }
                 <HordesLogContentContainer day={currentDay} today={currentDay === props.day}
                     manipulate={manipulations > 0} purge={purges > 0}
                     loading={loading} data={currentData} placeholder={placeholder} indicators={props.indicators}
