@@ -82,20 +82,20 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[Semaphore('town', scope: 'town')]
 class TownController extends InventoryAwareController
 {
-    const ErrorWellEmpty         = ErrorHelper::BaseTownErrors + 1;
-    const ErrorWellLimitHit      = ErrorHelper::BaseTownErrors + 2;
-    const ErrorWellNoWater       = ErrorHelper::BaseTownErrors + 3;
-    const ErrorDoorAlreadyClosed = ErrorHelper::BaseTownErrors + 4;
-    const ErrorDoorAlreadyOpen   = ErrorHelper::BaseTownErrors + 5;
-    const ErrorNotEnoughRes      = ErrorHelper::BaseTownErrors + 6;
-    const ErrorAlreadyUpgraded   = ErrorHelper::BaseTownErrors + 7;
-    const ErrorComplaintLimitHit = ErrorHelper::BaseTownErrors + 8;
-    const ErrorAlreadyFinished   = ErrorHelper::BaseTownErrors + 9;
-    const ErrorTownChaos         = ErrorHelper::BaseTownErrors + 10;
-    const ErrorAlreadyThrown     = ErrorHelper::BaseTownErrors + 11;
-    const ErrorAlreadyWatered    = ErrorHelper::BaseTownErrors + 12;
-    const ErrorAlreadyCooked     = ErrorHelper::BaseTownErrors + 13;
-    const ErrorAlreadyGhoul      = ErrorHelper::BaseTownErrors + 14;
+    const int ErrorWellEmpty         = ErrorHelper::BaseTownErrors + 1;
+    const int ErrorWellLimitHit      = ErrorHelper::BaseTownErrors + 2;
+    const int ErrorWellNoWater       = ErrorHelper::BaseTownErrors + 3;
+    const int ErrorDoorAlreadyClosed = ErrorHelper::BaseTownErrors + 4;
+    const int ErrorDoorAlreadyOpen   = ErrorHelper::BaseTownErrors + 5;
+    const int ErrorNotEnoughRes      = ErrorHelper::BaseTownErrors + 6;
+    const int ErrorAlreadyUpgraded   = ErrorHelper::BaseTownErrors + 7;
+    const int ErrorComplaintLimitHit = ErrorHelper::BaseTownErrors + 8;
+    const int ErrorAlreadyFinished   = ErrorHelper::BaseTownErrors + 9;
+    const int ErrorTownChaos         = ErrorHelper::BaseTownErrors + 10;
+    const int ErrorAlreadyThrown     = ErrorHelper::BaseTownErrors + 11;
+    const int ErrorAlreadyWatered    = ErrorHelper::BaseTownErrors + 12;
+    const int ErrorAlreadyCooked     = ErrorHelper::BaseTownErrors + 13;
+    const int ErrorAlreadyGhoul      = ErrorHelper::BaseTownErrors + 14;
 
     protected function get_needed_votes(): array {
         $town = $this->getActiveCitizen()->getTown();
