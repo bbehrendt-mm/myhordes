@@ -1946,24 +1946,23 @@ class JSONv1Controller extends CoreController {
                         case "cleanup":
                             $data[$fieldName] = $this->getCleanupInfos($citizen, $fieldValues['fields'] ?? []);
                             break;
-                        case "rewards":
 
-                            $rewards = $this->entity_manager->getRepository(Picto::class)->findPictoByUserAndTown($citizen->getUser(), $citizen->getTown());
-                            $rewardsData = [];
-
-                            $sub = $fieldValues['fields'] ?? ['id','number'];
-                            foreach ($rewards as $reward) {
-                                $set = [];
-                                if (in_array('id', $sub)) $set['id'] = $reward->getPrototype()->getId();
-                                if (in_array('rare', $sub)) $set['rare'] = $reward->getPrototype()->getRare();
-                                if (in_array('number', $sub)) $set['number'] = $reward->getCount();
-                                if (in_array('img', $sub)) $set['img'] = $this->getIconPath($this->asset->getUrl("build/images/pictos/{$reward->getPrototype()->getIcon()}.gif"));
-                                if (in_array('name', $sub)) $set['name'] = $this->getTranslate($reward->getPrototype()->getLabel(), 'game');
-                                if (in_array('desc', $sub)) $set['desc'] = $this->getTranslate($reward->getPrototype()->getDescription(), 'game');
-
-                                $rewardsData[$reward->getPrototype()->getId()] = $set;
-                            }
-                            $data["rewards"] = $rewardsData;
+                        // Disabled for now as it may cause immense load
+                        //case "rewards":
+                        //    $rewards = $this->entity_manager->getRepository(Picto::class)->findPictoByUserAndTown($citizen->getUser(), $citizen->getTown());
+                        //    $rewardsData = [];
+                        //    $sub = $fieldValues['fields'] ?? ['id','number'];
+                        //    foreach ($rewards as $reward) {
+                        //        $set = [];
+                        //        if (in_array('id', $sub)) $set['id'] = $reward->getPrototype()->getId();
+                        //        if (in_array('rare', $sub)) $set['rare'] = $reward->getPrototype()->getRare();
+                        //        if (in_array('number', $sub)) $set['number'] = $reward->getCount();
+                        //        if (in_array('img', $sub)) $set['img'] = $this->getIconPath($this->asset->getUrl("build/images/pictos/{$reward->getPrototype()->getIcon()}.gif"));
+                        //        if (in_array('name', $sub)) $set['name'] = $this->getTranslate($reward->getPrototype()->getLabel(), 'game');
+                        //        if (in_array('desc', $sub)) $set['desc'] = $this->getTranslate($reward->getPrototype()->getDescription(), 'game');
+                        //        $rewardsData[$reward->getPrototype()->getId()] = $set;
+                        //    }
+                        //    $data["rewards"] = $rewardsData;
                     }
             } else {
                 switch ($field) {
