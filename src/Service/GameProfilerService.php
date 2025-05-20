@@ -219,7 +219,7 @@ class GameProfilerService {
         );
     }
 
-    public function recordInsurrectionProgress(Town $town, Citizen $citizen, int $progress, int $nonShunned): void {
+    public function recordInsurrectionProgress(Town $town, Citizen $citizen, float $progress, int $nonShunned): void {
         $this->maybe_persist(
             $this->init( GameProfileEntryType::InsurrectProgress, $citizen->getTown(), $citizen )
                 ?->setForeign1( $citizen->getId() )
