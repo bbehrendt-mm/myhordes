@@ -1129,7 +1129,7 @@ class NightlyHandler
         $this->entity_manager->persist($gazette);
     }
 
-    private function stage3_status(Town $town) {
+    private function stage3_status(Town $town, ?AttackSchedule $schedule) {
         $this->log->info('<info>Processing status changes</info> ...');
 
         $status_survive   = $this->entity_manager->getRepository(CitizenStatus::class)->findOneBy( ['name' => 'hsurvive'] );
@@ -1202,6 +1202,7 @@ class NightlyHandler
             $this->unlockableService->getResetPackPoints( $citizen->getUser(), $points );
             foreach ($points as $point)
                 $this->entity_manager->persist( $point->setDays( max(0, $point->getDays() - 1 ) ) );
+            if (!$points->isEmpty() && $schedule) $citizen->getUser()->setLastSkillPointDeductedAt( $schedule );
 
             if($citizen->getZone() === null)
                 $aliveCitizenInTown++;
@@ -1830,7 +1831,7 @@ class NightlyHandler
         $this->stage2_post_attack_building_effects($town);
 
         $this->log->info('Entering <comment>Phase 3</comment> - Dawn of a New Day');
-        $this->stage3_status($town);
+        $this->stage3_status($town, $schedule);
         $this->stage3_roles($town);
         $this->stage3_zones($town);
         $this->stage3_items($town);

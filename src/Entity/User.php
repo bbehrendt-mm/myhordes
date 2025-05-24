@@ -201,6 +201,9 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: PinnedForum::class, cascade: ['persist', 'remove'])]
     private Collection $pinnedForums;
 
+    #[ORM\ManyToOne]
+    private ?AttackSchedule $lastSkillPointDeductedAt = null;
+
     public function __construct()
     {
         $this->citizens = new ArrayCollection();
@@ -1191,6 +1194,18 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
     public function removePinnedForum(PinnedForum $pinnedForum): static
     {
         $this->pinnedForums->removeElement($pinnedForum);
+
+        return $this;
+    }
+
+    public function getLastSkillPointDeductedAt(): ?AttackSchedule
+    {
+        return $this->lastSkillPointDeductedAt;
+    }
+
+    public function setLastSkillPointDeductedAt(?AttackSchedule $lastSkillPointDeductedAt): static
+    {
+        $this->lastSkillPointDeductedAt = $lastSkillPointDeductedAt;
 
         return $this;
     }
