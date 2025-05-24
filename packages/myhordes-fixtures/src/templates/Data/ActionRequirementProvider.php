@@ -23,6 +23,7 @@ use MyHordes\Fixtures\DTO\Actions\Atoms\Requirement\ItemRequirement;
 use MyHordes\Fixtures\DTO\Actions\Atoms\Requirement\LocationRequirement;
 use MyHordes\Fixtures\DTO\Actions\Atoms\Requirement\PointRequirement;
 use MyHordes\Fixtures\DTO\Actions\Atoms\Requirement\ProfessionRoleRequirement;
+use MyHordes\Fixtures\DTO\Actions\Atoms\Requirement\SourceRequirement;
 use MyHordes\Fixtures\DTO\Actions\Atoms\Requirement\StatusRequirement;
 use MyHordes\Fixtures\DTO\Actions\Atoms\Requirement\TimeRequirement;
 use MyHordes\Fixtures\DTO\Actions\RequirementsDataContainer;
@@ -145,7 +146,7 @@ class ActionRequirementProvider
         $requirement_container->add()->identifier('shoe_first')->type( Requirement::HideOnFail )->add( (new StatusRequirement())->status( 'tg_shoe_first', true ) )->commit();
         $requirement_container->add()->identifier('not_shoe_first')->type( Requirement::HideOnFail )->add( (new StatusRequirement())->status( 'tg_shoe_first', false ) )->commit();
 
-        $requirement_container->add()->identifier('bike_now')->type( Requirement::HideOnFail )->add( (new StatusRequirement())->status( 'tg_has_bike', true ) )->commit();
+        $requirement_container->add()->identifier('bike_now')->type( Requirement::HideOnFail )->add( (new SourceRequirement())->essential( true ) )->commit();
         $requirement_container->add()->identifier('not_yet_bike_now')->type( Requirement::HideOnFail )->add( (new StatusRequirement())->status( 'tg_has_bike', false ) )->commit();
         $requirement_container->add()->identifier('not_yet_bike_now_c')->type( Requirement::CrossOnFail )->add( (new StatusRequirement())->status( 'tg_has_bike', false ) )->commit();
         $requirement_container->add()->identifier('bike_today')->type( Requirement::HideOnFail )->add( (new StatusRequirement())->status( 'tg_had_bike', true ) )->commit();
