@@ -173,7 +173,7 @@ export const TwinoEditorWrapper = ( props: HTMLConfig & { onFieldChanged: FieldC
     });
     const fieldRef = useRef<{[index:string]: string|number}>(fields);
 
-    const [expanded, setExpanded] = useState<boolean>(props.skin !== 'pm');
+    const [expanded, setExpanded] = useState<boolean>(props.skin !== 'pm' || $.client.config.advancedPMEditor.get());
     const [controlDialogOpen, setControlDialogOpen] = useState<boolean>(false);
 
     const selection = useRef({
