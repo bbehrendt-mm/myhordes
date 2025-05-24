@@ -4,6 +4,8 @@ namespace App\Enum\Configuration;
 
 enum MyHordesSetting: string implements Configuration
 {
+    use PropertyComparisonTrait;
+
     //<editor-fold desc="Core Settings">
     case Languages = 'langs';
     //</editor-fold>

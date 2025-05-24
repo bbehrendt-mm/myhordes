@@ -4,6 +4,8 @@ namespace App\Enum\Configuration;
 
 enum CitizenProperties: string implements Configuration
 {
+    use PropertyComparisonTrait;
+
     //<editor-fold desc="Enabled Features">
     case Section_Features = '--section--/Features';
     case EnableBlackboard = 'features.blackboard';

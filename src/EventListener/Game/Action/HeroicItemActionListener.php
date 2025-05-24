@@ -17,6 +17,7 @@ use App\Event\Game\Actions\CustomActionProcessorEvent;
 use App\EventListener\ContainerTypeTrait;
 use App\Service\ActionHandler;
 use App\Service\Actions\Cache\InvalidateTagsInAllPoolsAction;
+use App\Service\Actions\Game\HeroSkillUpgradeCheck;
 use App\Service\Actions\Game\SpanHeroicActionInheritanceTreeAction;
 use App\Service\CitizenHandler;
 use App\Service\EventProxyService;
@@ -62,6 +63,7 @@ final class HeroicItemActionListener implements ServiceSubscriberInterface
 
             InvalidateTagsInAllPoolsAction::class,
             SpanHeroicActionInheritanceTreeAction::class,
+            HeroSkillUpgradeCheck::class,
         ];
     }
 
@@ -265,7 +267,7 @@ final class HeroicItemActionListener implements ServiceSubscriberInterface
 
                     if ($valid && $event->target->citizen()->getProfession()->getHeroic()) {
                         if ($event->target->citizen()->getHeroicActions()->contains( $event->target->action() ))
-                            $valid = false;
+                            $valid = ($this->getService(HeroSkillUpgradeCheck::class))( $event->target->action(), $event->target->citizen(), $event->citizen ) < 0;
                         foreach ( $upgrade_actions as $a ) if ($event->target->citizen()->getHeroicActions()->contains( $a ))
                             $valid = false;
                     }

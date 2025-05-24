@@ -4,7 +4,7 @@ namespace App\Enum\Configuration;
 
 enum TownSetting: string implements Configuration
 {
-
+    use PropertyComparisonTrait;
 
     //<editor-fold desc="Core Settings">
     case AllowLocalConfiguration = 'allow_local_conf';
