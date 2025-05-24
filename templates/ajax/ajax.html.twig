@@ -159,10 +159,6 @@
                     element.dataset[key] = value;
             });
         {% endif %}
-        
-        {% if block('title') is not defined %}
-            $.html.setTitleSegmentAddendum( null );
-        {% endif %}
 
         {# @var \App\Entity\GlobalPoll poll #}
         {% if app.user and is_granted('ROLE_USER') and poll is defined and poll %}
