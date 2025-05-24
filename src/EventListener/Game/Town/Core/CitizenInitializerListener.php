@@ -3,6 +3,7 @@
 
 namespace App\EventListener\Game\Town\Core;
 
+use App\Entity\AttackSchedule;
 use App\Entity\CauseOfDeath;
 use App\Entity\Citizen;
 use App\Entity\CitizenHome;
@@ -138,6 +139,13 @@ final class CitizenInitializerListener implements ServiceSubscriberInterface
 
     public function decreaseSkillPointCounter(AfterJoinTownEvent $event): void
     {
+        // If we already deducted a point for this day, do not deduct further
+        if ($event->before->subject->getLastSkillPointDeductedAt()) {
+            $lastAttack = $this->getService(EntityManagerInterface::class)->getRepository( AttackSchedule::class )->findPrevious( new \DateTime() );
+            if ($lastAttack?->getId() === $event->before->subject->getLastSkillPointDeductedAt()?->getId())
+                return;
+        }
+
         $this->getService(UserUnlockableService::class)->getResetPackPoints( $event->before->subject, $points );
         foreach ($points as $point) {
             if ($point->getDays() === 1)
