@@ -33,4 +33,21 @@ interface Configuration
     public function merge(mixed $old, mixed $new): mixed;
 
     public function translationKey(): string;
+
+    /**
+     * @template T of int|string|array|bool
+     * @param Configuration $property
+     * @param T $a
+     * @param T $b
+     * @return int
+     */
+    public static function sort( Configuration $property, mixed $a, mixed $b ): int;
+
+    /**
+     * @template T of int|string|array|bool
+     * @param T $a
+     * @param T $b
+     * @return int
+     */
+    public function compare( mixed $a, mixed $b ): int;
 }

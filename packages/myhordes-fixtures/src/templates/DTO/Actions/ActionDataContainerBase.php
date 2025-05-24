@@ -2,6 +2,7 @@
 
 namespace MyHordes\Fixtures\DTO\Actions;
 
+use BackedEnum;
 use MyHordes\Fixtures\DTO\Container;
 use MyHordes\Fixtures\DTO\ElementInterface;
 
@@ -30,5 +31,22 @@ abstract class ActionDataContainerBase extends Container
                 if (is_a( $atom, $class ))
                     $r[] = $atom;
         return $r;
+    }
+
+    /**
+     * Retrieves a unique array of properties injected into the data structure
+     * that belong to the specified class type.
+     *
+     * @template T of BackedEnum
+     * @psalm-param class-string<T> $propClass The class name to filter the injected properties by. Defaults to BackedEnum::class.
+     *
+     * @return T[] An array of unique properties matching the specified class type.
+     */
+    public function injectedProperties(string $propClass = BackedEnum::class): array {
+        $result = [];
+        foreach ( $this->all() as $de )
+            foreach ($de->atomList as $atom)
+                $result = [...$result, ...$atom->injectedProperties( $propClass )];
+        return array_map(fn(mixed $v) => $propClass::from($v), array_unique( array_map(fn(mixed $v) => $v->value, $result )));
     }
 }

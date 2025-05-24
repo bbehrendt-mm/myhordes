@@ -156,4 +156,22 @@ abstract class Atom implements ArrayDecoratorReadInterface {
         $this->$name = $arguments[0];
         return $this;
     }
+
+    /**
+     * Retrieves a unique array of properties injected into the data structure
+     * that belong to the specified class type.
+     *
+     * @template T of BackedEnum
+     * @psalm-param class-string<T> $propClass The class name to filter the injected properties by. Defaults to BackedEnum::class.
+     *
+     * @return T[] An array of unique properties matching the specified class type.
+     */
+    public function injectedProperties(string $propClass = BackedEnum::class): array {
+        $result = [];
+        array_walk_recursive( $this->data, function($value) use ($propClass, &$result) {
+            if (is_a($value, $propClass))
+                $result[] = $value->value;
+        });
+        return array_map(fn(mixed $v) => $propClass::from($v), array_unique( $result ));
+    }
 }
