@@ -103,7 +103,7 @@ class MessageTownMessageController extends MessageController
         if(is_array($items)){
             foreach ($items as $item_id) {
                 $valid = false;
-                $item = $em->getRepository(Item::class)->find($item_id);
+                $item = is_int($item_id) ? $em->getRepository(Item::class)->find($item_id) : null;
 
                 if (!$item) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
 
