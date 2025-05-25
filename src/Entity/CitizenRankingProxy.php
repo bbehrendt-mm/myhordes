@@ -191,6 +191,7 @@ class CitizenRankingProxy
     }
     public static function fromCitizen(Citizen $citizen, bool $update = false): CitizenRankingProxy {
         if (!$update && $citizen->getRankingEntry()) return $citizen->getRankingEntry();
+        /** @var CitizenRankingProxy $obj */
         $obj = (($update && $citizen->getRankingEntry()) ? $citizen->getRankingEntry() : new CitizenRankingProxy())
             ->setBaseID( $citizen->getId() )
             ->setUser( $citizen->getUser() )
@@ -198,10 +199,12 @@ class CitizenRankingProxy
             ->setDayOfDeath($citizen->getDayOfDeath())
             ->setTown( $citizen->getTown()->getRankingEntry() )
             ->setCitizen( $citizen )
-            ->setComment( $citizen->getComment() )
             ->setLastWords( $citizen->getLastWords() )
             ->setAlias($citizen->getAlias())
         ;
+
+        if (!$obj->getCommentLocked())
+            $obj->setComment( $citizen->getComment() );
 
         if ($obj->getEnd() === null)
             $obj->setPoints( $citizen->getSurvivedDays() * ( $citizen->getSurvivedDays() + 1 ) / 2 );
