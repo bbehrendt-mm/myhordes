@@ -846,28 +846,6 @@ class CitizenHandler
         return 0.05;
     }
 
-    public function getDeathChances(Citizen $citizen, bool $during_attack = false): float {
-        $fatigue = $this->getNightwatchBaseFatigue($citizen);
-
-        $is_pro = $citizen->property(CitizenProperties::EnableProWatchman);
-
-        for($i = 1 ; $i <= $citizen->getTown()->getDay() - ($during_attack ? 2 : 1); $i++){
-            /** @var CitizenWatch|null $previousWatches */
-            $previousWatches = $this->entity_manager->getRepository(CitizenWatch::class)->findWatchOfCitizenForADay($citizen, $i);
-            if ($previousWatches === null || $previousWatches->getSkipped())
-                $fatigue = max($this->getNightwatchBaseFatigue($citizen), $fatigue - ($is_pro ? 0.025 : 0.05));
-            else
-                $fatigue += ($is_pro ? 0.05 : 0.1);
-        }
-
-        $chances = max($this->getNightwatchBaseFatigue($citizen), $fatigue);
-        foreach ($citizen->getStatus() as $status)
-            $chances += $status->getNightWatchDeathChancePenalty();
-        if($citizen->hasRole('ghoul')) $chances -= 0.05;
-
-        return round($chances, 2, PHP_ROUND_HALF_DOWN);
-    }
-
     public function getNightWatchDefense(Citizen $citizen): int {
         return $this->events->citizenQueryNightwatchInfo( $citizen )['def'] ?? 0;
     }

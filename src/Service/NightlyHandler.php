@@ -588,7 +588,7 @@ class NightlyHandler
 			// HOLD HORDES BEHAVIOR:
 			// FROM: https://github.com/motion-twin/WebGamesArchives/blob/main/Hordes/src/HordeAttack.hx#L75
 			$attackPlayer = ($town->getWell() > 0 ? 66 : 100);
-			if (mt_rand(0, 100) < $attackPlayer) {
+			if (mt_rand(0, 100) > $attackPlayer) {
 				$d = min($town->getWell(), 20);
                 if ($d > 0) {
                     $town->setWell(max(0, $town->getWell() - $d));
