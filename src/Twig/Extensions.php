@@ -22,6 +22,7 @@ use App\Service\GameFactory;
 use App\Service\LogTemplateHandler;
 use App\Service\UserHandler;
 use App\Structures\MyHordesConf;
+use ArrayHelpers\Arr;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -37,7 +38,7 @@ use Twig\TwigFunction;
 
 class Extensions extends AbstractExtension implements GlobalsInterface
 {
-	protected $dognameCache = [];
+	protected array $dognameCache = [];
 
     public function __construct(
         private readonly TranslatorInterface            $translator,
@@ -128,13 +129,14 @@ class Extensions extends AbstractExtension implements GlobalsInterface
      * @return string
      */
     public function dogname(User $u): string {
-		if (!isset($this->dognameCache[$u->getId()])) {
-			$this->dognameCache[$u->getId()] = [];
-		}
-		if (!isset($this->dognameCache[$u->getId()][$this->translator->getLocale()])) {
-			$this->dognameCache[$u->getId()][$this->translator->getLocale()] = LogTemplateHandler::generateDogName( $u->getActiveCitizen() ? $u->getActiveCitizen()->getId() : 0, $this->translator );
-		}
-		return $this->dognameCache[$u->getId()][$this->translator->getLocale()];
+
+        $key = "{$u->getId()}.{$this->translator->getLocale()}";
+        if (Arr::has( $this->dognameCache, $key )) return Arr::get( $this->dognameCache, $key );
+
+        $name = LogTemplateHandler::generateDogName( $u->getActiveCitizen() ? $u->getActiveCitizen()->getId() : 0, $this->translator );
+        Arr::set( $this->dognameCache, $key, $name );
+
+		return $name;
     }
 
     /**
