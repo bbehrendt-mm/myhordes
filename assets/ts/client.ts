@@ -16,6 +16,7 @@ class Config {
     public extendConstructions:   conf<boolean>;
     public ttttHelpSeen:          conf<boolean>;
     public iconZoom:              conf<string>;
+    public forceIconZoom:         conf<boolean>;
     public forumFontSize:         conf<string>;
     public twinoidImport:         conf<[number,string,string]>;
     public editorCache:           conf<string>;
@@ -38,6 +39,7 @@ class Config {
         this.extendConstructions   = this.makeConf<boolean>('extendConstructions', false);
         this.ttttHelpSeen          = this.makeConf<boolean>('ttttHelpSeen', false);
         this.iconZoom              = this.makeConf<string>('iconZoom', '1-00');
+        this.forceIconZoom         = this.makeConf<boolean>('forceIconZoom', false);
         this.forumFontSize         = this.makeConf<string>('forumFontSize', 'normal');
         this.twinoidImport         = this.makeConf<[number,string,string]>('twinImport', [0,'',''], true);
         this.editorCache           = this.makeConf<string>('editorCache', '', true);

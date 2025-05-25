@@ -41,6 +41,7 @@ document.addEventListener('tokenExchangeCompleted', function() {
     $.html.init();
     if (!document.body.classList.contains('page-attract')) {
         document.body.classList.add('icon-zoom-' + $.client.config.iconZoom.get())
+        document.body.classList.toggle('force-icon-zoom', $.client.config.forceIconZoom.get())
         document.body.classList.add('forum-font-' + $.client.config.forumFontSize.get())
     }
     const initial_landing = document.documentElement.getAttribute('x-ajax-landing');

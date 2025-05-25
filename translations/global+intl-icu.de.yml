@@ -654,3 +654,5 @@ Sonstiges: Sonstiges
 'Diese Anwendung befindet sich im Wartungsmodus.': 'Diese Anwendung befindet sich im Wartungsmodus.'
 'Sei vorsichtig, das Betreten geschieht auf eigene Gefahr...': 'Sei vorsichtig, das Betreten geschieht auf eigene Gefahr...'
 'Aufgrund technischer Probleme ist der Funktionsumfang dieser externen Anwendung aktuell eingeschränkt.': 'Aufgrund technischer Probleme ist der Funktionsumfang dieser externen Anwendung aktuell eingeschränkt.'
+'Fehler beim Laden der Logeinträge ({error}).': 'Fehler beim Laden der Logeinträge ({error}).'
+'Log-Einträge können nicht abgerufen werden, bitte versuche, die Seite neu zu laden.': 'Log-Einträge können nicht abgerufen werden, bitte versuche, die Seite neu zu laden.'
