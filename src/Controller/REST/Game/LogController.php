@@ -267,7 +267,7 @@ class LogController extends CustomAbstractCoreController
      * @return JsonResponse
      * @throws Exception
      */
-    #[Route(path: '/beyond/{id}', name: 'beyond', methods: ['GET'])]
+    #[Route(path: '/beyond/{id<\d+>}', name: 'beyond', methods: ['GET'])]
     #[GateKeeperProfile(only_alive: true, only_beyond: true)]
     #[Toaster]
     public function beyond(Zone $zone, Request $request, EntityManagerInterface $em): JsonResponse {
@@ -306,12 +306,11 @@ class LogController extends CustomAbstractCoreController
      * @param Request $request
      * @param EntityManagerInterface $em
      * @param Citizen|null $citizen
-     * @param UserHandler $userHandler
      * @return JsonResponse
      * @throws Exception
      */
     #[Route(path: '/town', name: 'town', methods: ['GET'])]
-    #[Route(path: '/citizen/{id}', name: 'town_citizen', methods: ['GET'])]
+    #[Route(path: '/citizen/{id<\d+>}', name: 'town_citizen', methods: ['GET'])]
     #[GateKeeperProfile(only_with_profession: true, only_in_town: true)]
     #[Toaster]
     public function town(Request $request, EntityManagerInterface $em, ?Citizen $citizen = null): JsonResponse {
@@ -351,17 +350,16 @@ class LogController extends CustomAbstractCoreController
     /**
      * @param bool $purge
      * @param TownLogEntry $entry
-     * @param UserHandler $userHandler
      * @param EntityManagerInterface $em
      * @param InvalidateLogCacheAction $invalidate
      * @return JsonResponse
      */
-    #[Route(path: '/{id}', name: 'delete_log_hide', defaults: ['purge' => false], methods: ['DELETE'])]
-    #[Route(path: '/{id}/full', name: 'delete_log_purge', defaults: ['purge' => true], methods: ['DELETE'])]
+    #[Route(path: '/{id<\d+>}', name: 'delete_log_hide', defaults: ['purge' => false], methods: ['DELETE'])]
+    #[Route(path: '/{id<\d+>}/full', name: 'delete_log_purge', defaults: ['purge' => true], methods: ['DELETE'])]
     #[GateKeeperProfile(only_alive: true, only_with_profession: true, only_in_town: true)]
     #[Semaphore('town', scope: 'town')]
     #[Toaster]
-    public function delete_log(bool $purge, TownLogEntry $entry, UserHandler $userHandler, EntityManagerInterface $em, InvalidateLogCacheAction $invalidate): JsonResponse {
+    public function delete_log(bool $purge, TownLogEntry $entry, EntityManagerInterface $em, InvalidateLogCacheAction $invalidate): JsonResponse {
         $active_citizen = $this->getUser()->getActiveCitizen();
 
         $type = $purge ? LogHiddenType::Deleted : LogHiddenType::Hidden;
@@ -396,7 +394,7 @@ class LogController extends CustomAbstractCoreController
      * @return JsonResponse
      * @throws Exception
      */
-    #[Route(path: '/admin/zone/{id}', name: 'admin_zone', methods: ['GET'])]
+    #[Route(path: '/admin/zone/{id<\d+>}', name: 'admin_zone', methods: ['GET'])]
     #[GateKeeperProfile('skip')]
     #[IsGranted('ROLE_CROW')]
     public function adminZone(Zone $zone, Request $request, EntityManagerInterface $em): JsonResponse {
@@ -420,7 +418,7 @@ class LogController extends CustomAbstractCoreController
      * @return JsonResponse
      * @throws Exception
      */
-    #[Route(path: '/admin/town/{id}', name: 'admin_town', methods: ['GET'])]
+    #[Route(path: '/admin/town/{id<\d+>}', name: 'admin_town', methods: ['GET'])]
     #[GateKeeperProfile('skip')]
     #[IsGranted('ROLE_CROW')]
     public function adminTown(Town $town, Request $request, EntityManagerInterface $em): JsonResponse {
@@ -452,7 +450,7 @@ class LogController extends CustomAbstractCoreController
      * @param LogTemplateHandler $log
      * @return JsonResponse
      */
-    #[Route(path: '/chat/{id}', name: 'chat', methods: ['PUT'])]
+    #[Route(path: '/chat/{id<\d+>}', name: 'chat', methods: ['PUT'])]
     #[GateKeeperProfile(only_alive: true, only_beyond: true)]
     #[Semaphore('town', scope: 'town')]
     #[Toaster]
