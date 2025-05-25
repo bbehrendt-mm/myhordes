@@ -782,6 +782,12 @@
                                     <option value="2-00">x2</option>
                                 </select>
                             </div>
+                            <div class="padded cell rw-12">
+                                <div class="note note-lightest">
+                                    <input x-browser-setting="forceIconZoom" type="checkbox" id="setting_browser_forceIconZoom">&nbsp;<label for="setting_browser_forceIconZoom">{{ 'Icon-Zoom auch auf Desktop-Geräten verwenden'|trans({}, 'soul') }}</label>
+                                    {{help_btn("Ist diese Option aktiviert, wird die oben eingestellte Zoom-Größe für Icons nicht nur auf mobilen, sondern auch auf Desktop-Geräten angewendet."|trans({}, 'soul'))}}
+                                </div>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="padded cell rw-4 rw-md-6 rw-sm-12">
@@ -872,6 +878,13 @@
 
             document.body.classList.add('icon-zoom-' + elem.value);
             $.client.config.iconZoom.set(elem.value);
+            confirmConfig();
+        });
+
+        $.html.forEach('#setting_browser_forceIconZoom', e => e.value = $.client.config.forceIconZoom.get());
+        $.html.addEventListenerAll('#setting_browser_forceIconZoom', 'click', function(e,elem) {
+            document.body.classList.toggle('force-icon-zoom', !!elem.checked);
+            $.client.config.forceIconZoom.set(elem.checked);
             confirmConfig();
         });
 
