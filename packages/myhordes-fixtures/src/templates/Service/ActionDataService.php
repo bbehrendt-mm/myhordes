@@ -201,14 +201,15 @@ class ActionDataService implements FixtureProcessorInterface {
                 ]] ] ],
 
                 'play_soccer_1'  => [ 'label' => 'Benutzen', 'at00' => true, 'meta' => [ 'not_tired', 'not_yet_soccer', 'no_bonus_ap', 'not_drunk_hide', 'is_not_wounded_foot' ], 'result' => [ 'status_soccer_today', 'chances' => ['group' => [
-                    [ ['do_nothing', 'msg_soccer_fail'], 1 ],
-                    [ ['just_ap1', 'msg_soccer_success'], 1 ],
-                    [ ['morph_soccer_part', 'msg_soccer_bigfail'], 1 ],
+                    [ ['do_nothing', 'msg_soccer_fail'], 80 ],
+                    [ ['just_ap1', 'msg_soccer_success'], 15 ],
+                    [ ['morph_soccer_part', 'msg_soccer_bigfail'], 5 ],
+
                 ] ] ] ],
                 'play_soccer_2'  => [ 'label' => 'Benutzen', 'at00' => true, 'meta' => [ 'not_tired', 'not_yet_soccer', 'no_bonus_ap', 'must_be_drunk', 'is_not_wounded_foot' ], 'result' => [ 'status_soccer_today', 'chances' => ['group' => [
-                    [ ['morph_soccer_part', 'msg_soccer_bigfail'], 1 ],
-                    [ ['do_nothing', 'msg_soccer_fail'], 1 ],
-                    [ ['just_ap1', 'msg_soccer_success'], 1 ],
+                    [ ['morph_soccer_part', 'msg_soccer_bigfail'], 80 ],
+                    [ ['do_nothing', 'msg_soccer_fail'], 15 ],
+                    [ ['just_ap1', 'msg_soccer_success'], 5 ],
                 ] ] ] ],
 
                 'open_doggybag'  => [ 'label' => 'Öffnen', 'at00' => true, 'meta' => ['is_not_wounded_hands'], 'result' => [ 'consume_item', 'spawn_doggy' ], 'message' => 'Du hast dein <span class="tool">{item}</span> ausgepackt und <span class="tool">{items_spawn}</span> erhalten!' ],
