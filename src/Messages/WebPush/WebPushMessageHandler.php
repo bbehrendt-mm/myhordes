@@ -28,7 +28,7 @@ readonly class WebPushMessageHandler
 
         $payload = Message::create("MyHordes: {$message->title}")
             ->withBody( $html_supported ? $message->body : html_entity_decode( strip_tags( $message->body ), ENT_QUOTES ) )
-            ->withTimestamp( $message->timestamp->getTimestamp() )
+            ->withTimestamp( $message->timestamp->getTimestamp() * 1000 )
             ->withBadge( $this->uri . $this->asset->getUrl('build/favicon/android-chrome-72x72.png') );
 
         if ($message->avatar) {
