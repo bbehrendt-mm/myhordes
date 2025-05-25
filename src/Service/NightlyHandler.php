@@ -894,8 +894,8 @@ class NightlyHandler
             $targets = [];
 
             foreach ($town->getBuildings() as $building) {
-                // Only built buildings AND buildings with HP can get damaged
-                if (!$building->getComplete() || $building->getPrototype()->getHp() <= 0 || $building->getPrototype()->getImpervious()) continue;
+                // Only built buildings AND buildings with HP that are not temporary can get damaged
+                if (!$building->getComplete() || $building->getPrototype()->getHp() <= 0 || $building->getPrototype()->getTemp() || $building->getPrototype()->getImpervious()) continue;
 
                 $targets[] = $building;
             }
