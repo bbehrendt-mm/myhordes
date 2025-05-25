@@ -4,11 +4,9 @@
 namespace App\Twig;
 
 
-use Adbar\Dot;
 use App\Entity\Award;
 use App\Entity\AwardPrototype;
 use App\Entity\Citizen;
-use App\Entity\Hook;
 use App\Entity\Item;
 use App\Entity\Town;
 use App\Entity\TownSlotReservation;
@@ -24,10 +22,10 @@ use App\Service\GameFactory;
 use App\Service\LogTemplateHandler;
 use App\Service\UserHandler;
 use App\Structures\MyHordesConf;
+use ArrayHelpers\Arr;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
-use MyHordes\Fixtures\DTO\Actions\RequirementsDataContainer;
 use MyHordes\Fixtures\DTO\Container;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -40,6 +38,8 @@ use Twig\TwigFunction;
 
 class Extensions extends AbstractExtension implements GlobalsInterface
 {
+	protected array $dognameCache = [];
+
     public function __construct(
         private readonly TranslatorInterface            $translator,
         private readonly UrlGeneratorInterface          $router,
@@ -129,7 +129,14 @@ class Extensions extends AbstractExtension implements GlobalsInterface
      * @return string
      */
     public function dogname(User $u): string {
-        return LogTemplateHandler::generateDogName( $u->getActiveCitizen() ? $u->getActiveCitizen()->getId() : 0, $this->translator );
+
+        $key = "{$u->getId()}.{$this->translator->getLocale()}";
+        if (Arr::has( $this->dognameCache, $key )) return Arr::get( $this->dognameCache, $key );
+
+        $name = LogTemplateHandler::generateDogName( $u->getActiveCitizen() ? $u->getActiveCitizen()->getId() : 0, $this->translator );
+        Arr::set( $this->dognameCache, $key, $name );
+
+		return $name;
     }
 
     /**
