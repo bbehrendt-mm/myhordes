@@ -1706,9 +1706,13 @@ class AdminUserController extends AdminActionController
             $citizen_proxy->setLastWords($text);
             $citizen_proxy->getCitizen()?->setLastWords($text ?? '');
         }
-        else $citizen_proxy->setComment($text)->setCommentLocked(true);
+        else {
+            $citizen_proxy->setComment($text)->setCommentLocked(true);
+            $citizen_proxy->getCitizen()?->setComment($text ?? '');
+        }
 
         $this->entity_manager->persist($citizen_proxy);
+        if ($citizen_proxy->getCitizen()) $this->entity_manager->persist($citizen_proxy->getCitizen());
         $this->entity_manager->flush();
 
         return AjaxResponse::success();
