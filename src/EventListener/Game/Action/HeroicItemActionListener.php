@@ -167,7 +167,7 @@ final class HeroicItemActionListener implements ServiceSubscriberInterface
                             $this->getService(CitizenHandler::class)->setAP($event->citizen, false, 6, 0);
 
                         $sp_potential_bonus = $this->getService(CitizenHandler::class)->getMaxPoints($event->citizen, PointType::SP, false );
-                        if ($sp_potential_bonus > 0)
+                        if ($sp_potential_bonus > 0  && $old_sp < $sp_potential_bonus)
                             $this->getService(CitizenHandler::class)->setPoints($event->citizen, PointType::SP, false, $sp_potential_bonus, 0);
 
                         $event->cache->addPoints( PointType::AP, $event->citizen->getAp() - $old_ap );
