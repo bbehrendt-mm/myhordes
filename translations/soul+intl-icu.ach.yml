@@ -685,3 +685,5 @@ Verkaufswert: crwdns212448:0crwdne212448:0
 'Keine Aktivität in den anderen Saisons...': 'crwdns213180:0crwdne213180:0'
 '{num} Städte': 'crwdns213182:0{num}crwdne213182:0'
 '1 Stadt': 'crwdns213184:0crwdne213184:0'
+'Icon-Zoom auch auf Desktop-Geräten verwenden': 'crwdns213206:0crwdne213206:0'
+'Ist diese Option aktiviert, wird die oben eingestellte Zoom-Größe für Icons nicht nur auf mobilen, sondern auch auf Desktop-Geräten angewendet.': 'crwdns213208:0crwdne213208:0'

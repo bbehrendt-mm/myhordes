@@ -378,7 +378,7 @@ Werkstatt: L’atelier
 'Heute ist nichts Erwähnenswertes passiert...': 'Rien de notable pour cette journée…'
 'Unbekannte Todesursache': 'Raison inconnue'
 'Du weist nicht, was gerade geschehen ist... plötzlich warst du einfach nicht mehr am leben.': 'Vous n’avez aucune idée de ce qui vient de se passer… soudain, vous n’étiez plus en vie.'
-Zombieangriff: Lacéré(e)… Dévoré(e)… pendant l'attaque de la nuit
+Zombieangriff: "            {ref__icu, select,\n                on {\n                    {ref__gender, select,\n                        female {Lacérée… dévorée… pendant l’attaque de la nuit}\n                        other {Lacéré… dévoré… pendant l’attaque de la nuit}\n                    }\n                }\n            other {Lacéré(e)… dévoré(e)… pendant l’attaque de la nuit}\n            }"
 'Du hattest dich daheim eingebunkert und dachtest so überleben zu können... Als sie vor deiner Türe grunzten und schnüffelten, warst du dann mucksmäuschenstill. Leider hattest du ein Fenster nicht ausreichend vernagelt, sodass sie schließlich in dein Wohnzimmer stolperten. Vor Angst erstarrt hast du dann keinen Ton mehr rausgebracht und musstest ansehen, wie sie dich ins Schlafzimmer zerrten, um sich an deinen inneren Organen zu laben und dich langsam zu verspeisen.': 'Cloîtré dans votre maison, vous espériez qu''ils ne passeraient pas… Vous les avez entendus grogner, renifler à votre porte… puis plus rien. Une fenêtre proche a alors brusquement volé en éclats. Mal barricadée sûrement… Vous avez hurlé, ils vous ont laissé vous débattre puis vous ont plaqué contre votre lit. Lentement, ils vous ont dévoré. Aucun citoyen n''est venu à votre aide. Personne.'
 'Außerhalb der Stadt verschwunden': 'Disparu(e) dans l''Outre-Monde pendant la nuit'
 'Kurz nach Mitternacht wurde es unheimlich still... so, als ob jegliches Leben mit einem Schlag ausgelöscht worden wäre. Die Nacht kam dir noch eisiger als sonst vor... und plötzlich sahst du sie: Dutzende, hunderte, und alle schwankten auf dich zu! Ihre Hände reckten sich nach dir. Sie ergriffen, zogen und rissen dich auseinander... Dann haben sie dich mitgenommmen und sich an dir bis zum frühen Morgen gütlich getan.': 'Peu après minuit, un silence pesant s''est abattu tout autour de vous, comme si toute vie venait de s''éteindre brusquement. La nuit s''est faite glaciale… Puis vous les avez vus, des dizaines… des centaines titubant vers vous.. Leurs mains vous saisissant, agrippant, tirant, arrachant… Puis ils vous ont traîné avec eux toute la nuit, pour vous dévorer encore vivant au petit matin.'
@@ -559,7 +559,7 @@ Kannibalismus: Cannibalisme
 Wasserkanonen: Canons à eau
 'Anzahl an großen Wasserwaffen, die du gebaut hast.': 'Nombre de gros jouets à base d’eau que vous avez fabriqués.'
 Glückspilz: Chanceux
-'Anzahl der großen Metallkoffer, die du in der Außenwelt ausgegraben hast.': 'Nombre de gros coffres en métal que vous avez dégotés dans l''Outre-Monde.'
+'Anzahl der großen Metallkoffer, die du in der Außenwelt ausgegraben hast.': 'Nombre de gros coffres en métal que vous avez dégotés lors de vos fouilles.'
 Baustellen: Chantiers
 'Anzahl der Aktionspunkte, die du für den Bau neuer Kontruktionen und Stadtgebäude verwendet hast.': 'Points d’action et/ou de chantier investis dans l’avancement d’un chantier en ville.'
 'Anzahl der Punkte, die du erworben hast, indem du in einer Stadt komplett clean geblieben bist.': 'Capacité à rester Clair(e) (aucune drogue consommée) au cours de toute une vie.'
@@ -688,7 +688,7 @@ Sekunde(n): seconde(s)
 'Der Weihnachtsmann wurde dabei beobachtet, wie er {item} von {victim} gestohlen hat': 'Le Père Noël a été aperçu volant {item} à {victim} !'
 'Wenn du eine zusätzliche Nacht geblieben wärst, hättest du auch die folgenden Preise gewinnen können:': 'Si vous aviez tenu une nuit de plus, vous auriez également pu gagner les distinctions suivantes :'
 'Mein Rucksack': 'Mon sac à dos'
-'Dieser Bürger wurde noch nie gesehen...': 'n''a jamais été vu...'
+'Dieser Bürger wurde noch nie gesehen...': 'n’a jamais été vu…'
 'Der Bürger wurde zuletzt {time} gesehen.': 'a été aperçu pour la dernière fois <strong>{time}</strong>.'
 'Dieser Bürger hat {ration} Wasserration(en) aus dem Brunnen genommen.': "a été vu au puits prenant <strong>{ration} ration(s) d'eau</strong> aujourd'hui."
 'Dieser Bürger ist ernsthaft verletzt.': 'a été gravement blessé.'

@@ -378,7 +378,7 @@ Werkstatt: Taller
 'Heute ist nichts Erwähnenswertes passiert...': 'Nada en particular el día de hoy...'
 'Unbekannte Todesursache': 'Causa de muerte desconocida...'
 'Du weist nicht, was gerade geschehen ist... plötzlich warst du einfach nicht mehr am leben.': 'No sabes que sucedió... de la nada has perdido tu miserable vida.'
-Zombieangriff: '¡Ataque Nocturno!'
+Zombieangriff: Cuerpo devorado en el ataque nocturno
 'Du hattest dich daheim eingebunkert und dachtest so überleben zu können... Als sie vor deiner Türe grunzten und schnüffelten, warst du dann mucksmäuschenstill. Leider hattest du ein Fenster nicht ausreichend vernagelt, sodass sie schließlich in dein Wohnzimmer stolperten. Vor Angst erstarrt hast du dann keinen Ton mehr rausgebracht und musstest ansehen, wie sie dich ins Schlafzimmer zerrten, um sich an deinen inneren Organen zu laben und dich langsam zu verspeisen.': 'Encerrado en tu casa, rezabas para que no pasen... Les oíste gruñir, olfatear tu puerta... De pronto una ventana mal protegida voló en pedazos. Gritaste, te pusieron contra la pared. Lentamente te devoraron. Nadie vino para ayudarte. Nadie...'
 'Außerhalb der Stadt verschwunden': '¡Desaparecido en el Ultramundo!'
 'Kurz nach Mitternacht wurde es unheimlich still... so, als ob jegliches Leben mit einem Schlag ausgelöscht worden wäre. Die Nacht kam dir noch eisiger als sonst vor... und plötzlich sahst du sie: Dutzende, hunderte, und alle schwankten auf dich zu! Ihre Hände reckten sich nach dir. Sie ergriffen, zogen und rissen dich auseinander... Dann haben sie dich mitgenommmen und sich an dir bis zum frühen Morgen gütlich getan.': 'Poco después del ataque un pesado silencio te rodeó, como si toda la vida se extinguiera sin remedio. La noche se volvió glacial... Y los viste por decenas... centenas tambaleándose hacia ti... Te acorralaron, te jalaron, te arrastraron toda la noche, hasta devorarte aún vivo antes del amanecer.'
@@ -559,7 +559,7 @@ Kannibalismus: Canibalismo
 Wasserkanonen: Cañones de agua
 'Anzahl an großen Wasserwaffen, die du gebaut hast.': 'Cantidad de grandes juguetes de agua que has fabricado.'
 Glückspilz: Suertudo
-'Anzahl der großen Metallkoffer, die du in der Außenwelt ausgegraben hast.': 'Cantidad de grandes cofres de metal que has encontrado en el Ultramundo.'
+'Anzahl der großen Metallkoffer, die du in der Außenwelt ausgegraben hast.': 'Cantidad de grandes cofres de metal que has encontrado durante tus búsquedas.'
 Baustellen: Construcciones
 'Anzahl der Aktionspunkte, die du für den Bau neuer Kontruktionen und Stadtgebäude verwendet hast.': 'Puntos de acción o de construcción invertidos en el avance de una obra en el pueblo.'
 'Anzahl der Punkte, die du erworben hast, indem du in einer Stadt komplett clean geblieben bist.': 'Capacidad de rechazar el consumo de todo estimulante en tu vida.'
@@ -603,8 +603,8 @@ Event-Auszeichnungen: Reconocimiento de la Comunidad
 "Auszeichnung für die Teilnahme an Events bei 'Die Verdammten'.": "Recompensa obtenida por trabajar con la comunidad."
 'Wunderwerk: Sandschloss': 'Maravilla: Castillo de arena'
 'Das hast du nicht wirklich gebaut?': '¿Realmente has construido eso?'
-'Wunderwerk: Riesiger KVF': 'Maravilla: COSA gigante'
-'Huldigt den Riesigen KVF!': '¡Gloria a la COSA gigante!'
+'Wunderwerk: Riesiger KVF': 'Maravilla: gran COSA'
+'Huldigt den Riesigen KVF!': '¡Gloria a la gran COSA!'
 'Wunderwerk: Rad des Schreckens': 'Maravilla: Gran Noria de Znarf'
 'Sieh nur, man kann von da oben die Zombies sehen!': 'Increíble, ¡desde aquí los zombies se ven como hormiguitas!'
 'Wunderwerk: Statue des Raben': 'Maravilla: Estatua del Cuervo'
@@ -617,7 +617,7 @@ Nachrichten: Mensajes
 'Anzahl der Tage, die du als Buddler gespielt hast.': 'Días pasados escarbando el suelo como Excavador.'
 'Anzahl der Tage, die du als Wächter gespielt hast.': 'Días pasados con tu escudo como Guardián.'
 'Anzahl der Tage, die du als Techniker gespielt hast.': 'Días pasados jugando con herramientas.'
-'In deinem Bett gestorben': '¡Si me muero, mejor que sea cómodamente!'
+'In deinem Bett gestorben': 'Muertes en tu cama'
 'Großmutter, was hast du für große Zähne... Grrrooooaaar!': '¡Si me muero, mejor que sea cómodamente!'
 Dehydrationstode: Muertes por deshidratación
 'Gibt die Anzahl der Dehydrationen an, an denen du gestorben bist. Doch, doch! Wasser ist wichtig !': 'Cantidad de muertes por deshidratación terminal. Sí, el agua es importante.'
@@ -933,7 +933,7 @@ Rundbrief: Demagogo
 Freundschaft: Camaradería
 'Mit dieser Fähigkeit kannst du 1 Mal pro Partie (Stadt) jemandem einen Heldentag spendieren! Die anderen werden in dir den Messias erkennen! BEACHTE: Verschenkte Heldentage werden dir von deinem Konto abgezogen. Um jemandem einen Heldentag zu schenken, musst mit ihm in der gleichen Zone stehen oder, wenn du in der Stadt bist, ihn daheim besuchen.': 'Puedes dar 1 día de héroe a cualquier habitante. El día será descontado de tu total de días restantes. NB: cualquier día de héroe que regale se tomará de su total, simplemente vaya a la página de otro habitante para darles un día de héroe. Advertencia: cuando dona un día de héroe, solo es válido para ESE DÍA. No se puede guardar para otro momento.'
 Diktator: Dictador
-'Schreibe auf die Tafel, die sich auf der Übersichtsseite deiner Stadt befindet. Darüberhinaus kannst du auch deinen Mitbürgern ein Bauprojekt empfehlen. Das Gebäude mit den meisten Empfehlungen wird auf der Bauseite der Stadt hervorgehoben.': 'Puedes modificar la pizarra de héroes. La pizarra aparece en la vista general del pueblo cuando alguno de los héroes presentes posee esta habilidad.'
+'Schreibe auf die Tafel, die sich auf der Übersichtsseite deiner Stadt befindet. Darüberhinaus kannst du auch deinen Mitbürgern ein Bauprojekt empfehlen. Das Gebäude mit den meisten Empfehlungen wird auf der Bauseite der Stadt hervorgehoben.': 'Puedes modificar la pizarra de héroes presente en la vista general del pueblo.'
 'Große Truhe': 'Gran Baúl'
 'Du erhältst einen zusätzlichen Platz in deiner Truhe.': 'Obtienes un espacio adicional para el baúl de tu casa.'
 'Top in Form': 'Cuerpo Sano'

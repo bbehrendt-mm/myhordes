@@ -655,3 +655,5 @@ Sonstiges: Otros
 'Diese Anwendung befindet sich im Wartungsmodus.': 'Esta aplicación externa está actualmente en mantenimiento.'
 'Sei vorsichtig, das Betreten geschieht auf eigene Gefahr...': 'Ten cuidado, entra bajo tu propio riesgo...'
 'Aufgrund technischer Probleme ist der Funktionsumfang dieser externen Anwendung aktuell eingeschränkt.': 'Debido a problemas técnicos, la funcionalidad de esta aplicación externa está actualmente limitada.'
+'Fehler beim Laden der Logeinträge ({error}).': 'Error al cargar entradas de registro ({error}).'
+'Log-Einträge können nicht abgerufen werden, bitte versuche, die Seite neu zu laden.': 'No se pudieron recuperar las entradas del registro, intente recargar la página.'

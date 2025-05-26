@@ -685,3 +685,5 @@ Verkaufswert: Valor de venta
 'Keine Aktivität in den anderen Saisons...': 'Sin actividad durante otras temporadas...'
 '{num} Städte': '{num} Pueblos'
 '1 Stadt': '1 pueblo'
+'Icon-Zoom auch auf Desktop-Geräten verwenden': 'Utilice el zoom de iconos también en dispositivos de escritorio'
+'Ist diese Option aktiviert, wird die oben eingestellte Zoom-Größe für Icons nicht nur auf mobilen, sondern auch auf Desktop-Geräten angewendet.': 'Si esta opción está habilitada, el tamaño de zoom del ícono establecido anteriormente se aplicará no solo en dispositivos móviles sino también en dispositivos de escritorio.'
