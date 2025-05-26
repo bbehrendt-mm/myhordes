@@ -685,3 +685,5 @@ Verkaufswert: Sale value
 'Keine Aktivität in den anderen Saisons...': 'No activity during other seasons...'
 '{num} Städte': '{num} towns'
 '1 Stadt': '1 town'
+'Icon-Zoom auch auf Desktop-Geräten verwenden': 'Use icon zoom on desktop devices'
+'Ist diese Option aktiviert, wird die oben eingestellte Zoom-Größe für Icons nicht nur auf mobilen, sondern auch auf Desktop-Geräten angewendet.': 'When enabled, the icon zoom configured in the setting above also applies to desktop devices in addition to mobile ones.'

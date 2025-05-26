@@ -655,3 +655,5 @@ Sonstiges: Others
 'Diese Anwendung befindet sich im Wartungsmodus.': 'This external application is currently in maintenance mode.'
 'Sei vorsichtig, das Betreten geschieht auf eigene Gefahr...': 'Proceed with caution, enter at your own risk...'
 'Aufgrund technischer Probleme ist der Funktionsumfang dieser externen Anwendung aktuell eingeschränkt.': 'Due to technical issues, the features of this external application are currently limited.'
+'Fehler beim Laden der Logeinträge ({error}).': 'Error loading log entries ({error}).'
+'Log-Einträge können nicht abgerufen werden, bitte versuche, die Seite neu zu laden.': 'Log entries cannot be retrieved, please try reloading the page.'

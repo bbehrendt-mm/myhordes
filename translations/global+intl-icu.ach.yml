@@ -655,3 +655,5 @@ Sonstiges: crwdns213162:0crwdne213162:0
 'Diese Anwendung befindet sich im Wartungsmodus.': 'crwdns213186:0crwdne213186:0'
 'Sei vorsichtig, das Betreten geschieht auf eigene Gefahr...': 'crwdns213188:0crwdne213188:0'
 'Aufgrund technischer Probleme ist der Funktionsumfang dieser externen Anwendung aktuell eingeschränkt.': 'crwdns213190:0crwdne213190:0'
+'Fehler beim Laden der Logeinträge ({error}).': 'crwdns213202:0{error}crwdne213202:0'
+'Log-Einträge können nicht abgerufen werden, bitte versuche, die Seite neu zu laden.': 'crwdns213204:0crwdne213204:0'
