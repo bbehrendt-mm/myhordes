@@ -1,0 +1,127 @@
+@import (once) "../theme";
+
+.app-directory {
+  position: absolute;
+  top: 10px; left: 10px;
+  padding: 0 5px;
+  background-color: #5c2b20;
+  outline: 1px solid black;
+  border: 1px solid #f0d79e;
+  color: #f0d79e;
+  z-index: 998;
+  overflow: hidden;
+
+  min-height: 21px; min-width: 28px;
+  &.open { height: auto; width: auto }
+  &.closed { height: 0; width: 0; }
+
+  .app-icon {
+    position: absolute; top: 1px; left: 5px;
+  }
+
+  .app-listing-body {
+    width: 430px; max-width: calc(100vw - 32px);
+
+    h4 {
+      margin: 0; padding: 2px 0 3px 27px;
+      height: auto; font-size: 1.2rem;
+      text-transform: none; font-variant: small-caps;
+      background: none;
+      line-height: 17px;
+      font-family: @myhordes-font;
+      letter-spacing: 1px;
+      border-bottom: 1px solid #b37c4a;
+    }
+
+    p { color: white; font-size: 1.3rem; }
+
+    hr { height: 1px; background: #ddab76; border: none }
+
+    ul {
+      display: grid; padding: 0; margin: 0;
+      grid-template-columns: 1fr 1fr;
+      gap: @myhordes-grid-padsize-small;
+
+      &>li {
+        display: flex; gap: @myhordes-grid-padsize;
+        align-items: center;
+        padding: 4px 2px;
+        cursor: pointer;
+        font-size: 1.3rem;
+
+        &>* {
+          &:first-child { flex: none; line-height: 0 }
+          &:not(:first-child) { flex: 1 1 auto; }
+        }
+
+        transition: all 0.5s ease-in-out;
+        &:hover { background: rgba(221, 171, 118, 0.25); color: white; box-shadow: 0 0 3px rgba(0,0,0,0.3); }
+
+        .label {
+          display: flex; flex-direction: column; gap: 1px;
+          &>:not(.name) {
+            font-size: 0.6em; font-variant: small-caps;
+          }
+        }
+
+        &.maintenance {
+          img { filter: grayscale(100%); }
+          color: #b8b8b8;
+          font-style: italic;
+        }
+      }
+    }
+
+  }
+
+  &.closed .app-listing-body { opacity: 0; pointer-events: none }
+}
+
+.external-app {
+  span.critical {
+    text-transform: uppercase;
+    color: #f86;
+    font-weight: bold;
+    b {
+      color: #f8eacb;
+    }
+  }
+
+  strong { color: white; }
+
+  .secure, .dev {
+
+    h5 { margin-top: 0 }
+
+    padding: 5px 5px 5px 24px;
+    margin: 5px 0;
+    font-size: 9pt;
+    color: white;
+    background-position: 2px 5px;
+    background-repeat: no-repeat;
+
+    &.secure {
+      background-color: #696486;
+      background-image: url("../../img/icons/lock.gif");
+    }
+
+    &.dev {
+      background-color: #773939;
+      background-image: url("../../img/icons/small_dev.png");
+    }
+  }
+
+  ul {
+    font-size: 1.2rem;
+    padding-left: 16px;
+  }
+
+  .forms {
+    display: flex; flex-direction: column; gap: @myhordes-grid-padsize-small;
+  }
+
+  button {
+    font-variant: small-caps;
+    font-weight: normal;
+  }
+}

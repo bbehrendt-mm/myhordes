@@ -3,6 +3,8 @@ import {Tooltip} from "./tooltip/Wrapper";
 import * as React from "react";
 import {VaultItemEntry} from "../v2/typedef/vault_td";
 import {TranslatableAPI} from "./index";
+import {sharedWorkerMessageHandler} from "../v2/init";
+import {html} from "../v2/helpers";
 
 /**
  * Generates two boolean states and a setter; the first one can be directly set by the setter, the second one will
@@ -61,4 +63,17 @@ export function ItemTooltip(props: {
         { props.data?.desc ?? '???' }
         { props.children ?? null }
     </Tooltip>
+}
+
+export function useSharedWorkerMessages<T>(
+    message: string,
+    callback: (data: T) => void,
+    connection: string = 'live',
+    deps: DependencyList = [],
+) {
+    useEffect(() => {
+        const mercureHandler = sharedWorkerMessageHandler(connection, message, callback);
+        html().addEventListener('mercureMessage', mercureHandler);
+        return () => html().removeEventListener('mercureMessage', mercureHandler);
+    }, deps);
 }

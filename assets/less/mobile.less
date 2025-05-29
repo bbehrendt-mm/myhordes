@@ -261,7 +261,16 @@
       display: block; width: 24px; height: 24px; font-size: 14px; text-align: center; box-shadow: 0 0 3px black;
     }
   }
-  #apps h1 img { height: 32px; width: 32px; image-rendering: pixelated }
+
+  .app-directory {
+    min-height: 37px; min-width: 44px;
+    .app-icon { height: 32px; width: 32px; image-rendering: pixelated }
+    .app-listing-body {
+      h4 { padding: 10px 0 11px 43px; }
+      ul { grid-template-columns: 1fr; }
+    }
+  }
+
   #modeCommand, #pivotSwapCommand {
     height: 36px !important; left: 10px; margin-left: 0 !important;
     &#modeCommand { top: 60px !important;  }

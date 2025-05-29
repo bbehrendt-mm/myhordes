@@ -13,6 +13,7 @@ import {HordesIssueReport} from "../react/issue-report/Wrapper";
 import {HordesServiceWorkerIndicator} from "../react/service-worker-state/Wrapper";
 import {HordesProgressBar} from "../react/progress-bar/Wrapper";
 import {HordesHxpLog} from "../react/hxp-log/Wrapper";
+import {HordesHeaderUI, HordesSingularAppUI} from "../react/header/Wrapper";
 
 // Define web component <hordes-user-search />
 export class HordesUserSearchElement extends Shim<HordesUserSearchBar> {
@@ -194,6 +195,47 @@ customElements.define('hordes-hxp-log', class HordesHxpLogElement extends Shim<H
 
     protected static observedAttributeNames() {
         return ['data-focus'];
+    }
+
+}, {  });
+
+customElements.define('hordes-header-ui', class HordesHeaderUIElement extends Shim<HordesHeaderUI> {
+
+    protected generateInstance(): HordesHeaderUI {
+        return new HordesHeaderUI();
+    }
+
+    protected generateProps(): object | null {
+        return {
+            //focus: parseInt( this.dataset.focus ?? '0' ),
+        }
+    }
+
+    protected static observedAttributeNames() {
+        return [
+            //'data-focus'
+        ];
+    }
+
+}, {  });
+
+customElements.define('hordes-singular-ext-app', class HordesSingularAppUIElement extends Shim<HordesSingularAppUI> {
+
+    protected generateInstance(): HordesSingularAppUI {
+        return new HordesSingularAppUI();
+    }
+
+    protected generateProps(): object | null {
+        return {
+            appId: parseInt( this.dataset.appId ?? '0' ),
+            home: this.dataset.home ?? '',
+        }
+    }
+
+    protected static observedAttributeNames() {
+        return [
+            'data-app-id', 'data-home'
+        ];
     }
 
 }, {  });

@@ -8,6 +8,7 @@ use App\Entity\ExternalApp;
 use App\Entity\User;
 use App\Enum\Configuration\MyHordesSetting;
 use App\Response\AjaxResponse;
+use App\Service\Actions\Mercure\BroadcastViaMercureAction;
 use App\Service\ErrorHelper;
 use App\Service\JSONRequestParser;
 use App\Service\Media\ImageService;
@@ -69,7 +70,7 @@ class AdminAppController extends AdminActionController
      */
     #[Route(path: 'api/admin/apps/toggle/{id<\d+>}', name: 'admin_toggle_ext_app')]
     #[AdminLogProfile(enabled: true)]
-    public function ext_app_toggle(int $id, JSONRequestParser $parser): Response {
+    public function ext_app_toggle(int $id, JSONRequestParser $parser, BroadcastViaMercureAction $broadcast): Response {
         if (!$this->isGranted('ROLE_SUB_ADMIN')) return AjaxResponse::error( ErrorHelper::ErrorPermissionError );
 
         $app = $this->entity_manager->getRepository(ExternalApp::class)->find($id);
@@ -86,17 +87,25 @@ class AdminAppController extends AdminActionController
 
         $this->logger->invoke("Admin <info>{$this->getUser()->getName()}</info> <debug>" . ($app->getActive() ? 'activated' : 'deactivated') . "</debug> app <info>{$app->getName()}</info>");
 
+        ($broadcast)(
+            $app->getActive() ? 'external-app-update' : 'external-app-delete',
+                    [ 'app' => $app->getId() ],
+            public: !$app->getTesting(),
+            users: $app->getOwner()
+        );
+
         return AjaxResponse::success();
     }
 
     /**
-        * @param int $id
-        * @param JSONRequestParser $parser
-        * @return Response
-        */
+     * @param int $id
+     * @param JSONRequestParser $parser
+     * @param BroadcastViaMercureAction $broadcast
+     * @return Response
+     */
     #[Route(path: 'api/admin/apps/toggle/maintenance/{id<\d+>}', name: 'admin_toggle_ext_app_maintenance')]
     #[AdminLogProfile(enabled: true)]
-    public function ext_app_toggle_maintenance(int $id, JSONRequestParser $parser): Response {
+    public function ext_app_toggle_maintenance(int $id, JSONRequestParser $parser, BroadcastViaMercureAction $broadcast): Response {
         if (!$this->isGranted('ROLE_SUB_ADMIN')) return AjaxResponse::error( ErrorHelper::ErrorPermissionError );
 
         $app = $this->entity_manager->getRepository(ExternalApp::class)->find($id);
@@ -113,6 +122,14 @@ class AdminAppController extends AdminActionController
 
         $this->logger->invoke("Admin <info>{$this->getUser()->getName()}</info> <debug>" . ($app->getActive() ? 'activated' : 'deactivated') . "</debug> the maintenance mode for app <info>{$app->getName()}</info>");
 
+        if ($app->getActive())
+            ($broadcast)(
+                        'external-app-update',
+                        [ 'app' => $app->getId() ],
+                public: !$app->getTesting(),
+                users: $app->getOwner()
+            );
+
         return AjaxResponse::success();
     }
 
@@ -125,7 +142,7 @@ class AdminAppController extends AdminActionController
 	 */
     #[Route(path: 'api/admin/apps/register/{id<-?\d+>}', name: 'admin_update_ext_app')]
     #[AdminLogProfile(enabled: true)]
-    public function ext_app_update(int $id, JSONRequestParser $parser, RandomGenerator $rand): Response
+    public function ext_app_update(int $id, JSONRequestParser $parser, RandomGenerator $rand, BroadcastViaMercureAction $broadcast): Response
     {
         if (!$this->isGranted('ROLE_SUB_ADMIN')) return AjaxResponse::error( ErrorHelper::ErrorPermissionError );
 
@@ -202,6 +219,17 @@ class AdminAppController extends AdminActionController
                 'link_only' => $app->getLinkOnly(),
             ]);
         }
+
+        $is_deleted =
+            ($old_app?->getActive() && !$app->getActive()) ||
+            (($old_app?->getActive() && !$old_app?->getTesting()) && $app->getTesting());
+
+        ($broadcast)(
+                    !$is_deleted ? 'external-app-update' : 'external-app-delete',
+                    [ 'app' => $app->getId() ],
+            public: !$app->getTesting(),
+            users: $app->getOwner()
+        );
 
         return AjaxResponse::success();
     }

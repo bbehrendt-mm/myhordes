@@ -12,7 +12,6 @@ use App\Entity\Award;
 use App\Entity\CauseOfDeath;
 use App\Entity\Changelog;
 use App\Entity\CitizenRankingProxy;
-use App\Entity\ExternalApp;
 use App\Entity\FeatureUnlock;
 use App\Entity\FeatureUnlockPrototype;
 use App\Entity\ForumPollAnswer;
@@ -78,8 +77,6 @@ use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Symfony\Component\Validator\Constraints;
-use Symfony\Component\Validator\Validation;
 
 /**
  * @method User getUser
@@ -1576,61 +1573,6 @@ class SoulController extends CustomAbstractController
         return $this->render( 'ajax/help/shell.html.twig', [
             'support' => count($support_groups) === 1 ? $support_groups[0] : null
         ]);
-    }
-
-    /**
-     * @param int $id
-     * @param JSONRequestParser $parser
-     * @param RandomGenerator $rand
-     * @return Response
-     */
-    #[Route(path: 'api/soul/app/{id<\d+>}', name: 'soul_own_app_update')]
-    public function api_update_own_app(int $id, JSONRequestParser $parser, RandomGenerator $rand) {
-        /** @var ExternalApp $app */
-        $app = $this->entity_manager->getRepository(ExternalApp::class)->find($id);
-
-        if ($app === null) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
-        if ($app->getOwner() === null || $app->getOwner() !== $this->getUser()) return AjaxResponse::error(ErrorHelper::ErrorPermissionError);
-
-        if (!$parser->has_all( ['contact','url'], true )) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
-
-        $violations = Validation::createValidator()->validate( array_merge($parser->all( true ), [
-            'url' => preg_replace('/\{.*?\}/', 'SYMBOL', $parser->get('url')),
-            'devurl' => preg_replace('/\{.*?\}/', 'SYMBOL', $parser->get('devurl', '')),
-        ]), new Constraints\Collection([
-            'url' => [ new Constraints\Url( ['relativeProtocol' => false, 'protocols' => ['http', 'https'], 'message' => 'a' ] ) ],
-            'devurl' => [
-                new Constraints\AtLeastOneOf([
-                    new Constraints\Url( ['relativeProtocol' => false, 'protocols' => ['http', 'https'], 'message' => 'a' ] ),
-                    new Constraints\Blank( ['message' => 'a' ] )
-                ])
-            ],
-            'contact' => [
-                new Constraints\AtLeastOneOf([
-                    new Constraints\Url( ['relativeProtocol' => false, 'protocols' => ['http', 'https'], 'message' => 'a' ] ),
-                    new Constraints\Email( ['message' => 'v'])
-                ])
-            ],
-            'sk' => [  ]
-        ]) );
-
-        if ($violations->count() > 0) return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
-
-        $app->setUrl( $parser->trimmed('url') )->setContact( $parser->trimmed('contact') )->setDevurl( $parser->trimmed('devurl') ?: null );
-        if ( !$app->getLinkOnly() && $parser->get('sk', null) ) {
-            $s = '';
-            for ($i = 0; $i < 32; $i++) $s .= $rand->pick(['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f']);
-            $app->setSecret( $s );
-        }
-
-        $this->entity_manager->persist($app);
-        try {
-            $this->entity_manager->flush();
-        } catch (\Exception $e) {
-            AjaxResponse::error( ErrorHelper::ErrorDatabaseException );
-        }
-
-        return AjaxResponse::success();
     }
 
     /**
