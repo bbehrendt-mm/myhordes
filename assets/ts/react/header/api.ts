@@ -26,6 +26,16 @@ export type ExternalApp = {
     } | null
 }
 
+interface ModListResponse {
+    cat?: string,
+    links?: ModLink[];
+}
+
+export type ModLink = {
+    name: string
+    url: string
+}
+
 export class HeaderAPI extends TranslatableAPI<TranslationStrings> {
     constructor() { super( 'user/commons' ) }
 
@@ -47,6 +57,11 @@ export class HeaderAPI extends TranslatableAPI<TranslationStrings> {
     public regenerateAppSK(app: number): Promise<string> {
         return this.fetch.from(`/apps/${app}`)
             .request().put().then(v => v.sk) as Promise<string>;
+    }
+
+    public mods(): Promise<ModListResponse> {
+        return this.fetch.from('/mods')
+            .throwResponseOnError().request().get() as Promise<ModListResponse>;
     }
 
 }

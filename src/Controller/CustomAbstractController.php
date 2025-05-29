@@ -84,8 +84,6 @@ class CustomAbstractController extends CustomAbstractCoreController {
         $data["allLangs"] = $allLangs;
         $data['quote'] = $quotes[0];
 
-        $data['adminActions'] = AdminActionController::getAdminActions();
-        $data['comActions']   = AdminActionController::getCommunityActions();
         $data['swapPivots']   = $this->getUser() ? $this->entity_manager->getRepository(UserSwapPivot::class)->findBy( ['principal' => $this->getUser()] ) : [];
 
         $data["poll"] = array_values(array_filter(

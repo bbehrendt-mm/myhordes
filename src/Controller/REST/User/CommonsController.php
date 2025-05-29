@@ -3,6 +3,7 @@
 namespace App\Controller\REST\User;
 
 use App\Annotations\GateKeeperProfile;
+use App\Controller\Admin\AdminActionController;
 use App\Controller\CustomAbstractCoreController;
 use App\Entity\AdminReport;
 use App\Entity\BlackboardEdit;
@@ -297,5 +298,31 @@ class CommonsController extends CustomAbstractCoreController
         $em->flush();
 
         return new JsonResponse(['sk' => $s]);
+    }
+
+    /**
+     * @param UserCapabilityService $capability
+     * @return JsonResponse
+     */
+    #[Route(path: '/mods', name: 'mod_list', methods: ['GET'])]
+    public function mod_list(UserCapabilityService $capability): JsonResponse {
+
+        if (!$this->getUser() || !$capability->hasAnyRole( $this->getUser(), ['ROLE_CROW', 'ROLE_ELEVATED'] ))
+            return new JsonResponse([]);
+
+        $crow = $capability->hasRole( $this->getUser(), 'ROLE_CROW' );
+
+        $data = $crow
+            ? AdminActionController::getAdminActions()
+            : AdminActionController::getCommunityActions();
+
+        return new JsonResponse([
+            'cat' => $crow ? $this->translator->trans('Moderation', [], 'global') : $this->translator->trans('Community-Tools', [], 'global'),
+            'links' => array_map( fn(array $entry) => [
+                'name' => $entry['name'],
+                'url' => $this->generateUrl($entry['route']),
+            ], $data)
+        ]);
+
     }
 }
