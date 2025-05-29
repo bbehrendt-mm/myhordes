@@ -1,5 +1,6 @@
 import {TranslationStrings} from "./strings";
 import {Fetch} from "../../v2/fetch";
+import {TranslatableAPI} from "../index";
 
 type EventOwner = {
     id: number,
@@ -62,10 +63,6 @@ export interface TownPresetData extends TownPresetUUID {
     rules: object
 }
 
-export type ResponseIndex = {
-    strings: TranslationStrings
-}
-
 export type ResponseCreate = {
     uuid: string
 }
@@ -90,18 +87,9 @@ export type ResponseMeta = {
     meta: EventMeta
 }
 
-export class EventCreationAPI {
+export class EventCreationAPI extends TranslatableAPI<TranslationStrings> {
 
-    private fetch: Fetch;
-
-    constructor() {
-        this.fetch = new Fetch( 'user/soul/events' );
-    }
-
-    public index(): Promise<ResponseIndex> {
-        return this.fetch.from('/index_data/')
-            .request().withCache().get() as Promise<ResponseIndex>;
-    }
+    constructor() { super( 'user/soul/events', '/index_data/' ) }
 
     public list(): Promise<ResponseList> {
         return this.fetch.from('/')

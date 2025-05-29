@@ -16,6 +16,7 @@ import {Global} from "../../defaults";
 import LocalZoneView from "./ZoneView";
 import Client from "../../client";
 import {BeyondMapAPI, RuntimeMapStrings} from "./api";
+import {useTranslations} from "../utils";
 
 declare var $: Global;
 
@@ -72,6 +73,8 @@ type MapGlobals = {
 export const Globals = React.createContext<MapGlobals>(null);
 
 const MapWrapper = ( props: ReactDataMapCore ) => {
+    const api = new BeyondMapAPI();
+
     let mk = $.client.get('marker','routes',null, Client.DomainScavenger);
     if (!mk) mk = undefined;
     else mk = {x: mk[0] ?? 0, y: mk[1] ?? 0}
@@ -79,7 +82,7 @@ const MapWrapper = ( props: ReactDataMapCore ) => {
     const scrollPlaneRef = useRef<HTMLDivElement>(null);
     let dx = 0, dy = 0;
 
-    const [strings, setStrings] = useState<RuntimeMapStrings>( null );
+    const strings = useTranslations( api )
     const [map, setMap] = useState<MapData>( null );
     const [routes, setRoutes] = useState<MapRoute[]>( [] );
     const [inc, setInc] = useState<number>( 0 );
@@ -213,18 +216,12 @@ const MapWrapper = ( props: ReactDataMapCore ) => {
 
     const activeRoute = routes.filter(r=>r.id===state.activeRoute)[0] ?? null;
 
-    const api = new BeyondMapAPI();
-
     useEffect(() => {
         Promise.all([api.map( props.data.endpoint ), api.routes( props.data.endpoint )]).then( ([m,r]) => {
             setMap(m as MapData);
             setRoutes(r as MapRoute[]);
         } )
     }, [props.data.etag])
-
-    useEffect(() => {
-        api.index().then( v => setStrings(v) );
-    }, [])
 
     const reactRef = useRef<HTMLDivElement>();
 

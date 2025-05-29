@@ -7,6 +7,7 @@ import {Global} from "../../defaults";
 import {Tooltip} from "../tooltip/Wrapper";
 import {byteToText} from "../../v2/utils";
 import {BaseMounter} from "../index";
+import {useTranslations} from "../utils";
 
 declare var $: Global;
 
@@ -25,10 +26,10 @@ export const Globals = React.createContext<AvatarCreatorGlobals>(null);
 
 const AvatarCreatorWrapper = ( {maxSize}: {maxSize: number} ) => {
 
-    const apiRef = useRef<AvatarCreatorAPI>();
+    const apiRef = useRef<AvatarCreatorAPI>(new AvatarCreatorAPI());
     const uploadRef = useRef<HTMLInputElement>();
 
-    const [index, setIndex] = useState<ResponseIndex>(null)
+    const index = useTranslations(apiRef.current);
     const [media, setMedia] = useState<ResponseMedia>(null)
 
     const [loading, setLoading] = useState<boolean>(false)
@@ -37,10 +38,7 @@ const AvatarCreatorWrapper = ( {maxSize}: {maxSize: number} ) => {
     const [editBlockedByResolution, setEditBlockedByResolution] = useState<boolean>(false);
 
     useEffect( () => {
-        apiRef.current = new AvatarCreatorAPI();
-        apiRef.current.index().then( index => setIndex(index) );
         apiRef.current.getMedia().then( media => setMedia(media) );
-        return () => { setIndex(null); }
     }, [] )
 
     return (

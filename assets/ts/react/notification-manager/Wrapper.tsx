@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import {ResponseIndex, NotificationManagerAPI, NotificationSubscription} from "./api";
+import {NotificationManagerAPI, NotificationSubscription} from "./api";
 import {useEffect, useRef, useState} from "react";
 import {TranslationStrings} from "./strings";
 import {Const, Global} from "../../defaults";
@@ -11,6 +11,7 @@ import {UserSettingBase, UserSettingsAPI} from "../user-settings/api";
 import {v4 as uuidv4} from "uuid";
 import {Tooltip} from "../tooltip/Wrapper";
 import {BaseMounter} from "../index";
+import {useTranslations} from "../utils";
 
 declare var $: Global;
 declare var c: Const;
@@ -34,12 +35,12 @@ const NotificationManagerWrapper = ( {}: {} ) => {
 
     const apiRef = useRef<NotificationManagerAPI>();
 
-    const [index, setIndex] = useState<ResponseIndex>(null)
+    const strings = useTranslations( apiRef.current );
     const [list, setList] = useState<Array<NotificationSubscription>>(null)
     const [permission, setPermission] = useState<string|boolean>(supported && Notification.permission)
     const [self, setSelf] = useState<PushSubscription|null|boolean>(false)
 
-    const ready = index && list !== null;
+    const ready = strings && list !== null;
 
     const getSubscriptionFromWorker = () => {
         getPushServiceRegistration()
@@ -49,9 +50,7 @@ const NotificationManagerWrapper = ( {}: {} ) => {
 
     useEffect( () => {
         apiRef.current = new NotificationManagerAPI();
-        apiRef.current.index().then( index => setIndex(index) );
         apiRef.current.list('webpush').then( list => setList(list.subscriptions) );
-        return () => { setIndex(null); }
     }, [] )
 
     useEffect( () => {
@@ -78,30 +77,30 @@ const NotificationManagerWrapper = ( {}: {} ) => {
                 );
 
                 if (sub) setList( [...list,sub.subscription] );
-                $.html.notice( index.strings.actions.registered );
+                $.html.notice( strings.actions.registered );
             } catch (error) {
                 if (typeof error === "object") switch ( error.status ?? -1 ) {
-                    case 400: $.html.error( index.strings.common.error_put_400 ); break;
-                    case 409: $.html.error( index.strings.common.error_put_409 ); break;
+                    case 400: $.html.error( strings.common.error_put_400 ); break;
+                    case 409: $.html.error( strings.common.error_put_409 ); break;
                     default:
                         switch (error.message ?? '') {
-                            case 'Could not get subscription from service worker.': $.html.error( index.strings.common.error_put_nsw ); break;
+                            case 'Could not get subscription from service worker.': $.html.error( strings.common.error_put_nsw ); break;
                             default: $.html.error( error.message ?? c.errors['com'] )
                         }
                 } else if (error !== null) $.html.error( c.errors['com'] )
             }
         }
-        else $.html.error( index.strings.common.rejected );
+        else $.html.error( strings.common.rejected );
     }
 
     const deleteDevice = async (id: string) => {
         const ok = await apiRef.current.delete('webpush', id);
         if (ok) setList( [...list.filter(s => s.id !== id)] );
-        $.html.notice( index.strings.actions.removed );
+        $.html.notice( strings.actions.removed );
     }
 
     const editDevice = async (id: string, old_desc: string) => {
-        const new_desc = prompt( index.strings.actions.edit, old_desc );
+        const new_desc = prompt( strings.actions.edit, old_desc );
         if (new_desc) {
             const sub = await apiRef.current.edit('webpush', id, new_desc);
             if (sub) setList( [...list].map( s => s.id === sub.subscription.id ? sub.subscription : s ) );
@@ -110,9 +109,9 @@ const NotificationManagerWrapper = ( {}: {} ) => {
 
     const testDevice = async (id: string) => {
         const data = await apiRef.current.test('webpush', id);
-        if (data.success) $.html.notice( index.strings.actions.test_ok );
-        else if (data.expired) $.html.error( index.strings.actions.test_expired );
-        else $.html.error( index.strings.actions.test_error.replace('{code}', `${data.status}`) )
+        if (data.success) $.html.notice( strings.actions.test_ok );
+        else if (data.expired) $.html.error( strings.actions.test_expired );
+        else $.html.error( strings.actions.test_error.replace('{code}', `${data.status}`) )
     }
 
     const hash = self ? md5((self as PushSubscription).endpoint) : null;
@@ -121,53 +120,53 @@ const NotificationManagerWrapper = ( {}: {} ) => {
         (carry: boolean,sub:NotificationSubscription) => carry || sub.hash === hash, false);
 
     return (
-        <Globals.Provider value={{ api: apiRef.current, strings: index?.strings }}>
+        <Globals.Provider value={{ api: apiRef.current, strings }}>
             { !ready && <div className="loading"></div> }
             { ready && <>
                 <div className="help">
-                    <p>{index.strings.common.infoText1}</p>
-                    {!deviceIsRegistered && supported && <p>{index.strings.common.infoText2}</p>}
-                    <p>{index.strings.common.infoText3}</p>
+                    <p>{strings.common.infoText1}</p>
+                    {!deviceIsRegistered && supported && <p>{strings.common.infoText2}</p>}
+                    <p>{strings.common.infoText3}</p>
                 </div>
                 { !supported && <div className="note note-critical">
-                    { index.strings.common.unsupported }
+                    { strings.common.unsupported }
                 </div>}
                 {list.length === 0 &&
                     <div className="row">
                         <div className="padded cell rw-12">
-                            <span className="small">{ index.strings.table.none }</span>
+                            <span className="small">{ strings.table.none }</span>
                         </div>
                     </div>
                 }
                 { list.length > 0 &&
                     <div className="row-table">
                         <div className="row header">
-                            <div className="padded cell rw-8">{ index.strings.table.device }</div>
+                            <div className="padded cell rw-8">{ strings.table.device }</div>
                             <div className="padded cell rw-4"/>
                         </div>
                         { list.map( s => <div className={`row ${hash === s.hash ? 'highlight' : ''}`} key={s.id}>
                             <div className="padded cell rw-8">
                                 { s.expired && <div>
-                                    <img alt="!" src={index.strings.table.expired_icon}/>
+                                    <img alt="!" src={strings.table.expired_icon}/>
                                     &nbsp;
-                                    <span className="small critical">{ index.strings.table.expired }</span>
+                                    <span className="small critical">{ strings.table.expired }</span>
                                 </div>}
                                 <span className="small">{s.desc ?? s.id}</span>
                             </div>
                             <div className="padded cell rw-4 right">
                                 { !s.expired && <>
                                     <button className="inline small icon-only" onClick={() => editDevice(s.id, s.desc)}>
-                                        <img title={index.strings.table.edit} alt={index.strings.table.edit}
-                                             src={index.strings.table.edit_icon}/>
+                                        <img title={strings.table.edit} alt={strings.table.edit}
+                                             src={strings.table.edit_icon}/>
                                     </button>
                                     <button className="inline small icon-only" onClick={() => testDevice(s.id)}>
-                                        <img title={index.strings.table.test} alt={index.strings.table.test}
-                                             src={index.strings.table.test_icon}/>
+                                        <img title={strings.table.test} alt={strings.table.test}
+                                             src={strings.table.test_icon}/>
                                     </button>
                                 </>}
                                 <button className="inline small icon-only" onClick={() => deleteDevice(s.id)}>
-                                    <img title={index.strings.table.remove} alt={index.strings.table.remove}
-                                         src={index.strings.table.remove_icon}/>
+                                    <img title={strings.table.remove} alt={strings.table.remove}
+                                         src={strings.table.remove_icon}/>
                                 </button>
                             </div>
                         </div>)}
@@ -177,22 +176,22 @@ const NotificationManagerWrapper = ( {}: {} ) => {
                 {supported && (permission !== "granted" || deviceIsRegistered === false) &&
                     <div className="row">
                         <div className="cell ro-6 rw-6">
-                        <button onClick={() => register()}>{ index.strings.actions.add }</button>
+                        <button onClick={() => register()}>{ strings.actions.add }</button>
                         </div>
                     </div>
                 }
 
                 <div className="row">
-                    <SettingSection index={index} enabled={list.length > 0}/>
+                    <SettingSection strings={strings} enabled={list.length > 0}/>
                 </div>
             </>}
         </Globals.Provider>
     )
 };
 
-const SettingSection = ( {index, enabled}: {index: ResponseIndex|null, enabled: boolean} ) => {
+const SettingSection = ( {strings, enabled}: {strings: TranslationStrings|null, enabled: boolean} ) => {
 
-    if (!index) return null;
+    if (!strings) return null;
 
     const apiRef = useRef<UserSettingsAPI>(new UserSettingsAPI());
 
@@ -224,8 +223,8 @@ const SettingSection = ( {index, enabled}: {index: ResponseIndex|null, enabled: 
     }, [enabled]);
 
     return <>
-        <h5>{ index.strings.settings.headline }</h5>
-        { index.strings.settings.toggle.map( v => <div key={v.type} className="row">
+        <h5>{ strings.settings.headline }</h5>
+        { strings.settings.toggle.map( v => <div key={v.type} className="row">
             <div className="padded cell rw-12">
                 <div className="note note-lightest">
                     <div className="row-flex v-center gap">
@@ -245,14 +244,14 @@ const SettingSection = ( {index, enabled}: {index: ResponseIndex|null, enabled: 
                         <label htmlFor={makeUUID(v.type)}>{v.delay ? <><span style={{color: 'red'}}>*</span>&nbsp;</> : null}{v.text}</label>
                         {v.help && <a className="help-button">
                             <Tooltip textContent={v.help}/>
-                            {index.strings.common.help}
+                            {strings.common.help}
                         </a>}
                     </div>
                 </div>
             </div>
 
         </div>)}
-        { index.strings.settings.toggle.filter(v => v.delay).length > 0 && <>
+        { strings.settings.toggle.filter(v => v.delay).length > 0 && <>
             <div className="row">
                 <div className="padded cell">
                     <div className="note note-lightest">
@@ -261,7 +260,7 @@ const SettingSection = ( {index, enabled}: {index: ResponseIndex|null, enabled: 
                                 <span style={{color: 'red'}}>*</span>
                             </div>
                             <div className="padded cell">
-                                <span className="small">{index.strings.common.delayed}</span>
+                                <span className="small">{strings.common.delayed}</span>
                             </div>
                         </div>
                     </div>

@@ -8,6 +8,7 @@ import {TwinoEditorWrapper} from "../twino-editor/Wrapper";
 import {BaseMounter} from "../index";
 import {useSignal} from "../../v2/client-modules/Signal";
 import {ServerInducedSignalProps} from "../../v2/fetch";
+import {useTranslations} from "../utils";
 
 declare var $: Global;
 
@@ -49,7 +50,7 @@ const HordesLogWrapper = (props: mountProps) => {
     const [loading, setLoading] = useState<boolean>( false );
     const [placeholder, setPlaceholder] = useState<boolean>( false );
     const [interactive, setInteractive] = useState<boolean>( true );
-    const [strings, setStrings] = useState<TranslationStrings>( null );
+    const strings = useTranslations( api );
     const [sleeping, setSleeping] = useState<boolean>( true );
     const [currentDay, setCurrentDay] = useState<number>( props.day );
     const [currentData, setCurrentData] = useState<DailyCache>( null );
@@ -94,10 +95,6 @@ const HordesLogWrapper = (props: mountProps) => {
             } );
         } else handle();
     }
-
-    useEffect( () => {
-        api.index().then( v => setStrings(v) );
-    }, [] );
 
     useLayoutEffect( () => {
         if (sleeping) {

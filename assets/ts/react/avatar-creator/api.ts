@@ -1,5 +1,6 @@
 import {TranslationStrings} from "./strings";
 import {AjaxV1Response, Fetch} from "../../v2/fetch";
+import {TranslatableAPI} from "../index";
 
 export type ResponseIndex = {
     strings: TranslationStrings,
@@ -24,18 +25,9 @@ export type Crop = {
     width: number
 }
 
-export class AvatarCreatorAPI {
+export class AvatarCreatorAPI extends TranslatableAPI<ResponseIndex> {
 
-    private fetch: Fetch;
-
-    constructor() {
-        this.fetch = new Fetch( 'user/settings/avatar' );
-    }
-
-    public index(): Promise<ResponseIndex> {
-        return this.fetch.from('/index')
-            .request().withCache().get() as Promise<ResponseIndex>;
-    }
+    constructor() { super('user/settings/avatar', '/index') }
 
     public getMedia(): Promise<ResponseMedia> {
         return this.fetch.from('/media')

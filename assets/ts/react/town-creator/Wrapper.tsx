@@ -12,6 +12,7 @@ import {TownCreatorSectionAnimator} from "./SectionAnimator";
 import {TownCreatorSectionAdvanced} from "./SectionAdvanced";
 import {AtLeast} from "./Permissions";
 import {TownCreatorSectionTemplate} from "./SectionTemplate";
+import {useTranslations} from "../utils";
 
 declare var $: Global;
 
@@ -53,7 +54,7 @@ const TownCreatorWrapper = ( {elevation, eventMode, presetHead, presetRules}: {e
 
     const wrapper = useRef<HTMLDivElement>();
 
-    const [index, setIndex] = useState<ResponseIndex>(null)
+    const index = useTranslations( apiRef.current );
     const [townTownTypeList, setTownTypeList] = useState<ResponseTownList>()
     const [options, setOptions] = useState<TownOptions|object>({rules: {}, head: {}})
     const [defaultRules, setDefaultRules] = useState<TownRules|null>(null)
@@ -64,7 +65,6 @@ const TownCreatorWrapper = ( {elevation, eventMode, presetHead, presetRules}: {e
 
     useEffect( () => {
         apiRef.current = new TownCreatorAPI();
-        apiRef.current.index().then( index => setIndex(index) );
         apiRef.current.townList().then( list => {
             setTownTypeList(list);
             if (presetHead || presetRules) {
@@ -81,7 +81,6 @@ const TownCreatorWrapper = ( {elevation, eventMode, presetHead, presetRules}: {e
             }
         } );
         return () => {
-            setIndex(null);
             setTownTypeList(null);
             setOptions(null);
             setDefaultRules(null);

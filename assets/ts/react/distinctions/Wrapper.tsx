@@ -4,6 +4,7 @@ import Components, {BaseMounter} from "../index";
 import {TranslationStrings} from "./strings";
 import {DistinctionAward, DistinctionPicto, ResponseDistinctions, SoulDistinctionAPI} from "./api";
 import {Tooltip} from "../tooltip/Wrapper";
+import {useTranslations} from "../utils";
 
 
 export class HordesDistinctions extends BaseMounter<{  }>{
@@ -24,7 +25,7 @@ const Distinctions = (
 
     const wrapper = useRef<HTMLDivElement>();
 
-    const [strings, setStrings] = useState<TranslationStrings>(null)
+    const strings = useTranslations( apiRef.current );
     const [data, setData] = useState<ResponseDistinctions>(null)
     const [showingAwards, setShowingAwards] = useState<boolean>(false);
     const [dragging, setDragging] = useState<{ id: number }>(null);
@@ -34,10 +35,6 @@ const Distinctions = (
 
     const allTargets = useRef<HTMLDivElement>(null);
     const currentTarget = useRef<HTMLDivElement>(null);
-
-    useEffect( () => {
-        apiRef.current.index().then(s => setStrings(s.strings) );
-    }, [] )
 
     useEffect( () => {
         setData(null);

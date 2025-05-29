@@ -1,6 +1,7 @@
 import {GameTranslationStrings, TranslationStrings} from "./strings";
 import {Fetch} from "../../v2/fetch";
 import {number} from "prop-types";
+import {TranslatableAPI} from "../index";
 
 export type ResponseConfig = {
     "features": {
@@ -91,18 +92,8 @@ export type ResponseConfirm = {
     url: string
 }
 
-export class TownOnboardingAPI {
-
-    private fetch: Fetch;
-
-    constructor() {
-        this.fetch = new Fetch( 'game/welcome' );
-    }
-
-    public index(): Promise<TranslationStrings> {
-        return this.fetch.from('/')
-            .request().withCache().get() as Promise<TranslationStrings>;
-    }
+export class TownOnboardingAPI extends TranslatableAPI<TranslationStrings> {
+    constructor() { super( 'game/welcome' ) }
 
     public config(town: number): Promise<ResponseConfig> {
         return this.fetch.from(`/${town}`)
@@ -172,18 +163,8 @@ export type TownDetailsResponse = {
     rules: string[],
 }
 
-export class GameOnboardingAPI {
-
-    private fetch: Fetch;
-
-    constructor() {
-        this.fetch = new Fetch( 'game/lobby' );
-    }
-
-    public index(): Promise<GameTranslationStrings> {
-        return this.fetch.from('/')
-            .request().withCache().get() as Promise<GameTranslationStrings>;
-    }
+export class GameOnboardingAPI extends TranslatableAPI<GameTranslationStrings> {
+    constructor() { super( 'game/lobby' ) }
 
     public list(): Promise<TownListResponse> {
         return this.fetch.from('/list')

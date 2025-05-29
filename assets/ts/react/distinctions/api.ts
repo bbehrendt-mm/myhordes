@@ -1,9 +1,6 @@
 import {TranslationStrings} from "./strings";
 import {AjaxV1Response, Fetch} from "../../v2/fetch";
-
-export type ResponseIndex = {
-    strings: TranslationStrings
-}
+import {TranslatableAPI} from "../index";
 
 export type DistinctionPicto = {
     id: number,
@@ -39,18 +36,9 @@ export type ResponseUpdateTop3 = {
     updated: Top3
 }
 
-export class SoulDistinctionAPI {
+export class SoulDistinctionAPI extends TranslatableAPI<TranslationStrings> {
 
-    private fetch: Fetch;
-
-    constructor() {
-        this.fetch = new Fetch( 'user/soul/distinctions' );
-    }
-
-    public index(): Promise<ResponseIndex> {
-        return this.fetch.from('/index')
-            .request().withCache().get() as Promise<ResponseIndex>;
-    }
+    constructor() { super( 'user/soul/distinctions', '/index' ) }
 
     public data(user: number, source: string = 'soul'): Promise<ResponseDistinctions> {
         if (['old','soul','mh','imported','all'].indexOf(source) < 0)

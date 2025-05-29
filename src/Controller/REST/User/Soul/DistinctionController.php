@@ -37,23 +37,21 @@ class DistinctionController extends CustomAbstractCoreController
     #[Route(path: '/index', name: 'base_index', methods: ['GET'])]
     public function index(Packages $assets): JsonResponse {
         return new JsonResponse([
-            'strings' => [
-                'common' => [
-                    'header' => $this->translator->trans('Statistiken', [], 'global'),
-                    'points' => $this->translator->trans('{points} Punkte', [], 'global'),
-                    'tab_picto' => $this->translator->trans('Statistiken', [], 'soul'),
-                    'tab_award' => $this->translator->trans('Errungenschaften', [], 'soul'),
-                ],
-                'pictos' => [
-                    'empty' => $this->translator->trans('Dieser Spieler hat bisher noch keine Preise gewonnen...', [], 'global'),
-                ],
-                'awards' => [
-                    'unique' => $this->translator->trans('Einzigartige Errungenschaften', [], 'game'),
-                    'unique_desc' => $this->translator->trans('Dies ist eine einzigartige Errungenschaft, die im Rahmen eines Events verliehen wurde.', [], 'game'),
-                    'unique_url' => $assets->getUrl( 'build/images/icons/icon_mh_team.gif' ),
-                    'single' => $this->translator->trans('Besondere Errungenschaften', [], 'game'),
-                    'single_desc' => $this->translator->trans('Dies ist eine besondere Errungenschaft, die im Rahmen eines Events verliehen wurde.', [], 'game'),
-                ]
+            'common' => [
+                'header' => $this->translator->trans('Statistiken', [], 'global'),
+                'points' => $this->translator->trans('{points} Punkte', [], 'global'),
+                'tab_picto' => $this->translator->trans('Statistiken', [], 'soul'),
+                'tab_award' => $this->translator->trans('Errungenschaften', [], 'soul'),
+            ],
+            'pictos' => [
+                'empty' => $this->translator->trans('Dieser Spieler hat bisher noch keine Preise gewonnen...', [], 'global'),
+            ],
+            'awards' => [
+                'unique' => $this->translator->trans('Einzigartige Errungenschaften', [], 'game'),
+                'unique_desc' => $this->translator->trans('Dies ist eine einzigartige Errungenschaft, die im Rahmen eines Events verliehen wurde.', [], 'game'),
+                'unique_url' => $assets->getUrl( 'build/images/icons/icon_mh_team.gif' ),
+                'single' => $this->translator->trans('Besondere Errungenschaften', [], 'game'),
+                'single_desc' => $this->translator->trans('Dies ist eine besondere Errungenschaft, die im Rahmen eines Events verliehen wurde.', [], 'game'),
             ]
         ]);
     }

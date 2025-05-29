@@ -10,6 +10,7 @@ import {TranslationStrings} from "./strings";
 import {useVault} from "../../v2/client-modules/Vault";
 import {VaultBuildingEntry, VaultStorage} from "../../v2/typedef/vault_td";
 import {Globals} from "./Wrapper";
+import {useTranslations} from "../utils";
 
 declare var $: Global;
 declare var c: Const;
@@ -22,21 +23,17 @@ interface mountProps {
 
 export const HordesBuildingListWrapper = (props: mountProps) => {
 
-    const [strings, setStrings] = useState<TranslationStrings>( null );
+    const api = useRef( new BuildingAPI() )
+    const strings = useTranslations( api.current );
+
     const [displayListOnMobile, setDisplayListOnMobile] = useState<boolean>( false );
 
     const [buildings, setBuildings] = useState<BuildingListResponse>( null );
-
-    const api = useRef( new BuildingAPI() )
 
     const vaultData = useVault<VaultBuildingEntry>(
         'buildings',
         buildings?.buildings?.map(v => v.p)
     )
-
-    useEffect(() => {
-        api.current.index().then(s => setStrings(s));
-    }, []);
 
     useEffect(() => {
         //setLoading(true);

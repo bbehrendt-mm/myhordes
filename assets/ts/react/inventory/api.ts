@@ -1,5 +1,6 @@
 import {Fetch} from "../../v2/fetch";
 import {TranslationStrings} from "./strings";
+import {TranslatableAPI} from "../index";
 
 export type Item = {
     i: number,
@@ -58,18 +59,8 @@ export type TransportResponse = {
     reload?: boolean,
 }
 
-export class InventoryAPI {
-
-    private fetch: Fetch;
-
-    constructor() {
-        this.fetch = new Fetch( 'game/inventory' );
-    }
-
-    public index(): Promise<TranslationStrings> {
-        return this.fetch.from('/index')
-            .request().withCache().get() as Promise<TranslationStrings>;
-    }
+export class InventoryAPI  extends TranslatableAPI<TranslationStrings> {
+    constructor() { super( 'game/inventory', '/index' ) }
 
     public inventory(id: number, rsc: number[] = []): Promise<InventoryResponse> {
         return this.fetch.from(`/${id}`, rsc.length > 0 ? {rsc: rsc.join(',')} : {})

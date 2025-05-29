@@ -1,5 +1,6 @@
 import {TranslationStrings} from "./strings";
 import {Fetch} from "../../v2/fetch";
+import {TranslatableAPI} from "../index";
 
 export interface LogEntry {
     id: number
@@ -18,18 +19,8 @@ export interface LogEntryResponse {
 }
 
 
-export class HxpLogAPI {
-
-    private fetch: Fetch;
-
-    constructor() {
-        this.fetch = new Fetch( 'user/soul/skills/hxp' );
-    }
-
-    public index(): Promise<TranslationStrings> {
-        return this.fetch.from('/index')
-            .request().withCache().get() as Promise<TranslationStrings>;
-    }
+export class HxpLogAPI extends TranslatableAPI<TranslationStrings> {
+    constructor() { super( 'user/soul/skills/hxp', '/index' ) }
 
     public logs(after: number = null, focus: number = null): Promise<LogEntryResponse> {
         return this.fetch.from('/', { after, focus })

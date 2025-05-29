@@ -1,5 +1,6 @@
 import {TranslationStrings} from "./strings";
 import {Fetch} from "../../v2/fetch";
+import {TranslatableAPI} from "../index";
 
 export type ResponseIndex = {
     strings: TranslationStrings
@@ -15,18 +16,9 @@ export type FileUpload = {
     content: string
 }
 
-export class IssueReportAPI {
+export class IssueReportAPI extends TranslatableAPI<ResponseIndex> {
+    constructor() { super( 'user/issues' ) }
 
-    private fetch: Fetch;
-
-    constructor() {
-        this.fetch = new Fetch( 'user/issues' );
-    }
-
-    public index(): Promise<ResponseIndex> {
-        return this.fetch.from('/')
-            .request().withCache().get() as Promise<ResponseIndex>;
-    }
 
     public report(data: object, files: FileUpload[] = []): Promise<ResponseReport> {
         return this.fetch.from('/').withErrorMessages().throwResponseOnError()

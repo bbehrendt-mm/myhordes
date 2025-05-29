@@ -16,6 +16,7 @@ import {ServiceWorkerIndicator} from "../service-worker-state/Wrapper";
 import {BaseMounter} from "../index";
 import Dialog from "../components/dialog";
 import {html} from "../../v2/helpers";
+import {useTranslations} from "../utils";
 
 declare var c: Const;
 declare var $: Global;
@@ -84,18 +85,13 @@ const HordesTownOnboardingWrapper = (props: Props) => {
 
     const [submitting, setSubmitting] = useState<boolean>(false);
     const [config, setConfig] = useState<ResponseConfig>();
-    const [strings, setStrings] = useState<TranslationStrings>();
+    const strings = useTranslations( apiRef.current );
     const [hero, setHero] = useState<boolean>(false);
 
     useEffect(() => {
         apiRef.current.config( props.town ).then(i => setConfig(i));
         return () => setConfig(null);
     }, [props.town]);
-
-    useEffect(() => {
-        apiRef.current.index().then(i => setStrings(i));
-        return () => setStrings(null);
-    }, []);
 
     useLayoutEffect(() => {
         head.current?.scrollIntoView();

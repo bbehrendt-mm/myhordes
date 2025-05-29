@@ -17,7 +17,7 @@ import {VaultItemEntry} from "../../v2/typedef/vault_td";
 import {BaseMounter} from "../index";
 import {emitSignal, useBroadcastSignal, useSignal} from "../../v2/client-modules/Signal";
 import {ServerInducedSignalProps} from "../../v2/fetch";
-import {ItemTooltip} from "../utils";
+import {ItemTooltip, useTranslations} from "../utils";
 import {randomUUIDv4} from "../../shims";
 
 declare var $: Global;
@@ -176,19 +176,14 @@ const HordesInventoryWrapper = (props: mountProps &
     {setCache: (i:number,items:InventoryBagData|null) => void} &
     {parent: HTMLElement}
 ) => {
+    const api = useRef( new InventoryAPI() );
 
     const [internalETag, setInternalETag] = useState(0);
 
-    const [strings, setStrings] = useState<TranslationStrings>( null );
+    const strings = useTranslations( api.current );
     const [loading, setLoading] = useState<boolean>( false );
 
     const [theftMode, setTheftMode] = useState<boolean>( false );
-
-    const api = useRef( new InventoryAPI() )
-
-    useEffect(() => {
-        api.current.index().then(s => setStrings(s));
-    }, []);
 
     const [inventoryA, setInventoryA] = useState<InventoryResponse>(null);
     const [inventoryB, setInventoryB] = useState<InventoryResponse>(null);
@@ -477,17 +472,13 @@ const HordesPassiveInventoryWrapper = (props: passiveMountProps) => {
 
     const api = useRef( new InventoryAPI() )
 
-    const [strings, setStrings] = useState<TranslationStrings>( null );
+    const strings = useTranslations( api.current );
     const [bag, setBag] = useState<InventoryBagData>(null);
     const [mayBeOutdated, setMayBeOutdated] = useState<boolean>(false);
 
     const vaultData = useVault<VaultItemEntry>(
         'items', bag ? extractAllItems( bag ).map(i => i.p) : null
     )
-
-    useEffect(() => {
-        api.current.index().then(s => setStrings(s));
-    }, []);
 
     useBroadcastSignal(
         ['inventory-bag-loaded', 'inventory-changed'],
@@ -631,7 +622,7 @@ const HordesEscortInventoryWrapper = (props: escortMountProps) => {
     const [open, setOpen] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
 
-    const [strings, setStrings] = useState<TranslationStrings>( null );
+    const strings = useTranslations( api.current );
 
     const [bag, setBag] = useState<InventoryBagData>(null);
     const [floor, setFloor] = useState<InventoryBagData>(null);
@@ -643,10 +634,6 @@ const HordesEscortInventoryWrapper = (props: escortMountProps) => {
     const floorVaultData = useVault<VaultItemEntry>(
         'items', floor ? extractAllItems( floor ).map(i => i.p) : null
     )
-
-    useEffect(() => {
-        api.current.index().then(s => setStrings(s));
-    }, []);
 
     useEffect(() => {
         if (!props.rucksackId) return;

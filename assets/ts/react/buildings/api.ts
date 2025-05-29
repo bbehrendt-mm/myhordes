@@ -1,5 +1,6 @@
 import {Fetch} from "../../v2/fetch";
 import {TranslationStrings} from "./strings";
+import {TranslatableAPI} from "../index";
 
 export type Building = {
     i: number,
@@ -30,18 +31,9 @@ export type BuildingBuildResponse = {
     building?: Building,
 }
 
-export class BuildingAPI {
+export class BuildingAPI extends TranslatableAPI<TranslationStrings> {
 
-    private fetch: Fetch;
-
-    constructor() {
-        this.fetch = new Fetch( 'town/core/building' );
-    }
-
-    public index(): Promise<TranslationStrings> {
-        return this.fetch.from('/')
-            .request().withCache().get() as Promise<TranslationStrings>;
-    }
+    constructor() { super('town/core/building') }
 
     public list(completed: boolean): Promise<BuildingListResponse> {
         return this.fetch.from(`/list`, {completed: completed ? '1' : '0'})

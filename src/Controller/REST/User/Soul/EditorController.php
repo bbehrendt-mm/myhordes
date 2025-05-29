@@ -36,29 +36,28 @@ class EditorController extends CustomAbstractCoreController
     #[Route(path: '', name: 'base', methods: ['GET'])]
     public function index(Packages $assets): JsonResponse {
         return new JsonResponse([
-            'strings' => [
-                'header' => [
-                    'title' => $this->translator->trans('Titel', [], 'global'),
-                    'tag' => $this->translator->trans('Tag', [], 'forum'),
-                    'add_tag' => $this->translator->trans('Tag hinzufügen (optional)', [], 'global'),
-                    'no_tag' => $this->translator->trans('Kein Tag', [], 'global'),
-                    'version' => $this->translator->trans('Version', [], 'global'),
-                    'language' => $this->translator->trans('Sprache', [], 'global'),
-                ],
-                'sections' => [
-                    'preview' => $this->translator->trans('Vorschau', [], 'global'),
-                    'message' => $this->translator->trans('Deine Nachricht', [], 'global'),
-                ],
-                'common' => [
-                    'insert' => $this->translator->trans('Einfügen', [], 'global'),
-                    'abort' => $this->translator->trans('Abbrechen', [], 'global'),
-                    'ctrl' => $this->translator->trans('STRG', [], 'global'),
-                    'enter' => $this->translator->trans('ENTER', [], 'global'),
-                    'send' => $this->translator->trans('Absenden', [], 'global'),
-                    'help' => $this->translator->trans('Hilfe', [], 'global'),
-                    'expand' => $this->translator->trans('Zum erweiterten Editor wechseln', [], 'global'),
-                ],
-                'controls' => [
+            'header' => [
+                'title' => $this->translator->trans('Titel', [], 'global'),
+                'tag' => $this->translator->trans('Tag', [], 'forum'),
+                'add_tag' => $this->translator->trans('Tag hinzufügen (optional)', [], 'global'),
+                'no_tag' => $this->translator->trans('Kein Tag', [], 'global'),
+                'version' => $this->translator->trans('Version', [], 'global'),
+                'language' => $this->translator->trans('Sprache', [], 'global'),
+            ],
+            'sections' => [
+                'preview' => $this->translator->trans('Vorschau', [], 'global'),
+                'message' => $this->translator->trans('Deine Nachricht', [], 'global'),
+            ],
+            'common' => [
+                'insert' => $this->translator->trans('Einfügen', [], 'global'),
+                'abort' => $this->translator->trans('Abbrechen', [], 'global'),
+                'ctrl' => $this->translator->trans('STRG', [], 'global'),
+                'enter' => $this->translator->trans('ENTER', [], 'global'),
+                'send' => $this->translator->trans('Absenden', [], 'global'),
+                'help' => $this->translator->trans('Hilfe', [], 'global'),
+                'expand' => $this->translator->trans('Zum erweiterten Editor wechseln', [], 'global'),
+            ],
+            'controls' => [
                     'b' => $this->translator->trans('Fett', [], 'global'),
                     'i' => $this->translator->trans('Kursiv', [], 'global'),
                     'u' => $this->translator->trans('Unterstreichen', [], 'global'),
@@ -123,7 +122,6 @@ class EditorController extends CustomAbstractCoreController
                     'answer_img' => $assets->getUrl('build/images/forum/selected.png'),
                     'info_img' => $assets->getUrl('build/images/icons/small_talk.gif'),
                 ]
-            ],
         ]);
     }
 

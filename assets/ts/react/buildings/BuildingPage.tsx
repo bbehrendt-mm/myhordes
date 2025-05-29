@@ -13,7 +13,7 @@ import {BuildingListGlobal, mountPageProps} from "./Wrapper";
 import {Tag} from "../index";
 import {InventoryAPI, InventoryResourceData} from "../inventory/api";
 import {Tab, TabbedSection} from "../tab-list/TabList";
-import {ItemTooltip} from "../utils";
+import {ItemTooltip, useTranslations} from "../utils";
 
 declare var $: Global;
 declare var c: Const;
@@ -37,14 +37,14 @@ const Globals = React.createContext<BuildingListGlobal & BuildingPageGlobal & mo
 
 export const HordesBuildingPageWrapper = (props: mountPageProps) => {
 
-    const [strings, setStrings] = useState<TranslationStrings>( null );
+    const api = useRef( new BuildingAPI() )
+    const inventoryApi = useRef( new InventoryAPI() )
+
+    const strings = useTranslations( api.current );
 
     const [buildings, setBuildings] = useState<BuildingListResponse>( null );
     const [observedItems, setObservedItems] = useState<number[]>( null );
     const [itemCount, setItemCount] = useState<{[p: number]: number}>( {} );
-
-    const api = useRef( new BuildingAPI() )
-    const inventoryApi = useRef( new InventoryAPI() )
 
     const [currentBuilding, setCurrentBuilding] = useState<Building>( null );
     const [currentViewMode, setCurrentViewMode] = useState<"normal"|"needed">( $.client.config.showShortConstrList.get() ? 'needed' : 'normal' );
@@ -85,10 +85,6 @@ export const HordesBuildingPageWrapper = (props: mountPageProps) => {
         if (!buildings || !vaultData) return;
         setObservedItems( getItemPrototypeIDs(buildings.buildings) )
     }, [vaultData]);
-
-    useEffect(() => {
-        api.current.index().then(s => setStrings(s));
-    }, []);
 
     useEffect(() => {
         //setLoading(true);

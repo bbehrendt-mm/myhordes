@@ -45,88 +45,88 @@ class EventController extends CustomAbstractCoreController
     #[Route(path: '/index_data', name: 'base_index', methods: ['GET'])]
     public function index(Packages $assets): JsonResponse {
         return new JsonResponse([
-            'strings' => [
-                'common' => [
-                    'create' => $this->translator->trans('Eigenes Event organisieren', [], 'global'),
-                    'cancel_create' => $this->translator->trans('Zurück zur Übersicht', [], 'global'),
-                    'init_verification' => $this->translator->trans('Event-Verifizierung beantragen', [], 'global'),
-                    'cancel_verification' => $this->translator->trans('Event-Verifizierung abbrechen', [], 'global'),
-                    'do_verification' => $this->translator->trans('Event freischalten', [], 'global'),
-                    'verification_pending' => $this->translator->trans('Verifizierung beantragt', [], 'global'),
-                    'start_pending' => $this->translator->trans('Start geplant', [], 'global'),
-                    'mark_end' => $this->translator->trans('Event beenden', [], 'global'),
 
-                    'planned_string' => $this->translator->trans('Vorläufiges Startdatum am {date}', [], 'global'),
-                    'start_string_singular' => $this->translator->trans('Event startet morgen, am {date}', [], 'global'),
-                    'start_string_plural' => $this->translator->trans('Event startet in {days} Tagen, am {date}', [], 'global'),
-                    'start_string_running' => $this->translator->trans('Event läuft seit {date}', [], 'global'),
-                    'end_string' => $this->translator->trans('Event beendet', [], 'global'),
+            'common' => [
+                'create' => $this->translator->trans('Eigenes Event organisieren', [], 'global'),
+                'cancel_create' => $this->translator->trans('Zurück zur Übersicht', [], 'global'),
+                'init_verification' => $this->translator->trans('Event-Verifizierung beantragen', [], 'global'),
+                'cancel_verification' => $this->translator->trans('Event-Verifizierung abbrechen', [], 'global'),
+                'do_verification' => $this->translator->trans('Event freischalten', [], 'global'),
+                'verification_pending' => $this->translator->trans('Verifizierung beantragt', [], 'global'),
+                'start_pending' => $this->translator->trans('Start geplant', [], 'global'),
+                'mark_end' => $this->translator->trans('Event beenden', [], 'global'),
 
-                    'save' => $this->translator->trans('Speichern', [], 'global'),
-                    'cancel' => $this->translator->trans('Abbrechen', [], 'global'),
-                    'edit' => $this->translator->trans('Bearbeiten', [], 'global'),
-                    'edit_icon' => $assets->getUrl('build/images/forum/edit.png'),
-                    'delete' => $this->translator->trans('Löschen', [], 'global'),
-                    'delete_icon' => $assets->getUrl('build/images/icons/small_remove.gif'),
+                'planned_string' => $this->translator->trans('Vorläufiges Startdatum am {date}', [], 'global'),
+                'start_string_singular' => $this->translator->trans('Event startet morgen, am {date}', [], 'global'),
+                'start_string_plural' => $this->translator->trans('Event startet in {days} Tagen, am {date}', [], 'global'),
+                'start_string_running' => $this->translator->trans('Event läuft seit {date}', [], 'global'),
+                'end_string' => $this->translator->trans('Event beendet', [], 'global'),
 
-                    'online_icon' => $assets->getUrl('build/images/icons/player_online.gif'),
-                    'offline_icon' => $assets->getUrl('build/images/icons/player_offline.gif'),
+                'save' => $this->translator->trans('Speichern', [], 'global'),
+                'cancel' => $this->translator->trans('Abbrechen', [], 'global'),
+                'edit' => $this->translator->trans('Bearbeiten', [], 'global'),
+                'edit_icon' => $assets->getUrl('build/images/forum/edit.png'),
+                'delete' => $this->translator->trans('Löschen', [], 'global'),
+                'delete_icon' => $assets->getUrl('build/images/icons/small_remove.gif'),
 
-                    'flags' => array_map( fn($l) => $assets->getUrl("build/images/lang/{$l}.png"), ['de'=>'de','en'=>'en','fr'=>'fr','es'=>'es','multi'=>'multi'] ),
-                    'langs' => array_map( fn($l) => $this->translator->trans( $l, [], 'global' ), ['de'=>'Deutsch','en'=>'Englisch','fr'=>'Französisch','es'=>'Spanisch','multi'=>'???'] ),
-                ],
+                'online_icon' => $assets->getUrl('build/images/icons/player_online.gif'),
+                'offline_icon' => $assets->getUrl('build/images/icons/player_offline.gif'),
 
-                'messages' => [
-                    'verification_started' => $this->translator->trans('Verifizierung erfolgreich beantragt. Dein Event wird in Kürze von einem Raben oder Administrator geprüft.', [], 'global'),
-                    'verification_cancelled' => $this->translator->trans('Dein Antrag auf Verifizierung wurde erfolgreich zurückgezogen.', [], 'global'),
-                    'verification_confirmed' => $this->translator->trans('Event erfolgreich verifiziert.', [], 'global'),
-                ],
+                'flags' => array_map( fn($l) => $assets->getUrl("build/images/lang/{$l}.png"), ['de'=>'de','en'=>'en','fr'=>'fr','es'=>'es','multi'=>'multi'] ),
+                'langs' => array_map( fn($l) => $this->translator->trans( $l, [], 'global' ), ['de'=>'Deutsch','en'=>'Englisch','fr'=>'Französisch','es'=>'Spanisch','multi'=>'???'] ),
+            ],
 
-                'list' => [
-                    'no_events' => $this->translator->trans('Aktuell sind keine Community-Events geplant.', [], 'global'),
-                    'default_event' => $this->translator->trans('Neues Event', [], 'global'),
+            'messages' => [
+                'verification_started' => $this->translator->trans('Verifizierung erfolgreich beantragt. Dein Event wird in Kürze von einem Raben oder Administrator geprüft.', [], 'global'),
+                'verification_cancelled' => $this->translator->trans('Dein Antrag auf Verifizierung wurde erfolgreich zurückgezogen.', [], 'global'),
+                'verification_confirmed' => $this->translator->trans('Event erfolgreich verifiziert.', [], 'global'),
+            ],
 
-                    'delete_confirm' => $this->translator->trans('Bist du sicher, dass du dieses Event löschen möchtest?', [], 'global'),
+            'list' => [
+                'no_events' => $this->translator->trans('Aktuell sind keine Community-Events geplant.', [], 'global'),
+                'default_event' => $this->translator->trans('Neues Event', [], 'global'),
 
-                                        'more_info' => $this->translator->trans('Weitere Informationen und Regeln anzeigen.', [], 'global'),
-                ],
+                'delete_confirm' => $this->translator->trans('Bist du sicher, dass du dieses Event löschen möchtest?', [], 'global'),
 
-                'towns' => [
-                    'title' => $this->translator->trans('Event-Städte', [], 'global'),
-                    'help1' => $this->translator->trans('Hier kannst du Städte für dein Event anlegen, welche zusammen mit deinem Event gestartet werden. Dir stehen hierfür fast alle Optionen zur Verfügung, die auch Raben für die Erstellung von Städten haben.', [], 'global'),
-                    'help2' => $this->translator->trans('Deiner Kreativität sind somit keine Grenzen gesetzt!', [], 'global'),
-                    'password' => $this->translator->trans('Zugangscode', [], 'ghost'),
+                                    'more_info' => $this->translator->trans('Weitere Informationen und Regeln anzeigen.', [], 'global'),
+            ],
 
-                    'no_towns' => $this->translator->trans('Aktuell werden keine Städte mit dem Start des Events automatisch angelegt.', [], 'global'),
-                    'default_town' => $this->translator->trans('Automatisch generierter Name', [], 'global'),
+            'towns' => [
+                'title' => $this->translator->trans('Event-Städte', [], 'global'),
+                'help1' => $this->translator->trans('Hier kannst du Städte für dein Event anlegen, welche zusammen mit deinem Event gestartet werden. Dir stehen hierfür fast alle Optionen zur Verfügung, die auch Raben für die Erstellung von Städten haben.', [], 'global'),
+                'help2' => $this->translator->trans('Deiner Kreativität sind somit keine Grenzen gesetzt!', [], 'global'),
+                'password' => $this->translator->trans('Zugangscode', [], 'ghost'),
 
-                    'table_lang' => $this->translator->trans('Sprache', [], 'global'),
-                    'table_town' => $this->translator->trans('Stadt', [], 'game'),
-                    'table_act' => $this->translator->trans('Aktionen', [], 'global'),
+                'no_towns' => $this->translator->trans('Aktuell werden keine Städte mit dem Start des Events automatisch angelegt.', [], 'global'),
+                'default_town' => $this->translator->trans('Automatisch generierter Name', [], 'global'),
 
-                    'add' => $this->translator->trans('Stadt hinzufügen', [], 'global'),
-                    'delete_confirm' => $this->translator->trans('Bist du sicher, dass du dieses Stadt löschen möchtest?', [], 'global'),
+                'table_lang' => $this->translator->trans('Sprache', [], 'global'),
+                'table_town' => $this->translator->trans('Stadt', [], 'game'),
+                'table_act' => $this->translator->trans('Aktionen', [], 'global'),
 
-                    'expedite' => $this->translator->trans('Städte mit hoher Priorität anlegen', [], 'global'),
-                    'expedited' => $this->translator->trans('Städte werden mit hoher Priorität angelegt', [], 'global'),
-                    'expedite_help' => $this->translator->trans('Die Städte werden innerhalb der nächsten 30 Minuten erzeugt, statt erst beim nächsten Angriff. Bitte verwendet diese Funktion nur in Notfällen.', [], 'global'),
-                    'expedite_confirm' => $this->translator->trans('Bitte verwendet diese Funktion nur in Notfällen. Fortfahren?', [], 'global'),
+                'add' => $this->translator->trans('Stadt hinzufügen', [], 'global'),
+                'delete_confirm' => $this->translator->trans('Bist du sicher, dass du dieses Stadt löschen möchtest?', [], 'global'),
 
-                    'town_create' => $this->translator->trans('Neue Stadt anlegen', [], 'global'),
-                    'town_edit' => $this->translator->trans('Stadt bearbeiten', [], 'global'),
+                'expedite' => $this->translator->trans('Städte mit hoher Priorität anlegen', [], 'global'),
+                'expedited' => $this->translator->trans('Städte werden mit hoher Priorität angelegt', [], 'global'),
+                'expedite_help' => $this->translator->trans('Die Städte werden innerhalb der nächsten 30 Minuten erzeugt, statt erst beim nächsten Angriff. Bitte verwendet diese Funktion nur in Notfällen.', [], 'global'),
+                'expedite_confirm' => $this->translator->trans('Bitte verwendet diese Funktion nur in Notfällen. Fortfahren?', [], 'global'),
 
-                    'town_instance_online' => $this->translator->trans('Stadtinstanz bereit', [], 'global'),
-                    'town_instance_offline' => $this->translator->trans('Stadtinstanz beendet', [], 'global'),
+                'town_create' => $this->translator->trans('Neue Stadt anlegen', [], 'global'),
+                'town_edit' => $this->translator->trans('Stadt bearbeiten', [], 'global'),
 
-                    'citizens' => $this->translator->trans('Einwohnerzahl', [], 'ghost'),
-                    'alive' => $this->translator->trans('Am Leben', [], 'global'),
-                    'day' => $this->translator->trans('Tag', [], 'global'),
+                'town_instance_online' => $this->translator->trans('Stadtinstanz bereit', [], 'global'),
+                'town_instance_offline' => $this->translator->trans('Stadtinstanz beendet', [], 'global'),
 
-                    'forum_link' => $this->translator->trans('Zum Forum', [], 'game'),
-                    'ranking_link' => $this->translator->trans('Zur Chronik', [], 'global'),
-                ],
+                'citizens' => $this->translator->trans('Einwohnerzahl', [], 'ghost'),
+                'alive' => $this->translator->trans('Am Leben', [], 'global'),
+                'day' => $this->translator->trans('Tag', [], 'global'),
 
-                'editor' => [
+                'forum_link' => $this->translator->trans('Zum Forum', [], 'game'),
+                'ranking_link' => $this->translator->trans('Zur Chronik', [], 'global'),
+            ],
+
+            'editor' => [
                     'title' => $this->translator->trans('Allgemeine Event-Informationen', [], 'global'),
                     'help' => $this->translator->trans('Hier kannst du allgemeine Optionen für dein Event, wie dessen Name, Beschreibung oder Startzeitpunkt festlegen.', [], 'global'),
                     'edit' => $this->translator->trans('Event bearbeiten', [], 'global'),
@@ -138,7 +138,7 @@ class EventController extends CustomAbstractCoreController
                     'field_short' =>  $this->translator->trans('Kurzbeschreibung', [], 'global'),
                     'field_description' =>  $this->translator->trans('Beschreibung und Regeln des Events', [], 'global'),
                 ],
-            ]
+
         ]);
     }
 

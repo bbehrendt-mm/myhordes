@@ -1,8 +1,8 @@
-import {useState} from "react";
+import {DependencyList, useEffect, useState} from "react";
 import {Tooltip} from "./tooltip/Wrapper";
 import * as React from "react";
-import {Item} from "./inventory/api";
 import {VaultItemEntry} from "../v2/typedef/vault_td";
+import {TranslatableAPI} from "./index";
 
 /**
  * Generates two boolean states and a setter; the first one can be directly set by the setter, the second one will
@@ -21,6 +21,30 @@ export function useStickyToggle(init: boolean): [boolean, boolean, (v: boolean) 
         }
     ]
 
+}
+
+/**
+ *
+ * @param from
+ * @param deps
+ * @param before
+ * @param after
+ */
+export function useTranslations<T extends object>(
+    from: TranslatableAPI<T>,
+    deps: DependencyList = [],
+    before: () => void = () => {},
+    after: (s: T) => void = () => {},
+): T {
+    const [strings, setStrings] = useState<T>(null);
+    useEffect(() => {
+        before();
+        from.index().then(s => {
+            setStrings(s);
+            after(s);
+        });
+    }, deps);
+    return strings;
 }
 
 export function ItemTooltip(props: {

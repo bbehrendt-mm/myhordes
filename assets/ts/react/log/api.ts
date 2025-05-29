@@ -1,5 +1,6 @@
 import {TranslationStrings} from "./strings";
 import {AjaxV1Response, Fetch} from "../../v2/fetch";
+import {TranslatableAPI} from "../index";
 
 interface LogEntryFaker {
     name: string,
@@ -33,18 +34,8 @@ export interface ChatResponse {
     error?: string|number
 }
 
-export class LogAPI {
-
-    private fetch: Fetch;
-
-    constructor() {
-        this.fetch = new Fetch( 'game/log' );
-    }
-
-    public index(): Promise<TranslationStrings> {
-        return this.fetch.from('/index')
-            .request().withCache().get() as Promise<TranslationStrings>;
-    }
+export class LogAPI extends TranslatableAPI<TranslationStrings> {
+    constructor() { super( 'game/log', '/index' )}
 
     public logs(
         domain: string,

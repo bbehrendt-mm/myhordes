@@ -7,7 +7,7 @@ import {
 import {GameTranslationStrings, TranslationStrings} from "./strings";
 import {BaseMounter} from "../index";
 import {Tooltip} from "../tooltip/Wrapper";
-import {useStickyToggle} from "../utils";
+import {useStickyToggle, useTranslations} from "../utils";
 import Username from "../components/username";
 import Dialog from "../components/dialog";
 
@@ -35,11 +35,10 @@ export const Globals = React.createContext<GameOnboardingGlobals>(null);
 const HordesGameOnboardingWrapper = (props: Props) => {
     const api = useRef<GameOnboardingAPI>( new GameOnboardingAPI());
 
+    const strings = useTranslations( api.current );
     const [towns, setTowns] = useState<Town[]>(null);
-    const [strings, setStrings] = useState<GameTranslationStrings>(null);
 
     useEffect(() => {
-        api.current.index().then(s => setStrings(s));
         api.current.list().then(s => setTowns(s.towns));
     }, []);
 

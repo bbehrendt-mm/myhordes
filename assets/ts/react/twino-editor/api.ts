@@ -1,9 +1,6 @@
 import {TranslationStrings} from "./strings";
 import {Fetch} from "../../v2/fetch";
-
-export type ResponseIndex = {
-    strings: TranslationStrings,
-}
+import {TranslatableAPI} from "../index";
 
 export type EmoteListResponse = {
     result: {[index:string]: Emote}
@@ -33,18 +30,8 @@ export type Snippet = {
     role: string,
 }
 
-export class TwinoEditorAPI {
-
-    private fetch: Fetch;
-
-    constructor() {
-        this.fetch = new Fetch( 'user/soul/editor' );
-    }
-
-    public index(): Promise<ResponseIndex> {
-        return this.fetch.from('/')
-            .request().withCache().get() as Promise<ResponseIndex>;
-    }
+export class TwinoEditorAPI extends TranslatableAPI<TranslationStrings> {
+    constructor() { super( 'user/soul/editor' ) }
 
     public emotes( user: number|null, context: string = 'common' ): Promise<EmoteResponse> {
         return this.fetch.from(`/${user ?? 'me'}/unlocks/${context}/emotes`)
