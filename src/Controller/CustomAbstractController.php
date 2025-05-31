@@ -57,17 +57,9 @@ class CustomAbstractController extends CustomAbstractCoreController {
     protected function addDefaultTwigArgs( ?string $section = null, ?array $data = null ): array {
         $data = $data ?? [];
         $data['menu_section'] = $section;
+        $data['during_attack'] = $this->time_keeper->secondsUntilNextAttack(null, true) === 0;
 
         $activeCitizen = $this->getActiveCitizen();
-        $data['clock'] = [
-            'id'        => $activeCitizen?->getTown()?->getId() ?? null,
-            'desc'      => $activeCitizen?->getTown()->getName() ?? $this->translator->trans('Worauf warten Sie noch?', [], 'ghost'),
-            'day'       => $activeCitizen?->getTown()->getDay() ?? '',
-            'timestamp' => new DateTime('now'),
-            'attack'    => $this->time_keeper->secondsUntilNextAttack(null, true),
-            'towntype'  => $activeCitizen?->getTown()->getType()->getName() ?? '',
-            'offset'    => timezone_offset_get( timezone_open( date_default_timezone_get ( ) ), new DateTime() )
-        ];
 
         $locale = $this->container->get('request_stack')->getCurrentRequest()->getLocale();
         if ($locale) $locale = explode('_', $locale)[0];

@@ -1130,30 +1130,6 @@ div.game-menu-area {
         }
       }
 
-      &.clock {
-        position: absolute; background: url("../img/background/clock.png"); width: 260px; height: 90px;
-        top: -137px; right: 0px;
-        &>li { display: block; position: absolute; }
-        &>li:nth-child(1) { font-size: 1rem; color: @myhordes-smalltext; text-align: right; height: 12px; top: 9px; left: 0; right: 75px; font-variant: small-caps }
-        &>li:nth-child(2) {
-          font-size: 1rem;
-          color: #704018;
-          font-weight: bold;
-          text-align: right;
-          height: 12px;
-          top: 25px;
-          left: 0;
-          right: 85px;
-        }
-        &>li:nth-child(3) { font-size: 1rem; text-align: center; top: 32px; left: 195px; right: 25px; cursor: help; z-index: 995; }
-        &>li:nth-child(4) { color: #5e0000; font-size: 1rem; text-align: center; font-weight: bold; top: 58px; left: 195px; right: 25px; cursor: help; z-index: 995; }
-        .hardcore {
-          color: lighten(#7c2727, 10%);
-          font-variant: small-caps;
-        }
-        &>li:nth-child(5) { top: -6px; right: 0; z-index: 998 }
-      }
-
       &.ulcont {
         margin-top: 5px; background-color: #483927; padding: 1px 3px;  border: 1px solid #be9766; float: right; font-size: 0.7em;
         ul {
@@ -2308,6 +2284,6 @@ html body[data-theme-name="none"] #wrapper:not(.attract) > #header { background-
 html body[data-theme-name="none"][data-theme-primary-modifier="panda"] #wrapper:not(.attract) > #header { background-image: url('../img/background/bg_content_header_hc.gif'); }
 html body[data-theme-name="none"][data-theme-secondary-modifier="chaos"] #wrapper:not(.attract) > #header { background-image: url('../img/background/bg_content_header_chaos.gif'); }
 html body[data-theme-name="none"][data-theme-daytime="night"] #wrapper:not(.attract) > #header { background-image: url('../img/background/bg_content_header_night.gif'); }
-html body[data-theme-name="none"][data-theme-primary-modifier="panda"] #wrapper > #content { div.game-menu-area > div.game-bar > ul.clock > li:nth-child(2), div.game-menu-area > div.game-bar > div.ulcont.clock > li:nth-child(2) { text-shadow: -1px -1px 0 #ddab76, 1px -1px 0 #ddab76, -1px 1px 0 #ddab76, 1px 1px 0 #ddab76 !important } }
-html body[data-theme-name="none"][data-theme-secondary-modifier="chaos"] #wrapper > #content { div.game-menu-area > div.game-bar > ul.clock > li:nth-child(2), div.game-menu-area > div.game-bar > div.ulcont.clock > li:nth-child(2) { text-shadow: -1px -1px 0 #ddab76, 1px -1px 0 #ddab76, -1px 1px 0 #ddab76, 1px 1px 0 #ddab76 !important } }
-html body[data-theme-name="none"][data-theme-daytime="night"] #wrapper > #content { div.game-menu-area > div.game-bar > ul.clock > li:nth-child(2), div.game-menu-area > div.game-bar > div.ulcont.clock > li:nth-child(2) { text-shadow: -1px -1px 0 #ddab76, 1px -1px 0 #ddab76, -1px 1px 0 #ddab76, 1px 1px 0 #ddab76 !important } }
+html body[data-theme-name="none"][data-theme-primary-modifier="panda"] #wrapper .game-clock > .town-day { text-shadow: -1px -1px 0 #ddab76, 1px -1px 0 #ddab76, -1px 1px 0 #ddab76, 1px 1px 0 #ddab76 !important }
+html body[data-theme-name="none"][data-theme-secondary-modifier="chaos"] #wrapper .game-clock > .town-day { text-shadow: -1px -1px 0 #ddab76, 1px -1px 0 #ddab76, -1px 1px 0 #ddab76, 1px 1px 0 #ddab76 !important }
+html body[data-theme-name="none"][data-theme-daytime="night"] #wrapper .game-clock > .town-day { text-shadow: -1px -1px 0 #ddab76, 1px -1px 0 #ddab76, -1px 1px 0 #ddab76, 1px 1px 0 #ddab76 !important }

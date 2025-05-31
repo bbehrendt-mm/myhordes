@@ -21,6 +21,7 @@ use App\Event\Common\User\DeathConfirmedEvent;
 use App\Event\Common\User\DeathConfirmedPostPersistEvent;
 use App\Event\Common\User\DeathConfirmedPrePersistEvent;
 use App\EventListener\ContainerTypeTrait;
+use App\Service\Actions\Mercure\BroadcastViaMercureAction;
 use App\Service\Actions\XP\GetPictoXPStepsAction;
 use App\Service\ConfMaster;
 use App\Service\DoctrineCacheService;
@@ -45,6 +46,7 @@ use Symfony\Contracts\Service\ServiceSubscriberInterface;
 #[AsEventListener(event: DeathConfirmedPostPersistEvent::class, method: 'dispatchPictoUpdateEvent', priority: 0)]
 #[AsEventListener(event: DeathConfirmedPostPersistEvent::class, method: 'dispatchSoulPointUpdateEvent', priority: -100)]
 #[AsEventListener(event: DeathConfirmedPostPersistEvent::class, method: 'awardPrimeHxpForPictos', priority: -151)]
+#[AsEventListener(event: DeathConfirmedPostPersistEvent::class, method: 'broadcast', priority: -900)]
 #[AsEventListener(event: DeathConfirmedPostPersistEvent::class, method: 'cleanPersistentProperties', priority: -1000)]
 final class DeathConfirmationEventListener implements ServiceSubscriberInterface
 {
@@ -64,7 +66,8 @@ final class DeathConfirmationEventListener implements ServiceSubscriberInterface
             PictoService::class,
             GetPictoXPStepsAction::class,
             ConfMaster::class,
-            PermissionHandler::class
+            PermissionHandler::class,
+            BroadcastViaMercureAction::class
         ];
     }
 
@@ -209,6 +212,10 @@ final class DeathConfirmationEventListener implements ServiceSubscriberInterface
         // 10xp for surviving day 30 (one-time)
         if ($event->death->getDay() >= 30)
             $this->hxp( $event->death, 'hxp_common_day30', false, 10, ['town' => $event->death->getTown()->getName()], 'common_day30' );
+    }
+
+    public function broadcast(DeathConfirmedEvent $event): void {
+        ($this->getService(BroadcastViaMercureAction::class))('citizenship-changed', users: $event->user);
     }
 
     public function awardPrimeHxpForPictos(DeathConfirmedEvent $event): void {

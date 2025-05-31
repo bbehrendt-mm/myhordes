@@ -20,6 +20,7 @@ use App\Enum\Game\CitizenPersistentCache;
 use App\Event\Game\Town\Basic\Core\AfterJoinTownEvent;
 use App\Event\Game\Town\Basic\Core\JoinTownEvent;
 use App\EventListener\ContainerTypeTrait;
+use App\Service\Actions\Mercure\BroadcastViaMercureAction;
 use App\Service\CitizenHandler;
 use App\Service\CrowService;
 use App\Service\GameProfilerService;
@@ -42,6 +43,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[AsEventListener(event: AfterJoinTownEvent::class, method: 'handleGPS', priority: -1)]
 #[AsEventListener(event: AfterJoinTownEvent::class, method: 'handleWelcomePM', priority: -1)]
 #[AsEventListener(event: AfterJoinTownEvent::class, method: 'decreaseSkillPointCounter', priority: -2)]
+#[AsEventListener(event: AfterJoinTownEvent::class, method: 'broadcast', priority: -3)]
 final class CitizenInitializerListener implements ServiceSubscriberInterface
 {
     use ContainerTypeTrait;
@@ -61,7 +63,8 @@ final class CitizenInitializerListener implements ServiceSubscriberInterface
             GameProfilerService::class,
             InventoryHandler::class,
             CrowService::class,
-            UserUnlockableService::class
+            UserUnlockableService::class,
+            BroadcastViaMercureAction::class
         ];
     }
 
@@ -158,6 +161,10 @@ final class CitizenInitializerListener implements ServiceSubscriberInterface
         $user = $event->before->subject;
         if ($user->getAllSoulPoints() === 0)
             $this->getService(CrowService::class)->postAsPM($user->getActiveCitizen(), '', '', PrivateMessage::TEMPLATE_CROW_GAME_WELCOME);
+    }
+
+    public function broadcast(AfterJoinTownEvent $event): void {
+        ($this->getService(BroadcastViaMercureAction::class))('citizenship-changed', users: $event->before->subject);
     }
 
 }

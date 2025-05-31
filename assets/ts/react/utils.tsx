@@ -1,4 +1,4 @@
-import {DependencyList, useEffect, useState} from "react";
+import {DependencyList, useEffect, useRef, useState} from "react";
 import {Tooltip} from "./tooltip/Wrapper";
 import * as React from "react";
 import {VaultItemEntry} from "../v2/typedef/vault_td";
@@ -66,14 +66,75 @@ export function ItemTooltip(props: {
 }
 
 export function useSharedWorkerMessages<T>(
-    message: string,
+    message: string|string[],
     callback: (data: T) => void,
     connection: string = 'live',
     deps: DependencyList = [],
 ) {
+    if (typeof message === "string") message = [message];
+
     useEffect(() => {
-        const mercureHandler = sharedWorkerMessageHandler(connection, message, callback);
-        html().addEventListener('mercureMessage', mercureHandler);
-        return () => html().removeEventListener('mercureMessage', mercureHandler);
+        const messageHandlers = message.map(m => sharedWorkerMessageHandler(connection, m, callback));
+        messageHandlers.forEach( m => html().addEventListener('mercureMessage', m) );
+        return () => messageHandlers.forEach( m => html().removeEventListener('mercureMessage', m));
+    }, deps);
+}
+
+type countdownRef = {
+    init: boolean,
+    last: number|null,
+    formatted: string|null,
+    remaining: number|null,
+}
+
+export function useCountdown(
+    ms: number,
+    formatter: (remaining: number) => string,
+    callback: (remaining: number, formatted: string) => void|boolean,
+    interval: number = 1000,
+    deps: DependencyList = [],
+) {
+
+    const ref = useRef<countdownRef>({
+        init: true,
+        last: null,
+        formatted: null,
+        remaining: null,
+    });
+
+    useEffect(() => {
+        let timeout = null;
+        let handler = null;
+
+        if (ref.current.init) {
+            ref.current.init = false;
+            ref.current.last = (new Date()).getTime();
+            ref.current.formatted = null;
+            ref.current.remaining = ms;
+        }
+
+        handler = () => {
+            const now = (new Date()).getTime();
+
+            ref.current.remaining -= (now - ref.current.last);
+            ref.current.last = now;
+
+            let do_continue = ref.current.remaining > 0;
+            const formatted = formatter(ref.current.remaining);
+            if (formatted !== ref.current.formatted) {
+                const result = callback( ref.current.remaining, formatted );
+                ref.current.formatted = formatted;
+                if (result === false) do_continue = false;
+            }
+
+            if (do_continue) timeout = setTimeout(handler, interval);
+        }
+
+        handler();
+
+        return () => {
+            clearTimeout(timeout);
+            ref.current.init = true;
+        }
     }, deps);
 }

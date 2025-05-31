@@ -17,41 +17,28 @@ use App\Entity\TownRankingProxy;
 use App\Entity\UserGroup;
 use App\Enum\Configuration\TownSetting;
 use App\Enum\Game\CitizenPersistentCache;
+use App\Service\Actions\Mercure\BroadcastViaMercureAction;
 use App\Structures\TownConf;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
-class DeathHandler
+readonly class DeathHandler
 {
-    private EntityManagerInterface $entity_manager;
-    private ItemFactory $item_factory;
-    private InventoryHandler $inventory_handler;
-    private CitizenHandler $citizen_handler;
-    private ZoneHandler $zone_handler;
-    private PictoHandler $picto_handler;
-    private LogTemplateHandler $log;
-    private RandomGenerator $random_generator;
-    private ConfMaster $conf;
-    private PermissionHandler $perm;
-    private GameProfilerService $gps;
-    private EventProxyService $events;
-
     public function __construct(
-        EntityManagerInterface $em, ZoneHandler $zh, InventoryHandler $ih, CitizenHandler $ch,
-        ItemFactory $if, LogTemplateHandler $lt, PictoHandler $ph, RandomGenerator $rg, ConfMaster $conf,
-        PermissionHandler $perm, GameProfilerService $gps, EventProxyService $events)
-    {
-        $this->entity_manager = $em;
-        $this->inventory_handler = $ih;
-        $this->item_factory = $if;
-        $this->zone_handler = $zh;
-        $this->citizen_handler = $ch;
-        $this->picto_handler = $ph;
-        $this->log = $lt;
-        $this->random_generator = $rg;
-        $this->conf = $conf;
-        $this->perm = $perm;
-        $this->gps = $gps;
-        $this->events = $events;
+        private EntityManagerInterface $entity_manager,
+        private ZoneHandler            $zone_handler,
+        private InventoryHandler       $inventory_handler,
+        private CitizenHandler         $citizen_handler,
+        private ItemFactory            $item_factory,
+        private LogTemplateHandler     $log,
+        private PictoHandler           $picto_handler,
+        private ConfMaster             $conf,
+        private PermissionHandler      $perm,
+        private GameProfilerService    $gps,
+        private EventProxyService      $events,
+        private BroadcastViaMercureAction $broadcast,
+    ) {
     }
 
     /**
@@ -59,6 +46,9 @@ class DeathHandler
      * @param Citizen $citizen
      * @param int|CauseOfDeath $cod
      * @param array|null $remove
+     * @param int|null $gazetteDay
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     public function kill(Citizen $citizen, CauseOfDeath|int $cod, ?array &$remove = null, ?int $gazetteDay = null): void {
         $handle_em = $remove === null;
@@ -244,5 +234,6 @@ class DeathHandler
 
         // If the souls are enabled, spawn a soul
         $this->events->citizenPostDeath($citizen);
+        ($this->broadcast)('citizenship-changed', users: $citizen->getUser());
     }
 }

@@ -6,6 +6,7 @@ use App\Annotations\GateKeeperProfile;
 use App\Controller\CustomAbstractCoreController;
 use App\Entity\AttackSchedule;
 use App\Enum\Configuration\MyHordesSetting;
+use App\Service\Actions\Mercure\BroadcastViaMercureAction;
 use App\Service\JSONRequestParser;
 use DateTime;
 use DateTimeImmutable;
@@ -20,7 +21,7 @@ use Symfony\Component\Routing\Attribute\Route;
 #[GateKeeperProfile('skip')]
 class AttackScheduleController extends CustomAbstractCoreController
 {
-    private function current_delay( EntityManagerInterface $em ): JsonResponse {
+    private function current_delay( EntityManagerInterface $em, BroadcastViaMercureAction $broadcast ): JsonResponse {
         $planned = $em->getRepository(AttackSchedule::class)->findBy(['completed' => false, 'startedAt' => null], ['timestamp' => 'ASC']);
 
         if (count($planned) > 1)
@@ -37,21 +38,23 @@ class AttackScheduleController extends CustomAbstractCoreController
         }
 
         $em->flush();
+        ($broadcast)('attack-changed', public: true);
         return new JsonResponse(['success' => true]);
     }
 
     /**
      * @param EntityManagerInterface $em
      * @param JSONRequestParser $parser
+     * @param BroadcastViaMercureAction $broadcast
      * @return JsonResponse
      */
     #[Route(path: '/current', name: 'find', methods: ['PATCH'])]
-    public function modify(EntityManagerInterface $em, JSONRequestParser $parser): JsonResponse {
+    public function modify(EntityManagerInterface $em, JSONRequestParser $parser, BroadcastViaMercureAction $broadcast): JsonResponse {
         if (!$parser->has('method', true))
             return new JsonResponse([], Response::HTTP_UNPROCESSABLE_ENTITY);
 
         return match ( $parser->get('method') ) {
-            'delay' => $this->current_delay( $em ),
+            'delay' => $this->current_delay( $em, $broadcast ),
             default => new JsonResponse([], Response::HTTP_NOT_ACCEPTABLE)
         };
     }

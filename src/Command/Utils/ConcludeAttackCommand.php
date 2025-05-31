@@ -12,6 +12,7 @@ use App\Entity\Picto;
 use App\Entity\PictoPrototype;
 use App\Enum\Configuration\MyHordesSetting;
 use App\Service\Actions\Cache\InvalidateTagsInAllPoolsAction;
+use App\Service\Actions\Mercure\BroadcastViaMercureAction;
 use App\Service\ConfMaster;
 use DateTime;
 use DateTimeImmutable;
@@ -33,7 +34,8 @@ class ConcludeAttackCommand extends Command
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly InvalidateTagsInAllPoolsAction $clearCache,
-        private readonly ConfMaster $conf
+        private readonly ConfMaster $conf,
+        private readonly BroadcastViaMercureAction $broadcast,
     )
     {
 
@@ -102,8 +104,10 @@ class ConcludeAttackCommand extends Command
         if ($datemod !== 'never') {
 
             $new_date = (new DateTime())->setTimestamp( $s->getTimestamp()->getTimestamp() )->modify($datemod);
-            if ($new_date !== false && $new_date > $s->getTimestamp())
-                $this->entityManager->persist( (new AttackSchedule())->setTimestamp( DateTimeImmutable::createFromMutable($new_date) ) );
+            if ($new_date !== false && $new_date > $s->getTimestamp()) {
+                $this->entityManager->persist((new AttackSchedule())->setTimestamp(DateTimeImmutable::createFromMutable($new_date)));
+                ($this->broadcast)('attack-completed', ['schedule' => $s->getId()], public: true);
+            }
 
         }
 

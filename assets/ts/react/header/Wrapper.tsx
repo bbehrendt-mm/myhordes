@@ -7,6 +7,9 @@ import {BaseMounter} from "../index";
 import {useTranslations} from "../utils";
 import {HordesHeaderAPIWidget, HordesStandaloneAppPopupWrapper} from "./Apps";
 import {HordesHeaderModLinksWidget} from "./ModLinks";
+import {HordesHeaderClockWidget} from "./Clock";
+import {string} from "prop-types";
+import {Tooltip} from "../tooltip/Wrapper";
 
 declare var $: Global;
 
@@ -43,5 +46,10 @@ const HordesHeaderUIWrapper = (props: {}) => {
     return <Globals.Provider value={{ api: api.current, strings }}>
         <HordesHeaderAPIWidget/>
         <HordesHeaderModLinksWidget/>
+        <HordesHeaderClockWidget/>
+        { strings && <div className="game-logout">
+            <Tooltip additionalClasses="help" textContent={strings.logout.title}/>
+            <a href={ strings.logout.url }/>
+        </div> }
     </Globals.Provider>
 };

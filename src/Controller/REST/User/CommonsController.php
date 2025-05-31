@@ -25,6 +25,7 @@ use App\Service\JSONRequestParser;
 use App\Service\PermissionHandler;
 use App\Service\RandomGenerator;
 use App\Service\RateLimitingFactoryProvider;
+use App\Service\TimeKeeperService;
 use App\Service\User\UserCapabilityService;
 use DateTime;
 use Doctrine\Common\Collections\Criteria;
@@ -122,6 +123,18 @@ class CommonsController extends CustomAbstractCoreController
                     ]
                 ]
             ],
+
+            'clock' => [
+                'panda' => $this->translator->trans('Pandämonium', [], 'game'),
+                'day' => $this->translator->trans('Tag {day}', [], 'game'),
+                'gametime' => $this->translator->trans('Spielzeit', [], 'game'),
+                'attack' => $this->translator->trans('Zeit bis zum nächsten Zombieangriff', [], 'game'),
+            ],
+
+            'logout' => [
+                'url' => $this->generateUrl('auto_logout', [], UrlGeneratorInterface::ABSOLUTE_URL),
+                'title' => $this->translator->trans('Logout', [], 'soul')
+            ]
         ]);
     }
 
@@ -322,6 +335,37 @@ class CommonsController extends CustomAbstractCoreController
                 'name' => $entry['name'],
                 'url' => $this->generateUrl($entry['route']),
             ], $data)
+        ]);
+
+    }
+
+    /**
+     * @param TimeKeeperService $timeKeeper
+     * @return JsonResponse
+     */
+    #[Route(path: '/clock', name: 'get_clock', methods: ['GET'])]
+    public function clock(TimeKeeperService $timeKeeper): JsonResponse {
+
+        if (!$this->getUser())
+            return new JsonResponse([]);
+
+        $town = $this->getUser()->getActiveCitizen()?->getTown();
+
+        $during_attack = $timeKeeper->isDuringAttack();
+        if (!$during_attack && !$this->getUser()->getActiveCitizen()?->getAlive())
+            $town = null;
+
+        return new JsonResponse([
+            'id'        => $town?->getId() ?? null,
+            'type'      => $town?->getType()?->getName() ?? null,
+            'desc'      => $town?->getName() ?? $this->translator->trans('Worauf warten Sie noch?', [], 'ghost'),
+            'day'       => $during_attack ? -1 : ($town?->getDay() ?? -1),
+            'timestamp' => (new DateTime('now'))->getTimestamp(),
+            'attack'    => $timeKeeper->secondsUntilNextAttack(null, true),
+            'offset'    => timezone_offset_get( timezone_open( date_default_timezone_get ( ) ), new DateTime() ),
+            'show'      =>
+                (!$this->getUser()->getActiveCitizen() && !$during_attack) ||
+                ($this->getUser()->getActiveCitizen() && ($this->getUser()->getActiveCitizen()->getAlive() || $during_attack))
         ]);
 
     }

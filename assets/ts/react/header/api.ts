@@ -36,6 +36,18 @@ export type ModLink = {
     url: string
 }
 
+export type TownClock = {
+    id: number | null;
+    type: string | null;
+    desc: string;
+    day: number;
+    timestamp: number;
+    attack: number;
+    offset: number;
+    show: boolean;
+}
+
+
 export class HeaderAPI extends TranslatableAPI<TranslationStrings> {
     constructor() { super( 'user/commons' ) }
 
@@ -62,6 +74,11 @@ export class HeaderAPI extends TranslatableAPI<TranslationStrings> {
     public mods(): Promise<ModListResponse> {
         return this.fetch.from('/mods')
             .throwResponseOnError().request().get() as Promise<ModListResponse>;
+    }
+
+    public clock(): Promise<TownClock> {
+        return this.fetch.from('/clock')
+            .throwResponseOnError().request().get() as Promise<TownClock>;
     }
 
 }

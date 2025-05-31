@@ -17,7 +17,7 @@
                     </div>
                     <img alt="" src="{{ asset('build/images/icons/small_talk.gif') }}" /> {{ 'Forum'|trans({},'global') }}</li>
                     {% block menu_text %}
-                        {% if app.user and (clock is not defined or clock.attack != 0) %}
+                        {% if app.user and (during_attack is not defined or not during_attack) %}
                             {% if app.user.activeCitizen %}
                                 <li class="town-news" x-ajax-href="{{ url('game_newspaper') }}">
                                 	<div class="tooltip help">
@@ -49,7 +49,7 @@
                             {% endif %}
                         {% endif %}
                     {% endblock %}
-                    {% if is_granted('ROLE_USER') and (clock is not defined or clock.attack != 0) %}
+                    {% if is_granted('ROLE_USER') and (during_attack is not defined or not during_attack) %}
                         <li class="soul" x-ajax-href="{{ url('soul_me') }}">
                         	<div class="tooltip help">
                     			<p>{{ 'Deine Seele'|trans({},'global') }}</p>

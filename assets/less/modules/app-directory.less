@@ -162,3 +162,26 @@
 
   &.closed ul { max-height: 0; }
 }
+
+.game-clock {
+  position: absolute; background: url("../../img/background/clock.png"); width: 260px; height: 90px;
+  top: 4px; right: 0;
+
+  &>div {
+    display: block; position: absolute; font-size: 1rem; text-align: right;
+
+    &.town-name { color: @myhordes-smalltext; height: 12px; top: 9px; left: 0; right: 75px; font-variant: small-caps }
+    &.town-day { color: #704018; font-weight: bold; height: 12px; top: 25px; left: 0; right: 85px; }
+    &.town-time { text-align: center; top: 32px; left: 195px; right: 25px; cursor: help; z-index: 995; }
+    &.attack-time { color: #5e0000; text-align: center; font-weight: bold; top: 58px; left: 195px; right: 25px; cursor: help; z-index: 995; }
+
+    .hardcore { color: lighten(#7c2727, 10%); font-variant: small-caps; }
+  }
+}
+
+.game-logout {
+  position: absolute; background: url("../../img/icons/b_exit.png"); width: 22px; height: 22px;
+  top: 0; right: 0; z-index: 998;
+
+  &>a { display: block; width: 100%; height: 100%; }
+}

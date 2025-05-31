@@ -41,6 +41,16 @@ export type TranslationStrings = {
                 }
             }
 
-        }
+        },
+    },
+    clock: {
+        panda: string
+        day: string
+        gametime: string
+        attack: string
+    }
+    logout: {
+        url: string
+        title: string
     }
 }
