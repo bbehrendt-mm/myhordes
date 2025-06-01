@@ -21,6 +21,7 @@ use App\Enum\Game\TransferItemOption;
 use App\Enum\ItemPoisonType;
 use App\Event\Game\Items\TransferItemEvent;
 use App\Service\Actions\Cache\InvalidateTagsInAllPoolsAction;
+use App\Service\Actions\Mercure\BroadcastViaMercureAction;
 use App\Service\CitizenHandler;
 use App\Service\ConfMaster;
 use App\Service\ErrorHelper;
@@ -364,6 +365,7 @@ class InventoryController extends CustomAbstractCoreController
         EventFactory $ef, EventDispatcherInterface $ed,
         InvalidateTagsInAllPoolsAction $clearAction,
         ResponseGlobal $response,
+        BroadcastViaMercureAction $broadcast,
     ): JsonResponse
     {
         $citizen = $this->getUser()->getActiveCitizen();
@@ -475,6 +477,9 @@ class InventoryController extends CustomAbstractCoreController
             // Reload page if camping item has been moved outside
             if ($citizen->getZone() && array_reduce( $items, fn(bool $carry, ?Item $i) => $carry || $i?->getPrototype()?->hasProperty('camp_bonus'), false ))
                 $reload = true;
+
+            if ($target_citizen->getId() !== $citizen->getId())
+                ($broadcast)('inventory-changed', users: $target_citizen->getUser());
 
             if (!$reload)
                 $response->withSignal(ClientSignal::LogUpdated);
