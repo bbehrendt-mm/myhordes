@@ -12,7 +12,7 @@ readonly class BroadcastViaMercureAction
         private HubInterface $hub
     ) { }
 
-    public function __invoke(string $message, array $data, bool $public = false, array|User|int $users = []): ?string
+    public function __invoke(string $message, array $data = [], bool $public = false, array|User|int $users = []): ?string
     {
         $user_ids = match (true) {
             !$public && is_array($users) => array_map( fn(int|User $user) => is_int($user) ? $user : $user->getId() , $users ),

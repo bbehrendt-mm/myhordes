@@ -1,8 +1,10 @@
-import {useState} from "react";
+import {DependencyList, useEffect, useState} from "react";
 import {Tooltip} from "./tooltip/Wrapper";
 import * as React from "react";
 import {Item} from "./inventory/api";
 import {VaultItemEntry} from "../v2/typedef/vault_td";
+import {sharedWorkerMessageHandler} from "../v2/init";
+import {html} from "../v2/helpers";
 
 /**
  * Generates two boolean states and a setter; the first one can be directly set by the setter, the second one will
@@ -37,4 +39,19 @@ export function ItemTooltip(props: {
         { props.data?.desc ?? '???' }
         { props.children ?? null }
     </Tooltip>
+}
+
+export function useSharedWorkerMessages<T>(
+    message: string|string[],
+    callback: (data: T) => void,
+    connection: string = 'live',
+    deps: DependencyList = [],
+) {
+    if (typeof message === "string") message = [message];
+
+    useEffect(() => {
+        const messageHandlers = message.map(m => sharedWorkerMessageHandler(connection, m, callback));
+        messageHandlers.forEach( m => html().addEventListener('mercureMessage', m) );
+        return () => messageHandlers.forEach( m => html().removeEventListener('mercureMessage', m));
+    }, deps);
 }

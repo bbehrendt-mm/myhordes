@@ -17,7 +17,7 @@ import {VaultItemEntry} from "../../v2/typedef/vault_td";
 import {BaseMounter} from "../index";
 import {emitSignal, useBroadcastSignal, useSignal} from "../../v2/client-modules/Signal";
 import {ServerInducedSignalProps} from "../../v2/fetch";
-import {ItemTooltip} from "../utils";
+import {ItemTooltip, useSharedWorkerMessages} from "../utils";
 import {randomUUIDv4} from "../../shims";
 
 declare var $: Global;
@@ -491,11 +491,16 @@ const HordesPassiveInventoryWrapper = (props: passiveMountProps) => {
 
     useBroadcastSignal(
         ['inventory-bag-loaded', 'inventory-changed'],
-        () => {
-            setMayBeOutdated(true)
-        },
+        () => { setMayBeOutdated(true) },
         [props.id]
     );
+
+    useSharedWorkerMessages(
+        'inventory-changed',
+        () => { setMayBeOutdated(true) },
+        'live',
+        [props.id]
+    )
 
     useSignal(
         'web-navigation',

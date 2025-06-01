@@ -35,6 +35,7 @@ use App\Enum\ZoneActivityMarkerType;
 use App\Response\AjaxResponse;
 use App\Service\ActionHandler;
 use App\Service\Actions\Cache\InvalidateTagsInAllPoolsAction;
+use App\Service\Actions\Mercure\BroadcastViaMercureAction;
 use App\Service\CitizenHandler;
 use App\Service\ConfMaster;
 use App\Service\CrowService;
@@ -555,7 +556,7 @@ class BeyondController extends InventoryAwareController
      * @return Response
      */
     #[Route(path: 'api/beyond/desert/exit/{special}', name: 'beyond_desert_exit_controller')]
-    public function desert_exit_api(TownHandler $th, string $special = 'normal'): Response {
+    public function desert_exit_api(TownHandler $th, BroadcastViaMercureAction $broadcast, string $special = 'normal'): Response {
         if (!$this->citizen_handler->citizenCanAct($this->getActiveCitizen())) return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
 
         $citizen = $this->getActiveCitizen();
@@ -589,14 +590,19 @@ class BeyondController extends InventoryAwareController
 
         $this->clearZoneCache();
 
+        $ids = [];
         $movers = [];
         $movers[] = $citizen;
         if ($special === 'normal-escort' || ($special === 'normal' && $distance > 0))
-            foreach ($citizen->getValidLeadingEscorts() as $escort)
+            foreach ($citizen->getValidLeadingEscorts() as $escort) {
                 $movers[] = $escort->getCitizen();
+                $ids[] = $escort->getCitizen()?->getUser()?->getId();
+            }
         else
-            foreach ($citizen->getLeadingEscorts() as $escort)
+            foreach ($citizen->getLeadingEscorts() as $escort) {
+                $ids[] = $escort->getCitizen()?->getUser()?->getId();
                 $escort->getCitizen()->getEscortSettings()->setLeader(null);
+            }
 
         $others_are_here = $zone->getCitizens()->count() > count($movers);
 
@@ -652,6 +658,8 @@ class BeyondController extends InventoryAwareController
         } catch (Exception $e) {
             return AjaxResponse::error( ErrorHelper::ErrorDatabaseException );
         }
+
+        if (!empty($ids)) ($broadcast)('inventory-changed', users: $ids);
 
         return AjaxResponse::success();
     }
@@ -1590,7 +1598,7 @@ class BeyondController extends InventoryAwareController
      * @return Response
      */
     #[Route(path: 'api/beyond/desert/escort/{cid<\d+>}', name: 'beyond_desert_escort_controller')]
-    public function desert_escort_api(int $cid, JSONRequestParser $parser, ConfMaster $conf): Response {
+    public function desert_escort_api(int $cid, JSONRequestParser $parser, ConfMaster $conf, BroadcastViaMercureAction $broadcast): Response {
         if (!$conf->getTownConfiguration($this->getActiveCitizen()->getTown())->get( TownSetting::OptFeatureEscort ))
             return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
 
@@ -1648,6 +1656,8 @@ class BeyondController extends InventoryAwareController
             return AjaxResponse::error( ErrorHelper::ErrorDatabaseException );
         }
 
+        if (!$on) ($broadcast)('inventory-changed', users: $target_citizen->getUser());
+
         return AjaxResponse::success();
     }
 
@@ -1656,14 +1666,16 @@ class BeyondController extends InventoryAwareController
      * @return Response
      */
     #[Route(path: 'api/beyond/desert/escort/all', name: 'beyond_desert_escort_drop_controller')]
-    public function desert_escort_api_drop_all(ConfMaster $conf): Response {
+    public function desert_escort_api_drop_all(ConfMaster $conf, BroadcastViaMercureAction $broadcast): Response {
         if (!$conf->getTownConfiguration($this->getActiveCitizen()->getTown())->get( TownSetting::OptFeatureEscort ))
             return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
 
         if (!$this->citizen_handler->citizenCanAct($this->getActiveCitizen())) return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
         $citizen = $this->getActiveCitizen();
 
+        $ids = [];
         foreach ($citizen->getLeadingEscorts() as $escort) {
+            $ids[] = $escort->getCitizen()->getUser()->getId();
             $this->entity_manager->persist($this->log->beyondEscortReleaseCitizen($citizen, $escort->getCitizen()));
             $escort->setLeader(null);
             $this->entity_manager->persist($escort);
@@ -1677,6 +1689,8 @@ class BeyondController extends InventoryAwareController
         } catch (Exception $e) {
             return AjaxResponse::error( ErrorHelper::ErrorDatabaseException );
         }
+
+        ($broadcast)('inventory-changed', users: $ids);
 
         return AjaxResponse::success();
     }
