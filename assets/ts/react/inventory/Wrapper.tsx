@@ -566,17 +566,19 @@ const HordesPassiveInventoryWrapper = (props: passiveMountProps) => {
         const expand = Math.max(bag.items.length, bag.size) > props.max;
         props.parent.classList.toggle('expanded', expand);
         if (expand) {
-            const status = document.querySelector('.game-bar .status.rucksack_status_union') as HTMLElement;
-            const bar = document.querySelector('.game-bar .status-ghoul') as HTMLElement;
-            if (!bar || !status) return;
 
             const moveGVBarOut = () => {
-                console.log('W STATUS', status.clientWidth);
-                console.log('W BAR', bar.clientWidth);
-                console.log('SUM', bar.clientWidth - status.clientWidth);
+                const status = document.querySelector('.game-bar .status.rucksack_status_union') as HTMLElement;
+                const bar = document.querySelector('.game-bar .status-ghoul') as HTMLElement;
+                if (!bar || !status) return;
                 bar.style.left = `-${ 8 + bar.clientWidth - status.clientWidth}px`;
             }
-            const moveGVBarIn = () => bar.style.left = null;
+            const moveGVBarIn = () => {
+                const bar = document.querySelector('.game-bar .status-ghoul') as HTMLElement;
+                if (!bar) return;
+
+                bar.style.left = null;
+            }
 
             props.parent.addEventListener('mouseenter', moveGVBarOut);
             props.parent.addEventListener('mouseleave', moveGVBarIn);
