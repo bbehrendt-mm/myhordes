@@ -80,7 +80,7 @@ const HordesLogWrapper = (props: mountProps) => {
 
     const handleError = (r: Response, notify: boolean): void => {
         const handle = () => {
-            const e = strings.errors.com_error.replace('{error}', `${r.status} ${r.statusText}`);
+            const e = strings?.errors?.com_error?.replace('{error}', `${r.status} ${r.statusText}`) ?? `${r.status} ${r.statusText}`;
             if (notify) $.html.error(e);
             else setErrorText(e);
         }
@@ -147,7 +147,7 @@ const HordesLogWrapper = (props: mountProps) => {
                 setLoading(false);
                 setPlaceholder(false);
             })
-    }, [props.domain,JSON.stringify(props.category),props.citizen,props.zone,props.inlineDays,refreshID] );
+    }, [strings,props.domain,JSON.stringify(props.category),props.citizen,props.zone,props.inlineDays,refreshID] );
 
     const applyData = (day: number, entries: LogEntry[], before: boolean, completed: boolean, without: number|null = null) => {
         const new_target = (cache.current[day] ?? null) === null ? { entries: [], completed } : {...cache.current[day]};
@@ -199,7 +199,7 @@ const HordesLogWrapper = (props: mountProps) => {
                     setPlaceholder(false);
                 })
         }
-    }, [props.etag,currentDay,sleeping,updateID] );
+    }, [props.etag,currentDay,sleeping,updateID,strings] );
 
     const loadMore = ( day: number ) => {
         if (toastError || (cache.current[day] ?? null) === null) return;

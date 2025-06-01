@@ -314,7 +314,6 @@ class LogController extends CustomAbstractCoreController
     #[GateKeeperProfile(only_with_profession: true, only_in_town: true)]
     #[Toaster]
     public function town(Request $request, EntityManagerInterface $em, ?Citizen $citizen = null): JsonResponse {
-
         $active_citizen = $this->getUser()->getActiveCitizen();
 
         $filter = $request->query->get('filter', '');
