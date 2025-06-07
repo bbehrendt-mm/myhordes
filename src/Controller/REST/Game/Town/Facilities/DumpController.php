@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\REST\Town\Facilities;
+namespace App\Controller\REST\Game\Town\Facilities;
 
 use App\Annotations\GateKeeperProfile;
 use App\Annotations\Semaphore;
@@ -12,15 +12,14 @@ use App\Event\Game\Town\Addon\Dump\DumpRetrieveCheckEvent;
 use App\Event\Game\Town\Addon\Dump\DumpRetrieveExecuteEvent;
 use App\Service\EventFactory;
 use App\Service\JSONRequestParser;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route(path: '/rest/v1/town/facilities/dump', name: 'rest_town_facilities_dump_', condition: "request.headers.get('Accept') === 'application/json'")]
+#[Route(path: '/rest/v1/game/town/facilities/dump', name: 'rest_town_facilities_dump_', condition: "request.headers.get('Accept') === 'application/json'")]
 #[IsGranted('ROLE_USER')]
 #[GateKeeperProfile(only_alive: true, only_with_profession: true, only_in_town: true)]
 #[Semaphore('town', scope: 'town')]

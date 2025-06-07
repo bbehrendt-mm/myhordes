@@ -164,6 +164,7 @@ class ExplorationController extends InventoryAwareController implements HookedIn
                 'zone' => $ruinZone,
                 'activity' => $guide ? 0.1 + 0.9 * (4-min(4,$ruinZone->getRoomDistance()))/4 : 1,
                 'shifted' => $ex->getInRoom(),
+                'exploration' => $ex
             ],
         ]) );
     }

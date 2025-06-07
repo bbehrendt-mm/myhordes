@@ -33,7 +33,7 @@ export type BuildingBuildResponse = {
 
 export class BuildingAPI extends TranslatableAPI<TranslationStrings> {
 
-    constructor() { super('town/core/building') }
+    constructor() { super('game/town/core/building') }
 
     public list(completed: boolean): Promise<BuildingListResponse> {
         return this.fetch.from(`/list`, {completed: completed ? '1' : '0'})

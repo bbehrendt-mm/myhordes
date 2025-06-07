@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\REST\Town\Core;
+namespace App\Controller\REST\Game\Town\Core;
 
 use App\Annotations\GateKeeperProfile;
 use App\Annotations\Semaphore;
@@ -21,12 +21,11 @@ use App\Service\LogTemplateHandler;
 use App\Service\TownHandler;
 use App\Traits\Controller\ActiveCitizen;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route(path: '/rest/v1/town/core/door', name: 'rest_town_core_door_', condition: "request.headers.get('Accept') === 'application/json'")]
+#[Route(path: '/rest/v1/game/town/core/door', name: 'rest_town_core_door_', condition: "request.headers.get('Accept') === 'application/json'")]
 #[IsGranted('ROLE_USER')]
 #[GateKeeperProfile(only_alive: true, only_with_profession: true, only_in_town: true)]
 #[Semaphore('town', scope: 'town')]

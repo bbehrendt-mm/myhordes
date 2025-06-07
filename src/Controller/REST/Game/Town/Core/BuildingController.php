@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\REST\Town\Core;
+namespace App\Controller\REST\Game\Town\Core;
 
 use App\Annotations\GateKeeperProfile;
 use App\Annotations\Semaphore;
@@ -13,7 +13,6 @@ use App\Entity\PictoPrototype;
 use App\Enum\ActionHandler\PointType;
 use App\Enum\Configuration\CitizenProperties;
 use App\Enum\EventStages\BuildingValueQuery;
-use App\Response\AjaxResponse;
 use App\Service\CitizenHandler;
 use App\Service\ConfMaster;
 use App\Service\DoctrineCacheService;
@@ -40,7 +39,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 
-#[Route(path: '/rest/v1/town/core/building', name: 'rest_town_core_building_', condition: "request.headers.get('Accept') === 'application/json'")]
+#[Route(path: '/rest/v1/game/town/core/building', name: 'rest_town_core_building_', condition: "request.headers.get('Accept') === 'application/json'")]
 #[IsGranted('ROLE_USER')]
 #[GateKeeperProfile(only_alive: true, only_with_profession: true, only_in_town: true)]
 #[Semaphore('town', scope: 'town')]

@@ -15,6 +15,7 @@ import {
 } from "../react/inventory/Wrapper";
 import {InventoryBagData, Item} from "../react/inventory/api";
 import {HordesBuildingList, HordesBuildingPage} from "../react/buildings/Wrapper";
+import {HordesRuinExplorationMap} from "../react/map-ruin/Wrapper";
 
 customElements.define('hordes-map', class HordesMapElement extends PersistentShim<HordesMap> {
     protected generateInstance(): HordesMap {
@@ -30,6 +31,24 @@ customElements.define('hordes-map', class HordesMapElement extends PersistentShi
     }
 
 }, {  });
+
+customElements.define('hordes-map-e-ruin', class HordesMapERuinElement extends PersistentShim<HordesRuinExplorationMap> {
+    protected generateInstance(): HordesRuinExplorationMap {
+        return new HordesRuinExplorationMap();
+    }
+
+    protected generateProps(): object | null {
+        return {
+            origin: parseInt(this.dataset.origin ?? '0')
+        }
+    }
+
+    protected static observedAttributeNames() {
+        return ['data-etag', 'data-origin'];
+    }
+
+}, {  });
+
 
 customElements.define('hordes-log', class HordesLogElement extends PersistentShim<HordesLog> {
     protected generateInstance(): HordesLog {

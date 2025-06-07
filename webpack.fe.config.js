@@ -88,6 +88,7 @@ Encore
 
     .addEntry('swagger', './assets/js/swagger.js')
 
+    .addEntry('konva', 'konva/konva.min.js')
     .addEntry('module-ruffle', './assets/js/modules/ruffle.js')
 
     .addEntry('module-game', './assets/ts/modules/common-game-modules.ts')
