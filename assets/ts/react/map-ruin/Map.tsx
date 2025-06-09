@@ -1,169 +1,127 @@
 import * as React from "react";
-import {Group, Layer, Rect, Stage, Line} from "react-konva";
-import {RuinMapGlobal} from "./Wrapper";
-import {MutableRefObject, useContext, useEffect, useLayoutEffect, useRef, useState} from "react";
-import Konva from "konva";
-import {off} from "process";
+import {Layer, Rect, Stage, Image} from "react-konva";
+import {createContext, MutableRefObject, useContext, useEffect, useLayoutEffect, useRef, useState} from "react";
+import {AssetResponse, ExplorationTileset, ZoneResponse} from "./api";
+import {Globals} from "./Wrapper";
+import {LayerUI} from "./MapUILayer";
+import {MapScaler} from "./scaler";
+import {MapBackdropLayer, MapLayerShift} from "./MapBackdropLayer";
 
 interface MapSetup {
     h: number,
     w: number,
 }
 
-interface MapPosition {
-    x: number,
-    y: number,
+interface MapProperties {
+    theme: string
 }
 
-class MapScaler {
-    private w: number;
-    private h: number;
-    private parent: MutableRefObject<MapScaler>;
+export const ScaleHelper = createContext<{ scaler: MapScaler, ref: MutableRefObject<MapScaler> }>(null);
 
-    constructor(w: number, h: number, parent: MutableRefObject<MapScaler> = null) {
-        this.update(w,h,parent);
-    }
+export const AssetHelper = createContext<{ theme: AssetResponse, images: {[key: string]: HTMLImageElement}}>(null)
 
-    update(w: number, h: number, parent: MutableRefObject<MapScaler> = null) {
-        this.w = w;
-        this.h = h;
-        this.parent = parent;
-    }
+export const MapCore = (props: {setup: MapSetup, properties: MapProperties}) => {
+    const globals = useContext(Globals);
 
-    x(v: number = 1): number { return v * (this.parent?.current ? this.parent.current.x(this.w) : this.w); }
-    y(v: number = 1): number { return v * (this.parent?.current ? this.parent.current.y(this.h) : this.h); }
-    s(v: number = 1): number { return (this.x(v) + this.y(v))/2 }
-
-    p(x: number = 1, y: number = 1): [number,number] {
-        return [this.x(x),this.y(y)];
-    }
-
-    pl(list: [number,number][]): number[] {
-        return list.map( p => this.p(...p) ).reduce( (c: number[], p) => [...c, p[0], p[1]], [] )
-    }
-
-    wh(x: number = 1, y: number = 1): {height: number, width: number} {
-        return {
-            width: this.x(x),
-            height: this.y(y),
-        }
-    }
-
-    xy(x: number = 1, y: number = 1): {x: number, y: number} {
-        return {
-            x: this.x(x),
-            y: this.y(y),
-        }
-    }
-
-    centerAt(x: number, y: number, w: number, h: number): {height: number, width: number, x: number, y: number, offset: {x: number, y: number}} {
-        return {
-            offset: this.xy(w/2,h/2),
-            ...this.wh(w,h),
-            ...this.xy(x,y),
-        }
-    }
-}
-
-const ScaleHelper = React.createContext<{ scaler: MapScaler, ref: MutableRefObject<MapScaler> }>(null);
-
-export const MapCore = (props: {setup: MapSetup, position: MapPosition}) => {
     const scaler = useRef<MapScaler>( new MapScaler(props.setup.w, props.setup.h) );
-
     const [etag, setEtag] = useState<number>(0);
+
+    const [currentZone, setCurrentZone] = useState<ZoneResponse>();
+    const [nextZone, setNextZone] = useState<{r: ZoneResponse, s: MapLayerShift}>();
+
+    const imageCache = useRef<{[key: string]: HTMLImageElement}>({});
+    const [themeAssets, setThemeAssets] = useState<AssetResponse>();
+    const [themeImages, setThemeImages] = useState<{[key: string]: HTMLImageElement}>();
+    const [missingImages, setMissingImages] = useState<number>(-1);
+    const [totalImages, setTotalImages] = useState<number>(-1);
+
+    useEffect(() => {
+        globals.api.assets(props.properties.theme).then(a => {
+            setThemeAssets(a);
+            const sources = [];
+            Object.values(a.tiles).forEach( src => sources.push(src) );
+            Object.values(a.doors).forEach( s => Object.values(s).forEach( src => sources.push(src) ) );
+            Object.values(a.decals).forEach( s => sources.push(s.i) );
+
+            setMissingImages( sources.length );
+            setTotalImages( sources.length );
+
+            sources.forEach( src => {
+                const loaded = () => {
+                    setMissingImages( s=> s - 1);
+                    imageCache.current[src] = image;
+                }
+
+                const image = document.createElement('img');
+                image.src = src;
+                image.onload = loaded;
+                image.onerror = loaded;
+            } )
+        });
+
+        return () => {
+            imageCache.current = {};
+            setThemeAssets(null);
+            setMissingImages(-1);
+            setTotalImages(-1);
+        }
+    }, [props.properties.theme]);
+
+    useEffect(() => {
+        if (missingImages === 0) {
+            setThemeImages(imageCache.current);
+            return () => setThemeImages(null);
+        }
+    }, [missingImages]);
 
     useEffect(() => {
         scaler.current.update(props.setup.w, props.setup.h);
         setEtag(e => e+1);
     }, [props.setup.w, props.setup.h]);
 
+    useEffect(() => {
+        globals.api.zone().then(z => setCurrentZone(z) );
+    }, []);
+
+    const ready = currentZone && themeImages && themeAssets && missingImages === 0;
+
     //return <canvas height={props.setup.h} width={props.setup.w}/>
     return <Stage className="canvas" height={props.setup.h} width={props.setup.w}>
         <ScaleHelper.Provider value={ {scaler: scaler.current, ref: scaler} }>
-            <LayerUI/>
+            { ready && <>
+                <AssetHelper.Provider value={{ theme: themeAssets, images: themeImages }}>
+                    <MapBackdropLayer
+                        current={currentZone.tileset}
+                        next={nextZone?.s ?? null}
+                        onShiftCompleted={() => {
+                            setCurrentZone( prev => { return {...prev, tileset: nextZone.r.tileset } } );
+                            setNextZone(null);
+                        }}
+                    />
+                    <LayerUI onMove={ (dx, dy) => {
+                        globals.api.move(dx, dy).then(r => {
+                            setCurrentZone( prev => { return { ...prev, status: r.status } } )
+                            setNextZone( { r, s: { dx, dy, tileset: r.tileset, shifted: false } } )
+                            document
+                                .querySelectorAll('hordes-inventory[data-inventory-b-type="desert"]')
+                                .forEach( e => (e as HTMLElement).dataset.inventoryBId = `${r.status.floor}` )
+                        })
+                     } }/>
+                </AssetHelper.Provider>
+            </> }
+
+            { !ready && <>
+                <LayerLoading percent={ missingImages > 0 ? (1 - missingImages/totalImages) : 0}/>
+            </> }
         </ScaleHelper.Provider>
     </Stage>
 }
 
-interface MovementArrowProps {
-    visible: boolean,
-    rotation: 0|90|180|270,
-}
-
-const MovementArrow = (props: MovementArrowProps) => {
-    const {scaler, ref} = useContext(ScaleHelper);
-
-    const [visible, setVisible] = useState(false);
-
-    const elementRef = useRef<Konva.Group>(null);
-    const tweenRef = useRef<Konva.Tween>(null);
-
-    const dim = [0.28, 0.10];
-
-    const offscreenProps = {
-        opacity: 0,
-        ...((props.rotation === 0 || props.rotation === 180)
-                ? scaler.centerAt( 0.5, props.rotation === 0 ? 0 : 1, dim[0], dim[1] )
-                : scaler.centerAt( props.rotation === 90 ? 1 : 0, 0.5, dim[0], dim[1] )
-        )
-    }
-
-    const oncreenProps = {
-        opacity: 1,
-        ...((props.rotation === 0 || props.rotation === 180)
-                ? scaler.centerAt( 0.5, props.rotation === 0 ? 0.1 : 0.9, dim[0], dim[1] )
-                : scaler.centerAt( props.rotation === 90 ? 0.9 : 0.1, 0.5, dim[0], dim[1] )
-        )
-    }
-
-    const subScaler = useRef<MapScaler>( new MapScaler( dim[0], dim[1], ref ) );
-
-    useLayoutEffect(() => {
-        if (props.visible === visible) return;
-
-        tweenRef.current = new Konva.Tween({
-            onFinish: () => setVisible(props.visible),
-            node: elementRef.current,
-            duration: 0.5,
-            easing: Konva.Easings.EaseInOut,
-            opacity: (props.visible ? oncreenProps : offscreenProps).opacity,
-            x: (props.visible ? oncreenProps : offscreenProps).x,
-            y: (props.visible ? oncreenProps : offscreenProps).y,
-        });
-        tweenRef.current.play();
-
-        return () => {
-            tweenRef.current?.finish();
-            tweenRef.current = null;
-        }
-
-    }, [props.visible]);
-
-    return <Group ref={elementRef} rotation={props.rotation} onClick={() => console.log('click', props.rotation)} {...(visible ? oncreenProps : offscreenProps)}>
-        <ScaleHelper.Provider value={{scaler: subScaler.current, ref: subScaler}}>
-            <MovementChevron/>
-        </ScaleHelper.Provider>
-    </Group>
-}
-
-const MovementChevron = () => {
+const LayerLoading = (props: {percent: number}) => {
     const {scaler} = useContext(ScaleHelper);
 
-    const [hover, setHover] = useState(false);
-
-    return <Line
-        onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}
-        fill={`rgba(215,255,91,${hover ? 0.7 : 0.3})`} stroke={`rgba(215,255,91,${hover ? 0.9 : 0.7})`}
-        strokeWidth={scaler.s(0.02)} lineJoin="round"
-        points={ scaler.pl([ [0,1], [0.5,0], [1,1] ]) } closed
-    />
-}
-
-const LayerUI = () => {
     return <Layer>
-        <MovementArrow visible={true} rotation={0}/>
-        <MovementArrow visible={true} rotation={90}/>
-        <MovementArrow visible={true} rotation={180}/>
-        <MovementArrow visible={true} rotation={270}/>
+        <Rect stroke="#00ff00" fill="transparent" strokeWidth={ scaler.s(0.005) } { ...scaler.centerAt( 0.5, 0.5, 0.8, 0.075 ) } />
+        <Rect fill="#00ff00" { ...scaler.centerAt( 0.5, 0.5, 0.78 * props.percent, 0.055 ) } />
     </Layer>
 }

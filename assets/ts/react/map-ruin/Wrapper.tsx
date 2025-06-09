@@ -6,6 +6,7 @@ import {RuinExplorationAPI} from "./api";
 import {GlassFrameDecals} from "./FrameDecals";
 import {MapCore} from "./Map";
 import {useLayoutEffect, useRef, useState} from "react";
+import {useTranslations} from "../utils";
 
 declare var $: Global;
 declare var c: Const;
@@ -13,6 +14,7 @@ declare var c: Const;
 
 interface mountProps {
     origin: number,
+    theme: string,
 }
 
 export interface RuinMapGlobal {
@@ -31,6 +33,9 @@ export class HordesRuinExplorationMap extends BaseMounter<mountProps> {
 
 
 const HordesRuinExplorationMapWrapper = (props: mountProps) => {
+
+    const apiRef = useRef<RuinExplorationAPI>( new RuinExplorationAPI() );
+    const strings = useTranslations(apiRef.current);
 
     const [size, setSize] = useState<{width: number, height: number}>(null)
 
@@ -54,11 +59,17 @@ const HordesRuinExplorationMapWrapper = (props: mountProps) => {
 
     return <div className="ruin_map_react">
         <div ref={map} className="map">
-            { size && <MapCore setup={{
-                h: size.height, w: size.width
-            }} position={{
-                x: 0, y: 0
-            }}/> }
+            <Globals.Provider value={{
+                api: apiRef.current,
+                strings
+            }}>
+                { size && strings && <MapCore setup={{
+                    h: size.height, w: size.width
+                }} properties={{
+                    theme: props.theme,
+                }}/> }
+            </Globals.Provider>
+
             <div className="frame">
                 <GlassFrameDecals/>
             </div>

@@ -187,6 +187,7 @@ const HordesInventoryWrapper = (props: mountProps &
     const api = useRef( new InventoryAPI() );
 
     const [internalETag, setInternalETag] = useState(0);
+    const [internalETagB, setInternalETagB] = useState(0);
 
     const strings = useTranslations( api.current );
     const [loading, setLoading] = useState<boolean>( false );
@@ -210,11 +211,16 @@ const HordesInventoryWrapper = (props: mountProps &
             setInventoryB(r);
             setCache(props.inventoryBId, r)
         });
-    }, [props.inventoryBId, props.inventoryBType, props.etag, internalETag]);
+    }, [props.inventoryBId, props.inventoryBType, props.etag, internalETag, internalETagB]);
 
     useSignal<ServerInducedSignalProps>(
         'inventory-changed',
         () => setInternalETag(e => e+1)
+    )
+
+    useSignal<ServerInducedSignalProps>(
+        'inventory-changed-b',
+        () => setInternalETagB(e => e+1)
     )
 
     useSignal<InventoryBagLoadedSignalProps>(
