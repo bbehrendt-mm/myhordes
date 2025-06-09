@@ -1160,7 +1160,7 @@ class NightlyHandler
 
             // Starting with last autoghoul day, the chance for a new one increases
             $last_autoghoul_at = $town->getSpecificActionCounter( ActionCounterType::LastAutoghoulAt, default: $ghoul_begin );
-            $chance = min($ghoul_max, ($town->getDay() - $last_autoghoul_at->getCount()) * $ghoul_advance);
+            $chance = min($ghoul_max, ($town->getDay() - $last_autoghoul_at->getCount() - 1) * $ghoul_advance);
             $this->log->debug("<info>Airborne ghoul infection</info> chance is <info>$chance</info>!");
 
             if ($this->random->chance( $chance )) {
