@@ -14,6 +14,7 @@ use App\Service\UserHandler;
 use ArrayHelpers\Arr;
 use Gitlab\Client;
 use Shivas\VersioningBundle\Service\VersionManagerInterface;
+use Symfony\Component\Asset\Packages;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -59,7 +60,7 @@ class GitlabController extends CustomAbstractCoreController
      * @throws \Exception
      */
     #[Route(path: '', name: 'base', methods: ['GET'])]
-    public function index(ConfMaster $confMaster, UserHandler $handler): JsonResponse {
+    public function index(Packages $asset, ConfMaster $confMaster, UserHandler $handler): JsonResponse {
 
         $blocked = !$this->getUser() || ($handler->isRestricted($this->getUser(), AccountRestriction::RestrictionReportToGitlab)) || $handler->isRestricted( $this->getUser(), AccountRestriction::RestrictionGameplay );
 
@@ -103,8 +104,20 @@ class GitlabController extends CustomAbstractCoreController
                         'title' => $this->translator->trans('Datei anhängen (optional)', [], 'global'),
                         'hint' => $this->translator->trans('Wenn du zusätzliche Dateien (Screenshots, Videos, ...) zu deiner Fehlermeldung hinzufügen möchtest, kannst du das hier tun. Bitte beachte, dass die Gesamtgröße aller hochgeladenen Dateien die Grenze von 3MB nicht übersteigen darf.', [], 'global'),
                     ],
-                ]
-            ]
+                ],
+				'confidential' => [
+					'title' => $this->translator->trans('Vertraulichkeit von Fehlerberichten', [], 'global'),
+					'hint' => $this->translator->trans('Dieser Fehlerbericht enthält Informationen, die ich nicht öffentlich teilen möchte; er sollte nur vertrauenswürdigen Entwicklern zugänglich sein.', [], 'global'),
+					'public' => $this->translator->trans('Dieser Fehlerbericht wird öffentlich zugänglich sein', [], 'global'),
+					'private' => $this->translator->trans('Dieser Fehlerbericht wird nur für vertrauenswürdige Entwickler zugänglich sein', [], 'global'),
+				],
+            ],
+			'icons' => [
+				'warning' => [
+					'src' => $asset->getUrl('build/images/icons/warning_anim.gif'),
+					'alt' => $this->translator->trans('Warnung', [], 'global'),
+				]
+			]
         ]);
     }
 
@@ -132,6 +145,7 @@ class GitlabController extends CustomAbstractCoreController
 
         $title = $parser->trimmed('issue_title', null);
         $desc  = $parser->trimmed('issue_details', null);
+		$confidential = $parser->get_int('issue_confidential', 1);
 
         if (!$title || !$desc)
             return new JsonResponse([], Response::HTTP_BAD_REQUEST);
@@ -141,7 +155,7 @@ class GitlabController extends CustomAbstractCoreController
             title: $title,
             description: $desc,
             issue_type: 'issue',
-            confidential: true,
+            confidential: $confidential,
             trusted_info: $this->collectProxyInformation( Request::createFromGlobals(), $version ),
             passed_info: $parser->get_array('pass', []),
             attachments: $parser->get_array( 'issue_attachments' )
