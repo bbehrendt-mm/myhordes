@@ -254,7 +254,7 @@ const ConfirmationDialog = (props: ConfirmationDialogProps) => {
                 </div>
             </div>}
 
-            {selected_skills !== null && selected_profession.hero && <div className="row">
+            {selected_skills !== null && selected_profession && selected_profession.hero && <div className="row">
                 <div className="padded cell rw-12">
                     <h5>{globals.strings.confirm.skills}</h5>
                     <div className="flex column gap">
