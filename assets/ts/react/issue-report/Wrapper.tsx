@@ -44,6 +44,7 @@ const ReportIssueDialog = (props: {
     const [animateImg, setAnimateImg] = useState<number>(null);
 
     const [attachedFiles, setAttachedFiles] = useState<FileUploadWithSize[]>([]);
+    const [isConfidential, setIsConfidential] = useState<boolean>(false);
 
     const dialog = useRef<HTMLDialogElement>(null);
     const form = useRef<HTMLFormElement>(null);
@@ -356,7 +357,7 @@ const ReportIssueDialog = (props: {
                             <input ref={fileselect} multiple={true} className="hidden" type="file"
                                    data-no-serialization="1" onChange={() => appendFile()}/>
                         </div>
-                        <br />
+                        {attachedFiles.length > 0 && <br />}
                         {attachedFiles.length > 0 && <div className="row-flex vertical gap-small-y">
                             {attachedFiles.map((file, i) => <div key={i} className="row-flex gap-x ">
                                 {file.display && <div className="cell grow-0">
@@ -372,6 +373,22 @@ const ReportIssueDialog = (props: {
                                 </div>
                             </div>)}
                         </div>}
+                        <p className="small">
+                            <span>{index.strings.confidential.title}</span><br/>
+                            {index.strings.confidential.hint}
+
+                            <input type="checkbox" name="issue_confidential" value="1" 
+                                   checked={isConfidential}
+                                   onChange={(e) => setIsConfidential(e.target.checked)} />
+                        </p>
+						<hr />
+						<p
+							className={isConfidential ? 'small' : 'critical'}
+							style={{ marginBottom: '0.5em', display: 'flex', alignItems: 'center' }}
+						>
+							{isConfidential ? '' : <img alt={index.icons.warning.alt} src={index.icons.warning.src} style={{marginRight: '5px'}}/>}
+							<b>{index.strings.confidential[isConfidential ? 'private' : 'public']}</b>
+						</p>
                     </>}
                 </div>
                 {index && <div id="modal-actions">

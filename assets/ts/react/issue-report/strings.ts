@@ -26,11 +26,18 @@ export type TranslationStrings = {
         error_400: string,
         error_407: string,
         error_412: string,
-    }
+    },
 
     fields: {
         title: Field,
-        desc: Field
-        attachment: Field
-    }
+        desc: Field,
+        attachment: Field,
+    },
+
+	confidential: {
+		title: string,
+		hint: string,
+		public: string,
+		private: string,
+	},
 }
