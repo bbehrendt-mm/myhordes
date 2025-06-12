@@ -429,7 +429,7 @@ const BankInventory = (props: InventoryPropsBank) => {
                     <SingleItem
                         blur={ searchString === '' ? null : !(vaultData ?? {})[i.p]?.name?.normalize("NFD").replace(/[\u0300-\u036f]/g, "")?.toLowerCase()?.includes( normalizedSearchString ) }
                         item={i} mods={props.inventory.mods} data={(vaultData ?? {})[i.p] ?? null}
-                        locked={props.locked || i.e} onClick={props.onItemClick}
+                        locked={props.locked || i.e} onClick={props.onItemClick} highlightDefense={true}
                     />
                 </React.Fragment>) }
             </React.Fragment>)}
@@ -445,12 +445,12 @@ const BankInventory = (props: InventoryPropsBank) => {
     </>
 }
 
-const SingleItem = (props: { item: Item, data: VaultItemEntry | null, mods: InventoryMods, locked: boolean, onClick?: (i:Item) => void, blur: null|boolean, className?: string })=> {
+const SingleItem = (props: { item: Item, data: VaultItemEntry | null, mods: InventoryMods, locked: boolean, onClick?: (i:Item) => void, blur: null|boolean, className?: string, highlightDefense?: boolean })=> {
     const globals = useContext(Globals);
 
     return props.data !== null
         ? <li
-            className={`item ${props.className ?? ''} ${(props.blur === true && 'blur') || ''} ${(props.blur === false && 'focus') || ''} ${(props.locked && 'locked') || ''} ${(props.item.b && 'broken') || ''} ${(props.item.h && 'banished_hidden') || ''} ${(props.item.c > 1 && 'counted') || ''} ${(props.item.c >= 100 && 'excessive') || ''}`}
+            className={`item ${props.className ?? ''} ${(props.blur === true && 'blur') || ''} ${(props.blur === false && 'focus') || ''} ${(props.locked && 'locked') || ''} ${(props.item.b && 'broken') || ''} ${(props.item.h && 'banished_hidden') || ''} ${(props.item.c > 1 && 'counted') || ''} ${(props.item.c >= 100 && 'excessive') || ''} ${(props.highlightDefense && props.data.props.includes('defence') && 'defense') || ''}`}
             onClick={ props.locked ? null : i => props.onClick(props.item) }
         >
             <span className="item-icon"><img src={ props.data?.icon ?? '' } alt={ props.data?.name ?? '...' }/></span>
