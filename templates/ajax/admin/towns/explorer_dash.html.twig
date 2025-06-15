@@ -276,9 +276,8 @@
         document.querySelector('hordes-map')?.addEventListener("zone-clicked", function(ev) {
             ev.preventDefault();
             ev.stopPropagation();
-            let target = ev.explicitOriginalTarget;
-            document.getElementById("dash_zone_generator").setAttribute('x-id', target.getAttribute("x-id"));
-            $.ajax.easySend('{{ url('get_zone_infos', {id: town.id}) }}', {'zone_id': target.getAttribute("x-id")}, function(data){
+            document.getElementById("dash_zone_generator").setAttribute('x-id', ev.detail.zone.id);
+            $.ajax.easySend('{{ url('get_zone_infos', {id: town.id}) }}', {'zone_id': ev.detail.zone.id}, function(data){
                 document.querySelector("#zone_floor").innerHTML = data.view;
                 document.querySelector("#zone_floor .inventory").classList.add('desert');
                 document.querySelector("#zone_floor .inventory .title").innerText = "{{ 'Zone'|trans({}, 'admin') }} [" + data.zone_coords.x + ", " + data.zone_coords.y + "]";
@@ -303,7 +302,7 @@
                 document.getElementById("ruin_camp_level").value = data.camp_levl;
                 document.querySelector("#ruin_camp_base>span").innerText = data.ruin_camp;
                 document.getElementById("ruin_camp_base").classList.toggle('hidden', data.ruin_camp === null);
-                document.getElementById("admin-log").dataset.domain = 'admin/zone/' + target.getAttribute("x-id");
+                document.getElementById("admin-log").dataset.domain = 'admin/zone/' + ev.detail.zone.id;
                 document.getElementById("dash_zone_log").classList.toggle('hidden', false);
             });
 		})
