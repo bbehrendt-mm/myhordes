@@ -70,7 +70,7 @@ export const MapBackdropLayer = (props: MapBackdropLayerProps) => {
         nextRef.current?.cache();
     });
 
-    return <Layer>
+    return <>
         <Group ref={elementRef} { ...scaler.xy(0, 0) }>
             <MapTile shifted={ props.shifted } data={props.current} onDoorClick={ () => props.onStartShift() } />
             { props.next && <Group
@@ -87,7 +87,7 @@ export const MapBackdropLayer = (props: MapBackdropLayerProps) => {
                 <MapTile shifted={props.next.shifted} data={props.next.tileset} />
             </Group> }
         </Group>
-    </Layer>
+    </>
 
 }
 

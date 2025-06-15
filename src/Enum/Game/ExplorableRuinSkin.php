@@ -520,6 +520,10 @@ enum ExplorableRuinSkin: string
     public function actorZombie(bool $dead): string {
         return $dead ? "build/images/explore/{$this->value}/dead.png" : "build/images/explore/{$this->value}/zombie.gif";
     }
+
+    public function fog(bool $cloud): string {
+        return $cloud ? "build/images/explore/frames.gif" : "build/images/explore/white.png";
+    }
 }
 
 

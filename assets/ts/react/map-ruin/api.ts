@@ -50,6 +50,7 @@ export type AssetResponse = {
         player_noox: string,
         zombie_dead: string,
     }
+    fog: [string,string],
 };
 
 export type MovementControls = {

@@ -57,12 +57,12 @@ export const MapActorPlayerLayer = (props: MapLayerActorShift) => {
 
     }, [props?.dx, props?.dy]);
 
-    return <Layer>
+    return <>
         <Group ref={elementOuterRef} { ...scaler.xy(0, 0) }>
             <Group ref={elementInnerRef} { ...scaler.xy(0, 0) }>
                 <GifImage src={ theme.actors.player } {...scaler.centerAt(0.5, 0.5, 0.0541, 0.1081)} />
             </Group>
         </Group>
-    </Layer>
+    </>
 
 }

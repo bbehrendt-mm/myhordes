@@ -93,6 +93,10 @@ class RuinExplorationController extends AbstractController
                 'zombie' => $asset->getUrl($theme->actorZombie(false)),
                 'player_noox' => $asset->getUrl($theme->actorPlayer(true)),
                 'zombie_dead' => $asset->getUrl($theme->actorZombie(true)),
+            ],
+            'fog' => [
+                $asset->getUrl($theme->fog(true)),
+                $asset->getUrl($theme->fog(false)),
             ]
         ]);
     }

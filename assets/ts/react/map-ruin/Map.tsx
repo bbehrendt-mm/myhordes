@@ -7,6 +7,7 @@ import {LayerUI} from "./MapUILayer";
 import {MapScaler} from "./scaler";
 import {MapBackdropLayer, MapLayerShift} from "./MapBackdropLayer";
 import {MapActorPlayerLayer} from "./MapActorLayer";
+import {MapFOWLayer} from "./MapFOWLayer";
 
 interface MapSetup {
     h: number,
@@ -39,7 +40,7 @@ export const MapCore = (props: {setup: MapSetup, properties: MapProperties}) => 
     useEffect(() => {
         globals.api.assets(props.properties.theme).then(a => {
             setThemeAssets(a);
-            const sources = [];
+            const sources = [a.fog[0], a.fog[1]];
             Object.values(a.tiles).forEach( src => sources.push(src) );
             Object.values(a.doors).forEach( s => Object.values(s).forEach( d => sources.push(d.i) ) );
             Object.values(a.decals).forEach( s => sources.push(s.i) );
@@ -99,24 +100,29 @@ export const MapCore = (props: {setup: MapSetup, properties: MapProperties}) => 
         <ScaleHelper.Provider value={ {scaler: scaler.current, ref: scaler} }>
             { ready && <>
                 <AssetHelper.Provider value={{ theme: themeAssets, images: themeImages }}>
-                    <MapBackdropLayer
-                        shifted={currentZone.status.shifted}
-                        current={currentZone.tileset}
-                        next={nextZone?.s ?? null}
-                        onStartShift={ () => {
-                            if (!currentZone.tileset.door) return;
+                    <Layer>
+                        <MapBackdropLayer
+                            shifted={currentZone.status.shifted}
+                            current={currentZone.tileset}
+                            next={nextZone?.s ?? null}
+                            onStartShift={ () => {
+                                if (!currentZone.tileset.door) return;
 
-                            if (currentZone.tileset.door.l != 0)
-                                globals.api.move(0, 0, currentZone.tileset.door.l)
-                                    .then( (r) => updateZone(r, 0, 0, currentZone.tileset.door.l));
-                            else globals.api.shift( !currentZone.status.shifted ).then( (r) => updateZone(r) );
-                        }}
-                        onShiftCompleted={() => {
-                            setCurrentZone( prev => { return nextZone.r } );
-                            setNextZone(null);
-                        }}
-                    />
-                    <MapActorPlayerLayer { ...(nextZone?.s ?? {}) } />
+                                if (currentZone.tileset.door.l != 0)
+                                    globals.api.move(0, 0, currentZone.tileset.door.l)
+                                        .then( (r) => updateZone(r, 0, 0, currentZone.tileset.door.l));
+                                else globals.api.shift( !currentZone.status.shifted ).then( (r) => updateZone(r) );
+                            }}
+                            onShiftCompleted={() => {
+                                setCurrentZone( prev => { return nextZone.r } );
+                                setNextZone(null);
+                            }}
+                        />
+                        <MapActorPlayerLayer { ...(nextZone?.s ?? {}) } />
+                        <MapFOWLayer shadowColor="black" shadowOpacity={0.5} shadowDistance={0.5} shadowBlur={0.5}/>
+                    </Layer>
+
+
                     <LayerUI
                         controls={{
                             ...((nextZone?.r ?? currentZone)?.status?.move ?? {}),
