@@ -5985,6 +5985,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"gifler@npm:^0.1.0":
+  version: 0.1.0
+  resolution: "gifler@npm:0.1.0"
+  dependencies:
+    omggif: "npm:1.0.x"
+  checksum: 10c0/5f06df39a3aafdccee585bb6b8115ce753efa9151b2597aef5d4422c1fcf7a0762c2a2030d2a8f4495911b87836e4db81f7c7a167cbf6650355b8f18762e48df
+  languageName: node
+  linkType: hard
+
 "glob-parent@npm:~5.1.2":
   version: 5.1.2
   resolution: "glob-parent@npm:5.1.2"
@@ -7875,6 +7884,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"omggif@npm:1.0.x":
+  version: 1.0.10
+  resolution: "omggif@npm:1.0.10"
+  checksum: 10c0/5ddb6959555bf16ac93ee8724a6f600b0e97e77855515af9df0f657c69ebe0eb7d769763fdc4765f888827e4e64ca71ebeaf7255c7f51058e4bba5cc7950fe8e
+  languageName: node
+  linkType: hard
+
 "on-finished@npm:2.4.1":
   version: 2.4.1
   resolution: "on-finished@npm:2.4.1"
@@ -9355,6 +9371,7 @@ __metadata:
     favicons: "npm:^7.0.2"
     favicons-webpack-plugin: "npm:^6.0.0"
     file-loader: "npm:6.2.0"
+    gifler: "npm:^0.1.0"
     idb-keyval: "npm:^6.2.1"
     js-md5: "npm:^0.8.3"
     konva: "npm:^8.0"

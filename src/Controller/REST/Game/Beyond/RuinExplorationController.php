@@ -82,12 +82,18 @@ class RuinExplorationController extends AbstractController
         return new JsonResponse([
             'tiles' => $theme->assetsTiles()->map( fn(string $s) => $asset->getUrl( $s ) )->toArray(),
             'doors' => [
-                'open_up'   => $theme->assetDoors(true, 1)->map( fn(string $s) => $asset->getUrl( $s ) )->toArray(),
-                'open_down' => $theme->assetDoors(true, -1)->map( fn(string $s) => $asset->getUrl( $s ) )->toArray(),
-                'open'   => $theme->assetDoors(true)->map( fn(string $s) => $asset->getUrl( $s ) )->toArray(),
-                'closed' => $theme->assetDoors(false)->map( fn(string $s) => $asset->getUrl( $s ) )->toArray(),
+                'open_up'   => $theme->assetDoors(true, 1)->map( fn(array $a) => [...$a, 'i' => $asset->getUrl( $a['i'] )] )->toArray(),
+                'open_down' => $theme->assetDoors(true, -1)->map( fn(array $a) => [...$a, 'i' => $asset->getUrl( $a['i'] )] )->toArray(),
+                'open'   => $theme->assetDoors(true)->map( fn(array $a) => [...$a, 'i' => $asset->getUrl( $a['i'] )] )->toArray(),
+                'closed' => $theme->assetDoors(false)->map( fn(array $a) => [...$a, 'i' => $asset->getUrl( $a['i'] )] )->toArray(),
             ],
             'decals' => $theme->assetDecals()->map( fn(array $a) => [...$a, 'i' => $asset->getUrl( $a['i'] )] )->toArray(),
+            'actors' => [
+                'player' => $asset->getUrl($theme->actorPlayer(false)),
+                'zombie' => $asset->getUrl($theme->actorZombie(false)),
+                'player_noox' => $asset->getUrl($theme->actorPlayer(true)),
+                'zombie_dead' => $asset->getUrl($theme->actorZombie(true)),
+            ]
         ]);
     }
 
@@ -100,8 +106,11 @@ class RuinExplorationController extends AbstractController
     protected function renderTileset(RuinZone $zone): array {
         return [
             'tile' => $zone->isEntry() ? -1 : $zone->getCorridor(),
-            'door' => $zone->getDoorPosition(),
-            'elev' => $zone->getDoorPosition() ? $zone->getPrototype()->getLevel() : 0,
+            'door' => $zone->getDoorPosition() ? [
+                't' => $zone->getDoorPosition(),
+                'l' => $zone->getPrototype()->getLevel(),
+                'o' => !$zone->getLocked()
+            ] : null,
             'deco' => $zone->getUnifiedDecals(),
         ];
     }
@@ -133,6 +142,13 @@ class RuinExplorationController extends AbstractController
             'shifted' => $stats->getInRoom(),
             'activity' => $guide ? (0.1 + 0.9 * (4-min(4, $zone->getRoomDistance()))/4) : 1,
             'floor' => $zone->getFloor()->getId(),
+            'zombies' => $zone->getZombies(),
+            'move' => (($zone->getZombies() > 0 && !$stats->getEscaping()) || $stats->getInRoom()) ? null : [
+                'e' => $zone->hasCorridor(  RuinZone::CORRIDOR_E ),
+                'w' => $zone->hasCorridor(  RuinZone::CORRIDOR_W ),
+                'n' => $zone->hasCorridor(  RuinZone::CORRIDOR_N ),
+                's' => $zone->hasCorridor(  RuinZone::CORRIDOR_S ),
+            ]
         ];
     }
 
@@ -158,20 +174,24 @@ class RuinExplorationController extends AbstractController
         if ($ruinZone->getZombies() > 0 && !$ex->getEscaping())
             return new JsonResponse([], Response::HTTP_CONFLICT);
 
-        if ($ex->getInRoom())
+        $dx    = $parser->get_int('dx', 0);
+        $dy    = $parser->get_int('dy', 0);
+        $dz    = $parser->get_int('dz', 0);
+        $shift = $parser->get_int('shift', 0);
+
+        if (abs($dx) + abs($dy) + abs($dz) + abs($shift) !== 1)
             return new JsonResponse([], Response::HTTP_NOT_FOUND);
 
-        $dx = (int)$parser->get('dx', 0);
-        $dy = (int)$parser->get('dy', 0);
-
-        if (abs($dx) + abs($dy) !== 1)
+        if ($ex->getInRoom() && (abs($dx) + abs($dy) + abs($dz)) !== 0)
             return new JsonResponse([], Response::HTTP_NOT_FOUND);
 
         if (
-            ($dx == 1  && !$ruinZone->hasCorridor( RuinZone::CORRIDOR_E )) ||
-            ($dx == -1 && !$ruinZone->hasCorridor( RuinZone::CORRIDOR_W )) ||
-            ($dy == 1  && !$ruinZone->hasCorridor( RuinZone::CORRIDOR_N )) ||
-            ($dy == -1 && !$ruinZone->hasCorridor( RuinZone::CORRIDOR_S ))
+            ($dx === 1  && !$ruinZone->hasCorridor( RuinZone::CORRIDOR_E )) ||
+            ($dx === -1 && !$ruinZone->hasCorridor( RuinZone::CORRIDOR_W )) ||
+            ($dy === 1  && !$ruinZone->hasCorridor( RuinZone::CORRIDOR_N )) ||
+            ($dy === -1 && !$ruinZone->hasCorridor( RuinZone::CORRIDOR_S )) ||
+            ($dz !== 0 && $ruinZone->getPrototype()->getLevel() !== $dz) ||
+            ($shift !== 0 && !$ruinZone->getPrototype())
         ) return new JsonResponse([], Response::HTTP_NOT_FOUND);
 
 
@@ -186,6 +206,8 @@ class RuinExplorationController extends AbstractController
         $ex
             ->setX( $ex->getX() + $dx )
             ->setY( $ex->getY() - $dy )
+            ->setZ( $ex->getZ() + $dz )
+            ->setInRoom( $shift === 1 )
             ->setEscaping( false );
 
         $this->entityManager->persist($ex);

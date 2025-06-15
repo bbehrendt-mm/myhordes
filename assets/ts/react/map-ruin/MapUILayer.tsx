@@ -2,7 +2,7 @@ import * as React from "react";
 import {Group, Layer, Rect, Line, Image} from "react-konva";
 import {useContext, useLayoutEffect, useRef, useState} from "react";
 import Konva from "konva";
-import {ExplorationTileset} from "./api";
+import {ExplorationTileset, MovementControls} from "./api";
 import {ScaleHelper} from "./Map";
 import {MapScaler} from "./scaler";
 
@@ -93,13 +93,14 @@ const MovementChevron = () => {
 
 type LayerUIProps = {
     onMove: (dx: number, dy: number) => void,
+    controls?: MovementControls|null
 }
 
 export const LayerUI = (props: LayerUIProps) => {
     return <Layer>
-        <MovementArrow onClick={() => props.onMove(0, 1)} visible={true} rotation={0}/>
-        <MovementArrow onClick={() => props.onMove(1, 0)} visible={true} rotation={90}/>
-        <MovementArrow onClick={() => props.onMove(0,-1)} visible={true} rotation={180}/>
-        <MovementArrow onClick={() => props.onMove(-1,0)} visible={true} rotation={270}/>
+        <MovementArrow onClick={() => props.onMove(0, 1)} visible={props.controls?.n} rotation={0}/>
+        <MovementArrow onClick={() => props.onMove(1, 0)} visible={props.controls?.e} rotation={90}/>
+        <MovementArrow onClick={() => props.onMove(0,-1)} visible={props.controls?.s} rotation={180}/>
+        <MovementArrow onClick={() => props.onMove(-1,0)} visible={props.controls?.w} rotation={270}/>
     </Layer>
 }

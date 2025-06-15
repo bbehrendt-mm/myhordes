@@ -56,19 +56,72 @@ enum ExplorableRuinSkin: string
             !$open => 'c',
         };
 
+        $d = 0.1014;
+
         return new ArrayCollection([
-            1 => "build/images/explore/{$this->value}/dtl{$postfix}.png",
-            2 => "build/images/explore/{$this->value}/dt{$postfix}.png",
-            3 => "build/images/explore/{$this->value}/dtr{$postfix}.png",
-            4 => "build/images/explore/{$this->value}/dl{$postfix}.png",
-            5 => "build/images/explore/{$this->value}/dr{$postfix}.png",
-            6 => "build/images/explore/{$this->value}/dbl{$postfix}.png",
-            7 => "build/images/explore/{$this->value}/db{$postfix}.png",
-            8 => "build/images/explore/{$this->value}/dbr{$postfix}.png",
+            1 => [
+                'w' => $d,
+                'h' => $d,
+                'x' => 0.17,
+                'y' => 0.32,
+                'i' =>"build/images/explore/{$this->value}/dtl{$postfix}.png"
+            ],
+            2 => [
+                'w' => $d,
+                'h' => $d,
+                'x' => 0.45,
+                'y' => 0.32,
+                'i' =>"build/images/explore/{$this->value}/dt{$postfix}.png"
+            ],
+            3 => [
+                'w' => $d,
+                'h' => $d,
+                'x' => 0.83 - $d,
+                'y' => 0.32,
+                'i' =>"build/images/explore/{$this->value}/dtr{$postfix}.png"
+            ],
+            4 => [
+                'w' => $d,
+                'h' => $d,
+                'x' => 0.34,
+                'y' => 0.45,
+                'i' =>"build/images/explore/{$this->value}/dl{$postfix}.png"
+            ],
+            5 => [
+                'w' => $d,
+                'h' => $d,
+                'x' => 0.66 - $d,
+                'y' => 0.55 - $d,
+                'i' =>"build/images/explore/{$this->value}/dr{$postfix}.png"
+            ],
+            6 => [
+                'w' => $d,
+                'h' => $d,
+                'x' => 0.17,
+                'y' => 0.68 - $d,
+                'i' =>"build/images/explore/{$this->value}/dbl{$postfix}.png"
+            ],
+            7 => [
+                'w' => $d,
+                'h' => $d,
+                'x' => 0.55 - $d,
+                'y' => 0.68 - $d,
+                'i' =>"build/images/explore/{$this->value}/db{$postfix}.png"
+            ],
+            8 => [
+                'w' => $d,
+                'h' => $d,
+                'x' => 0.83 - $d,
+                'y' => 0.68 - $d,
+                'i' =>"build/images/explore/{$this->value}/dbr{$postfix}.png"
+            ],
         ]);
     }
 
-    public function assetDecals() {
+    /**
+     * @return Collection<string,array>
+     */
+    public function assetDecals(): Collection {
         return match ($this) {
             self::Bunker => new ArrayCollection([
                 '1a' => [
@@ -458,6 +511,14 @@ enum ExplorableRuinSkin: string
                 ]
             ]),
         };
+    }
+
+    public function actorPlayer(bool $no_ox): string {
+        return $no_ox ? "build/images/explore/you_noox.gif" : "build/images/explore/you.gif";
+    }
+
+    public function actorZombie(bool $dead): string {
+        return $dead ? "build/images/explore/{$this->value}/dead.png" : "build/images/explore/{$this->value}/zombie.gif";
     }
 }
 

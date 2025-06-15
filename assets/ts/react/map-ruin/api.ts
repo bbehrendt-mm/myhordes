@@ -1,7 +1,7 @@
 import {TranslationStrings} from "./strings";
 import {TranslatableAPI} from "../index";
 
-type Decal = {
+export type Decal = {
     i: string;
     h: number,
     w: number,
@@ -28,37 +28,55 @@ export type AssetResponse = {
         '13': string;
         '14': string;
         '15': string;
-    };
+    },
     doors: {
         open_up: {
-            [key: number]: string;
+            [key: number]: Decal;
         };
         open_down: {
-            [key: number]: string;
+            [key: number]: Decal;
         };
         open: {
-            [key: number]: string;
+            [key: number]: Decal;
         };
         closed: {
-            [key: number]: string;
+            [key: number]: Decal;
         };
-    };
-    decals: { [key: string]: Decal }
+    },
+    decals: { [key: string]: Decal },
+    actors: {
+        player: string,
+        zombie: string,
+        player_noox: string,
+        zombie_dead: string,
+    }
 };
 
+export type MovementControls = {
+    e?: boolean,
+    w?: boolean,
+    s?: boolean,
+    n?: boolean,
+}
+
 export type ExplorationStatus = {
-    paused: boolean;
-    exit: number;
-    shifted: boolean | null;
-    activity: number;
-    floor: number;
+    paused: boolean,
+    exit: number,
+    shifted: boolean | null,
+    activity: number,
+    floor: number,
+    zombies: number,
+    move: MovementControls|null,
 }
 
 export type ExplorationTileset = {
-    tile: number | null;
-    door: number | null;
-    elev: number;
-    deco: number | null;
+    tile: number | null,
+    door: {
+        t: number,
+        o: boolean,
+        l: number
+    } | null,
+    deco: number | null,
 }
 
 export type ZoneResponse = {
@@ -84,5 +102,10 @@ export class RuinExplorationAPI extends TranslatableAPI<TranslationStrings> {
     public move(dx: number, dy: number, dz: number = 0): Promise<ZoneResponse> {
         return this.fetch.from(`/explore`)
             .request().patch({dx,dy,dz}) as Promise<ZoneResponse>;
+    }
+
+    public shift(shift: boolean): Promise<ZoneResponse> {
+        return this.fetch.from(`/explore`)
+            .request().patch({shift: shift ? 1 : -1}) as Promise<ZoneResponse>;
     }
 }

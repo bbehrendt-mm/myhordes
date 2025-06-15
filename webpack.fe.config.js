@@ -88,10 +88,9 @@ Encore
 
     .addEntry('swagger', './assets/js/swagger.js')
 
-    .addEntry('konva', 'konva/konva.min.js')
     .addEntry('module-ruffle', './assets/js/modules/ruffle.js')
 
-    .addEntry('module-game', './assets/ts/modules/common-game-modules.ts')
+    .addEntry('module-game', ['./assets/ts/modules/common-game-modules.ts', 'gifler/gifler.js', 'konva/konva.min.js'])
     .addEntry('module-town-creator', './assets/ts/modules/town-creator.ts')
     .addEntry('module-event-creator', './assets/ts/modules/event-creator.ts')
     .addEntry('module-avatar-creator', './assets/ts/modules/avatar-creator.ts')

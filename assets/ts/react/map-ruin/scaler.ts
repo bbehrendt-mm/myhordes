@@ -1,4 +1,5 @@
 import {MutableRefObject} from "react";
+import {Decal} from "./api";
 
 export class MapScaler {
     private w: number;
@@ -39,6 +40,17 @@ export class MapScaler {
             x: this.x(x),
             y: this.y(y),
         }
+    }
+
+    whxy(w: number = 1, h: number = 1, x: number = 0, y: number = 0): {height: number, width: number, x: number, y: number} {
+        return {
+            ...this.wh(w,h),
+            ...this.xy(x,y),
+        }
+    }
+
+    d(o: Decal): {height: number, width: number, x: number, y: number} {
+        return this.whxy( o.w, o.h, o.x, o.y )
     }
 
     centerAt(x: number, y: number, w: number, h: number): {height: number, width: number, x: number, y: number, offset: {x: number, y: number}} {

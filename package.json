@@ -36,6 +36,7 @@
         "@types/react-dom": "18.2.24",
         "buffer": "6.0.3",
         "dialog-polyfill": "^0.5.6",
+        "gifler": "^0.1.0",
         "idb-keyval": "^6.2.1",
         "js-md5": "^0.8.3",
         "konva": "^8.0",

@@ -6,6 +6,7 @@ import {Globals} from "./Wrapper";
 import {LayerUI} from "./MapUILayer";
 import {MapScaler} from "./scaler";
 import {MapBackdropLayer, MapLayerShift} from "./MapBackdropLayer";
+import {MapActorPlayerLayer} from "./MapActorLayer";
 
 interface MapSetup {
     h: number,
@@ -40,7 +41,7 @@ export const MapCore = (props: {setup: MapSetup, properties: MapProperties}) => 
             setThemeAssets(a);
             const sources = [];
             Object.values(a.tiles).forEach( src => sources.push(src) );
-            Object.values(a.doors).forEach( s => Object.values(s).forEach( src => sources.push(src) ) );
+            Object.values(a.doors).forEach( s => Object.values(s).forEach( d => sources.push(d.i) ) );
             Object.values(a.decals).forEach( s => sources.push(s.i) );
 
             setMissingImages( sources.length );
@@ -85,28 +86,48 @@ export const MapCore = (props: {setup: MapSetup, properties: MapProperties}) => 
 
     const ready = currentZone && themeImages && themeAssets && missingImages === 0;
 
+    const updateZone = (r: ZoneResponse, dx: number = 0, dy: number = 0, dz: number = 0) => {
+        //setCurrentZone( prev => { return { ...prev, status: r.status } } )
+        setNextZone( { r, s: { dx, dy, dz, tileset: r.tileset, shifted: r.status.shifted } } )
+        document
+            .querySelectorAll('hordes-inventory[data-inventory-b-type="desert"]')
+            .forEach( e => (e as HTMLElement).dataset.inventoryBId = `${r.status.floor}` )
+    }
+
     //return <canvas height={props.setup.h} width={props.setup.w}/>
     return <Stage className="canvas" height={props.setup.h} width={props.setup.w}>
         <ScaleHelper.Provider value={ {scaler: scaler.current, ref: scaler} }>
             { ready && <>
                 <AssetHelper.Provider value={{ theme: themeAssets, images: themeImages }}>
                     <MapBackdropLayer
+                        shifted={currentZone.status.shifted}
                         current={currentZone.tileset}
                         next={nextZone?.s ?? null}
+                        onStartShift={ () => {
+                            if (!currentZone.tileset.door) return;
+
+                            if (currentZone.tileset.door.l != 0)
+                                globals.api.move(0, 0, currentZone.tileset.door.l)
+                                    .then( (r) => updateZone(r, 0, 0, currentZone.tileset.door.l));
+                            else globals.api.shift( !currentZone.status.shifted ).then( (r) => updateZone(r) );
+                        }}
                         onShiftCompleted={() => {
-                            setCurrentZone( prev => { return {...prev, tileset: nextZone.r.tileset } } );
+                            setCurrentZone( prev => { return nextZone.r } );
                             setNextZone(null);
                         }}
                     />
-                    <LayerUI onMove={ (dx, dy) => {
-                        globals.api.move(dx, dy).then(r => {
-                            setCurrentZone( prev => { return { ...prev, status: r.status } } )
-                            setNextZone( { r, s: { dx, dy, tileset: r.tileset, shifted: false } } )
-                            document
-                                .querySelectorAll('hordes-inventory[data-inventory-b-type="desert"]')
-                                .forEach( e => (e as HTMLElement).dataset.inventoryBId = `${r.status.floor}` )
-                        })
-                     } }/>
+                    <MapActorPlayerLayer { ...(nextZone?.s ?? {}) } />
+                    <LayerUI
+                        controls={{
+                            ...((nextZone?.r ?? currentZone)?.status?.move ?? {}),
+                            s: ((nextZone?.r ?? currentZone)?.status?.move ?? {})?.s || (nextZone?.r ?? currentZone).status.shifted
+                        }}
+                        onMove={ (dx, dy) => {
+                            if (currentZone.status.shifted)
+                                globals.api.shift(false).then(r => updateZone(r));
+                            else globals.api.move(dx, dy).then(r => updateZone(r, dx, dy));
+                        } }
+                    />
                 </AssetHelper.Provider>
             </> }
 
