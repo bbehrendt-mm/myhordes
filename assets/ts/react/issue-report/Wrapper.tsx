@@ -373,14 +373,21 @@ const ReportIssueDialog = (props: {
                                 </div>
                             </div>)}
                         </div>}
-                        <p className="small">
+                        <div className="p small">
                             <span>{index.strings.confidential.title}</span><br/>
-                            {index.strings.confidential.hint}
 
-                            <input type="checkbox" name="issue_confidential" value="1" 
-                                   checked={isConfidential}
-                                   onChange={(e) => setIsConfidential(e.target.checked)} />
-                        </p>
+                            <div className="row-flex gap-x">
+                                <div className="cell grow-0">
+                                    <input type="checkbox" name="issue_confidential" value="1"
+                                           checked={isConfidential}
+                                           onChange={(e) => setIsConfidential(e.target.checked)} />
+                                </div>
+                                <div className="cell grow-1">
+                                    {index.strings.confidential.hint}
+                                </div>
+                            </div>
+
+                        </div>
 						<hr />
 						<p
 							className={isConfidential ? 'small' : 'critical'}
