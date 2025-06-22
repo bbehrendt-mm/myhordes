@@ -3,6 +3,7 @@ import {Fetch} from "../../v2/fetch";
 
 export type ResponseIndex = {
     strings: TranslationStrings
+	icons: {[key in 'warning']: {src: string, alt: string}},
 }
 
 export type ResponseReport = {
