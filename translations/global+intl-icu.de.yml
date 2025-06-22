@@ -656,3 +656,8 @@ Sonstiges: Sonstiges
 'Aufgrund technischer Probleme ist der Funktionsumfang dieser externen Anwendung aktuell eingeschränkt.': 'Aufgrund technischer Probleme ist der Funktionsumfang dieser externen Anwendung aktuell eingeschränkt.'
 'Fehler beim Laden der Logeinträge ({error}).': 'Fehler beim Laden der Logeinträge ({error}).'
 'Log-Einträge können nicht abgerufen werden, bitte versuche, die Seite neu zu laden.': 'Log-Einträge können nicht abgerufen werden, bitte versuche, die Seite neu zu laden.'
+'Vertraulichkeit des Fehlerberichts': 'Vertraulichkeit des Fehlerberichts'
+'Dieser Fehlerbericht enthält Informationen, die ich nicht öffentlich teilen möchte; er sollte nur vertrauenswürdigen Entwicklern zugänglich sein.': 'Dieser Fehlerbericht enthält Informationen, die ich nicht öffentlich teilen möchte; er sollte nur vertrauenswürdigen Entwicklern zugänglich sein.'
+'Dieser Fehlerbericht wird öffentlich zugänglich sein': 'Dieser Fehlerbericht wird öffentlich zugänglich sein'
+'Dieser Fehlerbericht wird nur für vertrauenswürdige Entwickler zugänglich sein': 'Dieser Fehlerbericht wird nur für vertrauenswürdige Entwickler zugänglich sein'
+Warnung: Warnung
