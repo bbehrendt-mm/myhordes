@@ -145,7 +145,10 @@ class ProcessItemEffect extends AtomEffectProcessor
             if ($data->poisonSource !== null) $cache->item->setPoison( $data->poisonSource );
             if ($data->equipSource !== null) {
                 $cache->item->setEssential( $data->equipSource );
-                if ($data->equipSource) $ih->forceMoveItem( $cache->citizen->getInventory(), $cache->item );
+                if ($data->equipSource) {
+                    $cache->item->setHidden(false);
+                    $ih->forceMoveItem($cache->citizen->getInventory(), $cache->item);
+                }
             }
         }
 
@@ -171,7 +174,10 @@ class ProcessItemEffect extends AtomEffectProcessor
             if ($data->poisonTarget !== null) $cache->target->setPoison( $data->poisonTarget );
             if ($data->equipTarget !== null) {
                 $cache->target->setEssential( $data->equipTarget );
-                if ($data->equipTarget) $ih->forceMoveItem( $cache->citizen->getInventory(), $cache->target );
+                if ($data->equipTarget) {
+                    $cache->target->setHidden(false);
+                    $ih->forceMoveItem($cache->citizen->getInventory(), $cache->target);
+                }
             }
         }
     }
