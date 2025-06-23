@@ -264,6 +264,14 @@ final class HeroicItemActionListener implements ServiceSubscriberInterface
                     $downgrade_actions = ($treeService)( $event->target->action(), -1 );
 
                     $valid = !$this->getService(CitizenHandler::class)->hasStatusEffect( $event->target->citizen(), 'tg_rec_heroic' );
+                    if ($valid) {
+                        $records = array_filter( $event->target->citizen()->getSpecificActionCounter( ActionCounterType::ReceiveHeroic )->getAdditionalData() ?? [],
+                            fn($record) => is_array($record) && ($record['action'] ?? null) === $event->target->action()->getName() && ( $record['valid'] ?? false )
+                        );
+
+                        $valid = empty($records);
+                    }
+
 
                     if ($valid && $event->target->citizen()->getProfession()->getHeroic()) {
                         if ($event->target->citizen()->getHeroicActions()->contains( $event->target->action() ))
