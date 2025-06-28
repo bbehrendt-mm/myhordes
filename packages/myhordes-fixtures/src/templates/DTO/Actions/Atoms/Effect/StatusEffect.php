@@ -130,6 +130,16 @@ class StatusEffect extends EffectAtom {
         };
     }
 
+    public function injectedProperties(string $propClass = \BackedEnum::class): array {
+        $result = parent::injectedProperties($propClass);
+        if (
+            in_array( CitizenProperties::HeroImmuneHeals, $result ) &&
+            !in_array( CitizenProperties::HeroImmuneStatusList, $result )
+        )
+            $result[] = CitizenProperties::HeroImmuneStatusList;
+        return $result;
+    }
+
     public function getApCost(): int {
         return ($this->pointType === PointType::AP && !$this->pointRelativeToMax->isRelative()) ? $this->pointValue : 0;
     }
