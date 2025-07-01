@@ -228,7 +228,7 @@ export const TownCreatorSectionDifficulty = () => {
                                 value={ globals.getOption( `rules.margin_custom.${dir_str}` ) as string ?? '25' }
                                 key={`${MARGIN_CUSTOM_PREFIX}${dir_str}`}
                                 propName={`${MARGIN_CUSTOM_PREFIX}${dir_str}`}
-                                inputArgs={{min: 0, max: 100}}
+                                inputArgs={{min: 1, max: 99}}
                                 propTitle={ `${difficulty[`position_${dir_str}`]} (%)` }
                                 onChange={e => handleCustomMarginChange(e.target as HTMLInputElement, dir as Direction)}
                             />
