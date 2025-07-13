@@ -36,7 +36,7 @@ export function ItemTooltip(props: {
             {props.addendum && <span className={props.addendum.className}>{props.addendum.text}</span>}
             <img style={{objectFit: 'contain'}} src={props.data?.icon ?? ''} alt={props.data?.name ?? '...'}/>
         </h1>
-        { props.data?.desc ?? '???' }
+        <div dangerouslySetInnerHTML={{__html: props.data?.desc ?? '???'}}/>
         { props.children ?? null }
     </Tooltip>
 }
