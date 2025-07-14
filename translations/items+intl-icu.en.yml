@@ -823,7 +823,7 @@ Geschenkpaket: Gift Parcel
 "Du atmest tief durch und drückst den Rücken durch. Auf geht's! Ich werde nicht hier sterben!{hr}Du hast soeben Kraft getankt und <strong>{ap} neue AP erhalten</strong>.": "You take a deep breath and shake your head. Come on! This is no time to give up!{hr}Your {ap} AP <strong>have been restored</strong>."
 'Du versucht nochmal alle deine Kräfte für heute Abend zu mobilisieren. Die Anspannung steht dir ins Gesicht geschrieben. Du schwitzt und deine Hände zittern.{hr}Beim heutigen Angriff wirst du weder weder Durst, noch Krankheitssymptome (Infektion), noch Entzugserscheinungen verspüren.': 'You try to pull yourself together for the evening ahead. The tension is written across your face, you are sweating, shaking...{hr}You will not give in to the effects of thirst, infection, or addiction during tonight''s attack.'
 'Du versuchst dich einem Zombie zu nähern, aber <strong>der Zombie reißt dir fast das Gesicht mit seinen Zähnen ab</strong>! Unmöglich zu bestehen...': 'You head for a zombie, <strong>but at the same time, they make a lunge for your face and only narrowly miss...</strong> You''ll need to stay where you are for now...'
-'Du rennst schreiend in den ersten Zombie in Reichweite! Mit einem kraftvollen, gut angepassten Schulterschlag <strong>schickst du ihn ein paar Meter weiter in den Staub</strong>...{hr}Du kannst diese Gelegenheit zur Flucht nutzen!': 'You charge, screaming, at the first zombie you see. With a solid, well-aimed shoulder charge, <strong>you leave them sprawled on the ground several meters away</strong>... {hr}You could take advantage of this situation to get the hell out of there!'
+'Du rennst schreiend in den ersten Zombie in Reichweite! Mit einem kraftvollen, gut angepassten Schulterschlag <strong>schickst du ihn ein paar Meter weiter in den Staub</strong>...{hr}Du kannst diese Gelegenheit zur Flucht nutzen!': 'You charge, screaming, at the first zombie you see. With a solid, well-aimed shoulder charge, <strong>you leave them sprawled on the ground several metres away</strong>... {hr}You could take advantage of this situation to get the hell out of there!'
 'Du trägst keine Tarnkleidung und hast deswegen auch keinerlei Tarnungsvorteile!': 'You''re not wearing your camouflage vest, so you will no longer receive your stealth bonus !'
 'Kreischender Wecker (entladen)': 'Screaming Alarm Clock (incomplete)'
 'Es gibt morges doch nichts schöner, als einen lauten Wecker, der dein Trommelfell schön stimuliert.': 'There''s nothing quite like a good alarm to stimulate the old ear drums of a morning.'
@@ -933,7 +933,7 @@ Ruhm: Glory
 'Dir fällt kein Grund ein, dies zu tun...': 'You don''t see why you would do this...'
 'Dies kannst du erst ab <strong>Tag 2</strong> tun.': 'You cannot do this before <strong>day 2</strong>.'
 'Wenn du den Plan studieren willst, musst du in die relative Ruhe der Stadt zurückkehren.': 'To study the plans, head back to the relative calm of the town.'
-'Du musst mindestens 3 Kilometer von der Stadt entfernt sein, um das zu tun.': 'You have to be more than 3 kilometers from the town to do that.'
+'Du musst mindestens 3 Kilometer von der Stadt entfernt sein, um das zu tun.': 'You have to be more than 3 kilometres from town to do that.'
 'Hierfür hast du keinen Platz.': 'You have no room for this.'
 'Du kannst dieses Serum nicht auf dich selbst anwenden, oder du wirst der beste Freund eines Ghuls...': 'You can''t use this vaccine on yourself or become a ghoul''s best friend...'
 Eintrittskarte: Admission ticket

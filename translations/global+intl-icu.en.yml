@@ -657,3 +657,8 @@ Sonstiges: Others
 'Aufgrund technischer Probleme ist der Funktionsumfang dieser externen Anwendung aktuell eingeschränkt.': 'Due to technical issues, the features of this external application are currently limited.'
 'Fehler beim Laden der Logeinträge ({error}).': 'Error loading log entries ({error}).'
 'Log-Einträge können nicht abgerufen werden, bitte versuche, die Seite neu zu laden.': 'Log entries cannot be retrieved, please try reloading the page.'
+'Vertraulichkeit des Fehlerberichts': 'Confidentiality of the bug report'
+'Dieser Fehlerbericht enthält Informationen, die ich nicht öffentlich teilen möchte; er sollte nur vertrauenswürdigen Entwicklern zugänglich sein.': 'This bug report contains information that I do not want to share publicly; it should only be accessible to trusted developers.'
+'Dieser Fehlerbericht wird öffentlich zugänglich sein': 'This bug report will be publicly available'
+'Dieser Fehlerbericht wird nur für vertrauenswürdige Entwickler zugänglich sein': 'This bug report will only be accessible to trusted developers'
+Warnung: Warning
