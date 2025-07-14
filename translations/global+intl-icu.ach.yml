@@ -657,3 +657,8 @@ Sonstiges: crwdns213162:0crwdne213162:0
 'Aufgrund technischer Probleme ist der Funktionsumfang dieser externen Anwendung aktuell eingeschränkt.': 'crwdns213190:0crwdne213190:0'
 'Fehler beim Laden der Logeinträge ({error}).': 'crwdns213202:0{error}crwdne213202:0'
 'Log-Einträge können nicht abgerufen werden, bitte versuche, die Seite neu zu laden.': 'crwdns213204:0crwdne213204:0'
+'Vertraulichkeit des Fehlerberichts': 'crwdns213212:0crwdne213212:0'
+'Dieser Fehlerbericht enthält Informationen, die ich nicht öffentlich teilen möchte; er sollte nur vertrauenswürdigen Entwicklern zugänglich sein.': 'crwdns213214:0crwdne213214:0'
+'Dieser Fehlerbericht wird öffentlich zugänglich sein': 'crwdns213216:0crwdne213216:0'
+'Dieser Fehlerbericht wird nur für vertrauenswürdige Entwickler zugänglich sein': 'crwdns213218:0crwdne213218:0'
+Warnung: crwdns213220:0crwdne213220:0

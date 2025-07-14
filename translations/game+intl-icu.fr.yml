@@ -1923,7 +1923,7 @@ Weihnachten: Noël
 'Faaaaaaaast, ach verdammt': 'Eeeeeeeet ben non'
 'Bis zum Ende und einen Schritt weiter': 'Jusqu''au bout, et même un peu moins loin'
 'Schließt die Ränke und haltet durch': 'Serrez les rangs... et les fesses...'
-'Hallo... ist da draußen jemand?': 'Vous êtes là les copains?'
+'Hallo... ist da draußen jemand?': 'Vous êtes là les copains ?'
 'Haltet eure Position!': 'Tenez vos positions !'
 'Nur ein Finger': 'Juste un doigt !'
 'Plünderer der Schnapsläden': 'Pilier de comptoir'
@@ -2043,7 +2043,7 @@ Deko-Punkte: points déco
 'Diese Aktion kostet dich Sauerstoff, trotzdem flüchten?': 'Cette action vous coûte en Oxygène, fuir quand même ?'
 'Diese Aktion ermöglicht es dir, die Tiefen dieses Gebäude zu erkunden und wertvolle Ressourcen zu bergen. Sei aber nicht zu gierig, denn deine Zeit ist begrenzt!': 'Cette action vous permet d''entrer dans ce bâtiment en profondeur pour ramener de nombreuses ressources, n''ayez pas les yeux plus gros que le ventre, votre temps est compté !'
 'Das Gebäude betreten? (Diese Aktion kostet 1AP)': 'Entrer dans le bâtiment ? (cette action coûte 1 PA)'
-'Kein Wasser mehr!': 'Plus d''eau !'
+'Kein Wasser mehr!': 'Plus d’eau !'
 '<strong>Verlust der Zonenkontrolle</strong>: Die Suchen von {citizen} wurden unterbrochen!': '<span>Perte de contrôle :</span> les fouilles de {citizen} ont été interrompues !'
 '{citizen} hat die Zone verlassen, <strong>die Zombies werden in wenigen Minuten die Kontrolle erlangen wenn wir nichts unternehmen.</strong>': '{citizen} est parti(e), <span>la zone va repasser sous le contrôle des zombies dans quelques minutes si rien n''est fait</span>.'
 '<span>Es ist soweit: Der Schmaus kann beginnen!</span>': '<span>Plus de temps : le festin commence !</span>'
@@ -2057,20 +2057,20 @@ Deko-Punkte: points déco
 'Unser {plan} hat beim Angriff {damage} Punkte Schaden genommen: das sollte dringend repariert werden, ansonsten riskieren wir heute Nacht unser Leben!': 'Notre {plan} a subi {damage} points de dégâts structurels internes cette nuit : nous devons le réparer ou risquer de mourir ce soir !'
 'Die gesamte Region wurde durch die <strong>Explosion des {plan}</strong> verstrahlt!': 'Toute la région a été irradiée par la <strong>destruction de {plan}</strong> !'
 'Immerhin wurden alle Bürger aus der Stadt geschleudert...': 'Après tout, tous les citoyens de la ville ont été vaporisés...'
-'Du kannst nicht <strong>mehr als {max} Rationen Wasser pro Tag</strong> entnehmen.': 'Vous ne pouvez pas prendre <strong>plus de {max} rations d''eau par jour</strong>.'
+'Du kannst nicht <strong>mehr als {max} Rationen Wasser pro Tag</strong> entnehmen.': 'Vous ne pouvez pas prendre <strong>plus de {max} rations d’eau par jour</strong>.'
 'In der Horde der Zombies wurden {num} ehemalige Bürger gesichtet, die in der Aussenwelt gestorben sind und sich der Stadt nun zähnefletschend und mit düsterem Blick nähern...': "\n            {ref__icu, select,\n                on {\n                    {num, plural,\n                    one {En plus de cette horde, <span>#</span> ancien citoyen mort dans l'Outre-Monde est revenu, les dents en avant et le regard morne...}\n                    other {En plus de cette horde, <span>#</span> anciens citoyens morts dans l'Outre-Monde sont revenus, les dents en avant et le regard morne...}\n                    }\n                }\n                other {En plus de cette horde, <span>{num__copy}</span> anciens citoyens morts dans l'Outre-Monde sont revenus, les dents en avant et le regard morne...}\n            }\n        "
 'Von den Verteidigungsanlagen der Stadt aufgehalten, gingen eure ehemaligen Mitbürger mit leeren Händen und mampften stattdessen die Überreste ihrer eigenen verrottenden Gliedmaßen.': 'Arrêtés par les défenses de la ville, vos anciens concitoyens sont repartis bredouilles en grignotant les restes de leurs propres membres en putréfaction.'
 '{points} Punkt(e)': "{ref__icu, select,\n            on { {points, select, one {# point} other {{points} points}} }\n            other {{points} point(s)}\n            }"
 Schließen: Fermer
 Global: Global
-'Wenn die Stadt eine Pumpe baut, ist sie im Stande mehr Wasser zu fördern!': 'Si la ville construit une Pompe, vous pourrez obtenir plus d''eau !'
+'Wenn die Stadt eine Pumpe baut, ist sie im Stande mehr Wasser zu fördern!': 'Si la ville construit une Pompe, vous pourrez obtenir plus d’eau !'
 'Du kannst den Bau einer Pumpe im Bereich <strong>Konstruktionen</strong> beginnen.': 'Vous pouvez commencer la construction d''une Pompe depuis la section <strong>Chantiers</strong> du menu.'
 'Die Wandtafel ermöglicht altgedienten Helden, der ganzen Stadt Anweisungen zu geben.': 'Le tableau noir permet aux héros vétérans de donner des instructions à toute la communauté.'
 'Diese Option steht dir ab sofort zur Verfügung, da du auf deiner Seelenseite den Diktatorbonus freigeschaltet hast.': 'Il vous est accessible car vous avez débloqué l''avantage Dictateur sur votre page d''âme.'
 'Mehr darüber erfahren...': 'En savoir plus...'
 'Nach nur wenigen Metern bricht {citizen} schreiend auf dem Boden zusammen! Seine Beinverletzung hindert ihn schlussendlich daran, die Zone zu verlassen!': "Après quelques mètres seulement, {citizen} s'est effondré(e) par terre en hurlant ! Sa blessure à la jambe l'empêche finalement de quitter le secteur !"
 'Du kannst das Gebäude nicht betreten, deine offene Wunde würde sich sofort entzünden!': 'Vous ne pouvez pas rentrer dans ce bâtiment, vos blessures s''y infecteraient bien trop vite !'
-'Du kannst das Gebäude nicht betreten, es gibt dort nicht genug Sauerstoff für mehr als eine Person!': 'Vous ne pouvez pas rentrer dans ce bâtiment, il n''y a pas assez d''oxygène pour plus d''une personne !'
+'Du kannst das Gebäude nicht betreten, es gibt dort nicht genug Sauerstoff für mehr als eine Person!': 'Vous ne pouvez pas rentrer dans ce bâtiment, il n’y a pas assez d’oxygène pour plus d’une personne !'
 'Du kannst das Gebäude heute nicht erneut betreten, dein Körper würde das nicht aushalten!': 'Vous ne pouvez pas y retourner aujourd''hui, votre organisme ne pourrait le supporter.'
 'Du kannst das Gebäude nicht betreten, während du eskortiert wirst oder eine Eskorte leitest.': 'Vous ne pouvez pas rentrer dans ce bâtiment, vous êtes sous escorte ou attente d''escorte, vous ne pouvez pas rentrer !'
 'Du hast das Wasser aus {item} in den Brunnen geschüttet (<strong>+1 Einheit</strong>)': 'Vous avez ajouté l''eau de {item} au puits (<strong>+1 unité</strong>).'
@@ -2146,14 +2146,14 @@ Fuß: Pied
 'Bei deinem Fluchtversuch ist es einem Zombie gelungen dir eine Verletzung zuzufügen: {injury}! Du solltest hier besser schnell verschwinden!': 'Pendant votre fuite, un zombie vous a lacéré la partie du corps suivante : {injury} ! Il faut quitter cet enfer et vite !'
 'Du erhälst einen Bauplan wenn Du in diesem Gebäude campst, aber du musst zunächst die Zone aufräumen.': 'Vous pourriez obtenir un plan en campant ici, mais il faudrait déblayer la zone auparavant.'
 '(seit {num} Stunden herrscht völlige Flaute)': '(plus de {num} heures de calme plat)'
-'(über eine Stunde ohne besondere Vorkommnisse)': '(plus d''une heure sans activité notable)'
+'(über eine Stunde ohne besondere Vorkommnisse)': '(plus d’une heure sans activité notable)'
 '({num} Minuten Stille)': '({num} minutes de silence)'
 'Dieser Bürger gestattet dir nicht auf seine Gegenstände zuzugreifen.': 'Ce citoyen refuse que vous touchiez à ses objets.'
 '{attacker} hat {defender} gewalttätig angegriffen! Der Kampf ist eskaliert und {attacker} verletzte {defender} schlussendlich schwer!': '{attacker} a violemment agressé {defender} ! La bagarre a rapidement dégénéré et {attacker} a fini par <strong>blesser gravement</strong> {defender} !'
 'Tag {d} {today}': 'Jour {d} {today}'
 heute: aujourd'hui
 'Dieser Bürger wurde aus der Gemeinschaft verbannt; er hat nicht länger Zugang zu den Gebäuden der Stadt, mit Ausnahme des Brunnens (wobei er auf eine Ration pro Tag eingeschränkt ist).': 'Ce citoyen a été banni de la communauté : il ne pourra plus avoir accès aux dispositifs de la ville, à l''exception du puits (limité toutefois à la ration quotidienne, sans prise supplémentaire).'
-'Die Ratten haben das Schiff schon vor Tagen verlassen... Diese Stadt ist nur noch ein Schatten ihrer selbst.': 'De toute manière, tous les rats ont déjà abandonné le navire depuis des jours... Cette ville n''est plus que l''ombre d''elle-même.'
+'Die Ratten haben das Schiff schon vor Tagen verlassen... Diese Stadt ist nur noch ein Schatten ihrer selbst.': 'De toute manière, tous les rats ont déjà abandonné le navire depuis des jours… Cette ville n’est plus que l’ombre d’elle-même.'
 'Ermordet zu werden ist äußerst ärgerlich (ja, wirklich!). Aber wir bitten dich dringend, <u>die Identität deines Mörders gegenüber deinen ehemaligen Mitbürgern nicht aufzudecken</u>... Lass ihnen das Vergnügen, selbst ermitteln zu müssen!': 'Mourir assassiné(e) est un moment dur à passer (si, si). Mais nous vous recommandons très fortement <u>de ne pas divulguer l''identité de votre meurtrier à vos anciens concitoyens</u>... Laissez-leur le plaisir de mener l''enquête !'
 Fortfahren...: Continuer...
 'Was ist mit ihm passiert?': 'Qu''est-il devenu ?'

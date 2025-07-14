@@ -102,3 +102,7 @@ Registrierungstoken: Registration token
 'Dein Name kann höchstens {limit} Zeichen umfassen.': 'The name must have a maximum of {limit} characters.'
 'Der eingegebene Spielername verstößt gegen die Richtlinien von MyHordes und kann nicht verwendet werden.': 'The entered player name violates the guidelines of MyHordes and cannot be used.'
 'Leider verstößt dein aktueller Anzeigename auf Eternaltwin gegen die Richtlinien von MyHordes. Bitte gib einen neuen Namen ein, den du auf MyHordes benutzen möchtest. Dein Name auf Eternaltwin wird hierdurch nicht geändert.': 'Unfortunately, your current display name on Eternaltwin violates the MyHordes guidelines. Please enter a new name that you would like to use on MyHordes. This will not change your name on Eternaltwin.'
+'Dein aktueller Name auf MyHordes stimmt mit deinem Anzeigenamen auf Eternaltwin überein.': 'Your current display name on MyHordes matches your display name on Eternaltwin.'
+'Dein aktueller Anzeigename auf Eternaltwin kann auf MyHordes nicht verwendet werden.': 'Your current display name on Eternaltwin cannot be used on MyHordes.'
+'Beim Aktualisieren deines Namens ist ein Fehler aufgetreten.': 'An error occurred while updating your display name.'
+'Namen mit Eternaltwin abgleichen': 'Associate display names with Eternaltwin'

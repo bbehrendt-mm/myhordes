@@ -102,3 +102,7 @@ Registrierungstoken: Ficha de inscripción
 'Dein Name kann höchstens {limit} Zeichen umfassen.': 'Tu nombre solo puede tener hasta {limit} caracteres.'
 'Der eingegebene Spielername verstößt gegen die Richtlinien von MyHordes und kann nicht verwendet werden.': 'El nombre de usuario introducido infringe las normas de MyHordes y no puede ser utilizado.'
 'Leider verstößt dein aktueller Anzeigename auf Eternaltwin gegen die Richtlinien von MyHordes. Bitte gib einen neuen Namen ein, den du auf MyHordes benutzen möchtest. Dein Name auf Eternaltwin wird hierdurch nicht geändert.': 'Desafortunadamente, tu nombre actual en Eternaltwin infringe las normas de MyHordes. Por favor, introduce un nombre nuevo para utilizarlo en MyHordes. Esto no cambiará tu nombre en Eternaltwin.'
+'Dein aktueller Name auf MyHordes stimmt mit deinem Anzeigenamen auf Eternaltwin überein.': 'Tu nombre para mostrar actual en MyHordes coincide con tu nombre para mostrar en Eternaltwin.'
+'Dein aktueller Anzeigename auf Eternaltwin kann auf MyHordes nicht verwendet werden.': 'Tu nombre para mostrar actual en Eternaltwin no se puede utilizar en MyHordes.'
+'Beim Aktualisieren deines Namens ist ein Fehler aufgetreten.': 'Se produjo un error al actualizar tu nombre para mostrar.'
+'Namen mit Eternaltwin abgleichen': 'Asociar nombres para mostrar con Eternaltwin'
