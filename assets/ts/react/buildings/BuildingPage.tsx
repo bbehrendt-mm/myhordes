@@ -402,7 +402,7 @@ const BuildingActions= (props: BuildingCompleteProps) => {
                     ref={input}
                     type="number"
                     defaultValue={Math.min(1, props.missing_ap)}
-                    style={{marginBottom: "3px"}} min={Math.min(1, props.missing_ap)} max={Math.min(9, props.missing_ap)}
+                    style={{marginBottom: "3px"}} min={Math.min(1, props.missing_ap)} max={Math.min(14, props.missing_ap)}
                     onChange={() => {
                         if (input.current.value.match(/^\d+$/) === null) setInputValid(false);
                         else if (parseInt( input.current.value ) < Math.min(1, props.missing_ap)) setInputValid(false);
