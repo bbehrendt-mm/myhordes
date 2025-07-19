@@ -388,10 +388,10 @@ class ActionEffectProvider
                                                                          ->addSpawn('flesh_#00', count: 2)
         )->commit();
 
-        $effects_container->add()->identifier('spawn_potion')->add((new ItemEffect())->spawnAt(ItemDropTarget::DropTargetFloorOnly)
+        $effects_container->add()->identifier('spawn_potion')->add((new ItemEffect())->spawnAt(ItemDropTarget::DropTargetPreferRucksack)
                                                                        ->addSpawn('potion_#00')
         )->commit();
-        $effects_container->add()->identifier('spawn_1_watercup')->add((new ItemEffect())->spawnAt(ItemDropTarget::DropTargetFloorOnly)
+        $effects_container->add()->identifier('spawn_1_watercup')->add((new ItemEffect())->spawnAt(ItemDropTarget::DropTargetPreferRucksack)
                                                                            ->addSpawn('water_cup_#00')
         )->commit();
         $effects_container->add()->identifier('spawn_2_watercup')->add((new ItemEffect())->spawnAt(ItemDropTarget::DropTargetFloorOnly)
