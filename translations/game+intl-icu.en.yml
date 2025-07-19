@@ -3207,7 +3207,7 @@ Tierklinik: Experiment Center
 'Schau dir am besten gleich die {guide_cata} an.': 'Take a look at the {guide_cata} right away.'
 'Bedienungsanleitung des Katapults': 'operating instructions for the catapult'
 'Es enthält alle wesentlichen Informationen, um deiner neugewonnen Verantwortung gerecht werden zu können...': 'It contains all the essential information you need to fulfill your newfound responsibility...'
-'Du hast Erfahrungspunkte erhalten!': 'You have obtained expierience points!'
+'Du hast Erfahrungspunkte erhalten!': 'You have obtained experience points!'
 'In einem Rausch endloser Großzügigkeit hat {citizen} dir einige seiner Erfahrungspunkte gespendet.': "\n            {ref__gender, select,\n                        female {In a frenzy of endless generosity, {citizen} has donated some of her experience points to you.}\n                        other {In a frenzy of endless generosity, {citizen} has donated some of his experience points to you.}\n                    }\n"
 'Hoffentlich hat {citizen} die Erzählungen seiner vergangenen Heldentaten nur moderat übertrieben...': "\n            {ref__gender, select,\n                        female {Hopefully {citizen} has only moderately exaggerated the tales of her past exploits...}\n                        other {Hopefully {citizen} has only moderately exaggerated the tales of his past exploits...}\n                    }\n"
 'Zweite Lunge (2 AP, 2 EP)': 'Second Wind (2 AP, 2 EP)'
@@ -3227,3 +3227,4 @@ Tierklinik: Experiment Center
 'Du hast dafür <strong>{ap} Aktionspunkt(e)</strong> verbraucht.': 'You have used <strong>{ap, plural, one {one action point} other {# action points}}</strong>.'
 'Du hast dafür <strong>{cp} Baupunkt(e)</strong> verbraucht.': 'You have used <strong>{cp, plural, one {one construction point} other {# construction points}}</strong>.'
 'Du hast dafür <strong>{ap} Aktionspunkt(e)</strong> und <strong>{cp} Baupunkt(e)</strong> verbraucht.': 'You have used <strong>{ap, plural, one {one action point} other {# action points}}</strong> and <strong>{cp, plural, one {one construction point} other {# construction points}}</strong>.'
+'{citizen} wurde auserwählt, um unser Katapult zu steuern. Sollte ihm etwas Schreckliches zustoßen, dann muss ein neuer Bürger gewählt werden.': '{citizen}  has been voted to be in charge of the catapult. If anything dreadful happens to {ref__gender, select, female {her} other {him}}, another citizen will need to be designated.'
