@@ -416,7 +416,7 @@ class SanitizeTownConfigAction
             $dirs = ['north', 'south', 'west', 'east'];
             // init the values to default if needed
             foreach($dirs as $dir_i => $dir) {
-                $margin_custom[$dir] = min(max(0, $margin_custom[$dir] ?? 25), 100);
+                $margin_custom[$dir] = min(max(1, $margin_custom[$dir] ?? 25), 99);
             }
             // cap the margins to their opposed direction's margin and transform to %
             foreach($dirs as $dir_i => $dir) {
