@@ -3227,3 +3227,4 @@ Tierklinik: crwdns212326:0crwdne212326:0
 'Du hast dafür <strong>{ap} Aktionspunkt(e)</strong> verbraucht.': 'crwdns213196:0ap={ap}crwdne213196:0'
 'Du hast dafür <strong>{cp} Baupunkt(e)</strong> verbraucht.': 'crwdns213198:0cp={cp}crwdne213198:0'
 'Du hast dafür <strong>{ap} Aktionspunkt(e)</strong> und <strong>{cp} Baupunkt(e)</strong> verbraucht.': 'crwdns213200:0ap={ap}crwdnd213200:0cp={cp}crwdne213200:0'
+'{citizen} wurde auserwählt, um unser Katapult zu steuern. Sollte ihm etwas Schreckliches zustoßen, dann muss ein neuer Bürger gewählt werden.': 'crwdns213230:0citizen={citizen}crwdnd213230:0ref__gender={ref__gender}crwdne213230:0'
