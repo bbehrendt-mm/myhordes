@@ -207,7 +207,7 @@ const CitizenList = (props: { citizens: Citizen[] }) => {
                 <div className="flex gap">
                     <img alt=""
                          src={citizen.alive ? profMap.current[citizen.profession] : globals.strings.common.death}/>
-                    <Username userId={citizen.id} userName={citizen.name}/>
+                    <Username userId={citizen.id} userName={citizen.name} friend={citizen.friend}/>
                 </div>
             </li>)}
     </ul>

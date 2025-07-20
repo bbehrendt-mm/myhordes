@@ -153,6 +153,7 @@ export type Citizen = {
     name: string,
     profession: number|null,
     alive: boolean,
+    friend: boolean
 }
 
 export type TownListResponse = {
