@@ -518,7 +518,7 @@
                         <div class="cell grow-1">
                             <select id="zone-marker" class="full-width">
                                 {% for tag in zone_tags %}
-                                    <option value="{{tag.ref}}" {% if tag == zone.tag %}selected{% endif %}>{{tag.label|trans({}, 'game')}}</option>
+                                    <option value="{{tag.ref}}" {% if (zone.tag is null and zone.tag.ref == 0) or tag.ref == zone.tag.ref %}selected{% endif %}>{{tag.label|trans({}, 'game')}}</option>
                                 {% endfor %}
                             </select>
                         </div>
