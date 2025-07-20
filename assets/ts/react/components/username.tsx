@@ -5,7 +5,7 @@ import {Global} from "../../defaults";
 
 declare var $: Global;
 
-export default function Username(props: HTMLAttributes<HTMLElement>&{userId: number, tagName?: string, userName?: string, children?: React.ReactNode|React.ReactNode[]}) {
+export default function Username(props: HTMLAttributes<HTMLElement>&{userId: number, tagName?: string, userName?: string, friend?: boolean, children?: React.ReactNode|React.ReactNode[]}) {
     const me = useRef<HTMLElement>(null);
 
     useLayoutEffect(() => {
@@ -20,7 +20,7 @@ export default function Username(props: HTMLAttributes<HTMLElement>&{userId: num
     delete htmlProps.userName;
     delete htmlProps.children;
 
-    return <Tag elementRef={me} tagName={props.tagName ?? 'div'} classNames="username" {...htmlProps}>
+    return <Tag elementRef={me} tagName={props.tagName ?? 'div'} classNames={`username ${props.friend ? 'is-friend' : ''}`} {...htmlProps}>
         {props.userName ?? props.children}
     </Tag>
 }

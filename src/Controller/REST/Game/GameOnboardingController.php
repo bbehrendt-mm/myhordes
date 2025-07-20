@@ -190,6 +190,7 @@ class GameOnboardingController extends AbstractController
             'name' => $citizen->getName(),
             'alive' => $is_user ? false : $citizen->getAlive(),
             'profession' => (!$is_user && $citizen->getAlive()) ? $citizen->getProfession()->getName() : null,
+            'friend' => $this->getUser()?->getFriends()->contains( $is_user ? $citizen : $citizen->getUser() ),
         ];
     }
 
