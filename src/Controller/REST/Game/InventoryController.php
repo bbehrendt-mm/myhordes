@@ -289,6 +289,7 @@ class InventoryController extends CustomAbstractCoreController
             'categories' => array_map( fn($entry, $id) => [
                 'id' => $id,
                 'items' => (new ArrayCollection($entry))
+                    ->filter(fn(array $data) => $item_list[$data[0]] !== null)
                     ->map(fn(array $data) => $this->renderItem(
                         $citizen,
                         $item_list[$data[0]],
