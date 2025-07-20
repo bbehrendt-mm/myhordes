@@ -1518,9 +1518,7 @@ class SoulController extends CustomAbstractController
     {
         $user = $this->getUser();
 
-        /** @var CitizenRankingProxy $nextDeath */
         if ($latest) $nextDeath = $this->entity_manager->getRepository(CitizenRankingProxy::class)->findNextUnconfirmedDeath($user);
-
         if ($nextDeath === null || $nextDeath?->getTown()?->getImported() || ($nextDeath->getCitizen() && $nextDeath->getCitizen()->getAlive()) || $nextDeath->getUser() !== $user)
             return $this->redirectToRoute('initial_landing');
 
@@ -1556,8 +1554,8 @@ class SoulController extends CustomAbstractController
         return $this->render( 'ajax/soul/death.html.twig', $this->addDefaultTwigArgs(null, [
             'dead_citizen' => $nextDeath,
             'citizen' => $nextDeath,
-            'sp' => $nextDeath->getPoints(),
-            'day' => $nextDeath->getDay(),
+            'death_sp' => $nextDeath->getPoints(),
+            'death_day' => $nextDeath->getDay(),
             'pictos' => $pictosWonDuringTown,
             'gazette' => $canSeeGazette,
             'denied_pictos' => $pictosNotWonDuringTown,
