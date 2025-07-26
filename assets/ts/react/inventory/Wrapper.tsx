@@ -87,7 +87,8 @@ interface InventoryTransferSignalProps {
     from: number,
     to: number,
     direction: string,
-    item: number|null
+    item: number|null,
+    response: TransportResponse,
 }
 
 export class HordesInventory extends BaseMounter<mountProps>{
@@ -247,7 +248,7 @@ const HordesInventoryWrapper = (props: mountProps &
         if (theftMode) mod = 'theft';
 
         api.current.transfer( item, from, to, direction, mod ).then(s => {
-            emitSignal<InventoryTransferSignalProps>('item-transfer', { item, from, to, direction })
+            emitSignal<InventoryTransferSignalProps>('item-transfer', { item, from, to, direction, response: s })
 
             // Update individual inventories
             const toA = (direction === 'down' || direction === 'down-all') ? s.source : s.target;
@@ -694,7 +695,7 @@ const HordesEscortInventoryWrapper = (props: escortMountProps) => {
         setLoading(true);
 
         api.current.transfer( item, from, to, direction ).then(s => {
-            emitSignal<InventoryTransferSignalProps>('item-transfer', { item, from, to, direction })
+            emitSignal<InventoryTransferSignalProps>('item-transfer', { item, from, to, direction, response: s })
 
             // Update individual inventories
             const toA = direction === 'down' ? s.source : s.target;

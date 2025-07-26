@@ -107,45 +107,7 @@
 </body>
 <footer {{ (theme??{})|data }}>
     {% block footer %}
-
-        <div class="row">
-            <div class="padded cell footer rw-5 rw-sm-12 justify">
-                {% include 'partials/project_desc.html.twig' %}
-            </div>
-            <div class="padded cell-small footer rw-7 rw-sm-24 center">
-                {% include('partials/the_team.html.twig') with { devs: devs } only %}
-            </div>
-            <div class="padded cell-small footer rw-7 rw-sm-24 center">
-                <div>
-                    <strong>{{ 'Danke an'|trans({}, 'global') }}</strong>
-                    <div class="content">
-                        {% for supporter in supporters %}
-                            <i>{{ supporter }}</i>{% if not loop.last %},{% endif %}
-                        {% endfor %}
-                        <strong><a href="https://gitlab.com/eternaltwin/myhordes/official-assets-made-by-players">{{ 'Vielen Dank an diese Spieler für ihre künstlerischen Beiträge.'|trans({}, 'global') }}</a></strong>
-                    </div>
-                </div>
-
-                <div>
-                    <strong>{{ 'Rechtliche Informationen'|trans({}, 'global') }}</strong>
-                    <div class="content">
-                        <a href="{{ url('legal_doc_default', {document: 'tos'}) }}">{{ 'Nutzungsbedingungen'|trans({}, 'global') }}</a><br/>
-                        <a href="{{ url('legal_doc_default', {document: 'privacy-policy'}) }}">{{ 'Datenschutzerklärung'|trans({}, 'global') }}</a><br/>
-                        <a href="{{ url('legal_doc_default', {document: 'imprint'}) }}">{{ 'Impressum'|trans({}, 'global') }}</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="padded cell rw-6">
-                {% include "web/indicator.html.twig" with {} only %}
-            </div>
-            <div class="padded cell rw-6">
-                <div class="v">
-                    {% include "web/version_info.html.twig" with {debug, version, status_page} only %}
-                </div>
-            </div>
-        </div>
+        {% include "partials/footer.html.twig" with { devs: devs, supporters: supporters, version: version, debug: debug, status_page: status_page } only %}
     {% endblock %}
 </footer>
 <script>

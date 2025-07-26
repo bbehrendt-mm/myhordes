@@ -11,6 +11,7 @@ import {
 import {useContext, useEffect, useLayoutEffect, useRef, useState} from "react";
 import {Tooltip} from "../tooltip/Wrapper";
 import {Globals} from "./Wrapper";
+import {emitSignal} from "../../v2/client-modules/Signal";
 
 export type MapOverviewParentStateAction = {
     zoom?: number
@@ -107,7 +108,10 @@ const MapOverviewZoneTooltip = ( props: MapOverviewZoneTooltipProps ) => {
     const getHorrorValue = () => (globals.strings.horror ?? [null])[ Math.floor( Math.random() * (globals.strings.horror?.length ?? 0) ) ];
 
     useEffect(() => {
-        if (horror) timer.current = window.setTimeout( () => setHorror( null ), 500 );
+        if (horror) timer.current = window.setTimeout( () => {
+            setHorror(null);
+            emitSignal<MapZone>('horror-message-cleared', props.zone)
+        }, 500 );
         return () => {
             if (timer.current) {
                 window.clearTimeout( timer.current );

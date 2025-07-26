@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Annotations\GateKeeperProfile;
+use App\Translation\T;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -58,8 +59,7 @@ class SeoController extends CustomAbstractController
     public function seo_welcome_with_lang(Request $request): Response
     {
         return $this->renderWithLanguageLinks( $request, 'seo/welcome.html.twig', [
-            'devs' => array_map( fn($dev) => $dev[2], WebController::$devs),
-            'supporters' => WebController::$supporters
+            ...$this->getDevsAndSupporters()
         ] );
     }
 
@@ -98,10 +98,9 @@ class SeoController extends CustomAbstractController
 
         return $this->renderWithLanguageLinks( $request, 'seo/help.html.twig', [
             'title' => $title,
-            'devs' => WebController::$devs,
-            'supporters' => WebController::$supporters,
             'section' => $name,
-            'content' => str_replace('x-ajax-href', 'href', $content)
+            'content' => str_replace('x-ajax-href', 'href', $content),
+            ...$this->getDevsAndSupporters()
         ] );
     }
 
@@ -117,5 +116,25 @@ class SeoController extends CustomAbstractController
         return trim($any)
             ? $this->redirect( "{$request->getScheme()}://{$request->getHost()}/jx/{$any}" )
             : $this->redirect( "{$request->getScheme()}://{$request->getHost()}/" );
+    }
+
+    protected function getDevsAndSupporters() : array {
+        $devs = WebController::$devs;
+        shuffle($devs);
+
+        $supporters = WebController::$supporters;
+        shuffle($supporters);
+
+        return [
+            'devs' => array_map(function($dev) {
+                $dev[3] = match ($dev[1]) {
+                    'code' => T::__('Programmierung', 'global'),
+                    'users' => T::__('Community-Management', 'global'),
+                    default => '',
+                };
+                return $dev;
+            }, $devs),
+            'supporters' => $supporters,
+        ];
     }
 }
