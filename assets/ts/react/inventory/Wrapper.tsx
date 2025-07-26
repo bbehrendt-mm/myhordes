@@ -83,6 +83,13 @@ interface InventoryBagLoadedSignalProps {
     element: HTMLElement
 }
 
+interface InventoryTransferSignalProps {
+    from: number,
+    to: number,
+    direction: string,
+    item: number|null
+}
+
 export class HordesInventory extends BaseMounter<mountProps>{
 
     protected item_cache: {[key:number]: InventoryBagData} = {}
@@ -240,6 +247,8 @@ const HordesInventoryWrapper = (props: mountProps &
         if (theftMode) mod = 'theft';
 
         api.current.transfer( item, from, to, direction, mod ).then(s => {
+            emitSignal<InventoryTransferSignalProps>('item-transfer', { item, from, to, direction })
+
             // Update individual inventories
             const toA = (direction === 'down' || direction === 'down-all') ? s.source : s.target;
             const toB = (direction === 'down' || direction === 'down-all') ? s.target : s.source;
@@ -685,6 +694,8 @@ const HordesEscortInventoryWrapper = (props: escortMountProps) => {
         setLoading(true);
 
         api.current.transfer( item, from, to, direction ).then(s => {
+            emitSignal<InventoryTransferSignalProps>('item-transfer', { item, from, to, direction })
+
             // Update individual inventories
             const toA = direction === 'down' ? s.source : s.target;
             const toB = direction === 'down' ? s.target : s.source;
