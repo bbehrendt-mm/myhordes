@@ -3227,3 +3227,4 @@ Tierklinik: Tierklinik
 'Du hast dafür <strong>{cp} Baupunkt(e)</strong> verbraucht.': 'Du hast dafür <strong>{cp, plural, one {einen Baupunkt} other {# Baupunkte}}</strong> verbraucht.'
 'Du hast dafür <strong>{ap} Aktionspunkt(e)</strong> und <strong>{cp} Baupunkt(e)</strong> verbraucht.': 'Du hast dafür <strong>{ap, plural, one {einen Aktionspunkt} other {# Aktionspunkte}}</strong> und <strong>{cp, plural, one {einen Baupunkt} other {# Baupunkte}}</strong> verbraucht.'
 '{citizen} wurde auserwählt, um unser Katapult zu steuern. Sollte ihm etwas Schreckliches zustoßen, dann muss ein neuer Bürger gewählt werden.': '{citizen} wurde auserwählt, um unser Katapult zu steuern. Sollte {ref__gender, select, female {ihr} other {ihm} } etwas Schreckliches zustoßen, dann muss ein neuer Bürger gewählt werden.'
+'Wunderwerk: Blaugoldige Thermalbäder': 'Wunderwerk: Blaugoldige Thermalbäder'
