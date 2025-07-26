@@ -3228,3 +3228,4 @@ Tierklinik: Experiment Center
 'Du hast dafür <strong>{cp} Baupunkt(e)</strong> verbraucht.': 'You have used <strong>{cp, plural, one {one construction point} other {# construction points}}</strong>.'
 'Du hast dafür <strong>{ap} Aktionspunkt(e)</strong> und <strong>{cp} Baupunkt(e)</strong> verbraucht.': 'You have used <strong>{ap, plural, one {one action point} other {# action points}}</strong> and <strong>{cp, plural, one {one construction point} other {# construction points}}</strong>.'
 '{citizen} wurde auserwählt, um unser Katapult zu steuern. Sollte ihm etwas Schreckliches zustoßen, dann muss ein neuer Bürger gewählt werden.': '{citizen}  has been voted to be in charge of the catapult. If anything dreadful happens to {ref__gender, select, female {her} other {him}}, another citizen will need to be designated.'
+'Wunderwerk: Blaugoldige Thermalbäder': 'Wonder: Blue Gold Thermal baths'
