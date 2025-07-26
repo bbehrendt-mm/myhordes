@@ -744,7 +744,9 @@ footer {
   font-size: 1.1rem;
   .cell-small.footer > div:not(.v), .cell.footer > div:not(.v) {
     background: rgba(0,0,0,0.33);
-    margin-bottom: 5px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     strong {
       &:first-child { background: rgba(0,0,0,0.5); }
       display: block;
@@ -755,6 +757,10 @@ footer {
     }
     .content {
       padding: 5px;
+      display: flex;
+      flex-grow: 1;
+      flex-direction: column;
+      justify-content: center;
     }
   }
 }

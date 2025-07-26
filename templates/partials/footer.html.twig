@@ -1,0 +1,89 @@
+{% set compact_mode = (with_desc is not defined or with_desc) and (with_legal is not defined or with_legal) and not (devs is defined and devs|length) and not (supporters is defined and supporters|length > 0) %}
+<div class="row-flex wrap stretch">
+    {% if compact_mode %}
+        <div class="padded cell footer rw-6 rw-sm-12 justify">
+            {% include 'partials/project_desc.html.twig' %}
+        </div>
+        <div class="padded cell footer rw-6 rw-sm-12 center">
+            <div>
+                <strong>{{ 'Rechtliche Informationen'|trans({}, 'global') }}</strong>
+                <div class="content">
+                    <div>
+                        <a href="{{ url('legal_doc_default', {document: 'tos'}) }}">{{ 'Nutzungsbedingungen'|trans({}, 'global') }}</a><br/>
+                        <a href="{{ url('legal_doc_default', {document: 'privacy-policy'}) }}">{{ 'Datenschutzerklärung'|trans({}, 'global') }}</a><br/>
+                        <a href="{{ url('legal_doc_default', {document: 'imprint'}) }}">{{ 'Impressum'|trans({}, 'global') }}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="padded cell footer rw-5 rw-sm-12 justify">
+            {% if with_desc is not defined or with_desc %}{% include 'partials/project_desc.html.twig' %}{% endif %}
+        </div>
+        <div class="padded cell-small footer rw-7 rw-sm-24 center">
+            {% if devs is defined and devs|length > 0 %}{% include('partials/the_team.html.twig') with { devs: devs } only %}{% endif %}
+        </div>
+        <div class="padded cell-small footer rw-7 rw-sm-24 center">
+            {% if supporters is defined and supporters|length > 0 %}
+                <div>
+                    <strong>{{ 'Danke an'|trans({}, 'global') }}</strong>
+                    <div class="content">
+                        <div>
+                            {% for supporter in supporters %}
+                                <i>{{ supporter }}</i>{% if not loop.last %},{% endif %}
+                            {% endfor %}
+                            <strong><a href="https://gitlab.com/eternaltwin/myhordes/official-assets-made-by-players">{{ 'Vielen Dank an diese Spieler für ihre künstlerischen Beiträge.'|trans({}, 'global') }}</a></strong>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    {% endif %}
+
+</div>
+<div class="row-flex wrap stretch">
+    {% if compact_mode %}
+        <div class="padded cell-small footer rw-24 center">
+            {% if with_ads is not defined or with_ads %}
+                <div>
+                    <strong>{{ 'Andere Spiele auf Eternaltwin'|trans({}, 'global') }}</strong>
+                    <div class="content">{% include('partials/other_games.html.twig') with { } only %}</div>
+                </div>
+            {% endif %}
+        </div>
+    {% else %}
+        <div class="padded cell-small footer rw-17 rw-sm-24 center">
+            {% if with_ads is not defined or with_ads %}
+                <div>
+                    <strong>{{ 'Andere Spiele auf Eternaltwin'|trans({}, 'global') }}</strong>
+                    <div class="content">{% include('partials/other_games.html.twig') with { } only %}</div>
+                </div>
+            {% endif %}
+        </div>
+        <div class="padded cell-small footer rw-7 rw-sm-24 center">
+            {% if with_legal is not defined or with_legal %}
+                <div>
+                    <strong>{{ 'Rechtliche Informationen'|trans({}, 'global') }}</strong>
+                    <div class="content">
+                        <div>
+                            <a href="{{ url('legal_doc_default', {document: 'tos'}) }}">{{ 'Nutzungsbedingungen'|trans({}, 'global') }}</a><br/>
+                            <a href="{{ url('legal_doc_default', {document: 'privacy-policy'}) }}">{{ 'Datenschutzerklärung'|trans({}, 'global') }}</a><br/>
+                            <a href="{{ url('legal_doc_default', {document: 'imprint'}) }}">{{ 'Impressum'|trans({}, 'global') }}</a>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    {% endif %}
+
+</div>
+<div class="row">
+    <div class="padded cell rw-6 rw-sm-12">
+        {% if with_indicator is not defined or with_indicator %}{% include "web/indicator.html.twig" with {} only %}{% endif %}
+    </div>
+    <div class="padded cell rw-6 rw-sm-12">
+        <div class="v">
+            {% if with_version is not defined or with_version %}{% include "web/version_info.html.twig" with {debug, version, status_page} only %}{% endif %}
+        </div>
+    </div>
+</div>
