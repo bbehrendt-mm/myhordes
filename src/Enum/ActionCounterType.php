@@ -43,6 +43,7 @@ enum ActionCounterType: int {
             self::AnonPost,
             self::TamerClinicUsed,
             self::LastAutoghoulAt,
+            self::ReceiveHeroic,
         ];
     }
 
