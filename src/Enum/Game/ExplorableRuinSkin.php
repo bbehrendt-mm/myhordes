@@ -524,6 +524,14 @@ enum ExplorableRuinSkin: string
     public function fog(bool $cloud): string {
         return $cloud ? "build/images/explore/frames.gif" : "build/images/explore/white.png";
     }
+
+    public function ui_frame(): string {
+        return "build/images/explore/frame.png";
+    }
+
+    public function ui_oxygen(): string {
+        return "build/images/icons/oxygen_small.gif";
+    }
 }
 
 

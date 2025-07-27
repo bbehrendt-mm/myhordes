@@ -1,10 +1,12 @@
 import * as React from "react";
-import {Group, Layer, Rect, Line, Image} from "react-konva";
+import {Group, Layer, Rect, Line, Image, Text} from "react-konva";
 import {useContext, useLayoutEffect, useRef, useState} from "react";
 import Konva from "konva";
 import {ExplorationTileset, MovementControls} from "./api";
-import {ScaleHelper} from "./Map";
+import {AssetHelper, ScaleHelper} from "./Map";
 import {MapScaler} from "./scaler";
+import {Globals} from "./Wrapper";
+import {useCountdown} from "../utils";
 
 interface MapSetup {
     h: number,
@@ -91,7 +93,44 @@ const MovementChevron = () => {
     />
 }
 
+type LayerUIFrameProps = {
+    timeout: number
+}
+
+const UIFrame = (props: LayerUIFrameProps) => {
+    const globals = useContext(Globals);
+    const {scaler} = useContext(ScaleHelper);
+    const assets = useContext(AssetHelper);
+
+    const [timeout, setTimeout] = useState(`${Math.floor(Math.max(0, props.timeout/3))}`);
+
+    const statics = useRef<Konva.Group>();
+
+    useLayoutEffect(() => {
+        statics.current.cache();
+    }, [scaler.cache()]);
+
+    useCountdown(
+        props.timeout * 1000,
+        ms => `${Math.floor(Math.max(0, ms/3000))}`,
+        (_, s) => setTimeout(s),
+        250,
+        [props.timeout]
+    )
+
+    return <Group listening={false}>
+        <Group ref={statics}>
+            <Image image={ assets.images[assets.theme.ui.frame] } { ...scaler.whxy() } />
+            <Text text={ globals.name } lineHeight={0.6} align="left" verticalAlign="top" fill="#205319" fontStyle="bold" fontFamily="visitor2" fontSize={ scaler.s(0.045) } { ...scaler.whxy(0.398, 0.085, 0.02, 0.015) } />
+            <Text text={ `${globals.strings.common.oxygen}:` } lineHeight={0.6}  align="right" verticalAlign="top" fill="#205319" fontStyle="bold" fontFamily="visitor2" fontSize={ scaler.s(0.045) } { ...scaler.whxy(0.398, 0.085, 0.585, 0.015) } />
+            <Image image={ assets.images[assets.theme.ui.oxygen] } { ...scaler.whxy(0.057, 0.057, 0.92, 0.058) } />
+        </Group>
+        <Text text={ `${timeout}` } lineHeight={0.6}  align="right" verticalAlign="top" fill="#d7ff5b" fontStyle="bold" fontFamily="visitor2" fontSize={ scaler.s(0.07) } { ...scaler.whxy(0.325, 0.085, 0.585, 0.055) } />
+    </Group>
+}
+
 type LayerUIProps = {
+    timeout: number
     onMove: (dx: number, dy: number) => void,
     controls?: MovementControls|null
 }
@@ -102,5 +141,6 @@ export const LayerUI = (props: LayerUIProps) => {
         <MovementArrow onClick={() => props.onMove(1, 0)} visible={props.controls?.e} rotation={90}/>
         <MovementArrow onClick={() => props.onMove(0,-1)} visible={props.controls?.s} rotation={180}/>
         <MovementArrow onClick={() => props.onMove(-1,0)} visible={props.controls?.w} rotation={270}/>
+        <UIFrame timeout={ props.timeout } />
     </Layer>
 }

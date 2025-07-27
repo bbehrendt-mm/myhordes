@@ -1,4 +1,10 @@
-<hordes-map-e-ruin id="e-map" data-react-mount="e-map" data-etag="{{ map.exploration.id }}" data-origin="{{ map.zone.zone.id }}" data-skin="{{ prototype.explorableSkin }}"></hordes-map-e-ruin>
+<hordes-map-e-ruin
+        id="e-map" data-react-mount="e-map"
+        data-etag="{{ map.exploration.id }}"
+        data-origin="{{ map.zone.zone.id }}"
+        data-skin="{{ prototype.explorableSkin }}"
+        data-name="{{ map.name|trans({},'names') }}"
+></hordes-map-e-ruin>
 <div class="ruin_map_area">
     <div class="map {{ map.shifted ? 'in_room' : '' }}">
 

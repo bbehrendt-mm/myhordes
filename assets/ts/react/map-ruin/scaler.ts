@@ -16,6 +16,8 @@ export class MapScaler {
         this.parent = parent;
     }
 
+    cache(): string { return `${this.x(1)}-${this.y(1)}` }
+
     x(v: number = 1): number { return v * (this.parent?.current ? this.parent.current.x(this.w) : this.w); }
     y(v: number = 1): number { return v * (this.parent?.current ? this.parent.current.y(this.h) : this.h); }
     s(v: number = 1): number { return (this.x(v) + this.y(v))/2 }

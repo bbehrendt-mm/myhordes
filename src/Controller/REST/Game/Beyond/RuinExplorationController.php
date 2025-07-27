@@ -71,7 +71,7 @@ class RuinExplorationController extends AbstractController
     public function index(TranslatorInterface $trans, Packages $asset, EntityManagerInterface $em, ConfMaster $conf): JsonResponse {
         return new JsonResponse([
             'common' => [
-
+                'oxygen' => $trans->trans('Sauerstoff', [], 'game'),
             ],
         ]);
     }
@@ -97,6 +97,10 @@ class RuinExplorationController extends AbstractController
             'fog' => [
                 $asset->getUrl($theme->fog(true)),
                 $asset->getUrl($theme->fog(false)),
+            ],
+            'ui' => [
+                'frame'  => $asset->getUrl($theme->ui_frame()),
+                'oxygen' => $asset->getUrl($theme->ui_oxygen()),
             ]
         ]);
     }
@@ -141,6 +145,7 @@ class RuinExplorationController extends AbstractController
         }
 
         return [
+            'timeout' => max(0, $stats->getTimeout()->getTimestamp() - time()),
             'paused' => $in_grace,
             'exit' => $exit_angle,
             'shifted' => $stats->getInRoom(),

@@ -51,6 +51,10 @@ export type AssetResponse = {
         zombie_dead: string,
     }
     fog: [string,string],
+    ui: {
+        oxygen: string,
+        frame: string,
+    }
 };
 
 export type MovementControls = {
@@ -67,6 +71,7 @@ export type ExplorationStatus = {
     activity: number,
     floor: number,
     zombies: number,
+    timeout: number,
     move: MovementControls|null,
 }
 

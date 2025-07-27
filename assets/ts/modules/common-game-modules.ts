@@ -40,12 +40,13 @@ customElements.define('hordes-map-e-ruin', class HordesMapERuinElement extends P
     protected generateProps(): object | null {
         return {
             origin: parseInt(this.dataset.origin ?? '0'),
-            theme: this.dataset.skin
+            theme: this.dataset.skin,
+            name: this.dataset.name ?? this.dataset.skin ?? ''
         }
     }
 
     protected static observedAttributeNames() {
-        return ['data-etag', 'data-origin', 'data-theme'];
+        return ['data-etag', 'data-origin', 'data-theme', 'data-name'];
     }
 
 }, {  });

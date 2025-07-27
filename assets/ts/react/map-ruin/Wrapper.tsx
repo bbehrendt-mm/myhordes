@@ -15,11 +15,13 @@ declare var c: Const;
 interface mountProps {
     origin: number,
     theme: string,
+    name: string,
 }
 
 export interface RuinMapGlobal {
     api: RuinExplorationAPI,
-    strings: TranslationStrings|null
+    strings: TranslationStrings|null,
+    name: string,
 }
 
 export const Globals = React.createContext<RuinMapGlobal>(null);
@@ -61,7 +63,8 @@ const HordesRuinExplorationMapWrapper = (props: mountProps) => {
         <div ref={map} className="map">
             <Globals.Provider value={{
                 api: apiRef.current,
-                strings
+                strings,
+                name: props.name,
             }}>
                 { size && strings && <MapCore setup={{
                     h: size.height, w: size.width

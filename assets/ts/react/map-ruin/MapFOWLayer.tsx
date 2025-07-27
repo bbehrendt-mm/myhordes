@@ -74,13 +74,13 @@ export const MapFOWLayer = (props: MapFOWProperties) => {
         poisonAnimRef.current = new Konva.Animation((frame) => {
             const diff = (frame.timeDiff) / 1000;
             for (let i = 0; i < poisonLayers; i++)
-                poisonRefs[i].current.rotate(diff * rotation[i] * 2);
+                poisonRefs[i].current.rotate(diff * rotation[i] * 3);
         });
 
         poisonAnimRef.current.start();
         return () => poisonAnimRef.current?.stop();
 
-    }, []);
+    }, [scaler.cache()]);
 
     return <Group listening={false}>
         <Group {...scaler.xy(0, 0)} /*globalCompositeOperation="multiply"*/>

@@ -381,7 +381,12 @@ div.ruin_map_react {
         &>.r1  { right: 0; top: calc( 50% - 22px ); width: 33px; height: 45px; background: url("../../img/map/glass_r1.png") no-repeat; }
         &>.r0b { right: 0; top: calc( 50% + 23px ); width: 33px; bottom: 33px; background: url("../../img/map/glass_r0.png") repeat-y; }
         &>.b   { height: 33px; bottom: 0; left: 33px; right: 33px; background: url("../../img/map/glass_b.png") repeat-x; }
-
+        &>.noise {
+          top: 0; left: 0; right: 0; bottom: 0;
+          mix-blend-mode: multiply;
+          opacity: 0.15;
+          background: url("../../img/anims/noise.gif") center/cover no-repeat;
+        }
         position: absolute; top: 0; left: 0; right: 0; bottom: 0;
       }
     }

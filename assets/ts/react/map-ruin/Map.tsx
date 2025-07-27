@@ -44,6 +44,7 @@ export const MapCore = (props: {setup: MapSetup, properties: MapProperties}) => 
             Object.values(a.tiles).forEach( src => sources.push(src) );
             Object.values(a.doors).forEach( s => Object.values(s).forEach( d => sources.push(d.i) ) );
             Object.values(a.decals).forEach( s => sources.push(s.i) );
+            Object.values(a.ui).forEach( s => sources.push(s) );
 
             setMissingImages( sources.length );
             setTotalImages( sources.length );
@@ -122,8 +123,8 @@ export const MapCore = (props: {setup: MapSetup, properties: MapProperties}) => 
                         <MapFOWLayer shadowColor="black" shadowOpacity={0.5} shadowDistance={0.5} shadowBlur={0.5}/>
                     </Layer>
 
-
                     <LayerUI
+                        timeout={ (nextZone?.r ?? currentZone).status.timeout }
                         controls={{
                             ...((nextZone?.r ?? currentZone)?.status?.move ?? {}),
                             s: ((nextZone?.r ?? currentZone)?.status?.move ?? {})?.s || (nextZone?.r ?? currentZone).status.shifted

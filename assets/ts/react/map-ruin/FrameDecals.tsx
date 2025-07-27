@@ -9,6 +9,7 @@ export const GlassFrameDecals = () => {
     ];
 
     return <div className="frame-plane">
+        <div className="noise"/>
         { component.map( (c,i) => <div key={c} className={c}/> ) }
     </div>
 }
