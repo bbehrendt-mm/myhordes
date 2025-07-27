@@ -375,27 +375,17 @@ class WebController extends CustomAbstractController
     /**
      * @param EternalTwinHandler $etwin
      * @param SessionInterface $session
+     * @param string $state
+     * @param bool $remember
      * @return Response
      */
-    #[Route(path: 'gateway/eternal-twin', name: 'gateway-etwin')]
-    public function gateway_etwin(EternalTwinHandler $etwin, SessionInterface $session): Response {
+    #[Route(path: 'gateway/eternal-twin/{state}', name: 'gateway-etwin', defaults: ['remember' => false])]
+    #[Route(path: 'gateway/eternal-twin-rm/{state}', name: 'gateway-remember-etwin', defaults: ['remember' => true])]
+    public function gateway_etwin(EternalTwinHandler $etwin, SessionInterface $session, string $state = 'etwin-login', bool $remember = false): Response {
         if (!$etwin->isReady()) return new Response('Error: No gateway to EternalTwin is configured.');
-        $session->set('_etwin_rm', false);
+        $session->set('_etwin_rm', $remember);
         $request = Request::createFromGlobals();
-        return new RedirectResponse($etwin->createAuthorizationRequest('etwin-login#' . $request->getHost() . $request->getBaseUrl()));
-    }
-
-    /**
-     * @param EternalTwinHandler $etwin
-     * @param SessionInterface $session
-     * @return Response
-     */
-    #[Route(path: 'gateway/rm/eternal-twin', name: 'gateway-remember-etwin')]
-    public function gateway_rm_etwin(EternalTwinHandler $etwin, SessionInterface $session): Response {
-        if (!$etwin->isReady()) return new Response('Error: No gateway to EternalTwin is configured.');
-        $session->set('_etwin_rm', true);
-        $request = Request::createFromGlobals();
-        return new RedirectResponse($etwin->createAuthorizationRequest('etwin-login#' . $request->getHost() . $request->getBaseUrl()));
+        return new RedirectResponse($etwin->createAuthorizationRequest( "$state#{$request->getHost()}{$request->getBaseUrl()}"));
     }
 
     /**
@@ -432,11 +422,12 @@ class WebController extends CustomAbstractController
             return new Response('Error: Untrusted domain!');
         }
 
-        switch ($state) {
-            case 'import': return $this->render_web_framework($r, $mercure, $this->generateUrl('soul_import', ['code' => $code]));
-            case 'etwin-login': return $this->render_web_framework($r, $mercure, $this->generateUrl('etwin_login', ['code' => $code]));
-            default: return new Response('Error: Invalid state, can\'t redirect!');
-        }
+        return match ($state) {
+            'import' => $this->render_web_framework($r, $mercure, $this->generateUrl('soul_import', ['code' => $code])),
+            'etwin-login' => $this->render_web_framework($r, $mercure, $this->generateUrl('etwin_login', ['code' => $code])),
+            'etwin-update' => $this->render_web_framework($r, $mercure, $this->generateUrl('soul_settings', ['code' => $code])),
+            default => new Response('Error: Invalid state, can\'t redirect!'),
+        };
 
 
     }

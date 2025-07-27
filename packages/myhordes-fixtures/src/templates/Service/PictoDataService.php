@@ -720,7 +720,7 @@ class PictoDataService implements FixtureProcessorInterface {
                 'special' => true,
             ],
             [
-                'label' => 'Blaugoldige Thermalbäder',
+                'label' => 'Wunderwerk: Blaugoldige Thermalbäder',
                 'description' => 'Hey, du hättest an deine Seife denken sollen!',
                 'icon' => 'r_thermal',
                 'rare' => true,

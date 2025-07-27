@@ -17,7 +17,7 @@ import {VaultItemEntry} from "../../v2/typedef/vault_td";
 import {BaseMounter} from "../index";
 import {emitSignal, useBroadcastSignal, useSignal} from "../../v2/client-modules/Signal";
 import {ServerInducedSignalProps} from "../../v2/fetch";
-import {ItemTooltip, useTranslations} from "../utils";
+import {ItemTooltip, useTranslations, useSharedWorkerMessages} from "../utils";
 import {randomUUIDv4} from "../../shims";
 
 declare var $: Global;
@@ -81,6 +81,14 @@ interface InventoryBagLoadedSignalProps {
     id: number,
     inventory: InventoryResponse,
     element: HTMLElement
+}
+
+interface InventoryTransferSignalProps {
+    from: number,
+    to: number,
+    direction: string,
+    item: number|null,
+    response: TransportResponse,
 }
 
 export class HordesInventory extends BaseMounter<mountProps>{
@@ -235,6 +243,8 @@ const HordesInventoryWrapper = (props: mountProps &
         if (theftMode) mod = 'theft';
 
         api.current.transfer( item, from, to, direction, mod ).then(s => {
+            emitSignal<InventoryTransferSignalProps>('item-transfer', { item, from, to, direction, response: s })
+
             // Update individual inventories
             const toA = (direction === 'down' || direction === 'down-all') ? s.source : s.target;
             const toB = (direction === 'down' || direction === 'down-all') ? s.target : s.source;
@@ -424,7 +434,7 @@ const BankInventory = (props: InventoryPropsBank) => {
                     <SingleItem
                         blur={ searchString === '' ? null : !(vaultData ?? {})[i.p]?.name?.normalize("NFD").replace(/[\u0300-\u036f]/g, "")?.toLowerCase()?.includes( normalizedSearchString ) }
                         item={i} mods={props.inventory.mods} data={(vaultData ?? {})[i.p] ?? null}
-                        locked={props.locked || i.e} onClick={props.onItemClick}
+                        locked={props.locked || i.e} onClick={props.onItemClick} highlightDefense={true}
                     />
                 </React.Fragment>) }
             </React.Fragment>)}
@@ -440,12 +450,12 @@ const BankInventory = (props: InventoryPropsBank) => {
     </>
 }
 
-const SingleItem = (props: { item: Item, data: VaultItemEntry | null, mods: InventoryMods, locked: boolean, onClick?: (i:Item) => void, blur: null|boolean, className?: string })=> {
+const SingleItem = (props: { item: Item, data: VaultItemEntry | null, mods: InventoryMods, locked: boolean, onClick?: (i:Item) => void, blur: null|boolean, className?: string, highlightDefense?: boolean })=> {
     const globals = useContext(Globals);
 
     return props.data !== null
         ? <li
-            className={`item ${props.className ?? ''} ${(props.blur === true && 'blur') || ''} ${(props.blur === false && 'focus') || ''} ${(props.locked && 'locked') || ''} ${(props.item.b && 'broken') || ''} ${(props.item.h && 'banished_hidden') || ''} ${(props.item.c > 1 && 'counted') || ''} ${(props.item.c >= 100 && 'excessive') || ''}`}
+            className={`item ${props.className ?? ''} ${(props.blur === true && 'blur') || ''} ${(props.blur === false && 'focus') || ''} ${(props.locked && 'locked') || ''} ${(props.item.b && 'broken') || ''} ${(props.item.h && 'banished_hidden') || ''} ${(props.item.c > 1 && 'counted') || ''} ${(props.item.c >= 100 && 'excessive') || ''} ${(props.highlightDefense && props.data.props.includes('defence') && 'defense') || ''}`}
             onClick={ props.locked ? null : i => props.onClick(props.item) }
         >
             <span className="item-icon"><img src={ props.data?.icon ?? '' } alt={ props.data?.name ?? '...' }/></span>
@@ -482,11 +492,16 @@ const HordesPassiveInventoryWrapper = (props: passiveMountProps) => {
 
     useBroadcastSignal(
         ['inventory-bag-loaded', 'inventory-changed'],
-        () => {
-            setMayBeOutdated(true)
-        },
+        () => { setMayBeOutdated(true) },
         [props.id]
     );
+
+    useSharedWorkerMessages(
+        'inventory-changed',
+        () => { setMayBeOutdated(true) },
+        'live',
+        [props.id]
+    )
 
     useSignal(
         'web-navigation',
@@ -552,17 +567,19 @@ const HordesPassiveInventoryWrapper = (props: passiveMountProps) => {
         const expand = Math.max(bag.items.length, bag.size) > props.max;
         props.parent.classList.toggle('expanded', expand);
         if (expand) {
-            const status = document.querySelector('.game-bar .status.rucksack_status_union') as HTMLElement;
-            const bar = document.querySelector('.game-bar .status-ghoul') as HTMLElement;
-            if (!bar || !status) return;
 
             const moveGVBarOut = () => {
-                console.log('W STATUS', status.clientWidth);
-                console.log('W BAR', bar.clientWidth);
-                console.log('SUM', bar.clientWidth - status.clientWidth);
+                const status = document.querySelector('.game-bar .status.rucksack_status_union') as HTMLElement;
+                const bar = document.querySelector('.game-bar .status-ghoul') as HTMLElement;
+                if (!bar || !status) return;
                 bar.style.left = `-${ 8 + bar.clientWidth - status.clientWidth}px`;
             }
-            const moveGVBarIn = () => bar.style.left = null;
+            const moveGVBarIn = () => {
+                const bar = document.querySelector('.game-bar .status-ghoul') as HTMLElement;
+                if (!bar) return;
+
+                bar.style.left = null;
+            }
 
             props.parent.addEventListener('mouseenter', moveGVBarOut);
             props.parent.addEventListener('mouseleave', moveGVBarIn);
@@ -665,6 +682,8 @@ const HordesEscortInventoryWrapper = (props: escortMountProps) => {
         setLoading(true);
 
         api.current.transfer( item, from, to, direction ).then(s => {
+            emitSignal<InventoryTransferSignalProps>('item-transfer', { item, from, to, direction, response: s })
+
             // Update individual inventories
             const toA = direction === 'down' ? s.source : s.target;
             const toB = direction === 'down' ? s.target : s.source;

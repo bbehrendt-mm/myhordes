@@ -4,6 +4,7 @@ import {TranslatableAPI} from "../index";
 
 export type ResponseIndex = {
     strings: TranslationStrings
+	icons: {[key in 'warning']: {src: string, alt: string}},
 }
 
 export type ResponseReport = {

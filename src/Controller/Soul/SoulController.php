@@ -41,6 +41,7 @@ use App\Enum\DomainBlacklistType;
 use App\Enum\OfficialGroupSemantic;
 use App\Enum\StatisticType;
 use App\Enum\UserSetting;
+use App\Exception\DynamicAjaxResetException;
 use App\Response\AjaxResponse;
 use App\Service\Actions\Cache\InvalidateTagsInAllPoolsAction;
 use App\Service\ConfMaster;
@@ -729,9 +730,48 @@ class SoulController extends CustomAbstractController
      * @return Response
      */
     #[Route(path: 'jx/soul/settings', name: 'soul_settings')]
-    public function soul_settings(EternalTwinHandler $etwin): Response
+    public function soul_settings(EternalTwinHandler $etwin, Request $request): Response
     {
         $user = $this->getUser();
+
+        $code = $request->query->get('code');
+        if (!empty($code) && !$user->getNoAutomaticNameManagement()) {
+
+            try {
+                $etwin->setAuthorizationCode( $code );
+                $et_user = $etwin->requestAuthSelf($e);
+
+                $etu = substr($et_user->getDisplayName(),0,32);
+
+                if ($etu === $user->getName()) {
+                    $this->addFlash('notice', $this->translator->trans('Dein aktueller Name auf MyHordes stimmt mit deinem Anzeigenamen auf Eternaltwin überein.', [], 'login'));
+                    return $this->redirectToRoute('soul_settings');
+                }
+
+                if (!$this->user_handler->isNameValid($etu)) {
+                    $this->addFlash('notice', $this->translator->trans('Dein aktueller Anzeigename auf Eternaltwin kann auf MyHordes nicht verwendet werden.', [], 'login'));
+                    return $this->redirectToRoute('soul_settings');
+                }
+
+                $history = $user->getNameHistory() ?? [];
+                if(!in_array($etu, $history))
+                    $history[] = $etu;
+                $user->setNameHistory(array_filter(array_unique($history)));
+                $this->entity_manager->persist( $user->setDisplayName( $user->getUsername() === $etu ? null : $etu )->setLastNameChange(new DateTime()) );
+
+                try {
+                    $this->entity_manager->flush();
+                    $this->addFlash('notice', $this->translator->trans('Du hast deinen Anzeigenamen auf EternalTwin geändert. Wir haben diese Änderung soeben für dich übernommen!', [], 'login'));
+                } catch (Exception $e) {}
+
+                return $this->redirectToRoute('soul_settings');
+
+            } catch (Exception $e) {
+                $this->addFlash('notice', $this->translator->trans('Beim Aktualisieren deines Namens ist ein Fehler aufgetreten.', [], 'login'));
+                return $this->redirectToRoute('soul_settings');
+            }
+
+        }
 
         /** @var CitizenRankingProxy $nextDeath */
         if ($this->entity_manager->getRepository(CitizenRankingProxy::class)->findNextUnconfirmedDeath($user))
@@ -1475,9 +1515,7 @@ class SoulController extends CustomAbstractController
     {
         $user = $this->getUser();
 
-        /** @var CitizenRankingProxy $nextDeath */
         if ($latest) $nextDeath = $this->entity_manager->getRepository(CitizenRankingProxy::class)->findNextUnconfirmedDeath($user);
-
         if ($nextDeath === null || $nextDeath?->getTown()?->getImported() || ($nextDeath->getCitizen() && $nextDeath->getCitizen()->getAlive()) || $nextDeath->getUser() !== $user)
             return $this->redirectToRoute('initial_landing');
 
@@ -1513,8 +1551,8 @@ class SoulController extends CustomAbstractController
         return $this->render( 'ajax/soul/death.html.twig', $this->addDefaultTwigArgs(null, [
             'dead_citizen' => $nextDeath,
             'citizen' => $nextDeath,
-            'sp' => $nextDeath->getPoints(),
-            'day' => $nextDeath->getDay(),
+            'death_sp' => $nextDeath->getPoints(),
+            'death_day' => $nextDeath->getDay(),
             'pictos' => $pictosWonDuringTown,
             'gazette' => $canSeeGazette,
             'denied_pictos' => $pictosNotWonDuringTown,

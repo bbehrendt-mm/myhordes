@@ -657,3 +657,8 @@ Sonstiges: Divers
 'Aufgrund technischer Probleme ist der Funktionsumfang dieser externen Anwendung aktuell eingeschränkt.': 'En raison de problèmes techniques, les fonctionnalités de cette application externe sont actuellement limitées.'
 'Fehler beim Laden der Logeinträge ({error}).': 'Erreur lors du chargement des entrées du registre ({error}).'
 'Log-Einträge können nicht abgerufen werden, bitte versuche, die Seite neu zu laden.': 'Les entrées du registre n''ont pas pu être récupérées, veuillez essayer de recharger la page.'
+'Vertraulichkeit des Fehlerberichts': 'Confidentialité du rapport d''erreur'
+'Dieser Fehlerbericht enthält Informationen, die ich nicht öffentlich teilen möchte; er sollte nur vertrauenswürdigen Entwicklern zugänglich sein.': 'Ce rapport d''erreur contient des informations que je ne souhaite pas partager publiquement ; il ne doit être accessible qu''aux développeurs de confiance.'
+'Dieser Fehlerbericht wird öffentlich zugänglich sein': 'Ce rapport d''erreur sera accessible au public'
+'Dieser Fehlerbericht wird nur für vertrauenswürdige Entwickler zugänglich sein': 'Ce rapport d''erreur ne sera accessible qu''aux développeurs de confiance'
+Warnung: Attention

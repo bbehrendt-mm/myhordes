@@ -657,3 +657,8 @@ Sonstiges: Otros
 'Aufgrund technischer Probleme ist der Funktionsumfang dieser externen Anwendung aktuell eingeschränkt.': 'Debido a problemas técnicos, la funcionalidad de esta aplicación externa está actualmente limitada.'
 'Fehler beim Laden der Logeinträge ({error}).': 'Error al cargar entradas de registro ({error}).'
 'Log-Einträge können nicht abgerufen werden, bitte versuche, die Seite neu zu laden.': 'No se pudieron recuperar las entradas del registro, intente recargar la página.'
+'Vertraulichkeit des Fehlerberichts': 'Confidencialidad del informe de errores'
+'Dieser Fehlerbericht enthält Informationen, die ich nicht öffentlich teilen möchte; er sollte nur vertrauenswürdigen Entwicklern zugänglich sein.': 'Este informe de error contiene información que no deseo compartir públicamente; sólo debe ser accesible para desarrolladores confiables.'
+'Dieser Fehlerbericht wird öffentlich zugänglich sein': 'Este informe de error estará disponible públicamente'
+'Dieser Fehlerbericht wird nur für vertrauenswürdige Entwickler zugänglich sein': 'Este informe de errores solo será accesible para desarrolladores confiables'
+Warnung: Atención
