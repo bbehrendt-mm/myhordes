@@ -532,6 +532,19 @@ enum ExplorableRuinSkin: string
     public function ui_oxygen(): string {
         return "build/images/icons/oxygen_small.gif";
     }
+
+    public function ui_scanner(): string {
+        return "build/images/explore/scanner.gif";
+    }
+
+    public function ui_arrows(): array {
+        return [
+            "build/images/icons/map/226.svg",
+            "build/images/icons/map/227.svg",
+            "build/images/icons/map/228.svg",
+            "build/images/icons/map/map_move_marker.svg",
+        ];
+    }
 }
 
 

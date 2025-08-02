@@ -28,6 +28,7 @@ export const MapBackdropLayer = (props: MapBackdropLayerProps) => {
     const {scaler} = useContext(ScaleHelper);
 
     const elementRef = useRef<Konva.Group>(null);
+    const thisRef = useRef<Konva.Group>(null);
     const nextRef = useRef<Konva.Group>(null);
     const tweenRef = useRef<Konva.Tween>(null);
 
@@ -67,12 +68,15 @@ export const MapBackdropLayer = (props: MapBackdropLayerProps) => {
     }, [props.next]);
 
     useLayoutEffect(() => {
+        thisRef.current?.cache();
         nextRef.current?.cache();
     });
 
     return <>
         <Group ref={elementRef} { ...scaler.xy(0, 0) }>
-            <MapTile shifted={ props.shifted } data={props.current} onDoorClick={ () => props.onStartShift() } />
+            <Group ref={thisRef}>
+                <MapTile shifted={ props.shifted } data={props.current} onDoorClick={ () => props.onStartShift() } />
+            </Group>
             { props.next && <Group
                 { ...scaler.xy(props.next.dx, -props.next.dy) }
                 ref={nextRef}

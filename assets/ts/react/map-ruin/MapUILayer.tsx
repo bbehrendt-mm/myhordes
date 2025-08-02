@@ -7,6 +7,7 @@ import {AssetHelper, ScaleHelper} from "./Map";
 import {MapScaler} from "./scaler";
 import {Globals} from "./Wrapper";
 import {useCountdown} from "../utils";
+import {GifImage} from "../konva-utils";
 
 interface MapSetup {
     h: number,
@@ -82,19 +83,44 @@ const MovementArrow = (props: MovementArrowProps) => {
 
 const MovementChevron = () => {
     const {scaler} = useContext(ScaleHelper);
+    const assets = useContext(AssetHelper);
 
     const [hover, setHover] = useState(false);
 
-    return <Line
-        onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}
-        fill={`rgba(215,255,91,${hover ? 0.7 : 0.3})`} stroke={`rgba(215,255,91,${hover ? 0.9 : 0.7})`}
-        strokeWidth={scaler.s(0.02)} lineJoin="round"
-        points={ scaler.pl([ [0,1], [0.5,0], [1,1] ]) } closed
-    />
+    const elementRef = useRef<Konva.Group>(null);
+
+    useLayoutEffect(() => {
+        elementRef.current.cache();
+    }, [scaler.cache(), hover]);
+
+    return <Group ref={elementRef}>
+        <Line
+            onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}
+            fill="transparent" stroke="transparent"
+            strokeWidth={scaler.s(0.02)} lineJoin="round"
+            points={ scaler.pl([ [0,1], [0.5,0], [1,1] ]) } closed
+        />
+        <Group listening={false}>
+            { hover && <Image listening={false} image={ assets.images[assets.theme.ui.arrow_2] } { ...scaler.whxy() } /> }
+            { !hover && <>
+                <Image image={ assets.images[assets.theme.ui.arrow_0] } { ...scaler.whxy() } />
+                <Image image={ assets.images[assets.theme.ui.arrow_1] } { ...scaler.whxy() } />
+            </> }
+        </Group>
+    </Group>
+
+    //return <Line
+    //    onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}
+    //    fill={`rgba(215,255,91,${hover ? 0.7 : 0.3})`} stroke={`rgba(215,255,91,${hover ? 0.9 : 0.7})`}
+    //    strokeWidth={scaler.s(0.02)} lineJoin="round"
+    //    points={ scaler.pl([ [0,1], [0.5,0], [1,1] ]) } closed
+    ///>
 }
 
 type LayerUIFrameProps = {
-    timeout: number
+    timeout: number,
+    activity: number,
+    direction: number|null,
 }
 
 const UIFrame = (props: LayerUIFrameProps) => {
@@ -103,12 +129,64 @@ const UIFrame = (props: LayerUIFrameProps) => {
     const assets = useContext(AssetHelper);
 
     const [timeout, setTimeout] = useState(`${Math.floor(Math.max(0, props.timeout/3))}`);
+    const [activity, setActivity] = useState(props.activity);
+    const [direction, setDirection] = useState(props.direction);
+
+    const tweenRef = useRef<Konva.Tween>(null);
+    const tweenRefRotation = useRef<Konva.Tween>(null);
+    const elementRef = useRef<Konva.Image>(null);
+    const elementRefRotation = useRef<Konva.Image>(null);
 
     const statics = useRef<Konva.Group>();
 
     useLayoutEffect(() => {
         statics.current.cache();
+        elementRefRotation.current?.cache();
     }, [scaler.cache()]);
+
+    useLayoutEffect(() => {
+        if (props.activity === activity) return;
+
+        tweenRef.current = new Konva.Tween({
+            onFinish: () => setActivity(props.activity),
+            node: elementRef.current,
+            duration: 0.2,
+            easing: Konva.Easings.Linear,
+            y: scaler.y( 0.894 + (0.090 * (1-props.activity)) ),
+            h: scaler.y( 0.090 * props.activity),
+        });
+        tweenRef.current.play();
+
+        return () => {
+            tweenRef.current?.finish();
+            tweenRef.current = null;
+        }
+
+    }, [props.activity]);
+
+    useLayoutEffect(() => {
+        if (props.direction === direction) return;
+
+        if (!elementRefRotation.current) {
+            setDirection(props.direction);
+            return;
+        }
+
+        tweenRefRotation.current = new Konva.Tween({
+            onFinish: () => setDirection(props.direction),
+            node: elementRefRotation.current,
+            duration: 1,
+            easing: Konva.Easings.EaseInOut,
+            rotation: props.direction,
+        });
+        tweenRefRotation.current.play();
+
+        return () => {
+            tweenRefRotation.current?.finish();
+            tweenRefRotation.current = null;
+        }
+
+    }, [props.direction]);
 
     useCountdown(
         props.timeout * 1000,
@@ -118,19 +196,28 @@ const UIFrame = (props: LayerUIFrameProps) => {
         [props.timeout]
     )
 
+    const h = 0.090 * activity;
+
     return <Group listening={false}>
         <Group ref={statics}>
             <Image image={ assets.images[assets.theme.ui.frame] } { ...scaler.whxy() } />
             <Text text={ globals.name } lineHeight={0.6} align="left" verticalAlign="top" fill="#205319" fontStyle="bold" fontFamily="visitor2" fontSize={ scaler.s(0.045) } { ...scaler.whxy(0.398, 0.085, 0.02, 0.015) } />
             <Text text={ `${globals.strings.common.oxygen}:` } lineHeight={0.6}  align="right" verticalAlign="top" fill="#205319" fontStyle="bold" fontFamily="visitor2" fontSize={ scaler.s(0.045) } { ...scaler.whxy(0.398, 0.085, 0.585, 0.015) } />
-            <Image image={ assets.images[assets.theme.ui.oxygen] } { ...scaler.whxy(0.057, 0.057, 0.92, 0.058) } />
+            <Image image={ assets.images[assets.theme.ui.oxygen] }  { ...scaler.whxy(0.057, 0.057, 0.92, 0.058) } />
         </Group>
+        <GifImage imageRef={elementRef} src={ assets.theme.ui.scanner } { ...scaler.whxy( 0.13, h, 0.850, 0.894 + (0.090 - h)) } />
+        { props.direction !== null && <Image ref={elementRefRotation} image={ assets.images[assets.theme.ui.suggest] } { ...scaler.centerAt(0.5, 0.5, 1, 1) }
+                                             rotation={ direction ?? props.direction }
+                                             filters={ [ Konva.Filters.HSV ] } hue={-90}
+        /> }
         <Text text={ `${timeout}` } lineHeight={0.6}  align="right" verticalAlign="top" fill="#d7ff5b" fontStyle="bold" fontFamily="visitor2" fontSize={ scaler.s(0.07) } { ...scaler.whxy(0.325, 0.085, 0.585, 0.055) } />
     </Group>
 }
 
 type LayerUIProps = {
-    timeout: number
+    timeout: number,
+    activity: number,
+    direction: number|null,
     onMove: (dx: number, dy: number) => void,
     controls?: MovementControls|null
 }
@@ -141,6 +228,6 @@ export const LayerUI = (props: LayerUIProps) => {
         <MovementArrow onClick={() => props.onMove(1, 0)} visible={props.controls?.e} rotation={90}/>
         <MovementArrow onClick={() => props.onMove(0,-1)} visible={props.controls?.s} rotation={180}/>
         <MovementArrow onClick={() => props.onMove(-1,0)} visible={props.controls?.w} rotation={270}/>
-        <UIFrame timeout={ props.timeout } />
+        <UIFrame timeout={ props.timeout } activity={ props.activity } direction={ props.direction } />
     </Layer>
 }

@@ -54,6 +54,11 @@ export type AssetResponse = {
     ui: {
         oxygen: string,
         frame: string,
+        scanner: string,
+        arrow_0: string,
+        arrow_1: string,
+        arrow_2: string,
+        suggest: string,
     }
 };
 

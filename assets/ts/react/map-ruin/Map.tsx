@@ -41,10 +41,12 @@ export const MapCore = (props: {setup: MapSetup, properties: MapProperties}) => 
         globals.api.assets(props.properties.theme).then(a => {
             setThemeAssets(a);
             const sources = [a.fog[0], a.fog[1]];
-            Object.values(a.tiles).forEach( src => sources.push(src) );
+            [
+                ...Object.values(a.tiles),
+                ...Object.values(a.ui)
+            ].forEach( src => sources.push(src) );
             Object.values(a.doors).forEach( s => Object.values(s).forEach( d => sources.push(d.i) ) );
             Object.values(a.decals).forEach( s => sources.push(s.i) );
-            Object.values(a.ui).forEach( s => sources.push(s) );
 
             setMissingImages( sources.length );
             setTotalImages( sources.length );
@@ -125,6 +127,8 @@ export const MapCore = (props: {setup: MapSetup, properties: MapProperties}) => 
 
                     <LayerUI
                         timeout={ (nextZone?.r ?? currentZone).status.timeout }
+                        activity={ (nextZone?.r ?? currentZone).status.activity }
+                        direction={ (nextZone?.r ?? currentZone).status.exit }
                         controls={{
                             ...((nextZone?.r ?? currentZone)?.status?.move ?? {}),
                             s: ((nextZone?.r ?? currentZone)?.status?.move ?? {})?.s || (nextZone?.r ?? currentZone).status.shifted

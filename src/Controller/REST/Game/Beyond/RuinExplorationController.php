@@ -99,8 +99,13 @@ class RuinExplorationController extends AbstractController
                 $asset->getUrl($theme->fog(false)),
             ],
             'ui' => [
-                'frame'  => $asset->getUrl($theme->ui_frame()),
-                'oxygen' => $asset->getUrl($theme->ui_oxygen()),
+                'frame'   => $asset->getUrl($theme->ui_frame()),
+                'oxygen'  => $asset->getUrl($theme->ui_oxygen()),
+                'scanner' => $asset->getUrl($theme->ui_scanner()),
+                'arrow_0'   => $asset->getUrl($theme->ui_arrows()[0]),
+                'arrow_1'   => $asset->getUrl($theme->ui_arrows()[1]),
+                'arrow_2'   => $asset->getUrl($theme->ui_arrows()[2]),
+                'suggest' => $asset->getUrl($theme->ui_arrows()[3]),
             ]
         ]);
     }
