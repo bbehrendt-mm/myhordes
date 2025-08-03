@@ -147,7 +147,7 @@ export const MapCore = (props: {setup: MapSetup, properties: MapProperties}) => 
                             <MapActorZombiesLayer next={false} rid={currentZone.status.rid} zombies={currentZone.status.zombies} corridors={currentZone.status.corridors} { ...nextZone?.s ?? {} } />
                             { nextZone && <MapActorZombiesLayer next={true} rid={nextZone.r.status.rid} zombies={nextZone.r.status.zombies} corridors={nextZone.r.status.corridors} { ...nextZone.s } /> }
                         </> }
-                        <MapActorPlayerLayer { ...(nextZone?.s ?? {}) } />
+                        <MapActorPlayerLayer { ...(nextZone?.s ?? {}) } noox={ (nextZone?.r ?? currentZone).status.timeout < 60 } />
                         <MapFOWLayer shadowColor="black" shadowOpacity={0.5} shadowDistance={0.5} shadowBlur={0.5}/>
                     </Layer>
 

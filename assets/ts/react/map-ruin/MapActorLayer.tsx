@@ -26,7 +26,7 @@ type MapLayerActorZombieProps = MapLayerActorShift & {
     rid: string,
 }
 
-export const MapActorPlayerLayer = (props: MapLayerActorShift) => {
+export const MapActorPlayerLayer = (props: MapLayerActorShift & {noox: boolean}) => {
 
     const {scaler} = useContext(ScaleHelper);
     const {theme} = useContext(AssetHelper);
@@ -75,7 +75,7 @@ export const MapActorPlayerLayer = (props: MapLayerActorShift) => {
     return <>
         <Group ref={elementOuterRef} { ...scaler.xy(0, 0) }>
             <Group ref={elementInnerRef} { ...scaler.xy(0, 0) }>
-                <GifImage src={ theme.actors.player } {...scaler.centerAt(0.5, 0.5, 0.0541, 0.1081)} />
+                <GifImage src={ props.noox ? theme.actors.player_noox : theme.actors.player } {...scaler.centerAt(0.5, 0.5, 0.0541, 0.1081)} />
             </Group>
         </Group>
     </>

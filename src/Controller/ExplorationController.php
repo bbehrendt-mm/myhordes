@@ -157,14 +157,7 @@ class ExplorationController extends InventoryAwareController implements HookedIn
             'imprint_goal' => $imprint_goal,
 
             'ruin_map_data' => [
-                'paused' => $in_grace,
-                'show_exit_direction' => $exitZone ? [$exitZone->getX() - $ruinZone->getX(), $exitZone->getY() - $ruinZone->getY()] : null,
                 'name' => $this->generateRuinName($citizen->getZone()),
-                'timeout' => max(0, $ex->getTimeout()->getTimestamp() - time()),
-                'zone' => $ruinZone,
-                'activity' => $guide ? 0.1 + 0.9 * (4-min(4,$ruinZone->getRoomDistance()))/4 : 1,
-                'shifted' => $ex->getInRoom(),
-                'exploration' => $ex
             ],
         ]) );
     }
@@ -214,66 +207,6 @@ class ExplorationController extends InventoryAwareController implements HookedIn
         }
 
         return AjaxResponse::success();
-    }
-
-    /**
-     * @param JSONRequestParser $parser
-     * @return Response
-     */
-    #[Route(path: 'api/beyond/explore/move', name: 'beyond_ruin_move_controller')]
-    public function ruin_move_api(JSONRequestParser $parser) {
-        $ruinZone = $this->getCurrentRuinZone();
-        $ex = $this->getActiveCitizen()->activeExplorerStats();
-
-        if ($ruinZone->getZombies() > 0 && !$ex->getEscaping())
-            return AjaxResponse::error( BeyondController::ErrorZoneBlocked );
-
-        if ($ex->getInRoom())
-            return AjaxResponse::error( BeyondController::ErrorNotReachableFromHere );
-
-        $dx = (int)$parser->get('x', 0);
-        $dy = (int)$parser->get('y', 0);
-
-        if (abs($dx) + abs($dy) !== 1)
-            return AjaxResponse::error( BeyondController::ErrorNotReachableFromHere );
-
-        if (
-            ($dx == 1  && !$ruinZone->hasCorridor( RuinZone::CORRIDOR_E )) ||
-            ($dx == -1 && !$ruinZone->hasCorridor( RuinZone::CORRIDOR_W )) ||
-            ($dy == 1  && !$ruinZone->hasCorridor( RuinZone::CORRIDOR_N )) ||
-            ($dy == -1 && !$ruinZone->hasCorridor( RuinZone::CORRIDOR_S ))
-        ) return AjaxResponse::error( BeyondController::ErrorNotReachableFromHere );
-
-
-        if ($ex->isGrace()) {
-            $ex->setGrace(false);
-            if ($ex->getStarted() !== null) {
-                $offset = max(0, min(30, time() - $ex->getStarted()->getTimestamp()));
-                $ex->setTimeout( (new DateTime())->setTimestamp( $ex->getTimeout()->getTimestamp() - ( 30 - $offset ) ) );
-            }
-        }
-
-        $ex
-            ->setX( $ex->getX() + $dx )
-            ->setY( $ex->getY() - $dy )
-            ->setEscaping( false );
-
-        // End the exploration!
-        $this->entity_manager->persist($ex);
-        try {
-            $this->entity_manager->flush();
-        } catch (Exception $e) {
-            return AjaxResponse::error( ErrorHelper::ErrorDatabaseException );
-        }
-
-        $new_zone = $this->getCurrentRuinZone();
-        return AjaxResponse::success(true, [
-            'next' => ($new_zone->getX() !== 0 || $new_zone->getY() !== 0) ? $new_zone->getCorridor() : 'exit',
-            'dp' => $new_zone->getDoorPosition(),
-            'l' => $new_zone->getLocked(),
-            'd' => $new_zone->getUnifiedDecals(),
-            'c' => $new_zone->getPrototype()?->getLevel() ?? 0
-        ]);
     }
 
     /**

@@ -245,10 +245,6 @@
                 }, true );
         });
 
-        {% if ruin_map_data is defined %}
-            {% embed "scripts/ruin_map.js.twig" with {'map': ruin_map_data} %}{% endembed %}
-        {% endif %}
-
         $.html.addEventListenerAll('[x-toggle-expert-mode]','click', function(e,elem) {
             e.preventDefault();
             $.client.config.hiddenConditionalHelp.set([]);
