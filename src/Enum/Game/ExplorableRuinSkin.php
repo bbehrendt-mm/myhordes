@@ -517,8 +517,9 @@ enum ExplorableRuinSkin: string
         return $no_ox ? "build/images/explore/you_noox.gif" : "build/images/explore/you.gif";
     }
 
-    public function actorZombie(bool $dead): string {
-        return $dead ? "build/images/explore/{$this->value}/dead.png" : "build/images/explore/{$this->value}/zombie.gif";
+    public function actorZombie(bool $dead, bool $local): string {
+        $base_path = $local ? "build/images/explore/{$this->value}" : "build/images/explore";
+        return $dead ? "{$base_path}/dead.png" : "{$base_path}/zombie.gif";
     }
 
     public function fog(bool $cloud): string {

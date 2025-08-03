@@ -47,8 +47,10 @@ export type AssetResponse = {
     actors: {
         player: string,
         zombie: string,
+        zombie_local: string,
         player_noox: string,
         zombie_dead: string,
+        zombie_dead_local: string,
     }
     fog: [string,string],
     ui: {
@@ -69,15 +71,22 @@ export type MovementControls = {
     n?: boolean,
 }
 
+export type ZombieCount = {
+    active: number,
+    killed: number
+}
+
 export type ExplorationStatus = {
+    rid: string
     paused: boolean,
     exit: number,
     shifted: boolean | null,
     activity: number,
     floor: number,
-    zombies: number,
+    zombies: ZombieCount,
     timeout: number,
     move: MovementControls|null,
+    corridors: MovementControls,
 }
 
 export type ExplorationTileset = {

@@ -16,6 +16,8 @@ interface mountProps {
     origin: number,
     theme: string,
     name: string,
+    etag: string,
+    reload: string,
 }
 
 export interface RuinMapGlobal {
@@ -70,6 +72,8 @@ const HordesRuinExplorationMapWrapper = (props: mountProps) => {
                     h: size.height, w: size.width
                 }} properties={{
                     theme: props.theme,
+                    etag: props.etag,
+                    reload: props.reload,
                 }}/> }
             </Globals.Provider>
 

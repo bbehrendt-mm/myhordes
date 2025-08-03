@@ -1,9 +1,10 @@
 <hordes-map-e-ruin
         id="e-map" data-react-mount="e-map"
-        data-etag="{{ map.exploration.id }}"
+        data-etag="{{ date().timestamp }}"
         data-origin="{{ map.zone.zone.id }}"
         data-skin="{{ prototype.explorableSkin }}"
         data-name="{{ map.name|trans({},'names') }}"
+        data-reload="{{ path('exploration_dashboard') }}"
 ></hordes-map-e-ruin>
 <div class="ruin_map_area">
     <div class="map {{ map.shifted ? 'in_room' : '' }}">

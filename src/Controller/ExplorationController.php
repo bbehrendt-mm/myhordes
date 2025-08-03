@@ -323,6 +323,7 @@ class ExplorationController extends InventoryAwareController implements HookedIn
 
         $ex
             ->setZ( $ex->getZ() + $ruinZone->getConnect() )
+            ->setEscaping(false)
             ->setTimeout( (new DateTime)->setTimestamp( $ex->getTimeout()->getTimestamp() )->sub(DateInterval::createFromDateString( mt_rand( 15, 24) . 'sec' ) ) );
 
         $this->entity_manager->persist($ex);

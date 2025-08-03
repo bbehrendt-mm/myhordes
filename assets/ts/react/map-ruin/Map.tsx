@@ -6,8 +6,11 @@ import {Globals} from "./Wrapper";
 import {LayerUI} from "./MapUILayer";
 import {MapScaler} from "./scaler";
 import {MapBackdropLayer, MapLayerShift} from "./MapBackdropLayer";
-import {MapActorPlayerLayer} from "./MapActorLayer";
+import {MapActorPlayerLayer, MapActorZombiesLayer} from "./MapActorLayer";
 import {MapFOWLayer} from "./MapFOWLayer";
+import {Global} from "../../defaults";
+
+declare var $: Global;
 
 interface MapSetup {
     h: number,
@@ -15,7 +18,9 @@ interface MapSetup {
 }
 
 interface MapProperties {
-    theme: string
+    theme: string,
+    etag: string,
+    reload: string
 }
 
 export const ScaleHelper = createContext<{ scaler: MapScaler, ref: MutableRefObject<MapScaler> }>(null);
@@ -24,6 +29,8 @@ export const AssetHelper = createContext<{ theme: AssetResponse, images: {[key: 
 
 export const MapCore = (props: {setup: MapSetup, properties: MapProperties}) => {
     const globals = useContext(Globals);
+
+    const progressing = useRef(false);
 
     const scaler = useRef<MapScaler>( new MapScaler(props.setup.w, props.setup.h) );
     const [etag, setEtag] = useState<number>(0);
@@ -43,7 +50,8 @@ export const MapCore = (props: {setup: MapSetup, properties: MapProperties}) => 
             const sources = [a.fog[0], a.fog[1]];
             [
                 ...Object.values(a.tiles),
-                ...Object.values(a.ui)
+                ...Object.values(a.ui),
+                ...Object.values(a.actors),
             ].forEach( src => sources.push(src) );
             Object.values(a.doors).forEach( s => Object.values(s).forEach( d => sources.push(d.i) ) );
             Object.values(a.decals).forEach( s => sources.push(s.i) );
@@ -85,15 +93,28 @@ export const MapCore = (props: {setup: MapSetup, properties: MapProperties}) => 
     }, [props.setup.w, props.setup.h]);
 
     useEffect(() => {
-        globals.api.zone().then(z => setCurrentZone(z) );
-    }, []);
+        if (!progressing.current) {
+            globals.api.zone().then(z => setCurrentZone((prev) => {
+                if (!prev) return z;
+                else if ( z.status.shifted !== prev.status.shifted || z.status.floor !== prev.status.floor ) {
+                    updateZone(z, 0, 0, z.status.floor - prev.status.floor, false);
+                    return prev;
+                } else return z;
+            }));
+        }
+        progressing.current = false;
+    }, [props.properties.etag]);
 
     const ready = currentZone && themeImages && themeAssets && missingImages === 0;
 
-    const updateZone = (r: ZoneResponse, dx: number = 0, dy: number = 0, dz: number = 0) => {
-        //setCurrentZone( prev => { return { ...prev, status: r.status } } )
+    const updateZone = (r: ZoneResponse, dx: number = 0, dy: number = 0, dz: number = 0, chain = true) => {
         setNextZone( { r, s: { dx, dy, dz, tileset: r.tileset, shifted: r.status.shifted } } )
-        document
+        if (!chain) return;
+        if ( r.status.zombies.active > 0 || r.tileset.door || currentZone.status.zombies.active > 0 || currentZone.tileset.door ) {
+            progressing.current = true;
+            $.ajax.load(null, props.properties.reload, false);
+        }
+        else document
             .querySelectorAll('hordes-inventory[data-inventory-b-type="desert"]')
             .forEach( e => (e as HTMLElement).dataset.inventoryBId = `${r.status.floor}` )
     }
@@ -109,7 +130,8 @@ export const MapCore = (props: {setup: MapSetup, properties: MapProperties}) => 
                             current={currentZone.tileset}
                             next={nextZone?.s ?? null}
                             onStartShift={ () => {
-                                if (!currentZone.tileset.door) return;
+                                if (!currentZone.tileset.door || (!currentZone.status.shifted && currentZone.status.move === null)) return;
+                                progressing.current = true;
 
                                 if (currentZone.tileset.door.l != 0)
                                     globals.api.move(0, 0, currentZone.tileset.door.l)
@@ -121,6 +143,10 @@ export const MapCore = (props: {setup: MapSetup, properties: MapProperties}) => 
                                 setNextZone(null);
                             }}
                         />
+                        { (!nextZone || ( nextZone.r.status.shifted === currentZone.status.shifted && nextZone.r.status.floor === currentZone.status.floor )) && <>
+                            <MapActorZombiesLayer next={false} rid={currentZone.status.rid} zombies={currentZone.status.zombies} corridors={currentZone.status.corridors} { ...nextZone?.s ?? {} } />
+                            { nextZone && <MapActorZombiesLayer next={true} rid={nextZone.r.status.rid} zombies={nextZone.r.status.zombies} corridors={nextZone.r.status.corridors} { ...nextZone.s } /> }
+                        </> }
                         <MapActorPlayerLayer { ...(nextZone?.s ?? {}) } />
                         <MapFOWLayer shadowColor="black" shadowOpacity={0.5} shadowDistance={0.5} shadowBlur={0.5}/>
                     </Layer>

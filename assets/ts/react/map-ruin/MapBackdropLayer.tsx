@@ -48,6 +48,15 @@ export const MapBackdropLayer = (props: MapBackdropLayerProps) => {
 
         } else if (props.next.dx === 0 && props.next.dy === 0 && props.next.dz !== 0) {
 
+            tweenRef.current = new Konva.Tween({
+                onFinish: () => props.onShiftCompleted(),
+                node: nextRef.current,
+                duration: 1,
+                easing: Konva.Easings.EaseInOut,
+                opacity: 1,
+                pixelSize: 1,
+            });
+
         } else {
             tweenRef.current = new Konva.Tween({
                 onFinish: () => props.onShiftCompleted(),

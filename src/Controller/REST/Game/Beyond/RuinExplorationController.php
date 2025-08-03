@@ -89,10 +89,12 @@ class RuinExplorationController extends AbstractController
             ],
             'decals' => $theme->assetDecals()->map( fn(array $a) => [...$a, 'i' => $asset->getUrl( $a['i'] )] )->toArray(),
             'actors' => [
-                'player' => $asset->getUrl($theme->actorPlayer(false)),
-                'zombie' => $asset->getUrl($theme->actorZombie(false)),
-                'player_noox' => $asset->getUrl($theme->actorPlayer(true)),
-                'zombie_dead' => $asset->getUrl($theme->actorZombie(true)),
+                'player'            => $asset->getUrl($theme->actorPlayer(false)),
+                'zombie'            => $asset->getUrl($theme->actorZombie(false, false)),
+                'zombie_local'      => $asset->getUrl($theme->actorZombie(false, true)),
+                'player_noox'       => $asset->getUrl($theme->actorPlayer(true)),
+                'zombie_dead'       => $asset->getUrl($theme->actorZombie(true, false)),
+                'zombie_dead_local' => $asset->getUrl($theme->actorZombie(true, true)),
             ],
             'fog' => [
                 $asset->getUrl($theme->fog(true)),
@@ -149,20 +151,27 @@ class RuinExplorationController extends AbstractController
             }
         }
 
+        $corridors = [
+            'e' => $zone->hasCorridor(  RuinZone::CORRIDOR_E ),
+            'w' => $zone->hasCorridor(  RuinZone::CORRIDOR_W ),
+            'n' => $zone->hasCorridor(  RuinZone::CORRIDOR_N ),
+            's' => $zone->hasCorridor(  RuinZone::CORRIDOR_S ),
+        ];
+
         return [
+            'rid' => "{$stats->getId()}/{$zone->getId()}",
             'timeout' => max(0, $stats->getTimeout()->getTimestamp() - time()),
             'paused' => $in_grace,
             'exit' => $exit_angle,
             'shifted' => $stats->getInRoom(),
             'activity' => $guide ? (0.1 + 0.9 * (4-min(4, $zone->getRoomDistance()))/4) : 1,
             'floor' => $zone->getFloor()->getId(),
-            'zombies' => $zone->getZombies(),
-            'move' => (($zone->getZombies() > 0 && !$stats->getEscaping()) || $stats->getInRoom()) ? null : [
-                'e' => $zone->hasCorridor(  RuinZone::CORRIDOR_E ),
-                'w' => $zone->hasCorridor(  RuinZone::CORRIDOR_W ),
-                'n' => $zone->hasCorridor(  RuinZone::CORRIDOR_N ),
-                's' => $zone->hasCorridor(  RuinZone::CORRIDOR_S ),
-            ]
+            'zombies' => [
+                'active' => $zone->getZombies(),
+                'killed' => $zone->getKilledZombies()
+            ],
+            'move' => (($zone->getZombies() > 0 && !$stats->getEscaping()) || $stats->getInRoom()) ? null : $corridors,
+            'corridors' => $corridors,
         ];
     }
 
