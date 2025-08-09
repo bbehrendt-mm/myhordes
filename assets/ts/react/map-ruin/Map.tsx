@@ -9,6 +9,7 @@ import {MapBackdropLayer, MapLayerShift} from "./MapBackdropLayer";
 import {MapActorPlayerLayer, MapActorZombiesLayer} from "./MapActorLayer";
 import {MapFOWLayer} from "./MapFOWLayer";
 import {Global} from "../../defaults";
+import {useSignal} from "../../v2/client-modules/Signal";
 
 declare var $: Global;
 
@@ -110,7 +111,10 @@ export const MapCore = (props: {setup: MapSetup, properties: MapProperties}) => 
     const updateZone = (r: ZoneResponse, dx: number = 0, dy: number = 0, dz: number = 0, chain = true) => {
         setNextZone( { r, s: { dx, dy, dz, tileset: r.tileset, shifted: r.status.shifted } } )
         if (!chain) return;
-        if ( r.status.zombies.active > 0 || r.tileset.door || currentZone.status.zombies.active > 0 || currentZone.tileset.door ) {
+        if (
+            r.status.zombies.active > 0 || r.tileset.door || r.tileset.tile < 0 ||
+            currentZone.status.zombies.active > 0 || currentZone.tileset.door || currentZone.tileset.tile < 0
+        ) {
             progressing.current = true;
             $.ajax.load(null, props.properties.reload, false);
         }
@@ -118,6 +122,18 @@ export const MapCore = (props: {setup: MapSetup, properties: MapProperties}) => 
             .querySelectorAll('hordes-inventory[data-inventory-b-type="desert"]')
             .forEach( e => (e as HTMLElement).dataset.inventoryBId = `${r.status.floor}` )
     }
+
+    const shift = () => {
+        if (!currentZone.tileset.door || (!currentZone.status.shifted && currentZone.status.move === null)) return;
+        progressing.current = true;
+
+        if (currentZone.tileset.door.l != 0)
+            globals.api.move(0, 0, currentZone.tileset.door.l)
+                .then( (r) => updateZone(r, 0, 0, currentZone.tileset.door.l));
+        else globals.api.shift( !currentZone.status.shifted ).then( (r) => updateZone(r) );
+    }
+
+    useSignal( 'eruin-map-shift', shift, [currentZone] );
 
     //return <canvas height={props.setup.h} width={props.setup.w}/>
     return <Stage className="canvas" height={props.setup.h} width={props.setup.w}>
@@ -129,15 +145,7 @@ export const MapCore = (props: {setup: MapSetup, properties: MapProperties}) => 
                             shifted={currentZone.status.shifted}
                             current={currentZone.tileset}
                             next={nextZone?.s ?? null}
-                            onStartShift={ () => {
-                                if (!currentZone.tileset.door || (!currentZone.status.shifted && currentZone.status.move === null)) return;
-                                progressing.current = true;
-
-                                if (currentZone.tileset.door.l != 0)
-                                    globals.api.move(0, 0, currentZone.tileset.door.l)
-                                        .then( (r) => updateZone(r, 0, 0, currentZone.tileset.door.l));
-                                else globals.api.shift( !currentZone.status.shifted ).then( (r) => updateZone(r) );
-                            }}
+                            onStartShift={ shift }
                             onShiftCompleted={() => {
                                 setCurrentZone( prev => { return nextZone.r } );
                                 setNextZone(null);

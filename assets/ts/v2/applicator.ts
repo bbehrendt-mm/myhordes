@@ -1,6 +1,12 @@
 import {Global} from "../defaults";
 import {Fetch} from "./fetch";
+import {emitSignal} from "./client-modules/Signal";
 declare const $: Global;
+
+export interface EventEmitProps<E extends Event = Event> {
+    node: HTMLElement,
+    event: E,
+}
 
 function applyFetchFunctions( node: HTMLElement ) {
     node.querySelectorAll('[data-fetch]').forEach( (node: HTMLElement) =>
@@ -81,9 +87,23 @@ function applyToggleFunctions( node: HTMLElement ) {
     })
 }
 
+function applySignalFunctions( node: HTMLElement ) {
+
+    // emitSignal<InventoryBagLoadedSignalProps>('inventory-bag-loaded', {id,inventory,element: props.parent})
+
+    node.querySelectorAll('[data-emit]').forEach( (node: HTMLElement) => {
+        node.addEventListener('click', e => emitSignal<EventEmitProps<MouseEvent>>( node.dataset.emit, {
+            event: e,
+            node
+        } ))
+    });
+
+}
+
 export function dataDrivenFunctions( node: HTMLElement ) {
 
     applyFetchFunctions( node );
     applyToggleFunctions( node );
+    applySignalFunctions( node);
 
 }

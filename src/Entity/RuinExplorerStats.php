@@ -209,4 +209,8 @@ class RuinExplorerStats
         return $this->active && $ruinZone->getZone() === $this->zone && $ruinZone->getX() === $this->x && $ruinZone->getY() === $this->y && $ruinZone->getZ() === $this->z;
     }
 
+    public function isAtEntry(): bool {
+        return $this->getX() === 0 && $this->getY() === 0 && $this->getZ() === 0;
+    }
+
 }

@@ -165,14 +165,14 @@ export const MapActorZombiesLayer = (props: MapLayerActorZombieProps) => {
 
     return <>
         <Group ref={elementOuterRef} { ...(props.next ? scaler.xy(props.dx, -props.dy) : scaler.xy(0, 0)) }>
-            { cache.filter(z => z.d).map( (z, key) => <Image key={`${key}-d`}
+            { cache.filter(z => z.d).sort( (a,b) => a.y - b.y ).map( (z, key) => <Image key={`${key}-d`}
                 image={ assets.images[z.l ? assets.theme.actors.zombie_dead_local : assets.theme.actors.zombie_dead] }
                 {...scaler.centerAt( z.x, z.y, 0.0813, 0.120)}
             /> ) }
-            { cache.filter(z => !z.d).map( (z, key) => <GifImage key={`${key}-a`}
+            { cache.filter(z => !z.d).sort( (a,b) => a.y - b.y ).map( (z, key) => <React.Fragment key={`${key}-a`}><GifImage
                 src={ z.l ? assets.theme.actors.zombie_local : assets.theme.actors.zombie }
                 {...scaler.centerAt( z.x, z.y, 0.0813, 0.120)}
-            /> ) }
+            /></React.Fragment> ) }
         </Group>
     </>
 

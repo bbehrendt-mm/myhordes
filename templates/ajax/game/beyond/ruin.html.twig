@@ -21,18 +21,21 @@
         <div class="row">
             <div class="cell rw-12">
                 <div class="zone-blocked-warning">
-                    <b>{% trans with { '{z}': zone_zombies } from 'game' %}{z} Zombies blockieren den Weg!{% endtrans %}</b><br />
+                    <b>{{ '{z} Zombies blockieren den Weg!'|trans({z: zone_zombies},'game') }}</b><br />
                     <span>
-                        {% trans from 'game' %}
-                            Du wurdest überrascht und bist jetzt von den Zombies umzingelt! Du kannst flüchten, allerdings wirst du dadurch zusätzlichen Sauerstoff verbrauchen ...
-                        {% endtrans %}
+                        {{ 'Du wurdest überrascht und bist jetzt von den Zombies umzingelt! Du kannst flüchten, allerdings wirst du dadurch zusätzlichen Sauerstoff verbrauchen ...'|trans({},'game') }}
                     </span>
                     <div class="row">
                         <div class="padded-small cell rw-6">
-                            <button id="escape-btn">
+                            <button
+                                data-fetch="{{ path('rest_game_beyond_eruin_escape') }}"
+                                data-fetch-method="put"
+                                data-fetch-confirm="{{ 'Diese Aktion kostet dich Sauerstoff, trotzdem flüchten?'|trans({},'game') }}"
+                                data-fetch-load="{{ path('exploration_dashboard') }}"
+                            >
                                 <img alt="" src="{{ asset('build/images/icons/small_sprint.gif') }}" />
-                                {% trans from 'game' %}Flüchten{% endtrans %}
-                                <div class="tooltip help">{{ 'Du kannst einen Teil deines Sauerstoffs zur Flucht verwenden, indem du in die gewünschte Richtung sprintest.'|trans({},'game') }}</div>
+                                {{ 'Flüchten'|trans({},'game') }}
+                                <hordes-tooltip class="help">{{ 'Du kannst einen Teil deines Sauerstoffs zur Flucht verwenden, indem du in die gewünschte Richtung sprintest.'|trans({},'game') }}</hordes-tooltip>
                             </button>
                         </div>
                     </div>
@@ -42,21 +45,24 @@
     {% endif %}
 
     <div class="row">
-        <div class="row">
-            <div class="padded cell rw-6 rw-md-12">
-                <h5>{% trans from 'game' %}Meine Aktionen{% endtrans %}</h5>
-                {% if zone.x == 0 and zone.y == 0 and zone.z == 0 %}
-                    <br />
-                    <button id="exit_ruin_button"  >
-                        <img class="icon left" alt="" src="{{ asset('build/images/icons/exit.gif') }}" />
-                        {% trans from 'game' %}Gebäude verlassen{% endtrans %}
-                        <div class="tooltip help">{{ 'Du kannst dieses Gebäude mit allen gefundenen Ressourcen verlassen.'|trans({},'game') }}</div>
+        <div class="padded cell rw-6 rw-md-12">
+            <h5>{{ 'Meine Aktionen'|trans({},'game') }}</h5>
+
+            <div class="flex column">
+                {% if exploration.atEntry %}
+                    <button
+                        data-fetch="{{ path('rest_game_beyond_eruin_exit_exploration') }}"
+                        data-fetch-method="delete"
+                        data-fetch-load="{{ path('beyond_dashboard') }}"
+                    >
+                        <img class="icon left" alt="" src="{{ asset('build/images/icons/exit.gif') }}"/>
+                        {{ 'Gebäude verlassen'|trans({},'game') }}
+                        <hordes-tooltip class="help">{{ 'Du kannst dieses Gebäude mit allen gefundenen Ressourcen verlassen.'|trans({},'game') }}</hordes-tooltip>
                     </button>
                 {% endif %}
 
                 {% if zone.prototype %}
                     {% if shifted %}
-                        <br />
                         <button {% if not scavenge %}disabled{% endif%} id="scavenge_button">
                             {% if scavenge %}
                                 <img class="icon left" alt="" src="{{ asset('build/images/icons/small_view.gif') }}" />
@@ -68,42 +74,38 @@
                         </button>
                     {% endif %}
                     <br />
-                    {% if zone.prototype.level != 0 %}
-                        <button {% if (zone_zombies > 0 and not escaping) or zone.locked %}disabled{% endif %} id="stairs_button"  >
-                            {% if ((zone_zombies <= 0 or escaping) and not zone.locked) or shifted %}
-                                <img class="icon left" alt="" src="{{ asset('build/images/icons/small_enter.gif') }}" />
-                            {% else %}
-                                <img class="icon left" alt="" src="{{ asset('build/images/icons/lock.gif') }}" />
-                            {% endif %}
-                            {% if zone.prototype.level > 0 %}
-                                {{ 'Treppe nach oben nehmen'|trans({},'game') }}
-                            {% else %}
-                                {{ 'Treppe nach unten nehmen'|trans({},'game') }}
-                            {% endif %}
-                            <div class="tooltip help">{{ 'Über dieses Treppenhaus kannst du ein anderes Stockwerk dieser Ruine betreten.'|trans({},'game') }}</div>
-                        </button>
-                    {% else %}
-                        <button {% if (zone_zombies > 0 and not escaping) or (zone.locked and not shifted) %}disabled{% endif %} id="{{ shifted ? 'unshift_button' : 'shift_button' }}"  >
-                            {% if ((zone_zombies <= 0 or escaping) and not zone.locked) or shifted %}
-                                <img class="icon left" alt="" src="{{ asset('build/images/icons/small_enter.gif') }}" />
-                            {% else %}
-                                <img class="icon left" alt="" src="{{ asset('build/images/icons/lock.gif') }}" />
-                            {% endif %}
-                            {% if shifted %}
-                                {{ 'Raum verlassen'|trans({},'game') }}
-                                <div class="tooltip help">{{ 'Du kannst die üblen Gerüche und den Anblick dieses Raumes nicht länger ertragen.'|trans({},'game') }}</div>
-                            {% else %}
-                                {{ 'Raum betreten'|trans({},'game') }}
-                                <div class="tooltip help">{{ 'Du kannst diesen Raum betreten, vielleicht findest du einige interessante Gegenstände.'|trans({},'game') }}</div>
-                            {% endif %}
-                        </button>
-                    {% endif %}
 
+                    <button {% if (zone_zombies > 0 and not escaping) or zone.locked %}disabled{% endif %} data-emit="eruin-map-shift">
+                        {% if ((zone_zombies <= 0 or escaping) and not zone.locked) or shifted %}
+                            <img class="icon left" alt="" src="{{ asset('build/images/icons/small_enter.gif') }}" />
+                        {% else %}
+                            <img class="icon left" alt="" src="{{ asset('build/images/icons/lock.gif') }}" />
+                        {% endif %}
+                        {% if zone.prototype.level > 0 %}
+                            {{ 'Treppe nach oben nehmen'|trans({},'game') }}
+                            <div class="tooltip help">{{ 'Über dieses Treppenhaus kannst du ein anderes Stockwerk dieser Ruine betreten.'|trans({},'game') }}</div>
+                        {% elseif zone.prototype.level < 0 %}
+                            {{ 'Treppe nach unten nehmen'|trans({},'game') }}
+                            <div class="tooltip help">{{ 'Über dieses Treppenhaus kannst du ein anderes Stockwerk dieser Ruine betreten.'|trans({},'game') }}</div>
+                        {% elseif shifted %}
+                            {{ 'Raum verlassen'|trans({},'game') }}
+                            <div class="tooltip help">{{ 'Du kannst die üblen Gerüche und den Anblick dieses Raumes nicht länger ertragen.'|trans({},'game') }}</div>
+                        {% else %}
+                            {{ 'Raum betreten'|trans({},'game') }}
+                            <div class="tooltip help">{{ 'Du kannst diesen Raum betreten, vielleicht findest du einige interessante Gegenstände.'|trans({},'game') }}</div>
+                        {% endif %}
+                    </button>
 
                     {% if zone.locked and not shifted and zone.prototype.keyImprint and zone.prototype.keyItem %}
                         {% if can_imprint %}
                             {% for type in imprint_goal|keys %}
-                                <button {% if not scavenge %}disabled{% endif %} data-imprint-set="{{ type }}">
+                                <button
+                                    {% if not scavenge %}disabled{% endif %}
+                                    data-fetch="{{ path('rest_game_beyond_eruin_imprint_get', {type: type}) }}"
+                                    data-fetch-method="get"
+                                    data-fetch-confirm="{{ 'Einen Abdruck nehmen?'|trans({},'game') }}"
+                                    data-fetch-load="{{ path('exploration_dashboard') }}"
+                                >
                                     {% for item in imprint_source[type] %}
                                         <img class="icon left" alt="" title="{{ item.label|trans({},'item') }}" src="{{ asset('build/images/item/item_' ~ item.icon ~ '.gif') }}" />
                                     {% endfor %}
@@ -112,33 +114,38 @@
                                 </button>
                             {% endfor %}
                         {% endif %}
-                        <button id="unlock_button">
+                        <button
+                            data-fetch="{{ path('rest_game_beyond_eruin_imprint_put') }}"
+                            data-fetch-method="put"
+                            data-fetch-load="{{ path('exploration_dashboard') }}"
+                        >
                             {{ 'Tür aufschließen'|trans({},'game') }}
                             <div class="tooltip help">{{ 'Mit dem richtigen Schlüssel kannst du diese Tür öffnen.'|trans({},'game') }}</div>
                         </button>
                     {% endif %}
                 {% endif %}
                 <div id="wb-item-action-section" data-proxy-template="wb-item-action-section" style="display: contents">
-                    {% embed "ajax/game/actions.html.twig" with {'t': citizen.fullPropertySet, 'scout': false, 'hidden': false, 'iec': true, 'item_action_proxy': path('beyond_ruin_dashboard_partial_item_actions')} %}
+                    {% embed "ajax/game/actions.html.twig" with {'t': citizen.fullPropertySet, 'scout': false, 'hidden': false, 'iec': true, 'item_action_proxy': path('beyond_ruin_dashboard_partial_item_actions'), native_margins: true} %}
                     {% endembed %}
                 </div>
 
-                {% embed "ajax/game/actions.html.twig" with { 'heroic_action_list': heroics,'t': citizen.fullPropertySet, 'scout': false } %}
+                {% embed "ajax/game/actions.html.twig" with { 'heroic_action_list': heroics,'t': citizen.fullPropertySet, 'scout': false, native_margins: true } %}
                 {% endembed %}
             </div>
+        </div>
 
-            <div class="padded cell rw-6 rw-md-12">
-                <h5><span class="float-right link" x-ajax-href='{{ path('exploration_dashboard') }}'>{{'Aktualisierung'|trans({}, 'game')}}</span>{% trans from 'game' %}Meine objekte{% endtrans %}</h5>
-                <hordes-inventory
-                        id="ruin-inventory" data-react-mount="ruin-inventory" data-reset-proxy-templates="1"
-                        data-etag="{{ date().timestamp }}"
-                        data-inventory-a-type="rucksack" data-inventory-a-id="{{ citizen.inventory.id }}"
-                        data-inventory-b-type="desert" data-inventory-b-id="{{ zone.floor.id }}"
-                        data-soft-reload="{{ path('exploration_dashboard') }}"
-                ></hordes-inventory>
-            </div>
+        <div class="padded cell rw-6 rw-md-12">
+            <h5><span class="float-right link" x-ajax-href='{{ path('exploration_dashboard') }}'>{{'Aktualisierung'|trans({}, 'game')}}</span>{{ 'Meine objekte'|trans({},'game') }}</h5>
+            <hordes-inventory
+                    id="ruin-inventory" data-react-mount="ruin-inventory" data-reset-proxy-templates="1"
+                    data-etag="{{ date().timestamp }}"
+                    data-inventory-a-type="rucksack" data-inventory-a-id="{{ citizen.inventory.id }}"
+                    data-inventory-b-type="desert" data-inventory-b-id="{{ zone.floor.id }}"
+                    data-soft-reload="{{ path('exploration_dashboard') }}"
+            ></hordes-inventory>
         </div>
     </div>
+
 
 {% endblock %}
 {% block js %}
@@ -154,73 +161,11 @@
 
         handleActionPopups( document.querySelectorAll('ul.heroic_actions [x-target-definition]') );
 
-        {% if zone.x == 0 and zone.y == 0 %}
-            $.html.addEventListenerAll( '#exit_ruin_button', 'click', function() {
-                $.ajax.easySend( '{{ path('beyond_ruin_enter_desert_controller') }}', {},
-                    function () {
-                        $.ajax.load(null, '{{ path('beyond_dashboard') }}', true);
-                    } );
-            } );
-        {% endif %}
-
-        {% if zone.prototype %}
-            {% if not zone.locked and not shifted %}
-                $.html.addEventListenerAll( '#shift_button', 'click', function() {
-                    $.ajax.easySend( '{{ path('beyond_ruin_room_enter_controller') }}', {},
-                        function () {
-                            $.ajax.load(null, '{{ path('exploration_dashboard') }}', true);
-                        } );
-                } );
-                $.html.addEventListenerAll( '#stairs_button', 'click', function() {
-                    $.ajax.easySend( '{{ path('beyond_ruin_stairs_enter_controller') }}', {},
-                        function () {
-                            $.ajax.load(null, '{{ path('exploration_dashboard') }}', true);
-                        } );
-                } );
-            {% endif %}
-            {% if shifted %}
-                $.html.addEventListenerAll( '#unshift_button', 'click', function() {
-                    $.ajax.easySend( '{{ path('beyond_ruin_room_leave_controller') }}', {},
-                        function () {
-                            $.ajax.load(null, '{{ path('exploration_dashboard') }}', true);
-                        } );
-                } );
-            {% endif %}
-        {% endif %}
-
-        {% if zone.locked and not shifted and zone.prototype.keyImprint and zone.prototype.keyItem %}
-            {% if scavenge and can_imprint %}
-                $.html.addEventListenerAll( '[data-imprint-set]', 'click', function(e,elem) {
-                    if (confirm("{{ 'Einen Abdruck nehmen?'|trans({},'game')|e('js') }}"))
-                        $.ajax.easySend( '{{ path('beyond_ruin_imprint_controller') }}', {type: elem.dataset.imprintSet},
-                            function () {
-                                $.ajax.load(null, '{{ path('exploration_dashboard') }}', true);
-                            } );
-                } );
-            {% endif %}
-            $.html.addEventListenerAll( '#unlock_button', 'click', function() {
-                $.ajax.easySend( '{{ path('beyond_ruin_unlock_controller') }}', {},
-                    function () {
-                        $.ajax.load(null, '{{ path('exploration_dashboard') }}', true);
-                    } );
-            } );
-        {% endif %}
-
         {% if scavenge %}
             $.html.addEventListenerAll( '#scavenge_button', 'click', function() {
                 $.ajax.easySend( '{{ path('beyond_ruin_scavenge_controller') }}', {},
                     function () {
                         $.ajax.load(null, '{{ path('exploration_dashboard') }}', true);
-                    } );
-            } );
-        {% endif %}
-
-        {% if zone_zombies > 0 and not escaping %}
-            $.html.addEventListenerAll( '#escape-btn', 'click', function() {
-                if (confirm('{{ 'Diese Aktion kostet dich Sauerstoff, trotzdem flüchten?'|trans({},'game')|e('js') }}'))
-                    $.ajax.easySend( '{{ path('beyond_ruin_escape_controller') }}', {},
-                        function () {
-                            $.ajax.load(null, '{{ path('exploration_dashboard') }}', true);
                     } );
             } );
         {% endif %}
