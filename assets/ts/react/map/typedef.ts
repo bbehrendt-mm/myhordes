@@ -178,6 +178,7 @@ export type LocalControlProps = {
     fx: boolean,
     planes: LocalZoneSurroundings,
     movement: boolean,
+    blocked: boolean,
     activeRoute: MapRoute | null,
     wrapDispatcher: (RuntimeMapStateAction)=>void,
     dx: number,
@@ -189,6 +190,7 @@ export type LocalZoneProps = {
     fx: boolean,
     plane: LocalZone[],
     movement: boolean,
+    blocked: boolean
     activeRoute: MapRoute | null,
     wrapDispatcher: (RuntimeMapStateAction)=>void,
     dx: number,

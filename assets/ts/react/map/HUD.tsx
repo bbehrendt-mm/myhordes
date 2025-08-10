@@ -142,7 +142,7 @@ const ZoneControlParent = ( props: LocalControlProps ) => {
     }
 
     return (
-        <div className={`zone-plane-controls ${props.fx ? 'retro' : ''} ${props.movement ? '' : 'blocked'}`}>
+        <div className={`zone-plane-controls ${props.fx ? 'retro' : ''} ${props.blocked ? 'blocked' : ''}`}>
             { marker_rotation !== null && (
                 <div style={marker_rotation} className="marker-direction"/>
             ) }
