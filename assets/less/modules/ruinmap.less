@@ -11,6 +11,9 @@ div.ruin_map_react {
       width: 100%; height: 100%;
 
       .konvajs-content, canvas { height: 100% !important; width: 100% !important; }
+
+      &.webgl { pointer-events: none }
+      &.inactive { opacity: 0 }
     }
 
     &>.frame {
