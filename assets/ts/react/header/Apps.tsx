@@ -128,7 +128,8 @@ export const App = ({app, onClose, signalUpdate}: {app: ExternalApp|null, onClos
                             <button disabled={true} type="submit" className="button">{ globals.strings.apps.details.confirm.replace('{app}', app.name) }</button>
                             <p>
                                 <span className="critical">{ globals.strings.apps.details.warning_pk_1 }</span>
-                                <span>{ globals.strings.apps.details.warning_pk_2 }</span>
+                                &nbsp;
+                                <span dangerouslySetInnerHTML={{__html: globals.strings.apps.details.warning_pk_2}}/>
                             </p>
                         </form>}
 
