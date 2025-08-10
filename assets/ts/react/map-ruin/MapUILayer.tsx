@@ -2,12 +2,15 @@ import * as React from "react";
 import {Group, Layer, Rect, Line, Image, Text} from "react-konva";
 import {useContext, useLayoutEffect, useRef, useState} from "react";
 import Konva from "konva";
-import {ExplorationTileset, MovementControls} from "./api";
+import {MovementControls} from "./api";
 import {AssetHelper, ScaleHelper} from "./Map";
 import {MapScaler} from "./scaler";
 import {Globals} from "./Wrapper";
 import {useCountdown} from "../utils";
 import {GifImage} from "../konva-utils";
+import {Global} from "../../defaults";
+
+declare var $: Global;
 
 interface MapSetup {
     h: number,
@@ -190,10 +193,14 @@ const UIFrame = (props: LayerUIFrameProps) => {
 
     useCountdown(
         props.timeout * 1000,
-        ms => `${Math.floor(Math.max(0, ms/3000))}`,
-        (_, s) => setTimeout(s),
+        ms => `${Math.floor(ms/3000)}`,
+        (ms, s) => {
+            if (ms <= 0) $.ajax.load(null, globals.reload, false);
+            else setTimeout(s)
+        },
         250,
-        [props.timeout]
+        [props.timeout],
+        true
     )
 
     const h = 0.090 * activity;

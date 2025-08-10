@@ -93,6 +93,7 @@ export function useCountdown(
     callback: (remaining: number, formatted: string) => void|boolean,
     interval: number = 1000,
     deps: DependencyList = [],
+    allow_negative: boolean = false,
 ) {
 
     const ref = useRef<countdownRef>({
@@ -119,7 +120,7 @@ export function useCountdown(
             ref.current.remaining -= (now - ref.current.last);
             ref.current.last = now;
 
-            let do_continue = ref.current.remaining > 0;
+            let do_continue = allow_negative || ref.current.remaining > 0;
             const formatted = formatter(ref.current.remaining);
             if (formatted !== ref.current.formatted) {
                 const result = callback( ref.current.remaining, formatted );

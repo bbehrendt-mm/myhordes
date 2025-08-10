@@ -24,6 +24,7 @@ export interface RuinMapGlobal {
     api: RuinExplorationAPI,
     strings: TranslationStrings|null,
     name: string,
+    reload: string
 }
 
 export const Globals = React.createContext<RuinMapGlobal>(null);
@@ -67,6 +68,7 @@ const HordesRuinExplorationMapWrapper = (props: mountProps) => {
                 api: apiRef.current,
                 strings,
                 name: props.name,
+                reload: props.reload,
             }}>
                 { size && strings && <MapCore setup={{
                     h: size.height, w: size.width
