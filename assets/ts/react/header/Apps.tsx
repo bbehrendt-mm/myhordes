@@ -124,7 +124,7 @@ export const App = ({app, onClose, signalUpdate}: {app: ExternalApp|null, onClos
                             </form> }
                         </> }
 
-                        { app?.auth && !app?.pk && <form action={ app.dev.url } method={ app.auth ? 'post' : 'get' } target="_blank">
+                        { app?.auth && !app?.pk && <form action={ app.url } method={ app.auth ? 'post' : 'get' } target="_blank">
                             <button disabled={true} type="submit" className="button">{ globals.strings.apps.details.confirm.replace('{app}', app.name) }</button>
                             <p>
                                 <span className="critical">{ globals.strings.apps.details.warning_pk_1 }</span>
