@@ -202,7 +202,8 @@ class BeyondController extends InventoryAwareController
             $zone_players += $this->entity_manager->getRepository(Citizen::class)->count(['town' => $this->getActiveCitizen()->getTown(), 'zone' => null, 'alive' => true]);
         }
 
-        $allow_movement = (!$blocked || $escape > 0 || $scout_movement) && !$citizen_tired && !$citizen_hidden && ($this->getActiveCitizen()->getEscortSettings() === null || $this->getActiveCitizen()->getEscortSettings()->getLeader() === null);
+        $movement_blocked = !(!$blocked || $escape > 0 || $scout_movement);
+        $allow_movement = !$movement_blocked && !$citizen_tired && !$citizen_hidden && ($this->getActiveCitizen()->getEscortSettings() === null || $this->getActiveCitizen()->getEscortSettings()->getLeader() === null);
 
         $trash_limit =
             $this->getActiveCitizen()->property( CitizenProperties::TrashSearchLimit ) +
@@ -245,7 +246,11 @@ class BeyondController extends InventoryAwareController
                 'can_eat' => !$this->citizen_handler->hasStatusEffect($this->getActiveCitizen(), 'haseaten')
             ],
         ], $data, $merge_map ? [
-            'map_public_json'   => json_encode( $this->town_handler->get_public_map_blob( $this->getActiveCitizen()->getTown(), $this->getActiveCitizen(), $allow_movement ? 'beyond' : 'beyond-static', $this->getTownConf()->isNightTime() ? 'night' : 'day', "radar" ) )
+            'map_public_json'   => json_encode( $this->town_handler->get_public_map_blob( $this->getActiveCitizen()->getTown(), $this->getActiveCitizen(), match(true) {
+                $movement_blocked => 'beyond-static',
+                $allow_movement => 'beyond',
+                default => 'beyond-noap',
+            }, $this->getTownConf()->isNightTime() ? 'night' : 'day', "radar" ) )
         ] : []) );
     }
 

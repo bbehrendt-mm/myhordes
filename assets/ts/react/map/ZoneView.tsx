@@ -149,7 +149,7 @@ const LocalZoneView = React.memo( ( props: LocalZoneProps ) => {
                 </div>
 
             </div>
-            <ZoneControlParent fx={props.fx} movement={props.movement} planes={surroundings}
+            <ZoneControlParent fx={props.fx} movement={props.movement} blocked={props.blocked} planes={surroundings}
                                activeRoute={props.activeRoute} wrapDispatcher={props.wrapDispatcher} marker={props.marker}
                                dx={props.dx} dy={props.dy}
             />

@@ -300,7 +300,9 @@ const MapWrapper = ( props: ReactDataMapCore ) => {
                         { state.conf.enableLocalView && map && (
                             <LocalZoneView fx={props.data.fx} plane={map.local} inc={inc}
                                            activeRoute={activeRoute} dx={dx} dy={dy} wrapDispatcher={dispatch} marker={state.activeZone ?? null}
-                                           movement={state.conf.enableMovementControls && props.data.displayType !== 'beyond-static'} />
+                                           movement={state.conf.enableMovementControls && props.data.displayType !== 'beyond-static' && props.data.displayType !== 'beyond-noap'}
+                                           blocked={props.data.displayType === 'beyond-static'}
+                            />
                         ) }
                     </> }
 
