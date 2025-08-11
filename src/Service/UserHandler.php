@@ -328,7 +328,8 @@ class UserHandler
                 ($timeout <= 0 || $member->getUser()->getLastActionTimestamp()->getTimestamp() > (time() - $timeout)) &&
                 $member->getUser()->getActiveCitizen() === null &&
                 !$this->getConsecutiveDeathLock($member->getUser()) &&
-                !$this->isRestricted( $member->getUser(), AccountRestriction::RestrictionGameplay )
+                !$this->isRestricted( $member->getUser(), AccountRestriction::RestrictionGameplay ) &&
+                !$this->entity_manager->getRepository(CitizenRankingProxy::class)->findNextUnconfirmedDeath($member->getUser())
             ) {
                 if ($member->getUser() === $user) $active = true;
                 else $valid_members[] = $member->getUser();
