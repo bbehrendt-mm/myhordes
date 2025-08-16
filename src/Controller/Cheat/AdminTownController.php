@@ -277,7 +277,7 @@ class AdminTownController extends AdminActionController
 			if ($citizen->getActive()) $langs_alive[$lang]++;
 		}
 
-		return $this->render('ajax/admin/towns/explorer_citizen.html.twig', $this->addDefaultTwigArgs(null, array_merge([
+		return $this->render('ajax/cheat/towns/explorer_citizen.html.twig', $this->addDefaultTwigArgs(null, array_merge([
 			'town' => $town,
 			'day' => $town->getDay(),
 			'tab' => "citizens",
@@ -1117,7 +1117,7 @@ class AdminTownController extends AdminActionController
      * @return Response
      */
     #[Route(path: 'api/cheating/town/{id<\d+>}/teleport', name: 'admin_teleport_citizen')]
-    #[IsGranted('ROLE_SUB_ADMIN')]
+    #[IsGranted('cheat', 'town')]
     #[AdminLogProfile(enabled: true)]
     public function teleport_citizen(Town $town, JSONRequestParser $parser, ZoneHandler $handler, TownHandler $townHandler): Response
     {
@@ -1373,7 +1373,7 @@ class AdminTownController extends AdminActionController
      * @return Response
      */
     #[Route(path: 'jx/cheating/town/{id<\d+>}/citizen_infos', name: 'get_citizen_infos')]
-    #[IsGranted('ROLE_SUB_ADMIN')]
+    #[IsGranted('spy', 'town')]
     #[AdminLogProfile(enabled: true)]
     public function get_citizen_infos(Town $town, JSONRequestParser  $parser): Response {
         $citizen_id = $parser->get('citizen_id', -1);
@@ -1495,7 +1495,7 @@ class AdminTownController extends AdminActionController
      * @return Response
      */
     #[Route(path: 'api/cheating/town/{id<\d+>}/modify_prof', name: 'admin_modify_profession')]
-    #[IsGranted('ROLE_SUB_ADMIN')]
+    #[IsGranted('cheat', 'town')]
     #[AdminLogProfile(enabled: true)]
     public function modify_profession(Town $town, JSONRequestParser $parser, CitizenHandler $handler): Response
     {
@@ -1580,7 +1580,7 @@ class AdminTownController extends AdminActionController
      * @return Response
      */
     #[Route(path: 'api/cheating/town/proxy/{id<\d+>}/picto/give', name: 'admin_town_give_picto')]
-    #[IsGranted('ROLE_SUB_ADMIN')]
+    #[IsGranted('cheat', 'town')]
     #[AdminLogProfile(enabled: true)]
     public function town_give_picto(int $id, JSONRequestParser $parser, EventProxyService $proxy): Response
     {
@@ -1737,7 +1737,7 @@ class AdminTownController extends AdminActionController
      * @return Response
      */
     #[Route(path: 'api/cheating/town/{id<\d+>}/status/manage', name: 'admin_town_manage_status')]
-    #[IsGranted('ROLE_SUB_ADMIN')]
+    #[IsGranted('cheat', 'town')]
     #[AdminLogProfile(enabled: true)]
     public function town_manage_status(Town $town, JSONRequestParser $parser, CitizenHandler $handler): Response
     {
@@ -1911,7 +1911,7 @@ class AdminTownController extends AdminActionController
      * @return Response
      */
     #[Route(path: 'api/cheating/town/{id<\d+>}/role/manage', name: 'admin_town_manage_role')]
-    #[IsGranted('ROLE_SUB_ADMIN')]
+    #[IsGranted('cheat', 'town')]
     #[AdminLogProfile(enabled: true)]
     public function town_manage_role(Town $town, JSONRequestParser $parser, TownHandler $handler): Response
     {
@@ -1949,7 +1949,7 @@ class AdminTownController extends AdminActionController
      * @return Response
      */
     #[Route(path: 'api/cheating/town/{id<\d+>}/pp/alter', name: 'admin_town_alter_pp')]
-    #[IsGranted('ROLE_SUB_ADMIN')]
+    #[IsGranted('cheat', 'town')]
     #[AdminLogProfile(enabled: true)]
     public function town_alter_points(Town $town, JSONRequestParser $parser): Response
     {

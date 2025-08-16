@@ -14,28 +14,30 @@
 		<div class="cell padded rw-6 rw-md-12">
 			<div class="row-table citizens-list">
 				<div class="row header">
-					<div class="padded cell rw-1">
+                    {% if is_granted('cheat', town) %}
+					    <div class="padded cell rw-1">
 						<label class="pointer">
 							{{'Rucksack'|trans({}, 'admin')|slice(0,1)}}
 							<input class="hidden" type="checkbox" x-all="1" x-target="rucksack" />
 						</label>
 						<div class="tooltip help">{{'Rucksack'|trans({}, 'admin')}}</div>
 					</div>
-					<div class="padded cell rw-1">
+					    <div class="padded cell rw-1">
 						<label class="pointer">
 							{{'Truhe'|trans({}, 'admin')|slice(0,1)}}
 							<input class="hidden" type="checkbox" x-all="1" x-target="chest" />
 						</label>
 						<div class="tooltip help">{{'Truhe'|trans({}, 'admin')}}</div>
 					</div>
-					<div class="padded cell rw-1">
+					    <div class="padded cell rw-1">
 						<label class="pointer">
 							{{'Zone'|trans({}, 'admin')|slice(0,1)}}
 							<input class="hidden" type="checkbox" x-all="1" x-target="zone" />
 						</label>
 						<div class="tooltip help">{{'Zone'|trans({}, 'admin')}}</div>
 					</div>
-					<div class="padded cell left rw-9">
+                    {% endif %}
+					<div class="padded cell left rw-{% if is_granted('cheat', town) %}9{% else %}12{% endif %}">
 						<label class="pointer">
 							{{ 'Bürger'|trans({},'game') }}
 							<input class="hidden" type="checkbox" x-all="1" x-target="status" />
@@ -45,54 +47,56 @@
 				{% for citizen in town.citizens|sort((a,b) => (a.alive == b.alive) ? ((a.alive) ? a.name|lower <=> b.name|lower : b.survivedDays <=> a.survivedDays) : b.alive <=> a.alive) %}
 					{# @var \App\Entity\Citizen citizen  #}
 					<div x-citizen-id="{{ citizen.id }}" class="row-flex stretch pointer citizen-main" style="max-height: 100px; overflow: hidden">
-						<div class="cell rw-1">
-							{% if citizen.alive %}
-								<label><input type="checkbox" x-id="{{ citizen.id }}" x-target="rucksack" /></label>
-								<div class="tooltip normal">
-									<em>{{ 'Rucksack'|trans({},'admin') }}</em><br />
-									{% for item in citizen.inventory.items %}
-										{# @var \App\Entity\Item item #}
-										<div class="inline-block" style="{{ item.broken ? 'outline: 1px dotted #ff0000;' : '' }}"><img alt="{{ item.prototype.label|trans({},'items') }}" src="{{ asset('build/images/item/item_' ~ item.prototype.icon ~ '.gif') }}" /></div>
-									{% endfor %}
-								</div>
-							{% endif %}
-						</div>
-						<div class="cell rw-1">
-							<label><input type="checkbox" x-id="{{ citizen.home.id }}" x-target="chest" /></label>
-							<div class="tooltip normal">
-								{% if citizen.home.chest.items|length == 0 %}
-									<em>{{ 'Leere Truhe'|trans({},'admin') }}</em>
-								{% else %}
-									<em>{{ 'Truhe'|trans({},'admin') }}</em><br />
-								{% endif %}
-								{% for item in citizen.home.chest.items %}
-									{# @var \App\Entity\Item item #}
-                                    <div class="inline-block" style="{{ item.broken ? 'outline: 1px dotted #ff0000;' : '' }}"><img alt="{{ item.prototype.label|trans({},'items') }}" src="{{ asset('build/images/item/item_' ~ item.prototype.icon ~ '.gif') }}" /></div>
-								{% endfor %}
-							</div>
-						</div>
-						<div class="cell rw-1">
-							{% if citizen.alive and citizen.zone and (citizen.zone.x != 0 or citizen.zone.y != 0) %}
-								<label><input type="checkbox" x-id="{{ citizen.zone.id }}" x-target="zone" /></label>
-								<div class="tooltip normal">
-									{% if citizen.zone.floor.items|length == 0 %}
-										<em>{{ 'Leere Zone'|trans({},'admin') }}</em>
-									{% else %}
-										<em>{{ 'Zone'|trans({},'admin') }}</em><br />
-									{% endif %}
-									{% for item in citizen.zone.floor.items %}
-										{# @var \App\Entity\Item item #}
+                        {% if is_granted('cheat', town) %}
+						    <div class="cell rw-1">
+						    	{% if citizen.alive %}
+						    		<label><input type="checkbox" x-id="{{ citizen.id }}" x-target="rucksack" /></label>
+						    		<div class="tooltip normal">
+						    			<em>{{ 'Rucksack'|trans({},'admin') }}</em><br />
+						    			{% for item in citizen.inventory.items %}
+						    				{# @var \App\Entity\Item item #}
+						    				<div class="inline-block" style="{{ item.broken ? 'outline: 1px dotted #ff0000;' : '' }}"><img alt="{{ item.prototype.label|trans({},'items') }}" src="{{ asset('build/images/item/item_' ~ item.prototype.icon ~ '.gif') }}" /></div>
+						    			{% endfor %}
+						    		</div>
+						    	{% endif %}
+						    </div>
+						    <div class="cell rw-1">
+						    	<label><input type="checkbox" x-id="{{ citizen.home.id }}" x-target="chest" /></label>
+						    	<div class="tooltip normal">
+						    		{% if citizen.home.chest.items|length == 0 %}
+						    			<em>{{ 'Leere Truhe'|trans({},'admin') }}</em>
+						    		{% else %}
+						    			<em>{{ 'Truhe'|trans({},'admin') }}</em><br />
+						    		{% endif %}
+						    		{% for item in citizen.home.chest.items %}
+						    			{# @var \App\Entity\Item item #}
                                         <div class="inline-block" style="{{ item.broken ? 'outline: 1px dotted #ff0000;' : '' }}"><img alt="{{ item.prototype.label|trans({},'items') }}" src="{{ asset('build/images/item/item_' ~ item.prototype.icon ~ '.gif') }}" /></div>
-									{% endfor %}
-								</div>
-							{% endif %}
-						</div>
-						<div class="cell rw-1">
-							{% if citizen.alive %}
-								<label><input type="checkbox" x-id="{{ citizen.id }}" x-target="status" /></label>
-								<div class="tooltip normal">{{ widget_citizen(citizen) }}</div>
-							{% endif %}
-						</div>
+						    		{% endfor %}
+						    	</div>
+						    </div>
+						    <div class="cell rw-1">
+						    	{% if citizen.alive and citizen.zone and (citizen.zone.x != 0 or citizen.zone.y != 0) %}
+						    		<label><input type="checkbox" x-id="{{ citizen.zone.id }}" x-target="zone" /></label>
+						    		<div class="tooltip normal">
+						    			{% if citizen.zone.floor.items|length == 0 %}
+						    				<em>{{ 'Leere Zone'|trans({},'admin') }}</em>
+						    			{% else %}
+						    				<em>{{ 'Zone'|trans({},'admin') }}</em><br />
+						    			{% endif %}
+						    			{% for item in citizen.zone.floor.items %}
+						    				{# @var \App\Entity\Item item #}
+                                            <div class="inline-block" style="{{ item.broken ? 'outline: 1px dotted #ff0000;' : '' }}"><img alt="{{ item.prototype.label|trans({},'items') }}" src="{{ asset('build/images/item/item_' ~ item.prototype.icon ~ '.gif') }}" /></div>
+						    			{% endfor %}
+						    		</div>
+						    	{% endif %}
+						    </div>
+						    <div class="cell rw-1">
+						    	{% if citizen.alive %}
+						    		<label><input type="checkbox" x-id="{{ citizen.id }}" x-target="status" /></label>
+						    		<div class="tooltip normal">{{ widget_citizen(citizen) }}</div>
+						    	{% endif %}
+						    </div>
+                        {% endif %}
 						<div style="align-self: center" class="cell factor-0">
 							{% if citizen.user.language is null %}
 								<img style="width: 16px" class="float-right" src="{{ asset("build/images/lang/multi.png") }}" alt="multi" />
@@ -158,7 +162,9 @@
 							<div class="row">
 								<div class="padded cell rw-12 hidden">
 									<div class="invTargetDesc lightbox"></div>
-									<button data-clear="citizen-custom-message" class="small inline float-right">{{ 'Löschen'|trans({},'admin') }}</button>
+                                    {% if is_granted('ROLE_CROW') %}
+									    <button data-clear="citizen-custom-message" class="small inline float-right">{{ 'Löschen'|trans({},'admin') }}</button>
+                                    {% endif %}
 								</div>
 								<div class="padded cell rw-6"><div class="invTargetRucksack"></div></div>
 								<div class="padded cell rw-6"><div class="invTargetChest"></div></div>
@@ -185,7 +191,7 @@
 			</div>
 		</div>
 		<div class="cell rw-6 rw-md-12 padded">
-			{% if is_granted("ROLE_SUB_ADMIN") %}
+            {% if is_granted('cheat', town) %}
 				<div class="padded cell">
 					{{ item_creator(itemPrototypes, 'ctz') }}
 					<hr />
@@ -253,19 +259,20 @@
 				</div>
 				<br />
 			{% endif %}
-			{% if is_granted("ROLE_SUB_ADMIN") %}
+            {% if is_granted('administrate', town) %}
 				<button id="dropall">{{ 'Alle Gegenstände aller Bürger ablegen'|trans({},'admin') }}</button>
 			{% endif %}
-			<button id="townpm">{{ 'Rundmail als Rabe'|trans({},'admin') }}</button>
-			<input type="hidden" id="pmidrecipient" value="{{ town.id }}">
-			<div id="forum-content"></div>
-
+            {% if is_granted('ROLE_CROW') %}
+			    <button id="townpm">{{ 'Rundmail als Rabe'|trans({},'admin') }}</button>
+			    <input type="hidden" id="pmidrecipient" value="{{ town.id }}">
+			    <div id="forum-content"></div>
+            {% endif %}
 		</div>
 	</div>
 {% endblock %}
 {% block js %}
 	{{ parent() }}
-	{% if is_granted("ROLE_SUB_ADMIN") %}
+    {% if is_granted('cheat', town) %}
 		{{ item_creator_js('input[x-id][x-target="rucksack"]:checked,input[x-id][x-target="chest"]:checked,input[x-id][x-target="zone"]:checked', path('admin_spawn_item', {id: town.id}), path('admin_town_citizens', {id: town.id}), 'ctz') }}
 		{{ teleport_control_js('input[x-id][x-target="status"]:checked', path('admin_teleport_citizen', {id: town.id}), path('admin_town_citizens', {id: town.id})) }}
 		{{ picto_creator_js('input[x-id][x-target="status"]:checked', path('admin_town_give_picto', {id: town.id}), path('admin_town_citizens', {id: town.id})) }}
@@ -275,22 +282,25 @@
 		{{ profession_control_js('input[x-id][x-target="status"]:checked', path('admin_modify_profession', {id: town.id}), path('admin_town_citizens', {id: town.id})) }}
 	{% endif %}
 	<script>
-        document.getElementById('townpm').addEventListener('click', function(e) {
-            document.getElementById("forum-content").innerHTML = "";
-            $.ajax.no_history().load( document.getElementById('forum-content'), '{{ path('admin_pm_editor_controller', {'type': 'global'}) }}', false )
-        });
 
-        $.html.addEventListenerAll( '[x-citizen-id] [data-clear]', 'click', (e,elem) => {
-            if (!confirm('{{ 'Bestätigen?'|trans({},'global')|e('js') }}'))
-                return;
-            const id = parseInt(elem.closest('[x-citizen-id]').getAttribute('x-citizen-id'));
-            $.ajax.easySend('{{ path('clear_citizen_attribs', {id: town.id}) }}', {id, clear: elem.dataset.clear},
-                () => $.ajax.load(null, '{{ path('admin_town_citizens', {id: town.id}) }}', true)
-            );
-        } );
+        {% if is_granted('ROLE_CROW') %}
+            document.getElementById('townpm').addEventListener('click', function(e) {
+                document.getElementById("forum-content").innerHTML = "";
+                $.ajax.no_history().load( document.getElementById('forum-content'), '{{ path('admin_pm_editor_controller', {'type': 'global'}) }}', false )
+            });
 
-        {% if is_granted("ROLE_SUB_ADMIN") %}
-        $.html.addEventListenerAll('.citizen-main[x-citizen-id]', 'click',  (e,elem) => {
+            $.html.addEventListenerAll( '[x-citizen-id] [data-clear]', 'click', (e,elem) => {
+                if (!confirm('{{ 'Bestätigen?'|trans({},'global')|e('js') }}'))
+                    return;
+                const id = parseInt(elem.closest('[x-citizen-id]').getAttribute('x-citizen-id'));
+                $.ajax.easySend('{{ path('clear_citizen_attribs', {id: town.id}) }}', {id, clear: elem.dataset.clear},
+                    () => $.ajax.load(null, '{{ path('admin_town_citizens', {id: town.id}) }}', true)
+                );
+            } );
+        {% endif %}
+
+        {% if is_granted('spy', town) %}
+            $.html.addEventListenerAll('.citizen-main[x-citizen-id]', 'click',  (e,elem) => {
             if (e.target.tagName === 'INPUT') return;
             const details = document.querySelector('.citizen-details[x-citizen-id="' + elem.getAttribute('x-citizen-id') + '"]');
 
@@ -319,17 +329,19 @@
                         for(let i = 0 ; i < tooltips.length ; i++)
                             $.html.handleTooltip(tooltips[i]);
 
-                        let items = document.querySelectorAll('.citizen-details[x-citizen-id="' + elem.getAttribute('x-citizen-id') + '"] .inventory .item:not(.locked)[x-item-id]');
-                        for (let i = 0; i < items.length; i++)
-                            items[i].addEventListener('click', function(ev) {
-                                let change = 'remove';
-                                const item_id = this.getAttribute('x-item-id');
-                                $.ajax.easySend('{{ path('admin_town_item', {id: town.id}) }}', {
-                                        item: item_id, change, qty: '1'
-                                    },
-                                    refresh
-                                );
-                            });
+                        {% if is_granted('cheat', town) %}
+                            let items = document.querySelectorAll('.citizen-details[x-citizen-id="' + elem.getAttribute('x-citizen-id') + '"] .inventory .item:not(.locked)[x-item-id]');
+                            for (let i = 0; i < items.length; i++)
+                                items[i].addEventListener('click', function(ev) {
+                                    let change = 'remove';
+                                    const item_id = this.getAttribute('x-item-id');
+                                    $.ajax.easySend('{{ path('admin_town_item', {id: town.id}) }}', {
+                                            item: item_id, change, qty: '1'
+                                        },
+                                        refresh
+                                    );
+                                });
+                        {% endif %}
                     });
                 };
                 refresh();
