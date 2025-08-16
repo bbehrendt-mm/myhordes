@@ -320,7 +320,7 @@ class CommonsController extends CustomAbstractCoreController
     #[Route(path: '/mods', name: 'mod_list', methods: ['GET'])]
     public function mod_list(UserCapabilityService $capability): JsonResponse {
 
-        if (!$this->getUser() || !$capability->hasAnyRole( $this->getUser(), ['ROLE_CROW', 'ROLE_ELEVATED'] ))
+        if (!$this->getUser() || !$capability->hasAnyRole( $this->getUser(), ['ROLE_CROW', 'ROLE_ELEVATED', 'ROLE_CHEATER'] ))
             return new JsonResponse([]);
 
         $crow = $capability->hasRole( $this->getUser(), 'ROLE_CROW' );
@@ -330,11 +330,23 @@ class CommonsController extends CustomAbstractCoreController
             : AdminActionController::getCommunityActions();
 
         return new JsonResponse([
-            'cat' => $crow ? $this->translator->trans('Moderation', [], 'global') : $this->translator->trans('Community-Tools', [], 'global'),
+            'cat' => match (true) {
+                $capability->hasRole( $this->getUser(), 'ROLE_CROW' )     => $this->translator->trans('Moderation', [], 'global'),
+                $capability->hasRole( $this->getUser(), 'ROLE_ELEVATED' ) => $this->translator->trans('Community-Tools', [], 'global'),
+                $capability->hasRole( $this->getUser(), 'ROLE_CHEATER' )  => $this->translator->trans('Schummeln', [], 'global'),
+            },
             'links' => array_map( fn(array $entry) => [
                 'name' => $entry['name'],
                 'url' => $this->generateUrl($entry['route']),
-            ], $data)
+            ], match(true) {
+                $capability->hasRole( $this->getUser(), 'ROLE_CROW' ) => AdminActionController::getAdminActions(),
+                $capability->hasAllRoles( $this->getUser(), ['ROLE_ELEVATED', 'ROLE_CHEATER'] ) => [
+                    ...AdminActionController::getCommunityActions(),
+                    ...AdminActionController::getCheaterActions(),
+                ],
+                $capability->hasRole( $this->getUser(), 'ROLE_ELEVATED' ) => AdminActionController::getCommunityActions(),
+                $capability->hasRole( $this->getUser(), 'ROLE_CHEATER' ) => AdminActionController::getCheaterActions(),
+            })
         ]);
 
     }

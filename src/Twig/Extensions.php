@@ -20,6 +20,7 @@ use App\Service\ConfMaster;
 use App\Service\EventProxyService;
 use App\Service\GameFactory;
 use App\Service\LogTemplateHandler;
+use App\Service\PermissionHandler;
 use App\Service\UserHandler;
 use App\Structures\MyHordesConf;
 use ArrayHelpers\Arr;
@@ -44,6 +45,7 @@ class Extensions extends AbstractExtension implements GlobalsInterface
         private readonly TranslatorInterface            $translator,
         private readonly UrlGeneratorInterface          $router,
         private readonly UserHandler                    $userHandler,
+        private readonly PermissionHandler              $permissions,
         private readonly EntityManagerInterface         $entityManager,
         private readonly GameFactory                    $gameFactory,
         private readonly ConfMaster                     $conf,
@@ -92,7 +94,7 @@ class Extensions extends AbstractExtension implements GlobalsInterface
             new TwigFunction('help_lnk',  	[$this, 'help_lnk'], ['is_safe' => array('html')]),
             new TwigFunction('tooltip',   	[$this, 'tooltip'], ['is_safe' => array('html')]),
             new TwigFunction('conf',      	[$this, 'conf']),
-			new TwigFunction('hook', 			[ExtensionsRuntime::class, 'execute_hooks'], ['is_safe' => array('html')]),
+			new TwigFunction('hook', 		[ExtensionsRuntime::class, 'execute_hooks'], ['is_safe' => array('html')]),
 			new TwigFunction('hostname',  	[$this, 'gethostname']),
         ];
     }
@@ -201,7 +203,7 @@ class Extensions extends AbstractExtension implements GlobalsInterface
     }
 
     public function user_is_restricted(User $user, ?int $mask = null): bool {
-        return $this->userHandler->isRestricted($user,$mask);
+        return $this->permissions->checkRestriction($user,$mask);
     }
 
     public function user_relation(User $user, User $other, int $relation): bool {

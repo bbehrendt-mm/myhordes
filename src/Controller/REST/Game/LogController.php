@@ -31,6 +31,7 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Order;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -395,7 +396,7 @@ class LogController extends CustomAbstractCoreController
      */
     #[Route(path: '/admin/zone/{id<\d+>}', name: 'admin_zone', methods: ['GET'])]
     #[GateKeeperProfile('skip')]
-    #[IsGranted('ROLE_CROW')]
+    #[IsGranted('spy', new Expression('args["zone"].getTown()'))]
     public function adminZone(Zone $zone, Request $request, EntityManagerInterface $em): JsonResponse {
         $criteria = $this->applyFilters( $request, $zone, allow_inline_days: true, admin: true, identifier: $cache_ident );
         return new JsonResponse([

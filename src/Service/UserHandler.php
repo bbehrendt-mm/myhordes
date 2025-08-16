@@ -46,6 +46,7 @@ class UserHandler
         private readonly ConfMaster $conf,
         private readonly InvalidateTagsInAllPoolsAction $clearCache,
         private readonly UserCapabilityService $capability,
+        private readonly PermissionHandler $permissions,
         private readonly EventProxyService $proxy,
     )
     { }
@@ -185,7 +186,8 @@ class UserHandler
      * @return bool True if the user has the given role; false otherwise.
      * @deprecated User the hasRole function in UserCapabilityService instead
      */
-    public function hasRole(User $user, string $role) {
+    public function hasRole(User $user, string $role): bool
+    {
         return $this->capability->hasRole( $user, $role );
     }
 
@@ -202,7 +204,7 @@ class UserHandler
      * @return string[]
      */
     public function admin_validFlags(): array {
-        return ['FLAG_ORACLE', 'FLAG_ANIMAC', 'FLAG_TEAM', 'FLAG_RUFFIAN', 'FLAG_DEV','FLAG_ART'];
+        return ['FLAG_ORACLE', 'FLAG_ANIMAC', 'FLAG_TEAM', 'FLAG_RUFFIAN', 'FLAG_DEV','FLAG_ART', 'FLAG_CHEATER'];
     }
 
     /**
@@ -328,7 +330,7 @@ class UserHandler
                 ($timeout <= 0 || $member->getUser()->getLastActionTimestamp()->getTimestamp() > (time() - $timeout)) &&
                 $member->getUser()->getActiveCitizen() === null &&
                 !$this->getConsecutiveDeathLock($member->getUser()) &&
-                !$this->isRestricted( $member->getUser(), AccountRestriction::RestrictionGameplay )
+                !$this->permissions->checkRestriction( $member->getUser(), AccountRestriction::RestrictionGameplay )
             ) {
                 if ($member->getUser() === $user) $active = true;
                 else $valid_members[] = $member->getUser();
@@ -358,23 +360,6 @@ class UserHandler
         return array_filter( array_map( fn(UserGroupAssociation $ua) => $ua->getUser(), $all_coalition_members ), fn(User $u) => $u !== $user );
     }
 
-    public function getActiveRestrictions(User $user): int {
-        $r = AccountRestriction::RestrictionNone;
-
-        /** @var QueryBuilder $qb */
-        $qb = $this->entity_manager->getRepository(AccountRestriction::class)->createQueryBuilder('a');
-        foreach ($qb
-                     ->select('a.restriction AS r')
-                     ->andWhere('a.user = :user' )->setParameter('user', $user)
-                     ->andWhere('(a.active = TRUE AND a.confirmed = true)')
-                     ->andWhere('(a.expires IS NULL or a.expires > :now)')->setParameter('now', new DateTime())
-                     ->getQuery()->getResult() as $entry)
-
-            $r |= $entry['r'];
-
-        return $r;
-    }
-
     public function getActiveRestrictionExpiration(User $user, ?int $restriction): ?DateTime {
         $dt = null;
 
@@ -395,9 +380,14 @@ class UserHandler
         return $dt;
     }
 
+    /**
+     * @deprecated
+     * @param User $user
+     * @param int|null $restriction
+     * @return bool
+     */
     public function isRestricted(User $user, ?int $restriction = null): bool {
-        $r = $this->getActiveRestrictions($user);
-        return $restriction === null ? ($r !== AccountRestriction::RestrictionNone) : (($r & $restriction) === $restriction);
+        return $this->permissions->checkRestriction( $user, $restriction );
     }
 
     protected array $_relation_cache = [];
@@ -540,7 +530,7 @@ class UserHandler
         if ($nextDeath === null || ($nextDeath->getCitizen() && $nextDeath->getCitizen()->getAlive()))
             return false;
 
-        $lastWords = $this->isRestricted( $user, AccountRestriction::RestrictionComments ) ? '' : $lastWords;
+        $lastWords = $this->permissions->checkRestriction( $user, AccountRestriction::RestrictionComments ) ? '' : $lastWords;
         $this->proxy->deathConfirmed( $nextDeath, $lastWords, true );
 
         $this->entity_manager->persist( $nextDeath );

@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Controller\Admin;
+namespace App\Controller\Cheat;
 
 use App\Annotations\AdminLogProfile;
 use App\Annotations\GateKeeperProfile;
+use App\Controller\Admin\AdminActionController;
 use App\Entity\ActionEventLog;
 use App\Entity\AdminReport;
 use App\Entity\BlackboardEdit;
@@ -56,9 +57,9 @@ use App\Service\Actions\Cache\InvalidateTagsInAllPoolsAction;
 use App\Service\Actions\Game\GenerateTownNameAction;
 use App\Service\Actions\Game\InitializeTownBuildingsAction;
 use App\Service\AdminLog;
-use App\Service\CrowService;
 use App\Service\CitizenHandler;
 use App\Service\ConfMaster;
+use App\Service\CrowService;
 use App\Service\ErrorHelper;
 use App\Service\EventProxyService;
 use App\Service\GameFactory;
@@ -75,7 +76,6 @@ use App\Service\TownHandler;
 use App\Service\ZoneHandler;
 use App\Structures\BankItem;
 use App\Structures\EventConf;
-use App\Structures\TownConf;
 use App\Structures\TownSetup;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
@@ -84,23 +84,24 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 use Exception;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/', condition: 'request.isXmlHttpRequest()')]
 #[GateKeeperProfile(allow_during_attack: true)]
 class AdminTownController extends AdminActionController
 {
-    protected function clearTownCaches(Town $town) {
+    protected function clearTownCaches(Town $town): void
+    {
         ($this->clear)("town_{$town->getId()}");
     }
 
 	/**
      * @return Response
      */
-    #[Route(path: 'jx/admin/town/list', name: 'admin_town_list')]
+    #[Route(path: 'jx/cheating/towns', name: 'admin_town_list')]
     public function town_list(): Response
     {
         return $this->render('ajax/admin/towns/list.html.twig', $this->addDefaultTwigArgs('towns', [
@@ -114,8 +115,8 @@ class AdminTownController extends AdminActionController
      * @param int $page The page we're viewing
      * @return Response
      */
-    #[Route(path: 'jx/admin/town/list/old/{page}', name: 'admin_old_town_list', requirements: ['page' => '\d+'])]
-    public function old_town_list($page = 1): Response
+    #[Route(path: 'jx/cheating/towns/old/{page}', name: 'admin_old_town_list', requirements: ['page' => '\d+'])]
+    public function old_town_list(int $page = 1): Response
     {
         if ($page <= 0) $page = 1;
 
@@ -177,18 +178,16 @@ class AdminTownController extends AdminActionController
         return $final;
     }
 
-	/**
-  * @param int $id The internal ID of the town
-  * @param TownHandler $townHandler
-  * @return Response
-  */
- #[Route(path: 'jx/admin/town/dash/{id<\d+>}', name: 'admin_town_dashboard')]
- public function town_explorer_dash(int $id, TownHandler $townHandler, KernelInterface $kernel): Response {
-		/** @var Town $town */
-		$town = $this->entity_manager->getRepository(Town::class)->find($id);
-		if ($town === null) return $this->redirect($this->generateUrl('admin_town_list'));
-
-		return $this->render('ajax/admin/towns/explorer_dash.html.twig', $this->addDefaultTwigArgs(null, array_merge([
+    /**
+     * @param Town $town
+     * @param TownHandler $townHandler
+     * @param KernelInterface $kernel
+     * @return Response
+     * @throws Exception
+     */
+    #[Route(path: 'jx/cheating/town/{id<\d+>}/dash', name: 'admin_town_dashboard')]
+    public function town_explorer_dash(Town $town, TownHandler $townHandler, KernelInterface $kernel): Response {
+		return $this->render('ajax/cheat/towns/explorer_dash.html.twig', $this->addDefaultTwigArgs(null, array_merge([
 			'town' => $town,
 			'day' => $town->getDay(),
 			'itemPrototypes' => $this->getOrderedItemPrototypes($this->getUser()->getAdminLang() ?? $this->getUser()->getLanguage()),
@@ -201,17 +200,12 @@ class AdminTownController extends AdminActionController
 		])));
 	}
 
-	/**
-  * @param int $id The internal ID of the town
-  * @return Response
-  */
- #[Route(path: 'jx/admin/town/bank/{id<\d+>}', name: 'admin_town_bank')]
- public function town_explorer_bank(int $id): Response {
-		/** @var Town $town */
-		$town = $this->entity_manager->getRepository(Town::class)->find($id);
-		if ($town === null) return $this->redirect($this->generateUrl('admin_town_list'));
-
-
+    /**
+     * @param Town $town
+     * @return Response
+     */
+    #[Route(path: 'jx/cheating/town/{id<\d+>}/bank', name: 'admin_town_bank')]
+    public function town_explorer_bank(Town $town): Response {
 		return $this->render('ajax/admin/towns/explorer_bank.html.twig', $this->addDefaultTwigArgs(null, array_merge([
 			'town' => $town,
 			'day' => $town->getDay(),
@@ -221,16 +215,12 @@ class AdminTownController extends AdminActionController
 		])));
 	}
 
-	/**
-  * @param int $id The internal ID of the town
-  * @return Response
-  */
- #[Route(path: 'jx/admin/town/citizens/{id<\d+>}', name: 'admin_town_citizens')]
- public function town_explorer_citizens(int $id): Response {
-		/** @var Town $town */
-		$town = $this->entity_manager->getRepository(Town::class)->find($id);
-		if ($town === null) return $this->redirect($this->generateUrl('admin_town_list'));
-
+    /**
+     * @param Town $town
+     * @return Response
+     */
+    #[Route(path: 'jx/cheating/town/{id<\d+>}/citizens', name: 'admin_town_citizens')]
+    public function town_explorer_citizens(Town $town): Response {
 		$disabled_profs = $this->conf->getTownConfiguration($town)->get(TownSetting::DisabledJobs);
 		$professions = array_filter($this->entity_manager->getRepository( CitizenProfession::class )->findSelectable(),
 			fn(CitizenProfession $p) => !in_array($p->getName(),$disabled_profs)
@@ -304,17 +294,13 @@ class AdminTownController extends AdminActionController
 		])));
 	}
 
-	/**
-  * @param int $id The internal ID of the town
-  * @param GazetteService $gazetteService
-  * @return Response
-  */
- #[Route(path: 'jx/admin/town/register/{id<\d+>}', name: 'admin_town_register')]
- public function town_explorer_register(int $id, GazetteService $gazetteService): Response {
-		/** @var Town $town */
-		$town = $this->entity_manager->getRepository(Town::class)->find($id);
-		if ($town === null) return $this->redirect($this->generateUrl('admin_town_list'));
-
+    /**
+     * @param Town $town
+     * @param GazetteService $gazetteService
+     * @return Response
+     */
+    #[Route(path: 'jx/cheating/town/{id<\d+>}/register', name: 'admin_town_register')]
+    public function town_explorer_register(Town $town, GazetteService $gazetteService): Response {
 		return $this->render('ajax/admin/towns/explorer_register.html.twig', $this->addDefaultTwigArgs(null, array_merge([
 			'town' => $town,
 			'day' => $town->getDay(),
@@ -326,16 +312,13 @@ class AdminTownController extends AdminActionController
 		])));
 	}
 
-	/**
-  * @param int $id The internal ID of the town
-  * @return Response
-  */
- #[Route(path: 'jx/admin/town/blackboard/{id<\d+>}/{highlight<\d+>}', name: 'admin_town_blackboard')]
- public function town_explorer_blackboard(int $id, int $highlight = 0): Response {
-		/** @var Town $town */
-		$town = $this->entity_manager->getRepository(Town::class)->find($id);
-		if ($town === null) return $this->redirect($this->generateUrl('admin_town_list'));
-
+    /**
+     * @param Town $town
+     * @param int $highlight
+     * @return Response
+     */
+    #[Route(path: 'jx/cheating/town/{id<\d+>}/blackboard/{highlight<\d+>}', name: 'admin_town_blackboard')]
+    public function town_explorer_blackboard(Town $town, int $highlight = 0): Response {
         $blackboards = $this->entity_manager->getRepository(BlackboardEdit::class)->findBy([ 'town' => $town ], ['time' => 'DESC'], $highlight > 0 ? 500 : 100);
         $reports_q = $this->entity_manager->getRepository(AdminReport::class)->findBy(['blackBoard' => $blackboards]);
 
@@ -353,12 +336,13 @@ class AdminTownController extends AdminActionController
 		])));
 	}
 
-	/**
-  * @param Town $town
-  * @return Response
-  */
- #[Route(path: 'jx/admin/town/estimations/{id<\d+>}', name: 'admin_town_estimations')]
- public function town_explorer_estimations(Town $town, EventProxyService $proxy): Response {
+    /**
+     * @param Town $town
+     * @param EventProxyService $proxy
+     * @return Response
+     */
+    #[Route(path: 'jx/cheating/town/{id<\d+>}/estimations', name: 'admin_town_estimations')]
+    public function town_explorer_estimations(Town $town, EventProxyService $proxy): Response {
         $maxAttacks = [];
         foreach ($town->getZombieEstimations() as $estimation) {
             $day = $estimation->getDay();
@@ -375,12 +359,12 @@ class AdminTownController extends AdminActionController
 	}
 
     /**
-  * @param EventProxyService $events
-  * @param int $id The internal ID of the town
-  * @return Response
-  */
- #[Route(path: 'jx/admin/town/buildings/{id<\d+>}', name: 'admin_town_buildings')]
- public function town_explorer_buildings(EventProxyService $events, Town $town): Response {
+     * @param EventProxyService $events
+     * @param Town $town
+     * @return Response
+     */
+    #[Route(path: 'jx/cheating/town/{id<\d+>}/buildings', name: 'admin_town_buildings')]
+    public function town_explorer_buildings(EventProxyService $events, Town $town): Response {
 		$root = [];
 		$dict = [];
 		$inTown = [];
@@ -418,16 +402,12 @@ class AdminTownController extends AdminActionController
 		])));
 	}
 
-	/**
-  * @param int $id The internal ID of the town
-  * @return Response
-  */
- #[Route(path: 'jx/admin/town/eruins_explorer/{id<\d+>}', name: 'admin_town_eruins_explorer')]
- public function town_explorer_eruins_explorer(int $id): Response {
-		/** @var Town $town */
-		$town = $this->entity_manager->getRepository(Town::class)->find($id);
-		if ($town === null) return $this->redirect($this->generateUrl('admin_town_list'));
-
+    /**
+     * @param Town $town
+     * @return Response
+     */
+    #[Route(path: 'jx/cheating/town/{id<\d+>}/eruins_explorer', name: 'admin_town_eruins_explorer')]
+    public function town_explorer_eruins_explorer(Town $town): Response {
         $conf_self = $this->conf->getTownConfiguration($town);
 
 		$explorables = [];
@@ -455,16 +435,13 @@ class AdminTownController extends AdminActionController
 		])));
 	}
 
-	/**
-  * @param int $id The internal ID of the town
-  * @return Response
-  */
- #[Route(path: 'jx/admin/town/config/{id<\d+>}/{conf?}', name: 'admin_town_config')]
- public function town_explorer_config(int $id, ?string $conf): Response {
-		/** @var Town $town */
-		$town = $this->entity_manager->getRepository(Town::class)->find($id);
-		if ($town === null) return $this->redirect($this->generateUrl('admin_town_list'));
-
+    /**
+     * @param Town $town
+     * @param string|null $conf
+     * @return Response
+     */
+    #[Route(path: 'jx/cheating/town/{id<\d+>}/config/{conf?}', name: 'admin_town_config')]
+    public function town_explorer_config(Town $town, ?string $conf): Response {
 		$conf_self = $this->conf->getTownConfiguration($town);
 		$conf_compare = match($conf) {
 			'small', 'remote', 'panda', 'default' => $this->conf->getTownConfigurationByType($conf),
@@ -483,17 +460,14 @@ class AdminTownController extends AdminActionController
 		])));
 	}
 
-	/**
-     * @param int $id
+    /**
+     * @param Town $town
      * @param int $day
      * @param GazetteService $gazetteService
      * @return Response
      */
-    #[Route(path: 'jx/admin/town/{id<\d+>}/gazette/{day<\d+>}', name: 'admin_town_explorer_gazette', priority: 1)]
-    public function api_explore_gazette(int $id, int $day, GazetteService $gazetteService): Response {
-        $town = $this->entity_manager->getRepository(Town::class)->find($id);
-        if ($town === null || $day > $town->getDay()) return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
-
+    #[Route(path: 'jx/cheating/town/{id<\d+>}/gazette/{day<\d+>}', name: 'admin_town_explorer_gazette', priority: 1)]
+    public function api_explore_gazette(Town $town, int $day, GazetteService $gazetteService): Response {
         return $this->render('ajax/game/gazette_widget.html.twig', [
             'gazette' => $gazetteService->renderGazette( $town, $day, true ),
             'council' => array_map( fn(CouncilEntry $c) => [$gazetteService->parseCouncilLog( $c ), $c->getCitizen()], array_filter( $this->entity_manager->getRepository(CouncilEntry::class)->findBy(['town' => $town, 'day' => $day], ['ord' => 'ASC']),
@@ -502,65 +476,14 @@ class AdminTownController extends AdminActionController
         ]);
     }
 
-    public function get_map_blob(Town $town): array
-    {
-        $zones = [];
-        $range_x = [PHP_INT_MAX, PHP_INT_MIN];
-        $range_y = [PHP_INT_MAX, PHP_INT_MIN];
-        $zones_classes = [];
-
-        $soul_zones_ids = array_map(function (Zone $z) {
-            return $z->getId();
-        }, $this->zone_handler->getSoulZones($town));
-
-        foreach ($town->getZones() as $zone) {
-            $x = $zone->getX();
-            $y = $zone->getY();
-
-            $range_x = [min($range_x[0], $x), max($range_x[1], $x)];
-            $range_y = [min($range_y[0], $y), max($range_y[1], $y)];
-
-            if (!isset($zones[$x])) $zones[$x] = [];
-            $zones[$x][$y] = $zone;
-
-            if (!isset($zones_attributes[$x])) $zones_attributes[$x] = [];
-            $zones_classes[$x][$y] = $this->zone_handler->getZoneClasses(
-                $town,
-                $zone,
-                null,
-                in_array($zone->getId(), $soul_zones_ids),
-                true,
-                seed: -1
-            );
-        }
-
-        return [
-            'map_data' => [
-                'zones' => $zones,
-                'zones_classes' => $zones_classes,
-                'town_devast' => $town->getDevastated(),
-                'routes' => $this->entity_manager->getRepository(ExpeditionRoute::class)->findByTown($town),
-                'pos_x' => 0,
-                'pos_y' => 0,
-                'map_x0' => $range_x[0],
-                'map_x1' => $range_x[1],
-                'map_y0' => $range_y[0],
-                'map_y1' => $range_y[1],
-            ]
-        ];
-    }
-
     /**
-     * @param int $id
+     * @param TownRankingProxy $town
      * @param string|null $tab the tab we want to display
      * @return Response
      */
-    #[Route(path: 'jx/admin/town/old/{id<\d+>}/{tab?}', name: 'admin_old_town_explorer')]
-    public function old_town_explorer(int $id, ?string $tab): Response
+    #[Route(path: 'jx/cheating/town/proxy/{id<\d+>}/{tab?}', name: 'admin_old_town_explorer')]
+    public function old_town_explorer(TownRankingProxy $town, ?string $tab): Response
     {
-        $town = $this->entity_manager->getRepository(TownRankingProxy::class)->find($id);
-        if ($town === null) $this->redirect($this->generateUrl('admin_old_town_list'));
-
         $pictoProtos = $this->entity_manager->getRepository(PictoPrototype::class)->findAll();
         usort($pictoProtos, function ($a, $b) {
             return strcmp($this->translator->trans($a->getLabel(), [], 'game'), $this->translator->trans($b->getLabel(), [], 'game'));
@@ -574,18 +497,15 @@ class AdminTownController extends AdminActionController
         ]));
     }
 
-	/**
-	 * @param int $id Town ID
-	 * @param JSONRequestParser $parser
-	 * @return Response
-	 */
-	#[Route(path: 'api/admin/town/old/{id}/get_citizen_infos', name: 'get_old_citizen_infos', requirements: ['id' => '\d+'])]
+    /**
+     * @param TownRankingProxy $town
+     * @param JSONRequestParser $parser
+     * @return Response
+     */
+	#[Route(path: 'api/cheating/town/proxy/{id<\d+>}/get_citizen_infos', name: 'get_old_citizen_infos')]
 	#[IsGranted('ROLE_SUB_ADMIN')]
 	#[AdminLogProfile(enabled: true)]
-	public function get_old_citizen_infos(int $id, JSONRequestParser  $parser): Response{
-		$town = $this->entity_manager->getRepository(TownRankingProxy::class)->find($id);
-		if (!$town) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
-
+	public function get_old_citizen_infos(TownRankingProxy $town, JSONRequestParser  $parser): Response{
 		$citizen_id = $parser->get('citizen_id', -1);
 		$citizen = $this->entity_manager->getRepository(CitizenRankingProxy::class)->find($citizen_id);
 
@@ -602,45 +522,58 @@ class AdminTownController extends AdminActionController
 	}
 
     /**
-     * @param int $id The ID of the town
+     * @param Town $town
      * @param string $action The action to perform
+     * @param ItemFactory $itemFactory
+     * @param RandomGenerator $random
+     * @param NightlyHandler $night
+     * @param GameFactory $gameFactory
+     * @param CrowService $crowService
+     * @param KernelInterface $kernel
+     * @param JSONRequestParser $parser
+     * @param TownHandler $townHandler
+     * @param GameProfilerService $gps
+     * @param MapMaker $mapMaker
+     * @param GenerateTownNameAction $townNameAction
+     * @return Response
+     * @throws Exception
      */
-    #[Route(path: 'api/admin/town/{id}/do/{action}', name: 'admin_town_manage', requirements: ['id' => '\d+'])]
+    #[Route(path: 'api/cheating/town/{id<\d+>}/do/{action}', name: 'admin_town_manage')]
+    #[isGranted('edit','town')]
     #[AdminLogProfile(enabled: true)]
-    public function town_manager(int $id, string $action, ItemFactory $itemFactory, RandomGenerator $random,
+    public function town_manager(Town $town, string $action, ItemFactory $itemFactory, RandomGenerator $random,
                                  NightlyHandler $night, GameFactory $gameFactory, CrowService $crowService,
                                  KernelInterface $kernel, JSONRequestParser $parser, TownHandler $townHandler,
                                  GameProfilerService $gps, MapMaker $mapMaker, GenerateTownNameAction $townNameAction)
     : Response
     {
-
-        /** @var Town $town */
-        $town = $this->entity_manager->getRepository(Town::class)->find($id);
-        if (!$town) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
-
-
-
         if ((str_starts_with($action, 'dbg_') || in_array($action, ['ex_inf'])) &&
             !($kernel->getEnvironment() === 'dev' || $kernel->getEnvironment() === 'local' || $this->conf->getGlobalConf()->get(MyHordesSetting::StagingSettingsEnabled))
         )
             return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
 
         if (in_array($action, [
-                'pw_change', 'ex_del', 'ex_co+', 'ex_co-', 'ex_ref', 'ex_inf',
-                'dbg_fill_town', 'dbg_fill_bank', 'dgb_empty_bank', 'dbg_unlock_bank', 'dbg_hydrate', 'dbg_disengage', 'dbg_engage',
-                'dbg_set_well', 'dbg_unlock_buildings', 'dbg_map_progress', 'dbg_map_zombie_set', 'dbg_adv_days',
-                'dbg_set_attack', 'dbg_toggle_chaos', 'dbg_toggle_devas', 'dbg_enable_stranger', 'dropall',
-            ]) && !$this->isGranted('ROLE_SUB_ADMIN'))
+                'set_name', 'dice_name'
+            ]) && !$this->isGranted('edit', $town))
             return AjaxResponse::error(ErrorHelper::ErrorPermissionError);
 
         if (in_array($action, [
-                'set_name',
-            ]) && !($this->isGranted('ROLE_SUB_ADMIN') || $town->getType()->getName() === 'custom'))
+                'advance', 'dbg_fill_town', 'set_town_base_def', 'set_town_temp_def', 'toggle_lockdown',
+                'toggle_broken_door', 'dbg_enable_stranger', 'dbg_fill_bank', 'dgb_empty_bank', 'dbg_unlock_bank',
+                'dbg_hydrate', 'dbg_set_well', 'dbg_unlock_buildings', 'dbg_map_progress', 'dbg_map_zombie_set',
+                'dbg_adv_days', 'dbg_set_attack', 'dbg_toggle_chaos', 'dbg_toggle_devas', 'ex_del', 'ex_co+', 'ex_co-',
+                'ex_ref', 'ex_inf',
+            ]) && !$this->isGranted('cheat', $town))
             return AjaxResponse::error(ErrorHelper::ErrorPermissionError);
 
         if (in_array($action, [
-                'release', 'quarantine', 'advance', 'nullify'
-            ]) && !$this->isGranted('ROLE_ADMIN'))
+                'pw_change', 'dbg_disengage', 'dbg_engage', 'dropall',
+            ]) && !$this->isGranted('administrate', $town))
+            return AjaxResponse::error(ErrorHelper::ErrorPermissionError);
+
+        if (in_array($action, [
+                'release', 'quarantine', 'nullify'
+            ]) && !$this->isGranted('sudo', $town))
             return AjaxResponse::error(ErrorHelper::ErrorPermissionError);
 
         $this->logger->invoke("[town_manager] Admin <info>{$this->getUser()->getName()}</info> did the action <info>$action</info> in the town <info>{$town->getName()}</info> (id: {$town->getId()})");
@@ -1020,18 +953,15 @@ class AdminTownController extends AdminActionController
     }
 
     /**
-     * @param int $id The ID of the town
+     * @param Town $town
      * @param JSONRequestParser $parser
      * @param TownHandler $townHandler
      * @return Response
      */
-    #[Route(path: 'api/admin/town/{id}/set_event', name: 'admin_town_set_event', requirements: ['id' => '\d+'])]
+    #[Route(path: 'api/cheating/town/{id<\d+>}/set_event', name: 'admin_town_set_event')]
+    #[isGranted('cheat', 'town')]
     #[AdminLogProfile(enabled: true)]
-    public function admin_town_set_event(int $id, JSONRequestParser $parser, TownHandler $townHandler): Response {
-        /** @var Town $town */
-        $town = $this->entity_manager->getRepository(Town::class)->find($id);
-        if (!$town) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
-
+    public function admin_town_set_event(Town $town, JSONRequestParser $parser, TownHandler $townHandler): Response {
         $eventName = $parser->get('param');
 
         $town->setManagedEvents($eventName !== "");
@@ -1057,17 +987,14 @@ class AdminTownController extends AdminActionController
     }
 
     /**
-     * @param int $id The ID of the town
+     * @param Town $town
      * @param JSONRequestParser $parser
      * @return Response
      */
-    #[Route(path: 'api/admin/town/{id}/set_lang', name: 'admin_town_set_lang', requirements: ['id' => '\d+'])]
+    #[Route(path: 'api/cheating/town/{id<\d+>}/set_lang', name: 'admin_town_set_lang')]
+    #[isGranted('edit', 'town')]
     #[AdminLogProfile(enabled: true)]
-    public function admin_town_set_lang(int $id, JSONRequestParser $parser): Response {
-        /** @var Town $town */
-        $town = $this->entity_manager->getRepository(Town::class)->find($id);
-        if (!$town) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
-
+    public function admin_town_set_lang(Town $town, JSONRequestParser $parser): Response {
         $newLang = $parser->get('param');
         if (!in_array( $newLang, array_merge($this->generatedLangsCodes, [ 'multi' ]) ))
             return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
@@ -1089,8 +1016,9 @@ class AdminTownController extends AdminActionController
      * @param TownHandler $townHandler
      * @param GameProfilerService $gps
      * @return Response
+     * @throws Exception
      */
-    #[Route(path: 'api/admin/town/new', name: 'admin_new_town')]
+    #[Route(path: 'api/cheating/town/new', name: 'admin_new_town')]
     #[AdminLogProfile(enabled: true)]
     public function add_default_town( JSONRequestParser $parser, GameFactory $gameFactory, TownHandler $townHandler, GameProfilerService $gps): Response {
 
@@ -1148,22 +1076,17 @@ class AdminTownController extends AdminActionController
     }
 
     /**
-     * @param int $id Town ID
+     * @param Town $town
      * @param JSONRequestParser $parser
      * @param InventoryHandler $handler
      * @param ItemFactory $itemFactory
      * @return Response
      */
-    #[Route(path: 'api/admin/town/{id}/item', name: 'admin_town_item', requirements: ['id' => '\d+'])]
-    #[IsGranted('ROLE_SUB_ADMIN')]
+    #[Route(path: 'api/cheating/town/{id<\d+>}/item', name: 'admin_town_item')]
+    #[IsGranted('cheat', 'town')]
     #[AdminLogProfile(enabled: true)]
-    public function town_item_action(int $id, JSONRequestParser $parser, InventoryHandler $handler, ItemFactory $itemFactory): Response
+    public function town_item_action(Town $town, JSONRequestParser $parser, InventoryHandler $handler, ItemFactory $itemFactory): Response
     {
-        $town = $this->entity_manager->getRepository(Town::class)->find($id);
-        if (!$town) {
-            return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
-        }
-
         $item_id = $parser->get('item');
         $change = $parser->get('change');
         $qty = $parser->get('qty', 1);
@@ -1187,21 +1110,17 @@ class AdminTownController extends AdminActionController
     }
 
     /**
-     * @param int $id Town ID
+     * @param Town $town
      * @param JSONRequestParser $parser
      * @param ZoneHandler $handler
      * @param TownHandler $townHandler
      * @return Response
      */
-    #[Route(path: 'api/admin/town/{id}/teleport', name: 'admin_teleport_citizen', requirements: ['id' => '\d+'])]
+    #[Route(path: 'api/cheating/town/{id<\d+>}/teleport', name: 'admin_teleport_citizen')]
     #[IsGranted('ROLE_SUB_ADMIN')]
     #[AdminLogProfile(enabled: true)]
-    public function teleport_citizen(int $id, JSONRequestParser $parser, ZoneHandler $handler, TownHandler $townHandler): Response
+    public function teleport_citizen(Town $town, JSONRequestParser $parser, ZoneHandler $handler, TownHandler $townHandler): Response
     {
-        /** @var Town $town */
-        $town = $this->entity_manager->getRepository(Town::class)->find($id);
-        if (!$town) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
-
         $targets = $parser->get_array('targets');
         if (empty($targets))
             return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
@@ -1278,21 +1197,17 @@ class AdminTownController extends AdminActionController
     }
 
     /**
-     * @param int $id Town ID
+     * @param Town $town
      * @param JSONRequestParser $parser
-     * @param ZoneHandler $handler
+     * @param ConfMaster $cf
      * @param TownHandler $townHandler
      * @return Response
      */
-    #[Route(path: 'api/admin/town/{id}/alias', name: 'admin_alias_citizen', requirements: ['id' => '\d+'])]
+    #[Route(path: 'api/cheating/town/{id<\d+>}/alias', name: 'admin_alias_citizen')]
     #[IsGranted('ROLE_SUB_ADMIN')]
     #[AdminLogProfile(enabled: true)]
-    public function alias_citizen(int $id, JSONRequestParser $parser, ConfMaster $cf, TownHandler $townHandler): Response
+    public function alias_citizen(Town $town, JSONRequestParser $parser, ConfMaster $cf, TownHandler $townHandler): Response
     {
-        /** @var Town $town */
-        $town = $this->entity_manager->getRepository(Town::class)->find($id);
-        if (!$town) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
-
         $alias = $parser->trimmed('alias');
         $targets = $parser->get_array('targets');
         if ($alias != null && !$alias)
@@ -1325,20 +1240,17 @@ class AdminTownController extends AdminActionController
     }
 
     /**
-     * @param int $id Town ID
+     * @param Town $town
      * @param JSONRequestParser $parser
      * @param InventoryHandler $handler
      * @param ItemFactory $itemFactory
      * @return Response
      */
-    #[Route(path: 'api/admin/town/{id}/spawn_item', name: 'admin_spawn_item', requirements: ['id' => '\d+'])]
-    #[IsGranted('ROLE_SUB_ADMIN')]
+    #[Route(path: 'api/cheating/town/{id<\d+>}/spawn_item', name: 'admin_spawn_item')]
+    #[IsGranted('cheat', 'town')]
     #[AdminLogProfile(enabled: true)]
-    public function spawn_item(int $id, JSONRequestParser $parser, InventoryHandler $handler, ItemFactory $itemFactory): Response
+    public function spawn_item(Town $town, JSONRequestParser $parser, InventoryHandler $handler, ItemFactory $itemFactory): Response
     {
-        $town = $this->entity_manager->getRepository(Town::class)->find($id);
-        if (!$town) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
-
         $prototype_id = $parser->get('prototype');
         $number = $parser->get_int('number');
         $targets = $parser->get_array('targets');
@@ -1424,17 +1336,14 @@ class AdminTownController extends AdminActionController
     }
 
     /**
-     * @param int $id Town ID
+     * @param Town $town
      * @param JSONRequestParser $parser
      * @return Response
      */
-    #[Route(path: 'api/admin/town/{id}/get_zone_infos', name: 'get_zone_infos', requirements: ['id' => '\d+'])]
-    #[IsGranted('ROLE_SUB_ADMIN')]
+    #[Route(path: 'jx/cheating/town/{id<\d+>}/zone_infos', name: 'get_zone_infos')]
+    #[IsGranted('spy', 'town')]
     #[AdminLogProfile(enabled: true)]
-    public function get_zone_infos(int $id, JSONRequestParser  $parser): Response{
-        $town = $this->entity_manager->getRepository(Town::class)->find($id);
-        if (!$town) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
-
+    public function get_zone_infos(Town $town, JSONRequestParser  $parser): Response {
         $zone_id = $parser->get('zone_id', -1);
 		/** @var Zone $zone */
         $zone = $this->entity_manager->getRepository(Zone::class)->find($zone_id);
@@ -1459,17 +1368,14 @@ class AdminTownController extends AdminActionController
     }
 
     /**
-     * @param int $id Town ID
+     * @param Town $town
      * @param JSONRequestParser $parser
      * @return Response
      */
-    #[Route(path: 'api/admin/town/{id}/get_citizen_infos', name: 'get_citizen_infos', requirements: ['id' => '\d+'])]
+    #[Route(path: 'jx/cheating/town/{id<\d+>}/citizen_infos', name: 'get_citizen_infos')]
     #[IsGranted('ROLE_SUB_ADMIN')]
     #[AdminLogProfile(enabled: true)]
-    public function get_citizen_infos(int $id, JSONRequestParser  $parser): Response{
-        $town = $this->entity_manager->getRepository(Town::class)->find($id);
-        if (!$town) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
-
+    public function get_citizen_infos(Town $town, JSONRequestParser  $parser): Response {
         $citizen_id = $parser->get('citizen_id', -1);
         $citizen = $this->entity_manager->getRepository(Citizen::class)->find($citizen_id);
 
@@ -1508,17 +1414,14 @@ class AdminTownController extends AdminActionController
     }
 
     /**
-     * @param int $id Town ID
+     * @param Town $town
      * @param JSONRequestParser $parser
      * @return Response
      */
-    #[Route(path: 'api/admin/town/{id}/clear_citizen_attribs', name: 'clear_citizen_attribs', requirements: ['id' => '\d+'])]
+    #[Route(path: 'api/cheating/town/{id<\d+>}/clear_citizen_attribs', name: 'clear_citizen_attribs')]
     #[IsGranted('ROLE_CROW')]
     #[AdminLogProfile(enabled: true)]
-    public function clear_citizen_attribs(int $id, JSONRequestParser  $parser) {
-        $town = $this->entity_manager->getRepository(Town::class)->find($id);
-        if (!$town) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
-
+    public function clear_citizen_attribs(Town $town, JSONRequestParser  $parser) {
         $id = $parser->get_int('id');
         $clear = $parser->get('clear');
 
@@ -1541,17 +1444,14 @@ class AdminTownController extends AdminActionController
     }
 
     /**
-     * @param int $id Town ID
+     * @param Town $town
      * @param JSONRequestParser $parser
      * @return Response
      */
-    #[Route(path: 'api/admin/town/{id}/set_zone_attribs', name: 'set_zone_attribs', requirements: ['id' => '\d+'])]
-    #[IsGranted('ROLE_SUB_ADMIN')]
+    #[Route(path: 'api/cheating/town/{id<\d+>}/set_zone_attribs', name: 'set_zone_attribs')]
+    #[IsGranted('cheat', 'town')]
     #[AdminLogProfile(enabled: true)]
-    public function set_zone_attribs(int $id, JSONRequestParser  $parser): Response{
-        $town = $this->entity_manager->getRepository(Town::class)->find($id);
-        if (!$town) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
-
+    public function set_zone_attribs(Town $town, JSONRequestParser  $parser): Response{
         $zone_id = $parser->get('zone_id', -1);
         $zone = $this->entity_manager->getRepository(Zone::class)->find($zone_id);
 
@@ -1589,19 +1489,16 @@ class AdminTownController extends AdminActionController
     }
 
     /**
-     * @param int $id Town ID
+     * @param Town $town
      * @param JSONRequestParser $parser
      * @param CitizenHandler $handler
      * @return Response
      */
-    #[Route(path: 'api/admin/town/{id}/modify_prof', name: 'admin_modify_profession', requirements: ['id' => '\d+'])]
+    #[Route(path: 'api/cheating/town/{id<\d+>}/modify_prof', name: 'admin_modify_profession')]
     #[IsGranted('ROLE_SUB_ADMIN')]
     #[AdminLogProfile(enabled: true)]
-    public function modify_profession(int $id, JSONRequestParser $parser, CitizenHandler $handler): Response
+    public function modify_profession(Town $town, JSONRequestParser $parser, CitizenHandler $handler): Response
     {
-        $town = $this->entity_manager->getRepository(Town::class)->find($id);
-        if (!$town) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
-
         $pro_id = $parser->get_int('profession');
         $targets = $parser->get_array('targets');
 
@@ -1633,91 +1530,17 @@ class AdminTownController extends AdminActionController
     }
 
     /**
-     * @param int $tid
-     * @param int $act
-     * @return Response
-     */
-    #[Route(path: 'api/admin/town/{tid}/event-tag/{act}', name: 'admin_town_event_tag_control', requirements: ['tid' => '\d+', 'act' => '\d+'])]
-    #[IsGranted('ROLE_CROW')]
-    #[AdminLogProfile(enabled: true)]
-    public function ranking_event_toggle_town(int $tid, int $act): Response
-    {
-        $town_proxy = $this->entity_manager->getRepository(TownRankingProxy::class)->find($tid);
-        if (!$town_proxy) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
-
-        $town_proxy->setEvent( $act !== 0 );
-        $this->entity_manager->persist($town_proxy);
-        $this->entity_manager->flush();
-
-        return AjaxResponse::success();
-    }
-
-    /**
-     * @param int $tid
-     * @param int $act
-     * @param JSONRequestParser $request
-     * @return Response
-     */
-    #[Route(path: 'api/admin/town/{tid}/unrank/{act}', name: 'admin_town_town_ranking_control', requirements: ['tid' => '\d+', 'act' => '\d+'])]
-    #[IsGranted('ROLE_CROW')]
-    #[AdminLogProfile(enabled: true)]
-    public function ranking_toggle_town(int $tid, int $act, JSONRequestParser $request, InvalidateTagsInAllPoolsAction $uncache): Response
-    {
-        $town_proxy = $this->entity_manager->getRepository(TownRankingProxy::class)->find($tid);
-        if (!$town_proxy) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
-
-        $flag = $request->get("flag") ?? TownRankingProxy::DISABLE_RANKING;
-
-        //$town_proxy->setDisabled( $act !== 0 );
-        if($act)
-            $town_proxy->addDisableFlag($flag);
-        else
-            $town_proxy->removeDisableFlag($flag);
-
-        $this->entity_manager->persist($town_proxy);
-        $this->entity_manager->flush();
-
-        foreach ($town_proxy->getCitizens() as $citizen) {
-            if(($flag & TownRankingProxy::DISABLE_SOULPOINTS) === TownRankingProxy::DISABLE_SOULPOINTS) {
-                $this->entity_manager->persist($citizen->getUser()
-                    ->setSoulPoints($this->user_handler->fetchSoulPoints($citizen->getUser(), false))
-                    ->setImportedSoulPoints($this->user_handler->fetchImportedSoulPoints($citizen->getUser()))
-                );
-            }
-
-            if(($flag & TownRankingProxy::DISABLE_PICTOS) === TownRankingProxy::DISABLE_PICTOS) {
-                foreach ($this->entity_manager->getRepository(Picto::class)->findNotPendingByUserAndTown($citizen->getUser(), $town_proxy) as $picto)
-                    if (!$picto->isManual())
-                        $this->entity_manager->persist($picto->setDisabled($citizen->hasDisableFlag(CitizenRankingProxy::DISABLE_PICTOS) || $town_proxy->hasDisableFlag(TownRankingProxy::DISABLE_PICTOS)));
-            }
-
-            if(($flag & TownRankingProxy::DISABLE_HXP) === TownRankingProxy::DISABLE_HXP) {
-                foreach ($this->entity_manager->getRepository(HeroExperienceEntry::class)->findBy(['town' => $town_proxy]) as $hxp)
-                    $this->entity_manager->persist($hxp->setDisabled($citizen->hasDisableFlag(CitizenRankingProxy::DISABLE_HXP) || $town_proxy->hasDisableFlag(TownRankingProxy::DISABLE_HXP)));
-                ($uncache)("user-{$citizen->getUser()->getId()}-hxp");
-            }
-        }
-
-
-        $this->entity_manager->flush();
-        return AjaxResponse::success();
-    }
-
-    /**
-     * @param int $tid
+     * @param TownRankingProxy $town_proxy
      * @param JSONRequestParser $parser
      * @param GameFactory $gameFactory
+     * @param GenerateTownNameAction $townNameAction
      * @return Response
      */
-    #[Route(path: 'api/admin/town/{tid}/relang', name: 'admin_town_town_lang_control', requirements: ['tid' => '\d+', 'act' => '\d+'])]
+    #[Route(path: 'api/cheating/town/proxy/{id<\d+>}/relang', name: 'admin_town_town_lang_control', requirements: ['act' => '\d+'])]
     #[IsGranted('ROLE_CROW')]
     #[AdminLogProfile(enabled: true)]
-    public function switch_town_lang(int $tid, JSONRequestParser $parser, GameFactory $gameFactory, GenerateTownNameAction $townNameAction): Response
+    public function switch_town_lang(TownRankingProxy $town_proxy, JSONRequestParser $parser, GameFactory $gameFactory, GenerateTownNameAction $townNameAction): Response
     {
-        /** @var TownRankingProxy $town_proxy */
-        $town_proxy = $this->entity_manager->getRepository(TownRankingProxy::class)->find($tid);
-        if (!$town_proxy || $town_proxy->getImported()) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
-
         $lang = $parser->get('lang');
         $rename = $parser->get( 'rename' );
 
@@ -1751,71 +1574,12 @@ class AdminTownController extends AdminActionController
     }
 
     /**
-     * @param int $tid
-     * @param int $cid
-     * @param int $act
-     * @param JSONRequestParser $parser
-     * @param InvalidateTagsInAllPoolsAction $uncache
-     * @return Response
-     */
-    #[Route(path: 'api/admin/town/{tid}/unrank_single/{cid}/{act}', name: 'admin_town_citizen_ranking_control', requirements: ['tid' => '\d+', 'cid' => '\d+', 'act' => '\d+'])]
-    #[IsGranted('ROLE_CROW')]
-    #[AdminLogProfile(enabled: true)]
-    public function ranking_toggle_citizen(int $tid, int $cid, int $act, JSONRequestParser $parser, InvalidateTagsInAllPoolsAction $uncache): Response
-    {
-        $town_proxy = $this->entity_manager->getRepository(TownRankingProxy::class)->find($tid);
-        if (!$town_proxy) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
-
-        $citizen_proxy = $this->entity_manager->getRepository(CitizenRankingProxy::class)->find($cid);
-        if (!$citizen_proxy) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
-
-        if (!$town_proxy->getCitizens()->contains($citizen_proxy))
-            return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
-
-        $flag = $parser->get('flag');
-        if (!$flag)
-            return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
-
-        if ($act) {
-            $citizen_proxy->addDisableFlag($flag);
-        } else {
-            $citizen_proxy->removeDisableFlag($flag);
-        }
-
-        if (!$citizen_proxy->hasDisableFlag(CitizenRankingProxy::DISABLE_NOTHING) && $citizen_proxy->getResetMarker()) {
-            $this->entity_manager->remove( $citizen_proxy->getResetMarker() );
-            $citizen_proxy->setResetMarker(null);
-        }
-        $this->entity_manager->persist($citizen_proxy);
-        $this->entity_manager->flush();
-
-        if(($flag & CitizenRankingProxy::DISABLE_SOULPOINTS) === CitizenRankingProxy::DISABLE_SOULPOINTS) {
-            $this->entity_manager->persist($citizen_proxy->getUser()
-                ->setSoulPoints( $this->user_handler->fetchSoulPoints( $citizen_proxy->getUser(), false ) )
-                ->setImportedSoulPoints( $this->user_handler->fetchImportedSoulPoints( $citizen_proxy->getUser() ) )
-            );
-        }
-        if(($flag & CitizenRankingProxy::DISABLE_PICTOS) === CitizenRankingProxy::DISABLE_PICTOS) {
-            foreach ($this->entity_manager->getRepository(Picto::class)->findNotPendingByUserAndTown($citizen_proxy->getUser(), $town_proxy) as $picto)
-                if (!$picto->isManual())
-                    $this->entity_manager->persist($picto->setDisabled($citizen_proxy->hasDisableFlag(CitizenRankingProxy::DISABLE_PICTOS)));
-        }
-        if(($flag & CitizenRankingProxy::DISABLE_HXP) === CitizenRankingProxy::DISABLE_HXP) {
-            foreach ($this->entity_manager->getRepository(HeroExperienceEntry::class)->findBy(['citizen' => $citizen_proxy]) as $hxp)
-                $this->entity_manager->persist($hxp->setDisabled($citizen_proxy->hasDisableFlag(CitizenRankingProxy::DISABLE_HXP)));
-            ($uncache)("user-{$citizen_proxy->getUser()->getId()}-hxp");
-        }
-
-        $this->entity_manager->flush();
-        return AjaxResponse::success();
-    }
-
-    /**
      * @param int $id Town ID
      * @param JSONRequestParser $parser The Request Parser
+     * @param EventProxyService $proxy
      * @return Response
      */
-    #[Route(path: 'api/admin/town/{id}/picto/give', name: 'admin_town_give_picto', requirements: ['id' => '\d+'])]
+    #[Route(path: 'api/cheating/town/proxy/{id<\d+>}/picto/give', name: 'admin_town_give_picto')]
     #[IsGranted('ROLE_SUB_ADMIN')]
     #[AdminLogProfile(enabled: true)]
     public function town_give_picto(int $id, JSONRequestParser $parser, EventProxyService $proxy): Response
@@ -1883,19 +1647,16 @@ class AdminTownController extends AdminActionController
     }
 
     /**
-     * @param int $id Town ID
+     * @param Town $town
      * @param JSONRequestParser $parser The Request Parser
      * @param CitizenHandler $handler
      * @return Response
      */
-    #[Route(path: 'api/admin/town/{id}/home/manage', name: 'admin_town_manage_home', requirements: ['id' => '\d+'])]
+    #[Route(path: 'api/cheating/town/{id<\d+>}/home/manage', name: 'admin_town_manage_home')]
     #[IsGranted('ROLE_SUB_ADMIN')]
     #[AdminLogProfile(enabled: true)]
-    public function town_manage_home(int $id, JSONRequestParser $parser, CitizenHandler $handler): Response
+    public function town_manage_home(Town $town, JSONRequestParser $parser, CitizenHandler $handler): Response
     {
-        $town = $this->entity_manager->getRepository(Town::class)->find($id);
-        if (!$town) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
-
         $target   = $parser->get('target');
         $citizens = $parser->get_array('citizen');
         $dif      = $parser->get_int('dif', 0);
@@ -1970,19 +1731,16 @@ class AdminTownController extends AdminActionController
     }
 
     /**
-     * @param int $id Town ID
+     * @param Town $town
      * @param JSONRequestParser $parser The Request Parser
      * @param CitizenHandler $handler
      * @return Response
      */
-    #[Route(path: 'api/admin/town/{id}/status/manage', name: 'admin_town_manage_status', requirements: ['id' => '\d+'])]
+    #[Route(path: 'api/cheating/town/{id<\d+>}/status/manage', name: 'admin_town_manage_status')]
     #[IsGranted('ROLE_SUB_ADMIN')]
     #[AdminLogProfile(enabled: true)]
-    public function town_manage_status(int $id, JSONRequestParser $parser, CitizenHandler $handler): Response
+    public function town_manage_status(Town $town, JSONRequestParser $parser, CitizenHandler $handler): Response
     {
-        $town = $this->entity_manager->getRepository(Town::class)->find($id);
-        if (!$town) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
-
         $status_id = $parser->get_int('status');
         $targets = $parser->get_array('targets', []);
 
@@ -2147,19 +1905,16 @@ class AdminTownController extends AdminActionController
     }
 
     /**
-     * @param int $id Town ID
+     * @param Town $town
      * @param JSONRequestParser $parser The Request Parser
-     * @param CitizenHandler $handler
+     * @param TownHandler $handler
      * @return Response
      */
-    #[Route(path: 'api/admin/town/{id}/role/manage', name: 'admin_town_manage_role', requirements: ['id' => '\d+'])]
+    #[Route(path: 'api/cheating/town/{id<\d+>}/role/manage', name: 'admin_town_manage_role')]
     #[IsGranted('ROLE_SUB_ADMIN')]
     #[AdminLogProfile(enabled: true)]
-    public function town_manage_role(int $id, JSONRequestParser $parser, TownHandler $handler): Response
+    public function town_manage_role(Town $town, JSONRequestParser $parser, TownHandler $handler): Response
     {
-        $town = $this->entity_manager->getRepository(Town::class)->find($id);
-        if (!$town) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
-
         if (in_array($parser->get('role'), ['_ban_','_esc_','_nw_','_sh_','_wt_','_rst_', '_dig_'] ))
             return $this->town_manage_pseudo_role($town,$parser,$handler);
 
@@ -2189,18 +1944,15 @@ class AdminTownController extends AdminActionController
     }
 
     /**
-     * @param int $id Town ID
+     * @param Town $town
      * @param JSONRequestParser $parser The Request Parser
      * @return Response
      */
-    #[Route(path: 'api/admin/town/{id}/pp/alter', name: 'admin_town_alter_pp', requirements: ['id' => '\d+'])]
+    #[Route(path: 'api/cheating/town/{id<\d+>}/pp/alter', name: 'admin_town_alter_pp')]
     #[IsGranted('ROLE_SUB_ADMIN')]
     #[AdminLogProfile(enabled: true)]
-    public function town_alter_points(int $id, JSONRequestParser $parser): Response
+    public function town_alter_points(Town $town, JSONRequestParser $parser): Response
     {
-        $town = $this->entity_manager->getRepository(Town::class)->find($id);
-        if (!$town) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
-
         $point = $parser->get('point', '');
         if (!in_array($point, ['ap','bp','mp','sp','gh','cc','cn'])) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
 
@@ -2244,7 +1996,7 @@ class AdminTownController extends AdminActionController
      * @param GameProfilerService $gps
      * @return Response
      */
-    #[Route(path: 'api/admin/town/{id}/buildings/add', name: 'admin_town_add_building', requirements: ['id' => '\d+'])]
+    #[Route(path: 'api/cheating/town/{id<\d+>}/buildings/add', name: 'admin_town_add_building')]
     #[IsGranted('ROLE_SUB_ADMIN')]
     #[AdminLogProfile(enabled: true)]
     public function town_add_building(Town $town, JSONRequestParser $parser, TownHandler $th, GameProfilerService $gps): Response
@@ -2286,7 +2038,7 @@ class AdminTownController extends AdminActionController
      * @param InitializeTownBuildingsAction $action
      * @return Response
      */
-    #[Route(path: 'api/admin/town/{id}/buildings/reset', name: 'admin_town_reset_buildings')]
+    #[Route(path: 'api/cheating/town/{id<\d+>}/buildings/reset', name: 'admin_town_reset_buildings')]
     #[IsGranted('ROLE_SUB_ADMIN')]
     #[AdminLogProfile(enabled: true)]
     public function town_reset_buildings(Town $town, EntityManagerInterface $em, ConfMaster $conf, InitializeTownBuildingsAction $action): Response
@@ -2314,7 +2066,7 @@ class AdminTownController extends AdminActionController
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    #[Route(path: 'api/admin/town/{id}/buildings/set-ap', name: 'admin_town_set_building_ap', requirements: ['id' => '\d+'])]
+    #[Route(path: 'api/cheating/town/{id<\d+>}/buildings/set-ap', name: 'admin_town_set_building_ap')]
     #[IsGranted('ROLE_SUB_ADMIN')]
     #[AdminLogProfile(enabled: true)]
     public function town_set_building_ap(int $id, JSONRequestParser $parser, EventProxyService $events): Response
@@ -2359,20 +2111,18 @@ class AdminTownController extends AdminActionController
     }
 
     /**
-     * @param int $id ID of the town
+     * @param Town $town
      * @param JSONRequestParser $parser The JSON request parser
+     * @param EventProxyService $events
      * @return Response
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
-    #[Route(path: 'api/admin/town/{id}/buildings/set-hp', name: 'admin_town_set_building_hp', requirements: ['id' => '\d+'])]
+    #[Route(path: 'api/cheating/town/{id<\d+>}/buildings/set-hp', name: 'admin_town_set_building_hp')]
     #[IsGranted('ROLE_SUB_ADMIN')]
     #[AdminLogProfile(enabled: true)]
-    public function town_set_building_hp(int $id, JSONRequestParser $parser, EventProxyService $events)
+    public function town_set_building_hp(Town $town, JSONRequestParser $parser, EventProxyService $events): Response
     {
-        $town = $this->entity_manager->getRepository(Town::class)->find($id);
-        if (!$town) {
-            return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
-        }
-
         if (!$parser->has_all(['building', 'hp'])) {
             return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
         }
@@ -2427,7 +2177,7 @@ class AdminTownController extends AdminActionController
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    #[Route(path: 'api/admin/town/{id}/buildings/set-level', name: 'admin_town_set_building_level', requirements: ['id' => '\d+'])]
+    #[Route(path: 'api/cheating/town/{id<\d+>}/buildings/set-level', name: 'admin_town_set_building_level')]
     #[IsGranted('ROLE_SUB_ADMIN')]
     #[AdminLogProfile(enabled: true)]
     public function town_set_building_level(Town $town, JSONRequestParser $parser, EventProxyService $events): Response
@@ -2470,7 +2220,7 @@ class AdminTownController extends AdminActionController
      * @param EventProxyService $events
      * @return Response
      */
-    #[Route(path: 'api/admin/town/{id}/buildings/set-difficulty', name: 'admin_town_set_building_difficulty_level', requirements: ['id' => '\d+'])]
+    #[Route(path: 'api/cheating/town/{id<\d+>}/buildings/set-difficulty', name: 'admin_town_set_building_difficulty_level')]
     #[IsGranted('ROLE_SUB_ADMIN')]
     #[AdminLogProfile(enabled: true)]
     public function town_set_building_difficulty_level(Town $town, JSONRequestParser $parser, EventProxyService $events): Response
@@ -2511,7 +2261,7 @@ class AdminTownController extends AdminActionController
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    #[Route(path: 'api/admin/town/{id}/buildings/exec-nightly', name: 'admin_town_trigger_building_nightly_effect', requirements: ['id' => '\d+'])]
+    #[Route(path: 'api/cheating/town/{id<\d+>}/buildings/exec-nightly', name: 'admin_town_trigger_building_nightly_effect')]
     #[IsGranted('ROLE_SUB_ADMIN')]
     #[AdminLogProfile(enabled: true)]
     public function town_trigger_building_nightly_effect(Town $town, JSONRequestParser $parser, EventProxyService $events): Response
@@ -2542,7 +2292,7 @@ class AdminTownController extends AdminActionController
      * @param EntityManagerInterface $em
      * @return Response
      */
-    #[Route(path: 'jx/admin/towns/old/fuzzyfind', name: 'admin_old_towns_fuzzyfind')]
+    #[Route(path: 'jx/cheating/towns/old/fuzzyfind', name: 'admin_old_towns_fuzzyfind')]
     public function old_towns_fuzzyfind(JSONRequestParser $parser, EntityManagerInterface $em): Response
     {
         if (!$parser->has_all(['name'], true))
@@ -2562,7 +2312,7 @@ class AdminTownController extends AdminActionController
      * @param EntityManagerInterface $em
      * @return Response
      */
-    #[Route(path: 'jx/admin/towns/fuzzyfind', name: 'admin_towns_fuzzyfind')]
+    #[Route(path: 'jx/cheating/towns/fuzzyfind', name: 'admin_towns_fuzzyfind')]
     public function towns_fuzzyfind(JSONRequestParser $parser, EntityManagerInterface $em): Response
     {
         if (!$parser->has_all(['name'], true))
@@ -2578,21 +2328,15 @@ class AdminTownController extends AdminActionController
     }
 
 
-	/**
-     * @param int               $id The ID of the town
-     * @param JSONRequestParser $parser
-     * @param MazeMaker         $mazeMaker
-     * @param AdminLog          $logger
+    /**
+     * @param Town $town
+     * @param MazeMaker $mazeMaker
+     * @param AdminLog $logger
      * @return Response
      */
-    #[Route(path: 'api/admin/town/{id}/admin_regenerate_ruins', name: 'admin_regenerate_ruins', requirements: ['id' => '\d+'])]
+    #[Route(path: 'api/cheating/town/{id<\d+>}/admin_regenerate_ruins', name: 'admin_regenerate_ruins')]
     #[AdminLogProfile(enabled: true)]
-    public function admin_regenerate_ruins(int $id, JSONRequestParser $parser, MazeMaker $mazeMaker, AdminLog $logger): Response {
-        /** @var Town $town */
-
-        $town = $this->entity_manager->getRepository(Town::class)->find($id);
-        if (!$town) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
-
+    public function admin_regenerate_ruins(Town $town, MazeMaker $mazeMaker, AdminLog $logger): Response {
         $explorables = [];
 
         foreach ($town->getZones() as $zone)

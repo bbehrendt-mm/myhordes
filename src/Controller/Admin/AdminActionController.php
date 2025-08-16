@@ -83,6 +83,12 @@ class AdminActionController extends CustomAbstractController
         ];
     }
 
+    public static function getCheaterActions(): array {
+        return [
+            ['name' => T::__('Städte', 'admin'),      'route' => 'admin_town_list'],
+        ];
+    }
+
     public function __construct(EntityManagerInterface $em, ConfMaster $conf, LogTemplateHandler $lth, TranslatorInterface $translator, ZoneHandler $zh, TimeKeeperService $tk, CitizenHandler $ch, InventoryHandler $ih, UserHandler $uh, CrowService $crow, AdminLog $adminLogger, UrlGeneratorInterface $urlGenerator, AdminHandler $adminHandler, TownHandler $townHandler, HookExecutor $hookExecutor, InvalidateTagsInAllPoolsAction $clear)
     {
         parent::__construct($conf, $em, $tk, $ch, $ih, $translator, $hookExecutor);

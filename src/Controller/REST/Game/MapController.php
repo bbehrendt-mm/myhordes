@@ -16,6 +16,7 @@ use App\Service\CitizenHandler;
 use App\Service\TownHandler;
 use App\Service\ZoneHandler;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -163,7 +164,7 @@ class MapController extends CustomAbstractCoreController
      * @return JsonResponse
      */
     #[Route(path: '/admin/{id}/map', name: 'admin', methods: ['GET'])]
-    #[IsGranted('ROLE_CROW')]
+    #[IsGranted('spy', 'town')]
     #[GateKeeperProfile('skip')]
     public function admin(Town $town, RenderMapAction $renderer): JsonResponse {
         return new JsonResponse($renderer( town: $town, admin: true ) );
@@ -175,7 +176,7 @@ class MapController extends CustomAbstractCoreController
      * @return JsonResponse
      */
     #[Route(path: '/admin/{id}/routes', name: 'admin_routes', methods: ['GET'])]
-    #[IsGranted('ROLE_CROW')]
+    #[IsGranted('spy', 'town')]
     #[GateKeeperProfile('skip')]
     public function admin_routes(Town $town, RenderMapRouteAction $renderer): JsonResponse {
         return new JsonResponse($renderer($town));

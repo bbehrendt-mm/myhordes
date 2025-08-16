@@ -35,6 +35,7 @@ security:
         ROLE_ELEVATED:  ROLE_USER
         ROLE_TEAM:      ROLE_USER
         ROLE_DEV:       ROLE_USER
+        ROLE_CHEATER:   ROLE_USER
         ROLE_ANIMAC:    ROLE_ELEVATED
         ROLE_ORACLE:    ROLE_ELEVATED
         ROLE_CROW:      ROLE_ELEVATED
@@ -49,16 +50,17 @@ security:
         - { path: ^/$, roles: PUBLIC_ACCESS }
 
         # AJAX Access
-        - { path: ^/jx/landing,     roles: PUBLIC_ACCESS }
-        - { path: ^/jx/public/,     roles: PUBLIC_ACCESS }
-        - { path: ^/jx/ghost/,      roles: ROLE_USER }
-        - { path: ^/jx/soul/,       roles: ROLE_USER }
-        - { path: ^/jx/pm/,         roles: ROLE_USER }
-        - { path: ^/jx/admin/cst/,  roles: ROLE_USER }
+        - { path: ^/jx/landing,         roles: PUBLIC_ACCESS }
+        - { path: ^/jx/public/,         roles: PUBLIC_ACCESS }
+        - { path: ^/jx/ghost/,          roles: ROLE_USER }
+        - { path: ^/jx/soul/,           roles: ROLE_USER }
+        - { path: ^/jx/pm/,             roles: ROLE_USER }
+        - { path: ^/jx/admin/cst/,      roles: ROLE_USER }
         - { path: ^/jx/admin/com/dash,  roles: PUBLIC_ACCESS }
-        - { path: ^/jx/admin/com/,  roles: ROLE_ELEVATED }
-        - { path: ^/jx/admin/,      roles: ROLE_CROW }
-        - { path: ^/admin/,         roles: ROLE_CROW }
+        - { path: ^/jx/admin/com/,      roles: ROLE_ELEVATED }
+        - { path: ^/jx/admin/,          roles: ROLE_CROW }
+        - { path: ^/jx/cheating/,       roles: [ROLE_CHEATER, ROLE_CROW] }
+        - { path: ^/admin/,             roles: ROLE_CROW }
 
         # API Access
         - { path: ^/api/public/login,  roles: ROLE_REGISTERED }
@@ -71,6 +73,7 @@ security:
         - { path: ^/api/admin/cst/,    roles: ROLE_USER }
         - { path: ^/api/admin/com/,    roles: ROLE_ELEVATED }
         - { path: ^/api/admin/,        roles: ROLE_CROW }
+        - { path: ^/api/cheating/,     roles: [ROLE_CHEATER, ROLE_CROW] }
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
 

@@ -44,6 +44,7 @@ use App\Response\AjaxResponse;
 use App\Service\Actions\Cache\InvalidateTagsInAllPoolsAction;
 use App\Service\AdminHandler;
 use App\Service\AntiCheatService;
+use App\Service\ConfMaster;
 use App\Service\CrowService;
 use App\Service\ErrorHelper;
 use App\Service\EventProxyService;
@@ -56,6 +57,7 @@ use App\Service\User\UserUnlockableService;
 use App\Service\User\UserAccountService;
 use App\Service\UserFactory;
 use App\Service\UserHandler;
+use App\Structures\MyHordesConf;
 use App\Structures\TownConf;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
@@ -258,14 +260,11 @@ class AdminUserController extends AdminActionController
     /**
      * @param int $id
      * @return Response
+     * @throws Exception
      */
     #[Route(path: 'jx/admin/users/{id}/account/view', name: 'admin_users_account_view', requirements: ['id' => '\d+'])]
-    public function users_account_view(int $id, HTMLService $html, UserUnlockableService $unlockable): Response
+    public function users_account_view(User $user, HTMLService $html, UserUnlockableService $unlockable, KernelInterface $kernel): Response
     {
-        /** @var User $user */
-        $user = $this->entity_manager->getRepository(User::class)->find($id);
-        if (!$user) return $this->redirect( $this->generateUrl('admin_users') );
-
         $validations = $this->isGranted('ROLE_SUB_ADMIN') ? $this->entity_manager->getRepository(UserPendingValidation::class)->findByUser($user) : [];
         $desc = $this->entity_manager->getRepository(UserDescription::class)->findOneBy(['user' => $user]);
 
@@ -286,7 +285,8 @@ class AdminUserController extends AdminActionController
                 'total' => $unlockable->getHeroicExperience( $user, null ),
                 'legacy_mh' => $unlockable->getLegacyHeroDaysSpent( $user, false ),
                 'legacy_twin' => $unlockable->getLegacyHeroDaysSpent( $user, true ),
-            ]
+            ],
+            'staging' => $this->conf->getGlobalConf()->get( MyHordesSetting::StagingSettingsEnabled ) || $kernel->getEnvironment() === 'dev' || $kernel->getEnvironment() === 'local',
         ]));
     }
 
@@ -466,7 +466,7 @@ class AdminUserController extends AdminActionController
     }
 
     /**
-     * @param int $id
+     * @param User $user
      * @param string $action
      * @param JSONRequestParser $parser
      * @param UserFactory $uf
@@ -476,21 +476,20 @@ class AdminUserController extends AdminActionController
      * @param CrowService $crow
      * @param KernelInterface $kernel
      * @param InvalidateTagsInAllPoolsAction $clearCache
+     * @param EventProxyService $proxy
+     * @param UserUnlockableService $unlockService
      * @param string $param
      * @return Response
+     * @throws Exception
      */
     #[Route(path: 'api/admin/users/{id}/account/do/{action}/{param}', name: 'admin_users_account_manage', requirements: ['id' => '\d+'])]
     #[AdminLogProfile(enabled: true)]
-    public function user_account_manager(int $id, string $action, JSONRequestParser $parser, UserFactory $uf,
+    public function user_account_manager(User $user, string $action, JSONRequestParser $parser, UserFactory $uf,
                                          TwinoidHandler $twin, UserHandler $userHandler, PermissionHandler $perm,
                                          CrowService $crow, KernelInterface $kernel, InvalidateTagsInAllPoolsAction $clearCache,
                                          EventProxyService $proxy, UserUnlockableService $unlockService,
                                          string $param = ''): Response
     {
-        /** @var User $user */
-        $user = $this->entity_manager->getRepository(User::class)->find($id);
-        if (!$user) return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
-
         if (empty($param)) $param = $parser->get('param', '');
 
         if (in_array($action, [
@@ -582,7 +581,7 @@ class AdminUserController extends AdminActionController
                 /** @var $pv UserPendingValidation */
                 if (!$parser->has('tid') || ($pv = $this->entity_manager->getRepository(UserPendingValidation::class)->find((int)$parser->get('tid'))) === null)
                     return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
-                if ($pv->getUser()->getId() !== $id)
+                if ($pv->getUser()->getId() !== $user->getId())
                     return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
                 $this->entity_manager->remove($pv);
                 break;
@@ -951,9 +950,22 @@ class AdminUserController extends AdminActionController
                         $perm->associate( $user, $perm->getDefaultGroup( UserGroup::GroupTypeDefaultArtisticGroup));
                         break;
 
+                    case 'FLAG_CHEATER':
+                        if (!$this->conf->getGlobalConf()->get( MyHordesSetting::StagingSettingsEnabled ) && $kernel->getEnvironment() !== 'dev' && $kernel->getEnvironment() !== 'local')
+                            return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
+
+                        if ( $user->getRightsElevation() === User::USER_LEVEL_CROW )
+                            return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
+                        else $user->addRoleFlag( User::USER_ROLE_CHEATER );
+                        break;
+
                     case '!FLAG_ART':
                         $user->removeRoleFlag( User::USER_ROLE_ART );
                         $perm->disassociate( $user, $perm->getDefaultGroup( UserGroup::GroupTypeDefaultArtisticGroup));
+                        break;
+
+                    case '!FLAG_CHEATER':
+                        $user->removeRoleFlag( User::USER_ROLE_CHEATER );
                         break;
 
                     case 'FLAG_DEV':

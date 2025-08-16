@@ -9,6 +9,7 @@ use App\Entity\PinnedForum;
 use App\Entity\User;
 use App\Entity\UserGroup;
 use App\Entity\UserGroupAssociation;
+use DateTime;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -16,9 +17,26 @@ readonly class PermissionHandler
 {
 
     public function __construct(
-        private EntityManagerInterface $entity_manager,
-        private UserHandler            $user_handler)
+        private EntityManagerInterface $entity_manager
+    )
     { }
+
+    private function get_restrictions_for(User $user): int {
+        $r = AccountRestriction::RestrictionNone;
+
+        /** @var QueryBuilder $qb */
+        $qb = $this->entity_manager->getRepository(AccountRestriction::class)->createQueryBuilder('a');
+        foreach ($qb
+                     ->select('a.restriction AS r')
+                     ->andWhere('a.user = :user' )->setParameter('user', $user)
+                     ->andWhere('(a.active = TRUE AND a.confirmed = true)')
+                     ->andWhere('(a.expires IS NULL or a.expires > :now)')->setParameter('now', new DateTime())
+                     ->getQuery()->getResult() as $entry)
+
+            $r |= $entry['r'];
+
+        return $r;
+    }
 
     private function get_assoc( User $user, UserGroup $group): ?UserGroupAssociation {
         return $this->entity_manager->getRepository(UserGroupAssociation::class)->findOneBy(['user' => $user, 'association' => $group]);
@@ -139,7 +157,7 @@ readonly class PermissionHandler
             /** @var QueryBuilder $qb */
             $qb = $this->entity_manager->getRepository(Forum::class)->createQueryBuilder('f');
             $qb->andWhere('f.id NOT IN (:denied)')->setParameter('denied', $denied_forums);
-            if ($this->user_handler->isRestricted($user, AccountRestriction::RestrictionGameplay))
+            if ($this->checkRestriction($user, AccountRestriction::RestrictionGameplay))
                 $qb->andWhere('f.town IS NULL');
             return $qb->getQuery()->getResult();
 
@@ -218,7 +236,7 @@ readonly class PermissionHandler
         $grant = $deny = 0;
         if ($forum === null) return ForumUsagePermissions::PermissionNone;
 
-        if ($forum->getTown() && $this->user_handler->isRestricted($user, AccountRestriction::RestrictionGameplay))
+        if ($forum->getTown() && $this->checkRestriction($user, AccountRestriction::RestrictionGameplay))
             return ForumUsagePermissions::PermissionNone;
 
         /** @var QueryBuilder $qb */
@@ -252,5 +270,10 @@ readonly class PermissionHandler
 
     public function checkAnyEffectivePermissions( User $user, Forum $forum, array $perm ): bool {
         return $this->isAnyPermitted( $this->getEffectivePermissions($user, $forum), $perm );
+    }
+
+    public function checkRestriction(User $user, ?int $restriction = null): bool {
+        $r = $this->get_restrictions_for($user);
+        return $restriction === null ? ($r !== AccountRestriction::RestrictionNone) : (($r & $restriction) === $restriction);
     }
 }

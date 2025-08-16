@@ -31,23 +31,25 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[UniqueConstraint(name: 'user_etwin_unique', columns: ['eternal_id'])]
 class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUserInterface
 {
-    const USER_LEVEL_BASIC  =  0;
-    const USER_LEVEL_CROW   =  3;
-    const USER_LEVEL_ADMIN  =  4;
-    const USER_LEVEL_SUPER  =  5;
+    const int USER_LEVEL_BASIC  =  0;
+    const int USER_LEVEL_CROW   =  3;
+    const int USER_LEVEL_ADMIN  =  4;
+    const int USER_LEVEL_SUPER  =  5;
 
-    const USER_ROLE_ORACLE = 1 << 0;
-    const USER_ROLE_ANIMAC = 1 << 1;
-    const USER_ROLE_TEAM   = 1 << 2;
-    const USER_ROLE_DEV    = 1 << 3;
-    const USER_ROLE_ADMIN_SUB = 1 << 4;
-    const USER_ROLE_ART = 1 << 5;
+    const int USER_ROLE_ORACLE = 1 << 0;
+    const int USER_ROLE_ANIMAC = 1 << 1;
+    const int USER_ROLE_TEAM   = 1 << 2;
+    const int USER_ROLE_DEV    = 1 << 3;
+    const int USER_ROLE_ADMIN_SUB = 1 << 4;
+    const int USER_ROLE_ART = 1 << 5;
+    const int USER_ROLE_CHEATER = 1 << 6;
 
-    const USER_ROLE_LIMIT_MODERATION = 1 << 10;
+    const int USER_ROLE_LIMIT_MODERATION = 1 << 10;
 
-    const PRONOUN_NONE = 0;
-    const PRONOUN_MALE = 1;
-    const PRONOUN_FEMALE = 2;
+    const int PRONOUN_NONE = 0;
+    const int PRONOUN_MALE = 1;
+    const int PRONOUN_FEMALE = 2;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
@@ -293,11 +295,12 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
         elseif ($this->rightsElevation === self::USER_LEVEL_ADMIN && $this->hasRoleFlag(self::USER_ROLE_ADMIN_SUB))  $roles[] = 'ROLE_SUB_ADMIN';
         elseif ($this->rightsElevation === self::USER_LEVEL_CROW)   $roles[] = 'ROLE_CROW';
 
-        if ($this->hasRoleFlag( self::USER_ROLE_ORACLE )) $roles[] = 'ROLE_ORACLE';
-        if ($this->hasRoleFlag( self::USER_ROLE_ANIMAC )) $roles[] = 'ROLE_ANIMAC';
-        if ($this->hasRoleFlag( self::USER_ROLE_TEAM ))   $roles[] = 'ROLE_TEAM';
-        if ($this->hasRoleFlag( self::USER_ROLE_DEV ))   $roles[] = 'ROLE_DEV';
-        if ($this->hasRoleFlag( self::USER_ROLE_ART ))   $roles[] = 'ROLE_ART';
+        if ($this->hasRoleFlag( self::USER_ROLE_ORACLE ))   $roles[] = 'ROLE_ORACLE';
+        if ($this->hasRoleFlag( self::USER_ROLE_ANIMAC ))   $roles[] = 'ROLE_ANIMAC';
+        if ($this->hasRoleFlag( self::USER_ROLE_TEAM ))     $roles[] = 'ROLE_TEAM';
+        if ($this->hasRoleFlag( self::USER_ROLE_DEV ))      $roles[] = 'ROLE_DEV';
+        if ($this->hasRoleFlag( self::USER_ROLE_ART ))      $roles[] = 'ROLE_ART';
+        if ($this->hasRoleFlag( self::USER_ROLE_CHEATER ))  $roles[] = 'ROLE_CHEATER';
 
         if (strstr($this->email, "@localhost") === "@localhost") $roles[] = 'ROLE_DUMMY';
         else $roles[] = 'ROLE_NATURAL';
