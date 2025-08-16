@@ -206,7 +206,7 @@ class AdminTownController extends AdminActionController
      */
     #[Route(path: 'jx/cheating/town/{id<\d+>}/bank', name: 'admin_town_bank')]
     public function town_explorer_bank(Town $town): Response {
-		return $this->render('ajax/admin/towns/explorer_bank.html.twig', $this->addDefaultTwigArgs(null, array_merge([
+		return $this->render('ajax/cheat/towns/explorer_bank.html.twig', $this->addDefaultTwigArgs(null, array_merge([
 			'town' => $town,
 			'day' => $town->getDay(),
 			'itemPrototypes' => $this->getOrderedItemPrototypes($this->getUser()->getAdminLang() ?? $this->getUser()->getLanguage()),
