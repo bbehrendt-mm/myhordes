@@ -420,7 +420,7 @@ class LogController extends CustomAbstractCoreController
      */
     #[Route(path: '/admin/town/{id<\d+>}', name: 'admin_town', methods: ['GET'])]
     #[GateKeeperProfile('skip')]
-    #[IsGranted('ROLE_CROW')]
+    #[IsGranted('spy', 'town')]
     public function adminTown(Town $town, Request $request, EntityManagerInterface $em): JsonResponse {
 
         $filter = $request->query->get('filter', '');

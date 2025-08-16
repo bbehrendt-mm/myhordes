@@ -301,7 +301,7 @@ class AdminTownController extends AdminActionController
      */
     #[Route(path: 'jx/cheating/town/{id<\d+>}/register', name: 'admin_town_register')]
     public function town_explorer_register(Town $town, GazetteService $gazetteService): Response {
-		return $this->render('ajax/admin/towns/explorer_register.html.twig', $this->addDefaultTwigArgs(null, array_merge([
+		return $this->render('ajax/cheat/towns/explorer_register.html.twig', $this->addDefaultTwigArgs(null, array_merge([
 			'town' => $town,
 			'day' => $town->getDay(),
 			'tab' => "register",
@@ -469,6 +469,7 @@ class AdminTownController extends AdminActionController
     #[Route(path: 'jx/cheating/town/{id<\d+>}/gazette/{day<\d+>}', name: 'admin_town_explorer_gazette', priority: 1)]
     public function api_explore_gazette(Town $town, int $day, GazetteService $gazetteService): Response {
         return $this->render('ajax/game/gazette_widget.html.twig', [
+            'soul' => true,
             'gazette' => $gazetteService->renderGazette( $town, $day, true ),
             'council' => array_map( fn(CouncilEntry $c) => [$gazetteService->parseCouncilLog( $c ), $c->getCitizen()], array_filter( $this->entity_manager->getRepository(CouncilEntry::class)->findBy(['town' => $town, 'day' => $day], ['ord' => 'ASC']),
                 fn(CouncilEntry $c) => ($c->getTemplate() && $c->getTemplate()->getText() !== null)
