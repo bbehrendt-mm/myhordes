@@ -318,6 +318,7 @@ class AdminTownController extends AdminActionController
      * @return Response
      */
     #[Route(path: 'jx/cheating/town/{id<\d+>}/blackboard/{highlight<\d+>}', name: 'admin_town_blackboard')]
+    #[IsGranted('ROLE_CROW')]
     public function town_explorer_blackboard(Town $town, int $highlight = 0): Response {
         $blackboards = $this->entity_manager->getRepository(BlackboardEdit::class)->findBy([ 'town' => $town ], ['time' => 'DESC'], $highlight > 0 ? 500 : 100);
         $reports_q = $this->entity_manager->getRepository(AdminReport::class)->findBy(['blackBoard' => $blackboards]);
@@ -350,7 +351,7 @@ class AdminTownController extends AdminActionController
             $maxAttacks[$day] = [ $alive_citizens, $proxy->queryTownParameter( $town, BuildingValueQuery::MaxActiveZombies, [$alive_citizens] ) ];
         }
 
-		return $this->render('ajax/admin/towns/explorer_estimations.html.twig', $this->addDefaultTwigArgs(null, array_merge([
+		return $this->render('ajax/cheat/towns/explorer_estimations.html.twig', $this->addDefaultTwigArgs(null, array_merge([
 			'town' => $town,
 			'day' => $town->getDay(),
             'active' => $maxAttacks,
