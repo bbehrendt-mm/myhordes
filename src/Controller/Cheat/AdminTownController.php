@@ -186,6 +186,7 @@ class AdminTownController extends AdminActionController
      * @throws Exception
      */
     #[Route(path: 'jx/cheating/town/{id<\d+>}/dash', name: 'admin_town_dashboard')]
+    #[IsGranted('spy', 'town')]
     public function town_explorer_dash(Town $town, TownHandler $townHandler, KernelInterface $kernel): Response {
 		return $this->render('ajax/cheat/towns/explorer_dash.html.twig', $this->addDefaultTwigArgs(null, array_merge([
 			'town' => $town,
@@ -205,6 +206,7 @@ class AdminTownController extends AdminActionController
      * @return Response
      */
     #[Route(path: 'jx/cheating/town/{id<\d+>}/bank', name: 'admin_town_bank')]
+    #[IsGranted('spy', 'town')]
     public function town_explorer_bank(Town $town): Response {
 		return $this->render('ajax/cheat/towns/explorer_bank.html.twig', $this->addDefaultTwigArgs(null, array_merge([
 			'town' => $town,
@@ -220,6 +222,7 @@ class AdminTownController extends AdminActionController
      * @return Response
      */
     #[Route(path: 'jx/cheating/town/{id<\d+>}/citizens', name: 'admin_town_citizens')]
+    #[IsGranted('spy', 'town')]
     public function town_explorer_citizens(Town $town): Response {
 		$disabled_profs = $this->conf->getTownConfiguration($town)->get(TownSetting::DisabledJobs);
 		$professions = array_filter($this->entity_manager->getRepository( CitizenProfession::class )->findSelectable(),
@@ -300,6 +303,7 @@ class AdminTownController extends AdminActionController
      * @return Response
      */
     #[Route(path: 'jx/cheating/town/{id<\d+>}/register', name: 'admin_town_register')]
+    #[IsGranted('spy', 'town')]
     public function town_explorer_register(Town $town, GazetteService $gazetteService): Response {
 		return $this->render('ajax/cheat/towns/explorer_register.html.twig', $this->addDefaultTwigArgs(null, array_merge([
 			'town' => $town,
@@ -343,6 +347,7 @@ class AdminTownController extends AdminActionController
      * @return Response
      */
     #[Route(path: 'jx/cheating/town/{id<\d+>}/estimations', name: 'admin_town_estimations')]
+    #[IsGranted('spy', 'town')]
     public function town_explorer_estimations(Town $town, EventProxyService $proxy): Response {
         $maxAttacks = [];
         foreach ($town->getZombieEstimations() as $estimation) {
@@ -365,6 +370,7 @@ class AdminTownController extends AdminActionController
      * @return Response
      */
     #[Route(path: 'jx/cheating/town/{id<\d+>}/buildings', name: 'admin_town_buildings')]
+    #[IsGranted('spy', 'town')]
     public function town_explorer_buildings(EventProxyService $events, Town $town): Response {
 		$root = [];
 		$dict = [];
@@ -408,6 +414,7 @@ class AdminTownController extends AdminActionController
      * @return Response
      */
     #[Route(path: 'jx/cheating/town/{id<\d+>}/eruins_explorer', name: 'admin_town_eruins_explorer')]
+    #[IsGranted('cheat', 'town')]
     public function town_explorer_eruins_explorer(Town $town): Response {
         $conf_self = $this->conf->getTownConfiguration($town);
 
@@ -426,7 +433,7 @@ class AdminTownController extends AdminActionController
 				ksort($explorables[$zone->getId()]['rz']);
 			}
 
-		return $this->render('ajax/admin/towns/explorer_eruins_explorer.html.twig', $this->addDefaultTwigArgs(null, array_merge([
+		return $this->render('ajax/cheat/towns/explorer_eruins_explorer.html.twig', $this->addDefaultTwigArgs(null, array_merge([
 			'town' => $town,
 			'conf' => $conf_self,
 			'day' => $town->getDay(),
@@ -442,6 +449,7 @@ class AdminTownController extends AdminActionController
      * @return Response
      */
     #[Route(path: 'jx/cheating/town/{id<\d+>}/config/{conf?}', name: 'admin_town_config')]
+    #[IsGranted('administrate', 'town')]
     public function town_explorer_config(Town $town, ?string $conf): Response {
 		$conf_self = $this->conf->getTownConfiguration($town);
 		$conf_compare = match($conf) {
@@ -468,6 +476,7 @@ class AdminTownController extends AdminActionController
      * @return Response
      */
     #[Route(path: 'jx/cheating/town/{id<\d+>}/gazette/{day<\d+>}', name: 'admin_town_explorer_gazette', priority: 1)]
+    #[IsGranted('spy', 'town')]
     public function api_explore_gazette(Town $town, int $day, GazetteService $gazetteService): Response {
         return $this->render('ajax/game/gazette_widget.html.twig', [
             'soul' => true,
@@ -2332,6 +2341,7 @@ class AdminTownController extends AdminActionController
      * @return Response
      */
     #[Route(path: 'api/cheating/town/{id<\d+>}/admin_regenerate_ruins', name: 'admin_regenerate_ruins')]
+    #[IsGranted('ROLE_ADMIN')]
     #[AdminLogProfile(enabled: true)]
     public function admin_regenerate_ruins(Town $town, MazeMaker $mazeMaker, AdminLog $logger): Response {
         $explorables = [];
