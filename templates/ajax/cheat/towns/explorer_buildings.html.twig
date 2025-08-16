@@ -1,7 +1,7 @@
 {% extends 'ajax/cheat/towns/explorer_shell.html.twig' %}
 
 {% block explorer_content %}
-	{% macro building_entry(building, buildable, n, dict, available, workshopBonus, hpToAp) %}
+	{% macro building_entry(building, buildable, n, dict, available, workshopBonus, hpToAp, cheat) %}
 		{% if available[building.id] is defined %}
 			{% set fromTown = available[building.id] %}
 		{% endif %}
@@ -21,23 +21,25 @@
 						{% endif %}
 					{% endif %}
 				{% endfor %}
-				{% if fromTown is not defined %}
-                    <label style="">
-						<input type="checkbox" data-prototype-id="{{ building.id }}" data-building-admin-action="addToUnlockList" />
-						<div class="tooltip help">{{ 'Klicken, um Baustelle in die Liste der zu entsperrenden Baustellen aufzunehmen.'|trans({},'admin') }}</div>
-					</label>
-					<label>
-						<input type="checkbox" data-prototype-id="{{ building.id }}" data-building-admin-action="addToTown" />
-						<div class="tooltip help">{{ 'Klicken, um Baustelle sofort zu entsperren.'|trans({},'admin') }}</div>
-					</label>
-				{% else %}
-					<div class="inline-block">
-						<img class="link" src="{{ asset('build/images/icons/small_remove.gif') }}" alt="[X]" data-prototype-id="{{ building.id }}" data-building-admin-action="removeFromTown" />
-						<div class="tooltip help">
-							Cliquez ici pour supprimer ce chantier de la ville.
-						</div>
-					</div>
-				{% endif %}
+                {% if cheat %}
+				    {% if fromTown is not defined %}
+                        <label style="">
+				    		<input type="checkbox" data-prototype-id="{{ building.id }}" data-building-admin-action="addToUnlockList" />
+				    		<div class="tooltip help">{{ 'Klicken, um Baustelle in die Liste der zu entsperrenden Baustellen aufzunehmen.'|trans({},'admin') }}</div>
+				    	</label>
+				    	<label>
+				    		<input type="checkbox" data-prototype-id="{{ building.id }}" data-building-admin-action="addToTown" />
+				    		<div class="tooltip help">{{ 'Klicken, um Baustelle sofort zu entsperren.'|trans({},'admin') }}</div>
+				    	</label>
+				    {% else %}
+				    	<div class="inline-block">
+				    		<img class="link" src="{{ asset('build/images/icons/small_remove.gif') }}" alt="[X]" data-prototype-id="{{ building.id }}" data-building-admin-action="removeFromTown" />
+				    		<div class="tooltip help">
+				    			Cliquez ici pour supprimer ce chantier de la ville.
+				    		</div>
+				    	</div>
+				    {% endif %}
+                {% endif %}
 				{% if buildable %}
 					<img alt="" src="{{ asset('build/images/building/' ~ building.icon ~ '.gif' ) }}" >
 				{% else %}
@@ -116,7 +118,7 @@
 							</div>
 						{% endif %}
 					{% endif %}
-					{% if fromTown is defined %}
+					{% if cheat and fromTown is defined %}
 						<div class="building_action cell" style="width: fit-content; margin-left: auto; flex-grow: 0; margin-top: 2px;">
 							{% if fromTown.complete and building.maxLevel > 0 %}
 								{% if fromTown.level < building.maxLevel %}
@@ -164,7 +166,7 @@
 		</div>
 		{% if n < 20 and dict[building.id] is not empty %}
 			{% for sub_building in dict[building.id] %}
-				{{ _self.building_entry(sub_building, buildable and fromTown is defined and fromTown.complete , n+1, dict, available, workshopBonus, hpToAp) }}
+				{{ _self.building_entry(sub_building, buildable and fromTown is defined and fromTown.complete , n+1, dict, available, workshopBonus, hpToAp, cheat) }}
 			{% endfor %}
 		{% endif %}
 		{% endif %}
@@ -172,11 +174,13 @@
 
 	{# @var rootBuildings \App\Entity\BuildingPrototype[] #}
 	<div>
-        <div class="flex gap">
-            <button data-building-admin-action="unlockCheckedBuildings" class="inline"><img alt="" src="{{ asset('build/images/pictos/r_door.gif') }}" /> {{ 'Gewählte Gebäude freischalten'|trans({},'admin') }}</button>
-            <span></span>
-            <button data-building-admin-action="resetConstructionSite" class="inline"><img alt="" src="{{ asset('build/images/emotes/trash.gif') }}" /> {{ 'Gesamten Gebäudebaum zurücksetzen'|trans({},'admin') }}</button>
-        </div>
+        {% if is_granted('cheat', town) %}
+            <div class="flex gap">
+                <button data-building-admin-action="unlockCheckedBuildings" class="inline"><img alt="" src="{{ asset('build/images/pictos/r_door.gif') }}" /> {{ 'Gewählte Gebäude freischalten'|trans({},'admin') }}</button>
+                <span></span>
+                <button data-building-admin-action="resetConstructionSite" class="inline"><img alt="" src="{{ asset('build/images/emotes/trash.gif') }}" /> {{ 'Gesamten Gebäudebaum zurücksetzen'|trans({},'admin') }}</button>
+            </div>
+        {% endif %}
 
 		<ul class="buildings-tabs tabs plain" x-tab-group="buildings" x-tab-control>
 			<li class="tab" x-tab-id="all">
@@ -198,130 +202,131 @@
 	</div>
 
 	{% for building in rootBuildings %}
-		<div x-tab-group="buildings" style="margin-top:31px" x-tab-id="type_{{ building.icon }}" x-tab-target class="buildings type_{{ building.icon }}">{{ _self.building_entry(building, true, 0, dictBuildings, availBuldings, workshopBonus, hpToAp) }}</div>
+		<div x-tab-group="buildings" style="margin-top:31px" x-tab-id="type_{{ building.icon }}" x-tab-target class="buildings type_{{ building.icon }}">{{ _self.building_entry(building, true, 0, dictBuildings, availBuldings, workshopBonus, hpToAp, is_granted('cheat', town)) }}</div>
 	{% endfor %}
 
 {% endblock %}
 {% block js %}
 	{{ parent() }}
-	<script>
+    {% if is_granted('cheat', town) %}
+	    <script>
+            const manage = (action, element) => {
+                switch(action) {
+                    case "setAp":
+                        let ap = null, ap_valid = false;
+                        do {
+                            ap = window.prompt("{{ 'Baufortschritt setzen:'|trans({},'admin')|e('js') }}", "1");
+                            if (ap === null) ap_valid = true;
+                            else {
+                                ap = parseInt(ap);
+                                ap_valid = !isNaN(ap) && ap >= 0;
+                            }
+                        } while (!ap_valid);
 
-        const manage = (action, element) => {
-            switch(action) {
-                case "setAp":
-                    let ap = null, ap_valid = false;
-                    do {
-                        ap = window.prompt("{{ 'Baufortschritt setzen:'|trans({},'admin')|e('js') }}", "1");
-                        if (ap === null) ap_valid = true;
-                        else {
-                            ap = parseInt(ap);
-                            ap_valid = !isNaN(ap) && ap >= 0;
-                        }
-                    } while (!ap_valid);
+                        if (ap === null) return;
 
-                    if (ap === null) return;
+                        $.ajax.easySend( '{{ path('admin_town_set_building_ap', {id: town.id }) }}', {'building': element.dataset.buildingId, 'ap': ap},
+                            function () {
+                                $.ajax.load(null, '{{ path('admin_town_buildings', {id: town.id}) }}', true);
+                            } );
+                        break;
 
-                    $.ajax.easySend( '{{ path('admin_town_set_building_ap', {id: town.id }) }}', {'building': element.dataset.buildingId, 'ap': ap},
-                        function () {
-                            $.ajax.load(null, '{{ path('admin_town_buildings', {id: town.id}) }}', true);
-                        } );
-                    break;
+                    case "setHp":
+                        let hp = null, hp_valid = false;
+                        do {
+                            hp = window.prompt("{{ 'Integrität setzen:'|trans({},'admin')|e('js') }}", "1");
+                            if (hp === null) hp_valid = true;
+                            else {
+                                hp = parseInt(hp);
+                                hp_valid = !isNaN(hp) && hp >= 0;
+                            }
+                        } while (!hp_valid);
 
-                case "setHp":
-                    let hp = null, hp_valid = false;
-                    do {
-                        hp = window.prompt("{{ 'Integrität setzen:'|trans({},'admin')|e('js') }}", "1");
-                        if (hp === null) hp_valid = true;
-                        else {
-                            hp = parseInt(hp);
-                            hp_valid = !isNaN(hp) && hp >= 0;
-                        }
-                    } while (!hp_valid);
+                        if (hp === null) return;
 
-                    if (hp === null) return;
+                        $.ajax.easySend( '{{ path('admin_town_set_building_hp', {id: town.id }) }}', {'building': element.dataset.buildingId, 'hp': hp},
+                            function () {
+                                $.ajax.load(null, '{{ path('admin_town_buildings', {id: town.id}) }}', true);
+                            } );
+                        break;
 
-                    $.ajax.easySend( '{{ path('admin_town_set_building_hp', {id: town.id }) }}', {'building': element.dataset.buildingId, 'hp': hp},
-                        function () {
-                            $.ajax.load(null, '{{ path('admin_town_buildings', {id: town.id}) }}', true);
-                        } );
-                    break;
+                    case "complete":
+                        $.ajax.easySend( '{{ path('admin_town_set_building_ap', {id: town.id }) }}', {'building': element.dataset.buildingId, 'ap': 99999999},
+                            function () {
+                                $.ajax.load(null, '{{ path('admin_town_buildings', {id: town.id}) }}', true);
+                            } );
+                        break;
+                    case "destroy":
+                        $.ajax.easySend( '{{ path('admin_town_set_building_ap', {id: town.id }) }}', {'building': element.dataset.buildingId, 'ap': 0},
+                            function () {
+                                $.ajax.load(null, '{{ path('admin_town_buildings', {id: town.id}) }}', true);
+                            } );
+                        break;
+                    case "trigger_n":
+                        $.ajax.easySend( '{{ path('admin_town_trigger_building_nightly_effect', {id: town.id }) }}', {'building': element.dataset.buildingId},
+                            function () {
+                                $.ajax.load(null, '{{ path('admin_town_buildings', {id: town.id}) }}', true);
+                            } );
+                        break;
+                    case "set_difficulty":
+                        $.ajax.easySend( '{{ path('admin_town_set_building_difficulty_level', {id: town.id }) }}', {'building': element.dataset.buildingId, 'level': element.dataset.level ?? element.value ?? -1},
+                            function () {
+                                $.ajax.load(null, '{{ path('admin_town_buildings', {id: town.id}) }}', true);
+                            } );
+                        break;
+                    case "lv":
+                        $.ajax.easySend( '{{ path('admin_town_set_building_level', {id: town.id }) }}', {'building': element.dataset.buildingId, 'level': element.dataset.level ?? -1},
+                            function () {
+                                $.ajax.load(null, '{{ path('admin_town_buildings', {id: town.id}) }}', true);
+                            } );
+                        break;
 
-                case "complete":
-                    $.ajax.easySend( '{{ path('admin_town_set_building_ap', {id: town.id }) }}', {'building': element.dataset.buildingId, 'ap': 99999999},
-                        function () {
-                            $.ajax.load(null, '{{ path('admin_town_buildings', {id: town.id}) }}', true);
-                        } );
-                    break;
-                case "destroy":
-                    $.ajax.easySend( '{{ path('admin_town_set_building_ap', {id: town.id }) }}', {'building': element.dataset.buildingId, 'ap': 0},
-                        function () {
-                            $.ajax.load(null, '{{ path('admin_town_buildings', {id: town.id}) }}', true);
-                        } );
-                    break;
-                case "trigger_n":
-                    $.ajax.easySend( '{{ path('admin_town_trigger_building_nightly_effect', {id: town.id }) }}', {'building': element.dataset.buildingId},
-                        function () {
-                            $.ajax.load(null, '{{ path('admin_town_buildings', {id: town.id}) }}', true);
-                        } );
-                    break;
-                case "set_difficulty":
-                    $.ajax.easySend( '{{ path('admin_town_set_building_difficulty_level', {id: town.id }) }}', {'building': element.dataset.buildingId, 'level': element.dataset.level ?? element.value ?? -1},
-                        function () {
-                            $.ajax.load(null, '{{ path('admin_town_buildings', {id: town.id}) }}', true);
-                        } );
-                    break;
-                case "lv":
-                    $.ajax.easySend( '{{ path('admin_town_set_building_level', {id: town.id }) }}', {'building': element.dataset.buildingId, 'level': element.dataset.level ?? -1},
-                        function () {
-                            $.ajax.load(null, '{{ path('admin_town_buildings', {id: town.id}) }}', true);
-                        } );
-                    break;
-
-                case "addToTown":
-                    $.ajax.easySend("{{ path('admin_town_add_building', {id: town.id }) }}", {
-                            'prototype_id': element.dataset.prototypeId,
-                            'act': 1
-                        },
-                        function () {
-                            $.ajax.load(null, '{{ path('admin_town_buildings', {id: town.id}) }}', true);
-                        }
-                    );
-                    break;
-                case "removeFromTown":
-                    $.ajax.easySend("{{ path('admin_town_add_building', {id: town.id }) }}", {
-                            'prototype_id': element.dataset.prototypeId,
-                            'act': 0
-                        },
-                        function () {
-                            $.ajax.load(null, '{{ path('admin_town_buildings', {id: town.id}) }}', true);
-                        }
-                    );
-                    break;
-                case "unlockCheckedBuildings":
-                    let protos = [];
-                    let checked = document.querySelectorAll('input[data-building-admin-action="addToUnlockList"]:checked');
-                    checked.forEach(function(c) {
-                        protos.push(c.dataset.prototypeId);
-                    })
-                    $.ajax.easySend("{{ path('admin_town_add_building', {id: town.id }) }}", {
-                            'prototype_id': protos,
-                            'act': 1
-                        },
-                        function () {
-                            $.ajax.load(null, '{{ path('admin_town_buildings', {id: town.id}) }}', true);
-                        }
-                    );
-                    break;
-                case "resetConstructionSite":
-                    if (confirm('{{ 'Bestätigen?'|trans({},'global')|e('js') }}'))
-                        $.ajax.easySend("{{ path('admin_town_reset_buildings', {id: town.id }) }}", {},
-                            () => $.ajax.load(null, '{{ path('admin_town_buildings', {id: town.id}) }}', true)
+                    case "addToTown":
+                        $.ajax.easySend("{{ path('admin_town_add_building', {id: town.id }) }}", {
+                                'prototype_id': element.dataset.prototypeId,
+                                'act': 1
+                            },
+                            function () {
+                                $.ajax.load(null, '{{ path('admin_town_buildings', {id: town.id}) }}', true);
+                            }
                         );
-                    break;
+                        break;
+                    case "removeFromTown":
+                        $.ajax.easySend("{{ path('admin_town_add_building', {id: town.id }) }}", {
+                                'prototype_id': element.dataset.prototypeId,
+                                'act': 0
+                            },
+                            function () {
+                                $.ajax.load(null, '{{ path('admin_town_buildings', {id: town.id}) }}', true);
+                            }
+                        );
+                        break;
+                    case "unlockCheckedBuildings":
+                        let protos = [];
+                        let checked = document.querySelectorAll('input[data-building-admin-action="addToUnlockList"]:checked');
+                        checked.forEach(function(c) {
+                            protos.push(c.dataset.prototypeId);
+                        })
+                        $.ajax.easySend("{{ path('admin_town_add_building', {id: town.id }) }}", {
+                                'prototype_id': protos,
+                                'act': 1
+                            },
+                            function () {
+                                $.ajax.load(null, '{{ path('admin_town_buildings', {id: town.id}) }}', true);
+                            }
+                        );
+                        break;
+                    case "resetConstructionSite":
+                        if (confirm('{{ 'Bestätigen?'|trans({},'global')|e('js') }}'))
+                            $.ajax.easySend("{{ path('admin_town_reset_buildings', {id: town.id }) }}", {},
+                                () => $.ajax.load(null, '{{ path('admin_town_buildings', {id: town.id}) }}', true)
+                            );
+                        break;
+                }
             }
-        }
 
-        document.querySelectorAll("button[data-building-admin-action],input[type=\"checkbox\"][data-building-admin-action]").forEach( e => e.addEventListener('click', () => manage( e.dataset.buildingAdminAction, e )) )
-        document.querySelectorAll("select[data-building-admin-action]").forEach( e => e.addEventListener('change', () => manage( e.dataset.buildingAdminAction, e )) )
-	</script>
+            document.querySelectorAll("button[data-building-admin-action],input[type=\"checkbox\"][data-building-admin-action]").forEach( e => e.addEventListener('click', () => manage( e.dataset.buildingAdminAction, e )) )
+            document.querySelectorAll("select[data-building-admin-action]").forEach( e => e.addEventListener('change', () => manage( e.dataset.buildingAdminAction, e )) )
+	    </script>
+    {% endif %}
 {% endblock %}

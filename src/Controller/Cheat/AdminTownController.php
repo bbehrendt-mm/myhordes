@@ -391,7 +391,7 @@ class AdminTownController extends AdminActionController
         $workshopBonus = $events->queryTownParameter( $town, BuildingValueQuery::ConstructionAPRatio );
         $hpToAp = $events->queryTownParameter( $town, BuildingValueQuery::RepairAPRatio );
 
-		return $this->render('ajax/admin/towns/explorer_buildings.html.twig', $this->addDefaultTwigArgs(null, array_merge([
+		return $this->render('ajax/cheat/towns/explorer_buildings.html.twig', $this->addDefaultTwigArgs(null, array_merge([
 			'town' => $town,
 			'day' => $town->getDay(),
 			'tab' => "buildings",
@@ -1999,7 +1999,7 @@ class AdminTownController extends AdminActionController
      * @return Response
      */
     #[Route(path: 'api/cheating/town/{id<\d+>}/buildings/add', name: 'admin_town_add_building')]
-    #[IsGranted('ROLE_SUB_ADMIN')]
+    #[IsGranted('cheat', 'town')]
     #[AdminLogProfile(enabled: true)]
     public function town_add_building(Town $town, JSONRequestParser $parser, TownHandler $th, GameProfilerService $gps): Response
     {
@@ -2041,7 +2041,7 @@ class AdminTownController extends AdminActionController
      * @return Response
      */
     #[Route(path: 'api/cheating/town/{id<\d+>}/buildings/reset', name: 'admin_town_reset_buildings')]
-    #[IsGranted('ROLE_SUB_ADMIN')]
+    #[IsGranted('cheat', 'town')]
     #[AdminLogProfile(enabled: true)]
     public function town_reset_buildings(Town $town, EntityManagerInterface $em, ConfMaster $conf, InitializeTownBuildingsAction $action): Response
     {
@@ -2061,7 +2061,7 @@ class AdminTownController extends AdminActionController
     }
 
     /**
-     * @param int $id ID of the town
+     * @param Town $town
      * @param JSONRequestParser $parser The JSON request parser
      * @param EventProxyService $events
      * @return Response
@@ -2069,15 +2069,10 @@ class AdminTownController extends AdminActionController
      * @throws NotFoundExceptionInterface
      */
     #[Route(path: 'api/cheating/town/{id<\d+>}/buildings/set-ap', name: 'admin_town_set_building_ap')]
-    #[IsGranted('ROLE_SUB_ADMIN')]
+    #[IsGranted('cheat', 'town')]
     #[AdminLogProfile(enabled: true)]
-    public function town_set_building_ap(int $id, JSONRequestParser $parser, EventProxyService $events): Response
+    public function town_set_building_ap(Town $town, JSONRequestParser $parser, EventProxyService $events): Response
     {
-        $town = $this->entity_manager->getRepository(Town::class)->find($id);
-        if (!$town) {
-            return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
-        }
-
         if (!$parser->has_all(['building', 'ap'])) {
             return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
         }
@@ -2121,7 +2116,7 @@ class AdminTownController extends AdminActionController
      * @throws NotFoundExceptionInterface
      */
     #[Route(path: 'api/cheating/town/{id<\d+>}/buildings/set-hp', name: 'admin_town_set_building_hp')]
-    #[IsGranted('ROLE_SUB_ADMIN')]
+    #[IsGranted('cheat', 'town')]
     #[AdminLogProfile(enabled: true)]
     public function town_set_building_hp(Town $town, JSONRequestParser $parser, EventProxyService $events): Response
     {
@@ -2180,7 +2175,7 @@ class AdminTownController extends AdminActionController
      * @throws NotFoundExceptionInterface
      */
     #[Route(path: 'api/cheating/town/{id<\d+>}/buildings/set-level', name: 'admin_town_set_building_level')]
-    #[IsGranted('ROLE_SUB_ADMIN')]
+    #[IsGranted('cheat', 'town')]
     #[AdminLogProfile(enabled: true)]
     public function town_set_building_level(Town $town, JSONRequestParser $parser, EventProxyService $events): Response
     {
@@ -2223,7 +2218,7 @@ class AdminTownController extends AdminActionController
      * @return Response
      */
     #[Route(path: 'api/cheating/town/{id<\d+>}/buildings/set-difficulty', name: 'admin_town_set_building_difficulty_level')]
-    #[IsGranted('ROLE_SUB_ADMIN')]
+    #[IsGranted('cheat', 'town')]
     #[AdminLogProfile(enabled: true)]
     public function town_set_building_difficulty_level(Town $town, JSONRequestParser $parser, EventProxyService $events): Response
     {
@@ -2264,7 +2259,7 @@ class AdminTownController extends AdminActionController
      * @throws NotFoundExceptionInterface
      */
     #[Route(path: 'api/cheating/town/{id<\d+>}/buildings/exec-nightly', name: 'admin_town_trigger_building_nightly_effect')]
-    #[IsGranted('ROLE_SUB_ADMIN')]
+    #[IsGranted('cheat', 'town')]
     #[AdminLogProfile(enabled: true)]
     public function town_trigger_building_nightly_effect(Town $town, JSONRequestParser $parser, EventProxyService $events): Response
     {
