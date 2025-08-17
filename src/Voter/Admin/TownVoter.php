@@ -3,6 +3,7 @@
 namespace App\Voter\Admin;
 
 use App\Entity\Town;
+use App\Entity\TownRankingProxy;
 use App\Entity\User;
 use App\Enum\Configuration\MyHordesSetting;
 use App\Service\ConfMaster;
@@ -24,17 +25,25 @@ class TownVoter extends Voter
 
     public function supportsAttribute(string $attribute): bool
     {
-        return in_array($attribute, ['spy','edit','cheat','administrate','sudo'], true);
+        return in_array($attribute, [
+            'list', 'create',
+            'spy','edit','cheat','administrate','sudo'
+        ], true);
     }
 
     public function supportsType(string $subjectType): bool
     {
-        return is_a($subjectType, Town::class, true);
+        return
+            $subjectType === 'string' ||
+            is_a($subjectType, Town::class, true);
     }
 
     protected function supports(string $attribute, mixed $subject): bool
     {
-        return $this->supportsAttribute( $attribute ) && $subject instanceof Town;
+        return
+            $this->supportsAttribute( $attribute ) &&
+            is_a($subject, Town::class, true) &&
+            ( in_array($attribute, ['list','create']) || !is_string( $subject ) );
     }
 
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
@@ -47,11 +56,35 @@ class TownVoter extends Voter
             $this->kernel->getEnvironment() === 'dev' || $this->kernel->getEnvironment() === 'local';
 
         return match ($attribute) {
+            'create' => $this->canCreate( $token, $lax ),
+            'list' => $this->canList( $token, $lax ),
             'spy' => $this->canSpy( $token, $lax ),
             'cheat' => $this->canCheat( $subject, $token, $user, $lax ),
             'edit' => $this->canEdit( $subject, $token, $user, $lax ),
             'administrate' => $this->canAdministrate( $token ),
             'sudo' => $this->canDoEverything( $token ),
+            default => false,
+        };
+    }
+
+    private function canCreate(TokenInterface $token, bool $lax): bool {
+        return match(true) {
+            $this->accessDecisionManager->decide($token, ['ROLE_CROW']),
+            $this->accessDecisionManager->decide($token, ['ROLE_SUB_ADMIN']),
+            => true,
+            $this->accessDecisionManager->decide($token, ['ROLE_CHEATER']),
+            => $lax,
+            default => false,
+        };
+    }
+
+    private function canList(TokenInterface $token, bool $lax): bool {
+        return match(true) {
+            $this->accessDecisionManager->decide($token, ['ROLE_CROW']),
+            $this->accessDecisionManager->decide($token, ['ROLE_SUB_ADMIN']),
+                => true,
+            $this->accessDecisionManager->decide($token, ['ROLE_CHEATER']),
+                => $lax,
             default => false,
         };
     }

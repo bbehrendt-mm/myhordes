@@ -1,4 +1,4 @@
-{% extends 'ajax/cheat/towns/explorer_shell.html.twig' %}
+{% extends 'ajax/manage/towns/explorer_shell.html.twig' %}
 {% from "ajax/admin/widget/controls.twig" import widget_item_creator as item_creator, widget_item_creator_js as item_creator_js %}
 {% block explorer_content %}
 	<div class="row">
@@ -13,7 +13,7 @@
 					</div>
 				</div>
 			{% endif %}
-			{% embed "ajax/game/inventory.html.twig" with {'size': 0, 'items': bank, 'bankmode': true, 'debug': is_granted("ROLE_SUB_ADMIN")} %}
+			{% embed "ajax/game/inventory.html.twig" with {'size': 0, 'items': bank, 'bankmode': true, 'debug': is_granted('cheat', town)} %}
 				{% block class %}bank{% endblock %}
 				{% block title %}{% endblock %}
 			{% endembed %}

@@ -32,11 +32,13 @@
             </div>
 
             <br />
-            <div class="row">
-                <div class="cell rw-3 ro-9 rw-md-6 ro-md-6 rw-sm-12 ro-sm-0">
-                    <button x-ajax-href="{{ path('admin_town_list') }}">{{ 'Stadtübersicht'|trans({},'admin') }}</button>
+            {% if is_granted('list', 'App\\Entity\\Town') %}
+                <div class="row">
+                    <div class="cell rw-3 ro-9 rw-md-6 ro-md-6 rw-sm-12 ro-sm-0">
+                        <button x-ajax-href="{{ path('admin_town_list') }}">{{ 'Stadtübersicht'|trans({},'admin') }}</button>
+                    </div>
                 </div>
-            </div>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

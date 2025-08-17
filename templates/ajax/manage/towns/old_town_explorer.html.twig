@@ -119,9 +119,11 @@
                         <a class="button" target="_blank" href="{{ url('soul_view_town', {sid: town.citizens[0].user.id, idtown: town.id}) }}">{{ 'Ranking-Eintrag'|trans({},'admin') }}</a>
                     {% endif %}
                 </div>
-                <div class="padded cell rw-3 rw-md-6 rw-sm-12">
-                    <button x-ajax-href="{{ path('admin_old_town_list') }}">{{ 'Stadtübersicht'|trans({},'admin') }}</button>
-                </div>
+                {% if is_granted('list', 'App\\Entity\\Town') %}
+                    <div class="padded cell rw-3 rw-md-6 rw-sm-12">
+                        <button x-ajax-href="{{ path('admin_old_town_list') }}">{{ 'Stadtübersicht'|trans({},'admin') }}</button>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>

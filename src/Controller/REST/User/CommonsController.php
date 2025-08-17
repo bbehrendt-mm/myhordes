@@ -14,6 +14,7 @@ use App\Entity\ForumUsagePermissions;
 use App\Entity\GlobalPrivateMessage;
 use App\Entity\Post;
 use App\Entity\PrivateMessage;
+use App\Entity\Town;
 use App\Entity\User;
 use App\Entity\UserGroup;
 use App\Entity\UserGroupAssociation;
@@ -27,6 +28,7 @@ use App\Service\RandomGenerator;
 use App\Service\RateLimitingFactoryProvider;
 use App\Service\TimeKeeperService;
 use App\Service\User\UserCapabilityService;
+use App\Translation\T;
 use DateTime;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
@@ -313,6 +315,36 @@ class CommonsController extends CustomAbstractCoreController
         return new JsonResponse(['sk' => $s]);
     }
 
+    public static function getAdminActions(): array {
+        return [
+            ['name' => T::__('Kampagnen', 'admin'),   'route' => 'admin_campaigns'],
+            ['name' => T::__('Users', 'admin'),       'route' => 'admin_users'],
+            ['name' => T::__('Foren-Mod.', 'admin'),  'route' => 'admin_reports_forum_posts'],
+            ['name' => T::__('Zukunft', 'admin'),     'route' => 'admin_changelogs'],
+            ['name' => T::__('AntiSpam', 'admin'),    'route' => 'admin_spam_domain_view'],
+            ['name' => T::__('Apps', 'admin'),        'route' => 'admin_app_view'],
+            ['name' => T::__('Saisons', 'admin'),     'route' => 'admin_seasons_view'],
+            ['name' => T::__('Gruppen', 'admin'),     'route' => 'admin_group_view'],
+            ['name' => T::__('Dateisystem', 'admin'), 'route' => 'admin_file_system_dash'],
+            ['name' => T::__('Angriffsplan', 'admin'),'route' => 'admin_schedule_attacks'],
+        ];
+    }
+
+    public static function getCommunityActions(): array {
+        return [
+            ['name' => T::__('Dashboard', 'admin'),  'route' => 'admin_dashboard'],
+            ['name' => T::__('Kampagnen', 'admin'),  'route' => 'admin_campaigns'],
+            ['name' => T::__('Zukunft', 'admin'),    'route' => 'admin_changelogs'],
+            ['name' => T::__('Kurztexte', 'admin'),  'route' => 'admin_reports_snippets'],
+        ];
+    }
+
+    private function permissionBasedActions(): array {
+        return [
+            ...($this->isGranted('list', Town::class) ? [['name' => T::__('Städte', 'admin'),      'route' => 'admin_town_list']] : []),
+        ];
+    }
+
     /**
      * @param UserCapabilityService $capability
      * @return JsonResponse
@@ -325,28 +357,22 @@ class CommonsController extends CustomAbstractCoreController
 
         $crow = $capability->hasRole( $this->getUser(), 'ROLE_CROW' );
 
-        $data = $crow
-            ? AdminActionController::getAdminActions()
-            : AdminActionController::getCommunityActions();
-
         return new JsonResponse([
             'cat' => match (true) {
                 $capability->hasRole( $this->getUser(), 'ROLE_CROW' )     => $this->translator->trans('Moderation', [], 'global'),
                 $capability->hasRole( $this->getUser(), 'ROLE_ELEVATED' ) => $this->translator->trans('Community-Tools', [], 'global'),
-                $capability->hasRole( $this->getUser(), 'ROLE_CHEATER' )  => $this->translator->trans('Schummeln', [], 'global'),
+                $capability->hasRole( $this->getUser(), 'ROLE_CHEATER' )  => $this->translator->trans('Community-Tools', [], 'global'),
             },
             'links' => array_map( fn(array $entry) => [
                 'name' => $entry['name'],
                 'url' => $this->generateUrl($entry['route']),
-            ], match(true) {
-                $capability->hasRole( $this->getUser(), 'ROLE_CROW' ) => AdminActionController::getAdminActions(),
-                $capability->hasAllRoles( $this->getUser(), ['ROLE_ELEVATED', 'ROLE_CHEATER'] ) => [
-                    ...AdminActionController::getCommunityActions(),
-                    ...AdminActionController::getCheaterActions(),
-                ],
-                $capability->hasRole( $this->getUser(), 'ROLE_ELEVATED' ) => AdminActionController::getCommunityActions(),
-                $capability->hasRole( $this->getUser(), 'ROLE_CHEATER' ) => AdminActionController::getCheaterActions(),
-            })
+            ], [
+                ...match(true) {
+                    $capability->hasRole( $this->getUser(), 'ROLE_CROW' ) => self::getAdminActions(),
+                    $capability->hasRole( $this->getUser(), 'ROLE_ELEVATED' ) => self::getCommunityActions(),
+                },
+                ...$this->permissionBasedActions()
+            ])
         ]);
 
     }

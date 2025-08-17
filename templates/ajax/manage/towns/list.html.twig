@@ -5,7 +5,7 @@
     <li class="back-dash" x-ajax-href="{{ url('game_landing') }}">{{ 'Zum Spiel'|trans({},'global') }}</li>
 {% endblock %}
 {% block ajax %}
-    {% embed "ajax/admin/towns/header.html.twig" with {'search_controller': 'admin_towns_fuzzyfind'} %}{% endembed %}
+    {% embed "ajax/manage/towns/header.html.twig" with {'search_controller': 'admin_towns_fuzzyfind'} %}{% endembed %}
     <div class="row">
         <div class="cell padded rw-12">
             <ul class="tabs plain">
@@ -83,30 +83,32 @@
                 {% endfor %}
             </div>
 
-            <h5>{{ 'Stadt anlegen'|trans({},'admin') }}</h5>
-            <div class="row-flex wrap">
-                <div class="padded cell rw-sm-12 grow-0 shrink-0">
-                    <label>
-                        <select id="new_town_lang">
-                            {% for lang in langs %}
-                                <option {% if lang['code'] == app.user.language %}selected{% endif%} value="{{ lang['code'] }}">{{ lang['label']|trans({}, 'global') }}</option>
-                            {% endfor %}
-                            <option value="multi">Multi</option>
-                        </select>
-                    </label>
+            {% if is_granted('create', 'App\\Entity\\Town') %}
+                <h5>{{ 'Stadt anlegen'|trans({},'admin') }}</h5>
+                <div class="row-flex wrap">
+                    <div class="padded cell rw-sm-12 grow-0 shrink-0">
+                        <label>
+                            <select id="new_town_lang">
+                                {% for lang in langs %}
+                                    <option {% if lang['code'] == app.user.language %}selected{% endif%} value="{{ lang['code'] }}">{{ lang['label']|trans({}, 'global') }}</option>
+                                {% endfor %}
+                                <option value="multi">Multi</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div class="padded cell rw-sm-12 grow-1 shrink-1"><label><input id="new_town_name" type="text" placeholder="{{ 'Stadtname'|trans({},'admin') }}" /></label></div>
+                    <div class="padded cell rw-sm-12 grow-0 shrink-0"><label><select id="new_town_type">
+                        <option value="small">{{ 'Kleine Stadt'|trans({},'game') }}</option>
+                        <option selected value="remote">{{ 'Entfernte Regionen'|trans({},'game') }}</option>
+                        <option value="panda">{{ 'Pandämonium'|trans({},'game') }}</option>
+                    </select></label></div>
+                    <div class="padded cell rw-sm-12 grow-0 shrink-0"><label title="{{ 'Lege einen Zeitpunkt fest, an dem die Stadt eröffnet werden soll. Leer lassen oder einen Zeitpunkt in der Vergangenheit angeben, um die Stadt sofort zu öffnen.'|trans({},'admin') }}"><input type="datetime-local" id="new_town_sched" value="{{ 'today+20min'|to_date|date('Y-m-d\\TH:i:s') }}" /></label></div>
+                    <div class="padded cell rw-sm-12 shrink-0"><button id="new_town_button">{{ 'Stadt anlegen'|trans({},'admin') }}</button></div>
                 </div>
-                <div class="padded cell rw-sm-12 grow-1 shrink-1"><label><input id="new_town_name" type="text" placeholder="{{ 'Stadtname'|trans({},'admin') }}" /></label></div>
-                <div class="padded cell rw-sm-12 grow-0 shrink-0"><label><select id="new_town_type">
-                    <option value="small">{{ 'Kleine Stadt'|trans({},'game') }}</option>
-                    <option selected value="remote">{{ 'Entfernte Regionen'|trans({},'game') }}</option>
-                    <option value="panda">{{ 'Pandämonium'|trans({},'game') }}</option>
-                </select></label></div>
-                <div class="padded cell rw-sm-12 grow-0 shrink-0"><label title="{{ 'Lege einen Zeitpunkt fest, an dem die Stadt eröffnet werden soll. Leer lassen oder einen Zeitpunkt in der Vergangenheit angeben, um die Stadt sofort zu öffnen.'|trans({},'admin') }}"><input type="datetime-local" id="new_town_sched" value="{{ 'today+20min'|to_date|date('Y-m-d\\TH:i:s') }}" /></label></div>
-                <div class="padded cell rw-sm-12 shrink-0"><button id="new_town_button">{{ 'Stadt anlegen'|trans({},'admin') }}</button></div>
-            </div>
+            {% endif %}
         </div>
     </div>
-    {% embed "ajax/admin/towns/footer.html.twig" with {'search_controller': 'admin_towns_fuzzyfind'} %}{% endembed %}
+    {% embed "ajax/manage/towns/footer.html.twig" with {'search_controller': 'admin_towns_fuzzyfind'} %}{% endembed %}
 {% endblock %}
 {% block js %}
     {{ parent() }}
