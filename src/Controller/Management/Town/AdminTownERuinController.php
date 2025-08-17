@@ -69,7 +69,7 @@ class AdminTownERuinController extends AdminActionController
      * @return Response
      */
     #[Route(path: 'api/manage/town/{id<\d+>}/admin_regenerate_ruins', name: 'admin_regenerate_ruins')]
-    #[IsGranted('ROLE_ADMIN')]
+    #[IsGranted('cheat', 'town')]
     #[AdminLogProfile(enabled: true)]
     public function admin_regenerate_ruins(Town $town, MazeMaker $mazeMaker, AdminLog $logger): Response {
         $explorables = [];
