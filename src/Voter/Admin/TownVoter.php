@@ -3,7 +3,6 @@
 namespace App\Voter\Admin;
 
 use App\Entity\Town;
-use App\Entity\TownRankingProxy;
 use App\Entity\User;
 use App\Enum\Configuration\MyHordesSetting;
 use App\Service\ConfMaster;

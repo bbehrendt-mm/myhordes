@@ -1337,52 +1337,10 @@ class AdminUserController extends AdminActionController
 
         /** @var Citizen $citizen */
         $citizen = $user->getActiveCitizen();
-        if ($citizen) {
-            $active = true;
-            $town = $citizen->getTown();
-            $alive = $citizen->getAlive();
-        }                    
-        else {
-            $active = false;
-            $alive = false;
-            $town = null;
-        }
-
-        $pictoProtos = $this->entity_manager->getRepository(PictoPrototype::class)->findAll();
-        usort($pictoProtos, function ($a, $b) {
-            return strcmp($this->translator->trans($a->getLabel(), [], 'game'), $this->translator->trans($b->getLabel(), [], 'game'));
-        });
-
-        $itemPrototypes = $this->entity_manager->getRepository(ItemPrototype::class)->findAll();
-        usort($itemPrototypes, function ($a, $b) {
-            return strcmp($this->translator->trans($a->getLabel(), [], 'items'), $this->translator->trans($b->getLabel(), [], 'items'));
-        });
-
-        $citizenStati = $this->entity_manager->getRepository(CitizenStatus::class)->findAll();
-        usort($citizenStati, function ($a, $b) {
-            return strcmp($this->translator->trans($a->getLabel(), [], 'game'), $this->translator->trans($b->getLabel(), [], 'game'));
-        });
-
-        $disabled_profs = $town ? $this->conf->getTownConfiguration($town)->get(TownSetting::DisabledJobs) : [];
-        $professions = array_filter($this->entity_manager->getRepository( CitizenProfession::class )->findSelectable(),
-            fn(CitizenProfession $p) => !in_array($p->getName(),$disabled_profs)
-        );
-
-        $citizenRoles = $this->entity_manager->getRepository(CitizenRole::class)->findAll();
 
         return $this->render( 'ajax/admin/users/citizen.html.twig', $this->addDefaultTwigArgs("admin_users_citizen", [
-            'town' => $town,
-            'active' => $active,
-            'alive' => $alive,
             'user' => $user,
             'user_citizen' => $citizen,
-            'home_upgrades' => $this->entity_manager->getRepository(CitizenHomeUpgradePrototype::class)->findAll(),
-            'itemPrototypes' => $itemPrototypes,
-            'pictoPrototypes' => $pictoProtos,
-            'citizenStati' => $citizenStati,
-            'citizenRoles' => $citizenRoles,
-            'citizenProfessions' => $professions,
-            'citizen_id' => $citizen ? $citizen->getId() : -1,
         ]));        
     }
 
@@ -1472,32 +1430,6 @@ class AdminUserController extends AdminActionController
             return AjaxResponse::success();
 
         return AjaxResponse::error(ErrorHelper::ErrorDatabaseException);
-    }
-
-    /**
-     * @param int $id
-     * @param int $cid
-     * @return Response
-     */
-    #[Route(path: 'api/admin/users/{id}/citizen/engagement/{cid}', name: 'admin_users_citizen_engage', requirements: ['id' => '\d+', 'cid' => '\d+'])]
-    #[AdminLogProfile(enabled: true)]
-    public function users_update_engagement(int $id, int $cid): Response
-    {
-        /** @var User $user */
-        $user = $this->entity_manager->getRepository(User::class)->find($id);
-        if (!$user) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
-
-        if ($user->getActiveCitizen()) $this->entity_manager->persist($user->getActiveCitizen()->setActive(false));
-
-        if ($cid !== 0) {
-            $citizen = $this->entity_manager->getRepository(Citizen::class)->find($cid);
-            if (!$citizen || $citizen->getUser() !== $user || (!$citizen->getAlive() && $citizen->getProfession()->getName() !== CitizenProfession::DEFAULT))
-                return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
-            $this->entity_manager->persist($citizen->setActive(true));
-        }
-
-        $this->entity_manager->flush();
-        return AjaxResponse::success();
     }
 
     /**

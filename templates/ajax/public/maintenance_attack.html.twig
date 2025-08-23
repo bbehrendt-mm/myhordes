@@ -55,15 +55,6 @@
                 <p><em>{{'Und ja, es wird Tote geben...'|trans({}, 'ghost')}}</em></p>
                 {{ help_lnk('Der Angriff der Zombiehorde'|trans({},'help'), 'help', {'name' : 'the_attack_of_the_hordes'}) }}
             </div>
-
-            <div class="right">
-                <br />
-                {% if is_granted('ROLE_CROW') %}
-                    <span class="small pointer" x-ajax-href="{{ path('admin_dashboard') }}">{{ 'Admin Dashboard'|trans({},'admin') }}</span>
-                {% else %}
-                    <span style="cursor: default; opacity: 0;" class="small pointer" x-ajax-href="{{ path('admin_dashboard') }}">{{ 'Admin Dashboard'|trans({},'admin') }}</span>
-                {% endif %}
-            </div>
         {% endif %}
     </div>
 {% endblock %}

@@ -1,0 +1,199 @@
+{% extends 'ajax/manage/towns/explorer_shell.html.twig' %}
+
+{% from "ajax/admin/widget/displays.twig" import widget_citizen %}
+
+{% from "ajax/admin/widget/controls.twig" import widget_status_control as status_control, widget_status_control_js as status_control_js %}
+{% from "ajax/admin/widget/controls.twig" import widget_role_control as role_control, widget_role_control_js as role_control_js %}
+{% from "ajax/admin/widget/controls.twig" import widget_point_control as point_control, widget_point_control_js as point_control_js %}
+{% from "ajax/admin/widget/controls.twig" import widget_profession_control as profession_control, widget_profession_control_js as profession_control_js %}
+{% from "ajax/admin/widget/controls.twig" import widget_home_control as home_control, widget_home_control_js as home_control_js %}
+{% from "ajax/admin/widget/controls.twig" import widget_teleport_control as teleport_control, widget_teleport_control_js as teleport_control_js %}
+{% from "ajax/admin/widget/controls.twig" import widget_alias_control as alias_control, widget_alias_control_js as alias_control_js %}
+
+{% block explorer_content %}
+    <div class="row" id="citizen_base_selector" x-id="{{ citizen_selected.id }}">
+        <div class="cell rw-12">
+            <h1 class="page-head">{{ citizen_selected.name }}</h1>
+        </div>
+        <div class="padded cell rw-6 rw-sm-12">
+            {% if citizen_selected.alive %}
+                <div class="small lightbox">{{ widget_citizen(citizen_selected) }}</div>
+            {% endif %}
+
+            <div class="cell padded rw-12">
+                <div class="row-table">
+                    <div class="row header">
+                        <div class="padded cell rw-3">{{ 'Nachricht'|trans({},'admin') }}</div>
+                        <div class="padded cell rw-6">{{ 'Inhalt'|trans({},'admin') }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="padded cell rw-3"><b>{{ 'Nachricht'|trans({},'game') }}</b></div>
+                        <div class="padded cell rw-6"><span class="small">{{ citizen_selected.home.description }}</span></div>
+                        <div class="padded cell rw-3 right">
+                            {% if is_granted('ROLE_CROW') and citizen_selected.home.description %}
+                                <div class="inline pointer" data-delete-subject="status">
+                                    <img alt="" src="{{ asset('build/images/icons/small_trash_red.png') }}" />
+                                    <div class="tooltip"><b>{{ 'Löschen'|trans({}, 'admin') }}</b></div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="padded cell rw-3"><b>{{ 'Kommentar'|trans({},'soul') }}</b></div>
+                        <div class="padded cell rw-6"><span class="small">{{ citizen_selected.comment }}</span></div>
+                        <div class="padded cell rw-3">
+                            {% if is_granted('ROLE_CROW') and citizen_selected.comment %}
+                                <div class="inline pointer" data-delete-subject="comment">
+                                    <img alt="" src="{{ asset('build/images/icons/small_trash_red.png') }}" />
+                                    <div class="tooltip"><b>{{ 'Löschen'|trans({}, 'admin') }}</b></div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="padded cell rw-3"><b>{{ 'Letzte Worte'|trans({},'soul') }}</b></div>
+                        <div class="padded cell rw-6"><span class="small">{{ citizen_selected.lastWords }}</span></div>
+                        <div class="padded cell rw-3">
+                            {% if is_granted('ROLE_CROW') and citizen_selected.lastWords %}
+                                <div class="inline pointer" data-delete-subject="lastWords">
+                                    <img alt="" src="{{ asset('build/images/icons/small_trash_red.png') }}" />
+                                    <div class="tooltip"><b>{{ 'Löschen'|trans({}, 'admin') }}</b></div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% if citizen_selected.alive %}
+                <div class="row">
+
+                    {% if is_granted('administrate', citizen_selected) %}
+                        <div class="cell padded rw-2 text-center">
+                            <button class="small inline text-center" id="x-headshot">
+                                <img src="{{ asset('build/images/actions/bullets.gif') }}" alt="" /><br />
+                                <span class="hide-md hide-sm">{{ 'Kopfschuss'|trans({}, 'admin') }}</span>
+                            </button>
+                        </div>
+                    {% endif %}
+                    {% if is_granted("ROLE_CROW") %}
+                        <div class="cell padded rw-2 text-center">
+                            <button class="small inline text-center" id="x-liver-eat">
+                                <img src="{{ asset('build/images/actions/canteen.gif') }}" alt="" /><br />
+                                <span class="hide-md hide-sm">{{ 'Leber fressen'|trans({}, 'admin') }}</span>
+                            </button>
+                        </div>
+                    {% endif %}
+                    {% if is_granted('administrate', citizen_selected) %}
+                        <div class="cell padded rw-2 text-center">
+                            {% if citizen_selected.active %}
+                                <button class="small inline text-center" x-engage="{{ path('admin_town_citizen_disengage', {town: town.id, id: citizen_selected.id}) }}">
+                                    <img src="{{ asset("build/images/icons/escort_off.gif") }}" alt="" /><br />
+                                    <span class="hide-md hide-sm">{{ 'Entkoppeln'|trans({}, 'admin') }}</span>
+                                </button>
+                            {% else %}
+                                <button class="small inline text-center" x-engage="{{ path('admin_town_citizen_engage', {town: town.id, id: citizen_selected.id}) }}">
+                                    <img src="{{ asset("build/images/icons/escort_on.gif") }}" alt="" /><br />
+                                    <span class="hide-md hide-sm">{{ 'Koppeln'|trans({}, 'admin') }}</span>
+                                </button>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                    {% if is_granted("ROLE_CROW") %}
+                        <div class="cell padded rw-2 text-center">
+                            <button class="small inline text-center" id="x-pm">
+                                <img alt="" src="{{ asset('build/images/building/small_crow.gif') }}" /><br />
+                                <span class="hide-md hide-sm">{{ 'PM vom Raben'|trans({}, 'admin') }}</span>
+                            </button>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endif %}
+
+            <div class="row">
+                <div class="cell padded rw-12">
+                    <input type="hidden" id="pmidrecipient" value="{{ citizen_selected.id }}">
+                    <div id="forum-content"></div>
+                </div>
+            </div>
+        </div>
+        <div class="cell rw-6 rw-sm-12">
+            <div class="row">
+                {% if citizen_selected.alive and is_granted('edit', citizen_selected) %}
+                    <div class="cell padded rw-12">{{ point_control() }}</div>
+                    <div class="cell padded rw-12">{{ profession_control(citizenProfessions) }}</div>
+                    <div class="cell padded rw-12">{{ teleport_control() }}</div>
+                    <div class="cell padded rw-6 rw-md-12">{{ status_control(citizenStati) }}</div>
+                    <div class="cell padded rw-6 rw-md-12">{{ role_control(citizenRoles) }}</div>
+                    <div class="cell padded rw-12">{{ home_control(citizen_selected,home_upgrades) }}</div>
+                    {% if town.conf and (town.conf.features is defined) and (town.conf.features.citizen_alias is defined) and town.conf.features.citizen_alias %}
+                        <div class="cell padded rw-12">{{ alias_control(citizen_selected) }}</div>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    {{ parent() }}
+    {% if citizen_selected.alive and is_granted('edit', citizen_selected) %}
+        {{ home_control_js('#citizen_base_selector', path('admin_town_manage_home', {id: citizen_selected.town.id}), path('admin_town_citizen_view', {town: town.id, id: citizen_selected.id})) }}
+        {{ status_control_js('#citizen_base_selector', path('admin_town_manage_status', {id: citizen_selected.town.id}), path('admin_town_citizen_view', {town: town.id, id: citizen_selected.id})) }}
+        {{ role_control_js('#citizen_base_selector', path('admin_town_manage_role', {id: citizen_selected.town.id}), path('admin_town_citizen_view', {town: town.id, id: citizen_selected.id})) }}
+        {{ point_control_js('#citizen_base_selector', path('admin_town_alter_pp', {id: citizen_selected.town.id}), path('admin_town_citizen_view', {town: town.id, id: citizen_selected.id})) }}
+        {{ profession_control_js('#citizen_base_selector', path('admin_modify_profession', {id: citizen_selected.town.id}), path('admin_town_citizen_view', {town: town.id, id: citizen_selected.id})) }}
+        {{ teleport_control_js('#citizen_base_selector', path('admin_teleport_citizen', {id: citizen_selected.town.id}), path('admin_town_citizen_view', {town: town.id, id: citizen_selected.id})) }}
+        {{ alias_control_js('#citizen_base_selector', path('admin_alias_citizen', {id: citizen_selected.town.id}), path('admin_town_citizen_view', {town: town.id, id: citizen_selected.id})) }}
+    {% endif %}
+    <script>
+        {% if citizen_selected.alive and is_granted('administrate', citizen_selected) %}
+            $.html.addEventListenerAll('[x-engage]', 'click', (e,elem) => {
+                $.ajax.easySend( elem.getAttribute('x-engage'), [],
+                    function () {
+                        $.ajax.load(null, '{{ path('admin_town_citizen_view', {town: town.id, id: citizen_selected.id}) }}', true);
+                    } )
+            });
+        {% endif %}
+
+        {% if is_granted("ROLE_CROW") %}
+            $.html.addEventListenerAll('[data-delete-subject]', 'click', (e,elem) => {
+                if (confirm('{{ 'Bestätigen?'|trans({},'global')|e('js') }}'))
+                    $.ajax.easySend( '{{ path('admin_users_citizen_remove_aspect', { 'id': citizen_selected.user.id }) }}', {'subject': elem.dataset.deleteSubject},
+                        function () {
+                            $.ajax.load(null, '{{ path('admin_town_citizen_view', {town: town.id, id: citizen_selected.id}) }}', true);
+                        } )
+            });
+        {% endif %}
+
+        {% if citizen_selected.alive %}
+            {% if is_granted('administrate', citizen_selected) %}
+                document.getElementById('x-headshot').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (confirm('{{ 'Das Leben dieses Bürgers sofort beenden?'|trans({},'admin') }}'))
+                        $.ajax.easySend( '{{ path('admin_users_citizen_headshot', { 'id': citizen_selected.user.id }) }}', [],
+                            function () {
+                                $.ajax.load(null, '{{ path('admin_town_citizen_view', {town: town.id, id: citizen_selected.id}) }}', true);
+                            } )
+                });
+            {% endif %}
+
+            {% if is_granted("ROLE_CROW") %}
+                document.getElementById('x-liver-eat')?.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (confirm('{{ 'Das Leben dieses Bürgers sofort beenden?'|trans({},'admin') }}'))
+                        $.ajax.easySend( '{{ path('admin_users_citizen_eat_liver', { 'id': citizen_selected.id }) }}', [],
+                            function () {
+                                $.ajax.load(null, '{{ path('admin_town_citizen_view', {town: town.id, id: citizen_selected.id}) }}', true);
+                            } )
+                });
+
+                document.getElementById('x-pm')?.addEventListener('click', function() {
+                    document.getElementById("forum-content").innerHTML = "";
+                    $.ajax.no_history().load( document.getElementById('forum-content'), '{{ path('admin_pm_editor_controller', {'type': 'pm'}) }}', false )
+                });
+            {% endif %}
+
+        {% endif %}
+
+    </script>
+{% endblock %}

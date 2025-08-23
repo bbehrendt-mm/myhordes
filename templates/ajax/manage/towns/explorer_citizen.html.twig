@@ -104,8 +104,8 @@
 								<img style="width: 16px" class="float-right" src="{{ asset("build/images/lang/" ~ citizen.user.language ~ ".png") }}" alt="{{ citizen.user.language }}" />
 							{% endif %}
 						</div>
-						{% include 'ajax/soul/playeravatar.html.twig' with {user: citizen.user, small: true, background: true, classes: ['cell','factor-0','rw-sm-0'], attributes: {style: 'flex-basis: 92px;', ('x-ajax-href'): url('admin_users_citizen_view', {id: citizen.user.id})}} only %}
-						<div class="cell factor-0 citizen-{{ citizen.alive ? (citizen.online ? 'online' : 'offline') : 'dead' }}" style="flex-basis: 8px;" x-ajax-href="{{ url('admin_users_citizen_view', {id: citizen.user.id}) }}">&nbsp;</div>
+						{% include 'ajax/soul/playeravatar.html.twig' with {user: citizen.user, small: true, background: true, classes: ['cell','factor-0','rw-sm-0'], attributes: {style: 'flex-basis: 92px;', ('x-ajax-href'): path('admin_town_citizen_view', {town: town.id, id: citizen.id})}} only %}
+						<div class="cell factor-0 citizen-{{ citizen.alive ? (citizen.online ? 'online' : 'offline') : 'dead' }}" style="flex-basis: 8px;" x-ajax-href="{{ path('admin_town_citizen_view', {town: town.id, id: citizen.id}) }}">&nbsp;</div>
 
 						<div class="padded cell rw-4 factor-1 small content-center-vertical citizen-box citizen-box-name">
 							{% if citizen.banished %}
@@ -126,7 +126,7 @@
 								<img alt="" src="{{ asset('build/images/professions/void.gif') }}" />
 							{% endif %}
 							<img alt="{{ citizen.profession.label|trans({},'game') }}" src="{{ asset('build/images/professions/' ~ citizen.profession.icon ~ '.gif') }}" />
-							<a class="link" href="{{ url('admin_users_citizen_view', {id: citizen.user.id}) }}">
+							<a class="link" href="#" x-ajax-href="{{ path('admin_town_citizen_view', {town: town.id, id: citizen.id}) }}">
 								<b class="citizen-name">{{ citizen.name }}</b>
                                 {% if citizen.alias and citizen.alias != citizen.user.name %}
                                     <b class="citizen-name">[<i>{{ citizen.user.name }}</i>]</b>

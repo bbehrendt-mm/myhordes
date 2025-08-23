@@ -22,12 +22,14 @@ use App\Entity\ComplaintReason;
 use App\Entity\DigTimer;
 use App\Entity\HeroicActionPrototype;
 use App\Entity\HeroSkillPrototype;
+use App\Entity\ItemPrototype;
 use App\Entity\Picto;
 use App\Entity\PictoComment;
 use App\Entity\PictoPrototype;
 use App\Entity\SpecialActionPrototype;
 use App\Entity\Town;
 use App\Entity\TownRankingProxy;
+use App\Entity\User;
 use App\Entity\ZombieEstimation;
 use App\Entity\Zone;
 use App\Enum\Configuration\CitizenProperties;
@@ -41,6 +43,7 @@ use App\Service\JSONRequestParser;
 use App\Service\TownHandler;
 use App\Service\ZoneHandler;
 use Exception;
+use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -455,7 +458,7 @@ class AdminTownCitizenController extends AdminActionController
      * @return Response
      */
     #[Route(path: 'api/manage/town/{id<\d+>}/home/manage', name: 'admin_town_manage_home')]
-    #[IsGranted('ROLE_SUB_ADMIN')]
+    #[IsGranted('cheat', 'town')]
     #[AdminLogProfile(enabled: true)]
     public function town_manage_home(Town $town, JSONRequestParser $parser): Response
     {
@@ -786,6 +789,65 @@ class AdminTownCitizenController extends AdminActionController
         }
 
         $this->clearTownCaches($town);
+        $this->entity_manager->flush();
+        return AjaxResponse::success();
+    }
+
+    #[Route(path: 'jx/manage/town/{town:citizen<\d+>}/citizen/{id:citizen<\d+>}', name: 'admin_town_citizen_view')]
+    #[IsGranted('spy', new Expression('args["citizen"].getTown()'))]
+    public function users_citizen_view(Citizen $citizen): Response
+    {
+        $pictoProtos = $this->entity_manager->getRepository(PictoPrototype::class)->findAll();
+        usort($pictoProtos, function ($a, $b) {
+            return strcmp($this->translator->trans($a->getLabel(), [], 'game'), $this->translator->trans($b->getLabel(), [], 'game'));
+        });
+
+        $itemPrototypes = $this->entity_manager->getRepository(ItemPrototype::class)->findAll();
+        usort($itemPrototypes, function ($a, $b) {
+            return strcmp($this->translator->trans($a->getLabel(), [], 'items'), $this->translator->trans($b->getLabel(), [], 'items'));
+        });
+
+        $citizenStati = $this->entity_manager->getRepository(CitizenStatus::class)->findAll();
+        usort($citizenStati, function ($a, $b) {
+            return strcmp($this->translator->trans($a->getLabel(), [], 'game'), $this->translator->trans($b->getLabel(), [], 'game'));
+        });
+
+        $disabled_profs = $citizen->getTown() ? $this->conf->getTownConfiguration($citizen->getTown())->get(TownSetting::DisabledJobs) : [];
+        $professions = array_filter($this->entity_manager->getRepository( CitizenProfession::class )->findSelectable(),
+            fn(CitizenProfession $p) => !in_array($p->getName(),$disabled_profs)
+        );
+
+        $citizenRoles = $this->entity_manager->getRepository(CitizenRole::class)->findAll();
+
+        return $this->render( 'ajax/manage/towns/citizen.html.twig', $this->addDefaultTwigArgs(null, [
+            'tab' => "citizens",
+            'town' => $citizen->getTown(),
+            'citizen_selected' => $citizen,
+            'home_upgrades' => $this->entity_manager->getRepository(CitizenHomeUpgradePrototype::class)->findAll(),
+            'itemPrototypes' => $itemPrototypes,
+            'pictoPrototypes' => $pictoProtos,
+            'citizenStati' => $citizenStati,
+            'citizenRoles' => $citizenRoles,
+            'citizenProfessions' => $professions
+        ]));
+    }
+
+    #[Route(path: 'api/manage/town/{town:citizen<\d+>}/citizen/{id:citizen<\d+>}/engage', name: 'admin_town_citizen_engage', defaults: ['on' => true])]
+    #[Route(path: 'api/manage/town/{town:citizen<\d+>}/citizen/{id:citizen<\d+>}/disengage', name: 'admin_town_citizen_disengage', defaults: ['on' => false])]
+    #[IsGranted('administrate', 'citizen')]
+    #[AdminLogProfile(enabled: true)]
+    public function users_update_engagement(Citizen $citizen, bool $on): Response
+    {
+        if (!$citizen->getAlive()) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
+
+        $active = $citizen->getUser()->getActiveCitizen();
+
+        $citizen->setActive( $on );
+        if ($on) $active?->setActive(false);
+
+        $this->entity_manager->persist( $citizen );
+        if ($on && $active) $this->entity_manager->persist( $active );
+
         $this->entity_manager->flush();
         return AjaxResponse::success();
     }

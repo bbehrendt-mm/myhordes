@@ -370,6 +370,7 @@ class CommonsController extends CustomAbstractCoreController
                 ...match(true) {
                     $capability->hasRole( $this->getUser(), 'ROLE_CROW' ) => self::getAdminActions(),
                     $capability->hasRole( $this->getUser(), 'ROLE_ELEVATED' ) => self::getCommunityActions(),
+                    default => [],
                 },
                 ...$this->permissionBasedActions()
             ])
