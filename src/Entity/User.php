@@ -885,10 +885,18 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
         $this->setRoleFlag( $this->getRoleFlag() | $roleFlag );
         return $this;
     }
+
     public function removeRoleFlag(int $roleFlag): self {
         $this->setRoleFlag( $this->getRoleFlag() & ~$roleFlag );
         return $this;
     }
+
+    public function toggleRoleFlag(int $roleFlag, bool $enabled): self {
+        if ($enabled) $this->addRoleFlag( $roleFlag );
+        else $this->removeRoleFlag( $roleFlag );
+        return $this;
+    }
+
     public function hasRoleFlag(int $roleFlag): bool {
         return ($this->getRoleFlag() & $roleFlag) === $roleFlag;
     }
