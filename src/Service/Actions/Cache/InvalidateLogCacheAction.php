@@ -13,9 +13,10 @@ readonly class InvalidateLogCacheAction
         private CalculateBlockTimeAction $block,
     ) { }
 
-    public function __invoke(TownLogEntry|\DateTimeInterface|Zone $source, int|Town|null $town = null): void
+    public function __invoke(TownLogEntry|\DateTimeInterface|Zone|Town $source, int|Town|null $town = null): void
     {
         if (is_a($source, Zone::class)) ($this->invalidate)("logs__z{$source->getId()}");
+        elseif (is_a($source, Town::class)) ($this->invalidate)("logs__t{$source->getId()}");
         else {
             $block = ($this->block)(is_a($source, TownLogEntry::class) ? $source->getTimestamp() : $source);
             $tid = is_a($source, TownLogEntry::class) ? $source->getTown()?->getId() : (
