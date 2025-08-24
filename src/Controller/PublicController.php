@@ -20,6 +20,7 @@ use App\Entity\UserSponsorship;
 use App\Enum\Configuration\MyHordesSetting;
 use App\Enum\DomainBlacklistType;
 use App\Exception\DynamicAjaxResetException;
+use App\Service\Actions\Cache\InvalidateLogCacheAction;
 use App\Service\ConfMaster;
 use App\Service\ErrorHelper;
 use App\Service\EternalTwinHandler;
@@ -496,7 +497,10 @@ class PublicController extends CustomAbstractController
      * @return Response
      */
     #[Route(path: 'jx/public/login/etwin/{code}', name: 'etwin_login')]
-    public function login_via_etwin(string $code, TranslatorInterface $translator, EternalTwinHandler $etwin, SessionInterface $session, UserHandler $userHandler): Response {
+    public function login_via_etwin(string $code,
+                                    TranslatorInterface $translator, EternalTwinHandler $etwin, SessionInterface $session,
+                                    UserHandler $userHandler, InvalidateLogCacheAction $logCacheAction
+    ): Response {
 
         $myhordes_user = $this->getUser();
         if ($myhordes_user && $myhordes_user->getEternalID())
@@ -535,7 +539,9 @@ class PublicController extends CustomAbstractController
                     if(!in_array($etu, $history))
                         $history[] = $etu;
                     $potential_user->setNameHistory(array_filter(array_unique($history)));
-                    $this->entity_manager->persist( $potential_user->setDisplayName( $potential_user->getUsername() === $etu ? null : $etu )->setLastNameChange(new DateTime()) );
+                    $potential_user->setDisplayName( $potential_user->getUsername() === $etu ? null : $etu )->setLastNameChange(new DateTime());
+                    $this->entity_manager->persist( $potential_user );
+                    foreach ($potential_user->getCitizens() as $c) $logCacheAction( $c->getTown() );
 
                     try {
                         $this->entity_manager->flush();
@@ -572,7 +578,9 @@ class PublicController extends CustomAbstractController
      */
     #[Route(path: 'api/public/etwin/confirm', name: 'api_etwin_confirm')]
     public function etwin_confirm_api(Request $request, JSONRequestParser $parser, SessionInterface $session, UserFactory $userFactory,
-                                      UserPasswordHasherInterface $pass, TranslatorInterface $trans, ConfMaster $conf, TranslatorInterface $translator, UserHandler $userHandler): Response {
+                                      UserPasswordHasherInterface $pass, TranslatorInterface $trans, ConfMaster $conf,
+                                      TranslatorInterface $translator, UserHandler $userHandler, InvalidateLogCacheAction $logCacheAction
+    ): Response {
 
         $myhordes_user = $this->getUser();
         $password = $parser->get('pass', null);
@@ -733,6 +741,7 @@ class PublicController extends CustomAbstractController
                     $history[] = $myhordes_user->getName();
                 $myhordes_user->setNameHistory(array_filter(array_unique($history)));
                 $myhordes_user->setDisplayName( $new_display_name );
+                foreach ($myhordes_user->getCitizens() as $c) $logCacheAction( $c->getTown() );
             }
 
             $this->entity_manager->persist($myhordes_user);

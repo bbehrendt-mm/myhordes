@@ -239,7 +239,7 @@ class LogController extends CustomAbstractCoreController
                 $cached = $this->gameCachePool->get($key, function (ItemInterface $item) use ($cache_ident, $next, $admin, $canHide, &$c, &$zone) {
                     $tid = $c->first()?->getTown()?->getId();
                     $item->expiresAfter(4320000)->tag([
-                                                          'logs', "logs_{$cache_ident}", "logs_{$cache_ident}__{$next->getTimestamp()}", "logs__{$next->getTimestamp()}", "logs__{$tid}__{$next->getTimestamp()}",
+                                                          'logs', "logs__t{$tid}", "logs_{$cache_ident}", "logs_{$cache_ident}__{$next->getTimestamp()}", "logs__{$next->getTimestamp()}", "logs__{$tid}__{$next->getTimestamp()}",
                                                           ...($zone ? ["logs__z{$zone->getId()}", "logs__z{$zone->getId()}__{$next->getTimestamp()}"] : [])
                                                       ]);
                     return $this->renderLogEntries($c, $canHide, $admin);
