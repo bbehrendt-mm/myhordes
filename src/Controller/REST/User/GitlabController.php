@@ -62,7 +62,9 @@ class GitlabController extends CustomAbstractCoreController
     #[Route(path: '', name: 'base', methods: ['GET'])]
     public function index(Packages $asset, ConfMaster $confMaster, UserHandler $handler): JsonResponse {
 
-        $blocked = !$this->getUser() || ($handler->isRestricted($this->getUser(), AccountRestriction::RestrictionReportToGitlab)) || $handler->isRestricted( $this->getUser(), AccountRestriction::RestrictionGameplay );
+        $blocked = !$this->getUser()
+            || ($handler->isRestricted($this->getUser(), AccountRestriction::RestrictionReportToGitlab))
+            || $handler->isRestricted( $this->getUser(), AccountRestriction::RestrictionGameplay );
 
         return new JsonResponse([
             'strings' => [
@@ -88,6 +90,7 @@ class GitlabController extends CustomAbstractCoreController
                     'error_400' => $this->translator->trans('Bitte prüfe deinen Bericht auf Vollständigkeit.', [], 'global'),
                     'error_407' => $this->translator->trans('Bei der Weiterleitung deines Fehlerberichts an GitLab ist ein Kommunkationsfehler aufgetreten. Bitte versuche es in einigen Augenblicken erneut.', [], 'global'),
                     'error_412' => $this->translator->trans('Dein Fehlerbericht konnte nicht weitergeleitet werden. Dieser MyHordes-Server ist nicht an eine GitLab-Instanz angeschlossen.', [], 'global'),
+                    'error_429' => $this->translator->trans('Du hast zu viele Meldungen in kurzer Zeit abgesendet. Du musst einen Augenblick warten, bevor du weitere Meldungen senden kannst.', [], 'global'),
                 ],
 
                 'fields' => [
@@ -110,6 +113,7 @@ class GitlabController extends CustomAbstractCoreController
 					'hint' => $this->translator->trans('Dieser Fehlerbericht enthält Informationen, die ich nicht öffentlich teilen möchte; er sollte nur vertrauenswürdigen Entwicklern zugänglich sein.', [], 'global'),
 					'public' => $this->translator->trans('Dieser Fehlerbericht wird öffentlich zugänglich sein', [], 'global'),
 					'private' => $this->translator->trans('Dieser Fehlerbericht wird nur für vertrauenswürdige Entwickler zugänglich sein', [], 'global'),
+                    'force_private' => $this->getUser()->getSoulPoints() < 100
 				],
             ],
 			'icons' => [
@@ -141,11 +145,14 @@ class GitlabController extends CustomAbstractCoreController
         if ( !$this->isGranted('ROLE_ELEVATED') && !$rateLimiter->reportLimiter($this->getUser())->create( $this->getUser()->getId() )->consume( 2 )->isAccepted())
             return new JsonResponse([], Response::HTTP_TOO_MANY_REQUESTS);
 
+        if ( !$this->isGranted('ROLE_ELEVATED') && !$rateLimiter->reportToGitlab->create( $this->getUser()->getId() )->consume()->isAccepted())
+            return new JsonResponse([], Response::HTTP_TOO_MANY_REQUESTS);
+
         if (!$this->validateConfig( $confMaster )) return new JsonResponse([], Response::HTTP_PRECONDITION_FAILED);
 
         $title = $parser->trimmed('issue_title', null);
         $desc  = $parser->trimmed('issue_details', null);
-		$confidential = $parser->get_int('issue_confidential', 1);
+		$confidential = $this->getUser()->getSoulPoints() < 100 || $parser->get_int('issue_confidential', 1);
 
         if (!$title || !$desc)
             return new JsonResponse([], Response::HTTP_BAD_REQUEST);

@@ -67,6 +67,8 @@ readonly class GitlabMessageHandler
             $paths[$storage_name] = [$filename, $extension];
         }
 
+        $description = substr( $message->description, 0, 62144 );
+
         try {
             $md = array_filter( array_map( function( $file, $data ) use ($client, $project, &$images, &$downloads) {
                 [$name, $extension] = $data;
@@ -89,7 +91,7 @@ readonly class GitlabMessageHandler
             $attachments = (empty($md) ? '' : ("\n### Attachments:\n" .  implode( "\n", $md )));
 
             ['iid' => $issue_id] = $client->issues()->create( $project, [
-                'description'   => $message->description . $info_table . $proxy_table . $attachments,
+                'description'   => $description . $info_table . $proxy_table . $attachments,
                 'issue_type'    => $message->issue_type,
                 'confidential'  => $message->confidential,
                 'title'         => $message->title,
@@ -102,7 +104,7 @@ readonly class GitlabMessageHandler
             user: $message->owner,
             issue_id: $issue_id,
             title:    mb_substr("[#$issue_id] $message->title", 0, 64),
-            body:     $message->description,
+            body:     $description,
             template: 'gitlab_new_issue',
             images: $images,
             attachments: $downloads,

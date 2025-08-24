@@ -262,11 +262,11 @@ export default class HTML {
     }
 
     private nextPopup():void {
-        let elem_modal    = document.getElementById('modal');
-        let elem_title    = document.getElementById('modal-title');
-        let elem_content  = document.getElementById('modal-content');
-        let elem_backdrop = document.getElementById('modal-backdrop');
-        let elem_actions  = document.getElementById('modal-actions');
+        let elem_modal    = document.querySelector('#modal-backdrop #modal');
+        let elem_title    = document.querySelector('#modal-backdrop #modal-title');
+        let elem_content  = document.querySelector('#modal-backdrop #modal-content');
+        let elem_backdrop = document.querySelector('#modal-backdrop');
+        let elem_actions  = document.querySelector('#modal-backdrop #modal-actions');
 
         elem_title.innerHTML = elem_content.innerHTML = elem_actions.innerHTML = elem_modal.className = '' ;
 
