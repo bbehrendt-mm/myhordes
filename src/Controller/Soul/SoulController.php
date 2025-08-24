@@ -44,6 +44,7 @@ use App\Enum\StatisticType;
 use App\Enum\UserSetting;
 use App\Exception\DynamicAjaxResetException;
 use App\Response\AjaxResponse;
+use App\Service\Actions\Cache\InvalidateLogCacheAction;
 use App\Service\Actions\Cache\InvalidateTagsInAllPoolsAction;
 use App\Service\ConfMaster;
 use App\Service\CrowService;
@@ -733,7 +734,7 @@ class SoulController extends CustomAbstractController
      * @return Response
      */
     #[Route(path: 'jx/soul/settings', name: 'soul_settings')]
-    public function soul_settings(EternalTwinHandler $etwin, Request $request): Response
+    public function soul_settings(EternalTwinHandler $etwin, Request $request, InvalidateLogCacheAction $logCacheAction): Response
     {
         $user = $this->getUser();
 
@@ -760,7 +761,9 @@ class SoulController extends CustomAbstractController
                 if(!in_array($etu, $history))
                     $history[] = $etu;
                 $user->setNameHistory(array_filter(array_unique($history)));
-                $this->entity_manager->persist( $user->setDisplayName( $user->getUsername() === $etu ? null : $etu )->setLastNameChange(new DateTime()) );
+                $user->setDisplayName( $user->getUsername() === $etu ? null : $etu )->setLastNameChange(new DateTime());
+                $this->entity_manager->persist( $user );
+                foreach ($user->getCitizens() as $c) $logCacheAction( $c->getTown() );
 
                 try {
                     $this->entity_manager->flush();
@@ -826,7 +829,7 @@ class SoulController extends CustomAbstractController
      * @return Response
      */
     #[Route(path: 'api/soul/settings/header', name: 'api_soul_header')]
-    public function soul_set_header(JSONRequestParser $parser, HTMLService $html): Response {
+    public function soul_set_header(JSONRequestParser $parser, HTMLService $html, InvalidateLogCacheAction $logCacheAction): Response {
         $user = $this->getUser();
 
         $title = $parser->get_int('title', -1);
@@ -927,6 +930,7 @@ class SoulController extends CustomAbstractController
                 $user->setDisplayName($displayName);
             }
 
+            foreach ($user->getCitizens() as $c) $logCacheAction( $c->getTown() );
             $user->setLastNameChange(new DateTime());
         }
 
