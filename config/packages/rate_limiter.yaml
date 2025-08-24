@@ -36,3 +36,7 @@ framework:
       policy: 'fixed_window'
       limit: 2
       interval: '60 hours'
+    report_to_gitlab:
+      policy: 'fixed_window'
+      limit: 2
+      interval: '6 hours'

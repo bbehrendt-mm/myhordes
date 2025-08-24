@@ -136,6 +136,7 @@ const ReportIssueDialog = (props: {
                     case 400: $.html.error( index.strings.errors.error_400 ); break;
                     case 407: $.html.error( index.strings.errors.error_407 ); break;
                     case 412: $.html.error( index.strings.errors.error_412 ); break;
+                    case 429: cancelDialog(); $.html.error( index.strings.errors.error_429 ); break;
                     default:
                         console.log(error);
                         $.html.error( c.errors['com'] )
@@ -155,7 +156,10 @@ const ReportIssueDialog = (props: {
             if (s.strings.redirect) {
                 window.open(s.strings.redirect, '_blank');
                 cancelDialog();
-            } else setIndex(s)
+            } else {
+                setIndex(s);
+                setIsConfidential(s.strings.confidential.force_private)
+            }
         } );
     }, [open]);
 
@@ -373,22 +377,24 @@ const ReportIssueDialog = (props: {
                                 </div>
                             </div>)}
                         </div>}
-                        <div className="p small">
-                            <span>{index.strings.confidential.title}</span><br/>
+                        { !index.strings.confidential.force_private && <>
+                            <div className="p small">
+                                <span>{index.strings.confidential.title}</span><br/>
 
-                            <div className="row-flex gap-x">
-                                <div className="cell grow-0">
-                                    <input type="checkbox" name="issue_confidential" value="1"
-                                           checked={isConfidential}
-                                           onChange={(e) => setIsConfidential(e.target.checked)} />
+                                <div className="row-flex gap-x">
+                                    <div className="cell grow-0">
+                                        <input type="checkbox" name="issue_confidential" value="1"
+                                               checked={isConfidential}
+                                               onChange={(e) => setIsConfidential(e.target.checked)} />
+                                    </div>
+                                    <div className="cell grow-1">
+                                        {index.strings.confidential.hint}
+                                    </div>
                                 </div>
-                                <div className="cell grow-1">
-                                    {index.strings.confidential.hint}
-                                </div>
+
                             </div>
-
-                        </div>
-						<hr />
+                            <hr />
+                        </> }
 						<p
 							className={isConfidential ? 'small' : 'critical'}
 							style={{ marginBottom: '0.5em', display: 'flex', alignItems: 'center' }}
