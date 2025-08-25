@@ -262,11 +262,11 @@ export default class HTML {
     }
 
     private nextPopup():void {
-        let elem_modal    = document.querySelector('#modal-backdrop #modal');
-        let elem_title    = document.querySelector('#modal-backdrop #modal-title');
-        let elem_content  = document.querySelector('#modal-backdrop #modal-content');
-        let elem_backdrop = document.querySelector('#modal-backdrop');
-        let elem_actions  = document.querySelector('#modal-backdrop #modal-actions');
+        let elem_modal    = document.querySelector('#modal-backdrop #modal') as HTMLElement;
+        let elem_title    = document.querySelector('#modal-backdrop #modal-title') as HTMLElement;
+        let elem_content  = document.querySelector('#modal-backdrop #modal-content') as HTMLElement;
+        let elem_backdrop = document.querySelector('#modal-backdrop') as HTMLElement;
+        let elem_actions  = document.querySelector('#modal-backdrop #modal-actions') as HTMLElement;
 
         elem_title.innerHTML = elem_content.innerHTML = elem_actions.innerHTML = elem_modal.className = '' ;
 
