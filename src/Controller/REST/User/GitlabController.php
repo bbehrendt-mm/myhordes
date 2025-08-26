@@ -113,7 +113,7 @@ class GitlabController extends CustomAbstractCoreController
 					'hint' => $this->translator->trans('Dieser Fehlerbericht enthält Informationen, die ich nicht öffentlich teilen möchte; er sollte nur vertrauenswürdigen Entwicklern zugänglich sein.', [], 'global'),
 					'public' => $this->translator->trans('Dieser Fehlerbericht wird öffentlich zugänglich sein', [], 'global'),
 					'private' => $this->translator->trans('Dieser Fehlerbericht wird nur für vertrauenswürdige Entwickler zugänglich sein', [], 'global'),
-                    'force_private' => $this->getUser()->getSoulPoints() < 100
+                    'force_private' => ($this->getUser()?->getSoulPoints() ?? 0) < 100
 				],
             ],
 			'icons' => [
