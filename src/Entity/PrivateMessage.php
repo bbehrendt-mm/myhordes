@@ -43,8 +43,8 @@ class PrivateMessage
     #[ORM\ManyToOne(targetEntity: Citizen::class)]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private $recipient;
-    #[ORM\Column(type: 'array', nullable: true)]
-    private $items = [];
+    #[ORM\Column(type: 'json', nullable: true)]
+    private array $items = [];
     #[ORM\Column(type: 'integer')]
     private $template = 0;
     #[ORM\Column(type: 'integer', nullable: true)]

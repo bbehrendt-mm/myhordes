@@ -65,7 +65,7 @@ class Town
     private $gazettes;
     #[ORM\OneToOne(targetEntity: 'App\Entity\Forum', mappedBy: 'town', cascade: ['persist', 'remove'])]
     private ?Forum $forum = null;
-    #[ORM\Column(type: 'array', nullable: true)]
+    #[ORM\Column(type: 'json', nullable: true)]
     private array $conf = [];
     #[ORM\Column(type: 'integer')]
     private int $soulDefense = 0;

@@ -47,8 +47,8 @@ class LogEntryTemplate
     private $class;
     #[ORM\Column(type: 'integer', nullable: true)]
     private $secondaryType;
-    #[ORM\Column(type: 'array', nullable: true)]
-    private $variableTypes = [];
+    #[ORM\Column(type: 'json', nullable: true)]
+    private array $variableTypes = [];
     #[ORM\Column(type: 'string', length: 128)]
     private $name;
     #[ORM\Column(type: 'boolean')]

@@ -151,7 +151,7 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     private ?Award $activeIcon = null;
 
-    #[ORM\Column(type: 'array', nullable: true)]
+    #[ORM\Column(type: 'json', nullable: true)]
     private ?array $nameHistory = [];
 
     #[ORM\Column(type: 'date', nullable: true)]

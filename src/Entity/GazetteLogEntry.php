@@ -16,8 +16,8 @@ class GazetteLogEntry
     #[ORM\ManyToOne(targetEntity: 'App\Entity\Gazette', inversedBy: '_log_entries')]
     #[ORM\JoinColumn(nullable: false)]
     private $gazette;
-    #[ORM\Column(type: 'array', nullable: true)]
-    private $variables = [];
+    #[ORM\Column(type: 'json', nullable: true)]
+    private array $variables = [];
     #[ORM\ManyToOne(targetEntity: GazetteEntryTemplate::class)]
     #[ORM\JoinColumn(nullable: true, onDelete: 'CASCADE')]
     private $template;
