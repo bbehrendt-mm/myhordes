@@ -426,15 +426,20 @@ class UserHandler
 	 * @param bool $disable_preg If we should match the username against the pattern /[^\p{L}\w]/u
      * @return bool The validity of the username
      */
-    public function isNameValid(string $name, ?bool &$too_long = null, int $custom_length = 16, bool $disable_preg = false): bool {
-		// Define banned starting display name
+    public function isNameValid(string $name, ?bool &$too_long = null, int $custom_length = 16, bool $disable_preg = false, ?array &$debug = null): bool {
+		$debug ??= [];
+
+        // Define banned starting display name
         $invalidNameStarters = [
             'Corvus', 'Corbilla', '_'
         ];
 
 		// If wanted name starts with a banned starter
         foreach ($invalidNameStarters as $starter)
-            if (str_starts_with($name, $starter)) return false;
+            if (str_starts_with($name, $starter)) {
+                $debug['rule:starts_with'] = $starter;
+                return false;
+            }
 
 		//Define static forbidden names
         $invalidNames = [
@@ -456,26 +461,33 @@ class UserHandler
 		// We save [distance, match]
         $closestDistance = [PHP_INT_MAX, ''];
 
+        $debug['rule:matches'] = [];
         foreach ([...$invalidNames,...$additional_names] as $invalidName) {
 			// Remove wildcard chars from the banned name
             $base = str_replace(["'", '*', '?', '[', ']', '!'], '', $invalidName);
 
 			// Match wildcardly
             if (fnmatch(strtolower($invalidName), strtolower($name))) {
-				$closestDistance = [0, $base];
+                $closestDistance = $debug['rule:matches'][] = [0, $base];
 			} else {
                 // Calculate the levenshtein distance
                 $levenshtein = levenshtein(strtolower($name), strtolower($base));
-                if ($levenshtein < $closestDistance[0]) {
+                $temp = [$levenshtein, $base];
+
+                $levenshtein_max = mb_strlen( $temp[1] ) <= 5 ? 1 : 2;
+                if ($levenshtein <= $levenshtein_max) $debug['rule:matches'][] = [$levenshtein, $base];
+                if ($levenshtein < $closestDistance[0])
                     $closestDistance = [$levenshtein, $base];
-                }
             }
         }
 
 		$levenshtein_max = mb_strlen( $closestDistance[1] ) <= 5 ? 1 : 2;
 
-        $too_long = mb_strlen($name) > $custom_length;
-        return ($disable_preg || !preg_match('/[^\p{LC}]/u', $name)) && mb_strlen($name) >= 3 && !$too_long && $closestDistance[0] > $levenshtein_max;
+        $debug['rule:length'] = $too_long = mb_strlen($name) > $custom_length;
+        $matches = [];
+        $preg_ok = $disable_preg || !preg_match('/[^\p{LC}_\p{N}]/u', $name, $matches);
+        $debug['rule:preg'] = $matches;
+        return $preg_ok && mb_strlen($name) >= 3 && !$too_long && $closestDistance[0] > $levenshtein_max;
     }
 
 	public function isEmailValid(string $mail): bool {
