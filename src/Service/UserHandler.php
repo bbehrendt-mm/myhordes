@@ -485,8 +485,8 @@ class UserHandler
 
         $debug['rule:length'] = $too_long = mb_strlen($name) > $custom_length;
         $matches = [];
-        $preg_ok = $disable_preg || !preg_match('/[^\p{LC}_\p{N}]/u', $name, $matches);
-        $debug['rule:preg'] = $matches;
+        $preg_ok = $disable_preg || !preg_match_all('/[^\p{LC}_\p{N}]/u', $name, $matches);
+        $debug['rule:preg'] = array_unique($matches[0]);
         return $preg_ok && mb_strlen($name) >= 3 && !$too_long && $closestDistance[0] > $levenshtein_max;
     }
 
