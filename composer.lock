@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6c5aa80ffff049ecd6d8250efe713e0b",
+    "content-hash": "cd7d8f6fb56dfe249882ca0e1d105b45",
     "packages": [
         {
             "name": "adbario/php-dot-notation",
@@ -2862,7 +2862,7 @@
         },
         {
             "name": "myhordes/fixtures",
-            "version": "dev-v5/master",
+            "version": "dev-v5/symfony-7.3",
             "dist": {
                 "type": "path",
                 "url": "packages/myhordes-fixtures",
@@ -2900,7 +2900,7 @@
         },
         {
             "name": "myhordes/plugins",
-            "version": "dev-v5/master",
+            "version": "dev-v5/symfony-7.3",
             "dist": {
                 "type": "path",
                 "url": "packages/myhordes-plugins",
@@ -14288,7 +14288,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=8.3",
+        "php": ">=8.4",
         "ext-ctype": "*",
         "ext-curl": "*",
         "ext-dom": "*",
