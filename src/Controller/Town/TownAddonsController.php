@@ -44,6 +44,7 @@ use App\Service\TownHandler;
 use App\Structures\ItemRequest;
 use App\Structures\TownConf;
 use ArrayHelpers\Arr;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Psr\Container\ContainerExceptionInterface;
@@ -74,23 +75,25 @@ class TownAddonsController extends TownController
         $town = $this->getActiveCitizen()->getTown();
 
         $buildings = [];
-        $max_votes = 0;
-        $total_votes = 0;
-        foreach ($town->getBuildings() as $b) if ($b->getComplete()) {
+        $vote_list = [0,0];
+        foreach ($town->getBuildings()->matching(
+            new Criteria()->where(Criteria::expr()->eq('complete', true))
+        ) as $b) {
             if ($b->getPrototype()->getMaxLevel() > 0)
                 $buildings[] = $b;
-            $max_votes = max($max_votes, $b->getDailyUpgradeVotes()->count());
-            $total_votes += $b->getDailyUpgradeVotes()->count();
+            $vote_list[] = $b->getDailyUpgradeVotes()->count();
         }
 
+        rsort($vote_list);
         if (empty($buildings)) return $this->redirect( $this->generateUrl('town_dashboard') );
 
         return $this->render( 'ajax/game/town/upgrades.html.twig', $this->addDefaultTwigArgs('upgrade', [
             'buildings' => $buildings,
-            'max_votes' => $max_votes,
-            'total_votes' => $total_votes,
+            'vote_list' => $vote_list,
+            'total_votes' => array_sum( $vote_list ),
             'vote' => $this->getActiveCitizen()->getDailyUpgradeVote() ? $this->getActiveCitizen()->getDailyUpgradeVote()->getBuilding() : null,
-            'is_devastated' => $town->getDevastated()
+            'is_devastated' => $town->getDevastated(),
+            'pyre' => $this->town_handler->getBuilding( $town, 'small_pyre_#00', true )
         ]) );
     }
 

@@ -472,9 +472,16 @@ class NightlyHandler
     private function stage2_building_effects(Town $town) {
         $this->log->info('<info>Processing building functions</info> ...');
 
-        if (!$town->getDevastated()) {
+        $upgrades = 1;
+        if ($this->town_handler->getBuilding($town, 'small_pyre_#00', true))
+            $upgrades++;
+
+        $done = [];
+
+        if (!$town->getDevastated()) for ($i = 0; $i < $upgrades; $i++) {
             $buildings = []; $max_votes = -1;
-            foreach ($town->getBuildings() as $b) if ($b->getComplete())
+            foreach ($town->getBuildings() as $b) if ($b->getComplete()) {
+                if (in_array($b->getId(), $done)) continue;
                 if ($b->getPrototype()->getMaxLevel() > 0 && $b->getPrototype()->getMaxLevel() > $b->getLevel()) {
                     $v = $b->getDailyUpgradeVotes()->count();
                     $this->log->debug("<info>{$v}</info> citizens voted for <info>{$b->getPrototype()->getLabel()}</info>.");
@@ -483,11 +490,14 @@ class NightlyHandler
                         $max_votes = $v;
                     } elseif ($v === $max_votes) $buildings[] = $b;
                 }
+            }
 
+            if ($max_votes <= 0) break;
 
-            if (!empty($buildings) && $max_votes > 0) {
+            if (!empty($buildings)) {
                 /** @var Building $target_building */
                 $this->upgraded_building = $target_building = $this->random->pick( $buildings );
+                $done[] = $target_building->getId();
                 $target_building->setLevel( $target_building->getLevel() + 1 );
                 $this->log->debug("Increasing level of <info>{$target_building->getPrototype()->getLabel()}</info> to Level <info>{$target_building->getLevel()}</info>.");
                 $this->events->buildingUpgrade( $target_building, true );

@@ -417,7 +417,7 @@ class Town
 
     public function getBuilding(BuildingPrototype $prototype): ?Building
     {
-        return $this->buildings->matching( (new Criteria())
+        return $this->buildings->matching( new Criteria()
             ->where( new Comparison( 'prototype', Comparison::EQ, $prototype )  )
         )->first() ?: null;
     }

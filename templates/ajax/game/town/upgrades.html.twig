@@ -13,6 +13,11 @@
         <br />
         <p>{{ help_lnk('Gebäudeverbesserung'|trans({},'help'), 'help', {'name': 'daily_upgrades'}) }}</p>
     </div>
+    {% if pyre %}
+        <div class="help">
+            {{ 'In der Stadt brennt ein *Opferfeuer*! Durch die mystische Kraft des Feuers motiviert, werden die Bürger der Stadt diese Nacht in der Lage sein, eine zweite Verbesserung des Tages durchzuführen!'|trans({},'help')|raw }}
+        </div>
+    {% endif %}
 
     {% if banished %}
     <div class="note note-warning">
@@ -80,8 +85,11 @@
                         </div>
                     {% elseif building.level < building.prototype.maxLevel %}
                         {% trans from 'game' %}Stimmen:{% endtrans %} {{ building.dailyUpgradeVotes|length }}
-                        {% if building.dailyUpgradeVotes|length == max_votes %}
+                        {% if vote_list[0] > 0 and building.dailyUpgradeVotes|length == vote_list[0] %}
                             <div class="float-right"><img alt="!" src="{{ asset('build/images/icons/star.gif') }}" /></div>
+                        {% endif %}
+                        {% if vote_list[1] > 0 and pyre and building.dailyUpgradeVotes|length == vote_list[1] %}
+                            <div class="float-right"><img alt="!" src="{{ asset('build/images/building/small_pyre.gif') }}" /></div>
                         {% endif %}
                         <div class="vote-bar">
                             <div class="vote-progress" style="width: {{building.dailyUpgradeVotes|length / total_votes * 100}}%;"></div>
