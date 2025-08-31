@@ -29,7 +29,7 @@ class BuildingConstructionResourceSet
     #[ORM\Column]
     private int $ap = 0;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(cascade: ['persist','remove'])]
     private ?ItemGroup $resources = null;
 
     public function getBuilding(): ?BuildingPrototype

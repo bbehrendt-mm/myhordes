@@ -170,13 +170,13 @@ class AdminTownBuildingsController extends AdminActionController
 
         $ap = intval($parser->get("ap"));
 
-        if ($ap >= $building->getPrototype()->getAp()) {
-            $ap = $building->getPrototype()->getAp();
+        if ($ap >= $building->getPrototypeAP()) {
+            $ap = $building->getPrototypeAP();
         }
 
         $building->setAp($ap);
 
-        if ($building->getAp() >= $building->getPrototype()->getAp())
+        if ($building->getAp() >= $building->getPrototypeAP())
             $events->buildingConstruction( $building, 'debug' );
         elseif ($building->getAp() <= 0) {
             $events->buildingDestruction($building, 'debug', false);

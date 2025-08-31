@@ -2,6 +2,7 @@
 
 namespace MyHordes\Fixtures\Service;
 
+use App\Enum\Game\BuildingResourceSetType;
 use MyHordes\Fixtures\DTO\Buildings\BuildingPrototypeDataContainer;
 use MyHordes\Plugins\Interfaces\FixtureProcessorInterface;
 
@@ -995,11 +996,38 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->isTemporary(0)->defense(0)->ap(20)->health(20)->blueprintLevel(2)->resources(["meca_parts_#00" => 1,"wood_beam_#00" => 1,"wood2_#00" => 5,"rustine_#00" => 3,"wire_#00" => 5,"diode_#00" => 4,])->orderBy(1)->commit();
 
         $container->add()
+            ->icon('item_soul_blue_static')->label('Seelenreinigungsquelle')->description('Ein Ort der Entspannung, der sich hervorragend für die Überführung von Seelen in die ewige Ruhe eignet.')
+            ->isTemporary(0)->defense(20)->ap(30)->health(30)->blueprintLevel(0)->resources(["metal_#00" => 1,"rustine_#00" => 1,"ryebag_#00" => 2,"lens_#00" => 1,"oilcan_#00" => 1,])->orderBy(5)
+            ->voteLevel(3)->baseVoteText('Du kannst jetzt die Seelen deiner verstorbenen Mitbürger reinigen, um ein wenig zusätzliche Verteidigung zu erhalten.')
+            ->upgradeTexts([
+                               'Jede gereinigte Seele bringt der Stadt etwas mehr Verteidigung.',
+                               'Zusätzlich zum vorherigen Effekt sinkt der Einfluss gequälter Seelen auf den Angriff leicht ab.',
+                               'Zusätzlich zum vorherigen Effekt wird der Verteidigungsbonus gereinigter Seelen weiter erhöht, und jede gereinigte Seele bringt zwei zusätzliche Ranking-Punkte für die Stadt ein.',
+                           ])
+            ->commit($item_soul_blue_static);
+
+        $container->add()->parentBuilding($item_soul_blue_static)
             ->icon('small_spa4souls')->label('Sanktuarium')->description('Auch wenn dir das Spirituelle ein wenig über den Kopf wächst - ein Raum, der dem Wohlbefinden und der Entspannung gewidmet ist, hilft dir, dich weniger um die kommenden Tage zu sorgen. Nun... wenn du denn Zeit hättest, es zu besuchen.')
-            ->isTemporary(0)->defense(0)->ap(20)->health(20)->blueprintLevel(0)->resources(["wood2_#00" => 2,"wood_beam_#00" => 3,"ryebag_#00" => 1,])->orderBy(5)
+            ->isTemporary(0)->defense(0)->ap(20)->health(20)->blueprintLevel(0)->resources(["wood2_#00" => 2,"wood_beam_#00" => 3,"ryebag_#00" => 1,])->orderBy(0)
             ->commit($small_spa4souls);
 
-        $container->add()->parentBuilding($small_spa4souls)
+        $container->add()->parentBuilding($item_soul_blue_static)
+            ->icon('small_pyre')->label('Opferfeuer')->description('Dieses zeremonielle Feuer verteilt neben einer ganzen Menge Rauch auch eine mystische Kraft über der Stadt - wenn es brennt, kann die Stadt zwei Verbesserungen des Tages ausführen.')
+            ->isTemporary(1)->defense(0)->health(20)->blueprintLevel(0)
+            ->resourceSet(BuildingResourceSetType::Default, 0, 0, 10, ["soul_red_#00" =>  1,"trestle_#00" => 1,"wood2_#00" => 3,'torch_#00' =>  1])
+            ->resourceSet(BuildingResourceSetType::Default, 0, 1, 10, ["soul_red_#00" =>  2,"trestle_#00" => 1,"wood2_#00" => 3,'torch_#00' =>  2])
+            ->resourceSet(BuildingResourceSetType::Default, 0, 2, 10, ["soul_red_#00" =>  3,"trestle_#00" => 1,"wood2_#00" => 3,'torch_#00' =>  3])
+            ->resourceSet(BuildingResourceSetType::Default, 0, 3, 10, ["soul_red_#00" =>  4,"trestle_#00" => 1,"wood2_#00" => 3,'torch_#00' =>  4])
+            ->resourceSet(BuildingResourceSetType::Default, 0, 4, 10, ["soul_red_#00" =>  5,"trestle_#00" => 1,"wood2_#00" => 3,'torch_#00' =>  5])
+            ->resourceSet(BuildingResourceSetType::Default, 0, 5, 10, ["soul_red_#00" =>  6,"trestle_#00" => 1,"wood2_#00" => 3,'torch_#00' =>  6])
+            ->resourceSet(BuildingResourceSetType::Default, 0, 6, 10, ["soul_red_#00" =>  7,"trestle_#00" => 1,"wood2_#00" => 3,'torch_#00' =>  7])
+            ->resourceSet(BuildingResourceSetType::Default, 0, 7, 10, ["soul_red_#00" =>  8,"trestle_#00" => 1,"wood2_#00" => 3,'torch_#00' =>  8])
+            ->resourceSet(BuildingResourceSetType::Default, 0, 8, 10, ["soul_red_#00" =>  9,"trestle_#00" => 1,"wood2_#00" => 3,'torch_#00' =>  9])
+            ->resourceSet(BuildingResourceSetType::Default, 0, 9, 10, ["soul_red_#00" => 10,"trestle_#00" => 1,"wood2_#00" => 3,'torch_#00' => 10])
+            ->orderBy(1)
+            ->commit();
+
+        $container->add()->parentBuilding($item_soul_blue_static)
             ->icon('small_cemetery')->label('Kleiner Friedhof')->description('Bringt eure Toten! Denn diesmal werden sie sich noch als nützlich erweisen. Macht das beste aus ihnen und verbessert damit gemeinsam eure Verteidigung. Jeder zum Friedhof gebrachte tote Mitbürger bringt +10 Verteidigungspunkte für die Gesamtverteidigung der Stadt. Hinweis: Es spielt keine Rolle, wo und woran ein Mitbürger verstarb.')
             ->isTemporary(0)->defense(0)->ap(42)->health(42)->blueprintLevel(2)->resources(["meca_parts_#00" => 1,"wood2_#00" => 10,])->orderBy(2)->commit($small_cemetery);
 
@@ -1007,7 +1035,7 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->icon('small_coffin')->label('Sarg-Katapult')->description('Von 2 Toten hat derjenige, der sich bewegt, die besten Chancen, dich zu verspeisen. Trickst eure Feinde aus, indem ihr eure Leichen in die herankommende Zombiehorde schleudert. Jeder Tote bringt +20 anstelle von +10 Verteidigungspunkten.')
             ->isTemporary(0)->defense(0)->ap(85)->health(85)->blueprintLevel(3)->resources(["courroie_#00" => 1,"concrete_wall_#00" => 2,"wire_#00" => 2,"meca_parts_#00" => 3,"wood2_#00" => 5,"metal_#00" => 15,])->orderBy(0)->commit();
 
-        $container->add()->parentBuilding($small_spa4souls)
+        $container->add()->parentBuilding($item_soul_blue_static)
             ->icon('small_infirmary')->label('Krankenstation')->description('Egal ob kleines Wehwehchen oder irreparables Trauma - die Krankenstation empfängt dich mit offenen Armen. Zumindst solange du noch imstande bist, dich selbst zu verarzten, denn diese Einrichtung kommt ganz ohne medizinisches Personal daher.')
             ->isTemporary(0)->defense(0)
             ->ap(40)->health(40)->resources(["pharma_#00" => 6,"disinfect_#00" => 1,"wood_beam_#00" => 5,"metal_beam_#00" => 5,])
@@ -1017,24 +1045,12 @@ class BuildingDataService implements FixtureProcessorInterface {
             )
             ->blueprintLevel(3)->orderBy(3)->commit();
 
-
-        $container->add()->parentBuilding($small_spa4souls)
-            ->icon('item_soul_blue_static')->label('Seelenreinigungsquelle')->description('Ein Ort der Entspannung, der sich hervorragend für die Überführung von Seelen in die ewige Ruhe eignet.')
-            ->isTemporary(0)->defense(20)->ap(30)->health(30)->blueprintLevel(0)->resources(["metal_#00" => 1,"rustine_#00" => 1,"ryebag_#00" => 2,"lens_#00" => 1,"oilcan_#00" => 1,])->orderBy(0)
-            ->voteLevel(3)->baseVoteText('Du kannst jetzt die Seelen deiner verstorbenen Mitbürger reinigen, um ein wenig zusätzliche Verteidigung zu erhalten.')
-            ->upgradeTexts([
-                               'Jede gereinigte Seele bringt der Stadt etwas mehr Verteidigung.',
-                               'Zusätzlich zum vorherigen Effekt sinkt der Einfluss gequälter Seelen auf den Angriff leicht ab.',
-                               'Zusätzlich zum vorherigen Effekt wird der Verteidigungsbonus gereinigter Seelen weiter erhöht, und jede gereinigte Seele bringt zwei zusätzliche Ranking-Punkte für die Stadt ein.',
-                           ])
-            ->commit($item_soul_blue_static);
-
-        $container->add()->parentBuilding($small_spa4souls)
+        $container->add()->parentBuilding($item_soul_blue_static)
             ->icon('small_pool')->label('Pool')->description('Ein großer Pool, der nur für euer Wohlbefinden eingerichtet ist. Wenn man nicht auf seine Mitbürger achtet, die panisch um einen herumlaufen, könnte man den Angriff heute Abend glatt vergessen.')
             ->isTemporary(0)->defense(0)->ap(150)->blueprintLevel(4)->resources(["wood2_#00" => 18,"plate_#00" => 2,"metal_beam_#00" => 1,"water_#00" => 20,"meca_parts_#00" => 2,"tube_#00" => 1,"ryebag_#00" => 2,])->orderBy(1)
             ->commit();
 
-        $container->add()->parentBuilding($small_spa4souls)
+        $container->add()->parentBuilding($item_soul_blue_static)
             ->icon('small_thermal')->label('Blaugoldige Thermalbäder')->description('Die kolossale Menge an Wasser, die für den Bau dieses Gebäudes verbraucht wurde, kann nicht mehr konsumiert oder gegen Zombies eingesetzt werden. Während du dich fragst, was dich dazu gebracht hat, eine so kostbare Ressource zu verschwenden, bemerkst du die in goldenen Buchstaben eingravierte Inschrift auf dem Eingangsbogen: "Non est certamen". Dieses Wunderwerk strahlt im Glanze seiner Nutzlosigkeit: Seine Errichtung bringt allen Bürgern der Stadt eine seltene Auszeichnung ein.')
             ->isImpervious(true)->isTemporary(0)->defense(0)
             ->ap(300)->health(300)->resources(["water_#00" => 100,"metal_beam_#00" => 8,"tube_#00" => 6,"wood_beam_#00" => 6,"concrete_wall_#00" => 2,"fence_#00" => 1,"water_cleaner_#00" => 4,])
@@ -1044,7 +1060,7 @@ class BuildingDataService implements FixtureProcessorInterface {
             )
             ->blueprintLevel(4)->orderBy(6)->commit();
 
-        $container->add()->parentBuilding($small_spa4souls)
+        $container->add()->parentBuilding($item_soul_blue_static)
             ->icon('small_crow')->label('Krähenstatue')->description('Huldigt den Raben! Gelobt sei deine Milde und deine erhabene Austrahlung! Befreie uns vom Spam und vergib uns unsere Trollenbeiträge so wie auch wir vergeben anderen Trollen. Dieses Wunderwerk strahlt im Glanze seiner Nutzlosigkeit: Seine Errichtung bringt allen Bürgern der Stadt eine seltene Auszeichnung ein.')
             ->isImpervious(true)->isTemporary(0)->defense(0)
             ->ap(300)->health(0)->resources(["hmeat_#00" => 3,"wood_beam_#00" => 35,])
@@ -1054,24 +1070,24 @@ class BuildingDataService implements FixtureProcessorInterface {
             )
             ->blueprintLevel(4)->orderBy(5)->commit();
 
-        $container->add()->parentBuilding($small_spa4souls)
+        $container->add()->parentBuilding($item_soul_blue_static)
             ->icon('small_vaudoudoll')->label('Voodoo-Puppe')->description('Ein über 2 Meter hoher, schimmliger Wollballen, über und über mit Stricken und Nadeln bedeckt. In den mächtigen Händen des Schamanen wird dieses *Ding* zu einem XXL-Püppchen, das etliche Zombies niederstreckt, ehe es wieder eine unförmige, unbewegliche Masse wird.')
             ->isTemporary(0)->defense(65)->ap(40)->health(40)->blueprintLevel(0)->resources(["water_#00" => 2,"meca_parts_#00" => 3,"metal_#00" => 2,"plate_#00" => 2,"soul_yellow_#00" => 2,])->orderBy(7)->commit();
 
-        $container->add()->parentBuilding($small_spa4souls)
+        $container->add()->parentBuilding($item_soul_blue_static)
             ->icon('small_bokorsword')->label('Bokors Guillotine')->description('Mit Hilfe einer teuflischen Guillotine und einer provisorischen Schaufensterpuppe, kann der Schamane aus der Entfernung den Kopf eines Zombierudel-Führers abschlagen. Die Zombies die ihm folgen, werden daraufhin abdrehen und wieder in die Wüste wandern.')
             ->isTemporary(0)->defense(100)->ap(60)->health(60)->blueprintLevel(0)->resources(["plate_#00" => 3,"wood_beam_#00" => 8,"metal_beam_#00" => 5,"soul_yellow_#00" => 3,])->orderBy(8)->commit();
-        $container->add()->parentBuilding($small_spa4souls)
+        $container->add()->parentBuilding($item_soul_blue_static)
             ->icon('small_spiritmirage')->label('Spirituelles Wunder')->description('Dieser Zauber des Schamanen erschafft ein Trugbild der Stadt. Als Folge verliert sich eine beträchtliche Anzahl Zombies heillos in der Wüste.')
             ->isTemporary(0)->defense(80)->ap(30)->health(30)->blueprintLevel(0)->resources(["wood2_#00" => 6,"plate_#00" => 2,"wood_beam_#00" => 6,"soul_yellow_#00" => 2,])->orderBy(9)->commit();
-        $container->add()->parentBuilding($small_spa4souls)
+        $container->add()->parentBuilding($item_soul_blue_static)
             ->icon('small_holyrain')->label('Heiliger Regen')->description('Nur der Schamane kennt das Geheimnis dieses rituellen Feuertanzes. Richtig ausgeführt, steigt eine kleine Wolke in den Himmel und bewirkt, dass ein Schauer heiligen Wassers auf die Zombiehorde niedergeht.')
             ->isTemporary(1)->defense(200)->ap(40)->health(0)->blueprintLevel(0)->resources(["water_#00" => 5,"wood2_#00" => 5,"wood_beam_#00" => 9,"soul_yellow_#00" => 4,])->orderBy(10)->commit();
 
 
         $container
             // Bauhaus
-            ->modify('small_refine_#01')->parentBuilding($small_spa4souls)->commit()
+            ->modify('small_refine_#01')->parentBuilding($item_soul_blue_static)->commit()
             //Weiterentwickelte Stadtmauer
             ->modify('small_wallimprove_#01')->icon('small_devwall')->commit()
             // Vogelscheuche
@@ -1083,7 +1099,7 @@ class BuildingDataService implements FixtureProcessorInterface {
             //Rückzugsort für Aufklärer
             ->modify('small_watchmen_#01')->parentBuilding($item_scope)->icon('small_lair')->commit()
             // Hammam
-            ->modify('small_spa4souls_#00')->parentBuilding($item_soul_blue_static)->commit()
+            ->modify('small_spa4souls_#00')->parentBuilding($small_spa4souls)->commit()
             //Zackenmauer
             ->modify('item_plate_#02')->icon('small_spikedwall')->commit()
             // Holzzaun

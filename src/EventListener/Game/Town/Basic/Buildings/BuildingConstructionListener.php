@@ -64,7 +64,8 @@ final readonly class BuildingConstructionListener implements ServiceSubscriberIn
     public function onSetUpBuildingInstance( BuildingConstructionEvent $event ): void {
         $event->building->setComplete(true);
         $event->building->setConstructionDate(new \DateTime());
-        $event->building->setAp($event->building->getPrototype()->getAp());
+        $event->building->setCompletedTimes( $event->building->getCompletedTimes() + 1 );
+        $event->building->setAp($event->building->getPrototypeAP());
         $event->building->setHp($event->building->getPrototype()->getHp());
         $event->building->setDefense($event->building->getPrototype()->getDefense());
         $event->markModified();
@@ -160,7 +161,7 @@ final readonly class BuildingConstructionListener implements ServiceSubscriberIn
             case 'small_rocket_#00':
                 /** @var EntityManagerInterface $em */
                 $em = $this->getService(EntityManagerInterface::class);
-                
+
                 foreach ($event->town->getZones() as $zone)
                     if ($zone->getX() === 0 || $zone->getY() === 0) {
                         $zone->setZombies(0)->setInitialZombies(0);

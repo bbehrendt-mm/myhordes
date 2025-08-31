@@ -110,7 +110,7 @@ class DataController extends CustomAbstractCoreController
                 'levels' => $p->getMaxLevel() ?? 0,
                 'parent' => $p->getParent()?->getId() ?? null,
                 'order' => $p->getOrderBy() ?? 0,
-                'rsc' => self::renderItemGroup( $p->getResources() )
+                'rsc' => self::renderItemGroup( $p->getResourceSet()->getResources() )
             ])->toArray()
         ]);
     }

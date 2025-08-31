@@ -132,16 +132,6 @@ class BuildingPrototype implements NamedEntity
 
         return $this;
     }
-    public function getAp(): ?int
-    {
-        return $this->ap;
-    }
-    public function setAp(int $ap): self
-    {
-        $this->ap = $ap;
-
-        return $this;
-    }
     public function getDefense(): ?int
     {
         return $this->defense;

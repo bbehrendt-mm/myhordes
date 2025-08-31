@@ -209,7 +209,7 @@ class NightlyHandler
         foreach ($town->getBuildings() as $building) {
             if ($building->getComplete() && $building->getHp() < $building->getPrototype()->getHp()) {
                 $repair_sites[] = $building;
-            } elseif ($building->getComplete() || $building->getAp() >= ($building->getPrototype()->getAp() - 1)) continue;
+            } elseif ($building->getComplete() || $building->getAp() >= ($building->getPrototypeAP() - 1)) continue;
 
             // Check if all parent buildings are completed
             $parents_complete = true;
@@ -265,11 +265,11 @@ class NightlyHandler
 
             foreach ($available_sites as $building) if ($ap_for_building > 0) {
 
-                $required = $building->getPrototype()->getAp() - $building->getAp() ;
+                $required = $building->getPrototypeAP() - $building->getAp() ;
                 $invest = min( $required - 1, $ap_for_building );
 
                 if ($invest > 0) {
-                    $building->setAp( min($building->getAp() + $invest, $building->getPrototype()->getAp() - 1) );
+                    $building->setAp( min($building->getAp() + $invest, $building->getPrototypeAP() - 1) );
                     $this->log->debug( "The stranger invests <info>{$invest} AP</info> into constructing <info>{$building->getPrototype()->getLabel()}</info>." );
                     if ($enable_log) $this->entity_manager->persist( $this->logTemplates->strangerConstructionsInvest( $town, $building->getPrototype(), $stranger_ts ) );
                 }
@@ -1010,7 +1010,7 @@ class NightlyHandler
             10 + 2 * floor(max(0, $town->getDay() - 10)/2),
             ceil(count($all_targets) * 1.0)
         );
-		
+
 		$attacking = min($max_active, $overflow);
 
         $attract_targets = array_filter( array_map(
@@ -1041,12 +1041,12 @@ class NightlyHandler
 		for ($i = 0; $i < count($repartition); $i++) {
 			$repartition[$i] = mt_rand() / mt_getrandmax(); //random value between 0 and 1.0 with many decimals
 		}
-		
+
 		if(count($repartition) != 0) {
 			//one citizen gets especially unlucky
 			$repartition[mt_rand(0, count($repartition)-1)] += 0.3;
 		}
-		
+
 		$sum = array_sum($repartition);
 
 		$attacking_cache = $attacking;
@@ -1264,7 +1264,7 @@ class NightlyHandler
             $citizen->getDigTimers()->clear();
             if ($citizen->getEscortSettings()) $this->entity_manager->remove($citizen->getEscortSettings());
             $citizen->setEscortSettings(null);
-            
+
             foreach ($this->entity_manager->getRepository( EscapeTimer::class )->findAllByCitizen( $citizen ) as $et)
                 $this->cleanup[] = $et;
 
@@ -1329,7 +1329,7 @@ class NightlyHandler
         if($town->getDevastated()){
             // Each day as devastated, the town lose water as zombies are entering town.
             $d = min($town->getWell(), rand(20, 40));
-            
+
             if($d > 0){
                 $this->log->debug("Town is devastated, the zombies entering town removed <info>{$d} water rations</info> from the well.");
                 $this->entity_manager->persist($this->logTemplates->nightlyDevastationAttackWell($d, $town));

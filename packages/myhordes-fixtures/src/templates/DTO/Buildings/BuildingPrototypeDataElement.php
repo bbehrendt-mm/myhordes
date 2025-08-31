@@ -44,6 +44,9 @@ use MyHordes\Fixtures\DTO\LabeledIconElementInterface;
  * @property array $resources
  * @method self resources(array $v)
  * @method self resource(string $key, int $value)
+ * @property array resourceSets
+ * @method self resourceSets(array $v)
+ * @method self resourceSet(BuildingResourceSetType $set, int $level, int $repeat, ?int $ap, ?array $v)
  * @property array $hardResources
  * @method self hardResources(array $v)
  * @method self hardResource(string $key, int $value)
@@ -126,6 +129,16 @@ class BuildingPrototypeDataElement extends Element implements LabeledIconElement
                 );
             }
 
+            foreach (($this->resourceSets ?? []) as [$set, $level, $repeat, $ap, $v])
+                $entity->addResourceSet(
+                    new BuildingConstructionResourceSet()
+                        ->setType($set)
+                        ->setLevel($level)
+                        ->setTimes($repeat)
+                        ->setAp( $ap ?? $this->ap ?? 0 )
+                        ->setResources( ($this->resources || $v) ? $this->createResourceGroup($em, $v ?? $this->resources, $id, "{$set->value}_rsc_{$level}_{$repeat}") : null )
+                );
+
         } catch (\Throwable $t) {
             throw new Exception(
                 "Exception when persisting building prototype to database: {$t->getMessage()} \n\nOccurred when processing the following item:\n" . print_r($this->toArray(), true),
@@ -144,6 +157,20 @@ class BuildingPrototypeDataElement extends Element implements LabeledIconElement
             if ($value <= 0) unset( $r[$key] );
             else $r[$key] = $value;
             return $this->resources($r);
+        } elseif ($name === 'resourceSet' && count($arguments) === 5) {
+            [$set, $level, $repeat, $ap, $v] = $arguments;
+            if (
+                $set === BuildingResourceSetType::Default &&
+                $level === 0 && $repeat === 0
+            ) {
+                $this->resources = $v;
+                $this->ap = $ap;
+            } else {
+                $sets = $this->resourceSets;
+                $sets[] = $arguments;
+                $this->resourceSets = $sets;
+            }
+            return $this;
         } elseif ($name === 'hardResource' && count($arguments) === 2) {
             [$key, $value] = $arguments;
             $r = $this->hardResources ?? [];

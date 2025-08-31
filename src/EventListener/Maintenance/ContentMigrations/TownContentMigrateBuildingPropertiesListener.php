@@ -40,13 +40,13 @@ class TownContentMigrateBuildingPropertiesListener extends TownContentMigrationL
 
         foreach ($event->town->getBuildings() as $building) {
 
-            $ap = $building->getPrototype()->getAp();
+            $ap = $building->getPrototypeAP();
             if ($building->getAp() > $ap) {
                 $event->debug( "Clamping building <fg=green>{$building->getId()}</> AP ({$building->getAp()}) to prototype <fg=green>[{$building->getPrototype()->getId()}]</> <fg=yellow>{$building->getPrototype()->getLabel()}</> value of <fg=green>{$ap}</>" );
                 $em->persist($building->setAp( $ap ) );
             }
 
-            $hp = $building->getPrototype()->getHp() ?: $building->getPrototype()->getAp();
+            $hp = $building->getPrototype()->getHp() ?: $building->getPrototypeAP();
             if ($building->getHp() > $hp) {
                 $event->debug( "Clamping building <fg=green>{$building->getId()}</> HP ({$building->getHp()}) to prototype <fg=green>[{$building->getPrototype()->getId()}]</> <fg=yellow>{$building->getPrototype()->getLabel()}</> value of <fg=green>{$hp}</>" );
                 $em->persist($building->setHp( $hp ) );

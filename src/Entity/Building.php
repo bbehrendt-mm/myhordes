@@ -43,6 +43,8 @@ class Building
     private int $hp = 0;
     #[ORM\Column(type: 'integer')]
     private int $defense = 0;
+    #[ORM\Column(type: 'integer')]
+    private int $completedTimes = 0;
     #[ORM\OneToMany(mappedBy: 'building', targetEntity: BuildingVote::class, cascade: ['persist', 'remove'], fetch: 'EXTRA_LAZY', orphanRemoval: true)]
     private Collection $buildingVotes;
     #[ORM\OneToOne(inversedBy: 'building', targetEntity: Inventory::class, cascade: ['persist', 'remove'])]
@@ -80,6 +82,16 @@ class Building
     public function setComplete(bool $complete): self
     {
         $this->complete = $complete;
+
+        return $this;
+    }
+    public function getCompletedTimes(): int
+    {
+        return $this->completedTimes;
+    }
+    public function setCompletedTimes(int $completedTimes): self
+    {
+        $this->completedTimes = $completedTimes;
 
         return $this;
     }
@@ -263,7 +275,8 @@ class Building
                 $this->difficultyLevel < 0 => BuildingResourceSetType::Hard,
                 $this->difficultyLevel > 0 => BuildingResourceSetType::Easy,
                 default => BuildingResourceSetType::Default
-            }
+            },
+            repeat: $this->getCompletedTimes()
         )->getAp();
 
         if ($this->difficultyLevel >= 2)
@@ -284,7 +297,8 @@ class Building
                 $this->difficultyLevel < 0 => BuildingResourceSetType::Hard,
                 $this->difficultyLevel > 0 => BuildingResourceSetType::Easy,
                 default => BuildingResourceSetType::Default
-            }
+            },
+            repeat: $this->getCompletedTimes()
         )->getResources();
     }
 }

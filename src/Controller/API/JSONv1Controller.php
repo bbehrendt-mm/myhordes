@@ -545,7 +545,7 @@ class JSONv1Controller extends CoreController {
                                 $data_building[$field] = $this->getTranslate($building->getPrototype()->getDescription(), 'buildings');
                                 break;
                             case "pa":
-                                $data_building[$field] = $building->getPrototype()->getAp();
+                                $data_building[$field] = $building->getPrototype()->getResourceSet()->getAp();
                                 break;
                             case "paCurrent":
                                 $data_building[$field] = $building->getPrototypeAP( $this->conf->getTownConfiguration($building->getTown())->getBuildingRarity( $building->getPrototype() ) );
@@ -594,7 +594,7 @@ class JSONv1Controller extends CoreController {
                                 $data_building[$field] = $this->getResources($building);
                                 break;
                             case "actions":
-                                $data_building[$field] = $building->getPrototype()->getAp() - $building->getAp();
+                                $data_building[$field] = $building->getPrototypeAP( $this->conf->getTownConfiguration($building->getTown())->getBuildingRarity( $building->getPrototype() ) ) - $building->getAp();
                                 break;
                             case "hasLevels":
                                 $data_building[$field] = $building->getLevel();
@@ -1449,7 +1449,7 @@ class JSONv1Controller extends CoreController {
     private function getResources(Building|BuildingPrototype $building, array $fields = []): array {
         $data = [];
 
-        $resources = is_a($building,Building::class) ? $building->getPrototypeResources() : $building->getResources();
+        $resources = is_a($building,Building::class) ? $building->getPrototypeResources() : $building->getPrototype()->getResourceSet()->getResources();
 
         if (empty($fields)) {
             $fields = ['amount', 'rsc'];

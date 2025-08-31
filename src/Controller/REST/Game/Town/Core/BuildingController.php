@@ -127,6 +127,8 @@ class BuildingController extends CustomAbstractCoreController
             ...($voted ? ['v' => true] : []),
             ...($building->getDifficultyLevel() !== 0 ? [
                 'dl' => $building->getDifficultyLevel(),
+            ] : []),
+            ...(($building->getDifficultyLevel() !== 0 || $building->getCompletedTimes() > 0) ? [
                 'r' => DataController::renderItemGroup( $building->getPrototypeResources() )
             ] : []),
         ];

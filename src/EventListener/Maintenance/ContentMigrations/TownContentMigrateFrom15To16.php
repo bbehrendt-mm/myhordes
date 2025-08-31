@@ -116,7 +116,7 @@ class TownContentMigrateFrom15To16 extends TownContentMigrateBuildingTreeListene
         foreach ($this->getRescaledBuildings() as $key => $modifier) {
             $building = $th->getBuilding( $event->town, $key, true );
             if (!$building) continue;
-            $target_hp = min(ceil($building->getHp() * $modifier), $building->getPrototype()->getHp() ?: $building->getPrototype()->getAp());
+            $target_hp = min(ceil($building->getHp() * $modifier), $building->getPrototype()->getHp() ?: $building->getPrototypeAP());
             if ($target_hp > $building->getHp()) {
                 $event->debug("Rescaling <fg=yellow>{$building->getPrototype()->getLabel()}</> HP from <fg=green>{$building->getHp()}</> to <fg=green>{$target_hp}</>.");
                 $em->persist( $building->setHp( $target_hp ) );
