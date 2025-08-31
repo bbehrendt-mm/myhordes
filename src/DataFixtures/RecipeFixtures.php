@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\BuildingConstructionResourceSet;
 use App\Entity\Recipe;
 use App\Entity\BuildingPrototype;
 use App\Entity\ItemGroup;
@@ -45,6 +46,11 @@ class RecipeFixtures extends Fixture implements DependentFixtureInterface
         /** @var BuildingPrototype[] $available_parents */
         $available_parents = [];
 
+        foreach ($manager->getRepository(BuildingConstructionResourceSet::class)->findAll() as $crs)
+            $manager->remove($crs);
+
+        $manager->flush();
+
         $cache = [];
         while (!empty($building_data)) {
             foreach ($building_data as $id => $building)
@@ -56,7 +62,7 @@ class RecipeFixtures extends Fixture implements DependentFixtureInterface
 
                     $object =
                         $this->entityManager->getRepository(BuildingPrototype::class)->findOneByName($id, false) ??
-                        (new BuildingPrototype())->setName($id);
+                        new BuildingPrototype()->setName($id);
 
                     $building->toEntity($this->entityManager, $id, $object);
                     $object->getChildren()->clear();

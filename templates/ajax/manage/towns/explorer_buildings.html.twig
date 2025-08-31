@@ -86,13 +86,13 @@
 					{% endif %}
 
 				</div>
-				{% set not_built = fromTown is defined and buildable and fromTown.ap < ((building.ap * workshopBonus)|round) %}
+				{% set not_built = fromTown is defined and buildable and not fromTown.complete %}
 				{% set needs_repair = fromTown is defined and not not_built and fromTown.complete and fromTown.hp < building.hp %}
 				<div class="building_resources cell">
 					{% if fromTown is defined %}
 						{% if fromTown.ap > 0 and not fromTown.complete %}
 							<div class="ap-bar">
-								<div class="bar" style="width: {{ 100*(fromTown.ap/building.ap) }}%"></div>
+								<div class="bar" style="width: {{ 100*(fromTown.ap/fromTown.prototypeAP) }}%"></div>
 							</div>
                         	<img alt="" class="ap-bar-start" src="{{ asset('build/images/building/building_barStart.gif' ) }}"/>
 						{% elseif fromTown.complete and fromTown.hp < building.hp %}
@@ -106,9 +106,9 @@
 						{% if not_built %}
 							<div class="build-req">
 								<div class="ap-cost">
-									<div class="ap">{{ building.ap - fromTown.ap }}</div>
+									<div class="ap">{{ fromTown.prototypeAP - fromTown.ap }}</div>
 									<div class="tooltip help">
-										{{ 'Zum Bau dieses Bauprojekts fehlen noch {ap} AP'|trans({'{ap}':building.ap - fromTown.ap },"game") }}
+										{{ 'Zum Bau dieses Bauprojekts fehlen noch {ap} AP'|trans({'{ap}':fromTown.prototypeAP - fromTown.ap },"game") }}
 									</div>
 								</div>
 							</div>

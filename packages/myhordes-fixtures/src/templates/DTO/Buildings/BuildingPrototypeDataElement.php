@@ -2,11 +2,13 @@
 
 namespace MyHordes\Fixtures\DTO\Buildings;
 
+use App\Entity\BuildingConstructionResourceSet;
 use App\Entity\BuildingPrototype;
 use App\Entity\ItemCategory;
 use App\Entity\ItemGroup;
 use App\Entity\ItemGroupEntry;
 use App\Entity\ItemPrototype;
+use App\Enum\Game\BuildingResourceSetType;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use MyHordes\Fixtures\DTO\Element;
@@ -83,30 +85,46 @@ class BuildingPrototypeDataElement extends Element implements LabeledIconElement
      */
     public function toEntity(EntityManagerInterface $em, string $id, BuildingPrototype $entity): void {
         try {
+            $entity->getResourceSets()->clear();
             $entity
                 ->setLabel( $this->label )
                 ->setDescription( $this->description )
                 ->setTemp( $this->isTemporary ?? false )
-                ->setAp( $this->ap ?? 0 )
                 ->setBlueprint( $this->blueprintLevel ?? 0 )
                 ->setDefense( $this->defense ?? 0 )
                 ->setIcon( $this->icon )
                 ->setHp( $this->health ?: $this->ap ?: 0 )
                 ->setImpervious( $this->isImpervious ?? false )
                 ->setOrderBy( $this->orderBy ?? 0 )
-                ->setResources( $this->resources ? $this->createResourceGroup($em, $this->resources, $id, 'rsc') : null )
-                ->setHasHardMode( $this->hasHardMode ?? false )
-                ->setHardAp( $this->hasHardMode ? $this->hardAp : null )
-                ->setEasyAp( $this->hasHardMode ? $this->easyAp : null )
-                ->setHardResources( ($this->hasHardMode && $this->hardResources) ? $this->createResourceGroup($em, $this->hardResources, $id, 'hrsc') : null )
-                ->setEasyResources( ($this->hasHardMode && $this->easyResources) ? $this->createResourceGroup($em, $this->easyResources, $id, 'ersc') : null );
-
+                ->setHasHardMode( $this->hasHardMode ?? false );
             if ($this->voteLevel > 0)
                 $entity
                     ->setMaxLevel( $this->voteLevel )
                     ->setZeroLevelText( $this->baseVoteText ?? "")
                     ->setUpgradeTexts( array_slice( array_pad($this->upgradeTexts ?? [], $this->voteLevel, "???" ), 0, $this->voteLevel ) );
             else $entity->setMaxLevel( 0 )->setZeroLevelText( null )->setUpgradeTexts( null );
+
+            $entity->addResourceSet(
+                new BuildingConstructionResourceSet()
+                    ->setType(BuildingResourceSetType::Default)
+                    ->setAp( $this->ap ?? 0 )
+                    ->setResources( $this->resources ? $this->createResourceGroup($em, $this->resources, $id, 'rsc') : null )
+            );
+
+            if ($this->hasHardMode) {
+                $entity->addResourceSet(
+                    new BuildingConstructionResourceSet()
+                        ->setType(BuildingResourceSetType::Hard)
+                        ->setAp( $this->hardAp ?? $this->ap ?? 0 )
+                        ->setResources( ($this->resources || $this->hardResources) ? $this->createResourceGroup($em, $this->hardResources ?? $this->resources, $id, 'hrsc') : null )
+                );
+                $entity->addResourceSet(
+                    new BuildingConstructionResourceSet()
+                        ->setType(BuildingResourceSetType::Easy)
+                        ->setAp( $this->easyAp ?? $this->ap ?? 0 )
+                        ->setResources( ($this->resources || $this->easyResources) ? $this->createResourceGroup($em, $this->easyResources ?? $this->resources, $id, 'ersc') : null )
+                );
+            }
 
         } catch (\Throwable $t) {
             throw new Exception(
