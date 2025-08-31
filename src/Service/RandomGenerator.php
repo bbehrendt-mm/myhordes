@@ -115,7 +115,7 @@ class RandomGenerator
         return $g[array_key_last($g)];
     }
 
-    function pickEntryFromRandomGroup( RandomGroup $g, callable $filter = null ): ?RandomEntry {
+    function pickEntryFromRandomGroup( RandomGroup $g, ?callable $filter = null ): ?RandomEntry {
         return $this->pickEntryFromRandomArray( $filter === null
             ? $g->getEntries()->getValues()
             : $g->getEntries()->filter( $filter )->getValues()

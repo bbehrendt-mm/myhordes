@@ -75,7 +75,7 @@ class ConfMaster
         return array_keys($this->getAllEvents());
     }
 
-    private function configToDate(string $dateString, \DateTimeInterface $current, \DateTimeInterface $assumeAfter = null): ?\DateTime {
+    private function configToDate(string $dateString, \DateTimeInterface $current, ?\DateTimeInterface $assumeAfter = null): ?\DateTime {
         list($date, $time) = explode(' ', $dateString);
         $date = explode('-', $date);
         $time = explode(':', $time);

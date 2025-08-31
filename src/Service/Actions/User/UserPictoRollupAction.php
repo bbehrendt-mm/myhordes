@@ -107,7 +107,7 @@ readonly class UserPictoRollupAction
         );
     }
 
-    public function __invoke(User $user, PictoPrototype|array $prototypes = null, ?Season $season = null, ?bool $imported = false, ?bool $old = false): void
+    public function __invoke(User $user, PictoPrototype|array|null $prototypes = null, ?Season $season = null, ?bool $imported = false, ?bool $old = false): void
     {
         $count_import = $imported === null ? [false,true] : [$imported];
         $count_old = $old === null ? [false, true] : [$old];

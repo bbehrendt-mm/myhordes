@@ -48,7 +48,7 @@ class Town
     private int $day = 1;
     #[ORM\Column(type: 'integer')]
     private ?int $well = 0;
-    #[ORM\OneToMany(targetEntity: 'App\Entity\Zone', mappedBy: 'town', orphanRemoval: true, cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(targetEntity: 'App\Entity\Zone', mappedBy: 'town', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private $zones;
     #[ORM\Column(type: 'boolean')]
     private bool $door = false;
@@ -56,12 +56,12 @@ class Town
     private bool $chaos = false;
     #[ORM\Column(type: 'boolean')]
     private bool $devastated = false;
-    #[ORM\OneToMany(targetEntity: 'App\Entity\Building', mappedBy: 'town', orphanRemoval: true, cascade: ['persist', 'remove'], fetch: 'EXTRA_LAZY')]
+    #[ORM\OneToMany(targetEntity: 'App\Entity\Building', mappedBy: 'town', cascade: ['persist', 'remove'], fetch: 'EXTRA_LAZY', orphanRemoval: true)]
     #[ORM\OrderBy(['position' => 'ASC'])]
     private $buildings;
-    #[ORM\OneToMany(targetEntity: 'App\Entity\ZombieEstimation', mappedBy: 'town', orphanRemoval: true, cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: 'App\Entity\ZombieEstimation', mappedBy: 'town', cascade: ['persist'], orphanRemoval: true)]
     private $zombieEstimations;
-    #[ORM\OneToMany(targetEntity: 'App\Entity\Gazette', mappedBy: 'town', orphanRemoval: true, cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: 'App\Entity\Gazette', mappedBy: 'town', cascade: ['persist'], orphanRemoval: true)]
     private $gazettes;
     #[ORM\OneToOne(targetEntity: 'App\Entity\Forum', mappedBy: 'town', cascade: ['persist', 'remove'])]
     private ?Forum $forum = null;

@@ -56,7 +56,7 @@ class Base
 
     }
 
-    public function addMessage(string $message, array $variables = [], string $translationDomain = null, int $order = 0): void {
+    public function addMessage(string $message, array $variables = [], ?string $translationDomain = null, int $order = 0): void {
         $this->messages[] = [$message, $variables, $translationDomain,$order,count($this->messages)];
     }
 

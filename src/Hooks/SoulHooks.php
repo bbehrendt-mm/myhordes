@@ -11,7 +11,7 @@ use App\Service\User\UserUnlockableService;
 class SoulHooks extends HooksCore {
 
 
-    private function counter(User $user, string $template = null, string $subject = null): array {
+    private function counter(User $user, ?string $template = null, ?string $subject = null): array {
         /** @var UserUnlockableService $unlockService */
         $unlockService = $this->container->get(UserUnlockableService::class);
 

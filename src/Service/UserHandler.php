@@ -278,7 +278,7 @@ class UserHandler
      * @param User|UserGroup|UserGroupAssociation $principal
      * @return Shoutbox|null
      */
-    public function getShoutbox($principal): ?Shoutbox {
+    public function getShoutbox(User|UserGroup|UserGroupAssociation $principal): ?Shoutbox {
 
         if (is_a($principal, User::class)) $principal = $this->getCoalitionMembership($principal);
         if (is_a($principal, UserGroupAssociation::class) && in_array($principal->getAssociationType(),
@@ -290,7 +290,7 @@ class UserHandler
         return null;
     }
 
-    public function getConsecutiveDeathLock(User $user, bool &$warning = null): bool {
+    public function getConsecutiveDeathLock(User $user, ?bool &$warning = null): bool {
         /** @var ConsecutiveDeathMarker $cdm */
         $cdm = $this->entity_manager->getRepository(ConsecutiveDeathMarker::class)->findOneBy(['user' => $user]);
 

@@ -135,7 +135,7 @@ class WebController extends CustomAbstractController
         ] );
     }
 
-    public function render_error_framework(FlattenException $exception, DebugLoggerInterface $logger = null, KernelInterface $kernel): Response {
+    public function render_error_framework(FlattenException $exception, ?DebugLoggerInterface $logger = null, KernelInterface $kernel): Response {
         foreach (Request::createFromGlobals()->getAcceptableContentTypes() as $type)
             switch ($type) {
                 case 'application/json':
@@ -261,7 +261,7 @@ class WebController extends CustomAbstractController
      * @return Response
      */
     #[Route(path: '/pm/{com}', name: 'home_pm')]
-    public function standalone_pm(string $com = null): Response
+    public function standalone_pm(?string $com = null): Response
     {
         if ($r = $this->handleDomainRedirection()) return $r;
         if (!$this->isGranted('ROLE_USER'))
@@ -294,7 +294,7 @@ class WebController extends CustomAbstractController
      */
     #[Route(path: '/pm/group/{semantic}', name: 'home_pm_group_sem')]
     #[Route(path: '/pm/group/{lang}/{semantic}', name: 'home_pm_group_sem_lang')]
-    public function standalone_pm_sem(string $semantic, string $lang = null): Response
+    public function standalone_pm_sem(string $semantic, ?string $lang = null): Response
     {
         if ($r = $this->handleDomainRedirection()) return $r;
         if (!$this->isGranted('ROLE_USER'))
@@ -336,7 +336,7 @@ class WebController extends CustomAbstractController
             return $this->redirect($this->generateUrl('home'));
 
         if (!($user = $this->getUser())) return $this->redirect($this->generateUrl('home'));
-        
+
         if ($user->getLanguage() === 'ach') {
             $user->setLanguage($this->getUserLanguage(true));
 

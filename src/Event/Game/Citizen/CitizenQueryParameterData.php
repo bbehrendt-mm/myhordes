@@ -15,7 +15,7 @@ class CitizenQueryParameterData extends CitizenBaseData
      * @return CitizenQueryParameterData
      * @noinspection PhpDocSignatureInspection
      */
-    public function setup( Citizen $citizen, CitizenValueQuery $query = null, mixed $arg = null ): void {
+    public function setup( Citizen $citizen, ?CitizenValueQuery $query = null, mixed $arg = null ): void {
         parent::setup($citizen);
         $this->query = $query;
         $this->arg = $arg;

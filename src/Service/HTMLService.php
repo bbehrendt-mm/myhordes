@@ -774,7 +774,7 @@ class HTMLService {
      * @param User|string|null $user User or language string
      * @return array
      */
-    public function get_emotes(bool $url_only = false, User|string $user = null): array {
+    public function get_emotes(bool $url_only = false, User|string|null $user = null): array {
         if ($this->emote_cache !== null) return $this->emote_cache;
 
         $this->emote_cache = [];
@@ -797,7 +797,7 @@ class HTMLService {
         return $this->emote_cache;
     }
 
-    public function prepareEmotes(string $str, User|string $user = null, Town $town_context = null): string {
+    public function prepareEmotes(string $str, User|string|null $user = null, ?Town $town_context = null): string {
         $emotes = $this->get_emotes(false, $user);
 
         $fixed_account_translators = [

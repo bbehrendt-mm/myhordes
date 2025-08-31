@@ -404,7 +404,7 @@ class TownHandler
         $summary->soul_defense = $town->getSoulDefense();
 
         $summary->nightwatch_defense = $this->calculate_watch_def($town);
-        
+
         return $summary->sum();
     }
 
@@ -433,7 +433,7 @@ class TownHandler
         return $total_def;
     }
 
-    public function get_zombie_estimation(Town &$town, int $day = null, $watchtower_offset = null): array {
+    public function get_zombie_estimation(Town &$town, ?int $day = null, $watchtower_offset = null): array {
         $est = $this->entity_manager->getRepository(ZombieEstimation::class)->findOneByTown($town, $day ?? $town->getDay());
         /** @var ZombieEstimation $est */
         if (!$est) return [];
@@ -522,7 +522,7 @@ class TownHandler
         //foreach ($building->getPrototype()->getChildren() as $childBuilding) {
         //    $this->destroy_building($town, $childBuilding);
         //}
-        
+
         if($trigger_after) $trigger_after();
     }
 
@@ -711,7 +711,7 @@ class TownHandler
 
     public function door_is_locked(Town $town): bool|BuildingPrototype {
         if ($town->getLockdown()) return true;
-        
+
         if ( !$town->getDoor() ) {
 
             if ($town->isOpen() && $this->conf->getTownConfiguration($town)->get(TownSetting::LockDoorUntilTownIsFull)) return true;

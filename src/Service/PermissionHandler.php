@@ -75,7 +75,7 @@ readonly class PermissionHandler
     public function associate( User $user, UserGroup $group,
                                int $type = UserGroupAssociation::GroupAssociationTypeDefault,
                                int $level = UserGroupAssociation::GroupAssociationLevelDefault,
-                               int $ref1 = null ): UserGroupAssociation {
+                               ?int $ref1 = null ): UserGroupAssociation {
         $existing_assoc = $this->get_assoc( $user, $group );
         if (!$existing_assoc) $this->entity_manager->persist(
             $existing_assoc = (new UserGroupAssociation())

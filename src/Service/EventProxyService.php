@@ -95,7 +95,7 @@ readonly class EventProxyService
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    public function buildingConstruction( Building $building, string|Citizen $method = null ): void {
+    public function buildingConstruction( Building $building, string|Citizen|null $method = null ): void {
         $this->ed->dispatch( $this->ef->gameEvent( BuildingConstructionEvent::class, $building->getTown() )->setup( $building, $method ) );
     }
 
@@ -178,12 +178,12 @@ readonly class EventProxyService
         return $event->data;
     }
 
-	public function citizenQueryNightwatchDefense(Citizen $citizen, LoggerInterface $log = null): int {
+	public function citizenQueryNightwatchDefense(Citizen $citizen, ?LoggerInterface $log = null): int {
 		$this->ed->dispatch($event = $this->ef->gameEvent(CitizenQueryNightwatchDefenseEvent::class, $citizen->getTown())->setup($citizen, log: $log));
 		return $event->nightwatchDefense;
 	}
 
-	public function citizenQueryNightwatchDeathChance(Citizen $citizen, LoggerInterface $log = null, bool $duringAttack = false): array {
+	public function citizenQueryNightwatchDeathChance(Citizen $citizen, ?LoggerInterface $log = null, bool $duringAttack = false): array {
 		$this->ed->dispatch($event = $this->ef->gameEvent(CitizenQueryNightwatchDeathChancesEvent::class, $citizen->getTown())->setup($citizen, duringAttack: $duringAttack, log: $log));
 		return [
 			'death' => $event->deathChance,

@@ -16,7 +16,7 @@ trait FallibleAction
      * @param Throwable|null $exception Exception to log
      * @return ErrorCode
      */
-    protected function error(int $errorCode = null, Throwable $exception = null): object
+    protected function error(?int $errorCode = null, ?Throwable $exception = null): object
     {
         return (new class { use Optional, ErrorCodeResult; })->withError( $errorCode ?? match (true) {
             is_a( $exception, Exception::class) => ErrorHelper::ErrorDatabaseException,

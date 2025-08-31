@@ -212,7 +212,7 @@ class LogController extends CustomAbstractCoreController
         } )->filter(fn($v) => $v !== null)->toArray());
     }
 
-    protected function renderCachedLogEntries( EntityManagerInterface $em, Criteria $filters, string $cache_ident, Zone $zone = null, bool $canHide = false, bool $admin = false): array {
+    protected function renderCachedLogEntries( EntityManagerInterface $em, Criteria $filters, string $cache_ident, ?Zone $zone = null, bool $canHide = false, bool $admin = false): array {
         if ($admin)
             return $this->renderLogEntries(
                 $em->getRepository(TownLogEntry::class)->matching(

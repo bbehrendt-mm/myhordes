@@ -42,8 +42,8 @@ readonly class RenderMapAction
      * @return array
      */
     public function __invoke(
-        Town $town = null,
-        Citizen $activeCitizen = null,
+        ?Town $town = null,
+        ?Citizen $activeCitizen = null,
         bool $admin = false
     ): array
     {

@@ -146,13 +146,13 @@ class CustomAbstractController extends CustomAbstractCoreController {
     /**
      * @inheritDoc
      */
-    protected function render(string $view, array $parameters = [], Response $response = null): Response
+    protected function render(string $view, array $parameters = [], ?Response $response = null): Response
     {
         $this->enrichParameter($parameters);
         return parent::render($view, $parameters, $response);
     }
 
-    protected function renderBlocks(string $view, array $blocks, array $externals = [], array $parameters = [], $include_flash = true, Response $response = null, bool $wrap = false): Response
+    protected function renderBlocks(string $view, array $blocks, array $externals = [], array $parameters = [], $include_flash = true, ?Response $response = null, bool $wrap = false): Response
     {
         $this->enrichParameter($parameters);
 

@@ -265,7 +265,7 @@ class UserUnlockableService implements ServiceSubscriberInterface
         User $user,
         LogEntryTemplate|string|null $template = null,
         ?string $subject = null,
-        Season|true $season = null,
+        Season|true|null $season = null,
         ?int &$total = null,
         int|true $reset = 0,
         ?int &$count = 0,

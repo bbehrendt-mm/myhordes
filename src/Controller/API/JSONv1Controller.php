@@ -1677,7 +1677,7 @@ class JSONv1Controller extends CoreController {
         return $user_data;
     }
 
-    private function getRewardsData(User $user = null, array $fields = []): array {
+    private function getRewardsData(?User $user = null, array $fields = []): array {
         $data = [];
 
         if(empty($fields)) {
@@ -2300,5 +2300,5 @@ class JSONv1Controller extends CoreController {
             return $val;
         }
     }
-    
+
 }

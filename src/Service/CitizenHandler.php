@@ -462,13 +462,13 @@ class CitizenHandler
      */
     public function setAP(Citizen $citizen, bool $relative, int $num, ?int $max_bonus = null): int {
         $beforeAp = $citizen->getAp();
-        
+
         if ($max_bonus !== null) {
             $citizen->setAp( max(0, min(max($this->getMaxAP( $citizen ) + $max_bonus, $citizen->getAp()), $relative ? ($citizen->getAp() + $num) : max(0,$num) )) );
         } else {
             $citizen->setAp( max(0, $relative ? ($citizen->getAp() + $num) : max(0,$num) ) );
         }
-        
+
         $citizen->getAp() == 0 ? $this->inflictStatus( $citizen, 'tired' ) : $this->removeStatus( $citizen, 'tired' );
 
         return $citizen->getAp() - $beforeAp;
@@ -874,7 +874,7 @@ class CitizenHandler
         return $all;
     }
 
-    public function houseIsProtected(Citizen $c, bool $only_explicit_lock = false, Citizen $thief = null) {
+    public function houseIsProtected(Citizen $c, bool $only_explicit_lock = false, ?Citizen $thief = null) {
         if (!$c->getAlive()) return false;
         if (!$c->getZone() && !$thief?->property( CitizenProperties::EnableAdvancedTheft ) && !$only_explicit_lock) return true;
         if ($c->getHome()->getPrototype()->getTheftProtection()) return true;
