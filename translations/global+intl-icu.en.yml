@@ -1,4 +1,3 @@
----
 'Allgemeiner Fehler.': 'Common error.'
 'Das gewählte Forum existiert nicht oder dir fehlt die Zugangsberechtigung dafür.': 'The selected forum doesn''t exist or you are lacking the permission to view it.'
 'Dein Text muss mindestens 2 Zeichen lang sein.': 'Your text has to be at least 2 characters long.'
@@ -664,3 +663,5 @@ Sonstiges: Others
 Warnung: Warning
 'Andere Spiele auf Eternaltwin': 'Other games on Eternaltwin'
 'Wenn du bei der Übersetzung von MyHordes mithelfen willst, kannst du dies auf {crowdin} tun!': 'If you want to help translate MyHordes, you can do so on {crowdin}!'
+'SK: {sk}': 'SK: {sk}'
+'Weiter zu {app}': 'Continue to {app}'

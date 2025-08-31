@@ -1,13 +1,12 @@
----
-letter: crwdns61782:0crwdne61782:0
-consonant: crwdns61784:0crwdne61784:0
-vowel: crwdns61786:0crwdne61786:0
-rps: crwdns61788:0crwdne61788:0
-coin: crwdns61790:0crwdne61790:0
-card: crwdns61792:0crwdne61792:0
-rnduser: crwdns61794:0crwdne61794:0
-'Forum stummschalten': 'crwdns136114:0crwdne136114:0'
-'Wenn diese Option aktiviert ist, werden dir neue Nachrichten in diesem Forum nicht auf der Forenübersicht angezeigt. Diese Option kann nicht für das Stadtforum aktiviert werden.': 'crwdns136116:0crwdne136116:0'
-Tag: crwdns136226:0crwdne136226:0
-'Forum anpinnen': 'crwdns205310:0crwdne205310:0'
-'Wenn diese Option aktiviert ist, wird dieses Forum in der Tab-Liste im oberen Bereich der Forenansicht angeheftet, damit du schneller darauf zugreifen kannst. Du kannst maximal {n} Foren anpinnen.': 'crwdns205312:0{n}crwdne205312:0'
+letter: crwdns216644:0crwdne216644:0
+consonant: crwdns216652:0crwdne216652:0
+vowel: crwdns216656:0crwdne216656:0
+rps: crwdns216660:0crwdne216660:0
+coin: crwdns216664:0crwdne216664:0
+card: crwdns216668:0crwdne216668:0
+rnduser: crwdns216672:0crwdne216672:0
+'Forum stummschalten': 'crwdns216674:0crwdne216674:0'
+'Wenn diese Option aktiviert ist, werden dir neue Nachrichten in diesem Forum nicht auf der Forenübersicht angezeigt. Diese Option kann nicht für das Stadtforum aktiviert werden.': 'crwdns216678:0crwdne216678:0'
+Tag: crwdns216682:0crwdne216682:0
+'Forum anpinnen': 'crwdns216686:0crwdne216686:0'
+'Wenn diese Option aktiviert ist, wird dieses Forum in der Tab-Liste im oberen Bereich der Forenansicht angeheftet, damit du schneller darauf zugreifen kannst. Du kannst maximal {n} Foren anpinnen.': 'crwdns216690:0{n}crwdne216690:0'

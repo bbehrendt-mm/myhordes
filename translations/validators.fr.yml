@@ -1,4 +1,3 @@
----
 'This value should be false.': 'Cette valeur doit être fausse.'
 'This value should be true.': 'Cette valeur doit être vraie.'
 'This value should be of type {{ type }}.': 'Cette valeur doit être de type {{ type }}.'
@@ -115,7 +114,7 @@ Error: Erreur
 'This value is not a valid week.': 'Cette valeur n''est pas une semaine valide.'
 'This value should not be before week "{{ min }}".': 'Cette valeur ne doit pas être avant la semaine "{{ min }}".'
 'This value should not be after week "{{ max }}".': 'Cette valeur ne doit pas être après la semaine "{{ max }}".'
-'This value is not a valid slug.': 'Cette valeur n''est pas un slug valide.'
+'This value is not a valid Twig template.': 'Dieser Wert ist kein valides Twig-Template.'
 'This form should not contain extra fields.': 'Ce formulaire ne doit pas contenir de champs supplémentaires.'
 'The uploaded file was too large. Please try to upload a smaller file.': 'Le fichier téléchargé est trop volumineux. Merci d''essayer d''envoyer un fichier plus petit.'
 'The CSRF token is invalid. Please try to resubmit the form.': 'Le jeton CSRF est invalide. Veuillez renvoyer le formulaire.'
@@ -149,5 +148,6 @@ Error: Erreur
 'Please select a valid option.': 'Veuillez sélectionner une option valide.'
 'Please select a valid range.': 'Veuillez sélectionner une plage valide.'
 'Please enter a valid week.': 'Veuillez entrer une semaine valide.'
+'This value is not a valid slug.': 'Cette valeur n''est pas un slug valide.'
 v: v
 a: a
