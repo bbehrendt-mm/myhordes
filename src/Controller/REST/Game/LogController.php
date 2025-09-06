@@ -186,7 +186,8 @@ class LogController extends CustomAbstractCoreController
                 'hidden'    => $entry->getHidden()->hidden(),
                 'hideable'  => !$admin && $entry->getHidden()->visible() && $canHide,
                 'day'       => $entry->getDay(),
-                'retro'     => $template?->getName() === 'smokeBombUsage'
+                'retro'     => $template?->getName() === 'smokeBombUsage',
+                'template'  => $template?->getId()
             ];
 
             if ($entry->getHidden()->hidden() && !$admin) $json['text'] = null;

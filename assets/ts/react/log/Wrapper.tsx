@@ -295,7 +295,7 @@ const HordesLogContentContainer = (props: logContainerProps) => {
             </> }
             { (last_time = entry.timestamp) && <></> }
             { (last_day = entry.day) && <></> }
-            <div className={`log-entry log-entry-type-${ entry['type'] } log-entry-class-${ entry['class'] }`}>
+            <div className={`log-entry log-entry-type-${ entry['type'] } log-entry-class-${ entry['class'] }`} data-template-id={`${entry.template ?? 0}`}>
                 <span className="log-part-time">{entry.timestring}</span>
                 <span style={inHiding === entry.id ? {opacity: 0.5} : null} className={`log-part-content ${entry.hidden ? 'log-part-entry-hidden' : ''}`}>
                     { entry.hidden && <img alt="" src={ globals.strings?.content.warning }/> }
