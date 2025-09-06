@@ -94,7 +94,7 @@
 
     <h5>{{ 'Vorhandene Bauprojekte'|trans({},'game') }}</h5>
     <hordes-building-page id="town-building-page" data-react-mount="town-building-page" data-etag="--"
-                          data-ap-ratio="{{ 1.0 / workshopBonus }}" data-hp-ratio="{{ hpToAp }}"
+                          data-ap-ratio="{{ workshopBonus }}" data-hp-ratio="{{ hpToAp }}"
                           data-bank="{{ town.bank.id }}" data-can-vote="{{ canvote ? 1 : 0 }}"
     ></hordes-building-page>
 
