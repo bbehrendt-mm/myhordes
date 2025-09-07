@@ -6,6 +6,7 @@ namespace App\Service;
 use App\Entity\BuildingPrototype;
 use App\Entity\Citizen;
 use App\Entity\Forum;
+use App\Entity\ForumGroup;
 use App\Entity\ForumUsagePermissions;
 use App\Entity\Inventory;
 use App\Entity\ItemGroup;
@@ -192,6 +193,8 @@ class CommandHelper
                 return $e->getTown()
                     ? "Town Forum #{$e->getId()} <comment>{$e->getTitle()}</comment>"
                     : "Forum #{$e->getId()} <comment>{$e->getTitle()}</comment> (Type: <comment>{$e->getType()}</comment>)";
+            case ForumGroup::class:
+                return "Forum Group #{$e->getId()} <comment>{$e->getTitle()}</comment>";
             case UserGroup::class:
                 /** @var UserGroup $e */
                 return "User group #{$e->getId()} <comment>{$e->getName()}</comment> (Ref1 '<comment>{$e->getRef1()}</comment>' Ref2 '<comment>{$e->getRef2()}</comment>')";
@@ -268,6 +271,10 @@ class CommandHelper
         $this->_db[Forum::class][IdentifierSemantic::PerfectMatch] = ['#id'];
         $this->_db[Forum::class][IdentifierSemantic::LikelyMatch]  = ['title'];
         $this->_db[Forum::class][IdentifierSemantic::GuessMatch]   = ['%title', '%description'];
+
+        $this->_db[ForumGroup::class][IdentifierSemantic::PerfectMatch] = ['#id'];
+        $this->_db[ForumGroup::class][IdentifierSemantic::LikelyMatch]  = ['title'];
+        $this->_db[ForumGroup::class][IdentifierSemantic::GuessMatch]   = ['%title'];
 
         $this->_db[UserGroup::class][IdentifierSemantic::PerfectMatch] = ['#id'];
         $this->_db[UserGroup::class][IdentifierSemantic::LikelyMatch]  = ['name'];
