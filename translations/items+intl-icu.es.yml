@@ -692,7 +692,7 @@ Aufbauen: Instalar
 'Schlafplatz verbessern (schwacher permanenter Bonus, 1AP)': 'Mejorar un poco el campamento (bonus permanente débil, 1PA)'
 'Du hast das hiesige Versteck verbessert.': 'Pasaste muchos minutos preparando un escondite con todo lo que tenías a tu alcance...'
 'Sich verstecken und die Nacht hier schlafen!': '¡Esconderse y pasar la noche aquí!'
-'Du hast Dich notdürftig versteckt.': '¡Actualmente estás escondido en el área!'
+'Du hast Dich notdürftig versteckt.': '¡Estás actualmente escondido en la zona!'
 '"Grab" schaufeln (mittelmäßiger vorübergehender Bonus, 1AP)': 'Cavar una "tumba" (bonus temporal medio, 1PA)'
 'Du hast Dir Dein eigenes Grab geschaufelt. Oh welche Ironie!': 'Cavaste tu propia tumba. ¡Oh, qué ironía!'
 'Versteck verlassen': 'Dejar tu escondite.'
@@ -986,7 +986,7 @@ Freundschaft: Camaradería
 'Du brauchst im Moment <strong>nichts zu essen</strong>, da du nicht müde bist und noch alle deine Aktionspunkte hast.': '<strong>No necesitas comer</strong> de momento: No estás cansado y tienes todos tus puntos de acción.'
 'Mit deiner verletzten Hand bist du eigentlich nicht in der Lage, etwas zu halten. Trotzdem versuchst du dich hartnäckig in filigraner Reparaturarbeit, stößt dir dabei aber die Hand, was dir viele unnötige Schmerzen bereitet. Vielleicht solltest du stattdessen nach einem Weg suchen, dich selbst zu heilen.': 'No puedes sujetar nada con la mano herida. A pesar de ello, te empeñas en hacer una reparación complicada, pero te golpeas la mano en el proceso, lo que te causa mucho dolor innecesario. Tal vez deberías buscar una forma de curarte a ti mismo...'
 'Kein Malteser Hündchen': 'Ningún perro maltés'
-'Du hast dein Hündchen *in deinem Haus zurückgelassen*... Hoffentlich nimmt es dir das nicht übel.': '*Dejaste a tu cachorro en casa*... Espero que no se ofenda.'
+'Du hast dein Hündchen *in deinem Haus zurückgelassen*... Hoffentlich nimmt es dir das nicht übel.': '*Dejaste a tu perrito en casa*... Espero que no se ofenda.'
 'Flammen des Ruhms': 'Llamas de gloria'
 'Als Champion der letzten Saison hast du die Möglichkeit, deine Nachrichten im Forum besonders hervorzuheben.': 'Como campeón de la temporada anterior, tienes la oportunidad de resaltar tus mensajes en el foro.'
 'Kreischender Wecker (1 Schuss)': 'Despertador chillón (1 carga)'
@@ -1078,7 +1078,7 @@ Flagge: Bandera
 'Du kannst ihn auch mit einem Leckerli bestechen:': 'También puedes sobornarlo con una golosina:'
 Füttern: Alimentar
 'Du gibst deinem {tamer_dog} {items_consume}, das er gierig hinunterschlingt.{hr}Es vergeht keine Minute bis diese Belohnung Wirkung zeigt: Dein Fifi hat nun leuchtende Augen, ein glänzendes Fell und einen wedelnden Schwanz.': 'Le das a tu {tamer_dog} {items_consume}, que engulle con avidez.{hr}La recompensa no tarda ni un minuto en hacer efecto: Tu perrito tiene ahora los ojos brillantes, el pelaje reluciente y mueve la cola.'
-'Gut gefüttertes Malteser Hündchen': 'Cachorro maltés bien alimentado'
+'Gut gefüttertes Malteser Hündchen': 'Bichón maltés bien alimentado'
 Fußball: Balón de fútbol
 'Nun, da du dein Hündchen mit einem Leckerli ausreichend gestärkt hast, kann es selbst schwere und sperrige Gegenstände schleppen. Dir fällt auf, dass es ohne Ende sabbert. Es sieht aus, als würde es dich jeden Augenblick anspringen.': 'Ahora que has sobornado a tu perro con una golosina, puede cargar incluso objetos pesados y voluminosos. Eso sí, te das cuenta de que no para de babear... parece que va a saltarte encima en cualquier momento si te despistas...'
 'Für den kleinen Kick zwischendurch.': 'Para una pequeña patada entre los dos.'
