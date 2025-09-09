@@ -399,7 +399,7 @@ final class TransferItemListener implements ServiceSubscriberInterface
         if (
             ($event->type_from === TransferItemType::Local || $event->type_to === TransferItemType::Local) &&
             $target_citizen = match(true) {
-                $event->type_from === TransferItemType::Spawn => $event->actor,
+                //$event->type_from === TransferItemType::Spawn => $event->actor,
                 $event->type_from === TransferItemType::Local => $event->to?->getCitizen(),
                 default => $event->from?->getCitizen()
             }
