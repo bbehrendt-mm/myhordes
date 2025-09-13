@@ -5,6 +5,7 @@ namespace App\Command\Forum\Group;
 
 
 use App\Console\AssociativeChoiceQuestion;
+use App\Entity\Forum;
 use App\Entity\ForumGroup;
 use App\Service\CommandHelper;
 use Doctrine\ORM\EntityManagerInterface;
@@ -40,6 +41,14 @@ abstract class ForumGroupEditCommand extends Command
         return is_numeric($group)
             ? $this->entityManager->getRepository(ForumGroup::class)->find((int)$group)
             : $this->helper->resolve_string($group, ForumGroup::class, 'Forum Group', $this->getHelper('question'), $input, $output);
+    }
+
+    protected function getForum(InputInterface $input, OutputInterface $output, string $name = 'Forum'): Forum {
+        $forum = $input->getArgument($name);
+
+        return is_numeric($forum)
+            ? $this->entityManager->getRepository(Forum::class)->find((int)$forum)
+            : $this->helper->resolve_string($forum, Forum::class, 'Forum', $this->getHelper('question'), $input, $output);
     }
 
     protected function interact(InputInterface $input, OutputInterface $output): void

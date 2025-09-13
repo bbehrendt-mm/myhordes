@@ -81,7 +81,7 @@ class ForumGroup
         return Arr::get($this->titles ?? [], $lang, $this->getTitle());
     }
 
-    public function setLocalizedTitle(string $lang, string $title): static {
+    public function setLocalizedTitle(string $lang, ?string $title): static {
         $data = $this->getTitles() ?? [];
         Arr::set($data, $lang, $title);
         return $this->setTitles($data);
@@ -112,7 +112,13 @@ class ForumGroup
     }
 
     public function showIfSingleEntry(): bool {
-        return Arr::get( $this->options ?? [], 'showIfSingleEntry', false );
+        return Arr::get( $this->getOptions() ?? [], 'showIfSingleEntry', false );
+    }
+
+    public function setShowIfSingleEntry(bool $value): static {
+        $options = $this->getOptions() ?? [];
+        Arr::set( $options, 'showIfSingleEntry', $value );
+        return $this->setOptions($options);
     }
 
     public function getSort(): ?int
@@ -158,6 +164,20 @@ class ForumGroup
             $forum->getLocalizedTitle( $lang );
     }
 
+    public function clearTitleOverride( Forum $forum, ?string $lang = 'default' ): static {
+        $data = $this->getOverrides() ?? [];
+        if ($lang === null) {
+            unset($data[$forum->getId()]);
+            return $this->setOverrides($data);
+        } else return $this->setTitleOverride( $forum, null, $lang );
+    }
+
+    public function setTitleOverride( Forum $forum, ?string $title, string $lang = 'default' ): static {
+        $data = $this->getOverrides() ?? [];
+        Arr::set($data, "{$forum->getId()}.{$lang}.title", $title );
+        return $this->setOverrides( $data );
+    }
+
     /**
      * @return Collection<int, Forum>
      */
@@ -183,6 +203,8 @@ class ForumGroup
             if ($forum->getForumGroup() === $this) {
                 $forum->setForumGroup(null);
             }
+
+            $this->clearTitleOverride( $forum, null );
         }
 
         return $this;
