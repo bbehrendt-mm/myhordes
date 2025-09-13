@@ -78,7 +78,7 @@ class ForumGroup
     }
 
     public function getLocalizedTitle(string $lang): string {
-        return Arr::get($this->titles ?? [], $lang, $this->getTitle());
+        return Arr::get($this->getTitles() ?? [], $lang) ?? $this->getTitle();
     }
 
     public function setLocalizedTitle(string $lang, ?string $title): static {
