@@ -9,7 +9,7 @@ import {
     Item,
     TransportResponse
 } from "./api";
-import {Tooltip} from "../tooltip/Wrapper";
+import {Tooltip} from "../misc/Tooltip";
 import {Const, Global} from "../../defaults";
 import {TranslationStrings} from "./strings";
 import {useVault} from "../../v2/client-modules/Vault";

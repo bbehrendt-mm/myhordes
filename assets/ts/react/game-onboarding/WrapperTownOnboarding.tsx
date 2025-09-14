@@ -10,7 +10,7 @@ import {
     ResponseJobs, ResponseSkills, Skill
 } from "./api";
 import {TranslationStrings} from "./strings";
-import {Tooltip} from "../tooltip/Wrapper";
+import {Tooltip} from "../misc/Tooltip";
 import {sharedWorkerCall, sharedWorkerMessageHandler} from "../../v2/init";
 import {ServiceWorkerIndicator} from "../service-worker-state/Wrapper";
 import {BaseMounter} from "../index";

@@ -8,23 +8,18 @@
 {# @var user \App\Entity\User #}
 {# @var forums \App\Entity\Forum[] #}
 
-{% macro drawForum(forum, has_new_posts) %}
+{% macro drawForum(forum, has_new_posts, title) %}
     {# @var forum \App\Entity\Forum #}
-    <div x-ajax-href="{{ url('forum_view', {id: forum.id}) }}" class="forum-preview {{ has_new_posts ? 'new' : ''}} {% if forum.description is not empty %}forum-preview-desc{% endif %}">
-        {% if forum.town %}
-            <img alt="" src="{{ asset('build/images/forum/banner/bannerForumVille.gif') }}">
-        {% elseif forum.icon is not empty %}
-            <img alt="" src="{{ asset('build/images/forum/banner/' ~ forum.icon) }}">
-        {% else %}
-            <img alt="" src="{{ asset('build/images/forum/banner/bannerForumVoid.gif') }}">
-        {% endif %}
-        <div>
-            <div>{{ forum.localizedTitle(app.locale) }}</div>
-            {% if forum.localizedDescription(app.locale) is not empty %}
-                <span>{{ forum.localizedDescription(app.locale) }}</span>
-            {% endif %}
-        </div>
-    </div>
+    <hordes-forum
+            data-title="{{ forum.localizedTitle(app.locale) }}"
+            data-description="{{ forum.localizedDescription(app.locale) }}"
+            data-url="{{ url('forum_view', {id: forum.id}) }}"
+            data-icon="{{ (forum.icon is empty)
+                ? (forum.town ? asset('build/images/forum/banner/bannerForumVille.gif') : asset('build/images/forum/banner/bannerForumVoid.gif'))
+                : asset('build/images/forum/banner/' ~ forum.icon) }}"
+            data-sort="{{ forum.worldForumSorting ?? 0 }}"
+            data-new="{{ has_new_posts ? '1' : '0' }}"
+    ></hordes-forum>
 {% endmacro %}
 
 {% macro drawPrivateForums(forums, forums_new) %}
@@ -34,6 +29,41 @@
             {{ _self.drawForum(forum, forums_new[forum.id]) }}
         {% endfor %}
     {% endif %}
+{% endmacro %}
+
+{% macro drawForumSection(lang, section, forums, forums_new) %}
+    <hordes-forum-group
+            data-title="{{ section }}"
+            data-icon="{{ asset('build/images/lang/' ~ lang ~ '.png') }}"
+            data-forums="{{ forums|map( f => {
+                title:       f.localizedTitle(app.locale),
+                description: f.localizedDescription(app.locale),
+                url:         url('forum_view', {id: f.id}),
+                icon:        (f.icon is empty)
+                    ? asset('build/images/forum/banner/bannerForumVoid.gif')
+                    : asset('build/images/forum/banner/' ~ f.icon),
+                sort: f.worldForumSorting,
+                new: forums_new[f.id],
+            } )|values|json_encode }}"
+    ></hordes-forum-group>
+{% endmacro %}
+
+{% macro drawForumGroup(group, forums_new) %}
+    <hordes-forum-group
+        data-title="{{ group.localizedTitle(app.locale) }}"
+        data-icon="{{ asset('build/images/lang/' ~ group.lang ~ '.png') }}"
+        data-collapse="{{ group.collapsedByDefault ? '1' : '0' }}"
+        data-forums="{{ group.forums|map( f => {
+            title:       group.titleOverride(f, app.locale),
+            description: f.localizedDescription(app.locale),
+            url:         url('forum_view', {id: f.id}),
+            icon:        (f.icon is empty)
+                ? asset('build/images/forum/banner/bannerForumVoid.gif')
+                : asset('build/images/forum/banner/' ~ f.icon),
+            sort: f.worldForumSorting,
+            new: forums_new[f.id],
+        } )|values|json_encode }}"
+    ></hordes-forum-group>
 {% endmacro %}
 
 {% block ajax %}
@@ -54,7 +84,7 @@
                     </div>
                 {% else %}
 
-                    {% set town_forums = forums|filter(f => (f.town and user.aliveCitizen and user.aliveCitizen.town.id == f.town.id)) %}
+                    {% set town_forums = forums|filter(f => (f.id not in grouped_forums and f.town and user.aliveCitizen and user.aliveCitizen.town.id == f.town.id)) %}
                     {% if town_forums is not empty %}
                         <h5>{{ 'Stadtforum'|trans({},'global') }}</h5>
                         {% for forum in town_forums %}
@@ -62,31 +92,27 @@
                         {% endfor %}
                     {% endif %}
 
-                    {% set world_forums = forums|filter(f => f.town is empty)|sort((a,b) => (a.type <=> b.type ?? a.id <=> b.id)) %}
+                    {% set world_forums = forums|filter(f => f.id not in grouped_forums and f.town is empty)|sort((a,b) => (a.type <=> b.type ?? a.id <=> b.id)) %}
                     {% set private_forums = world_forums|filter( f => f.worldForumLanguage is null ) %}
 
                     {% if world_forums is not empty %}
 
                         {% if app.user.setting( constant("\\App\\Enum\\UserSetting::PrivateForumsOnTop") ) %}
+                            {% for group in groups|sort((a,b) => a.sort <=> b.sort ?? a.id <=> b.id) %}
+                                {{ _self.drawForumGroup(group, forums_new) }}
+                            {% endfor %}
                             {{ _self.drawPrivateForums(private_forums, forums_new) }}
                         {% endif %}
 
                         <h5>{{ 'Weltforen'|trans({},'global') }}</h5>
                         {% for section in forumSections %}
-                            <div class="forumGroup">
-                                <div class="header">
-                                    <img alt="{{ section }}" src="{{ asset('build/images/lang/' ~ section ~ '.png') }}">
-                                    <span>{{ 'Weltforum'|trans({},'global',section) }}</span>
-                                </div>
-                                <div class="content">
-                                    {% for forum in world_forums|filter( f => f.worldForumLanguage == section )|sort( (a,b) => ( a.worldForumSorting <=> b.worldForumSorting ) ) %}
-                                        {{ _self.drawForum(forum, forums_new[forum.id]) }}
-                                    {% endfor %}
-                                </div>
-                            </div>
+                            {{ _self.drawForumSection( section, 'Weltforum'|trans({},'global',section), world_forums|filter( f => f.worldForumLanguage == section )|sort( (a,b) => ( a.worldForumSorting <=> b.worldForumSorting ) ), forums_new ) }}
                         {% endfor %}
 
                         {% if not app.user.setting( constant("\\App\\Enum\\UserSetting::PrivateForumsOnTop") ) %}
+                            {% for group in groups|sort((a,b) => a.sort <=> b.sort ?? a.id <=> b.id) %}
+                                {{ _self.drawForumGroup(group, forums_new) }}
+                            {% endfor %}
                             {{ _self.drawPrivateForums(private_forums, forums_new) }}
                         {% endif %}
                     {% endif %}

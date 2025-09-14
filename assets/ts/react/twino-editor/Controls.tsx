@@ -4,7 +4,7 @@ import {Globals} from "./Wrapper";
 import {UserSearchBar} from "../user-search/Wrapper";
 import {Tab, TabbedSection, TabGroup} from "../tab-list/TabList";
 import {Emote, Snippet} from "./api";
-import {Tooltip} from "../tooltip/Wrapper";
+import {Tooltip} from "../misc/Tooltip";
 import {v4 as uuidv4} from "uuid";
 import {Global} from "../../defaults";
 import {dialogShim} from "../../shims";

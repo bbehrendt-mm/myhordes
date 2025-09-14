@@ -260,8 +260,15 @@ class MessageForumController extends MessageController
         $forums = array_filter($this->perm->getForumsWithPermission($this->getUser()), fn(Forum $f) => !$this->isLimitedDuringAttack($f));
         $subscriptions = $this->getUser()->getForumThreadSubscriptions()->filter(fn(ForumThreadSubscription $s) => !$s->getThread()->getHidden() && in_array($s->getThread()->getForum(), $forums));
 
+        $groups = [];
         $forums_new = [];
         foreach ($forums as $forum) {
+
+            if ($forum->getForumGroup()?->isEnabled()) {
+                if (!isset( $groups[$forum->getForumGroup()->getId()] ))
+                    $groups[$forum->getForumGroup()->getId()] = [$forum->getForumGroup(), [$forum->getId()]];
+                else $groups[$forum->getForumGroup()->getId()][1][] = $forum->getId();
+            }
 
             $forums_new[$forum->getId()] = $gameCachePool->get("forum_unread_cache_{$this->getUser()->getId()}_{$forum->getId()}", function (ItemInterface $item) use ($forum): bool {
                 $item->expiresAfter(1800)->tag(['forum_unread', "forum_{$forum->getId()}_unread", "forum_{$this->getUser()->getId()}_{$forum->getId()}_unread"]);
@@ -283,7 +290,22 @@ class MessageForumController extends MessageController
             }/*, INF*/);
         }
 
-        $forum_sections = array_unique( array_filter( array_map( fn(Forum $f) => $f->getWorldForumLanguage(), $forums ) ) );
+        $active_groups = [];
+        $grouped_forums = [];
+        foreach ($groups as [$group, $contained]) {
+            if (count($contained) < 1) continue;
+            if (!$group->showIfSingleEntry() && count($contained) < 2) continue;
+
+            $active_groups[] = $group;
+            $grouped_forums = array_merge($grouped_forums, $contained);
+        }
+
+        $forum_sections = array_unique( array_filter(
+            array_map(
+                fn(Forum $f) => $f->getWorldForumLanguage(),
+                array_filter( $forums, fn(Forum $forum) => !in_array( $forum->getId(), $grouped_forums ) )
+            )
+        ) );
         usort( $forum_sections, function(string $a, string $b) {
             return match(true) {
                 $a === $b => 0,
@@ -299,6 +321,8 @@ class MessageForumController extends MessageController
             'user' => $this->getUser(),
             'forums' => $forums,
             'forums_new' => $forums_new,
+            'groups' => $active_groups,
+            'grouped_forums' => $grouped_forums,
             'subscriptions' => $subscriptions,
             'forumSections' => $forum_sections,
             'official_groups' => $this->entity_manager->getRepository(OfficialGroup::class)->findBy(['lang' => [$this->getUserLanguage(),'multi']]),

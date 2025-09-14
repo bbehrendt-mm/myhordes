@@ -3,7 +3,7 @@ import {Root} from "react-dom/client";
 import {useLayoutEffect, useRef, useState} from "react";
 import {Fetch} from "../../v2/fetch";
 import {Global} from "../../defaults";
-import {Tooltip} from "../tooltip/Wrapper";
+import {Tooltip} from "../misc/Tooltip";
 import {BaseMounter} from "../index";
 
 declare var $: Global;

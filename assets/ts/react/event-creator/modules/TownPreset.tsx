@@ -5,7 +5,7 @@ import Components from "../../index";
 import {TownPreset, TownPresetData} from "../api";
 import {Flag} from "../Common";
 import {EditorGlobals} from "../Creator";
-import {Tooltip} from "../../tooltip/Wrapper";
+import {Tooltip} from "../../misc/Tooltip";
 import {Simulate} from "react-dom/test-utils";
 import cancel = Simulate.cancel;
 

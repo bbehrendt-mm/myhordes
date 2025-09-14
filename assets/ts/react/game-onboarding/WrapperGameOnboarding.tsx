@@ -6,7 +6,7 @@ import {
 } from "./api";
 import {GameTranslationStrings, TranslationStrings} from "./strings";
 import {BaseMounter} from "../index";
-import {Tooltip} from "../tooltip/Wrapper";
+import {Tooltip} from "../misc/Tooltip";
 import {useStickyToggle} from "../utils";
 import Username from "../components/username";
 import Dialog from "../components/dialog";

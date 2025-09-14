@@ -5,7 +5,7 @@ import {ProgressBar} from "../progress-bar/Wrapper";
 import {useContext, useEffect, useRef, useState} from "react";
 import {TranslationStrings} from "./strings";
 import {HeroSkill, HxpManagementApi, SkillState} from "./api";
-import {Tooltip} from "../tooltip/Wrapper";
+import {Tooltip} from "../misc/Tooltip";
 
 declare var c: Const;
 declare var $: Global;

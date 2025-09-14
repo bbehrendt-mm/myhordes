@@ -4,7 +4,7 @@ import {
     Building,
     BuildingAPI, BuildingListResponse,
 } from "./api";
-import {Tooltip} from "../tooltip/Wrapper";
+import {Tooltip} from "../misc/Tooltip";
 import {Const, Global} from "../../defaults";
 import {TranslationStrings} from "./strings";
 import {useVault, Vault} from "../../v2/client-modules/Vault";
