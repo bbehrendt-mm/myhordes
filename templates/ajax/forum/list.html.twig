@@ -22,9 +22,12 @@
     ></hordes-forum>
 {% endmacro %}
 
-{% macro drawPrivateForums(forums, forums_new) %}
-    {% if forums is not empty %}
+{% macro drawPrivateForums(forums, groups, forums_new) %}
+    {% if forums is not empty or groups is not empty %}
         <h5>{{ 'Private Foren'|trans({},'global') }}</h5>
+        {% for group in groups|sort((a,b) => a.sort <=> b.sort ?? a.id <=> b.id) %}
+            {{ _self.drawForumGroup(group, forums_new) }}
+        {% endfor %}
         {% for forum in forums %}
             {{ _self.drawForum(forum, forums_new[forum.id]) }}
         {% endfor %}
@@ -98,10 +101,7 @@
                     {% if world_forums is not empty %}
 
                         {% if app.user.setting( constant("\\App\\Enum\\UserSetting::PrivateForumsOnTop") ) %}
-                            {% for group in groups|sort((a,b) => a.sort <=> b.sort ?? a.id <=> b.id) %}
-                                {{ _self.drawForumGroup(group, forums_new) }}
-                            {% endfor %}
-                            {{ _self.drawPrivateForums(private_forums, forums_new) }}
+                            {{ _self.drawPrivateForums(private_forums, groups, forums_new) }}
                         {% endif %}
 
                         <h5>{{ 'Weltforen'|trans({},'global') }}</h5>
@@ -110,10 +110,7 @@
                         {% endfor %}
 
                         {% if not app.user.setting( constant("\\App\\Enum\\UserSetting::PrivateForumsOnTop") ) %}
-                            {% for group in groups|sort((a,b) => a.sort <=> b.sort ?? a.id <=> b.id) %}
-                                {{ _self.drawForumGroup(group, forums_new) }}
-                            {% endfor %}
-                            {{ _self.drawPrivateForums(private_forums, forums_new) }}
+                            {{ _self.drawPrivateForums(private_forums, groups, forums_new) }}
                         {% endif %}
                     {% endif %}
 
