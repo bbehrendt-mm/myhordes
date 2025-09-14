@@ -7,12 +7,13 @@
 import {GroupResponse, HordesUserSearchBar, UserResponse} from "../react/user-search/Wrapper";
 import {HordesDistinctions} from "../react/distinctions/Wrapper";
 import {Shim} from "../react";
-import {HordesTooltip} from "../react/tooltip/Wrapper";
+import {HordesTooltip} from "../react/misc/Tooltip";
 import {HordesContentReport} from "../react/content-report/Wrapper";
 import {HordesIssueReport} from "../react/issue-report/Wrapper";
 import {HordesServiceWorkerIndicator} from "../react/service-worker-state/Wrapper";
 import {HordesProgressBar} from "../react/progress-bar/Wrapper";
 import {HordesHxpLog} from "../react/hxp-log/Wrapper";
+import {HordesForum, HordesForumGroup} from "../react/misc/ForumGroup";
 
 // Define web component <hordes-user-search />
 export class HordesUserSearchElement extends Shim<HordesUserSearchBar> {
@@ -194,6 +195,53 @@ customElements.define('hordes-hxp-log', class HordesHxpLogElement extends Shim<H
 
     protected static observedAttributeNames() {
         return ['data-focus'];
+    }
+
+}, {  });
+
+customElements.define('hordes-forum-group', class HordesForumGroupElement extends Shim<HordesForumGroup> {
+    protected generateInstance(): HordesForumGroup {
+        return new HordesForumGroup();
+    }
+
+    protected generateProps(): object | null {
+        let data = [];
+        try {
+            data = JSON.parse( this.dataset.forums );
+        } catch (_) { }
+
+        return {
+            icon: this.dataset.icon,
+            title: this.dataset.title,
+            collapse: parseInt(this.dataset.collapse ?? '0') != 0,
+            forums: data
+        }
+    }
+
+    protected static observedAttributeNames() {
+        return ['data-icon', 'data-title', 'data-forums', 'data-collapse'];
+    }
+
+}, {  });
+
+customElements.define('hordes-forum', class HordesForumElement extends Shim<HordesForum> {
+    protected generateInstance(): HordesForum {
+        return new HordesForum();
+    }
+
+    protected generateProps(): object | null {
+        return {
+            icon: this.dataset.icon,
+            title: this.dataset.title,
+            url: this.dataset.url,
+            sort: parseInt(this.dataset.sort ?? '0'),
+            new: parseInt(this.dataset.new ?? '0') != 0,
+            description: this.dataset.description
+        }
+    }
+
+    protected static observedAttributeNames() {
+        return ['data-icon', 'data-title', 'data-url', 'data-sort', 'data-new', 'data-description'];
     }
 
 }, {  });

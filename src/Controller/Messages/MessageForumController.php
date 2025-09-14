@@ -300,7 +300,12 @@ class MessageForumController extends MessageController
             $grouped_forums = array_merge($grouped_forums, $contained);
         }
 
-        $forum_sections = array_unique( array_filter( array_map( fn(Forum $f) => $f->getWorldForumLanguage(), $forums ) ) );
+        $forum_sections = array_unique( array_filter(
+            array_map(
+                fn(Forum $f) => $f->getWorldForumLanguage(),
+                array_filter( $forums, fn(Forum $forum) => !in_array( $forum->getId(), $grouped_forums ) )
+            )
+        ) );
         usort( $forum_sections, function(string $a, string $b) {
             return match(true) {
                 $a === $b => 0,

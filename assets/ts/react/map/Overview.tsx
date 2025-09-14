@@ -9,7 +9,7 @@ import {
     RuntimeMapSettings, RuntimeMapStateAction
 } from "./typedef";
 import {useContext, useEffect, useLayoutEffect, useRef, useState} from "react";
-import {Tooltip} from "../tooltip/Wrapper";
+import {Tooltip} from "../misc/Tooltip";
 import {Globals} from "./Wrapper";
 import {emitSignal} from "../../v2/client-modules/Signal";
 

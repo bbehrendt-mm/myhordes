@@ -23,6 +23,7 @@ class ForumGroupConfigureCommand extends ForumGroupEditCommand
             ->setHelp('This command allows enabling or disabling a specific forum group.')
 
             ->addOption('show-if-single-entry', null, InputOption::VALUE_REQUIRED, 'Display the group if it only has one visible forum in it.')
+            ->addOption('collapse-by-default', null, InputOption::VALUE_REQUIRED, 'Display the group collapsed by default.')
             ->addOption('sort', null, InputOption::VALUE_REQUIRED, 'Sorting value.')
 
             ->addOption('name', null, InputOption::VALUE_REQUIRED, 'Sets the group name.')
@@ -49,6 +50,9 @@ class ForumGroupConfigureCommand extends ForumGroupEditCommand
 
         if ($input->getOption('show-if-single-entry') !== null)
             $forumGroup->setShowIfSingleEntry( (int)$input->getOption('show-if-single-entry') > 0 );
+
+        if ($input->getOption('collapse-by-default') !== null)
+            $forumGroup->setCollapsedByDefault( (int)$input->getOption('collapse-by-default') > 0 );
 
         if ($input->getOption('sort') !== null)
             $forumGroup->setSort( (int)$input->getOption('sort') );

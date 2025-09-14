@@ -2,7 +2,7 @@ import * as React from "react";
 import {useContext, useEffect, useLayoutEffect, useRef, useState} from "react";
 import {LogAPI, LogEntry} from "./api";
 import {TranslationStrings} from "./strings";
-import {Tooltip} from "../tooltip/Wrapper";
+import {Tooltip} from "../misc/Tooltip";
 import {Global} from "../../defaults";
 import {TwinoEditorWrapper} from "../twino-editor/Wrapper";
 import {BaseMounter} from "../index";

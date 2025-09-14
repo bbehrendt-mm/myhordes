@@ -4,7 +4,7 @@ import {AvatarCreatorAPI, ResponseIndex, ResponseMedia} from "./api";
 import {useContext, useEffect, useLayoutEffect, useRef, useState} from "react";
 import {TranslationStrings} from "./strings";
 import {Global} from "../../defaults";
-import {Tooltip} from "../tooltip/Wrapper";
+import {Tooltip} from "../misc/Tooltip";
 import {byteToText} from "../../v2/utils";
 import {BaseMounter} from "../index";
 

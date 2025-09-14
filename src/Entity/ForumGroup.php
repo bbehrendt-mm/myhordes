@@ -121,6 +121,16 @@ class ForumGroup
         return $this->setOptions($options);
     }
 
+    public function collapsedByDefault(): bool {
+        return Arr::get( $this->getOptions() ?? [], 'collapsedByDefault', false );
+    }
+
+    public function setCollapsedByDefault(bool $value): static {
+        $options = $this->getOptions() ?? [];
+        Arr::set( $options, 'collapsedByDefault', $value );
+        return $this->setOptions($options);
+    }
+
     public function getSort(): ?int
     {
         return $this->sort;

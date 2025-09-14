@@ -3,7 +3,7 @@ import {PointerEventHandler, useEffect, useLayoutEffect, useRef, useState} from 
 import Components, {BaseMounter} from "../index";
 import {TranslationStrings} from "./strings";
 import {DistinctionAward, DistinctionPicto, ResponseDistinctions, SoulDistinctionAPI} from "./api";
-import {Tooltip} from "../tooltip/Wrapper";
+import {Tooltip} from "../misc/Tooltip";
 
 
 export class HordesDistinctions extends BaseMounter<{  }>{

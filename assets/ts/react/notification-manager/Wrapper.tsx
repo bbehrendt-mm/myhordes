@@ -9,7 +9,7 @@ import {getPushServiceRegistration, pushAPIIsSupported, registerForPushNotificat
 import {md5} from "js-md5";
 import {UserSettingBase, UserSettingsAPI} from "../user-settings/api";
 import {v4 as uuidv4} from "uuid";
-import {Tooltip} from "../tooltip/Wrapper";
+import {Tooltip} from "../misc/Tooltip";
 import {BaseMounter} from "../index";
 
 declare var $: Global;

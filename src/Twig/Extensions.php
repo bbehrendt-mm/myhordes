@@ -55,6 +55,7 @@ class Extensions extends AbstractExtension implements GlobalsInterface
     public function getFilters(): array
     {
         return [
+            new TwigFilter('values', [$this, 'values']),
             new TwigFilter('instance_of', [$this, 'instance_of']),
             new TwigFilter('to_date',  [$this, 'create_date']),
             new TwigFilter('is_granted',  [$this, 'check_granted']),
@@ -100,6 +101,10 @@ class Extensions extends AbstractExtension implements GlobalsInterface
     public function getGlobals(): array
     {
         return [];
+    }
+
+    public function values(array $data) : array {
+        return array_values($data);
     }
 
     public function instance_of($object, string $classname): bool {
