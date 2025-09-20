@@ -36,10 +36,12 @@ final class Version20250830134338 extends AbstractMigration
             $rows = $this->connection->fetchAllAssociative("SELECT id, $column FROM $table");
             foreach ($rows as $row) {
                 if ($row[$column] === null) continue;
-                $this->connection->executeQuery("UPDATE $table SET $column = :data WHERE id = :id", [
-                    'data' => json_encode(unserialize($row[$column])),
-                    'id' => $row['id'],
-                ]);
+                $data = @unserialize($row[$column]);
+                if ($data !== false)
+                    $this->connection->executeQuery("UPDATE $table SET $column = :data WHERE id = :id", [
+                        'data' => json_encode($data),
+                        'id' => $row['id'],
+                    ]);
             }
         }
     }

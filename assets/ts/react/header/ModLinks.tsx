@@ -3,9 +3,6 @@ import {useContext, useEffect, useLayoutEffect, useRef, useState} from "react";
 import {ExternalApp, HeaderAPI, ModLink} from "./api";
 import {Global} from "../../defaults";
 import {useSharedWorkerMessages, useStickyToggle, useTranslations} from "../utils";
-import {Tooltip} from "../tooltip/Wrapper";
-import Dialog from "../components/dialog";
-import {randomUUIDv4} from "../../shims";
 import {Globals, mountProps} from "./Wrapper";
 
 declare var $: Global;

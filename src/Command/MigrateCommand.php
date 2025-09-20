@@ -559,11 +559,6 @@ class MigrateCommand extends Command
                             $output->writeln('<info>Ok!</info>');
                         }
 
-                    if (!$this->helper->capsule( 'doctrine:migrations:version --all --delete --no-interaction', $output )) {
-                        $output->writeln("<error>Unable to clean migrations.</error>");
-                        return 4;
-                    }
-
                     if (!$this->helper->capsule( 'doctrine:migrations:diff --allow-empty-diff --formatted --no-interaction', $output )) {
                         $output->writeln("<error>Unable to create a migration.</error>");
                         return 1;

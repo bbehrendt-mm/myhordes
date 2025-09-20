@@ -9,7 +9,7 @@ import {HordesHeaderAPIWidget, HordesStandaloneAppPopupWrapper} from "./Apps";
 import {HordesHeaderModLinksWidget} from "./ModLinks";
 import {HordesHeaderClockWidget} from "./Clock";
 import {string} from "prop-types";
-import {Tooltip} from "../tooltip/Wrapper";
+import {Tooltip} from "../misc/Tooltip";;
 
 declare var $: Global;
 

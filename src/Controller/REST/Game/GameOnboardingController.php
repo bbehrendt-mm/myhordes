@@ -201,7 +201,7 @@ class GameOnboardingController extends AbstractController
             ->where(Criteria::expr()->eq('day', 1))
             ->andWhere(Criteria::expr()->orX(
                 Criteria::expr()->isNull('scheduledFor'),
-                Criteria::expr()->lte('scheduledFor', now()),
+                Criteria::expr()->lte('scheduledFor', new DateTime()),
             ))
         )->filter(fn(Town $town) => $town->getPopulation() > $town->getCitizenCount());
 
