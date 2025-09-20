@@ -216,7 +216,7 @@ final class BuildingQueryListener implements ServiceSubscriberInterface
     public function onQueryTownRoleEnabled( BuildingQueryTownRoleEnabledEvent $event ): void {
         $event->enabled = match ($event->role->getName()) {
             'guide'     => $this->getService(TownHandler::class)->getBuilding($event->town, 'item_scope_#00' ) !== null,
-            'shaman'    => $this->getService(TownHandler::class)->getBuilding($event->town, 'small_spa4souls_#01' ) !== null,
+            'shaman'    => $this->getService(TownHandler::class)->getBuilding($event->town, 'item_soul_blue_static_#00' ) !== null,
             'cata'      => $this->getService(TownHandler::class)->getBuilding($event->town, 'item_courroie_#00' ) !== null,
             default => true
         };
