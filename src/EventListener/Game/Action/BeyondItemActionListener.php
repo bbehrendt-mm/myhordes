@@ -145,10 +145,10 @@ final class BeyondItemActionListener implements ServiceSubscriberInterface
                 );
 
                 if ($zone) $event->cache->addMessage(
-                    T::__('Während du dich konzentrierst, spürst du für einen kurzen Moment die Aura eines deiner verstorbenen Mitbürger. Sie scheint von {location} zu kommen...', 'gane'),
+                    T::__('Während du dich konzentrierst, spürst du für einen kurzen Moment die Aura eines deiner verstorbenen Mitbürger. Sie scheint von {location} zu kommen...', 'game'),
                     [ 'location' => "<span class=\"tool\">[ {$zone->getX()} / {$zone->getY()} ]</span>" ]
                 ); else $event->cache->addMessage(
-                    T::__('Du spürst nichts als Ruhe.', 'gane'),
+                    T::__('Du spürst nichts als Ruhe.', 'game'),
                 );
 
                 break;
