@@ -12,6 +12,7 @@ use App\Service\RandomGenerator;
 use App\Service\TownHandler;
 use App\Structures\ActionHandler\Execution;
 use App\Structures\TownConf;
+use Doctrine\Common\Collections\ArrayCollection;
 use MyHordes\Fixtures\DTO\Actions\Atoms\Effect\TownEffect;
 use MyHordes\Fixtures\DTO\Actions\EffectAtom;
 
@@ -50,6 +51,19 @@ class ProcessTownEffect extends AtomEffectProcessor
                 $data->unlockBlueprintType !== null && $data->unlockBlueprintType === $cache->conf->getBuildingRarity( $proto ) => true,
                 default => in_array($proto->getName(), $data->unlockBlueprintList ?? [])
             });
+
+            if ($cache->conf->get(TownSetting::OptFeatureBlueprintMode) === 'improve') {
+                $reduced = new ArrayCollection( $filtered )->filter(function(BuildingPrototype $p) use ($town) {
+                    // Check if any parents of this building have not yet been upgraded
+                    $pids = $p->getAllParents()->map( fn(BuildingPrototype $pp) => $pp->getId() );
+                    return $town->getBuildings()
+                            ->filter( fn(Building $b) => $pids->contains( $b->getPrototype()->getId() ) )
+                            ->filter( fn(Building $b) => $b->getDifficultyLevel() < 0 )
+                            ->count() === 0;
+                });
+
+                if ($reduced->count() > 0) $filtered = $reduced->toArray();
+            }
 
             if (!empty($filtered)) {
                 /** @var RandomGenerator $rg */

@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Enum\Game\BuildingResourceSetType;
 use App\Interfaces\NamedEntity;
+use ArrayHelpers\Arr;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
@@ -56,6 +57,8 @@ class BuildingPrototype implements NamedEntity
 
     #[ORM\Column]
     private ?bool $hasHardMode = null;
+
+    private ?ArrayCollection $allParents = null;
 
     /**
      * @var Collection<int, BuildingConstructionResourceSet>
@@ -148,14 +151,27 @@ class BuildingPrototype implements NamedEntity
         return $this->parent;
     }
 
+    /**
+     * Returns a list of all parent constructions
+     * @return Collection<self>
+     */
+    public function getAllParents(): Collection
+    {
+        return clone ($this->allParents ??= new ArrayCollection([
+            ...( $this->getParent() ? [$this->getParent()] : [] ),
+            ...( $this->getParent()?->getAllParents()->toArray() ?? [] )
+        ]));
+    }
+
     public function setParent(?self $parent): self
     {
         $this->parent = $parent;
 
         return $this;
     }
+
     /**
-     * @return Collection|self[]
+     * @return Collection<self>>
      */
     public function getChildren(): Collection
     {

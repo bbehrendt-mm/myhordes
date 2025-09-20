@@ -213,7 +213,7 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->isTemporary(0)->defense(0)
             ->ap(25)->health(25)->resources(["wood2_#00" => 6,"wood_beam_#00" => 2,"metal_beam_#00" => 2,"meca_parts_#00" => 1,])
             ->adjustForHardMode(
-                null, ["wood2_#00" => 24,"wood_beam_#00" => 6,"metal_beam_#00" => 6,"meca_parts_#00" => 3,],
+                null, ["wood2_#00" => 20,"wood_beam_#00" => 5,"metal_beam_#00" => 5,"meca_parts_#00" => 2,],
                 null, ["wood2_#00" => 5,"wood_beam_#00" => 1,"metal_beam_#00" => 1,"meca_parts_#00" => 1,],
             )
             ->blueprintLevel(0)->orderBy(3)
@@ -383,7 +383,10 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->icon('item_meat')->label('Metzgerei')->description('In der Metzgerei könnt ihr eure kleinen treuen Begleiter (Hunde, Katzen, Schlangen ...) in Lebensmittel verwandeln. Da gibt es doch tatsächlich noch Leute, die Vegetarier sind...')
             ->isTemporary(0)->defense(0)
             ->ap(40)->health(40)->resources(["wood2_#00" => 9,"metal_#00" => 4,])
-            ->adjustForHardMode(null, ["wood2_#00" => 36,"metal_#00" => 16,])->autoEasyMode()
+            ->adjustForHardMode(
+                null, ["wood2_#00" => 25,"metal_#00" => 12,],
+                null, ["wood2_#00" => 7,"metal_#00" => 3,],
+            )
             ->blueprintLevel(0)->orderBy(2)->commit($item_meat);
 
         $container->add()->parentBuilding($item_meat)
@@ -656,7 +659,7 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->isTemporary(0)->defense(0)
             ->ap(40)->health(40)->resources(["meca_parts_#00" => 1,"wood2_#00" => 10,"metal_#00" => 8,"plate_#00" => 2,"rustine_#00" => 2,])
             ->adjustForHardMode(
-                null, ["meca_parts_#00" => 3,"wood2_#00" => 40,"metal_#00" => 32,"plate_#00" => 6,"rustine_#00" => 12,],
+                null, ["meca_parts_#00" => 2,"wood2_#00" => 35,"metal_#00" => 27,"plate_#00" => 5,"rustine_#00" => 8,],
                 null, ["meca_parts_#00" => 1,"wood2_#00" => 8,"metal_#00" => 6,"plate_#00" => 1,"rustine_#00" => 2,],
             )
             ->blueprintLevel(0)->orderBy(2)->commit($small_armor);
@@ -748,7 +751,7 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->isTemporary(0)->defense(0)
             ->ap(30)->health(30)->resources(["electro_#00" => 2,"wood_beam_#00" => 5,"metal_beam_#00" => 5,"pile_#00" => 1,"diode_#00" => 1,])
             ->adjustForHardMode(
-                null, ["electro_#00" => 6,"wood_beam_#00" => 15,"metal_beam_#00" => 15,"pile_#00" => 4,"diode_#00" => 3,],
+                null, ["electro_#00" => 2,"wood_beam_#00" => 15,"metal_beam_#00" => 15,"pile_#00" => 4,"diode_#00" => 1,],
                 null, ["electro_#00" => 1,"wood_beam_#00" => 4,"metal_beam_#00" => 4,"pile_#00" => 1,"diode_#00" => 1,],
             )
             ->blueprintLevel(3)->orderBy(2)->commit();
