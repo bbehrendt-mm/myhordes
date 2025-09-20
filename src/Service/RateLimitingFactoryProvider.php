@@ -19,6 +19,7 @@ class RateLimitingFactoryProvider
     public RateLimiterFactory $forumThreadCreation;
     public RateLimiterFactory $reportToModeration;
     public RateLimiterFactory $reportToModerationLimited;
+    public RateLimiterFactory $reportToGitlab;
 
     public function __construct(
         RateLimiterFactory $publicApiLimiter,
@@ -30,6 +31,7 @@ class RateLimitingFactoryProvider
         RateLimiterFactory $forumThreadCreationLimiter,
         RateLimiterFactory $reportToModerationLimiter,
         RateLimiterFactory $reportToModerationLimitedLimiter,
+        RateLimiterFactory $reportToGitlabLimiter,
     ) {
         $this->publicApi = $publicApiLimiter;
         $this->anonymousApi = $anonymousApiLimiter;
@@ -40,6 +42,7 @@ class RateLimitingFactoryProvider
         $this->forumThreadCreation = $forumThreadCreationLimiter;
         $this->reportToModeration = $reportToModerationLimiter;
         $this->reportToModerationLimited = $reportToModerationLimitedLimiter;
+        $this->reportToGitlab = $reportToGitlabLimiter;
 
         $this->normalizer = new CamelCaseToSnakeCaseNameConverter();
     }

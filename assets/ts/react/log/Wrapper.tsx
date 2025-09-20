@@ -2,7 +2,7 @@ import * as React from "react";
 import {useContext, useEffect, useLayoutEffect, useRef, useState} from "react";
 import {LogAPI, LogEntry} from "./api";
 import {TranslationStrings} from "./strings";
-import {Tooltip} from "../tooltip/Wrapper";
+import {Tooltip} from "../misc/Tooltip";
 import {Global} from "../../defaults";
 import {TwinoEditorWrapper} from "../twino-editor/Wrapper";
 import {BaseMounter} from "../index";
@@ -292,7 +292,7 @@ const HordesLogContentContainer = (props: logContainerProps) => {
             </> }
             { (last_time = entry.timestamp) && <></> }
             { (last_day = entry.day) && <></> }
-            <div className={`log-entry log-entry-type-${ entry['type'] } log-entry-class-${ entry['class'] }`}>
+            <div className={`log-entry log-entry-type-${ entry['type'] } log-entry-class-${ entry['class'] }`} data-template-id={`${entry.template ?? 0}`}>
                 <span className="log-part-time">{entry.timestring}</span>
                 <span style={inHiding === entry.id ? {opacity: 0.5} : null} className={`log-part-content ${entry.hidden ? 'log-part-entry-hidden' : ''}`}>
                     { entry.hidden && <img alt="" src={ globals.strings?.content.warning }/> }

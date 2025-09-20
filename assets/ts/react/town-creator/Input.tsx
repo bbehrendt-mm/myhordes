@@ -9,7 +9,7 @@ import {
 } from "react";
 import {Globals} from "./Wrapper";
 import {Global} from "../../defaults";
-import {Tooltip} from "../tooltip/Wrapper";
+import {Tooltip} from "../misc/Tooltip";
 
 declare var $: Global;
 

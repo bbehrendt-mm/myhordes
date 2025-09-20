@@ -207,10 +207,6 @@ final class BeyondItemActionListener implements ServiceSubscriberInterface
 
                     $event->cache->addTag("bp-found");
                     $event->cache->addSpawnedItem($bp_item);
-
-                    $this->getService(EntityManagerInterface::class)->persist(
-                        $this->getService(LogTemplateHandler::class)->beyondItemLog(citizen: $event->citizen, item: $bp_item_prototype, toFloor: true)
-                    );
                 }
                 break;
         }

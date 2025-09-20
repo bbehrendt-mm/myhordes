@@ -26,6 +26,7 @@ export type TranslationStrings = {
         error_400: string,
         error_407: string,
         error_412: string,
+        error_429: string,
     },
 
     fields: {
@@ -39,5 +40,6 @@ export type TranslationStrings = {
 		hint: string,
 		public: string,
 		private: string,
+        force_private: boolean
 	},
 }

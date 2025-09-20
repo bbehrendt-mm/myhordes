@@ -318,7 +318,6 @@ class ZoneHandler
                     $this->gps->recordItemFound( $item_prototype, $current_citizen, null );
                     if ($inventoryDest = $this->proxy->placeItem( $current_citizen, $item, [ $current_citizen->getInventory(), $executable_timer->getZone()->getFloor() ] )) {
                         if($inventoryDest->getId() === $executable_timer->getZone()->getFloor()->getId()){
-                            $this->entity_manager->persist($this->log->beyondItemLog($current_citizen, $item->getPrototype(), true));
                             if ($active && $current_citizen->getEscortSettings() && $current_citizen->getEscortSettings()->getLeader() && $current_citizen->getEscortSettings()->getLeader() === $active)
                                 $ret_str[] = $this->trans->trans('Er kann den Gegenstand momentan nicht aufnehmen und hat ihn auf dem Boden abgelegt.', [], 'game');
                             elseif ($active && $current_citizen === $active)

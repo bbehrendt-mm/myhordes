@@ -1676,7 +1676,7 @@ class TownController extends InventoryAwareController
 
         $gps->recordInsurrectionProgress($town, $citizen, $insurrectionProgress, $non_shunned);
 
-        $town->setInsurrectionProgress($town->getInsurrectionProgress() + $insurrectionProgress);
+        $town->setInsurrectionProgress($town->getInsurrectionProgress() + (int)ceil($insurrectionProgress));
 
         if ($town->getInsurrectionProgress() >= 100) {
             // Let's do the insurrection !

@@ -41,6 +41,7 @@ use App\Enum\Configuration\TownSetting;
 use App\Enum\DomainBlacklistType;
 use App\Enum\ServerSetting;
 use App\Response\AjaxResponse;
+use App\Service\Actions\Cache\InvalidateLogCacheAction;
 use App\Service\Actions\Cache\InvalidateTagsInAllPoolsAction;
 use App\Service\AdminHandler;
 use App\Service\AntiCheatService;
@@ -487,7 +488,7 @@ class AdminUserController extends AdminActionController
     public function user_account_manager(User $user, string $action, JSONRequestParser $parser, UserFactory $uf,
                                          TwinoidHandler $twin, UserHandler $userHandler, PermissionHandler $perm,
                                          CrowService $crow, KernelInterface $kernel, InvalidateTagsInAllPoolsAction $clearCache,
-                                         EventProxyService $proxy, UserUnlockableService $unlockService,
+                                         EventProxyService $proxy, UserUnlockableService $unlockService, InvalidateLogCacheAction $logCacheAction,
                                          string $param = ''): Response
     {
         if (empty($param)) $param = $parser->get('param', '');
@@ -660,6 +661,7 @@ class AdminUserController extends AdminActionController
                 if (empty($param)) $user->setDisplayName( null );
                 else $user->setDisplayName( $param );
                 $this->entity_manager->persist($user);
+                foreach ($user->getCitizens() as $c) $logCacheAction( $c->getTown() );
                 break;
 
             case 'name_manual':

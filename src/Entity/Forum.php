@@ -43,6 +43,9 @@ class Forum
 
     #[ORM\OneToMany(mappedBy: 'forum', targetEntity: ForumTitle::class, cascade: ['persist', 'remove'], fetch: 'EXTRA_LAZY', orphanRemoval: true)]
     private Collection $titles;
+
+    #[ORM\ManyToOne(inversedBy: 'forums')]
+    private ?ForumGroup $forumGroup = null;
     public function __construct()
     {
         $this->threads = new ArrayCollection();
@@ -226,6 +229,18 @@ class Forum
                 $title->setForum(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getForumGroup(): ?ForumGroup
+    {
+        return $this->forumGroup;
+    }
+
+    public function setForumGroup(?ForumGroup $forumGroup): static
+    {
+        $this->forumGroup = $forumGroup;
 
         return $this;
     }

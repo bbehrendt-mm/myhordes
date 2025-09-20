@@ -21,6 +21,11 @@
   &.new:before {
     content: " "; position: absolute; width: 20px; height: 20px; border: 1px solid #fe7d00; box-shadow: 0 0 3px black;
     background: url("../../img/forum/new.png") top center no-repeat, #bd3d00; top: -2px; left: -7px;
+    transition: top 0.1s ease-in-out, left 0.1s ease-in-out;
+  }
+
+  &.new.animating:before {
+    top: 2px; left: 7px;
   }
 
   &:hover { border-color: @myhordes-smalltext; filter: drop-shadow(0 0 10px rgba(0,0,0,0.8)); color: rgba(255,255,255,1.0); }
@@ -28,20 +33,37 @@
 }
 
 .forumGroup {
+  margin: 10px;
+  background: #5c2b20;
+  border-radius: 10px;
+  outline: 2px solid #7e4d2b; outline-offset: -2px;
+  filter: drop-shadow(0 0 10px rgba(0,0,0,0.5));
+  &:hover { filter: drop-shadow(0 0 10px rgba(0,0,0,0.8)); }
+  transition: filter 0.25s ease-in-out;
+
   .header {
-    font-variant: small-caps; font-weight: bold; margin-bottom: 5px;
-    display: flex; align-items: center; gap: 10px; margin-left: 10px;
+    cursor: pointer;
+    font-variant: small-caps; font-weight: bold;
+    display: flex; align-items: center; gap: 10px; padding: 5px 10px 5px 20px;
+    position: relative;
     img { flex-grow: 0 }
     span { flex-grow: 1 }
+
+    &.open:before, &.collapsed:before {
+      position: absolute;
+      right: 10px; top: 12px;
+      content: "";
+      height: 11px; width: 11px;
+      background: url(../../img/forum/arrowUp.png) no-repeat;
+      transition: transform 0.2s ease-in-out;
+    }
+    &.open:before { transform: rotate(180deg); }
+    &.collapsed:before { transform: rotate(90deg); }
+
   }
   .content {
-
-    transition: filter 0.25s ease-in-out, color 0.25s ease-in-out;
-    filter: drop-shadow(0 0 10px rgba(0,0,0,0.5));
-    &:hover { filter: drop-shadow(0 0 10px rgba(0,0,0,0.8)); }
-
     .forum-preview {
-      margin-top: 0; margin-bottom: 0; border-radius: 0; filter: none;
+      margin: 0; border-radius: 0; filter: none;
       border-top-width: 0; border-bottom-width: 0;
 
       &:first-child { border-top-left-radius: 10px; border-top-right-radius: 10px; border-top-width: 2px; }

@@ -398,7 +398,11 @@ final class TransferItemListener implements ServiceSubscriberInterface
         // Item log for picking up or dropping items in the world beyond
         if (
             ($event->type_from === TransferItemType::Local || $event->type_to === TransferItemType::Local) &&
-            $target_citizen = $event->type_from === TransferItemType::Local ? $event->to?->getCitizen() : $event->from?->getCitizen()
+            $target_citizen = match(true) {
+                $event->type_from === TransferItemType::Spawn => $event->actor,
+                $event->type_from === TransferItemType::Local => $event->to?->getCitizen(),
+                default => $event->from?->getCitizen()
+            }
         ) {
             $hide = $event->modality === TransferItemModality::HideItem;
 

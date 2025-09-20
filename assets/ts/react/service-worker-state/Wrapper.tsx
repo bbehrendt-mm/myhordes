@@ -2,7 +2,7 @@ import * as React from "react";
 import {useEffect, useRef, useState} from "react";
 import {Const, Global} from "../../defaults";
 import {sharedWorkerCall} from "../../v2/init";
-import {Tooltip} from "../tooltip/Wrapper";
+import {Tooltip} from "../misc/Tooltip";
 import {BaseMounter} from "../index";
 import {html} from "../../v2/helpers";
 
