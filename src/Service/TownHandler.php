@@ -327,9 +327,13 @@ class TownHandler
 
             $c = 0;
             foreach ($town->getCitizens() as $citizen) if (!$citizen->getAlive()) $c++;
-            $ratio = 10;
+            $ratio = match($building->getLevel()) {
+                0 => 1,
+                1 => 5,
+                default => 10,
+            };
             if ($this->getBuilding($town, 'small_coffin_#00'))
-                $ratio = 20;
+                $ratio += 10;
             $d += ( $ratio * $c + $building->getDefenseBonus() + $building->getDefense() );
 
         }
@@ -387,9 +391,13 @@ class TownHandler
                 if ($building->getPrototype()->getName() === 'item_meca_parts_#00')
                     $item_def_factor += (1+$building->getLevel()) * 0.5;
                 else if ($building->getPrototype()->getName() === "small_cemetery_#00") {
-                    $ratio = 10;
+                    $ratio = match($building->getLevel()) {
+                        0 => 1,
+                        1 => 5,
+                        default => 10,
+                    };
                     if ($this->getBuilding($town, 'small_coffin_#00'))
-                        $ratio = 20;
+                        $ratio += 10;
                     $summary->cemetery = $ratio * $deadCitizens;
                 }
             }

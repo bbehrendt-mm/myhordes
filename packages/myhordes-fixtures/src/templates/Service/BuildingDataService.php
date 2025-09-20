@@ -1031,8 +1031,14 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->commit();
 
         $container->add()->parentBuilding($item_soul_blue_static)
-            ->icon('small_cemetery')->label('Kleiner Friedhof')->description('Bringt eure Toten! Denn diesmal werden sie sich noch als nützlich erweisen. Macht das beste aus ihnen und verbessert damit gemeinsam eure Verteidigung. Jeder zum Friedhof gebrachte tote Mitbürger bringt +10 Verteidigungspunkte für die Gesamtverteidigung der Stadt. Hinweis: Es spielt keine Rolle, wo und woran ein Mitbürger verstarb.')
-            ->isTemporary(0)->defense(0)->ap(42)->health(42)->blueprintLevel(2)->resources(["meca_parts_#00" => 1,"wood2_#00" => 10,])->orderBy(2)->commit($small_cemetery);
+            ->icon('small_cemetery')->label('Kleiner Friedhof')->description('Bringt eure Toten! Denn diesmal werden sie sich noch als nützlich erweisen. Macht das beste aus ihnen und verbessert damit gemeinsam eure Verteidigung. Hinweis: Es spielt keine Rolle, wo und woran ein Mitbürger verstarb.')
+            ->isTemporary(0)->defense(0)->ap(42)->health(42)->blueprintLevel(0)->resources(["meca_parts_#00" => 1,"wood2_#00" => 10,])->orderBy(2)
+            ->voteLevel(2)->baseVoteText('Jeder zum Friedhof gebrachte tote Mitbürger bringt insgesamt +1 Verteidigungspunkt für die Gesamtverteidigung der Stadt')
+            ->upgradeTexts([
+                'Jeder zum Friedhof gebrachte tote Mitbürger bringt insgesamt +5 Verteidigungspunkte für die Gesamtverteidigung der Stadt',
+                'Jeder zum Friedhof gebrachte tote Mitbürger bringt insgesamt +10 Verteidigungspunkte für die Gesamtverteidigung der Stadt',
+            ])
+            ->commit($small_cemetery);
 
         $container->add()->parentBuilding($small_cemetery)
             ->icon('small_coffin')->label('Sarg-Katapult')->description('Von 2 Toten hat derjenige, der sich bewegt, die besten Chancen, dich zu verspeisen. Trickst eure Feinde aus, indem ihr eure Leichen in die herankommende Zombiehorde schleudert. Jeder Tote bringt +20 anstelle von +10 Verteidigungspunkten.')

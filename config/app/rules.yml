@@ -274,7 +274,7 @@ parameters:
       features:
         shaman: 'none'
         nightmode: false
-      
+
       disabled_roles: ['shaman']
 
     remote:
@@ -415,6 +415,7 @@ parameters:
         - item_soul_blue_static_#00
         - small_spa4souls_#00
         - item_rp_book2_#00
+        - small_cemetery_#00
 
       overrides:
         building_rarity:
