@@ -11,14 +11,11 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class BankAntiAbuseService {
 
-    private EntityManagerInterface $em;
-    private ConfMaster $conf;
-
-    public function __construct(ConfMaster $conf, EntityManagerInterface $em)
-    {
-        $this->em = $em;
-        $this->conf = $conf;
-    }
+    public function __construct(
+        private readonly ConfMaster $conf,
+        private readonly EntityManagerInterface $em,
+        private readonly TownHandler $th)
+    { }
 
     public function increaseBankCount(Citizen $citizen) {
         $this->em->persist((new ActionEventLog())
@@ -33,6 +30,10 @@ class BankAntiAbuseService {
         $town = $citizen->getTown();
 
         $nbObjectMax = $this->conf->getTownConfiguration($town)->get($town->getChaos() ? TownSetting::OptModifierBankAbuseLimitChaos : TownSetting::OptModifierBankAbuseLimit);
+
+        if ($this->th->getBuilding( $town, 'small_court_#00', true ))
+            $nbObjectMax += 5;
+
         $limit = $this->conf->getTownConfiguration($citizen->getTown())->get(TownSetting::OptModifierBankAbuseLock);
 
         $cutoff = (new \DateTime())->sub(DateInterval::createFromDateString("{$limit}min"));

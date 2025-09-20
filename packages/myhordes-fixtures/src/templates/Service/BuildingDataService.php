@@ -769,7 +769,7 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->isTemporary(1)->defense(30)->ap(15)->health(15)->blueprintLevel(2)->resources(["lights_#00" => 1,"wood2_#00" => 5,])->orderBy(11)->commit();
         $container->add()->parentBuilding($item_rp_book2)
             ->icon('small_court')->label('Bürgergericht')->description('Wie jeder weiß, haben Helden immer recht. Um diesen Fakt weiter zu zementieren, zählen alle von Helden gegen andere Bürger ausgesprochenen Beschwerden doppelt.')
-            ->isTemporary(0)->defense(0)->ap(12)->health(12)->blueprintLevel(3)->resources(["wood2_#00" => 10,"metal_#00" => 10,"table_#00" => 1,"wire_#00" => 1,"radio_on_#00" => 2,])->orderBy(1)->commit();
+            ->isTemporary(0)->defense(0)->ap(12)->health(12)->blueprintLevel(3)->resources(["wood2_#00" => 10,"metal_#00" => 10,"wire_#00" => 1,"radio_on_#00" => 2,])->orderBy(1)->commit();
         $container->add()->parentBuilding($item_rp_book2)
             ->icon('small_slave')->label('Ministerium für Sklaverei')->description('Das Ministerium für Sklaverei hat beschlossen, dass Verbannte auf den Baustellen arbeiten dürfen. Außerdem erhält jeder von ihnen in ein Bauprojekt investierte AP einen 50%-Bonus (z.B. aus 6 AP werden so 9 AP, die in das Bauprojekt fließen).')
             ->isTemporary(0)->defense(0)->ap(15)->health(15)->blueprintLevel(4)->resources(["wood_beam_#00" => 10,"metal_beam_#00" => 5,"chain_#00" => 2,'table_#00' => 1])->orderBy(3)->commit();
