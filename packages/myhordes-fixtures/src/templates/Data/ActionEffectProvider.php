@@ -576,6 +576,7 @@ class ActionEffectProvider
         $effects_container->add()->identifier('status_count_surv')->add( (new StatusEffect())->count(ActionCounterType::SpecialActionSurv))->commit();
         $effects_container->add()->identifier('status_count_hunter')->add( (new StatusEffect())->count(ActionCounterType::SpecialActionHunter))->commit();
         $effects_container->add()->identifier('status_count_ap_loan')->add( (new StatusEffect())->count(ActionCounterType::SpecialActionAPLoan))->commit();
+        $effects_container->add()->identifier('status_contemplated')->add( (new StatusEffect())->count(ActionCounterType::Contemplate))->commit();
         $effects_container->add()->identifier('status_start_sp')->add( (new StatusEffect())->addsStatus('tg_start_sp'))->commit();
 
         $effects_container->add()->identifier('just_ap1')->add( (new StatusEffect())->point( PointType::AP, 1, relativeToMax: false, exceedMax: 1 ) )->commit();
@@ -657,6 +658,8 @@ class ActionEffectProvider
         $effects_container->add()->identifier('tamer_fetch')->add((new CustomEffect())->effectIndex(10501))->commit();
 
         $effects_container->add()->identifier('give_ruin_bp')->add((new CustomEffect())->effectIndex(12001))->commit();
+
+        $effects_container->add()->identifier('discover_random_soul')->add((new CustomEffect())->effectIndex(31))->commit();
         //</editor-fold>
 
         // Composite

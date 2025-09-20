@@ -577,6 +577,8 @@ class ActionDataService implements FixtureProcessorInterface {
                 'home_survivalist_any' => [ 'label' => 'Wasser finden', 'meta' => [ 'must_be_inside', 'min_3_ap', 'not_profession_survivalist', 'must_have_surv_building', 'surv_building_counter_below_1' ], 'result' => [ 'minus_3ap', 'status_count_surv', 'building_survivalist_a' ], 'message' => 'Du konntest es zunächst gar nicht geglaubt, aber nachdem du die halbierten Dosen überprüft hast, stellst du fest, dass sich etwas Wasser darin befindet. Wie sich herausstellt, kennen sich diese Einsiedler doch aus! Du erhälst {items_spawn}.' ],
                 'home_survivalist_pro' => [ 'label' => 'Wasser finden', 'meta' => [ 'must_be_inside', 'min_3_ap', 'profession_survivalist', 'must_have_surv_building', 'surv_building_counter_below_1' ], 'result' => [ 'minus_3ap', 'status_count_surv', 'building_survivalist_b', 'building_survivalist_c' ], 'message' => 'Einige Leute haben dein Wassergewinnung-System bösartig verleumdet, aber es ist offensichtlich, dass sie jetzt schweigen. Du erhälst {items_spawn}.' ],
 
+                'home_contemplate' => [ 'label' => 'Besinnen', 'meta' => [ 'must_be_inside', 'min_2_ap', 'must_have_sanctuary', 'not_contemplated' ], 'result' => [ 'minus_2ap', 'status_contemplated', 'discover_random_soul' ], 'message' => 'Du nimmst dir einen Moment Zeit, um zur Ruhe zu kommen und dich auf das wesentliche zu besinnen.' ],
+
                 'home_defbuff_any'   => [ 'label' => 'Verteidigung organisieren', 'meta' => [ 'not_profession_guardian', 'min_2_ap', 'must_be_inside', 'must_have_guardtower', 'not_yet_home_defbuff', 'guard_tower_not_max' ], 'result' => ['minus_2ap', 'status_home_defbuff', 'building_guard' ], 'message' => 'Du suchst die Stadtmauer nach kleinen Lücken ab, die die Wächter hinterlassen haben könnten. Die Stadt hat vorübergehend +5 Verteidigungspunkte gewonnen.' ],
 
                 'open_drugkit'    => [ 'label' => 'Öffnen', 'at00' => true, 'meta' => ['is_not_wounded_hands'], 'result' => [ 'consume_item', 'spawn_drugkit' ], 'message_key' => 'container_open' ],
@@ -686,7 +688,9 @@ class ActionDataService implements FixtureProcessorInterface {
                 'p3a' => ['home_survivalist_any', 'survarea'],
                 'p3b' => ['home_survivalist_pro', 'survarea'],
                 'p4b' => ['home_crows_any', 'lair'],
-                'p3'  => ['home_defbuff_any', 'watchmen']
+                'p3'  => ['home_defbuff_any', 'watchmen'],
+
+                'hs01' => ['home_contemplate', 'home_contemplate']
             ],
 
             'escort' => [

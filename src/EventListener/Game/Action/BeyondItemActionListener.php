@@ -24,6 +24,7 @@ use App\Service\TownHandler;
 use App\Service\ZoneHandler;
 use App\Structures\ItemRequest;
 use App\Structures\TownConf;
+use App\Translation\T;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Container\ContainerInterface;
@@ -55,8 +56,8 @@ final class BeyondItemActionListener implements ServiceSubscriberInterface
         ];
     }
 
-    
-    
+
+
     public function onCustomAction( CustomActionProcessorEvent $event ): void {
         switch ($event->type) {
             // Discover a random ruin
@@ -135,6 +136,21 @@ final class BeyondItemActionListener implements ServiceSubscriberInterface
                 } else {
                     $event->cache->addTag('flare_fail');
                 }
+                break;
+
+            case 31:
+                /** @var Zone $zone */
+                $zone = $this->getService(RandomGenerator::class)->pick(
+                    $this->getService(ZoneHandler::class)->getSoulZones( $event->citizen->getTown() )
+                );
+
+                if ($zone) $event->cache->addMessage(
+                    T::__('Während du dich konzentrierst, spürst du für einen kurzen Moment die Aura eines deiner verstorbenen Mitbürger. Sie scheint von {location} zu kommen...', 'gane'),
+                    [ 'location' => "<span class=\"tool\">[ {$zone->getX()} / {$zone->getY()} ]</span>" ]
+                ); else $event->cache->addMessage(
+                    T::__('Du spürst nichts als Ruhe.', 'gane'),
+                );
+
                 break;
 
             // Tamer Dog Fetch Action

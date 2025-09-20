@@ -212,6 +212,7 @@ class ActionRequirementProvider
         $requirement_container->add()->identifier('scav_building_counter_below_3')->type( Requirement::CrossOnFail )->add( (new CounterRequirement())->counter(ActionCounterType::SpecialDigScavenger)->max( 2 ) )->commit();
         $requirement_container->add()->identifier('surv_building_counter_below_1')->type( Requirement::CrossOnFail )->add( (new CounterRequirement())->counter(ActionCounterType::SpecialActionSurv)->max( 0 ) )->commit();
         $requirement_container->add()->identifier('hunter_building_counter_below_1')->type( Requirement::CrossOnFail )->add( (new CounterRequirement())->counter(ActionCounterType::SpecialActionHunter)->max( 0 ) )->commit();
+        $requirement_container->add()->identifier('not_contemplated')->type( Requirement::CrossOnFail )->add( (new CounterRequirement())->counter(ActionCounterType::Contemplate)->max( 0 ) )->commit();
         //</editor-fold>
 
         //<editor-fold desc="BuildingRequirements">
@@ -241,6 +242,7 @@ class ActionRequirementProvider
         $requirement_container->add()->identifier('must_have_surv_building')->type( Requirement::HideOnFail )->add( (new BuildingRequirement())->building('small_survarea_#00', true) )->commit();
         $requirement_container->add()->identifier('must_have_tamer_building')->type( Requirement::HideOnFail )->add( (new BuildingRequirement())->building('small_pet_#00', true) )->commit();
         $requirement_container->add()->identifier('must_not_have_tamer_building')->type( Requirement::HideOnFail )->add( (new BuildingRequirement())->building('small_pet_#00', false) )->commit();
+        $requirement_container->add()->identifier('must_have_sanctuary')->type( Requirement::HideOnFail )->add( (new BuildingRequirement())->building('small_spa4souls_#01', true) )->commit();
         //</editor-fold>
 
         //<editor-fold desc="ConfigRequirements">

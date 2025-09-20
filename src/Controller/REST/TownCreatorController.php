@@ -244,7 +244,7 @@ class TownCreatorController extends CustomAbstractCoreController
                         ['value' => 'none',   'label' => $this->translator->trans('Deaktiviert', [], 'ghost'), 'help' => $this->translator->trans('Der Schamane und die Seelen werden deaktiviert.', [], 'ghost')],
                     ],
                     'shaman_buildings' => [
-                        'normal' => ['small_spa4souls_#00'],
+                        'normal' => ['item_soul_blue_static_#00'],
                         'job' => ['small_vaudoudoll_#00','small_bokorsword_#00','small_spiritmirage_#00','small_holyrain_#00'],
                     ],
 
