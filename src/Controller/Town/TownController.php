@@ -7,7 +7,6 @@ use App\Annotations\Semaphore;
 use App\Annotations\Toaster;
 use App\Controller\InventoryAwareController;
 use App\Entity\AccountRestriction;
-use App\Entity\ActionCounter;
 use App\Entity\ActionEventLog;
 use App\Entity\BlackboardEdit;
 use App\Entity\Building;
@@ -54,7 +53,6 @@ use App\Service\LogTemplateHandler;
 use App\Service\RateLimitingFactoryProvider;
 use App\Structures\CitizenInfo;
 use App\Structures\ItemRequest;
-use App\Structures\TownConf;
 use App\Translation\T;
 use App\Response\AjaxResponse;
 use App\Service\AdminHandler;
@@ -138,7 +136,10 @@ class TownController extends InventoryAwareController
 
     /**
      * @param TownHandler $th
+     * @param GameEventService $gameEvents
+     * @param KernelInterface $kernel
      * @return Response
+     * @throws Exception
      */
     #[Route(path: 'jx/town/dashboard', name: 'town_dashboard')]
     public function dashboard(TownHandler $th, GameEventService $gameEvents, KernelInterface $kernel): Response
@@ -308,15 +309,15 @@ class TownController extends InventoryAwareController
     public function visit(int $id, EntityManagerInterface $em): Response
     {
         if (!$this->getActiveCitizen()->getHasSeenGazette())
-            return $this->redirect($this->generateUrl('game_newspaper'));
+            return $this->redirectToRoute('game_newspaper');
 
         if ($id === $this->getActiveCitizen()->getId())
-            return $this->redirect($this->generateUrl('town_house_dash'));
+            return $this->redirectToRoute('town_house_dash');
 
         /** @var Citizen $c */
         $c = $em->getRepository(Citizen::class)->find( $id );
         if (!$c || $c->getTown()->getId() !== $this->getActiveCitizen()->getTown()->getId())
-            return $this->redirect($this->generateUrl('town_dashboard'));
+            return $this->redirectToRoute('town_dashboard');
 
         $home = $c->getHome();
 
@@ -328,7 +329,7 @@ class TownController extends InventoryAwareController
         $date = (new DateTime())->setTimestamp($lastActionTimestamp);
 
         // Getting delta time between now and the last action
-        $time = time() - $lastActionTimestamp; 
+        $time = time() - $lastActionTimestamp;
         $time = abs($time);
 
         $lastActionText = $this->generateLastActionText($time, $date, $lastActionTimestamp);
@@ -418,6 +419,7 @@ class TownController extends InventoryAwareController
      * @param EntityManagerInterface $em
      * @param JSONRequestParser $parser
      * @param ItemFactory $if
+     * @param ResponseGlobal $response
      * @return Response
      */
     #[Route(path: 'api/town/visit/{id}/dispose', name: 'town_visit_dispose_controller')]
@@ -666,7 +668,7 @@ class TownController extends InventoryAwareController
                 ->setCulprit( $culprit )
                 ->setSeverity( $severity )
                 ->setCount( ($author->getProfession()->getHeroic() && $th->getBuilding( $town, 'small_court_#00', true )) ? 2 : 1 );
-            
+
             if($reason > 0)
                 $existing_complaint->setLinkedReason($complaintReason);
             $culprit->addComplaint($existing_complaint);
@@ -689,7 +691,7 @@ class TownController extends InventoryAwareController
                 $complaint_level = -1;
             else if ($existing_complaint->getSeverity() === Complaint::SeverityNone && $severity > Complaint::SeverityNone)
                 $complaint_level = 1;
-            
+
             if( $complaint_level > 0 && $reason > 0 )
                 $existing_complaint->setLinkedReason($complaintReason);
             else $complaintReason = $existing_complaint->getLinkedReason();
@@ -712,7 +714,7 @@ class TownController extends InventoryAwareController
             $em->persist($culprit);
             $em->persist($existing_complaint);
             $em->flush();
-            
+
             $num_of_complaints = $this->entity_manager->getRepository(Complaint::class)->countComplaintsFor($culprit, Complaint::SeverityBanish);
 
         } catch (Exception $e) {
@@ -884,7 +886,7 @@ class TownController extends InventoryAwareController
             return $this->redirect($this->generateUrl('game_newspaper'));
         $town = $this->getActiveCitizen()->getTown();
         $item_def_factor = 1;
-        
+
         $building = $th->getBuilding($town, 'item_meca_parts_#00', true);
         if ($building) {
             $item_def_factor += (1+$building->getLevel()) * 0.5;
@@ -1072,7 +1074,7 @@ class TownController extends InventoryAwareController
     {
         if (!$this->getActiveCitizen()->getHasSeenGazette())
             return $this->redirect($this->generateUrl('game_newspaper'));
-            
+
         // Get citizen & town
         $citizen = $this->getActiveCitizen();
         $town = $citizen->getTown();
