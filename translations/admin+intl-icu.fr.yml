@@ -699,11 +699,11 @@ Billig+: Pas cher+
 'Gesamten Gebäudebaum zurücksetzen': 'Réinitialiser l''arbre de chantiers entier'
 'Klicken, um Baustelle in die Liste der zu entsperrenden Baustellen aufzunehmen.': 'Cliquez pour ajouter à la liste des chantiers à débloquer'
 'Klicken, um Baustelle sofort zu entsperren.': 'Cliquez pour débloquer'
-'Wenn du deinen Schlüssel änderst, musst du diesen in deiner Anwendung austauschen. Bitte bestätige, dass du den Schlüssel jetzt austauschen möchtest, indem du die Zahl {num} eingibst.': 'Wenn du deinen Schlüssel änderst, musst du diesen in deiner Anwendung austauschen. Bitte bestätige, dass du den Schlüssel jetzt austauschen möchtest, indem du die Zahl {num} eingibst.'
+'Wenn du deinen Schlüssel änderst, musst du diesen in deiner Anwendung austauschen. Bitte bestätige, dass du den Schlüssel jetzt austauschen möchtest, indem du die Zahl {num} eingibst.': 'Si vous modifiez votre clé, vous devrez la remplacer dans votre application. Veuillez confirmer que vous souhaitez remplacer la clé maintenant en saisissant le numéro {num}.'
 Koppeln: Koppeln
-'Namen testen': 'Namen testen'
-'Name ist gültig': 'Name ist gültig'
-'Name ist länger als 32 Zeichen': 'Name ist länger als 32 Zeichen'
-'Name enthält ungültige Zeichen': 'Name enthält ungültige Zeichen'
-'Name ist ähnlich zu verbotenen Begriffen': 'Name ist ähnlich zu verbotenen Begriffen'
-Cheater: Cheater
+'Namen testen': 'Tester le nom'
+'Name ist gültig': 'Le nom est valide'
+'Name ist länger als 32 Zeichen': 'Le nom comporte plus de 32 caractères'
+'Name enthält ungültige Zeichen': 'Le nom contient des caractères invalides'
+'Name ist ähnlich zu verbotenen Begriffen': 'Le nom contient ou est similaire à un mot interdit'
+Cheater: Tricheur

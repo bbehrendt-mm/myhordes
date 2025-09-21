@@ -3228,3 +3228,5 @@ Tierklinik: crwdns225726:0crwdne225726:0
 'Du hast dafür <strong>{ap} Aktionspunkt(e)</strong> und <strong>{cp} Baupunkt(e)</strong> verbraucht.': 'crwdns225822:0ap={ap}crwdnd225822:0cp={cp}crwdne225822:0'
 '{citizen} wurde auserwählt, um unser Katapult zu steuern. Sollte ihm etwas Schreckliches zustoßen, dann muss ein neuer Bürger gewählt werden.': 'crwdns225824:0citizen={citizen}crwdnd225824:0ref__gender={ref__gender}crwdne225824:0'
 'Wunderwerk: Blaugoldige Thermalbäder': 'crwdns225826:0crwdne225826:0'
+'Während du dich konzentrierst, spürst du für einen kurzen Moment die Aura eines deiner verstorbenen Mitbürger. Sie scheint von {location} zu kommen...': 'crwdns232780:0{location}crwdne232780:0'
+'Du spürst nichts als Ruhe.': 'crwdns232782:0crwdne232782:0'
