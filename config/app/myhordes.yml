@@ -65,6 +65,7 @@ parameters:
         project-id: ~
         project-slug: 'eternaltwin/myhordes/myhordes'
         base: 'https://gitlab.com'
+      lang: ~
     twinoid:
       sk: ~
       id: ~

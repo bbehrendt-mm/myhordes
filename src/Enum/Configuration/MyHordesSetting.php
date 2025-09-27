@@ -102,6 +102,7 @@ enum MyHordesSetting: string implements Configuration
     //<editor-fold desc="Issue Reporting Settings">
     case IssueReportingFallbackUrl = 'issue_tracking.fallback-url';
     case IssueReportingGitlabToken = 'issue_tracking.gitlab';
+    case IssueReportingFixedLanguage = 'issue_tracking.lang';
     //</editor-fold>
 
     //<editor-fold desc="Event Override Settings">
@@ -222,6 +223,7 @@ enum MyHordesSetting: string implements Configuration
 
             self::IssueReportingFallbackUrl => '',
             self::IssueReportingGitlabToken => null,
+            self::IssueReportingFixedLanguage => null,
 
             self::EventOverrideAutopostAddendum,
             self::EventOverrideBlackboard,

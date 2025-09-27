@@ -62,7 +62,10 @@ readonly class SupportChannelMessageHandler
 
             $new = true;
             $og = $this->entityManager->getRepository(OfficialGroup::class)
-                ->findOneBy(['lang' => $user->getLanguage() ?? 'en', 'semantic' => OfficialGroupSemantic::Support]);
+                ->findOneBy([
+                    'lang' => $this->confMaster->getGlobalConf()->get( MyHordesSetting::IssueReportingFixedLanguage ) ?? $user->getLanguage() ?? 'en',
+                    'semantic' => OfficialGroupSemantic::Support
+                ]);
             if (!$og) throw new UnrecoverableMessageHandlingException( 'No official support group found');
 
             $existing_group = (new UserGroup())
