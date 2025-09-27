@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\RuinExplorerStatsRepository;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -50,10 +51,10 @@ class RuinExplorerStats
     private $escaping = false;
 
     #[ORM\Column(type: 'datetime')]
-    private $timeout;
+    private DateTime $timeout;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $started = null;
+    private ?DateTime $started = null;
 
     #[ORM\Column]
     private bool $grace = false;

@@ -238,6 +238,12 @@ class RuinExplorationController extends AbstractController implements HookedInte
             ($shift !== 0 && !$ruinZone->getPrototype())
         ) return new JsonResponse([], Response::HTTP_NOT_FOUND);
 
+        $new_zone = $this->entityManager->getRepository(RuinZone::class)->findOneByPosition(
+            $this->getActiveCitizen()->getZone(),
+            $ex->getX() + $dx, $ex->getY() - $dy, $ex->getZ() + $dz
+        );
+
+        if (!$new_zone) return new JsonResponse([], Response::HTTP_NOT_FOUND);
 
         if ($ex->isGrace()) {
             $ex->setGrace(false);
@@ -257,7 +263,7 @@ class RuinExplorationController extends AbstractController implements HookedInte
         $this->entityManager->persist($ex);
         $this->entityManager->flush();
 
-        $new_zone = $this->getCurrentRuinZone();
+
 
         return new JsonResponse([
             'status' => $this->renderStatus($new_zone, $ex),

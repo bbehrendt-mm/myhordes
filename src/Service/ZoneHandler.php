@@ -89,9 +89,10 @@ class ZoneHandler
             $citizen = $ex->getCitizen();
             $ruinZone = $this->entity_manager->getRepository(RuinZone::class)->findOneByPosition($citizen->getZone(), $ex->getX(), $ex->getY(), $ex->getZ());
 
-            foreach ($citizen->getInventory()->getItems() as $item)
-                if (!$item->getEssential())
-                    $this->inventory_handler->forceMoveItem( $ruinZone->getFloor(), $item );
+            if ($ruinZone)
+                foreach ($citizen->getInventory()->getItems() as $item)
+                    if (!$item->getEssential())
+                        $this->inventory_handler->forceMoveItem( $ruinZone->getFloor(), $item );
 
             if ($wound) $this->citizen_handler->inflictWound( $citizen );
 
@@ -99,7 +100,7 @@ class ZoneHandler
 
             $this->entity_manager->persist( $citizen );
             $this->entity_manager->persist( $ex );
-            $this->entity_manager->persist( $ruinZone );
+            if ($ruinZone) $this->entity_manager->persist( $ruinZone );
 
             return $this->trans->trans('Die Atmosphäre wird unerträglich... Du kannst so nicht weitermachen; ohne zu wissen wie, du findest den Ausgang, aber du verletzt dich bei der Flucht.', [], 'game');
         } else return null;
@@ -559,7 +560,7 @@ class ZoneHandler
         } else {
             if (!$admin && $zone->getDiscoveryStatus() === Zone::DiscoveryStatePast) {
                 $attributes[] = 'past';
-            } 
+            }
             if(!$admin && $citizen && !($zone->getX() == 0 && $zone->getY() == 0) && !$citizen->getVisitedZones()->contains($zone)) {
                 $attributes[] = 'global';
             }

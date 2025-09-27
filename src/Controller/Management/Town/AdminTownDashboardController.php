@@ -458,6 +458,7 @@ class AdminTownDashboardController extends AdminActionController
                         break;
                     default: break;
                 }
+                break;
 
             case 'dbg_enable_stranger':
                 $gameFactory->enableStranger( $town );
