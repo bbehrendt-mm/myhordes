@@ -81,7 +81,7 @@ class DigTimer
     }
     public function setDigCache(?array $digCache): self
     {
-        $this->digCache = $digCache;
+        $this->digCache = $digCache ?? [];
 
         return $this;
     }
