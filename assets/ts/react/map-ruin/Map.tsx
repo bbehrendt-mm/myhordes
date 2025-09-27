@@ -33,6 +33,7 @@ export const AssetHelper = createContext<{ theme: AssetResponse, images: {[key: 
 export const MapCore = (props: {setup: MapSetup, properties: MapProperties}) => {
     const globals = useContext(Globals);
 
+    const moveLock = useRef(false);
     const progressing = useRef(false);
     const stages = useRef<HTMLDivElement>();
 
@@ -65,10 +66,10 @@ export const MapCore = (props: {setup: MapSetup, properties: MapProperties}) => 
                 glitch.y <= 0.5 ? glitch.y : -(1.0 - glitch.y),
                 glitch.z <= 0.5 ? glitch.z : -(1.0 - glitch.z)
             ) * 2.0;
-            
+
             // Get background tile set color
             vec4 bg = texture2D(u_image_1, v_texCoord + vec2(-0.05, 0) * glitch.y);
-            
+
             // Create a blurred version of the bg tile set color
             vec2 screen_frac = vec2(${1.0 / (props.setup.w * window.devicePixelRatio)},${1.0 / (props.setup.h * window.devicePixelRatio)});
             vec4 bgBlurred = vec4(0);
@@ -76,14 +77,14 @@ export const MapCore = (props: {setup: MapSetup, properties: MapProperties}) => 
                 for (int y = -${v}; y <= ${v}; y++)
                 bgBlurred += texture2D(u_image_1, v_texCoord + screen_frac * vec2(x,y) + vec2(-0.05, 0) * glitch.y);
             bgBlurred /= pow( float(2*${v}+1), 2.0 );
-    
+
             // Merge bg and blurred bg together
             float circle = length( v_texCoord - vec2(0.5) );
             vec4 bgColor = bgBlurred * circle + bg * (1.0 - circle);
-            
+
             // Get ui color
             vec4 ui = texture2D(u_image_2, v_texCoord + vec2(0.1, 0) * glitch.x);
-            
+
             // Compose final color
             gl_FragColor = ui * ui.a + bgColor * (1.0 - ui.a);
         }
@@ -214,7 +215,13 @@ export const MapCore = (props: {setup: MapSetup, properties: MapProperties}) => 
                                 onMove={ (dx, dy) => {
                                     if (currentZone.status.shifted)
                                         globals.api.shift(false).then(r => updateZone(r));
-                                    else globals.api.move(dx, dy).then(r => updateZone(r, dx, dy));
+                                    else {
+                                        if (moveLock.current || nextZone) return;
+                                        moveLock.current = true;
+                                        globals.api.move(dx, dy)
+                                            .then(r => updateZone(r, dx, dy))
+                                            .finally( () => moveLock.current = false );
+                                    }
                                 } }
                             />
 
