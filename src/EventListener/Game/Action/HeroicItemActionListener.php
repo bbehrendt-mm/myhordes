@@ -18,6 +18,7 @@ use App\EventListener\ContainerTypeTrait;
 use App\Service\ActionHandler;
 use App\Service\Actions\Cache\InvalidateTagsInAllPoolsAction;
 use App\Service\Actions\Game\HeroSkillUpgradeCheck;
+use App\Service\Actions\Game\RegenerateZoneAction;
 use App\Service\Actions\Game\SpanHeroicActionInheritanceTreeAction;
 use App\Service\CitizenHandler;
 use App\Service\EventProxyService;
@@ -64,6 +65,7 @@ final class HeroicItemActionListener implements ServiceSubscriberInterface
             InvalidateTagsInAllPoolsAction::class,
             SpanHeroicActionInheritanceTreeAction::class,
             HeroSkillUpgradeCheck::class,
+            RegenerateZoneAction::class,
         ];
     }
 
@@ -246,6 +248,12 @@ final class HeroicItemActionListener implements ServiceSubscriberInterface
 
                 break;
             }
+
+            // Scavenger
+            case 23:
+                if ($this->getService(RegenerateZoneAction::class)($event->citizen->getZone(), 1, true, false))
+                    $this->getService(EntityManagerInterface::class)->persist( $event->citizen->getZone()->setForceRegenerated(true) );
+                break;
 
             // Friendship
             case 70: case 71:

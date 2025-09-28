@@ -62,6 +62,8 @@ class ProcessLocationRequirement extends AtomRequirementProcessor
             if ($data->isTempControlled !== null && $data->isTempControlled !== !!$cache->em->getRepository( EscapeTimer::class )->findActiveByCitizen( $cache->citizen )) return false;
             if ($data->isControlledOrTempControlled !== null && $data->isControlledOrTempControlled !== ($cp >= $zombies || !!$cache->em->getRepository( EscapeTimer::class )->findActiveByCitizen( $cache->citizen ))) return false;
 
+            if ($data->isForceRegenerated !== null && $data->isForceRegenerated !== $zone->isForceRegenerated()) return false;
+
         }
 
         return true;

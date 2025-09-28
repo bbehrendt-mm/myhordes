@@ -142,7 +142,6 @@ readonly class RenderMapAction
                 }
             }
 
-
             if ($zone->isTownZone()) {
                 $current_zone['td'] = $town->getDevastated();
                 $current_zone['r'] = [
@@ -172,6 +171,9 @@ readonly class RenderMapAction
 
             if (!$zone->isTownZone() && ($admin || !$activeCitizen->getVisitedZones()->contains( $zone )))
                 $current_zone['g'] = true;
+
+            if (!$zone->isTownZone() && ($admin || $scavenger_sense))
+                $current_zone['xc'] = $zone->isForceRegenerated();
 
             if (!$zone->isTownZone() && $zone->getTag()) $current_zone['tg'] = $zone->getTag()->getRef();
             if (!$zone->isTownZone() && $activeCitizen?->getZone() === null

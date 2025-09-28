@@ -2197,6 +2197,14 @@
                   "xml": {
                     "attribute": true
                   }
+                },
+                "exc": {
+                  "type": "integer",
+                  "description": "\"Excavated\", 1 if the zone has been excavated by a scavenger.",
+                  "example": 0,
+                  "xml": {
+                      "attribute": true
+                  }
                 }
               },
               "xml": {
@@ -3388,6 +3396,16 @@
                   "type": "integer",
                   "description": "Y Position on the map (when outside)",
                   "example": -2
+                },
+                "nvt": {
+                  "type": "integer",
+                  "description": "\"Not visited today\", 1 if the zone has been uncovered, but nobody has visited it on the current day",
+                  "example": 0
+                },
+                "exc": {
+                  "type": "integer",
+                  "description": "\"Excavated\", 1 if the zone has been excavated by a scavenger.",
+                  "example": 0
                 },
                 "km": {
                   "type": "integer",

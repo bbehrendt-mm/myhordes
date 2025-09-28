@@ -201,13 +201,14 @@ const MapOverviewZone = ( props: MapOverviewZoneProps ) => {
     };
 
     return (
-        <div onClick={click_handler} className={`zone 
+        <div onClick={click_handler} className={`zone
             ${typeof props.zone.td !== "undefined" ? `town ${props.zone.td ? 'devast' : ''}` : ''}
             ${props.zone.cc ? 'active' : ''}
             ${typeof props.zone.t  !== "undefined" ? (props.zone.t ? '' : 'past') : 'unknown'}
             ${props.zone.g ? 'global' : ''}
             ${(typeof props.zone.r !== "undefined" && typeof props.zone.td === "undefined") ? `ruin ${props.zone.r.b ? 'buried' : ''}` : ''}
             ${typeof props.zone.d  !== "undefined" ? `danger-${props.zone.d}` : ''}
+            ${typeof props.zone.xc  !== "undefined" ? (props.zone.xc ? 'excavated' : '') : ''}
             ${props.zone.s ? 'soul' : ''}
         `} style={{
             gridColumn: 1 + props.zone.x - props.geo.x0,

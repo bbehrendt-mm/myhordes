@@ -36,6 +36,7 @@ use App\Enum\EventStages\BuildingEffectStage;
 use App\Enum\EventStages\BuildingValueQuery;
 use App\Enum\EventStages\CitizenValueQuery;
 use App\Service\Actions\Game\PrepareZombieAttackEstimationAction;
+use App\Service\Actions\Game\RegenerateZoneAction;
 use App\Service\Maps\MapMaker;
 use App\Service\Maps\MazeMaker;
 use App\Service\User\UserUnlockableService;
@@ -56,68 +57,35 @@ class NightlyHandler
     private array $destroyed_buildings = [];
     private array $deferred_log_entries = [];
 
-    private EntityManagerInterface $entity_manager;
-    private LoggerInterface $log;
-    private CitizenHandler $citizen_handler;
-    private RandomGenerator $random;
-    private DeathHandler $death_handler;
-    private TownHandler $town_handler;
-    private ZoneHandler $zone_handler;
-    private InventoryHandler $inventory_handler;
-    private PictoHandler $picto_handler;
-    private ItemFactory $item_factory;
-    private LogTemplateHandler $logTemplates;
-    private ConfMaster $conf;
-    private ActionHandler $action_handler;
-    private MazeMaker $maze;
-    private MapMaker $map;
-    private CrowService $crow;
-    private UserHandler $user_handler;
-    private GameFactory $game_factory;
-    private GazetteService $gazette_service;
-    private GameProfilerService $gps;
-    private TimeKeeperService $timeKeeper;
-    private EventProxyService $events;
-	private GameEventService $gameEvents;
+    public function __construct(
+        private readonly EntityManagerInterface $entity_manager,
+        private readonly CitizenHandler $citizen_handler,
+        private readonly DeathHandler $death_handler,
+        private readonly InventoryHandler $inventory_handler,
+        private readonly RandomGenerator $random,
+        private readonly TownHandler $town_handler,
+        private readonly ZoneHandler $zone_handler,
+        private readonly PictoHandler $picto_handler,
+        private readonly ItemFactory $item_factory,
+        private readonly LoggerInterface $log,
+        private readonly LogTemplateHandler $logTemplates,
+        private readonly ConfMaster $conf,
+        private readonly ActionHandler $action_handler,
+        private readonly MazeMaker $maze,
+        private readonly MapMaker $map,
+        private readonly CrowService $crow,
+        private readonly UserHandler $user_handler,
+        private readonly GameFactory $game_factory,
+        private readonly GazetteService $gazette_service,
+        private readonly GameProfilerService $gps,
+        private readonly TimeKeeperService $timeKeeper,
+        private readonly EventProxyService $events,
+        private readonly GameEventService $gameEvents,
+        private readonly UserUnlockableService $unlockableService,
 
-    private UserUnlockableService $unlockableService;
-
-    private PrepareZombieAttackEstimationAction $prepareZombieAttackEstimationAction;
-
-    public function __construct(EntityManagerInterface $em, LoggerInterface $log, CitizenHandler $ch, InventoryHandler $ih,
-                              RandomGenerator $rg, DeathHandler $dh, TownHandler $th, ZoneHandler $zh, PictoHandler $ph,
-                              ItemFactory $if, LogTemplateHandler $lh, ConfMaster $conf, ActionHandler $ah, MazeMaker $maze,
-                              CrowService $crow, UserHandler $uh, GameFactory $gf, GazetteService $gs, GameProfilerService $gps,
-                              TimeKeeperService $timeKeeper, MapMaker $mapMaker, EventProxyService $events, GameEventService $gameEvents,
-                              UserUnlockableService $unlockableService, PrepareZombieAttackEstimationAction $prepareZombieAttackEstimationAction,
-    )
-    {
-        $this->entity_manager = $em;
-        $this->citizen_handler = $ch;
-        $this->death_handler = $dh;
-        $this->inventory_handler = $ih;
-        $this->random = $rg;
-        $this->town_handler = $th;
-        $this->zone_handler = $zh;
-        $this->picto_handler = $ph;
-        $this->item_factory = $if;
-        $this->log = $log;
-        $this->logTemplates = $lh;
-        $this->conf = $conf;
-        $this->action_handler = $ah;
-        $this->maze = $maze;
-        $this->crow = $crow;
-        $this->user_handler = $uh;
-        $this->game_factory = $gf;
-        $this->gazette_service = $gs;
-        $this->gps = $gps;
-        $this->timeKeeper = $timeKeeper;
-        $this->map = $mapMaker;
-        $this->events = $events;
-		$this->gameEvents = $gameEvents;
-        $this->unlockableService = $unlockableService;
-        $this->prepareZombieAttackEstimationAction = $prepareZombieAttackEstimationAction;
-    }
+        private readonly PrepareZombieAttackEstimationAction $prepareZombieAttackEstimationAction,
+        private readonly RegenerateZoneAction $regenerateZoneAction,
+    ) { }
 
     private function check_town(Town $town): bool {
         if ($town->isOpen()) {
@@ -1504,7 +1472,9 @@ class NightlyHandler
             }
 
             if ($zone->getDirection() === $wind && round($distance) > $wind_dist) {
-                $this->attemptRegenZone($reco_counter, $zone, $town, $recovery_chance);
+                $reco_counter[0]++;
+                if (($this->regenerateZoneAction)($zone, $recovery_chance, log: $this->log))
+                    $reco_counter[1]++;
             }
 
             if ($zone->getImprovementLevel() > 0) {
@@ -1872,37 +1842,5 @@ class NightlyHandler
         $cc = $this->cleanup;
         $this->cleanup = [];
         return $cc;
-    }
-
-    /**
-     * @param array $reco_counter
-     * @param Zone $zone
-     * @param Town $town
-     * @param float $recovery_chance
-     * @return void
-     */
-    public function attemptRegenZone(array $reco_counter, Zone $zone, Town $town, float $recovery_chance): void
-    {
-        $reco_counter[1]++;
-        $dropChanceFactor = $zone->getDigs() >= $this->conf->getTownConfiguration($town)->get(TownSetting::MapZoneDropCountThreshold) ? 0.33 : 1;
-        $dropRegenChance = $recovery_chance * $dropChanceFactor;
-
-        $n = $this->conf->getTownConfiguration($town)->get(TownSetting::MapZoneDropCountRefresh);
-
-        if ($this->random->chance($dropRegenChance)) {
-            $digs = $zone->getDigs() + $n + mt_rand(0, $n - 1);
-
-            $zone->setDigs($zone->getDigs() + $digs);
-            $this->log->debug("Zone <info>{$zone->getX()}/{$zone->getY()}</info>: Recovering by <info>{$digs}</info> to <info>{$zone->getDigs()}</info>.");
-            $reco_counter[0]++;
-        }
-
-        $ruinChanceFactor = $zone->getRuinDigs() >= $this->conf->getTownConfiguration($town)->get(TownSetting::MapZoneDropCountThreshold) ? 0.33 : 1;
-        $ruinRegenChange = $recovery_chance * $ruinChanceFactor;
-        if ($zone->getPrototype() && $this->random->chance($ruinRegenChange)) {
-            $rdigs = $zone->getRuinDigs() + $n + mt_rand(0, $n - 1);
-            $zone->setRuinDigs($rdigs);
-            $this->log->debug("Zone <info>{$zone->getX()}/{$zone->getY()}</info>: Recovering ruin by <info>{$rdigs}</info> to <info>{$zone->getRuinDigs()}</info>.");
-        }
     }
 }

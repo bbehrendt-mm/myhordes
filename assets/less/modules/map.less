@@ -240,6 +240,8 @@ div.react_map_area {
           &.danger-3 { background: #cc0a0a; }
           &.danger-4 { background: #004182; }
 
+          &.excavated::after { position: absolute; top: 10%; left: 10%; right: 70%; bottom: 70%; display: block; background: #ffff00; content: " "; border-radius: 50%; border: 1px solid #ffaa00;  }
+
           &>div:not(.tooltip) { position: absolute; display: block; top: 0; left: 0; width: 100%; z-index: 1; height: 100%; }
           &>div.count         { pointer-events: none; font-size: .7rem; line-height: .7rem; color: white; text-align: center; padding-top: 2px; text-shadow: 0 0 1px black, 0 0 2px black, 0 0 3px black; }
 
@@ -291,6 +293,9 @@ div.react_map_area {
             }
             &.tag-12 {
               background-image: url('../../img/tags/tag_12.gif');
+            }
+            &.tag-13 {
+              background-image: url('../../img/tags/tag_13.gif');
             }
           }
 

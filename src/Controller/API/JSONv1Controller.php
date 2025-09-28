@@ -1751,7 +1751,7 @@ class JSONv1Controller extends CoreController {
         $data = [];
 
         if (empty($fields)) {
-            $fields = ['x', 'y', 'nvt', 'tag', 'danger'];
+            $fields = ['x', 'y', 'nvt', 'exc', 'tag', 'danger'];
         }
 
         if (!in_array("x", $fields)) {
@@ -1820,6 +1820,9 @@ class JSONv1Controller extends CoreController {
                             break;
                         case "nvt":
                             $data_zone[$field] = intval($zone->getDiscoveryStatus() != Zone::DiscoveryStateCurrent);
+                            break;
+                        case "exc":
+                            $data_zone[$field] = intval($zone->isForceRegenerated());
                             break;
                         case "tag":
                             if ($zone->getTag() !== null && $zone->getTag()->getRef() !== ZoneTag::TagNone) {

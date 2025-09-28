@@ -20,24 +20,24 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 #[UniqueConstraint(name: 'gps_unique_zone', columns: ['x', 'y', 'town_id'])]
 class Zone
 {
-    const DiscoveryStateNone    = 0;
-    const DiscoveryStatePast    = 1;
-    const DiscoveryStateCurrent = 2;
-    const ZombieStateUnknown  = 0;
-    const ZombieStateEstimate = 1;
-    const ZombieStateExact    = 2;
-    const DirectionNorthWest = 1;
-    const DirectionNorth     = 2;
-    const DirectionNorthEast = 3;
-    const DirectionWest      = 4;
-    const DirectionCenter    = 5;
-    const DirectionEast      = 6;
-    const DirectionSouthWest = 7;
-    const DirectionSouth     = 8;
-    const DirectionSouthEast = 9;
-    const BluePrintNone      = 0;
-    const BlueprintAvailable = 1;
-    const BlueprintFound     = 2;
+    const int DiscoveryStateNone    = 0;
+    const int DiscoveryStatePast    = 1;
+    const int DiscoveryStateCurrent = 2;
+    const int ZombieStateUnknown  = 0;
+    const int ZombieStateEstimate = 1;
+    const int ZombieStateExact    = 2;
+    const int DirectionNorthWest = 1;
+    const int DirectionNorth     = 2;
+    const int DirectionNorthEast = 3;
+    const int DirectionWest      = 4;
+    const int DirectionCenter    = 5;
+    const int DirectionEast      = 6;
+    const int DirectionSouthWest = 7;
+    const int DirectionSouth     = 8;
+    const int DirectionSouthEast = 9;
+    const int BluePrintNone      = 0;
+    const int BlueprintAvailable = 1;
+    const int BlueprintFound     = 2;
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
@@ -104,6 +104,9 @@ class Zone
 
     #[ORM\Column]
     private int $soulPositionOffset = 0;
+
+    #[ORM\Column]
+    private bool $forceRegenerated = false;
 
     public function __construct()
     {
@@ -684,6 +687,18 @@ class Zone
     public function setSoulPositionOffset(int $soulPositionOffset): static
     {
         $this->soulPositionOffset = $soulPositionOffset;
+
+        return $this;
+    }
+
+    public function isForceRegenerated(): bool
+    {
+        return $this->forceRegenerated;
+    }
+
+    public function setForceRegenerated(bool $forceRegenerated): static
+    {
+        $this->forceRegenerated = $forceRegenerated;
 
         return $this;
     }

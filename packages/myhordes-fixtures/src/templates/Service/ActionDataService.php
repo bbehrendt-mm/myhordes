@@ -487,6 +487,8 @@ class ActionDataService implements FixtureProcessorInterface {
                 'hero_surv_1' => [ 'label' => 'Wasser suchen', 'renderer' => 'survivalist_popup', 'meta' => [ 'must_be_outside', 'must_be_outside_3km', 'not_yet_sbook' ],                         'result' => [ 'contaminated_zone_infect', 'hero_surv_0', 'hero_surv_1' ], 'message' => '{casino}' ],
                 'hero_surv_2' => [ 'label' => 'Essen suchen',  'renderer' => 'survivalist_popup', 'meta' => [ 'must_be_outside', 'no_full_ap', 'must_be_outside_3km', 'not_yet_sbook', 'eat_ap' ], 'result' => [ 'contaminated_zone_infect', 'hero_surv_0', 'hero_surv_2' ], 'message' => '{casino}' ],
 
+                'hero_scavenger' => [ 'label' => 'Zone ausheben', 'meta' => [ 'must_be_outside', 'profession_collec', 'scav_counter_below_1', 'zone_not_force_regenerated' ], 'result' => [ 'hero_scavenger', 'increase_scavenger_counter' ], 'message' => 'Du hast diese Zone erfolgreich ausgehoben und zahlreiche neue Buddelmöglichkeiten entdeckt.' ],
+
                 'hero_hunter_1' => [ 'label' => 'Tarnen', 'at00' => true, 'meta' => [ 'must_be_outside', 'hunter_no_followers', 'must_have_control_hunter' ], 'result' => [ 'hero_hunter' ], 'message' => 'Du bist ab sofort getarnt.' ],
                 'hero_hunter_2' => [ 'label' => 'Tarnen', 'at00' => true, 'meta' => [ 'must_be_inside' ], 'result' => [ 'hero_hunter' ], 'message' => 'Du bist nun getarnt.' ],
 
@@ -954,6 +956,8 @@ class ActionDataService implements FixtureProcessorInterface {
                 'basic_suit_dirt_#00' => [ 'clean_clothes'], // 'campsite_improve', 'campsite_hide', 'campsite_tomb', 'campsite_unhide', 'campsite_untomb' ],
 
                 'surv_book_#00' => [ 'hero_surv_1', 'hero_surv_2' ],
+
+                'pelle_#00' => [ 'hero_scavenger' ],
 
                 'vest_off_#00' => [ 'hero_hunter_1', 'hero_hunter_2' ],
 

@@ -41,6 +41,8 @@ use MyHordes\Fixtures\DTO\Actions\RequirementsAtom;
  * @property ?bool $isTempControlled
  * @method self isControlledOrTempControlled(?bool $v)
  * @property ?bool $isControlledOrTempControlled
+ * @method self isForceRegenerated(?bool $v)
+ * @property ?bool $isForceRegenerated
  */
 class LocationRequirement extends RequirementsAtom {
     public function getClass(): string
@@ -59,6 +61,7 @@ class LocationRequirement extends RequirementsAtom {
         return $this->minKm !== null || $this->maxKm !== null || $this->minAp !== null || $this->maxAp !== null ||
             $this->minLevel !== null || $this->maxLevel !== null ||
             $this->atRuin !== null || $this->atBuriedRuin !== null ||
+            $this->isForceRegenerated !== null ||
             $this->requiresZombieCheck();
     }
 

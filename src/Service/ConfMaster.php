@@ -28,6 +28,8 @@ class ConfMaster
     private array $event_cache = [];
     private array $setting_cache = [];
 
+    private array $conf_cache = [];
+
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly ConfigurationStorage $storage,
@@ -38,13 +40,14 @@ class ConfMaster
     }
 
     public function getTownConfiguration( Town $town ): TownConf {
+        if (isset( $this->conf_cache[$town->getId()] )) return $this->conf_cache[$town->getId()];
         $tc = new TownConf( [
             $this->storage->getSegment('rules.default'),
             $town->getDeriveConfigFrom() ? $this->storage->getSegment("rules.{$town->getDeriveConfigFrom()}", []) : [],
             $this->storage->getSegment("rules.{$town->getType()->getName()}", [])
         ] );
         if ($tc->complete()->get(TownSetting::AllowLocalConfiguration) && $town->getConf()) $tc->import( $town->getConf() );
-        return $tc->complete();
+        return ($this->conf_cache[$town->getId()] = $tc->complete());
     }
 
     public function getTownConfigurationByType( TownClass|string|null $town = null, bool $asPrivate = false ): TownConf {

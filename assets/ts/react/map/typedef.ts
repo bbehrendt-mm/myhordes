@@ -31,6 +31,7 @@ export interface MapZone extends MapCoordinate {
     g?: boolean,        // Global view
     s?: boolean,        // Contains a soul
     tg?: number,        // Tag Ref
+    xc?: boolean,       // Excavated?
     scoutLevel?: number  // Scout level
     fractional?: boolean // Show scout level when at 0
 }

@@ -13,19 +13,20 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 #[UniqueConstraint(name: 'zone_tag_unique', columns: ['name'])]
 class ZoneTag implements NamedEntity
 {
-    const TagNone           = 0;
-    const TagHelp           = 1;
-    const TagResource       = 2;
-    const TagItems          = 3;
-    const TagImportantItems = 4;
-    const TagDepleted       = 5;
-    const TagTempSecured    = 6;
-    const TagRuinDig        = 7;
-    const Tag5To8Zombies    = 8;
-    const Tag9OrMoreZombies = 9;
-    const TagCamping        = 10;
-    const TagExploreRuin    = 11;
-    const TagLostSoul       = 12;
+    const int TagNone           = 0;
+    const int TagHelp           = 1;
+    const int TagResource       = 2;
+    const int TagItems          = 3;
+    const int TagImportantItems = 4;
+    const int TagDepleted       = 5;
+    const int TagTempSecured    = 6;
+    const int TagRuinDig        = 7;
+    const int Tag5To8Zombies    = 8;
+    const int Tag9OrMoreZombies = 9;
+    const int TagCamping        = 10;
+    const int TagExploreRuin    = 11;
+    const int TagLostSoul       = 12;
+    const int TagExcavated      = 13;
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]

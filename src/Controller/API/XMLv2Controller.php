@@ -131,13 +131,13 @@ class XMLv2Controller extends CoreController {
             ],
             'rewards' => [
                 'list' => [
-                    'name' => 'r', 
+                    'name' => 'r',
                     'items' => []
                 ]
             ],
             'maps' => [
                 'list' => [
-                    'name' => 'm', 
+                    'name' => 'm',
                     'items' => []
                 ]
             ],
@@ -182,7 +182,7 @@ class XMLv2Controller extends CoreController {
                     $node['attributes']["desc-$lang"] = $this->translator->trans($picto->getPrototype()->getDescription(), [], 'game', $lang);
                 }
             }
-            
+
             $criteria = new Criteria();
             $criteria->andWhere($criteria->expr()->lte('unlockQuantity', $picto->getCount()));
             $criteria->andWhere($criteria->expr()->eq('associatedPicto', $picto->getPrototype()));
@@ -1234,7 +1234,8 @@ class XMLv2Controller extends CoreController {
                 'attributes' => [
                     'x' => $offset['x'] + $zone->getX(),
                     'y' => $offset['y'] - $zone->getY(),
-                    'nvt' => intval($zone->getDiscoveryStatus() != Zone::DiscoveryStateCurrent)
+                    'nvt' => intval($zone->getDiscoveryStatus() != Zone::DiscoveryStateCurrent),
+                    'exc' => $zone->isForceRegenerated() ? 1 : 0,
                 ]
             ];
 
