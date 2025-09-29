@@ -1438,7 +1438,7 @@ RadioactiveMan: RadioactiveMan
 HAZ-Gewinner: Gagnant de GSP
 'Ehrenauszeichnung für den Gewinner der Heilung für die Auszeichnungssucht.': 'Récompense honorifique décernée au gagnant de Guérir sa Pictophilie !'
 'Kernsammler (job)': Collecteur d’âmes
-'Anzahl der im Ausland gesammelten Seelen verstorbener Bürger (job)': 'Nombres d’âmes de citoyens décédés collectées dans l’Outre-Monde'
+'Anzahl der im Ausland gesammelten Seelen verstorbener Bürger (job)': 'Nombres d’âmes de citoyens décédés collectées dans l’Outre-Monde.'
 'Mystic (job)': 'Trans­formation mystique'
 'Wie viele Seelen hat Ihre Stadt befreien können. (job)': 'Nombre d’âmes trafiquées par vos soins à l’Atelier.'
 'Ich bin geheilt': 'Je suis guéri(e)'
@@ -3052,7 +3052,7 @@ Wiederherstellen: Récupérer
 'Blaugoldige Thermalbäder': 'Thermes de l''Or bleu'
 Leichenverbrenner: Crémateur de corps
 'Hey, du hättest an deine Seife denken sollen!': 'Hé, tu aurais dû penser à ton savon !'
-'Durchgeführte feurige Begräbnisrituale an den Leichen von Bürgern': 'Nombre de rituels funéraires effectués sur les cadavres des citoyens'
+'Durchgeführte feurige Begräbnisrituale an den Leichen von Bürgern': 'Nombre de rituels funéraires effectués sur les cadavres des citoyens.'
 '{citizen} hat {items} in der Müllhalde wiederhergestellt (-{def} Verteidigung)': '{citizen} a récuperé {items} dans la décharge (-{def} défense)'
 '{citizen} hat die Asche von {disposed} in das Gemüsebeet gestreut. Wenigstens war er am Ende noch nützlich.': '{citizen} a dispersé les cendres de {disposed} dans le potager. Au moins, il était utile.'
 'Du beginnst jede neue Stadt mit einer Erste Hilfe Tasche in deinem Rucksack.': 'Vous démarrez toutes vos villes avec une Boîte à pharmacie dans votre coffre.'
@@ -3228,5 +3228,6 @@ Tierklinik: Centre d'essai
 'Du hast dafür <strong>{ap} Aktionspunkt(e)</strong> und <strong>{cp} Baupunkt(e)</strong> verbraucht.': 'Vous avez utilisé <strong>{ap, plural, one {un point d''action} other {# points d''action}}</strong> et <strong>{cp, plural, one {un point de chantiers} other {# points de chantiers}}</strong>.'
 '{citizen} wurde auserwählt, um unser Katapult zu steuern. Sollte ihm etwas Schreckliches zustoßen, dann muss ein neuer Bürger gewählt werden.': 'Notre catapulte est gérée par {ref__gender, select, female {la citoyenne {citizen} qui a été désignée} other {le citoyen {citizen} qui a été désigné} } par la ville. Si quoi que ce soit d''affreux devait lui arriver, un nouveau citoyen pourrait alors être choisi.'
 'Wunderwerk: Blaugoldige Thermalbäder': 'Merveille : Thermes de l''Or bleu'
-'Während du dich konzentrierst, spürst du für einen kurzen Moment die Aura eines deiner verstorbenen Mitbürger. Sie scheint von {location} zu kommen...': 'Während du dich konzentrierst, spürst du für einen kurzen Moment die Aura eines deiner verstorbenen Mitbürger. Sie scheint von {location} zu kommen...'
-'Du spürst nichts als Ruhe.': 'Du spürst nichts als Ruhe.'
+'Während du dich konzentrierst, spürst du für einen kurzen Moment die Aura eines deiner verstorbenen Mitbürger. Sie scheint von {location} zu kommen...': 'Alors que vous vous concentrez, vous sentez l''espace d''un bref instant l''aura de l''un de vos concitoyens décédés. Elle semble provenir de {location} ...'
+'Du spürst nichts als Ruhe.': 'Vous ne ressentez rien d''autre qu''un grand calme.'
+'Zone ausgehoben': 'Zone déjà excavée'

@@ -1438,7 +1438,7 @@ RadioactiveMan: Hombre radiactivo
 HAZ-Gewinner: Ganador del CTP
 'Ehrenauszeichnung für den Gewinner der Heilung für die Auszeichnungssucht.': '¡Premio honorario dado al ganador de "Curando tu Pictofilia"!'
 'Kernsammler (job)': Recolector de Almas
-'Anzahl der im Ausland gesammelten Seelen verstorbener Bürger (job)': 'Cantidad de almas recolectadas de habitantes fallecidos en el Ultramundo'
+'Anzahl der im Ausland gesammelten Seelen verstorbener Bürger (job)': 'Cantidad de almas recolectadas de habitantes fallecidos en el Ultramundo.'
 'Mystic (job)': 'Transformación Mística'
 'Wie viele Seelen hat Ihre Stadt befreien können. (job)': 'Cantidad de almas que has transformado en el Taller'
 'Ich bin geheilt': 'Estoy curado'
@@ -3052,7 +3052,7 @@ Wiederherstellen: Recuperar
 'Blaugoldige Thermalbäder': 'Baños Termales de Oro Azul'
 Leichenverbrenner: Cremación de cuerpos
 'Hey, du hättest an deine Seife denken sollen!': '¡Oye, deberías haber previsto jabón!'
-'Durchgeführte feurige Begräbnisrituale an den Leichen von Bürgern': 'Realizaron rituales funerarios ardientes con los cuerpos de los habitantes'
+'Durchgeführte feurige Begräbnisrituale an den Leichen von Bürgern': 'Rituales funerarios ardientes realizados con los cuerpos de habitantes.'
 '{citizen} hat {items} in der Müllhalde wiederhergestellt (-{def} Verteidigung)': '{citizen} ha recuperado {items} desde el vertedero (-{def} defensa)'
 '{citizen} hat die Asche von {disposed} in das Gemüsebeet gestreut. Wenigstens war er am Ende noch nützlich.': '{citizen} esparció las cenizas de {disposed} en la huerta. Al menos al final ha servido para algo.'
 'Du beginnst jede neue Stadt mit einer Erste Hilfe Tasche in deinem Rucksack.': 'Comienzas la partida con un Estuche de medicamentos.'
@@ -3230,3 +3230,4 @@ Tierklinik: Centro de pruebas
 'Wunderwerk: Blaugoldige Thermalbäder': 'Maravilla: Baños Termales de Oro Azul'
 'Während du dich konzentrierst, spürst du für einen kurzen Moment die Aura eines deiner verstorbenen Mitbürger. Sie scheint von {location} zu kommen...': 'Während du dich konzentrierst, spürst du für einen kurzen Moment die Aura eines deiner verstorbenen Mitbürger. Sie scheint von {location} zu kommen...'
 'Du spürst nichts als Ruhe.': 'Du spürst nichts als Ruhe.'
+'Zone ausgehoben': 'Zone ausgehoben'
