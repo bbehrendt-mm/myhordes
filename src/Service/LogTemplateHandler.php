@@ -166,7 +166,7 @@ class LogTemplateHandler
 		list(,$preID,$sufID) = unpack('l2', md5("dog-for-{$numeric}", true));
 		return "{$dog_names_prefix[abs($preID % count($dog_names_prefix))]}{$dog_names_suffix[abs($sufID % count($dog_names_suffix))]}";
 	}
-    
+
     public function parseTransParams(array $variableTypes, ?array $variables): ?array {
         $transParams = [];
         if (!$variables) return [];
@@ -252,7 +252,7 @@ class LogTemplateHandler
                 }
                 elseif ($typeEntry['type'] === 'ap') {
                     $transParams['{'.$typeEntry['name'].'}'] = "<div class='ap'>{$variables[$typeEntry['name']]}</div>";
-                }   
+                }
                 elseif ($typeEntry['type'] === 'chat') {
                     $transParams['{'.$typeEntry['name'].'}'] = htmlentities($this->html->prepareEmotes( $variables[$typeEntry['name']], user: $this->trans->getLocale() ));
                 }
@@ -518,7 +518,7 @@ class LogTemplateHandler
         if (isset($item)) {
             $variables = array('citizen' => $citizen->getId(), 'item' => $item->getId(), 'num' => $count);
             $template = $this->entity_manager->getRepository(LogEntryTemplate::class)->findOneBy(['name' => 'wellAddItem']);
-        }   
+        }
         else {
             $variables = array('citizen' => $citizen->getId(), 'num' => $count);
             $template = $this->entity_manager->getRepository(LogEntryTemplate::class)->findOneBy(['name' => 'wellAdd']);
@@ -684,7 +684,7 @@ class LogTemplateHandler
         else {
             $variables = array('citizen' => $citizen->getId(), 'plan' => $proto->getId());
             $template = $this->entity_manager->getRepository(LogEntryTemplate::class)->findOneBy(['name' => 'constructionsNewSite']);
-        }   
+        }
         return (new TownLogEntry())
             ->setLogEntryTemplate($template)
             ->setVariables($variables)
@@ -712,16 +712,16 @@ class LogTemplateHandler
             ->setCitizen( $citizen );
     }
 
-    public function constructionsBuildingComplete( Citizen $citizen, BuildingPrototype $proto, ?ItemGroup $resources = null ): TownLogEntry {
-        $list = ($resources ?? $proto->getResources())?->getEntries()?->getValues() ?? [];
+    public function constructionsBuildingComplete( Citizen $citizen, Building $building, ?ItemGroup $resources = null ): TownLogEntry {
+        $list = ($resources ?? $building->getPrototypeResources())?->getEntries()?->getValues() ?? [];
         if (!empty($list)){
             $varlist = array_map( function(ItemGroupEntry $e) { return array('id' => $e->getPrototype()->getId(), 'count' => $e->getChance()); }, $list );
 
-            $variables = array('plan' => $proto->getId(), 'list' => $varlist);
+            $variables = array('plan' => $building->getPrototype()->getId(), 'list' => $varlist);
             $template = $this->entity_manager->getRepository(LogEntryTemplate::class)->findOneBy(['name' => 'constructionsBuildingComplete']);
         }
         else {
-            $variables = array('plan' => $proto->getId());
+            $variables = array('plan' => $building->getPrototype()->getId());
             $template = $this->entity_manager->getRepository(LogEntryTemplate::class)->findOneBy(['name' => 'constructionsBuildingCompleteNoResources']);
         }
         return (new TownLogEntry())
@@ -734,7 +734,7 @@ class LogTemplateHandler
 
     public function constructionsBuildingCompleteSpawnItems( Building $building, $items ): TownLogEntry {
         $proto = $building->getPrototype();
-        $variables = array('building' => $proto->getId(), 
+        $variables = array('building' => $proto->getId(),
             'list' => array_map( function($e) { if(array_key_exists('count', $e)) {return array('id' => $e['item']->getId(),'count' => $e['count']);}
               else { return array('id' => $e[0]->getId()); } }, $items ));
         $template = $this->entity_manager->getRepository(LogEntryTemplate::class)->findOneBy(['name' => 'constructionsBuildingCompleteSpawnItems']);
@@ -771,7 +771,7 @@ class LogTemplateHandler
     public function doorControl( Citizen $citizen, bool $open ): TownLogEntry {
         if ($open)
             $action = T::__("geöffnet", 'game');
-        else 
+        else
             $action = T::__("geschlossen", 'game');
         $variables = array('citizen' => $citizen->getId(), 'action' => $action);
         $template = $this->entity_manager->getRepository(LogEntryTemplate::class)->findOneBy(['name' => 'doorControl']);
@@ -801,7 +801,7 @@ class LogTemplateHandler
     public function doorControlAuto( Town $town, bool $open, ?DateTimeInterface $time ): TownLogEntry {
         if ($open)
             $action = T::__("geöffnet", 'game');
-        else 
+        else
             $action = T::__("geschlossen", 'game');
         $variables = array('action' => $action);
         $template = $this->entity_manager->getRepository(LogEntryTemplate::class)->findOneBy(['name' => 'doorControlAuto']);
@@ -817,7 +817,7 @@ class LogTemplateHandler
     public function doorPass( Citizen $citizen, bool $in ): TownLogEntry {
         if ($in)
             $action = T::__("betreten", 'game');
-        else 
+        else
             $action = T::__("verlassen", 'game');
         $variables = array('citizen' => $citizen->getId(), 'action' => $action);
         $template = $this->entity_manager->getRepository(LogEntryTemplate::class)->findOneBy(['name' => 'doorPass']);
@@ -949,7 +949,7 @@ class LogTemplateHandler
                 $variables = array('citizen' => $citizen->getId());
                 $template = $this->entity_manager->getRepository(LogEntryTemplate::class)->findOneBy(['name' => 'citizenDeathHeadshot']);
                 break;
-            default: 
+            default:
                 $variables = array('citizen' => $citizen->getId(), 'cod' => $citizen->getCauseOfDeath()->getId());
                 $template = $this->entity_manager->getRepository(LogEntryTemplate::class)->findOneBy(['name' => 'citizenDeathDefault']);
         }
@@ -1005,7 +1005,7 @@ class LogTemplateHandler
     }
 
     public function workshopConvert( Citizen $citizen, array $items_in, array $items_out ): TownLogEntry {
-        $variables = array('citizen' => $citizen->getId(), 
+        $variables = array('citizen' => $citizen->getId(),
             'list1' => array_map( function($e) { if(array_key_exists('count', $e)) {return array('id' => $e['item']->getId(),'count' => $e['count']);}
               else { return array('id' => $e[0]->getId()); } }, $items_in ),
             'list2' => array_map( function($e) { if(array_key_exists('count', $e)) {return array('id' => $e['item']->getId(),'count' => $e['count']);}
@@ -1042,27 +1042,27 @@ class LogTemplateHandler
         elseif ($d_west)     $str = 'Westen';
 
         // This breaks the sneak out capability of the ghoul. The caller of this function that would trigger this if statement is disabled.
-        if ($is_zero_zone) 
+        if ($is_zero_zone)
         {
             $variables = array('citizen' => $citizen->getId(), 'direction' => $str);
-            if ($depart) {               
+            if ($depart) {
                 $template = $this->entity_manager->getRepository(LogEntryTemplate::class)->findOneBy(['name' => 'townMoveLeave']);
             }
             else {
                 $template = $this->entity_manager->getRepository(LogEntryTemplate::class)->findOneBy(['name' => 'townMoveEnter']);
             }
         }
-        else 
+        else
         {
             $variables = array('citizen' => $citizen->getId(), 'direction' => $str, 'profession' => $citizen->getProfession()->getId());
-            if ($depart) {               
+            if ($depart) {
                 $template = $this->entity_manager->getRepository(LogEntryTemplate::class)->findOneBy(['name' => 'outsideMoveLeave']);
             }
             else {
                 $template = $this->entity_manager->getRepository(LogEntryTemplate::class)->findOneBy(['name' => 'outsideMoveEnter']);
             }
         }
-        
+
         return (new TownLogEntry())
             ->setLogEntryTemplate($template)
             ->setVariables($variables)
@@ -1429,7 +1429,7 @@ class LogTemplateHandler
         }
         $variables = array('citizens' => $citizenList);
         $template = $this->entity_manager->getRepository(LogEntryTemplate::class)->findOneBy(['name' => count($watchers) === 1 ? 'nightlyAttackOneWatcher' : 'nightlyAttackWatchers']);
-        
+
         return (new TownLogEntry())
             ->setLogEntryTemplate($template)
             ->setVariables($variables)
@@ -1588,7 +1588,7 @@ class LogTemplateHandler
     }
 
     public function nightlyAttackUpgradeBuildingItems( Building $building, ?array $items ): TownLogEntry {
-        $variables = array('building' => $building->getPrototype()->getId(), 
+        $variables = array('building' => $building->getPrototype()->getId(),
             'items' => array_map( function($e) { if(array_key_exists('count', $e)) {return array('id' => $e['item'],'count' => $e['count']);}
               else { return array('id' => $e[0]->getId()); } }, $items ));
         $template = $this->entity_manager->getRepository(LogEntryTemplate::class)->findOneBy(['name' => 'nightlyAttackUpgradeBuildingItems']);
@@ -1636,8 +1636,8 @@ class LogTemplateHandler
             ->setTimestamp( new DateTime('now') );
     }
 
-    public function nightlyAttackProduction( Building $building, ?array $items = [] ): TownLogEntry {        
-        $variables = array('building' => $building->getPrototype()->getId(), 
+    public function nightlyAttackProduction( Building $building, ?array $items = [] ): TownLogEntry {
+        $variables = array('building' => $building->getPrototype()->getId(),
             'items' => array_map( function($e) { if(array_key_exists('count', $e)) {return array('id' => $e['item']->getId(),'count' => $e['count']);}
               else { return array('id' => $e[0]->getId()); } }, $items ));
         $template = $this->entity_manager->getRepository(LogEntryTemplate::class)->findOneBy(['name' => $building->getPrototype()->getName() === 'item_vegetable_tasty_#00' ? 'nightlyAttackProductionVegetables' : 'nightlyAttackProduction']);
@@ -1732,7 +1732,7 @@ class LogTemplateHandler
                 $template = $this->entity_manager->getRepository(LogEntryTemplate::class)->findOneBy(['name' => 'citizenDisposalWater']);
                 break;
             case Citizen::Cooked:
-                $variables = array('citizen' => $actor->getId(), 'disposed' => $disposed->getId(), 
+                $variables = array('citizen' => $actor->getId(), 'disposed' => $disposed->getId(),
                     'items' => array_map( function($e) { if(array_key_exists('count', $e)) {return array('id' => $e['item']->getId(),'count' => $e['count']);}
                         else { return array('id' => $e[0]->getId()); } }, $items ));
                 $template = $this->entity_manager->getRepository(LogEntryTemplate::class)->findOneBy(['name' => 'citizenDisposalCremato']);
@@ -1766,7 +1766,7 @@ class LogTemplateHandler
                     $template = $this->entity_manager->getRepository(LogEntryTemplate::class)->findOneBy(['name' => 'townStealSanta']);
                 else
                     $template = $this->entity_manager->getRepository(LogEntryTemplate::class)->findOneBy(['name' => 'townStealLeprechaun']);
-            } 
+            }
             else {
                 if ($actor) {
                     $variables = array('actor' => $actor->getId(), 'victim' => $victim->getId(), 'item' => $item->getId(), 'broken' => $broken);
@@ -1788,7 +1788,7 @@ class LogTemplateHandler
                 $template = $this->entity_manager->getRepository(LogEntryTemplate::class)->findOneBy(['name' => 'townSmuggleUncaught']);
             }
         }
-            
+
         return (new TownLogEntry())
             ->setLogEntryTemplate($template)
             ->setVariables($variables)
@@ -1802,7 +1802,7 @@ class LogTemplateHandler
 
         $variables = array('actor' => $actor->getId(), 'victim' => $victim->getId(), 'item' => $item->getId(), 'broken' => $broken);
         $template = $this->entity_manager->getRepository(LogEntryTemplate::class)->findOneBy(['name' => 'townLoot']);
-            
+
         return (new TownLogEntry())
             ->setLogEntryTemplate($template)
             ->setVariables($variables)

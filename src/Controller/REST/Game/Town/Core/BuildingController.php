@@ -289,7 +289,7 @@ class BuildingController extends CustomAbstractCoreController
                 $res[$item->getPrototype()->getName()]->addCount(-$cc);
             }
 
-            $em->persist( $log->constructionsBuildingComplete( $citizen, $building->getPrototype(), $resources ) );
+            $em->persist( $log->constructionsBuildingComplete( $citizen, $building, $resources ) );
             $events->buildingConstruction( $building, $citizen );
             $votes = $building->getBuildingVotes();
             foreach ($votes as $vote) {
