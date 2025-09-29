@@ -638,7 +638,7 @@ class JSONv1Controller extends CoreController {
                         $data[$field] = $this->getTranslate($prototype->getDescription(), 'buildings');
                         break;
                     case "pa": case "paCurrent":
-                        $data[$field] = $prototype->getAp();
+                        $data[$field] = $prototype->getResourceSet()->getAp();
                         break;
                     case "maxLife":
                         $data[$field] = $prototype->getHp();
