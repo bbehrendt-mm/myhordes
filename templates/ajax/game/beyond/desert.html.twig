@@ -543,7 +543,7 @@
 
                 <div class="row-table">
                     {% set can_escort_dig = 0 %}
-                    {% for other_citizen in other_citizens|sort((a,b) => a.name|lower <=> b.name|lower) %}
+                    {% for other_citizen in other_citizens|sort((a,b) => a.name|sortable <=> b.name|sortable) %}
                         {# @var other_citizen \App\Entity\Citizen #}
                         {% if other_citizen.escortSettings is not null and other_citizen.escortSettings.leader == citizen %}
                             <div class="beyond-escort-on">
@@ -719,7 +719,7 @@
                 </h5>
 
                 <div class="row-table">
-                    {% for other_citizen in other_citizens|sort((a,b) => a.name|lower <=> b.name|lower) %}
+                    {% for other_citizen in other_citizens|sort((a,b) => a.name|sortable <=> b.name|sortable) %}
                         {# @var other_citizen \App\Entity\Citizen #}
                         {% if other_citizen.escortSettings is null or other_citizen.escortSettings.leader != citizen %}
                             <div class="row beyond-escort-off">
