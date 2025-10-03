@@ -25,6 +25,7 @@ class Config {
     public hiddenConditionalHelp: conf<Array<string>>;
     public completedTutorials:    conf<Array<number>>;
     public armaHideSkulls:        conf<number>;
+    public forceScreenWidth:      conf<number>;
 
     constructor(c:Client) {
         this.client = c;
@@ -48,6 +49,7 @@ class Config {
         this.hiddenConditionalHelp = this.makeConf<Array<string>>('hiddenConditionalHelp', [], false);
         this.completedTutorials    = this.makeConf<Array<number>>('completedTutorials', [], false);
         this.armaHideSkulls        = this.makeConf<number>('armaHideSkulls', 0, true);
+        this.forceScreenWidth      = this.makeConf<number>('forceScreenWidth', 0, false);
     }
 
     public get<T>(s:string): conf<T> {

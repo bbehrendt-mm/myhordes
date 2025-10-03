@@ -70,8 +70,20 @@ export default class HTML {
 
     constructor() { this.twinoParser = new TwinoAlikeParser(); }
 
+    setScreenWidth(width: number): void {
+        let content = 'width=device-width, user-scalable=no';
+        if (width > 0 && !(width >= 950 && window.innerWidth >= 950)) {
+            content = 'width=' + width;
+            if (width > window.innerWidth)
+                content += ', user-scalable=yes';
+            else content += ', user-scalable=no';
+        }
+        document.querySelector('meta[name="viewport"]').setAttribute('content', content);
+    }
+
     init(): void {
         document.getElementById('modal-backdrop')?.addEventListener('pop', () => requestAnimationFrame( () => this.nextPopup() ))
+        this.setScreenWidth($?.client?.config?.forceScreenWidth?.get() ?? 0);
     }
 
     setInitParams( params: HTMLInitParams ): void {
