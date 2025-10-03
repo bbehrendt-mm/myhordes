@@ -108,7 +108,7 @@
                     </span>
                         <div id="recipient_list">
                             <div class="list">
-                                {% for citizen in possible_dests|sort((a,b) => a.name|lower <=> b.name|lower) %}
+                                {% for citizen in possible_dests|sort((a,b) => a.name|sortable <=> b.name|sortable) %}
                                     <div class="recipient small link" x-citizen-id="{{citizen.id}}">{{citizen.name}}</div>
                                 {% endfor %}
                             </div>

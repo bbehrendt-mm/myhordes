@@ -49,7 +49,7 @@
                                 <label for="citizen-filter" class="cell rw-4 rw-lg-12">{{ 'Bürger:'|trans({}, 'game') }}</label>
                                 <select id="citizen-filter" name="citizen-filter" class="cell rw-8 rw-lg-12" data-map-value-to="#gazette-log" data-map-value-as="citizen">
                                     <option data-value="town" data-map-value-as="domain" value="-1">[ {{ 'Alles sehen'|trans({}, 'game')}} ]</option>
-                                    {% for citizen in town.citizens|sort((a,b) => a.name|lower <=> b.name|lower) %}
+                                    {% for citizen in town.citizens|sort((a,b) => a.name|sortable <=> b.name|sortable) %}
                                         <option data-value="citizen" data-map-value-as="domain" value="{{ citizen.id }}">{% if not citizen.alive %}&dagger; {% endif %}{{ citizen.name }}</option>
                                     {% endfor %}
                                 </select>

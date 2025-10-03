@@ -47,7 +47,7 @@
                         <div class="row-flex stretch season_entry_container" x-town-latest="">
                             <div class="cell rw-1 center" style="border-right: 1px solid #7e4d2a;"></div>
                             <div class="cell rw-7 ro-1">
-                                {% for denizen in town.citizens|filter(a => a.day == town.days)|sort((a,b) => a.user.name|lower <=> b.user.name|lower) %}
+                                {% for denizen in town.citizens|filter(a => a.day == town.days)|sort((a,b) => a.user.name|sortable <=> b.user.name|sortable) %}
                                     <span class="small">
                                     {% include 'ajax/soul/playername.html.twig' with {user: denizen.user, additional_classes: ['undecorated'], globalSpace: true} only %} <span style="color: #f0d79e">({{ denizen.day }})</span>
                                     </span>{% if not loop.last %},{% endif %}
