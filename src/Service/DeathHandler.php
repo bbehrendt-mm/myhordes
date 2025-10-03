@@ -20,38 +20,22 @@ use App\Enum\Game\CitizenPersistentCache;
 use App\Structures\TownConf;
 use Doctrine\ORM\EntityManagerInterface;
 
-class DeathHandler
+readonly class DeathHandler
 {
-    private EntityManagerInterface $entity_manager;
-    private ItemFactory $item_factory;
-    private InventoryHandler $inventory_handler;
-    private CitizenHandler $citizen_handler;
-    private ZoneHandler $zone_handler;
-    private PictoHandler $picto_handler;
-    private LogTemplateHandler $log;
-    private RandomGenerator $random_generator;
-    private ConfMaster $conf;
-    private PermissionHandler $perm;
-    private GameProfilerService $gps;
-    private EventProxyService $events;
 
     public function __construct(
-        EntityManagerInterface $em, ZoneHandler $zh, InventoryHandler $ih, CitizenHandler $ch,
-        ItemFactory $if, LogTemplateHandler $lt, PictoHandler $ph, RandomGenerator $rg, ConfMaster $conf,
-        PermissionHandler $perm, GameProfilerService $gps, EventProxyService $events)
-    {
-        $this->entity_manager = $em;
-        $this->inventory_handler = $ih;
-        $this->item_factory = $if;
-        $this->zone_handler = $zh;
-        $this->citizen_handler = $ch;
-        $this->picto_handler = $ph;
-        $this->log = $lt;
-        $this->random_generator = $rg;
-        $this->conf = $conf;
-        $this->perm = $perm;
-        $this->gps = $gps;
-        $this->events = $events;
+        private EntityManagerInterface $entity_manager,
+        private ZoneHandler            $zone_handler,
+        private InventoryHandler       $inventory_handler,
+        private CitizenHandler         $citizen_handler,
+        private ItemFactory            $item_factory,
+        private LogTemplateHandler     $log,
+        private PictoHandler           $picto_handler,
+        private ConfMaster             $conf,
+        private PermissionHandler      $perm,
+        private GameProfilerService    $gps,
+        private EventProxyService      $events,
+    ) {
     }
 
     /**
@@ -128,7 +112,8 @@ class DeathHandler
             $citizen->getHome()->setHoldsBody( true );
             if ($this->conf->getTownConfiguration( $citizen->getTown() )->get(TownSetting::OptModifierBonesInTown, false))
                 $this->events->placeItem( $citizen, $this->item_factory->createItem('bone_meat_#00'),
-                    [$citizen->getHome()->getChest(),$citizen->getTown()->getBank()]
+                    [$citizen->getHome()->getChest(),$citizen->getTown()->getBank()],
+                    silent: true
                 );
         }
         else {
@@ -141,7 +126,7 @@ class DeathHandler
                         $this->item_factory->createItem('bone_meat_#00')
                     );
                 else
-                    $this->events->placeItem( $citizen, $this->item_factory->createItem('bone_meat_#00'), [$zone->getFloor()], true);
+                    $this->events->placeItem( $citizen, $this->item_factory->createItem('bone_meat_#00'), [$zone->getFloor()], true, silent: true);
             }
 
             $citizen->setZone(null);
@@ -153,7 +138,7 @@ class DeathHandler
         }
 
         if($citizen->getBanished()){
-            $this->events->placeItem( $citizen, $this->item_factory->createItem('banned_note_#00'), [$citizen->getHome()->getChest()], true);
+            $this->events->placeItem( $citizen, $this->item_factory->createItem('banned_note_#00'), [$citizen->getHome()->getChest()], true, silent: true);
         }
 
         $citizen->setCauseOfDeath($cod);
