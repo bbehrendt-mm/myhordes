@@ -332,7 +332,8 @@ class CitizenFixtures extends Fixture implements DependentFixtureInterface
             $entity
                 ->setLabel( $entry['label'] )
                 ->setIcon( $entry['icon'] )
-                ->setDescription( $entry['desc'] );
+                ->setDescription( $entry['desc'] )
+                ->setMarker( $entry['marker'] ?? false );
 
             if (isset($entry['pictos'])) {
                 foreach ($entry['pictos'] as $picto) {

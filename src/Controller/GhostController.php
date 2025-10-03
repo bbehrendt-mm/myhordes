@@ -88,7 +88,8 @@ class GhostController extends CustomAbstractController
             'warnCoaNotComplete' => $count > 0 && (count($coa_members) + 1) < $count,
             'warnCoaEmpty'       => $count > 1 && empty($coa_members),
             'coa'                => $coa_members,
-            'cdm_level'          => $cdm_lock ? 2 : ( $cdm_warn ? 1 : 0 ),
+            'cdm_warn'           => $cdm_warn,
+            'cdm'                => $cdm_lock,
             'canCreateTown' => true,
             'mayorBlock' => $mayor_block,
         ] ));
