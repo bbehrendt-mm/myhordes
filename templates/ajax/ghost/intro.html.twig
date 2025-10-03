@@ -123,16 +123,15 @@
                 <div class="padded cell rw-12">
                     <div class="row">
                         <div class="cell rw-12">
-                            {% if cdm_level == 2 %}
-
+                            {% if cdm %}
                                 <div class="note note-warning">
-                                    {% trans from 'ghost' %}
-                                        Da du in mehreren deiner letzten Städte frühzeitig durch Verdursten gestorben bist, bist du für einige Zeit vom Spiel ausgeschlossen. Du kannst aktuell keine neue Stadt betreten.
-                                    {% endtrans %}
+                                    {{ 'Da du in mehreren deiner letzten Städte frühzeitig gestorben bist ({death_type}), bist du bis {end_date} vom Spiel ausgeschlossen. Du kannst aktuell keine neue Stadt betreten.'|trans({
+                                        death_type: cdm.death.label|trans({},'game'),
+                                        end_date: cdm.timestamp|date_modify('tomorrow + 2week')|format_datetime('short', 'none')
+                                    },'ghost') }}
                                 </div>
-
                             {% else %}
-                                {% if cdm_level == 1 %}
+                                {% if cdm_warn %}
                                     <div class="note note-warning">
                                         {% trans from 'ghost' %}
                                             Du bist in mehreren deiner letzten Städte frühzeitig durch Verdursten gestorben. Sollte dies in deiner nächsten Stadt erneut geschehen, wirst du für einige Wochen vom Spiel ausgeschlossen.

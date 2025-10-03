@@ -23,6 +23,7 @@ use App\Enum\Configuration\MyHordesSetting;
 use App\Enum\DomainBlacklistType;
 use App\Service\Actions\Cache\InvalidateTagsInAllPoolsAction;
 use App\Service\User\UserCapabilityService;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\QueryBuilder;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -288,12 +289,16 @@ class UserHandler
         return null;
     }
 
-    public function getConsecutiveDeathLock(User $user, bool &$warning = null): bool {
+    public function getConsecutiveDeathLock(User $user, bool &$warning = null): ?ConsecutiveDeathMarker {
         /** @var ConsecutiveDeathMarker $cdm */
-        $cdm = $this->entity_manager->getRepository(ConsecutiveDeathMarker::class)->findOneBy(['user' => $user]);
+        $cdm = $this->entity_manager->getRepository(ConsecutiveDeathMarker::class)->matching((new Criteria())
+            ->where(Criteria::expr()->eq('user', $user))
+            ->andWhere(Criteria::expr()->gte('number', 2))
+            ->andWhere(Criteria::expr()->gte('timestamp', (new \DateTime('today - 2week'))))
+        )->first() ?: null;
 
-        $warning = $cdm ? ($cdm->getDeath()->getRef() === CauseOfDeath::Dehydration && $cdm->getNumber() === 2) : false;
-        return $cdm ? ($cdm->getDeath()->getRef() === CauseOfDeath::Dehydration && $cdm->getNumber() >= 3 && $cdm->getTimestamp() > (new \DateTime('today - 2week'))) : false;
+        $warning = $cdm?->getDeath()?->isMarker() && $cdm?->getNumber() < 3;
+        return ($cdm?->getDeath()?->isMarker() && $cdm?->getNumber() >= 3) ? $cdm : null;
     }
 
     /**

@@ -390,3 +390,4 @@ Koalition: Koalition
 'Du bist dieser Stadt aufgrund einer aktuellen Beschränkung deines Accounts nicht beitreten.': 'Du bist dieser Stadt aufgrund einer aktuellen Beschränkung deines Accounts nicht beitreten.'
 'Du kannst dieser Stadt nicht beitreten. Fehlercode: {error}': 'Du kannst dieser Stadt nicht beitreten. Fehlercode: {error}'
 'Aktive Fähigkeiten': 'Aktive Fähigkeiten'
+'Da du in mehreren deiner letzten Städte frühzeitig gestorben bist ({death_type}), bist du bis {end_date} vom Spiel ausgeschlossen. Du kannst aktuell keine neue Stadt betreten.': 'Da du in mehreren deiner letzten Städte frühzeitig gestorben bist ({death_type}), bist du bis {end_date} vom Spiel ausgeschlossen. Du kannst aktuell keine neue Stadt betreten.'
