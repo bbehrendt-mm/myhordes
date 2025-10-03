@@ -6,14 +6,12 @@ community.
 The code is licensed under [AGPL-3.0-or-later](https://spdx.org/licenses/AGPL-3.0-or-later.html), while assets use 
 [CC-BY-NC-SA-4.0](https://spdx.org/licenses/CC-BY-NC-SA-4.0.html). Some part of the code are based on Hordes'
 open-source code.
-  
-The official MyHordes server uses additional an package comprised of private code (`myhordes-prime`) to keep some parts 
-of the game rules a mystery. This was an integral part of the spirit of the original game, which is why we replicate it
-here. This code is published with a delay of one year and can be found 
-[here](./packages/myhordes-prime-shim/archive/seasons). For more information about this part of the code, check the
-[archive readme](./packages/myhordes-prime-shim/archive/README.MD).
 
 # Development Installation
+
+⚠️ **Installing MyHordes "bare-metal" is not recommended.** Instead, we strongly recommend using the docker-based installation.
+You can find instructions for that in the [MyHordes-Docker repository](https://gitlab.com/eternaltwin/myhordes/myhordes-docker).
+
 #### Tested on Debian 10, Ubuntu 19.04 
 
 ## Requirements
@@ -108,21 +106,11 @@ yarn install
 
 ### Distribution Packages (such as MyHordes Prime)
 
-MyHordes can be extended by custom distribution packages, adding or modifying constructions, items, game rules and much more. One of these distribution packages is the MyHordes Prime Closes Source Package (`myhordes/prime-csc`), which is used on the main MyHordes server (https://myhordes.eu).
-
-**If you do not have access to this package, or want to use your own package**, you need to update the composer lockfile:
-```bash
-php composer.phar update myhordes/prime --no-scripts
-```
-
-**If you have access to this package**, you can enable it using the following command after starting the docker containers:
-```bash
-ln -s .composer.dist.json composer.dist.json && php composer.phar update myhordes/prime --no-scripts
-```
+MyHordes can be extended by custom distribution packages, adding or modifying constructions, items, game rules and much more.
 
 **If you wish to use your own distribution package**, create a file named `composer.dist.json` within the root folder:
 
-!! Unless you're using the prime package, please make sure you do not commit your composer or symfony lock file!
+!! If you are using your own distribution package, please make sure you do not commit your composer or symfony lock file into the main repository!
 
 ```json
 {
