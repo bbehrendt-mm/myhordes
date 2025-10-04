@@ -1,5 +1,15 @@
 import * as React from "react";
-import {useContext, useEffect, useLayoutEffect, useRef, useState} from "react";
+import {
+    useContext,
+    useEffect,
+    useLayoutEffect,
+    useRef,
+    useState,
+    Children,
+    Fragment,
+    ReactNode,
+    MutableRefObject, forwardRef, ForwardedRef
+} from "react";
 import {ExternalApp, HeaderAPI} from "./api";
 import {Global} from "../../defaults";
 import {useSharedWorkerMessages, useStickyToggle, useTranslations} from "../utils";
@@ -30,14 +40,17 @@ export const HordesStandaloneAppPopupWrapper = (props: mountProps) => {
     </Globals.Provider>
 };
 
-const AppList = ({apps, onClick}: {apps: ExternalApp[], onClick: (app: ExternalApp) => void}) => {
+const AppList = ({apps, onClick}: {apps: ExternalApp[], onClick: (app: ExternalApp, event: React.MouseEvent) => void}) => {
     const globals = useContext(Globals)
     return apps.length > 0 ? <ul>
         { apps.sort( (a,b) =>
             ((a.testing ? 1 : 0) - (b.testing ? 1 : 0)) ||
             ((a.maintenance ? 1 : 0) - (b.maintenance ? 1 : 0)) ||
             a.name.localeCompare( b.name )
-        ).map( app => <li key={app.id} className={ app.maintenance ? 'maintenance' : '' } onClick={() => onClick(app)}>
+        ).map( app => <li key={app.id} className={ app.maintenance ? 'maintenance' : '' } onClick={e => {
+            onClick(app, e);
+            e.preventDefault();
+        }}>
             <div><img alt={app.name} src={app.icon ?? globals.strings.apps.list.no_icon}/></div>
             <div className="label">
                 <span className="name">{ app.name }</span>
@@ -48,6 +61,15 @@ const AppList = ({apps, onClick}: {apps: ExternalApp[], onClick: (app: ExternalA
         </li> ) }
     </ul> : null
 }
+
+const AppForm = forwardRef(({app, children, dev}: {app: ExternalApp, children?: ReactNode|ReactNode[], dev?: boolean }, ref?: ForwardedRef<HTMLFormElement>) => {
+
+    return <form action={ dev ? (app.dev?.url ?? app.url) : app.url } method={ app.auth ? 'post' : 'get' } ref={ref} target="_blank" rel="noopener">
+        { app.auth && app.pk && <input type="hidden" name="key" value={ app.pk }/>}
+        { children && Children.map( children, (child, i) => <Fragment key={i}>{child}</Fragment> ) }
+    </form>
+
+})
 
 export const App = ({app, onClose, signalUpdate}: {app: ExternalApp|null, onClose: () => void, signalUpdate: () => void}) => {
     const globals = useContext(Globals)
@@ -117,21 +139,18 @@ export const App = ({app, onClose, signalUpdate}: {app: ExternalApp|null, onClos
                     </div> }
 
                     <div className="forms">
-                        { (!app?.auth || app?.pk) && <>
-                            { <form action={ app.url } method={ app.auth ? 'post' : 'get' } target="_blank">
-                                { app.auth && app.pk && <input type="hidden" name="key" value={ app.pk }/>}
-                                <button type="submit" className="button" disabled={loading}>{ globals.strings.apps.details.confirm.replace('{app}', app.name) }</button>
-                            </form> }
-                        </> }
+                        { (!app?.auth || app?.pk) && <AppForm app={app}>
+                            <button type="submit" className="button" disabled={loading}>{ globals.strings.apps.details.confirm.replace('{app}', app.name) }</button>
+                        </AppForm> }
 
-                        { app?.auth && !app?.pk && <form action={ app.url } method={ app.auth ? 'post' : 'get' } target="_blank">
+                        { app?.auth && !app?.pk && <AppForm app={app}>
                             <button disabled={true} type="submit" className="button">{ globals.strings.apps.details.confirm.replace('{app}', app.name) }</button>
                             <p>
                                 <span className="critical">{ globals.strings.apps.details.warning_pk_1 }</span>
                                 &nbsp;
                                 <span dangerouslySetInnerHTML={{__html: globals.strings.apps.details.warning_pk_2}}/>
                             </p>
-                        </form>}
+                        </AppForm>}
 
                         <button type="button" className="button" disabled={loading} onClick={() => onClose()}>{ globals.strings.apps.details.cancel }</button>
                     </div>
@@ -193,10 +212,9 @@ export const App = ({app, onClose, signalUpdate}: {app: ExternalApp|null, onClos
                                 </div>
                                 <div className="cell rw-8 rw-md-12">
                                     <input id={`${uuid.current}_dev_url`} name="dev_url" type="url" defaultValue={app.dev.url} maxLength={190}/>
-                                    { app.dev?.url && <form action={ app.dev.url } method={ app.auth ? 'post' : 'get' } target="_blank">
-                                        { app.auth && app.pk && <input type="hidden" name="key" value={ app.pk }/>}
+                                    { app.dev?.url && <AppForm app={app} dev={true}>
                                         <button type="submit" className="inline small float-right" disabled={loading}>{ globals.strings.apps.details.confirm.replace('{app}', app.name) }</button>
-                                    </form> }
+                                    </AppForm> }
                                 </div>
                             </div>
 
@@ -242,12 +260,14 @@ export const HordesHeaderAPIWidget = () => {
     const globals = useContext(Globals)
 
     const root = useRef<HTMLDivElement>();
-    const animation = useRef<Animation>()
+    const animation = useRef<Animation>();
+    const instantForm = useRef<HTMLFormElement>();
 
     const [show, render, setRender] = useStickyToggle(false);
 
     const [appList, setAppList] = useState<ExternalApp[]>([]);
     const [selectedApp, setSelectedApp] = useState<ExternalApp>(null);
+    const [instantApp, setInstantApp] = useState<ExternalApp>(null);
 
     const [outdatedAppList, setOutdatedAppList] = useState<(number)[]>([]);
 
@@ -321,6 +341,13 @@ export const HordesHeaderAPIWidget = () => {
         animation.current.oncancel = clear;
     }, [show]);
 
+    useLayoutEffect(() => {
+        if (instantApp && instantForm.current) {
+            instantForm.current.submit();
+            setInstantApp(null);
+        }
+    }, [instantApp]);
+
     if (appList.length === 0 || !globals.strings) return;
 
     const hasApps = appList.some(app => !app.wiki);
@@ -333,12 +360,13 @@ export const HordesHeaderAPIWidget = () => {
              onMouseOut={() => setRender(false)}
         >
             <img alt={globals.strings.apps.list.headline} src={globals.strings.apps.list.icon} className="app-icon"/>
+            { !selectedApp && instantApp && <div className="hidden"><AppForm app={instantApp} ref={instantForm}/></div> }
             {render && <div className="app-listing-body">
                 <h4>{globals.strings.apps.list.headline}</h4>
                 <p>{globals.strings.apps.list.description}</p>
-                {hasApps && <AppList apps={appList.filter(app => !app.wiki)} onClick={app => setSelectedApp(app)}/>}
+                {hasApps && <AppList apps={appList.filter(app => !app.wiki)} onClick={(app, event) => event.shiftKey ? setInstantApp(app) : setSelectedApp(app)}/>}
                 {hasApps && hasWikis && <hr/>}
-                {hasWikis && <AppList apps={appList.filter(app => app.wiki)} onClick={app => setSelectedApp(app)}/>}
+                {hasWikis && <AppList apps={appList.filter(app => app.wiki)} onClick={(app, event) => event.shiftKey ? setInstantApp(app) : setSelectedApp(app)}/>}
             </div>}
         </div>
     </>
