@@ -386,6 +386,14 @@ class BeyondController extends InventoryAwareController
                 $zone_tags = $this->entity_manager->getRepository(ZoneTag::class)->findAll();
             }
 
+            $digLevel = match(true) {
+                $zone->getDigs() <= 0 => 0,
+                $citizen->getProfession()->getName() !== 'collec' => null,
+                $zone->getDigs() <= 2  => 1,
+                $zone->getDigs() <= 6  => 2,
+                default => 3,
+            };
+
             return [
                 'scout' => $citizen->getProfession()->getName() === 'hunter',
                 'allow_enter_town' => $can_enter,
@@ -419,7 +427,7 @@ class BeyondController extends InventoryAwareController
                 'camping_debug' => $camping_debug ?? '',
                 'zone_tags' => $zone_tags,
                 'sect' => $sect,
-
+                'digLevel' => $digLevel,
             ];
         }/*, INF*/);
 
@@ -898,7 +906,7 @@ class BeyondController extends InventoryAwareController
                         $gps->recordlostHood($mover, $new_zone, "outsideMove");
                     }
                 }
-				
+
                 // Add activity marker for scout visit after the check for zombie detection
                 $new_zone->addActivityMarker((new ZoneActivityMarker())
                     ->setCitizen($mover)
@@ -929,7 +937,7 @@ class BeyondController extends InventoryAwareController
                         $this->entity_manager->remove($smokeBomb);
                     }
                 }
-                
+
             }
 
             // This text is a newly added one, but it breaks the "Sneak out of town"
@@ -1161,7 +1169,7 @@ class BeyondController extends InventoryAwareController
             $this->getActiveCitizen()->getInventory(), $this->entity_manager->getRepository(ItemPrototype::class)->findOneBy(['name' => 'vest_on_#00'])
         ) > 0)
             return AjaxResponse::error( self::ErrorZoneUnderControl );
-        
+
         if($this->citizen_handler->hasStatusEffect($citizen, "terror"))
             return AjaxResponse::error(self::ErrorTerrorized);
 
