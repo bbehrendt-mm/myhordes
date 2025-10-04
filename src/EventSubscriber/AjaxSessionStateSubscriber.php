@@ -28,7 +28,8 @@ class AjaxSessionStateSubscriber implements EventSubscriberInterface
         $town = $citizen?->getTown();
 
         $event->getResponse()->headers->add([
-            'X-Session-Domain' => ($user?->getId()??'0') . ':' . ($citizen?->getId()??'0') . ':' . ($town?->getDay()??'0') . ':' . ($citizen?->getZone() ?'1':'0')
+            'X-Session-Domain' => ($user?->getId()??'0') . ':' . ($citizen?->getId()??'0') . ':' . ($town?->getDay()??'0') . ':' . ($citizen?->getZone() ?'1':'0'),
+            ...($user?->getLanguage() ? ['X-Session-Lang' => $user->getLanguage()] : [])
         ]);
     }
 

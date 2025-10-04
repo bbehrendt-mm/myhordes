@@ -6,6 +6,7 @@ namespace App\Security;
 
 use App\Entity\RememberMeTokens;
 use App\Entity\User;
+use App\Response\AjaxResponse;
 use App\Service\JSONRequestParser;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Cookie;
@@ -47,9 +48,12 @@ class AjaxAuthenticator extends RememberMeSupportingAuthenticator implements Aut
         if (!$request->isXmlHttpRequest())
             return new RedirectResponse($this->url_generator->generate('initial_landing'));
 
-        $intent = $request->headers->get('X-Request-Intent', 'UndefinedIntent');
-        switch ($intent) {
+        switch ($request->headers->get('X-Request-Intent', 'UndefinedIntent')) {
             case 'WebNavigation':
+                if ($request->headers->get('X-Render-Target', 'content') !== 'content')
+                    return new Response('', 200, [
+                        'X-AJAX-Control' => 'reset',
+                    ]);
                 return new RedirectResponse($this->url_generator->generate('public_login'));
             default:
                 return new JsonResponse( ['error' => 'not_authorized'] );

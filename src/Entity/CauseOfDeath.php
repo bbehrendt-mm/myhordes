@@ -36,49 +36,49 @@ class CauseOfDeath
         17 Pulvérisé un peu partout
         18 Possédé par une âme torturée
     */
-    const Dehydration      = 1;
+    const int Dehydration      = 1;
     // Old : 4;
-    const Strangulation    = 2;
+    const int Strangulation    = 2;
     // Old : 14;
-    const Cyanide          = 3;
+    const int Cyanide          = 3;
     // Old : 8;
-    const Hanging          = 4;
+    const int Hanging          = 4;
     // Old : 12;
-    const Vanished         = 5;
+    const int Vanished         = 5;
     // Old : 3;
-    const NightlyAttack    = 6;
+    const int NightlyAttack    = 6;
     // Old : 2;
-    const Addiction        = 7;
+    const int Addiction        = 7;
     // Old : 6;
-    const Infection        = 8;
+    const int Infection        = 8;
     // Old : 7;
-    const Headshot         = 9;
+    const int Headshot         = 9;
     // Old : 15;
-    const Unknown          = 10;
+    const int Unknown          = 10;
     // Old : 1;
-    const Poison           = 11;
+    const int Poison           = 11;
     // Old : 9;
-    const GhulEaten        = 12;
+    const int GhulEaten        = 12;
     // Old : 10;
-    const GhulBeaten       = 13;
+    const int GhulBeaten       = 13;
     // Old : 11;
-    const GhulStarved      = 14;
+    const int GhulStarved      = 14;
     // Old : 5;
-    const FleshCage        = 15;
+    const int FleshCage        = 15;
     // Old : 13;
-    const ChocolateCross   = 16;
+    const int ChocolateCross   = 16;
     // Old : 19;
-    const ExplosiveDoormat = 17;
+    const int ExplosiveDoormat = 17;
     // Old : 18;
-    const Haunted          = 18;
+    const int Haunted          = 18;
     // Old : 17;
-    const Radiations       = 19;
+    const int Radiations       = 19;
     // Old : 16;
-    const Apocalypse       = 20;
+    const int Apocalypse       = 20;
     // Old : --
-    const LiverEaten       = 21;
+    const int LiverEaten       = 21;
 
-    const RabidDog = 22;
+    const int RabidDog = 22;
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
@@ -93,6 +93,10 @@ class CauseOfDeath
     private $ref;
     #[ORM\ManyToMany(targetEntity: PictoPrototype::class)]
     private $pictos;
+
+    #[ORM\Column]
+    private bool $marker = false;
+
     public function __construct()
     {
         $this->pictos = new ArrayCollection();
@@ -159,6 +163,18 @@ class CauseOfDeath
     public function removePicto(PictoPrototype $picto): self
     {
         $this->pictos->removeElement($picto);
+
+        return $this;
+    }
+
+    public function isMarker(): ?bool
+    {
+        return $this->marker;
+    }
+
+    public function setMarker(bool $marker): static
+    {
+        $this->marker = $marker;
 
         return $this;
     }

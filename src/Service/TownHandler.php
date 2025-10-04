@@ -349,7 +349,7 @@ class TownHandler
         $summary->base_defense = $town->getBaseDefense();
         $summary->base_defense += $town->getStrangerPower();
 
-        $f_house_def = 0.0;
+        $f_house_def = 0;
         $summary->guardian_defense = 0;
 
         $home_def_factor = $this->getBuilding( $town, 'small_strategy_#00', true ) ? 0.8 : 0.4;
@@ -365,7 +365,7 @@ class TownHandler
                 $home = $citizen->getHome();
                 $this->calculate_home_def($home, $home_summary);
                 /** @var HomeDefenseSummary $home_summary */
-                $f_house_def += ($home_summary->house_defense + $home_summary->job_defense + $home_summary->upgrades_defense) * $home_def_factor;
+                $f_house_def += ($home_summary->house_defense + $home_summary->job_defense + $home_summary->upgrades_defense);
 
                 if (!$citizen->getZone()) {
                     $summary->citizen_defense += $citizen->property( CitizenProperties::TownDefense );
@@ -378,7 +378,7 @@ class TownHandler
                 $deadCitizens++;
             }
         }
-        $summary->house_defense = floor($f_house_def);
+        $summary->house_defense = floor((float)$f_house_def * $home_def_factor);
         $item_def_factor = 1.0;
         foreach ($town->getBuildings() as $building)
             if ($building->getComplete()) {

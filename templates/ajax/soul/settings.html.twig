@@ -811,6 +811,24 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="padded cell rw-4 rw-md-6 rw-sm-12">
+                                <div class="note note-lightest">
+                                    <label for="setting_browser_forceScreenWidth">{{ 'Layout des Spiels'|trans({}, 'soul') }}</label>
+                                    {{help_btn('Diese Einstellung funktioniert nur auf mobilen Geräten. Üblicherweise wird das Layout des Spiels durch die Bildschirmgröße deines Geräts gesteuert. Falls du ein bestimmtes Layout bevorzugst, welches nicht der Bildschirmgröße deines Gerätes entspricht, kannst du dieses hier erzwingen.'|trans({}, 'soul'))}}
+                                </div>
+                            </div>
+                            <div class="padded cell rw-8 rw-md-6 rw-sm-12">
+                                <select id="setting_browser_forceScreenWidth">
+                                    <option value="0">{{ 'Automatisch (empfohlen)'|trans({}, 'soul') }}</option>
+                                    <option value="479">{{ 'Smartphone-Layout'|trans({}, 'soul') }}</option>
+                                    <option value="599">{{ 'Phablet-Layout'|trans({}, 'soul') }}</option>
+                                    <option value="949">{{ 'Tablet-Layout'|trans({}, 'soul') }}</option>
+                                    <option value="950">{{ 'Desktop-Layout (Vollbild)'|trans({}, 'soul') }}</option>
+                                    <option value="1500">{{ 'Desktop-Layout (Normal)'|trans({}, 'soul') }}</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -903,6 +921,18 @@
 
             document.body.classList.add('forum-font-' + elem.value);
             $.client.config.forumFontSize.set(elem.value);
+            confirmConfig();
+        });
+
+        $.html.forEach('#setting_browser_forceScreenWidth', e => e.value = ('' + $.client.config.forceScreenWidth.get()));
+        $.html.addEventListenerAll('#setting_browser_forceScreenWidth', 'change', function(e,elem) {
+            const old_classes = document.body.classList;
+            old_classes.forEach(c => {
+                if (c.substring(0,11) === 'forum-font-') document.body.classList.remove(c);
+            });
+
+            $.html.setScreenWidth(parseInt('' + elem.value));
+            $.client.config.forceScreenWidth.set(parseInt('' + elem.value));
             confirmConfig();
         });
 

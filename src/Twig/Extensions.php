@@ -28,6 +28,7 @@ use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use MyHordes\Fixtures\DTO\Container;
+use Normalizer;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -83,6 +84,7 @@ class Extensions extends AbstractExtension implements GlobalsInterface
             new TwigFilter('cfg',  [$this, 'cfg']),
             new TwigFilter('decodeMessage',  [$this, 'decode']),
             new TwigFilter('unique',  [$this, 'unique']),
+            new TwigFilter('sortable',  [$this, 'sortable']),
         ];
     }
 
@@ -217,6 +219,36 @@ class Extensions extends AbstractExtension implements GlobalsInterface
 
     public function unique(mixed $data): mixed {
         return is_array($data) ? array_unique($data) : $data;
+    }
+
+    private function normalize_string(string $data): string {
+        try {
+            $string = normalizer_normalize($data, Normalizer::NFD);
+            if ($string === false) return $data;
+
+            $string = preg_replace('/\p{Mn}/u', '', $string);
+            return strtr($string, [
+                'Ø' => 'O', 'ø' => 'o',     // Characters that don't decompose cleanly
+                'Ð' => 'D', 'ð' => 'd',     // Eth
+                'Þ' => 'Th', 'þ' => 'th',   // Thorn
+                'Æ' => 'AE', 'æ' => 'ae',   // Ligatures
+                'Œ' => 'OE', 'œ' => 'oe',
+                'ß' => 'ss',                // German sharp S
+            ]);
+        } catch (\Throwable $e) {
+            return $data;
+        }
+
+    }
+
+    public function sortable(mixed $data): string|int|float
+    {
+        return match (true) {
+            is_string($data) => strtolower( $this->normalize_string( $data ) ),
+            is_array($data) => count($data),
+            is_numeric($data) => $data,
+            default => 0,
+        };
     }
 
     public function format_filesize(int $size): string {

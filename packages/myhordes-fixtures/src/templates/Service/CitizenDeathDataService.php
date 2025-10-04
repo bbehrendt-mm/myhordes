@@ -35,7 +35,8 @@ class CitizenDeathDataService implements FixtureProcessorInterface {
                 'label' => 'Dehydration',
                 'icon' => 'dehydrated',
                 'desc' => 'Dehydratation ist wirklich was Übles. Muskelspasmen, Atemprobleme und unaushaltbare Gliederschmerzen treten in der finalen Phase auf. Du hast nach etwas Trinkbarem gesucht - überall.... Vergeblich. Deine Mitbürger behaupten sogar, dich dabei gesehen zu haben, wie du in den letzten Minuten schaufelweise Sand in dich geschüttet hättest... Herrje...',
-                'pictos' => ['r_dwater_#00']
+                'pictos' => ['r_dwater_#00'],
+                'marker' => true,
             ],
             [
                 'ref' => CauseOfDeath::GhulStarved,

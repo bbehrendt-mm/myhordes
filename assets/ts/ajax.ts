@@ -389,6 +389,37 @@ export default class Ajax {
         history.pushState( url, '', url );
     }
 
+    process_response_headers( response: XMLHttpRequest ) {
+        this.setNetworkOffset( response.getResponseHeader('Date') );
+
+        // Check if a reset header is set
+        switch ( response.getResponseHeader('X-AJAX-Control') ) {
+            case 'reset':
+                window.location.href = this.base;
+                return;
+            case 'navigate':
+                window.location.href = response.getResponseHeader('X-AJAX-Navigate') ?? this.base;
+                return;
+            case 'reload':
+                window.location.reload();
+                return;
+            case 'cancel':
+                return;
+            case 'process': default: break;
+        }
+
+        if (response.getResponseHeader('X-Session-Domain')) {
+            const [p = '0', v1 = '0', v2 = '0', v3 = '0'] = response.getResponseHeader('X-Session-Domain').split(':');
+            $.client.setSessionDomain(parseInt(p),parseInt(v1),parseInt(v2),parseInt(v3));
+        }
+
+        $.html?.setHtmlLanguage( response.getResponseHeader('X-Session-Lang') ?? null );
+
+        response.getResponseHeader('X-Client-Signals')?.split(', ').forEach(
+            sig => emitSignal<ServerInducedSignalProps>(sig, {response, type: 'xhr'})
+        )
+    }
+
     load( target: HTMLElement, url: string, push_history: boolean = false, data: object = {}, callback: ajaxStack|null = null ) {
         let ajax_instance = this;
 
@@ -405,37 +436,11 @@ export default class Ajax {
             this_promise = [resolve,reject]
         })}}) );
 
-        const sno = d => this.setNetworkOffset( d );
-
         if (!no_loader) $.html.addLoadStack();
         let request = new XMLHttpRequest();
         request.responseType = 'document';
         request.addEventListener('load', function(e) {
-            sno( this.getResponseHeader('Date') );
-            // Check if a reset header is set
-            switch ( this.getResponseHeader('X-AJAX-Control') ) {
-                case 'reset':
-                    window.location.href = ajax_instance.base;
-                    return;
-                case 'navigate':
-                    window.location.href = this.getResponseHeader('X-AJAX-Navigate') ?? ajax_instance.base;
-                    return;
-                case 'reload':
-                    window.location.reload();
-                    return;
-                case 'cancel':
-                    return;
-                case 'process': default: break;
-            }
-
-            if (this.getResponseHeader('X-Session-Domain')) {
-                const [p = '0', v1 = '0', v2 = '0', v3 = '0'] = this.getResponseHeader('X-Session-Domain').split(':');
-                $.client.setSessionDomain(parseInt(p),parseInt(v1),parseInt(v2),parseInt(v3));
-            }
-
-            this.getResponseHeader('X-Client-Signals')?.split(', ').forEach(
-                sig => emitSignal<ServerInducedSignalProps>(sig, {response: this, type: 'xhr'})
-            )
+            ajax_instance.process_response_headers( this );
 
             if (this.status >= 400) {
                 this_promise[1]();
@@ -495,42 +500,17 @@ export default class Ajax {
 
     send( url: string, data: object, callback: ajaxCallback ) {
         url = this.prepareURL(url);
-        const base = this.base;
+        const ajax_instance = this;
 
         const no_hist   = this.fetch_no_history();
         const no_loader = this.fetch_no_loader();
         const no_error  = this.fetch_soft_fail();
 
-        const sno = d => this.setNetworkOffset( d )
-
         if (!no_loader) $.html.addLoadStack();
         let request = new XMLHttpRequest();
         request.responseType = 'json';
         request.addEventListener('load', function(e) {
-            sno( this.getResponseHeader('Date') );
-            switch ( this.getResponseHeader('X-AJAX-Control') ) {
-                case 'reset':
-                    window.location.href = base;
-                    return;
-                case 'navigate':
-                    window.location.href = this.getResponseHeader('X-AJAX-Navigate') ?? base;
-                    return;
-                case 'reload':
-                    window.location.reload();
-                    return;
-                case 'cancel':
-                    return;
-                case 'process': default: break;
-            }
-
-            if (this.getResponseHeader('X-Session-Domain')) {
-                const [p = '0', v1 = '0', v2 = '0', v3 = '0'] = this.getResponseHeader('X-Session-Domain').split(':');
-                $.client.setSessionDomain(parseInt(p),parseInt(v1),parseInt(v2),parseInt(v3));
-            }
-
-            this.getResponseHeader('X-Client-Signals')?.split(', ').forEach(
-                sig => emitSignal<ServerInducedSignalProps>(sig, {response: this, type: 'xhr'})
-            )
+            ajax_instance.process_response_headers( this );
 
             callback( this.response, this.status );
             if (!no_loader) $.html.removeLoadStack();
