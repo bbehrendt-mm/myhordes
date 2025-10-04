@@ -1,4 +1,4 @@
-import {DependencyList, MutableRefObject, useEffect, useLayoutEffect, useState} from "react";
+import {DependencyList, MutableRefObject, useEffect, useLayoutEffect, useRef, useState} from "react";
 import * as React from "react";
 
 import {ImageConfig} from "konva/lib/shapes/Image";
@@ -60,9 +60,14 @@ export function useWebGL(
     input: HTMLCanvasElement[],
     output: HTMLCanvasElement|null,
     shader: string,
-    deps: DependencyList = null
+    deps: DependencyList = null,
+    minFramerate = 25,
+    observedTimeSpan = 5000,
 ) {
     const [webGLActive, setWebGLActive] = useState<boolean>(false);
+    const failureState = useRef<boolean>(false);
+    const lastFrameTime = useRef<number>(0);
+    const lastFrameTimes = useRef<number[]>([]);
 
     // language=GLSL
     const source_v = `
@@ -88,8 +93,22 @@ export function useWebGL(
         if (
             input.length == 0 ||
             !input.reduce( (carry, canvas) => carry && canvas.height > 0 && canvas.width > 0, true ) ||
-            !output
+            !output ||
+            failureState.current
         ) return;
+
+        const recordFrameTime = (time: number): number|null => {
+            if (observedTimeSpan <= 0 || minFramerate <= 0) return null;
+            lastFrameTimes.current.push(time);
+            let shifted = false;
+            let span = lastFrameTimes.current.reduce( (carry, entry) => carry + entry, 0 );
+            while ( span > observedTimeSpan ) {
+                span -= lastFrameTimes.current.shift();
+                shifted = true;
+            }
+            if (shifted) return 1000 / (span / lastFrameTimes.current.length);
+            return null;
+        }
 
         const gl = output.getContext('webgl');
         if (!gl) return;
@@ -145,17 +164,29 @@ export function useWebGL(
             if (error !== gl.NO_ERROR) {
                 console.error(`WebGL Error ${error}`);
                 setWebGLActive(false);
+                failureState.current = true;
             }
+
         }
 
         const ref = { stop: false };
 
         const step = () => {
+            const avgFrameTime = recordFrameTime(performance.now() - lastFrameTime.current);
+            if (avgFrameTime !== null && avgFrameTime < minFramerate) {
+                console.error(`Current FPS: ${avgFrameTime}. Performance target of ${minFramerate} missed over an average of ${observedTimeSpan}ms. Reverting to legacy rendering.`);
+                setWebGLActive(false);
+                failureState.current = true;
+                return;
+            }
             if (ref.stop) return;
             render();
+
+            lastFrameTime.current = performance.now();
             requestAnimationFrame(step);
         }
 
+        lastFrameTime.current = performance.now();
         step();
 
         return () => {
@@ -170,5 +201,4 @@ export function useWebGL(
     }, deps);
 
     return webGLActive;
-
 }

@@ -76,11 +76,6 @@ export const MapBackdropLayer = (props: MapBackdropLayerProps) => {
 
     }, [props.next]);
 
-    useLayoutEffect(() => {
-        thisRef.current?.cache();
-        nextRef.current?.cache();
-    });
-
     return <>
         <Group ref={elementRef} { ...scaler.xy(0, 0) }>
             <Group ref={thisRef}>
@@ -125,10 +120,6 @@ const MapTile = (props: { shifted: boolean, data: ExplorationTileset, onDoorClic
         else if (props.data.door.l < 0) door = assets.theme.doors.open_down[props.data.door.t];
         else if (props.data.door.l > 0) door = assets.theme.doors.open_up[props.data.door.t];
     }
-
-    useLayoutEffect(() => {
-        groupRef.current?.cache();
-    });
 
     useLayoutEffect(() => {
         hoverImageRef.current?.cache();

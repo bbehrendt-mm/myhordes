@@ -68,9 +68,6 @@ export const MapFOWLayer = (props: MapFOWProperties) => {
             -6
         ];
 
-        for (let i = 0; i < poisonLayers; i++)
-            poisonRefs[i].current?.cache();
-
         poisonAnimRef.current = new Konva.Animation((frame) => {
             const diff = (frame.timeDiff) / 1000;
             for (let i = 0; i < poisonLayers; i++)
