@@ -81,6 +81,17 @@ export default class HTML {
         document.querySelector('meta[name="viewport"]').setAttribute('content', content);
     }
 
+    setHtmlLanguage(language: string|undefined|null): void {
+        if (!language) return;
+        const html = document.querySelector('html');
+        if (html && html.lang !== language) {
+            html.lang = language;
+            const remove_classes = Array.from(html.classList).filter(c => c.startsWith('lang-base-'));
+            remove_classes.forEach(c => html.classList.remove(c));
+            html.classList.add('lang-base-' + language);
+        }
+    }
+
     init(): void {
         document.getElementById('modal-backdrop')?.addEventListener('pop', () => requestAnimationFrame( () => this.nextPopup() ))
         this.setScreenWidth($?.client?.config?.forceScreenWidth?.get() ?? 0);
