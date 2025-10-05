@@ -484,9 +484,9 @@ class TownController extends InventoryAwareController
                 $town = $ac->getTown();
                 if (!$this->town_handler->getBuilding($town, 'item_hmeat_#00', true))
                     return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
-                $spawn_items[] = [ 'item' => $this->doctrineCache->getEntityByIdentifier( ItemPrototype::class, 'hmeat_#00'), 'count' => 4 ];
+                $spawn_items[] = [ 'item' => $hmeat = $this->doctrineCache->getEntityByIdentifier( ItemPrototype::class, 'hmeat_#00'), 'count' => 4 ];
                 $pictoName = "r_cooked_#00";
-                $message = $this->translator->trans('Sie brachten die Leiche von {disposed} zum Kremato-Cue. Man bekommt {ration} Rationen davon...  Aber zu welchem Preis?', ['{disposed}' => '<span>' . $c->getName() . '</span>','{ration}' => '<span>4</span>'], 'game');
+                $message = $this->translator->trans('Sie brachten die Leiche von {disposed} zum Kremato-Cue. Man bekommt {ration} Rationen davon...  Aber zu welchem Preis?', ['{disposed}' => '<span>' . $c->getName() . '</span>','{ration}' => "<span class=\"tool\"><img alt='' src='{$this->asset->getUrl( "build/images/item/item_{$hmeat->getIcon()}.gif" )}' /> × 4</span>"], 'game');
                 $c->setDisposed(Citizen::Cooked);
                 $c->addDisposedBy($ac);
                 break;
