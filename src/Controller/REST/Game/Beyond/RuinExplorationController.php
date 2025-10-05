@@ -3,49 +3,26 @@
 namespace App\Controller\REST\Game\Beyond;
 
 use App\Annotations\GateKeeperProfile;
-use App\Annotations\Semaphore;
 use App\Controller\BeyondController;
-use App\Controller\GhostController;
 use App\Controller\HookedInterfaceController;
-use App\Entity\AccountRestriction;
-use App\Entity\Citizen;
-use App\Entity\CitizenProfession;
-use App\Entity\CitizenRankingProxy;
-use App\Entity\CitizenRole;
-use App\Entity\ItemPrototype;
-use App\Entity\MayorMark;
 use App\Entity\RuinExplorerStats;
 use App\Entity\RuinZone;
-use App\Entity\SpecialActionPrototype;
-use App\Entity\Town;
-use App\Entity\TownClass;
-use App\Entity\TownSlotReservation;
 use App\Entity\User;
-use App\Enum\ClientSignal;
-use App\Enum\Configuration\MyHordesSetting;
 use App\Enum\Game\ExplorableRuinSkin;
-use App\Response\AjaxResponse;
-use App\Service\Actions\Ghost\ExplainTownConfigAction;
-use App\Service\Actions\Security\GenerateMercureToken;
 use App\Service\ConfMaster;
 use App\Service\ErrorHelper;
 use App\Service\EventProxyService;
-use App\Service\GameFactory;
-use App\Service\Globals\ResponseGlobal;
 use App\Service\InventoryHandler;
 use App\Service\ItemFactory;
 use App\Service\JSONRequestParser;
 use App\Service\PictoHandler;
-use App\Service\TownHandler;
 use App\Service\UserHandler;
 use App\Service\ZoneHandler;
-use App\Structures\EventConf;
 use App\Structures\ItemRequest;
-use App\Structures\MyHordesConf;
 use App\Traits\Controller\ActiveCitizen;
+use Carbon\Carbon;
 use DateInterval;
 use DateTime;
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -53,10 +30,8 @@ use Symfony\Component\Asset\Packages;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use function Symfony\Component\Clock\now;
 
 /**
  * @method User getUser
@@ -248,8 +223,8 @@ class RuinExplorationController extends AbstractController implements HookedInte
         if ($ex->isGrace()) {
             $ex->setGrace(false);
             if ($ex->getStarted() !== null) {
-                $offset = max(0, min(30, time() - $ex->getStarted()->getTimestamp()));
-                $ex->setTimeout( (new DateTime())->setTimestamp( $ex->getTimeout()->getTimestamp() - ( 30 - $offset ) ) );
+                $offset = max(0, min(30, Carbon::now()->diffInSeconds( $ex->getStarted(), true )));
+                $ex->setTimeout( Carbon::createFromInterface( $ex->getTimeout() )->subSeconds( 30 - $offset ) );
             }
         }
 
@@ -259,6 +234,9 @@ class RuinExplorationController extends AbstractController implements HookedInte
             ->setZ( $ex->getZ() + $dz )
             ->setInRoom( $shift === 1 )
             ->setEscaping( false );
+
+        if ($dz !== 0)
+            $ex->setTimeout( Carbon::createFromInterface( $ex->getTimeout() )->subSeconds( mt_rand( 15, 24) ) );
 
         $this->entityManager->persist($ex);
         $this->entityManager->flush();
@@ -301,7 +279,7 @@ class RuinExplorationController extends AbstractController implements HookedInte
 
         $ex
             ->setEscaping(true)
-            ->setTimeout( (new DateTime)->setTimestamp( $ex->getTimeout()->getTimestamp() )->sub(DateInterval::createFromDateString( mt_rand( 15, 24) . 'sec' ) ) );
+            ->setTimeout( Carbon::createFromInterface( $ex->getTimeout() )->subSeconds( mt_rand( 15, 24) ) );
 
         $em->persist($ex);
         $em->flush();
