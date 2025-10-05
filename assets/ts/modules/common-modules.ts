@@ -211,6 +211,7 @@ customElements.define('hordes-forum-group', class HordesForumGroupElement extend
         } catch (_) { }
 
         return {
+            id: this.dataset.id ?? null,
             icon: this.dataset.icon,
             title: this.dataset.title,
             collapse: parseInt(this.dataset.collapse ?? '0') != 0,
@@ -219,7 +220,7 @@ customElements.define('hordes-forum-group', class HordesForumGroupElement extend
     }
 
     protected static observedAttributeNames() {
-        return ['data-icon', 'data-title', 'data-forums', 'data-collapse'];
+        return ['data-icon', 'data-title', 'data-forums', 'data-collapse', 'data-id'];
     }
 
 }, {  });

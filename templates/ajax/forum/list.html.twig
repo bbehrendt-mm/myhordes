@@ -36,6 +36,7 @@
 
 {% macro drawForumSection(lang, section, forums, forums_new) %}
     <hordes-forum-group
+            data-id="wf-fegroup-{{ lang }}"
             data-title="{{ section }}"
             data-icon="{{ asset('build/images/lang/' ~ lang ~ '.png') }}"
             data-forums="{{ forums|map( f => {
@@ -53,6 +54,7 @@
 
 {% macro drawForumGroup(group, forums_new) %}
     <hordes-forum-group
+        data-id="{{ group.id }}"
         data-title="{{ group.localizedTitle(app.locale) }}"
         data-icon="{{ asset('build/images/lang/' ~ group.lang ~ '.png') }}"
         data-collapse="{{ group.collapsedByDefault ? '1' : '0' }}"

@@ -26,6 +26,7 @@ class Config {
     public completedTutorials:    conf<Array<number>>;
     public armaHideSkulls:        conf<number>;
     public forceScreenWidth:      conf<number>;
+    public forumSectionState:     conf<{ [key: string]: boolean|null }>;
 
     constructor(c:Client) {
         this.client = c;
@@ -50,6 +51,7 @@ class Config {
         this.completedTutorials    = this.makeConf<Array<number>>('completedTutorials', [], false);
         this.armaHideSkulls        = this.makeConf<number>('armaHideSkulls', 0, true);
         this.forceScreenWidth      = this.makeConf<number>('forceScreenWidth', 0, false);
+        this.forumSectionState     = this.makeConf<{ [key: string]: boolean|null }>('forumSectionState', {}, false);
     }
 
     public get<T>(s:string): conf<T> {
