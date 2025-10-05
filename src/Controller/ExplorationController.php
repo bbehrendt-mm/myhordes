@@ -47,6 +47,7 @@ use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -106,7 +107,7 @@ class ExplorationController extends InventoryAwareController implements HookedIn
             return false;
         } else return true;
     }
-    
+
     protected function getCurrentRuinZone(): RuinZone {
         $citizen = $this->getActiveCitizen();
         $ex = $citizen->activeExplorerStats();
@@ -123,6 +124,9 @@ class ExplorationController extends InventoryAwareController implements HookedIn
         $ex = $citizen->activeExplorerStats();
         $ruinZone = $this->getCurrentRuinZone();
 
+        $request = Request::createFromGlobals();
+        $inline = $request->headers->get('X-Render-Target') === 'beyond_desert_content';
+
         $imprint_source = [];
         $imprint_goal = [];
         if ($citizen->getProfession()->getName() === 'tech') {
@@ -135,23 +139,27 @@ class ExplorationController extends InventoryAwareController implements HookedIn
            $imprint_goal['noodles'] = $ruinZone->getPrototype()?->getKeyImprintAlternative();
        }
 
-        return $this->render( 'ajax/game/beyond/ruin.html.twig', $this->addDefaultTwigArgs(null, [
-            'prototype' => $citizen->getZone()->getPrototype(),
-            'exploration' => $ex,
-            'zone' => $ruinZone,
-            'heroics' => $this->getHeroicActions(),
-            'escaping' => $ex->getEscaping(),
-            'zone_zombies' => $ruinZone->getZombies(),
-            'shifted' => $ex->getInRoom(),
-            'scavenge' => !$ex->getScavengedRooms()->contains($ruinZone),
-            'can_imprint' => !empty($imprint_goal),
-            'imprint_source' => $imprint_source,
-            'imprint_goal' => $imprint_goal,
+       $args = $this->addDefaultTwigArgs(null, [
+           'prototype' => $citizen->getZone()->getPrototype(),
+           'exploration' => $ex,
+           'zone' => $ruinZone,
+           'heroics' => $this->getHeroicActions(),
+           'escaping' => $ex->getEscaping(),
+           'zone_zombies' => $ruinZone->getZombies(),
+           'shifted' => $ex->getInRoom(),
+           'scavenge' => !$ex->getScavengedRooms()->contains($ruinZone),
+           'can_imprint' => !empty($imprint_goal),
+           'imprint_source' => $imprint_source,
+           'imprint_goal' => $imprint_goal,
 
-            'ruin_map_data' => [
-                'name' => $this->generateRuinName($citizen->getZone()),
-            ],
-        ]) );
+           'ruin_map_data' => [
+               'name' => $this->generateRuinName($citizen->getZone()),
+           ],
+       ]);
+
+        return $inline
+            ? $this->renderBlocks( 'ajax/game/beyond/ruin.html.twig', ['content','js'], [ 'ajax/game/game.html.twig' => 'gma' ], $args )
+            : $this->render( 'ajax/game/beyond/ruin.html.twig', $args );
     }
 
     /**
