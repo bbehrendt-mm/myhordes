@@ -100,7 +100,8 @@ class InventoryController extends CustomAbstractCoreController
                 'deco' => $this->translator->trans('Einrichtungsgegenstand', [], 'items'),
                 'defence' => $this->translator->trans('Verteidigungsgegenstand', [], 'items'),
                 'weapon' => $this->translator->trans('Waffe', [], 'items'),
-                'nw-weapon' => $this->translator->trans('Nachtwache-Waffen', [], 'items')
+                'nw-weapon' => $this->translator->trans('Nachtwache-Waffen', [], 'items'),
+                'catapult' => $this->translator->trans('Katapultierbar', [], 'items')
             ],
             'actions' => [
                 'more' => $asset->getUrl('build/images/icons/small_more2.gif'),

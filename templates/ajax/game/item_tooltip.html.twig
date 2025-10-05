@@ -24,6 +24,8 @@
     {% if item.prototype.hasProperty('defence') %}<div class="item-tag item-tag-defense">{{ 'Verteidigungsgegenstand'|trans({},'items') }}</div>{% endif %}
     {% if item.prototype.hasProperty('weapon') %}<div class="item-tag item-tag-weapon">{{ 'Waffe'|trans({},'items') }}</div>{% endif %}
     {% if item.prototype.watchpoint != 0 %}<div class="item-tag item-tag-weapon">{{ 'Nachtwache-Waffen'|trans({},'items') }} <em>({{'{watchpoint} pkt attacke'|trans({'{watchpoint}': (virtual ? item.prototype : item)|watchpoint},'items')}})</em></div>{% endif %}
+    {% if item.prototype.hasProperty('catapult') %}<div class="item-tag item-tag-catapult">{{ 'Katapultierbar'|trans({},'items') }}</div>{% endif %}
+    
 
     {% if not virtual and ((debug is defined and debug) or (is_granted('ROLE_CROW') and (app.environment == 'dev' or app.environment == 'local'))) %}
         <br/>
