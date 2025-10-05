@@ -390,3 +390,4 @@ Koalition: Coalition
 'Du bist dieser Stadt aufgrund einer aktuellen Beschränkung deines Accounts nicht beitreten.': 'Vous ne pouvez pas rejoindre cette ville en raison d''une restriction imposée à votre compte.'
 'Du kannst dieser Stadt nicht beitreten. Fehlercode: {error}': 'Vous ne pouvez pas rejoindre cette ville. Code d''erreur : {error}'
 'Aktive Fähigkeiten': 'Capacités actives'
+'Da du in mehreren deiner letzten Städte frühzeitig gestorben bist ({death_type}), bist du bis {end_date} vom Spiel ausgeschlossen. Du kannst aktuell keine neue Stadt betreten.': 'Puisque vous êtes mort prématurément dans plusieurs de vos dernières villes ({death_type}), vous êtes exclu du jeu jusqu''au {end_date}. Vous ne pouvez pas actuellement entrer dans une nouvelle ville.'

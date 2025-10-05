@@ -390,3 +390,4 @@ Koalition: crwdns232454:0crwdne232454:0
 'Du bist dieser Stadt aufgrund einer aktuellen Beschränkung deines Accounts nicht beitreten.': 'crwdns232456:0crwdne232456:0'
 'Du kannst dieser Stadt nicht beitreten. Fehlercode: {error}': 'crwdns232458:0{error}crwdne232458:0'
 'Aktive Fähigkeiten': 'crwdns232460:0crwdne232460:0'
+'Da du in mehreren deiner letzten Städte frühzeitig gestorben bist ({death_type}), bist du bis {end_date} vom Spiel ausgeschlossen. Du kannst aktuell keine neue Stadt betreten.': 'crwdns252322:0{death_type}crwdnd252322:0{end_date}crwdne252322:0'

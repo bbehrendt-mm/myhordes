@@ -686,3 +686,11 @@ Verkaufswert: crwdns219404:0crwdne219404:0
 '1 Stadt': 'crwdns219482:0crwdne219482:0'
 'Icon-Zoom auch auf Desktop-Geräten verwenden': 'crwdns219486:0crwdne219486:0'
 'Ist diese Option aktiviert, wird die oben eingestellte Zoom-Größe für Icons nicht nur auf mobilen, sondern auch auf Desktop-Geräten angewendet.': 'crwdns219490:0crwdne219490:0'
+'Layout des Spiels': 'crwdns252300:0crwdne252300:0'
+'Diese Einstellung funktioniert nur auf mobilen Geräten. Üblicherweise wird das Layout des Spiels durch die Bildschirmgröße deines Geräts gesteuert. Falls du ein bestimmtes Layout bevorzugst, welches nicht der Bildschirmgröße deines Gerätes entspricht, kannst du dieses hier erzwingen.': 'crwdns252302:0crwdne252302:0'
+'Automatisch (empfohlen)': 'crwdns252304:0crwdne252304:0'
+Smartphone-Layout: crwdns252306:0crwdne252306:0
+Phablet-Layout: crwdns252308:0crwdne252308:0
+Tablet-Layout: crwdns252310:0crwdne252310:0
+'Desktop-Layout (Vollbild)': 'crwdns252312:0crwdne252312:0'
+'Desktop-Layout (Normal)': 'crwdns252314:0crwdne252314:0'

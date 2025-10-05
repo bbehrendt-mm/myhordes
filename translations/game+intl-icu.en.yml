@@ -649,7 +649,7 @@ Textsammler: Roleplayer
 Leichenentsorger: Removals
 'Anzahl deiner toten Freunde, die du außerhalb der Stadt entsorgt hast.': 'The number of dead friends you''ve dragged out of town.'
 Batteriewerferfabrikant: Battery Launcher Builder
-'Anzahl der Batteriewerfer, die du gebaut hast.': 'The number of Battery launchers you have built.'
+'Anzahl der Batteriewerfer, die du gebaut hast.': 'The number of battery launchers you have built.'
 'Überlebende der Hölle!': 'Survivor of Hell!'
 'Sie sind ein wahrer Überlebenskünstler der Hölle.': 'You are a true survivor of hell.'
 Hausarbeiten: Homemaker
@@ -3231,3 +3231,6 @@ Tierklinik: Experiment Center
 'Während du dich konzentrierst, spürst du für einen kurzen Moment die Aura eines deiner verstorbenen Mitbürger. Sie scheint von {location} zu kommen...': ' As you concentrate, you briefly sense the aura of one of your deceased fellow citizens. It seems to be coming from {location}...'
 'Du spürst nichts als Ruhe.': 'You feel nothing but calm.'
 'Zone ausgehoben': 'Excavated zone'
+'Diese Zone sieht bereits ziemlich abgesucht aus... vermutlich wirst du hier nicht mehr viele wertvolle Gegenstände finden können.': 'This area already looks pretty thoroughly searched... you probably won''t find many valuable items here anymore.'
+'In dieser Zone befinden sich einige Orte, an denen scheinbar noch niemand intensiv gesucht hat. Vermutlich wirst du hier noch einige wertvolle Gegenstände finden können.': ' There are a few places in this zone that no one seems to have searched thoroughly yet. You''ll probably be able to find some valuable items here.'
+'In dieser Zone befinden sich zahlreiche Orte, an denen scheinbar noch niemand gesucht hat. Ziemlich sicher wirst du hier noch einige wertvolle Gegenstände finden können.': 'There are numerous places in this zone where it seems that no one has searched yet. You will almost certainly be able to find some valuable items here.'
