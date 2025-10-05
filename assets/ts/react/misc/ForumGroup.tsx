@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useRef} from "react";
+import {useEffect, useRef} from "react";
 import {Global} from "../../defaults";
 import {BaseMounter} from "../index";
 import {useSlider} from "../utils";
@@ -16,6 +16,7 @@ interface forumProps {
 }
 
 interface mountProps {
+    id?: string|null,
     icon: string,
     title: string,
     collapse: boolean
@@ -36,8 +37,13 @@ export class HordesForum extends BaseMounter<forumProps> {
 
 const ForumGroup = (props: mountProps) => {
     const groupRef = useRef<HTMLDivElement>();
+
+    const default_collapse = props.id
+        ? ($.client.config.forumSectionState.get()[props.id] ?? props.collapse)
+        : props.collapse;
+
     const [currentState, showElements, renderElements, setShowElements] = useSlider(
-        !props.collapse,
+        !default_collapse,
         groupRef,
         '.content > .forum-preview',
         {duration: 100 * props.forums.length, delay: 100},
@@ -52,6 +58,15 @@ const ForumGroup = (props: mountProps) => {
             element.classList.remove('animating');
         }
     )
+
+    useEffect(() => {
+        if (props.id) {
+            $.client.config.forumSectionState.set({
+                ...$.client.config.forumSectionState.get(),
+                [props.id]: !currentState === props.collapse ? null : !currentState,
+            });
+        }
+    }, [currentState, props.id]);
 
     return <div className="forumGroup" ref={groupRef}>
         <div className={`header ${currentState ? 'open' : 'collapsed'}`} onClick={() => setShowElements(!showElements)}>
