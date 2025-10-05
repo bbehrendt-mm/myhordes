@@ -197,7 +197,7 @@ export const MapCore = (props: {setup: MapSetup, properties: MapProperties}) => 
                                     }}
                                 />
                                 { (!nextZone || ( nextZone.r.status.shifted === currentZone.status.shifted && nextZone.r.status.floor === currentZone.status.floor )) && <>
-                                    <MapActorZombiesLayer next={false} rid={currentZone.status.rid} zombies={currentZone.status.zombies} corridors={currentZone.status.corridors} { ...nextZone?.s ?? {} } />
+                                    { !currentZone.status.shifted && <MapActorZombiesLayer next={false} rid={currentZone.status.rid} zombies={currentZone.status.zombies} corridors={currentZone.status.corridors} { ...nextZone?.s ?? {} } /> }
                                     { nextZone && <MapActorZombiesLayer next={true} rid={nextZone.r.status.rid} zombies={nextZone.r.status.zombies} corridors={nextZone.r.status.corridors} { ...nextZone.s } /> }
                                 </> }
                                 <MapActorPlayerLayer { ...(nextZone?.s ?? {}) } noox={ (nextZone?.r ?? currentZone).status.timeout < 60 } />
