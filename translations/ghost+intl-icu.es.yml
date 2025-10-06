@@ -391,3 +391,4 @@ Koalition: Alianza
 'Du bist dieser Stadt aufgrund einer aktuellen Beschränkung deines Accounts nicht beitreten.': 'No puedes unirte a este pueblo debido a una restricción impuesta en tu cuenta.'
 'Du kannst dieser Stadt nicht beitreten. Fehlercode: {error}': 'No puedes unirte a este pueblo. Código de error: {error}'
 'Aktive Fähigkeiten': 'Habilidades activas'
+'Da du in mehreren deiner letzten Städte frühzeitig gestorben bist ({death_type}), bist du bis {end_date} vom Spiel ausgeschlossen. Du kannst aktuell keine neue Stadt betreten.': 'Da du in mehreren deiner letzten Städte frühzeitig gestorben bist ({death_type}), bist du bis {end_date} vom Spiel ausgeschlossen. Du kannst aktuell keine neue Stadt betreten.'

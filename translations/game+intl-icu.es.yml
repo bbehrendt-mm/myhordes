@@ -803,7 +803,7 @@ Senden: Enviar
 '{citizen} starb, als er auf lächerliche Weise von der Mauer fiel!': '{citizen} murió, ¡Se cayó de las almenas de la manera más ridícula posible mientras defendía el pueblo!'
 'Tapfere Bürger haben auf den Stadtmauern Stellung bezogen : {citizens}': 'Un terrible final tuvieron los valientes habitantes que cuidaron anoche el portal del pueblo: {citizens}'
 Zusammenbauen: Ensamblar
-'Hast du schließlich doch Angst Wächter zu sein? Was zögerst du noch:': '¿Ya no quieres ser centinela?'
+'Hast du schließlich doch Angst Wächter zu sein? Was zögerst du noch:': '¿Ya no quieres ser un centinela?'
 'Ich habe doch zu große Angst...': '¡Sí, me da miedo, y qué!'
 'Auch du musst diese Stadt heute Nacht verteidigen! Tritt in die Wächtergruppe ein! Du möchtest Mitglied der selbstmörd... tapfersten Bürger werden? Was zögerst du noch:': 'Ayúdanos a defender el pueblo esta noche. ¡Únete al equipo de centinelas! ¿Quieres ser uno de los más suicid... valientes del pueblo? Entonces no lo dudes más:'
 'Ich möchte Wächter werden!': '¡Sí, yo quiero ser un centinela!'
@@ -1439,7 +1439,7 @@ RadioactiveMan: Hombre radiactivo
 HAZ-Gewinner: Ganador del CTP
 'Ehrenauszeichnung für den Gewinner der Heilung für die Auszeichnungssucht.': '¡Premio honorario dado al ganador de "Curando tu Pictofilia"!'
 'Kernsammler (job)': Recolector de Almas
-'Anzahl der im Ausland gesammelten Seelen verstorbener Bürger (job)': 'Cantidad de almas recolectadas de habitantes fallecidos en el Ultramundo'
+'Anzahl der im Ausland gesammelten Seelen verstorbener Bürger (job)': 'Cantidad de almas recolectadas de habitantes fallecidos en el Ultramundo.'
 'Mystic (job)': 'Transformación Mística'
 'Wie viele Seelen hat Ihre Stadt befreien können. (job)': 'Cantidad de almas que has transformado en el Taller'
 'Ich bin geheilt': 'Estoy curado'

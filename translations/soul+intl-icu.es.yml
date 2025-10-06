@@ -687,3 +687,11 @@ Verkaufswert: Valor de venta
 '1 Stadt': '1 pueblo'
 'Icon-Zoom auch auf Desktop-Geräten verwenden': 'Utilice el zoom de iconos también en dispositivos de escritorio'
 'Ist diese Option aktiviert, wird die oben eingestellte Zoom-Größe für Icons nicht nur auf mobilen, sondern auch auf Desktop-Geräten angewendet.': 'Si esta opción está habilitada, el tamaño de zoom del ícono establecido anteriormente se aplicará no solo en dispositivos móviles sino también en dispositivos de escritorio.'
+'Layout des Spiels': 'Layout des Spiels'
+'Diese Einstellung funktioniert nur auf mobilen Geräten. Üblicherweise wird das Layout des Spiels durch die Bildschirmgröße deines Geräts gesteuert. Falls du ein bestimmtes Layout bevorzugst, welches nicht der Bildschirmgröße deines Gerätes entspricht, kannst du dieses hier erzwingen.': 'Diese Einstellung funktioniert nur auf mobilen Geräten. Üblicherweise wird das Layout des Spiels durch die Bildschirmgröße deines Geräts gesteuert. Falls du ein bestimmtes Layout bevorzugst, welches nicht der Bildschirmgröße deines Gerätes entspricht, kannst du dieses hier erzwingen.'
+'Automatisch (empfohlen)': 'Automatisch (empfohlen)'
+Smartphone-Layout: Smartphone-Layout
+Phablet-Layout: Phablet-Layout
+Tablet-Layout: Tablet-Layout
+'Desktop-Layout (Vollbild)': 'Desktop-Layout (Vollbild)'
+'Desktop-Layout (Normal)': 'Desktop-Layout (Normal)'

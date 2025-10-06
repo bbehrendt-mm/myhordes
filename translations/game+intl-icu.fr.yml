@@ -802,7 +802,7 @@ Senden: Écrire
 'Sie brachten die Leiche von {disposed} zum Kremato-Cue. Man bekommt {ration} Rationen davon...  Aber zu welchem Preis?': 'Vous avez amené le corps de {disposed} au Crémato-Cue. Vous en tirez {ration} rations… mais à quel prix ?'
 '{citizen} starb, als er auf lächerliche Weise von der Mauer fiel!': '{citizen} est mort en tombant ridiculement du haut de la muraille !'
 'Tapfere Bürger haben auf den Stadtmauern Stellung bezogen : {citizens}': 'De valeureux citoyens se sont postés ce soir sur les remparts de la ville : {citizens} ! Souhaitons-leur une mort paisible… à moins qu’ils ne survivent ?'
-Zusammenbauen: Assembler 
+Zusammenbauen: Assembler 
 'Hast du schließlich doch Angst Wächter zu sein? Was zögerst du noch:': 'Finalement être veilleur vous effraie ? Alors n’hésitez pas un seul instant :'
 'Ich habe doch zu große Angst...': 'Finalement j''ai trop peur...'
 'Auch du musst diese Stadt heute Nacht verteidigen! Tritt in die Wächtergruppe ein! Du möchtest Mitglied der selbstmörd... tapfersten Bürger werden? Was zögerst du noch:': 'Vous aussi, défendez la ville ce soir ! Rejoignez <strong>l''équipe des Veilleurs</strong> !<br /><br />Vous souhaitez faire partie des <strong>citoyens</strong> les plus suicid... <strong>courageux</strong> ? Alors n''hésitez pas un seul instant :'
@@ -1439,7 +1439,7 @@ RadioactiveMan: RadioactiveMan
 HAZ-Gewinner: Gagnant de GSP
 'Ehrenauszeichnung für den Gewinner der Heilung für die Auszeichnungssucht.': 'Récompense honorifique décernée au gagnant de Guérir sa Pictophilie !'
 'Kernsammler (job)': Collecteur d’âmes
-'Anzahl der im Ausland gesammelten Seelen verstorbener Bürger (job)': 'Nombres d’âmes de citoyens décédés collectées dans l’Outre-Monde'
+'Anzahl der im Ausland gesammelten Seelen verstorbener Bürger (job)': 'Nombres d’âmes de citoyens décédés collectées dans l’Outre-Monde.'
 'Mystic (job)': 'Trans­formation mystique'
 'Wie viele Seelen hat Ihre Stadt befreien können. (job)': 'Nombre d’âmes trafiquées par vos soins à l’Atelier.'
 'Ich bin geheilt': 'Je suis guéri(e)'
