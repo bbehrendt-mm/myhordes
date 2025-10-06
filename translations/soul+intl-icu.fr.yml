@@ -686,11 +686,11 @@ Verkaufswert: Valeur de vente
 '1 Stadt': '1 ville'
 'Icon-Zoom auch auf Desktop-Geräten verwenden': 'Utiliser le zoom des icônes sur les appareils de bureau également'
 'Ist diese Option aktiviert, wird die oben eingestellte Zoom-Größe für Icons nicht nur auf mobilen, sondern auch auf Desktop-Geräten angewendet.': 'Si cette option est activée, la taille de zoom des icônes définies ci-dessus sera appliquée non seulement sur les appareils mobiles mais aussi sur les appareils de bureau.'
-'Layout des Spiels': 'Layout des Spiels'
-'Diese Einstellung funktioniert nur auf mobilen Geräten. Üblicherweise wird das Layout des Spiels durch die Bildschirmgröße deines Geräts gesteuert. Falls du ein bestimmtes Layout bevorzugst, welches nicht der Bildschirmgröße deines Gerätes entspricht, kannst du dieses hier erzwingen.': 'Diese Einstellung funktioniert nur auf mobilen Geräten. Üblicherweise wird das Layout des Spiels durch die Bildschirmgröße deines Geräts gesteuert. Falls du ein bestimmtes Layout bevorzugst, welches nicht der Bildschirmgröße deines Gerätes entspricht, kannst du dieses hier erzwingen.'
-'Automatisch (empfohlen)': 'Automatisch (empfohlen)'
-Smartphone-Layout: Smartphone-Layout
-Phablet-Layout: Phablet-Layout
-Tablet-Layout: Tablet-Layout
-'Desktop-Layout (Vollbild)': 'Desktop-Layout (Vollbild)'
-'Desktop-Layout (Normal)': 'Desktop-Layout (Normal)'
+'Layout des Spiels': 'Affichage du jeu'
+'Diese Einstellung funktioniert nur auf mobilen Geräten. Üblicherweise wird das Layout des Spiels durch die Bildschirmgröße deines Geräts gesteuert. Falls du ein bestimmtes Layout bevorzugst, welches nicht der Bildschirmgröße deines Gerätes entspricht, kannst du dieses hier erzwingen.': 'Ce paramètre ne fonctionne que sur les appareils mobiles. En règle générale, l''affichage du jeu est déterminé automatiquement par la taille d''écran de votre appareil. Si vous préférez un affichage particulier qui ne correspond pas à la taille de l''écran de votre appareil, vous pouvez le forcer ici.'
+'Automatisch (empfohlen)': 'Automatique (recommandé)'
+Smartphone-Layout: Affichage pour mobile
+Phablet-Layout: Affichage pour petite tablette (ou gros téléphone mobile)
+Tablet-Layout: Affichage pour tablette
+'Desktop-Layout (Vollbild)': 'Affichage du bureau (plein écran)'
+'Desktop-Layout (Normal)': 'Affichage du bureau (normal)'
