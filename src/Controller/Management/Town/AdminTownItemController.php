@@ -101,9 +101,9 @@ class AdminTownItemController extends AdminActionController
 
         if ($change == 'add') {
             for($i = 0 ; $i < $qty ; $i++)
-                $handler->forceMoveItem($town->getBank(), $itemFactory->createItem($item->getPrototype()->getName()));
+                $handler->forceMoveItem($town->getBank(), $itemFactory->createBaseItemCopy($item));
         } else {
-            $handler->forceRemoveItem($item, $qty);
+            $handler->forceRemoveItem($item, $qty, true);
         }
 
         $this->clearTownCaches($town);

@@ -19,6 +19,7 @@ use App\Entity\Town;
 use App\Enum\Configuration\CitizenProperties;
 use App\Enum\ItemPoisonType;
 use App\Structures\ItemRequest;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
@@ -94,18 +95,13 @@ class InventoryHandler
     public function findStackPrototype( Inventory $inv, Item $item ): ?Item {
         // Items with the <individual> tag cannot stack
         if ($item->getPrototype()->getIndividual()) return null;
-            $items = $inv->getItems();
-            foreach($items as $compareItem){
-                if($item->getPrototype() === $compareItem->getPrototype()
-                    && $item->getId() != $compareItem->getId()
-                    && $item->getPoison() == $compareItem->getPoison()
-                    && $item->getBroken() == $compareItem->getBroken()
-                    && $item->getEssential() == $compareItem->getEssential()
-                ){
-                    return $compareItem;
-                }
-            }
-        return null;
+        return $inv->getItems()->matching( new Criteria()
+            ->where( Criteria::expr()->eq('prototype', $item->getPrototype()) )
+            ->andWhere( Criteria::expr()->neq('id', $item->getId()) )
+            ->andWhere( Criteria::expr()->eq('poison', $item->getPoison()) )
+            ->andWhere( Criteria::expr()->eq('broken', $item->getBroken()) )
+            ->andWhere( Criteria::expr()->eq('essential', $item->getEssential()) )
+        )->first() ?: null;
     }
 
     /**
@@ -293,14 +289,34 @@ class InventoryHandler
         return $item;
     }
 
-    public function forceRemoveItem( Item $item, int $count = 1 ): void {
-        if ($item->getCount() > $count) {
-            $item->setCount($item->getCount() - $count);
-            $this->entity_manager->persist($item);
-        } else {
-            if ($item->getInventory()) $item->getInventory()->removeItem($item);
-            $this->entity_manager->remove( $item );
-        }
+    public function forceRemoveItem( Item $item, int $count = 1, bool $allStacks = false ): void {
+        // Initialize the stack and cache the inventory
+        $stack = $item;
+        $inventory = $item->getInventory();
+
+        do {
+            if ($stack->getCount() > $count) {
+                // The current item stack is larger than the requested count, so we simply reduce the count
+                $stack->setCount($stack->getCount() - $count);
+                $this->entity_manager->persist($stack);
+                $count = 0;
+            } else {
+                // The current item stack is smaller than the requested count, so we remove it entirely
+                $count -= $stack->getCount();
+                $inventory?->removeItem($stack);
+                $this->entity_manager->remove($stack);
+
+                // If the allStacks flag is set, we need to check if there's a possible stack to remove
+                // This is only needed when the requested count is larger than the current stack count and only possible
+                // if we have an inventory
+                $stack = ($allStacks && $count > 0 && $inventory)
+                    ? $this->findStackPrototype($inventory, $stack)
+                    : null;
+            }
+        // Continue as long as we have a stack to remove and the requested count is still larger than 0
+        } while ($count > 0 && $stack );
+
+
     }
 
     public function getAllInventoryIDs( Town $town, bool $bank = true, bool $homes = true, bool $rucksack = true, bool $floor = true, bool $ruinFloor = true, bool $buildings = true ): array {
