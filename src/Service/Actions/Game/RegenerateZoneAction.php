@@ -37,8 +37,10 @@ readonly class RegenerateZoneAction
         $regenerate_base = 0;
         $regenerate_ruin = 0;
 
+        $by = fn() => mt_rand($regenerate_by, 2 * $regenerate_by - 1);
+
         if ($force || $this->random->chance($chance * $dropChanceFactor)) {
-            $regenerate_base = $zone->getDigs() + mt_rand($regenerate_by, 2 * $regenerate_by - 1);
+            $regenerate_base = $by();
             $zone->setDigs($zone->getDigs() + $regenerate_base);
             $log?->debug("Zone <info>{$zone->getX()}/{$zone->getY()}</info>: Recovering by <info>{$regenerate_base}</info> to <info>{$zone->getDigs()}</info>.");
         }
@@ -50,7 +52,7 @@ readonly class RegenerateZoneAction
             : 1;
 
         if ($force || $this->random->chance($chance * $ruinChanceFactor)) {
-            $regenerate_ruin = mt_rand($regenerate_by, 2 * $regenerate_by - 1);
+            $regenerate_ruin = $by();
             $zone->setRuinDigs($zone->getRuinDigs() + $regenerate_ruin);
             $log->debug("Zone <info>{$zone->getX()}/{$zone->getY()}</info>: Recovering ruin by <info>{$regenerate_ruin}</info> to <info>{$zone->getRuinDigs()}</info>.");
         }
