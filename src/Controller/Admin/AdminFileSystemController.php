@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use function Symfony\Component\String\b;
 
@@ -69,20 +70,16 @@ class AdminFileSystemController extends AdminActionController
     }
 
     /**
-     * @param int $id
+     * @param Town $town
      * @param string $type
      * @return Response
      */
-    #[Route(path: 'admin/fs/townlog/fetch/{id<\d+>}/{type}.txt', name: 'admin_townlog', condition: '!request.isXmlHttpRequest()')]
+    #[Route(path: 'manage/fs/townlog/fetch/{id<\d+>}/{type}.txt', name: 'admin_townlog', condition: '!request.isXmlHttpRequest()')]
+    #[IsGranted('spy', 'town')]
     #[AdminLogProfile(enabled: true)]
-    public function townlog(int $id, string $type): Response
+    public function townlog(Town $town, string $type): Response
     {
-        if (!$this->isGranted('ROLE_CROW')) return new Response('', 403);
-
         if (!in_array($type, ['register', 'zones', 'all', 'citizens'])) return new Response('', 404);
-
-        $town = $this->entity_manager->getRepository(Town::class)->find($id);
-        if (!$town) return new Response('', 404);
 
         $q = $this->entity_manager->getRepository(TownLogEntry::class)->createQueryBuilder('t')
             ->andWhere('t.town = :town' )->setParameter( 'town', $town );
