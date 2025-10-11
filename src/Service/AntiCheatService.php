@@ -78,16 +78,16 @@ readonly class AntiCheatService {
                 ->getQuery()->execute();
 
             if ($count === 0) {
-                $this->em->persist((new Activity())
-                                       ->setUser($user)
-                                       ->setIp($client_ip)
-                                       ->setAgent($agent_string)
-                                       ->setDomain($request->getHost())
-                                       ->setBlockBegin($prev_segment)
-                                       ->setDateTimeBegin(new DateTime())
-                                       ->setRequests(0)
-                                       ->setBlockEnd($next_segment)->setDateTimeEnd(new DateTime())
-                                       ->setRequests(1)
+                $this->em->persist(new Activity()
+                    ->setUser($user)
+                    ->setIp($client_ip)
+                    ->setAgent($agent_string)
+                    ->setDomain($request->getHost())
+                    ->setBlockBegin($prev_segment)
+                    ->setDateTimeBegin(new DateTime())
+                    ->setRequests(0)
+                    ->setBlockEnd($next_segment)->setDateTimeEnd(new DateTime())
+                    ->setRequests(1)
                 );
                 $this->em->flush();
             }

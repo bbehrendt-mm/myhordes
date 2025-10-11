@@ -14,7 +14,7 @@ class Inventory
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private ?int $id;
+    private ?int $id = null;
     #[ORM\OneToMany(targetEntity: Item::class, mappedBy: 'inventory', cascade: ['persist', 'remove'])]
     #[OrderBy(['essential' => 'DESC', 'prototype' => 'ASC'])]
     private Collection $items;
@@ -23,7 +23,7 @@ class Inventory
     #[ORM\OneToOne(targetEntity: CitizenHome::class, mappedBy: 'chest', cascade: ['persist', 'remove'])]
     private ?CitizenHome $home = null;
     #[ORM\OneToOne(targetEntity: Town::class, mappedBy: 'bank', cascade: ['persist'])]
-    private ?Town $town;
+    private ?Town $town = null;
     #[ORM\OneToOne(targetEntity: Zone::class, mappedBy: 'floor', cascade: ['persist'])]
     private ?Zone $zone = null;
     #[ORM\OneToOne(targetEntity: RuinZone::class, mappedBy: 'floor', cascade: ['persist', 'remove'])]

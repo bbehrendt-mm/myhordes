@@ -304,7 +304,7 @@ class MapMaker
 
         foreach ($e_ruin_zones as $zone) {
             $zombies = $zone->getDistance();
-            $zone->setZombies( $zombies / 2 )->setInitialZombies( $zombies / 2 );
+            $zone->setZombies( floor($zombies / 2) )->setInitialZombies( floor($zombies / 2) );
         }
     }
 
