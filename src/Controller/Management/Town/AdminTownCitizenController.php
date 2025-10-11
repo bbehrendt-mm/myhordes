@@ -760,7 +760,7 @@ class AdminTownCitizenController extends AdminActionController
         $point = $parser->get('point', '');
         if (!in_array($point, ['ap','bp','mp','sp','gh','cc','cn'])) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
 
-        $number = $parser->get_int('num', 6);
+        $number = $parser->get_int('num', 6, 0, 100);
 
         $control = $parser->get_int('control', 0);
         if (!in_array($control, [-1,0,1])) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);

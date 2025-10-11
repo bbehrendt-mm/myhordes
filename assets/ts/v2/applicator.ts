@@ -8,6 +8,48 @@ export interface EventEmitProps<E extends Event = Event> {
     event: E,
 }
 
+function constructPayloadForFetch( node: HTMLElement, e: MouseEvent ): null|object {
+    // Attempt to get payload from payload field
+    let payload = node.dataset.fetchPayload ? JSON.parse( node.dataset.fetchPayload ) : null;
+
+    // If no payload field exists, look for payload form field and extract payload by serializing the referenced form
+    if (payload === null && node.dataset.fetchPayloadForm) payload = $.html.serializeForm( document.querySelector(node.dataset.fetchPayloadForm) );
+
+    // If no payload form field exists, look for a parent form and extract payload by serializing the parent form
+    else if (payload === null && node.closest('form')) payload = $.html.serializeForm( node.closest('form') );
+
+    // Check if a payload query field exists and prompt the user for a value to use as the payload query field value
+    let payloadQuery = node.dataset.fetchPayloadQuery;
+    let payloadQueryField = node.dataset.fetchPayloadQueryField;
+    if (payloadQuery && payloadQueryField) {
+        const q = prompt( payloadQuery );
+        if (q === null) return;
+
+        let data = {};
+        data[payloadQueryField] = q;
+
+        payload = {
+            ...(payload ?? {}),
+            ...data
+        }
+    }
+
+    // Check if a payload key modifier field exists and merge it into the payload if the user has
+    ['Alt','Control','Meta','Shift'].forEach( k => {
+        if (e.getModifierState(k)) {
+            const key = node.dataset[`fetchPayload${k}Field`];
+            const value = node.dataset[`fetchPayload${k}Value`];
+
+            if (key && value) payload = {
+                ...(payload ?? {}),
+                ...({[key]: value})
+            }
+        }
+    });
+
+    return payload;
+}
+
 function applyFetchFunctions( node: HTMLElement ) {
     node.querySelectorAll('[data-fetch]').forEach( (node: HTMLElement) =>
         node.addEventListener('click', e => {
@@ -16,26 +58,7 @@ function applyFetchFunctions( node: HTMLElement ) {
 
             if (node.dataset.fetchConfirm && !confirm( node.dataset.fetchConfirm )) return;
 
-            let payload = node.dataset.fetchPayload ? JSON.parse( node.dataset.fetchPayload ) : null;
-            if (payload === null && node.dataset.fetchPayloadForm) payload = $.html.serializeForm( document.querySelector(node.dataset.fetchPayloadForm) );
-            else if (payload === null && node.closest('form')) payload = $.html.serializeForm( node.closest('form') );
-
-            let payloadQuery = node.dataset.fetchPayloadQuery;
-            let payloadQueryField = node.dataset.fetchPayloadQueryField;
-
-            if (payloadQuery && payloadQueryField) {
-                const q = prompt( payloadQuery );
-                if (q === null) return;
-
-                let data = {};
-                data[payloadQueryField] = q;
-
-                payload = {
-                    ...(payload ?? {}),
-                    ...data
-                }
-            }
-
+            const payload = constructPayloadForFetch( node, e );
             const spinner = node.dataset.fetchNoSpin !== "0";
             const classic = node.dataset.fetchV2 !== "1";
 

@@ -416,6 +416,7 @@ parameters:
         - small_spa4souls_#00
         - item_rp_book2_#00
         - small_cemetery_#00
+        - small_pyre_#00
 
       overrides:
         building_rarity:

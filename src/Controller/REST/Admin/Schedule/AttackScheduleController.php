@@ -8,6 +8,7 @@ use App\Entity\AttackSchedule;
 use App\Enum\Configuration\MyHordesSetting;
 use App\Service\Actions\Mercure\BroadcastViaMercureAction;
 use App\Service\JSONRequestParser;
+use Carbon\Carbon;
 use DateTime;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
@@ -21,17 +22,20 @@ use Symfony\Component\Routing\Attribute\Route;
 #[GateKeeperProfile('skip')]
 class AttackScheduleController extends CustomAbstractCoreController
 {
-    private function current_delay( EntityManagerInterface $em, BroadcastViaMercureAction $broadcast ): JsonResponse {
+    private function current_delay( EntityManagerInterface $em, BroadcastViaMercureAction $broadcast, bool $forward = false ): JsonResponse {
         $planned = $em->getRepository(AttackSchedule::class)->findBy(['completed' => false, 'startedAt' => null], ['timestamp' => 'ASC']);
 
         if (count($planned) > 1)
             $em->remove( $planned[array_key_first($planned)] );
         else {;
-            $planned = empty($planned) ? (new AttackSchedule())->setTimestamp( new DateTimeImmutable() ) : $planned[array_key_first($planned)];
-            $datemod = $this->conf->getGlobalConf()->get(MyHordesSetting::NightlyAttackDateModifier);
-            if ($datemod !== 'never') {
-                $new_date = (new DateTime())->setTimestamp( $planned->getTimestamp()->getTimestamp() )->modify($datemod);
-                if ($new_date !== false && $new_date > $planned->getTimestamp())
+            $planned = empty($planned) ? new AttackSchedule()->setTimestamp(new DateTimeImmutable() ) : $planned[array_key_first($planned)];
+            $modifier = $this->conf->getGlobalConf()->get(MyHordesSetting::NightlyAttackDateModifier);
+            if ($modifier !== 'never') {
+                $new_date = Carbon::createFromInterface( $planned->getTimestamp() );
+                do $new_date->modify($modifier);
+                while ($forward === true && $new_date->isPast() );
+
+                if ($new_date > $planned->getTimestamp())
                     $em->persist( $planned->setTimestamp( DateTimeImmutable::createFromMutable($new_date)) );
                 else return new JsonResponse([], Response::HTTP_NOT_ACCEPTABLE);
             } else return new JsonResponse([], Response::HTTP_NOT_ACCEPTABLE);
@@ -54,7 +58,7 @@ class AttackScheduleController extends CustomAbstractCoreController
             return new JsonResponse([], Response::HTTP_UNPROCESSABLE_ENTITY);
 
         return match ( $parser->get('method') ) {
-            'delay' => $this->current_delay( $em, $broadcast ),
+            'delay' => $this->current_delay( $em, $broadcast, $parser->get_int( 'forward', 0 ) != 0 ),
             default => new JsonResponse([], Response::HTTP_NOT_ACCEPTABLE)
         };
     }
