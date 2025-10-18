@@ -150,3 +150,23 @@ body[data-theme-mods~="a1"] {
       }
   }
 }
+
+@keyframes pan-1 { from {mask-position: 0 bottom} to {mask-position: 1000px bottom} }
+@keyframes pan-2 { from {mask-position: -500px bottom} to {mask-position: -500px bottom} }
+@keyframes pan-3 { from {mask-position: 250px bottom} to {mask-position: 1250px bottom} }
+@keyframes pan-4 { from {mask-position: 750px bottom} to {mask-position: -250px bottom} }
+@keyframes pan-5 { from {mask-position: 330px bottom} to {mask-position: 1330px bottom} }
+
+body[data-theme-name="halloween"] {
+  .theme-layer {
+    display: block; pointer-events: none; background: rgba(255,255,255,0.2); z-index: -1;
+    mask: url("../../img/background/fog.png") repeat-x left bottom;
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%; opacity: 1;
+
+    &[data-theme-layer="1"] { mask-size: 1024px; animation: pan-1 50s ease-in-out infinite alternate; z-index: 1000; backdrop-filter: blur(5px); }
+    &[data-theme-layer="2"] { mask-size: 612px; animation: pan-2 120s ease-in-out infinite alternate; z-index: 1000; backdrop-filter: blur(5px); }
+    &[data-theme-layer="3"] { mask-size: 2300px; animation: pan-3 160s ease-in-out infinite alternate; }
+    &[data-theme-layer="4"] { mask-size: 1500px; animation: pan-4 330s ease-in-out infinite alternate; }
+    &[data-theme-layer="5"] { mask-size: 620px; animation: pan-5 610s ease-in-out infinite alternate; }
+  }
+}
