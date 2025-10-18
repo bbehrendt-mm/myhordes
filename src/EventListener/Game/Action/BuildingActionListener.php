@@ -3,29 +3,25 @@
 
 namespace App\EventListener\Game\Action;
 
-use App\Entity\ActionCounter;
 use App\Entity\CitizenWatch;
-use App\Entity\ItemGroup;
-use App\Entity\PictoPrototype;
 use App\Entity\Zone;
 use App\Entity\ZoneActivityMarker;
 use App\Enum\ActionCounterType;
 use App\Enum\ActionHandler\CountType;
 use App\Enum\Configuration\CitizenProperties;
 use App\Enum\Configuration\TownSetting;
+use App\Enum\ItemDropType;
 use App\Enum\ScavengingActionType;
 use App\Enum\ZoneActivityMarkerType;
 use App\Event\Game\Actions\CustomActionProcessorEvent;
 use App\EventListener\ContainerTypeTrait;
+use App\Service\Actions\Game\CalculateItemDropAction;
 use App\Service\ConfMaster;
 use App\Service\EventProxyService;
-use App\Service\GameProfilerService;
-use App\Service\ItemFactory;
 use App\Service\LogTemplateHandler;
 use App\Service\PictoHandler;
 use App\Service\RandomGenerator;
 use App\Service\TownHandler;
-use App\Structures\TownConf;
 use App\Translation\T;
 use DateTime;
 use Doctrine\Common\Collections\Criteria;
@@ -50,11 +46,10 @@ final class BuildingActionListener implements ServiceSubscriberInterface
             RandomGenerator::class,
             ConfMaster::class,
             EntityManagerInterface::class,
-            ItemFactory::class,
-            GameProfilerService::class,
             TownHandler::class,
             LogTemplateHandler::class,
 			PictoHandler::class,
+            CalculateItemDropAction::class
         ];
     }
 
@@ -87,27 +82,14 @@ final class BuildingActionListener implements ServiceSubscriberInterface
                 $dig_chance = $this->getService(EventProxyService::class)->citizenQueryDigChance( $event->citizen, null, ScavengingActionType::Dig, $event->townConfig->isNightMode() );
 
                 $item = $random->chance( $dig_chance, 0.1, 0.9 )
-                    ? $random->pickItemPrototypeFromGroup(
-                        $this->getService(EntityManagerInterface::class)->getRepository(ItemGroup::class)->findOneBy(['name' => 'base_dig']),
-                        $event->townConfig,
-                        $this->getService(ConfMaster::class)->getCurrentEvents( $event->town )
-                    )
+                    ? ($this->getService(CalculateItemDropAction::class))($event->citizen, $event->town->getTownZone(), ItemDropType::TownZoneDig)
                     : null;
 
                 if ($item) {
 
                     $event->cache->addSpawnedItem($item);
                     $event->cache->addMessage(T::__( 'Deine Anstrengungen in den Buddelgruben haben sich gelohnt! Du hast folgendes gefunden: {items_spawn}!', 'game' ));
-
-                    // If we get a Chest XL, we earn a picto
-                    if ($item->getName() == 'chest_xl_#00') {
-                        $pictoPrototype = $this->getService(EntityManagerInterface::class)->getRepository(PictoPrototype::class)->findOneBy(['name' => "r_chstxl_#00"]);
-                        $this->getService(PictoHandler::class)->give_picto($event->citizen, $pictoPrototype);
-                    }
-
-                    $item_instance = $this->getService(ItemFactory::class)->createItem($item);
-                    $this->getService(GameProfilerService::class)->recordItemFound( $item, $event->citizen, method: 'scavenge_town' );
-                    $this->getService(EventProxyService::class)->placeItem( $event->citizen, $item_instance, [ $event->citizen->getInventory(), $event->citizen->getHome()->getChest(), $event->town->getBank() ] );
+                    $this->getService(EventProxyService::class)->placeItem( $event->citizen, $item, [ $event->citizen->getInventory(), $event->citizen->getHome()->getChest(), $event->town->getBank() ] );
 
                 } else {
                     $event->cache->addMessage(T::__( 'Trotz all deiner Anstrengungen hast du hier leider nichts gefunden ...', 'game' ));
