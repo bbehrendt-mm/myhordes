@@ -25,6 +25,7 @@ use App\Service\PictoHandler;
 use App\Service\RandomGenerator;
 use App\Structures\EventConf;
 use App\Structures\TownConf;
+use ArrayHelpers\Arr;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -179,6 +180,15 @@ class CalculateItemDropAction
         $max_redraws = 10;
         $redraw_count = 0;
 
+        $translation = [];
+        foreach ($events as $e)
+            foreach ($e->get(EventConf::EVENT_DIG_REPLACE, []) as $source => $items) {
+                Arr::set( $translation, $source, [
+                    ...Arr::get( $translation, $source, [] ),
+                    ...$items
+                ] );
+            }
+
         do {
             $redraw_count++;
             $item_prototype = match ($type) {
@@ -196,6 +206,9 @@ class CalculateItemDropAction
                 ItemDropType::TrashEmptyDig,
                 ItemDropType::TrashDig => $this->determineItemPrototypeForTrashDig($events, $conf, $type),
             };
+
+            if ($item_prototype && !empty($translation[$item_prototype->getName()]))
+                $item_prototype = $this->doctrineCache->getEntityByIdentifier(ItemPrototype::class, $this->random_generator->pick($translation[$item_prototype->getName()]));
 
             $itemMarkerType = $item_prototype ? ZoneActivityMarkerType::scavengedItemIncurs( $item_prototype ) : null;
             $itemLimit = $itemMarkerType?->configuredLimit( $conf ) ?? -1;
