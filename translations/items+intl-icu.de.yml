@@ -1158,6 +1158,11 @@ Larven-Marmelade: Larven-Marmelade
 'Ein köstlicher Insektenbrei, der sehr nahrhaft ist. Er ist knusprig und gleichzeitig wirklich saftig!': 'Ein köstlicher Insektenbrei, der sehr nahrhaft ist. Er ist knusprig und gleichzeitig wirklich saftig!'
 'Ein köstliches Protein-Dessert! Anscheinend ist es besser, wenn es sich noch bewegt...': 'Ein köstliches Protein-Dessert! Anscheinend ist es besser, wenn es sich noch bewegt...'
 'Reinigen (1AP) (Wasser)': 'Reinigen (1AP)'
+'Du schleichst dich von hinten an {target} heran und es gelingt dir, ihm einen tierischen Schrecken einzujagen!': 'Du schleichst dich von hinten an {target} heran und es gelingt dir, {target__gender, select, female {ihr} other {ihm}} einen tierischen Schrecken einzujagen!'
+'Du schleichst dich von hinten an {target} heran. Dabei machst du allerdings so einen Lärm, dass {target} dich bereits frühzeitig bemerkt. Das hat wohl nicht geklappt...': 'Du schleichst dich von hinten an {target} heran. Dabei machst du allerdings so einen Lärm, dass {target} dich bereits frühzeitig bemerkt. Das hat wohl nicht geklappt...'
+Erschrecken: Erschrecken
+'Schaurige Maske': 'Schaurige Maske'
+'Irgendwie erinnert diese Maske dich an jemanden...': 'Irgendwie erinnert diese Maske dich an jemanden...'
 Besinnen: Besinnen
 'Du nimmst dir einen Moment Zeit, um zur Ruhe zu kommen und dich auf das wesentliche zu besinnen.': 'Du nimmst dir einen Moment Zeit, um zur Ruhe zu kommen und dich auf das wesentliche zu besinnen.'
 'Zone ausheben': 'Zone ausheben'
