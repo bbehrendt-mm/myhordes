@@ -1,0 +1,13 @@
+<div class="inner-notification-header">
+<img class="float-left" alt="" src="{{ asset('build/images/background/popup/feist.gif') }}">
+    <strong>{{ 'Du bist vor Angst erstarrt!!'|trans({},'game') }}</strong>
+</div>
+<div class="inner-notification-content">
+    <p class="small">
+        {{ 'Nichtsahnend bist du deinem Tagewerk nachgegangen, als sich plötzlich jemand von hinten an dich angeschlichen und mit einer furchterregenden Maske zu Tode erschreckt hast.'|trans({},'game') }}
+    </p>
+    <p>
+        <b>{{ 'Du bist nun vor Angst erstarrt!'|trans({},'game') }}</b>
+    </p>
+    <p>{{ 'Mehr Informationen über die Angststarre findest du in der {health_help}.'|trans({'health_help': ('<a target="_blank" href="' ~ path('help', {'name': 'health'}) ~ '">' ~ 'Spielhilfe'|trans({},'global') ~ '</a>')},'game')|raw }}</p>
+</div>

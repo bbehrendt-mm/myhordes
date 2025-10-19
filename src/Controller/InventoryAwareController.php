@@ -145,7 +145,12 @@ class InventoryAwareController extends CustomAbstractController
             $this->entity_manager->flush();
         } else if ($activeCitizen->getTown()->getForceStartAhead() && !$activeCitizen->hasSeenHelpNotification('stranger') ) {
             $this->addFlash('popup-stranger', $this->renderView('ajax/game/notifications/stranger.html.twig', ['population' => $activeCitizen->getTown()->getPopulation()]));
-            $activeCitizen->addHelpNotification( $this->doctrineCache->getEntityByIdentifier(HelpNotificationMarker::class, 'stranger') );
+            $activeCitizen->addHelpNotification($this->doctrineCache->getEntityByIdentifier(HelpNotificationMarker::class, 'stranger'));
+            $this->entity_manager->persist($activeCitizen);
+            $this->entity_manager->flush();
+        } else if ($activeCitizen->hasStatus('tg_was_scared') && $activeCitizen->hasStatus('terror') && !$activeCitizen->hasSeenHelpNotification('scared_mask') ) {
+            $this->addFlash('popup-ghoul', $this->renderView('ajax/game/notifications/scared_mask.html.twig', []));
+            $activeCitizen->addHelpNotification( $this->doctrineCache->getEntityByIdentifier(HelpNotificationMarker::class, 'scared_mask') );
             $this->entity_manager->persist($activeCitizen);
             $this->entity_manager->flush();
         } else if ( !empty( $records = array_filter( $activeCitizen->getSpecificActionCounter( ActionCounterType::ReceiveHeroic )->getAdditionalData() ?? [],
