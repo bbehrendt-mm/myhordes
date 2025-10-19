@@ -194,7 +194,7 @@ class ItemPropertyDataService implements FixtureProcessorInterface {
             'distri_#00'                 => [ 'nw_ikea' ],
             'guitar_#00'                 => [ 'impoundable', 'nw_ikea' ],
             'bureau_#00'                 => [ 'nw_ikea' ],
-            'rlaunc_#00'                 => [ 'impoundable', 'nw_armory', 'weapon', 'esc_fixed' ],
+            'rlaunc_#00'                 => [ 'impoundable', 'nw_armory', 'esc_fixed' ],
             'repair_one_#00'             => [ 'impoundable', 'hero_find_lucky', 'hero_find_lucky2', 'hero_find_lucky3' ],
             'electro_box_#00'            => [ 'hero_find_lucky', 'hero_find_lucky2', 'hero_find_lucky3' ],
             'christmas_candy_#00'        => [ 'food', 'can_cook', 'single_use', 'lure' ],
