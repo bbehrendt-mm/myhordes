@@ -30,11 +30,13 @@ use App\Enum\Configuration\MyHordesSetting;
 use App\Enum\Configuration\TownSetting;
 use App\Enum\EventStages\BuildingValueQuery;
 use App\Enum\Game\TransferItemOption;
+use App\Enum\ItemDropType;
 use App\Enum\ScavengingActionType;
 use App\Enum\ZoneActivityMarkerType;
 use App\Response\AjaxResponse;
 use App\Service\ActionHandler;
 use App\Service\Actions\Cache\InvalidateTagsInAllPoolsAction;
+use App\Service\Actions\Game\CalculateItemDropAction;
 use App\Service\Actions\Mercure\BroadcastViaMercureAction;
 use App\Service\CitizenHandler;
 use App\Service\ConfMaster;
@@ -129,13 +131,18 @@ class BeyondController extends InventoryAwareController
      * @param EventProxyService $events
      * @param HookExecutor $hookExecutor
      * @param InvalidateTagsInAllPoolsAction $clearCache
+     * @param UserUnlockableService $u
+     * @param CalculateItemDropAction $calculateItemDrop
      */
     public function __construct(
         EntityManagerInterface $em, InventoryHandler $ih, CitizenHandler $ch, ActionHandler $ah, TimeKeeperService $tk,
         DeathHandler $dh, PictoHandler $ph, TranslatorInterface $translator, GameFactory $gf, RandomGenerator $rg,
         ItemFactory $if, ZoneHandler $zh, LogTemplateHandler $lh, ConfMaster $conf, Packages $a, UserHandler $uh,
         CrowService $armbrust, TownHandler $th, DoctrineCacheService $doctrineCache, EventProxyService $events, HookExecutor $hookExecutor,
-        InvalidateTagsInAllPoolsAction $clearCache, UserUnlockableService $u)
+        InvalidateTagsInAllPoolsAction $clearCache, UserUnlockableService $u,
+
+        private readonly CalculateItemDropAction $calculateItemDrop
+    )
     {
         parent::__construct($em, $ih, $ch, $ah, $dh, $ph, $translator, $lh, $tk, $rg, $conf, $zh, $uh, $armbrust, $th, $a, $doctrineCache, $events, $hookExecutor, $u);
         $this->game_factory = $gf;
@@ -525,15 +532,14 @@ class BeyondController extends InventoryAwareController
         $inv_target = $citizen->getInventory();
         $inv_source = null;
 
-        $good = $this->random_generator->chance(0.125);
+        $item = ($this->calculateItemDrop)(
+            $citizen,
+            $citizen->getTown()->getTownZone(),
+            $this->random_generator->chance(0.125) ? ItemDropType::TrashDig : ItemDropType::TrashEmptyDig
+        );
 
-        $item_group = $this->entity_manager->getRepository(ItemGroup::class)->findOneBy(['name' => $good ? 'trash_good' : 'trash_bad']);
-        $proto = $this->random_generator->pickItemPrototypeFromGroup( $item_group, $this->getTownConf(), $this->conf->getCurrentEvents( $town ) );
-        if (!$proto)
+        if (!$item)
             return AjaxResponse::errorMessage( $this->translator->trans('Obwohl du minutenlang den Stadtmüll durchwühlst, findest du <strong>nichts Nützliches</strong>...', [], 'game') );
-
-        $item = $this->item_factory->createItem($proto);
-        $gps->recordItemFound( $proto, $citizen, null, 'trash' );
 
         $response->withSignal( ClientSignal::InventoryUpdated );
 
@@ -548,8 +554,6 @@ class BeyondController extends InventoryAwareController
             $this->addFlash( 'notice', $this->translator->trans( 'Beim Durchwühlen des Mülls, der am Stadtrand herumliegt, findest du schließlich folgendes: {item}.<hr />Du hast <strong>1 Aktionspunkt(e)</strong> verbraucht.', [
                 '{item}' => "<span class='tool'> <img alt='' src='{$this->asset->getUrl( "build/images/item/item_{$item->getPrototype()->getIcon()}.gif" )}'> {$this->translator->trans($item->getPrototype()->getLabel(), [], 'items')}</span>"
             ], 'game' ));
-
-
 
             try {
                 $this->entity_manager->persist($item);
@@ -1377,50 +1381,26 @@ class BeyondController extends InventoryAwareController
             $item_found = $this->random_generator->chance($total_dig_chance);
 
             $zone->addActivityMarker( (new ZoneActivityMarker())
-                                          ->setCitizen( $citizen )
-                                          ->setType( ZoneActivityMarkerType::RuinDig )
-                                          ->setTimestamp( new DateTime() )
+                ->setCitizen( $citizen )
+                ->setType( ZoneActivityMarkerType::RuinDig )
+                ->setTimestamp( new DateTime() )
             );
 
             if ($item_found) {
+
                 $zone->setRuinDigs( $zone->getRuinDigs() - 1 );
 
-                $event_conf = null; $event_confs = [];
-                foreach ($this->conf->getCurrentEvents($zone->getTown()) as $ev)
-                    foreach ($ev->get(EventConf::EVENT_DIG_RUINS, []) as $e)
-                        if ($e['name'] === $zone->getPrototype()->getIcon())
-                            $event_confs[] = $e;
+                $item = ($this->calculateItemDrop)($citizen, $zone, ItemDropType::RuinDig);
 
-                if (!empty($event_confs)) $event_conf = $this->random_generator->pick( $event_confs );
-
-                $named_groups = $this->getTownConf()->get( TownSetting::OptModifierOverrideNamedDrops );
-                $group = $event_conf
-                    ? ( $this->random_generator->chance($event_conf['chance'])
-                        ? $this->entity_manager->getRepository(ItemGroup::class)->findOneBy(['name' => $event_conf['group']])
-                        : $zone->getPrototype()->getDropByNames( $named_groups ) )
-                    : $zone->getPrototype()->getDropByNames( $named_groups );
-
-                $prototype = $group ? $this->random_generator->pickItemPrototypeFromGroup( $group, $this->getTownConf(), $this->conf->getCurrentEvents( $zone->getTown() ) ) : null;
-                $gps->recordDigResult($prototype, $citizen, $zone->getPrototype(), 'ruin_scavenge', $event_conf && $group->getName() == $event_conf['group']);
-                if ($prototype) {
-                    $item = $this->item_factory->createItem( $prototype );
-                    $gps->recordItemFound( $prototype, $citizen, $zone->getPrototype() );
+                if ($item) {
                     $noPlaceLeftMsg = "";
-                    if ($item) {
-                        $inventoryDest = $proxyService->placeItem( $citizen, $item, [ $citizen->getInventory(), $zone->getFloor() ] );
-                        if($inventoryDest === $zone->getFloor()){
-                            $noPlaceLeftMsg = "<hr />" . $this->translator->trans('Der Gegenstand, den du soeben gefunden hast, passt nicht in deinen Rucksack, darum bleibt er erstmal am Boden...', [], 'game');
-                        }
-                        $this->entity_manager->persist( $item );
-                        $this->entity_manager->persist( $citizen->getInventory() );
-                        $this->entity_manager->persist( $zone->getFloor() );
+                    $inventoryDest = $proxyService->placeItem( $citizen, $item, [ $citizen->getInventory(), $zone->getFloor() ] );
+                    if($inventoryDest === $zone->getFloor()){
+                        $noPlaceLeftMsg = "<hr />" . $this->translator->trans('Der Gegenstand, den du soeben gefunden hast, passt nicht in deinen Rucksack, darum bleibt er erstmal am Boden...', [], 'game');
                     }
-
-                    // If we get a Chest XL, we earn a picto
-                    if ($prototype->getName() == 'chest_xl_#00') {
-                        $pictoPrototype = $this->entity_manager->getRepository(PictoPrototype::class)->findOneBy(['name' => "r_chstxl_#00"]);
-                        $this->picto_handler->give_picto($citizen, $pictoPrototype);
-                    }
+                    $this->entity_manager->persist( $item );
+                    $this->entity_manager->persist( $citizen->getInventory() );
+                    $this->entity_manager->persist( $zone->getFloor() );
 
                     $distance = round(sqrt(pow($zone->getX(),2) + pow($zone->getY(),2)));
                     $pictoName = "";
@@ -1434,7 +1414,7 @@ class BeyondController extends InventoryAwareController
                         $this->picto_handler->give_picto($citizen, $picto);
                     }
                     $this->addFlash( 'notice', $this->translator->trans( 'Als du folgendes Gebäude: {building} erkundest hast, lief es eiskalt den Rücken runter... Aber es war nicht umsonst! Du hast folgenden Gegenstand gefunden: {item}.', [
-                        '{item}' => "<span class='tool'><img alt='' src='{$this->asset->getUrl( 'build/images/item/item_' . $prototype->getIcon() . '.gif' )}'> {$this->translator->trans($prototype->getLabel(), [], 'items')}</span>",
+                        '{item}' => "<span class='tool'><img alt='' src='{$this->asset->getUrl( 'build/images/item/item_' . $item->getPrototype()->getIcon() . '.gif' )}'> {$this->translator->trans($item->getPrototype()->getLabel(), [], 'items')}</span>",
                         "{building}" => "<strong>" . $this->translator->trans($zone->getPrototype()->getLabel(), [], "game") . "</strong>"
                     ], 'game' ) . "$noPlaceLeftMsg");
                 } else {
@@ -1444,7 +1424,6 @@ class BeyondController extends InventoryAwareController
             } else {
                 // Nothing found.
                 $this->addFlash( 'notice', $this->translator->trans( 'Trotz all deiner Anstrengungen hast du hier leider nichts gefunden ...', [], 'game' ));
-                $gps->recordDigResult(null, $citizen, $zone->getPrototype(), 'ruin_scavenge');
             }
         } else {
             $this->addFlash( 'notice', $this->translator->trans( 'Beim Durchsuchen der Ruine merkst du, dass es nichts mehr zu finden gibt. Leider...', [], 'game' ));

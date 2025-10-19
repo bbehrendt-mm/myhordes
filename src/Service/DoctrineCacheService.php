@@ -37,6 +37,7 @@ class DoctrineCacheService {
      * @template T of object
      */
     public function getEntityByIdentifier( string $class, string $identifier, string $field = 'name' ): ?object {
+        if ($identifier === '') return null;
         if (!isset( $this->cache['by-single-identifier'][$class] )) $this->cache['by-single-identifier'][$class] = [];
         if (!isset( $this->cache['by-single-identifier'][$class][$field] )) $this->cache['by-single-identifier'][$class][$field] = [];
 

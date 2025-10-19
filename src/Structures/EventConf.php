@@ -11,30 +11,32 @@ use Symfony\Component\HttpFoundation\Response;
 
 class EventConf extends Conf
 {
-    const EVENT_NAME = 'name';
-    const EVENT_PRIORITY = 'priority';
+    const string EVENT_NAME = 'name';
+    const string EVENT_PRIORITY = 'priority';
 
-    const EVENT_CSS = 'css';
-    const EVENT_MOD_CSS = 'mod-css';
-    const EVENT_MUTATE_NAME = 'mutate_names';
-    const EVENT_MODS_ENABLED = 'mods.enable';
+    const string EVENT_CSS = 'css';
+    const string EVENT_CSS_LAYERS = 'css-layers';
+    const string EVENT_MOD_CSS = 'mod-css';
+    const string EVENT_MUTATE_NAME = 'mutate_names';
+    const string EVENT_MODS_ENABLED = 'mods.enable';
 
-    const EVENT_DIG_DESERT_GROUP  = 'event_dig.desert.group';
-    const EVENT_DIG_DESERT_CHANCE = 'event_dig.desert.chance';
-    const EVENT_DIG_DESERT_CHANCE_CAP = 'event_dig.desert.chance_cap';
-    const EVENT_DIG_RUINS         = 'event_dig.ruins';
+    const string EVENT_DIG_DESERT_GROUP  = 'event_dig.desert.group';
+    const string EVENT_DIG_DESERT_CHANCE = 'event_dig.desert.chance';
+    const string EVENT_DIG_DESERT_CHANCE_CAP = 'event_dig.desert.chance_cap';
+    const string EVENT_DIG_RUINS         = 'event_dig.ruins';
+    const string EVENT_DIG_REPLACE         = 'event_dig.replace';
 
-    const EVENT_DISPATCH_WATCHTOWER   = 'dispatch.watchtower';
-    const EVENT_DISPATCH_DASHBOARD    = 'dispatch.dashboard';
-    const EVENT_DISPATCH_DOOR         = 'dispatch.door';
-    const EVENT_DISPATCH_NIGHTLY_PRE  = 'dispatch.night_before';
-    const EVENT_DISPATCH_NIGHTLY_POST = 'dispatch.night_after';
-    const EVENT_DISPATCH_NIGHTLY_NONE = 'dispatch.night_none';
+    const string EVENT_DISPATCH_WATCHTOWER   = 'dispatch.watchtower';
+    const string EVENT_DISPATCH_DASHBOARD    = 'dispatch.dashboard';
+    const string EVENT_DISPATCH_DOOR         = 'dispatch.door';
+    const string EVENT_DISPATCH_NIGHTLY_PRE  = 'dispatch.night_before';
+    const string EVENT_DISPATCH_NIGHTLY_POST = 'dispatch.night_after';
+    const string EVENT_DISPATCH_NIGHTLY_NONE = 'dispatch.night_none';
 
-    const EVENT_DISPATCH_ENABLE_TOWN     = 'dispatch.enable_town';
-    const EVENT_DISPATCH_DISABLE_TOWN    = 'dispatch.disable_town';
-    const EVENT_DISPATCH_ENABLE_CITIZEN  = 'dispatch.enable_citizen';
-    const EVENT_DISPATCH_DISABLE_CITIZEN = 'dispatch.disable_citizen';
+    const string EVENT_DISPATCH_ENABLE_TOWN     = 'dispatch.enable_town';
+    const string EVENT_DISPATCH_DISABLE_TOWN    = 'dispatch.disable_town';
+    const string EVENT_DISPATCH_ENABLE_CITIZEN  = 'dispatch.enable_citizen';
+    const string EVENT_DISPATCH_DISABLE_CITIZEN = 'dispatch.disable_citizen';
 
 
 

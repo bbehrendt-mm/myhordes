@@ -127,7 +127,9 @@ class ActionDataService implements FixtureProcessorInterface {
                 'can_t3'    => [ 'label' => 'Öffnen', 'at00' => true, 'meta' => [ 'profession_tech', 'not_have_can_opener_hd', 'have_can_opener', 'no_cp', 'is_not_wounded_hands' ], 'result' => [ ] ],
 
                 'eat_6ap'   => [ 'label' => 'Essen', 'cover' => true, 'at00' => true, 'poison' => ItemAction::PoisonHandlerConsume, 'meta' => [ 'eat_ap', 'no_full_ap_msg_food' ], 'result' => [ 'contaminated_zone_infect', 'eat_ap6', 'consume_item' ], 'escort_message_key' => 'escort_food_eat' ],
-                'eat_7ap'   => [ 'label' => 'Essen', 'priority' => 1, 'cover' => true, 'at00' => true, 'poison' => ItemAction::PoisonHandlerConsume, 'meta' => [ 'eat_ap', 'no_full_ap_msg_food' ], 'result' => [ 'contaminated_zone_infect', 'eat_ap7', 'consume_item' ], 'escort_message_key' => 'escort_food_eat' ],
+                'eat_7ap'   => [ 'label' => 'Essen', 'priority' => 2, 'cover' => true, 'at00' => true, 'poison' => ItemAction::PoisonHandlerConsume, 'meta' => [ 'eat_ap', 'no_full_ap_msg_food' ], 'result' => [ 'contaminated_zone_infect', 'eat_ap7', 'consume_item' ], 'escort_message_key' => 'escort_food_eat' ],
+                'eat_7ap_hw_1' => [ 'label' => 'Essen', 'priority' => 1, 'cover' => true, 'at00' => true, 'poison' => ItemAction::PoisonHandlerConsume, 'meta' => [ 'eat_ap', 'no_full_ap_msg_food', 'h_not_during_halloween' ], 'result' => [ 'contaminated_zone_infect', 'eat_ap7', 'consume_item' ], 'escort_message_key' => 'escort_food_eat' ],
+                'eat_7ap_hw_2' => [ 'label' => 'Essen', 'priority' => 1, 'cover' => true, 'at00' => true, 'poison' => ItemAction::PoisonHandlerConsume, 'meta' => [ 'eat_ap', 'no_full_ap_msg_food', 'h_during_halloween' ], 'result' => [ 'contaminated_zone_infect', 'eat_ap7', 'consume_item', 'unterrorize' ], 'escort_message_key' => 'escort_food_eat' ],
                 'eat_4ap'   => [ 'label' => 'Essen', 'cover' => true, 'at00' => true, 'poison' => ItemAction::PoisonHandlerConsume, 'meta' => [ 'eat_ap', 'no_full_ap_msg_food' ], 'result' => [ 'contaminated_zone_infect', 'eat_ap4', 'consume_item' ], 'escort_message_key' => 'escort_food_eat' ],
 
                 'drug_xana1' => [ 'label' => 'Einsetzen', 'cover' => true, 'at00' => true, 'allow_when_terrorized' => true, 'poison' => ItemAction::PoisonHandlerConsume, 'meta' => [ 'drug_1', 'must_be_terrorized_hd' ],  'result' => [ 'contaminated_zone_infect', 'drug_any', 'unterrorize', 'consume_item' ], 'message_key' => 'drug_xanax' ],
@@ -513,6 +515,7 @@ class ActionDataService implements FixtureProcessorInterface {
 
 
                 'throw_sandball' => [ 'label' => 'Werfen', /* 'target' => ['type' => ItemTargetDefinition::ItemCitizenOnZoneSBType], */ 'meta' => [ 'must_be_outside', 'during_christmas'], 'result' => [ 'sandball' ], 'message' => '<nt-fail>Du hast einen Sandball in {citizen}s Gesicht geworfen.</nt-fail><t-fail>Hier ist niemand, auf den du den Sandball werfen könntest...</t-fail>' ],
+                'scare' => [ 'label' => 'Erschrecken', 'target' => ['type' => ItemTargetDefinition::ItemCitizenOnZoneType], 'meta' => ['during_halloween', 'not_yet_scary'], 'result' => [ 'scary_mask' ] ],
 
                 'special_armag'        => [ 'label' => 'Durchgang in Kraft', 'tooltip_key' => 'heroic_arma_tooltip', 'allow_when_terrorized' => true, 'meta' => [ 'must_be_outside', 'must_be_blocked' ],   'result' => [ ['group' => [ [['do_nothing', 'msg_heroic_arma_fail'], 50], [[ 'msg_heroic_arma_success', 'zone_escape_600_armag', 'kill_1_zombie_s' ], 50]]] ] ],
                 'special_armag_d'      => [ 'label' => 'Durchgang in Kraft', 'tooltip_key' => 'heroic_arma_tooltip', 'allow_when_terrorized' => true, 'meta' => [ 'must_be_outside', 'must_be_blocked', 'must_be_day'],   'result' => [ ['group' => [ [['do_nothing', 'msg_heroic_arma_fail'], 50], [['msg_heroic_arma_success', 'zone_escape_600_armag', 'kill_1_zombie_s' ], 50]]] ] ],
@@ -705,7 +708,7 @@ class ActionDataService implements FixtureProcessorInterface {
                     'watercan1_tl0', 'watercan1_tl1a', 'watercan1_tl1b', 'watercan1_tl2', 'watercan1_g'
                 ]],
                 'ex_eat'   => [ 'icon' => 'eat', 'label' => 'Essen', 'tooltip' => '{citizen} befehlen etwas zu essen.', 'actions' => [
-                    'eat_6ap', 'eat_7ap', 'eat_fleshroom_1', 'eat_fleshroom_2', 'eat_meat_1', 'eat_meat_2', 'eat_apple'
+                    'eat_6ap', 'eat_7ap', 'eat_7ap_hw_1', 'eat_7ap_hw_2', 'eat_fleshroom_1', 'eat_fleshroom_2', 'eat_meat_1', 'eat_meat_2', 'eat_apple'
                 ]],
             ],
 
@@ -751,7 +754,7 @@ class ActionDataService implements FixtureProcessorInterface {
                 'meat_#00'            => [ 'eat_7ap'],
                 'vegetable_tasty_#00' => [ 'eat_7ap'],
                 'dish_tasty_#00'      => [ 'eat_7ap'],
-                'food_candies_#00'    => [ 'eat_7ap'],
+                'food_candies_#00'    => [ 'eat_7ap_hw_1', 'eat_7ap_hw_2'],
                 'chama_tasty_#00'     => [ 'eat_7ap'],
                 'woodsteak_#00'       => [ 'eat_7ap'],
                 'egg_#00'             => [ 'eat_7ap'],
@@ -1004,6 +1007,8 @@ class ActionDataService implements FixtureProcessorInterface {
                 'photo_4_#00' => [ 'flash_photo_4', 'flash_photo_4_ruin_no_bp', 'flash_photo_4_ruin_bp', 'flash_photo_4_ruin_bp_free' ],
                 'cello_box_#00' => [ 'open_cellobox' ],
                 'flag_#00' => [ 'wagging_flag' ],
+
+                'scary_mask_#00' => ['scare']
             ],
 
             'items_nw' => [

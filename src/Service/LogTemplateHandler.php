@@ -2092,6 +2092,21 @@ class LogTemplateHandler
             ->setSecondaryCitizen( $defender );
     }
 
+    public function scaryMaskAttack( Citizen $attacker, Citizen $defender, bool $success ): TownLogEntry {
+        $variables = array('attacker' => $attacker->getId(), 'defender' => $defender->getId());
+        $template = $this->entity_manager->getRepository(LogEntryTemplate::class)->findOneBy(['name' => $success ? 'scaryMaskAttackSuccess' : 'scaryMaskAttack']);
+
+        return (new TownLogEntry())
+            ->setLogEntryTemplate($template)
+            ->setVariables($variables)
+            ->setTown( $attacker->getTown() )
+            ->setDay( $attacker->getTown()->getDay() )
+            ->setZone( $attacker->getZone() )
+            ->setTimestamp( new DateTime('now') )
+            ->setCitizen( $attacker )
+            ->setSecondaryCitizen( $defender );
+    }
+
     public function citizenTownGhoulAttack( Citizen $attacker, Citizen $defender ): TownLogEntry {
         $variables = array('attacker' => $attacker->getId(), 'defender' => $defender->getId());
         $template = $this->entity_manager->getRepository(LogEntryTemplate::class)->findOneBy(['name' => 'citizenTownGhoulAttack']);

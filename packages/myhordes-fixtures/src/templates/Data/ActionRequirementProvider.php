@@ -90,6 +90,7 @@ class ActionRequirementProvider
         $requirement_container->add()->identifier('not_yet_dice')->type( Requirement::CrossOnFail )->add( new StatusRequirement()->status('tg_dice', false) )->text_key('once_a_day')->commit();
         $requirement_container->add()->identifier('not_yet_card')->type( Requirement::CrossOnFail )->add( new StatusRequirement()->status('tg_cards', false) )->text_key('once_a_day')->commit();
         $requirement_container->add()->identifier('not_yet_teddy')->type( Requirement::CrossOnFail )->add( new StatusRequirement()->status('tg_teddy', false) )->text_key('once_a_day')->commit();
+        $requirement_container->add()->identifier('not_yet_scary')->type( Requirement::CrossOnFail )->add( new StatusRequirement()->status('tg_scary_mask', false) )->text_key('once_a_day')->commit();
 
         $requirement_container->add()->identifier('not_yet_guitar')->type( Requirement::MessageOnFail )->add( new StatusRequirement()->status('tg_guitar', false) )->text('Vorsicht, zu viel Musik ist schädlich, und einer deiner Mitbürger hat dieses Instrument heute bereits benutzt. Deine Ohren würden das nicht überleben.')->commit();
         $requirement_container->add()->identifier('not_yet_beta')->type( Requirement::CrossOnFail )->add( new StatusRequirement()->status('tg_betadrug', false) )->commit();
@@ -250,6 +251,9 @@ class ActionRequirementProvider
         //<editor-fold desc="ConfigRequirements">
         $requirement_container->add()->identifier('feature_camping')->type( Requirement::HideOnFail )->add( new ConfigRequirement()->config(TownSetting::OptFeatureCamping, true) )->commit();
         $requirement_container->add()->identifier('during_christmas')->type( Requirement::CrossOnFail )->add( new ConfigRequirement()->event('christmas') )->text_key('not_in_event')->commit();
+        $requirement_container->add()->identifier('during_halloween')->type( Requirement::CrossOnFail )->add( new ConfigRequirement()->event('halloween') )->text_key('not_in_event')->commit();
+        $requirement_container->add()->identifier('h_during_halloween')->type( Requirement::HideOnFail )->add( new ConfigRequirement()->event('halloween') )->commit();
+        $requirement_container->add()->identifier('h_not_during_halloween')->type( Requirement::HideOnFail )->add( new ConfigRequirement()->event('!halloween') )->commit();
         $requirement_container->add()->identifier('must_be_aprils_fools')->type( Requirement::CrossOnFail )->add( new ConfigRequirement()->event('afools') )->text_key('not_in_event')->commit();
         //</editor-fold>
 

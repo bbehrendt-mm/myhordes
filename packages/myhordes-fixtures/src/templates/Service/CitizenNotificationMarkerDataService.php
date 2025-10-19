@@ -16,6 +16,7 @@ class CitizenNotificationMarkerDataService implements FixtureProcessorInterface 
             'stranger',
             'altar',
             'cata',
+            'scared_mask'
         ]);
     }
 }

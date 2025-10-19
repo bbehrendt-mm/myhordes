@@ -20,6 +20,7 @@ use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
 #[AsEventListener(event: CitizenPostDeathEvent::class, method: 'onSpawnSouls',  priority: 0)]
 #[AsEventListener(event: CitizenPostDeathEvent::class, method: 'onUninstallGarlands',  priority: 5)]
+#[AsEventListener(event: CitizenPostDeathEvent::class, method: 'onCountFestiveItems',  priority: 10)]
 final class CitizenDeathListener implements ServiceSubscriberInterface
 {
     use ContainerTypeTrait;
@@ -69,6 +70,20 @@ final class CitizenDeathListener implements ServiceSubscriberInterface
 
         if ($installed_garlands > 0)
             $this->getService(PictoHandler::class)->give_validated_picto($event->citizen, "r_decofeist_#00", $installed_garlands);
+    }
+
+    public function onCountFestiveItems( CitizenPostDeathEvent $event ): void {
+        $found_items = 0;
+        $item_classes = [
+            'pumpkin_on_#00'
+        ];
+
+        foreach ( $event->citizen->getHome()->getChest()->getItems() as $item )
+            if (in_array($item->getPrototype()->getName(), $item_classes))
+                $found_items++;
+
+        if ($found_items > 0)
+            $this->getService(PictoHandler::class)->give_validated_picto($event->citizen, "r_decofeist_#00", $found_items);
     }
 
 }

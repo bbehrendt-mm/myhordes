@@ -5,6 +5,7 @@ namespace App\EventListener\Game\Action;
 
 use App\Entity\ActionCounter;
 use App\Entity\Citizen;
+use App\Entity\CitizenStatus;
 use App\Entity\EventActivationMarker;
 use App\Entity\ItemPrototype;
 use App\Entity\Zone;
@@ -137,6 +138,30 @@ final class BeyondItemActionListener implements ServiceSubscriberInterface
                     $event->cache->addTag('flare_fail');
                 }
                 break;
+
+            // Trick or treat, motherfucker
+            case 23: {
+
+                if (!$this->getService(EntityManagerInterface::class)->getRepository(EventActivationMarker::class)->findOneBy(['town' => $event->citizen->getTown(), 'active' => true, 'event' => 'halloween']))
+                    break;
+
+                $event->cache->setTargetCitizen($event->target);
+                $already_scared = $event->target->hasStatus('tg_was_scared');
+
+                $success = !$already_scared && !$event->target->hasStatus('terror') && $this->getService(RandomGenerator::class)->chance( 0.5 );
+
+                if ($success) {
+                    $this->getService(PictoHandler::class)->give_picto($event->citizen, 'r_decofeist_#00');
+                    $event->target->addStatus($this->getService(EntityManagerInterface::class)->getRepository(CitizenStatus::class)->findOneByName('terror'));
+                    $event->cache->addMessage(T::__('Du schleichst dich von hinten an {target} heran und es gelingt dir, ihm einen tierischen Schrecken einzujagen!', 'items'));
+                } else $event->cache->addMessage(T::__('Du schleichst dich von hinten an {target} heran. Dabei machst du allerdings so einen Lärm, dass {target} dich bereits frühzeitig bemerkt. Das hat wohl nicht geklappt...', 'items'));
+
+                if (!$already_scared) $event->target->addStatus($this->getService(EntityManagerInterface::class)->getRepository(CitizenStatus::class)->findOneByName('tg_was_scared'));
+                $this->getService(EntityManagerInterface::class)->persist( $this->getService(LogTemplateHandler::class)->scaryMaskAttack( $event->citizen, $event->target, $success ) );
+                $this->getService(EntityManagerInterface::class)->persist($event->target);
+
+                break;
+            }
 
             case 31:
                 /** @var Zone $zone */

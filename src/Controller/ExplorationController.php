@@ -10,10 +10,12 @@ use App\Entity\Zone;
 use App\Entity\ZoneActivityMarker;
 use App\Entity\ZonePrototype;
 use App\Enum\Configuration\TownSetting;
+use App\Enum\ItemDropType;
 use App\Enum\ScavengingActionType;
 use App\Enum\ZoneActivityMarkerType;
 use App\Response\AjaxResponse;
 use App\Service\ActionHandler;
+use App\Service\Actions\Game\CalculateItemDropAction;
 use App\Service\CitizenHandler;
 use App\Service\ConfMaster;
 use App\Service\CrowService;
@@ -59,7 +61,6 @@ class ExplorationController extends InventoryAwareController implements HookedIn
 {
 
     protected ZoneHandler $zone_handler;
-    protected ItemFactory $item_factory;
 
     /**
      * BeyondController constructor.
@@ -73,7 +74,6 @@ class ExplorationController extends InventoryAwareController implements HookedIn
      * @param TranslatorInterface $translator
      * @param GameFactory $gf
      * @param RandomGenerator $rg
-     * @param ItemFactory $if
      * @param ZoneHandler $zh
      * @param LogTemplateHandler $lh
      * @param ConfMaster $conf
@@ -89,11 +89,13 @@ class ExplorationController extends InventoryAwareController implements HookedIn
     public function __construct(
         EntityManagerInterface $em, InventoryHandler $ih, CitizenHandler $ch, ActionHandler $ah, TimeKeeperService $tk,
         DeathHandler $dh, PictoHandler $ph, TranslatorInterface $translator, GameFactory $gf, RandomGenerator $rg,
-        ItemFactory $if, ZoneHandler $zh, LogTemplateHandler $lh, ConfMaster $conf, Packages $a, UserHandler $uh,
-        CrowService $armbrust, TownHandler $th, DoctrineCacheService $doctrineCache, EventProxyService $events, HookExecutor $hookExecutor, UserUnlockableService $u)
+        ZoneHandler $zh, LogTemplateHandler $lh, ConfMaster $conf, Packages $a, UserHandler $uh,
+        CrowService $armbrust, TownHandler $th, DoctrineCacheService $doctrineCache, EventProxyService $events, HookExecutor $hookExecutor, UserUnlockableService $u,
+
+        private readonly CalculateItemDropAction $calculateItemDropAction,
+    )
     {
         parent::__construct($em, $ih, $ch, $ah, $dh, $ph, $translator, $lh, $tk, $rg, $conf, $zh, $uh, $armbrust, $th, $a, $doctrineCache, $events, $hookExecutor, $u);
-        $this->item_factory = $if;
         $this->zone_handler = $zh;
     }
 
@@ -178,44 +180,17 @@ class ExplorationController extends InventoryAwareController implements HookedIn
         if (!$ex->getInRoom() || $ex->getScavengedRooms()->contains( $ruinZone ))
             return AjaxResponse::error( BeyondController::ErrorNotDiggable );
 
-        $prototype = null;
-
         // Calculate chances
         $d = $ruinZone->getDigs() + 1;
         $chances = $proxyService->citizenQueryDigChance( $citizen, $ruinZone, ScavengingActionType::DigExploration, $this->getTownConf()->isNightMode() );
 
-        if ($this->random_generator->chance( $chances )) {
-            $group = $ruinZone->getZone()->getPrototype()->getDropByNames( $this->getTownConf()->get( TownSetting::OptModifierOverrideNamedDrops ) );
-
-            $redraw = false; $redraw_count = 0; $itemMarkerType = null;
-            do {
-                $redraw_count++;
-                $prototype = $group ? $this->random_generator->pickItemPrototypeFromGroup( $group, $this->getTownConf(), $this->conf->getCurrentEvents( $citizen->getTown() ) ) : null;
-
-                $itemMarkerType = $prototype ? ZoneActivityMarkerType::scavengedItemIncurs( $prototype ) : null;
-                $itemLimit = $itemMarkerType?->configuredLimit( $this->getTownConf() ) ?? -1;
-
-                if ($itemLimit >= 0 && $itemMarkerType)
-                    $redraw = $ruinZone->getZone()->getActivityMarkersFor( $itemMarkerType )->count() >= ($itemLimit * ($ruinZone->getZ()+1));
-                else $redraw = false;
-
-                if ($redraw && $redraw_count >= 10) $prototype = null;
-
-            } while ($redraw && $redraw_count < 10);
-
-            if ($itemMarkerType && $prototype) $this->entity_manager->persist($ruinZone->getZone()->addActivityMarker( (new ZoneActivityMarker())
-                ->setCitizen( $citizen )
-                ->setTimestamp( new DateTime() )
-                ->setType( $itemMarkerType )
-            ));
-        }
+        $item = $this->random_generator->chance( $chances )
+            ? ($this->calculateItemDropAction)($citizen, $ruinZone, ItemDropType::ERuinDig)
+            : null;
 
         $ruinZone->setDigs( $ruinZone->getDigs() + 1 );
 
-        $gps->recordDigResult($prototype, $citizen, $ruinZone->getZone()->getPrototype(), 'eruin_scavenge');
-        if ($prototype) {
-            $item = $this->item_factory->createItem($prototype, false, $prototype->hasProperty("found_poisoned") && $this->random_generator->chance(0.90));
-            $gps->recordItemFound( $prototype, $citizen, $ruinZone->getZone()->getPrototype() );
+        if ($item) {
             $noPlaceLeftMsg = "";
             // $inventoryDest = $proxyService->placeItem($citizen, $item, [$citizen->getInventory(), $ruinZone->getRoomFloor()]);
             $inventoryDest = $proxyService->placeItem($citizen, $item, [$citizen->getInventory(), $ruinZone->getFloor()]);
@@ -228,7 +203,7 @@ class ExplorationController extends InventoryAwareController implements HookedIn
             $this->entity_manager->persist($ruinZone->getFloor());
 
             $this->addFlash( 'notice', $this->translator->trans( 'Du hast {item} gefunden, als du die schmutzigen Ecken dieses elenden Ortes durchsucht hast!', [
-                    '{item}' => "<span class='tool'><img alt='' src='{$this->asset->getUrl( 'build/images/item/item_' . $prototype->getIcon() . '.gif' )}'> {$this->translator->trans($prototype->getLabel(), [], 'items')}</span>"
+                    '{item}' => "<span class='tool'><img alt='' src='{$this->asset->getUrl( 'build/images/item/item_' . $item->getPrototype()->getIcon() . '.gif' )}'> {$this->translator->trans($item->getPrototype()->getLabel(), [], 'items')}</span>"
                 ], 'game' ) . "$noPlaceLeftMsg");
         } else {
             $messages = [ $this->translator->trans('Trotz all deiner Anstrengungen hast du hier leider nichts gefunden ...', [], 'game') ];
