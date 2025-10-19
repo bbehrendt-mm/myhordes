@@ -2975,7 +2975,7 @@ Schritt-Punkte: crwdns225282:0crwdne225282:0
 Benötigt: crwdns225316:0crwdne225316:0
 Freischalten: crwdns225318:0crwdne225318:0
 'Einwohner in der Stadt': 'crwdns225320:0crwdne225320:0'
-'{days} Tage überlebt in "{town}"': 'crwdns225322:0{days}crwdnd225322:0{town}crwdne225322:0'
+'{days} Tage überlebt in "{town}"': 'crwdns252510:0raw_days={raw_days}crwdnd252510:0town={town}crwdne252510:0'
 'Fähigkeit erworben': 'crwdns225324:0crwdne225324:0'
 'Rudimentärer Schutz': 'crwdns225326:0crwdne225326:0'
 'Dank der Hilfe eines anderen Bürgers wirst du diese Nacht keine Durst- oder Krankheitssymptome verspüren.': 'crwdns225328:0crwdne225328:0'

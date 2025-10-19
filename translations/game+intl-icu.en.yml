@@ -736,7 +736,7 @@ Headshot: Headshot
 'Du hast {count} Aktionspunkt(e) benutzt.': 'You have used {count} action point(s).'
 'Du vollführst einen Schamanentanz und betest zum Himmel, dass er Regen bringen und diese unselige Zone reinigen möge.': 'You perform a shamanic dance and plead to the sky to bring rain to cleanse this zone of evil spirits.'
 'Doch nichts passiert... Soviel steht fest, du stehst nun wie ein lausiger Amateur da. Außer Blasen an den Füßen hat das alles nichts eingebracht...': 'But nothing happens. Admittedly, for anyone watching, you looked like the worst kind of amateur. To add insult to injury, you''ve given yourself blisters on your feet...'
-'Und die Energie, die in diesen Tanz gesteckt wurde, zahlt sich schließlich aus, die ersten Tropfen fallen auf die Zombies und du genießt diesen delikaten Moment, in dem ihr Fleisch wie Schnee in der Sonne schmilzt und du geduldig wartest, bis sich ihre Körper verflüssigen.': 'and the energy invested in this dance finally pays off, the first drops of rain fall on the zombies and their flesh melts like snow in the sunshine and you watch and wait until their bodies are completely liquefied.'
+'Und die Energie, die in diesen Tanz gesteckt wurde, zahlt sich schließlich aus, die ersten Tropfen fallen auf die Zombies und du genießt diesen delikaten Moment, in dem ihr Fleisch wie Schnee in der Sonne schmilzt und du geduldig wartest, bis sich ihre Körper verflüssigen.': 'And the energy poured into this dance finally pays off as the first drops of rain fall upon the zombies, and their flesh melts like snow under the sun. You watch and wait until their bodies are completely liquefied.'
 'Ob durch deine Kräfte oder unverschämtes Wetterglück, dicke Regentropfen fallen auf die Stadt herab und füllen ein wenig den Brunnen auf.': 'And be it mastery of the spirit world or blind meteorological fortune, drops of rain fall on the town, adding fresh drinking water to the well.'
 '...der Mörder .. ist.. IST.. AAARGHhh..': '...the murderer .. was.. WAS.. AAARGHhh..'
 'In diesem Thread dreht sich alles um die Bank.': 'Use this subject for discussions involving the town Bank...'
@@ -1067,7 +1067,7 @@ Quarantäne: Quarantine
 'Der letzte Tote erhält nur dann eine Belohnung, wenn er 5 volle Tage überlebt hat.': 'The last dead person will only receive a reward if they have survived 5 full days.'
 'Mit den anderen Bürgern reden...': 'Speak to the other citizens in your town and get organized if you want to survive...'
 "Lesen und Nutzen des Forums sind in 'MyHordes' überlebensnotwendig! Die wichtigen Entscheidungen der Stadt werden hier gemeinsam von der Community getroffen.": "Reading and chatting on the forums is critical in 'MyHordes'! That's where all the important decisions are made, by the community itself."
-'Deine gesamte Geschichte basiert auf deinen zuvor gespielten Städten...': 'Your personal story built from all your previous lives ...'
+'Deine gesamte Geschichte basiert auf deinen zuvor gespielten Städten...': 'Your personal story, built from all your previous lives...'
 'Spielhilfe aufrufen.': 'Check the online game guide for ''MyHordes''.'
 'Hast du schon unter "Wie wird gespielt" nachgeschaut? Du findest den Link darauf unter der Karte der Stadt.': 'Have you looked under "How to play"? You can find the link under the town map.'
 'Das Leichsblatt: Hier findet ihr alle Neuigkeiten, über das, was gestern in der Stadt passiert ist...': 'The News Corpse: if you want to know everything that went on in town last night...'
@@ -2975,7 +2975,7 @@ Schritt-Punkte: Exploration Points
 Benötigt: Required
 Freischalten: Unlock
 'Einwohner in der Stadt': 'Citizens in the town'
-'{days} Tage überlebt in "{town}"': '{days} days survived in "{town}"'
+'{days} Tage überlebt in "{town}"': '{raw_days, plural, one {**One** day} other {**#** days}} survived in "{town}"'
 'Fähigkeit erworben': 'Skill acquired'
 'Rudimentärer Schutz': 'Rudimentary protection'
 'Dank der Hilfe eines anderen Bürgers wirst du diese Nacht keine Durst- oder Krankheitssymptome verspüren.': 'Thanks to the help of another citizen, you will not experience any symptoms of thirst or illness this night.'

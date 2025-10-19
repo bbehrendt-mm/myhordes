@@ -2975,7 +2975,7 @@ Schritt-Punkte: Point d'Exploration
 Benötigt: Nécessaire
 Freischalten: Déverrouiller
 'Einwohner in der Stadt': 'Citoyens de la ville'
-'{days} Tage überlebt in "{town}"': '{days} jours survécu dans "{town}"'
+'{days} Tage überlebt in "{town}"': '{raw_days, plural, =0 {**#** jours survécus} one {**Une** journée survécue} other {**#** jours survécus}} dans "{town}"'
 'Fähigkeit erworben': 'Compétence acquise'
 'Rudimentärer Schutz': 'Protection rudimentaire'
 'Dank der Hilfe eines anderen Bürgers wirst du diese Nacht keine Durst- oder Krankheitssymptome verspüren.': 'Grâce à l''aide d''un autre citoyen, vous ne ressentirez aucun symptôme de soif ou de maladie cette nuit.'

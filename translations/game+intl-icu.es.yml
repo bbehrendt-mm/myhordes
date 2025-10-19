@@ -2975,7 +2975,7 @@ Schritt-Punkte: Punto de Exploración
 Benötigt: Necesario
 Freischalten: Desbloquear
 'Einwohner in der Stadt': 'Habitantes del pueblo'
-'{days} Tage überlebt in "{town}"': '{days} días sobrevivieron en "{town}"'
+'{days} Tage überlebt in "{town}"': '{raw_days, plural, =0 {**#** días} one {**Un** día} other {**#** días}} sobrevivieron en "{town}"'
 'Fähigkeit erworben': 'Habilidad adquirida'
 'Rudimentärer Schutz': 'Protección rudimentaria'
 'Dank der Hilfe eines anderen Bürgers wirst du diese Nacht keine Durst- oder Krankheitssymptome verspüren.': 'Gracias al cuidado de otro habitante, esta noche no sentirás ningún síntoma de sed o enfermedad.'
