@@ -1158,6 +1158,11 @@ Larven-Marmelade: Larvae Jam
 'Ein köstlicher Insektenbrei, der sehr nahrhaft ist. Er ist knusprig und gleichzeitig wirklich saftig!': 'A delicious insect porridge, utterly nourishing. It''s crunchy and truly succulent!'
 'Ein köstliches Protein-Dessert! Anscheinend ist es besser, wenn es sich noch bewegt...': 'A delicious protein dessert! Apparently, it''s better when it''s moving...'
 'Reinigen (1AP) (Wasser)': 'Clean (1AP)'
+'Du schleichst dich von hinten an {target} heran und es gelingt dir, ihm einen tierischen Schrecken einzujagen!': 'You creep up to {target} and manage to scare {target__gender, select, female {her} other {him}} almost to death!'
+'Du schleichst dich von hinten an {target} heran. Dabei machst du allerdings so einen Lärm, dass {target} dich bereits frühzeitig bemerkt. Das hat wohl nicht geklappt...': 'You creep up to {target}, but thanks to your complete lack of subtlety {target} notices you almost instantly. Guess that didn''t work out...'
+Erschrecken: Scare
+'Schaurige Maske': 'Creepy Mask'
+'Irgendwie erinnert diese Maske dich an jemanden...': 'Somehow this mask reminds you of someone...'
 Besinnen: Reflect
 'Du nimmst dir einen Moment Zeit, um zur Ruhe zu kommen und dich auf das wesentliche zu besinnen.': 'You take a moment to calm down and reflect on what is important.'
 'Zone ausheben': 'Excavate zone'

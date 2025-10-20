@@ -1158,6 +1158,11 @@ Larven-Marmelade: Marmelarve
 'Ein köstlicher Insektenbrei, der sehr nahrhaft ist. Er ist knusprig und gleichzeitig wirklich saftig!': 'Une délicieuse bouillie d''insectes, tout ce qu''il y a de plus nourrissante. Ça croque sous la dent, c''est vraiment succulent !'
 'Ein köstliches Protein-Dessert! Anscheinend ist es besser, wenn es sich noch bewegt...': 'Un succulent dessert protéiné ! Il paraît que c''est meilleur quand ça bouge...'
 'Reinigen (1AP) (Wasser)': 'Purifier (1PA)'
+'Du schleichst dich von hinten an {target} heran und es gelingt dir, ihm einen tierischen Schrecken einzujagen!': 'Vous vous approchez furtivement de {target} par derrière et réussissez à lui faire une peur bleue !'
+'Du schleichst dich von hinten an {target} heran. Dabei machst du allerdings so einen Lärm, dass {target} dich bereits frühzeitig bemerkt. Das hat wohl nicht geklappt...': 'Vous vous approchez furtivement de {target} par derrière. Mais vous faites tellement de bruit que {target} vous remarque rapidement. Ça n''a pas marché...'
+Erschrecken: Effrayer
+'Schaurige Maske': 'Masque effrayant'
+'Irgendwie erinnert diese Maske dich an jemanden...': 'D''une certaine manière, ce masque vous rappelle quelqu''un...'
 Besinnen: Se recueillir
 'Du nimmst dir einen Moment Zeit, um zur Ruhe zu kommen und dich auf das wesentliche zu besinnen.': 'Vous prenez un moment pour vous calmer et vous concentrer sur l''essentiel.'
 'Zone ausheben': 'Excaver la zone'
