@@ -85,7 +85,7 @@ final class BuildingEffectListener implements ServiceSubscriberInterface
                 $water_needed = [0,2,4,6,9,12][ $event->building->getLevel() ] ?? 12;
                 if ($event->town->getWell() >= $water_needed)
                     $event->waterDeducted += $water_needed;
-                else $event->building->setTempDefenseBonus(0 - $event->building->getDefense() - $event->building->getDefenseBonus());
+                else $event->building->setTempDefenseBonus(0 - $event->building->getDefenseBonus());
 
                 break;
 
