@@ -6,10 +6,12 @@ namespace App\EventListener\Game\Town\Basic\Well;
 
 use App\Controller\Town\TownController;
 use App\Entity\ItemPrototype;
+use App\Enum\ClientSignal;
 use App\Event\Game\Town\Basic\Well\WellInsertionCheckEvent;
 use App\Event\Game\Town\Basic\Well\WellInsertionExecuteEvent;
 use App\Service\ErrorHelper;
 use App\Service\EventProxyService;
+use App\Service\Globals\ResponseGlobal;
 use App\Service\InventoryHandler;
 use App\Service\LogTemplateHandler;
 use App\Structures\ItemRequest;
@@ -42,6 +44,7 @@ final class WellInsertionCommonListener implements ServiceSubscriberInterface
             EventProxyService::class,
             EntityManagerInterface::class,
             LogTemplateHandler::class,
+            ResponseGlobal::class,
         ];
     }
 
@@ -107,6 +110,7 @@ final class WellInsertionCommonListener implements ServiceSubscriberInterface
                         $event->check->consumable->getInventory()
                     )) !== InventoryHandler::ErrorNone) $event->pushErrorCode( $error )->stopPropagation();
         }
+        $this->container->get( ResponseGlobal::class )->withSignal( ClientSignal::InventoryUpdated );
 
         $event->markModified();
     }
