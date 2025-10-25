@@ -142,7 +142,7 @@ final class BeyondItemActionListener implements ServiceSubscriberInterface
             // Trick or treat, motherfucker
             case 23: {
 
-                if (!$this->getService(EntityManagerInterface::class)->getRepository(EventActivationMarker::class)->findOneBy(['town' => $event->citizen->getTown(), 'active' => true, 'event' => 'halloween']))
+                if (!$event->target || !$this->getService(EntityManagerInterface::class)->getRepository(EventActivationMarker::class)->findOneBy(['town' => $event->citizen->getTown(), 'active' => true, 'event' => 'halloween']))
                     break;
 
                 $event->cache->setTargetCitizen($event->target);
