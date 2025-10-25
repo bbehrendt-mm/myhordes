@@ -687,11 +687,11 @@ Verkaufswert: Valor de venta
 '1 Stadt': '1 pueblo'
 'Icon-Zoom auch auf Desktop-Geräten verwenden': 'Utilice el zoom de iconos también en dispositivos de escritorio'
 'Ist diese Option aktiviert, wird die oben eingestellte Zoom-Größe für Icons nicht nur auf mobilen, sondern auch auf Desktop-Geräten angewendet.': 'Si esta opción está habilitada, el tamaño de zoom del ícono establecido anteriormente se aplicará no solo en dispositivos móviles sino también en dispositivos de escritorio.'
-'Layout des Spiels': 'Layout des Spiels'
-'Diese Einstellung funktioniert nur auf mobilen Geräten. Üblicherweise wird das Layout des Spiels durch die Bildschirmgröße deines Geräts gesteuert. Falls du ein bestimmtes Layout bevorzugst, welches nicht der Bildschirmgröße deines Gerätes entspricht, kannst du dieses hier erzwingen.': 'Diese Einstellung funktioniert nur auf mobilen Geräten. Üblicherweise wird das Layout des Spiels durch die Bildschirmgröße deines Geräts gesteuert. Falls du ein bestimmtes Layout bevorzugst, welches nicht der Bildschirmgröße deines Gerätes entspricht, kannst du dieses hier erzwingen.'
+'Layout des Spiels': 'Visualización del juego'
+'Diese Einstellung funktioniert nur auf mobilen Geräten. Üblicherweise wird das Layout des Spiels durch die Bildschirmgröße deines Geräts gesteuert. Falls du ein bestimmtes Layout bevorzugst, welches nicht der Bildschirmgröße deines Gerätes entspricht, kannst du dieses hier erzwingen.': 'Esta configuración solo funciona en dispositivos móviles. Normalmente, la disposición del juego se ajusta al tamaño de la pantalla de tu dispositivo. Si prefieres una disposición específica que no coincida con el tamaño de tu pantalla, puedes forzarla aquí.'
 'Automatisch (empfohlen)': 'Automatisch (empfohlen)'
-Smartphone-Layout: Smartphone-Layout
-Phablet-Layout: Phablet-Layout
-Tablet-Layout: Tablet-Layout
-'Desktop-Layout (Vollbild)': 'Desktop-Layout (Vollbild)'
-'Desktop-Layout (Normal)': 'Desktop-Layout (Normal)'
+Smartphone-Layout: Diseño para smartphone
+Phablet-Layout: Diseño para tableta grande (o gran smartphone)
+Tablet-Layout: Diseño para tablet
+'Desktop-Layout (Vollbild)': 'Diseño para escritorio (pantalla completa)'
+'Desktop-Layout (Normal)': 'Diseño para escritorio (normal)'
