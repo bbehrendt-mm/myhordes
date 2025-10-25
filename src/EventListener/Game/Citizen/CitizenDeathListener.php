@@ -73,17 +73,17 @@ final class CitizenDeathListener implements ServiceSubscriberInterface
     }
 
     public function onCountFestiveItems( CitizenPostDeathEvent $event ): void {
-        $found_items = 0;
+        $found_items = [];
         $item_classes = [
             'pumpkin_on_#00'
         ];
 
         foreach ( $event->citizen->getHome()->getChest()->getItems() as $item )
             if (in_array($item->getPrototype()->getName(), $item_classes))
-                $found_items++;
+                $found_items[] = $item->getPrototype()->getName();
 
         if ($found_items > 0)
-            $this->getService(PictoHandler::class)->give_validated_picto($event->citizen, "r_decofeist_#00", $found_items);
+            $this->getService(PictoHandler::class)->give_validated_picto($event->citizen, "r_decofeist_#00", count(array_unique( $found_items )));
     }
 
 }

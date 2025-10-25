@@ -306,14 +306,21 @@ final class TransferItemListener implements ServiceSubscriberInterface
                     return;
                 }
 
-                if ($this->getService(InventoryHandler::class)->countSpecificItems($victim->getHome()->getChest(), "scary_mask_#00") > 0) {
+                if ($this->getService(InventoryHandler::class)->countSpecificItems($victim->getHome()->getChest(), "haunting_soul", true) > 0) {
 
                     if ($this->getService(EntityManagerInterface::class)->getRepository(EventActivationMarker::class)->findOneBy(['town' => $event->town, 'active' => true, 'event' => 'halloween'])) {
                         $event->pushError(
                             InventoryHandler::ErrorStealBlocked,
-                            $this->getService(TranslatorInterface::class)->trans('Als du gerade zugreifen willst, fällt dein Blick auf eine an der Wand aufgehängte krude Maske. Du erschreckst dich zu Tode und flüchtest, ohne etwas stehlen zu können!', ['victim' => $victim->getName()], 'game'),
+                            $this->getService(TranslatorInterface::class)->trans('Als du gerade zugreifen willst, hörst du ein schauriges Lachen aus einer dunklen Ecke. Du erschreckst dich zu Tode und flüchtest, ohne etwas stehlen zu können!', ['victim' => $victim->getName()], 'game'),
                         );
-                        $this->getService(PictoHandler::class)->give_picto($victim, 'r_decofeist_#00');
+
+                        $counter = $event->actor->getSpecificActionCounter( ActionCounterType::ScaryIntrusionFrom, $victim->getId() );
+
+                        if ($counter->getCount() <= 0)
+                            $this->getService(PictoHandler::class)->give_picto($victim, 'r_decofeist_#00');
+
+                        $this->getService(EntityManagerInterface::class)->persist($counter->increment());
+
                         $this->getService(CitizenHandler::class)->inflictStatus($event->actor, 'terror');
                         $this->getService(CitizenHandler::class)->inflictStatus($event->actor, 'tg_steal');
                         $this->getService(EntityManagerInterface::class)->persist($victim);

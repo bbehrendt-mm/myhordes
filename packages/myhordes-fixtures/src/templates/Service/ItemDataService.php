@@ -395,7 +395,7 @@ class ItemDataService implements FixtureProcessorInterface {
         $container->add()->label('Handvoll gewürzte Insekten')->icon('moldy_food_spicy')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->commit(); // Spicy moldy food
         $container->add()->label('Larven-Marmelade')->icon('moldy_food_part')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->commit(); // Spicy moldy food
         $container->add()->label('Krabbelnde Krümel')->icon('moldy_food')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->commit(); // Spicy moldy food
-        $container->add()->label('Schaurige Maske')->icon('scary_mask')->category('Misc')->deco(2)->heavy(false)->watchpoint(0)->hideInForeignChest(true)->commit(); // Scary Mask
+        $container->add()->label('Schaurige Maske')->icon('scary_mask')->category('Misc')->deco(5)->heavy(false)->watchpoint(0)->commit(); // Scary Mask
 
         $container->modify('water_#00')->description('Das Wasser gibt dir einmal pro Tag deine Aktionpunkte zurück oder löscht alternativ deinen Durst (unbegrenzt).')->commit();
         $container->modify('pile_#00')->description('Die Batterie ist für vieles nützlich. Allerdings ist sie auch ziemlich schnell leer ...')->commit();

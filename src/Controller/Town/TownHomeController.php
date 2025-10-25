@@ -165,6 +165,10 @@ class TownHomeController extends TownController
                     case PrivateMessage::TEMPLATE_CROW_GAME_WELCOME:
                         $thread->setTitle( $this->translator->trans('Willkommen in deiner ersten Stadt', [], 'game') );
                         break;
+                    case PrivateMessage::TEMPLATE_CROW_HALLOWEEN_INFECT:
+                    case PrivateMessage::TEMPLATE_CROW_HALLOWEEN_TERROR:
+                        $thread->setTitle( $this->translator->trans('Eine schaurige Nacht!', [], 'game') );
+                        break;
 
                     default: break;
                 }

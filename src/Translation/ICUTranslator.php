@@ -38,10 +38,11 @@ class ICUTranslator implements TranslatorInterface, TranslatorBagInterface, Loca
             'ref__gender' => 'none'
         ];
 
-        $got_citizen = false;
         $no_md = false;
 
         foreach ($parameters as $key => $value) {
+
+            if ($value === null) continue;
 
             if ($key === '__no_md') {
                 $no_md = $value;
@@ -49,28 +50,27 @@ class ICUTranslator implements TranslatorInterface, TranslatorBagInterface, Loca
             }
 
             $key = str_replace(['{','}'],'', $key);
+            $raw = false;
+            if (str_ends_with($key, '__raw')) {
+                $key = substr($key, 0, -5);
+                $raw = true;
+            }
             if (is_a( $value, User::class )) {
                 /** @var User $value */
-                $pass_trough["{$key}__gender"] = static::$gender_map[(int)$value->getPreferredPronoun()];
-                if (!$got_citizen) {
-                    $pass_trough["ref__gender"] = $pass_trough["{$key}__gender"];
-                    $got_citizen = true;
-                }
-                $pass_trough[$key] = $value->getName();
+                $pass_trough["{$key}__gender"] ??= static::$gender_map[(int)$value->getPreferredPronoun()];
+                $pass_trough["ref__gender"] ??= $pass_trough["{$key}__gender"];
+                if (!$raw) $pass_trough[$key] = $value->getName();
             } elseif (is_a( $value, Citizen::class )) {
                 /** @var Citizen $value */
-                $pass_trough["{$key}__gender"] = static::$gender_map[(int)$value->getUser()->getPreferredPronoun()];
-                if (!$got_citizen) {
-                    $pass_trough["ref__gender"] = $pass_trough["{$key}__gender"];
-                    $got_citizen = true;
-                }
-                $pass_trough[$key] = $value->getName();
-            } elseif (!is_array( $value )) {
+                $pass_trough["{$key}__gender"] ??= static::$gender_map[(int)$value->getUser()->getPreferredPronoun()];
+                $pass_trough["ref__gender"] ??= $pass_trough["{$key}__gender"];
+                if (!$raw) $pass_trough[$key] = $value->getName();
+            } elseif (!is_array( $value ) && !$raw) {
                 $pass_trough[$key] = $value;
                 $pass_trough["{$key}__copy"] = $value;
             }
 
-            if (isset($parameters["{$key}__tag"])) {
+            if (!$raw && isset($parameters["{$key}__tag"])) {
                 $attr = '';
                 if (isset($parameters["{$key}__attr"]))
                     $attr = is_array( $parameters["{$key}__attr"] )

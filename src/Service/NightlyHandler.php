@@ -13,6 +13,7 @@ use App\Entity\CitizenVote;
 use App\Entity\CitizenWatch;
 use App\Entity\CouncilEntryTemplate;
 use App\Entity\EscapeTimer;
+use App\Entity\EventActivationMarker;
 use App\Entity\Gazette;
 use App\Entity\GazetteEntryTemplate;
 use App\Entity\GazetteLogEntry;
@@ -1287,6 +1288,19 @@ class NightlyHandler
                 $this->citizen_handler->inflictStatus($citizen, 'tg_air_ghoul');
                 if ($this->conf->getTownConfiguration( $town )->get( TownSetting::OptFeatureGhoulsHungry ))
                     $citizen->setGhulHunger(45);
+            }
+
+            // Halloween event
+            if ($this->entity_manager->getRepository(EventActivationMarker::class)->findOneBy(['town' => $town, 'active' => true, 'event' => 'halloween'])) {
+
+                if ( $this->random->chance(0.5) && $this->inventory_handler->countSpecificItems($citizen->getHome()->getChest(), "angry_soul", true) > 0 ) {
+                    $this->citizen_handler->inflictStatus($citizen, 'infection');
+                    $this->crow->postAsPM($citizen, '', '', PrivateMessage::TEMPLATE_CROW_HALLOWEEN_INFECT);
+                } elseif ( $this->random->chance(0.5) && $this->inventory_handler->countSpecificItems($citizen->getHome()->getChest(), "haunting_soul", true) > 0 ) {
+                    $this->citizen_handler->inflictStatus($citizen, 'terror');
+                    $this->crow->postAsPM($citizen, '', '', PrivateMessage::TEMPLATE_CROW_HALLOWEEN_TERROR);
+                }
+
             }
         }
 
