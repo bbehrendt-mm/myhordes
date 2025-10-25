@@ -1,0 +1,24 @@
+{% block title%}Halloween {{ year }} !{% endblock %}
+{% block content %}
+    <p>
+        Cette année, Halloween sera particulièrement effrayant !
+    </p>
+    <p>
+        Avec un peu de chance, vous trouverez quelque chose dans le désert que vous pourrez utiliser pour effrayer vos
+        concitoyens !
+    </p>
+
+    <p>
+        De plus, pendant l'événement, vous pouvez déposer des âmes dans votre maison pour la protéger des cambrioleurs.
+        Mais y a-t-il des inconvénients à dormir à côté de l'âme d'un défunt la nuit ?
+    </p>
+    <p>
+        Et si la lutte quotidienne pour survivre aux hordes de morts-vivants ne vous effraie pas encore assez, décorez
+        simplement votre maison avec des citrouilles !
+    </p>
+    <p>
+        <b>L'événement Halloween de cette année</b> commence le
+        {{ date_begin|format_datetime('medium', 'none', '', null, 'gregorian', 'de') }} et se termine le
+        {{ date_end|format_datetime('medium', 'none', '', null, 'gregorian', 'de') }}.
+    </p>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% block title%}Halloween {{ year }}!{% endblock %}
+{% block content %}
+    <p>
+        Dieses Jahr ist Halloween besonders gruselig!
+    </p>
+    <p>
+        Mit etwas Glück findet ihr etwas in der Wüste, dass ihr verwenden könnt, um euren Mitbürgern einen gehörigen
+        Schrecken einzujagen!
+    </p>
+
+    <p>
+        Zudem könnt ihr während des Events Seelen in eurem Haus deponieren, um es vor Einbrechern zu schützen. Ob es
+        wohl auch Nachteile mit sich bringt, nachts neben der Seele eines Toten zu schlafen...?
+    </p>
+    <p>
+        Und falls euch der tägliche Überlebenskampf gegen die untoten Horden noch nicht gruselig genug ist,
+        schmückt euer Haus doch einfach mit Kürbissen!
+    </p>
+
+    <p>
+        <b>Das diesjährige Halloween-Event</b> wird vom
+        {{ date_begin|format_datetime('medium', 'none', '', null, 'gregorian', 'de') }} bis zum
+        {{ date_end|format_datetime('medium', 'none', '', null, 'gregorian', 'de') }} andauern.
+    </p>
+{% endblock %}

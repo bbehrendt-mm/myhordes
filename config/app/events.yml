@@ -70,8 +70,8 @@ parameters:
     halloween:
       trigger:
         type: datetime
-        begin: 10-25 00:00
-        end: 11-01 00:00
+        begin: 10-27 00:00
+        end: 11-03 00:00
       conf:
         name: 'Halloween'
         priority: 104
