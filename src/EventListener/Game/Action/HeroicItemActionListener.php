@@ -250,7 +250,7 @@ final class HeroicItemActionListener implements ServiceSubscriberInterface
             }
 
             // Scavenger
-            case 23:
+            case 24:
                 if ($this->getService(RegenerateZoneAction::class)($event->citizen->getZone(), 1, true, false))
                     $this->getService(EntityManagerInterface::class)->persist( $event->citizen->getZone()->setForceRegenerated(true) );
                 break;

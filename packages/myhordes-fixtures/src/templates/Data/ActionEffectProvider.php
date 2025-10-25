@@ -640,7 +640,7 @@ class ActionEffectProvider
         $effects_container->add()->identifier('hero_tamer_1b')->add(new CustomEffect()->effectIndex(16))->commit();
         $effects_container->add()->identifier('hero_tamer_2b')->add(new CustomEffect()->effectIndex(17))->commit();
 
-        $effects_container->add()->identifier('hero_scavenger')->add(new CustomEffect()->effectIndex(23))->commit();
+        $effects_container->add()->identifier('hero_scavenger')->add(new CustomEffect()->effectIndex(24))->commit();
 
         $effects_container->add()->identifier('vote_role_shaman')->add(new CustomEffect()->effectIndex(5001))->commit();
         $effects_container->add()->identifier('vote_role_guide')->add(new CustomEffect()->effectIndex(5002))->commit();
