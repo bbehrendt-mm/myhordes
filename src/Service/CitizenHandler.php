@@ -16,6 +16,7 @@ use App\Entity\CitizenStatus;
 use App\Entity\CitizenWatch;
 use App\Entity\Complaint;
 use App\Entity\EscapeTimer;
+use App\Entity\EventActivationMarker;
 use App\Entity\HeroSkillPrototype;
 use App\Entity\Inventory;
 use App\Entity\Item;
@@ -26,6 +27,7 @@ use App\Entity\PrivateMessage;
 use App\Entity\PrivateMessageThread;
 use App\Entity\Town;
 use App\Entity\Zone;
+use App\Enum\ActionCounterType;
 use App\Enum\ActionHandler\PointType;
 use App\Enum\Configuration\CitizenProperties;
 use App\Enum\Configuration\TownSetting;
@@ -874,7 +876,8 @@ class CitizenHandler
         return $all;
     }
 
-    public function houseIsProtected(Citizen $c, bool $only_explicit_lock = false, Citizen $thief = null) {
+    public function houseIsProtected(Citizen $c, bool $only_explicit_lock = false, Citizen $thief = null): bool
+    {
         if (!$c->getAlive()) return false;
         if (!$c->getZone() && !$thief?->property( CitizenProperties::EnableAdvancedTheft ) && !$only_explicit_lock) return true;
         if ($c->getHome()->getPrototype()->getTheftProtection()) return true;
@@ -885,6 +888,13 @@ class CitizenHandler
             return true;
         if ($this->inventory_handler->countSpecificItems( $c->getHome()->getChest(), 'lock', true, false ) > 0)
             return true;
+
+        dump($thief);
+        if (
+            $this->entity_manager->getRepository(EventActivationMarker::class)->findOneBy(['town' => $c->getTown(), 'active' => true, 'event' => 'halloween']) &&
+            $this->inventory_handler->countSpecificItems($c->getHome()->getChest(), "haunting_soul", true) > 0 &&
+            $thief?->getSpecificActionCounterValue( ActionCounterType::ScaryIntrusionFrom, $c->getId() ) > 0
+        ) return true;
         return false;
     }
 
