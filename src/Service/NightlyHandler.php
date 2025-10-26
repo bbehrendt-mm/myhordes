@@ -1494,8 +1494,8 @@ class NightlyHandler
                 $this->maze->populateMaze( $zone, $maze_zeds * $zone->getExplorableFloorFactor(), true, true );
             }
 
-            $distance = sqrt( pow($zone->getX(),2) + pow($zone->getY(),2) );
-            if ($zone->getCitizens()->count() || round($distance) <= $discover_range) {
+            $distance = $zone->getDistance();
+            if ($zone->getCitizens()->count() || $distance <= $discover_range) {
                 if ($zone->getDiscoveryStatus() !== Zone::DiscoveryStateCurrent) {
                     $this->log->debug( "Zone <info>{$zone->getX()}/{$zone->getY()}</info>: Set discovery state to <info>current</info>." );
                     $zone->setDiscoveryStatus(Zone::DiscoveryStateCurrent);
@@ -1507,7 +1507,7 @@ class NightlyHandler
                 $zone->setZombieStatus( Zone::ZombieStateUnknown );
             }
 
-            if ($zone->getDirection() === $wind && round($distance) > $wind_dist) {
+            if ($zone->getDirection() === $wind && $distance > $wind_dist) {
                 $this->attemptRegenZone($reco_counter, $zone, $town, $recovery_chance);
             }
 
