@@ -516,7 +516,7 @@ class ActionDataService implements FixtureProcessorInterface {
 
 
                 'throw_sandball' => [ 'label' => 'Werfen', /* 'target' => ['type' => ItemTargetDefinition::ItemCitizenOnZoneSBType], */ 'meta' => [ 'must_be_outside', 'during_christmas'], 'result' => [ 'sandball' ], 'message' => '<nt-fail>Du hast einen Sandball in {citizen}s Gesicht geworfen.</nt-fail><t-fail>Hier ist niemand, auf den du den Sandball werfen könntest...</t-fail>' ],
-                'scare' => [ 'label' => 'Erschrecken', 'target' => ['type' => ItemTargetDefinition::ItemCitizenOnZoneType], 'meta' => ['during_halloween', 'not_yet_scary'], 'result' => [ 'scary_mask' ] ],
+                'scare' => [ 'label' => 'Erschrecken', 'target' => ['type' => ItemTargetDefinition::ItemCitizenOnZoneSMType], 'meta' => ['during_halloween', 'not_yet_scary'], 'result' => [ 'scary_mask' ] ],
 
                 'special_armag'        => [ 'label' => 'Durchgang in Kraft', 'tooltip_key' => 'heroic_arma_tooltip', 'allow_when_terrorized' => true, 'meta' => [ 'must_be_outside', 'must_be_blocked' ],   'result' => [ ['group' => [ [['do_nothing', 'msg_heroic_arma_fail'], 50], [[ 'msg_heroic_arma_success', 'zone_escape_600_armag', 'kill_1_zombie_s' ], 50]]] ] ],
                 'special_armag_d'      => [ 'label' => 'Durchgang in Kraft', 'tooltip_key' => 'heroic_arma_tooltip', 'allow_when_terrorized' => true, 'meta' => [ 'must_be_outside', 'must_be_blocked', 'must_be_day'],   'result' => [ ['group' => [ [['do_nothing', 'msg_heroic_arma_fail'], 50], [['msg_heroic_arma_success', 'zone_escape_600_armag', 'kill_1_zombie_s' ], 50]]] ] ],
