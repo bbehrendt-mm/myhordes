@@ -889,7 +889,6 @@ class CitizenHandler
         if ($this->inventory_handler->countSpecificItems( $c->getHome()->getChest(), 'lock', true, false ) > 0)
             return true;
 
-        dump($thief);
         if (
             $this->entity_manager->getRepository(EventActivationMarker::class)->findOneBy(['town' => $c->getTown(), 'active' => true, 'event' => 'halloween']) &&
             $this->inventory_handler->countSpecificItems($c->getHome()->getChest(), "haunting_soul", true) > 0 &&
