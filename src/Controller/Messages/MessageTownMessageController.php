@@ -468,7 +468,7 @@ class MessageTownMessageController extends MessageController
 
         /** @var PrivateMessageThread $thread */
         $thread = $em->getRepository(PrivateMessageThread::class)->find( $tid );
-        if (!$thread || !$thread->getSender() || ($thread->getRecipient()->getId() !== $citizen->getId() && $thread->getSender()->getId() !== $citizen->getId())) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
+        if (!$thread || ($thread->getRecipient()->getId() !== $citizen->getId() && ($thread->getSender() !== null && $thread->getSender()->getId() !== $citizen->getId()))) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
 
         $thread->setArchived($action !== 0);
 

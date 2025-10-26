@@ -78,6 +78,70 @@ class TownHomeController extends TownController
             ], $this->house_partial_deco_args(), $this->house_partial_complaints_args())) );
     }
 
+    private function manageThread(PrivateMessageThread $thread, TranslatorInterface $trans): PrivateMessageThread {
+        foreach ($thread->getMessages() as $message) {
+            if($message->getRecipient() === $this->getActiveCitizen() && $message->getNew())
+                $thread->setNew(true);
+
+            switch ($message->getTemplate()) {
+
+                case PrivateMessage::TEMPLATE_CROW_COMPLAINT_ON:
+                    $thread->setTitle( $trans->trans('Anonyme Beschwerde ({num} insgesamt)', ['num' => $message->getAdditionalData() ? $message->getAdditionalData()['num'] ?? 0 : 0], 'game') );
+                    break;
+                case PrivateMessage::TEMPLATE_CROW_COMPLAINT_OFF:
+                    $thread->setTitle( $trans->trans('Beschwerde zurückgezogen (es bleiben noch {num} Stück)', ['num' => $message->getAdditionalData() ? $message->getAdditionalData()['num'] ?? 0 : 0], 'game') );
+                    break;
+                case PrivateMessage::TEMPLATE_CROW_TERROR:
+                case PrivateMessage::TEMPLATE_CROW_NIGHTWATCH_TERROR:
+                    $thread->setTitle( $trans->trans('Du bist vor Angst erstarrt!!', [], 'game') );
+                    break;
+                case PrivateMessage::TEMPLATE_CROW_AVOID_TERROR:
+                    $thread->setTitle( $trans->trans('Was für eine schreckliche Nacht!', [], 'game') );
+                    break;
+                case PrivateMessage::TEMPLATE_CROW_THEFT:
+                    $thread->setTitle( $trans->trans('Haltet den Dieb!', [], 'game') );
+                    break;
+                case PrivateMessage::TEMPLATE_CROW_CATAPULT:
+                    $thread->setTitle( $trans->trans('Du bist für das Katapult verantwortlich', [], 'game') );
+                    break;
+                case PrivateMessage::TEMPLATE_CROW_AGGRESSION_SUCCESS:
+                    /** @var Citizen $aggressor */
+                    $aggressor = $this->entity_manager->getRepository(Citizen::class)->find( $thread->getMessages()[0]->getForeignID() );
+                    $thread->setTitle( $this->translator->trans('{username} hat dich angegriffen und verletzt!', ['{username}' => $aggressor->getName()], 'game') );
+                    break;
+                case PrivateMessage::TEMPLATE_CROW_AGGRESSION_FAIL:
+                    /** @var Citizen $aggressor */
+                    $aggressor = $this->entity_manager->getRepository(Citizen::class)->find( $thread->getMessages()[0]->getForeignID() );
+                    $thread->setTitle( $this->translator->trans('{username} hat dich angegriffen!', ['{username}' => $aggressor->getName()], 'game') );
+                    break;
+                case PrivateMessage::TEMPLATE_CROW_NIGHTWATCH_WOUND:
+                    $thread->setTitle( $this->translator->trans('Verletzt', [], 'game') );
+                    break;
+                case PrivateMessage::TEMPLATE_CROW_INTRUSION:
+                    $intruder = $this->entity_manager->getRepository(Citizen::class)->find( $thread->getMessages()[0]->getForeignID() );
+                    $thread->setTitle( $this->translator->trans("Alarm (Bürger {citizen})", ['citizen' =>  $intruder ?? '???'], 'game') );
+                    break;
+                case PrivateMessage::TEMPLATE_CROW_BANISHMENT:
+                    $thread->setTitle( $this->translator->trans('Du wurdest verbannt', [], 'game') );
+                    break;
+                case PrivateMessage::TEMPLATE_CROW_REDUCED_AP_REGEN:
+                    $thread->setTitle( $this->translator->trans('Du bist erschöpft!', [], 'game') );
+                    break;
+                case PrivateMessage::TEMPLATE_CROW_GAME_WELCOME:
+                    $thread->setTitle( $this->translator->trans('Willkommen in deiner ersten Stadt', [], 'game') );
+                    break;
+                case PrivateMessage::TEMPLATE_CROW_HALLOWEEN_INFECT:
+                case PrivateMessage::TEMPLATE_CROW_HALLOWEEN_TERROR:
+                    $thread->setTitle( $this->translator->trans('Eine schaurige Nacht!', [], 'game') );
+                    break;
+
+                default: break;
+            }
+        }
+
+        return $thread;
+    }
+
     /**
      * @param string|null $subtab
      * @param Request $request
@@ -111,70 +175,6 @@ class TownHomeController extends TownController
             $destCitizen = $this->entity_manager->getRepository(Citizen::class)->find($dest_id);
         }
 
-        /** @var PrivateMessageThread[] $nonArchivedMessages */
-        $nonArchivedMessages = $this->entity_manager->getRepository(PrivateMessageThread::class)->findNonArchived($citizen);
-        foreach ($nonArchivedMessages as $thread) {
-            foreach ($thread->getMessages() as $message) {
-                if($message->getRecipient() === $this->getActiveCitizen() && $message->getNew())
-                    $thread->setNew(true);
-
-                switch ($message->getTemplate()) {
-
-                    case PrivateMessage::TEMPLATE_CROW_COMPLAINT_ON:
-                        $thread->setTitle( $trans->trans('Anonyme Beschwerde ({num} insgesamt)', ['num' => $message->getAdditionalData() ? $message->getAdditionalData()['num'] ?? 0 : 0], 'game') );
-                        break;
-                    case PrivateMessage::TEMPLATE_CROW_COMPLAINT_OFF:
-                        $thread->setTitle( $trans->trans('Beschwerde zurückgezogen (es bleiben noch {num} Stück)', ['num' => $message->getAdditionalData() ? $message->getAdditionalData()['num'] ?? 0 : 0], 'game') );
-                        break;
-                    case PrivateMessage::TEMPLATE_CROW_TERROR:
-                    case PrivateMessage::TEMPLATE_CROW_NIGHTWATCH_TERROR:
-                        $thread->setTitle( $trans->trans('Du bist vor Angst erstarrt!!', [], 'game') );
-                        break;
-                    case PrivateMessage::TEMPLATE_CROW_AVOID_TERROR:
-                        $thread->setTitle( $trans->trans('Was für eine schreckliche Nacht!', [], 'game') );
-                        break;
-                    case PrivateMessage::TEMPLATE_CROW_THEFT:
-                        $thread->setTitle( $trans->trans('Haltet den Dieb!', [], 'game') );
-                        break;
-                    case PrivateMessage::TEMPLATE_CROW_CATAPULT:
-                        $thread->setTitle( $trans->trans('Du bist für das Katapult verantwortlich', [], 'game') );
-                        break;
-                    case PrivateMessage::TEMPLATE_CROW_AGGRESSION_SUCCESS:
-                        /** @var Citizen $aggressor */
-                        $aggressor = $this->entity_manager->getRepository(Citizen::class)->find( $thread->getMessages()[0]->getForeignID() );
-                        $thread->setTitle( $this->translator->trans('{username} hat dich angegriffen und verletzt!', ['{username}' => $aggressor->getName()], 'game') );
-                        break;
-                    case PrivateMessage::TEMPLATE_CROW_AGGRESSION_FAIL:
-                        /** @var Citizen $aggressor */
-                        $aggressor = $this->entity_manager->getRepository(Citizen::class)->find( $thread->getMessages()[0]->getForeignID() );
-                        $thread->setTitle( $this->translator->trans('{username} hat dich angegriffen!', ['{username}' => $aggressor->getName()], 'game') );
-                        break;
-                    case PrivateMessage::TEMPLATE_CROW_NIGHTWATCH_WOUND:
-                        $thread->setTitle( $this->translator->trans('Verletzt', [], 'game') );
-                        break;
-                    case PrivateMessage::TEMPLATE_CROW_INTRUSION:
-                        $intruder = $this->entity_manager->getRepository(Citizen::class)->find( $thread->getMessages()[0]->getForeignID() );
-                        $thread->setTitle( $this->translator->trans("Alarm (Bürger {citizen})", ['citizen' =>  $intruder ?? '???'], 'game') );
-                        break;
-                    case PrivateMessage::TEMPLATE_CROW_BANISHMENT:
-                        $thread->setTitle( $this->translator->trans('Du wurdest verbannt', [], 'game') );
-                        break;
-                    case PrivateMessage::TEMPLATE_CROW_REDUCED_AP_REGEN:
-                        $thread->setTitle( $this->translator->trans('Du bist erschöpft!', [], 'game') );
-                        break;
-                    case PrivateMessage::TEMPLATE_CROW_GAME_WELCOME:
-                        $thread->setTitle( $this->translator->trans('Willkommen in deiner ersten Stadt', [], 'game') );
-                        break;
-                    case PrivateMessage::TEMPLATE_CROW_HALLOWEEN_INFECT:
-                    case PrivateMessage::TEMPLATE_CROW_HALLOWEEN_TERROR:
-                        $thread->setTitle( $this->translator->trans('Eine schaurige Nacht!', [], 'game') );
-                        break;
-
-                    default: break;
-                }
-            }
-        }
-
         $sendable_items = [];
 
         foreach ($citizen->getInventory()->getItems() as $item) {
@@ -200,8 +200,8 @@ class TownHomeController extends TownController
                 'subtab' => $subtab,
 
                 'can_send_global_pm' => $can_send_global_pm,
-                'nonArchivedMessages' => $nonArchivedMessages,
-                'archivedMessages' => $this->entity_manager->getRepository(PrivateMessageThread::class)->findArchived($citizen),
+                'nonArchivedMessages' => array_map( fn(PrivateMessageThread $t) => $this->manageThread( $t, $trans ), $this->entity_manager->getRepository(PrivateMessageThread::class)->findNonArchived($citizen)),
+                'archivedMessages' => array_map( fn(PrivateMessageThread $t) => $this->manageThread( $t, $trans ), $this->entity_manager->getRepository(PrivateMessageThread::class)->findArchived($citizen)),
                 'possible_dests' => $possible_dests,
                 'dest_citizen' => $destCitizen,
                 'sendable_items' => $sendable_items,
