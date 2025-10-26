@@ -21,10 +21,12 @@ use App\Entity\Zone;
 use App\Entity\ZoneActivityMarker;
 use App\Entity\ZonePrototype;
 use App\Enum\Configuration\TownSetting;
+use App\Enum\ItemDropType;
 use App\Enum\ScavengingActionType;
 use App\Enum\ZoneActivityMarkerType;
 use App\Service\Actions\Cache\InvalidateLogCacheAction;
 use App\Service\Actions\Cache\InvalidateTagsInAllPoolsAction;
+use App\Service\Actions\Game\CalculateItemDropAction;
 use App\Structures\EventConf;
 use App\Structures\TownConf;
 use App\Translation\T;
@@ -35,49 +37,25 @@ use Exception;
 use Symfony\Component\Asset\Packages;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class ZoneHandler
+readonly class ZoneHandler
 {
-    private EntityManagerInterface $entity_manager;
-    private ItemFactory $item_factory;
-    private StatusFactory $status_factory;
-    private RandomGenerator $random_generator;
-    private InventoryHandler $inventory_handler;
-    private CitizenHandler $citizen_handler;
-    private PictoHandler $picto_handler;
-    private TranslatorInterface $trans;
-    private LogTemplateHandler $log;
-    private ConfMaster $conf;
-    private Packages $asset;
-    private TownHandler $town_handler;
-    private GameProfilerService $gps;
-    private EventProxyService $proxy;
-
-    private InvalidateTagsInAllPoolsAction $clear;
-    private InvalidateLogCacheAction $clearLog;
-
     public function __construct(
-        EntityManagerInterface $em, ItemFactory $if, LogTemplateHandler $lh, TranslatorInterface $t,
-        StatusFactory $sf, RandomGenerator $rg, InventoryHandler $ih, CitizenHandler $ch, PictoHandler $ph, Packages $a,
-        ConfMaster $conf, TownHandler $th, GameProfilerService $gps, EventProxyService $proxy,
-        InvalidateTagsInAllPoolsAction $clear, InvalidateLogCacheAction $clearLog)
-    {
-        $this->entity_manager = $em;
-        $this->item_factory = $if;
-        $this->status_factory = $sf;
-        $this->random_generator = $rg;
-        $this->inventory_handler = $ih;
-        $this->citizen_handler = $ch;
-        $this->picto_handler = $ph;
-        $this->trans = $t;
-        $this->log = $lh;
-        $this->asset = $a;
-        $this->conf = $conf;
-        $this->town_handler = $th;
-        $this->gps = $gps;
-        $this->proxy = $proxy;
-        $this->clear = $clear;
-        $this->clearLog = $clearLog;
-    }
+        private EntityManagerInterface         $entity_manager,
+        private ItemFactory                    $item_factory,
+        private LogTemplateHandler             $log,
+        private TranslatorInterface            $trans,
+        private RandomGenerator                $random_generator,
+        private InventoryHandler               $inventory_handler,
+        private CitizenHandler                 $citizen_handler,
+        private PictoHandler                   $picto_handler,
+        private Packages                       $asset,
+        private ConfMaster                     $conf,
+        private GameProfilerService            $gps,
+        private EventProxyService              $proxy,
+        private InvalidateTagsInAllPoolsAction $clear,
+        private InvalidateLogCacheAction       $clearLog,
+        private CalculateItemDropAction        $calculateItemDrop,
+    ) {}
 
     public function updateRuinZone(?RuinExplorerStats $ex): ?string {
         if ($ex === null || !$ex->getActive()) return false;
@@ -160,10 +138,6 @@ class ZoneHandler
                 ($a->getTimestamp() < $b->getTimestamp() ? -1 : 1);
         };
 
-        $empty_group = $this->entity_manager->getRepository(ItemGroup::class)->findOneBy(['name' => 'empty_dig']);
-        $base_group = $this->entity_manager->getRepository(ItemGroup::class)->findOneBy(['name' => 'base_dig']);
-        $event_group = null;
-
         // Get event specific items
         $events = [];
         foreach ($this->conf->getCurrentEvents($zone->getTown()) as $e)
@@ -181,7 +155,10 @@ class ZoneHandler
             $event_cap = 0.9;
         }
 
-        if ($event && $event_chance > 0) $event_group = $this->entity_manager->getRepository(ItemGroup::class)->findOneBy(['name' => $event]);
+
+        $event_group = ($event && $event_chance > 0)
+            ? $this->entity_manager->getRepository(ItemGroup::class)->findOneBy(['name' => $event])
+            : null;
 
         $wrap = function(array $a) {
             return implode(', ', array_map(function(ItemPrototype $p) {
@@ -259,63 +236,22 @@ class ZoneHandler
                 $executable_timer->setDigCache(null);
             else foreach ($executable_timer->getDigCache() as $time => $mode) {
 
-                $redraw = false; $redraw_count = 0; $itemMarkerType = null;
-
-                do {
-                    $redraw_count++;
-                    $item_prototype = match ($mode) {
-                        -1 => null,
-                        0 => $this->random_generator->pickItemPrototypeFromGroup($empty_group, $conf, $all_events),
-                        1 => $this->random_generator->pickItemPrototypeFromGroup($base_group, $conf, $all_events),
-                        2 => $this->random_generator->pickItemPrototypeFromGroup($event_group ?? $base_group, $conf, $all_events),
-                        default => null,
-                    };
-
-                    $itemMarkerType = $item_prototype ? ZoneActivityMarkerType::scavengedItemIncurs( $item_prototype ) : null;
-                    $itemLimit = $itemMarkerType?->configuredLimit( $conf ) ?? -1;
-
-                    if ($itemLimit >= 0 && $itemMarkerType)
-                        $redraw = $zone->getTown()->getTownZone()->getActivityMarkersFor( $itemMarkerType )->count() >= $itemLimit;
-                    else $redraw = false;
-
-                    if ($redraw && $redraw_count >= 10) $item_prototype = null;
-
-                } while ($redraw && $redraw_count < 10);
-
-                if ($itemMarkerType && $item_prototype) $this->entity_manager->persist($zone->getTown()->getTownZone()->addActivityMarker( (new ZoneActivityMarker())
-                    ->setCitizen( $current_citizen )
-                    ->setTimestamp( new DateTime() )
-                    ->setType( $itemMarkerType )
-                ));
-
+                $item = ($this->calculateItemDrop)($current_citizen, $zone, ItemDropType::from( $mode ));
                 $zone_update = true;
 
                 if ($active && $current_citizen->getId() === $active->getId()) {
                     $chances_by_player++;
-                    if ($item_prototype)
-                        $found_by_player[] = $item_prototype;
+                    if ($item)
+                        $found_by_player[] = $item->getPrototype();
                 }
 
                 if ($active && $current_citizen->getEscortSettings() && $current_citizen->getEscortSettings()->getLeader() && $current_citizen->getEscortSettings()->getLeader()->getId() === $active->getId()) {
                     $chances_by_escorts++;
-                    if ($item_prototype)
-                        $found_by_escorts[] = $item_prototype;
+                    if ($item)
+                        $found_by_escorts[] = $item->getPrototype();
                 }
 
-                $this->gps->recordDigResult($item_prototype, $current_citizen, null, 'scavenge', match ($mode) {
-                    -1, 0, 1 => false,
-                    2 => (bool)$event_group
-                });
-
-                if ($item_prototype) {
-                    // If we get a Chest XL, we earn a picto
-                    if ($item_prototype->getName() == 'chest_xl_#00') {
-                        $pictoPrototype = $this->entity_manager->getRepository(PictoPrototype::class)->findOneBy(['name' => "r_chstxl_#00"]);
-                        $this->picto_handler->give_picto($current_citizen, $pictoPrototype);
-                    }
-
-                    $item = $this->item_factory->createItem($item_prototype);
-                    $this->gps->recordItemFound( $item_prototype, $current_citizen, null );
+                if ($item) {
                     if ($inventoryDest = $this->proxy->placeItem( $current_citizen, $item, [ $current_citizen->getInventory(), $executable_timer->getZone()->getFloor() ] )) {
                         if($inventoryDest->getId() === $executable_timer->getZone()->getFloor()->getId()){
                             if ($active && $current_citizen->getEscortSettings() && $current_citizen->getEscortSettings()->getLeader() && $current_citizen->getEscortSettings()->getLeader() === $active)
@@ -330,7 +266,7 @@ class ZoneHandler
                 } else {
                     // Uncomment to have the dig message show up when the dig happened, not when the user logged back in
                     if (!$executable_timer->isNonAutomatic())
-                        $this->entity_manager->persist( $this->log->outsideDig( $current_citizen, $item_prototype/*, (new DateTime())->setTimestamp($time) */) );
+                        $this->entity_manager->persist( $this->log->outsideDig( $current_citizen, null/*, (new DateTime())->setTimestamp($time) */) );
                 }
 
                 // Banished citizen's stash check

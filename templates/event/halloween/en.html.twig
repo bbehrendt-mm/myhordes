@@ -1,0 +1,25 @@
+{% block title%}Halloween {{ year }}!{% endblock %}
+{% block content %}
+    <p>
+        This year, Halloween is particularly spooky!
+    </p>
+    <p>
+        With a little luck, you will find something in the desert that will bring back memories and give you some
+        idea...
+    </p>
+
+    <p>
+        During the event, honor the souls of your dead by keeping them in your home; perhaps this will discourage
+        thieves... But what might happen next?
+    </p>
+    <p>
+        And if the daily struggle for survival against the undead hordes isn't scary enough for you,
+        why not decorate your house with pumpkins!
+    </p>
+
+    <p>
+        <b>This year's halloween event</b> will last from
+        {{ date_begin|format_datetime('medium', 'none', '', null, 'gregorian', 'de') }} until
+        {{ date_end|format_datetime('medium', 'none', '', null, 'gregorian', 'de') }}!
+    </p>
+{% endblock %}

@@ -219,11 +219,12 @@ class ItemPropertyDataService implements FixtureProcessorInterface {
             'claymo_#00'                 => [ 'impoundable', 'esc_fixed' ],
             'paques_#00'                 => [ 'impoundable' ],
             'trapma_#00'                 => [ 'impoundable', 'nosteal' ],
-            'christmas_suit_full_#00'    => [ 'impoundable' ],
-            'christmas_suit_1_#00'       => [ 'impoundable' ],
-            'christmas_suit_2_#00'       => [ 'impoundable' ],
-            'christmas_suit_3_#00'       => [ 'impoundable' ],
-            'leprechaun_suit_#00'        => [ 'impoundable' ],
+            'christmas_suit_full_#00'    => [ 'impoundable', 'esc_fixed' ],
+            'christmas_suit_1_#00'       => [ 'impoundable', 'esc_fixed' ],
+            'christmas_suit_2_#00'       => [ 'impoundable', 'esc_fixed' ],
+            'christmas_suit_3_#00'       => [ 'impoundable', 'esc_fixed' ],
+            'leprechaun_suit_#00'        => [ 'impoundable', 'esc_fixed' ],
+            'scary_mask_#00'             => [ 'impoundable', 'esc_fixed' ],
             'bplan_box_#00'              => [ 'impoundable' ],
             'bplan_box_e_#00'            => [ 'impoundable' ],
             'bplan_drop_#00'             => [ 'impoundable' ],
@@ -261,6 +262,9 @@ class ItemPropertyDataService implements FixtureProcessorInterface {
             'moldy_food_#00'             => [ 'food', 'can_cook', 'single_use', 'lure' ],
             'smelly_meat_#00'            => [ 'camp_bonus' ],
             'sheet_#00'                  => [ 'camp_bonus' ],
+            'soul_blue_#00'              => [ 'haunting_soul' ],
+            'soul_blue_#01'              => [ 'haunting_soul' ],
+            'soul_red_#00'               => [ 'haunting_soul', 'angry_soul' ],
         ]);
     }
 }

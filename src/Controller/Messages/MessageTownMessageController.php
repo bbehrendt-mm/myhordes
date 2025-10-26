@@ -430,6 +430,14 @@ class MessageTownMessageController extends MessageController
                     $thread->setTitle( $this->translator->trans('Willkommen in deiner ersten Stadt', [], 'game') );
                     $post->setText( $this->html->prepareEmotes($post->getText(), $this->getUser(), $citizen->getTown()) . $this->translator->trans( 'Willkommen! Dies ist ein Spiel, das sowohl auf Zusammenarbeit als auch Verrat zwischen den Spielern basiert. Der Feind kann ein Zombie oder dein Nachbar sein. Wir laden dich ein, das Forum deiner Stadt zu nutzen, um dich mit anderen Spielern zu koordinieren, zu diskutieren und euch vor Gefahren außerhalb und innerhalb der Stadt zu warnen.', [], 'game' ) );
                     break;
+                case PrivateMessage::TEMPLATE_CROW_HALLOWEEN_INFECT:
+                    $thread->setTitle( $this->translator->trans('Eine schaurige Nacht!', [], 'game') );
+                    $post->setText( $this->html->prepareEmotes($post->getText(), $this->getUser(), $citizen->getTown()) . $this->translator->trans( 'Du hast die gesamte Nacht keine Sekunde geschlafen. Die kalte Nachtluft brennt in deiner Lunge und am morgen fühlst du dich ausgelaugt und krank. Es ist beinahe so, als wollte irgend etwas in deiner Behausung dich töten...', [], 'game' ) );
+                    break;
+                case PrivateMessage::TEMPLATE_CROW_HALLOWEEN_TERROR:
+                    $thread->setTitle( $this->translator->trans('Eine schaurige Nacht!', [], 'game') );
+                    $post->setText( $this->html->prepareEmotes($post->getText(), $this->getUser(), $citizen->getTown()) . $this->translator->trans( 'Du hast die gesamte Nacht keine Sekunde geschlafen. Jedes mal, wenn du die Augen schließt, hörst du Schritte oder ein leises Lachen. Diese Nacht hat dich völlig verängstigt zurückgelassen. Es ist beinahe so, als wollte irgend etwas in deiner Behausung dich um den Verstand bringen...', [], 'game' ) );
+                    break;
                 default:
                     $post->setText($this->html->prepareEmotes($post->getText(), $this->getUser(), $citizen->getTown()));
             }

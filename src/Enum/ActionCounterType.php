@@ -30,6 +30,7 @@ enum ActionCounterType: int {
     case LastAutoghoulAt 	= 24;
     case ReceiveXP 	        = 25;
     case IntrusionFrom 	    = 26;
+    case ScaryIntrusionFrom = 29;
 
     /**
      * @return ActionCounterType[]
@@ -44,6 +45,7 @@ enum ActionCounterType: int {
             self::TamerClinicUsed,
             self::LastAutoghoulAt,
             self::ReceiveHeroic,
+            self::ScaryIntrusionFrom,
         ];
     }
 

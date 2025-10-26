@@ -305,6 +305,34 @@ final class TransferItemListener implements ServiceSubscriberInterface
                     $event->pushError(InventoryHandler::ErrorUnstealableItem);
                     return;
                 }
+
+                if ($this->getService(InventoryHandler::class)->countSpecificItems($victim->getHome()->getChest(), "haunting_soul", true) > 0) {
+
+                    if ($this->getService(EntityManagerInterface::class)->getRepository(EventActivationMarker::class)->findOneBy(['town' => $event->town, 'active' => true, 'event' => 'halloween'])) {
+                        $event->pushError(
+                            InventoryHandler::ErrorStealBlocked,
+                            $this->getService(TranslatorInterface::class)->trans('Als du gerade zugreifen willst, hörst du ein schauriges Lachen aus einer dunklen Ecke. Du erschreckst dich zu Tode und flüchtest, ohne etwas stehlen zu können!', ['victim' => $victim->getName()], 'game'),
+                        );
+
+                        $counter = $event->actor->getSpecificActionCounter( ActionCounterType::ScaryIntrusionFrom, $victim->getId() );
+
+                        if ($counter->getCount() <= 0)
+                            $this->getService(PictoHandler::class)->give_picto($victim, 'r_decofeist_#00');
+
+                        $this->getService(EntityManagerInterface::class)->persist($counter->increment());
+
+                        $this->getService(CitizenHandler::class)->inflictStatus($event->actor, 'terror');
+                        $this->getService(CitizenHandler::class)->inflictStatus($event->actor, 'tg_steal');
+                        $this->getService(EntityManagerInterface::class)->persist($victim);
+                        $intrusion = $this->getService(EntityManagerInterface::class)->getRepository(HomeIntrusion::class)->findOneBy(['intruder' => $event->actor, 'victim' => $victim]);
+                        if ($intrusion) $this->getService(EntityManagerInterface::class)->remove($intrusion);
+
+                        $event->hasSideEffects = true;
+                        $event->markModified();
+                        return;
+                    }
+
+                }
             }
         }
 
@@ -497,11 +525,10 @@ final class TransferItemListener implements ServiceSubscriberInterface
                             $hasRabidDog => CauseOfDeath::RabidDog,
                             default => CauseOfDeath::Unknown
                         });
-                        $this->getService(EntityManagerInterface::class)->persist($this->getService(LogTemplateHandler::class)->citizenDeath( $event->actor ) );
+                        $this->getService(EntityManagerInterface::class)->persist($this->getService(LogTemplateHandler::class)->citizenDeath($event->actor));
                         $event->hasSideEffects = true;
-                    }
-                    else {
-                        $this->getService(CitizenHandler::class)->inflictWound( $event->actor );
+                    } else {
+                        $this->getService(CitizenHandler::class)->inflictWound($event->actor);
                         $event->hasSideEffects = true;
                     }
 
@@ -510,7 +537,7 @@ final class TransferItemListener implements ServiceSubscriberInterface
                         if (!empty($dm)) $this->getService(InventoryHandler::class)->forceRemoveItem(array_pop($dm));
                     }
 
-                    $this->getService(EntityManagerInterface::class)->persist( $this->getService(LogTemplateHandler::class)->townSteal( $victim_home->getCitizen(), $event->actor, $event->item->getPrototype(), true, false, $event->item->getBroken() ) );
+                    $this->getService(EntityManagerInterface::class)->persist($this->getService(LogTemplateHandler::class)->townSteal($victim_home->getCitizen(), $event->actor, $event->item->getPrototype(), true, false, $event->item->getBroken()));
                     if ($event->actor->getAlive()) {
                         $base = match (true) {
                             $hasExplodingDoormat => $this->getService(TranslatorInterface::class)->trans('Huch! Scheint, als würde dein Mitbürger nicht wollen, dass jemand seine Sachen durchstöbert. Unter deinen Füßen ist etwas explodiert und hat dich gegen die Wand geschleudert. Du wurdest verletzt!', ['victim' => $victim_home->getCitizen()->getName()], 'game'),
@@ -519,10 +546,10 @@ final class TransferItemListener implements ServiceSubscriberInterface
                         };
 
                         $event->pushMessage(($base ? "$base<hr/>" : '') .
-                                         $this->getService(TranslatorInterface::class)->trans('Der Diebstahl, den du gerade begangen hast, wurde bemerkt! Die Bürger werden gewarnt, dass du den(die,das) {item} bei {victim} gestohlen hast.', ['victim' => $victim_home->getCitizen()->getName(), '{item}' => "<strong><img alt='' src='{$this->getService(Packages::class)->getUrl( "build/images/item/item_{$event->item->getPrototype()->getIcon()}.gif" )}'> {$this->getService(TranslatorInterface::class)->trans($event->item->getPrototype()->getLabel(),[],'items')}</strong>"], 'game')
+                                            $this->getService(TranslatorInterface::class)->trans('Der Diebstahl, den du gerade begangen hast, wurde bemerkt! Die Bürger werden gewarnt, dass du den(die,das) {item} bei {victim} gestohlen hast.', ['victim' => $victim_home->getCitizen()->getName(), '{item}' => "<strong><img alt='' src='{$this->getService(Packages::class)->getUrl( "build/images/item/item_{$event->item->getPrototype()->getIcon()}.gif" )}'> {$this->getService(TranslatorInterface::class)->trans($event->item->getPrototype()->getLabel(),[],'items')}</strong>"], 'game')
                         );
                     } else {
-                        $event->pushMessage( match (true) {
+                        $event->pushMessage(match (true) {
                             $hasExplodingDoormat => $this->getService(TranslatorInterface::class)->trans('Tja, das hast du davon bei einem paranoiden Pyromanen einbrechen zu wollen. Deine Einzelteile besprenkeln nun seine vier Wände. Das ist lange nicht so spaßig, wie es klingt: Irgendjemand wird hier putzen müssen.', ['victim' => $victim_home->getCitizen()->getName()], 'game'),
                             $hasRabidDog => $this->getService(TranslatorInterface::class)->trans('Tja, das hast du davon bei einem Hundebesitzer einbrechen zu wollen. Dein Blut ist bis an die Decke gespritzt. Das ist lange nicht so spaßig, wie es klingt: Irgendjemand wird hier putzen müssen.', ['victim' => $victim_home->getCitizen()->getName()], 'game'),
                             default => ''

@@ -188,6 +188,7 @@ class ItemGroupDataService implements FixtureProcessorInterface {
 
                 // Inline Halloween
                 'pumpkin_raw_#00'           => [5, DropMod::EventHalloween],
+                'scary_mask_#00'            => [7, DropMod::EventHalloween],
             ),
             'trash_good' => [
                 'fence_#00'                 => 10,

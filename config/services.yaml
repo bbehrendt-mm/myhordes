@@ -226,6 +226,8 @@ services:
 
     App\Configuration\ChristmasEventOverride:
       tags: [ { name: 'myhordes.configuration.events', priority: 1 } ]
+    App\Configuration\HalloweenEventOverride:
+      tags: [ { name: 'myhordes.configuration.events', priority: 1 } ]
 
     Symfony\Component\HttpFoundation\Session\Storage\Handler\RedisSessionHandler:
       arguments:

@@ -20,14 +20,18 @@ class ProcessConfigRequirement extends AtomRequirementProcessor
         if ($data->event) {
             $confMaster = $this->container->get(ConfMaster::class);
 
+            $invert = str_starts_with($data->event, '!');
+            $canonicalName = $invert ? substr($data->event, 1) : $data->event;
+
             $events = $confMaster->getCurrentEvents($cache->citizen->getTown());
             $found = false;
             foreach ($events as $event)
-                if ($event->name() == $data->event && $event->active()) {
+                if ($event->name() === $canonicalName && $event->active()) {
                     $found = true;
                     break;
                 }
-            if (!$found) return false;
+
+            return $found xor $invert;
         }
 
         return true;

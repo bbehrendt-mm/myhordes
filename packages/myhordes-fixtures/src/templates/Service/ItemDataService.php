@@ -395,6 +395,7 @@ class ItemDataService implements FixtureProcessorInterface {
         $container->add()->label('Handvoll gewürzte Insekten')->icon('moldy_food_spicy')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->commit(); // Spicy moldy food
         $container->add()->label('Larven-Marmelade')->icon('moldy_food_part')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->commit(); // Spicy moldy food
         $container->add()->label('Krabbelnde Krümel')->icon('moldy_food')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->commit(); // Spicy moldy food
+        $container->add()->label('Schaurige Maske')->icon('scary_mask')->category('Misc')->deco(5)->heavy(false)->watchpoint(0)->commit(); // Scary Mask
 
         $container->modify('water_#00')->description('Das Wasser gibt dir einmal pro Tag deine Aktionpunkte zurück oder löscht alternativ deinen Durst (unbegrenzt).')->commit();
         $container->modify('pile_#00')->description('Die Batterie ist für vieles nützlich. Allerdings ist sie auch ziemlich schnell leer ...')->commit();
@@ -775,6 +776,7 @@ class ItemDataService implements FixtureProcessorInterface {
         $container->modify('moldy_food_spicy_#00')->description('Ein wenig schleimig, aber appetitlich. Der Hauch von Gewürz verstärkt die Gesamtwirkung auf subtile Weise.')->commit(); // Spicy moisty food
         $container->modify('moldy_food_part_#00')->description('Ein köstlicher Insektenbrei, der sehr nahrhaft ist. Er ist knusprig und gleichzeitig wirklich saftig!')->commit(); // Unappetizing leftovers
         $container->modify('moldy_food_#00')->description('Ein köstliches Protein-Dessert! Anscheinend ist es besser, wenn es sich noch bewegt...')->commit(); // Leftovers roast roast
+        $container->modify('scary_mask_#00')->description('Irgendwie erinnert diese Maske dich an jemanden...')->commit(); // Leftovers roast roast
 
         // Installed Crow Garland
         $container->clone('xmas_gift_#00')->label('Aufgehängte Krähengirlande')->deco(5)->isEmote(false)->commit();

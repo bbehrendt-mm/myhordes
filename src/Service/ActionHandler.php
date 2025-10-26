@@ -297,6 +297,7 @@ class ActionHandler
                 if ( $target->getZone()->getDistance() > ($reference?->property(CitizenProperties::HeroRescueRange) ?? CitizenProperties::HeroRescueRange->default()) ) return false;
                 break;
             case ItemTargetDefinition::ItemCitizenType: case ItemTargetDefinition::ItemCitizenVoteType: case ItemTargetDefinition::ItemCitizenOnZoneType: case ItemTargetDefinition::ItemCitizenOnZoneSBType: case ItemTargetDefinition::ItemFriendshipXPType:
+            case ItemTargetDefinition::ItemCitizenOnZoneSMType:
                 if (!is_a( $target, Citizen::class )) return false;
                 if (!$target->getAlive()) return false;
                 break;

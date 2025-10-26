@@ -107,6 +107,8 @@ class CitizenStatusDataService implements FixtureProcessorInterface {
             'tg_soccer' => ['name' => 'tg_soccer', 'volatile' => true ],
             'tg_flag' => ['name' => 'tg_flag', 'volatile' => true ],
             'tg_tamer_lure' => ['name' => 'tg_tamer_lure', 'volatile' => true ],
+            'tg_scary_mask' => ['name' => 'tg_scary_mask', 'volatile' => true ],
+            'tg_was_scared' => ['name' => 'tg_was_scared', 'volatile' => false ],
         ]);
     }
 }

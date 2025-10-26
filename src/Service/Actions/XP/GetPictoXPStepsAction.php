@@ -42,7 +42,9 @@ readonly class GetPictoXPStepsAction
             'r_ebgros_#00' =>  $pt_2,
             'r_ebcrow_#00' =>  $pt_2,
             'r_maso_#00'   =>  $pt_2,
+            'r_decofeist_#00' =>  $pt_2,
             'r_wondrs_#00' =>  [15 => 2, 30 => 1, 45 => 1, 60 => 1],
+
 
             'r_batgun_#00' =>  $pt_5,
             'r_door_#00'   =>  $pt_5,

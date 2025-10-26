@@ -1159,3 +1159,8 @@ Larven-Marmelade: crwdns213096:0crwdne213096:0
 'Ein köstlicher Insektenbrei, der sehr nahrhaft ist. Er ist knusprig und gleichzeitig wirklich saftig!': 'crwdns213104:0crwdne213104:0'
 'Ein köstliches Protein-Dessert! Anscheinend ist es besser, wenn es sich noch bewegt...': 'crwdns213106:0crwdne213106:0'
 'Reinigen (1AP) (Wasser)': 'crwdns213146:0crwdne213146:0'
+'Du schleichst dich von hinten an {target} heran und es gelingt dir, ihm einen tierischen Schrecken einzujagen!': 'crwdns252514:0target={target}crwdnd252514:0target__gender={target__gender}crwdne252514:0'
+'Du schleichst dich von hinten an {target} heran. Dabei machst du allerdings so einen Lärm, dass {target} dich bereits frühzeitig bemerkt. Das hat wohl nicht geklappt...': 'crwdns252516:0{target}crwdnd252516:0{target}crwdne252516:0'
+Erschrecken: crwdns252518:0crwdne252518:0
+'Schaurige Maske': 'crwdns252520:0crwdne252520:0'
+'Irgendwie erinnert diese Maske dich an jemanden...': 'crwdns252522:0crwdne252522:0'

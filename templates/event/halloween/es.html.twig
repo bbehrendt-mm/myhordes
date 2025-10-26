@@ -1,0 +1,23 @@
+{% block title%}Halloween {{ year }} !{% endblock %}
+{% block content %}
+    <p>
+        ¡Este año Halloween será especialmente terrorífico!
+    </p>
+    <p>
+        Con un poco de suerte, encontrarás algo en el desierto que te traerá recuerdos y te dará alguna idea...
+    </p>
+
+    <p>
+        Durante el evento, honra las almas de tus difuntos manteniéndolas en tu hogar; tal vez esto disuada a los
+        ladrones... Pero, ¿qué podría suceder después?
+    </p>
+    <p>
+        Y si la lucha diaria por sobrevivir a las hordas de muertos vivientes aún no os parece lo suficientemente
+        espeluznante, ¡decora tu casa con calabazas!
+    </p>
+    <p>
+        <b>El evento de Halloween de este año</b> comienza el
+        {{ date_begin|format_datetime('medium', 'none', '', null, 'gregorian', 'de') }} y termina el
+        {{ date_end|format_datetime('medium', 'none', '', null, 'gregorian', 'de') }}.
+    </p>
+{% endblock %}

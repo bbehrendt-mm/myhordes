@@ -10,20 +10,22 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: PrivateMessageRepository::class)]
 class PrivateMessage
 {
-    const TEMPLATE_CROW_COMPLAINT_ON       = 1;
-    const TEMPLATE_CROW_COMPLAINT_OFF      = 2;
-    const TEMPLATE_CROW_TERROR             = 3;
-    const TEMPLATE_CROW_THEFT              = 4;
-    const TEMPLATE_CROW_AGGRESSION_FAIL    = 5;
-    const TEMPLATE_CROW_AGGRESSION_SUCCESS = 6;
-    const TEMPLATE_CROW_CATAPULT           = 7;
-    const TEMPLATE_CROW_AVOID_TERROR       = 8;
-    const TEMPLATE_CROW_NIGHTWATCH_WOUND   = 9;
-    const TEMPLATE_CROW_NIGHTWATCH_TERROR  = 10;
-    const TEMPLATE_CROW_INTRUSION          = 11;
-    const TEMPLATE_CROW_BANISHMENT         = 12;
-    const TEMPLATE_CROW_REDUCED_AP_REGEN   = 13;
-    const TEMPLATE_CROW_GAME_WELCOME  = 14;
+    const int TEMPLATE_CROW_COMPLAINT_ON       = 1;
+    const int TEMPLATE_CROW_COMPLAINT_OFF      = 2;
+    const int TEMPLATE_CROW_TERROR             = 3;
+    const int TEMPLATE_CROW_THEFT              = 4;
+    const int TEMPLATE_CROW_AGGRESSION_FAIL    = 5;
+    const int TEMPLATE_CROW_AGGRESSION_SUCCESS = 6;
+    const int TEMPLATE_CROW_CATAPULT           = 7;
+    const int TEMPLATE_CROW_AVOID_TERROR       = 8;
+    const int TEMPLATE_CROW_NIGHTWATCH_WOUND   = 9;
+    const int TEMPLATE_CROW_NIGHTWATCH_TERROR  = 10;
+    const int TEMPLATE_CROW_INTRUSION          = 11;
+    const int TEMPLATE_CROW_BANISHMENT         = 12;
+    const int TEMPLATE_CROW_REDUCED_AP_REGEN   = 13;
+    const int TEMPLATE_CROW_GAME_WELCOME  = 14;
+    const int TEMPLATE_CROW_HALLOWEEN_TERROR = 15;
+    const int TEMPLATE_CROW_HALLOWEEN_INFECT = 16;
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]

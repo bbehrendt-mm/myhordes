@@ -1,0 +1,25 @@
+{% block title%}Halloween {{ year }}!{% endblock %}
+{% block content %}
+    <p>
+        Dieses Jahr ist Halloween besonders gruselig!
+    </p>
+    <p>
+        Mit etwas Glück findet ihr etwas in der Wüste, dass ihr verwenden könnt, dass einige Erinnerungen zurück bringt
+        und euch auf schaurige Gedanken bringt...
+    </p>
+
+    <p>
+        Versucht während des Events doch einmal, die Seelen der Toten zu ehren, indem ihr sie in eurem Haus aufbewahrt.
+        Möglicherweise könnt ihr so sogar Einbrecher abschrecken! Aber was wird wohl nachts passieren?
+    </p>
+    <p>
+        Und falls euch der tägliche Überlebenskampf gegen die untoten Horden noch nicht gruselig genug ist,
+        schmückt euer Haus doch einfach mit Kürbissen!
+    </p>
+
+    <p>
+        <b>Das diesjährige Halloween-Event</b> wird vom
+        {{ date_begin|format_datetime('medium', 'none', '', null, 'gregorian', 'de') }} bis zum
+        {{ date_end|format_datetime('medium', 'none', '', null, 'gregorian', 'de') }} andauern.
+    </p>
+{% endblock %}
