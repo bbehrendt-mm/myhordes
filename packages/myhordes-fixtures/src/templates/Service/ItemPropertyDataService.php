@@ -224,7 +224,7 @@ class ItemPropertyDataService implements FixtureProcessorInterface {
             'christmas_suit_2_#00'       => [ 'impoundable', 'esc_fixed' ],
             'christmas_suit_3_#00'       => [ 'impoundable', 'esc_fixed' ],
             'leprechaun_suit_#00'        => [ 'impoundable', 'esc_fixed' ],
-            'scary_mask_#00'             => [ 'impoundable', 'esc_fixed', 'nosteal' ],
+            'scary_mask_#00'             => [ 'impoundable', 'esc_fixed' ],
             'bplan_box_#00'              => [ 'impoundable' ],
             'bplan_box_e_#00'            => [ 'impoundable' ],
             'bplan_drop_#00'             => [ 'impoundable' ],
