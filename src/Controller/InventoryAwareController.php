@@ -241,11 +241,20 @@ class InventoryAwareController extends CustomAbstractController
 
             break;
             case ItemTargetDefinition::ItemCitizenOnZoneType: case ItemTargetDefinition::ItemCitizenOnZoneSBType:
+            case ItemTargetDefinition::ItemCitizenOnZoneSMType:
 
             foreach ($this->getActiveCitizen()->getTown()->getCitizens() as $citizen)
                 if ($citizen->getAlive() && $citizen != $this->getActiveCitizen() && $citizen->getZone() === $this->getActiveCitizen()->getZone()) {
-                    if ($definition->getSpawner() !== ItemTargetDefinition::ItemCitizenOnZoneSBType || $citizen->getSpecificActionCounter(ActionCounterType::SandballHit)->getLast() === null || $citizen->getSpecificActionCounter(ActionCounterType::SandballHit)->getLast()->getTimestamp() < (time() - 1800))
-                        $targets[] = [ $citizen->getId(), $citizen->getName(), "build/images/professions/{$citizen->getProfession()->getIcon()}.gif" ];
+
+                    // Rate-limit sand balls
+                    if (!($definition->getSpawner() !== ItemTargetDefinition::ItemCitizenOnZoneSBType || $citizen->getSpecificActionCounter(ActionCounterType::SandballHit)->getLast() === null || $citizen->getSpecificActionCounter(ActionCounterType::SandballHit)->getLast()->getTimestamp() < (time() - 1800)))
+                        continue;
+
+                    // Prevent targeting citizens that were already scared
+                    if ($definition->getSpawner() === ItemTargetDefinition::ItemCitizenOnZoneSMType && $citizen->hasStatus('tg_was_scared'))
+                        continue;
+
+                    $targets[] = [ $citizen->getId(), $citizen->getName(), "build/images/professions/{$citizen->getProfession()->getIcon()}.gif" ];
                 }
             break;
             case ItemTargetDefinition::ItemFriendshipType:
@@ -737,11 +746,15 @@ class InventoryAwareController extends CustomAbstractController
                 }
                 return true;
             case ItemTargetDefinition::ItemCitizenOnZoneType: case ItemTargetDefinition::ItemCitizenOnZoneSBType:
+            case ItemTargetDefinition::ItemCitizenOnZoneSMType:
                 $return = $this->entity_manager->getRepository(Citizen::class)->find( (int)$id );
                 if (!$return?->getAlive() || $return?->getZone() !== $this->getActiveCitizen()->getZone()) {
                     $return = null;
                     return false;
                 } else if ( $target->getSpawner() === ItemTargetDefinition::ItemCitizenOnZoneSBType && $return?->getSpecificActionCounter(ActionCounterType::SandballHit)?->getLast() !== null && $return?->getSpecificActionCounter(ActionCounterType::SandballHit)?->getLast()?->getTimestamp() >= (time() - 1800) ) {
+                    $return = null;
+                    return false;
+                } else if ( $target->getSpawner() === ItemTargetDefinition::ItemCitizenOnZoneSMType && $return->hasStatus('tg_was_scared') ) {
                     $return = null;
                     return false;
                 }

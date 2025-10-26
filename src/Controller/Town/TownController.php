@@ -367,7 +367,7 @@ class TownController extends InventoryAwareController
 
         $recycleAP = $this->getTownConf()->get(TownSetting::OptModifierRecyclingAp);
         $can_recycle = !$c->getAlive() && $c->getHome()->getPrototype()->getLevel() > 1 && $c->getHome()->getRecycling() < $recycleAP;
-        $protected = $this->citizen_handler->houseIsProtected($c, true);
+        $protected = $this->citizen_handler->houseIsProtected($c, true, $this->getActiveCitizen());
 
         $intrusion = $this->entity_manager->getRepository(HomeIntrusion::class)->findOneBy(['intruder' => $this->getActiveCitizen(), 'victim' => $c]);
 
@@ -787,7 +787,7 @@ class TownController extends InventoryAwareController
 
         $master_thief = $this->getActiveCitizen()->property( CitizenProperties::EnableAdvancedTheft );
         $victim = $this->entity_manager->getRepository(Citizen::class)->find( $id );
-        if (!$victim || $victim->getTown()->getId() !== $this->getActiveCitizen()->getTown()->getId() || ($this->citizen_handler->houseIsProtected($victim, true) && $victim->getAlive()) || ((!$victim->getZone() && !$master_thief) && $victim->getAlive()))
+        if (!$victim || $victim->getTown()->getId() !== $this->getActiveCitizen()->getTown()->getId() || ($this->citizen_handler->houseIsProtected($victim, true, $this->getActiveCitizen()) && $victim->getAlive()) || ((!$victim->getZone() && !$master_thief) && $victim->getAlive()))
             return AjaxResponse::error(ErrorHelper::ErrorActionNotAvailable );
 
         if ($action !== 0) {

@@ -19,6 +19,7 @@ class ItemTargetDefinition
     const int ItemFriendshipType = 8;
     const int ItemTypeChestSelectionType = 9;
     const int ItemFriendshipXPType = 10;
+    const int ItemCitizenOnZoneSMType = 11;
 
 
     #[ORM\Id]
