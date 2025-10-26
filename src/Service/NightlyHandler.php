@@ -1505,7 +1505,7 @@ class NightlyHandler
                 $this->log->debug( "Zone <info>{$zone->getX()}/{$zone->getY()}</info>: Set discovery state to <info>past</info>." );
                 $zone->setDiscoveryStatus(Zone::DiscoveryStatePast);
                 $zone->setZombieStatus( Zone::ZombieStateUnknown );
-            }
+            } else $zone->setZombieStatus( Zone::ZombieStateUnknown );
 
             if ($zone->getDirection() === $wind && $distance > $wind_dist) {
                 $this->attemptRegenZone($reco_counter, $zone, $town, $recovery_chance);
