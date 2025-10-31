@@ -240,8 +240,6 @@ div.react_map_area {
           &.danger-3 { background: #cc0a0a; }
           &.danger-4 { background: #004182; }
 
-          &.excavated::after { position: absolute; top: 10%; left: 10%; right: 70%; bottom: 70%; display: block; background: #ffff00; content: " "; border-radius: 50%; border: 1px solid #ffaa00;  }
-
           &>div:not(.tooltip) { position: absolute; display: block; top: 0; left: 0; width: 100%; z-index: 1; height: 100%; }
           &>div.count         { pointer-events: none; font-size: .7rem; line-height: .7rem; color: white; text-align: center; padding-top: 2px; text-shadow: 0 0 1px black, 0 0 2px black, 0 0 3px black; }
 
@@ -314,6 +312,12 @@ div.react_map_area {
               background: url('../../img/icons/scout_lv3_map.gif') no-repeat center center / 90%;
             }
           }
+          &>div.scavExcavationMark {
+            display: none;
+            &.scav-excavated {
+                background: url('../../img/professions/dig.gif') no-repeat center center / 75%;
+            }
+        }
 
           &>div.soul-area {
             width: 200%;
@@ -390,6 +394,14 @@ div.react_map_area {
           }
         }
       }
+    }
+
+    &.show-scav {
+        &>.scroll-plane .zone {
+            &>div.scavExcavationMark {
+                display: block;
+            }
+        }
     }
 
     &.show-global {
@@ -512,13 +524,16 @@ div.react_map_area {
         &:first-child { margin-left: 2px; padding-left: 2px }
         &:last-child { margin-right: 2px; padding-left: 1px }
         &.map-icon { padding-left: 20px; background: url('../../img/icons/item_map.gif') 3px -2px no-repeat, url(../../img/background/bg_button.gif) center / cover no-repeat; }
-        &.hide-tags { background: url('../../img/icons/tickOff.gif') 3px -2px no-repeat, url(../../img/background/bg_button.gif) center / cover no-repeat; }
-        &.show-tags { background: url('../../img/icons/tickOn.gif') 3px -2px no-repeat, url(../../img/background/bg_button.gif) center / cover no-repeat; }
-        &.map_button_zoom_in { background: url(../../img/icons/small_more2.gif) 0 -2px no-repeat, url(../../img/background/bg_button.gif) center / cover no-repeat; min-width: 17px; }
-        &.map_button_zoom_out { background: url(../../img/icons/small_minus.gif) 0 -2px no-repeat, url(../../img/background/bg_button.gif) center / cover no-repeat; min-width: 17px; }
+        &.hide-tags { background: url('../../img/icons/tickOff.gif') 3px 0 no-repeat, url(../../img/background/bg_button.gif) center / cover no-repeat; }
+        &.show-tags { background: url('../../img/icons/tickOn.gif') 3px 0 no-repeat, url(../../img/background/bg_button.gif) center / cover no-repeat; }
+        &.map_button_zoom_in { background: url(../../img/icons/small_more2.gif) 0 -1px no-repeat, url(../../img/background/bg_button.gif) center / cover no-repeat; min-width: 17px; }
+        &.map_button_zoom_out { background: url(../../img/icons/small_minus.gif) 0 -1px no-repeat, url(../../img/background/bg_button.gif) center / cover no-repeat; min-width: 17px; }
         &.map_button_pin { background: url(../../img/icons/map_pin.png) 1px 0px / 13px 13px no-repeat, url(../../img/background/bg_button.gif) center / cover no-repeat; min-width: 17px; }
-        &.map_button_scout.hide-tags { background: url(../../img/icons/tickOff.gif) 3px -2px no-repeat, url(../../img/professions/vest.gif) 15px -2px no-repeat, url(../../img/background/bg_button.gif) center / cover no-repeat; min-width: 33px; }
-        &.map_button_scout.show-tags { background: url(../../img/icons/tickOn.gif) 3px -2px no-repeat, url(../../img/professions/vest.gif) 15px -2px no-repeat, url(../../img/background/bg_button.gif) center / cover no-repeat; min-width: 33px; }
+        &.map_button_scout.hide-tags { background: url(../../img/icons/tickOff.gif) 3px 0 no-repeat, url(../../img/professions/vest.gif) 13px 1px / 50% no-repeat, url(../../img/background/bg_button.gif) center / cover no-repeat; min-width: 27px; }
+        &.map_button_scout.show-tags { background: url(../../img/icons/tickOn.gif) 3px 0 no-repeat, url(../../img/professions/vest.gif) 13px 1px / 50% no-repeat, url(../../img/background/bg_button.gif) center / cover no-repeat; min-width: 27px; }
+        &.map_button_scav.hide-tags { background: url(../../img/icons/tickOff.gif) 3px 0 no-repeat, url(../../img/professions/dig.gif) 13px 1px / 50% no-repeat, url(../../img/background/bg_button.gif) center / cover no-repeat; min-width: 27px; }
+        &.map_button_scav.show-tags { background: url(../../img/icons/tickOn.gif) 3px 0 no-repeat, url(../../img/professions/dig.gif) 13px 1px / 50% no-repeat, url(../../img/background/bg_button.gif) center / cover no-repeat; min-width: 27px; }
+        &.map_button_close { background: url(../../img/icons/small_x.gif) 0 -1px no-repeat, url(../../img/background/bg_button.gif) center / cover no-repeat; min-width: 17px; }
         &.hide-tags,&.show-tags { padding-left: 12px; padding-right: 2px; }
         &.route_button > div {  margin: -4px -9px 0 -9px; }
       }

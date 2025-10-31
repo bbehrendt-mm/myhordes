@@ -208,7 +208,6 @@ const MapOverviewZone = ( props: MapOverviewZoneProps ) => {
             ${props.zone.g ? 'global' : ''}
             ${(typeof props.zone.r !== "undefined" && typeof props.zone.td === "undefined") ? `ruin ${props.zone.r.b ? 'buried' : ''}` : ''}
             ${typeof props.zone.d  !== "undefined" ? `danger-${props.zone.d}` : ''}
-            ${typeof props.zone.xc  !== "undefined" ? (props.zone.xc ? 'excavated' : '') : ''}
             ${props.zone.s ? 'soul' : ''}
         `} style={{
             gridColumn: 1 + props.zone.x - props.geo.x0,
@@ -220,6 +219,7 @@ const MapOverviewZone = ( props: MapOverviewZoneProps ) => {
             { props.zone.tg && <div className={`tag tag-${props.zone.tg}`}/> }
             { props.zone.z && <div className="count">{props.zone.z}</div> }
             { (props.zone.scoutLevel || props.zone.fractional) && <div className={`scoutLevelMark scout-${props.zone.scoutLevel}`}/> }
+            { typeof props.zone.xc  !== "undefined" && <div className={`scavExcavationMark scav-${props.zone.xc ? 'excavated' : 'non-excavated'}`}/> }
             { (props.zone.c ?? []).length > 0 && <div className="citizen_marker"/> }
             <MapOverviewZoneTooltip zone={props.zone} local={props.local} />
         </div>

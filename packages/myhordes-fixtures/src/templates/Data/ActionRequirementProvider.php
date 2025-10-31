@@ -306,7 +306,7 @@ class ActionRequirementProvider
 
         $requirement_container->add()->identifier('zone_is_improvable')->type( Requirement::MessageOnFail )->add( new LocationRequirement()->beyond(true)->maxLevel(50) )->text('Du bist der Ansicht, dass du diese Zone nicht besser ausbauen kannst, da du schon dein Bestes gegeben hast.')->commit();
         $requirement_container->add()->identifier('must_be_anywhere')->type( Requirement::HideOnFail )->add( new LocationRequirement()->anywhere() )->commit();
-        $requirement_container->add()->identifier('zone_not_force_regenerated')->type( Requirement::HideOnFail )->add( new LocationRequirement()->beyond(true)->isForceRegenerated(false) )->commit();
+        $requirement_container->add()->identifier('zone_not_force_regenerated')->type( Requirement::CrossOnFail )->add( new LocationRequirement()->beyond(true)->isForceRegenerated(false) )->text('Es sieht wirklich nicht so aus, als würdest du hier noch neue Buddelmöglichkeiten finden können...')->commit();
 
         $requirement_container->add()->identifier("must_not_have_zombies")->type(Requirement::HideOnFail)->add(new LocationRequirement()->beyond(true)->minZombies(0)->maxZombies(0))->commit();
         $requirement_container->add()->identifier('must_be_blocked_hd')->type(Requirement::HideOnFail )->add( new LocationRequirement()->beyond(true)->exploring(null)->isControlled(false) )->commit();
@@ -315,6 +315,8 @@ class ActionRequirementProvider
         $requirement_container->add()->identifier("must_have_ruin_with_bp")->type(Requirement::HideOnFail)->add(new LocationRequirement()->beyond(true)->atRuin(true)->hasBp(true))->commit();
         $requirement_container->add()->identifier("must_have_ruin_no_bp")->type(Requirement::HideOnFail)->add(new LocationRequirement()->beyond(true)->atRuin(true)->hasBp(false))->commit();
         $requirement_container->add()->identifier("must_not_have_ruin")->type(Requirement::HideOnFail)->add(new LocationRequirement()->beyond(true)->atRuin(false))->commit();
+
+        $requirement_container->add()->identifier("zone_must_be_empty")->type(Requirement::CrossOnFail)->add(new LocationRequirement()->beyond(true)->isEmpty( true ))->text('Nach neuen Buddelmöglichkeiten zu suchen macht nur Sinn, wenn es keine offensichtlichen Buddelmöglichkeiten mehr gibt.')->commit();
 
         //</editor-fold>
 

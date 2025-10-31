@@ -418,8 +418,7 @@ class Citizen
 
         return
             $this->getDigTimers()->matching(
-                (new Criteria())
-                    ->where(Criteria::expr()->eq( 'zone', $this->getZone() ))
+                new Criteria()->where(Criteria::expr()->eq( 'zone', $this->getZone() ))
             )->first() ?: null;
     }
     public function getDailyUpgradeVote(): ?DailyUpgradeVote

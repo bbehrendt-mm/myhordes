@@ -64,7 +64,8 @@ export type MapRoute = {
 }
 
 export type MapConfig = {
-    scout: boolean
+    scout: boolean,
+    scav: boolean,
 }
 
 export type MapData = {
@@ -102,6 +103,7 @@ export type RuntimeMapState = {
     markEnabled: boolean,
     globalEnabled: boolean,
     scoutEnabled: boolean,
+    scavEnabled: boolean,
     activeRoute: number | undefined;
     activeZone: MapCoordinate | undefined;
     routeEditor: MapCoordinate[];
@@ -116,6 +118,7 @@ export type RuntimeMapStateAction = {
     markEnabled?: boolean,
     globalEnabled?: boolean,
     scoutEnabled?: boolean,
+    scavEnabled?: boolean,
     activeRoute?: number | boolean,
     activeZone?: MapCoordinate | boolean,
     routeEditorPush?: MapCoordinate,
@@ -157,7 +160,9 @@ export type MapControlProps = {
     markEnabled: boolean,
     globalEnabled: boolean,
     scoutEnabled: boolean,
+    scavEnabled: boolean,
     showScoutButton: boolean,
+    showScavButton: boolean,
     showRoutes: boolean,
     showRoutesPanel: boolean,
     showGlobalButton: boolean,

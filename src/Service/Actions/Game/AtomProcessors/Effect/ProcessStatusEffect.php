@@ -3,6 +3,7 @@
 namespace App\Service\Actions\Game\AtomProcessors\Effect;
 
 use App\Entity\Citizen;
+use App\Entity\DigTimer;
 use App\Enum\ActionHandler\RelativeMaxPoint;
 use App\Enum\Configuration\TownSetting;
 use App\Service\CitizenHandler;
@@ -41,6 +42,20 @@ class ProcessStatusEffect extends AtomEffectProcessor
             $cache->em->persist( $log->citizenDeath( $target ) );
 
             return;
+        }
+
+        if ($data->stopDigTimers && $target->getZone() && !$target->getZone()->isTownZone()) {
+
+            $dig_timer = $target->getCurrentDigTimer();
+            if ($dig_timer) {
+                $dig_timer->setPassive(true);
+                $cache->em->persist( $dig_timer );
+            } else
+                $cache->em->persist(
+                    new DigTimer()
+                        ->setZone( $target->getZone() )->setCitizen( $target )->setPassive( true )
+                        ->setNonAutomatic(true)->setTimestamp( new \DateTime() )
+                );
         }
 
         $p = $data->statusProbability;

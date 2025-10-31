@@ -193,6 +193,7 @@ readonly class RenderMapAction
             'zones' => $zones,
             'lid' => $citizen_zone?->getId() ?? 0,
             'conf' => [
+                'scav' => ($admin || $scavenger_sense),
                 'scout' => ($admin || $scout_markings_global || $scout_markings_own)
             ],
             'local' => array_map( function(Zone $z) use ($activeCitizen, $town, $citizen_zone, $scavenger_sense, $scout_sense, $admin, $scout_markings_own, $scout_markings_global) {

@@ -525,6 +525,8 @@ class ActionEffectProvider
         $effects_container->add()->identifier('increase_kitchen_counter')->add( new StatusEffect()->count(ActionCounterType::HomeKitchen))->commit();
         $effects_container->add()->identifier('increase_scavenger_counter')->add( new StatusEffect()->count(ActionCounterType::SpecialActionScav))->commit();
 
+        $effects_container->add()->identifier('stop_digging')->add( new StatusEffect()->stopDigTimers(true))->commit();
+
         $effects_container->add()->identifier('heal_ghoul')->add( new StatusEffect()->role('ghoul', false)->ghoulHunger(-9999999, true))->commit();
         $effects_container->add()->identifier('satisfy_ghoul_50')->add( new StatusEffect()->ghoulHunger(-50))->commit();
         $effects_container->add()->identifier('satisfy_ghoul_30')->add( new StatusEffect()->ghoulHunger(-30))->commit();

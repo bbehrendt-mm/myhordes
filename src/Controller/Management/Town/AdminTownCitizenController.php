@@ -690,7 +690,7 @@ class AdminTownCitizenController extends AdminActionController
                 if ($control)
                     foreach ($citizens as $citizen) {
                         $dig = ($citizen->getZone() && !$citizen->getZone()->isTownZone())
-                            ? ($citizen->getCurrentDigTimer() ?? (new DigTimer())->setZone( $citizen->getZone() )->setCitizen( $citizen ))
+                            ? ($citizen->getCurrentDigTimer() ?? new DigTimer()->setZone($citizen->getZone() )->setCitizen($citizen ))
                             : null;
                         if ($dig) {
                             $dig->setTimestamp(new \DateTime('now - 24hours'));

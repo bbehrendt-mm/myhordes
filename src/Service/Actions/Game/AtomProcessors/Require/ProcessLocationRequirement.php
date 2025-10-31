@@ -28,6 +28,9 @@ class ProcessLocationRequirement extends AtomRequirementProcessor
             $zone = $cache->citizen->getZone();
             if (!$zone) return false;
 
+            if ( $data->requiresFillrateCheck() && ($zone->getDigs() <= 0) !== $data->isEmpty )
+                return false;
+
             $cache->addTranslationKey('km_from_town', $zone->getDistance());
             $cache->addTranslationKey('ap_from_town', $zone->getApDistance());
 
