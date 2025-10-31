@@ -263,7 +263,11 @@ class ActionEffectProvider
         )->commit();
 
         $effects_container->add()->identifier('spawn_c_chest')->add(new ItemEffect()->spawnAt(ItemDropTarget::DropTargetOrigin)
-                                                                        ->addSpawnList(['pile_#00', 'radio_off_#00', 'pharma_#00', 'lights_#00'])
+                                                                        ->addSpawn('shoe_#00', 10)
+                                                                        ->addSpawn('pile_#00', 20)
+                                                                        ->addSpawn('lights_#00', 25)
+                                                                        ->addSpawn('pharma_#00', 25)
+                                                                        ->addSpawn('radio_off_#00', 20)
         )->commit();
 
         $effects_container->add()->identifier('spawn_h_chest')->add(new ItemEffect()->spawnAt(ItemDropTarget::DropTargetOrigin)
