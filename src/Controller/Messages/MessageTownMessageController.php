@@ -2,6 +2,7 @@
 
 namespace App\Controller\Messages;
 
+use App\Annotations\GateKeeperProfile;
 use App\Command\Info\ResolveCommand;
 use App\Entity\AccountRestriction;
 use App\Entity\ActionCounter;
@@ -49,9 +50,11 @@ class MessageTownMessageController extends MessageController
      * @param JSONRequestParser $parser
      * @param TranslatorInterface $t
      * @param UserHandler $userHandler
+     * @param ResponseGlobal $response
      * @return Response
      */
     #[Route(path: 'api/town/house/sendpm', name: 'town_house_send_pm_controller')]
+    #[GateKeeperProfile(allow_during_attack: false, only_alive: true, only_with_profession: true)]
     public function send_pm_api(EntityManagerInterface $em, JSONRequestParser $parser, TranslatorInterface $t, UserHandler $userHandler, ResponseGlobal $response): Response {
         if ($userHandler->isRestricted($this->getUser(), AccountRestriction::RestrictionTownCommunication))
             return AjaxResponse::error(ErrorHelper::ErrorPermissionError);
@@ -305,6 +308,7 @@ class MessageTownMessageController extends MessageController
      * @return Response
      */
     #[Route(path: 'api/town/house/pm/{tid<\d+>}/view', name: 'home_view_thread_controller')]
+    #[GateKeeperProfile(allow_during_attack: false, only_alive: true, only_with_profession: true)]
     public function pm_viewer_api(int $tid, EntityManagerInterface $em): Response {
         $user = $this->getUser();
 
@@ -432,11 +436,11 @@ class MessageTownMessageController extends MessageController
                     break;
                 case PrivateMessage::TEMPLATE_CROW_HALLOWEEN_INFECT:
                     $thread->setTitle( $this->translator->trans('Eine schaurige Nacht!', [], 'game') );
-                    $post->setText( $this->html->prepareEmotes($post->getText(), $this->getUser(), $citizen->getTown()) . $this->translator->trans( 'Du hast die gesamte Nacht keine Sekunde geschlafen. Die kalte Nachtluft brennt in deiner Lunge und am morgen fühlst du dich ausgelaugt und krank. Es ist beinahe so, als wollte irgend etwas in deiner Behausung dich töten...', [], 'game' ) );
+                    $post->setText( $this->html->prepareEmotes($post->getText(), $this->getUser(), $citizen->getTown()) . $this->translator->trans( 'Du hast die gesamte Nacht keine Sekunde geschlafen. Die kalte Nachtluft brennt in deiner Lunge und am morgen fühlst du dich ausgelaugt und krank. Es ist beinahe so, als wollte irgend etwas in deiner Behausung dich töten...', ['citizen' => $citizen], 'game' ) );
                     break;
                 case PrivateMessage::TEMPLATE_CROW_HALLOWEEN_TERROR:
                     $thread->setTitle( $this->translator->trans('Eine schaurige Nacht!', [], 'game') );
-                    $post->setText( $this->html->prepareEmotes($post->getText(), $this->getUser(), $citizen->getTown()) . $this->translator->trans( 'Du hast die gesamte Nacht keine Sekunde geschlafen. Jedes mal, wenn du die Augen schließt, hörst du Schritte oder ein leises Lachen. Diese Nacht hat dich völlig verängstigt zurückgelassen. Es ist beinahe so, als wollte irgend etwas in deiner Behausung dich um den Verstand bringen...', [], 'game' ) );
+                    $post->setText( $this->html->prepareEmotes($post->getText(), $this->getUser(), $citizen->getTown()) . $this->translator->trans( 'Du hast die gesamte Nacht keine Sekunde geschlafen. Jedes mal, wenn du die Augen schließt, hörst du Schritte oder ein leises Lachen. Diese Nacht hat dich völlig verängstigt zurückgelassen. Es ist beinahe so, als wollte irgend etwas in deiner Behausung dich um den Verstand bringen...', ['citizen' => $citizen], 'game' ) );
                     break;
                 default:
                     $post->setText($this->html->prepareEmotes($post->getText(), $this->getUser(), $citizen->getTown()));
@@ -460,6 +464,7 @@ class MessageTownMessageController extends MessageController
      * @return Response
      */
     #[Route(path: 'api/town/house/pm/{tid<\d+>}/archive/{action<\d+>}', name: 'home_archive_pm_controller')]
+    #[GateKeeperProfile(allow_during_attack: false, only_alive: true, only_with_profession: true)]
     public function pm_archive_api(int $tid, int $action, EntityManagerInterface $em): Response {
         $user = $this->getUser();
 
@@ -468,7 +473,7 @@ class MessageTownMessageController extends MessageController
 
         /** @var PrivateMessageThread $thread */
         $thread = $em->getRepository(PrivateMessageThread::class)->find( $tid );
-        if (!$thread || !$thread->getSender() || ($thread->getRecipient()->getId() !== $citizen->getId() && $thread->getSender()->getId() !== $citizen->getId())) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
+        if (!$thread || ($thread->getRecipient()->getId() !== $citizen->getId() && ($thread->getSender() !== null && $thread->getSender()->getId() !== $citizen->getId()))) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
 
         $thread->setArchived($action !== 0);
 
