@@ -278,12 +278,11 @@ class HeroSkillDataService implements FixtureProcessorInterface {
             ->icon('super_e3')->name('super_enduring_3')
             ->bullets([
                           'Ein weiterer zusätzlicher Platz im Rucksack',
-                          '30 Sekunden temporäre Zonencontrolle durch Wildstyle Uppercut',
                           'Verbesserung Zweite Lunge (4 AP, 6 EP)',
                           '30 Extra-O² in begehbaren Ruinen',
                       ])
             ->addCitizenProperty(CitizenProperties::InventorySpaceBonus, 3)
-            ->addCitizenProperty(CitizenProperties::HeroPunchEscapeTime, 30)
+            // ->addCitizenProperty(CitizenProperties::HeroPunchEscapeTime, 30) // [S19] Removal of the 30-second control gain at the Enduring Master level.
             ->addCitizenProperty(CitizenProperties::OxygenTimeBonus, 90)
             ->addCitizenProperty(CitizenProperties::HeroSecondWindBaseSP, 6)
             ->level(3)->unlockAt(80)->commit();
