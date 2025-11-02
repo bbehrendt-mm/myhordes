@@ -259,7 +259,7 @@ class ItemPropertyDataService implements FixtureProcessorInterface {
             'pumpkin_tasty_#00'          => ['impoundable', 'food', 'single_use', 'lure'],
             'moldy_food_subpart_#00'     => [ 'single_use', 'lure' ],
             'moldy_food_spicy_#00'       => [ 'food', 'can_cook', 'single_use', 'lure' ],
-            'moldy_food_#00'             => [ 'food', 'can_cook', 'single_use', 'lure' ],
+            'moldy_food_#00'             => [ 'food', 'single_use', 'lure' ],
             'smelly_meat_#00'            => [ 'camp_bonus' ],
             'sheet_#00'                  => [ 'camp_bonus' ],
             'soul_blue_#00'              => [ 'haunting_soul' ],

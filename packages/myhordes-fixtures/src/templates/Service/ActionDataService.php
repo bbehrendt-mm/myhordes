@@ -126,6 +126,7 @@ class ActionDataService implements FixtureProcessorInterface {
                 'can_t2'    => [ 'label' => 'Öffnen (1 BP)', 'at00' => true, 'meta' => [ 'profession_tech', 'not_have_can_opener_hd', 'min_1_cp_hd' ], 'result' => [ 'minus_1cp', 'morph_open_can' ], 'message_key' => 'container_open' ],
                 'can_t3'    => [ 'label' => 'Öffnen', 'at00' => true, 'meta' => [ 'profession_tech', 'not_have_can_opener_hd', 'have_can_opener', 'no_cp', 'is_not_wounded_hands' ], 'result' => [ ] ],
 
+                'eat_5ap'   => [ 'label' => 'Essen', 'cover' => true, 'at00' => true, 'poison' => ItemAction::PoisonHandlerConsume, 'meta' => [ 'eat_ap', 'no_full_ap_msg_food' ], 'result' => [ 'contaminated_zone_infect', 'eat_ap5', 'consume_item' ], 'escort_message_key' => 'escort_food_eat' ],
                 'eat_6ap'   => [ 'label' => 'Essen', 'cover' => true, 'at00' => true, 'poison' => ItemAction::PoisonHandlerConsume, 'meta' => [ 'eat_ap', 'no_full_ap_msg_food' ], 'result' => [ 'contaminated_zone_infect', 'eat_ap6', 'consume_item' ], 'escort_message_key' => 'escort_food_eat' ],
                 'eat_7ap'   => [ 'label' => 'Essen', 'priority' => 2, 'cover' => true, 'at00' => true, 'poison' => ItemAction::PoisonHandlerConsume, 'meta' => [ 'eat_ap', 'no_full_ap_msg_food' ], 'result' => [ 'contaminated_zone_infect', 'eat_ap7', 'consume_item' ], 'escort_message_key' => 'escort_food_eat' ],
                 'eat_7ap_hw_1' => [ 'label' => 'Essen', 'priority' => 1, 'cover' => true, 'at00' => true, 'poison' => ItemAction::PoisonHandlerConsume, 'meta' => [ 'eat_ap', 'no_full_ap_msg_food', 'h_not_during_halloween' ], 'result' => [ 'contaminated_zone_infect', 'eat_ap7', 'consume_item' ], 'escort_message_key' => 'escort_food_eat' ],
@@ -742,6 +743,7 @@ class ActionDataService implements FixtureProcessorInterface {
                 'food_sandw_#00'      => [ 'eat_6ap'],
                 'food_noodles_#00'    => [ 'eat_6ap'],
                 'wood_xmas_#00'       => [ 'eat_6ap'],
+                'moldy_food_part_#00' => [ 'eat_5ap'],
                 'moldy_food_spicy_#00' => [ 'eat_6ap'],
                 'noodle_prints_#00'   => [ 'eat_4ap'],
                 'noodle_prints_#01'   => [ 'eat_4ap'],

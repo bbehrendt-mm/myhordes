@@ -521,6 +521,7 @@ class ActionEffectProvider
             ->add( new StatusEffect()->point(PointType::SP, 0, relativeToMax: RelativeMaxPoint::RelativeToExtensionMax ) )
             ->commit();
         $effects_container->add()->identifier('eat_ap4')->add( new StatusEffect()->point(PointType::AP, 4, relativeToMax: false )->addsStatus('haseaten'))->add(new MessageEffect()->escort(false)->text('Es schmeckt wirklich komisch... aber es erfüllt seinen Zweck: Dein Hunger ist gestillt. Glaub aber nicht, dass du dadurch zusätzliche APs erhältst...'))->commit();
+        $effects_container->add()->identifier('eat_ap5')->add( new StatusEffect()->point(PointType::AP, 5, relativeToMax: false )->addsStatus('haseaten'))->add(new MessageEffect()->escort(false)->text('Es schmeckt wirklich komisch... aber wenigstens ist dein Hunger ein wenig gestillt. Glaub aber nicht, dass du dadurch zusätzliche APs erhältst...'))->commit();
 
         $effects_container->add()->identifier('increase_lab_counter')->add( new StatusEffect()->count(ActionCounterType::HomeLab))->commit();
         $effects_container->add()->identifier('increase_kitchen_counter')->add( new StatusEffect()->count(ActionCounterType::HomeKitchen))->commit();
