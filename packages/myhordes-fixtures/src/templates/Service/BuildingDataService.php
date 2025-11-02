@@ -947,10 +947,9 @@ class BuildingDataService implements FixtureProcessorInterface {
 
         $container->add()->parentBuilding($item_tagger)
             ->icon('item_scope')->label('Aussichtsplattform')->description( 'Wenn wir den Wachturm noch ein wenig vergrößern, hält die Außenwelt keine Geheimnisse mehr für uns. Dank seines soliden Fundaments können wir sogar noch ein paar Stockwerke hinzufügen, um noch weiter sehen zu können.')
-            ->isTemporary(0)->defense(0)->ap(30)->blueprintLevel(0)->resources(["wood2_#00" => 5,"scope_#00" => 1,"lens_#00" => 1,])->orderBy(0)
-            ->voteLevel(5)->baseVoteText('Die Aussichtsplattform ermöglicht es, den Bürger zu wählen, der am besten bei Expeditionen führen kann.')
+            ->isTemporary(0)->defense(0)->ap(30)->blueprintLevel(0)->resources(["wood2_#00" => 5,"scope_#00" => 1,"metal_beam_#00" => 1,])->orderBy(0)
+            ->voteLevel(5)->baseVoteText('Die Aussichtsplattform ermöglicht es, den Bürger zu wählen, der am besten bei Expeditionen führen kann. Erspäht jeden Morgen alle Zombies, die sich im Umkreis von 3km um die Stadt aufhalten.')
             ->upgradeTexts([
-                               'Erspäht jeden Morgen alle Zombies, die sich im Umkreis von 3km um die Stadt aufhalten.',
                                'Erspäht jeden Morgen alle Zombies, die sich im Umkreis von 6km um die Stadt aufhalten.',
                                'Erspäht jeden Morgen alle Zombies, die sich im Umkreis von 10km um die Stadt aufhalten.',
                                'Erspäht jeden Morgen alle Zombies, die sich im Umkreis von 10km um die Stadt aufhalten. Bürger im Umkreis von 1km um die Stadt können ohne AP-Verbrauch die Stadt betreten.',
@@ -1033,10 +1032,10 @@ class BuildingDataService implements FixtureProcessorInterface {
         $container->add()->parentBuilding($item_soul_blue_static)
             ->icon('small_cemetery')->label('Kleiner Friedhof')->description('Bringt eure Toten! Denn diesmal werden sie sich noch als nützlich erweisen. Macht das beste aus ihnen und verbessert damit gemeinsam eure Verteidigung. Hinweis: Es spielt keine Rolle, wo und woran ein Mitbürger verstarb.')
             ->isTemporary(0)->defense(0)->ap(42)->health(42)->blueprintLevel(0)->resources(["meca_parts_#00" => 1,"wood2_#00" => 10,])->orderBy(2)
-            ->voteLevel(2)->baseVoteText('Jeder zum Friedhof gebrachte tote Mitbürger bringt insgesamt +1 Verteidigungspunkt für die Gesamtverteidigung der Stadt')
+            ->voteLevel(2)->baseVoteText('Jeder zum Friedhof gebrachte tote Mitbürger bringt insgesamt +3 Verteidigungspunkt für die Gesamtverteidigung der Stadt')
             ->upgradeTexts([
-                'Jeder zum Friedhof gebrachte tote Mitbürger bringt insgesamt +5 Verteidigungspunkte für die Gesamtverteidigung der Stadt',
-                'Jeder zum Friedhof gebrachte tote Mitbürger bringt insgesamt +10 Verteidigungspunkte für die Gesamtverteidigung der Stadt',
+                'Jeder zum Friedhof gebrachte tote Mitbürger bringt insgesamt +7 Verteidigungspunkte für die Gesamtverteidigung der Stadt',
+                'Jeder zum Friedhof gebrachte tote Mitbürger bringt insgesamt +14 Verteidigungspunkte für die Gesamtverteidigung der Stadt',
             ])
             ->commit($small_cemetery);
 
