@@ -57,9 +57,9 @@ Stadttor: Grande Porte
 Karte: Carte
 'Bitte wähle einen Gegenstand:': 'Choisissez un objet :'
 'Du verfügst über keine geeigneten Gegenstände': 'Vous n’avez pas d’objet pour cette action.'
-Herstellen: Assembler
+Herstellen: Assembler 
 aus: Nécessite
-Kombinieren: Combiner
+Kombinieren: Combiner 
 'Du kannst von hier aus die Stadt verlassen und die Außenwelt erkunden. Vergiss aber nicht, um Mitternacht das Tor zu schließen!': 'Vous pouvez sortir de la ville et explorer l’Outre-Monde depuis ici. N’oubliez pas de garder la <strong>Grande Porte</strong> fermée lors de l’attaque à minuit !'
 'Du wurdest verbannt und kannst daher das Stadttor weder öffnen noch schließen.': 'Vous avez été banni et ne pouvez donc ni ouvrir ni fermer la porte de la ville.'
 'Meine Aktionen': 'Mes Actions'
@@ -3231,7 +3231,7 @@ Tierklinik: Centre d'essai
 'Als du gerade zugreifen willst, fällt dein Blick auf eine an der Wand aufgehängte krude Maske. Du erschreckst dich zu Tode und flüchtest, ohne etwas stehlen zu können!': 'Alors que vous vous apprêtiez à attraper quelque chose, votre regard tombe sur un masque grossier accroché au mur. Vous êtes mort(e) de peur et vous enfuyez sans rien voler !!'
 'Nichtsahnend bist du deinem Tagewerk nachgegangen, als sich plötzlich jemand von hinten an dich angeschlichen und mit einer furchterregenden Maske zu Tode erschreckt hast.': 'Vous vaquiez tranquillement à vos occupations quotidiennes quand soudain, quelqu''un s''est approché furtivement derrière vous et vous a surpris avec un masque vraiment effrayant !'
 'Du bist nun vor Angst erstarrt!': 'Vous êtes maintenant figé(e) de Terreur !'
-'Mehr Informationen über die Angststarre findest du in der {health_help}.': 'Vous trouverez plus d''informations à propos de l''état « Terrorisé(e) » dans l''{health_help}.'
+'Mehr Informationen über die Angststarre findest du in der {health_help}.': 'Vous trouverez plus d''informations à propos de l''état « Terrorisé(e) » dans l'' {health_help}.'
 '{attacker} hat sich von hinten an {defender} herangeschlichen und him einen üblen Schrecken eingejagt!': '{attacker} s''est approché furtivement de {defender} par derrière et lui a fait une peur bleue !'
 '{attacker} hat sich von hinten an {defender} herangeschlichen und vergeblich versucht, ihm einen Schrecken einzujagen.': '{attacker} s''est approché furtivement de {defender} par derrière et a tenté en vain de l''effrayer. '
 'Während du dich konzentrierst, spürst du für einen kurzen Moment die Aura eines deiner verstorbenen Mitbürger. Sie scheint von {location} zu kommen...': 'Alors que vous vous concentrez, vous sentez l''espace d''un bref instant l''aura de l''un de vos concitoyens décédés. Elle semble provenir de {location} ...'
@@ -3244,3 +3244,6 @@ Tierklinik: Centre d'essai
 'Eine schaurige Nacht!': 'Une nuit effrayante !'
 'Du hast die gesamte Nacht keine Sekunde geschlafen. Die kalte Nachtluft brennt in deiner Lunge und am morgen fühlst du dich ausgelaugt und krank. Es ist beinahe so, als wollte irgend etwas in deiner Behausung dich töten...': 'Vous n''avez pas fermé l''œil de la nuit. Au réveil, l''air froid vous brûle les poumons, vous vous sentez épuisé(e) et malade. C''est presque comme si quelque chose dans votre maison voulait vous tuer...'
 'Du hast die gesamte Nacht keine Sekunde geschlafen. Jedes mal, wenn du die Augen schließt, hörst du Schritte oder ein leises Lachen. Diese Nacht hat dich völlig verängstigt zurückgelassen. Es ist beinahe so, als wollte irgend etwas in deiner Behausung dich um den Verstand bringen...': 'Vous n''avez pas fermé l''œil de la nuit. Chaque fois que vous fermiez les yeux, vous entendiez des bruits de pas ou des rires étouffés. Cette nuit vous a complètement terrifié. C''est presque comme si quelque chose dans votre maison voulait vous rendre fou...'
+'Du hast die Präsenz einer Seele gespürt.': 'Du hast die Präsenz einer Seele gespürt.'
+'Im Rahmen einer intensiven Meditation ist es dir gelungen, die Seele eines Mitbürgers in der Außenwelt zu lokalisieren. Deinen Berechnungen zufolge sollte sie sich bei {x}/{y} befinden!': 'Im Rahmen einer intensiven Meditation ist es dir gelungen, die Seele eines Mitbürgers in der Außenwelt zu lokalisieren. Deinen Berechnungen zufolge sollte sie sich bei {x}/{y} befinden!'
+'Durchgang in Kraft': 'Durchgang in Kraft'

@@ -344,7 +344,7 @@ Einnehmen: Utiliser
 Einsetzen: Utiliser
 'Du hast dein <span class="tool">{item}</span> ausgepackt und <span class="tool">{items_spawn}</span> erhalten!': 'Vous avez ouvert <span class="tool">{item}</span>, vous trouvez <span class="tool">{items_spawn}</span> à l''intérieur.'
 '<nt-spawned>Trotz aller Anstrengungen ist es dir nicht gelungen, den {item} zu öffnen...</nt-spawned><t-spawned>Du hast die {item} geöffnet und darin {items_spawn} gefunden!</t-spawned>': '<nt-spawned>Vous perdez un temps précieux à chercher la combinaison de {item}, en vain.<hr />Vous avez utilisé <strong>1 point d''action</strong>.</nt-spawned><t-spawned>Ça y est ! <strong>Vous avez trouvé la combinaison secrète du coffre !</strong> Il s''agissait de {combination}... Vous découvrez {items_spawn} à l''intérieur.<hr />Vous avez utilisé <strong>1 point d''action</strong>.</t-spawned>'
-Laden: Assembler
+Laden: Assembler 
 'Du hast eine {items_consume} in dein/e/n {item_from} eingelegt und {item_to} erhalten!': 'Vous avez inséré une {items_consume} dans votre {item_from} et reçu {item_to} !'
 'Waffe einsetzen': 'Attaquer avec'
 'Zum Glück sind hier keine Zombies...': 'Il n''y a pas de zombie dans le coin...'
@@ -1160,10 +1160,14 @@ Larven-Marmelade: Marmelarve
 'Reinigen (1AP) (Wasser)': 'Purifier (1PA)'
 'Du schleichst dich von hinten an {target} heran und es gelingt dir, ihm einen tierischen Schrecken einzujagen!': 'Vous vous approchez furtivement de {target} par derrière et réussissez à lui faire une peur bleue !'
 'Du schleichst dich von hinten an {target} heran. Dabei machst du allerdings so einen Lärm, dass {target} dich bereits frühzeitig bemerkt. Das hat wohl nicht geklappt...': 'Vous vous approchez furtivement de {target} par derrière. Mais vous faites tellement de bruit que {target} vous remarque rapidement. Ça n''a pas marché...'
-Erschrecken: Utiliser
+Erschrecken: Utiliser 
 'Schaurige Maske': 'Masque effrayant'
 'Irgendwie erinnert diese Maske dich an jemanden...': 'D''une certaine manière, ce masque vous rappelle quelqu''un...'
 Besinnen: Se recueillir
 'Du nimmst dir einen Moment Zeit, um zur Ruhe zu kommen und dich auf das wesentliche zu besinnen.': 'Vous prenez un moment pour vous calmer et vous concentrer sur l''essentiel.'
 'Zone ausheben': 'Excaver la zone'
 'Du hast diese Zone erfolgreich ausgehoben und zahlreiche neue Buddelmöglichkeiten entdeckt.': 'Tu as réussi à creuser dans cette zone et à découvrir de nouveaux endroits où fouiller.'
+'Es schmeckt wirklich komisch... aber wenigstens ist dein Hunger ein wenig gestillt. Glaub aber nicht, dass du dadurch zusätzliche APs erhältst...': 'Es schmeckt wirklich komisch... aber wenigstens ist dein Hunger ein wenig gestillt. Glaub aber nicht, dass du dadurch zusätzliche APs erhältst...'
+'Du tötest 1 Zombie in der Zone zu töten und erhältst du die Kontrolle über die Zone für 5 Minuten.': 'Du tötest 1 Zombie in der Zone zu töten und erhältst du die Kontrolle über die Zone für 5 Minuten.'
+'Es sieht wirklich nicht so aus, als würdest du hier noch neue Buddelmöglichkeiten finden können...': 'Es sieht wirklich nicht so aus, als würdest du hier noch neue Buddelmöglichkeiten finden können...'
+'Nach neuen Buddelmöglichkeiten zu suchen macht nur Sinn, wenn es keine offensichtlichen Buddelmöglichkeiten mehr gibt.': 'Nach neuen Buddelmöglichkeiten zu suchen macht nur Sinn, wenn es keine offensichtlichen Buddelmöglichkeiten mehr gibt.'

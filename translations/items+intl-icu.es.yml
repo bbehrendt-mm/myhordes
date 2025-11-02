@@ -1161,9 +1161,13 @@ Larven-Marmelade: Mermelada de larvas
 'Du schleichst dich von hinten an {target} heran und es gelingt dir, ihm einen tierischen Schrecken einzujagen!': 'Te acercas sigilosamente a {target} y ¡casi le da un infarto del susto!'
 'Du schleichst dich von hinten an {target} heran. Dabei machst du allerdings so einen Lärm, dass {target} dich bereits frühzeitig bemerkt. Das hat wohl nicht geklappt...': 'Te acercas sigilosamente a {target}, pero gracias a tu total falta de sutileza, {target} te nota casi al instante. No te ha salido bien la broma…'
 Erschrecken: Aterrorizar
-'Schaurige Maske': 'Mascará Escalofriante'
+'Schaurige Maske': 'Máscara Escalofriante'
 'Irgendwie erinnert diese Maske dich an jemanden...': 'De alguna manera, esta máscara te recuerda a alguien… en todo caso, te pone los pelos en punta.'
-Besinnen: Besinnen
-'Du nimmst dir einen Moment Zeit, um zur Ruhe zu kommen und dich auf das wesentliche zu besinnen.': 'Du nimmst dir einen Moment Zeit, um zur Ruhe zu kommen und dich auf das wesentliche zu besinnen.'
-'Zone ausheben': 'Zone ausheben'
-'Du hast diese Zone erfolgreich ausgehoben und zahlreiche neue Buddelmöglichkeiten entdeckt.': 'Du hast diese Zone erfolgreich ausgehoben und zahlreiche neue Buddelmöglichkeiten entdeckt.'
+Besinnen: Recogerse
+'Du nimmst dir einen Moment Zeit, um zur Ruhe zu kommen und dich auf das wesentliche zu besinnen.': 'Te recoges un instante en silencio para enfocar tu mente en lo esencial.'
+'Zone ausheben': 'Excavar la zona'
+'Du hast diese Zone erfolgreich ausgehoben und zahlreiche neue Buddelmöglichkeiten entdeckt.': 'Has conseguido cavar en esta zona y descubrir nuevas oportunidades de sitios de búsqueda.'
+'Es schmeckt wirklich komisch... aber wenigstens ist dein Hunger ein wenig gestillt. Glaub aber nicht, dass du dadurch zusätzliche APs erhältst...': 'Es schmeckt wirklich komisch... aber wenigstens ist dein Hunger ein wenig gestillt. Glaub aber nicht, dass du dadurch zusätzliche APs erhältst...'
+'Du tötest 1 Zombie in der Zone zu töten und erhältst du die Kontrolle über die Zone für 5 Minuten.': 'Du tötest 1 Zombie in der Zone zu töten und erhältst du die Kontrolle über die Zone für 5 Minuten.'
+'Es sieht wirklich nicht so aus, als würdest du hier noch neue Buddelmöglichkeiten finden können...': 'Es sieht wirklich nicht so aus, als würdest du hier noch neue Buddelmöglichkeiten finden können...'
+'Nach neuen Buddelmöglichkeiten zu suchen macht nur Sinn, wenn es keine offensichtlichen Buddelmöglichkeiten mehr gibt.': 'Nach neuen Buddelmöglichkeiten zu suchen macht nur Sinn, wenn es keine offensichtlichen Buddelmöglichkeiten mehr gibt.'
