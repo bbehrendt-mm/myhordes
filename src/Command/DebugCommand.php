@@ -137,6 +137,11 @@ class DebugCommand extends LanguageCommand
                     $crow = $this->entity_manager->getRepository(User::class)->find(66);
                 }
 
+                if ($crow->getRightsElevation() >= User::USER_LEVEL_CROW && $crow->getEmail() === 'crow') {
+                    $output->writeln('<info>User 66 is already a crow.</info>');
+                    return 0;
+                }
+
                 if ($crow->getRightsElevation() > User::USER_LEVEL_BASIC || !str_ends_with($crow->getEmail(), "@localhost")) {
                     $output->writeln('<error>User 66 is not a debug user. Will not proceed.</error>');
                     return -1;
@@ -188,6 +193,11 @@ class DebugCommand extends LanguageCommand
                         $command->run($nested_input, $output);
                     }
                     $animacteur = $this->entity_manager->getRepository(User::class)->find(67);
+                }
+
+                if ($animacteur->getEmail() === 'anim') {
+                    $output->writeln('<info>User 67 is already a animacteur.</info>');
+                    return 0;
                 }
 
                 if ($animacteur->getRightsElevation() > User::USER_LEVEL_BASIC || !str_ends_with($animacteur->getEmail(), "@localhost")) {
