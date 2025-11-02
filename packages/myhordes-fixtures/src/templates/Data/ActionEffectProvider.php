@@ -111,6 +111,7 @@ class ActionEffectProvider
         $effects_container->add()->identifier('zone_escape_60')->add(new ZoneEffect()->escape(60))->commit();
         $effects_container->add()->identifier('zone_escape_120')->add(new ZoneEffect()->escape(120))->commit();
         $effects_container->add()->identifier('zone_escape_300')->add(new ZoneEffect()->escape(300))->commit();
+        $effects_container->add()->identifier('zone_escape_300_armag')->add(new ZoneEffect()->escape(300)->escapeTag('armag'))->commit();
         $effects_container->add()->identifier('zone_escape_600_armag')->add(new ZoneEffect()->escape(600)->escapeTag('armag'))->commit();
         $effects_container->add()->identifier('zone_chat_60')->add(new ZoneEffect()->chatSilence(60))->commit();
         $effects_container->add()->identifier('zone_improve_5')->add(new ZoneEffect()->improveLevel(5.0))->commit();

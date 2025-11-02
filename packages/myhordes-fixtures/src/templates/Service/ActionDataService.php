@@ -520,7 +520,7 @@ class ActionDataService implements FixtureProcessorInterface {
                 'throw_sandball' => [ 'label' => 'Werfen', /* 'target' => ['type' => ItemTargetDefinition::ItemCitizenOnZoneSBType], */ 'meta' => [ 'must_be_outside', 'during_christmas'], 'result' => [ 'sandball' ], 'message' => '<nt-fail>Du hast einen Sandball in {citizen}s Gesicht geworfen.</nt-fail><t-fail>Hier ist niemand, auf den du den Sandball werfen könntest...</t-fail>' ],
                 'scare' => [ 'label' => 'Erschrecken', 'target' => ['type' => ItemTargetDefinition::ItemCitizenOnZoneSMType], 'meta' => ['during_halloween', 'not_yet_scary'], 'result' => [ 'scary_mask' ] ],
 
-                'special_armag'        => [ 'label' => 'Durchgang in Kraft', 'tooltip_key' => 'heroic_arma_tooltip', 'allow_when_terrorized' => true, 'meta' => [ 'must_be_outside', 'must_be_blocked' ],   'result' => [ ['group' => [ [['do_nothing', 'msg_heroic_arma_fail'], 50], [[ 'msg_heroic_arma_success', 'zone_escape_600_armag', 'kill_1_zombie_s' ], 50]]] ] ],
+                'hero_armag'           => [ 'label' => 'Durchgang in Kraft', 'tooltip_key' => 'heroic_arma_tooltip_h', 'allow_when_terrorized' => true, 'meta' => [ 'must_be_outside', 'must_be_blocked' ], 'result' => [ 'msg_heroic_arma_success', 'zone_escape_300_armag', 'kill_1_zombie_s']],
                 'special_armag_d'      => [ 'label' => 'Durchgang in Kraft', 'tooltip_key' => 'heroic_arma_tooltip', 'allow_when_terrorized' => true, 'meta' => [ 'must_be_outside', 'must_be_blocked', 'must_be_day'],   'result' => [ ['group' => [ [['do_nothing', 'msg_heroic_arma_fail'], 50], [['msg_heroic_arma_success', 'zone_escape_600_armag', 'kill_1_zombie_s' ], 50]]] ] ],
                 'special_armag_n'      => [ 'label' => 'Durchgang in Kraft', 'tooltip_key' => 'heroic_arma_tooltip', 'allow_when_terrorized' => true, 'meta' => [ 'must_be_outside', 'must_be_blocked', 'must_be_night'], 'result' => [ ['group' => [ [['do_nothing', 'msg_heroic_arma_fail'], 25], [['msg_heroic_arma_success', 'zone_escape_600_armag', 'kill_1_zombie_s' ], 75]]] ] ],
                 'special_vote_shaman'  => [ 'label' => 'Den Shamane wählen', 'target' => ['type' => ItemTargetDefinition::ItemCitizenVoteType], 'meta' => [ 'must_be_outside', 'profession_heroic', 'vote_shaman_needed', 'vote_shaman_not_given'] , 'result' => [ 'vote_role_shaman' ] ],
@@ -642,10 +642,10 @@ class ActionDataService implements FixtureProcessorInterface {
                 'hero_generic_rescue' => ['name' => 'hero_generic_rescue', 'unlockable' => true, 'used' => 'Du hast bereits versucht, einen deiner Mitbürger zu retten! Für deine nächste Rettungsaktion musst du bis zu deinem nächsten Leben warten!'],
                 'hero_generic_friendship' => ['name' => 'hero_generic_friendship', 'unlockable' => false, 'used' => 'Du hast deine Großzügigkeit in diesem Leben bereits unter Beweis gestellt!'],
                 'hero_generic_fs_xp' => ['name' => 'hero_generic_fs_xp', 'unlockable' => false, 'used' => 'Du hast deine Großzügigkeit in diesem Leben bereits unter Beweis gestellt!'],
+                'hero_armag' => ['name' => 'hero_armag', 'unlockable' => true],
             ],
 
             'specials' => [
-                ['name' => 'special_armag', 'icon' => 'armag', 'consumable' => true],
                 ['name' => 'special_armag_d', 'icon' => 'armag', 'consumable' => true],
                 ['name' => 'special_armag_n', 'icon' => 'armag', 'consumable' => true],
                 ['name' => 'special_vote_shaman', 'icon' => 'hero', 'consumable' => false],
@@ -1175,6 +1175,7 @@ class ActionDataService implements FixtureProcessorInterface {
                 'escape_item'               => '<t-escape>Mithilfe der {item} hast du dir etwas Zeit erkauft ... du solltest diesen Ort schnell verlassen!</t-escape><t-reverse-escape>Du setzt {item} in Gang. Ein gewaltiger Blitz schießt heraus, mitten in die Reihen der Zombies! Geblendet ergreifen {zombies} Zombies die Flucht.</t-reverse-escape>',
                 'escape_item_camera'        => '<nt-any-escape>Ein stumpfes Klicken ertönt und ein wenig grünlicher Rauch entschwebt der {item_initial} ...</nt-any-escape><t-escape>Du setzt {item_initial} in Gang. Ein gewaltiger Blitz schießt heraus, mitten in die Reihen der Zombies! Geblendet stolpern sie umher und sind nicht länger in der Lage, dich zu finden.</t-escape><t-reverse-escape>Du setzt {item_initial} in Gang. Ein gewaltiger Blitz schießt heraus, mitten in die Reihen der Zombies! Geblendet ergreifen {zombies} Zombies die Flucht.</t-reverse-escape>',
 
+                'heroic_arma_tooltip_h'     => 'Du tötest 1 Zombie in der Zone zu töten und erhältst du die Kontrolle über die Zone für 5 Minuten.',
                 'heroic_arma_tooltip'       => 'Du hast die Chance, 1 Zombie in der Zone zu töten; wenn du erfolgreich bist, erhältst du die Kontrolle über die Zone für 10 Minuten.<br /><em>Angesichts des <strong>Armageddon</strong> kannst du diese Spezialaktion <strong>einmal pro Spiel</strong> durchführen.</em>',
                 'heroic_arma_fail'          => 'Du versuchst dich einem Zombie zu nähern, aber <strong>der Zombie reißt dir fast das Gesicht mit seinen Zähnen ab</strong>! Unmöglich zu bestehen...',
                 'heroic_arma_success'       => 'Du rennst schreiend in den ersten Zombie in Reichweite! Mit einem kraftvollen, gut angepassten Schulterschlag <strong>schickst du ihn ein paar Meter weiter in den Staub</strong>...{hr}Du kannst diese Gelegenheit zur Flucht nutzen!',

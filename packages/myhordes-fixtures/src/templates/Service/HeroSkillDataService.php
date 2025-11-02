@@ -280,9 +280,11 @@ class HeroSkillDataService implements FixtureProcessorInterface {
                           'Ein weiterer zusätzlicher Platz im Rucksack',
                           'Verbesserung Zweite Lunge (4 AP, 6 EP)',
                           '30 Extra-O² in begehbaren Ruinen',
+                          'Durchgang in Kraft'
                       ])
             ->addCitizenProperty(CitizenProperties::InventorySpaceBonus, 3)
             // ->addCitizenProperty(CitizenProperties::HeroPunchEscapeTime, 30) // [S19] Removal of the 30-second control gain at the Enduring Master level.
+            ->unlocksAction('hero_armag')
             ->addCitizenProperty(CitizenProperties::OxygenTimeBonus, 90)
             ->addCitizenProperty(CitizenProperties::HeroSecondWindBaseSP, 6)
             ->level(3)->unlockAt(80)->commit();

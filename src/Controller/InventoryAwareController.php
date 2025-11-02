@@ -902,7 +902,7 @@ class InventoryAwareController extends CustomAbstractController
             }
 
             // Special handler for the ARMA action
-            $arma_actions = ['special_armag','special_armag_d','special_armag_n'];
+            $arma_actions = ['special_armag_d','special_armag_n'];
             if (in_array( $special->getName(), $arma_actions))
                 foreach ($citizen->getSpecialActions() as $specialAction)
                     if (in_array( $specialAction->getName(), $arma_actions))
