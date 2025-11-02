@@ -134,6 +134,9 @@ class TownHomeController extends TownController
                 case PrivateMessage::TEMPLATE_CROW_HALLOWEEN_TERROR:
                     $thread->setTitle( $this->translator->trans('Eine schaurige Nacht!', [], 'game') );
                     break;
+                case PrivateMessage::TEMPLATE_CROW_SANCTUARY:
+                    $thread->setTitle( $this->translator->trans('Du hast die Präsenz einer Seele gespürt.', [], 'game') );
+                    break;
 
                 default: break;
             }
@@ -246,7 +249,7 @@ class TownHomeController extends TownController
         $citizen = $this->getActiveCitizen();
         $town = $citizen->getTown();
         $home = $citizen->getHome();
-        
+
         $has_urbanism = $th->hasUrbanism($town);
 
         // Get the next upgrade level for the house
@@ -435,7 +438,7 @@ class TownHomeController extends TownController
         /** @var CitizenHomePrototype $next */
         $next = $em->getRepository(CitizenHomePrototype::class)->findOneBy( ['level' => $home->getPrototype()->getLevel() + 1] );
         if (!$next) return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
-        
+
         $required_ap = $has_urbanism ? $next->getApUrbanism() : $next->getAp();
 
         // Make sure the citizen is not tired

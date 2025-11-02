@@ -26,6 +26,7 @@ class PrivateMessage
     const int TEMPLATE_CROW_GAME_WELCOME  = 14;
     const int TEMPLATE_CROW_HALLOWEEN_TERROR = 15;
     const int TEMPLATE_CROW_HALLOWEEN_INFECT = 16;
+    const int TEMPLATE_CROW_SANCTUARY = 17;
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]

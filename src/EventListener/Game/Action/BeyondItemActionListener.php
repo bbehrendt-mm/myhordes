@@ -8,6 +8,7 @@ use App\Entity\Citizen;
 use App\Entity\CitizenStatus;
 use App\Entity\EventActivationMarker;
 use App\Entity\ItemPrototype;
+use App\Entity\PrivateMessage;
 use App\Entity\Zone;
 use App\Enum\ActionCounterType;
 use App\Enum\Configuration\TownSetting;
@@ -15,6 +16,7 @@ use App\Enum\Game\TransferItemModality;
 use App\Event\Game\Actions\CustomActionProcessorEvent;
 use App\EventListener\ContainerTypeTrait;
 use App\Service\CitizenHandler;
+use App\Service\CrowService;
 use App\Service\EventProxyService;
 use App\Service\InventoryHandler;
 use App\Service\ItemFactory;
@@ -54,6 +56,7 @@ final class BeyondItemActionListener implements ServiceSubscriberInterface
             EventProxyService::class,
             ZoneHandler::class,
             ItemFactory::class,
+            CrowService::class,
         ];
     }
 
@@ -166,15 +169,25 @@ final class BeyondItemActionListener implements ServiceSubscriberInterface
             }
 
             case 31:
-                /** @var Zone $zone */
-                $zone = $this->getService(RandomGenerator::class)->pick(
-                    $this->getService(ZoneHandler::class)->getSoulZones( $event->citizen->getTown() )
-                );
 
-                if ($zone) $event->cache->addMessage(
-                    T::__('Während du dich konzentrierst, spürst du für einen kurzen Moment die Aura eines deiner verstorbenen Mitbürger. Sie scheint von {location} zu kommen...', 'game'),
-                    [ 'location' => "<span class=\"tool\">[ {$zone->getX()} / {$zone->getY()} ]</span>" ]
-                ); else $event->cache->addMessage(
+                $red_zones  = $this->getService(ZoneHandler::class)->getSoulZones( $event->citizen->getTown(), false, true );
+                $blue_zones = $this->getService(ZoneHandler::class)->getSoulZones( $event->citizen->getTown(), true, false );
+
+                if (!empty($red_zones) && !empty($blue_zones) && $this->getService(RandomGenerator::class)->chance( 0.5 )) $zones = $red_zones;
+                elseif (!empty($blue_zones)) $zones = $blue_zones;
+                elseif (!empty($red_zones)) $zones = $red_zones;
+                else $zones = [];
+
+                /** @var Zone $zone */
+                $zone = $this->getService(RandomGenerator::class)->pick($zones);
+
+                if ($zone) {
+                    $event->cache->addMessage(
+                        T::__('Während du dich konzentrierst, spürst du für einen kurzen Moment die Aura eines deiner verstorbenen Mitbürger. Sie scheint von {location} zu kommen...', 'game'),
+                        ['location' => "<span class=\"tool\">[ {$zone->getX()} / {$zone->getY()} ]</span>"]
+                    );
+                    $this->getService(CrowService::class)->postAsPM($event->citizen, '', '', PrivateMessage::TEMPLATE_CROW_SANCTUARY, data: [$zone->getX(), $zone->getY()]);
+                } else $event->cache->addMessage(
                     T::__('Du spürst nichts als Ruhe.', 'game'),
                 );
 

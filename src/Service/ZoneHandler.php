@@ -398,9 +398,12 @@ readonly class ZoneHandler
         }
     }
 
-    public function getSoulZones( Town $town ) {
+    public function getSoulZones( Town $town, bool $blue = true, bool $red = true ): array
+    {
         // Get all soul items within these inventories
-        $soul_items = $this->inventory_handler->getAllItems($town, ['soul_blue_#00','soul_blue_#01','soul_red_#00'], false, false, false, true, true, false);
+        $souls = $blue ? ['soul_blue_#00', 'soul_blue_#01'] : [];
+        if ($red) $souls[] = 'soul_red_#00';
+        $soul_items = $this->inventory_handler->getAllItems($town, $souls, false, false, false, true, true, false);
 
         $cache = []; $found_zone_ids = [];
         foreach ($soul_items as $item)

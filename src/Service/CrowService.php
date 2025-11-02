@@ -106,7 +106,7 @@ class CrowService {
     }
 
 
-    public function postAsPM( Citizen $receiver, string $title, string $text, int $template = 0, ?int $foreign = null, $data = null ): void
+    public function postAsPM( Citizen $receiver, string $title, string $text, int $template = 0, ?int $foreign = null, ?array $data = null ): void
     {
 
         $thread = new PrivateMessageThread();
