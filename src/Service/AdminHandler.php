@@ -7,31 +7,22 @@ use App\Entity\Citizen;
 use App\Entity\CauseOfDeath;
 use App\Entity\Post;
 use App\Entity\User;
+use App\Service\User\UserCapabilityService;
 use App\Structures\MyHordesConf;
+use ArrayHelpers\Arr;
 use DateTime;
 use DirectoryIterator;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use PhpParser\Node\Param;
 use SplFileInfo;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class AdminHandler
 {
-    private EntityManagerInterface $entity_manager;
-    /**
-     * @var DeathHandler
-     */
-    private DeathHandler $death_handler;
-    private TranslatorInterface $translator;
-    private LogTemplateHandler $log;
-    private UserHandler $userHandler;
-    private CrowService $crow;
-    private ParameterBagInterface $params;
-    private MyHordesConf $conf;
-
-    private $requiredRole = [
+    private static array $requiredRole = [
         'headshot' => 'ROLE_SUB_ADMIN',
         'suicid' => 'ROLE_CROW',
         'setDefaultRoleDev' => 'ROLE_SUB_ADMIN',
@@ -41,28 +32,41 @@ class AdminHandler
         'eatLiver' => 'ROLE_CROW'
     ];
 
-    public function __construct( EntityManagerInterface $em, DeathHandler $dh, TranslatorInterface $ti, LogTemplateHandler $lt, UserHandler $uh, CrowService $crow, ParameterBagInterface $params, ConfMaster $conf)
-    {
-        $this->entity_manager = $em;
-        $this->death_handler = $dh;
-        $this->translator = $ti;
-        $this->log = $lt;
-        $this->userHandler = $uh;
-        $this->crow = $crow;
-        $this->params = $params;
-        $this->conf = $conf->getGlobalConf();
-    }
+    private static array $cheatingAllowed = [
+        'headshot',
+        'suicid',
+        'eatLiver'
+    ];
 
-    protected function hasRights(int $sourceUser, string $desiredAction)
+    public function __construct(
+        private readonly EntityManagerInterface $entity_manager,
+        private readonly DeathHandler           $death_handler,
+        private readonly TranslatorInterface    $translator,
+        private readonly LogTemplateHandler     $log,
+        private readonly UserCapabilityService  $userCapability,
+        private readonly ParameterBagInterface  $params,
+        private readonly ConfMaster             $conf,
+        private readonly Security               $security,
+    ) { }
+
+    protected function hasRights(int $sourceUser, string $desiredAction, ?int $id = null): bool
     {
-        if (!isset($this->requiredRole[$desiredAction])) return false;
+        $role = Arr::get(self::$requiredRole, $desiredAction);
+        $cheating_allowed = in_array( $desiredAction, self::$cheatingAllowed );
+
+        if (!$role) return false;
         $acting_user = $this->entity_manager->getRepository(User::class)->find($sourceUser);
-        return $acting_user && $this->userHandler->hasRole( $acting_user, $this->requiredRole[$desiredAction] );
+
+        $grantedByCheating = $cheating_allowed &&
+            $id !== null &&
+            $this->security->isGranted('administrate', $this->entity_manager->getRepository(Citizen::class)->find($id) );
+
+        return $acting_user && ($grantedByCheating || $this->userCapability->hasRole( $acting_user, self::$requiredRole[$desiredAction] ));
     }
 
     public function headshot(int $sourceUser, int $targetCitizenId): string
     {
-        if(!$this->hasRights($sourceUser, 'headshot'))
+        if(!$this->hasRights($sourceUser, 'headshot', $targetCitizenId))
             return $this->translator->trans('Dazu hast Du kein Recht.', [], 'game');
 
         return $this->kill_citizen($targetCitizenId, CauseOfDeath::Headshot);
@@ -105,8 +109,8 @@ class AdminHandler
 
         $post = $this->entity_manager->getRepository(Post::class)->find($postId);
         $reports = $post->getAdminReports();
-        
-        try 
+
+        try
         {
             foreach ($reports as $report) {
                 $report->setSeen(true);
@@ -126,15 +130,15 @@ class AdminHandler
             return false;
 
         $user = $this->entity_manager->getRepository(User::class)->find($sourceUser);
-            
+
         if ($asDev) {
             $defaultRole = "DEV";
-        }    
+        }
         else {
             $defaultRole = "USER";
         }
-        
-        try 
+
+        try
         {
             $user->setPostAsDefault($defaultRole);
             $this->entity_manager->persist($user);
@@ -149,7 +153,7 @@ class AdminHandler
     public function suicid(int $sourceUser): string
     {
         if(!$this->hasRights($sourceUser, 'suicid'))
-            return $this->translator->trans('Dazu hast Du kein Recht.', [], 'game');   
+            return $this->translator->trans('Dazu hast Du kein Recht.', [], 'game');
 
         /** @var User $user */
         $user = $this->entity_manager->getRepository(User::class)->find($sourceUser);
@@ -267,7 +271,7 @@ class AdminHandler
     }
 
     public function getDbDumps(): array {
-        $storages = $this->conf->getData()['backup']['storages'];
+        $storages = $this->conf->getGlobalConf()->getData()['backup']['storages'];
 
         if (count($storages) == 0) return [];
 

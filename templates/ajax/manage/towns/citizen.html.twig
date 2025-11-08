@@ -170,7 +170,7 @@
                 document.getElementById('x-headshot').addEventListener('click', function(e) {
                     e.preventDefault();
                     if (confirm('{{ 'Das Leben dieses Bürgers sofort beenden?'|trans({},'admin') }}'))
-                        $.ajax.easySend( '{{ path('admin_users_citizen_headshot', { 'id': citizen_selected.user.id }) }}', [],
+                        $.ajax.easySend( '{{ path('admin_users_citizen_headshot', { 'town': citizen_selected.town.id, 'id': citizen_selected.id }) }}', [],
                             function () {
                                 $.ajax.load(null, '{{ path('admin_town_citizen_view', {town: town.id, id: citizen_selected.id}) }}', true);
                             } )

@@ -1281,7 +1281,7 @@ class AdminUserController extends AdminActionController
     #[Route(path: 'api/admin/users/{id}/ban/lift', name: 'admin_users_ban_lift', requirements: ['id' => '\d+'])]
     #[AdminLogProfile(enabled: true)]
     public function users_ban_lift(int $id): Response
-    {                
+    {
         if ($this->adminHandler->liftAllBans($this->getUser()->getId(), $id))
             return AjaxResponse::success();
 
@@ -1343,7 +1343,7 @@ class AdminUserController extends AdminActionController
         return $this->render( 'ajax/admin/users/citizen.html.twig', $this->addDefaultTwigArgs("admin_users_citizen", [
             'user' => $user,
             'user_citizen' => $citizen,
-        ]));        
+        ]));
     }
 
     /**
@@ -1404,17 +1404,18 @@ class AdminUserController extends AdminActionController
             'reverse_friends' => $this->entity_manager->getRepository(User::class)->findInverseFriends($user, true),
         ]));
     }
+
     /**
-     * @param int $id
+     * @param Citizen $citizen
      * @param AdminHandler $admh
      * @return Response
      */
-    #[Route(path: 'api/admin/users/{id}/citizen/headshot', name: 'admin_users_citizen_headshot', requirements: ['id' => '\d+'])]
+    #[Route(path: 'api/manage/town/{town:citizen<\d+>}/citizen/{id:citizen<\d+>}/headshot', name: 'admin_users_citizen_headshot')]
     #[AdminLogProfile(enabled: true)]
-    public function users_citizen_headshot(int $id, AdminHandler $admh): Response
+    public function users_citizen_headshot(Citizen $citizen, AdminHandler $admh): Response
     {
-        if ($admh->headshot($this->getUser()->getId(), $id))
-            return AjaxResponse::success();
+        if ($m = $admh->headshot($this->getUser()->getId(), $citizen->getId()))
+            return AjaxResponse::success(['message' => $m]);
 
         return AjaxResponse::error(ErrorHelper::ErrorDatabaseException);
     }
