@@ -136,7 +136,7 @@ class UserUnlockableService implements ServiceSubscriberInterface
             });
 
 
-            return max(0, $value + ($this->getService(ConfMaster::class)->getGlobalConf()->get(MyHordesSetting::StagingSettingsEnabled)
+            return max(0, $value + $user->getBonusHeroicXP() + ($this->getService(ConfMaster::class)->getGlobalConf()->get(MyHordesSetting::StagingSettingsEnabled)
                 ? $this->getService(ConfMaster::class)->getGlobalConf()->get(MyHordesSetting::StagingProtoHxp)
                 : 0
             ));

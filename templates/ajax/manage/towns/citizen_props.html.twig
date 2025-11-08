@@ -2,7 +2,7 @@
 {% for skill in skills %}
     <div class="row">
         <div class="cell rw-6">
-            <div class="note note-lightest">{{ skill.title ?? skill.name }}</div>
+            <div class="note note-lightest">{{ (skill.title ?? skill.name)|trans({}, 'game') }}</div>
         </div>
         <div class="padded-small cell rw-6">
             <code class="small">{{ skill.level }}</code>

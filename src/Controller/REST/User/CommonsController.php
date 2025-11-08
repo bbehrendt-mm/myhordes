@@ -364,7 +364,7 @@ class CommonsController extends CustomAbstractCoreController
                 $capability->hasRole( $this->getUser(), 'ROLE_CHEATER' )  => $this->translator->trans('Community-Tools', [], 'global'),
             },
             'links' => array_map( fn(array $entry) => [
-                'name' => $entry['name'],
+                'name' => $this->translator->trans($entry['name'], [], 'admin'),
                 'url' => $this->generateUrl($entry['route']),
             ], [
                 ...match(true) {

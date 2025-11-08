@@ -180,7 +180,7 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
     private ?RegistrationToken $registrationToken = null;
 
     #[ORM\Column]
-    private int $bonusHeroDaysSpent = 0;
+    private int $bonusHeroicXP = 0;
 
     #[ORM\Column]
     private int $tosver = 0;
@@ -585,10 +585,6 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
         }
 
         return $this;
-    }
-    public function getAllHeroDaysSpent(): int
-    {
-        return ($this->getHeroDaysSpent() ?? 0) + ($this->getImportedHeroDaysSpent() ?? 0) + ($this->getBonusHeroDaysSpent() ?? 0);
     }
     public function getHeroDaysSpent(): ?int
     {
@@ -1034,14 +1030,14 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
         return $this;
     }
 
-    public function getBonusHeroDaysSpent(): ?int
+    public function getBonusHeroicXP(): ?int
     {
-        return $this->bonusHeroDaysSpent;
+        return $this->bonusHeroicXP;
     }
 
-    public function setBonusHeroDaysSpent(int $bonusHeroDaysSpent): self
+    public function setBonusHeroicXP(int $bonusHeroicXP): self
     {
-        $this->bonusHeroDaysSpent = $bonusHeroDaysSpent;
+        $this->bonusHeroicXP = $bonusHeroicXP;
 
         return $this;
     }

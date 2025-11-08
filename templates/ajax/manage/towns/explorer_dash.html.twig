@@ -163,9 +163,20 @@
                             {% endif %}
 			        		<select id="activate-event">
 			        			<option value="">{{ "Kein"|trans({}, 'global') }}</option>
-			        			{% for eventName,event in events %}
-			        				<option value="{{ eventName }}" x-param="{{ eventName }}" {% if current_event is not null and current_event[0].name == eventName %}selected{% endif %}>{{ event.conf.name|trans({}, 'game') }}</option>
-			        			{% endfor %}
+                                <optgroup label="{{ 'Öffentliche Events'|trans({}, 'admin') }}">
+                                    {% for eventName,event in events %}
+                                        {% if event.public is defined and event.public %}
+                                            <option value="{{ eventName }}" x-param="{{ eventName }}" {% if current_event is not null and current_event[0].name == eventName %}selected{% endif %}>{{ event.conf.name|trans({}, 'game') }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </optgroup>
+                                <optgroup label="{{ 'Interne Events'|trans({}, 'admin') }}">
+                                    {% for eventName,event in events %}
+                                        {% if event.public is not defined or not event.public %}
+                                            <option value="{{ eventName }}" x-param="{{ eventName }}" {% if current_event is not null and current_event[0].name == eventName %}selected{% endif %}>{{ '[ ' ~ eventName ~ ' ]' }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </optgroup>
 			        		</select>
 			        		<div id="set_event_button" class="button inline small">{{ 'Ausführen'|trans({},'admin') }}</div>
 			        	</div>

@@ -283,6 +283,7 @@ class AdminUserController extends AdminActionController
             'swap_pivots' => $this->entity_manager->getRepository(UserSwapPivot::class)->findBy(['principal' => $user]),
             'xp' => [
                 'season' => $unlockable->getHeroicExperience( $user, true ),
+                'bonus' => $user->getBonusHeroicXP(),
                 'total' => $unlockable->getHeroicExperience( $user, null ),
                 'legacy_mh' => $unlockable->getLegacyHeroDaysSpent( $user, false ),
                 'legacy_twin' => $unlockable->getLegacyHeroDaysSpent( $user, true ),
@@ -495,7 +496,7 @@ class AdminUserController extends AdminActionController
 
         if (in_array($action, [
                 'delete_token', 'invalidate', 'validate', 'twin_full_reset', 'twin_main_reset', 'twin_main_full_import', 'delete', 'rename',
-                'shadow', 'whitelist', 'unwhitelist', 'etwin_reset', 'herodays',
+                'shadow', 'whitelist', 'unwhitelist', 'etwin_reset', 'herodays', 'bonusxp',
                 'team', 'change_mail', 'ref_rename', 'ref_disable', 'ref_enable', 'set_sponsor', 'mh_unreset', 'forget_name_history',
             ]) && !$this->isGranted('ROLE_SUB_ADMIN'))
             return AjaxResponse::error( ErrorHelper::ErrorPermissionError );
@@ -990,6 +991,14 @@ class AdminUserController extends AdminActionController
                 $unlockService->setLegacyHeroDaysSpent( $user, null, (int)$param );
                 $this->entity_manager->persist($user);
                 break;
+
+            case 'bonusxp':
+                if (!is_numeric($param)) return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
+                $user->setBonusHeroicXP( $param );
+                $this->entity_manager->persist($user);
+                $clearCache("user-{$user->getId()}-hxp");
+                break;
+
             case "dbg_soulpoints":
                 if (empty($param) || !is_numeric($param)) return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
                 $user->setSoulPoints( max(0,$param) );
