@@ -4,6 +4,7 @@ namespace App\Controller\REST\Game\Town\Core;
 
 use App\Annotations\GateKeeperProfile;
 use App\Annotations\Semaphore;
+use App\Controller\BeyondController;
 use App\Controller\CustomAbstractCoreController;
 use App\Controller\Town\TownController;
 use App\Entity\BuildingPrototype;
@@ -16,6 +17,7 @@ use App\Service\CitizenHandler;
 use App\Service\ErrorHelper;
 use App\Service\EventProxyService;
 use App\Service\GameEventService;
+use App\Service\InventoryHandler;
 use App\Service\JSONRequestParser;
 use App\Service\LogTemplateHandler;
 use App\Service\TownHandler;
@@ -137,6 +139,7 @@ class DoorController extends CustomAbstractCoreController
         EntityManagerInterface $em,
         LogTemplateHandler $log,
         TownHandler $th,
+        InventoryHandler $inv,
         string $special = 'normal',
     ): JsonResponse {
         $citizen = $this->getActiveCitizen();
@@ -155,6 +158,16 @@ class DoorController extends CustomAbstractCoreController
                 break;
             default: return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
         }
+
+        // Check inventory
+        $inv_size = $inv->getSize( $citizen->getInventory() );
+        $heavy_size = $inv->getHeavyItemSize( $citizen->getInventory() );
+
+        if (
+            ($inv_size > 0 && $citizen->getInventory()->getItems()->count() > $inv_size) ||
+            ($heavy_size > 0 && $inv->countHeavyItems( $citizen->getInventory() ) > $heavy_size)
+        )
+            return AjaxResponse::error( ErrorHelper::ErrorEncumbered );
 
         $zone = $em->getRepository(Zone::class)->findOneByPosition($citizen->getTown(), 0, 0);
 

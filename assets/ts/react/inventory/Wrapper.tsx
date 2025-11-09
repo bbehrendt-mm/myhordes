@@ -742,7 +742,7 @@ const HordesEscortInventoryWrapper = (props: escortMountProps) => {
                 <li key={i} className="free"/>)
             }
             {heavyItems.map((item,index) => <React.Fragment key={item.i}><SingleItem
-                className={index > bag.heavy ? "bg-over" : "bg-heavy"}
+                className={index >= bag.heavy ? "bg-over" : "bg-heavy"}
                 item={item} data={(bagVaultData ?? {})[item.p] ?? null} mods={bag.mods} locked={item.e || loading}
                 onClick={handleTransfer(props.rucksackId, props.floorId, 'down')}
                 blur={null}/>

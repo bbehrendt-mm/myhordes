@@ -837,6 +837,19 @@ class BeyondController extends InventoryAwareController
             if (count($movers) > 1 && $mover->getEscortSettings() && $mover->getEscortSettings()->getForceDirectReturn() && $away_from_town)
                 return AjaxResponse::errorMessage( $this->translator->trans('{citizen} möchte nicht in diese Richtung gehen! <strong>Er bittet dich darum, ihn in die Stadt zu bringen...</strong>', ['{citizen}' => "<span>{$mover->getName()}</span>"], 'game') );
 
+            // Check inventory
+            $inv_size = $this->inventory_handler->getSize( $mover->getInventory() );
+            $heavy_size = $this->inventory_handler->getHeavyItemSize( $mover->getInventory() );
+
+            if (
+                ($inv_size > 0 && $mover->getInventory()->getItems()->count() > $inv_size) ||
+                ($heavy_size > 0 && $this->inventory_handler->countHeavyItems( $mover->getInventory() ) > $heavy_size)
+            )
+                return AjaxResponse::error( $citizen->getId() === $mover->getId() ? ErrorHelper::ErrorEncumbered : BeyondController::ErrorEscortFailure );
+        }
+
+        $global_movement_interrupted = false;
+        foreach ($movers as $mover) {
             $movement_interrupted = false;
             if ($mover !== $citizen && $mover->hasStatus('wound4') && $this->random_generator->chance(0.20)) {
                 $this->entity_manager->persist($this->log->outsideMoveoutsideMoveFailInjury( $mover ));
@@ -849,12 +862,15 @@ class BeyondController extends InventoryAwareController
             }
 
             if ($movement_interrupted) {
+                $global_movement_interrupted = true;
                 $this->citizen_handler->deductPointsWithFallback($mover, PointType::AP, $primaryPointSource, 1 );
                 $this->entity_manager->persist($mover);
                 $this->entity_manager->flush();
-                return AjaxResponse::error( BeyondController::ErrorEscortFailure );
             }
         }
+
+        if ($global_movement_interrupted)
+            return AjaxResponse::error( BeyondController::ErrorEscortFailure );
 
         $cpNewZone = $this->zone_handler->getZoneControlPoints($new_zone);
         foreach ($movers as $mover)
