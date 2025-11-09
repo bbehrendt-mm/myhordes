@@ -654,6 +654,11 @@ class InventoryAwareController extends CustomAbstractController
         if ($recipe === null || !in_array($recipe->getType(), [Recipe::ManualAnywhere, Recipe::ManualOutside, Recipe::ManualInside]))
             return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
 
+        if (
+            ($recipe->getType() === Recipe::ManualOutside && $citizen->getZone() === null) ||
+            ($recipe->getType() === Recipe::ManualInside && $citizen->getZone() !== null)
+        ) return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
+
         if ($recipe->getName() === 'com027' && !$citizen->getZone() ) {
 
             $lab = $this->doctrineCache->getEntityByIdentifier(CitizenHomeUpgradePrototype::class, 'lab');

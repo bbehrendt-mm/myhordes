@@ -15,12 +15,12 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 #[UniqueConstraint(name: 'recipe_name_unique', columns: ['name'])]
 class Recipe
 {
-    const WorkshopType = 1;
-    const WorkshopTypeShamanSpecific = 2;
-    const WorkshopTypeTechSpecific = 3;
-    const ManualOutside = 11;
-    const ManualInside = 12;
-    const ManualAnywhere = 13;
+    const int WorkshopType = 1;
+    const int WorkshopTypeShamanSpecific = 2;
+    const int WorkshopTypeTechSpecific = 3;
+    const int ManualOutside = 11;
+    const int ManualInside = 12;
+    const int ManualAnywhere = 13;
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
