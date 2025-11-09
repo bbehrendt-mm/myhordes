@@ -122,7 +122,7 @@ class ReapplySkillsCommand extends Command
                 continue;
             }
 
-            if ($citizen->getProfession()->getName() === CitizenProfession::DEFAULT) {
+            if ($citizen->isProfession(CitizenProfession::DEFAULT)) {
                 $output->writeln("<fg=yellow>Citizen #{$citizenId} ({$citizen->getName()}) has not been onboarded yet.</>");
                 continue;
             }

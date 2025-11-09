@@ -239,7 +239,7 @@ final class TransferItemListener implements ServiceSubscriberInterface
 
         // Check Soul limit
         $soul_names = ['soul_blue_#00', 'soul_blue_#01', 'soul_red_#00', 'soul_yellow_#00'];
-        if( $type_to->isRucksack() && $event->to->getCitizen() && in_array($event->item->getPrototype()->getName(), $soul_names) && !$event->to->getCitizen()->hasRole("shaman") && $event->to->getCitizen()->getProfession()->getName() !== "shaman"){
+        if( $type_to->isRucksack() && $event->to->getCitizen() && in_array($event->item->getPrototype()->getName(), $soul_names) && !$event->to->getCitizen()->hasRole("shaman") && !$event->to->getCitizen()->isProfession("shaman")){
             foreach($soul_names as $soul_name) {
                 if ($this->getService(InventoryHandler::class)->countSpecificItems($event->to, $soul_name) > 0) {
                     $event->pushError(InventoryHandler::ErrorTooManySouls);
@@ -369,7 +369,7 @@ final class TransferItemListener implements ServiceSubscriberInterface
             $target_citizen = $event->to->getCitizen();
 
             // We pick a read soul in the World Beyond
-            if ( $target_citizen && !$this->getService(CitizenHandler::class)->hasStatusEffect($target_citizen, "tg_shaman_immune") ) {
+            if ( $target_citizen && !$target_citizen->hasStatus("tg_shaman_immune") ) {
 
                 // Produce logs
                 if (!in_array(TransferItemOption::Silent, $event->options))
@@ -387,7 +387,7 @@ final class TransferItemListener implements ServiceSubscriberInterface
                 $event->markModified()->shouldPersist();
                 $event->stopPropagation();
 
-            } elseif ( !$target_citizen->hasRole('shaman') && $target_citizen->getProfession()->getName() !== 'shaman' && $this->getService(CitizenHandler::class)->hasStatusEffect($target_citizen, "tg_shaman_immune"))
+            } elseif ( !$target_citizen->hasRole('shaman') && !$target_citizen->isProfession('shaman') && $target_citizen->hasStatus("tg_shaman_immune"))
                 $event->pushMessage($this->getService(TranslatorInterface::class)->trans('Du nimmst diese wandernde Seele und betest, dass der Schamane weiß, wie man diesen Trank zubereitet! Und du überlebst! Was für ein Glück, du hätten keine müde Mark auf den Scharlatan gewettet.', [], "game"));
         }
     }

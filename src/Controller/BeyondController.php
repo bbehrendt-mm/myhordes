@@ -185,11 +185,11 @@ class BeyondController extends InventoryAwareController
         $citizen_tired = !$this->citizen_handler->checkPointsWithFallback( $this->getActiveCitizen(), PointType::AP, $primaryPointSource, 1 );
         $citizen_hidden = $this->citizen_handler->citizenIsCamping($this->getActiveCitizen());
 
-        $scavenger_sense = $this->getActiveCitizen()->getProfession()->getName() === 'collec';
+        $scavenger_sense = $this->getActiveCitizen()->isProfession('collec');
         $scout_level = null;
         $scout_sense = false;
 
-        if ($this->getActiveCitizen()->getProfession()->getName() === 'hunter') {
+        if ($this->getActiveCitizen()->isProfession('hunter')) {
             $scout_sense = true;
             $scout_markings_global = $this->getActiveCitizen()->hasRole('guide');
             $scout_level =
@@ -214,7 +214,7 @@ class BeyondController extends InventoryAwareController
 
         $trash_limit =
             $this->getActiveCitizen()->property( CitizenProperties::TrashSearchLimit ) +
-            ($this->getActiveCitizen()->getProfession()->getName() === 'collec' ? 1 : 0);
+            ($this->getActiveCitizen()->isProfession('collec') ? 1 : 0);
 
         return parent::addDefaultTwigArgs( $section, array_merge( [
             'zone_players' => $zone_players,
@@ -222,7 +222,7 @@ class BeyondController extends InventoryAwareController
             'zone_splatter' => max(0, $zone->getInitialZombies() - $zone->getZombies()),
             'can_attack_citizen' => !$this->citizen_handler->isTired($this->getActiveCitizen()) && $this->getActiveCitizen()->getAp() >= $this->getTownConf()->get(TownSetting::OptModifierAttackAp) && !$this->citizen_handler->isWounded($this->getActiveCitizen()) && !$zone->isTownZone(),
             'can_devour_citizen' => $this->getActiveCitizen()->hasRole('ghoul') && !$zone->isTownZone(),
-            'allow_devour_citizen' => !$this->citizen_handler->hasStatusEffect($this->getActiveCitizen(), 'tg_ghoul_eat'),
+            'allow_devour_citizen' => !$this->getActiveCitizen()->hasStatus('tg_ghoul_eat'),
             'zone_cp' => $cp,
             'zone'  =>  $zone,
             'allow_movement' => $allow_movement,
@@ -238,19 +238,19 @@ class BeyondController extends InventoryAwareController
             'lock_trash' => $trash_count >= $trash_limit,
             'citizen_hidden' => $citizen_hidden,
             'can_explore' => $zone->getPrototype() && $zone->getPrototype()->getExplorable() &&
-                !$this->citizen_handler->hasStatusEffect( $this->getActiveCitizen(), ['terror'] ) &&
+                !$this->getActiveCitizen()->hasStatus('terror') &&
                 !$this->citizen_handler->isWounded( $this->getActiveCitizen() ) &&
                 (!$blocked || $scout_movement) && !$zone->activeExplorerStats() && !$this->getActiveCitizen()->currentExplorerStats(),
             'exploration_blocked_wound'     => $zone->getPrototype() && $zone->getPrototype()->getExplorable() && $this->citizen_handler->isWounded( $this->getActiveCitizen() ),
             'exploration_blocked_blocked'   => $zone->getPrototype() && $zone->getPrototype()->getExplorable() && ($blocked && !$scout_movement),
             'exploration_blocked_infection' => false,
-            'exploration_blocked_terror'    => $zone->getPrototype() && $zone->getPrototype()->getExplorable() && $this->citizen_handler->hasStatusEffect( $this->getActiveCitizen(), 'terror' ),
+            'exploration_blocked_terror'    => $zone->getPrototype() && $zone->getPrototype()->getExplorable() && $this->getActiveCitizen()->hasStatus( 'terror' ),
             'exploration_blocked_in_use'    => $zone->getPrototype() && $zone->getPrototype()->getExplorable() && $zone->activeExplorerStats(),
             'exploration_blocked_already'   => $zone->getPrototype() && $zone->getPrototype()->getExplorable() && $this->getActiveCitizen()->currentExplorerStats(),
             'tired' => $this->citizen_handler->isTired($this->getActiveCitizen()),
             'status_info' => [
-                'can_drink' => !$this->citizen_handler->hasStatusEffect($this->getActiveCitizen(), 'hasdrunk'),
-                'can_eat' => !$this->citizen_handler->hasStatusEffect($this->getActiveCitizen(), 'haseaten')
+                'can_drink' => !$this->getActiveCitizen()->hasStatus('hasdrunk'),
+                'can_eat' => !$this->getActiveCitizen()->hasStatus('haseaten')
             ],
         ], $data, $merge_map ? [
             'map_public_json'   => json_encode( $this->town_handler->get_public_map_blob( $this->getActiveCitizen()->getTown(), $this->getActiveCitizen(), match(true) {
@@ -395,14 +395,14 @@ class BeyondController extends InventoryAwareController
 
             $digLevel = match(true) {
                 $zone->getDigs() <= 0 => 0,
-                $citizen->getProfession()->getName() !== 'collec' => null,
+                !$citizen->isProfession('collec') => null,
                 $zone->getDigs() <= 2  => 1,
                 $zone->getDigs() <= 6  => 2,
                 default => 3,
             };
 
             return [
-                'scout' => $citizen->getProfession()->getName() === 'hunter',
+                'scout' => $citizen->isProfession('hunter'),
                 'allow_enter_town' => $can_enter,
                 'doors_open' => $town->getDoor(),
                 'town' => $town,
@@ -411,7 +411,7 @@ class BeyondController extends InventoryAwareController
                 'show_sneaky' => $is_on_zero && $citizen->hasRole('ghoul') && $town->getDoor(),
                 'enter_costs_ap' => $require_ap,
                 'can_escape' => !$this->citizen_handler->isWounded( $citizen ) && !$citizen_tired,
-                'can_attack' => !$citizen_tired && !$this->citizen_handler->hasStatusEffect($citizen, 'wound2'),
+                'can_attack' => !$citizen_tired && !$citizen->hasStatus('wound2'),
                 'can_attack_nr' => $citizen_tired ? 'tired' : ( $this->citizen_handler->isWounded($citizen) ? 'wounded' : false ),
                 'can_escape_nr' => $citizen_tired ? 'tired' : ( $this->citizen_handler->isWounded($citizen) ? 'wounded' : false ),
                 'zone_blocked' => $blocked,
@@ -526,7 +526,7 @@ class BeyondController extends InventoryAwareController
 
         $limit =
             $citizen->property( CitizenProperties::TrashSearchLimit ) +
-            ($citizen->getProfession()->getName() === 'collec' ? 1 : 0);
+            ($citizen->isProfession('collec') ? 1 : 0);
         if ($trashlock->getCount() >= $limit) return AjaxResponse::error(self::ErrorTrashLimitHit);
 
         $inv_target = $citizen->getInventory();
@@ -694,7 +694,7 @@ class BeyondController extends InventoryAwareController
             return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
 
         // Make sure the citizen is not wounded or terrorized
-        if ($this->citizen_handler->isWounded( $citizen ) || $this->citizen_handler->hasStatusEffect( $citizen, ['terror'] ))
+        if ($this->citizen_handler->isWounded( $citizen ) || $citizen->hasStatus('terror'))
             return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
 
         $this->clearZoneCache();
@@ -743,7 +743,7 @@ class BeyondController extends InventoryAwareController
         $this->citizen_handler->setAP( $citizen, true, -1 );
 
         $citizen->addExplorerStat((new RuinExplorerStats())->setActive(true)->setGrace(true)->setStarted(new DateTime())->setTimeout( (new DateTime())->add(DateInterval::createFromDateString(
-            $this->getTownConf()->get($citizen->getProfession()->getName() === 'collec'
+            $this->getTownConf()->get($citizen->isProfession('collec')
                                           ? TownSetting::TimingExplorationCollector
                                           : TownSetting::TimingExplorationDefault
             )
@@ -792,13 +792,13 @@ class BeyondController extends InventoryAwareController
 
         $movement_interrupted = false;
 
-        if ($this->citizen_handler->hasStatusEffect($citizen, 'wound4') && $this->random_generator->chance(0.20)) {
+        if ($citizen->hasStatus('wound4') && $this->random_generator->chance(0.20)) {
             $this->addFlash('notice', $this->translator->trans('Wenn du anfängst zu gehen, greift ein sehr starker Schmerz in dein Bein. Du fällst stöhnend zu Boden. Man verliert eine Aktion...', [], 'game'));
             $this->entity_manager->persist($this->log->outsideMoveoutsideMoveFailInjury( $citizen ));
             $movement_interrupted = true;
         }
 
-        if ($zone->getZombies() > 0 && $this->citizen_handler->hasStatusEffect($citizen, 'terror') && $this->random_generator->chance(0.05)) {
+        if ($zone->getZombies() > 0 && $citizen->hasStatus('terror') && $this->random_generator->chance(0.05)) {
             $this->addFlash('notice', $this->translator->trans('Als du dich umschaust, <strong>überfällt dich eine plötzliche, unkontrollierbare Panik</strong>! Es ist unmöglich, auch nur einen Schritt weiterzugehen.<hr/>Deine Bewegung wurde <strong>unterbrochen</strong> und du hast <strong>1 AP</strong> verloren.', [], 'game'));
             $this->entity_manager->persist($this->log->outsideMoveoutsideMoveFailTerror( $citizen ));
             $movement_interrupted = true;
@@ -838,12 +838,12 @@ class BeyondController extends InventoryAwareController
                 return AjaxResponse::errorMessage( $this->translator->trans('{citizen} möchte nicht in diese Richtung gehen! <strong>Er bittet dich darum, ihn in die Stadt zu bringen...</strong>', ['{citizen}' => "<span>{$mover->getName()}</span>"], 'game') );
 
             $movement_interrupted = false;
-            if ($mover !== $citizen && $this->citizen_handler->hasStatusEffect($mover, 'wound4') && $this->random_generator->chance(0.20)) {
+            if ($mover !== $citizen && $mover->hasStatus('wound4') && $this->random_generator->chance(0.20)) {
                 $this->entity_manager->persist($this->log->outsideMoveoutsideMoveFailInjury( $mover ));
                 $movement_interrupted = true;
             }
 
-            if ($mover !== $citizen && $zone->getZombies() > 0 && $this->citizen_handler->hasStatusEffect($mover, 'terror') && $this->random_generator->chance(0.05)) {
+            if ($mover !== $citizen && $zone->getZombies() > 0 && $mover->hasStatus('terror') && $this->random_generator->chance(0.05)) {
                 $this->entity_manager->persist($this->log->outsideMoveoutsideMoveFailTerror( $mover ));
                 $movement_interrupted = true;
             }
@@ -887,7 +887,7 @@ class BeyondController extends InventoryAwareController
             $new_zone->addCitizen( $mover );
 
             // Scout check
-            if ($mover->getProfession()->getName() === 'hunter') {
+            if ($mover->isProfession('hunter')) {
                 if ($scouts[$mover->getId()] && $cpNewZone < $new_zone->getZombies()) {
 
                     $zedsAboveCps = $new_zone->getZombies() - $cpNewZone;
@@ -1174,7 +1174,7 @@ class BeyondController extends InventoryAwareController
         ) > 0)
             return AjaxResponse::error( self::ErrorZoneUnderControl );
 
-        if($this->citizen_handler->hasStatusEffect($citizen, "terror"))
+        if($citizen->hasStatus("terror"))
             return AjaxResponse::error(self::ErrorTerrorized);
 
         if ($this->citizen_handler->isWounded( $citizen ))
@@ -1225,7 +1225,7 @@ class BeyondController extends InventoryAwareController
         $citizen = $this->getActiveCitizen();
         $zone = $citizen->getZone();
 
-        if ($this->citizen_handler->hasStatusEffect( $citizen, 'terror' ))
+        if ($citizen->hasStatus( 'terror' ))
             return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailableTerror );
 
         if ($this->zone_handler->isZoneUnderControl( $zone ) || $this->citizen_handler->getEscapeTimeout( $citizen, true ) > 0)
@@ -1234,7 +1234,7 @@ class BeyondController extends InventoryAwareController
         if ($this->inventory_handler->countSpecificItems($this->getActiveCitizen()->getInventory(), $this->entity_manager->getRepository(ItemPrototype::class)->findOneBy(['name' => 'vest_on_#00'])) > 0)
             return AjaxResponse::error( self::ErrorZoneUnderControl );
 
-        if ($this->citizen_handler->hasStatusEffect($citizen, 'wound2')) {
+        if ($citizen->hasStatus('wound2')) {
             return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailableWounded);
         }
 
@@ -1246,7 +1246,7 @@ class BeyondController extends InventoryAwareController
         $this->citizen_handler->setAP( $citizen, true, -1 );
         $ratio = 0.08;
         $messages = [];
-        if ($this->citizen_handler->hasStatusEffect($citizen, "drunk"))
+        if ($citizen->hasStatus("drunk"))
             $ratio /= 2;
         if ($generator->chance( $ratio )) {
             $zone->setZombies( $zone->getZombies() - 1 );
@@ -1260,7 +1260,7 @@ class BeyondController extends InventoryAwareController
         } else {
             $this->entity_manager->persist( $this->log->zombieKillHandsFail($citizen));
             $messages[] = $this->translator->trans('Du stürzt dich auf eine dieser Kreaturen und <strong>umklammerst sie mit beiden Armen</strong>, um sie zu Fall zu bringen. Der Kontakt mit seiner <strong>verrotteten Haut</strong> bringt dich fast zum Kotzen... Du kämpfst und versuchst ihn irgendwie umzustoßen, doch ohne Erfolg. <strong>Das Biest hat dich mehrere Male um ein Haar gebissen!</strong> Erschöpft und demoralisiert lässt du von ihm ab, um dich zurückzuziehen...', [], 'game');
-            if ($this->citizen_handler->hasStatusEffect($citizen, "drunk"))
+            if ($citizen->hasStatus("drunk"))
                 $messages[] = $this->translator->trans('Dein <strong>Trunkenheitszustand</strong> hilft dir wirklich nicht weiter. Das ist nicht gerade einfach, wenn sich alles dreht und du nicht mehr klar siehst.', [], 'game');
         }
 
@@ -1716,7 +1716,7 @@ class BeyondController extends InventoryAwareController
 
         } elseif ($mode === 'job') {
 
-            if ($citizen->getProfession()->getName() !== "shaman")
+            if (!$citizen->isProfession("shaman"))
                 return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
 
             if( $citizen->getAp() < 1 )

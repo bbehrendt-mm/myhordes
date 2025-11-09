@@ -91,7 +91,7 @@ readonly class DeathHandler
 
         // If the citizen is marked to become a ghoul after the next attack, pass the mark on to another
         // citizen
-        if ($this->citizen_handler->hasStatusEffect($citizen, 'tg_air_infected') || $this->citizen_handler->hasStatusEffect($citizen, 'tg_air_ghoul'))
+        if ($citizen->hasStatus('tg_air_infected') || $citizen->hasStatus('tg_air_ghoul'))
             $this->citizen_handler->pass_airborne_ghoul_infection($citizen);
 
         $survivedDays = max(0, $citizen->getTown()->getDay() - 1);
@@ -199,7 +199,7 @@ readonly class DeathHandler
             }
 
             // Clean picto
-            if($citizen->getSurvivedDays() >= 3 && $this->citizen_handler->hasStatusEffect($citizen, "clean")) {
+            if($citizen->getSurvivedDays() >= 3 && $citizen->hasStatus("clean")) {
                 // We earn the picto for the past days
                 $pictoPrototype = $this->entity_manager->getRepository(PictoPrototype::class)->findOneByName("r_nodrug_#00");
                 $this->picto_handler->give_picto($citizen, $pictoPrototype, round(pow($citizen->getSurvivedDays(), 1.5), 0));

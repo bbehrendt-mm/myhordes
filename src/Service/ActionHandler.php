@@ -303,7 +303,7 @@ class ActionHandler
                 break;
             case ItemTargetDefinition::ItemFriendshipType:
                 if (!is_a( $target, FriendshipActionTarget::class )) return false;
-                if (!$target->citizen()->getAlive() || $target->action()->getName() === 'hero_generic_friendship' || $this->citizen_handler->hasStatusEffect( $target->citizen(), 'tg_rec_heroic' )) return false;
+                if (!$target->citizen()->getAlive() || $target->action()->getName() === 'hero_generic_friendship' || $target->citizen()->hasStatus('tg_rec_heroic' )) return false;
                 break;
             default: return false;
         }
@@ -451,10 +451,10 @@ class ActionHandler
                 // Add drugged status
                 case 1:
                     $this->picto_handler->award_picto_to($citizen, 'r_drug_#00');
-                    if (!$this->citizen_handler->hasStatusEffect($citizen, 'drugged')) {
+                    if (!$citizen->hasStatus('drugged')) {
                         $this->citizen_handler->inflictStatus($citizen, 'drugged');
                         $cache->addMessage(T::__('Aber eine Frage bleibt: Waren diese fliegenden grünen Mäuse schon immer da?','items'), translationDomain: 'items');
-                    } elseif (!$this->citizen_handler->hasStatusEffect($citizen, 'addict')) {
+                    } elseif (!$citizen->hasStatus('addict')) {
                         $this->citizen_handler->inflictStatus($citizen, 'addict');
                         $cache->addMessage(T::__('Sofort nach dem herunterschlucken verspürst du das Verlangen nach mehr... du bist nun <b>drogenabhängig</b>!','items'), translationDomain: 'items');
                     }
@@ -465,7 +465,7 @@ class ActionHandler
                     $this->picto_handler->award_picto_to($citizen, 'r_alcool_#00');
                     $this->citizen_handler->removeStatus($citizen, 'hungover');
                     $this->citizen_handler->removeStatus($citizen, 'tg_no_hangover');
-                    if (!$this->citizen_handler->hasStatusEffect($citizen, 'drunk')) {
+                    if (!$citizen->hasStatus('drunk')) {
                         $this->citizen_handler->inflictStatus($citizen, 'drunk');
                         $cache->addMessage(T::__('Plötzlich fängt alles um dich herum an, sich zu drehen ...','items'), translationDomain: 'items');
                     }

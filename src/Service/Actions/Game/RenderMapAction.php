@@ -58,9 +58,9 @@ readonly class RenderMapAction
             $range_y = [ min($range_y[0], $y), max($range_y[1], $y) ];
         }
 
-        $citizen_is_shaman = $admin ||
-            ($this->citizen_handler->hasRole($activeCitizen, 'shaman')
-                || $activeCitizen->getProfession()->getName() == 'shaman');
+        $citizen_is_shaman = $admin
+            || ($activeCitizen->hasRole('shaman')
+            || $activeCitizen->isProfession('shaman'));
 
         $soul_zones_ids = $citizen_is_shaman
             ? array_map(function(Zone $z) use ($range_x, $range_y) {
@@ -75,8 +75,8 @@ readonly class RenderMapAction
         $local_zones = [];
         $citizen_zone = $activeCitizen?->getZone();
 
-        $scavenger_sense = $activeCitizen !== null ? $activeCitizen->getProfession()->getName() === 'collec'  : $admin;
-        $scout_sense     = $activeCitizen !== null ? $activeCitizen->getProfession()->getName() === 'hunter'  : $admin;
+        $scavenger_sense = $activeCitizen !== null ? $activeCitizen->isProfession('collec')  : $admin;
+        $scout_sense     = $activeCitizen !== null ? $activeCitizen->isProfession('hunter')  : $admin;
 
         $scout_markings = $admin || $this->proxy->queryTownParameter( $town, BuildingValueQuery::ScoutMarkingsEnabled );
         $scout_markings_own = $scout_markings && $scout_sense;

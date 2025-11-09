@@ -332,7 +332,7 @@ class DebugCommand extends LanguageCommand
 
                     /** @var Citizen $joined_citizen */
                     foreach ( $all as $joined_citizen ) {
-                        if ($citizen->getProfession()->getName() !== 'none')
+                        if ($citizen->isProfession(CitizenProfession::DEFAULT))
                             $this->gps->recordCitizenProfessionSelected( $joined_citizen );
                         if($joined_citizen !== $citizen) {
                             $output->writeln("Coalition member <comment>{$joined_citizen->getUser()->getName()}</comment> joins <comment>{$town->getName()}</comment> as a <comment>{$this->translator->trans($pro->getLabel(), [], 'game')}</comment>.");

@@ -386,11 +386,11 @@ class HTMLService {
                             if (!$c->getBanished()) return false;
                         }
                         elseif ($profession === 'shaman') {
-                            if ($c->getProfession()->getName() !== $profession && !$c->hasRole('shaman')) return false; }
+                            if (!$c->isProfession($profession) && !$c->hasRole('shaman')) return false; }
                         elseif ($profession === 'zone') {
                             if (!$c->getZone() || $user->getActiveCitizen()->getZone() !== $c->getZone()) return false;
                         }
-                        elseif ($c->getProfession()->getName() !== $profession) return false;
+                        elseif (!$c->isProfession($profession)) return false;
                     }
 
                     if ($group !== null) {

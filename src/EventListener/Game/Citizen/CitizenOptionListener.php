@@ -33,7 +33,7 @@ final class CitizenOptionListener implements ServiceSubscriberInterface
 
     public function onPopulateWorkshopRecipes( CitizenWorkshopOptionsEvent $event ): void {
         $event->pushOption( Recipe::WorkshopType );
-        if ($event->citizen->getProfession()->getName() === "shaman")
+        if ($event->citizen->isProfession("shaman"))
             $event->pushOption(
                 Recipe::WorkshopTypeShamanSpecific,
                 section: $this->getService(TranslatorInterface::class)->trans('Schamanenkreis', [], 'game')
@@ -45,7 +45,7 @@ final class CitizenOptionListener implements ServiceSubscriberInterface
             $event->pushOption(
                 Recipe::WorkshopTypeTechSpecific,
                 $counter >= 1,
-                $event->citizen->getProfession()->getName() == "tech" ? 3 : 5,
+                $event->citizen->isProfession("tech") ? 3 : 5,
                 $trans->trans('Techniker-Werkstatt', [], 'buildings'),
                 $counter >= 1
                     ? $trans->trans('Du hast die Techniker-Werkbank <strong>heute bereits verwendet</strong>. Komm morgen wieder.', [], 'game')

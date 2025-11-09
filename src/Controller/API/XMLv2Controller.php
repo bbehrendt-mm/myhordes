@@ -7,6 +7,7 @@ use App\Entity\AwardPrototype;
 use App\Entity\Building;
 use App\Entity\BuildingPrototype;
 use App\Entity\Citizen;
+use App\Entity\CitizenProfession;
 use App\Entity\CitizenRankingProxy;
 use App\Entity\CitizenRole;
 use App\Entity\ExpeditionRoute;
@@ -1158,7 +1159,7 @@ class XMLv2Controller extends CoreController {
                         'avatar' => $citizen->getUser()->getAvatar() !== null ? $citizen->getUser()->getId() . "/" . $citizen->getUser()->getAvatar()->getFilename() . "." . $citizen->getUser()->getAvatar()->getFormat() : '',
                         'id' => $citizen->getUser()->getId(),
                         'ban' => intval($citizen->getBanished()),
-                        'job' => $citizen->getProfession()->getName() !== 'none' ? $citizen->getProfession()->getName() : '',
+                        'job' => $citizen->isProfession(CitizenProfession::DEFAULT) ? '' : $citizen->getProfession()->getName(),
                         'out' => intval($citizen->getZone() !== null),
                         'baseDef' => $citizen->getAlive() ? $citizen->getHome()->getPrototype()->getDefense() : 0,
                     ],

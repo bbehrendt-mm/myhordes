@@ -144,18 +144,18 @@ final class HeroicItemActionListener implements ServiceSubscriberInterface
                         $event->citizen->setWalkingDistance(0);
                         if($event->citizen->hasRole('ghoul')){
                             $this->getService(CitizenHandler::class)->inflictWound($event->citizen);
-                        } else if($this->getService(CitizenHandler::class)->hasStatusEffect($event->citizen, 'thirst2')){
+                        } else if($event->citizen->hasStatus('thirst2')){
                             $this->getService(CitizenHandler::class)->removeStatus($event->citizen, 'thirst2');
                             $this->getService(CitizenHandler::class)->inflictStatus($event->citizen, 'thirst1');
                         } else {
                             $this->getService(CitizenHandler::class)->removeStatus($event->citizen, 'thirst1');
-                            if (!$this->getService(CitizenHandler::class)->hasStatusEffect($event->citizen, 'hasdrunk')) {
+                            if (!$event->citizen->hasStatus('hasdrunk')) {
                                 $this->getService(CitizenHandler::class)->inflictStatus($event->citizen, 'hasdrunk');
                                 $give_ap = true;
                             }
                         }
                     } else {
-                        if (!$this->getService(CitizenHandler::class)->hasStatusEffect($event->citizen, 'haseaten')) {
+                        if (!$event->citizen->hasStatus('haseaten')) {
                             $this->getService(CitizenHandler::class)->inflictStatus($event->citizen, 'haseaten');
                             $give_ap = true;
                         }
@@ -271,7 +271,7 @@ final class HeroicItemActionListener implements ServiceSubscriberInterface
                     $upgrade_actions = ($treeService)( $event->target->action(), 1 );
                     $downgrade_actions = ($treeService)( $event->target->action(), -1 );
 
-                    $valid = !$this->getService(CitizenHandler::class)->hasStatusEffect( $event->target->citizen(), 'tg_rec_heroic' );
+                    $valid = !$event->target->citizen()->hasStatus('tg_rec_heroic' );
                     if ($valid) {
                         $records = array_filter( $event->target->citizen()->getSpecificActionCounter( ActionCounterType::ReceiveHeroic )->getAdditionalData() ?? [],
                             fn($record) => is_array($record) && ($record['action'] ?? null) === $event->target->action()->getName() && ( $record['valid'] ?? false )

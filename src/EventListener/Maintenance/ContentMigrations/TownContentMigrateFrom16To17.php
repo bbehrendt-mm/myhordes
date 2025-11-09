@@ -41,7 +41,7 @@ class TownContentMigrateFrom16To17 extends TownContentMigrateBuildingTreeListene
         $em = $this->getService(EntityManagerInterface::class);
 
         foreach ($event->town->getCitizens() as $citizen)
-            if ($citizen->getAlive() && $citizen->getProfession()->getName() === 'hunter') {
+            if ($citizen->getAlive() && $citizen->isProfession('hunter')) {
                 $event->debug( "Citizen <fg=yellow>{$citizen->getName()}</> requires <bg=green>exploration points</> to be set." );
                 $em->persist( $citizen->setSp(2) );
             }

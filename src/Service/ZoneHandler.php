@@ -60,7 +60,7 @@ readonly class ZoneHandler
     public function updateRuinZone(?RuinExplorerStats $ex): ?string {
         if ($ex === null || !$ex->getActive()) return false;
 
-        $eject = $ex->getTimeout()->getTimestamp() < time()/* || $this->citizen_handler->isWounded( $ex->getCitizen() ) || $this->citizen_handler->hasStatusEffect($ex->getCitizen(), 'terror')*/;
+        $eject = $ex->getTimeout()->getTimestamp() < time()/* || $this->citizen_handler->isWounded( $ex->getCitizen() ) || $ex->getCitizen()->hasStatus('terror')*/;
         $wound = $ex->getTimeout()->getTimestamp() < time();
 
         if ($eject) {
@@ -206,7 +206,7 @@ readonly class ZoneHandler
                             (new DateTime())->setTimestamp(
                                 $timer->getTimestamp()->getTimestamp()
                             )->add(DateInterval::createFromDateString(
-                                $conf->get( $timer->getCitizen()->getProfession()->getName() === 'collec'
+                                $conf->get( $timer->getCitizen()->isProfession('collec')
                                                 ? TownSetting::TimingDiggingCollector
                                                 : TownSetting::TimingDiggingDefault
                                 ))) );
@@ -297,9 +297,9 @@ readonly class ZoneHandler
 
         if ($chances_by_player > 0) {
             if (empty($found_by_player)){
-                if ($this->citizen_handler->hasStatusEffect( $active, 'wound5' ))
+                if ($active->hasStatus( 'wound5' ))
                     array_unshift($ret_str, $this->trans->trans( 'Deine Verletzung am Auge macht dir die Suche nicht gerade leichter.', [], 'game'));
-                if ($this->citizen_handler->hasStatusEffect( $active, 'drunk' ))
+                if ($active->hasStatus( 'drunk' ))
                     array_unshift($ret_str, $this->trans->trans( 'Dein <strong>Trunkenheitszustand</strong> hilft dir wirklich nicht weiter. Das ist nicht gerade einfach, wenn sich alles dreht und du nicht mehr klar siehst.', [], 'game'));
                 array_unshift($ret_str, $this->trans->trans( 'Trotz all deiner Anstrengungen hast du hier leider nichts gefunden ...', [], 'game' ));
             }
@@ -321,7 +321,7 @@ readonly class ZoneHandler
             $ret_str[] = $this->trans->trans("Diese Zone ist leergesucht. Du wirst hier keine wertvollen Gegenstände mehr finden können.", [], "game");
         }
 
-        if ($active && $active->getProfession()->getName() === 'collec')
+        if ($active && $active->isProfession('collec'))
             foreach ([[1,0],[-1,0],[0,1],[0,-1]] as $n) {
                 $nzone = $this->entity_manager->getRepository(Zone::class)->findOneByPosition($zone->getTown(),$zone->getX() + $n[0], $zone->getY() + $n[1]);
                 if ($nzone && !$nzone->getCitizens()->isEmpty()) $this->updateZone($nzone,$up_to,null);

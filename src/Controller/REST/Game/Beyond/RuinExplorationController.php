@@ -129,7 +129,7 @@ class RuinExplorationController extends AbstractController implements HookedInte
     protected function renderStatus(RuinZone $zone, RuinExplorerStats $stats): array {
         $guide = $stats->getCitizen()->hasRole('guide');
         $exitZone =
-            $stats->getCitizen()->getProfession()->getName() === 'tamer'
+            $stats->getCitizen()->isProfession('tamer')
                 ? ($stats->getZ() === 0
                     ? $this->entityManager->getRepository(RuinZone::class)->findOneBy(['zone' => $zone->getZone(), 'x' => 0, 'y' => 0, 'z' => 0])
                     : $this->entityManager->getRepository(RuinZone::class)->findOneBy(['zone' => $zone->getZone(), 'z' => $stats->getZ(), 'connect' => -1])

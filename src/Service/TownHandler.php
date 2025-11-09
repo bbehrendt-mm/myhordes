@@ -274,7 +274,7 @@ class TownHandler
 
         if ($home->getCitizen()->getProfession()->getHeroic()) {
             $summary->job_defense += 2;
-            if ($home->getCitizen()->getProfession()->getName() === 'guardian')
+            if ($home->getCitizen()->isProfession('guardian'))
                 $summary->job_guard_defense += 1;
         }
 
@@ -369,7 +369,7 @@ class TownHandler
 
                 if (!$citizen->getZone()) {
                     $summary->citizen_defense += $citizen->property( CitizenProperties::TownDefense );
-                    if ($citizen->getProfession()->getName() === 'guardian')
+                    if ($citizen->isProfession('guardian'))
                         $summary->guardian_defense += $guardian_bonus;
                 }
 

@@ -63,7 +63,7 @@ class ProcessStatusEffect extends AtomEffectProcessor
 
             if ($data->role === 'ghoul') {
                 if ($target->getTown()->getType()->getName() === 'panda') $p += 3;
-                if ($ch->hasStatusEffect($target, 'tg_home_clean')) $p -= 3;
+                if ($target->hasStatus('tg_home_clean')) $p -= 3;
             }
 
         }
@@ -115,7 +115,7 @@ class ProcessStatusEffect extends AtomEffectProcessor
             elseif ($data->statusTo) {
                 $inflict = true;
 
-                if ($data->statusTo === "infect" && $ch->hasStatusEffect($target, "tg_infect_wtns")) {
+                if ($data->statusTo === "infect" && $target->hasStatus("tg_infect_wtns")) {
                     $inflict = $rg->chance(0.5);
                     $ch->removeStatus( $target, 'tg_infect_wtns' );
 

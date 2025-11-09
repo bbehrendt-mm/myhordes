@@ -464,9 +464,9 @@ class LogController extends CustomAbstractCoreController
             return new JsonResponse(['error' => BeyondController::ErrorChatMessageInvalid], Response::HTTP_NOT_ACCEPTABLE);
 
         $message = $html->htmlDistort( $message,
-                                       ($citizenHandler->hasStatusEffect($active_citizen, 'drunk') ? HTMLService::ModulationDrunk : HTMLService::ModulationNone) |
-                                       ($citizenHandler->hasStatusEffect($active_citizen, 'terror') ? HTMLService::ModulationTerror : HTMLService::ModulationNone) |
-                                       ($citizenHandler->hasStatusEffect($active_citizen, 'wound1') ? HTMLService::ModulationHead : HTMLService::ModulationNone)
+                                       ($active_citizen->hasStatus('drunk') ? HTMLService::ModulationDrunk : HTMLService::ModulationNone) |
+                                       ($active_citizen->hasStatus('terror') ? HTMLService::ModulationTerror : HTMLService::ModulationNone) |
+                                       ($active_citizen->hasStatus('wound1') ? HTMLService::ModulationHead : HTMLService::ModulationNone)
             , $active_citizen->getTown()->getRealLanguage($this->generatedLangsCodes) ?? $this->getUserLanguage(), $d );
 
 

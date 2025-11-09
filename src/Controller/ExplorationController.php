@@ -131,7 +131,7 @@ class ExplorationController extends InventoryAwareController implements HookedIn
 
         $imprint_source = [];
         $imprint_goal = [];
-        if ($citizen->getProfession()->getName() === 'tech') {
+        if ($citizen->isProfession('tech')) {
             $imprint_source['tech'] = [];
             $imprint_goal['tech'] = $ruinZone->getPrototype()?->getKeyImprint();
         }
@@ -207,7 +207,7 @@ class ExplorationController extends InventoryAwareController implements HookedIn
                 ], 'game' ) . "$noPlaceLeftMsg");
         } else {
             $messages = [ $this->translator->trans('Trotz all deiner Anstrengungen hast du hier leider nichts gefunden ...', [], 'game') ];
-            if ($this->citizen_handler->hasStatusEffect($citizen, "drunk"))
+            if ($citizen->hasStatus("drunk"))
                 $messages[] = $this->translator->trans('Dein <strong>Trunkenheitszustand</strong> hilft dir wirklich nicht weiter. Das ist nicht gerade einfach, wenn sich alles dreht und du nicht mehr klar siehst.', [], 'game');
             $this->addFlash('notice', implode('<hr/>', $messages) );
         }

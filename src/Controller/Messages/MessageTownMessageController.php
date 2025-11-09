@@ -153,7 +153,7 @@ class MessageTownMessageController extends MessageController
             $recipient = $global_recipient ?? $em->getRepository(Citizen::class)->find($recipient);
 
             if (count($linked_items) > 0) {
-                if ($recipient->getBanished() != $sender->getBanished() && !$this->citizen_handler->hasStatusEffect($sender,'drunk'))
+                if ($recipient->getBanished() != $sender->getBanished() && !$sender->hasStatus('drunk'))
                     return AjaxResponse::error(ErrorHelper::ErrorActionNotAvailable);
                 if ($sender->getTown()->getChaos()){
                     if($recipient->getZone())
@@ -177,7 +177,7 @@ class MessageTownMessageController extends MessageController
             }
 
             // Special drunk handler
-            if ($recipient && $this->citizen_handler->hasStatusEffect($sender,'drunk')) {
+            if ($recipient && $sender->hasStatus('drunk')) {
 
                 // Filter possible recipients. A sender can only send to someone who has the same banishment status.
                 $list = $sender->getTown()

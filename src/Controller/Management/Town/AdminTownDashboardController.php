@@ -255,7 +255,7 @@ class AdminTownDashboardController extends AdminActionController
                     $this->entity_manager->persist($citizen);
                     $this->entity_manager->persist($town);
 
-                    if ($citizen->getProfession()->getName() !== 'none')
+                    if (!$citizen->isProfession(CitizenProfession::DEFAULT))
                         $gps->recordCitizenProfessionSelected( $citizen );
 
                     $this->entity_manager->flush();

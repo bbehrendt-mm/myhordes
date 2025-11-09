@@ -58,7 +58,7 @@ readonly class OnboardCitizenIntoTownAction
         array $heroSkills = [],
     ): bool
     {
-        if ($citizen->getProfession()->getName() !== CitizenProfession::DEFAULT)
+        if (!$citizen->isProfession(CitizenProfession::DEFAULT))
             return false;
 
         $citizenPropConfig = [];

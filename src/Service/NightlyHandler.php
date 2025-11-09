@@ -427,7 +427,7 @@ class NightlyHandler
         $camp_d = $this->entity_manager->getRepository(CitizenStatus::class)->findOneBy(['name' => 'tg_camping_death']);
 
         foreach ($town->getCitizens() as $citizen)
-            if ($citizen->getAlive() && $citizen->getZone() && $this->citizen_handler->hasStatusEffect( $citizen, $camp_d )) {
+            if ($citizen->getAlive() && $citizen->getZone() && $citizen->hasStatus( $camp_d )) {
                 $zone = $citizen->getZone();
                 $cp_ok = $this->zone_handler->isZoneUnderControl($zone);
 
@@ -511,7 +511,7 @@ class NightlyHandler
             if (!$citizen->getAlive()) continue;
 
             // Spiritual leader
-            if ($this->citizen_handler->hasStatusEffect($citizen, 'tg_spirit_guide')) {
+            if ($citizen->hasStatus('tg_spirit_guide')) {
                 $c = 0;
                 foreach ($town->getCitizens() as $foreign) {
                     if (!$foreign->getAlive()) continue;
@@ -792,7 +792,7 @@ class NightlyHandler
                     }
                 } elseif (!$this->town_handler->getBuilding($town, 'small_catapult3_#00', true)) {
                     // Terror
-                    if (!$this->citizen_handler->hasStatusEffect($ctz, $status_terror)) {
+                    if (!$ctz->hasStatus($status_terror)) {
                         $this->citizen_handler->inflictStatus($ctz, $status_terror);
                         $this->log->debug("Watcher <info>{$ctz->getUser()->getUsername()}</info> now suffers from <info>{$status_terror->getLabel()}</info>");
                         $gazette->setTerror($gazette->getTerror() + 1);
@@ -1067,17 +1067,17 @@ class NightlyHandler
                 // Calculate decoration
                 $deco = $this->citizen_handler->getDecoPoints($c);
 
-                if (!$has_kino && !$this->citizen_handler->hasStatusEffect($c, $status_terror)) {
+                if (!$has_kino && !$c->hasStatus($status_terror)) {
 
                     $quies = $this->inventory_handler->fetchSpecificItems( [$c->getInventory(),$c->getHome()->getChest()], [new ItemRequest('bquies_#00')] );
-                    $clean = $this->citizen_handler->hasStatusEffect( $c, 'tg_clothes' ) || $this->inventory_handler->fetchSpecificItems( [$c->getInventory()], [new ItemRequest('basic_suit_#00')] ) !== null;
+                    $clean = $c->hasStatus( 'tg_clothes' ) || $this->inventory_handler->fetchSpecificItems( [$c->getInventory()], [new ItemRequest('basic_suit_#00')] ) !== null;
 
                     $terror_chance = 100;
                     $terror_chance -= min($deco, 10);
-                    $terror_chance -= $clean                                                                 ?  3 : 0;
-                    $terror_chance -= $this->citizen_handler->hasStatusEffect( $c, 'tg_home_clean' )  ?  5 : 0;
-                    $terror_chance -= $this->citizen_handler->hasStatusEffect( $c, 'tg_home_shower' ) ? 10 : 0;
-                    $terror_chance -= $quies                                                                 ? 10 : 0;
+                    $terror_chance -= $clean                                        ?  3 : 0;
+                    $terror_chance -= $c->hasStatus( 'tg_home_clean' )  ?  5 : 0;
+                    $terror_chance -= $c->hasStatus( 'tg_home_shower' ) ? 10 : 0;
+                    $terror_chance -= $quies                                        ? 10 : 0;
 
                     if ($this->random->chance($terror_chance / 100)) {
                         $this->citizen_handler->inflictStatus( $c, $status_terror );
@@ -1230,7 +1230,7 @@ class NightlyHandler
             $this->citizen_handler->setAP($citizen,false,max(1, $this->citizen_handler->getMaxAP( $citizen ) - $loan) ,0);
             if ($loan > 0) $this->crow->postAsPM($citizen, '', '', PrivateMessage::TEMPLATE_CROW_REDUCED_AP_REGEN);
 
-            $sp_init_bonus = $citizen->hasStatus('tg_start_sp') ? ($citizen->getProfession()->getName() === 'hunter' ? 4 : 2) : 0;
+            $sp_init_bonus = $citizen->hasStatus('tg_start_sp') ? ($citizen->isProfession('hunter') ? 4 : 2) : 0;
             $this->citizen_handler->setBP($citizen,false,$this->citizen_handler->getMaxBP( $citizen ),0);
             $this->citizen_handler->setPM($citizen,false,$this->citizen_handler->getMaxPM( $citizen ));
             $this->citizen_handler->setSP($citizen,false, $sp_init_bonus + $this->citizen_handler->getMaxSP( $citizen ));
@@ -1247,7 +1247,7 @@ class NightlyHandler
             foreach ($this->entity_manager->getRepository( EscapeTimer::class )->findAllByCitizen( $citizen ) as $et)
                 $this->cleanup[] = $et;
 
-            $add_hangover = ($this->citizen_handler->hasStatusEffect($citizen, 'drunk') && !$this->citizen_handler->hasStatusEffect($citizen, 'tg_no_hangover'));
+            $add_hangover = ($citizen->hasStatus('drunk') && !$citizen->hasStatus('tg_no_hangover'));
             foreach ($citizen->getStatus() as $st)
                 if (in_array($st,$status_clear_list)) {
                     $this->log->debug("Removing volatile status from citizen <info>{$citizen->getUser()->getUsername()}</info>: <info>{$st->getLabel()}</info>.");
@@ -1281,7 +1281,7 @@ class NightlyHandler
                 $this->entity_manager->persist($alarm3[0]);
             }
 
-            if ($this->citizen_handler->hasStatusEffect($citizen, 'tg_air_infected') && !$citizen->hasRole('ghoul')) {
+            if ($citizen->hasStatus('tg_air_infected') && !$citizen->hasRole('ghoul')) {
                 $this->log->debug("Citizen <info>{$citizen->getUser()->getUsername()}</info> has been infected by the <info>airborne ghoul disease</info>!: Turning them into a <info>ghoul</info>!");
                 $this->citizen_handler->removeStatus($citizen, 'tg_air_infected');
                 $this->citizen_handler->addRole($citizen, 'ghoul');

@@ -113,22 +113,22 @@ class InventoryAwareController extends CustomAbstractController
     public function before(): bool
     {
         $activeCitizen = $this->getActiveCitizen();
-        if ($this->citizen_handler->hasRole($activeCitizen, 'ghoul') && !$activeCitizen->hasSeenHelpNotification('ghoul')) {
+        if ($activeCitizen->hasRole('ghoul') && !$activeCitizen->hasSeenHelpNotification('ghoul')) {
             $this->addFlash('popup-ghoul', $this->renderView('ajax/game/notifications/ghoul.html.twig'));
             $activeCitizen->addHelpNotification( $this->doctrineCache->getEntityByIdentifier(HelpNotificationMarker::class, 'ghoul') );
             $this->entity_manager->persist($activeCitizen);
             $this->entity_manager->flush();
-        } else if ($this->citizen_handler->hasRole($activeCitizen, 'shaman') && !$activeCitizen->hasSeenHelpNotification('shaman')) {
+        } else if ($activeCitizen->hasRole('shaman') && !$activeCitizen->hasSeenHelpNotification('shaman')) {
             $this->addFlash('popup-official-role', $this->renderView('ajax/game/notifications/shaman.html.twig'));
             $activeCitizen->addHelpNotification( $this->doctrineCache->getEntityByIdentifier(HelpNotificationMarker::class, 'shaman') );
             $this->entity_manager->persist($activeCitizen);
             $this->entity_manager->flush();
-        } else if ($this->citizen_handler->hasRole($activeCitizen, 'guide') && !$activeCitizen->hasSeenHelpNotification('guide')) {
+        } else if ($activeCitizen->hasRole('guide') && !$activeCitizen->hasSeenHelpNotification('guide')) {
             $this->addFlash('popup-official-role', $this->renderView('ajax/game/notifications/guide.html.twig'));
             $activeCitizen->addHelpNotification( $this->doctrineCache->getEntityByIdentifier(HelpNotificationMarker::class, 'guide') );
             $this->entity_manager->persist($activeCitizen);
             $this->entity_manager->flush();
-        } else if ($this->citizen_handler->hasRole($activeCitizen, 'cata') && !$activeCitizen->hasSeenHelpNotification('cata')) {
+        } else if ($activeCitizen->hasRole('cata') && !$activeCitizen->hasSeenHelpNotification('cata')) {
             $this->addFlash('popup-official-role', $this->renderView('ajax/game/notifications/cata.html.twig'));
             $activeCitizen->addHelpNotification( $this->doctrineCache->getEntityByIdentifier(HelpNotificationMarker::class, 'cata') );
             $this->entity_manager->persist($activeCitizen);
@@ -260,7 +260,7 @@ class InventoryAwareController extends CustomAbstractController
             case ItemTargetDefinition::ItemFriendshipType:
 
                 foreach ($this->getActiveCitizen()->getTown()->getCitizens() as $citizen)
-                    if ($citizen !== $this->getActiveCitizen() && $citizen->getAlive() && $citizen->getZone() === $this->getActiveCitizen()->getZone() && !$this->citizen_handler->hasStatusEffect( $citizen, 'tg_rec_heroic' ))
+                    if ($citizen !== $this->getActiveCitizen() && $citizen->getAlive() && $citizen->getZone() === $this->getActiveCitizen()->getZone() && !$citizen->hasStatus('tg_rec_heroic' ))
                         $targets[] = [ $citizen->getId(), $citizen->getName(), "build/images/item/item_cart.gif", null, 'Player' ];
 
                 //$giftedActions = array_values(array_column( array_filter(
@@ -464,7 +464,7 @@ class InventoryAwareController extends CustomAbstractController
 
         if ($victim->getAlive()) {
 
-            if ($this->citizen_handler->hasStatusEffect($aggressor, 'tg_ghoul_eat'))
+            if ($aggressor->hasStatus('tg_ghoul_eat'))
                 return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
 
             if ($victim->hasRole('ghoul')) {
@@ -506,17 +506,17 @@ class InventoryAwareController extends CustomAbstractController
                     ->registerPropInPersistentCache( CitizenPersistentCache::Ghoul_Aggression );
 
             $stat_down = false;
-            if (!$this->citizen_handler->hasStatusEffect($aggressor, 'drugged') && $this->citizen_handler->hasStatusEffect($victim, 'drugged')) {
+            if (!$aggressor->hasStatus('drugged') && $victim->hasStatus('drugged')) {
                 $stat_down = true;
                 $this->citizen_handler->inflictStatus( $aggressor, 'drugged' );
             }
 
-            if (!$this->citizen_handler->hasStatusEffect($aggressor, 'addict') && $this->citizen_handler->hasStatusEffect($victim, 'addict')) {
+            if (!$aggressor->hasStatus('addict') && $victim->hasStatus('addict')) {
                 $stat_down = true;
                 $this->citizen_handler->inflictStatus( $aggressor, 'addict' );
             }
 
-            if (!$this->citizen_handler->hasStatusEffect($aggressor, 'drunk') && $this->citizen_handler->hasStatusEffect($victim, 'drunk')) {
+            if (!$aggressor->hasStatus('drunk') && $victim->hasStatus('drunk')) {
                 $stat_down = true;
                 $this->citizen_handler->inflictStatus( $aggressor, 'drunk' );
                 $this->citizen_handler->inflictStatus( $aggressor, 'tg_no_hangover' );
@@ -532,7 +532,7 @@ class InventoryAwareController extends CustomAbstractController
 
         } else {
 
-            if ($this->citizen_handler->hasStatusEffect($aggressor, 'tg_ghoul_corpse'))
+            if ($aggressor->hasStatus('tg_ghoul_corpse'))
                 return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
 
             if ($aggressor->getZone() || !$victim->getHome()->getHoldsBody())
@@ -660,7 +660,7 @@ class InventoryAwareController extends CustomAbstractController
             $home_lab_upgrade = $lab ? $this->entity_manager->getRepository(CitizenHomeUpgrade::class)->findOneByPrototype($citizen->getHome(), $lab) : null;
             if ($home_lab_upgrade) {
                 $this->addFlash("error", $this->translator->trans('Dafür solltest du dein Labor verwenden...', [], 'game'));
-                if (!$this->citizen_handler->hasStatusEffect($citizen, 'tg_tried_pp')) {
+                if (!$citizen->hasStatus('tg_tried_pp')) {
                     $this->citizen_handler->inflictStatus($citizen, 'tg_tried_pp');
                     $this->entity_manager->persist($citizen);
                     $this->entity_manager->flush();
@@ -775,7 +775,7 @@ class InventoryAwareController extends CustomAbstractController
                 $player = $this->entity_manager->getRepository(Citizen::class)->find( $player );
                 if (!$action || !$player) return false;
 
-                if (!$player->getAlive() || $player->getZone() !== $this->getActiveCitizen()->getZone() || $player === $this->getActiveCitizen() || !$this->getActiveCitizen()->getHeroicActions()->contains($action) || $this->citizen_handler->hasStatusEffect( $player, 'tg_rec_heroic' ))
+                if (!$player->getAlive() || $player->getZone() !== $this->getActiveCitizen()->getZone() || $player === $this->getActiveCitizen() || !$this->getActiveCitizen()->getHeroicActions()->contains($action) || $player->hasStatus('tg_rec_heroic' ))
                     return false;
 
                 //$giftedActions = array_values(array_column( array_filter(
@@ -1028,7 +1028,7 @@ class InventoryAwareController extends CustomAbstractController
         $citizen = $base_citizen ?? $this->getActiveCitizen();
 
         $zone = $citizen->getZone();
-        if ($zone && !$this->zone_handler->isZoneUnderControl($zone) && !$action->getAllowWhenTerrorized() && $this->citizen_handler->hasStatusEffect($citizen, 'terror') && !$this->zone_handler->isZoneUnderControl($this->getActiveCitizen()->getZone()))
+        if ($zone && !$this->zone_handler->isZoneUnderControl($zone) && !$action->getAllowWhenTerrorized() && $citizen->hasStatus('terror') && !$this->zone_handler->isZoneUnderControl($this->getActiveCitizen()->getZone()))
             return AjaxResponse::error( $citizen === $this->getActiveCitizen() ? BeyondController::ErrorTerrorized : BeyondController::ErrorEscortTerrorized );
 
         if (!$action->getAllowedAtGate() && $zone && $zone->isTownZone())

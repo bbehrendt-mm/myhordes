@@ -1533,7 +1533,7 @@ class MigrateCommand extends Command
 
         if ($input->getOption('set-profession-prop')) {
             $this->helper->leChunk($output, Citizen::class, 10, [], true, true, function(Citizen $c) {
-                if ($c->getProfession()->getName() !== CitizenProfession::DEFAULT)
+                if ($c->isProfession(CitizenProfession::DEFAULT))
                     $c->registerPropInPersistentCache( CitizenPersistentCache::Profession, $c->getProfession()->getId() );
             }, true);
         }
