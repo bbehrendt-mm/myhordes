@@ -396,6 +396,7 @@ class ItemDataService implements FixtureProcessorInterface {
         $container->add()->label('Larven-Marmelade')->icon('moldy_food_part')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->commit(); // Spicy moldy food
         $container->add()->label('Krabbelnde Krümel')->icon('moldy_food')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->commit(); // Spicy moldy food
         $container->add()->label('Schaurige Maske')->icon('scary_mask')->category('Misc')->deco(5)->heavy(false)->watchpoint(0)->commit(); // Scary Mask
+        $container->add()->label('Schutzschild (abgelegt)')->icon('shield_off')->category('Misc')->deco(0)->heavy(false)->watchpoint(0)->sort(80)->commit(); // shield_off
 
         $container->modify('water_#00')->description('Das Wasser gibt dir einmal pro Tag deine Aktionpunkte zurück oder löscht alternativ deinen Durst (unbegrenzt).')->commit();
         $container->modify('pile_#00')->description('Die Batterie ist für vieles nützlich. Allerdings ist sie auch ziemlich schnell leer ...')->commit();
@@ -727,6 +728,7 @@ class ItemDataService implements FixtureProcessorInterface {
 		$container->modify('surv_book_#00')->description('Auch wenn der Titel anderes vermuten lässt: "Tick, Trick und Tracks Schlaues Buch" ist von unschätzbarem Wert. Es enthält zahlreiche Tipps und Tricks, wie man in der Natur am besten überleben und Nahrung finden kann.')->commit();
 		$container->modify('keymol_#00')->description('Unverzichtbar, um auf den Baustellen der Stadt herumzuwuseln, kann der Schraubenschlüssel auch dazu verwendet werden, verschlossene Türen ganz einfach zu öffnen.')->commit();
 		$container->modify('shield_#00')->description(' Ein großer Schutzschild, der keine Wünsche offen lässt, ermöglicht es dir, in der Wüste bis zu 2 zusätzliche Zombies auf Distanz zu halten.')->commit();
+		$container->modify('shield_off_#00')->description('Ein großer Schutzschild. Wenn du ihn vor dich halten würdest, könntest du damit 2 zusätzliche Zombies auf Distanz zu halten. Aktuell fungiert er nur als kleidsames Accessoire.')->commit();
 		$container->modify('shaman_#00')->description('Diese uralte Maske ist erfüllt vom Wissen und der Macht tausender Voodoo-Priester. Mit ihr kann der Schamane ausfindig machen, wo in der Außenwelt die Seelen frisch verstorbenen Bürger herumwandeln.')->commit();
 		$container->modify('xmas_gift_#00')->description('Eine Girlande einer scheinbar uralten Tradition. Es wird empfohlen, es zu Hause als Dekoration aufzuhängen, es könnte gut für die Moral der Stadt sein.')->commit();
 		$container->modify('pumpkin_on_#00')->description('Hier ist eine verrückte Idee: Dieses große, seltsame Gemüse wurde von seinem Fleisch befreit, geformt und es gibt eine brennende Kerze darin... ')->commit();

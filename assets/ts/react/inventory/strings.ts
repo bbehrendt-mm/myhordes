@@ -3,6 +3,8 @@ export type TranslationStrings = {
         abort: string,
         warning: string,
         help: string,
+        slot: string,
+        heavy_slot: string
     }
     "type": {
         rucksack: string

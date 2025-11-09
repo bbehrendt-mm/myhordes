@@ -1561,6 +1561,7 @@ class NightlyHandler
             'tamed_pet_drug_#00' => $this->entity_manager->getRepository(ItemPrototype::class)->findOneBy(['name' => 'tamed_pet_#00']),
             'maglite_2_#00' => $this->entity_manager->getRepository(ItemPrototype::class)->findOneBy(['name' => 'maglite_1_#00']),
             'maglite_1_#00' => $this->entity_manager->getRepository(ItemPrototype::class)->findOneBy(['name' => 'maglite_off_#00']),
+            'shield_off_#00' => $this->entity_manager->getRepository(ItemPrototype::class)->findOneBy(['name' => 'shield_#00']),
         ];
 
         foreach ($morph as $source => $target) {

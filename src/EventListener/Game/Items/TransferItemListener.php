@@ -229,12 +229,13 @@ final class TransferItemListener implements ServiceSubscriberInterface
         // Check Heavy item limit
         if (
             !$opt_allow_multi_heavy &&
-            $event->item->getPrototype()->getHeavy() &&
-            $type_to->isRucksack() &&
-            $this->getService(InventoryHandler::class)->countHeavyItems($event->to)
+            $event->item->getPrototype()->getHeavy()
         ) {
-            $event->pushError(InventoryHandler::ErrorHeavyLimitHit);
-            return;
+            $heavy_limit = $this->getService(InventoryHandler::class)->getHeavyItemSize($event->to);
+            if ($heavy_limit > 0 && $this->getService(InventoryHandler::class)->countHeavyItems($event->to) + 1 > $heavy_limit) {
+                $event->pushError($heavy_limit === 1 ? InventoryHandler::ErrorHeavyLimitHit : InventoryHandler::ErrorMultiHeavyLimitHit);
+                return;
+            }
         }
 
         // Check Soul limit

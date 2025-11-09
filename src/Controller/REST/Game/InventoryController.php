@@ -79,6 +79,8 @@ class InventoryController extends CustomAbstractCoreController
                 'abort' => $this->translator->trans('Abbrechen', [], 'global'),
                 'warning' => $this->translator->trans('Achtung', [], 'global'),
                 'help' => $this->translator->trans('Hilfe', [], 'global'),
+                'slot' => $this->translator->trans('Dies ist ein einfacher leerer Platz in deinem Rucksack. Hier kannst du einen leichten Gegenstand verstauen.', [], 'global'),
+                'heavy_slot' => $this->translator->trans('Dies ist ein leerer Platz für schwere Gegenstände in deinem Rucksack. Hier kannst du einen leichten oder einen schweren Gegenstand verstauen.', [], 'global'),
             ],
             'type' => [
                 'rucksack' => $this->translator->trans('Rucksack', [], 'game'),
@@ -175,7 +177,8 @@ class InventoryController extends CustomAbstractCoreController
         return [
             'bank' => false,
             'rsc' => false,
-            'size' => $foreign_chest ? 0 : $handler->getSize( $inventory ),
+            'size'  => $foreign_chest ? 0 : $handler->getSize( $inventory ),
+            'heavy' => $foreign_chest ? 0 : $handler->getHeavyItemSize( $inventory ),
             'mods' => [
                 'has_drunk' => $citizen->hasStatus('hasdrunk')
             ],

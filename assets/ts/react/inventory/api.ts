@@ -34,6 +34,7 @@ export type InventoryBagData = InventoryBaseData & {
     bank: false
     rsc: false
     size: number|null,
+    heavy: number|null,
     items: Item[],
 }
 

@@ -534,36 +534,37 @@ class CitizenHandler
     }
 
     public function getCP(Citizen $citizen): int {
-        if ($citizen->hasStatus('terror')) $base = 0;
-        else {
-            $base = ($citizen->isProfession('guardian') ? 4 : 2) +
-                $citizen->property( CitizenProperties::ZoneControlBonus );
+        if ($citizen->hasStatus('terror')) return 0;
 
-            if ($citizen->hasStatus('clean'))
-                $base += $citizen->property( CitizenProperties::ZoneControlCleanBonus );
+        $base = 2 + $citizen->property( CitizenProperties::ZoneControlBonus )
+            + ($this->inventory_handler->countSpecificItems( $citizen->getInventory(), 'shield_#00', broken: false ) > 0
+                ? 2
+                : 0
+            )+ ($citizen->hasRole('guide')
+                ? ($citizen->getZone()?->getCitizens()?->count() ?? 0)
+                : 0
+            ) + ($citizen->hasStatus('clean')
+                ? $citizen->property( CitizenProperties::ZoneControlCleanBonus )
+                : 0
+            ) + ($this->inventory_handler->countSpecificItems( $citizen->getInventory(), 'car_door_#00', broken: false ) > 0
+                ? 1
+                : 0
+            );
 
-            $bonus = $citizen->property( CitizenProperties::ZoneControlHydratedBonus );
-            if (!$citizen->hasAnyStatus('thirst1', 'thirst2') && $bonus > 0) {
-                $base += $bonus;
-                $this->inflictStatus($citizen, "hydrated");
-            } elseif ($bonus > 0) {
-                $this->removeStatus($citizen, 'hydrated');
-            }
+        $bonus = $citizen->property( CitizenProperties::ZoneControlHydratedBonus );
+        if (!$citizen->hasAnyStatus('thirst1', 'thirst2') && $bonus > 0) {
+            $base += $bonus;
+            $this->inflictStatus($citizen, "hydrated");
+        } elseif ($bonus > 0) {
+            $this->removeStatus($citizen, 'hydrated');
+        }
 
-            $bonus = $citizen->property( CitizenProperties::ZoneControlSoberBonus );
-            if (!$citizen->hasAnyStatus('drunk', 'hungover') && $bonus > 0) {
-                $base += $bonus;
-                $this->inflictStatus($citizen, "sober");
-            } elseif ($bonus > 0) {
-                $this->removeStatus($citizen, 'sober');
-            }
-
-            if (!empty($this->inventory_handler->fetchSpecificItems(
-                $citizen->getInventory(), [new ItemRequest( 'car_door_#00' )]
-            ))) $base += 1;
-
-            if ($citizen->hasRole('guide'))
-                $base += $citizen->getZone() ? $citizen->getZone()->getCitizens()->count() : 0;
+        $bonus = $citizen->property( CitizenProperties::ZoneControlSoberBonus );
+        if (!$citizen->hasAnyStatus('drunk', 'hungover') && $bonus > 0) {
+            $base += $bonus;
+            $this->inflictStatus($citizen, "sober");
+        } elseif ($bonus > 0) {
+            $this->removeStatus($citizen, 'sober');
         }
 
         return $base;

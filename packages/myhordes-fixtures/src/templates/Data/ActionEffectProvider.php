@@ -248,6 +248,8 @@ class ActionEffectProvider
         $effects_container->add()->identifier('hero_tamer_use')->add( new ItemEffect()->morphSource('tamed_pet_off_#00'))->commit();
         $effects_container->add()->identifier('hero_tamer_gone')->add( new ItemEffect()->morphSource('tamed_pet_gone_#00'))->commit();
 
+        $effects_container->add()->identifier('hero_guard_gone')->add( new ItemEffect()->morphSource('shield_off_#00'))->commit();
+
         $effects_container->add()->identifier('spawn_doggy')->add(new ItemEffect()->spawnAt(ItemDropTarget::DropTargetOrigin)
                                                                       ->addSpawn('food_bar2_#00', 222)
                                                                       ->addSpawn('food_chick_#00', 194)
