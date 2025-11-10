@@ -308,7 +308,7 @@ Profilbeschreibung: Profile description
 'Baufortschritt setzen:': 'Set construction progress:'
 'Integrität setzen:': 'Set integrity:'
 'Neue Anzahl:': 'New number:'
-'Heldentage setzen': 'Set heroic experience'
+'Heldentage setzen': 'Set hero days'
 'Hausverbesserungen:': 'Home upgrades:'
 'Teleportieren:': 'Teleportation:'
 'In die Stadt': 'In town'
@@ -707,3 +707,6 @@ Koppeln: Couple
 'Name enthält ungültige Zeichen': 'Name contains invalid characters.'
 'Name ist ähnlich zu verbotenen Begriffen': 'Name is too similar to forbidden words.'
 Cheater: Cheater
+'Öffentliche Events': 'Public Events'
+'Interne Events': 'Internal Events'
+'Bonus-Heldenerfahrung setzen': 'Set bonus hero xp'

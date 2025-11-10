@@ -308,7 +308,7 @@ Profilbeschreibung: Description du profil
 'Baufortschritt setzen:': 'Définir la progression du chantier:'
 'Integrität setzen:': 'Définir les PA de réparation :'
 'Neue Anzahl:': 'Nouveau nombre :'
-'Heldentage setzen': 'Définir l''expérience héroïque'
+'Heldentage setzen': 'Définir jours héroïques'
 'Hausverbesserungen:': 'Améliorations de la maison:'
 'Teleportieren:': 'Téléportation :'
 'In die Stadt': 'En ville'
@@ -707,3 +707,6 @@ Koppeln: Associer
 'Name enthält ungültige Zeichen': 'Le nom contient des caractères invalides'
 'Name ist ähnlich zu verbotenen Begriffen': 'Le nom contient ou est similaire à un mot interdit'
 Cheater: Tricheur
+'Öffentliche Events': 'Événements publics'
+'Interne Events': 'Événements internes'
+'Bonus-Heldenerfahrung setzen': 'Définir l''expérience bonus des héros'
