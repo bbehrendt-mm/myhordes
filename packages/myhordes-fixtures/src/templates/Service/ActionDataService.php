@@ -603,6 +603,7 @@ class ActionDataService implements FixtureProcessorInterface {
 
                 'eat_apple'   => [ 'label' => 'Essen', 'priority' => 1, 'cover' => true, 'at00' => true, 'poison' => ItemAction::PoisonHandlerConsume, 'meta' => [ 'eat_ap', 'no_full_ap_msg_food' ], 'result' => [ 'contaminated_zone_infect', 'eat_ap8', 'consume_item', [ 'group' => [ ['infect', 15], [ 'do_nothing', 85 ] ] ] ], 'escort_message_key' => 'escort_food_eat' ],
 
+                'nw_void'    => [ 'label' => '', 'meta' => [], 'result' => [] ],
                 'nw_break'   => [ 'label' => '', 'meta' => [], 'result' => [ 'break_item' ] ],
                 'nw_destroy' => [ 'label' => '', 'meta' => [], 'result' => [ 'consume_item' ] ],
                 'nw_empty_big_pgun'     => [ 'label' => '', 'meta' => [], 'result' => [ 'morph_big_pgun_empty' ] ],
@@ -1019,6 +1020,7 @@ class ActionDataService implements FixtureProcessorInterface {
             ],
 
             'items_nw' => [
+                'shield_#00'         => 'nw_void',
                 'can_open_#00'       => 'nw_destroy',
                 'pilegun_#00'        => 'nw_empty_pilegun',
                 'taser_#00'          => 'nw_empty_taser',

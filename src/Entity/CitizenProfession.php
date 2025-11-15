@@ -43,9 +43,6 @@ class CitizenProfession implements NamedEntity
     #[ORM\Column]
     private ?int $nightwatch_defense_bonus = 0;
 
-    #[ORM\Column]
-    private ?float $nightwatch_survival_bonus = 0;
-
     #[ORM\Column(nullable: true)]
     private ?float $dig_bonus = null;
     public function __construct()
@@ -166,30 +163,6 @@ class CitizenProfession implements NamedEntity
     public static function getTranslationDomain(): ?string
     {
         return 'game';
-    }
-
-    public function getNightwatchDefenseBonus(): ?int
-    {
-        return $this->nightwatch_defense_bonus;
-    }
-
-    public function setNightwatchDefenseBonus(int $nightwatch_defense_bonus): self
-    {
-        $this->nightwatch_defense_bonus = $nightwatch_defense_bonus;
-
-        return $this;
-    }
-
-    public function getNightwatchSurvivalBonus(): ?float
-    {
-        return $this->nightwatch_survival_bonus;
-    }
-
-    public function setNightwatchSurvivalBonus(float $nightwatch_survival_bonus): self
-    {
-        $this->nightwatch_survival_bonus = $nightwatch_survival_bonus;
-
-        return $this;
     }
 
     public function getDigBonus(): ?float

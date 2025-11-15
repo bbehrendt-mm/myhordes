@@ -162,9 +162,14 @@ customElements.define('hordes-standalone-item', class HordesStandaloneItemElemen
         return new HordesStandaloneItem();
     }
 
+    protected consumesInnerHTML(): boolean {
+        return true;
+    }
+
     protected generateProps(): object | null {
         return {
             item: parseInt(this.dataset.item ?? '0'),
+            extra: this.initial_inner_html
         }
     }
 

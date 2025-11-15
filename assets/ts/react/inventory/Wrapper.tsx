@@ -75,6 +75,7 @@ interface escortMountProps {
 
 interface standaloneItemMountProps {
     item: number,
+    extra: string|null,
 }
 
 interface InventoryBagLoadedSignalProps {
@@ -644,7 +645,12 @@ const HordesStandaloneItemWrapper = (props: standaloneItemMountProps) => {
     return <div className="inline">
         { item && <>
             <img alt={item.name} src={item.icon}/>
-            <ItemTooltip data={item}/>
+            <ItemTooltip data={item}>
+                { props.extra?.length > 0 && <>
+                    <hr/>
+                    <div dangerouslySetInnerHTML={{__html: props.extra}}/>
+                </> }
+            </ItemTooltip>
         </> }
     </div>
 

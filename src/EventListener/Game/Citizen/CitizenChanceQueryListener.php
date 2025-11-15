@@ -230,14 +230,14 @@ final class CitizenChanceQueryListener implements ServiceSubscriberInterface
 		/** @var EventProxyService $events */
 		$events = $this->getService(EventProxyService::class);
 
-		$def = 10 + $citizen->property(CitizenProperties::WatchDefense) + $citizen->getProfession()->getNightwatchDefenseBonus();
+		$def = 10 + $citizen->property(CitizenProperties::WatchDefense);
 
 		foreach ($citizen->getStatus() as $status) {
 			$def += $status->getNightWatchDefenseBonus();
 		}
 
 		foreach ($citizen->getInventory()->getItems() as $item) {
-			$itemDef = $events->buildingQueryNightwatchDefenseBonus($citizen->getTown(), $item);;
+			$itemDef = $events->buildingQueryNightwatchDefenseBonus($citizen->getTown(), $item);
 			$def += $itemDef;
 		}
 
@@ -251,10 +251,10 @@ final class CitizenChanceQueryListener implements ServiceSubscriberInterface
 		$events = $this->getService(EventProxyService::class);
 
 		$def = $event->data->nightwatchInfo['def'] ?? 0;
-		$def += 10 + $citizen->property(CitizenProperties::WatchDefense) + $citizen->getProfession()->getNightwatchDefenseBonus();
+		$def += 10 + $citizen->property(CitizenProperties::WatchDefense);
 
-        $event->data->nightwatchInfo['bonusDef'] = $citizen->getProfession()->getNightwatchDefenseBonus();
-        $event->data->nightwatchInfo['bonusSurvival'] = $citizen->getProfession()->getNightwatchSurvivalBonus();
+        $event->data->nightwatchInfo['bonusDef'] = 0;
+        $event->data->nightwatchInfo['bonusSurvival'] = 0;
 
 		foreach ($citizen->getStatus() as $status) {
 			if ($status->getNightWatchDefenseBonus() === 0 && $status->getNightWatchDeathChancePenalty() === 0.0) continue;

@@ -328,7 +328,7 @@ class ItemDataService implements FixtureProcessorInterface {
 		$container->add()->label('Kein Malteser Hündchen')->icon('tamed_pet_gone')->category('Misc')->deco(0)->heavy(false)->watchpoint(0)->sort(80)->commit();
 		$container->add()->label('Survivalbuch')->icon('surv_book')->category('Misc')->deco(0)->heavy(false)->watchpoint(0)->sort(80)->commit();
 		$container->add()->label('Schraubenschlüssel')->icon('keymol')->category('Misc')->deco(0)->heavy(false)->watchpoint(0)->sort(80)->commit();
-		$container->add()->label('Schutzschild')->icon('shield')->category('Misc')->deco(0)->heavy(false)->watchpoint(0)->sort(80)->commit();
+		$container->add()->label('Schutzschild')->icon('shield')->category('Misc')->deco(0)->heavy(false)->watchpoint(15)->watchimpact(5)->sort(80)->commit();
 		$container->add()->label('Voodoo-Maske')->icon('shaman')->category('Misc')->deco(0)->heavy(false)->watchpoint(0)->sort(80)->commit();
 		$container->add()->label('Kamera aus Vorkriegs-Tagen')->icon('photo_3')->category('Misc')->deco(0)->heavy(false)->watchpoint(0)->sort(61)->commit();
 		$container->add()->label('Kamera aus Vorkriegs-Tagen')->icon('photo_2')->category('Misc')->deco(0)->heavy(false)->watchpoint(0)->sort(61)->commit();

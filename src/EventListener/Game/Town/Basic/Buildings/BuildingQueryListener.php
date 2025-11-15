@@ -52,7 +52,10 @@ final class BuildingQueryListener implements ServiceSubscriberInterface
     }
 
     public function onCheckItemsAllowed( BuildingQueryNightwatchDefenseBonusEvent $event ): void {
-        if ($this->getService(EventProxyService::class)->queryTownParameter( $event->town, BuildingValueQuery::NightWatcherWeaponsAllowed ) == 0)
+        if (
+            !$event->item->getEssential() &&
+            $this->getService(EventProxyService::class)->queryTownParameter( $event->town, BuildingValueQuery::NightWatcherWeaponsAllowed ) == 0
+        )
             $event->skipPropagationTo( BuildingQueryListener::class, 'onQueryNightwatchDefenseBonusInitial' );
     }
 
