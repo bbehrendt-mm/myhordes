@@ -285,6 +285,7 @@ class TownInspectorCommand extends Command
                 $zone->setZombieStatus( $zs );
             }
             $changes = true;
+            $this->townHandler->checkFullyExploredMap($town);
             $this->entityManager->persist( $town );
         }
 

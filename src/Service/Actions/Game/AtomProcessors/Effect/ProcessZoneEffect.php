@@ -45,6 +45,8 @@ class ProcessZoneEffect extends AtomEffectProcessor
                 }
         }
 
+        $th->checkFullyExploredMap($cache->citizen->getTown());
+
         if ($base_zone) {
 
             if ($data->hasCleanupEffect()) {

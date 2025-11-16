@@ -209,6 +209,7 @@ class AdminTownCitizenController extends AdminActionController
             $target_zone
                 ->setDiscoveryStatus( Zone::DiscoveryStateCurrent )
                 ->setZombieStatus( max($upgraded_map ? Zone::ZombieStateExact : Zone::ZombieStateEstimate, $target_zone->getZombieStatus() ) );
+            $townHandler->checkFullyExploredMap($town);
             $handler->handleCitizenCountUpdate($target_zone,$cp_target_zone);
             $this->entity_manager->persist($target_zone);
         }

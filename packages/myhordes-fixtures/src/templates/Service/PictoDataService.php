@@ -185,6 +185,12 @@ class PictoDataService implements FixtureProcessorInterface {
                 'icon' => 'r_explo2',
                 'rare' => true
             ],
+            [   // TODO: translations and real description
+                'label' => 'Total Exploration',
+                'description' => 'Times your town has fully explored the map.',
+                'icon' => 'r_explot',
+                'rare' => true
+            ],
             [
                 'label' => 'Großzügigkeit',
                 'description' => 'Anzahl der Heldentage, die du einem anderem Bürger in Not geschenkt hast.',

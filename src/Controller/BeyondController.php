@@ -1004,6 +1004,8 @@ class BeyondController extends InventoryAwareController
             ->setDiscoveryStatus( Zone::DiscoveryStateCurrent )
             ->setZombieStatus( max($upgraded_map ? Zone::ZombieStateExact : Zone::ZombieStateEstimate, $new_zone->getZombieStatus() ) );
 
+        $this->town_handler->checkFullyExploredMap($zone->getTown());
+
         $this->clearZoneCache($zone);
         $this->clearZoneCache($new_zone);
 

@@ -54,6 +54,7 @@ class TownHandler
     private CitizenHandler $citizen_handler;
     private RandomGenerator $random;
     private ConfMaster $conf;
+    private PictoHandler $picto_handler;
 
     private $protoDefenceItems = null;
     private DoctrineCacheService $doctrineCache;
@@ -67,7 +68,7 @@ class TownHandler
         EntityManagerInterface $em, InventoryHandler $ih, LogTemplateHandler $lh,
         TimeKeeperService $tk, CitizenHandler $ch, ConfMaster $conf, RandomGenerator $rand,
         DoctrineCacheService $doctrineCache, EventProxyService $proxy, GameEventService $gs,
-        EstimateZombieAttackAction $est,
+        EstimateZombieAttackAction $est, PictoHandler $picto_handler
     )
     {
         $this->entity_manager = $em;
@@ -81,6 +82,7 @@ class TownHandler
         $this->proxy = $proxy;
         $this->gameEvents = $gs;
         $this->estimateZombieAttacks = $est;
+        $this->picto_handler = $picto_handler;
     }
 
     /**
@@ -753,5 +755,28 @@ class TownHandler
             }
         }
         return false;
+    }
+
+    public function checkFullyExploredMap(Town $town, ?int $minDiscoveryStatus = Zone::DiscoveryStatePast) {
+        if ($town->getFullyExploredAwarded()) return;
+
+        foreach ($town->getZones() as $zone) {
+            if ($zone->getDiscoveryStatus() < $minDiscoveryStatus) {
+                return;
+            }
+        }
+
+        $pictoPrototype = $this->entity_manager->getRepository(PictoPrototype::class)->findOneBy(['name' => 'r_explot_#00' ]);
+
+        foreach ($town->getCitizens() as $citizen) {
+            if (!$citizen->getAlive()) continue;
+            $this->picto_handler->give_picto($citizen, $pictoPrototype);
+        }
+
+        $town->setFullyExploredAwarded(true);
+
+        $this->entity_manager->persist($town);
+
+        return;
     }
 }

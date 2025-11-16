@@ -498,6 +498,7 @@ class AwardTitleDataService implements FixtureProcessorInterface {
         $container->add()->title('DdA Beste Buddler')->unlockquantity(1)->associatedtag(':scaddh:')->associatedpicto('r_scaddh_#00')->commit();
         $container->add()->title('Tarnexperte')->unlockquantity(1)->associatedtag(':rangwin:')->associatedpicto('r_rangwin_#00')->commit();
         $container->add()->title('Meisteringenieur')->unlockquantity(1)->associatedtag(':techwin:')->associatedpicto('r_techwin_#00')->commit();
+        // $container->add()->title('Total Exploration')->unlockquantity(1)->associatedtag(':explot:')->associatedpicto('r_explot_#01')->commit(); // TODO: add titles for Total Exploration
 
         $data = $container->toArray();
     }

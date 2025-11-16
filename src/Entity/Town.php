@@ -109,6 +109,8 @@ class Town
     private bool $lockdown = false;
     #[ORM\Column(type: 'boolean')]
     private bool $brokenDoor = false;
+    #[ORM\Column(type: 'boolean')]
+    private bool $fullyExploredAwarded = false;
 
     #[ORM\OneToMany(mappedBy: 'town', targetEntity: ActionCounter::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $actionCounters;
@@ -990,5 +992,17 @@ class Town
         $this->door_changed_at = $door_changed_at;
 
         return $this;
+    }
+
+    public function setFullyExploredAwarded(bool $awarded): static
+    {
+        $this->fullyExploredAwarded = $awarded;
+
+        return $this;
+    }
+
+    public function getFullyExploredAwarded(): bool
+    {
+        return $this->fullyExploredAwarded;
     }
 }
