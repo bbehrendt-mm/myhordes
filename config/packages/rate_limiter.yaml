@@ -10,12 +10,12 @@ framework:
       interval: '60 minutes'
     authenticated_personal_api:
       policy: 'sliding_window'
-      limit: 120
+      limit: 150
       interval: '2 hours'
     authenticated_api:
       policy: 'token_bucket'
-      limit: 10000
-      rate: { interval: '15 minutes', amount: 1000 }
+      limit: 15000
+      rate: { interval: '15 minutes', amount: 1500 }
     blackboard_edit_slide:
       policy: 'token_bucket'
       limit: 10

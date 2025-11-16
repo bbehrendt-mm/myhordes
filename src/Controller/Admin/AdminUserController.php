@@ -32,6 +32,7 @@ use App\Entity\TwinoidImportPreview;
 use App\Entity\User;
 use App\Entity\UserDescription;
 use App\Entity\UserGroup;
+use App\Entity\UserModerationNote;
 use App\Entity\UserPendingValidation;
 use App\Entity\UserReferLink;
 use App\Entity\UserSponsorship;
@@ -59,6 +60,7 @@ use App\Service\UserFactory;
 use App\Service\UserHandler;
 use App\Structures\TownConf;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\Order;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\Expr\Join;
 use Exception;
@@ -1016,6 +1018,7 @@ class AdminUserController extends AdminActionController
 
         return $this->render( 'ajax/admin/users/ban.html.twig', $this->addDefaultTwigArgs("admin_users_ban", [
             'user' => $user,
+            'notes' => $this->entity_manager->getRepository(UserModerationNote::class)->findBy(['user' => $user], ['created_at' => Order::Ascending->value]),
 
             'known_ips' => count($known_ips),
             'blocked_ips' => count($blocked_ips),

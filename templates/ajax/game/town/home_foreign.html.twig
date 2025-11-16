@@ -290,7 +290,7 @@
                     {% if owner.lastActionTimestamp == 0 %}
                         <li>{{'Dieser Bürger wurde noch nie gesehen...'|trans({ref: owner}, 'game')|raw}}</li>
                     {% else %}
-                        <li>{{'Der Bürger wurde zuletzt {time} gesehen.'|trans({ref: owner, '{time}': '<strong>' ~ lastActionText ~ '</strong>'}, 'game')|raw}}</li>
+                        <li data-at="{{ owner.lastActionTimestamp }}">{{'Der Bürger wurde zuletzt {time} gesehen.'|trans({ref: owner, '{time}': '<strong>' ~ lastActionText ~ '</strong>'}, 'game')|raw}}</li>
                     {% endif %}
                     {% if owner.specificActionCounterValue(constant('App\\Enum\\ActionCounterType::Well')) > 0 %}<li>{{"Dieser Bürger hat {ration} Wasserration(en) aus dem Brunnen genommen."|trans({ref: owner, 'ration': owner.specificActionCounterValue(constant('App\\Enum\\ActionCounterType::Well'))}, 'game')|raw}}</li>{% endif %}
                     {% if is_outside_unprotected %}<li>{{'Dieser Bürger ist nicht in der Stadt sei und hat <strong>sein Haus nicht gegen Einbrecher geschützt</strong>...'|trans({ref: owner}, 'game')|raw}}</li>{% endif %}

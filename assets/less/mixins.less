@@ -139,3 +139,8 @@ div.inline { display: inline-block }
 }
 
 .break-word { word-wrap: break-word }
+
+.scroll-anchor {
+  &>*:not(.scroll-anchor-element) { overflow-anchor: none; }
+  &>*.scroll-anchor-element { overflow-anchor: auto; height: 1px;}
+}
