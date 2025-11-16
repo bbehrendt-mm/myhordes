@@ -25,6 +25,7 @@ use App\Entity\Town;
 use App\Entity\TownLogEntry;
 use App\Entity\User;
 use App\Entity\Zone;
+use App\Entity\ZonePrototype;
 use App\Translation\T;
 use DateTime;
 use DateTimeInterface;
@@ -75,6 +76,7 @@ class LogTemplateHandler
         }
         if ($obj instanceof ItemGroupEntry)       return "<img alt='' src='{$this->asset->getUrl( "build/images/item/item_{$obj->getPrototype()->getIcon()}.gif" )}' /> {$this->trans->trans($obj->getPrototype()->getLabel(), [], 'items')} <i>x {$obj->getChance()}</i>";
         if ($obj instanceof BuildingPrototype)    return "<img alt='' src='{$this->asset->getUrl( "build/images/building/{$obj->getIcon()}.gif" )}' /> {$this->trans->trans($obj->getLabel(), [], 'buildings')}";
+        if ($obj instanceof ZonePrototype)        return $this->trans->trans($obj->getLabel(), [], 'game');
         if ($obj instanceof Citizen)              return $obj->getName();
         if ($obj instanceof CitizenProfession)    return "<img alt='' src='{$this->asset->getUrl( "build/images/professions/{$obj->getIcon()}.gif" )}' /> {$this->trans->trans($obj->getLabel(), ['ref' => $ref], 'game')}";
         if ($obj instanceof CitizenHomePrototype) return "<img alt='' src='{$this->asset->getUrl( "build/images/home/{$obj->getIcon()}.gif" )}' /> {$this->trans->trans($obj->getLabel(), [], 'buildings')}";
@@ -111,6 +113,9 @@ class LogTemplateHandler
                 break;
             case 'picto':
                 $object = $this->entity_manager->getRepository(PictoPrototype::class)->find($key);
+                break;
+            case 'ruin':
+                $object = $this->entity_manager->getRepository(ZonePrototype::class)->find($key);
                 break;
         }
         return $object;
@@ -231,8 +236,13 @@ class LogTemplateHandler
                 }
                 elseif ($typeEntry['type'] === 'list') {
                     $listType = $typeEntry['listType'];
-                    $listArray = array_map( function($e) use ($listType) { if(array_key_exists('count', $e)) {return array('item' => $this->fetchVariableObject($listType, $e['id']),'count' => $e['count']);}
-                        else { return $this->fetchVariableObject($listType, $e['id']); } }, $variables[$typeEntry['name']] );
+                    $listArray = array_map( function($e) use ($listType) {
+                        if(array_key_exists('count', $e)) {
+                            return array('item' => $this->fetchVariableObject($listType, $e['id']), 'count' => $e['count']);
+                        } else {
+                            return $this->fetchVariableObject($listType, $e['id']);
+                        }
+                    }, $variables[$typeEntry['name']] );
                     if (!empty($listArray)) {
                         $transParams['{'.$typeEntry['name'].'}'] = implode( ', ', array_map( function($e) use ($wrap_fun) { return $wrap_fun( $this->iconize( $e ), 'tool' ); }, $listArray ) );
                     }
@@ -760,6 +770,24 @@ class LogTemplateHandler
     public function constructionsBuildingCompleteZombieKill( Building $building ): TownLogEntry {
         $variables = array('building' => $building->getPrototype()->getId());
         $template = $this->entity_manager->getRepository(LogEntryTemplate::class)->findOneBy(['name' => 'constructionsBuildingCompleteZombieKill']);
+        return (new TownLogEntry())
+            ->setLogEntryTemplate($template)
+            ->setVariables($variables)
+            ->setTown( $building->getTown() )
+            ->setDay( $building->getTown()->getDay() )
+            ->setTimestamp( new DateTime('now') );
+    }
+
+    /**
+     * @param ZonePrototype[] $ruins The newly revealed ruins
+     */
+    public function constructionsBuildingCompleteHotAirBalloon( Building $building, array $ruins ): TownLogEntry {
+        $variables = array(
+            'building' => $building->getPrototype()->getId(),
+            'citizen' => $building->getTown()->getRandomCitizenInside()->getId(),
+            'ruins' => array_map( fn(ZonePrototype $e) => ['id' => $e->getId()], $ruins )
+        );
+        $template = $this->entity_manager->getRepository(LogEntryTemplate::class)->findOneBy(['name' => 'constructionsBuildingCompleteHotAirBalloon']);
         return (new TownLogEntry())
             ->setLogEntryTemplate($template)
             ->setVariables($variables)

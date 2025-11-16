@@ -1,6 +1,11 @@
 {% extends 'ajax/manage/towns/explorer_shell.html.twig' %}
 
-{% from "ajax/admin/widget/controls.twig" import widget_item_creator as item_creator, widget_item_creator_js as item_creator_js %}
+{% from "ajax/admin/widget/controls.twig" import
+    widget_item_creator as item_creator,
+    widget_item_creator_js as item_creator_js,
+    widget_ruin_creator as ruin_creator,
+    widget_ruin_creator_js as ruin_creator_js
+%}
 
 {% block explorer_content %}
 	{% macro valuelist(prop,val,raw = false) %}
@@ -202,7 +207,12 @@
             <div id="zone_floor" class="hidden"></div>
             {% if is_granted('cheat', town) %}
                 <div id="dash_zone_generator" class="hidden" x-target="zone" x-id="">
-                    {{ item_creator(itemPrototypes, 'zone') }}
+                    <div class="item-create">
+                        {{ item_creator(itemPrototypes, 'zone') }}
+                    </div>
+                    <div class="ruin-create">
+                        {{ ruin_creator(zonePrototypes, 'zone') }}
+                    </div>
                 </div>
             {% endif %}
             <div id="zone_numbers" class="lightbox hidden ">
@@ -269,7 +279,8 @@
 {% block js %}
 	{{ parent() }}
 	{% if is_granted('cheat', town) %}
-		{{ item_creator_js('[x-id][x-target="zone"]', path('admin_spawn_item', {id: town.id}), path('admin_town_dashboard', {id: town.id}), 'zone') }}
+		{{ item_creator_js('[x-id][x-target="zone"] .item-create', path('admin_spawn_item', {id: town.id}), path('admin_town_dashboard', {id: town.id}), 'zone') }}
+        {{ ruin_creator_js('[x-id][x-target="zone"] .ruin-create', path('admin_spawn_ruin', {id: town.id}), path('admin_town_dashboard', {id: town.id}), 'zone') }}
 	{% endif %}
 	<script>
         let fun_api_call = function(api_url, elem) {

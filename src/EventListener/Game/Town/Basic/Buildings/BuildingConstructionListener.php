@@ -8,6 +8,7 @@ use App\Entity\Complaint;
 use App\Entity\ItemPrototype;
 use App\Entity\PictoPrototype;
 use App\Entity\Zone;
+use App\Entity\ZonePrototype;
 use App\Enum\Configuration\TownSetting;
 use App\Event\Game\Town\Basic\Buildings\BuildingConstructionEvent;
 use App\EventListener\ContainerTypeTrait;
@@ -20,6 +21,7 @@ use App\Service\LogTemplateHandler;
 use App\Service\PictoHandler;
 use App\Service\RandomGenerator;
 use App\Service\TownHandler;
+use App\Service\Maps\MapMaker;
 use App\Structures\TownConf;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Container\ContainerInterface;
@@ -58,6 +60,7 @@ final readonly class BuildingConstructionListener implements ServiceSubscriberIn
             ItemFactory::class,
             CitizenHandler::class,
             RandomGenerator::class,
+            MapMaker::class,
         ];
     }
 
@@ -147,16 +150,42 @@ final readonly class BuildingConstructionListener implements ServiceSubscriberIn
     public function onExecuteSpecialEffect( BuildingConstructionEvent $event ): void {
         switch ($event->building->getPrototype()->getName()) {
             case 'small_balloon_#00':
-                $all = $event->building->getPrototype()->getName() === 'small_balloon_#00';
                 /** @var TownHandler $townHandler */
                 $townHandler = $this->getService(TownHandler::class);
+                /** @var EntityManagerInterface $em */
+                $em = $this->getService(EntityManagerInterface::class);
+                /** @var MapMaker $mapMaker */
+                $mapMaker = $this->getService(MapMaker::class);
 
                 $state = $townHandler->getBuilding($event->town, 'item_electro_#00', true) ? Zone::ZombieStateExact : Zone::ZombieStateEstimate;
-                foreach ($event->town->getZones() as $zone)
-                    if ($all || $zone->getPrototype()) {
-                        $zone->setDiscoveryStatus( Zone::DiscoveryStateCurrent );
-                        $zone->setZombieStatus( max( $zone->getZombieStatus(), $state ) );
-                    }
+                foreach ($event->town->getZones() as $zone) {
+                    $zone->setDiscoveryStatus( Zone::DiscoveryStateCurrent );
+                    $zone->setZombieStatus( max( $zone->getZombieStatus(), $state ) );
+                }
+                
+                $spawnedSpecial = $mapMaker->spawnRuins(
+                    $event->town,
+                    1,
+                    fn (ZonePrototype $ruin): bool => $ruin->isAirOnly(),
+                    true,
+                );
+
+                $spawnedRevealed = $mapMaker->spawnRuins(
+                    $event->town,
+                    mt_rand(3,4),
+                    fn (ZonePrototype $ruin): bool => $ruin->isAirReveal(),
+                    true,
+                );
+
+                $newRuins = array_map(fn(Zone $z) => $z->getPrototype(), array_merge($spawnedSpecial, $spawnedRevealed));
+                shuffle( $newRuins );
+
+                if (!empty($newRuins)) {
+                    $em->persist( $this->getService(LogTemplateHandler::class)->constructionsBuildingCompleteHotAirBalloon(
+                        $event->building,
+                        $newRuins
+                    ) );
+                }
                 break;
             case 'small_rocket_#00':
                 /** @var EntityManagerInterface $em */

@@ -18,6 +18,7 @@ use App\Entity\TownRankingProxy;
 use App\Entity\User;
 use App\Entity\ZombieEstimation;
 use App\Entity\Zone;
+use App\Entity\ZonePrototype;
 use App\Enum\Configuration\MyHordesSetting;
 use App\Enum\Configuration\TownSetting;
 use App\Response\AjaxResponse;
@@ -56,6 +57,7 @@ class AdminTownDashboardController extends AdminActionController
 			'town' => $town,
 			'day' => $town->getDay(),
 			'itemPrototypes' => $this->getOrderedItemPrototypes($this->getUser()->getAdminLang() ?? $this->getUser()->getLanguage()),
+            'zonePrototypes' => $this->entity_manager->getRepository(ZonePrototype::class)->findAll(),
 			'tab' => "dash",
 			'events' => $this->conf->getAllEvents(),
 			'current_event' => $this->conf->getCurrentEvents($town),

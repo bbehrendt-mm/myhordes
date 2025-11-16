@@ -30,6 +30,7 @@ use App\Service\TimeKeeperService;
 use App\Service\TownHandler;
 use App\Service\UserHandler;
 use App\Service\ZoneHandler;
+use App\Service\Maps\MapMaker;
 use App\Translation\T;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -54,10 +55,11 @@ class AdminActionController extends CustomAbstractController
     protected UrlGeneratorInterface $urlGenerator;
     protected AdminHandler $adminHandler;
 	protected TownHandler $town_handler;
+	protected MapMaker $map_maker;
 
     protected InvalidateTagsInAllPoolsAction $clear;
 
-    public function __construct(EntityManagerInterface $em, ConfMaster $conf, LogTemplateHandler $lth, TranslatorInterface $translator, ZoneHandler $zh, TimeKeeperService $tk, CitizenHandler $ch, InventoryHandler $ih, UserHandler $uh, CrowService $crow, AdminLog $adminLogger, UrlGeneratorInterface $urlGenerator, AdminHandler $adminHandler, TownHandler $townHandler, HookExecutor $hookExecutor, InvalidateTagsInAllPoolsAction $clear)
+    public function __construct(EntityManagerInterface $em, ConfMaster $conf, LogTemplateHandler $lth, TranslatorInterface $translator, ZoneHandler $zh, TimeKeeperService $tk, CitizenHandler $ch, InventoryHandler $ih, UserHandler $uh, CrowService $crow, AdminLog $adminLogger, UrlGeneratorInterface $urlGenerator, AdminHandler $adminHandler, TownHandler $townHandler, HookExecutor $hookExecutor, InvalidateTagsInAllPoolsAction $clear, MapMaker $mapMaker)
     {
         parent::__construct($conf, $em, $tk, $ch, $ih, $translator, $hookExecutor);
         $this->logTemplateHandler = $lth;
@@ -69,6 +71,7 @@ class AdminActionController extends CustomAbstractController
         $this->adminHandler = $adminHandler;
 		$this->town_handler = $townHandler;
         $this->clear = $clear;
+		$this->map_maker = $mapMaker;
     }
 
     protected function clearTownCaches(Town $town): void
