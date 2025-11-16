@@ -10,6 +10,7 @@ use App\Controller\Town\TownController;
 use App\Entity\Building;
 use App\Entity\BuildingVote;
 use App\Entity\PictoPrototype;
+use App\Entity\Town;
 use App\Enum\ActionHandler\PointType;
 use App\Enum\Configuration\CitizenProperties;
 use App\Enum\EventStages\BuildingValueQuery;
@@ -143,17 +144,30 @@ class BuildingController extends CustomAbstractCoreController
             ? $town->getBuildings()->matching((new Criteria())->where(Criteria::expr()->eq('complete', true)))
             : $town->getBuildings();
 
-        $mv = [null, 0];
-        if (!$completed)
-            $mv = $buildings->reduce( function(array $v, Building $building) {
-                if ($building->getComplete()) return $v;
-                $votes = $building->getBuildingVotes()->count();
-                return $votes > $v[1] ? [$building->getId(), $votes] : $v;
-            }, $mv );
+        $voted_building = self::getVotedBuildingID($town);
 
         return new JsonResponse([
-            'buildings' => $buildings->map(fn(Building $b) => $this->renderBuilding($b, $b->getId() === $mv[0]))->toArray()
+            'buildings' => $buildings->map(fn(Building $b) => $this->renderBuilding($b, $b->getId() === $voted_building))->toArray()
         ]);
+    }
+
+    /**
+     * Determines the building ID with the highest number of votes in a given town.
+     *
+     * @param Town $town The town entity containing buildings to evaluate.
+     * @param int &$votes Reference variable to store the number of votes for the selected building.
+     * @return int|null Returns the ID of the building with the highest votes, or null if no valid building is found.
+     */
+    protected static function getVotedBuildingID(Town $town, int &$votes = 0): ?int {
+        $mv = [null, 0];
+        $mv = $town->getBuildings()->reduce( function(array $v, Building $building) {
+            if ($building->getComplete()) return $v;
+            $votes = $building->getBuildingVotes()->count();
+            return $votes > $v[1] ? [$building->getId(), $votes] : $v;
+        }, $mv );
+
+        $votes = $mv[1];
+        return $mv[0];
     }
 
     #[Route(path: '/{id}', name: 'buildings_participate', methods: ['PATCH'])]
@@ -343,7 +357,7 @@ class BuildingController extends CustomAbstractCoreController
         return new JsonResponse([
             'success' => true,
             'message' => empty($messages) ? null : implode('<hr />', $messages),
-            'building' => $this->renderBuilding($building, false),
+            'building' => $this->renderBuilding($building, $building->getId() === self::getVotedBuildingID($town)),
             'incidentals' => [
                 'ap' => $citizen->getAp(),
                 'bp' => $citizen->getBp(),
@@ -381,16 +395,9 @@ class BuildingController extends CustomAbstractCoreController
             return new JsonResponse(['error' => ErrorHelper::ErrorDatabaseException], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        $mv = [null, 0];
-        $mv = $town->getBuildings()->reduce( function(array $v, Building $building) {
-            if ($building->getComplete()) return $v;
-            $votes = $building->getBuildingVotes()->count();
-            return $votes > $v[1] ? [$building->getId(), $votes] : $v;
-        }, $mv );
-
         return new JsonResponse([
             'success' => true,
-            'building' => $this->renderBuilding($building, $mv[0] === $building->getId()),
+            'building' => $this->renderBuilding($building, $building->getId() === self::getVotedBuildingID($town)),
         ]);
     }
 }
