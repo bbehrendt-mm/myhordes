@@ -764,6 +764,11 @@ class TownHandler
             if ($zone->getDiscoveryStatus() < $minDiscoveryStatus) {
                 return;
             }
+
+            // Requires all ruins to be uncovered
+            if ($zone->getPrototype() && $zone->getBuryCount() > 0) {
+                return;
+            }
         }
 
         $pictoPrototype = $this->entity_manager->getRepository(PictoPrototype::class)->findOneBy(['name' => 'r_explot_#00' ]);
