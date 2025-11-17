@@ -309,7 +309,7 @@ Profilbeschreibung: Descripción del perfil
 'Baufortschritt setzen:': 'Establecer el progreso de la construcción:'
 'Integrität setzen:': 'Integridad:'
 'Neue Anzahl:': 'Nuevo número:'
-'Heldentage setzen': 'Establecer la expreriencía de Héroe'
+'Heldentage setzen': 'Establecer días heroicos'
 'Hausverbesserungen:': 'Mejoras de la casa:'
 'Teleportieren:': 'Teleportación:'
 'In die Stadt': 'En el pueblo'
@@ -700,3 +700,5 @@ Billig+: Barato+
 'Gesamten Gebäudebaum zurücksetzen': 'Restablecer el árbol del sitio de construcción'
 'Klicken, um Baustelle in die Liste der zu entsperrenden Baustellen aufzunehmen.': 'Haga clic para agregar a la lista de sitios para desbloquear'
 'Klicken, um Baustelle sofort zu entsperren.': 'Haga clic para desbloquear'
+Notizen: Notas
+'Notiz hinzufügen': 'Añadir nota'

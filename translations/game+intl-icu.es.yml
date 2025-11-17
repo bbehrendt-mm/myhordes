@@ -1112,7 +1112,7 @@ Schlachtenbummler: Titán de choque
 'Du bist einer der am besten integrierten Spieler in Die Verdammten und verhälst dich immer fair, nicht nur aus Prinzip, sondern aus Überzeugung.': 'Eres uno de los jugadores más integrados en Zombinoia, el juego limpio es más que un principio, es un estado de ánimo.'
 '{dogname}, der stinkende Köter von {citizen}, hat folgendes in die Bank gebracht: {item}': '¡{dogname}, el perro maloliente de {citizen} ha traído {item} al pueblo!'
 '{citizen} hat seinen Hund mit {count} Gegenständen in die Stadt geschickt.': '{citizen} ha enviado a su mascota al pueblo con {count} objetos en su lomo.'
-'Du hast heimlich einen Eintrag im Register unkenntlich gemacht... Du kannst das noch {times} mal tun.': 'Discretamente, has adulterado una línea en el Registro...  Aún puedes hacer eso {times}.'
+'Du hast heimlich einen Eintrag im Register unkenntlich gemacht... Du kannst das noch {times} mal tun.': 'Discretamente, has adulterado una línea en el Registro...  Aún puedes hacer eso {times} veces.'
 'Du hast {item_list} in der Werkstatt geöffnet und erhälst {item}.': 'Has obtenido {item} en el taller (abriendo {item_list}).'
 'Du hast {item_list} in der Werkstatt zu {item} zerlegt.': 'Has producido {item} en el taller (usando {item_list}).'
 'Du hast {item_list} in der Werkstatt zu {item} umgewandelt.': 'Con un poco de ingenio, has obtenido {item} (el objeto ha sido puesto en el Almacén).<hr />Has utilizado <strong>{ap} Punto(s) de Acción</strong>.'
@@ -2976,7 +2976,7 @@ Schritt-Punkte: Punto de Exploración
 Benötigt: Necesario
 Freischalten: Desbloquear
 'Einwohner in der Stadt': 'Habitantes del pueblo'
-'{days} Tage überlebt in "{town}"': '{days} días sobrevivieron en "{town}"'
+'{days} Tage überlebt in "{town}"': '{days} días sobrevividos en "{town}"'
 'Fähigkeit erworben': 'Habilidad adquirida'
 'Rudimentärer Schutz': 'Protección rudimentaria'
 'Dank der Hilfe eines anderen Bürgers wirst du diese Nacht keine Durst- oder Krankheitssymptome verspüren.': 'Gracias al cuidado de otro habitante, esta noche no sentirás ningún síntoma de sed o enfermedad.'
