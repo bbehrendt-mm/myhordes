@@ -1,6 +1,11 @@
 {% extends 'ajax/manage/towns/explorer_shell.html.twig' %}
 
-{% from "ajax/admin/widget/controls.twig" import widget_item_creator as item_creator, widget_item_creator_js as item_creator_js %}
+{% from "ajax/admin/widget/controls.twig" import
+    widget_item_creator as item_creator,
+    widget_item_creator_js as item_creator_js,
+    widget_ruin_creator as ruin_creator,
+    widget_ruin_creator_js as ruin_creator_js
+%}
 
 {% block explorer_content %}
 	{% macro valuelist(prop,val,raw = false) %}
@@ -198,11 +203,16 @@
             {% endif %}
 		</div>
 		<div class="cell padded rw-6 rw-sm-12">
-			<hordes-map id="global-map" data-react-mount="map" data-map="{{ map_public_json }}"></hordes-map>
+			<hordes-map id="global-map" data-map="{{ map_public_json }}"></hordes-map>
             <div id="zone_floor" class="hidden"></div>
             {% if is_granted('cheat', town) %}
-                <div id="dash_zone_generator" class="hidden" x-target="zone" x-id="">
-                    {{ item_creator(itemPrototypes, 'zone') }}
+                <div id="dash_zone_generator" class="hidden" x-target="zone" x-id="" x-param-name="zone">
+                    <div class="item-create">
+                        {{ item_creator(itemPrototypes, 'zone') }}
+                    </div>
+                    <div class="ruin-create">
+                        {{ ruin_creator(zonePrototypes, 'zone') }}
+                    </div>
                 </div>
             {% endif %}
             <div id="zone_numbers" class="lightbox hidden ">
@@ -269,7 +279,8 @@
 {% block js %}
 	{{ parent() }}
 	{% if is_granted('cheat', town) %}
-		{{ item_creator_js('[x-id][x-target="zone"]', path('admin_spawn_item', {id: town.id}), path('admin_town_dashboard', {id: town.id}), 'zone') }}
+		{{ item_creator_js('[x-id][x-target="zone"] .item-create', path('admin_spawn_item', {id: town.id}), path('admin_town_dashboard', {id: town.id}), 'zone') }}
+        {{ ruin_creator_js('[x-id][x-target="zone"] .ruin-create', path('admin_spawn_ruin', {id: town.id}), path('admin_town_dashboard', {id: town.id}), 'zone') }}
 	{% endif %}
 	<script>
         let fun_api_call = function(api_url, elem) {
@@ -301,29 +312,29 @@
         });
 
 		{% if is_granted('spy', town) %}
-            document.querySelector('hordes-map')?.addEventListener("zone-clicked", function(ev) {
-                ev.preventDefault();
-                ev.stopPropagation();
-                document.getElementById("dash_zone_generator")?.setAttribute('x-id', ev.detail.zone.id);
-                $.ajax.easySend('{{ url('get_zone_infos', {id: town.id}) }}', {'zone_id': ev.detail.zone.id}, function(data){
+
+            const load_zone_panel = (zone_id) => {
+                document.getElementById("dash_zone_generator")?.setAttribute('x-id', zone_id);
+                document.getElementById("dash_zone_generator")?.setAttribute('x-param', zone_id);
+                $.ajax.easySend('{{ url('get_zone_infos', {id: town.id}) }}', {'zone_id': zone_id}, function(data){
                     document.querySelector("#zone_floor").innerHTML = data.view;
                     document.querySelector("#zone_floor .inventory").classList.add('desert');
                     document.querySelector("#zone_floor .inventory .title").innerText = "{{ 'Zone'|trans({}, 'admin') }} [" + data.zone_coords.x + ", " + data.zone_coords.y + "]";
                     {% if is_granted('cheat', town) %}
-                        let items = document.querySelectorAll('#zone_floor .inventory .item:not(.locked)[x-item-id]');
-                        for (let i = 0; i < items.length; i++)
-                            items[i].addEventListener('click', function() {
-                                let change = 'remove';
-                                const item_id = this.getAttribute('x-item-id');
-                                $.ajax.easySend('{{ path('admin_town_item', {id: town.id}) }}', {
-                                        item: item_id, change: change, qty: '1'
-                                    },
-                                    function () {
-                                        let itemTarget = document.querySelector('#zone_floor .inventory .item[x-item-id="' + item_id + '"]');
-                                        itemTarget.parentElement.removeChild(itemTarget);
-                                    }
-                                );
-                            });
+                    let items = document.querySelectorAll('#zone_floor .inventory .item:not(.locked)[x-item-id]');
+                    for (let i = 0; i < items.length; i++)
+                        items[i].addEventListener('click', function() {
+                            let change = 'remove';
+                            const item_id = this.getAttribute('x-item-id');
+                            $.ajax.easySend('{{ path('admin_town_item', {id: town.id}) }}', {
+                                    item: item_id, change: change, qty: '1'
+                                },
+                                function () {
+                                    let itemTarget = document.querySelector('#zone_floor .inventory .item[x-item-id="' + item_id + '"]');
+                                    itemTarget.parentElement.removeChild(itemTarget);
+                                }
+                            );
+                        });
                     {% endif %}
                     document.querySelectorAll("#zone_floor .item div.tooltip").forEach( elem => $.html.handleTooltip( elem ));
                     document.getElementById("zone_digs").value = data.zone_digs;
@@ -332,41 +343,56 @@
                     document.getElementById("ruin_camp_level").value = data.camp_levl;
                     document.querySelector("#ruin_camp_base>span").innerText = data.ruin_camp;
                     document.getElementById("ruin_camp_base").classList.toggle('hidden', data.ruin_camp === null);
-                    document.getElementById("admin-log").dataset.domain = 'admin/zone/' + ev.detail.zone.id;
+                    document.getElementById("admin-log").dataset.domain = 'admin/zone/' + zone_id;
                     document.getElementById("dash_zone_log")?.classList.toggle('hidden', false);
                     document.getElementById("zone_numbers")?.classList.toggle('hidden', false);
                     document.getElementById("dash_zone_generator")?.classList.toggle('hidden', false);
                     document.getElementById("zone_floor")?.classList.toggle('hidden', false);
                 });
-		    })
+            }
+
+            document.querySelector('hordes-map')?.addEventListener("zone-clicked", function(ev) {
+                ev.preventDefault();
+                ev.stopPropagation();
+                load_zone_panel(ev.detail.zone.id);
+		    });
+
+            {% if zone %}load_zone_panel({{ zone }}){% endif %}
         {% endif %}
 
         {% if is_granted('cheat', town) %}
+
+            const getDashUrl = () => {
+                const url = new URL('{{ url('admin_town_dashboard', {id: town.id}) }}');
+                url.searchParams.append('zone', document.getElementById("dash_zone_generator").getAttribute('x-param'));
+                return url.toString();
+            }
+
             let set_zone_digs = document.getElementById("zone_dig_set");
             if(set_zone_digs) set_zone_digs.addEventListener('click', function(){
                 $.ajax.easySend('{{ path('set_zone_attribs', {'id': town.id}) }}', {'target': 'zone', 'zone_id': document.getElementById("dash_zone_generator").getAttribute('x-id'), 'value': document.getElementById('zone_digs').value }, function(){
-                    $.ajax.load(null, '{{ path('admin_town_dashboard', {id: town.id}) }}', true);
+                    $.ajax.load(null, getDashUrl(), true);
                 })
             })
 
             let set_ruin_digs = document.getElementById("ruin_dig_set");
             if(set_ruin_digs) set_ruin_digs.addEventListener('click', function(){
                 $.ajax.easySend('{{ path('set_zone_attribs', {'id': town.id}) }}', {'target': 'ruin', 'zone_id': document.getElementById("dash_zone_generator").getAttribute('x-id'), 'value': document.getElementById('ruin_digs').value }, function(){
-                    $.ajax.load(null, '{{ path('admin_town_dashboard', {id: town.id}) }}', true);
+                    $.ajax.load(null, getDashUrl(), true);
                 })
             })
 
             let set_ruin_bury = document.getElementById("ruin_bury_set");
             if(set_ruin_bury) set_ruin_bury.addEventListener('click', function(){
                 $.ajax.easySend('{{ path('set_zone_attribs', {'id': town.id}) }}', {'target': 'bury', 'zone_id': document.getElementById("dash_zone_generator").getAttribute('x-id'), 'value': document.getElementById('ruin_bury').value }, function(){
-                    $.ajax.load(null, '{{ path('admin_town_dashboard', {id: town.id}) }}', true);
+                    $.ajax.load(null, getDashUrl(), true);
                 })
             })
 
             let set_ruin_camp = document.getElementById("ruin_camp_level_set");
             if(set_ruin_camp) set_ruin_camp.addEventListener('click', function(){
                 $.ajax.easySend('{{ path('set_zone_attribs', {'id': town.id}) }}', {'target': 'camp', 'zone_id': document.getElementById("dash_zone_generator").getAttribute('x-id'), 'value': document.getElementById('ruin_camp_level').value }, function(){
-                    $.ajax.load(null, '{{ path('admin_town_dashboard', {id: town.id}) }}', true);
+                    $.ajax.load(null, getDashUrl(), true);
                 })
             })
         {% endif %}

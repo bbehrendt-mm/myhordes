@@ -11,7 +11,7 @@
             <div class="padded cell grow-1 shrink-1">
                 <select id="{{ _self.gen_id(prefix,'itemwidget','select')}}">
                     {% if allow_all %}
-                    <option title="{{ 'Alle'|trans({}, 'admin') }}" value="all">{{ 'Alle'|trans({}, 'admin') }}</option>
+                        <option title="{{ 'Alle'|trans({}, 'admin') }}" value="all">{{ 'Alle'|trans({}, 'admin') }}</option>
                     {% endif %}
                     {% for itemPrototype in itemPrototypes %}
                         <option title="{{ itemPrototype.name }}" value="{{itemPrototype.id}}">{{ itemPrototype.label|trans({}, 'items') }}</option>
@@ -65,19 +65,102 @@
                 chest: [], rucksack: [], zone: [], bank: []
             }
 
+            let params = {};
             document.querySelectorAll('{{ selector|e('js') }}').forEach(element => {
-                if (element.getAttribute('x-id') !== "")
-                switch (element.getAttribute('x-target')) {
-                    case 'chest'   : targets.chest.push(parseInt(element.getAttribute('x-id'))); break;
-                    case 'rucksack': targets.rucksack.push(parseInt(element.getAttribute('x-id'))); break;
-                    case 'zone'    : targets.zone.push(parseInt(element.getAttribute('x-id'))); break;
-                    case 'bank'    : targets.bank.push(parseInt(element.getAttribute('x-id'))); break;
+                let id = element.getAttribute('x-id') ?? null;
+                let target = element.getAttribute('x-target');
+                let param = element.getAttribute('x-param') ?? null;
+                let param_name = element.getAttribute('x-param-name');
+                if (id === null) {
+                    let other = element.closest('[x-id][x-target]');
+                    if (other) {
+                        id = other.getAttribute('x-id') ?? null;
+                        target = other.getAttribute('x-target');
+                        param = other.getAttribute('x-param') ?? null;
+                        param_name = other.getAttribute('x-param-name');
+                    }
+                }
+
+                if (id === null) {
+                    return;
+                }
+
+                id = parseInt(id);
+
+                switch (target) {
+                    case 'chest'   : targets.chest.push(id); break;
+                    case 'rucksack': targets.rucksack.push(id); break;
+                    case 'zone'    : targets.zone.push(id); break;
+                    case 'bank'    : targets.bank.push(id); break;
                     default: break;
                 }
+
+                if (param !== null) params[param_name ?? 'param'] = param;
             });
 
+            const url = new URL('{{ load_url }}', '{{ app.request.getSchemeAndHttpHost() }}{{ app.request.getBaseURL() }}');
+            Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+
             $.ajax.easySend('{{ api_url }}', { prototype: item, number: number, conf: conf, targets: targets},
-                () => $.ajax.load(null, '{{ load_url }}', true)
+                () => $.ajax.load(null, url.toString(), true)
+            );
+        });
+    </script>
+{% endmacro %}
+<!-- </editor-fold> -->
+
+<!-- <editor-fold desc="Ruin Creator Widget"> -->
+{% macro widget_ruin_creator(zonePrototypes, prefix = '') %}
+    <div class="lightbox">
+        <div class="row">
+            <div class="cell rw-12"><label for="{{ _self.gen_id(prefix,'ruinwidget','select')}}">{{'Gebäude anlegen:'|trans({}, 'admin')}}</label></div>
+        </div>
+        <div class="row-flex">
+            <div class="padded cell grow-1 shrink-1">
+                <select id="{{ _self.gen_id(prefix,'ruinwidget','select')}}">
+                    {% for zonePrototype in zonePrototypes %}
+                        <option title="{{ zonePrototype.label|trans({}, 'game') }}" value="{{zonePrototype.id}}">{{ zonePrototype.label|trans({}, 'game') }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="padded cell rw-12"><button id="{{ _self.gen_id(prefix,'ruinwidget','spawn')}}">{{'Erzeugen!'|trans({}, 'admin')}}</button></div>
+        </div>
+    </div>
+{% endmacro %}
+{% macro widget_ruin_creator_js(selector, api_url, load_url, prefix = '') %}
+    <script>
+        $.html.addEventListenerAll('#{{ _self.gen_id(prefix,'ruinwidget','spawn')}}', 'click', function() {
+            const ruin = document.getElementById('{{ _self.gen_id(prefix,'ruinwidget','select')}}').value;
+
+            let zone;
+
+            let params = {};
+            document.querySelectorAll('{{ selector|e('js') }}').forEach(element => {
+                zone = element.getAttribute('x-id') ?? null;
+                let param = element.getAttribute('x-param') ?? null;
+                let param_name = element.getAttribute('x-param-name');
+
+                if (zone === null) {
+                    let other = element.closest('[x-id]');
+                    if (other) {
+                        zone = other.getAttribute('x-id');
+                        param = other.getAttribute('x-param') ?? null;
+                        param_name = other.getAttribute('x-param-name');
+                    }
+                }
+
+                if (param !== null) params[param_name ?? 'param'] = param;
+            });
+
+            if (zone === null) return;
+
+            const url = new URL('{{ load_url }}', '{{ app.request.getSchemeAndHttpHost() }}{{ app.request.getBaseURL() }}');
+            Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+
+            $.ajax.easySend('{{ api_url }}', { prototype: ruin, zone: zone},
+                () => $.ajax.load(null, url.toString(), true)
             );
         });
     </script>

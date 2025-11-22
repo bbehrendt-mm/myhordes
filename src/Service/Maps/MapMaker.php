@@ -58,82 +58,11 @@ class MapMaker
                 $town->addZone( $zone );
             }
 
-        $spawn_ruins = $conf->get(TownSetting::MapRuinCount);
-
-        $ruin_km_range = [
-            $this->entity_manager->getRepository(ZonePrototype::class)->findMinRuinDistance(false),
-            $this->entity_manager->getRepository(ZonePrototype::class)->findMaxRuinDistance(false),
-        ];
-
-        /** @var Zone[] $zone_list */
-        $zone_list = array_filter($town->getZones()->getValues(), function(Zone $z) use ($ruin_km_range) {
-            $km = round(sqrt( pow($z->getX(),2) + pow($z->getY(),2) ) );
-            // $ap = abs($z->getX()) + abs($z->getY());
-            return $km != 0 && $km >= $ruin_km_range[0] && $km <= $ruin_km_range[1];
-        });
-        shuffle($zone_list);
-
-        $previous = [];
-
-        $co_location_cache = [];
-        $cl_get = function(int $x, int $y) use (&$co_location_cache): int {
-            $m = 0;
-            for ($xo = -1; $xo <= 1; $xo++) for ($yo = -1; $yo <= 1; $yo++)
-                if (isset($co_location_cache[$id = (($x+$xo) . '.' . ($y+$yo))]))
-                    $m = max($m, count($co_location_cache[$id]));
-            return $m;
-        };
-        $cl_set = function(int $x, int $y) use (&$co_location_cache): void {
-            $a = [$x . '.' . $y];
-            for ($xo = -1; $xo <= 1; $xo++) for ($yo = -1; $yo <= 1; $yo++)
-                if (isset($co_location_cache[$id = (($x+$xo) . '.' . ($y+$yo))]))
-                    $a = array_merge($a,$co_location_cache[$id]);
-            $a = array_unique($a);
-            foreach ($a as $id) $co_location_cache[$id] = $a;
-        };
-
-        $o = 0;
-        for ($i = 0; $i < $spawn_ruins; $i++) {
-
-            do {
-                if (($i+$o) >= count($zone_list)) continue 2;
-                $b = $cl_get( $zone_list[$i+$o]->getX(), $zone_list[$i+$o]->getY() );
-                if ($b <= 1) $keep_location = true;
-                else if ($b === 2) $keep_location = $this->random->chance(0.25);
-                else $keep_location = false;
-
-                if (!$keep_location) $o++;
-            } while ( !$keep_location );
-
-            $cl_set( $zone_list[$i+$o]->getX(), $zone_list[$i+$o]->getY() );
-
-            //$ruin_types = $this->entity_manager->getRepository(ZonePrototype::class)->findByDistance( abs($zone_list[$i]->getX()) + abs($zone_list[$i]->getY()) );
-            $ruin_types = $this->entity_manager->getRepository(ZonePrototype::class)->findByDistance(round(sqrt( pow($zone_list[$i+$o]->getX(),2) + pow($zone_list[$i+$o]->getY(),2) )));
-            if (empty($ruin_types)) continue;
-
-            $iterations = 0;
-            do {
-                $target_ruin = $this->random->pickLocationFromList( $ruin_types );
-                $iterations++;
-            } while ( isset( $previous[$target_ruin->getId()] ) && $iterations <= $previous[$target_ruin->getId()] );
-
-            if (!isset( $previous[$target_ruin->getId()] )) $previous[$target_ruin->getId()] = 1;
-            else $previous[$target_ruin->getId()]++;
-
-            //Hordes Dig Count is N + rand(N), where rand is between 0 included and N excluded
-            $conf_min = $conf->get(TownSetting::MapRuinItemsMin);
-            $ruinDigCount = ceil($conf_min*0.7) + mt_rand(0,$conf_min-1 ) ;
-
-            $zone_list[$i+$o]
-                ->setPrototype( $target_ruin )
-                ->setRuinDigs($ruinDigCount);
-
-            if ($conf->get(TownSetting::OptFeatureCamping))
-                $zone_list[$i+$o]->setBlueprint(Zone::BlueprintAvailable);
-
-            if ($this->random->chance($conf->get(TownSetting::MapParamsBuriedProb)))
-                $zone_list[$i+$o]->setBuryCount( mt_rand($conf->get(TownSetting::MapParamsBuriedDigsMin), $conf->get(TownSetting::MapParamsBuriedDigsMax)) );
-        }
+        $this->spawnRuins(
+            $town,
+            $conf->get(TownSetting::MapRuinCount),
+            fn (ZonePrototype $ruin): bool => !$ruin->isAirOnly()
+        );
 
         $spawn_explorable_ruins = $conf->get(TownSetting::MapExplorableRuinCount);
         $all_explorable_ruins = $explorable_ruins = [];
@@ -190,6 +119,151 @@ class MapMaker
 
         $this->initialZombieSpawn( $town );
         foreach ($town->getZones() as $zone) $zone->setStartZombies( $zone->getZombies() );
+    }
+
+    /**
+     * Procedurally spawns ruins in a town up to the specified amount
+     * @param ?callable(ZonePrototype):bool $ruin_filter Optional filter to apply to the list of ruins before spawning
+     * @return Zone[] The list of spawned ruin locations
+     */
+    public function spawnRuins( Town $town, int $amount, ?callable $ruin_filter = null, ?bool $uncovered = false, bool $lenient_distances = false): array {
+
+        $spot_offset = 0;
+        if ($ruin_filter === null) {
+            $zone_list = $this->getZonesForRuins($town);
+            $base_ruin_types = null;
+        }
+        else {
+            $base_ruin_types = array_filter(
+                $this->entity_manager->getRepository(ZonePrototype::class)->findAll(),
+                $ruin_filter
+            );
+
+            if (empty($base_ruin_types)) return [];
+
+            // If a ruin filter is given and no zones are available to accommodate these ruins, dynamically increase the search range
+            $min_distance = array_reduce( $base_ruin_types, fn(int $carry, ZonePrototype $z) => min($carry, $z->getMinDistance()), PHP_INT_MAX ) - $spot_offset;
+            $max_distance = array_reduce( $base_ruin_types, fn(int $carry, ZonePrototype $z) => max($carry, $z->getMaxDistance()), 0 ) - $spot_offset;
+            do {
+                $zone_list = $this->getZonesForRuins(
+                    $town,
+                    min_distance: $min_distance - $spot_offset,
+                    max_distance: $max_distance + $spot_offset,
+                );
+
+                if (empty($zone_list)) $spot_offset += 2;
+            } while ($lenient_distances && empty($zone_list) && ($min_distance - $spot_offset) > 0);
+
+        }
+        shuffle($zone_list);
+        $amount = min( $amount, count($zone_list) );
+
+        $key = fn(Zone|int $x, int|null $y = null) => is_int($x) ? "{$x}.{$y}" : "{$x->getX()}.{$x->getY()}";
+
+        // Keep track of previously placed ruins to avoid too much repetition
+        $previous = [];
+        $co_location_cache = [];
+        foreach ($town->getZones() as $zone) {
+            if (!$zone->getPrototype()) continue;
+            $previous[$zone->getPrototype()->getId()] = ($previous[$zone->getPrototype()->getId()] ?? 0) + 1;
+            $co_location_cache[$key($zone)] = 1;
+        }
+
+        // Neighboring zone cache to reduce chance of ruins being too close
+        $getSurroundingRuins = function(int|Zone $x, int|null $y = null, int $distance = 1) use (&$co_location_cache, &$key): int {
+            $m = 0;
+            [$base_x, $base_y] = is_int($x) ? [$x, $y] : [$x->getX(), $x->getY()];
+            for ($xo = -$distance; $xo <= $distance; $xo++) for ($yo = -$distance; $yo <= $distance; $yo++)
+                $m += $co_location_cache[$key($base_x+$xo,$base_y+$yo)] ?? 0;
+            return $m;
+        };
+        $addSurroundingRuin = function(int|Zone $x, int|null $y = null) use (&$co_location_cache, &$key): void {
+            $k = $key($x,$y);
+            $co_location_cache[$k] = ( $co_location_cache[$k] ?? 0 ) + 1;
+        };
+
+        $spawned = [];
+
+        for ($added = 0, $omitted = 0; ($added + $omitted) < count($zone_list) && $added < $amount;) {
+            $zone = $zone_list[$added + $omitted];
+
+            $surrounding_ruins = $getSurroundingRuins( $zone );
+
+            if ($surrounding_ruins >= 3) { $omitted++; continue; }
+            if ($surrounding_ruins === 2 && !$this->random->chance(0.25)) { $omitted++; continue; }
+
+            if ($lenient_distances && $spot_offset > 0 && !empty($base_ruin_types))
+                $ruin_types = $base_ruin_types;
+            else {
+                $ruin_types = $this->entity_manager->getRepository(ZonePrototype::class)->findByDistance($zone->getDistance());
+                if ($ruin_filter !== null) {
+                    $ruin_types = array_filter( $ruin_types, $ruin_filter );
+                }
+            }
+
+            if (empty($ruin_types)) { $omitted++; continue; }
+
+            $addSurroundingRuin( $zone );
+
+            // Reduces the odds of getting too much of the same ruin type while still allowing duplicates
+            $iterations = 0;
+            do {
+                $target_ruin = $this->random->pickLocationFromList( $ruin_types );
+                $iterations++;
+            } while ( isset( $previous[$target_ruin->getId()] ) && $iterations <= $previous[$target_ruin->getId()] );
+
+            $previous[$target_ruin->getId()] = ($previous[$target_ruin->getId()] ?? 0) + 1;
+
+            $this->spawnRuin( $town, $zone, $target_ruin, $uncovered ? 0 : null );
+            $spawned[] = $zone;
+
+            $added++;
+        }
+
+        return $spawned;
+    }
+
+    /**
+     * Finds all zones suitable for placing ruins, with the possibility of specifying a Km range
+     * @return Zone[]
+     */
+    public function getZonesForRuins(
+        Town $town,
+        ?int $min_distance = null,
+        ?int $max_distance = null
+    ): array {
+        $min_distance ??= $this->entity_manager->getRepository(ZonePrototype::class)->findMinRuinDistance(false);
+        $max_distance ??= $this->entity_manager->getRepository(ZonePrototype::class)->findMaxRuinDistance(false);
+
+        /** @var Zone[] $zone_list */
+        return array_filter($town->getZones()->getValues(), function(Zone $z) use ($min_distance, $max_distance): bool {
+            $km = $z->getDistance();
+            $withinRange = $km != 0 && $km >= $min_distance && $km <= $max_distance;
+            $hasRuin = $z->getPrototype() !== null;
+
+            return !$hasRuin && $withinRange;
+        });
+    }
+
+    /**
+     * Spawns a ruin in the specified zone
+     */
+    public function spawnRuin( Town $town, Zone $zone, ZonePrototype $target_ruin, ?int $bury_count = null ): void {
+        $conf = $this->conf->getTownConfiguration( $town );
+
+        //Hordes Dig Count is N + rand(N), where rand is between 0 included and N excluded
+        $conf_min = $conf->get(TownSetting::MapRuinItemsMin);
+        $ruin_dig_count = ceil($conf_min*0.7) + mt_rand(0,$conf_min-1 );
+
+        $zone
+            ->setPrototype( $target_ruin )
+            ->setRuinDigs($ruin_dig_count);
+
+        if ($conf->get(TownSetting::OptFeatureCamping))
+            $zone->setBlueprint(Zone::BlueprintAvailable);
+
+        if ($this->random->chance($conf->get(TownSetting::MapParamsBuriedProb)))
+            $zone->setBuryCount( $bury_count ?? mt_rand($conf->get(TownSetting::MapParamsBuriedDigsMin), $conf->get(TownSetting::MapParamsBuriedDigsMax)) );
     }
 
     private function getDefaultZoneResolution( TownConf $conf, ?int &$offset_x, ?int &$offset_y ): int {

@@ -225,6 +225,16 @@ class Town
         }
         return false;
     }
+    public function getRandomCitizenInside(bool $aliveOnly = true): ?Citizen {
+        $citizens = $this->getCitizens()->toArray();
+        shuffle($citizens);
+        foreach ($citizens as $citizen) {
+            if ($citizen->getZone()) continue;
+            if ($aliveOnly && !$citizen->getAlive()) continue;
+            return $citizen;
+        }
+        return null;
+    }
     /**
      * @return Collection|Citizen[]
      */

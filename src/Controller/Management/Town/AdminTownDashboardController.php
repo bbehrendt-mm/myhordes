@@ -18,6 +18,7 @@ use App\Entity\TownRankingProxy;
 use App\Entity\User;
 use App\Entity\ZombieEstimation;
 use App\Entity\Zone;
+use App\Entity\ZonePrototype;
 use App\Enum\Configuration\MyHordesSetting;
 use App\Enum\Configuration\TownSetting;
 use App\Response\AjaxResponse;
@@ -33,6 +34,7 @@ use App\Service\NightlyHandler;
 use App\Service\RandomGenerator;
 use App\Service\TownHandler;
 use Exception;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Attribute\Route;
@@ -46,16 +48,19 @@ class AdminTownDashboardController extends AdminActionController
      * @param Town $town
      * @param TownHandler $townHandler
      * @param KernelInterface $kernel
+     * @param Request $request
      * @return Response
      * @throws Exception
      */
     #[Route(path: 'jx/manage/town/{id<\d+>}/dash', name: 'admin_town_dashboard')]
     #[IsGranted('spy', 'town')]
-    public function town_explorer_dash(Town $town, TownHandler $townHandler, KernelInterface $kernel): Response {
+    public function town_explorer_dash(Town $town, TownHandler $townHandler, KernelInterface $kernel, Request $request): Response {
 		return $this->render('ajax/manage/towns/explorer_dash.html.twig', $this->addDefaultTwigArgs(null, array_merge([
 			'town' => $town,
 			'day' => $town->getDay(),
+            'zone' => $request->query->get('zone'),
 			'itemPrototypes' => $this->getOrderedItemPrototypes($this->getUser()->getAdminLang() ?? $this->getUser()->getLanguage()),
+            'zonePrototypes' => $this->entity_manager->getRepository(ZonePrototype::class)->findAll(),
 			'tab' => "dash",
 			'events' => $this->conf->getAllEvents(),
 			'current_event' => $this->conf->getCurrentEvents($town),
