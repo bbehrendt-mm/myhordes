@@ -1806,7 +1806,7 @@ class RuinDataService implements FixtureProcessorInterface {
 
             // Hot Air Balloon special building
             "crop_circles" => [
-                "label" => "Strange Barn",
+                "label" => "Verdächtige Scheune",
                 "icon" => "crop_circles",
                 "camping" => 15,
                 "min_dist" => 21,

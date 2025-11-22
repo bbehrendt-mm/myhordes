@@ -127,33 +127,59 @@ class MapMaker
      * @return Zone[] The list of spawned ruin locations
      */
     public function spawnRuins( Town $town, int $amount, ?callable $ruin_filter = null, ?bool $uncovered = false): array {
-        $zone_list = $this->getZonesForRuins( $town );
+
+        $spot_offset = 0;
+        if ($ruin_filter === null) {
+            $zone_list = $this->getZonesForRuins($town);
+            $base_ruin_types = null;
+        }
+        else {
+            $base_ruin_types = array_filter(
+                $this->entity_manager->getRepository(ZonePrototype::class)->findAll(),
+                $ruin_filter
+            );
+
+            if (empty($base_ruin_types)) return [];
+
+            // If a ruin filter is given and no zones are available to accommodate these ruins, dynamically increase the search range
+            $min_distance = array_reduce( $base_ruin_types, fn(int $carry, ZonePrototype $z) => min($carry, $z->getMinDistance()), PHP_INT_MAX ) - $spot_offset;
+            $max_distance = array_reduce( $base_ruin_types, fn(int $carry, ZonePrototype $z) => max($carry, $z->getMaxDistance()), 0 ) - $spot_offset;
+            do {
+                $zone_list = $this->getZonesForRuins(
+                    $town,
+                    min_distance: $min_distance - $spot_offset,
+                    max_distance: $max_distance + $spot_offset,
+                );
+
+                if (empty($zone_list)) $spot_offset += 2;
+            } while (empty($zone_list) && ($min_distance - $spot_offset) > 0);
+
+        }
         shuffle($zone_list);
         $amount = min( $amount, count($zone_list) );
 
+        $key = fn(Zone|int $x, int|null $y = null) => is_int($x) ? "{$x}.{$y}" : "{$x->getX()}.{$x->getY()}";
+
         // Keep track of previously placed ruins to avoid too much repetition
         $previous = [];
-        foreach ($zone_list as $zone) {
+        $co_location_cache = [];
+        foreach ($town->getZones() as $zone) {
             if (!$zone->getPrototype()) continue;
             $previous[$zone->getPrototype()->getId()] = ($previous[$zone->getPrototype()->getId()] ?? 0) + 1;
+            $co_location_cache[$key($zone)] = 1;
         }
 
         // Neighboring zone cache to reduce chance of ruins being too close
-        $co_location_cache = [];
-        $getSurroundingRuins = function(int $x, int $y) use (&$co_location_cache): int {
+        $getSurroundingRuins = function(int|Zone $x, int|null $y = null, int $distance = 1) use (&$co_location_cache, &$key): int {
             $m = 0;
-            for ($xo = -1; $xo <= 1; $xo++) for ($yo = -1; $yo <= 1; $yo++)
-                if (isset($co_location_cache[$id = (($x+$xo) . '.' . ($y+$yo))]))
-                    $m = max($m, count($co_location_cache[$id]));
+            [$base_x, $base_y] = is_int($x) ? [$x, $y] : [$x->getX(), $x->getY()];
+            for ($xo = -$distance; $xo <= $distance; $xo++) for ($yo = -$distance; $yo <= $distance; $yo++)
+                $m += $co_location_cache[$key($base_x+$xo,$base_y+$yo)] ?? 0;
             return $m;
         };
-        $addSurroundingRuin = function(int $x, int $y) use (&$co_location_cache): void {
-            $a = [$x . '.' . $y];
-            for ($xo = -1; $xo <= 1; $xo++) for ($yo = -1; $yo <= 1; $yo++)
-                if (isset($co_location_cache[$id = (($x+$xo) . '.' . ($y+$yo))]))
-                    $a = array_merge($a,$co_location_cache[$id]);
-            $a = array_unique($a);
-            foreach ($a as $id) $co_location_cache[$id] = $a;
+        $addSurroundingRuin = function(int|Zone $x, int|null $y = null) use (&$co_location_cache, &$key): void {
+            $k = $key($x,$y);
+            $co_location_cache[$k] = ( $co_location_cache[$k] ?? 0 ) + 1;
         };
 
         $spawned = [];
@@ -161,19 +187,23 @@ class MapMaker
         for ($added = 0, $omitted = 0; ($added + $omitted) < count($zone_list) && $added < $amount;) {
             $zone = $zone_list[$added + $omitted];
 
-            $surrounding_ruins = $getSurroundingRuins( $zone->getX(), $zone->getY() );
+            $surrounding_ruins = $getSurroundingRuins( $zone );
 
             if ($surrounding_ruins >= 3) { $omitted++; continue; }
             if ($surrounding_ruins === 2 && !$this->random->chance(0.25)) { $omitted++; continue; }
 
-            //$ruin_types = $this->entity_manager->getRepository(ZonePrototype::class)->findByDistance( abs($zone_list[$i]->getX()) + abs($zone_list[$i]->getY()) );
-            $ruin_types = $this->entity_manager->getRepository(ZonePrototype::class)->findByDistance(round(sqrt( pow($zone->getX(),2) + pow($zone->getY(),2) )));
-            if ($ruin_filter !== null) {
-                $ruin_types = array_filter( $ruin_types, $ruin_filter );
+            if ($spot_offset > 0 && !empty($base_ruin_types))
+                $ruin_types = $base_ruin_types;
+            else {
+                $ruin_types = $this->entity_manager->getRepository(ZonePrototype::class)->findByDistance($zone->getDistance());
+                if ($ruin_filter !== null) {
+                    $ruin_types = array_filter( $ruin_types, $ruin_filter );
+                }
             }
+
             if (empty($ruin_types)) { $omitted++; continue; }
 
-            $addSurroundingRuin( $zone->getX(), $zone->getY() );
+            $addSurroundingRuin( $zone );
 
             // Reduces the odds of getting too much of the same ruin type while still allowing duplicates
             $iterations = 0;
@@ -182,8 +212,7 @@ class MapMaker
                 $iterations++;
             } while ( isset( $previous[$target_ruin->getId()] ) && $iterations <= $previous[$target_ruin->getId()] );
 
-            if (!isset( $previous[$target_ruin->getId()] )) $previous[$target_ruin->getId()] = 1;
-            else $previous[$target_ruin->getId()]++;
+            $previous[$target_ruin->getId()] = ($previous[$target_ruin->getId()] ?? 0) + 1;
 
             $this->spawnRuin( $town, $zone, $target_ruin, $uncovered ? 0 : null );
             $spawned[] = $zone;
@@ -208,9 +237,7 @@ class MapMaker
 
         /** @var Zone[] $zone_list */
         return array_filter($town->getZones()->getValues(), function(Zone $z) use ($min_distance, $max_distance): bool {
-            $km = round(sqrt( pow($z->getX(),2) + pow($z->getY(),2) ) );
-            // $ap = abs($z->getX()) + abs($z->getY());
-
+            $km = $z->getDistance();
             $withinRange = $km != 0 && $km >= $min_distance && $km <= $max_distance;
             $hasRuin = $z->getPrototype() !== null;
 

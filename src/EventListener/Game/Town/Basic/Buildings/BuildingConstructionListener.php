@@ -162,19 +162,17 @@ final readonly class BuildingConstructionListener implements ServiceSubscriberIn
                     $zone->setDiscoveryStatus( Zone::DiscoveryStateCurrent );
                     $zone->setZombieStatus( max( $zone->getZombieStatus(), $state ) );
                 }
-                
+
                 $spawnedSpecial = $mapMaker->spawnRuins(
                     $event->town,
                     1,
-                    fn (ZonePrototype $ruin): bool => $ruin->isAirOnly(),
-                    true,
+                    fn (ZonePrototype $ruin): bool => $ruin->isAirOnly()
                 );
 
                 $spawnedRevealed = $mapMaker->spawnRuins(
                     $event->town,
-                    mt_rand(3,4),
-                    fn (ZonePrototype $ruin): bool => $ruin->isAirReveal(),
-                    true,
+                    3,
+                    fn (ZonePrototype $ruin): bool => $ruin->isAirReveal()
                 );
 
                 $newRuins = array_map(fn(Zone $z) => $z->getPrototype(), array_merge($spawnedSpecial, $spawnedRevealed));

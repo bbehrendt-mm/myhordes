@@ -65,18 +65,23 @@
                 chest: [], rucksack: [], zone: [], bank: []
             }
 
+            let params = {};
             document.querySelectorAll('{{ selector|e('js') }}').forEach(element => {
-                let id = element.getAttribute('x-id');
+                let id = element.getAttribute('x-id') ?? null;
                 let target = element.getAttribute('x-target');
-                if (id === null || id === undefined) {
+                let param = element.getAttribute('x-param') ?? null;
+                let param_name = element.getAttribute('x-param-name');
+                if (id === null) {
                     let other = element.closest('[x-id][x-target]');
                     if (other) {
-                        id = other.getAttribute('x-id');
+                        id = other.getAttribute('x-id') ?? null;
                         target = other.getAttribute('x-target');
+                        param = other.getAttribute('x-param') ?? null;
+                        param_name = other.getAttribute('x-param-name');
                     }
                 }
 
-                if (id === null || id === undefined) {
+                if (id === null) {
                     return;
                 }
 
@@ -89,10 +94,15 @@
                     case 'bank'    : targets.bank.push(id); break;
                     default: break;
                 }
+
+                if (param !== null) params[param_name ?? 'param'] = param;
             });
 
+            const url = new URL('{{ load_url }}', '{{ app.request.getSchemeAndHttpHost() }}{{ app.request.getBaseURL() }}');
+            Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+
             $.ajax.easySend('{{ api_url }}', { prototype: item, number: number, conf: conf, targets: targets},
-                () => $.ajax.load(null, '{{ load_url }}', true)
+                () => $.ajax.load(null, url.toString(), true)
             );
         });
     </script>
@@ -125,23 +135,32 @@
             const ruin = document.getElementById('{{ _self.gen_id(prefix,'ruinwidget','select')}}').value;
 
             let zone;
-            
+
+            let params = {};
             document.querySelectorAll('{{ selector|e('js') }}').forEach(element => {
-                zone = element.getAttribute('x-id');
-                if (zone === null || zone === undefined) {
+                zone = element.getAttribute('x-id') ?? null;
+                let param = element.getAttribute('x-param') ?? null;
+                let param_name = element.getAttribute('x-param-name');
+
+                if (zone === null) {
                     let other = element.closest('[x-id]');
-                    if (other) zone = other.getAttribute('x-id');
+                    if (other) {
+                        zone = other.getAttribute('x-id');
+                        param = other.getAttribute('x-param') ?? null;
+                        param_name = other.getAttribute('x-param-name');
+                    }
                 }
 
-                console.log(zone);
-
-                if (zone === null || zone === undefined) {
-                    return;
-                }
+                if (param !== null) params[param_name ?? 'param'] = param;
             });
 
+            if (zone === null) return;
+
+            const url = new URL('{{ load_url }}', '{{ app.request.getSchemeAndHttpHost() }}{{ app.request.getBaseURL() }}');
+            Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+
             $.ajax.easySend('{{ api_url }}', { prototype: ruin, zone: zone},
-                () => $.ajax.load(null, '{{ load_url }}', true)
+                () => $.ajax.load(null, url.toString(), true)
             );
         });
     </script>
@@ -190,7 +209,6 @@
     $.html.addEventListenerAll('#{{ _self.gen_id(prefix,'pictowidget','give')}}', 'click', function(){
         const number = parseInt(document.getElementById("{{ _self.gen_id(prefix,'pictowidget','number')}}").value);
 
-        document.querySelectorAll('{{ selector|e('js') }}').forEach(element => {
         let targets = [];
         {% if selector %}
             document.querySelectorAll('{{ selector|e('js') }}').forEach( element => targets.push(parseInt(element.getAttribute('x-id'))) );
