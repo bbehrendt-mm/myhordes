@@ -1014,7 +1014,7 @@ class ActionDataService implements FixtureProcessorInterface {
 
                 'photo_4_#00' => [ 'flash_photo_4', 'flash_photo_4_ruin_no_bp', 'flash_photo_4_ruin_bp', 'flash_photo_4_ruin_bp_free' ],
                 'cello_box_#00' => [ 'open_cellobox' ],
-                'flag_#00' => [ 'wagging_flag' ],
+                //'flag_#00' => [ 'wagging_flag' ],
 
                 'scary_mask_#00' => ['scare']
             ],
