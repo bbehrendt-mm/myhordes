@@ -126,7 +126,7 @@ class MapMaker
      * @param ?callable(ZonePrototype):bool $ruin_filter Optional filter to apply to the list of ruins before spawning
      * @return Zone[] The list of spawned ruin locations
      */
-    public function spawnRuins( Town $town, int $amount, ?callable $ruin_filter = null, ?bool $uncovered = false): array {
+    public function spawnRuins( Town $town, int $amount, ?callable $ruin_filter = null, ?bool $uncovered = false, bool $lenient_distances = false): array {
 
         $spot_offset = 0;
         if ($ruin_filter === null) {
@@ -152,7 +152,7 @@ class MapMaker
                 );
 
                 if (empty($zone_list)) $spot_offset += 2;
-            } while (empty($zone_list) && ($min_distance - $spot_offset) > 0);
+            } while ($lenient_distances && empty($zone_list) && ($min_distance - $spot_offset) > 0);
 
         }
         shuffle($zone_list);
@@ -192,7 +192,7 @@ class MapMaker
             if ($surrounding_ruins >= 3) { $omitted++; continue; }
             if ($surrounding_ruins === 2 && !$this->random->chance(0.25)) { $omitted++; continue; }
 
-            if ($spot_offset > 0 && !empty($base_ruin_types))
+            if ($lenient_distances && $spot_offset > 0 && !empty($base_ruin_types))
                 $ruin_types = $base_ruin_types;
             else {
                 $ruin_types = $this->entity_manager->getRepository(ZonePrototype::class)->findByDistance($zone->getDistance());

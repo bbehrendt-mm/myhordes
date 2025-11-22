@@ -166,13 +166,17 @@ final readonly class BuildingConstructionListener implements ServiceSubscriberIn
                 $spawnedSpecial = $mapMaker->spawnRuins(
                     $event->town,
                     1,
-                    fn (ZonePrototype $ruin): bool => $ruin->isAirOnly()
+                    fn (ZonePrototype $ruin): bool => $ruin->isAirOnly(),
+                    uncovered: true,
+                    lenient_distances: true,
                 );
 
                 $spawnedRevealed = $mapMaker->spawnRuins(
                     $event->town,
                     3,
-                    fn (ZonePrototype $ruin): bool => $ruin->isAirReveal()
+                    fn (ZonePrototype $ruin): bool => $ruin->isAirReveal(),
+                    uncovered: true,
+                    lenient_distances: true,
                 );
 
                 $newRuins = array_map(fn(Zone $z) => $z->getPrototype(), array_merge($spawnedSpecial, $spawnedRevealed));
