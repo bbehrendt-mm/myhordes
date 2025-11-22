@@ -389,7 +389,8 @@ final class CitizenChanceQueryListener implements ServiceSubscriberInterface
                 break;
             case CitizenValueQuery::NightlyAttraction:
                 $value = $event->value;
-                if ($event->citizen->hasStatus('tg_flag')) $value += 0.025;
+                // [S19] Disable flag attraction
+                // if ($event->citizen->hasStatus('tg_flag')) $value += 0.025;
                 $event->value = $value;
                 break;
             default:

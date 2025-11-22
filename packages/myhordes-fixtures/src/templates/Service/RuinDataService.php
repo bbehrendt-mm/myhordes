@@ -132,28 +132,16 @@ class RuinDataService implements FixtureProcessorInterface {
             ],
 
             // id 53
-            "freight" => [
-                "label" => "Alter Rangierbahnhof",
-                "icon" => "freight",
-                "camping" => 10,
-                "min_dist" => 10,
-                "max_dist" => 13,
-                "chance" => 464,
-                "empty" => 0.10,
-                "capacity" => 3,
-                "air_reveal" => true,
-                "drops" => [
-                    "metal_beam_#00" => 3,
-                    "wood_beam_#00" => 3,
-                    "wrench_#00" => 3,
-                    "wood2_#00" => 10,
-                    "metal_#00" => 10,
-                    "courroie_#00" => 1,
-                    "coffee_#00" => 1,
-                    "chain_#00" => 5,
-                ],
-                "desc" => "Dieser Rangierbahnhof war einmal das zentrale Drehkreuz des Landes. Waren aus aller Herren Länder wurden hier rund um die Uhr umgeladen und in alle Himmelsrichtungen versendet. Das 'weitverzweigte Netzt' ist heute noch ungefähr 150 Meter lang, vorausgesetzt man zählt die Gleisüberbleibsel da hinten noch mit."
-            ],
+            'freight' => ["label" => "Alter Rangierbahnhof",'icon' => 'freight',"camping" => 10,"min_dist" => 10, "max_dist" => 13, "chance" => 464, "empty" => 0.10, "capacity" => 3, "drops" => [
+                'metal_beam_#00' => 3,
+                'wood_beam_#00' => 3,
+                'wrench_#00' => 3,
+                'wood2_#00' => 10,
+                'metal_#00' => 10,
+                'courroie_#00' => 1,
+                'coffee_#00' => 1,
+                'chain_#00' => 5,
+            ], 'desc' => 'Dieser Rangierbahnhof war einmal das zentrale Drehkreuz des Landes. Waren aus aller Herren Länder wurden hier rund um die Uhr umgeladen und in alle Himmelsrichtungen versendet. Das \'weitverzweigte Netzt\' ist heute noch ungefähr 150 Meter lang, vorausgesetzt man zählt die Gleisüberbleibsel da hinten noch mit.'],
 
             // id 54
             "hospital" => [
@@ -206,7 +194,7 @@ class RuinDataService implements FixtureProcessorInterface {
                     "jerrycan_#00" => 1,
                     "wire_#00" => 3,
                     "oilcan_#00" => 4,
-                    "flag_#00" => 2,
+                    //"flag_#00" => 2,
                 ],
                 "desc" => "Das Einzige, was auf diesem bröckelnden Flugplatz startet oder landet, sind die Fliegen. Vielleicht finden Sie etwas Nützliches, wenn Sie in den Lagerhallen herumstöbern. Zum Beispiel einen A380 in funktionstüchtigem Zustand."
             ],
@@ -1041,7 +1029,7 @@ class RuinDataService implements FixtureProcessorInterface {
                     "explo_#00" => 3,
                     "tagger_#00" => 5,
                     "pilegun_upkit_#00" => 1,
-                    "flag_#00" => 2,
+                    //"flag_#00" => 2,
                 ],
                 "desc" => "Dieses militärische Vehikel ist wie die metaphorische Konservendose. Der Soldat ist drinnen und spielt die Rolle einer Sardine, und hundert Zombies draußen spielen den hungrigen Bürger. Der Bürger gewinnt..."
             ],
@@ -1090,7 +1078,7 @@ class RuinDataService implements FixtureProcessorInterface {
                     "coffee_#00" => 8,
                     "rsc_pack_3_#00" => 2,
                     "wire_#00" => 4,
-                    "flag_#00" => 3,
+                    //"flag_#00" => 3,
                     "shoe_#00" => 5,
                 ],
                 "desc" => "Die hier stationierten Soldaten waren auf alles vorbereitet: Waffen, Vorräte und eine 150 m lange Sicherheitszone. Auf alles, außer darauf, dass ihr Leutnant sie während der Nacht verspeiste. Spaß beiseite, mit einer soliden Mauer und einer gesunden Diktatur gibt es (unter dem Gesichtspunkt des Überlebens) nichts Vergleichbares !"
@@ -1632,7 +1620,7 @@ class RuinDataService implements FixtureProcessorInterface {
                 "empty" => 0.20,
                 "capacity" => 2,
                 "drops" => [
-                    "flag_#00" => 6,
+                    //"flag_#00" => 6,
                     "shoe_#00" => 9,
                     "bike_part_#00" => 2,
                     "pocket_belt_#00" => 2,
