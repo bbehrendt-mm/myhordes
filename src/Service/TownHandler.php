@@ -320,8 +320,26 @@ class TownHandler
         return $summary->sum();
     }
 
-    public function calculate_building_def( Town &$town, Building $building ): int {
+    public function bonus_defense_blocked(Town $town, Building $building): bool {
+        switch ($building->getPrototype()->getName()) {
+            case 'item_tube_#00':
+                if ($building->getLevel() <= 0) return false;
+                $water_needed = [0, 2, 4, 6, 9, 12][$building->getLevel()] ?? 12;
+                return $town->getWell() < $water_needed;
+            case 'item_boomfruit_#00':
+                $grapefruits_needed = min(5, $building->getLevel());
+                $items = $this->inventory_handler->countSpecificItems( $town->getBank(), 'boomfruit_#00', broken: false, poison: false );
+                return $items < $grapefruits_needed;
+            default:
+                return false;
+        }
+    }
+
+    public function calculate_building_def( Town $town, Building $building, ?int &$base = 0, ?int &$bonus = 0 ): int {
         $d = 0;
+
+        $base = $building->getDefense();
+        $bonus = $building->getDefenseBonus();
 
         if ($building->getPrototype()->getName() === 'small_cemetery_#00') {
 
@@ -334,14 +352,14 @@ class TownHandler
             };
             if ($this->getBuilding($town, 'small_coffin_#00'))
                 $ratio += 10;
-            $d += ( $ratio * $c + $building->getDefenseBonus() + $building->getDefense() );
 
+            $bonus += $ratio * $c;
         }
-        else $d += ( $building->getDefenseBonus() + $building->getDefense() );
-        // $d += $building->getTempDefenseBonus();
-        // Temp defense is handled separately
 
-        return $d;
+        if ($this->bonus_defense_blocked($town, $building))
+            $bonus = 0;
+
+        return $base + $bonus;
     }
 
     public function calculate_town_def( Town $town, ?TownDefenseSummary &$summary = null ): int {
@@ -383,9 +401,9 @@ class TownHandler
         foreach ($town->getBuildings() as $building)
             if ($building->getComplete()) {
 
-                $summary->building_defense += $this->calculate_building_def( $town, $building );
-                $summary->building_def_base += $building->getDefense();
-                $summary->building_def_vote += $building->getDefenseBonus();
+                $summary->building_defense += $this->calculate_building_def( $town, $building, $base, $bonus);
+                $summary->building_def_base += $base;
+                $summary->building_def_vote += $bonus;
                 $summary->temp_defense += $building->getTempDefenseBonus();
 
                 if ($building->getPrototype()->getName() === 'item_meca_parts_#00')

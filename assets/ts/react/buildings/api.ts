@@ -10,6 +10,7 @@ export type Building = {
     c: boolean,
     d0: number,
     db: number,
+    dx?: boolean,
     dt: number,
     e: boolean,
     a: [number,number],
