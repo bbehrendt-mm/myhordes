@@ -1828,7 +1828,7 @@ class RuinDataService implements FixtureProcessorInterface {
                     "hmbrew_#00" => 160,
                     "vegetable_#00" => 185,
                 ],
-                "desc" => "This barn had gone completely unnoticed by you because it seemed so uninteresting in the middle of the desert, but the strange, half-erased drawings in the surrounding area, which you discovered from the hot air balloon, convinced you of its interest... Closer examination reveals that the barn served as a shelter for a group of survivors. Their remaining supplies are still inside — if one thing is sure : they won't be needing them anymore.",
+                "desc" => "Diese Scheune ist dir bisher völlig entgangen, weil sie mitten in der Wüste so uninteressant wirkte; aber die seltsamen, halb verwischten Zeichnungen in der Umgebung, die die Bürger vom Heißluftballon aus entdeckt hatten, überzeugten dich von ihrer Bedeutung... Bei näherer Betrachtung stellt sich heraus, dass die Scheune einer Gruppe von Überlebenden als Unterschlupf diente. Ihre verbliebenen Vorräte befinden sich noch immer darin – und wenn eines sicher ist: Sie werden sie nicht mehr brauchen.",
             ]
         ]);
     }
