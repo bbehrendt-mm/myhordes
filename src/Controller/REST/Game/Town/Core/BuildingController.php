@@ -111,7 +111,7 @@ class BuildingController extends CustomAbstractCoreController
         ]);
     }
 
-    public function renderBuilding(Building $building, bool $voted = false): array {
+    public function renderBuilding(Building $building, bool $voted = false, bool $bonus_defense_blocked = false): array {
         return [
             'i' => $building->getId(),
             'p' => $building->getPrototype()->getId(),
@@ -125,6 +125,7 @@ class BuildingController extends CustomAbstractCoreController
                 ? [$building->getHp(), $building->getPrototype()->getHp()]
                 : [$building->getAp(), $building->getPrototypeAP( $this->conf->getTownConfiguration($building->getTown())->getBuildingRarity( $building->getPrototype() ) )],
             ...($voted ? ['v' => true] : []),
+            ...($bonus_defense_blocked ? ['dx' => true] : []),
             ...($building->getDifficultyLevel() !== 0 ? [
                 'dl' => $building->getDifficultyLevel(),
             ] : []),
@@ -135,7 +136,7 @@ class BuildingController extends CustomAbstractCoreController
     }
 
     #[Route(path: '/list', name: 'buildings_get', methods: ['GET'])]
-    public function inventory(Request $request): JsonResponse {
+    public function inventory(Request $request, TownHandler $townHandler): JsonResponse {
         $town = $this->getUser()->getActiveCitizen()->getTown();
 
         $completed = $request->query->get('completed', '0') === '1';
@@ -153,7 +154,11 @@ class BuildingController extends CustomAbstractCoreController
             }, $mv );
 
         return new JsonResponse([
-            'buildings' => $buildings->map(fn(Building $b) => $this->renderBuilding($b, $b->getId() === $mv[0]))->toArray()
+            'buildings' => $buildings->map(fn(Building $b) => $this->renderBuilding(
+                $b,
+                $b->getId() === $mv[0],
+                $townHandler->bonus_defense_blocked( $town, $b )
+            ))->toArray()
         ]);
     }
 
