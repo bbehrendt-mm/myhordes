@@ -6,9 +6,8 @@ import {
 } from "./api";
 import {Tooltip} from "../misc/Tooltip";
 import {Const, Global} from "../../defaults";
-import {TranslationStrings} from "./strings";
 import {useVault} from "../../v2/client-modules/Vault";
-import {VaultBuildingEntry, VaultStorage} from "../../v2/typedef/vault_td";
+import {VaultBuildingEntry} from "../../v2/typedef/vault_td";
 import {Globals} from "./Wrapper";
 import {useTranslations} from "../utils";
 
@@ -87,7 +86,12 @@ const BuildingListLine = (props: { building: Building, data?: VaultBuildingEntry
                     <em>{globals.strings.common.level.replace('{lv}', `${props.building.l}`)}</em>
                 </div>}
                 {((props.data.defense > 0) || (props.building.d0 + props.building.db + props.building.dt > 0)) && <em>
-                    +&nbsp;{props.building.d0 + props.building.db + props.building.dt}&nbsp;{globals.strings.common.defense}
+                    { props.building.db > 0 && props.building.dx && <>
+                        +&nbsp;<s style={{color: '#f86'}}>{props.building.d0 + props.building.db + props.building.dt}</s>&nbsp;{props.building.d0 + props.building.dt}&nbsp;{globals.strings.common.defense}
+                    </> }
+                    { (props.building.db <= 0 || !props.building.dx) && <>
+                        +&nbsp;{props.building.d0 + props.building.db + props.building.dt}&nbsp;{globals.strings.common.defense}
+                    </> }
                     { ((props.building.db + props.building.dt > 0) || (props.building.d0 < props.data.defense)) && <Tooltip additionalClasses="normal">
                         <div className="flex column"></div>
                         {props.building.d0 > 0 && <div>
@@ -97,12 +101,14 @@ const BuildingListLine = (props: { building: Building, data?: VaultBuildingEntry
                                 <span className="warning">{props.building.d0}&nbsp;/&nbsp;{props.data.defense}</span>}
                             {props.building.d0 >= props.data.defense && <span>{props.building.d0}</span>}
                         </div>}
-                        {props.building.db > 0 &&
+                        {props.building.db > 0 && props.building.dx &&
+                            <div><em>{globals.strings.common.defense_bonus}:</em>&nbsp;<s style={{color: '#f86'}}>{props.building.db}</s></div>}
+                        {props.building.db > 0 && !props.building.dx &&
                             <div><em>{globals.strings.common.defense_bonus}:</em>&nbsp;{props.building.db}</div>}
                         {props.building.dt > 0 &&
                             <div><em>{globals.strings.common.defense_temp}:</em>&nbsp;{props.building.dt}</div>}
                         <hr/>
-                        <em>+&nbsp;{props.building.d0 + props.building.db + props.building.dt}&nbsp;{globals.strings.common.defense}</em>
+                        <em>+&nbsp;{props.building.d0 + (props.building.dx ? 0 : props.building.db) + props.building.dt}&nbsp;{globals.strings.common.defense}</em>
                     </Tooltip>}
                 </em> }
             </div>

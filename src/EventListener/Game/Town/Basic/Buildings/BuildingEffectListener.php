@@ -77,45 +77,6 @@ final class BuildingEffectListener implements ServiceSubscriberInterface
 
     public function onProcessPreAttackEffect( BuildingEffectEvent $event ): void {
 
-        switch ($event->building->getPrototype()->getName()) {
-            case 'item_tube_#00':
-                if ($event->building->getLevel() <= 0) break;
-
-                // Attempt to deduct water from the well, reduce building defense to 0 if it fails
-                $water_needed = [0,2,4,6,9,12][ $event->building->getLevel() ] ?? 12;
-                if ($event->town->getWell() >= $water_needed)
-                    $event->waterDeducted += $water_needed;
-                else $event->building->setTempDefenseBonus(0 - $event->building->getDefense() - $event->building->getDefenseBonus());
-
-                break;
-
-            case 'item_boomfruit_#00':
-                if ($event->building->getLevel() <= 0) break;
-
-                // Attempt to deduct explosive grapefruits from the bank to increase defense
-                $grapefruits_needed = min(5, $event->building->getLevel());
-                $inventory_handler = $this->getService(InventoryHandler::class);
-
-                $items = $inventory_handler->fetchSpecificItems( $event->town->getBank(), [new ItemRequest('boomfruit_#00', $grapefruits_needed)] );
-
-                if ($items) {
-                    $n = $grapefruits_needed;
-                    while (!empty($items) && $n > 0) {
-                        $item = array_pop($items);
-                        $c = $item->getCount();
-                        $inventory_handler->forceRemoveItem( $item, $n );
-                        $n -= $c;
-                    }
-
-                    $event->addConsumedItem( 'boomfruit_#00', $grapefruits_needed );
-
-                } else $event->building->setTempDefenseBonus(0 - $event->building->getDefenseBonus());
-
-                break;
-
-            default:
-                break;
-        }
     }
 
     public function onProcessPreDefaultEffect( BuildingEffectEvent $event ): void {
@@ -140,6 +101,40 @@ final class BuildingEffectListener implements ServiceSubscriberInterface
         $inventoryHandler = $this->getService(InventoryHandler::class);
 
         switch ($event->building->getPrototype()->getName()) {
+
+            case 'item_tube_#00':
+                if ($event->building->getLevel() <= 0) break;
+
+                // Attempt to deduct water from the well
+                $water_needed = [0,2,4,6,9,12][ $event->building->getLevel() ] ?? 12;
+                if ($event->town->getWell() >= $water_needed)
+                    $event->waterDeducted += $water_needed;
+
+                break;
+
+            case 'item_boomfruit_#00':
+                if ($event->building->getLevel() <= 0) break;
+
+                // Attempt to deduct explosive grapefruits from the bank to increase defense
+                $grapefruits_needed = min(5, $event->building->getLevel());
+                $inventory_handler = $this->getService(InventoryHandler::class);
+
+                $items = $inventory_handler->fetchSpecificItems( $event->town->getBank(), [new ItemRequest('boomfruit_#00', $grapefruits_needed)] );
+
+                if ($items) {
+                    $n = $grapefruits_needed;
+                    while (!empty($items) && $n > 0) {
+                        $item = array_pop($items);
+                        $c = $item->getCount();
+                        $inventory_handler->forceRemoveItem( $item, $n );
+                        $n -= $c;
+                    }
+
+                    $event->addConsumedItem( 'boomfruit_#00', $grapefruits_needed );
+
+                }
+
+                break;
 
             case 'small_strategy_#01':
                 /** @var RandomGenerator $random */
