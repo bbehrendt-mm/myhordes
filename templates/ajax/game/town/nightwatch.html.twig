@@ -25,10 +25,22 @@
         {% endif %}
         {% if is_watcher %}
             <p>{{'Hast du schließlich doch Angst Wächter zu sein? Was zögerst du noch:'|trans({}, 'game')}}</p>
-            <button class="inline" id="unwatch-button">{{'Ich habe doch zu große Angst...'|trans({}, 'game')}}</button>
+            <button class="inline"
+                    data-fetch="{{ path('rest_town_facilities_watch_set') }}"
+                    data-fetch-method="delete"
+                    data-fetch-load="{{ path('town_nightwatch') }}"
+            >
+                {{'Ich habe doch zu große Angst...'|trans({}, 'game')}}
+            </button>
         {% elseif cap is null or watchers|length < cap %}
             <p>{{'Auch du musst diese Stadt heute Nacht verteidigen! Tritt in die Wächtergruppe ein! Du möchtest Mitglied der selbstmörd... tapfersten Bürger werden? Was zögerst du noch:'|trans({}, 'game')|raw}}</p>
-            <button class="inline" id="watch-button">{{'Ich möchte Wächter werden!'|trans({}, 'game')}}</button>
+            <button class="inline"
+                    data-fetch="{{ path('rest_town_facilities_watch_set') }}"
+                    data-fetch-method="put"
+                    data-fetch-load="{{ path('town_nightwatch') }}"
+            >
+                {{'Ich möchte Wächter werden!'|trans({}, 'game')}}
+            </button>
         {% endif %}
         <p>{{ help_lnk('Die Nachtwächter'|trans({},'help'), 'help', {'name': 'the_watchmen'}) }}</p>
     </div>
@@ -100,8 +112,8 @@
                     {% for item in watcher.items %}
                         <div class="inline-block">
                             <hordes-standalone-item data-item="{{ item.prototype.id }}">
-                                {{ item.defImpact }} <img src="{{ asset('build/images/icons/small_zombie.gif') }}" />
-                                {{ -item.deathImpact }} <img src="{{ asset('build/images/icons/small_human.gif') }}" />
+                                {{ item.defImpact }} <img src="{{ asset('build/images/icons/small_zombie.gif') }}"  alt=""/>
+                                {{ -item.deathImpact }} <img src="{{ asset('build/images/icons/small_human.gif') }}"  alt=""/>
                                 {% if item.prototype.nightWatchAction is not null and item.prototype.nightWatchAction.name == 'nw_break' %}<div>{{'Es besteht die Chance das Objekt während des Angriffs zu zerbrechen!'|trans({}, 'game')}}</div>{% endif %}
                                 {% if item.prototype.nightWatchAction is not null and item.prototype.nightWatchAction.name == 'nw_destroy' %}<div>{{'Es besteht die Chance das Objekt während des Angriffs zu verlieren!'|trans({}, 'game')}}</div>{% endif %}
                             </hordes-standalone-item>
@@ -129,30 +141,4 @@
             </div>
         </div>
     {% endif %}
-{% endblock %}
-{% block js %}
-    {{ parent() }}
-    <script>
-        const handleWatch = function(element, action) {
-            if (!element) return;
-            element.addEventListener('click', function() {
-                let txt = "";
-                if(action == 'watch')
-                    txt = '{{ 'Zur Information: Sobald du Wächter bist, kannst du danach wieder einfacher Bürger werden.'|trans({},'game')|e('js') }}';
-                else
-                    txt = '{{ 'Achtung: Wenn du jetzt kneifst, werden sich die anderen Bürger ziemlich sicher über dich lustig machen...'|trans({},'game')|e('js') }}'
-                if (!confirm(txt))
-                    return;
-                $.ajax.easySend( '{{ path('town_nightwatch_go_controller') }}', {
-                        action: action
-                    },
-                    function () {
-                        $.ajax.load(null, '{{ path('town_nightwatch') }}', true);
-                    } );
-            });
-        };
-
-        handleWatch( document.getElementById('watch-button'), 'watch' );
-        handleWatch( document.getElementById('unwatch-button'), 'unwatch' );
-    </script>
 {% endblock %}

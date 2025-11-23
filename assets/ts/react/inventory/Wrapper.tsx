@@ -399,7 +399,14 @@ const BagInventory = (props: InventoryPropsBag) => {
     return <ul className={`inventory inventory-react ${props.type}`}>
         {label !== null && label !== '' && <li className="title">{label}</li> }
         {lightItems.map((i, index) => <React.Fragment key={i.i}><SingleItem
-            blur={null} className={props.inventory.size > 0 && props.inventory.heavy > 0 ? (i.e ? "bg-locked" : (index < (props.inventory.size - props.inventory.heavy) ? "bg-light" : "bg-heavy")) : ''}
+            blur={null} className={props.inventory.size > 0 ? (i.e
+                ? "bg-locked"
+                : (index < (props.inventory.size - props.inventory.heavy) ? (props.inventory.heavy > 0 ? "bg-light" : "bg-heavy") : (
+                    index < props.inventory.size
+                    ? "bg-heavy"
+                    : "bg-over"
+                ))
+            ) : ''}
             item={i} mods={props.inventory.mods} data={(vaultData ?? {})[i.p] ?? null}
             locked={props.locked || i.e} onClick={props.onItemClick}
         /></React.Fragment>)}
@@ -407,7 +414,9 @@ const BagInventory = (props: InventoryPropsBag) => {
             <em className="small">{ globals.strings.props.nothing }</em>
         </li>}
         {props.inventory.size > 0 && Array.from(Array(Math.max(0, props.inventory.size - lightItems.length - Math.max(props.inventory.heavy,heavyItems.length))).keys()).map(i =>
-            <li key={i} className="free"><Tooltip additionalClasses="help"  html={ globals.strings.global.slot } /></li>)
+            <li key={i} className={`free ${props.inventory.heavy > 0 ? '' : 'bg-heavy'}`}>
+                { props.inventory.heavy > 0 && <Tooltip additionalClasses="help"  html={ globals.strings.global.slot } /> }
+            </li>)
         }
         {heavyItems.map((i,index) => <React.Fragment key={i.i}><SingleItem
             blur={null} className={index >= props.inventory.heavy ? "bg-over" : "bg-heavy"}
@@ -739,7 +748,14 @@ const HordesEscortInventoryWrapper = (props: escortMountProps) => {
         { !loaded && <div className="loading"/> }
         { loaded && <ul className="inventory rucksack-escort">
             {lightItems.map((item,index) => <React.Fragment key={item.i}><SingleItem
-                className={bag.size > 0 && bag.heavy > 0 ? (item.e ? "bg-locked" : (index < (bag.size - bag.heavy) ? "bg-light" : "bg-heavy")) : ''}
+                className={bag.size > 0 && bag.heavy > 0 ? (item.e
+                    ? "bg-locked"
+                    : (index < (bag.size - bag.heavy) ? "bg-light" : (
+                            index < bag.size
+                                ? "bg-heavy"
+                                : "bg-over"
+                        ))
+                ) : ''}
                 item={item} data={(bagVaultData ?? {})[item.p] ?? null} mods={bag.mods} locked={item.e || loading}
                 onClick={handleTransfer(props.rucksackId, props.floorId, 'down')}
                 blur={null}/>
@@ -773,35 +789,4 @@ const HordesEscortInventoryWrapper = (props: escortMountProps) => {
         </ul></div>}
 
     </Globals.Provider>
-
-    /**
-     *     const itemList = props.inventory.items.sort(sort);
-     *
-     *     const lightItems = itemList.filter(i => props.inventory.heavy === 0 || !(vaultData ?? {})[i.p]?.heavy);
-     *     const heavyItems = itemList.filter(i => props.inventory.heavy > 0 && (vaultData ?? {})[i.p]?.heavy);
-     *
-     *     return <ul className={`inventory inventory-react ${props.type}`}>
-     *         {label !== null && label !== '' && <li className="title">{label}</li> }
-     *         {lightItems.map((i, index) => <React.Fragment key={i.i}><SingleItem
-     *             blur={null} className={props.inventory.size > 0 && props.inventory.heavy > 0 ? (i.e ? "bg-locked" : (index < (props.inventory.size - props.inventory.heavy) ? "bg-light" : "bg-heavy")) : ''}
-     *             item={i} mods={props.inventory.mods} data={(vaultData ?? {})[i.p] ?? null}
-     *             locked={props.locked || i.e} onClick={props.onItemClick}
-     *         /></React.Fragment>)}
-     *         {props.type === 'desert' && !props.inventory.size && props.inventory.items.length === 0 && <li className="category label">
-     *             <em className="small">{ globals.strings.props.nothing }</em>
-     *         </li>}
-     *         {props.inventory.size > 0 && Array.from(Array(Math.max(0, props.inventory.size - lightItems.length - props.inventory.heavy)).keys()).map(i =>
-     *             <li key={i} className="free"><Tooltip additionalClasses="help"  html={ globals.strings.global.slot } /></li>)
-     *         }
-     *         {heavyItems.map(i => <React.Fragment key={i.i}><SingleItem
-     *             blur={null} className="bg-heavy"
-     *             item={i} mods={props.inventory.mods} data={(vaultData ?? {})[i.p] ?? null}
-     *             locked={props.locked || i.e} onClick={props.onItemClick}
-     *         /></React.Fragment>)}
-     *         {props.inventory.heavy > 0 && Array.from(Array(Math.max(0, props.inventory.heavy - heavyItems.length - Math.max(0, lightItems.length - (props.inventory.size - props.inventory.heavy)))).keys()).map(i =>
-     *             <li key={i} className="free bg-heavy"><Tooltip additionalClasses="help" html={ globals.strings.global.heavy_slot } /></li>)
-     *         }
-     *     </ul>
-     */
-
 }

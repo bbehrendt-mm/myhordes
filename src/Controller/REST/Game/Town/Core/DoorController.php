@@ -160,13 +160,7 @@ class DoorController extends CustomAbstractCoreController
         }
 
         // Check inventory
-        $inv_size = $inv->getSize( $citizen->getInventory() );
-        $heavy_size = $inv->getHeavyItemSize( $citizen->getInventory() );
-
-        if (
-            ($inv_size > 0 && $citizen->getInventory()->getItems()->count() > $inv_size) ||
-            ($heavy_size > 0 && $inv->countHeavyItems( $citizen->getInventory() ) > $heavy_size)
-        )
+        if ($inv->isOverEncumbered( $citizen->getInventory() ))
             return AjaxResponse::error( ErrorHelper::ErrorEncumbered );
 
         $zone = $em->getRepository(Zone::class)->findOneByPosition($citizen->getTown(), 0, 0);

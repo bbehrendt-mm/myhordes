@@ -38,7 +38,7 @@ class CitizenWatchRepository extends ServiceEntityRepository
         ;
     }
 
-    public function findWatchOfCitizenForADay(Citizen $citizen, int $day): ?CitizenWatch {
+    public function findWatchOfCitizenForADay(Citizen $citizen, ?int $day = null): ?CitizenWatch {
         try {
             return $this->createQueryBuilder('c')
                 ->andWhere('c.town = :town')
@@ -46,7 +46,7 @@ class CitizenWatchRepository extends ServiceEntityRepository
                 ->andWhere('c.day = :day')
                 ->setParameter('town', $citizen->getTown())
                 ->setParameter('citizen', $citizen)
-                ->setParameter('day', $day)
+                ->setParameter('day', $day ?? $citizen->getTown()->getDay())
                 ->orderBy('c.day', 'ASC')
                 ->getQuery()
                 ->getOneOrNullResult();

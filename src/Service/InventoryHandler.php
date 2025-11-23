@@ -245,11 +245,23 @@ class InventoryHandler
      * @return int
      */
     public function countHeavyItems(Inventory $inventory, array $ignore = []): int {
-        $c = 0;
-        foreach ($inventory->getItems() as $item)
-            if ($item->getPrototype()->getHeavy() && !in_array( $item, $ignore ))
-                $c += $item->getCount();
-        return $c;
+        return $inventory->getItems()->reduce(
+            fn(int $c, Item $i) => $c + ( $i->getPrototype()->getHeavy() && !in_array( $i, $ignore ) ? $i->getCount() : 0 ),
+            0
+        );
+    }
+
+    /**
+     * @param Inventory $inventory
+     * @return bool
+     */
+    public function isOverEncumbered(Inventory $inventory): bool {
+        $inv_size = $this->getSize( $inventory );
+        $heavy_size = $this->getHeavyItemSize( $inventory );
+
+        return
+            ($inv_size > 0 && $inventory->getItems()->reduce( fn(int $c, Item $i) => $c + $i->getCount(), 0 ) > $inv_size) ||
+            ($heavy_size > 0 && $this->countHeavyItems( $inventory ) > $heavy_size);
     }
 
     public function countEssentialItems(Inventory $inventory): int {

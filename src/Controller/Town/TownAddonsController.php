@@ -448,68 +448,6 @@ class TownAddonsController extends TownController
 
     /**
      * @param TownHandler $th
-     * @param JSONRequestParser $parser
-     * @param EventProxyService $proxy
-     * @return Response
-     */
-    #[Route(path: 'api/town/nightwatch/gowatch', name: 'town_nightwatch_go_controller')]
-    public function api_nightwatch_gowatch(TownHandler $th, JSONRequestParser $parser, EventProxyService $proxy): Response
-    {
-        $town = $this->getActiveCitizen()->getTown();
-        if (!$this->getTownConf()->get(TownSetting::OptFeatureNightwatch))
-            return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
-
-        if (!$th->getBuilding($town, 'small_round_path_#00', true) && !$this->getTownConf()->get(TownSetting::OptFeatureNightwatchInstant))
-            return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
-
-        $action = $parser->get("action");
-
-        $watchers = $this->entity_manager->getRepository(CitizenWatch::class)->findCurrentWatchers($town);
-        $activeCitizenWatcher = null;
-
-        foreach ($watchers as $watcher)
-            if($watcher->getCitizen() === $this->getActiveCitizen()){
-                $activeCitizenWatcher = $watcher;
-                break;
-            }
-
-        if($action == 'unwatch') {
-            if ($activeCitizenWatcher === null)
-                return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
-
-            $town->removeCitizenWatch($activeCitizenWatcher);
-            $this->getActiveCitizen()->removeCitizenWatch($activeCitizenWatcher);
-            $this->entity_manager->remove($activeCitizenWatcher);
-            $this->addFlash('notice', $this->translator->trans('Du verlässt deinen Posten?...',[], 'game'));
-
-        } else if ($action == "watch") {
-
-            if ($activeCitizenWatcher !== null)
-                return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
-
-            if (count($watchers) >= $proxy->queryTownParameter( $town, BuildingValueQuery::NightWatcherCap ))
-                return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
-
-            $citizenWatch = new CitizenWatch();
-            $citizenWatch->setTown($town)->setCitizen($this->getActiveCitizen())->setDay($town->getDay());
-            $town->addCitizenWatch($citizenWatch);
-
-            $this->getActiveCitizen()->addCitizenWatch($citizenWatch);
-
-            $this->entity_manager->persist($citizenWatch);
-
-            $this->addFlash('notice', $this->translator->trans('Bravo, du hast die verantwortungsvolle Aufgabe übernommen, deine Mitbürger vor den Untoten zu beschützen...',[], 'game'));
-        }
-
-        $this->entity_manager->persist($this->getActiveCitizen());
-        $this->entity_manager->persist($town);
-        $this->entity_manager->flush();
-
-        return AjaxResponse::success();
-    }
-
-    /**
-     * @param TownHandler $th
      * @return Response
      */
     #[Route(path: 'jx/town/catapult', name: 'town_catapult')]
