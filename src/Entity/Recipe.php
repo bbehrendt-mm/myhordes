@@ -24,34 +24,37 @@ class Recipe
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private ?int $id;
     #[ORM\Column(type: 'string', length: 32)]
-    private $name;
+    private ?string $name;
     #[ORM\Column(type: 'integer')]
-    private $type;
+    private ?int $type;
     #[ORM\Column(type: 'string', length: 32, nullable: true)]
-    private $action;
-    #[ORM\ManyToOne(targetEntity: 'App\Entity\ItemGroup', cascade: ['persist', 'remove'])]
+    private ?string $action;
+    #[ORM\ManyToOne(targetEntity: ItemGroup::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
-    private $source;
-    #[ORM\ManyToMany(targetEntity: 'App\Entity\ItemPrototype')]
-    private $provoking;
-    #[ORM\ManyToOne(targetEntity: 'App\Entity\ItemGroup', cascade: ['persist', 'remove'])]
+    private ?ItemGroup $source;
+    #[ORM\ManyToMany(targetEntity: ItemPrototype::class)]
+    private Collection $provoking;
+    #[ORM\ManyToOne(targetEntity: ItemGroup::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
-    private $result;
-    #[ORM\ManyToOne(targetEntity: 'App\Entity\PictoPrototype')]
+    private ?ItemGroup $result;
+    #[ORM\ManyToOne(targetEntity: PictoPrototype::class)]
     #[ORM\JoinColumn(nullable: true)]
-    private $pictoPrototype;
-    #[ORM\ManyToMany(targetEntity: 'App\Entity\ItemPrototype')]
+    private ?PictoPrototype $pictoPrototype;
+    #[ORM\ManyToMany(targetEntity: ItemPrototype::class)]
     #[ORM\JoinTable(name: 'recipe_keep_item_prototype')]
-    private $keep;
+    private Collection $keep;
     #[ORM\Column(type: 'boolean')]
-    private $stealthy = false;
+    private bool $stealthy = false;
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $tooltip_string;
+    private ?string $tooltip_string;
 
     #[ORM\Column]
     private bool $multiOut = false;
+
+    #[ORM\Column]
+    private int $additionalAP = 0;
 
     public function __construct()
     {
@@ -103,7 +106,7 @@ class Recipe
         return $this;
     }
     /**
-     * @return Collection|ItemPrototype[]
+     * @return Collection<ItemPrototype>
      */
     public function getProvoking(): Collection
     {
@@ -146,7 +149,7 @@ class Recipe
         return $this;
     }
     /**
-     * @return Collection|ItemPrototype[]
+     * @return Collection<ItemPrototype>
      */
     public function getKeep(): Collection
     {
@@ -197,6 +200,18 @@ class Recipe
     public function setMultiOut(bool $multiOut): static
     {
         $this->multiOut = $multiOut;
+
+        return $this;
+    }
+
+    public function getAdditionalAP(): int
+    {
+        return $this->additionalAP;
+    }
+
+    public function setAdditionalAP(int $additionalAP): static
+    {
+        $this->additionalAP = $additionalAP;
 
         return $this;
     }

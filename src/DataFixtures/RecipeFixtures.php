@@ -119,7 +119,7 @@ class RecipeFixtures extends Fixture implements DependentFixtureInterface
         $cache = [];
         foreach ($recipe_fixture_data as $name => $recipe_data) {
             $recipe = $manager->getRepository(Recipe::class)->findOneBy( ['name' => $name] );
-            if ($recipe === null) $recipe = (new Recipe())->setName( $name );
+            if ($recipe === null) $recipe = new Recipe()->setName($name );
 
             if ($recipe->getSource()) { $manager->remove( $recipe->getSource() ); $recipe->setSource( null ); }
             if ($recipe->getResult()) { $manager->remove( $recipe->getResult() ); $recipe->setResult( null ); }
@@ -153,15 +153,15 @@ class RecipeFixtures extends Fixture implements DependentFixtureInterface
             if ($provoking === null || empty($out_rc) || empty($in))
                 throw new Exception("Entry '$name' is incomplete!");
 
-            $in_group = (new ItemGroup())->setName("rc_{$name}_in");
+            $in_group = new ItemGroup()->setName("rc_{$name}_in");
             foreach ( $in as $id => $count ) {
                 $proto = $manager->getRepository(ItemPrototype::class)->findOneBy( ['name' => $id] );
                 if (!$proto) throw new Exception("Item prototype not found: '$id'");
-                $in_group->addEntry( (new ItemGroupEntry())->setChance( $count )->setPrototype( $proto ) );
+                $in_group->addEntry( new ItemGroupEntry()->setChance($count )->setPrototype($proto ) );
             }
             $recipe->setSource($in_group);
 
-            $out_group = (new ItemGroup())->setName("rc_{$name}_out");
+            $out_group = new ItemGroup()->setName("rc_{$name}_out");
             foreach ( $out_rc as $id => $count ) {
                 $proto = $manager->getRepository(ItemPrototype::class)->findOneBy( ['name' => $id] );
                 if (!$proto) throw new Exception("Item prototype not found: '$id'");
@@ -187,6 +187,7 @@ class RecipeFixtures extends Fixture implements DependentFixtureInterface
             }
             $recipe->setTooltipString($recipe_data['tooltip'] ?? null);
             $recipe->setMultiOut($recipe_data['multi_out'] ?? false);
+            $recipe->setAdditionalAP($recipe_data['ap'] ?? 0);
             $manager->persist($recipe);
 
             $progress->advance();

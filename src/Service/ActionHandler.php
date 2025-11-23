@@ -512,9 +512,9 @@ class ActionHandler
                 $break_item = $breakable_saw;
             }
 
-            $ap = $penalty + (3 - (($have_saw || $breakable_saw) ? 1 : 0) - ($have_manu ? 1 : 0));
+            $ap = $penalty + (3 - (($have_saw || $breakable_saw) ? 1 : 0) - ($have_manu ? 1 : 0)) + $recipe->getAdditionalAP();
             $silent = true;
-        } else $ap = $penalty;
+        } else $ap = $penalty + $recipe->getAdditionalAP();
 
         if ( in_array($recipe->getType(), $workshop_types) && (($citizen->getAp() + $citizen->getBp()) < $ap || $this->citizen_handler->isTired( $citizen )) )
             return ErrorHelper::ErrorNoAP;

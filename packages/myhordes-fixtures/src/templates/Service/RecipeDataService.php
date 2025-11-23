@@ -104,7 +104,7 @@ class RecipeDataService implements FixtureProcessorInterface {
             'com050' => ['type' => Recipe::ManualAnywhere, 'out' => 'pumpkin_off_#00',          'provoking' => 'pumpkin_raw_#00',       'in' => ['pumpkin_raw_#00', 'small_knife_#00'], 'keep' => ['small_knife_#00'] ],
             'com051' => ['type' => Recipe::ManualAnywhere, 'out' => 'infect_poison_#00',        'provoking' => 'infect_poison_part_#00','in' => ['infect_poison_part_#00', 'drug_#00', 'pharma_#00', 'water_#00', 'drug_water_#00' ] ],
             'com052' => ['type' => Recipe::ManualAnywhere, 'out' => 'bike_#00',                 'provoking' => 'bike_part_#00',         'in' => ['bike_part_#00', 'rustine_#00', 'metal_#00', 'chain_#00' ] ],
-            'com053' => ['type' => Recipe::ManualAnywhere, 'out' => 'soccer_#00',               'provoking' => 'soccer_part_#00',       'in' => ['soccer_part_#00', 'rustine_#00' ] ],
+            'com053' => ['type' => Recipe::ManualAnywhere, 'out' => 'soccer_#00',               'provoking' => 'soccer_part_#00',       'in' => ['soccer_part_#00'], 'ap' => 1 ],
 
             'com054' => ['type' => Recipe::ManualAnywhere, 'out' => 'moldy_food_part_#00',      'provoking' => 'moldy_food_subpart_#00',  'in' => ['moldy_food_subpart_#00', 'moldy_food_subpart_#00' ] ],
             'com055' => ['type' => Recipe::ManualAnywhere, 'out' => 'moldy_food_#00',           'provoking' => 'moldy_food_part_#00',     'in' => ['moldy_food_part_#00', 'moldy_food_subpart_#00' ] ],
