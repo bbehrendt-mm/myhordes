@@ -1908,7 +1908,7 @@ Weihnachten: Navidad
 'Du kannst versuchen, diesen Bürger zu heilen, aber nichts ist garantiert... und hüte dich vor Nebenwirkungen!': "Puedes intentar curar a este habitante, no te aseguramos nada.. ¡pero ten cuidado con los efectos secundarios!"
 'Du hast nichts, womit du {poison} kombinieren kannst. Du benötigst einen der folgenden Gegenstände:<br />{list_head} oder {list_tail}.': 'No puedes combinar {poison} con esto. Puedes hacerlo con uno de estos objetos:<br />{list_head} o {list_tail}.'
 'Du kannst keine Gegenstände verstecken, solange jemand zuschaut ...': 'No puedes ocultar objetos mientras alguien está mirando...'
-'Du hast keine Gegenstände, die du verstecken könntest.': 'No tienes elementos que esconder.'
+'Du hast keine Gegenstände, die du verstecken könntest.': 'Por ahora, no necesitas hacer esto.'
 'Wähle einen Gegenstand aus der Bank aus...': 'Selecciona el objeto que deseas robar del Almacén...'
 'Aufklärer: Ruinen erkunden': 'Explorador: Examinar ruinas'
 'Mit dieser Aktion kannst du ermitteln, welches Gebäude hier vergraben ist.': 'Esta acción te permite determinar el tipo de construcción enterrada aquí.'
@@ -3248,3 +3248,7 @@ Tierklinik: Centro de pruebas
 'Im Rahmen einer intensiven Meditation ist es dir gelungen, die Seele eines Mitbürgers in der Außenwelt zu lokalisieren. Deinen Berechnungen zufolge sollte sie sich bei {x}/{y} befinden!': 'Im Rahmen einer intensiven Meditation ist es dir gelungen, die Seele eines Mitbürgers in der Außenwelt zu lokalisieren. Deinen Berechnungen zufolge sollte sie sich bei {x}/{y} befinden!'
 'Durchgang in Kraft': 'Pasaje en vigor'
 'Du hast keinen Platz für einen weiteren schweren Gegenstand!': 'Du hast keinen Platz für einen weiteren schweren Gegenstand!'
+'Verdächtige Scheune': 'Verdächtige Scheune'
+'Diese Scheune ist dir bisher völlig entgangen, weil sie mitten in der Wüste so uninteressant wirkte; aber die seltsamen, halb verwischten Zeichnungen in der Umgebung, die die Bürger vom Heißluftballon aus entdeckt hatten, überzeugten dich von ihrer Bedeutung... Bei näherer Betrachtung stellt sich heraus, dass die Scheune einer Gruppe von Überlebenden als Unterschlupf diente. Ihre verbliebenen Vorräte befinden sich noch immer darin – und wenn eines sicher ist: Sie werden sie nicht mehr brauchen.': 'Diese Scheune ist dir bisher völlig entgangen, weil sie mitten in der Wüste so uninteressant wirkte; aber die seltsamen, halb verwischten Zeichnungen in der Umgebung, die die Bürger vom Heißluftballon aus entdeckt hatten, überzeugten dich von ihrer Bedeutung... Bei näherer Betrachtung stellt sich heraus, dass die Scheune einer Gruppe von Überlebenden als Unterschlupf diente. Ihre verbliebenen Vorräte befinden sich noch immer darin – und wenn eines sicher ist: Sie werden sie nicht mehr brauchen.'
+'An Bord des {building} hat sich {citizen} die Zeit genommen, das gesamte Gebiet zu untersuchen. Es wurden neue Gebäude entdeckt: {ruins}': 'An Bord des {building} hat sich {citizen} die Zeit genommen, das gesamte Gebiet zu untersuchen. Es wurden neue Gebäude entdeckt: {ruins}'
+'Du magst stark sein, aber du bist kein mächtiger Chuck. Erleichtere dich deiner überzählichen Gegenstände, bevor du dich der Wache anschließt.': 'Du magst stark sein, aber du bist kein mächtiger Chuck. Erleichtere dich deiner überzählichen Gegenstände, bevor du dich der Wache anschließt.'

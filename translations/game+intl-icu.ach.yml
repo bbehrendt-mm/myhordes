@@ -3248,3 +3248,7 @@ Tierklinik: crwdns225726:0crwdne225726:0
 'Im Rahmen einer intensiven Meditation ist es dir gelungen, die Seele eines Mitbürgers in der Außenwelt zu lokalisieren. Deinen Berechnungen zufolge sollte sie sich bei {x}/{y} befinden!': 'crwdns252594:0{x}crwdnd252594:0{y}crwdne252594:0'
 'Durchgang in Kraft': 'crwdns252596:0crwdne252596:0'
 'Du hast keinen Platz für einen weiteren schweren Gegenstand!': 'crwdns252612:0crwdne252612:0'
+'Verdächtige Scheune': 'crwdns252626:0crwdne252626:0'
+'Diese Scheune ist dir bisher völlig entgangen, weil sie mitten in der Wüste so uninteressant wirkte; aber die seltsamen, halb verwischten Zeichnungen in der Umgebung, die die Bürger vom Heißluftballon aus entdeckt hatten, überzeugten dich von ihrer Bedeutung... Bei näherer Betrachtung stellt sich heraus, dass die Scheune einer Gruppe von Überlebenden als Unterschlupf diente. Ihre verbliebenen Vorräte befinden sich noch immer darin – und wenn eines sicher ist: Sie werden sie nicht mehr brauchen.': 'crwdns252628:0crwdne252628:0'
+'An Bord des {building} hat sich {citizen} die Zeit genommen, das gesamte Gebiet zu untersuchen. Es wurden neue Gebäude entdeckt: {ruins}': 'crwdns252630:0{building}crwdnd252630:0{citizen}crwdnd252630:0{ruins}crwdne252630:0'
+'Du magst stark sein, aber du bist kein mächtiger Chuck. Erleichtere dich deiner überzählichen Gegenstände, bevor du dich der Wache anschließt.': 'crwdns252632:0crwdne252632:0'
