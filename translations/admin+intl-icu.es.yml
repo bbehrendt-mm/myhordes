@@ -308,7 +308,7 @@ Profilbeschreibung: Descripción del perfil
 'Baufortschritt setzen:': 'Establecer el progreso de la construcción:'
 'Integrität setzen:': 'Integridad:'
 'Neue Anzahl:': 'Nuevo número:'
-'Heldentage setzen': 'Establecer la expreriencía de Héroe'
+'Heldentage setzen': 'Establecer días heroicos'
 'Hausverbesserungen:': 'Mejoras de la casa:'
 'Teleportieren:': 'Teleportación:'
 'In die Stadt': 'En el pueblo'
@@ -699,6 +699,8 @@ Billig+: Barato+
 'Gesamten Gebäudebaum zurücksetzen': 'Restablecer el árbol del sitio de construcción'
 'Klicken, um Baustelle in die Liste der zu entsperrenden Baustellen aufzunehmen.': 'Haga clic para agregar a la lista de sitios para desbloquear'
 'Klicken, um Baustelle sofort zu entsperren.': 'Haga clic para desbloquear'
+Notizen: Notas
+'Notiz hinzufügen': 'Añadir nota'
 'Wenn du deinen Schlüssel änderst, musst du diesen in deiner Anwendung austauschen. Bitte bestätige, dass du den Schlüssel jetzt austauschen möchtest, indem du die Zahl {num} eingibst.': 'Si modificas tu clave, tendrás que reemplazarla en tu aplicación. Por favor, confirma que deseas reemplazar la clave ahora ingresando el número {num}.'
 Koppeln: Asociar
 'Namen testen': 'Testear el nombre'

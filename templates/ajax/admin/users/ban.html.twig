@@ -144,18 +144,58 @@
 
             <div class="row">
                 <div class="cell rw-12 padded">
+                    <h5>{{ 'Notizen'|trans({},'admin') }}</h5>
+                    {% if notes is not empty %}
+                        <div class="forum-preview-wrapper">
+                            <div class="forum-content">
+                                <div class="row-flex vertical stretch">
+                                    <div class="forum-posts grow-1" style="display: flex; flex-direction: column-reverse;">
+                                        {% for note in notes|reverse %}
+                                            <div class="forum-post forum-post-small">
+                                                <div class="forum-post-content">
+                                                    {% include "ajax/soul/playeravatar.html.twig" with {user: note.owner, small: true} only %}
+                                                    {% include 'ajax/soul/playername.html.twig' with {user: note.owner} only %}:
+                                                    {{ note.text }}
+                                                </div>
+                                                <i class="small float-right" style="opacity: 0.5; padding: 2px;">
+                                                    {% if note.createdAt >= 'today'|to_date %}
+                                                        {{ 'Heute um'|trans({},'global') }} {{ note.createdAt|format_datetime('none', 'short') }}
+                                                    {% elseif note.createdAt >= 'yesterday'|to_date %}
+                                                        {{ 'Gestern um'|trans({},'global') }} {{ note.createdAt|format_datetime('none', 'short') }}
+                                                    {% else %}
+                                                        {{ note.createdAt|format_datetime('medium', 'short') }}
+                                                    {% endif %}
+                                                </i>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <form>
+                        <b><label for="new_note">{{ 'Notiz hinzufügen'|trans({},'admin') }}</label></b>
+                        <textarea style="min-height: 120px; height: 120px;" id="new_note" name="text"></textarea>
+                        <button data-fetch="{{ path('rest_admin_forum_management_add_user_note', {id: user.id}) }}" data-fetch-method="put" data-fetch-load="{{ path('admin_users_ban_view', {id: user.id}) }}" data-fetch-confirm="{{ 'Bestätigen?'|trans({},'global') }}">{{ 'Bestätigen'|trans({},'admin') }}</button>
+                    </form>
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="cell rw-12 padded">
                     <h5>{{ 'Neue Beschränkung hinzufügen'|trans({},'admin') }}</h5>
                     <div class="row">
                         <div class="cell rw-6 rw-md-12 padded">
                             <b><label for="rest_duration">{{ 'Dauer'|trans({},'admin') }}</label></b>
-                            <select x-confirmation id="rest_duration">
+                            <select data-confirmation id="rest_duration">
                                 <option value="86400">{{ '24 Stunden'|trans({},'admin') }}</option>
                                 {% for duration in [2,3,5,7,15,30,60,90,120,240] %}
-                                    <option {% if duration > 30%}x-confirmation="1"{% endif %} value="{{ duration * 86400 }}">{{ '{d} Tage'|trans({'{d}': duration},'admin') }}{% if duration > 30 and not is_granted('ROLE_SUB_ADMIN') %} ({{ 'Bestätigung erforderlich'|trans({},'admin') }}){% endif %}</option>
+                                    <option {% if duration > 30%}data-confirmation="1"{% endif %} value="{{ duration * 86400 }}">{{ '{d} Tage'|trans({'{d}': duration},'admin') }}{% if duration > 30 and not is_granted('ROLE_SUB_ADMIN') %} ({{ 'Bestätigung erforderlich'|trans({},'admin') }}){% endif %}</option>
                                 {% endfor %}
-                                <option x-confirmation="2" value="31536000">{{ '1 Jahr'|trans({},'admin') }}{% if not is_granted('ROLE_SUB_ADMIN') %} ({{ 'Admin-Bestätigung erforderlich'|trans({},'admin') }}){% endif %}</option>
-                                <option x-confirmation="2" value="63072000">{{ '2 Jahre'|trans({},'admin') }}{% if not is_granted('ROLE_SUB_ADMIN') %} ({{ 'Admin-Bestätigung erforderlich'|trans({},'admin') }}){% endif %}</option>
-                                <option x-confirmation="2" value="-1">{{ 'Dauerhaft'|trans({},'admin') }}{% if not is_granted('ROLE_SUB_ADMIN') %} ({{ 'Admin-Bestätigung erforderlich'|trans({},'admin') }}){% endif %}</option>
+                                <option data-confirmation="2" value="31536000">{{ '1 Jahr'|trans({},'admin') }}{% if not is_granted('ROLE_SUB_ADMIN') %} ({{ 'Admin-Bestätigung erforderlich'|trans({},'admin') }}){% endif %}</option>
+                                <option data-confirmation="2" value="63072000">{{ '2 Jahre'|trans({},'admin') }}{% if not is_granted('ROLE_SUB_ADMIN') %} ({{ 'Admin-Bestätigung erforderlich'|trans({},'admin') }}){% endif %}</option>
+                                <option data-confirmation="2" value="-1">{{ 'Dauerhaft'|trans({},'admin') }}{% if not is_granted('ROLE_SUB_ADMIN') %} ({{ 'Admin-Bestätigung erforderlich'|trans({},'admin') }}){% endif %}</option>
                             </select>
                             <br /><br />
                             <b><label for="rest_public">{{ 'Grund'|trans({},'admin') }}</label></b>
@@ -169,38 +209,38 @@
                         <div class="cell rw-6 rw-md-12 padded">
                             <div class="row">
                                 <b>{{ 'Art der Beschränkung'|trans({},'admin') }}</b>
-                                <div class="cell rw-12"><label x-tooltip="title" title="{{ 'Aktiviert alle untergeordneten Beschränkungen.'|trans({},'admin') }}">
-                                        <input type="checkbox" x-restriction="{{ constant('App\\Entity\\AccountRestriction::RestrictionSocial') }}"> {{ 'Soziale Interaktion verbieten'|trans({},'admin') }}</label></div>
-                                <div class="cell ro-1 rw-11"><label x-tooltip="title" title="{{ 'Verbietet das Erstellen neuer Threads und Posts sowie das Bearbeiten existierender Posts in allen Foren (Stadt- und Weltforum). Verbietet zudem die Teilnahme an Foren-Umfragen.'|trans({},'admin') }}">
-                                        <input type="checkbox" x-restriction="{{ constant('App\\Entity\\AccountRestriction::RestrictionForum') }}"> {{ 'Posten in Foren verbieten'|trans({},'admin') }}</label></div>
-                                <div class="cell ro-1 rw-11"><label x-tooltip="title" title="{{ 'Verbietet die Benutzung des Zonen-Chats und des Schwarzen Bretts, das Versenden von Stadt-PNs sowie die Änderung der persönlichen Ankündigung.'|trans({},'admin') }}">
-                                        <input type="checkbox" x-restriction="{{ constant('App\\Entity\\AccountRestriction::RestrictionTownCommunication') }}"> {{ 'Stadt-interne Kommunikation verbieten'|trans({},'admin') }}</label></div>
-                                <div class="cell ro-2 rw-11"><label x-tooltip="title" title="{{ 'Verbietet die Verwendung des Schwarzen Bretts.'|trans({},'admin') }}">
-                                        <input type="checkbox" x-restriction="{{ constant('App\\Entity\\AccountRestriction::RestrictionBlackboard') }}"> {{ 'Verwendung des Schwarzen Bretts verbieten'|trans({},'admin') }}</label></div>
-                                <div class="cell ro-1 rw-11"><label x-tooltip="title" title="{{ 'Verbietet die Erstellung neuer globaler PNs sowie das Antworten und die Hinzufügung neuer Spieler zu bestehenden PNs.'|trans({},'admin') }}">
-                                        <input type="checkbox" x-restriction="{{ constant('App\\Entity\\AccountRestriction::RestrictionGlobalCommunication') }}"> {{ 'Stadtübergreifende Kommunikation verbieten'|trans({},'admin') }}</label></div>
-                                <div class="cell ro-1 rw-11"><label x-tooltip="title" title="{{ 'Verbietet die Bearbeitung von Stadtkommentaren sowie das Setzen der Letzten Worte.'|trans({},'admin') }}">
-                                        <input type="checkbox" x-restriction="{{ constant('App\\Entity\\AccountRestriction::RestrictionComments') }}"> {{ 'Kommentare verbieten'|trans({},'admin') }}</label></div>
-                                <div class="cell ro-1 rw-11"><label x-tooltip="title" title="{{ 'Verbietet das Gründen neuer Koalitionen sowie die Mitgliederverwaltung und den Koalitionschat existierender Koalitionen.'|trans({},'admin') }}">
-                                        <input type="checkbox" x-restriction="{{ constant('App\\Entity\\AccountRestriction::RestrictionOrganization') }}"> {{ 'Organisation in Gruppen verbieten'|trans({},'admin') }}</label></div>
+                                <div class="cell rw-12"><label data-tooltip="title" title="{{ 'Aktiviert alle untergeordneten Beschränkungen.'|trans({},'admin') }}">
+                                        <input type="checkbox" data-restriction="{{ constant('App\\Entity\\AccountRestriction::RestrictionSocial') }}"> {{ 'Soziale Interaktion verbieten'|trans({},'admin') }}</label></div>
+                                <div class="cell ro-1 rw-11"><label data-tooltip="title" title="{{ 'Verbietet das Erstellen neuer Threads und Posts sowie das Bearbeiten existierender Posts in allen Foren (Stadt- und Weltforum). Verbietet zudem die Teilnahme an Foren-Umfragen.'|trans({},'admin') }}">
+                                        <input type="checkbox" data-restriction="{{ constant('App\\Entity\\AccountRestriction::RestrictionForum') }}"> {{ 'Posten in Foren verbieten'|trans({},'admin') }}</label></div>
+                                <div class="cell ro-1 rw-11"><label data-tooltip="title" title="{{ 'Verbietet die Benutzung des Zonen-Chats und des Schwarzen Bretts, das Versenden von Stadt-PNs sowie die Änderung der persönlichen Ankündigung.'|trans({},'admin') }}">
+                                        <input type="checkbox" data-restriction="{{ constant('App\\Entity\\AccountRestriction::RestrictionTownCommunication') }}"> {{ 'Stadt-interne Kommunikation verbieten'|trans({},'admin') }}</label></div>
+                                <div class="cell ro-2 rw-11"><label data-tooltip="title" title="{{ 'Verbietet die Verwendung des Schwarzen Bretts.'|trans({},'admin') }}">
+                                        <input type="checkbox" data-restriction="{{ constant('App\\Entity\\AccountRestriction::RestrictionBlackboard') }}"> {{ 'Verwendung des Schwarzen Bretts verbieten'|trans({},'admin') }}</label></div>
+                                <div class="cell ro-1 rw-11"><label data-tooltip="title" title="{{ 'Verbietet die Erstellung neuer globaler PNs sowie das Antworten und die Hinzufügung neuer Spieler zu bestehenden PNs.'|trans({},'admin') }}">
+                                        <input type="checkbox" data-restriction="{{ constant('App\\Entity\\AccountRestriction::RestrictionGlobalCommunication') }}"> {{ 'Stadtübergreifende Kommunikation verbieten'|trans({},'admin') }}</label></div>
+                                <div class="cell ro-1 rw-11"><label data-tooltip="title" title="{{ 'Verbietet die Bearbeitung von Stadtkommentaren sowie das Setzen der Letzten Worte.'|trans({},'admin') }}">
+                                        <input type="checkbox" data-restriction="{{ constant('App\\Entity\\AccountRestriction::RestrictionComments') }}"> {{ 'Kommentare verbieten'|trans({},'admin') }}</label></div>
+                                <div class="cell ro-1 rw-11"><label data-tooltip="title" title="{{ 'Verbietet das Gründen neuer Koalitionen sowie die Mitgliederverwaltung und den Koalitionschat existierender Koalitionen.'|trans({},'admin') }}">
+                                        <input type="checkbox" data-restriction="{{ constant('App\\Entity\\AccountRestriction::RestrictionOrganization') }}"> {{ 'Organisation in Gruppen verbieten'|trans({},'admin') }}</label></div>
                                 <div class="cell rw-12">
                                     <label>
-                                        <input x-confirmation="2" type="checkbox" x-restriction="{{ constant('App\\Entity\\AccountRestriction::RestrictionGameplay') }}">
+                                        <input data-confirmation="2" type="checkbox" data-restriction="{{ constant('App\\Entity\\AccountRestriction::RestrictionGameplay') }}">
                                         {{ 'Spielen verbieten'|trans({},'admin') }}{% if not is_granted('ROLE_SUB_ADMIN') %} ({{ 'Admin-Bestätigung erforderlich'|trans({},'admin') }}){% endif %}
                                     </label>
                                 </div>
                                 <div class="cell rw-12">
                                     <label>
-                                        <input x-confirmation="2" type="checkbox" x-restriction="{{ constant('App\\Entity\\AccountRestriction::RestrictionGameplayLang') }}">
+                                        <input data-confirmation="2" type="checkbox" data-restriction="{{ constant('App\\Entity\\AccountRestriction::RestrictionGameplayLang') }}">
                                         {{ 'Das Spielen in anderen Gemeinden verbieten'|trans({},'admin') }}{% if not is_granted('ROLE_SUB_ADMIN') %} ({{ 'Admin-Bestätigung erforderlich'|trans({},'admin') }}){% endif %}
                                     </label>
                                 </div>
-                                <div class="cell rw-12"><label><input type="checkbox" x-restriction="{{ constant('App\\Entity\\AccountRestriction::RestrictionProfile') }}"> {{ 'Änderungen am Profil verbieten'|trans({},'admin') }}</label></div>
-                                <div class="cell ro-1 rw-11"><label><input type="checkbox" x-restriction="{{ constant('App\\Entity\\AccountRestriction::RestrictionProfileAvatar') }}"> {{ 'Ändern des Avatars verbieten'|trans({},'admin') }}</label></div>
-                                <div class="cell ro-1 rw-11"><label><input type="checkbox" x-restriction="{{ constant('App\\Entity\\AccountRestriction::RestrictionProfileDescription') }}"> {{ 'Ändern der Profilbeschreibung verbieten'|trans({},'admin') }}</label></div>
-                                <div class="cell ro-1 rw-11"><label><input type="checkbox" x-restriction="{{ constant('App\\Entity\\AccountRestriction::RestrictionProfileTitle') }}"> {{ 'Ändern des Titels verbieten'|trans({},'admin') }}</label></div>
-                                <div class="cell ro-1 rw-11"><label><input type="checkbox" x-restriction="{{ constant('App\\Entity\\AccountRestriction::RestrictionProfileDisplayName') }}"> {{ 'Ändern des Spielernamens verbieten'|trans({},'admin') }}</label></div>
-                                <div class="cell rw-12"><label><input type="checkbox" x-restriction="{{ constant('App\\Entity\\AccountRestriction::RestrictionReportToGitlab') }}"> {{ 'Verfassen von Fehlerberichten für Gitlab verbieten'|trans({},'admin') }}</label></div>
+                                <div class="cell rw-12"><label><input type="checkbox" data-restriction="{{ constant('App\\Entity\\AccountRestriction::RestrictionProfile') }}"> {{ 'Änderungen am Profil verbieten'|trans({},'admin') }}</label></div>
+                                <div class="cell ro-1 rw-11"><label><input type="checkbox" data-restriction="{{ constant('App\\Entity\\AccountRestriction::RestrictionProfileAvatar') }}"> {{ 'Ändern des Avatars verbieten'|trans({},'admin') }}</label></div>
+                                <div class="cell ro-1 rw-11"><label><input type="checkbox" data-restriction="{{ constant('App\\Entity\\AccountRestriction::RestrictionProfileDescription') }}"> {{ 'Ändern der Profilbeschreibung verbieten'|trans({},'admin') }}</label></div>
+                                <div class="cell ro-1 rw-11"><label><input type="checkbox" data-restriction="{{ constant('App\\Entity\\AccountRestriction::RestrictionProfileTitle') }}"> {{ 'Ändern des Titels verbieten'|trans({},'admin') }}</label></div>
+                                <div class="cell ro-1 rw-11"><label><input type="checkbox" data-restriction="{{ constant('App\\Entity\\AccountRestriction::RestrictionProfileDisplayName') }}"> {{ 'Ändern des Spielernamens verbieten'|trans({},'admin') }}</label></div>
+                                <div class="cell rw-12"><label><input type="checkbox" data-restriction="{{ constant('App\\Entity\\AccountRestriction::RestrictionReportToGitlab') }}"> {{ 'Verfassen von Fehlerberichten für Gitlab verbieten'|trans({},'admin') }}</label></div>
                             </div>
                             <div class="row">
                                 <div class="cell rw-12">
@@ -288,8 +328,8 @@
                 document.getElementById('rest_duration').value = elem.dataset.duration;
 
                 const r = parseInt(elem.dataset.type);
-                $.html.forEach('input[type="checkbox"][x-restriction]', element => {
-                    const re = parseInt(element.getAttribute('x-restriction'));
+                $.html.forEach('input[type="checkbox"][data-restriction]', element => {
+                    const re = parseInt(element.dataset.restriction);
                     element.checked = ((r & re) === re);
                 });
             });
@@ -304,7 +344,7 @@
                 document.getElementById('rest_private').value = '';
                 document.getElementById('rest_duration').value = '86400';
 
-                $.html.forEach('input[type="checkbox"][x-restriction]', element => element.checked = false);
+                $.html.forEach('input[type="checkbox"][data-restriction]', element => element.checked = false);
             });
 
             const check_confirmation_level = function(){
@@ -312,8 +352,8 @@
 
                 let lv = 0;
                 {% if not is_granted('ROLE_SUB_ADMIN') %}
-                    if (document.querySelector('[x-confirmation="1"]:checked')) lv = 1;
-                    if (document.querySelector('[x-confirmation="2"]:checked')) lv = 2;
+                    if (document.querySelector('[data-confirmation="1"]:checked')) lv = 1;
+                    if (document.querySelector('[data-confirmation="2"]:checked')) lv = 2;
 
                     if (lv === 1) $.html.forEach('#rest_info_lv1', element => element.classList.remove('hidden'));
                     if (lv === 2) $.html.forEach('#rest_info_lv2', element => element.classList.remove('hidden'));
@@ -321,8 +361,8 @@
                 return lv;
             }
 
-            $.html.addEventListenerAll('input[type="checkbox"][x-confirmation]', 'click', check_confirmation_level);
-            $.html.addEventListenerAll('select[x-confirmation]', 'change', check_confirmation_level);
+            $.html.addEventListenerAll('input[type="checkbox"][data-confirmation]', 'click', check_confirmation_level);
+            $.html.addEventListenerAll('select[data-confirmation]', 'change', check_confirmation_level);
 
             $.html.addEventListenerAll('[data-toggle-duration-for]', 'click', (e,elem) => {
                 document.querySelectorAll('[data-duration-for="' + elem.dataset.toggleDurationFor + '"]').forEach( cb => cb.classList.remove('hidden') );
@@ -337,32 +377,32 @@
 
             const get_restriction_mask = function(){
                 let rm = 0;
-                $.html.forEach('input[type="checkbox"][x-restriction]:checked', element => {
-                    const re = parseInt(element.getAttribute('x-restriction'));
+                $.html.forEach('input[type="checkbox"][data-restriction]:checked', element => {
+                    const re = parseInt(element.dataset.restriction);
                     rm |= re;
                 });
                 return rm;
             }
 
-            $.html.addEventListenerAll('input[type="checkbox"][x-restriction]', 'click', (e,elem) => {
-                const r = parseInt(elem.getAttribute('x-restriction'));
+            $.html.addEventListenerAll('input[type="checkbox"][data-restriction]', 'click', (e,elem) => {
+                const r = parseInt(elem.dataset.restriction);
 
                 if (elem.checked)
-                    $.html.forEach('input[type="checkbox"][x-restriction]', element => {
-                        const re = parseInt(element.getAttribute('x-restriction'));
+                    $.html.forEach('input[type="checkbox"][data-restriction]', element => {
+                        const re = parseInt(element.dataset.restriction);
                         if (r === re) return;
                         if ((r & re) === re) element.checked = true;
                     });
                 else
-                    $.html.forEach('input[type="checkbox"][x-restriction]', element => {
-                        const re = parseInt(element.getAttribute('x-restriction'));
+                    $.html.forEach('input[type="checkbox"][data-restriction]', element => {
+                        const re = parseInt(element.dataset.restriction);
                         if (r === re) return;
                         if (r & re) element.checked = false;
                     });
 
                 let rm = get_restriction_mask();
-                $.html.forEach('input[type="checkbox"][x-restriction]:not(:checked)', element => {
-                    const re = parseInt(element.getAttribute('x-restriction'));
+                $.html.forEach('input[type="checkbox"][data-restriction]:not(:checked)', element => {
+                    const re = parseInt(element.dataset.restriction);
                     if ((rm & re) === re) element.checked = true;
                 });
             });

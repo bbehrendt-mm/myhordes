@@ -452,16 +452,16 @@ class MigrateCommand extends Command
                     "Would you like to create default world forums? (Y/n) ", true
                 ) );
                 if ($result) {
-                    if (!$this->helper->capsule('app:forum:create "Weltforum" 0 --icon bannerForumDiscuss.gif', $output)) {
+                    if (!$this->helper->capsule('app:forum:create "Weltforum" 0 --no-description --icon bannerForumDiscuss.gif', $output)) {
                         return 5;
                     }
-                    if (!$this->helper->capsule('app:forum:create "Forum Monde" 0 --icon bannerForumDiscuss.gif', $output)) {
+                    if (!$this->helper->capsule('app:forum:create "Forum Monde" 0 --no-description --icon bannerForumDiscuss.gif', $output)) {
                         return 5;
                     }
-                    if (!$this->helper->capsule('app:forum:create "World Forum" 0 --icon bannerForumDiscuss.gif', $output)) {
+                    if (!$this->helper->capsule('app:forum:create "World Forum" 0 --no-description --icon bannerForumDiscuss.gif', $output)) {
                         return 5;
                     }
-                    if (!$this->helper->capsule('app:forum:create "Foro Mundial" 0 --icon bannerForumDiscuss.gif', $output)) {
+                    if (!$this->helper->capsule('app:forum:create "Foro Mundial" 0 --no-description --icon bannerForumDiscuss.gif', $output)) {
                         return 5;
                     }
                 } else {
@@ -469,7 +469,7 @@ class MigrateCommand extends Command
                         "Would you like to create a single staging forum, instead? (Y/n) ", true
                     ) );
                     if ($result) {
-                        if (!$this->helper->capsule('app:forum:create "Feedback & Bug Reports" 0 --icon bannerForumExplore.gif', $output)) {
+                        if (!$this->helper->capsule('app:forum:create "Feedback & Bug Reports" 0 --no-description --icon bannerForumExplore.gif', $output)) {
                             return 5;
                         }
                     }
