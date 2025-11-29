@@ -185,9 +185,9 @@ class PictoDataService implements FixtureProcessorInterface {
                 'icon' => 'r_explo2',
                 'rare' => true
             ],
-            [   // TODO: translations and real description
-                'label' => 'Total Exploration',
-                'description' => 'Times your town has fully explored the map.',
+            [
+                'label' => 'Vollständige Erkundung',
+                'description' => 'Anzahl der Karten, die du vollständig aufgedeckt hast.',
                 'icon' => 'r_explot',
                 'rare' => true
             ],

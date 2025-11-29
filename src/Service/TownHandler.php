@@ -24,6 +24,7 @@ use App\Entity\Inventory;
 use App\Entity\PictoPrototype;
 use App\Entity\PrivateMessage;
 use App\Entity\Town;
+use App\Entity\TownClass;
 use App\Entity\ZombieEstimation;
 use App\Entity\Zone;
 use App\Entity\ZoneActivityMarker;
@@ -40,6 +41,7 @@ use App\Structures\TownDefenseSummary;
 use App\Structures\TownConf;
 use App\Structures\WatchtowerEstimation;
 use DateInterval;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -757,19 +759,23 @@ class TownHandler
         return false;
     }
 
-    public function checkFullyExploredMap(Town $town, ?int $minDiscoveryStatus = Zone::DiscoveryStatePast) {
-        if ($town->getFullyExploredAwarded()) return;
+    public function checkFullyExploredMap(Town $town, ?int $minDiscoveryStatus = Zone::DiscoveryStatePast): void
+    {
+        if ($town->getFullyExploredAwarded() || $town->getType()->is(TownClass::EASY)) return;
 
-        foreach ($town->getZones() as $zone) {
-            if ($zone->getDiscoveryStatus() < $minDiscoveryStatus) {
-                return;
-            }
-
-            // Requires all ruins to be uncovered
-            if ($zone->getPrototype() && $zone->getBuryCount() > 0) {
-                return;
-            }
-        }
+        if ($town->getZones()->matching(
+            new Criteria()
+                // Get zones where either...
+                ->where( Criteria::expr()->orX(
+                    // ...discovery status is less than the given value
+                    Criteria::expr()->lt( 'discoveryStatus', $minDiscoveryStatus ),
+                    // ...or there is a ruin that is still covered
+                    Criteria::expr()->andX(
+                        Criteria::expr()->isNotNull( 'prototype' ),
+                        Criteria::expr()->gt( 'buryCount', 0 ),
+                    )
+                ) )
+        )->count() > 0) return;
 
         $pictoPrototype = $this->entity_manager->getRepository(PictoPrototype::class)->findOneBy(['name' => 'r_explot_#00' ]);
 
@@ -779,9 +785,6 @@ class TownHandler
         }
 
         $town->setFullyExploredAwarded(true);
-
         $this->entity_manager->persist($town);
-
-        return;
     }
 }

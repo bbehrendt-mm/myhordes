@@ -48,7 +48,7 @@ class Town
     private int $day = 1;
     #[ORM\Column(type: 'integer')]
     private ?int $well = 0;
-    #[ORM\OneToMany(targetEntity: 'App\Entity\Zone', mappedBy: 'town', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: 'App\Entity\Zone', mappedBy: 'town', cascade: ['persist', 'remove'], fetch: 'EXTRA_LAZY', orphanRemoval: true)]
     private $zones;
     #[ORM\Column(type: 'boolean')]
     private bool $door = false;
@@ -307,9 +307,9 @@ class Town
     }
 
     /**
-     * @return Collection<int, Zone>
+     * @return ArrayCollection<Zone>|PersistentCollection<Zone>
      */
-    public function getZones(): Collection
+    public function getZones(): ArrayCollection|PersistentCollection
     {
         return $this->zones;
     }
@@ -335,24 +335,6 @@ class Town
         }
 
         return $this;
-    }
-
-    /**
-     * @param int $x0
-     * @param int $x1
-     * @param int $y0
-     * @param int $y1
-     * @return Collection<int, Zone>
-     */
-    public function getZoneRect(int $x0, int $x1, int $y0, int $y1): Collection
-    {
-        return $this->zones->matching(
-            (new Criteria())
-                ->andWhere( new Comparison( 'x', Comparison::GTE, $x0 ) )
-                ->andWhere( new Comparison( 'x', Comparison::LTE, $x1 ) )
-                ->andWhere( new Comparison( 'y', Comparison::GTE, $y0 ) )
-                ->andWhere( new Comparison( 'y', Comparison::LTE, $y1 ) )
-        );
     }
 
     /**
