@@ -186,6 +186,12 @@ class PictoDataService implements FixtureProcessorInterface {
                 'rare' => true
             ],
             [
+                'label' => 'Vollständige Erkundung',
+                'description' => 'Anzahl der Karten, die du vollständig aufgedeckt hast.',
+                'icon' => 'r_explot',
+                'rare' => true
+            ],
+            [
                 'label' => 'Großzügigkeit',
                 'description' => 'Anzahl der Heldentage, die du einem anderem Bürger in Not geschenkt hast.',
                 'icon' => 'r_share',

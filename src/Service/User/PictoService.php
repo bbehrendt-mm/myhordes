@@ -115,6 +115,8 @@ class PictoService implements ServiceSubscriberInterface
                     default                 => 3.5 + 6.5,
                 },
 
+                // TODO : has Total Exploration impact on picto rollup set ?
+
                 'r_guide_#00' => match(true) {
                     $picto->getCount() <  300 => 0,
                     $picto->getCount() < 1000 => 3.5,
