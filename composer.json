@@ -14,6 +14,7 @@
     "ext-libxml": "*",
     "ext-mbstring": "*",
     "ext-simplexml": "*",
+    "ext-fileinfo": "*",
     "adbario/php-dot-notation": "^3.3",
     "brainbox-et/etwin-api-client": "@dev",
     "clue/graph": "0.9.3",
@@ -81,7 +82,8 @@
     "twig/twig": "3.21.1",
     "whichbrowser/parser": "2.1.8",
     "wikimedia/composer-merge-plugin": "2.1.0",
-    "zenstruck/schedule-bundle": "1.8.1"
+    "zenstruck/schedule-bundle": "1.8.1",
+    "intervention/image": "3.11.5"
   },
   "require-dev": {
     "ext-sqlite3": "*",
