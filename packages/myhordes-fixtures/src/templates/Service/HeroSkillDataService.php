@@ -122,8 +122,10 @@ class HeroSkillDataService implements FixtureProcessorInterface {
                           '2% Bonus-Überlebenschance auf der Nachtwache',
                           'Unbegrenzt anonyme Nachrichten verfassen',
                           'Kamera aus Vorkriegstagen (4 Ladungen)',
-                          'Diebstahl von Bürgern in der Stadt möglich'
+                          'Diebstahl von Bürgern in der Stadt möglich',
+                          'Durchgang in Kraft'
                       ])
+            ->unlocksAction('hero_armag')
             ->addCitizenProperty( CitizenProperties::WatchSurvivalBonus, 0.02 )
             ->addCitizenProperty( CitizenProperties::AnonymousMessageLimit, -1 )
             ->addItemGrant('photo_4_#00', 'apag', true)
@@ -279,12 +281,10 @@ class HeroSkillDataService implements FixtureProcessorInterface {
             ->bullets([
                           'Ein weiterer zusätzlicher Platz im Rucksack',
                           'Verbesserung Zweite Lunge (4 AP, 6 EP)',
-                          '30 Extra-O² in begehbaren Ruinen',
-                          'Durchgang in Kraft'
+                          '30 Extra-O² in begehbaren Ruinen'
                       ])
             ->addCitizenProperty(CitizenProperties::InventorySpaceBonus, 3)
             // ->addCitizenProperty(CitizenProperties::HeroPunchEscapeTime, 30) // [S19] Removal of the 30-second control gain at the Enduring Master level.
-            ->unlocksAction('hero_armag')
             ->addCitizenProperty(CitizenProperties::OxygenTimeBonus, 90)
             ->addCitizenProperty(CitizenProperties::HeroSecondWindBaseSP, 6)
             ->level(3)->unlockAt(80)->commit();
