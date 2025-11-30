@@ -350,9 +350,9 @@ class TownHandler
             $c = 0;
             foreach ($town->getCitizens() as $citizen) if (!$citizen->getAlive()) $c++;
             $ratio = match($building->getLevel()) {
-                0 => 1,
-                1 => 5,
-                default => 10,
+                0 => 3,
+                1 => 7,
+                default => 14,
             };
             if ($this->getBuilding($town, 'small_coffin_#00'))
                 $ratio += 10;
@@ -414,9 +414,9 @@ class TownHandler
                     $item_def_factor += (1+$building->getLevel()) * 0.5;
                 else if ($building->getPrototype()->getName() === "small_cemetery_#00") {
                     $ratio = match($building->getLevel()) {
-                        0 => 1,
-                        1 => 5,
-                        default => 10,
+                        0 => 3,
+                        1 => 7,
+                        default => 14,
                     };
                     if ($this->getBuilding($town, 'small_coffin_#00'))
                         $ratio += 10;
