@@ -190,8 +190,8 @@ final class BuildingQueryListener implements ServiceSubscriberInterface
                 default => 0
             },
             BuildingValueQuery::BeyondTeleportRadius => match ($this->getService(TownHandler::class)->getBuilding($event->town, 'item_scope_#00', true )?->getLevel() ?? 0) {
-                4 => 1,
-                5 => 2,
+                3 => 1,
+                4 => 2,
                 default => 0
             },
             BuildingValueQuery::NightlyRecordWindDirection => $this->getService(TownHandler::class)->getBuilding($event->town, 'small_gather_#02', true ) ? 1 : 0,
