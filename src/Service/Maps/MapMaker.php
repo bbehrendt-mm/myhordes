@@ -262,7 +262,7 @@ class MapMaker
         if ($conf->get(TownSetting::OptFeatureCamping))
             $zone->setBlueprint(Zone::BlueprintAvailable);
 
-        if ($this->random->chance($conf->get(TownSetting::MapParamsBuriedProb)))
+        if (!$target_ruin->getExplorable() && $this->random->chance($conf->get(TownSetting::MapParamsBuriedProb)))
             $zone->setBuryCount( $bury_count ?? mt_rand($conf->get(TownSetting::MapParamsBuriedDigsMin), $conf->get(TownSetting::MapParamsBuriedDigsMax)) );
     }
 
