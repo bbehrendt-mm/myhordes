@@ -168,7 +168,7 @@ export const MapCore = (props: {setup: MapSetup, properties: MapProperties}) => 
     }
 
     const shift = () => {
-        if (!currentZone.tileset.door || (!currentZone.status.shifted && currentZone.status.move === null)) return;
+        if (progressing.current|| !currentZone.tileset.door || (!currentZone.status.shifted && currentZone.status.move === null)) return;
         progressing.current = true;
 
         if (currentZone.tileset.door.l != 0)
