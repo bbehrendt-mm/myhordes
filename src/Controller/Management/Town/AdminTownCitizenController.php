@@ -209,7 +209,7 @@ class AdminTownCitizenController extends AdminActionController
             $target_zone
                 ->setDiscoveryStatus( Zone::DiscoveryStateCurrent )
                 ->setZombieStatus( max($upgraded_map ? Zone::ZombieStateExact : Zone::ZombieStateEstimate, $target_zone->getZombieStatus() ) );
-            $townHandler->checkFullyExploredMap($town);
+
             $handler->handleCitizenCountUpdate($target_zone,$cp_target_zone);
             $this->entity_manager->persist($target_zone);
         }
@@ -217,6 +217,9 @@ class AdminTownCitizenController extends AdminActionController
         $this->clearTownCaches($town);
 
         $this->entity_manager->flush();
+        if ($townHandler->checkFullyExploredMap($town))
+            $this->entity_manager->flush();
+
         return AjaxResponse::success();
     }
 

@@ -838,7 +838,7 @@ class InventoryAwareController extends CustomAbstractController
             return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
 
         $item = null;
-        if (($error = $this->action_handler->execute( $citizen, $item, $target, $heroic->getAction(), $msg, $remove, contextCitizen: $this->action_handler->getHeroicDonatedFromCitizen( $heroic, $citizen ) )) === ActionHandler::ErrorNone) {
+        if (($error = $this->action_handler->execute( $citizen, $item, $target, $heroic->getAction(), $msg, $remove, contextCitizen: $this->action_handler->getHeroicDonatedFromCitizen( $heroic, $citizen ), map_updated: $map_updated )) === ActionHandler::ErrorNone) {
 
             $heroic_action = $heroic->getAction();
             if ($trigger_after) $trigger_after($heroic_action);
@@ -863,6 +863,9 @@ class InventoryAwareController extends CustomAbstractController
                 $this->entity_manager->remove($remove_entry);
             try {
                 $this->entity_manager->flush();
+
+                if ($map_updated && $this->town_handler->checkFullyExploredMap( $citizen->getTown() ))
+                    $this->entity_manager->flush();
             } catch (Exception $e) {
                 return AjaxResponse::error( ErrorHelper::ErrorDatabaseException );
             }
@@ -896,7 +899,7 @@ class InventoryAwareController extends CustomAbstractController
             return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
 
         $item = null;
-        if (($error = $this->action_handler->execute( $citizen, $item, $target, $special->getAction(), $msg, $remove )) === ActionHandler::ErrorNone) {
+        if (($error = $this->action_handler->execute( $citizen, $item, $target, $special->getAction(), $msg, $remove, map_updated: $map_updated )) === ActionHandler::ErrorNone) {
 
             $special_action = $special->getAction();
             if ($trigger_after) $trigger_after($special_action);
@@ -918,6 +921,8 @@ class InventoryAwareController extends CustomAbstractController
                 $this->entity_manager->remove($remove_entry);
             try {
                 $this->entity_manager->flush();
+                if ($map_updated && $this->town_handler->checkFullyExploredMap( $citizen->getTown() ))
+                    $this->entity_manager->flush();
             } catch (Exception $e) {
                 return AjaxResponse::error( ErrorHelper::ErrorDatabaseException );
             }
@@ -950,12 +955,15 @@ class InventoryAwareController extends CustomAbstractController
             return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
 
         $item = null;
-        if (($error = $this->action_handler->execute( $citizen, $item, $target, $home_action->getAction(), $msg, $remove )) === ActionHandler::ErrorNone) {
+        if (($error = $this->action_handler->execute( $citizen, $item, $target, $home_action->getAction(), $msg, $remove, map_updated: $map_updated )) === ActionHandler::ErrorNone) {
             $this->entity_manager->persist($citizen);
             foreach ($remove as $remove_entry)
                 $this->entity_manager->remove($remove_entry);
             try {
                 $this->entity_manager->flush();
+
+                if ($map_updated && $this->town_handler->checkFullyExploredMap( $citizen->getTown() ))
+                    $this->entity_manager->flush();
             } catch (Exception $e) {
                 return AjaxResponse::error( ErrorHelper::ErrorDatabaseException );
             }
@@ -988,7 +996,7 @@ class InventoryAwareController extends CustomAbstractController
         if ($zone && $zone->getX() === 0 && $zone->getY() === 0 ) return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
 
         $item = null;
-        if (($error = $this->action_handler->execute( $citizen, $item, $target, $camping->getAction(), $msg, $remove )) === ActionHandler::ErrorNone) {
+        if (($error = $this->action_handler->execute( $citizen, $item, $target, $camping->getAction(), $msg, $remove, map_updated: $map_updated )) === ActionHandler::ErrorNone) {
 
             switch($camping->getName()){
                 case 'cm_campsite_improve':
@@ -1001,6 +1009,9 @@ class InventoryAwareController extends CustomAbstractController
                 $this->entity_manager->remove($remove_entry);
             try {
                 $this->entity_manager->flush();
+
+                if ($map_updated && $this->town_handler->checkFullyExploredMap( $citizen->getTown() ))
+                    $this->entity_manager->flush();
             } catch (Exception $e) {
                 return AjaxResponse::error( ErrorHelper::ErrorDatabaseException );
             }
@@ -1061,7 +1072,7 @@ class InventoryAwareController extends CustomAbstractController
             return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
         $url = null;
 
-        if (($error = $this->action_handler->execute( $citizen, $item, $target, $action, $msg, $remove, false, $escort_mode )) === ActionHandler::ErrorNone) {
+        if (($error = $this->action_handler->execute( $citizen, $item, $target, $action, $msg, $remove, false, $escort_mode, map_updated: $map_updated )) === ActionHandler::ErrorNone) {
 
             if ($trigger_after) $trigger_after($action);
 
@@ -1076,6 +1087,9 @@ class InventoryAwareController extends CustomAbstractController
                 $this->entity_manager->remove($remove_entry);
             try {
                 $this->entity_manager->flush();
+
+                if ($map_updated && $this->town_handler->checkFullyExploredMap( $citizen->getTown() ))
+                    $this->entity_manager->flush();
             } catch (Exception $e) {
                 return AjaxResponse::error( ErrorHelper::ErrorDatabaseException );
             }

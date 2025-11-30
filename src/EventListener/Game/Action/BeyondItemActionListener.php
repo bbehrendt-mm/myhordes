@@ -78,9 +78,10 @@ final class BeyondItemActionListener implements ServiceSubscriberInterface
                     $event->cache->setTargetZone($selected);
                     $event->cache->addTag('zone');
                     $selected->setDiscoveryStatus( Zone::DiscoveryStateCurrent );
-                    $this->getService(TownHandler::class)->checkFullyExploredMap($event->citizen->getTown());
                     if ($upgraded_map) $selected->setZombieStatus( Zone::ZombieStateExact );
                     else $selected->setZombieStatus( max( $selected->getZombieStatus(), Zone::ZombieStateEstimate ) );
+
+                    $event->cache->altered_map_discovery = true;
                 }
                 break;
 
@@ -138,10 +139,10 @@ final class BeyondItemActionListener implements ServiceSubscriberInterface
                     $event->cache->addConsumedItem($event->item);
                     $event->cache->addTag($zone->getPrototype() ? 'flare_ok_ruin' : 'flare_ok');
                     $event->cache->setTargetZone($zone);
+                    $event->cache->altered_map_discovery = true;
                 } else {
                     $event->cache->addTag('flare_fail');
                 }
-                $this->getService(TownHandler::class)->checkFullyExploredMap($event->citizen->getTown());
                 break;
 
             // Trick or treat, motherfucker

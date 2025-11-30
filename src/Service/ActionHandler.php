@@ -368,7 +368,7 @@ class ActionHandler
      * @param bool $escort_mode
      * @return int
      */
-    public function execute( Citizen &$citizen, ?Item &$item, &$target, ItemAction $action, ?string &$message, ?array &$remove, bool $force = false, bool $escort_mode = false, ?Citizen $contextCitizen = null ): int {
+    public function execute( Citizen &$citizen, ?Item &$item, &$target, ItemAction $action, ?string &$message, ?array &$remove, bool $force = false, bool $escort_mode = false, ?Citizen $contextCitizen = null, ?bool &$map_updated = false ): int {
 
         $remove = [];
 
@@ -476,6 +476,8 @@ class ActionHandler
 
         if($cache->hasMessages())
             $message = implode('<hr />', $cache->getMessages( $this->translator, $this->wrapObjectsForOutputAction, $this->messageDecoder, ($contextCitizen ?? $citizen)->fullPropertySet()));
+
+        $map_updated = $cache->altered_map_discovery;
 
         return self::ErrorNone;
     }

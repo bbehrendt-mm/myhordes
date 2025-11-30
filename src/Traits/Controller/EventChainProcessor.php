@@ -23,6 +23,9 @@ trait EventChainProcessor
      * @param EntityManagerInterface $em
      * @param string|GameInteractionEvent $firstEvent
      * @param string|GameInteractionEvent|string[]|GameInteractionEvent[] $subsequentEvents
+     * @param bool $autoFlush
+     * @param array|null $error_messages
+     * @param GameInteractionEvent|null $lastEvent
      * @return int|null
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface

@@ -189,7 +189,7 @@ final readonly class BuildingConstructionListener implements ServiceSubscriberIn
                     ) );
                 }
 
-                $townHandler->checkFullyExploredMap($event->town);
+                $townHandler->checkFullyExploredMap($event->town, force: true);
                 break;
             case 'small_rocket_#00':
                 /** @var EntityManagerInterface $em */

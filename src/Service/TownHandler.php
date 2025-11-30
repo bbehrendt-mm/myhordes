@@ -759,11 +759,11 @@ class TownHandler
         return false;
     }
 
-    public function checkFullyExploredMap(Town $town, ?int $minDiscoveryStatus = Zone::DiscoveryStatePast): void
+    public function checkFullyExploredMap(Town $town, ?int $minDiscoveryStatus = Zone::DiscoveryStatePast, bool $force = false): bool
     {
-        if ($town->getFullyExploredAwarded() || $town->getType()->is(TownClass::EASY)) return;
+        if ($town->getFullyExploredAwarded() || $town->getType()->is(TownClass::EASY)) return false;
 
-        if ($town->getZones()->matching(
+        if (!$force && $town->getZones()->matching(
             new Criteria()
                 // Get zones where either...
                 ->where( Criteria::expr()->orX(
@@ -775,7 +775,7 @@ class TownHandler
                         Criteria::expr()->gt( 'buryCount', 0 ),
                     )
                 ) )
-        )->count() > 0) return;
+        )->count() > 0) return false;
 
         $pictoPrototype = $this->entity_manager->getRepository(PictoPrototype::class)->findOneBy(['name' => 'r_explot_#00' ]);
 
@@ -786,5 +786,7 @@ class TownHandler
 
         $town->setFullyExploredAwarded(true);
         $this->entity_manager->persist($town);
+
+        return true;
     }
 }

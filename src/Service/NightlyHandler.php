@@ -1501,8 +1501,6 @@ class NightlyHandler
             }
         }
 
-        $this->town_handler->checkFullyExploredMap($town);
-
         $this->log->debug("Recovered <info>{$reco_counter[0]}</info>/<info>{$reco_counter[1]}</info> zones." );
 
         if ($this->conf->getTownConfiguration($town)->is( TownSetting::OptFeatureShamanMode, ['normal','both'] )) {

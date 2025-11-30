@@ -285,8 +285,6 @@ class TownInspectorCommand extends Command
                 $zone->setZombieStatus( $zs );
             }
             $changes = true;
-            $this->townHandler->checkFullyExploredMap($town);
-            $this->entityManager->persist( $town );
         }
 
         if ($input->getOption('rebuild-explorables')) {
@@ -296,7 +294,7 @@ class TownInspectorCommand extends Command
                 $changes = true;
                 $this->mazeMaker->setTargetZone($zone);
                 $zone->setExplorableFloors($conf->get(TownSetting::ERuinSpaceFloors));
-                $this->mazeMaker->createField();  
+                $this->mazeMaker->createField();
                 $this->mazeMaker->generateCompleteMaze();
 
                 foreach ($zone->getExplorerStats() as $stat) {
@@ -371,6 +369,10 @@ class TownInspectorCommand extends Command
 
         if ($changes) {
             $output->write("<comment>Updating database</comment>... ");
+            $this->entityManager->flush();
+
+            $this->townHandler->checkFullyExploredMap($town);
+            $this->entityManager->persist( $town );
             $this->entityManager->flush();
             $output->writeln("<info>OK!</info>");
         }

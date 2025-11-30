@@ -37,6 +37,12 @@ class Execution extends Base
 
     private bool $escort_mode = false;
 
+    public bool $altered_map_discovery = false {
+        get => $this->altered_map_discovery;
+        set(bool $value) => $this->altered_map_discovery = $this->altered_map_discovery || $value;
+    }
+
+
     public function addPoints(PointType $type, int $value): void {
         $this->points[$type->value] = $this->getPoints($type) + $value;
     }
