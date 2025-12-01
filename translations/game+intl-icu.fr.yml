@@ -57,9 +57,9 @@ Stadttor: Grande Porte
 Karte: Carte
 'Bitte wähle einen Gegenstand:': 'Choisissez un objet :'
 'Du verfügst über keine geeigneten Gegenstände': 'Vous n’avez pas d’objet pour cette action.'
-Herstellen: Assembler
+Herstellen: Assembler 
 aus: Nécessite
-Kombinieren: Combiner
+Kombinieren: Combiner 
 'Du kannst von hier aus die Stadt verlassen und die Außenwelt erkunden. Vergiss aber nicht, um Mitternacht das Tor zu schließen!': 'Vous pouvez sortir de la ville et explorer l’Outre-Monde depuis ici. N’oubliez pas de garder la <strong>Grande Porte</strong> fermée lors de l’attaque à minuit !'
 'Du wurdest verbannt und kannst daher das Stadttor weder öffnen noch schließen.': 'Vous avez été banni et ne pouvez donc ni ouvrir ni fermer la porte de la ville.'
 'Meine Aktionen': 'Mes Actions'
@@ -3231,7 +3231,7 @@ Tierklinik: Centre d'essai
 'Als du gerade zugreifen willst, fällt dein Blick auf eine an der Wand aufgehängte krude Maske. Du erschreckst dich zu Tode und flüchtest, ohne etwas stehlen zu können!': 'Alors que vous vous apprêtiez à attraper quelque chose, votre regard tombe sur un masque grossier accroché au mur. Vous êtes mort(e) de peur et vous enfuyez sans rien voler !!'
 'Nichtsahnend bist du deinem Tagewerk nachgegangen, als sich plötzlich jemand von hinten an dich angeschlichen und mit einer furchterregenden Maske zu Tode erschreckt hast.': 'Vous vaquiez tranquillement à vos occupations quotidiennes quand soudain, quelqu''un s''est approché furtivement derrière vous et vous a surpris avec un masque vraiment effrayant !'
 'Du bist nun vor Angst erstarrt!': 'Vous êtes maintenant figé(e) de Terreur !'
-'Mehr Informationen über die Angststarre findest du in der {health_help}.': 'Vous trouverez plus d''informations à propos de l''état « Terrorisé(e) » dans l'' {health_help}'
+'Mehr Informationen über die Angststarre findest du in der {health_help}.': 'Vous trouverez plus d''informations à propos de l''état « Terrorisé(e) » dans l'' {health_help}.'
 '{attacker} hat sich von hinten an {defender} herangeschlichen und him einen üblen Schrecken eingejagt!': '{attacker} s''est approché furtivement de {defender} par derrière et lui a fait une peur bleue !'
 '{attacker} hat sich von hinten an {defender} herangeschlichen und vergeblich versucht, ihm einen Schrecken einzujagen.': '{attacker} s''est approché furtivement de {defender} par derrière et a tenté en vain de l''effrayer. '
 'Während du dich konzentrierst, spürst du für einen kurzen Moment die Aura eines deiner verstorbenen Mitbürger. Sie scheint von {location} zu kommen...': 'Alors que vous vous concentrez, vous sentez l''espace d''un bref instant l''aura de l''un de vos concitoyens décédés. Elle semble provenir de {location} ...'
@@ -3248,7 +3248,9 @@ Tierklinik: Centre d'essai
 'Im Rahmen einer intensiven Meditation ist es dir gelungen, die Seele eines Mitbürgers in der Außenwelt zu lokalisieren. Deinen Berechnungen zufolge sollte sie sich bei {x}/{y} befinden!': 'Après une méditation intense, vous avez réussi à localiser l''âme de l''un ou d''une de vos ancien(ne)s concitoyen(ne)s dans le désert. D''après vos calculs, cela devrait être en {x}/{y} !'
 'Durchgang in Kraft': 'Passage en Force'
 'Du hast keinen Platz für einen weiteren schweren Gegenstand!': 'Vous n''avez plus de place pour un autre objet encombrant !'
-'Verdächtige Scheune': 'Verdächtige Scheune'
-'Diese Scheune ist dir bisher völlig entgangen, weil sie mitten in der Wüste so uninteressant wirkte; aber die seltsamen, halb verwischten Zeichnungen in der Umgebung, die die Bürger vom Heißluftballon aus entdeckt hatten, überzeugten dich von ihrer Bedeutung... Bei näherer Betrachtung stellt sich heraus, dass die Scheune einer Gruppe von Überlebenden als Unterschlupf diente. Ihre verbliebenen Vorräte befinden sich noch immer darin – und wenn eines sicher ist: Sie werden sie nicht mehr brauchen.': 'Diese Scheune ist dir bisher völlig entgangen, weil sie mitten in der Wüste so uninteressant wirkte; aber die seltsamen, halb verwischten Zeichnungen in der Umgebung, die die Bürger vom Heißluftballon aus entdeckt hatten, überzeugten dich von ihrer Bedeutung... Bei näherer Betrachtung stellt sich heraus, dass die Scheune einer Gruppe von Überlebenden als Unterschlupf diente. Ihre verbliebenen Vorräte befinden sich noch immer darin – und wenn eines sicher ist: Sie werden sie nicht mehr brauchen.'
+'Verdächtige Scheune': 'Grange étrange'
+'Diese Scheune ist dir bisher völlig entgangen, weil sie mitten in der Wüste so uninteressant wirkte; aber die seltsamen, halb verwischten Zeichnungen in der Umgebung, die die Bürger vom Heißluftballon aus entdeckt hatten, überzeugten dich von ihrer Bedeutung... Bei näherer Betrachtung stellt sich heraus, dass die Scheune einer Gruppe von Überlebenden als Unterschlupf diente. Ihre verbliebenen Vorräte befinden sich noch immer darin – und wenn eines sicher ist: Sie werden sie nicht mehr brauchen.': "Cette grange vous avait complètement échappé, elle semblait sans intérêt au milieu du désert. Cependant, les étranges dessins à moitié effacés dans les environs, que vous avez découverts depuis la montgolfière, vous ont convaincu de son intérêt... En y regardant de plus près, vous constatez que la grange a servi d'abri à un groupe de survivants !\nLeurs provisions restantes se trouvent toujours à l'intérieur, mais une chose est sûre : ils n'en auront plus besoin."
 'An Bord des {building} hat sich {citizen} die Zeit genommen, das gesamte Gebiet zu untersuchen. Es wurden neue Gebäude entdeckt: {ruins}': 'À bord de la {building}, {citizen} a pris le temps d''étudier le secteur dans son intégralité. De nouveaux bâtiments ont été découverts : {ruins}'
-'Du magst stark sein, aber du bist kein mächtiger Chuck. Erleichtere dich deiner überzählichen Gegenstände, bevor du dich der Wache anschließt.': 'Du magst stark sein, aber du bist kein mächtiger Chuck. Erleichtere dich deiner überzählichen Gegenstände, bevor du dich der Wache anschließt.'
+'Du magst stark sein, aber du bist kein mächtiger Chuck. Erleichtere dich deiner überzählichen Gegenstände, bevor du dich der Wache anschließt.': 'Vous êtes peut-être fort(e), mais vous n''êtes pas Chuck Norris. Baissez votre bouclier ou allégez votre sac avant de rejoindre la veille.'
+'Vollständige Erkundung': 'Vollständige Erkundung'
+'Anzahl der Karten, die du vollständig aufgedeckt hast.': 'Anzahl der Karten, die du vollständig aufgedeckt hast.'

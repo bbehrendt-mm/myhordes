@@ -1078,7 +1078,7 @@ Flagge: Flag
 Füttern: Feed
 'Du gibst deinem {tamer_dog} {items_consume}, das er gierig hinunterschlingt.{hr}Es vergeht keine Minute bis diese Belohnung Wirkung zeigt: Dein Fifi hat nun leuchtende Augen, ein glänzendes Fell und einen wedelnden Schwanz.': 'You give a {items_consume} to {tamer_dog}, which he greedily gobbles down.{hr}Not a minute passes before this reward takes effect: Your dog now has shining eyes, a shiny coat and a wagging tail.'
 'Gut gefüttertes Malteser Hündchen': 'Well fed Labradoodle'
-Fußball: Soccer ball
+Fußball: Football
 'Nun, da du dein Hündchen mit einem Leckerli ausreichend gestärkt hast, kann es selbst schwere und sperrige Gegenstände schleppen. Dir fällt auf, dass es ohne Ende sabbert. Es sieht aus, als würde es dich jeden Augenblick anspringen.': 'Now that you’ve given your Labradoodle a tasty treat to boost his strength, he can carry even the heaviest and bulkiest objects. You can’t help but notice the incessant drooling, and he seems poised to jump at you at any moment...'
 'Für den kleinen Kick zwischendurch.': 'For a little kick in between.'
 'Nichts entgeht deinem geschulten Blick! All die gesammelten Informationen werden dir morgen helfen, die geschickt und mit maximaler Effizienz durch die Außenwelt zu bewegen.': 'Nothing escapes your trained eye! All the information you have gathered will help you move through the World Beyond skilfully and with maximum efficiency tomorrow.'
@@ -1088,7 +1088,7 @@ Fußball: Soccer ball
 'Du jonglierst mit dem Ball, aber leider fliegt er immer wieder in alle Richtungen. Das frustriert dich, daher gibst du den Gedanken auf, weiter mit dem Ball zu spielen.': 'You juggle with the ball, but unfortunately it keeps flying in all directions at each try. This annoys you, and you give up the idea of playing with it.'
 'Du jonglierst mit dem Ball und schaffst es sehr gut, den Ball in der Luft zu halten. Man könnte dich fast für einen professionellen Fußballspieler halten!<hr />Du hattest viel Spaß und erhältst <strong>1 Aktionspunkt</strong>.': 'You juggle with the ball and manage rebounds very well, you could almost be mistaken for a professional player!<hr />You’ve had a lot of fun and received <strong>1 Action Point</strong>.'
 'Du jonglieren mit dem Ball, aber beim ersten Aufprall fliegt er direkt auf einen spitzen Gegenstand. Als du dich dem Ball näherst, hörst du ein Pfeifen der Luft und stellst mit Enttäuschung fest, <strong>dass er nun durchstochen ist</strong>!': 'You start juggling the ball, but on the very first kick it shoots straight into a sharp object. As you approach, a faint whistling escapes, and you realize with disappointment that <strong>the ball has burst!</strong>'
-'Geplatzter Fußball': 'Burst Soccer ball'
+'Geplatzter Fußball': 'Burst Football'
 'Ein Ball, mit dem wir einiges an Spaß haben könnten. Wenn er nur nicht schon geplatzt wäre...': 'A ball to have fun with, if only it wasn''t burst...'
 'Du trinkst die Flasche aus; es schmeckt sehr süß und hat ein leichtes Granatapfel-Armoa. Du fühlst dich für den Moment erfrischt.<br />Du erhälst <strong>Erkundungspunkte</strong> !': 'You drink the bottle, it tastes sweet with an overwhelming pomegranate aroma. You are now refreshed, and you feel very good at the moment.<br />You obtain <strong>Exploration Points</strong> !'
 'Nach wenigen Sekunden bereust du, aus dieser Flasche getrunken zu haben. Das Zeug ist viel zu süß, du bist jetzt <strong>durstig</strong>!': 'However, after a few seconds you regret your decision. The drink is way too sweet, you are now <strong>thirsty</strong>!'
@@ -1168,10 +1168,10 @@ Besinnen: Reflect
 'Zone ausheben': 'Excavate zone'
 'Du hast diese Zone erfolgreich ausgehoben und zahlreiche neue Buddelmöglichkeiten entdeckt.': 'You have successfully excavated this area and discovered numerous new digging opportunities.'
 'Es schmeckt wirklich komisch... aber wenigstens ist dein Hunger ein wenig gestillt. Glaub aber nicht, dass du dadurch zusätzliche APs erhältst...': 'This has a truly bizarre taste, it''s difficult to define. At least it does the job: fills your stomach partially. On the other hand, it doesn''t give you any extra energy...'
-'Du tötest 1 Zombie in der Zone zu töten und erhältst du die Kontrolle über die Zone für 5 Minuten.': 'You kill a zombie in a given zone and gain control of the zone for 5 minutes.'
 'Es sieht wirklich nicht so aus, als würdest du hier noch neue Buddelmöglichkeiten finden können...': 'It really doesn''t look like you''ll be able to find any new digging spots here...'
 'Nach neuen Buddelmöglichkeiten zu suchen macht nur Sinn, wenn es keine offensichtlichen Buddelmöglichkeiten mehr gibt.': 'Looking for new digging opportunities only makes sense if there are no obvious digging opportunities left.'
 Senken: Lower
 'Du senkst deinen Schild. Zwar kannst du dich jetzt nicht mehr so gut verteidigen, dafür kannst du aber einen weiteren, schweren Gegenstand mit dir führen.': 'You lower your shield. Although you can no longer defend yourself as well, you can now carry another heavy item with you.'
 'Schutzschild (abgelegt)': 'Riot Shield (lowered)'
 'Ein großer Schutzschild. Wenn du ihn vor dich halten würdest, könntest du damit 2 zusätzliche Zombies auf Distanz zu halten. Aktuell fungiert er nur als kleidsames Accessoire.': 'It''s big and it''s zombie-proof. Or it would be, if you didn''t lower it. Normally, it allows you to face 2 additional zombies in the desert. Currently, it serves only as a stylish accessory.'
+'Du tötest 1 Zombie in der Zone und erhältst du die Kontrolle über die Zone für 5 Minuten.': 'You kill a zombie in a given zone and gain control of the zone for 5 minutes.'

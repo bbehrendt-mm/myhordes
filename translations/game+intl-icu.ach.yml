@@ -3252,3 +3252,5 @@ Tierklinik: crwdns225726:0crwdne225726:0
 'Diese Scheune ist dir bisher völlig entgangen, weil sie mitten in der Wüste so uninteressant wirkte; aber die seltsamen, halb verwischten Zeichnungen in der Umgebung, die die Bürger vom Heißluftballon aus entdeckt hatten, überzeugten dich von ihrer Bedeutung... Bei näherer Betrachtung stellt sich heraus, dass die Scheune einer Gruppe von Überlebenden als Unterschlupf diente. Ihre verbliebenen Vorräte befinden sich noch immer darin – und wenn eines sicher ist: Sie werden sie nicht mehr brauchen.': 'crwdns252628:0crwdne252628:0'
 'An Bord des {building} hat sich {citizen} die Zeit genommen, das gesamte Gebiet zu untersuchen. Es wurden neue Gebäude entdeckt: {ruins}': 'crwdns252630:0{building}crwdnd252630:0{citizen}crwdnd252630:0{ruins}crwdne252630:0'
 'Du magst stark sein, aber du bist kein mächtiger Chuck. Erleichtere dich deiner überzählichen Gegenstände, bevor du dich der Wache anschließt.': 'crwdns252632:0crwdne252632:0'
+'Vollständige Erkundung': 'crwdns252634:0crwdne252634:0'
+'Anzahl der Karten, die du vollständig aufgedeckt hast.': 'crwdns252636:0crwdne252636:0'
