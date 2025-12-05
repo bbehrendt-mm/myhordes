@@ -78,5 +78,6 @@ export type TranslationStrings = {
         help_img: string,
         answer_img: string,
         info_img: string,
+        send_img: string,
     }
 }

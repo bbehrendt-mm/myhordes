@@ -177,8 +177,11 @@
                             {% if app.user|restricted(constant('App\\Entity\\AccountRestriction::RestrictionForum')) or not permission.create_thread() %}
                                 <div class="forum-button-disabled" id="banned">{{ 'Neues Thema'|trans({},'global') }}</div>
                             {% else %}
-                                <div x-forum-action="new" class="forum-button" id="new-thread-button"><span>{{ 'Neues Thema'|trans({},'global') }}</span></div>
-                            {% endif %}    
+                                <div x-forum-action="new" class="forum-button" id="new-thread-button">
+                                    <img alt="" src="{{ asset('build/images/forum/edit.png') }}" />
+                                    <div class="tooltip forum-tooltip">{{ 'Neues Thema'|trans({},'global') }}</div>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
                     {% if forum.description is not empty %}
