@@ -80,6 +80,7 @@ class AdminActionController extends CustomAbstractController
             ['name' => T::__('Kampagnen', 'admin'),  'route' => 'admin_campaigns'],
             ['name' => T::__('Zukunft', 'admin'),    'route' => 'admin_changelogs'],
             ['name' => T::__('Kurztexte', 'admin'),  'route' => 'admin_reports_snippets'],
+            ['name' => T::__('Art', 'admin'),        'route' => 'art_dashboard'],
         ];
     }
 

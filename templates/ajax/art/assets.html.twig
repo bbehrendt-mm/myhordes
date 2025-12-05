@@ -1,0 +1,59 @@
+{% extends "ajax/ajax.html.twig" %}
+
+{% block title %}
+    {% trans from 'art' %}Assets{% endtrans %}
+{% endblock %}
+
+{% block ajax %}
+    <div class="row">
+        <div class="cell padded header rw-12">
+            <h4>
+                {% trans from 'art' %}Assets verfügbar{% endtrans %}
+                ({{ assets|reduce((c, files) => c + files|length, 0) }})
+            </h4>
+            <p class="justify">
+                {% trans with {'path': 'assets/img/'} from 'art' %}Übersicht der Dateien unter {path}, gruppiert nach Ordnern. Klappe einen Ordner auf, um die Vorschaubilder zu sehen.{% endtrans %}
+            </p>
+        </div>
+    </div>
+
+    {% if assets is empty %}
+        <div class="row">
+            <div class="cell padded rw-12">
+                <p>{% trans from 'art' %}Keine Assets gefunden.{% endtrans %}</p>
+            </div>
+        </div>
+    {% endif %}
+
+    {% for folder, files in assets %}
+        <div class="row">
+            <div class="cell padded rw-12">
+                <details>
+                    <summary><strong>{{ folder }}</strong> ({{ files|length }})</summary>
+                    <div class="art-grid">
+                        {% for file in files %}
+                            {% set rel = folder ~ '/' ~ file %}
+                            <div class="art-grid__item">
+                                <div class="card art-card">
+                                    <div class="card__body art-card__body">
+                                        <div class="art-asset__preview">
+                                            <a href="{{ path('art_asset_file', {'p': rel}) }}" target="_blank" rel="noopener">
+                                                <img src="{{ path('art_asset_file', {'p': rel}) }}"
+                                                     alt="{{ rel }}"
+                                                     loading="lazy"
+                                                     class="art-asset__img" />
+                                            </a>
+                                        </div>
+                                        <div class="art-asset__meta">
+                                            <small>{{ rel }}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </details>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}

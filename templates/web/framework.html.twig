@@ -77,11 +77,16 @@
 <div id="wrapper">
     <div id="header">
         <div id="header-reload-area"></div>
-        <div id="postbox" {{ {'hidden': true, 'show-larger': app.user and app.user.setting( constant("\\App\\Enum\\UserSetting::LargerPMIcon") )}|classes }}>
+        <div id="postbox" {{ {'hidden': true, 'show-larger': app.user and app.user.setting( constant("\\App\\Enum\\UserSetting::LargerPMIcon") ), 'header-icon': true, 'mail': true }|classes }}>
             <div><img src="{{ asset('build/images/icons/small_mail.gif') }}" alt=""></div>
             <div><img src="{{ asset('build/images/icons/anim_icon_mail.gif') }}" alt=""></div>
             <div id="postbox-new-msg-counter">0</div>
         </div>
+        {% if is_granted('ROLE_ART') or is_granted('ROLE_ADMIN') %}
+            <div id="art-dashboard" class="header-icon art" x-ajax-href="{{ path('art_dashboard') }}" title="{% trans from 'art' %}Good Taste Dashboard{% endtrans %}">
+                <img src="{{ asset('build/images/icons/deco.gif') }}" alt="{% trans from 'art' %}Good Taste Dashboard{% endtrans %}">
+            </div>
+        {% endif %}
         {% block header %}{% endblock %}
     </div>
 
@@ -187,6 +192,12 @@
                 }
             });
             $.html.forEach('#postbox', e => e.dataset.handled = "1");
+
+            $.html.addEventListenerAll('#art-dashboard:not([data-handled])','click', function(e) {
+                e.preventDefault();
+                $.ajax.load(null, '{{ path('art_dashboard')|e('js') }}', true);
+            });
+            $.html.forEach('#art-dashboard', e => e.dataset.handled = "1");
 
             {% if theme is defined and theme.themeName == 'arma' %}
                 const y = (new Date()).getFullYear();
