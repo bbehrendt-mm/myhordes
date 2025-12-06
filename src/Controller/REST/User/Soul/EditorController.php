@@ -122,6 +122,7 @@ class EditorController extends CustomAbstractCoreController
                     'help_img' => $assets->getUrl('build/images/icons/small_help.gif'),
                     'answer_img' => $assets->getUrl('build/images/forum/selected.png'),
                     'info_img' => $assets->getUrl('build/images/icons/small_talk.gif'),
+                    'send_img' => $assets->getUrl('build/images/forum/done.png'),
                 ]
             ],
         ]);
