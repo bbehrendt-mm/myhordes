@@ -589,11 +589,6 @@ dialog {
       &#modeCommand { top: 10px; z-index: 997; }
       &#pivotSwapCommand { top: 38px; z-index: 996; }
 
-      &:hover {
-        width: 150px;
-        height: auto;
-      }
-
       & h1 {
         margin: 0;
         font-size: 7pt;
@@ -614,7 +609,10 @@ dialog {
         display: none;
       }
 
-      &:hover {
+      &:not(.static):hover {
+        width: 150px;
+        height: auto;
+
         & h1 {
           border-bottom: 1px solid #b37c4a;
           margin-bottom: 5px;

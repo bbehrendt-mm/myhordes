@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use SplFileInfo;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -57,43 +58,20 @@ class ArtController extends CustomAbstractController
             ->in($basePath)
             ->ignoreDotFiles(true)
             ->ignoreVCS(true)
-            ->filter(fn(\SplFileInfo $f) => in_array(strtolower($f->getExtension()), ['png','jpg','jpeg','gif','svg','webp']))
+            ->filter(fn(SplFileInfo $f) => in_array(strtolower($f->getExtension()), ['png','jpg','jpeg','gif','svg','webp']))
             ->sortByName(true);
 
         $assets = [];
         foreach ($finder as $file) {
-            $relative = ltrim(str_replace($basePath, '', $file->getRealPath()), DIRECTORY_SEPARATOR);
-            $parts = explode(DIRECTORY_SEPARATOR, $relative);
-            $top = array_shift($parts);
-            $rest = implode('/', $parts);
-            $assets[$top][] = $rest === '' ? $top : $rest;
+
+            $relative = $file->getRelativePath();
+            $top = explode(DIRECTORY_SEPARATOR, $relative)[0] ?: '[ root ]';
+
+            $assets[$top][] = $relative ? "$relative/{$file->getFilename()}": $file->getFilename();
         }
 
         return $this->render('ajax/art/assets.html.twig', $this->addDefaultTwigArgs(null, [
             'assets' => $assets,
         ]));
-    }
-
-    #[Route(path: 'jx/art/asset', name: 'art_asset_file')]
-    public function assetFile(Request $request): Response
-    {
-        if ($resp = $this->denyUnlessArt()) {
-            return $resp;
-        }
-
-        $path = $request->query->get('p', '');
-        if ($path === '' || str_contains($path, '..')) {
-            throw new FileNotFoundException($path);
-        }
-
-        $projectDir = $this->getParameter('kernel.project_dir');
-        $fullPath = realpath("{$projectDir}/assets/img/{$path}");
-        $basePath = realpath("{$projectDir}/assets/img");
-
-        if (!$fullPath || !$basePath || !str_starts_with($fullPath, $basePath) || !is_file($fullPath)) {
-            throw new FileNotFoundException($path);
-        }
-
-        return new BinaryFileResponse($fullPath);
     }
 }

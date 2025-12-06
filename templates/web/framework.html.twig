@@ -82,11 +82,6 @@
             <div><img src="{{ asset('build/images/icons/anim_icon_mail.gif') }}" alt=""></div>
             <div id="postbox-new-msg-counter">0</div>
         </div>
-        {% if is_granted('ROLE_ART') or is_granted('ROLE_ADMIN') %}
-            <div id="art-dashboard" class="header-icon art" x-ajax-href="{{ path('art_dashboard') }}" title="{% trans from 'art' %}Good Taste Dashboard{% endtrans %}">
-                <img src="{{ asset('build/images/icons/deco.gif') }}" alt="{% trans from 'art' %}Good Taste Dashboard{% endtrans %}">
-            </div>
-        {% endif %}
         {% block header %}{% endblock %}
     </div>
 

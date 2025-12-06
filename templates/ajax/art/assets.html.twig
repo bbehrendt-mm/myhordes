@@ -32,20 +32,19 @@
                     <summary><strong>{{ folder }}</strong> ({{ files|length }})</summary>
                     <div class="art-grid">
                         {% for file in files %}
-                            {% set rel = folder ~ '/' ~ file %}
                             <div class="art-grid__item">
                                 <div class="card art-card">
                                     <div class="card__body art-card__body">
                                         <div class="art-asset__preview">
-                                            <a href="{{ path('art_asset_file', {'p': rel}) }}" target="_blank" rel="noopener">
-                                                <img src="{{ path('art_asset_file', {'p': rel}) }}"
-                                                     alt="{{ rel }}"
+                                            <a href="{{ asset('build/images/' ~ file) }}" target="_blank" rel="noopener">
+                                                <img src="{{ asset('build/images/' ~ file) }}"
+                                                     alt="{{ file }}"
                                                      loading="lazy"
                                                      class="art-asset__img" />
                                             </a>
                                         </div>
                                         <div class="art-asset__meta">
-                                            <small>{{ rel }}</small>
+                                            <a class="small" title="Download" href="{{ asset('build/images/' ~ file) }}" download="{{ file|split('/')|last }}">{{ file }}</a>
                                         </div>
                                     </div>
                                 </div>
