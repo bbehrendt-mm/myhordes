@@ -12,6 +12,7 @@
 @import (once) "modules/soul";
 @import (once) "modules/rp";
 @import (once) "modules/admin";
+@import (once) "modules/art";
 @import (once) "modules/help";
 @import (once) "modules/docs";
 @import (once) "modules/events";
@@ -480,9 +481,12 @@ dialog {
       border: 1px solid #f0d79e;
       z-index: 998;
       max-width: calc(100% - 20px);
+      width: 24px;
+      height: 25px;
 
       &:hover {
         width: 430px;
+        height: auto;
       }
 
       & h1 {
@@ -501,7 +505,9 @@ dialog {
         letter-spacing: 1px;
 
         img {
-          vertical-align: -9%;
+          position: absolute;
+          top: 3px;
+          left: 3px;
         }
       }
 
@@ -513,6 +519,7 @@ dialog {
       &:hover h1 {
         border-bottom: 1px solid #b37c4a;
         margin-bottom: 5px;
+        padding: 4px 0 2px 0px;
 
         img {
           margin-right: 1em;
@@ -520,6 +527,7 @@ dialog {
 
         span {
           display: inline;
+          padding-left: 20px;
         }
       }
 
@@ -566,71 +574,90 @@ dialog {
     & #modeCommand, & #pivotSwapCommand {
       position: absolute;
 
-      margin-left: 60px;
+      left: 45px;
       font-size: 8pt;
       line-height: 10pt;
-      width: 110px;
-
+      width: 24px;
+      height: 25px;
+      padding-left: 5px;
+      padding-right: 5px;
+      cursor: pointer;
+      outline: 1px solid black;
+      border: 1px solid #f0d79e;
+      background-color: #5c2b20;
 
       &#modeCommand { top: 10px; z-index: 997; }
       &#pivotSwapCommand { top: 38px; z-index: 996; }
 
       & h1 {
         margin: 0;
-        padding: 0 0 0 5px;
         font-size: 7pt;
         line-height: 8pt;
         text-transform: uppercase;
         letter-spacing: 0;
-        background-color: #5c2b20;
         color: #f0d79e;
-        cursor: pointer;
-        outline: 1px solid black;
-        border: 1px solid #f0d79e;
+
+        img {
+          position: absolute;
+          top: 3px;
+          left: 3px;
+        }
       }
 
+      & h1 span,
       & #scrollMenu {
         display: none;
       }
 
-      &:hover #scrollMenu {
-        display: block;
-        position: relative;
-        width: 110px;
-        top:-7px;
-        background-color: #3b3249;
+      &:not(.static):hover {
+        width: 150px;
+        height: auto;
 
-        & ul {
-          margin: 0;
-          padding: 0;
-          float: left;
+        & h1 {
+          border-bottom: 1px solid #b37c4a;
+          margin-bottom: 5px;
+          padding: 7px 0 5px 0px;
+
+          span {
+            display: inline;
+            padding-left: 20px;
+          }
+        }
+
+        & #scrollMenu {
+          display: block;
           position: relative;
-          top:8px;
-          margin-bottom: 8px;
-          width: 110px;
-          list-style: none;
+          top:-7px;
           background-color: #3b3249;
+          height: auto;
 
-          & li {
-            margin: 0 0 .5em;
-            padding: 3px 6px;
-            font-size: 1.3rem;
-            color: #ddab76;
-            cursor: pointer;
+          & ul {
+            margin: 0;
+            padding: 0;
+            float: left;
+            position: relative;
+            top:8px;
+            margin-bottom: 8px;
+            list-style: none;
 
-            img {
-              vertical-align: middle;
-              margin-right: 1em;
-            }
-            span {
-              font-weight: normal;
+            & li {
+              font-size: 1.3rem;
+              color: #ddab76;
+              cursor: pointer;
+
+              a {
+                text-decoration: none;
+              }
+              img {
+                vertical-align: middle;
+              }
+              span {
+                font-weight: normal;
+              }
             }
           }
-
-
         }
       }
-
     }
   }
 
@@ -831,7 +858,7 @@ div.note {
       line-height: 1.2;
     }
   }
-  
+
   &.note-light {
     background-color: #5c2b20;
   }
@@ -1731,7 +1758,7 @@ span.defense-broken,div.defense-broken { .icon_div("../img/icons/small_def_broke
     &::after {display: block; height: 0;}
   }
 
-  h4.soul-name { 
+  h4.soul-name {
     margin: 8px 4px; display: inline-block;
     }
 
@@ -2257,8 +2284,7 @@ i.dagger {
   }
 }
 
-#postbox {
-  position: absolute; right: 10px; top: 100px; font-size: 10px;
+.header-icon {
   background-color: rgba(62, 36, 23, .75); border-radius: 6px; padding: 3px 5px;
   color: @myhordes-smalltext; transition: background-color 0.5s ease-in-out;
   cursor: pointer; z-index: 995;
@@ -2283,6 +2309,14 @@ i.dagger {
   &.show-larger {
     img { height: 24px; }
   }
+}
+
+.header-icon.mail {
+  position: absolute; right: 10px; top: 100px; font-size: 10px;
+}
+
+.header-icon.art {
+  position: absolute; right: 40px; top: 100px; font-size: 10px;
 }
 
 .mt-1 {

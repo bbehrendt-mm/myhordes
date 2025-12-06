@@ -71,6 +71,7 @@ class AdminActionController extends CustomAbstractController
             ['name' => T::__('Gruppen', 'admin'),     'route' => 'admin_group_view'],
             ['name' => T::__('Dateisystem', 'admin'), 'route' => 'admin_file_system_dash'],
             ['name' => T::__('Angriffsplan', 'admin'),'route' => 'admin_schedule_attacks'],
+            ['name' => T::__('Art', 'admin'),         'route' => 'art_dashboard'],
         ];
     }
 
@@ -80,6 +81,7 @@ class AdminActionController extends CustomAbstractController
             ['name' => T::__('Kampagnen', 'admin'),  'route' => 'admin_campaigns'],
             ['name' => T::__('Zukunft', 'admin'),    'route' => 'admin_changelogs'],
             ['name' => T::__('Kurztexte', 'admin'),  'route' => 'admin_reports_snippets'],
+            ['name' => T::__('Art', 'admin'),        'route' => 'art_dashboard'],
         ];
     }
 
