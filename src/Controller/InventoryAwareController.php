@@ -148,7 +148,7 @@ class InventoryAwareController extends CustomAbstractController
             $activeCitizen->addHelpNotification($this->doctrineCache->getEntityByIdentifier(HelpNotificationMarker::class, 'stranger'));
             $this->entity_manager->persist($activeCitizen);
             $this->entity_manager->flush();
-        } else if ($activeCitizen->hasStatus('tg_was_scared') && $activeCitizen->hasStatus('terror') && !$activeCitizen->hasSeenHelpNotification('scared_mask') ) {
+        } else if ($activeCitizen->hasStatus('tg_msk_scared') && $activeCitizen->hasStatus('terror') && !$activeCitizen->hasSeenHelpNotification('scared_mask') ) {
             $this->addFlash('popup-ghoul', $this->renderView('ajax/game/notifications/scared_mask.html.twig', []));
             $activeCitizen->addHelpNotification( $this->doctrineCache->getEntityByIdentifier(HelpNotificationMarker::class, 'scared_mask') );
             $this->entity_manager->persist($activeCitizen);
