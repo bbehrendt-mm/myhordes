@@ -141,7 +141,8 @@ class ItemDataService implements FixtureProcessorInterface {
 		$container->add()->label('Explosive Pampelmuse')->icon('boomfruit')->category('Weapon')->deco(0)->heavy(false)->watchpoint(12)->fragile(true)->isEmote(true)->commit();
 		$container->add()->label('Pfahlwerfer')->icon('rlaunc')->category('Weapon')->deco(0)->heavy(true)->watchpoint(30)->commit();
 		$container->add()->label('Kalaschni-Splash')->icon('kalach')->category('Weapon')->deco(0)->heavy(true)->watchpoint(24)->commit();
-		$container->add()->label('Kalaschni-Splash (leer)')->icon('kalach_0')->category('Weapon')->deco(0)->heavy(false)->watchpoint(0)->commit();
+		$container->add()->label('Kalaschni-Splash (leer)')->icon('kalach')->category('Weapon')->deco(0)->heavy(false)->watchpoint(0)->commit();
+		$container->modify('kalach_#01')->icon('kalach_0')->commit();
 		$container->add()->label('Tretmine')->icon('claymo')->category('Weapon')->deco(0)->heavy(false)->watchpoint(40)->commit();
 		$container->add()->label('Einkaufswagen')->icon('cart')->category('Box')->deco(0)->heavy(true)->watchpoint(15)->sort(2)->commit();
 		$container->add()->label('Extra Tasche')->icon('bag')->category('Box')->deco(0)->heavy(false)->watchpoint(0)->sort(2)->commit();
