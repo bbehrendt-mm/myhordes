@@ -919,7 +919,7 @@ class NightlyHandler
             // Panda towns sees their defense object in the bank destroyed
 			// REVAMPED FROM: https://github.com/motion-twin/WebGamesArchives/blob/main/Hordes/src/HordeAttack.hx#L226
 			$zombiesOnDef = max($est->getZombies() - $def_summary->building_defense, 0);
-			$number = min(floor($zombiesOnDef / $this->conf->getTownConfiguration($town)->get(TownSetting::OptModifierDoDestroy)), $this->conf->getTownConfiguration($town)->get(TownSetting::OptModifierDoDestroyMax));
+			$number = min(floor($zombiesOnDef / $this->conf->getTownConfiguration($town)->get(TownSetting::OptModifierDoDestroyRatio)), $this->conf->getTownConfiguration($town)->get(TownSetting::OptModifierDoDestroyMax));
 
 			$this->log->info("There are <info>$zombiesOnDef</info> zombies attacking the bank (with a ratio of {$this->conf->getTownConfiguration($town)->get(TownSetting::OptModifierDoDestroyRatio)})");
 			if ($number > 0) {
