@@ -1909,7 +1909,7 @@ Weihnachten: Navidad
 'Du kannst versuchen, diesen Bürger zu heilen, aber nichts ist garantiert... und hüte dich vor Nebenwirkungen!': "Puedes intentar curar a este habitante, no te aseguramos nada.. ¡pero ten cuidado con los efectos secundarios!"
 'Du hast nichts, womit du {poison} kombinieren kannst. Du benötigst einen der folgenden Gegenstände:<br />{list_head} oder {list_tail}.': 'No puedes combinar {poison} con esto. Puedes hacerlo con uno de estos objetos:<br />{list_head} o {list_tail}.'
 'Du kannst keine Gegenstände verstecken, solange jemand zuschaut ...': 'No puedes ocultar objetos mientras alguien está mirando...'
-'Du hast keine Gegenstände, die du verstecken könntest.': 'No tienes elementos que esconder.'
+'Du hast keine Gegenstände, die du verstecken könntest.': 'Por ahora, no necesitas hacer esto.'
 'Wähle einen Gegenstand aus der Bank aus...': 'Selecciona el objeto que deseas robar del Almacén...'
 'Aufklärer: Ruinen erkunden': 'Explorador: Examinar ruinas'
 'Mit dieser Aktion kannst du ermitteln, welches Gebäude hier vergraben ist.': 'Esta acción te permite determinar el tipo de construcción enterrada aquí.'
