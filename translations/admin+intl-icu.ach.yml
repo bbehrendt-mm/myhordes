@@ -671,3 +671,34 @@ Erstellt: crwdns205332:0crwdne205332:0
 Veraltet!: crwdns205370:0crwdne205370:0
 Klicks: crwdns205374:0crwdne205374:0
 '{number} Auszeichnungen konnten nicht entfernt werden. Möglicherweise sind sie dem Spieler über Städte zugewiesen. In diesem Fall müssen sie über die Städteverwaltung entfernt werden.': 'crwdns205378:0{number}crwdne205378:0'
+'Eingehende Nachrichten als Tickets behandeln': 'crwdns205392:0crwdne205392:0'
+'Ist diese Option aktiviert, so wird eine eingehende Konversation für alle Gruppenmitglieder als "Gelesen" markiert, sobald ein Gruppenmitglied antwortet.': 'crwdns205394:0crwdne205394:0'
+SP: crwdns205920:0crwdne205920:0
+'Es wurden {n} Posts gelöscht.': 'crwdns205554:0{n}crwdne205554:0'
+'Weitere Aktionen': 'crwdns205556:0crwdne205556:0'
+'Bekannte IP-Adressen': 'crwdns205558:0crwdne205558:0'
+'{n} (davon {n2} bereits blockiert)': 'crwdns205560:0{n}crwdnd205560:0{n2}crwdne205560:0'
+Foren-Posts: crwdns205562:0crwdne205562:0
+'{n} (davon {n2} gelöscht)': 'crwdns205564:0{n}crwdnd205564:0{n2}crwdne205564:0'
+Heldenerfahrung: crwdns205922:0crwdne205922:0
+Zurücksetzen: crwdns205924:0crwdne205924:0
+Künstler: 'crwdns211674:0crwdne211674:0'
+'Anzahl der gelisteten Namen: {number}': 'crwdns206812:0{number}crwdne206812:0'
+Namen-Suche: crwdns206814:0crwdne206814:0
+'Namen hinzufügen': 'crwdns206816:0crwdne206816:0'
+'Namen können als glob-Muster eingegeben werden. Beispielsweise würde *test* alle Namen verhindern, in denen "test" vorkommt. Für eine Übersicht über glob-Syntax, siehe folgenden Link:': 'crwdns206818:0crwdne206818:0'
+'Gesperrte Namen': 'crwdns206820:0crwdne206820:0'
+'Es existiert bereits ein Changelog für diese Version in der angegebenen Sprache.': 'crwdns210442:0crwdne210442:0'
+'Temporär für Neuregistrierungen sperren': 'crwdns211737:0crwdne211737:0'
+'Alle Posts löschen': 'crwdns211739:0crwdne211739:0'
+'Ressourcen- und AP-Vorlage, welches für diese Konstruktion benötigt wird.': 'crwdns211910:0crwdne211910:0'
+Teuer: crwdns211912:0crwdne211912:0
+Normal: crwdns211914:0crwdne211914:0
+Billig: crwdns211916:0crwdne211916:0
+Billig+: crwdns211918:0crwdne211918:0
+'Gewählte Gebäude freischalten': 'crwdns213172:0crwdne213172:0'
+'Gesamten Gebäudebaum zurücksetzen': 'crwdns213174:0crwdne213174:0'
+'Klicken, um Baustelle in die Liste der zu entsperrenden Baustellen aufzunehmen.': 'crwdns213176:0crwdne213176:0'
+'Klicken, um Baustelle sofort zu entsperren.': 'crwdns213178:0crwdne213178:0'
+Notizen: crwdns252620:0crwdne252620:0
+'Notiz hinzufügen': 'crwdns252622:0crwdne252622:0'
