@@ -26,7 +26,7 @@ verlassen: 'left'
 'Du kannst die Stadt von hier aus nicht betreten.': 'You cannot enter the town.'
 'Du kannst diese Zone von hier aus nicht betreten.': 'You cannot enter in this zone from here.'
 'Zombies blockieren deine Zone!': 'We are suffering an excess of zombies!'
-'Diese Aktion kann nur in Zonen ausgeführt werden, die von Zombies kontrolliert werden.': 'This actions can be done only when the zone is under control.'
+'Diese Aktion kann nur in Zonen ausgeführt werden, die von Zombies kontrolliert werden.': 'These actions can only be done when the zone is under control.'
 'Du kannst nicht angreifen wenn du bereits verwundet bist.': 'You cannot attack if you are injured.'
 'Du kannst auf dieser Zone nicht graben.': 'You cannot search this zone.'
 'Deine Nachricht muss zwischen 2 und 256 Zeichen haben.': 'The length of your message must be between 2 and 256 characters.'
@@ -150,7 +150,7 @@ Anzahl: Stock
 Werkstatt-Register: Workshop
 'Hier findest du alle Gegenstände, die gegenwärtig in der Bank aufbewahrt werden. Bei diesen Gegenständen handelt es sich um Spenden der Bürger. Sie sind im Wesentlichen dazu da, Gemeinschaftsgebäude zu bauen und die Stadt gegen die allnächtlichen Zombieattacken zu verteidigen.': 'This is a complete list of everything currently stored in the Bank. These objects are the fruit of the citizens'' hard work. These objects are mainly used for the construction of community buildings and to defend the town during the attack of the zombie horde.'
 Bankregister: Bank
-"Die Stadt hat Sklaverei legalisiert. Ab sofort kannst du trotz deiner Verbannung auf einer Baustelle\n                    arbeiten und erhälst sogar einen Bonus von 50% auf alle investierten <div class=\"ap\"></div>.": "The Town has legalized Slavery. From now on you can go to a construction site despite your banishment to\n        \\twork and even get a 50% bonus on everyone invested <div class=\"ap\"></div>."
+"Die Stadt hat Sklaverei legalisiert. Ab sofort kannst du trotz deiner Verbannung auf einer Baustelle\n                    arbeiten und erhälst sogar einen Bonus von 50% auf alle investierten <div class=\"ap\"></div>.": 'The town has legalized slavery. From now on, you can work on construction sites despite being shunned, and even get a 50% bonus on every invested <div class="ap"></div>.'
 'Du wurdest verbannt und kannst daher nicht länger auf einer Baustelle arbeiten.': 'You have been shunned and can therefore no longer work on a construction site.'
 Baustellenregister: Constructions
 '{rations} Rationen Wasser übrig': '{rations} water rations remaining'
@@ -207,7 +207,7 @@ Verbannt: Shunned
 'Deine Stadt hat entschieden, dich zu verbannen. Einige Aktionen stehen dir nicht länger zur Verfügung.': 'Citizens decided to shun you from the community. Some actions aren''t available for you anymore.'
 'Je nachdem, welchen Beruf du auswählst, stehen dir unterschiedliche Aktionen und Spielweisen in dieser Stadt zur Verfügung.': 'According to your chosen profession, you will have different actions and gameplays available during this town.'
 Held: Hero
-Einwohner: Citizen
+Einwohner: Resident
 'Wähle einen Beruf': 'Choose your profession'
 'Alle Einträge anzeigen': 'View all registry entries'
 Tag: Day
@@ -275,7 +275,7 @@ Lagerhalle: Warehouse
 "Motel 'Dusk'": "Motel 666 Dusk"
 'Militärischer Wachposten': 'Army Outpost'
 Postfiliale: Post Office
-Räuberhöhle: Once-inhabited Cave
+Räuberhöhle: Smugglers' Cache
 Schützengraben: Equipped Trench
 Stadtbücherei: Town Library
 'Tante Emma Laden': 'Mini-market'
@@ -345,7 +345,7 @@ Süden: South
 Osten: East
 Westen: West
 'Bitte wähle einen Bürger:': 'Please select a citizen:'
-'Es ist kein Bürger in der Nähe...': 'There is no citizen nearby ...'
+'Es ist kein Bürger in der Nähe...': 'There is no citizen nearby...'
 'Rucksack in der Bank ausleeren': 'Empty your rucksack Here!'
 'Meine objekte': 'Objects'
 Gammler: "Undecided"
@@ -394,10 +394,10 @@ Zyanid: Suicide by ingestion of Cyanide
 'Ermordung durch Gift': 'Injected with a poison!'
 'Sorglos hast du dieses Produkt runtergeschluckt... Das darin enthaltene Gift hat nur wenige Sekunden gebraucht, um über dein Blutkreislaufsystem zum Herzen zu gelangen. Du hast dein Bewusstsein verloren. Atemstillstand und Herzversagen haben dir dann den Rest gegeben. Du wurdest vergifet!! Wie hinterhältig!': 'You swallow the product without a second thought... It only took a few seconds for the poison contained within to hit your bloodstream, causing your blood vessels to dilate almost instantly. First, you collapse, then your whole body begins to spasm. Then your heart stops. You have been murdered!!'
 'Argh!! Es scheint, als ob sich ein Ghul unter die Einwohner gemischt hätte! Völlig ahnungs- und wehrlos wurdest du von etwas oder jemandem angefallen und übel vermöbelt. Als er dann seine fauligen Zähne in deinen Hals schlug warst du noch bei Bewusstsein... Doch du hattest nur noch einen Gedanken: Wer war das?': 'Argh! It would appear that a ghoul moves among us! With no time to react, someone, or something jumped on you, and rained blows on you before devouring you whilst you were still semi-conscious. Before slipping into the darkness, one question plagues you: what do I taste like?'
-Aggression: Your ghoulishness was killed during a fight!
+Aggression: Ghoul slain during an assault!
 'Du wurdest übel zusammengeschlagen und bist an deinen inneren Verletzungen gestorben... Dir gings eh nicht mehr so gut, dein Immunsystem war bereits geschwächt, da steckt man Schläge nicht mehr so einfach weg. So ein Mist aber auch, mit deiner besonderen Fähigkeit hättest du in deiner Stadt noch ein Weilchen Furcht und Schrecken verbreiten können...': 'You have been fatally wounded... Your constitution isn''t what it used to be, and being a ghoul makes you extremely vulnerable. It''s a shame, you could have gone far with this power (or curse)...'
 Erhängt: Mob justice (death by hanging)!
-'Ein paar Leute in der Stadt mochten dich ganz offensichtlich nicht, darunter befanden sich mehrere Mitbürger, deine Nachbarn - ja sogar ein paar von deinen Freunden! Aus diesem Grund haben sie dich zu einer Baustelle geschleppt und dir einen Strick um den Hals gelegt. Das ganze ging ruck zuck. Innerhalb weniger Sekunden bist du einen Meter über den Boden geschwebt. Nach einem kurzen Applaus löste sich die Gruppe auf und jeder kehrte zu seiner Arbeit zurück.': 'Ein paar Leute in der Stadt mochten dich ganz offensichtlich nicht, darunter befanden sich mehrere Mitbürger, deine Nachbarn - ja sogar ein paar von deinen Freunden! Aus diesem Grund haben sie dich zu einer Baustelle geschleppt und dir einen Strick um den Hals gelegt. Das ganze ging ruck zuck. Innerhalb weniger Sekunden bist du einen Meter über den Boden geschwebt. Nach einem kurzen Applaus löste sich die Gruppe auf und jeder kehrte zu seiner Arbeit zurück.'
+'Ein paar Leute in der Stadt mochten dich ganz offensichtlich nicht, darunter befanden sich mehrere Mitbürger, deine Nachbarn - ja sogar ein paar von deinen Freunden! Aus diesem Grund haben sie dich zu einer Baustelle geschleppt und dir einen Strick um den Hals gelegt. Das ganze ging ruck zuck. Innerhalb weniger Sekunden bist du einen Meter über den Boden geschwebt. Nach einem kurzen Applaus löste sich die Gruppe auf und jeder kehrte zu seiner Arbeit zurück.': 'You weren''t the most popular cat in town... Several citizen, your neighbours and friends even, dragged you to a construction site and put a rope around your neck. Two of them tugged violently on it, lifting you a metre off the ground. After that was done... they applauded, then they went back about their business without even hanging around to watch you die.'
 'Im Fleischkäfig geendet': 'Death by Meat Locker'
 'Ein paar Leute in der Stadt mochten dich ganz offensichtlich nicht, darunter befanden sich mehrere Mitbürger, deine Nachbarn - ja sogar ein paar von deinen Freunden! Aus diesem Grund haben sie dich zur Stadtmauer geschleppt, dich in einen Käfig gesteckt und diesen über den Rand gestoßen. Das ganze ging ruck zuck. Jetzt bist du wohl Zombiefutter... Nach einem kurzen Applaus löste sich die Gruppe auf und jeder kehrte zu seiner Arbeit zurück.': 'Let''s not beat about the bush. There are some people in town who don''t like you... Several in fact, your neighbours, and even some of your friends helped drag you to the town gates... To the "meat locker". Without trial, they locked you inside, then someone suggested throwing stones at you for entertainment purposes. What a result for you! You were barely conscious when the zombie horde arrived...'
 Strangulation: Strangulation
@@ -425,7 +425,7 @@ Kopfschuss: Shot in the head
 "Diese alte Mine hat es nicht vermocht den Wetterwidrigkeiten Stand zu halten. Nur Gott weiß, was die Menschen damals angetrieben hat, so tief zu graben, um der Erde nützliche Rohstoffe zu entreißen. Dabei reicht es mit den Füßen leicht am Boden zu kratzen und schon kommt eine leckere Kakerlake vorbeigehuscht. Du denkst dir: 'Lecker, die esse ich doch mal gleich'": "An old mine which has not resisted the ravages of time well. God knows what caprice could have led people to look so deep underground to find something useful. Especially when you only just have to scratch the surface to find some delicious cockroaches to crunch on! You start to feel hungry just thinking about it..."
 'Diese Mineralienabbauzone trägt alle Merkmale eines schrecklichen Unglücks : der Hang scheint auf die Arbeiter, Maschinen und Gebäude darunter eingestürzt zu sein.': 'This mineral extraction zone bears all the hallmarks of a terrible accident: the hillside seems to have collapsed onto the workers, machines and buildings below.'
 'Das Ganze sieht wie eine komische runde Metallscheibe aus, die mal zu einen Flugzeugcockpit gehörte. Aber du bist dir nicht ganz sicher, denn es könnte sich auch um ein Mähdrescherteil handeln...': 'It looks like a large metal disk with what appears to be some kind of cockpit mounted on top. It could also be some type of high-tech combine harvester.'
-'E-KEA : Diese riesigen Geschäfte gab es früher in jeder Stadt (immer ziemlich ärgerlich am Stadtrand gelegen). Sie spezialisierten sich auf die Herstellung und den Verkauf von Billigmöbeln, denen meist ein Bolzen / Schraube / Verbindungselement fehlte. Es wird gesagt, dass die schlechte Qualität ihrer Produkte einer der Gründe für den Niedergang der Gesellschaft war...': 'PI-KEYA: These enormous stores used to be in every city (always rather annoyingly situated on the outskirts). They specialised in the manufacture and sale of cheap furniture, usually with one bolt / screw / fastener missing. It is said that the poor quality of their products was one of the reasons for society going to ruin...'
+'E-KEA : Diese riesigen Geschäfte gab es früher in jeder Stadt (immer ziemlich ärgerlich am Stadtrand gelegen). Sie spezialisierten sich auf die Herstellung und den Verkauf von Billigmöbeln, denen meist ein Bolzen / Schraube / Verbindungselement fehlte. Es wird gesagt, dass die schlechte Qualität ihrer Produkte einer der Gründe für den Niedergang der Gesellschaft war...': 'PI-KEYA: These enormous stores used to be in every town (always rather annoyingly situated on the outskirts). They specialised in the manufacture and sale of cheap furniture, usually with one bolt, screw or fastener missing. It is said that the poor quality of their products was one of the reasons for society to fall into ruin...'
 'Eine verfallene Familiengruft. Man kann den Eingang gerade noch erkennen, da er fast vollständig von verrottender Vegetation verdeckt ist. Anscheinend sind die Leichen vor einiger Zeit aufgestanden und gegangen...': 'A dilapidated family crypt. You can only just make out the entrance, as it''s almost completely obscured by decaying vegetation. Apparently the bodies got up and left some time ago...'
 'Aus diesem Gebäude strömt ein entsetzlicher Gestank von verwesenden Leichen : Die Fleischvorräte haben sich in ekelerregende Hügel aus schimmeligem, weißem Fleisch verwandelt, aus denen eine dicke, scharfe Flüssigkeit austritt, die nun den Boden bedeckt und sogar begonnen hat, aus der Tür zu laufen...': 'There is a horrendous stench of decaying bodies coming from this building: The stocks of meat have transformed into disgusting mounds of mouldy white flesh which are leaking a thick pungent liquid which now covers the floor and has even started to run out the door...'
 'Dieser Langstreckenflieger ist mitten im nirgendwo abgestürzt... Da der Wüstensand das Wrack fast vollkommen eingegraben hat und sich der Zahn der Zeit in das Material gefressen hat, lässt sich nicht mehr sagen, was das Flugzeug transportierte. Du lässt deinen Blick schweifen, es sind jedoch weit und breit keine Leichen erkennbar...': 'This long-haul aircraft has crashed in the middle of nowhere... It''s difficult to know what it was carrying, the desert sand has almost entirely eroded the fuselage. The presence of some seats suggests there were at least some passengers on board. There is no trace of the bodies though...'
@@ -440,8 +440,8 @@ Kopfschuss: Shot in the head
 'Dieser Krankenwagen ist mitten auf der Straße stehen geblieben. Er hat keine Reifen mehr und auch der Motor fehlt... Außerdem finden sich keinerlei Anzeichen für einen Kampf oder Unfall... Höchst seltsam...': 'This ambulance has been abandoned in the middle of the road. The wheels are gone, as is the engine... There are no signs of a struggle, and no signs of an accident. There are no bodies either come to that...'
 'Die letzte Inventur hat hier schon vor einiger Zeit stattgefunden... Die 30 Leichen, die in Halle 2 hängen, lassen darauf vermuten, dass mit den Bilanzen etwas nicht stimmte. Dem Umfang ihrer Bäuche nach zu urteilen, handelt es sich wahrscheinlich um den Verwaltungsrat. War es ein kollektiver Selbstmord? Ihr gefesselten Hände sprechen nicht dafür.': 'This was the storage unit for a department store which went to the wall some time ago. So this would lead you to think that the thirty corpses hanging in stockroom 2 were the board of directors. Now you just need to work out if it was a mass suicide (the fact that they all have their hands tied together confuses you though...).'
 'Ein unterirdisches Parkhaus, das fast vollständig vom Sand begraben wurde - der ideale Ort, um alleine zu sterben. Niemand wird dich hören...': 'An almost completely buried underground parking lot. An ideal venue to ''go quietly into the night'' as long as nobody hears you...'
-'Dieses militärische Vehikel ist wie die metaphorische Konservendose. Der Soldat ist drinnen und spielt die Rolle einer Sardine, und hundert Zombies draußen spielen den hungrigen Bürger. Der Bürger gewinnt...': 'This military vehicle is like the metaphorical food can. The soldier is inside, playing the role of a sardine, and a hundred zombies outside are playing the hungry citizen. The citizen wins...'
-"Beim Anblick des Gebäudes stellst du dir die Frage, wer in diesem schäbigen Motel früher übernachtet hat. Bilder und Szenen verschiedener Roadmovies schießen dir durch den Kopf: Thelma&Louise, Natural Born Killers... Du denkst dir: 'Vielleicht sollte ich als Erstes Zimmer 215 kontrollieren. Man weiß ja nie...'.": "You ask yourself what kind of person would enjoy spending a night in a shabby hole like this motel. No doubt some sleazy sales rep whose dodgy past will catch up with him sooner or later. I really must check out room 215, you think to yourself, without really knowing why'."
+'Dieses militärische Vehikel ist wie die metaphorische Konservendose. Der Soldat ist drinnen und spielt die Rolle einer Sardine, und hundert Zombies draußen spielen den hungrigen Bürger. Der Bürger gewinnt...': 'This military vehicle is like a metaphorical food can. The soldier inside plays the role of a sardine in the hands of a hundred hungry zombies… By the end, there is nothing left of the sardine.'
+"Beim Anblick des Gebäudes stellst du dir die Frage, wer in diesem schäbigen Motel früher übernachtet hat. Bilder und Szenen verschiedener Roadmovies schießen dir durch den Kopf: Thelma&Louise, Natural Born Killers... Du denkst dir: 'Vielleicht sollte ich als Erstes Zimmer 215 kontrollieren. Man weiß ja nie...'.": "You ask yourself what kind of person would enjoy spending a night in a shabby hole like this motel. No doubt some sleazy sales rep whose dodgy past will catch up with him sooner or later. \"I really must check out room 215\", you think to yourself, without really knowing why."
 'Die hier stationierten Soldaten waren auf alles vorbereitet: Waffen, Vorräte und eine 150 m lange Sicherheitszone. Auf alles, außer darauf, dass ihr Leutnant sie während der Nacht verspeiste. Spaß beiseite, mit einer soliden Mauer und einer gesunden Diktatur gibt es (unter dem Gesichtspunkt des Überlebens) nichts Vergleichbares !': 'The soldiers stationed here were prepared for anything: weapons, supplies, and a 150m security perimeter. Anything except their lieutenant eating them during the night. Joking aside, with a solid wall and a healthy dictatorship, (from a survival point of view) there''s nothing like it!'
 'Dieses Gebäude scheint von den turbulenten Ereignissen der Vergangenheit verschont worden zu sein. Es ist noch vollkommen intakt und erinnert an ein klassisches Postbüro mit doppelten Schalterfenstern und durchsiebtem Sprechfenster. Hier wirst du kaum etwas Nützliches finden außer etwas zum Lesen...': 'This building seems to have resisted the ravages of time, a vestige of the postal service of years ago. It''s unlikely that you''ll find anything of great interest here, unless you like reading...'
 'Der Zugang zu dieser Höhle ist ein notdürftig abgedecktes Loch in der Erde. Er führt in eine übergroße feuchte Grotte, die mit allerlei Trümmern und Gerümpel gefüllt ist. Höchstwahrscheinlich handelt es sich um Beutegut, das bei der Plünderung einer benachbarten Stadt eingesackt wurde. Vielleicht wurde deine Stadt mit diesem Raubgut errichtet? Und wer weiß: Womöglich haben die ersten Einwohner deiner Stadt an diesen Raubzügen teilgenommen...': 'A hole in the ground that has been somewhat concealed by some planks and some sand. It opens out into a large humid cavern filled with all kinds of debris, no doubt the result of pillaging by a neighbouring town. Who could say that your town wasn''t built using ill-gotten gains from such pillaging ? Perhaps the first citizens were responsible for these attacks...'
@@ -455,7 +455,7 @@ Kopfschuss: Shot in the head
 'Soll das eine Schule, ein Parkhaus oder vielleicht ein Kaufhaus sein? Du kannst es nicht erkennen... Das einzige, was von diesem geheimnisvollen Projekt noch übrig ist, sind ein paar verrostete Metallstrukturen.': 'It''s impossible to guess what they were wanting to build here. It could have been a school, a car park, a department store... The rusting metal supports are the only remaining evidence of whatever mysterious project was underway here.'
 "Wow - das ist ein verdammtes Geschenk des Himmels! Ein Brunnen, der immer noch funktioniert ! Völlig verloren in der Mitte von Nirgendwo gibt es hier niemanden mit seinem Regelwerk, der Ihnen sagt: 'Tun Sie dies nicht, tun Sie das nicht, nehmen Sie nicht zu viel Wasser, bla bla bla bla...'. Na los, nimm einen Drink, es wird unser kleines Geheimnis sein...": "Wow - this is a bloody godsend! A well which still works! Completely lost in the middle of nowhere there is nobody here with their rulebook to tell you 'Don't do this, don't do that, don't take too much water, blah blah blah...' Go on, take a drink, it'll be our little secret..."
 'Ursprünglich zur Lagerung von Getreide konstruiert, aber als die Zeit verging und das Getreide knapp wurde, füllten sich die Tanks mit Regenwasser (und einer toten Ratte). Sie brauchen allerdings den richtigen Bausatz, um sie zu benutzen...': 'Originally constructed for storing grain, but as time passed and the grain ran out, the tanks filled with rainwater (and a dead rat). You''ll need the right kit to make use of it though...'
-'Was hier passiert ist erschließt sich dir nicht so ganz... Ein riesiger Felsen ist mit voller Wucht auf die Straße geschleudert worden - doch woher kam er? Rings um dich ist nichts als Wüste...': 'Something truly bizarre seems to have happened here: a huge rock seems to have crash landed in the middle of the road, like some kind of tombstone...Something truly bizarre seems to have happened here: a huge rock seems to have crash landed in the middle of the road, like some kind of tombstone...'
+'Was hier passiert ist erschließt sich dir nicht so ganz... Ein riesiger Felsen ist mit voller Wucht auf die Straße geschleudert worden - doch woher kam er? Rings um dich ist nichts als Wüste...': 'Something truly bizarre seems to have happened here: a huge rock seems to have crash landed in the middle of the road, like some kind of tombstone...'
 'Ein Ort des Friedens und der Gelassenheit... Wenn Sie bewaffnet und bereit sind, um Ihr Leben zu kämpfen. Die umgebende Vegetation ist unheimlich und riecht stark nach Tod, unidentifizierte Kreaturen lauern im Schatten... Sie haben das überwältigende Gefühl, dass eine Kreatur aus einer Hecke ausbrechen und Sie angreifen wird.': 'A place of peace and serenity... If you are armed and ready to fight for your life. The surrounding vegetation is sinister and smells strongly of death, unidentified creatures lurk in the shadows... You have the overwhelming feeling that some creature is going to burst out from a hedge and attack you.'
 "Wenn Sie drohen, verstümmeln oder morden wollen, haben Sie hier die Hauptader getroffen... Die in den Wänden steckenden Schrapnelle, Einschusslöcher und Trümmer ringsum geben Ihnen eine gute Vorstellung davon, welche Art von 'Ereignissen' sich hier abgespielt haben...": "If you like to menace, maim or murder, you've hit the mother lode here... The shrapnel stuck in the walls, bullet holes and wreckage all around give you a good idea of what genre of 'events' took place here..."
 'Das Schiebetor dieses Supermarktlagers hat allen Plünderungsversuchen erfolgreich getrotzt. Durch einen etwas versteckten Seiteneingang gelangst du ins Innere und machst dich sofort auf die Suche nach Dingen, die du noch gebrauchen kannst...': 'The door to this supermarket stockroom has thus far resisted would-be pillagers... surely there must be something tasty inside worth having...'
@@ -481,7 +481,7 @@ Wächt: W-Men
 Müllhalde: Dump
 Katapult: Catapult
 'Trotz all deiner Anstrengungen hast du hier leider nichts gefunden ...': 'After exhaustive searching, the only thing you have discovered is the emptiness of wasted time...'
-'Nach einigen Anstrengungen hast du folgendes gefunden: {item}!': 'Scavengin in the rubbish lying around near the town, you manage to find: {item}!'
+'Nach einigen Anstrengungen hast du folgendes gefunden: {item}!': 'Scavenging in the rubbish lying around near the town, you manage to find: {item}!'
 'Du kannst nur einen Behälter auf einmal tragen.': 'You can only carry one container at a time.'
 'Die Wüste erstreckt sich, so weit das Auge reicht... Wie viele Männer sind in dieser Weite verloren gegangen? Wer weiß, ob Sie nicht der Nächste sind?': 'The desert stretches for as far as the eye can see... How many lives were lost in its vastness? Who is to say that you won''t be next?'
 'Sie sind allein in dieser Gegend...': 'You are alone in the zone...'
@@ -559,7 +559,7 @@ Kannibalismus: Cannibalism
 Wasserkanonen: Water Guns
 'Anzahl an großen Wasserwaffen, die du gebaut hast.': 'The number of water-based toys you have built.'
 Glückspilz: Luck
-'Anzahl der großen Metallkoffer, die du in der Außenwelt ausgegraben hast.': 'Number of large metal chests you have found in the World Beyond.'
+'Anzahl der großen Metallkoffer, die du in der Außenwelt ausgegraben hast.': 'Number of large metal chests you have uncovered during your searches.'
 Baustellen: Constructions
 'Anzahl der Aktionspunkte, die du für den Bau neuer Kontruktionen und Stadtgebäude verwendet hast.': 'The number of action / construction points you have invested in the construction projects in town.'
 'Anzahl der Punkte, die du erworben hast, indem du in einer Stadt komplett clean geblieben bist.': 'Your capacity to stay clean (take no drugs) during a lifetime.'
@@ -578,7 +578,7 @@ Hauseinrichtung: Decoration
 'Letzte Verteidigungslinie': 'Last line of defence'
 "Du gehörst zu den letzten Bürgern der Stadt, die die Zombiehorde 'empfangen' hat...": "You were one of the last people to see the Hordes descend on the town..."
 Drogen: Drugs
-'Anzahl kleiner lustiger Pillen, die du geschluckt oder sonstwie eingenommen hast.': 'The number of funny little pills you have swallowed (or hidden elsewhere...)..'
+'Anzahl kleiner lustiger Pillen, die du geschluckt oder sonstwie eingenommen hast.': 'The number of funny little pills you have swallowed (or hidden elsewhere...).'
 Drogenerfahrungen: Drug Tests
 'Anzahl der gefährlichen Drogen, die du genommen hast.': 'The number of times you have tested dangerous drugs... on yourself.'
 'Gebäude erkunden': 'Ruin Explorations'
@@ -604,7 +604,7 @@ Event-Auszeichnungen: Community Awards
 'Wunderwerk: Sandschloss': 'Wonder: Sandcastle'
 'Das hast du nicht wirklich gebaut?': 'You really built that?'
 'Wunderwerk: Riesiger KVF': 'Wonder: Giant BRD'
-'Huldigt den Riesigen KVF!': 'BRDs for everyone! The people demand BRDs'
+'Huldigt den Riesigen KVF!': 'BRDs for everyone! The people demand BRDs!'
 'Wunderwerk: Rad des Schreckens': 'Wonder: Fearfulness Wheel'
 'Sieh nur, man kann von da oben die Zombies sehen!': 'Look, I can see the zeds from up here!'
 'Wunderwerk: Statue des Raben': 'Wonder: Statue of the Crow'
@@ -650,7 +650,7 @@ Textsammler: Roleplayer
 Leichenentsorger: Removals
 'Anzahl deiner toten Freunde, die du außerhalb der Stadt entsorgt hast.': 'The number of dead friends you''ve dragged out of town.'
 Batteriewerferfabrikant: Battery Launcher Builder
-'Anzahl der Batteriewerfer, die du gebaut hast.': 'The number of Battery launchers you have built.'
+'Anzahl der Batteriewerfer, die du gebaut hast.': 'The number of battery launchers you have built.'
 'Überlebende der Hölle!': 'Survivor of Hell!'
 'Sie sind ein wahrer Überlebenskünstler der Hölle.': 'You are a true survivor of hell.'
 Hausarbeiten: Homemaker
@@ -699,7 +699,7 @@ Sekunde(n): second(s)
 'Dieser Bürger ist nicht in der Lage, einen Beruf zu wählen. Wir sind noch lange nicht über den Berg, das kann ich euch sagen!': 'wasn''t even capable of choosing a profession! We''re not through this yet, I promise you!'
 'Dieser Bürger könnte jemand sehr Wichtiges sein. Vielleicht einer der Erschaffer?': "could be someone very important. Maybe one of the creators?"
 'Gereinigte Seelen': 'Purified Souls'
-'"Einen Schritt weiter..." stand auf {victim}s Fußmatte. Ihre Explosion hat einen bleibenden Eindruck bei dir hinterlassen. Wenn du noch laufen kannst, such dir besser einen Arzt.': '"One step further ..." it said on {victim} s doormat. Their explosion left a lasting impression on you. If you can still walk, you''d better see a doctor.'
+'"Einen Schritt weiter..." stand auf {victim}s Fußmatte. Ihre Explosion hat einen bleibenden Eindruck bei dir hinterlassen. Wenn du noch laufen kannst, such dir besser einen Arzt.': '"One step further..." was written on {victim}''s doormat. You could say the sudden explosion left you with a lasting impression, if you can still walk, you''d better see a doctor.'
 'Du kannst diesen Gegenstand nicht stehlen.': 'You cannot steal this item.'
 '{username} wurde standrechtlich erschossen.': '{username} was shot dead.'
 'Dieser Bürger gehört keiner Stadt an.': 'This citizen does not belong to any Town.'
@@ -712,7 +712,7 @@ Headshot: Headshot
 'Du hast Medizin eingenommen, die dich vor Infektionen schützt und dich davor bewahrt, zu einem Ghul zu werden.': 'Some Medicine you took recently is protecting you from any infections and stopping you from being transformed into a Ghoul.'
 'Du hast deine Heldenfähigkeit "Den Tod besiegen" verwendet!': 'You have already used your heroic "Cheat Death" power!'
 'Du bist völlig erschöpft... Ruh dich aus oder iss etwas, um wieder zu Kräften zu kommen!': 'You are shattered... Rest up or eat something to recover!'
-'Dir ist etwas furchtbares wiederfahren, und du bist vor Angst erstarrt! Du kannst dich nicht länger in einer von Zombies kontrollierten Zone aufhalten. Wenn du gefangen bist, kannst du nicht länger fliehen.': 'You were involved in an atrocious event and are terrorised! You can no longer decide to stay in a Horde-controlled zone. If you are trapped, you will no longer be able to run away!'
+'Dir ist etwas furchtbares wiederfahren, und du bist vor Angst erstarrt! Du kannst dich nicht länger in einer von Zombies kontrollierten Zone aufhalten. Wenn du gefangen bist, kannst du nicht länger fliehen.': 'You were involved in an atrocious event and are terrorised! You can no longer choose to pass through a Horde-controlled zone. If you are trapped, you will no longer be able to escape!'
 'Du bist durstig... Das passiert immer dann wenn du am Vortag nichts getrunken hast oder wenn du in der Wüste lange Strecken gelaufen bist...': 'You are thirsty... This happens in the morning if you haven''t drank the night before, or if you''ve been walking in the desert for a long time...'
 'Dein Durst hat ein kritisches Level erreicht! Trinke schnell etwas, oder du riskierst zu sterben!': 'Your thirst has become critical! Drink something quickly or you risk dying!'
 'Du hast heute bereits Drogen konsumiert. Wenn du noch weitere Drogen nimmst, riskierst du eine Abhängigkeit!': 'You have already taken drugs today. Warning, if you take any more, you run the risk of getting hooked!'
@@ -731,13 +731,13 @@ Headshot: Headshot
 'Hier wurde bereits ein Bauplan gefunden.': 'Someone has already studied this building so it is no longer possible to obtain the construction blueprint here...'
 '{citizen} möchte nicht in diese Richtung gehen! <strong>Er bittet dich darum, ihn in die Stadt zu bringen...</strong>': '{citizen} wants to go back to the Town and <strong>will not follow you in this direction...</strong>'
 'Die Tarnung von {name} ist aufgeflogen!': '{name}''s camouflage has been blown!'
-'Der Gegenstand, den du soeben gefunden hast, passt nicht in deinen Rucksack, darum bleibt er erstmal am Boden...': 'The object you have just found cannot fit in your rucksack, so you have left it on the ground...'
+'Der Gegenstand, den du soeben gefunden hast, passt nicht in deinen Rucksack, darum bleibt er erstmal am Boden...': 'This item cannot fit in your rucksack, so you have left it on the ground...'
 'Du hast einen Teil des Sektors freigelegt, aber es gibt immer noch eine beträchtliche Menge an Trümmern, die den Weg versperren...': 'You have uncovered some of the sector, but there is still a substantial amount of debris blocking the way...'
 'Herzlichen Glückwunsch, die Zone ist vollständig freigelegt worden! Du kannst nun mit der Suche nach Gegenständen im: {ruin} beginnen!': 'Congratulations, the zone has been completely uncovered! You can now start to search for items in the: {ruin}!'
 'Du hast {count} Aktionspunkt(e) benutzt.': 'You have used {count} action point(s).'
 'Du vollführst einen Schamanentanz und betest zum Himmel, dass er Regen bringen und diese unselige Zone reinigen möge.': 'You perform a shamanic dance and plead to the sky to bring rain to cleanse this zone of evil spirits.'
 'Doch nichts passiert... Soviel steht fest, du stehst nun wie ein lausiger Amateur da. Außer Blasen an den Füßen hat das alles nichts eingebracht...': 'But nothing happens. Admittedly, for anyone watching, you looked like the worst kind of amateur. To add insult to injury, you''ve given yourself blisters on your feet...'
-'Und die Energie, die in diesen Tanz gesteckt wurde, zahlt sich schließlich aus, die ersten Tropfen fallen auf die Zombies und du genießt diesen delikaten Moment, in dem ihr Fleisch wie Schnee in der Sonne schmilzt und du geduldig wartest, bis sich ihre Körper verflüssigen.': 'and the energy invested in this dance finally pays off, the first drops of rain fall on the zombies and their flesh melts like snow in the sunshine and you watch and wait until their bodies are completely liquefied.'
+'Und die Energie, die in diesen Tanz gesteckt wurde, zahlt sich schließlich aus, die ersten Tropfen fallen auf die Zombies und du genießt diesen delikaten Moment, in dem ihr Fleisch wie Schnee in der Sonne schmilzt und du geduldig wartest, bis sich ihre Körper verflüssigen.': 'And the energy poured into this dance finally pays off as the first drops of rain fall upon the zombies, and their flesh melts like snow under the sun. You watch and wait until their bodies are completely liquefied.'
 'Ob durch deine Kräfte oder unverschämtes Wetterglück, dicke Regentropfen fallen auf die Stadt herab und füllen ein wenig den Brunnen auf.': 'And be it mastery of the spirit world or blind meteorological fortune, drops of rain fall on the town, adding fresh drinking water to the well.'
 '...der Mörder .. ist.. IST.. AAARGHhh..': '...the murderer .. was.. WAS.. AAARGHhh..'
 'In diesem Thread dreht sich alles um die Bank.': 'Use this subject for discussions involving the town Bank...'
@@ -795,7 +795,7 @@ Senden: Send
 'Du bist an deinen Beinen verletzt! Essen, trinken und Ausruhen wird dir 1AP weniger verschaffen.': 'You are injured on your Leg! You will restore 1AP less whenever you drink, eat or rest.'
 'Du bist an den Augen verletzt! Essen, trinken und Ausruhen wird dir 1AP weniger verschaffen.': 'You are injured on your Eyes! You will restore 1AP less whenever you drink, eat or rest.'
 'Du bist am Fuß verletzt! Essen, trinken und Ausruhen wird dir 1AP weniger verschaffen.': 'You are injured on your Foot! You will restore 1AP less whenever you drink, eat or rest.'
-'Besessen von einer gequälten Seele': 'Possesed by a Tortured Soul'
+'Besessen von einer gequälten Seele': 'Possessed by a Tortured Soul'
 'Während du die Worte des Schamanen vernommen hast, dachtest du nie, dass er es ernst meinte. Nichts ist 100%ig sicher in dieser Wüste und der Trank, den er dir gegeben hat... Nun, er hat nicht funktioniert. Die gequälte Seele, der du zu helfen versuchtest, hat sich an dich geklammert und deine ungeschützte Seele mit Leichtigkeit überwältigt. Ihre Gewalt und Wut hinterließen nichts von dir als eine leere Hülle, dazu verdammt, von der Horde verschlungen zu werden.': 'While you heard the Shaman''s words, you never thought he was serious. Nothing is 100% in this desert and the potion he gave you... Well it didin''t work. The tortured soul you tried to help latched onto you and easily overcame your unprotected soul. It''s violence and rage left nothing of you but an empty shell, doomed to be devoured by the horde.'
 'Das ist keine gute Idee, das ist dir doch wohl klar!': 'This is not a good idea, you must be clear about it!'
 'Du hast die Nachricht von {username} dem Raben gemeldet. Wer weiß, vielleicht wird {username} heute Nacht stääärben...': 'You have reported this post from {username} to The Crow. Who knows, maybe {username} will die tonight... caaaw caaaw!'
@@ -834,9 +834,9 @@ Zusammenbauen: Assemble
 'Mit ein paar unschönen Tritten gegen seinen Kopf vergewisserst du dich, dass er garantiert nicht mehr aufstehen wird. Na los! Bring deinen Job zuende und verspeise ihn!': 'When you are finally sure that your victim isn''t getting up, you finish the job by eating them.'
 'Gut gemacht!': 'There you have it, it''s done.'
 'Du wurdest beobachtet! Die anderen Bürger wurden gewarnt!': 'You were spotted! The citizens have been warned!'
-'Nicht so appetitlich wie frisches Menschenfleisch, aber es stillt nichtsdestotrotz deinen Hunger... zumindest ein bisschen. Wenigstens war das Fleisch noch halbwegs zart.': 'It''s not as appetising as a nice, fresh, wriggling human, but it does the job and makes your voracity subside... a little. Fortunately, the meat way quite gamey, this meal would have been dreadful otherwise.'
+'Nicht so appetitlich wie frisches Menschenfleisch, aber es stillt nichtsdestotrotz deinen Hunger... zumindest ein bisschen. Wenigstens war das Fleisch noch halbwegs zart.': 'It''s not as appetising as a nice, fresh, wriggling human, but it does the job and makes your voracity subside... a little. Fortunately, the meat was quite gamey, this meal would have been dreadful otherwise.'
 'Mit aller Gewalt greifst du {citizen} an! Du hast den Überraschungsmoment auf deiner Seite und am Ende trägt {citizen} eine schwere Verletzung davon.': 'You violently attacked {citizen}! The fight degenerated rapidly and resulted in you <strong>seriously wounding the other citizen!</strong><hr />The citizens have all been told...'
-'Plötzlich sackt {citizen} in sich zusammen, seine Augen drehen sich nach hinten, und mit einem schauerhaften Gurgeln löst sich sein ganzer Körper vor deinen Augen auf und hinterlässt nur den üblen Geruch von Tod und Verwesung! Es gibt keinen Zweifel mehr: {citizen} war ein Ghul!!': 'Unexpectedly, {citizen} collapsed with a ungodly gurgle, their eyes rolling back in their head... Their body is literally decomposing in places and the smell of death fills the air! The horrible truth slaps you in the face: <strong>{citizen} was a Ghoul!</strong>'
+'Plötzlich sackt {citizen} in sich zusammen, seine Augen drehen sich nach hinten, und mit einem schauerhaften Gurgeln löst sich sein ganzer Körper vor deinen Augen auf und hinterlässt nur den üblen Geruch von Tod und Verwesung! Es gibt keinen Zweifel mehr: {citizen} war ein Ghul!!': 'Unexpectedly, {citizen} collapsed with an ungodly gurgle, their eyes rolling back in their head... Their body is literally decomposing in places, and the smell of death fills the air! The horrible truth slaps you in the face: <strong>{citizen} was a Ghoul!</strong>'
 "Bleib mal ganz geschmeidig! In dieser Stadt gibt es keine Ghule, also solltest du auch nicht herumlaufen und grundlos Leute verprügeln. M'Kay?": 'Steady on there, by all accounts there are <strong>no ghouls in town</strong>, so there''s no need to go smacking people. Mmkay pumpkin?'
 '{citizen} ist bereits verletzt; ihn erneut anzugreifen wird dir nichts bringen.': 'You can''t seriously want to attack someone who is already injured... can you?'
 'Mit aller Gewalt greifst du {citizen} an! Ihr tauscht für eine Weile Schläge aus, bis ihr euch schließlich größtenteils unverletzt voneinander trennt.': 'You violently attacked {citizen}! You exchange blows for a while, until you finally separate from each other mostly unharmed.<hr />The citizens have all been told...'
@@ -870,7 +870,7 @@ Umdrehen: Turn around
 'Der {rolename} der Stadt ist {username}': "The {rolename} of the town is {username}"
 Status: Status
 Notruf: Call for help
-'Rohstoff am Boden (Holz, Metall...)': 'Ressource(s) (wood, metal...)'
+'Rohstoff am Boden (Holz, Metall...)': 'Resource(s) (wood, metal...)'
 'Verschiedene Gegenstände am Boden': 'Item(s)'
 'Wichtige(r) Gegenstand/-ände!': 'Important object(s)!'
 'Zone leer': 'Depleted zone'
@@ -929,7 +929,7 @@ Tipp-Ex: Manipulator
 Hellseherei: Clairvoyance
 'Du erfährst, wie aktiv ein bestimmter Bürger in deiner Stadt spielt. Du musst dazu lediglich bei ihm daheim vorbeischauen...': 'You know how active and present a player is in the game, simply by going to their house.'
 Rundbrief: Mr Writer
-'Mit dieser Funktion kannst du alle Stadteinwohner auf einmal anschreiben. Du kannst damit in den Foren zudem Rollenspielthreads (RP) erstellen (Übertreibe es aber bitte nicht - Danke!).': 'Now you can send Private Messages to all the citizens in your town at once (from the Messages section in your House). You can also start "RP" threads in the forums (please do not abuse this!).'
+'Mit dieser Funktion kannst du alle Stadteinwohner auf einmal anschreiben. Du kannst damit in den Foren zudem Rollenspielthreads (RP) erstellen (Übertreibe es aber bitte nicht - Danke!).': 'You can now send Private Messages to all the citizens in your town at once (from the Messages section in your Home). You can also start "RP" threads in the forums (please do not abuse this!).'
 Freundschaft: Brothers in Arms
 'Mit dieser Fähigkeit kannst du 1 Mal pro Partie (Stadt) jemandem einen Heldentag spendieren! Die anderen werden in dir den Messias erkennen! BEACHTE: Verschenkte Heldentage werden dir von deinem Konto abgezogen. Um jemandem einen Heldentag zu schenken, musst mit ihm in der gleichen Zone stehen oder, wenn du in der Stadt bist, ihn daheim besuchen.': 'Once per game, you can give 1 Hero day to a fellow citizen! Just wait, you''ll become a veritable messiah for the masses... NB: any hero days you give away will be taken from your total, simply go to another citizen''s page to give them a Hero day. Warning: When you donate a Hero day, it is only valid for THAT DAY. It cannot be saved for another time.'
 Diktator: Dictator
@@ -1068,7 +1068,7 @@ Quarantäne: Quarantine
 'Der letzte Tote erhält nur dann eine Belohnung, wenn er 5 volle Tage überlebt hat.': 'The last dead person will only receive a reward if they have survived 5 full days.'
 'Mit den anderen Bürgern reden...': 'Speak to the other citizens in your town and get organized if you want to survive...'
 "Lesen und Nutzen des Forums sind in 'MyHordes' überlebensnotwendig! Die wichtigen Entscheidungen der Stadt werden hier gemeinsam von der Community getroffen.": "Reading and chatting on the forums is critical in 'MyHordes'! That's where all the important decisions are made, by the community itself."
-'Deine gesamte Geschichte basiert auf deinen zuvor gespielten Städten...': 'Your personal story built from all your previous lives ...'
+'Deine gesamte Geschichte basiert auf deinen zuvor gespielten Städten...': 'Your personal story, built from all your previous lives...'
 'Spielhilfe aufrufen.': 'Check the online game guide for ''MyHordes''.'
 'Hast du schon unter "Wie wird gespielt" nachgeschaut? Du findest den Link darauf unter der Karte der Stadt.': 'Have you looked under "How to play"? You can find the link under the town map.'
 'Das Leichsblatt: Hier findet ihr alle Neuigkeiten, über das, was gestern in der Stadt passiert ist...': 'The News Corpse: if you want to know everything that went on in town last night...'
@@ -1102,7 +1102,7 @@ Schlachtenbummler: Clash Titan
 'Auszeichnung für den größten Helden, der während des Shock of Heroes Events am längsten überlebt hat. Du bist nun eine Legende der Außenwelt!': 'Distinction of the greatest hero having survived the longest during the Shock of heroes, you are now part of the legend of the World Beyond!'
 'Diese seltene Auszeichnung wurde den Einsiedlern verliehen, die mit ihrer Stadt die Schlacht der Berufe gewonnen haben. Respekt!': 'This rare award was given to the Survivalists who won the battle of the professions with their Town. Respect!'
 'Aufklärer - Gewinner des SoH': 'Scout - Winner of the SoH'
-'Sieg für die Aufklärer beim Shock of Heroes Event!': 'Victory as a Scavenger during the Shock of Heroes!'
+'Sieg für die Aufklärer beim Shock of Heroes Event!': 'Victory as a Scout during the Shock of Heroes!'
 'Sieg für die Wächter beim Shock of Heroes Event!': 'Victory as a Guardian during the Shock of heroes!'
 'Bewohner Koh-Lambdas': 'Citizen Koh-Lambdais'
 'Dieser Bürger war bei der Wiedervereinigung (letzte Runde) von Koh-Lambda dabei!': 'This citizen was present during the Reunification (last round) of Koh-Lambda!'
@@ -1217,7 +1217,7 @@ Dieb: Ali Baba
 Fantomas: Rusty Ryan
 'Ali Baba': 'Danny Ocean'
 Meisterdieb: Master Thief
-Kleptomane: Cleptomaniac
+Kleptomane: Kleptomaniac
 'Dein Haus ist mein Haus': 'Your home is my home'
 Ästhet: Coquette
 Schaufenstergestalter: Good taste personified
@@ -1257,7 +1257,7 @@ Terraformingspezialist: Terraforming Specialist
 'Erbauer der verlorenen Zeit': 'Founder of Timewasting'
 'Erleuchteter Baumeister': 'Enlightened Builder'
 'Maurer aus Leidenschaft': 'Soul Mason'
-'Huldigt den riesigen KVF!': 'BRDs for everyone! The people demand BRDs'
+'Huldigt den riesigen KVF!': 'BRDs for everyone! The people demand BRDs!'
 Durazell: There's a battery with your name on it...
 'Hüter der Heiligen Batterie': 'Zen-ergizer'
 Maurerlehrling: Labourer
@@ -1439,7 +1439,7 @@ RadioactiveMan: RadioactiveMan
 HAZ-Gewinner: Winner of CYP
 'Ehrenauszeichnung für den Gewinner der Heilung für die Auszeichnungssucht.': 'Honorary reward awarded to the winner of the Cure his Pictophilia.'
 'Kernsammler (job)': Soul Collector
-'Anzahl der im Ausland gesammelten Seelen verstorbener Bürger (job)': 'The number of dead citizens'' souls collected in the World Beyond'
+'Anzahl der im Ausland gesammelten Seelen verstorbener Bürger (job)': 'The number of dead citizens'' souls collected in the World Beyond.'
 'Mystic (job)': 'Mystical transformation'
 'Wie viele Seelen hat Ihre Stadt befreien können. (job)': 'Number of souls trafficked by you at the Workshop.'
 'Ich bin geheilt': 'I am healed'
@@ -1705,7 +1705,7 @@ Unzerstörbar: Dances with Hordes
 'Ich habe Magenschmerzen...': 'I''ve got a sore tummy...'
 'Mir ist kalt hier draußen...': 'Baby it''s cold outside...'
 Anfängerleiche: Beginner Corpse
-Rabenfreund: Crows buddy
+Rabenfreund: Crows' buddy
 Dehydrationskollege: Dehydrated fellow
 Seelenhändler: Soul salesman
 'Sehr überzeugender Pate': 'Very convincing sponsor'
@@ -1809,7 +1809,7 @@ Anfängermodus: Rookie Mode
 'Du besitzt eine <strong>Karte</strong>. Benutze den Knopf hier oben, um nicht verloren zu gehen!': 'You have a <strong>map</strong>. Use it well so that you don''t get lost - don''t forget the buttons underneath it!'
 "Für viele Aktionen, wie beispielsweise die Erkundung der Aussenwelt oder der Arbeit auf einer Baustelle,\n                                benötigst du Aktionspunkte. Deine Aktionspunkte werden jede Nacht nach dem Angriff aufgefüllt. Außerdem\n                                kannst du sie durch den Einsatz bestimmter Gegenstände sowie einmal pro Tag durch Essen und Trinken neu\n                                auffüllen.": "These are used to move around the World Beyond, the desert which surrounds the town..."
 'Du wurdest zum Schamanen gewählt!': 'YOU HAVE BEEN ELECTED AS SHAMAN!'
-'Du wachst heute Morgen mit einer schrecklichen Migräne auf und hast Schwierigkeiten, zu sehen... Du beschließt, aus deinem Zelt zu gehen. Die Nachbarn an denen du vorbeiläufst, neigen ihr Haupt vor dir.': 'You wake up with a horrible migraine and you can''t really see straight... You decide to take a steap outside your tent. All of the other people you meet are in awe of you.'
+'Du wachst heute Morgen mit einer schrecklichen Migräne auf und hast Schwierigkeiten, zu sehen... Du beschließt, aus deinem Zelt zu gehen. Die Nachbarn an denen du vorbeiläufst, neigen ihr Haupt vor dir.': 'You wake with a splitting migraine, your vision still blurry... You decide to take a step outside, everyone you meet stares at you in awe.'
 'Was ist letzte Nacht nur passiert? Du hast wohl zu heftig gefeiert. Als du die Stadtmauer erreichst, kannst du ein kleines blaues Leuchten sehen... Ja, ja, du bist in der Tat der Ausgewählte. Der Zweifel verschwindet, als du dir die Hand an den Kopf hälst: eine lächerliche Maske klebt an deinem Gesicht und reduziert dein Sehvermögen erheblich.': 'Oh dear... What did I do last night? It seems you might have partied a little too hard last night. Upon arriving at the walls you see some little blue lights... Yeeeerrrrp it''s you who''s been named. All vestigaes of doubt disappear as you lift your hand to scratch your head: You''ve got a ridiculous mask stuck to your face. At least you know why you can''t see straight now...'
 'Du bist nun der Schamane.': 'You are now the Shaman.'
 'Ein neuer Horizont öffnet sich für dich: Du bist nicht länger ein gewöhnlicher Bürger, sondern ein geistiger Führer!': 'A new world has opened up before you! You''re no longer just an average citizen, but a spiritual guide for the town!'
@@ -1846,7 +1846,7 @@ Reiseleiter-Ratgeber: the guide to the game for Guides to the World Beyond
 'Wenn du flüchtest, werden dich die Zombies verletzen, aber du wirst trotzdem entkommen...': 'If you flee, you will be wounded by the zombies, but on the other hand, you will be able to leave the zone...'
 'Du kannst versuchen einen Zombie im Nahkampf und ohne Waffen anzugreifen.': 'You can try to engage a zombie in hand to hand combat to make your escape easier.'
 'Diese Aktion kostet dich 1 AP und die Erfolgsaussichten sind ziemlich gering.': 'This action costs 1 AP and has a minimal chance of success.'
-'Dieser Bürger möchte in die Stadt gebracht werden.': 'This citizen wishes to be escorted back to town.'
+'Dieser Bürger möchte in die Stadt gebracht werden.': "{ref__icu, select,\n                on {{ref__gender, select,\n                        female {This citizen wants to be brought into town.}\n                        other {This citizen wants to be brought into town.}\n                    }}\n            other {This citizen wants to be brought into town.}\n            }"
 'Der Leichnam von {citizen} wurde nicht zerstört.': '{citizen}''s corpse has not been destroyed.'
 'Es ist gut möglich, dass er diese Nacht aufersteht und versuchen wird, uns anzugreifen.': 'It''s entirely possible that it''ll decide to wake up and eat you alive tonight.'
 '<em>Du kannst dein Haus ausbauen und so für eine bessere Verteidigung sorgen. <strong>Wichtige Anmerkung:</strong> Vielleicht wäre es sinnvoller, die dafür benötigten Ressourcen (falls erforderlich) der Stadt zu spenden?</em>': '<em>You can upgrade your home and benefit from improved defences. <strong>Important:</strong> perhaps it would be wise to use your resources to carry out improvements in the town?</em>'
@@ -1903,7 +1903,7 @@ Weihnachten: Christmas
 'Glücklicherweise kannst du dich dank deines {img_scout} <strong>Tarnanzug</strong> unerkannt weiterbewegen.': 'Fortunately, your {img_scout} <strong>Camouflage Vest</strong> allows you to continue moving around unseen.'
 'Achtung: Jede Aktion in der Zone sorgt dafür, dass deine <strong>Tarnung auffliegt</strong>. (Es können nur Aktionen ausgeführt werden, die mit einem Icon {img_scout_ok} gekennzeichnet sind)!': 'Warning: many actions, if carried out in this zone will make you <strong>lose your camouflage</strong> (only actions marked with the icon {img_scout_ok} can be used)!'
 'Mit deinem {img_scout} <strong>Tarnanzug</strong> kannst du dich bewegen ohne dabei entdeckt zu werden.': 'Your {img_scout} <strong>Camouflage Vest</strong> allows you to move around undetected.'
-'{building} hat {num} Batterien verbraucht.': '{building} has used {num} Battery.'
+'{building} hat {num} Batterien verbraucht.': '{building} has used {num} batteries.'
 '{watchers} Nachtwächter haben am Stadtrand Stellung bezogen. Wild entschlossen haben sie sich vorgenommen, die Stadt gegen die Zombies zu verteidigen.': '{watchers} watchmen were posted to the furthest corners of the town to contain the Horde''s attack!'
 'Diese Aktion ermöglicht die Reinigung der Zone durch herabfallenden Regen. Dieser kann den Brunnen in der Stadt füllen oder eine vernichtende Wirkung auf die umliegenden Zombies entfalten.': 'This action allows you to purify a zone by making it rain. This rain can help to refill the well or have a devastating effect on surrounding zombies.'
 'Du kannst versuchen, diesen Bürger zu heilen, aber nichts ist garantiert... und hüte dich vor Nebenwirkungen!': "You can try to heal this citizen, but there are no guarantees... and watch out for side effects!"
@@ -1968,7 +1968,7 @@ Material: Use
 'Die Stadt hat zudem folgende Resourcen zurückgewinnen können: {item_list}': 'The town has also recovered the following resources: {item_list}'
 'Die Stadt hat nichts Nützliches aus dem Haus herausbekommen, da war wirklich nichts zu holen...': 'The town didn''t recover anything useful from their house, there was really <strong>nothing of interest to take</strong>...'
 'Du hast <strong>1AP</strong> aufgewendet, um das Haus von <strong>✝ {citizen}</strong> zu recyclen. Die Arbeiten sind noch nicht abgeschlossen...': 'You use <strong>1AP</strong> to dismantle <strong>✝ {citizen}</strong>''s house. There''s still more work to be done...'
-'Beachte: Behälter wie Rucksack, Einkaufswagen etc. werden nicht in der Bank abgelegt.': 'Note: Containers (such as a rucksack, trolley, etc...) will not automatically be placed in the bank.'
+'Beachte: Behälter wie Rucksack, Einkaufswagen etc. werden nicht in der Bank abgelegt.': 'Note: Containers (such as a rucksack, trolley, etc.) will not automatically be placed in the bank.'
 'Deine Nachricht wurde gespeichert.': 'Your comment has been saved.'
 'Meine Partien': 'My games'
 'Name der Stadt': 'Town name'
@@ -2002,7 +2002,7 @@ Dauerhaft!: Forever!
 'Das Stadttor wurde bei einem besonders furchtbaren Angriff aus den Angeln gerissen und in die Aussenwelt geschleudert. Du solltest dich heute Nacht besser nicht hier aufhalten, sonst wird diese Stadt dein Grab.': 'During a particularly terrifying assault, the town gates were smashed then carried off into the World beyond. You would be well advised not to hang around here tonight or your town will be your tomb.'
 'Das passiert eben, wenn man eine Stadt ohne einen einzigen Einwohner zurücklässt.': 'That''s what happens when you leave a town without anyone to defend it.'
 'Das Stadttor ist zerstört!': 'The town gates have been destroyed.'
-'Die Stadt ist von Zombies zerstört worden: Es können keine Verbesserungen mehr stattfinden.': 'The city has been ravaged by zombies: no further evolutions can be carried out.'
+'Die Stadt ist von Zombies zerstört worden: Es können keine Verbesserungen mehr stattfinden.': 'The town has been ravaged by zombies: no further evolutions can be carried out.'
 'Die Stadt ist verwüstet! Du kannst dein Haus nicht mehr ausbauen, weil es ebenfalls niedergebrannt ist.': 'The town has been devastated! You cannot upgrade your house because it, too, has been reduced to firewood.'
 ZERSTÖRT!!: DESTROYED!!
 'Mit dieser Aktion kannst du alle Gegenstände in deinem Rucksack in der Zone verstecken. <strong>Sie werden nur für andere verbannte Bürger sichtbar sein.</strong> Eine nicht verbannte Person hat jedoch eine kleine Chance, sie beim Graben zu finden.': '<p>This action lets you hide all your objects somewhere in the zone. <strong>Only other shunned citizens will be able to see them.</strong></p> Nonetheless, a regular citizen will have a slight chance of finding them while searching the zone.'
@@ -2040,15 +2040,15 @@ Deko-Punkte: points for decor
 'Verzweifelt suchst du in diesem Raum nach etwas, aber wie lange wirst du an diesem unheilvollen Ort durchhalten?': 'You try desperately to find an object of use in the room, but how long will you last in this revolting place?'
 'Du kannst die üblen Gerüche und den Anblick dieses Raumes nicht länger ertragen.': 'You can''t deal with the disgusting smell or horrific look of this room any more.'
 'Du kannst diesen Raum betreten, vielleicht findest du einige interessante Gegenstände.': 'You can enter this room, maybe you''ll find something interesting inside.'
-'Diese Aktion kostet dich Sauerstoff, trotzdem flüchten?': 'This action will use up some Oxygene, will you flee anyway?'
+'Diese Aktion kostet dich Sauerstoff, trotzdem flüchten?': 'This action will use up some Oxygen, will you flee anyway?'
 'Diese Aktion ermöglicht es dir, die Tiefen dieses Gebäude zu erkunden und wertvolle Ressourcen zu bergen. Sei aber nicht zu gierig, denn deine Zeit ist begrenzt!': 'This action allows you to venture deep inside this building in order to bring back lots of resources, You can''t afford for your eyes to get bigger than your belly though, your time is limited!'
 'Das Gebäude betreten? (Diese Aktion kostet 1AP)': 'Enter the building? (this action costs 1 AP)'
 'Kein Wasser mehr!': 'There is no more water!'
 '<strong>Verlust der Zonenkontrolle</strong>: Die Suchen von {citizen} wurden unterbrochen!': '<strong>Loss of control:</strong> excavations of {citizen} have been interrupted!'
 '{citizen} hat die Zone verlassen, <strong>die Zombies werden in wenigen Minuten die Kontrolle erlangen wenn wir nichts unternehmen.</strong>': '{citizen} has left, <strong>the zone will be controlled by the zombies in a matter of minutes if nothing is done to stop it</strong>.'
 '<span>Es ist soweit: Der Schmaus kann beginnen!</span>': '<span>Time has run out: let the festivities begin!</span>'
-'Du warst gerade dabei dich daheim einzubunkern, als dir plötzlich auffällt dass etwas mit dem Reaktor nicht zu stimmen scheint, auf den die anderen Bürger so stolz sind... jetzt wurden sie durch eine ohrenbetäubende Explosion ausgelöscht. Als du wieder zu dir kommst liegst du in einem riesigen Krater, der einmal deine Stadt war; dein Blut kocht und deine Haut schmilzt dir vom Fleisch. Erst nach einigen Minuten unerträglicher Schmerzen verlässt auch du diese Welt.': 'You were just about to bunker down at home, when suddenly you realize that something seems to be wrong with the reactor that the other citizens are so proud of... now they have been wiped out by a deafening explosion. When you regain consciousness, you lie in a huge crater that was once your city; your blood boils and your skin melts from your flesh. Only after a few minutes of unbearable pain do you leave this world.'
-'Ihre Reklamation wurde gut aufgenommen, wird aber in der aktuellen Situation <strong>nicht sehr hilfreich</strong> sein.<hr>Die Stadt ist im totalen <strong>Chaos</strong> versunken... Bei so wenigen Überlebenden sind <strong>die Gesetze des Landes gebrochen worden</strong>.': 'Ihre Reklamation wurde gut aufgenommen, wird aber in der aktuellen Situation <strong>nicht sehr hilfreich</strong> sein.<hr>Die Stadt ist im totalen <strong>Chaos</strong> versunken... Bei so wenigen Überlebenden sind <strong>die Gesetze des Landes gebrochen worden</strong>.'
+'Du warst gerade dabei dich daheim einzubunkern, als dir plötzlich auffällt dass etwas mit dem Reaktor nicht zu stimmen scheint, auf den die anderen Bürger so stolz sind... jetzt wurden sie durch eine ohrenbetäubende Explosion ausgelöscht. Als du wieder zu dir kommst liegst du in einem riesigen Krater, der einmal deine Stadt war; dein Blut kocht und deine Haut schmilzt dir vom Fleisch. Erst nach einigen Minuten unerträglicher Schmerzen verlässt auch du diese Welt.': 'You were just about to bunker down at home, when suddenly you realize that something seems to be wrong with the reactor that the other citizens are so proud of... now they have been wiped out by a deafening explosion. When you regain consciousness, you lie in a huge crater that was once your town; your blood boils and your skin melts from your flesh. Only after a few minutes of unbearable pain do you leave this world.'
+'Ihre Reklamation wurde gut aufgenommen, wird aber in der aktuellen Situation <strong>nicht sehr hilfreich</strong> sein.<hr>Die Stadt ist im totalen <strong>Chaos</strong> versunken... Bei so wenigen Überlebenden sind <strong>die Gesetze des Landes gebrochen worden</strong>.': 'Your complaint has been received, but it <strong>will not be very helpful</strong> in the current situation.<hr>The town has sunk into total <strong>chaos</strong>… With so few survivors, <strong>social laws</strong> are no longer being enforced.'
 'Sie haben eine Beschwerde gegen <strong>{citizen}</strong> eingereicht. Wenn sich genug Beschwerden ansammeln, <strong>wird {citizen} aus der Gemeinschaft verbannt oder gehängt</strong>, falls ein Galgen vorhanden ist.': 'You have registered a complaint against <strong>{citizen}</strong>. If sufficient complaints are received, <strong>{citizen} will be shunned by the community</strong>, or hanged if there is a gallows.'
 'Ihre Beschwerde wurde zurückgezogen... Denken Sie das nächste Mal besser nach...': 'Your complaint has been withdrawn... Exercise better judgement next time...'
 'Achtung! Alle Spieler, die sich außerhalb der Stadt befinden, können danach nicht mehr rein.': 'Warning, players outside the town will not beable to get back in.'
@@ -2074,7 +2074,7 @@ Global: Global
 'Du kannst das Gebäude heute nicht erneut betreten, dein Körper würde das nicht aushalten!': 'You can''t go back there today, your body couldn''t handle it!'
 'Du kannst das Gebäude nicht betreten, während du eskortiert wirst oder eine Eskorte leitest.': 'You cannot enter this building, you are under escort or awaiting escort, you cannot enter.'
 'Du hast das Wasser aus {item} in den Brunnen geschüttet (<strong>+1 Einheit</strong>)': 'You have transferred the water from the {item} to the well (<strong>+1 unit</strong>).'
-'Unsere aktuelle Schätzung ist zu ungenau, um brauchbar zu sein: Wir brauchen mehr Bürger, die auf den Turm gehen!': 'Our current estimation is too inaccurate to be of any use: more citizens need to come to the tower!'
+'Unsere aktuelle Schätzung ist zu ungenau, um brauchbar zu sein: Wir brauchen mehr Bürger, die auf den Turm gehen!': 'Our current estimation is too inaccurate to be of any use, more citizens need to visit the tower!'
 'Du kannst das Haus, in dem {citizen} lebte, recyceln. Alle darin gelagerten Gegenstände (in seinem Inventar) werden in der Bank abgelegt. Außerdem hast du die Möglichkeit, einen Teil der beim Bau verwendeten Ressourcen zurückzugewinnen.': 'You can recycle the house where {citizen} lived. Everything found inside (i.e. in the inventory) will be placed in the bank. There is also a chance you could recover some of the materials used to build it.'
 'Nichts mehr da! Die Bürger haben beschlossen, das Haus zu zerstören... Welch eine dankbare Gemeinschaft.': 'There''s nothing left! The citizens decided to destroy it... That''s gratitude for you.'
 'Wiederverwertung:': 'Recycling:'
@@ -2107,7 +2107,7 @@ Ranking-Ausschluss: Ranking Exclusion
 'Um Baupläne zu finden musst du nun in Gebäuden in der Außenwelt campen.': 'Now you need to camp in the buildings in the desert in order to unlock the associated blueprint.'
 'Diese letzten Nächte des Überlebens haben deiner verlorenen Seele zugesetzt, aber du bist daraus gestärkt hervorgegangen. Nun bist du bereit für die wirklichen Herausforderungen, die jetzt beginnen.': 'These last few nights of survival have left your lost soul battered but reinforced. You are ready for the real challenges to begin.'
 'Der Diebstahl, den du gerade begangen hast, wurde bemerkt! Die Bürger werden gewarnt, dass du den(die,das) {item} bei {victim} gestohlen hast.': 'The robbery you''ve just carried <strong>has been detected</strong>! The citizens have been warned that you stole that {item} from {victim}.'
-'<strong>Das Stadttor ist geschlossen</strong>, eine Rückkehr ist nicht möglich!': '<strong>The gates of the city are closed</strong>, it is impossible to be teleported to the town!'
+'<strong>Das Stadttor ist geschlossen</strong>, eine Rückkehr ist nicht möglich!': '<strong>The town''s gates are closed</strong>, it is impossible to be teleported inside!'
 'Das Stadttor ist <strong>geschlossen</strong>! Vielleicht kannst du im Forum nach Hilfe fragen...': 'The doors are <strong>closed</strong>! Maybe by going to beg on the forum...'
 'Deine Beschwerde ist der Tropfen, der das Fass zum Überlaufen brachte... Die Bürger haben sich in Scharen gegen <strong>{citizen}</strong> ausgesprochen.': 'Your complaint was the final straw... Many citizens have voted against <strong>{citizen}</strong>!'
 'Dieser Aussätzige wurde zum Fleischkäfig geschleppt und dort unter dem Beifall des Publikums gesteinigt. Welch ein Schauspiel!': 'The pariah was dragged to the <strong>Meat Locker</strong> then stoned in front of a cheering crowd. What an atmosphere!'
@@ -2124,7 +2124,7 @@ Ranking-Ausschluss: Ranking Exclusion
 'Dieser Bürger ist nicht in der Stadt sei und hat <strong>sein Haus nicht gegen Einbrecher geschützt</strong>...': "is not in town and <strong>hasn't protected their house against thievery</strong>..."
 'In der (<strong>leeren</strong>) Zone graben': 'Search (<strong>depleted zone</strong>)'
 'Tod durch die Apokalypse': 'Death by Apocalypse'
-'Eine Katastrophe apokalyptischen Ausmaßes hat dich, deine Stadt und alles in der Umgebung hinweggefegt. Es ist, als hätte jemand die gesamte Welt... gereinigt.': 'A disaster of apocalyptic proportions has obliterated you, your city, and everything in the surrounding area. It is as if this world has been... purged.'
+'Eine Katastrophe apokalyptischen Ausmaßes hat dich, deine Stadt und alles in der Umgebung hinweggefegt. Es ist, als hätte jemand die gesamte Welt... gereinigt.': 'A disaster of apocalyptic proportions has obliterated you, your town, and everything in the surrounding area. It is as if this world has been... purged.'
 'Vereinzelte Bürger berichten von einem merkwürdigen Phänomen am Himmel... Ihr solltet die Alkoholvorräte in der Bank pürfen.': 'Some citizens report a strange phenomenon in the sky... You should check the alcohol supplies in the bank.'
 'Einige Bürger haben berichtet, während ihrer Abschätzung ein rotes Blitzen am Horizont gesehen zu haben.': 'Some citizens have reported seeing a flash of red on the horizon during their estimation.'
 'Ein Großteil der Bürger, die heute auf dem Wachturm waren, haben ein lautes Grollen in der Ferne vernommen.': 'A large number of the citizens who were at the watchtower today heard a loud rumbling in the distance.'
@@ -2152,7 +2152,7 @@ Fuß: Foot
 '{attacker} hat {defender} gewalttätig angegriffen! Der Kampf ist eskaliert und {attacker} verletzte {defender} schlussendlich schwer!': '{attacker} violently attacked {defender}! The fight quickly escalated and {attacker} ended up <strong>seriously injuring</strong> {defender}!'
 'Tag {d} {today}': 'Day {d} {today}'
 heute: today
-'Dieser Bürger wurde aus der Gemeinschaft verbannt; er hat nicht länger Zugang zu den Gebäuden der Stadt, mit Ausnahme des Brunnens (wobei er auf eine Ration pro Tag eingeschränkt ist).': 'This citizen has been banished from the community: he will no longer be able to have access to the city''s devices, with the exception of the well (limited however to the daily ration, without additional catch).'
+'Dieser Bürger wurde aus der Gemeinschaft verbannt; er hat nicht länger Zugang zu den Gebäuden der Stadt, mit Ausnahme des Brunnens (wobei er auf eine Ration pro Tag eingeschränkt ist).': 'This citizen has been shunned from the community: they will no longer be able to have access to the town''s devices, with the exception of the well (limited to the daily ration, without additional take).'
 'Die Ratten haben das Schiff schon vor Tagen verlassen... Diese Stadt ist nur noch ein Schatten ihrer selbst.': 'Anyway, all the rats have already abandoned ship for days... This town is only a shadow of itself.'
 'Ermordet zu werden ist äußerst ärgerlich (ja, wirklich!). Aber wir bitten dich dringend, <u>die Identität deines Mörders gegenüber deinen ehemaligen Mitbürgern nicht aufzudecken</u>... Lass ihnen das Vergnügen, selbst ermitteln zu müssen!': 'Being murdered is a bitter pill to swallow (really, it is). But we strongly recommend you to <u>not reveal the name of your murderer to your former fellow citizens</u>... Leave them to enjoy the thrill of the hunt!'
 Fortfahren...: Continue...
@@ -2174,13 +2174,13 @@ Fortfahren...: Continue...
 'Einige Bürger wurden beim Versuch, sich der Zombiehorde entgegenzustellen, verletzt.': 'Some citizens were terrorized during their attempt to resist the attack of the Horde!'
 'Einige Bürger sind beim Versuch, sich der Zombiehorde entgegenzustellen, vor Angst erstarrt.': 'Some citizens were terrorized during their attempt to resist the attack of the Horde!'
 'Beim Graben ist {citizen} auf eine Art... geheimes Versteck mit {items} gestoßen! Es wurde vermutlich von einem verbannten Mitbürger angelegt...': 'As {citizen} starts to search, they notice some kind of... <strong>cache</strong> containing: {items}! Hmmm... This was probably hidden by a <strong>shunned citizen</strong>...'
-'Beim Durchwühlen des Mülls, der am Stadtrand herumliegt, findest du schließlich folgendes: {item}.<hr />Du hast <strong>1 Aktionspunkt(e)</strong> verbraucht.': 'By rummaging through the garbage lying around the edge of the city, you end up finding {item}.<hr />You have used <strong>1 action point</strong>.'
+'Beim Durchwühlen des Mülls, der am Stadtrand herumliegt, findest du schließlich folgendes: {item}.<hr />Du hast <strong>1 Aktionspunkt(e)</strong> verbraucht.': 'By rummaging through the garbage lying around the edge of town, you end up finding {item}.<hr />You have used <strong>1 action point</strong>.'
 'Es ist dir gelungen, {item} von {victim} zu stehlen <strong>ohne entdeckt zu werden</strong>. Nicht schlecht!': 'You have stolen the {item} from {victim} <strong>without anyone noticing</strong>. Damn! You''ve got skills...'
 'Du hast keine Seelenpunkte gewonnen (am ersten Tag gestorben).': 'You haven''t earned any points (died on day 1).'
 'Die Stadt hat folgende Gegenstände in Folge der Hinrichtung von {shunned} zurückerhalten: {list}': 'The town received following item(s) after hanging {shunned}: {list}'
 'Du kannst kein(en) {item} per Post versenden.': 'You cannot send {item} as an attachment.'
 'Die Bürger haben entschieden, {citizen} zu <strong>erhängen</strong>!! Der Galgen wurde im Zuge dieser gewalttätigen Aktion <strong>zerstört</strong>!': 'The citizens decided to <strong>hang</strong> {citizen} !! The gallows were destroyed during this particularly violent event!'
-'Die Bürger haben entschieden, {citizen} in den <strong>Fleischkäfig</strong> zu zerren und dort zum Vergnügen aller zu steinigen... Die Stadt hat <strong>+{def} temporäre Stadtverteidigung</strong> erhalten!': 'The citizens decided to drag {citizen} to the <strong>Meat Locker</strong>, then stone him for the show... The city received <strong>+{def} temporary defense pts</strong>!'
+'Die Bürger haben entschieden, {citizen} in den <strong>Fleischkäfig</strong> zu zerren und dort zum Vergnügen aller zu steinigen... Die Stadt hat <strong>+{def} temporäre Stadtverteidigung</strong> erhalten!': 'The citizens decided to drag {citizen} to the <strong>Meat Locker</strong>, then stone him for the show... The town received <strong>+{def} temporary defense points</strong>!'
 'Anonyme Beschwerde ({num} insgesamt)': 'Anonymous complaint ({num} in total)'
 'Beschwerde zurückgezogen (es bleiben noch {num} Stück)': 'Complaint Withdrawn ({num} remaining)'
 '{deaths} Bürger sind beim heutigen Angriff gestorben!': '{deaths} citizens died during the attack!'
@@ -2193,7 +2193,7 @@ Fortfahren...: Continue...
 'Ganz genau, das bist du!': 'Yes, it''s really you...'
 'gesichertes Haus': 'protected house'
 'In dieses Haus kann <strong>nicht eingebrochen</strong> werden. Es ist durch ein Schloss oder etwas anderes gesichert...': 'This house <strong>cannot be burgled</strong>. It has a lock or something...'
-'Das Stadttor wurde bereits von einem anderen pflichtbewussten Bürger geschlossen.': 'The city gates have been closed by another conscientious citizen.'
+'Das Stadttor wurde bereits von einem anderen pflichtbewussten Bürger geschlossen.': 'The town gates have been closed by another conscientious citizen.'
 'Du nimmst diese wandernde Seele und betest, dass der Schamane weiß, wie man diesen Trank zubereitet! Und du überlebst! Was für ein Glück, du hätten keine müde Mark auf den Scharlatan gewettet.': 'You grab this wandering soul and pray that the shaman knows how to brew this potion! And you survive! What a luck, you wouldn''t have bet a kopek on this charlatan.'
 'Die Seele in MyHordes': 'The Soul in MyHordes'
 'Gerechtigkeit in MyHordes': 'Justice in MyHordes'
@@ -2202,7 +2202,7 @@ Def.: Def.
 'Dieser Wert spiegelt die Anwesenheit und Aktivität eines jeden Bürgers wider.': 'This score reflects how active a player is and whether they connect regularly.'
 Löschen: Delete
 'Meine persönliche Nachricht ändern': 'Change my personal message'
-'Einen Aufstand der Verbannten vorbereiten (optional).': 'Help prepare the uprising (optional).'
+'Einen Aufstand der Verbannten vorbereiten (optional).': 'Help prepare the uprising (optional)'
 'Solange dieser Bürger <strong>vor Angst erstarrt</strong> ist, wird es für ihn unmöglich sein, inmitten von Zombies zu handeln...': 'As long as this citizen is <strong>terrorized</strong>, it will be impossible for him to act in the midst of zombies...'
 'Mit dieser Aktion kannst du die Stadt betreten, ohne dass es ins Stadtregister eingetragen wird. Wenn du ein paar Spieler eskortierst, werden diese am Stadttor zurückgelassen.': 'This action allows you to go through the town gates without it being recorded in the Register. If you are escorting players, they will be left at the town gates.'
 'Mit dieser Aktion kannst du deinen unersättlichen Hunger nach Menschenfleisch stillen!': 'With this action, you can satisfy your insatiable hunger for human flesh!'
@@ -2212,7 +2212,7 @@ Löschen: Delete
 'Die Anzahl der Sterne gibt dir eine Vorstellung von der heutigen Aktivität des Einwohners {citizen}: Anwesenheit, Besuche im Forum, Arbeit im Dorf, etc.': 'The numbers of stars beside a citizen give you an idea of how active {citizen} has been today: presence, forum visits, work done in town, etc.'
 'Du kannst diese Aktion im Lernmodus nicht ausführen. <strong>Zuerst musst du noch etwas Spielerfahrung sammeln</strong>.<hr/>Klicke auf den Link bei Lernmodus, um diesen Modus zu deaktivieren.': 'You cannot do this in rookie mode. Basically, <strong>this action requires you to have greater experience of the game</strong>.<hr/>You can deactivate rookie mode by clicking the link in the info box.'
 'Der Schwierigkeitsgrad ist in dieser Stadt geringer. Deswegen gilt sie nicht für das Saison-Ranking. Die Außenwelt ist durchschnittlich 13x13 Felder groß.': 'Game difficulty is reduced for this town, and therefore will not feature in the season rankings. The average size of the map of the World Beyond is 13x13.'
-'Bei den entfernten Regionen handelt es sich um Städte, die nur von sehr erfahrenen Spielern gespielt werden dürfen (<strong>{splimit} Seelenpunkte</strong>). <p>Diese Städte sind den Veteranen vorbehalten.</p><p>Die entsprechenden Karten der entfernten Regionen sind <strong>weitaus größer</strong> und es gibt mehr zu erforschen.</p>': 'Distant regions can only be joined by players with a significant amount of game experience (a minimum of <strong>{splimit} soul points</strong>). <p>These towns are full of veterans.</p><p>Furthermore, maps of distant region towns are <strong>much larger than others</strong> and allow for more exploration.</p>'
+'Bei den entfernten Regionen handelt es sich um Städte, die nur von sehr erfahrenen Spielern gespielt werden dürfen (<strong>{splimit} Seelenpunkte</strong>). <p>Diese Städte sind den Veteranen vorbehalten.</p><p>Die entsprechenden Karten der entfernten Regionen sind <strong>weitaus größer</strong> und es gibt mehr zu erforschen.</p>': 'Distant regions can be joined by everyone. <p>Furthermore, maps of distant region towns are <strong>much larger than others</strong> and allow for more exploration.</p>'
 'Pandämoniumstädte sind <strong>weitaus schwieriger</strong> als normale Städte! Dementsprechend sind auch die Belohnungen und Gewinnmöglichkeiten besser.<br /><strong>Du benötigst mindestens {splimit} Seelenpunkte</strong>, um in diesen Städten spielen zu dürfen.': 'Hardcore towns are reputed to be <strong>much more difficult than others</strong>!<br /><strong>You need  at least {splimit} soul points</strong> to join these towns.'
 'Ein Moderator hat deinen Thread "{threadname}" in das Forum "{forumname}" verschoben. {link_post}': 'A moderator has moved your thread "{threadname}" to the forum "{forumname}". {link_post}'
 'Deine aktuelle Situation erlaubt nicht, dass du diese Aktion durchführst.': 'Your current situation does not allow you to perform this action.'
@@ -2232,13 +2232,13 @@ Löschen: Delete
 '{citizen} hat das Gebäude {plan} repariert (Sklaverei: +50% AP).': '{citizen} repaired the building {plan} (Slavery: +50% AP).'
 'Funkgerät verwenden': 'Use the radio'
 'Gebäudeliste einblenden': 'Display construction list'
-'<strong>{citizen} scheint von einer plötzlichen, unkontrollierbaren Panik ergriffen zu sein</strong>! Es ist unmöglich, auch nur einen Schritt weiter zu gehen... seine <strong>Bewegung wurde unterbrochen</strong>.': '<strong>{citizen} seems to be gripped by a sudden, uncontrollable panic</strong>! It''s impossible to go even one step further... his <strong>movement has been interrupted</strong>.'
+'<strong>{citizen} scheint von einer plötzlichen, unkontrollierbaren Panik ergriffen zu sein</strong>! Es ist unmöglich, auch nur einen Schritt weiter zu gehen... seine <strong>Bewegung wurde unterbrochen</strong>.': '<strong>{citizen} seems to be gripped by a sudden, uncontrollable panic</strong>! It''s impossible to take even one step further... their <strong>movement has been interrupted</strong>.'
 'Als du dich umschaust, <strong>überfällt dich eine plötzliche, unkontrollierbare Panik</strong>! Es ist unmöglich, auch nur einen Schritt weiterzugehen.<hr/>Deine Bewegung wurde <strong>unterbrochen</strong> und du hast <strong>1 AP</strong> verloren.': 'As you look around, <strong>a sudden, uncontrollable feeling of panic hits you</strong>! It''s impossible to go even one step further.<hr/>Your movement was <strong>interrupted</strong> and you lost <strong>1 AP</strong>.'
 '{shaman} hat {citizen} soeben mit seinen mystischen Schamanenkräften geheilt!': '{shaman} has just healed {citizen} thanks to their shamanic powers!'
 'Wir werden alle sterben: Sag es weiter!': 'We''re all going to die: spread the word!'
 Revolution!: Insurrection!
 'Vor dir siehst du die glimmenden Überreste einer Barrikade. In der Ferne ertöhnen Jubelschreie und Sirenenrufe.': 'Before you lie the smoldering remains of a barricade. In the distance, cheers and siren calls resound.'
-'Die Verbannten der Stadt wollten sich nicht länger unterdrücken lassen und haben eine Revolution angezettelt! Die bisherigen Anführer der Stadt wurden entmachtet und die Revolutionäre haben die Kontrolle übernommen.': 'The shunned of the city no longer wanted to be oppressed and have started a revolution! The previous leaders of the city have been ousted and the revolutionaries have taken control.'
+'Die Verbannten der Stadt wollten sich nicht länger unterdrücken lassen und haben eine Revolution angezettelt! Die bisherigen Anführer der Stadt wurden entmachtet und die Revolutionäre haben die Kontrolle übernommen.': 'The shunned in town no longer want to be oppressed and have started a revolution! The previous leaders of the town have been ousted and the revolutionaries have taken control.'
 'Du bist nun frei.': 'You are now free.'
 'Erlöst von den Fesseln der Verbannung kannst du nun zusammen mit den anderen Revolutionären das Schicksal der Stadt bestimmen.': 'Released from the shackles of banishment, you can now determine the fate of the town together with the other revolutionaries.'
 'Du bist nun verbannt.': 'You are now shunned.'
@@ -2356,7 +2356,7 @@ Stadt/Stadttor: Town/Doors
 '{citizen} hat soeben gemeldet, dass das Stadttor automatisch geschlossen wurde.': '{citizen} has reported that the town''s gates have been automatically closed.'
 '{num} ehemalige Mitbürger, deren Leichen wir gestern noch entsorgt haben, haben uns heute einen Besuch abgestattet. Wie grotesk!': '{num} former fellow citizens, whose bodies were disposed of yesterday, paid us a visit today. How grotesque!'
 'Wir haben heute <i class="dagger">†</i> {citizen} wiedererkannt. Seine Leiche hatten wir gestern erst weggeworfen!': 'Although we had disposed of his body yesterday, <i class="dagger">†</i> {citizen} came back to visit us! Ahh friendship...'
-'Du hast Glück gehabt. Die Zombies wurden noch einmal von den Verteidigungsanlagen der Stadt aufgehalten!': 'Thankfully for you, the zombies were once again stopped by the city''s defenses!'
+'Du hast Glück gehabt. Die Zombies wurden noch einmal von den Verteidigungsanlagen der Stadt aufgehalten!': 'Thankfully for you, the zombies were once again stopped by the town''s defenses!'
 'Mit deinem letzten Aufbäumen vor dem Tod ist es dir gelungen, die Zombies alt aussehen zu lassen! Bravo!': 'With a glorious and brave last stand, you managed to push back the horde! Bravo!'
 'Schade, dass das die anderen dich nicht mehr sehen können! Du bist ohne Zweifel ein ausgezeichneter Nachtwächter!': 'If only the others had been there to see you! You are, without doubt, an excellent watchperson!'
 'Nachtwächter {citizen} trug keine Waffe bei sich??!! War das Nachlässigkeit?': 'Watchman {citizen} had no weapons??!! Was this simply a mistake...'
@@ -2390,7 +2390,7 @@ Tarnexperte: Camo Chief
 'Dein Community-Event "{eventName}" wurde von einem Moderator verifiziert und kann nun zum geplanten Zeitpunkt starten.': 'Your community event "{eventName}" has been verified by a moderator and can now start at the scheduled time.'
 'Dein Community-Event "{eventName}" wurde von einem Moderator gelöscht.': 'Your community event "{eventName}" has been deleted by a moderator.'
 'Schon von Weitem hört man Jubelschreie und Freudenrufe durch die Gassen schallen. Niemand hätte es für Möglich gehalten...': 'Even from afar, you can hear cheers and shouts of joy echoing through the alleys. No one would have thought it possible...'
-'Nach der Fertigstellung des Altars ist der Rabe in deiner gottverlassenen Stadt erschienen und hat in seiner unendlichen Gnade alle Verbannungen aufgehoben.': 'After the completion of the altar, The Crow appeared in your godforsaken town and, in His infinite mercy, lifted all the banishments.'
+'Nach der Fertigstellung des Altars ist der Rabe in deiner gottverlassenen Stadt erschienen und hat in seiner unendlichen Gnade alle Verbannungen aufgehoben.': 'After the completion of the altar, The Crow appeared in your godforsaken town and, in His infinite mercy, lifted all banishments.'
 'Der Rabe hat dir eine zweite Chance gewährt und dich von den Fesseln der Verbannung erlöst. Wie wirst du deine neugewonnene Freiheit nutzen?': 'The Crow has granted you a second chance and released you from the shackles of banishment. How will you use your newfound freedom?'
 'Wenn du dich nur genug anstrengst, kannst du möglicherweise etwas mit in dein nächstes Leben nehmen ...': 'If you just try hard enough, you may be able to take something with you into your next life ...'
 'Das Ende deines Lebens in <strong>{town}</strong>': 'The end of your life in <strong>{town}</strong>'
@@ -2463,7 +2463,7 @@ Kantinenkoch_f: Cantine Cook
 Amateur-Laborratte_f: Amateur Lab Rat
 'Kleiner Präparator_f': 'Potion Preparer'
 'Chemiker von um die Ecke_f': 'Corner Chemist'
-Produkttester_f: Produkttesterin
+Produkttester_f: Product Tester
 Wüstenstadt-Dealer_f: Local Dealer
 'Ich koste alle meine Produkte_f': 'I taste all my products'
 'Rauchts? Dann ist es meins._f': 'Does it smoke? It is from me.'
@@ -2479,7 +2479,7 @@ Außenweltlegende_f: Legend of the World Beyond
 'Messie der verlorenen Welt_f': 'Lost World Messiah'
 'Mein Name ist Nobody_f': 'My name is nobody'
 'Ein Sternbild trägt meinen Namen_f': 'They named a constellation after me'
-Abstauber_f: Abstauberin
+Abstauber_f: Bin Raker
 Müllkind_f: Dumpster Diver
 'Autonomer Müll_f': 'Autonomous junk'
 'Freier Bürger_f': 'Free citizen!'
@@ -2487,41 +2487,41 @@ Müllkind_f: Dumpster Diver
 'Ich brauche niemanden_f': 'I do not need anyone'
 'Unabhängiger Großeinsiedler_f': 'Great Independent Hermitess'
 'Che Guevara der Wüste_f': 'Che Guevara of the desert'
-Maulheld_f: Maulheldin
+Maulheld_f: Tea Leaf
 Lump_f: Artful Dodger
-Schaumschläger_f: Schaumschlägerin
-Dieb_f: Diebin
+Schaumschläger_f: Chiseler
+Dieb_f: Sadie Farrell
 Fantomas_f: Rusty Ryan
 'Ali Baba_f': 'Debbie Ocean'
 Meisterdieb_f: Multipass
-Kleptomane_f: Kleptomanin
+Kleptomane_f: Kleptomaniac
 'Dein Haus ist mein Haus_f': 'Your home is my home'
 Ästhet_f: Coquette
-Schaufenstergestalter_f: Schaufenstergestalterin
-Innenarchitekt_f: Innenarchitektin
+Schaufenstergestalter_f: Good taste personified
+Innenarchitekt_f: Interior designer
 Möbelgourmet_f: Marquee Master
 'Ordnung muss sein!_f': 'Aesthetics Experta'
 'Ein schöneres Leben_f': 'Style is eternal...'
 'Großer E-KEA Katalog_f': 'Welcome to the palace.'
-Plünderer_f: Plünderin
+Plünderer_f: Pillager
 Aasgeier_f: Plunderess
 Hyäne_f: Hyena
 'Wegelagerer post mortem_f': 'Post-mortem Pickpocket'
 'Hungriger Schakal_f': 'Hungry Jackal'
 'Kojote der kargen Steppen_f': 'Fleet-footed Coyote'
-Fingerschmied_f: Fingerschmiedin
+Fingerschmied_f: Solicitor of the World Beyond
 'Nein, das Ding fasse ich nicht an._f': 'Silver Showerer'
-Leichenhygieniker_f: Leichenhygienikerin
+Leichenhygieniker_f: Golden Showerer
 'Ich liebe den Geruch von gewaschenen Leichen am Morgen._f': 'Platinum Showerer'
-Müllmann_f: Müllfrau
-'Erfahrener Müllmann_f': 'Erfahrene Müllfrau'
-Entsorgungsfachmann_f: Entsorgungsfachfrau
-Maccabees-Vertreiber_f: Maccabees-Vertreiberin
-'SM Anhänger_f': 'SM Anhängerin'
-'SM Spezialist_f': 'SM Spezialistin'
+Müllmann_f: Corpse Cop
+'Erfahrener Müllmann_f': 'Body Bouncer'
+Entsorgungsfachmann_f: Stiff Shifter
+Maccabees-Vertreiber_f: Apocalyptic Garbagewoman
+'SM Anhänger_f': 'Casual S+M Enthusiast'
+'SM Spezialist_f': 'Whip me harder!'
 'Nenn mich Herrin_f': 'Attach the nipple clamps!'
 'Ich möchte dein Objekt sein._f': 'Bring out the gimp!'
-Stadtmetzger_f: Stadtmetzgerin
+Stadtmetzger_f: Local Butcher
 'Spezialität: Hundesteaks_f': 'Anyone for a fat-cat-kebab?'
 'Miezi? Jaaaa, komm her..._f': 'Scourge of the animal kingdom...'
 'Fleisch ist mein Gemüse_f': 'If we''re meant to eat vegetables, why are animals so tasty?'
@@ -2530,41 +2530,41 @@ Stadtmetzger_f: Stadtmetzgerin
 'Immer alles im Blick_f': 'Long-sighted'
 Wachsam_f: Uber-Aware
 Paranoid_f: Paranoid and Proud
-'Fels in der Brandung_f': 'The Rock!'
-'Großer Baumeister_f': 'Große Baumeisterin'
-'Großer Architekt_f': 'Große Architektin'
-Freimauer_f: Freimauerin
-Terraformingspezialist_f: Terraformingspezialistin
-'Allmächtiger Schöpfer_f': 'Allmächtige Schöpferin'
-'Archi-Mädlicher Illustrator von Pi_f': 'Archi-Mädliche Illustratorin von Pi'
+'Fels in der Brandung_f': 'The Rowdy!'
+'Großer Baumeister_f': 'Master Builder'
+'Großer Architekt_f': 'Great Architect'
+Freimauer_f: Great Mason
+Terraformingspezialist_f: Terraforming Specialist
+'Allmächtiger Schöpfer_f': 'Great, benevolent, all-powerful creator'
+'Archi-Mädlicher Illustrator von Pi_f': 'I can recite pi to infinity!'
 "Muad'Dib_f": "Three rivers dam... That's adorable."
 'Am 7. Tag erschuf er den Fleischkäfig_f': 'And on the 7th day, she did not rest!'
-'Bauherr ohne Sinn und Verstand_f': 'Bauherrin ohne Sinn und Verstand'
-'Erbauer der verlorenen Zeit_f': 'Erbauerin der verlorenen Zeit'
-'Erleuchteter Baumeister_f': 'Erleuchteter Baumeisterin'
-'Maurer aus Leidenschaft_f': 'Maurerin aus Leidenschaft'
+'Bauherr ohne Sinn und Verstand_f': 'Nonsense builder'
+'Erbauer der verlorenen Zeit_f': 'Founder of Timewasting'
+'Erleuchteter Baumeister_f': 'Enlightened Builder'
+'Maurer aus Leidenschaft_f': 'Soul Mason'
 'Das Unnütze mit dem Angenehmen verbinden_f': 'Chiefess DIY'
-'Verrückter Architekten-Visionär_f': 'Verrückte Architekten-Visionärin'
+'Verrückter Architekten-Visionär_f': 'Visionary Architect'
 'Ich habe einen Plan_f': 'I have a plan'
-'Hirnverbrannter Baumeister_f': 'Hirnverbrannte Baumeisterin'
-'Meister der Nutzlosigkeit_f': 'Meisterin der Nutzlosigkeit'
-'Vereister Ingenieur_f': 'Vereiste Ingenieurin'
+'Hirnverbrannter Baumeister_f': 'Demented Master Builder'
+'Meister der Nutzlosigkeit_f': 'Master of futility'
+'Vereister Ingenieur_f': 'Fruit Loop Engineer'
 'Wundervoll nutzlos_f': 'Wonderfully futile'
 'Der Bruce Lee des Spachtels_f': 'Cynthia Rothrock of the trowel'
 'Es ist Zeit für Kathedralen_f': 'The time for cathedrals has come'
 'Hast du nichts besseres zu tun?_f': 'Don''t you have better things to do?'
 'Hohepriesterin des Sonnentempels_f': 'High Priestess of the Sun Temple'
-'Huldigt den riesigen KVF!_f': 'BRDs for everyone! The people demand BRDs'
+'Huldigt den riesigen KVF!_f': 'BRDs for everyone! The people demand BRDs!'
 'Obelisk der heutigen Zeit!_f': 'Modern obelisk!'
 'Lebhafter Tribut_f': 'Standing ovation'
 'Wird in die Annalen eingehen_f': 'One for the books'
 'Extra viel Liebe_f': 'Extra large love'
 'Es ist kleiner als im Katalog_f': 'It was smaller on the catalog'
 'Freude der Stärke 8_f': 'Happiness of magnitude 8'
-'Bewahrer der Freuden_f': 'Bewahrerin der Freuden'
+'Bewahrer der Freuden_f': 'Keeper of pleasures'
 'Das hast du nicht wirklich gebaut?_f': 'You really built that?'
-Eimerhalter_f: Eimerhalterin
-Sandverkäufer_f: Sandverkäuferin
+Eimerhalter_f: Guardian of the seals
+Sandverkäufer_f: Snake oil saleswoman
 'Martinet am Strand_f': 'Martine at the beach'
 'Ein Spiel für echte Kinder_f': 'A real children''s game!'
 "Dauermitglied in Micky's Club_f": "Permanent member of the Mickey Club"
@@ -2588,37 +2588,37 @@ Kraaaah!_f: CroooAAwW!
 '4000 Zombies starren uns an_f': '4000 zombies gaze at us'
 Durazell_f: There's a battery with your name on it...
 'Hüter der Heiligen Batterie_f': 'Zen-ergizer'
-'Der Batterienator_f': 'Die Batterienatorin'
+'Der Batterienator_f': 'The batterinator.'
 'Ist es ein Vogel? Ist es ein Flugzeug? Nein, es ist der super Batteriewerfer!_f': 'Is it a bird? Is it a plane? No, it''s the super battery launcher!'
 'Aufgeladen und kampfbereit_f': 'Amped up and ready to roll'
 'Hey! Willst du meine... Batterie sehen?_f': 'Hey hey, wanna see my... Battery?'
 Maurerlehrling_f: Labourer
-Maurer_f: Maurerin
-Polier_f: Polierin
-Baustellenleiter_f: Baustellenleiterin
-'Architekt (title)_f': Architektin
-Meisterarchitekt_f: Meisterarchitektin
+Maurer_f: Builder
+Polier_f: Site manager
+Baustellenleiter_f: Architect
+'Architekt (title)_f': Master Architect
+Meisterarchitekt_f: Town planner
 'Oscar Niemeyer_f': 'Bob the builder'
 'Zement & Garfunkel_f': 'Cement & Garfunkle'
 'Menschliche Ameisenkolonie_f': 'The human ant'
 'Arbeiterhelm und Kupferstiefel_f': 'The Great Wall of what?'
 'Arbeit ist Gesundheit_f': 'Pyramid shmyramid'
 'Bob der Baumeister_f': 'I''m working on the Sagrada'
-Spachtler_f: Spachtlerin
+Spachtler_f: Town plasterer
 'Gewissenhafter Maurer_f': 'All-round Handywoman'
 'Meisterwerke in Gefahr_f': 'Masterpieces in Peril'
 'Ein Flicken und alles ist wie neu_f': 'Get some Duct Tape in there.'
-Pisa-Geraderichter_f: Pisa-Geraderichterin
-'Großer Renovator_f': 'Große Renovatorin'
+Pisa-Geraderichter_f: The Fixer
+'Großer Renovator_f': 'Renovator to the stars'
 'Ein Patch, kein Spiel_f': 'Patch-up Specialist'
 'Ein Riss? Welcher Riss?_f': 'A crack? What crack?'
 'Das braucht noch 10 Jahre!_f': 'That''ll last another 10 years!'
 Kettensägenmassaker_f: Chainsaw Massacre
-Fleisch-Schuldner_f: Fleisch-Schuldnerin
+Fleisch-Schuldner_f: There ain't nothing I can't take this chainsaw to...
 'Bruce Campbell_f': 'Bruce Campbell'
-Hobby-Heimwerker_f: Hobby-Heimwerkerin
-Techniker_f: Technikerin
-'Meisterbastler _f': Meisterbastlerin
+Hobby-Heimwerker_f: Home Depot Regular
+Techniker_f: Technician
+'Meisterbastler _f': Fitter
 'Sowas wirft man doch nicht weg!_f': 'Craftswoman'
 'Mac Gyver der Außenwelt_f': 'MacGyver of the World beyond'
 'Super Soaker_f': 'Super Soaker'
@@ -2626,8 +2626,8 @@ Wasserwaffen-Spezialist_f: H2Operative
 Hydraulik-Engineering_f: Hydraulics Engineer
 'Abstieg der Atlanteaner_f': 'Descendant of the Atlanteans'
 Archäologielehrling_f: Archaeologist
-Archäologe_f: Archäologin
-Grabungsleiter_f: Grabungsleiterin
+Archäologe_f: Female Archeologist
+Grabungsleiter_f: Ruin Restorer
 'Großer Löcherbuddler_f': 'Indiana Jones'
 Riesenmaulwurf_f: Desert Rat
 'Furchtloser Camper_f': 'Unshakeable Camper'
@@ -2638,13 +2638,13 @@ Riesenmaulwurf_f: Desert Rat
 'Neil Armstrong der Außenwelt_f': 'Christina Koch of the World Beyond'
 'Lebensmüder Kundschafter_f': 'Extreme Explorer'
 'Draufgängerischer Expeditionsreisender_f': 'Expedition Expert'
-Nervenkitzelsucher_f: Nervenkitzelsucherin
+Nervenkitzelsucher_f: Horizon traveler
 'Christopher Kolumbus_f': 'Desert Shackleton'
 'Bis zur Unendlichkeit... und noch viel weiter!_f': 'To infinity and beyond!'
 'Indiana Jones und die Ruinen der Aussenwelt_f': 'Lara Croft and the ruins of the World Beyond'
 'Wenn ich das nur vorher gewusst hätte..._f': 'Sneaky Voyager'
 'Verwegener Wanderer_f': 'Tunnel Visionary'
-Tunnelblicker_f: Tunnelblickerin
+Tunnelblicker_f: Regularly A-mazed!
 'Im Irrgarten_f': 'Compass Included'
 'Inklusive Kompass_f': 'Buried Voluntarily'
 'Begrabener Freiwilliger_f': 'Tombstone Toppler'
@@ -2654,18 +2654,18 @@ Labyrinth-Gollum_f: Labyrinth Mistress PhD
 "Wo klemmt's?_f": "Key hee hee!"
 Dietrich_f: How about some Chubb-ly?
 'Sesam, öffne dich..._f': 'Sesame, shift your A...'
-Türöffner_f: Türöffnerin
-Gentleman-Einbrecher_f: Lady-Einbrecherin
+Türöffner_f: Deadbolt Dick
+Gentleman-Einbrecher_f: Female Burglar
 Schlüsseldienst_f: Captain Hook
 Zerberus_f: Shim Surgeoness
 'Meister der Schlüssel_f': 'Grand Key Master'
-Brutalo_f: Brutala
-Verstümmler_f: Verstümmlerin
+Brutalo_f: Mutilator
+Verstümmler_f: Exterminator
 Killer_f: Corpse Crusher
-Kadaverentsorger_f: Kadaverentsorgerin
-Vernichter_f: Vernichterin
-Schlächter_f: Schlächterin
-Friedensstifter_f: Friedensstifterin
+Kadaverentsorger_f: The Hitwoman
+Vernichter_f: Female Destroyer
+Schlächter_f: Female Butcher
+Friedensstifter_f: Female Peacemaker
 'Alptraum der Traumlosen_f': 'Go ahead, make my day!'
 'Hans im Glück_f': 'The name''s Nataniela Fortu'
 'Vierklettriges Kleeblatt_f': 'Do you feel lucky, punk?'
@@ -2681,49 +2681,49 @@ Fortuna_f: Windfall Catcher
 'Stürmischer Kundschafter_f': 'Dora the Explorer'
 'Furchtloser Abenteurer_f': 'Fearless adventurer'
 'Wagemutiger Trapper_f': 'Guide to the World Beyond'
-Wikinger_f: Wikingerfrau
-Außenweltreiseführer_f: Außenweltreiseführerin
+Wikinger_f: Female Viking
+Außenweltreiseführer_f: Female World Beyond Travel Guide
 'Ich habe die Erde umrundet... zweimal!_f': 'I''ve been round the world... Twice!'
 'Internet Explorer_f': 'Internet Explorer'
 'Ich hab sogar das Klo abgesucht!_f': 'I''ve even dug through a public toilet!'
 'Sind wir schon da?_f': 'Are we there yet?'
-Außenweltschläfer_f: Außenweltschläferin
+Außenweltschläfer_f: Suicide Sleeper
 'Allein in dieser Welt_f': 'Alone in the Dark'
 'Der mit den Zombies tanzt_f': 'Dances with zombies'
 'Ich sehe überall Tote!_f': 'I see dead people - everywhere!'
 'Ich komme heute Nacht nicht heim..._f': 'Don''t wait up...'
-'Ein Mann gegen die Außenwelt_f': 'Eine Frau gegen die Außenwelt'
+'Ein Mann gegen die Außenwelt_f': 'Woman vs World Beyond'
 Stadtallergie_f: I'm allergic to something in town.
 'Wo ich hinguck, seh ich Gegend._f': 'So I guess we''re not waiting for Bobbie?'
-'Runaway Michael_f': 'Runaway Michael'
+'Runaway Michael_f': 'Megan Hine'
 'Ohne Dach oder Leber_f': 'Without a roof or a tooth.'
-'Neugieriger Leser_f': 'Neugierige Leserin'
-'Eifriger Leser_f': 'Eifrige Leserin'
-Wüstenhistoriker_f: Wüstenhistorikerin
-Bibliothekar_f: Bibliothekarin
-Archivar_f: Archivarin
-Erinnerungsträger_f: Erinnerungsträgerin
+'Neugieriger Leser_f': 'Female Curious reader'
+'Eifriger Leser_f': 'Female Storyteller'
+Wüstenhistoriker_f: Female Desert Historian
+Bibliothekar_f: Female Librarian
+Archivar_f: Female Archiver
+Erinnerungsträger_f: Female memory bearer
 'Erinnerungen an die Zivilisation_f': 'Memory of civilization'
 'Twinoid ist tabu_f': 'Twinoid is taboo'
 'Keine Macht den Drogen_f': 'Happy as Laurence'
 'Sowas fasse ICH nicht an_f': 'Never touch the stuff, me.'
 'Vorbild für die Jugend_f': 'Just Say No!'
 'Champions nehmen keine Drogen!_f': 'Winners don''t use drugs!'
-Medikamentetester_f: Medikamentetesterin
+Medikamentetester_f: Female Drug Tester
 Laborratte_f: Lab Rat
 'Pille palle, 3 Tage wach!_f': 'Product Tester!'
 'Timothy Leary_f': 'What do you mean these ain''t skittles'
 'Ich sehe ein Blauuuuuuues Tal_f': 'The sky is falling!!!'
-Menschenfleischliebhaber_f: Menschenfleischliebhaberin
+Menschenfleischliebhaber_f: Female Human Flesh Enjoyer
 Hannibalfan_f: Dr Death's Dietician
-Totmacher_f: Totmacherin
+Totmacher_f: Check out my skin sombrero!
 'Jeffrey Dahmer_f': 'Lunches like Anna'
 'Fast schon ein Zombie..._f': 'Wannabe Zombie...'
 "Schmeckt am besten wenn's noch schreit!_f": "It's better when they scream."
 'Die Macht der Proteine_f': 'Full of protein.'
 'Nackt und Zerfleischt_f': 'Holocaust cannibals'
 Zombieliebling_f: Zombie favourite
-'Letzter Überlebender_f': 'Letzte Überlebende'
+'Letzter Überlebender_f': 'Last One Standing'
 Unzerstörbar_f: Dances with Hordes
 'Allein gegen die Horde_f': 'Me vs. the Horde!'
 "Chuck Norris' Ebenbild_f": "Equal to Chuck Norris"
@@ -2733,28 +2733,28 @@ Unzerstörbar_f: Dances with Hordes
 'Pandämonium? Hah. Einfach._f': 'Hardcore? Candy from babies...'
 'Teilweise verrottet_f': 'Partially Putrified'
 Virenschleuder_f: Infected with a poison
-Gedärmeauskotzer_f: Gedärmeauskotzerin
+Gedärmeauskotzer_f: Blood 'n' Bile Spitter
 Seuchenherd_f: Harbinger of the Plague
 'Ich habe Magenschmerzen..._f': 'I''ve got a sore tummy...'
-'Verirrter Ausflügler_f': 'Verirrte Ausflüglerin'
-'Nächtlicher Spaziergänger_f': 'Nächtliche Spaziergängerin'
+'Verirrter Ausflügler_f': 'Female Moonlight Stroller'
+'Nächtlicher Spaziergänger_f': 'Female Wild-eyed Wanderer'
 'Mir ist kalt hier draußen..._f': 'Baby it''s cold outside...'
-'Vertrauenswürdiger Bürger_f': 'Vertrauenswürdige Bürgerin'
-'Sehr erfahrener Bürger_f': 'Sehr erfahrene Bürgerin'
+'Vertrauenswürdiger Bürger_f': 'Trusted Neighbour'
+'Sehr erfahrener Bürger_f': 'Inspiration for the people'
 'Vorbild für das Volk_f': 'Highly experienced player'
 'Richtwert der Gemeinschaft_f': 'Pillar of the community'
 'Berühmter Veteran_f': 'Decorated Veteran'
 Anfängerleiche_f: Beginner Corpse
-Rabenfreund_f: Rabenfreundin
-Dehydrationskollege_f: Dehydrationskollegin
+Rabenfreund_f: Crows' bestie
+Dehydrationskollege_f: Dehydrated lady
 'Lebender Mythos_f': 'Myth in the making'
 'Ich bin eine Legende_f': 'I am legend.'
 'Hör auf mich, wenn du überleben möchtest_f': 'If you want to live... Follow me!'
-'Netter Kerl_f': 'Nette Tante'
-'Zeuge der großen Verseuchung_f': 'Zeugin der großen Verseuchung'
-'Alter Hase_f': 'Alte Häsin'
+'Netter Kerl_f': 'Good Gal'
+'Zeuge der großen Verseuchung_f': 'Witness to the Great Contamination'
+'Alter Hase_f': 'In with the bricks'
 'Jedes Los gewinnt_f': 'Community Companion'
-Zinker_f: Zinkerin
+Zinker_f: Community Spirit
 Bingo_f: Social Animal
 'Sudoku ist anders_f': 'Animated Corpse'
 'Siebenseitiger Würfel_f': 'Community Über-Activist'
@@ -2766,10 +2766,10 @@ Bingo_f: Social Animal
 "FJV'08 Kanonenfutter_f": "FJV'08 cannon fodder"
 'Kleiner Guru_f': 'Fund re-allocation specialist'
 'Überzeugender Guru_f': 'Citizen trafficker'
-Frischfleischhändler_f: Frischfleischhändlerin
-Seelenhändler_f: Seelenhändlerin
+Frischfleischhändler_f: Fresh flesh peddler
+Seelenhändler_f: Soul saleswoman
 'Sehr überzeugender Pate_f': 'Very convincing sponsor'
-Wüstenspekulant_f: Wüstenspekulantin
+Wüstenspekulant_f: Desert speculator
 'Held der Community!_f': 'In at the deep end!'
 'Bringt Sachen ins Rollen!_f': 'Making things happen!'
 'Nobler Spender_f': 'Noble Heart'
@@ -2789,13 +2789,13 @@ Messias_f: All you need is love... and Hero days
 'Blauer Feuerspucker_f': 'Blue Fire-breather'
 'I see dead people 0_0_f': 'I see dead people 0_0'
 'Soul Man_f': 'Who you gonna call?'
-Lebenssammler_f: Lebenssammlerin
+Lebenssammler_f: Don't cross the streams
 'Schnitter der Aussenwelt_f': 'I ain''t afraid of no ghost'
 'Bei meiner Seel_f': 'O Soul-e Mio'
 'Für immer und seelich_f': 'Tin-soul town'
 'Noble Seele_f': 'Noble Soul'
 Beseelt_f: Soul-dier
-Reinkarnator_f: Reinkarnatorin
+Reinkarnator_f: Reincarnator
 'Göttliche Seele_f': 'Divine Soul'
 Open-chakra_f: Open-chakra
 Tausend-und-ein-Leben_f: Thousand I-lived
@@ -2803,14 +2803,14 @@ Buddha_f: Buddha
 'Ich bin ein Gott! Ich werde ewig leben!_f': 'I am a god! I will live forever!'
 'Eine Stadt sie zu knechten!_f': 'One town to rule them all!'
 'Verrückter Skeptiker_f': 'Keen Sceptic'
-Seelenknipser_f: Seelenknipserin
+Seelenknipser_f: Soul Calipers
 'Wächter der Seelen_f': 'Watches with Scouts'
 'Die Wahrheit ist irgendwo da draußen_f': 'The truth is elsewhere'
 'Ich glaube!_f': 'I''m a believer'
 Sektenmitglied_f: Sect Member
 'Kosmischer Anführer_f': 'Cosmic Sponsor'
 'Rauch? Welcher Rauch?_f': 'Smoke? What smoke?'
-Leckstopper_f: Leckstopperin
+Leckstopper_f: Leak Plugger
 'Licht in der Nacht_f': 'Light in the night'
 RadioactiveMan_f: RadioactiveWoman
 'Strahlender Bürger_f': 'Radiant citizen'
@@ -2829,9 +2829,9 @@ RadioactiveMan_f: RadioactiveWoman
 'Keine Fehler hi&e%12;r_f': 'No bugs h&e%12;re'
 'Patient Null_f': 'Patient Zero'
 'Es ist der Tod der mich fürchten sollte!_f': 'It is death that should be afraid of me!'
-Sandmann_f: Sandfrau
+Sandmann_f: Sandwoman
 'Sandy Maverick_f': 'Sandy Maverick'
-Wegweiser_f: Wegweiserin
+Wegweiser_f: Daylight Lantern
 'Praktischer Begleiter_f': 'Pocket Companion'
 'Erleuchteter Anführer_f': 'Illuminated Guide'
 'Erleuchteter Prediger_f': 'Enlightened Preacher'
@@ -2855,15 +2855,15 @@ Wegweiser_f: Wegweiserin
 'Alles unter 55% ist Wasser_f': 'If it''s under 55 proof it''s water!'
 Dialyse_f: Dialysis
 'Chef der Mauer_f': 'Rampart Chief'
-Schaufelführer_f: Schaufelführerin
+Schaufelführer_f: Head Shoveler
 'Ich bin ein Biest!_f': 'Chiefess Tamer'
 'DdA Beste Buddler_f': 'DoE Winning Scavenger'
-Tarnexperte_f: Tarnexpertin
+Tarnexperte_f: Camo Chief
 Ninja_f: Shadow Master
 AP: AP
 CP: CP
 MP: MP
-'Der Raum auf den Zinnen ist begrenzt! Aktuell haben <strong>{watchers} / {cap}</strong> Nachtwächter ihren Platz eingenommen.': 'Space on the Battlements is limited! Currently, <strong>{watchers} / {cap}</strong> watchmen are defending the city.'
+'Der Raum auf den Zinnen ist begrenzt! Aktuell haben <strong>{watchers} / {cap}</strong> Nachtwächter ihren Platz eingenommen.': 'The Battlements have limited available space! Currently, <strong>{watchers}/{cap}</strong> watchmen are defending the town.'
 '<strong>Achtung:</strong> In der Bank fehlen Gegenstände, die benötigt werden, damit die Verteidigungsanlagen mit voller Stärke arbeiten können!': '<strong>Warning:</strong> The bank is missing crucial items needed for the defenses to work at full strength!'
 '{building} hat folgende Gegenstände verbraucht: {items}.': '{building} consumed the following items: {items}.'
 Schamanenkreis: Shamanic circle
@@ -2935,7 +2935,7 @@ Sandkasten-Scharfschütze_f: Sandstorm Sniper
 'Es scheint, dass alle guten Verstecke bereits von deinen "Freunden" besetzt sind. Du musst also einen anderen Ort finden oder improvisieren...': 'It seems that all the good hideouts are already occupied. You''ll have to find another place, or improvise...'
 'Entfernung von hier': 'Distance from here'
 'Entfernung zur Stadt': 'Distance from town'
-'Bei {citizens} Bürgern in der Stadt': 'With {citizens} citizens in the city'
+'Bei {citizens} Bürgern in der Stadt': 'With {citizens} citizens in town'
 'Du bist erschöpft!': 'You are exhausted!'
 'Du hast dich gestern so sehr verausgabt, dass du in der Nacht nicht genug Kraft schöpfen konntest, um deine Aktionspunkte vollständig zu regenerieren.': 'You exhausted yourself so much yesterday by hanging a garland that you couldn''t gain enough strength during the night to fully regenerate your action points.'
 'Das Stadttor kann während eines Lockdowns nicht geöffnet werden!': 'It is impossible to open the town gates during a quarantine period!'
@@ -2945,8 +2945,297 @@ Sandkasten-Scharfschütze_f: Sandstorm Sniper
 'Zufälliges Koalitionsmitglied': 'Random coalition member'
 'Hiermit kannst du den Namen eines zufälligen Mitglieds deiner Koalition in deinen Post anfügen.': 'Allows you to add the name of a random member of your coalition to your post.'
 '{player} ist der Stadt "{town}" beigetreten. Dort ist noch Platz für dich, du könntest ihm also folgen...': '{ref__gender, select, female {{player} has joined "{town}". There is still an available place for you there, you could then follow them...} other {{player} has joined "{town}". There is still an available place for you there, you could then follow them...} }'
-'{player} sind der Stadt "{town}" beigetreten. Dort ist noch Platz für dich, du könntest ihnen also folgen...': '{player} have joined the city "{town}". There''s still room for you there, so you could follow them...'
+'{player} sind der Stadt "{town}" beigetreten. Dort ist noch Platz für dich, du könntest ihnen also folgen...': '{player} has joined the town "{town}". There''s still room for you there, so you could follow them...'
 'Tief durchatmen!': 'Take a breath!'
-'Du kannst den Bürgern der Stadt die Errichtung eines bestimmten Gebäudes empfehlen. Klicke dafür auf den Namen des Bauprojektes, das du empfehlen willst.': 'You can recommend the construction of a specific site to the citizens of the city. To do this, click on the name of the construction site you want to recommend.'
+'Du kannst den Bürgern der Stadt die Errichtung eines bestimmten Gebäudes empfehlen. Klicke dafür auf den Namen des Bauprojektes, das du empfehlen willst.': 'You can recommend the construction of a specific site to the town''s citizens. To do this, click on the name of the construction site you would like to recommend.'
 'Klicke hier, um deinen Mitbürgern die Errichtung dieses Bauwerks zu empfehlen.': 'Click here to recommend the construction of this project to your fellow citizens.'
 'Es konnten nicht alle Einträge geladen werden, da dieses Register zu viele Einträge enthält.': 'All registry entries could not be loaded because this registry contains too many entries.'
+'Huch! Scheint, als würde dein Mitbürger nicht wollen, dass jemand seine Sachen durchstöbert. Sein Hund hat dich angefallen und dir einige tiefe Bisswunden zugefügt!': 'Wow! It sounds like your fellow citizen doesn''t want anyone going through their stuff. Their dog attacked you and inflicted deep bites!'
+'Tja, das hast du davon bei einem Hundebesitzer einbrechen zu wollen. Dein Blut ist bis an die Decke gespritzt. Das ist lange nicht so spaßig, wie es klingt: Irgendjemand wird hier putzen müssen.': 'Well, that''s what you get for trying to break into a dog owner''s house. Your blood splattered all the way to the ceiling. It''s not as fun as it sounds: someone''s going to have to clean up here.'
+'Bitte wähle einen Gegenstand aus deiner Truhe:': 'Please select an item from your chest:'
+Zerfleischt: Mutilated
+'Es gibt eine gute und eine schlechte Nachricht. Lass uns mit der Guten anfangen: Der Hund des Bürgers, in dessen Haus du soeben eingebrochen bist, muss heute nicht mehr gefüttert werden. Die Schlechte: Nunja...': 'There is good news and bad news. Let''s start with the good news: the citizen''s dog you just broke into doesn''t need to be fed today. The Bad: Well...'
+SP: EP
+Schritt-Punkte: Exploration Points
+'Mithilfe deiner Schritt-Punkte kannst du dich in der Außenwelt bewegen, ohne Aktionspunkte ausgeben zu müssen': 'You can use your Exploration Points to move around the World-Beyond without having to spend Action Points.'
+'Wähle deine Fähigkeiten': 'Choose your skills'
+'Deine Fähigkeiten verleihen dir bestimmte Boni im Spiel. Du kannst nicht alle auf einmal aktivieren, also wähle weise!': 'Your skills give you certain bonuses in the game. You can''t activate all of them at once, so choose wisely!'
+'Level {skill_level}': 'Level {skill_level}'
+'Dir stehen noch <em>{pts}</em> Punkte zur Verfügung!': 'You still have <em>{pts}</em> points available!'
+'Du verfügst über ausreichend Heldenerfahrung um eine neue Fähigkeit freizuschalten, welche dir daraufhin in dieser Auswahl zur Verfügung stehen wird.': 'You have enough heroic experience to unlock a new ability, which will then be available to you in this selection.'
+'Zur Übersicht meiner Fähigkeiten': 'To the overview of my skills'
+'Du hast eine neue Fähigkeit erworben. Herzlichen Glückwunsch!': 'You have acquired a new skill. Congratulations!'
+'Du verfügst aktuell über <strong>{xp} Punkte</strong> an Heldenerfahrung.': 'You currently have <strong>{xp} points</strong> of heroic experience.'
+'Du kannst eine neue {heroskill_link}!': 'You can get a new {heroskill_link}!'
+'Heldenfähigkeit freischalten': 'Unlock Hero Ability'
+'Meine freigeschalteten Fähigkeiten ansehen': 'View my unlocked skills'
+'{xp} Punkte': '{xp} Points'
+'an Heldenerfahrung gesammelt.': 'of heroic experience.'
+'Dir stehen aktuell:': 'You currently have:'
+'an Heldenerfahrung zur Verfügung.': 'of hero experience available.'
+Benötigt: Required
+Freischalten: Unlock
+'Einwohner in der Stadt': 'Citizens in the town'
+'{days} Tage überlebt in "{town}"': '{days} days survived in "{town}"'
+'Fähigkeit erworben': 'Skill acquired'
+'Rudimentärer Schutz': 'Rudimentary protection'
+'Dank der Hilfe eines anderen Bürgers wirst du diese Nacht keine Durst- oder Krankheitssymptome verspüren.': 'Thanks to the help of another citizen, you will not experience any symptoms of thirst or illness this night.'
+'Du hast deine Fähigkeiten und Heldenerfahrung zurückgesetzt und dafür einen zusätzlichen Fähigkeiten-Punkt erhalten!': 'You have reset your skills and heroic experience and received an additional power point!'
+'Du kannst momentan:': 'You can activate:'
+'{pack} Fähigkeiten': '{pack} Skills'
+'beim Stadtstart aktivieren.': 'when joining a town.'
+'Heldenhafte Fähigkeiten sind den Helden vorbehalten. Da du keinen Heldenberuf gewählt hast, stehen dir keine besonderen Fähigkeiten zur Verfügung.': 'Heroic Abilities are reserved for heroes. Since you haven''t chosen a hero profession, you don''t have any special abilities.'
+Anfänger: Beginner
+Lehrling: Apprentice
+Experte: Expert
+Meister: Master
+'Klick hier, wenn du mit deiner Heldenfähigkeit <strong>diesen Registereintrag löschen</strong> möchtest...': 'Click here if you want to <strong>delete this registry entry</strong> with your heroic ability...'
+Sofort: Immediately
+'Angegebener Zeitpunkt': 'Specified time'
+'Gut hydriert': 'Hydrated'
+Nüchtern: Sober
+'Es ist wichtig, regelmäßig zu trinken!': 'It is important to drink regularly!'
+'Du bist nüchtern, gut gemacht!': 'You are sober, well done!'
+'Willkommen in deiner ersten Stadt': 'Welcome to your first town'
+'Willkommen! Dies ist ein Spiel, das sowohl auf Zusammenarbeit als auch Verrat zwischen den Spielern basiert. Der Feind kann ein Zombie oder dein Nachbar sein. Wir laden dich ein, das Forum deiner Stadt zu nutzen, um dich mit anderen Spielern zu koordinieren, zu diskutieren und euch vor Gefahren außerhalb und innerhalb der Stadt zu warnen.': 'Welcome! This is a game based on both cooperation and betrayal between players. The enemy can be a zombie or your neighbor. We invite you to use your town''s forum to coordinate with other players, discuss and warn each other about dangers outside and inside town.'
+'Ist das die Identität, die du in dieser Stadt annehmen möchtest? Prüfe deine Wahl sorgfältig, denn du kannst sie für die Dauer der Stadt nicht mehr ändern!': 'Is this the identity you want to adopt in this town? Review your choice carefully, because you can''t change it for the duration of the town!'
+'Dein Beruf': 'Your profession'
+'Deine Fähigkeiten': 'Your skills'
+'Ungenutzter Fähigkeitenpunkt': 'Unused power point'
+'Du hast nicht alle deine Fähigkeitenpunkte vergeben. Diese Punkte werden <strong>nicht verbraucht</strong> und stehen dir demzufolge auch in jeder folgenden Stadt zur Verfügung - es ist also nicht notwendig, sie aufzusparen. <strong>Möchtest du wirklich fortfahren, ohne alle Fähigkeitenpunkte zu vergeben?</strong>': 'You have not spent all your power points. These points are <strong>not used up</strong> and are therefore available to you in every subsequent town - so there is no need to save them up. <strong>Do you really want to continue without spending all your skill points?</strong>'
+'Allgemein verfügbar': 'Always available'
+'In diesem Thread können Fragen zum Leben in der Stadt gestellt werden.': 'You may use this topic to ask questions about life in town.'
+'Fragen & Antworten': 'Questions & Answers'
+'Dein geworbener Spieler {user} hat zum ersten Mal Heldenerfahrung für eine Fähigkeit ausgegeben.': 'Your referred player {user} has spent heroic experience on an ability for the first time.'
+'Dein geworbener Spieler {user} hat zum ersten Mal in dieser Saison Heldenerfahrung für eine Fähigkeit ausgegeben.': 'Your referred player {user} spent heroic experience on an ability for the first time this season.'
+'Vergessene Stadt': 'Forgotten Town'
+'Überall und nirgens': 'Everywhere and nowhere'
+Meisteringenieur: Handyman Chief
+Meisteringenieur_f: Handywomen Chief
+'Techniker - Gewinner des SoH': 'Technician - Winner of the SoH'
+'Sieg für die Techniker beim Shock of Heroes Event!': 'Victory as a Technician during the Shock of Heroes!'
+'Deine Anstrengungen in den Buddelgruben haben sich gelohnt! Du hast folgendes gefunden: {items_spawn}!': 'Your efforts in the Gallery have paid off! You found: {items_spawn}!'
+'Auf den Zinnen fühlst du dich unbesiegbar. Nichts wird dich heute Nacht zum Wanken bringen.': 'From the battlements, you''re feeling invicible. Nothing''s going to make you wobble tonight.'
+'Auf den Zinnen fühlst du dich gut. Du willst morgen noch am Leben sein.': 'From the battlements, you feel at ease. You intend to be alive tomorrow.'
+'Auf den Zinnen fühlst du dich sicher. Du wartest auf die Zombies, die du bereits herannahen siehst.': 'From the battlements, you feel confident. You wait for the hordes that you''re already seeing.'
+'Auf den Zinnen blickst du in den Horizont. Du hoffst, morgen noch einmal die Sonne aufgehen zu sehen.': 'From the battlements, you look at the horizon. You hope to once again see the sun rise tomorrow.'
+'Auf den Zinnen fühlst du dich unschlüssig und deine Laune ist schlecht. Vielleicht gibt es kein Morgen für dich...': 'From the battlements, you''re feeling hesitant and your spirits are low. There may be no tomorrow for you...'
+'Auf den Zinnen bist du zittrig und deine Laune ist am Tiefpunkt. Du weißt nicht, ob du das Licht des Tages erblicken wirst...': 'From the battlements, you''re shaky and your spirits are at their lowest. You don''t know if you''ll see the light of the day...'
+'Auf den Zinnen wird dein Herz von Angst erdrückt. Du spürst, dass dein Leben am seidenen Faden hängt...': 'From the battlements, your heart is in your throat. You feel that your life is hanging by the thread...'
+'Du fühlst dich großartig.': 'You''re feeling great.'
+'Du bist eingeschüchtert von der Zahl der Zombies, die du siehst. Du hoffst, dass du keinen Arm oder ein Bein verlierst.': 'You''re intimidated by the number of zombies you see. You hope not to lose an arm or a leg.'
+'Du bist eingeschüchtert von der Zahl der Zombies, die du siehst. Du bist vorbereitet, Gliedmaßen zu verlieren, aber hoffentlich nicht deinen Kopf...': 'You''re intimidated by the number of zombies you see. You''re ready to lose a limb, but let''s hope it''s not your head...'
+'Du bist eingeschüchtert von der Zahl der Zombies, die du siehst. Du hoffst, dass es noch Verbandszeug in der Bank gibt...': 'You''re intimidated by the number of zombies you see. You hope there are still bandages in the bank...'
+'Selbst wenn du dir vorstellst, was dich heute Abend erwartet, bleibst du zumindest ein wenig gelassen.': 'Even imagining what awaits you this evening, you remain at least a little serene.'
+'Du spürst die Aufregung. Es wird eine gruselige Nacht werden.': 'You''re not indifferent to the hustle and bustle. It''s going to be a scary night.'
+'Du versuchst, deine Gedanken positiv zu halten, aber dir kommt nur der Tod in den Sinn... Glücklich! Es wird eine lange Nacht werden.': 'You try to keep your thoughts positive, but only death comes to mind... Happy! It''s going to be a long night.'
+'Der Anblick der Zombies, die sich den Festungsmauern nähern, versetzt dich in Panik.': 'The sight of the hordes approaching the ramparts is enough to send you into a panic.'
+'Du kannst nicht so viele Gegenstände auf die Müllhalde werfen.': 'You cannot throw this many items in the Dump.'
+'Du hast die Techniker-Werkbank <strong>heute bereits verwendet</strong>. Komm morgen wieder.': 'You <strong>already used</strong> the Technicians Workbench today. Come back tomorrow.'
+'<strong>Achtung:</strong> Du kannst die Techniker-Werkbank nur <strong>ein mal pro Tag</strong> nutzen, denke also nach bevor du handelst.': '<strong>Warning:</strong> You can only use the Technicians Workbench <strong>once per day</strong>, so think before you act.'
+'Zur "Freude" deiner Mitbürger ist es dir gelungen, den Brunnen um {well} Rationen Wasser aufzufüllen!': 'To the “joy” of your fellow citizens, you managed to fill the well with {well} water rations!'
+'Leider ist es dir nicht gelungen, dem Brunnen eine substantielle Menge an Wasser hinzuzufügen ...': 'Unfortunately, you have failed to add a substantial amount of water to the well...'
+'Leider ist es dir trotz größter Anstrengungen nicht gelungen, etwas neues in der Umgebung zu entdecken.': 'Unfortunately, despite your best efforts, you have not managed to discover anything new in the area.'
+'Nichts entgeht deinem geschulten Blick! Du hast neue Informationen über {casino} Zonen gesammelt!': 'Nothing escapes your trained eye! You have gathered new information about {casino} areas!'
+'Frenetisch schreibst du alles auf was du in der Umgebung entdeckst und sammelst neue Informationen über {casino} Zonen. Jetzt brauchst du nur noch einen Experten, der ermitteln kann, wo genau diese Zonen liegen ...': 'You frantically write down everything you discover in the area and collect new information about {casino} areas. All you have to do is call on an expert who can determine where exactly these areas are...'
+Wiederherstellen: Recover
+'Du kannst jedes Mal höchstens 20 identische Gegenstände zerstören oder wiederherstellen': 'You can throw up to 20 objects at a time into the dump.'
+'Jede Aktion kostet dich {ap}.': 'Each action costs {ap}.'
+'Wie viele Gegenstände möchtest du auf den Müll wiederherstellen?': 'How many items do you want to recover in the dump?'
+'Ohne echte Waffenlager sind deine Gegenstände in Watch nutzlos. Deine Stadt sollte {building} bauen, um diese Mängel auszugleichen...': 'Without real weapon storage, your items are useless in Watch. Your town should build the {building} to compensate for these shortcomings...'
+'Die Leiche verbrennen!': 'Burn the corpse!'
+'Die Zeremonie besteht daraus, die Leiche mit 1x <strong>Fackel</strong> zu verbrennen und dann die Asche in das Gemüsebeet zu streuen. Dadurch wird der Leichnam sofort zerstört.': 'The ceremony consists of burning the body with 1x <strong>Torch</strong> and then scatter the ashes into the vegetable plot. This will destroy the corpse instantly.'
+'In großer Trauer verstreute {disposing_citizen} die Asche von {citizen} in das Gemüsebeet. Wenigstens war er am Ende noch nützlich.': 'It''s with sadness that {disposing_citizen} scattered the ashes of {citizen} into the vegetable plot. At least, he was useful'
+'Diese Aktion verbraucht 1x Fackel und 2 Aktionspunkte. Bestätigen?': 'This action costs 1x Torch and 2 action points. Confirm?'
+'Du verbrennst die Leiche von {disposed} mit der Fackel und verstreust dann die Asche in das Gemüsebeet. Das sollte unsere Ernte verbessern...': 'You burn {disposed}''s body with the torch and then scatter the ashes in the vegetable garden. That should give us more food...'
+'Du kannst nicht so viele Gegenstände auf die Müllhalde wiederherstellen.': 'You can''t recover this much items from the dump.'
+'Du hast {count} x {item} auf der öffentlichen Müllhalde abgerufen. <strong>Die Stadt hat {def} Verteidigungspunkt(e) verloren.</strong>': 'You have recovered {count} {item} from the dump. <strong>The town has lost {def} defense point(s).</strong>'
+'Blaugoldige Thermalbäder': 'Blue Gold Thermal baths'
+Leichenverbrenner: Body cremators
+'Hey, du hättest an deine Seife denken sollen!': 'Hey, you should have brought your soap!'
+'Durchgeführte feurige Begräbnisrituale an den Leichen von Bürgern': 'Performed fiery burial rituals on the corpses of citizens.'
+'{citizen} hat {items} in der Müllhalde wiederhergestellt (-{def} Verteidigung)': '{citizen} has recovered {items} at the dump (-{def} defense)'
+'{citizen} hat die Asche von {disposed} in das Gemüsebeet gestreut. Wenigstens war er am Ende noch nützlich.': '{citizen} scattered {disposed}''s ashes into the vegetable plot. At least he was still useful in the end.'
+'Du beginnst jede neue Stadt mit einer Erste Hilfe Tasche in deinem Rucksack.': 'You start out every town with a First Aid Kit in your chest'
+'{citizen} hat die Asche von {disposed} in alle Winde zerstreut.': '{citizen} scattered {disposed}''s ashes to the wind.'
+'Festliche Dekoration': 'Festive Decoration'
+'Anzahl der Feierlichkeiten, an denen Sie teilgenommen haben.': 'Number of festivities you attended.'
+'Du musst die Girlande zuerst <strong>abnehmen</strong>, bevor du sie <strong>mitnehmen</strong> kannst.': 'You need to take the garland <strong>down</strong>, before you can take it <strong>with</strong> you.'
+'In großer Trauer verstreute {disposing_citizen} die Asche von {citizen} in alle Winde.': 'It''s with sadness that {disposing_citizen} scattered the ashes of {citizen} into the winds.'
+'Du verbrennst die Leiche von {disposed} mit der Fackel und verstreust dann die Asche in alle Winde.': 'You burn {disposed}''s body with the torch and then scatter the ashes into the winds.'
+'{disposing_citizen} hat die Asche von {citizen}s Leiche nicht ganz ohne Emotionen im Gemüsebeet verstreut.': 'It was not without a certain emotion that {disposing_citizen} scattered the ashes of {citizen}''s body in the Vegetable Plot.'
+'Es war nicht nicht ganz ohne Emotionen, dass {disposing_citizen} die Asche von {citizen}s Körper vom Wind wegtragen ließ.': 'It was not without a certain emotion that {disposing_citizen} let the wind carry away the ashes of {citizen}''s body.'
+'Du verbrennst {disposed}s Leiche mit deiner Fackel und verstreust die Asche auf dem Gemüsebeet. Das sollte uns mehr zu Essen einbringen...': 'You burn {disposed}''s body with your torch before scattering the ashes in the Vegetable Plot. This should give us more food...'
+'Du verbrennst {disposed}s Körper mit deiner Fackel, bevor du die Asche zu Staub im Wind verwehen lässt. Vielleicht hättest du etwas Sinnvolleres damit machen können...': 'You burn {disposed}''s body with your torch before letting the ashes fly away into dust in the wind. Maybe you could have done something more useful with it...'
+'{citizen} hat die Asche von {disposed} im Gemüsebeet verstreut.': '{citizen} scattered {disposed}''s ashes in the Vegetable Plot.'
+'Die Sportkrähe': 'Crows''fit Gym'
+'Das Grab der ehemaligen Sportler...': 'The grave of former athletes...'
+Wachthund: Guard dog
+'Gedopter Wachthund': 'Doped guard dog'
+'Schmiere stehen': 'Stand guard'
+'Dein Hund passt heute Nacht besonders gut auf dich auf, solltest du dich entscheiden, als Nachtwächter auf den Zinnen zu stehen.': 'Your dog will watch over you especially well tonight, if you decide to go up on the ramparts as a watchman tonight.'
+'Dein Hund passt heute Nacht besonders gut auf dich auf, solltest du dich entscheiden, als Nachtwächter auf den Zinnen zu stehen. Keine Sorge, der Schaum vor seinem Mund ist ganz normal...': 'Your dog will watch over you especially well tonight, if you decide to go up on the ramparts as a watchman tonight. Don''t worry, the foam in his mouth is completely normal...'
+'Falls du heute planst, einem anderen Bürger einen unangemeldeten Besuch abzustatten, wird dir dein Hund dabei helfen, unentdeckt zu bleiben.': 'If you plan to pay an unannounced visit to another citizen today, your dog will help you remain undetected.'
+'Auf der Stadtmauer stehend bist du sehr zuversichtlich, was den Ausgang dieses Abends angeht. Du wirst heute nicht sterben!': 'Standing on the town’s walls, you are very confident about the outcome of this evening. You will not die today!'
+'{kills} Bürger als Ghoul verspeist.': '{kills} citizen eaten as a ghoul.'
+'Den ersten Tag in der Pandämonium-Stadt "{town}" überlebt.': 'Survived the first day in Pandemonium Town "{town}".'
+'10 Tage als {profession} in "{town}" überlebt.': 'Survived 10 days as {profession} in "{town}".'
+'15 Tage in "{town}" überlebt.': 'Survived 15 days in "{town}".'
+'Auszeichnung {picto} in "{town}" verdient.': 'Distinction {picto} earned in "{town}".'
+'Auszeichnung {picto} zum ersten Mal in "{town}" verdient.': 'Distinction {picto} earned for the first time in "{town}".'
+Strategie: Strategist
+Umsicht: University
+Planung: Prepared
+Eifer: Enduring
+Ruhe: Reclusive
+'+5 Stadtverteidigung': '+5 Town Defences'
+'+10 Verteidigung bei der Nachtwache': '+10 defense on the Watch'
+'Zugang zum Schwarzen Brett': 'Access to the Blackboard'
+'Versenden von Nachrichten an alle Bürger': 'Send messages to all citizens'
+'Konstruktionen empfehlen': 'Recommend a construction site'
+'Ration Wasser': 'Water ration at the start of town'
+'Kamera aus Vorkriegstagen (2 Ladungen)': 'Pre-War Camera (2 charges)'
+'1 anonymen Foren-Post verfassen': 'Write 1 anonymous forum message'
+'Profi-Wächter: Deine Überlebenschancen bei der Nachtwache reduzieren sich langsamer': 'Pro-watchman: Your chances of surviving on the Watch decrease more slowly'
+'Kamera aus Vorkriegstagen (3 Ladungen)': 'Pre-War Camera (3 charges)'
+'Unbegrenzt anonyme Foren-Posts verfassen': 'Write unlimited anonymous forum messages'
+'Eine zusätzliche Beschwerde pro Tag möglich': 'One additional complaint per day possible'
+'2% Bonus-Überlebenschance auf der Nachtwache': '2% bonus chance of surviving on the Watch'
+'Unbegrenzt anonyme Nachrichten verfassen': 'Write unlimited anonymous messages'
+'Kamera aus Vorkriegstagen (4 Ladungen)': 'Pre-War Camera (4 charges)'
+'Diebstahl von Bürgern in der Stadt möglich': 'Robbing citizens is possible even if they are in town'
+'Rettung eines anderen Bürgers (Distanz: 1km)': 'Rescue another citizen (distance: 1km)'
+'Den Tod besiegen (Dehydration & Infektion)': 'Cheat Death (dehydration & infection)'
+'Manipulieren von Registereinträgen (max. 1)': 'Falsify registry entries (max. 1)'
+'Rettung eines anderen Bürgers (Distanz: 2km)': 'Rescue another citizen (distance: 2km)'
+'Den Tod besiegen (zusätzlicher Schutz vor Drogenentzug)': 'Cheat Death (additional protection against drug addiction)'
+'Manipulieren von Registereinträgen (max. 2)': 'Falsify registry entries (max. 2)'
+'Rettung eines anderen Bürgers (Distanz: 3km)': 'Rescue another citizen (distance: 3km)'
+'Den Tod besiegen (zusätzlicher Schutz vor Hungertod als Ghul)': 'Cheat Death (additional protection against starvation as a ghoul)'
+'Manipulieren von Registereinträgen (max. 3)': 'Falsify registry entries (max. 3)'
+'Ein zusätzlicher Platz in der Truhe': 'An additional space in your chest'
+'Den Tod besiegen (heilt Angststarre und Verwundungen)': 'Cheat Death (heals terror and injuries)'
+'Rudimentäre Pflege': 'Rudimentary Heal for your neighbors'
+'1 zusätzlicher Zonenkontrollpunkt wenn "clean"': '1 additional zone control point if you are "clean"'
+'Hellseherei: Du erfährst, wie aktiv ein bestimmter Bürger in deiner Stadt spielt.': 'Clairvoyance: You learn how actively a certain citizen in your town is participating.'
+Doggybag: 'Doggybag at the start of town'
+'1 zusätzlicher Zonenkontrollpunkt': '1 additional zone control point in the World-Beyond'
+'Allwissenheit: Wie Hellseherei, außer, dass du jetzt eine Übersicht zur Aktivität aller Stadteinwohner bekommst': 'Omniscience: like Clairvoyance, except that you now get an overview of the activity of all town’s citizens'
+'Vorräte eines umsichtigen Bürgers': 'Shrewd Citizen''s Stash at the start of town'
+'Erste Hilfe Tasche': 'First aid kit at the start of town'
+'1 zusätzlicher Zonenkontrollpunkt wenn nicht "durstig" oder "dehydriert"': '1 additional zone control point if you are not "thirsty" or "dehydrated"'
+'Gewöhnlicher Bauplan': 'Common blueprint at the start of the town'
+'Lunchbox (statt Doggybag)': 'Lunch Box (instead of Doggybag) at the start of the town'
+'1 zusätzlicher Zonenkontrollpunkt wenn nicht "betrunken" oder "verkatert"': '1 additional zone control point if you are not "drunk" or "hungover"'
+Cellokasten: 'Cello case at the start of town'
+'Ein zusätzlicher Platz im Rucksack': 'An additional space in your rucksack'
+'Wildstyle Uppercut': 'Vicious Uppercut : allows you to kill 2 zombies'
+'Ein weiterer zusätzlicher Platz im Rucksack': 'Another additional space in your rucksack'
+'Ein weiterer zusätzlicher Platz in der Truhe': 'Another additional space in your chest'
+'Verbesserung Wildstyle Uppercut (3 Zombies)': 'Improved Vicious Uppercut : allows you to kill 3 zombies'
+'Verbesserung Zweite Lunge (4 EP)': 'Second Wind (4 EP)'
+'Verbesserung Wildstyle Uppercut (4 Zombies)': 'Improved Vicious Uppercut : allows you to kill 4 zombies'
+'Verbesserung Zweite Lunge (8 AP)': 'Improved Second Wind (8 AP)'
+'15 Extra-O² in begehbaren Ruinen': '15 extra O² in explorable ruins'
+'30 Sekunden temporäre Zonencontrolle durch Wildstyle Uppercut': '30 seconds temporary zone control through Vicious Uppercut'
+'Verbesserung Zweite Lunge (10 AP, 6 EP)': 'Improved Second Wind (10 AP, 6 EP)'
+'30 Extra-O² in begehbaren Ruinen': '30 extra O² in explorable ruins'
+'Rückkehr des Helden (9km)': 'Heroic Return (9km)'
+'Proficamper (auf 6 Campings begrenzt)': 'Pro-Camper (limited to 6 campings)'
+Fund: Seeker
+'Rückkehr des Helden (11km)': 'Heroic Return (11km)'
+'Proficamper (auf 8 Campings begrenzt)': 'Pro-Camper (limited to 8 campings)'
+'Schönes Fundstück (ersetzt Fund)': 'Lucky Find (replaces Seeker)'
+'Rückkehr des Helden (13km)': 'Heroic Return (13km)'
+'Beeindruckendes Fundstück (ersetzt Schönes Fundstück)': 'Impressive Find (replace Lucky Find)'
+'Toxische Liebe': 'Toxic Love'
+'1 zusätzliche Mülldurchwühlung pro Tag': '1 additional garbage rummaging per day'
+'Rückkehr des Helden (15km)': 'Heroic Return (15km)'
+'Ermöglicht Überlebenschance beim Camping von bis zu 99%': 'Allows survival chance to be up to 99% when camping'
+'Erstaunliches Fundstück (ersetzt Beeindruckendes Fundstück)': 'Incredible Find (replaces Impressive Find)'
+'Löschen von Registereinträgen (max. 1)': 'Deleting register entries (max. 1)'
+'Die Experimentelle Klinik der Dompteure verfügt über ein komplexes System zur Domestizierung von Wildtieren - bestehend im wesentlichen aus einem verschließbaren Käfig mit einer Futterschale darin.': 'The Tamers'' Experimental Clinic has a complex system for domesticating wild animals - essentially consisting of a lockable cage with a feeding bowl inside.'
+'Einmal pro Tag kann jeder Bürger damit wilde Tiere aus der Umgebung der Stadt anlocken.': 'Once a day, every citizen can use it to attract wild animals from the surrounding area of the town.'
+'Du wurdest verbannt und kannst daher keine Tiere anlocken.': 'You have been shunned and therefore cannot attract animals.'
+'Inhalt der Futterschale': 'Contents of the feeding bowl'
+'Du hast die Tierklinik heute bereits verwendet.': 'You have already used the veterinary clinic today.'
+'Tiere anlocken': 'Attract animals'
+'Verfügbare Lockmittel': 'Available lures'
+Hinzufügen: Add
+'Nicht schlecht. Mit deinem Köder hast du es geschafft, {item} anzulocken!<hr/>Du hast es zur sicheren Aufbewahrung in die Bank gebracht.': 'Not bad. With your bait, you managed to attract {item}!<hr/>You took it to the bank for safekeeping.'
+'Es ist dir nicht gelungen, ein Tier anzulocken. Was für eine Verschwendung...': 'You failed to attract an animal. What a waste...'
+Dompteurklinik: Tamer Clinic
+'1 Gegenstand in der Truhe ist versteckt': '1 item in your chest is hidden'
+'Solltest du am dritten Tag oder an einem späteren Zeitpunkt verbannt werden, bekommst du automatisch etwas Toxin geschenkt, das du nach Belieben einsetzen kannst... Tja, man hätte dich besser nicht ärgern sollen!': 'If you are shunned on day 3 or later, you will automatically receive 2 vials of poison and one Toxin with which to exact your revenge... Yeah, they''d better not **** with you now!'
+'Abgenutzte Kuriertasche (statt Bauplan) beim Start der Stadt': 'Worn Leather Bag (instead of blueprint) at the start of the town'
+'Zweite Lunge (4 EP)': 'Second Wind (4 EP)'
+'Verbesserung Zweite Lunge (6 EP)': 'Improved Second Wind (6 EP)'
+'Verbesserung Zweite Lunge (2 AP, 6 EP)': 'Improved Second Wind (2 AP, 6 EP)'
+'Verbesserung Zweite Lunge (4 AP, 6 EP)': 'Improved Second Wind (4 AP, 6 EP)'
+'Den Tod besiegen (heilt Kater, Bandagiert und Angst)': 'Cheat Death (Heals Hungover, Healed and Terror)'
+'{dogname}, der stinkende Köter von {citizen}, hat sich folgendes aus der Bank geschnappt und ist damit aus der Stadt gerannt: {item}': '{dogname}, {citizen}''s foul-smelling dog has taken an {item} from the bank and ran out of town with it!'
+'Die ersten 5 Tage in der Pandämonium-Stadt "{town}" überlebt.': 'Survived the first 5 days in the Hardcore town "{town}".'
+Klinikregister: Experiment Center
+'{citizen} hat {list2} in die Stadt gelockt und dabei folgendes Futter eingesetzt: {list1}.': '{citizen} has successfully lured {list2} into town using {list1} as bait.'
+'{citizen} hat vergeblich versucht Tiere in die Stadt zu locken und dabei folgendes Futter verschwendet: {list1}.': '{citizen} has tried in vain to lure animals into town while wasting the following bait: {list1}.'
+Tierklinik: Experiment Center
+'Die folgenden Bürger sind der Stadt bereits beigetreten:': 'The following citizens have already entered this town:'
+'Du kannst dieser Stadt nicht beitreten, da du nicht auf der Teilnehmerliste stehst.': 'You cannot enter this town, since you''re not on its invite list.'
+'Du kannst dieser Stadt nicht beitreten, da du noch nicht die erforderliche Menge an Seelenpunkten gesammelt hast.': 'You cannot join this town as you do not have a sufficient amount of soul points.'
+'Meine Truhe': 'My Chest'
+'30 Tage in "{town}" überlebt.': 'Survived 30 days in "{town}".'
+'Auszeichnung {picto} zum {num}ten Mal in "{town}" verdient.': 'Distinction {picto} earned for the {num}. time in "{town}".'
+'Du hast {item} hergestellt. Die Gegenstände wurden in der Bank abgelegt.<hr />Du hast dafür <strong>{ap} Aktionspunkt(e)</strong> verbraucht.': 'After some DIY (thumb hammering, sweating, and colorful language), you have crafted {item}. The items have been placed in the bank.<hr />You spent <strong>{ap} action points</strong> to do so.'
+'Du hast {item} hergestellt. Die Gegenstände wurden in der Bank abgelegt.<hr />Du hast dafür <strong>{cp} Baupunkt(e)</strong> verbraucht.': 'After some DIY (thumb hammering, sweating, and colorful language), you have crafted {item}. The items have been placed in the bank.<hr />You spent <strong>{cp} action points</strong> to do so.'
+'Du hast {item} hergestellt. Die Gegenstände wurden in der Bank abgelegt.<hr />Du hast dafür <strong>{ap} Aktionspunkt(e)</strong> und <strong>{cp} Baupunkt(e)</strong> verbraucht.': 'After some DIY (thumb hammering, sweating, and colorful language), you have obtained {item} (the object has been placed in the bank).<hr />You have used <strong>{ap} action points</strong> and <strong>{cp} construction points</strong>.'
+'Ups, dein(e) {item} scheint dabei kaputt gegangen zu sein...': 'Oops, your {item} seems to have broken...'
+'Du hast bei der Reparatur des Gebäudes {plan} mitgeholfen.': 'You helped repair the {plan} construction site.'
+'Du hast es geschafft, {item} anzulocken... aber das Einfangen ist dir weniger geglückt.<hr/>Enttäuscht hebst du die Reste des verschlungenen Futters auf und legst sie als {leftovers} in die Bank.': 'You have managed to attract {item}... but you were less successful in catching it.<hr/>Disappointed, you pick up the remains of the devoured food and put them in the bank as {leftovers}.'
+'Du hast einen zusätzlichen Fähigkeitenpunkt erhalten!': 'You have received an additional power point!'
+'{cost} Erfahrungspunkte ausgegeben, um einen zusätzlichen Fähigkeitenpunkt zu erhalten; {sold} Erfahrungspunkte durch den Verkauf freigeschalteter Fähigkeiten erhalten.': 'Spent {cost} experience points for an additional power point; got {sold} experience points from selling previously unlocked skills.'
+'{citizen} hat mit {list1} erfolgreich {list2} in die Stadt gelockt... und entkommen lassen. Nur etwas {list3} ist übrig geblieben...': '{citizen} has lured {list2} into town using {list1} as bait... but it escaped! Only some {list3} remains...'
+'Du hast {item_list} in der Werkstatt geöffnet und erhälst {item}.<hr />Du hast dafür <strong>{ap} Aktionspunkt(e)</strong> verbraucht.': 'You opened {item_list} in the Workshop and received {item}.<hr />You spent <strong>{ap} action points</strong> to do so.'
+'Du hast {item_list} in der Werkstatt zu {item} zerlegt.<hr />Du hast dafür <strong>{ap} Aktionspunkt(e)</strong> verbraucht.': 'You split {item_list} into {item} in the Workshop.<hr />You spent <strong>{ap} action points</strong> to do so.'
+'Die ersten 10 Tage in der Pandämonium-Stadt "{town}" überlebt.': 'Survived the first 10 days in the Hardcore town "{town}".'
+'{citizen} hat einen verbesserten Bauplan für {plan} gefunden - damit werden wir zahlreiche Resourcen beim Bau einsparen. Hurra!': '{citizen} has found an improved blueprint for {plan} - this will save us a lot of resources for building it. Hurray!'
+'{citizen} hat einen verbesserten Bauplan für {plan} gefunden - damit werden wir zahlreiche Resourcen beim Bau einsparen... Zumindest, wenn wir vorher {parent} bauen. Hurra!': '{citizen} has found an improved blueprint for {plan} - this will save us a lot of resources for building it... At least if we build {parent} first. Hurray!'
+'Du wurdest zum Bediener des Katapults gewählt!': 'You have been chosen as the operator of the catapult!'
+'Du wachst heute Morgen mit Schmerzen in deinem Rücken auf... Du humpelst aus deinem Zelt und... die anderen Bewohner grüßen dich freundlich?': 'You wake up this morning with pain in your back... You limp out of your tent and... the other residents give you a friendly greeting?'
+'Was ist letzte Nacht nur passiert? Du hast wohl zu heftig gefeiert. Als du die Stadtmauer erreichst, findest du einen kleinen Schlüssel in deiner Tasche... Ja, ja, du bist in der Tat der Ausgewählte. Der Zweifel verschwindet, als der Schlüssel sich mühelos im Schloss drehen lässt und dir den Zugang zum Katapult gewährt.': 'What happened last night? You must have partied too hard. When you reach the town''s walls, you found a small key in your pocket... Yes, yes, you are indeed the chosen one. Any doubt melts away as the key turns effortlessly in the lock and grants you access to the catapult.'
+'Du bist nun der Bediener des Katapults.': 'You are now the operator of the catapult.'
+'Ein neuer Horizont öffnet sich für dich: Du bist nicht länger ein gewöhnlicher Bürger, sondern verfügst über ein offizielles Amt!': 'A new world has opened up before you! You''re no longer just an average citizen, but a citizen with an official designation!'
+'Schau dir am besten gleich die {guide_cata} an.': 'Take a look at the {guide_cata} right away.'
+'Bedienungsanleitung des Katapults': 'operating instructions for the catapult'
+'Es enthält alle wesentlichen Informationen, um deiner neugewonnen Verantwortung gerecht werden zu können...': 'It contains all the essential information you need to fulfill your newfound responsibility...'
+'Du hast Erfahrungspunkte erhalten!': 'You have obtained experience points!'
+'In einem Rausch endloser Großzügigkeit hat {citizen} dir einige seiner Erfahrungspunkte gespendet.': "\n            {ref__gender, select,\n                        female {In a frenzy of endless generosity, {citizen} has donated some of her experience points to you.}\n                        other {In a frenzy of endless generosity, {citizen} has donated some of his experience points to you.}\n                    }\n"
+'Hoffentlich hat {citizen} die Erzählungen seiner vergangenen Heldentaten nur moderat übertrieben...': "\n            {ref__gender, select,\n                        female {Hopefully {citizen} has only moderately exaggerated the tales of her past exploits...}\n                        other {Hopefully {citizen} has only moderately exaggerated the tales of his past exploits...}\n                    }\n"
+'Zweite Lunge (2 AP, 2 EP)': 'Second Wind (2 AP, 2 EP)'
+'Verbesserung Zweite Lunge (2 AP, 4 EP)': 'Improved Second Wind (2 AP, 4 EP)'
+'Verbesserung Zweite Lunge (4 AP, 4 EP)': 'Improved Second Wind (4 AP, 4 EP)'
+'Heldenerfahrung an {user} in "{town}" weitergegeben.': 'Hero experience passed on to {user} in "{town}".'
+'Heldenerfahrung von {user} in "{town}" erhalten.': 'Heroic experience received from {user} in "{town}".'
+'Heldenfähigkeit freigeschaltet': 'heroic skill'
+'Du hast es geschafft, diesen Gegenstand zu verarbeiten. Aber als du fast fertig warst, ist das Klebeband gerissen. Ohne dessen Halt ist die Klinge abgerutscht und hat den Stamm zertrümmert. So ist das ganze Ding nicht mehr zu gebrauchen. Wenigstens hast du es ohne einen Splitter überstanden.': 'You''ve managed to transform your item. But the end of the operation broke the duct tape. Without support, the blade slipped and shattered the log. Nothing left is usable. At least you made it out without a splinter.'
+'Du hast es geschafft, {item} anzulocken... aber das Einfangen ist dir weniger geglückt.<hr/>Nichts von dem Futter ist übrig geblieben, abgesehen von ein paar von Insekten bedeckten Krümeln. Du legst die {leftovers} in die Bank.': 'You have managed to attract {item}... but you were less successful in catching it.<hr/>Nothing is left of the food but a few moist crumbs covered in insects, so you put {leftovers} in the bank. It''s better than nothing, right?'
+'Du erhälst diese Nachricht als Bestätigung, dass deine Fehlermeldung bei uns eingegangen ist. Du kannst auf diese Nachricht antworten, um deiner Fehlermeldung zusätzliche Informationen hinzuzufügen. Unsere Techniker werden dich möglicherweise über diesen Thread kontaktieren, wenn sie Rückfragen haben.<br/><br/>Deine Meldung:<br/>{body}<br/>Link zu deinem Ticket (nur für Projektmitglieder abrufbar): <a href="{link}">#{issue}</a>': '<div class="crowmsg">You receive this message as confirmation that we have received your bug report. You can reply to this message to add additional information to your bug report. Our technicians may contact you via this thread if they have any questions.</div><br/>Your message:<br/><i>{body}</i><br/><br/>Link to your ticket (available only to project members):<br/><a href="{link}">#{issue}</a>'
+'Dein Ticket mit der Nummer #{issue} wurde soeben geschlossen.': '<div class="crowmsg">Your ticket with the number #{issue} has just been closed.</div>'
+'Dein Ticket mit der Nummer #{issue} wurde soeben erneut geöffnet.': '<div class="crowmsg">Your ticket with the number #{issue} has just been reopened.</div>'
+'Ein Techniker hat dir eine Nachricht geschrieben:<br/><br/>{body}': '<div class="crowmsg">A technician sent you a message:</div><br/><i>{body}</i>'
+'Du hast ein(e,n) {item} hergestellt. Der Gegenstand wurde in der Bank abgelegt.': 'After some DIY (thumb hammering, sweating, and colorful language), you have obtained a {item} (the object has been placed in the bank).'
+'Du hast {item} hergestellt. Die Gegenstände wurden in der Bank abgelegt.': 'After some DIY (thumb hammering, sweating, and colorful language), you have crafted {item}. The items have been placed in the bank.'
+'Du hast dafür <strong>{ap} Aktionspunkt(e)</strong> verbraucht.': 'You have used <strong>{ap, plural, one {one action point} other {# action points}}</strong>.'
+'Du hast dafür <strong>{cp} Baupunkt(e)</strong> verbraucht.': 'You have used <strong>{cp, plural, one {one construction point} other {# construction points}}</strong>.'
+'Du hast dafür <strong>{ap} Aktionspunkt(e)</strong> und <strong>{cp} Baupunkt(e)</strong> verbraucht.': 'You have used <strong>{ap, plural, one {one action point} other {# action points}}</strong> and <strong>{cp, plural, one {one construction point} other {# construction points}}</strong>.'
+'{citizen} wurde auserwählt, um unser Katapult zu steuern. Sollte ihm etwas Schreckliches zustoßen, dann muss ein neuer Bürger gewählt werden.': '{citizen}  has been voted to be in charge of the catapult. If anything dreadful happens to {ref__gender, select, female {her} other {him}}, another citizen will need to be designated.'
+'Wunderwerk: Blaugoldige Thermalbäder': 'Wonder: Blue Gold Thermal baths'
+'Als du gerade zugreifen willst, fällt dein Blick auf eine an der Wand aufgehängte krude Maske. Du erschreckst dich zu Tode und flüchtest, ohne etwas stehlen zu können!': 'Just as you are about to grab something, your gaze falls on a crude mask hanging on the wall. You are scared to death and flee without stealing anything!'
+'Nichtsahnend bist du deinem Tagewerk nachgegangen, als sich plötzlich jemand von hinten an dich angeschlichen und mit einer furchterregenden Maske zu Tode erschreckt hast.': 'You were going about your daily business, unaware of what was about to happen, when suddenly someone crept up behind you and scared you to death with a terrifying mask.'
+'Du bist nun vor Angst erstarrt!': 'You are now frozen in fear!'
+'Mehr Informationen über die Angststarre findest du in der {health_help}.': 'You can find more information about being terrorized in the {health_help}.'
+'{attacker} hat sich von hinten an {defender} herangeschlichen und him einen üblen Schrecken eingejagt!': '{attacker} has crept up to {defender} and scared {defender__gender, select, female {her} other {him}} almost to death!'
+'{attacker} hat sich von hinten an {defender} herangeschlichen und vergeblich versucht, ihm einen Schrecken einzujagen.': '{attacker} has crept up to {defender}, trying (and failing) to scare {defender__gender, select, female {her} other {him}}.'
+'Als du gerade zugreifen willst, hörst du ein schauriges Lachen aus einer dunklen Ecke. Du erschreckst dich zu Tode und flüchtest, ohne etwas stehlen zu können!': 'Just as you are about to grab it, you hear an eerie laugh coming from a dark corner. You are scared to death and flee without stealing anything!'
+'Eine schaurige Nacht!': 'A spooky night!'
+'Du hast die gesamte Nacht keine Sekunde geschlafen. Die kalte Nachtluft brennt in deiner Lunge und am morgen fühlst du dich ausgelaugt und krank. Es ist beinahe so, als wollte irgend etwas in deiner Behausung dich töten...': 'You haven''t slept a wink all night. The cold night air burns your lungs and in the morning you feel exhausted and sick. It''s almost as if something in your home wants to kill you...'
+'Du hast die gesamte Nacht keine Sekunde geschlafen. Jedes mal, wenn du die Augen schließt, hörst du Schritte oder ein leises Lachen. Diese Nacht hat dich völlig verängstigt zurückgelassen. Es ist beinahe so, als wollte irgend etwas in deiner Behausung dich um den Verstand bringen...': 'You haven''t slept a wink all night. Every time you close your eyes, you hear footsteps or quiet laughter. This night has left you completely terrified. It''s almost as if something in your home is trying to drive you mad...'
