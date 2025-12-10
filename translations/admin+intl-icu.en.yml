@@ -208,7 +208,7 @@ Saisons: Seasons
 'Neue Saison': 'New Season'
 'Status vergeben': 'Give the status'
 'Status entfernen': 'Remove the status'
-'Eine Rolle auswählen:': 'Select role :'
+'Eine Rolle auswählen:': 'Select role:'
 'Rolle vergeben': 'Give the role'
 'Rolle entfernen': 'Remove the role'
 'Bürger nach Sprache': 'Citizens per town'
@@ -309,7 +309,7 @@ Profilbeschreibung: Profile description
 'Baufortschritt setzen:': 'Set construction progress:'
 'Integrität setzen:': 'Set integrity:'
 'Neue Anzahl:': 'New number:'
-'Heldentage setzen': 'Set heroic experience'
+'Heldentage setzen': 'Set hero days'
 'Hausverbesserungen:': 'Home upgrades:'
 'Teleportieren:': 'Teleportation:'
 'In die Stadt': 'In town'
@@ -636,8 +636,8 @@ Beginn: Start
 'Max. Aktive Zombies': 'Max. active zombies'
 'Sperre deaktivieren': 'Disable lockdown'
 'Sperre aktivieren': 'Activate lockdown'
-'Stadttor reparieren': 'Repair city gate'
-'Zerstöre das Stadttor': 'Destroy the city gate'
+'Stadttor reparieren': 'Repair the town''s gates'
+'Zerstöre das Stadttor': 'Destroy the town''s gates'
 'Verläufige Ergebnisse anzeigen ab': 'Show current results'
 'Mehrere Antworten möglich (Multiple Choice)': 'Multiple answers possible (multiple choice)'
 'Raben-Account anlegen': 'Create a Crow account'
@@ -655,7 +655,7 @@ Erstellt: Created
 '{hrs} Std. ({prc}%)': '{hrs}h ({prc}%)'
 'Letzte Woche': 'Last week'
 'Letzte 3 Tage': 'Last 3 Days'
-'Letzter Tag': 'Last day'
+'Letzter Tag': 'Last 24 hours'
 'Diese Zeile enthält belastende Informationen über den Spieler.': 'This line contains exculpatory information about the player. If the value shown here is high, it means it is less likely to be a multi-account.'
 'Erster Wert:': 'First value:'
 'Dauer und Gesamtanteil der aktiven Phasen, die sich mit min. einem anderen Spieler dieser Gruppe überschneiden.': 'Duration and total proportion of active phases that overlap with at least one other player in this group.'
@@ -671,3 +671,34 @@ Erstellt: Created
 Veraltet!: Outdated!
 Klicks: Clicks
 '{number} Auszeichnungen konnten nicht entfernt werden. Möglicherweise sind sie dem Spieler über Städte zugewiesen. In diesem Fall müssen sie über die Städteverwaltung entfernt werden.': '{number} disctinctions could not be removed. They are possibly assigned via a town and must be removed via the town distinction UI.'
+'Eingehende Nachrichten als Tickets behandeln': 'Treat incoming messages as tickets'
+'Ist diese Option aktiviert, so wird eine eingehende Konversation für alle Gruppenmitglieder als "Gelesen" markiert, sobald ein Gruppenmitglied antwortet.': 'If this option is activated, an incoming conversation is marked as "Read" for all group members as soon as a group member replies.'
+SP: EP
+'Es wurden {n} Posts gelöscht.': '{n} messages have been deleted.'
+'Weitere Aktionen': 'Additional actions'
+'Bekannte IP-Adressen': 'Known IP addresses'
+'{n} (davon {n2} bereits blockiert)': '{n} (including {n2} already blocked)'
+Foren-Posts: Forum messages
+'{n} (davon {n2} gelöscht)': '{n} (including {n2} already deleted)'
+Heldenerfahrung: Heroic Experience
+Zurücksetzen: Reset
+Künstler: 'Curator of Good Taste'
+'Anzahl der gelisteten Namen: {number}': 'Number of names listed: {number}'
+Namen-Suche: Name search
+'Namen hinzufügen': 'Add name'
+'Namen können als glob-Muster eingegeben werden. Beispielsweise würde *test* alle Namen verhindern, in denen "test" vorkommt. Für eine Übersicht über glob-Syntax, siehe folgenden Link:': 'Names can be entered as a glob pattern. For example, *test* would block all names containing "test". For an overview of the glob syntax, see the following link:'
+'Gesperrte Namen': 'Blocked names'
+'Es existiert bereits ein Changelog für diese Version in der angegebenen Sprache.': 'There is already a changelog for this version in the specified language.'
+'Temporär für Neuregistrierungen sperren': 'Temporarily lock new registrations'
+'Alle Posts löschen': 'Delete all posts'
+'Ressourcen- und AP-Vorlage, welches für diese Konstruktion benötigt wird.': 'Resource and AP template required for this construction.'
+Teuer: Expensive
+Normal: Normal
+Billig: Cheap
+Billig+: Cheap+
+'Gewählte Gebäude freischalten': 'Unlock selected construction'
+'Gesamten Gebäudebaum zurücksetzen': 'Reset entire building tree'
+'Klicken, um Baustelle in die Liste der zu entsperrenden Baustellen aufzunehmen.': 'Click to add to the list of constructions to unlock'
+'Klicken, um Baustelle sofort zu entsperren.': 'Click to unlock'
+Notizen: Notes
+'Notiz hinzufügen': 'Add note'
