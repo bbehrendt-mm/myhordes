@@ -170,7 +170,7 @@ Weltforen: Foros Mundiales
 Wiederherstellen: Restaurar
 'Wir sollten mehr Verteidigungsanlagen bauen. Falls Ressourcen dafür fehlen, geh in die Außenwelt (die Wüste außerhalb der Stadt) und suche danach.': 'Necesitamos crear más defensas. Si faltan recursos, ve al Ultramundo (el desierto fuera del pueblo) y búscalos ahí.'
 '<strong>Wichtig:</strong> Verteidigungsgegenstände können maximal <strong>500</strong> Verteidigungspunkte vergeben!': '<strong>Importante:</strong> Los objetos defensivos aumentarán su defensa a un máximo de <strong>500</strong> puntos!'
-'Diese Abwehrkräfte werden von gereinigten Seelen gebracht.': 'Éstas defensas son obtenidas gracias a las Almas Purificadas.'
+'Diese Abwehrkräfte werden von gereinigten Seelen gebracht.': 'Estas defensas son obtenidas gracias a las Almas Purificadas.'
 'Jeder <strong>Verteidigungsgegenstand</strong>, der sich in der Bank befindet, bringt der Stadt <strong>1 Verteidigungspunkte</strong>.': 'Cada <strong>objeto de defensa</strong> colocado en el Almacén le da <strong>1 punto de defensa al pueblo</strong>.'
 'Folgende Bürger sind wahlweise: <ul><li>auf ihrer Todesanzeigeseite (sie haben ihren Tod noch nicht bestätigt),</li><li>bereits im Spiel,</li><li>sie haben sich entschieden, nicht automatisch einer Stadt und ihrer Koalition anzugehören.</li><li>oder, sie haben sich seit über 5 Tagen nicht mehr angemeldet.</li></ul>': 'Los siguientes habitantes no están disponibles por una o varias de estas razones: <ul><li>Están en su página de Muerte (no han validado su deceso).</li><li>Están en una partida.</li><li>Han elegido no unirse a un pueblo con el resto de la alianza.</li><li>No se han conectado desde hace más de 5 días.</li></ul>'
 'Wenn ein andered Mitglied deiner Koalition eine Stadt auswählt, schließt du dich ihm automatisch an und spielst in der gleichen Stadt wie er.': 'Si otro miembro de la alianza se une a un pueblo, le seguirás y comenzarás a jugar en su mismo pueblo.'
@@ -179,7 +179,7 @@ Code: Código
 Kein: "No"
 'Diese Nachricht wurde dir vom Raben persönlich überbracht. Er schwebt über der Stadt und wirft immer ein wachsames Auge auf dich...': 'Éste mensaje te lo trajo personalmente el Cuervo. Él siempre vuela sobre el pueblo y tiene un ojo clavado en tí...'
 'Diesen Bonus gibt es dank eurer alten Freunde und dem Gebäude <strong>Kleiner Friedhof</strong>.': 'Este bonus se encuentra disponible gracias a tus antiguos camaradas y a la Construcción <strong>Defensa Post-Mortem</strong>.'
-'Diesen Bonus gibt es nur dann, wenn sich die Wächter wärhend eines Angriffs in det Stadt befinden.': 'Este Bonus sólo se encuentra disponible si los Guardianes se encuentran en la ciudad.'
+'Diesen Bonus gibt es nur dann, wenn sich die Wächter wärhend eines Angriffs in det Stadt befinden.': 'Estas defensas las proporcionan los habitantes que asumen el rol de centinelas en el momento del ataque.'
 'Diese Kosten können durch den Aufbau der <strong>Müll für Alle</strong>.': 'Este costo puede reducirse con la construcción <strong>Vertedero gratuito</strong>.'
 Ausblenden: Esconder
 Nachricht: Noticia
@@ -432,7 +432,7 @@ STRG: CTRL
 Weltforum: Foro Mundial
 'im-Kontext Übersetzung': 'Traducir MyHordes'
 'Mit dieser speziellen Sprache aktivierst du die Crowdin-Kontextübersetzung. Damit kannst du MyHordes direkt aus dem Spiel heraus übersetzen.': 'Este lenguaje en particular activa la traducción en contexto de Crowdin. Podrá traducir MyHordes directamente desde el juego.'
-'Spieler melden': 'Denunciar jugador'
+'Spieler melden': 'Reportar jugador'
 'Bist du sicher, dass du diesen Spieler an die Moderatoren melden willst?': '¿Estás seguro de que quieres informar de esta publicación a los moderadores?'
 'Wenn du eine Nachricht oder einen Foren-Post dieses Spielers melden willst, benutze bitte stattdessen die Melden-Funktion der entsprechenden Nachricht.': 'Si quieres denunciar un mensaje o una entrada del foro de este jugador, utiliza la función de denuncia del mensaje correspondiente.'
 'Unangemessene Profilbeschreibung': 'Descripción del perfil inapropiado'
@@ -555,7 +555,7 @@ PN: MP
 'Städte werden mit hoher Priorität angelegt': 'El pueblo se creará con prioridad'
 'Die Städte werden innerhalb der nächsten 30 Minuten erzeugt, statt erst beim nächsten Angriff. Bitte verwendet diese Funktion nur in Notfällen.': 'El pueblo se creará en los 30 minutos siguientes al próximo ataque. Por favor, utiliza esta función sólo en caso de emergencia.'
 'Bitte verwendet diese Funktion nur in Notfällen. Fortfahren?': 'Esta función sólo debe utilizarse en caso de emergencia. ¿Continuar?'
-'Kein Tag': 'Todos los dias'
+'Kein Tag': 'Ninguna etiqueta'
 ENTER: ENTER
 'Keine Formatierung': 'Sin formato'
 'Spieler auswählen': 'Elige un jugador'
@@ -583,16 +583,16 @@ Testbenachrichtiung: Notificación de prueba
 'Um diese Funktion zu verwenden, musst du MyHordes die Erlaubnis geben, dir Benachrichtigungen auf dein Gerät zu schicken.': 'Para utilizar esta función, debe permitir que MyHordes le envíe notificaciones en tu dispositivo.'
 'MyHordes ist nicht in der Lage, die von diesem Gerät angebotene Schnittstelle anzusprechen. Bitte versuche, dein Gerät oder Browser auf die neuste Version zu aktualisieren, oder verwende einen anderen Browser.': 'MyHordes no puede abordar la interfaz que ofrece este dispositivo. Intente actualizar tu dispositivo o navegador a la última versión, o utilice un navegador diferente.'
 'Dieses Gerät ist bereits für Push-Benachrichtigungen eines anderen MyHordes-Account registriert. Ein Gerät kann nicht mehreren Accounts zugeordnet werden.': 'Este dispositivo ya está registrado para recibir notificaciones push de otra cuenta MyHordes. Un dispositivo no se puede asignar a varias cuentas.'
-'Freunde sind einer Stadt beigetreten': 'Amigos se unieron a una ciudad'
-'Ein Freund ist einer Stadt beigetreten': 'Un amigo se unió a una ciudad'
+'Freunde sind einer Stadt beigetreten': 'Amigos se unieron a un pueblo'
+'Ein Freund ist einer Stadt beigetreten': 'Un amigo se unió a un pueblo'
 'Bitte fülle das Formular vollständig aus.': 'Por favor complete el formulario por completo.'
 'Der gemeldete Inhalt wurde nicht gefunden. Möglicherweise wurde er in der Zwischenzeit bereits gelöscht.': 'El contenido reportado no fue encontrado. Es posible que ya se haya eliminado mientras tanto.'
 'Dieser Inhalt kann nicht gemeldet werden.': 'Este contenido no se puede denunciar.'
 'Du hast zu viele Meldungen in kurzer Zeit abgesendet. Du musst einen Augenblick warten, bevor du weitere Meldungen senden kannst.': 'Has enviado demasiados mensajes en poco tiempo. Debes esperar un poco antes de poder enviar más mensajes.'
 'Bist du sicher, dass du den Inhalt des Schwarzen Bretts an die Moderatoren melden willst?': '¿Estás seguro de que deseas informar el contenido del foro a los moderadores?'
-'Bist du sicher, dass du die persönliche Beschreibung dieses Bürgers an die Moderatoren melden willst?': '¿Está seguro de que desea informar la descripción personal de este ciudadano a los moderadores?'
-'Bist du sicher, dass du die letzten Worte dieses Bürgers an die Moderatoren melden willst?': '¿Estás seguro de que quieres informar las últimas palabras de este ciudadano a los moderadores?'
-'Bist du sicher, dass du den Stadtkommentar dieses Bürgers an die Moderatoren melden willst?': '¿Estás seguro de que quieres denunciar el comentario de este ciudadano sobre la ciudad a los moderadores?'
+'Bist du sicher, dass du die persönliche Beschreibung dieses Bürgers an die Moderatoren melden willst?': '¿Está seguro de que desea reportar la descripción personal de este habitante a los moderadores?'
+'Bist du sicher, dass du die letzten Worte dieses Bürgers an die Moderatoren melden willst?': '¿Estás seguro de que quieres reportar las últimas palabras de este habitante a los moderadores?'
+'Bist du sicher, dass du den Stadtkommentar dieses Bürgers an die Moderatoren melden willst?': '¿Estás seguro de que quieres reportar el comentario de este habitante sobre el pueblo a los moderadores?'
 'Über dieses Formular kannst du uns einen technischen Fehler melden. Bitte verwende diese Funktion nicht, um uns unangemessene Inhalte oder inhaltliche Vorschläge für zukünftige Updates zu senden.': 'Puede utilizar este formulario para informarnos de un error técnico. No utilice esta función para enviarnos contenido inapropiado o sugerencias de contenido para futuras actualizaciones.'
 'Der Missbrauch dieses Formulars führt zu Sanktionen für deinen Account.': 'El abuso de este formulario resultará en sanciones para tu cuenta.'
 'Datei anhängen': 'Adjuntar un archivo'
@@ -621,5 +621,48 @@ Testbenachrichtiung: Notificación de prueba
 'Dies ist Meldung #{num}.': 'Es el mensaje #{num}.'
 Community-Event: Evento Comunitario
 'Die erhälst die gekennzeichneten Benachrichtigungen nur, wenn sie deiner gewählten Sprache entsprechen. Wenn du die entsprechenden Einstellungen änderst oder deine Sprache wechselst, kann es bis zu 24 Stunden dauern, bis die Änderungen für Benachrichtigungen übernommen werden.': 'Solo recibirás las notificaciones etiquetadas si corresponden al idioma seleccionado. Si modificas los ajustes pertinentes o cambias de idioma, los cambios pueden tardar hasta 24 horas en aplicarse a las notificaciones.'
-'Alternativ zu einer E-Mail Adresse kannst du hier auch eine URL eintragen, auf der Spieler eine Kontaktmöglichkeit zu dir finden.': 'Alternativ zu einer E-Mail Adresse kannst du hier auch eine URL eintragen, auf der Spieler eine Kontaktmöglichkeit zu dir finden.'
-'Dein Gerät konnte sich nicht beim Benachrichtigungsdienst anmelden. Dies kann durch einen kurzzeitigen Verbindungsausfall passieren. Möglicherweise musst du den Benachrichtigungsdienst auch zunächst in den Privatsphäre-Einstellungen deines Browsers aktivieren.': 'Dein Gerät konnte sich nicht beim Benachrichtigungsdienst anmelden. Dies kann durch einen kurzzeitigen Verbindungsausfall passieren. Möglicherweise musst du den Benachrichtigungsdienst auch zunächst in den Privatsphäre-Einstellungen deines Browsers aktivieren.'
+'Alternativ zu einer E-Mail Adresse kannst du hier auch eine URL eintragen, auf der Spieler eine Kontaktmöglichkeit zu dir finden.': 'Como alternativa a una dirección de correo electrónico, también puedes introducir una URL en la que los jugadores puedan ponerse en contacto contigo.'
+'Dein Gerät konnte sich nicht beim Benachrichtigungsdienst anmelden. Dies kann durch einen kurzzeitigen Verbindungsausfall passieren. Möglicherweise musst du den Benachrichtigungsdienst auch zunächst in den Privatsphäre-Einstellungen deines Browsers aktivieren.': 'Tu dispositivo no ha podido iniciar sesión en el servicio de notificaciones. Esto puede ocurrir debido a un fallo temporal de la conexión. Es posible que también tengas que activar primero el servicio de notificaciones en la configuración de privacidad de tu navegador.'
+'Leider scheint dein Gerät oder Browser diese Funktion nicht zu unterstützen.': 'Lamentablemente, tu dispositivo o navegador no parece admitir esta función.'
+'Dieser Text ist zu lang. Bitte kürze deinen Text oder zerlege ihn in mehrere Posts.': 'Este texto es demasiado largo. Acorte tu texto o divídalo en varios mensajes.'
+'Dieser Indikator zeigt an, ob du aktuell mit dem Live-Dienst von MyHordes verbunden bist.': 'Este indicador indica si estás actualmente conectado al servicio en vivo MyHordes.'
+'Mithilfe des Live-Dienstes erhälst dein System Benachrichtigungen vom MyHordes-Server in Echtzeit, beispielsweise über neue Forenposts oder PNs.': 'Con el servicio en vivo, su sistema recibe notificaciones del servidor MyHordes en tiempo real, por ejemplo, sobre nuevas publicaciones en el foro o mensajes directos.'
+'Aktuell besteht keine Verbindung zum Live-Dienst. Du kannst dennoch wie gewohnt weiter spielen, da alle wichtigen Funktionen auch ohne den Live-Dienst arbeiten können.': 'Actualmente no hay conexión al servicio en vivo. Aún puedes seguir jugando como siempre, porque todas las funciones importantes también pueden funcionar sin el servicio en vivo.'
+'Nicht verbunden': 'No conectado'
+'Verbindung wird hergestellt': 'Conectando'
+'Verbunden, Verbindungsupdate angefordert': 'Conectado, actualización de conexión solicitada'
+Verbunden: Conectado
+'Die Taube': 'La Paloma'
+'Normaler Post': 'Publicar normal'
+'Diesen Bonus gibt es nur dann, wenn sich die Bürger während eines Angriffs in der Stadt befinden.': 'Esta bonificación sólo se aplica si hay habitantes en el pueblo durante un ataque.'
+'Anonymer Post': 'Mensaje anónimo'
+'Bist du sicher, dass du deine Fähigkeiten zurücksetzen möchtest? Du wirst all deine Heldenerfahrung und Fähigkeiten verlieren. Diese Aktion kann nicht rückgängig gemacht werden!': '¿Estás seguro de que quieres restablecer tus habilidades? Perderás toda tu experiencia y habilidades de héroe. ¡Esta acción es irreversible!'
+'Dieser Spieler ist ein Mitglied der Künstlergilde auf MyHordes.': 'Este jugador es miembro del Comité de Buen Gusto de MyHordes.'
+'Die Stadt verfügt über eine <strong>Techniker-Werkbank</strong>.': 'El pueblo cuenta con una <strong>Mesa de trabajo de los técnicos</strong>.'
+Angepinnt: Destacado
+'Dieses Thema wird nicht länger in der Tab-Leiste angezeigt.': 'Este tema ya no aparece en la barra de pestañas.'
+'Dieses Thema wird in der Tab-Leiste im oberen Bereich der Forenansicht angeheftet, damit du schneller darauf zugreifen kannst. Du kannst maximal 6 Foren oder Themen anpinnen.': 'Si esta opción está activada, este tema se anclará en la lista de pestañas de la parte superior de la vista del foro para que puedas acceder a él más rápidamente. Puedes anclar un máximo de 6 foros o temas.'
+'Spiel  (forum)': Juego
+'Spam  (forum)': Spam
+'Themen filtern': 'Filtrar temas'
+Zurücksetzen: Reiniciar
+'Wähle hier eine Sprache aus, um diese Sektion für Spieler mit dieser Sprache automatisch auszuklappen.': 'Seleccione un idioma aquí para expandir automáticamente esta sección para los jugadores que usan ese idioma.'
+'Keine Sprache': 'Sin Idioma'
+Support: Soporte
+Animation: Animación
+Orakel: Oráculo
+Sonstiges: Otros
+'Diese Anwendung befindet sich im Wartungsmodus.': 'Esta aplicación externa está actualmente en mantenimiento.'
+'Sei vorsichtig, das Betreten geschieht auf eigene Gefahr...': 'Ten cuidado, entra bajo tu propio riesgo...'
+'Aufgrund technischer Probleme ist der Funktionsumfang dieser externen Anwendung aktuell eingeschränkt.': 'Debido a problemas técnicos, la funcionalidad de esta aplicación externa está actualmente limitada.'
+'Fehler beim Laden der Logeinträge ({error}).': 'Error al cargar entradas de registro ({error}).'
+'Log-Einträge können nicht abgerufen werden, bitte versuche, die Seite neu zu laden.': 'No se pudieron recuperar las entradas del registro, intente recargar la página.'
+'Vertraulichkeit des Fehlerberichts': 'Confidencialidad del informe de errores'
+'Dieser Fehlerbericht enthält Informationen, die ich nicht öffentlich teilen möchte; er sollte nur vertrauenswürdigen Entwicklern zugänglich sein.': 'Este informe de error contiene información que no deseo compartir públicamente; sólo debe ser accesible para desarrolladores confiables.'
+'Dieser Fehlerbericht wird öffentlich zugänglich sein': 'Este informe de error estará disponible públicamente'
+'Dieser Fehlerbericht wird nur für vertrauenswürdige Entwickler zugänglich sein': 'Este informe de errores solo será accesible para desarrolladores confiables'
+Warnung: Atención
+'Andere Spiele auf Eternaltwin': 'Otros juegos en Eternaltwin'
+'Wenn du bei der Übersetzung von MyHordes mithelfen willst, kannst du dies auf {crowdin} tun!': 'Si quieres ayudar a traducir MyHordes, ¡puedes hacerlo en {crowdin}!'
+'My Brute': 'El Bruto'
+Spielhilfe: Guía del juego
