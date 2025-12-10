@@ -168,10 +168,10 @@ Weltforen: World Forums
 'Gelöscht von {user} ({time}). Klicken, um den Grund einzublenden.': 'Deleted by {user} ({time}). Click to reveal the reason.'
 Überprüft: Checked
 Wiederherstellen: Restore
-'Wir sollten mehr Verteidigungsanlagen bauen. Falls Ressourcen dafür fehlen, geh in die Außenwelt (die Wüste außerhalb der Stadt) und suche danach.': 'We should build more defenses. If resources are lacking, go to the outside world (the desert outside the city) and look for it.'
+'Wir sollten mehr Verteidigungsanlagen bauen. Falls Ressourcen dafür fehlen, geh in die Außenwelt (die Wüste außerhalb der Stadt) und suche danach.': 'We should build more defenses. If resources are lacking, go to the outside world (the desert outside the town) and look for it.'
 '<strong>Wichtig:</strong> Verteidigungsgegenstände können maximal <strong>500</strong> Verteidigungspunkte vergeben!': "<strong>Important:</strong>\n        Defence objects can award a maximum of <strong>500</strong> defence points!"
 'Diese Abwehrkräfte werden von gereinigten Seelen gebracht.': 'This defense is from purified souls.'
-'Jeder <strong>Verteidigungsgegenstand</strong>, der sich in der Bank befindet, bringt der Stadt <strong>1 Verteidigungspunkte</strong>.': 'Each <strong>Defence Object</strong> in the bank gives the city <strong>1 defence point</strong>.'
+'Jeder <strong>Verteidigungsgegenstand</strong>, der sich in der Bank befindet, bringt der Stadt <strong>1 Verteidigungspunkte</strong>.': 'Each <strong>Defence Object</strong> in the bank gives the town <strong>1 defence point</strong>.'
 'Folgende Bürger sind wahlweise: <ul><li>auf ihrer Todesanzeigeseite (sie haben ihren Tod noch nicht bestätigt),</li><li>bereits im Spiel,</li><li>sie haben sich entschieden, nicht automatisch einer Stadt und ihrer Koalition anzugehören.</li><li>oder, sie haben sich seit über 5 Tagen nicht mehr angemeldet.</li></ul>': 'The following citizens are: <ul><li>either on their ''Death'' page (they have not yet confirmed their death),</li><li>are already in a game,</li><li>they have chosen not to automatically join towns with the rest of the coalition,</li><li>they have not connected in more than 5 days.</li></ul>'
 'Wenn ein andered Mitglied deiner Koalition eine Stadt auswählt, schließt du dich ihm automatisch an und spielst in der gleichen Stadt wie er.': 'If another member of your coalition chooses a town, you will automatically join them and play in the same town as them.'
 'Du musst noch mehr Erfahrung sammeln, um das tun zu können...': 'You need to earn more experience to be able to do this ...'
@@ -179,7 +179,7 @@ Code: Code
 Kein: None
 'Diese Nachricht wurde dir vom Raben persönlich überbracht. Er schwebt über der Stadt und wirft immer ein wachsames Auge auf dich...': 'This message was personally delivered to you by the Crow. He hovers over your town and always keeps a watchful eye on you...'
 'Diesen Bonus gibt es dank eurer alten Freunde und dem Gebäude <strong>Kleiner Friedhof</strong>.': 'This bonus has been obtained thanks to your old friends and the <strong>Small Cemetary</strong> building.'
-'Diesen Bonus gibt es nur dann, wenn sich die Wächter wärhend eines Angriffs in det Stadt befinden.': 'This bonus is only available if the watchmen are in the town during the attack.'
+'Diesen Bonus gibt es nur dann, wenn sich die Wächter wärhend eines Angriffs in det Stadt befinden.': 'These defences are provided by citizens on watch duty at the time of the attack.'
 'Diese Kosten können durch den Aufbau der <strong>Müll für Alle</strong>.': 'This cost can be reduced by building an <strong>Free dump</strong>.'
 Ausblenden: Hide
 Nachricht: Your message
@@ -481,7 +481,7 @@ Nutzungsbedingungen: Terms of Service
 'Hier kannst du eine URL für eine Test- oder Entwicklungsumgebung hinterlegen (z.B. "localhost"). Du siehst dann einen zusätzlichen Button, der dich auf diese Umgebung weiterleitet. Diese URL sowie der zusätzliche Button sind ausschließlich für dich sichtbar.': 'Here you can enter a URL for a test or development environment (e.g. "localhost"). You will then see an additional button that redirects you to this environment. This URL and the additional button are only visible to you.'
 Kopiert!: Copied!
 'Du kannst diese Aktion nicht ausführen, da du <strong>verbannt</strong> wurdest!': 'It is impossible to do this when you have been <strong>shunned by the community</strong>!'
-'Jeder <strong>Verteidigungsgegenstand</strong>, der sich in der Bank befindet, bringt der Stadt <strong>{def} Verteidigungspunkt(e)</strong>.': 'Each <strong>Defence Object</strong> in the bank gives the city <strong>{def, select, 1 {1 defense point} other {{def} defense points}}</strong>.'
+'Jeder <strong>Verteidigungsgegenstand</strong>, der sich in der Bank befindet, bringt der Stadt <strong>{def} Verteidigungspunkt(e)</strong>.': 'Each <strong>Defence Object</strong> in the bank gives the town <strong>{def, select, 1 {1 defense point} other {{def} defense points}}</strong>.'
 'Eigenes Event organisieren': 'Organize an event'
 'Zurück zur Übersicht': 'Return to overview'
 'Event-Verifizierung beantragen': 'Request event verification'
@@ -503,7 +503,7 @@ Kopiert!: Copied!
 'Bist du sicher, dass du dieses Event löschen möchtest?': 'Are you sure you wish to delete this event?'
 'Weitere Informationen und Regeln anzeigen.': 'View more information and rules.'
 Event-Städte: Event towns
-'Hier kannst du Städte für dein Event anlegen, welche zusammen mit deinem Event gestartet werden. Dir stehen hierfür fast alle Optionen zur Verfügung, die auch Raben für die Erstellung von Städten haben.': 'Here you can create towns for your event, which will be started together with the event. You have almost all the options available to you that Crows have for creating cities.'
+'Hier kannst du Städte für dein Event anlegen, welche zusammen mit deinem Event gestartet werden. Dir stehen hierfür fast alle Optionen zur Verfügung, die auch Raben für die Erstellung von Städten haben.': 'Here you can create towns for your event, which will be started together with the event. You have almost all the options available to you that Crows have for creating towns.'
 'Deiner Kreativität sind somit keine Grenzen gesetzt!': 'There are no limits to your creativity!'
 'Aktuell werden keine Städte mit dem Start des Events automatisch angelegt.': 'Currently, no towns are automatically created with the start of the event.'
 'Automatisch generierter Name': 'Automatically generated name'
@@ -551,9 +551,9 @@ inaktiv: inactive
 '{player} hat dich auf MyHordes in einem Post unter "{threadname}" im Forum "{forumname}" erwähnt.': '{player} mentioned you on MyHordes in a post under "{threadname}" in the forum "{forumname}".'
 PN: PM
 'Du hast einen neuen Freund!': 'You have a new friend!'
-'Städte mit hoher Priorität anlegen': 'Create the city as a priority'
-'Städte werden mit hoher Priorität angelegt': 'The city will be created in priority'
-'Die Städte werden innerhalb der nächsten 30 Minuten erzeugt, statt erst beim nächsten Angriff. Bitte verwendet diese Funktion nur in Notfällen.': 'The city will be created within 30 minutes, instead of the next attack. Please only use this feature in an emergency.'
+'Städte mit hoher Priorität anlegen': 'Create the town as a priority'
+'Städte werden mit hoher Priorität angelegt': 'The town will be created in priority'
+'Die Städte werden innerhalb der nächsten 30 Minuten erzeugt, statt erst beim nächsten Angriff. Bitte verwendet diese Funktion nur in Notfällen.': 'The town will be created within 30 minutes, instead of the next attack. Please only use this feature in an emergency.'
 'Bitte verwendet diese Funktion nur in Notfällen. Fortfahren?': 'This feature is only to be used in an emergency. Continue?'
 'Kein Tag': 'No tag'
 ENTER: ENTRY
@@ -583,8 +583,8 @@ Testbenachrichtiung: Test notification
 'Um diese Funktion zu verwenden, musst du MyHordes die Erlaubnis geben, dir Benachrichtigungen auf dein Gerät zu schicken.': 'To use this feature, you must give MyHordes permission to send you notifications to your device.'
 'MyHordes ist nicht in der Lage, die von diesem Gerät angebotene Schnittstelle anzusprechen. Bitte versuche, dein Gerät oder Browser auf die neuste Version zu aktualisieren, oder verwende einen anderen Browser.': 'MyHordes is unable to address the interface offered by this device. Please try updating your device or browser to the latest version, or use a different browser.'
 'Dieses Gerät ist bereits für Push-Benachrichtigungen eines anderen MyHordes-Account registriert. Ein Gerät kann nicht mehreren Accounts zugeordnet werden.': 'This device is already registered for push notifications from another MyHordes account. A device cannot be assigned to multiple accounts.'
-'Freunde sind einer Stadt beigetreten': 'Friend have joined a city'
-'Ein Freund ist einer Stadt beigetreten': 'A friend has joined a city'
+'Freunde sind einer Stadt beigetreten': 'Friends have joined a town'
+'Ein Freund ist einer Stadt beigetreten': 'A friend has joined a town'
 'Bitte fülle das Formular vollständig aus.': 'Please fill out the form completely.'
 'Der gemeldete Inhalt wurde nicht gefunden. Möglicherweise wurde er in der Zwischenzeit bereits gelöscht.': 'The reported content was not found. It may have already been deleted in the meantime.'
 'Dieser Inhalt kann nicht gemeldet werden.': 'This content cannot be reported.'
@@ -592,7 +592,7 @@ Testbenachrichtiung: Test notification
 'Bist du sicher, dass du den Inhalt des Schwarzen Bretts an die Moderatoren melden willst?': 'Are you sure you want to report the black board content to the moderators?'
 'Bist du sicher, dass du die persönliche Beschreibung dieses Bürgers an die Moderatoren melden willst?': 'Are you sure you want to report this citizen''s personal description to the moderators?'
 'Bist du sicher, dass du die letzten Worte dieses Bürgers an die Moderatoren melden willst?': 'Are you sure you want to report this citizen''s last words to the moderators?'
-'Bist du sicher, dass du den Stadtkommentar dieses Bürgers an die Moderatoren melden willst?': 'Are you sure you want to report this citizen''s city comment to the moderators?'
+'Bist du sicher, dass du den Stadtkommentar dieses Bürgers an die Moderatoren melden willst?': 'Are you sure you want to report this citizen''s town comment to the moderators?'
 'Über dieses Formular kannst du uns einen technischen Fehler melden. Bitte verwende diese Funktion nicht, um uns unangemessene Inhalte oder inhaltliche Vorschläge für zukünftige Updates zu senden.': 'You can use this form to report a technical error to us. Please do not use this feature to send us inappropriate content or content suggestions for future updates.'
 'Der Missbrauch dieses Formulars führt zu Sanktionen für deinen Account.': 'Abuse of this form will result in sanctions for your account.'
 'Datei anhängen': 'Attach a file'
@@ -612,14 +612,57 @@ Testbenachrichtiung: Test notification
 'Wenn du zusätzliche Dateien (Screenshots, Videos, ...) zu deiner Fehlermeldung hinzufügen möchtest, kannst du das hier tun. Bitte beachte, dass die Gesamtgröße aller hochgeladenen Dateien die Grenze von 3MB nicht übersteigen darf.': 'If you would like to add additional files (screenshots, videos, ...) to your error message, you can do so here. Please note that the total size of all uploaded files cannot exceed 3MB.'
 'Fehler melden': 'Report an error'
 'Ein Forenpost wurde gemeldet.': 'A forum post was reported.'
-'Eine Stadt-PN wurde gemeldet.': 'A city PM was reported.'
+'Eine Stadt-PN wurde gemeldet.': 'A town PM was reported.'
 'Ein Eintrag auf dem Schwarzen Brett wurde gemeldet.': 'An entry on the black board was reported.'
 'Die Nachricht eines Bürgers wurde gemeldet.': 'A citizen''s message was reported.'
 'Die Letzten Worte eines Bürgers wurde gemeldet.': 'A citizen''s last words have been reported.'
-'Der Stadtkommentar eines Bürgers wurde gemeldet.': 'The comment from a city citizen was reported.'
+'Der Stadtkommentar eines Bürgers wurde gemeldet.': 'The town comment from a citizen was reported.'
 'Ein Spieleraccount wurde gemeldet.': 'A player account has been reported.'
 'Dies ist Meldung #{num}.': 'This is the message #{num}.'
 Community-Event: Community Event
 'Die erhälst die gekennzeichneten Benachrichtigungen nur, wenn sie deiner gewählten Sprache entsprechen. Wenn du die entsprechenden Einstellungen änderst oder deine Sprache wechselst, kann es bis zu 24 Stunden dauern, bis die Änderungen für Benachrichtigungen übernommen werden.': 'You will only receive marked notifications if they match the selected language. If you change the affected settings or change your language, notifications may take up to 24 hours to reflect the changes.'
 'Alternativ zu einer E-Mail Adresse kannst du hier auch eine URL eintragen, auf der Spieler eine Kontaktmöglichkeit zu dir finden.': 'Alternatively to an email adress, you may also specify an URL where players can contact you.'
 'Dein Gerät konnte sich nicht beim Benachrichtigungsdienst anmelden. Dies kann durch einen kurzzeitigen Verbindungsausfall passieren. Möglicherweise musst du den Benachrichtigungsdienst auch zunächst in den Privatsphäre-Einstellungen deines Browsers aktivieren.': 'Your device indicated that it failed to register with its push service. This may be the result of a temporary connection problem. It''s also possible that you need to manually enable the push service in your browser''s privacy settings.'
+'Leider scheint dein Gerät oder Browser diese Funktion nicht zu unterstützen.': 'Unfortunately, your device or browser does not seem to support this feature.'
+'Dieser Text ist zu lang. Bitte kürze deinen Text oder zerlege ihn in mehrere Posts.': 'This text is too long. Please shorten your text or split it into several posts.'
+'Dieser Indikator zeigt an, ob du aktuell mit dem Live-Dienst von MyHordes verbunden bist.': 'This indicator shows whether you are currently connected to the MyHordes live service.'
+'Mithilfe des Live-Dienstes erhälst dein System Benachrichtigungen vom MyHordes-Server in Echtzeit, beispielsweise über neue Forenposts oder PNs.': 'With the help of the live service, your system receives notifications from the MyHordes server in real time, for example about new forum posts or PMs.'
+'Aktuell besteht keine Verbindung zum Live-Dienst. Du kannst dennoch wie gewohnt weiter spielen, da alle wichtigen Funktionen auch ohne den Live-Dienst arbeiten können.': 'There is currently no connection to the live service. You can still continue to play as usual, as all important functions can also work without the live service.'
+'Nicht verbunden': 'Not connected'
+'Verbindung wird hergestellt': 'Connected'
+'Verbunden, Verbindungsupdate angefordert': 'Connected, connection update requested'
+Verbunden: Connected
+'Die Taube': 'The Dove'
+'Normaler Post': 'Normal post'
+'Diesen Bonus gibt es nur dann, wenn sich die Bürger während eines Angriffs in der Stadt befinden.': 'This bonus is only available if citizens are in town during an attack.'
+'Anonymer Post': 'Anonymous Post'
+'Bist du sicher, dass du deine Fähigkeiten zurücksetzen möchtest? Du wirst all deine Heldenerfahrung und Fähigkeiten verlieren. Diese Aktion kann nicht rückgängig gemacht werden!': 'Are you sure you want to reset your skills? You will lose all your heroic experience and skills. This action cannot be undone!'
+'Dieser Spieler ist ein Mitglied der Künstlergilde auf MyHordes.': 'This player is a member of the Committee of Good Taste on MyHordes.'
+'Die Stadt verfügt über eine <strong>Techniker-Werkbank</strong>.': 'The Town has a  <strong>Technicians Workbench</strong>.'
+Angepinnt: Pinned
+'Dieses Thema wird nicht länger in der Tab-Leiste angezeigt.': 'This topic will no longer be shown in the tab bar.'
+'Dieses Thema wird in der Tab-Leiste im oberen Bereich der Forenansicht angeheftet, damit du schneller darauf zugreifen kannst. Du kannst maximal 6 Foren oder Themen anpinnen.': 'If this option is enabled, this topic will be pinned in the tab list at the top of the forum view so that you can access it more quickly. You can pin a maximum of 6 forums or topics.'
+'Spiel  (forum)': Game
+'Spam  (forum)': Talk
+'Themen filtern': 'Filter topics'
+Zurücksetzen: Reset
+'Wähle hier eine Sprache aus, um diese Sektion für Spieler mit dieser Sprache automatisch auszuklappen.': 'Select a language here to automatically expand this section for players using this language.'
+'Keine Sprache': 'No language'
+Support: Support
+Animation: Animaction
+Orakel: Oracle
+Sonstiges: Others
+'Diese Anwendung befindet sich im Wartungsmodus.': 'This external application is currently in maintenance mode.'
+'Sei vorsichtig, das Betreten geschieht auf eigene Gefahr...': 'Proceed with caution, enter at your own risk...'
+'Aufgrund technischer Probleme ist der Funktionsumfang dieser externen Anwendung aktuell eingeschränkt.': 'Due to technical issues, the features of this external application are currently limited.'
+'Fehler beim Laden der Logeinträge ({error}).': 'Error loading log entries ({error}).'
+'Log-Einträge können nicht abgerufen werden, bitte versuche, die Seite neu zu laden.': 'Log entries cannot be retrieved, please try reloading the page.'
+'Vertraulichkeit des Fehlerberichts': 'Confidentiality of the bug report'
+'Dieser Fehlerbericht enthält Informationen, die ich nicht öffentlich teilen möchte; er sollte nur vertrauenswürdigen Entwicklern zugänglich sein.': 'This bug report contains information that I do not want to share publicly; it should only be accessible to trusted developers.'
+'Dieser Fehlerbericht wird öffentlich zugänglich sein': 'This bug report will be publicly available'
+'Dieser Fehlerbericht wird nur für vertrauenswürdige Entwickler zugänglich sein': 'This bug report will only be accessible to trusted developers'
+Warnung: Warning
+'Andere Spiele auf Eternaltwin': 'Other games on Eternaltwin'
+'Wenn du bei der Übersetzung von MyHordes mithelfen willst, kannst du dies auf {crowdin} tun!': 'If you want to help translate MyHordes, you can do so on {crowdin}!'
+'My Brute': 'My Brute'
+Spielhilfe: Help
