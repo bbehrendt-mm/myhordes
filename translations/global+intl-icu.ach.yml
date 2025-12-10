@@ -623,3 +623,46 @@ Community-Event: crwdns205322:0crwdne205322:0
 'Die erhälst die gekennzeichneten Benachrichtigungen nur, wenn sie deiner gewählten Sprache entsprechen. Wenn du die entsprechenden Einstellungen änderst oder deine Sprache wechselst, kann es bis zu 24 Stunden dauern, bis die Änderungen für Benachrichtigungen übernommen werden.': 'crwdns205324:0crwdne205324:0'
 'Alternativ zu einer E-Mail Adresse kannst du hier auch eine URL eintragen, auf der Spieler eine Kontaktmöglichkeit zu dir finden.': 'crwdns205376:0crwdne205376:0'
 'Dein Gerät konnte sich nicht beim Benachrichtigungsdienst anmelden. Dies kann durch einen kurzzeitigen Verbindungsausfall passieren. Möglicherweise musst du den Benachrichtigungsdienst auch zunächst in den Privatsphäre-Einstellungen deines Browsers aktivieren.': 'crwdns205380:0crwdne205380:0'
+'Leider scheint dein Gerät oder Browser diese Funktion nicht zu unterstützen.': 'crwdns205490:0crwdne205490:0'
+'Dieser Text ist zu lang. Bitte kürze deinen Text oder zerlege ihn in mehrere Posts.': 'crwdns205536:0crwdne205536:0'
+'Dieser Indikator zeigt an, ob du aktuell mit dem Live-Dienst von MyHordes verbunden bist.': 'crwdns206154:0crwdne206154:0'
+'Mithilfe des Live-Dienstes erhälst dein System Benachrichtigungen vom MyHordes-Server in Echtzeit, beispielsweise über neue Forenposts oder PNs.': 'crwdns206156:0crwdne206156:0'
+'Aktuell besteht keine Verbindung zum Live-Dienst. Du kannst dennoch wie gewohnt weiter spielen, da alle wichtigen Funktionen auch ohne den Live-Dienst arbeiten können.': 'crwdns206158:0crwdne206158:0'
+'Nicht verbunden': 'crwdns206160:0crwdne206160:0'
+'Verbindung wird hergestellt': 'crwdns206162:0crwdne206162:0'
+'Verbunden, Verbindungsupdate angefordert': 'crwdns206164:0crwdne206164:0'
+Verbunden: crwdns206166:0crwdne206166:0
+'Die Taube': 'crwdns206168:0crwdne206168:0'
+'Normaler Post': 'crwdns206170:0crwdne206170:0'
+'Diesen Bonus gibt es nur dann, wenn sich die Bürger während eines Angriffs in der Stadt befinden.': 'crwdns206172:0crwdne206172:0'
+'Anonymer Post': 'crwdns206174:0crwdne206174:0'
+'Bist du sicher, dass du deine Fähigkeiten zurücksetzen möchtest? Du wirst all deine Heldenerfahrung und Fähigkeiten verlieren. Diese Aktion kann nicht rückgängig gemacht werden!': 'crwdns206176:0crwdne206176:0'
+'Dieser Spieler ist ein Mitglied der Künstlergilde auf MyHordes.': 'crwdns211678:0crwdne211678:0'
+'Die Stadt verfügt über eine <strong>Techniker-Werkbank</strong>.': 'crwdns212480:0crwdne212480:0'
+Angepinnt: crwdns211616:0crwdne211616:0
+'Dieses Thema wird nicht länger in der Tab-Leiste angezeigt.': 'crwdns211618:0crwdne211618:0'
+'Dieses Thema wird in der Tab-Leiste im oberen Bereich der Forenansicht angeheftet, damit du schneller darauf zugreifen kannst. Du kannst maximal 6 Foren oder Themen anpinnen.': 'crwdns211620:0crwdne211620:0'
+'Spiel  (forum)': crwdns212482:0crwdne212482:0
+'Spam  (forum)': crwdns212484:0crwdne212484:0
+'Themen filtern': 'crwdns212486:0crwdne212486:0'
+Zurücksetzen: crwdns212488:0crwdne212488:0
+'Wähle hier eine Sprache aus, um diese Sektion für Spieler mit dieser Sprache automatisch auszuklappen.': 'crwdns212490:0crwdne212490:0'
+'Keine Sprache': 'crwdns212492:0crwdne212492:0'
+Support: crwdns213156:0crwdne213156:0
+Animation: crwdns213158:0crwdne213158:0
+Orakel: crwdns213160:0crwdne213160:0
+Sonstiges: crwdns213162:0crwdne213162:0
+'Diese Anwendung befindet sich im Wartungsmodus.': 'crwdns213186:0crwdne213186:0'
+'Sei vorsichtig, das Betreten geschieht auf eigene Gefahr...': 'crwdns213188:0crwdne213188:0'
+'Aufgrund technischer Probleme ist der Funktionsumfang dieser externen Anwendung aktuell eingeschränkt.': 'crwdns213190:0crwdne213190:0'
+'Fehler beim Laden der Logeinträge ({error}).': 'crwdns213202:0{error}crwdne213202:0'
+'Log-Einträge können nicht abgerufen werden, bitte versuche, die Seite neu zu laden.': 'crwdns213204:0crwdne213204:0'
+'Vertraulichkeit des Fehlerberichts': 'crwdns213212:0crwdne213212:0'
+'Dieser Fehlerbericht enthält Informationen, die ich nicht öffentlich teilen möchte; er sollte nur vertrauenswürdigen Entwicklern zugänglich sein.': 'crwdns213214:0crwdne213214:0'
+'Dieser Fehlerbericht wird öffentlich zugänglich sein': 'crwdns213216:0crwdne213216:0'
+'Dieser Fehlerbericht wird nur für vertrauenswürdige Entwickler zugänglich sein': 'crwdns213218:0crwdne213218:0'
+Warnung: crwdns213220:0crwdne213220:0
+'Andere Spiele auf Eternaltwin': 'crwdns213234:0crwdne213234:0'
+'Wenn du bei der Übersetzung von MyHordes mithelfen willst, kannst du dies auf {crowdin} tun!': 'crwdns213236:0{crowdin}crwdne213236:0'
+'My Brute': 'crwdns213238:0crwdne213238:0'
+Spielhilfe: crwdns252512:0crwdne252512:0
