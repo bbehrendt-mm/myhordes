@@ -670,3 +670,34 @@ Erstellt: Erstellt
 Veraltet!: Veraltet!
 Klicks: Klicks
 '{number} Auszeichnungen konnten nicht entfernt werden. Möglicherweise sind sie dem Spieler über Städte zugewiesen. In diesem Fall müssen sie über die Städteverwaltung entfernt werden.': '{number} Auszeichnungen konnten nicht entfernt werden. Möglicherweise sind sie dem Spieler über Städte zugewiesen. In diesem Fall müssen sie über die Städteverwaltung entfernt werden.'
+'Eingehende Nachrichten als Tickets behandeln': 'Eingehende Nachrichten als Tickets behandeln'
+'Ist diese Option aktiviert, so wird eine eingehende Konversation für alle Gruppenmitglieder als "Gelesen" markiert, sobald ein Gruppenmitglied antwortet.': 'Ist diese Option aktiviert, so wird eine eingehende Konversation für alle Gruppenmitglieder als "Gelesen" markiert, sobald ein Gruppenmitglied antwortet.'
+SP: SP
+'Es wurden {n} Posts gelöscht.': 'Es wurden {n} Posts gelöscht.'
+'Weitere Aktionen': 'Weitere Aktionen'
+'Bekannte IP-Adressen': 'Bekannte IP-Adressen'
+'{n} (davon {n2} bereits blockiert)': '{n} (davon {n2} bereits blockiert)'
+Foren-Posts: Foren-Posts
+'{n} (davon {n2} gelöscht)': '{n} (davon {n2} gelöscht)'
+Heldenerfahrung: Heldenerfahrung
+Zurücksetzen: Zurücksetzen
+Künstler: 'Kurator des Guten Geschmacks'
+'Anzahl der gelisteten Namen: {number}': 'Anzahl der gelisteten Namen: {number}'
+Namen-Suche: Namen-Suche
+'Namen hinzufügen': 'Namen hinzufügen'
+'Namen können als glob-Muster eingegeben werden. Beispielsweise würde *test* alle Namen verhindern, in denen "test" vorkommt. Für eine Übersicht über glob-Syntax, siehe folgenden Link:': 'Namen können als glob-Muster eingegeben werden. Beispielsweise würde *test* alle Namen verhindern, in denen "test" vorkommt. Für eine Übersicht über glob-Syntax, siehe folgenden Link:'
+'Gesperrte Namen': 'Gesperrte Namen'
+'Es existiert bereits ein Changelog für diese Version in der angegebenen Sprache.': 'Es existiert bereits ein Changelog für diese Version in der angegebenen Sprache.'
+'Temporär für Neuregistrierungen sperren': 'Temporär für Neuregistrierungen sperren'
+'Alle Posts löschen': 'Alle Posts löschen'
+'Ressourcen- und AP-Vorlage, welches für diese Konstruktion benötigt wird.': 'Ressourcen- und AP-Vorlage, welches für diese Konstruktion benötigt wird.'
+Teuer: Teuer
+Normal: Normal
+Billig: Billig
+Billig+: Billig+
+'Gewählte Gebäude freischalten': 'Gewählte Gebäude freischalten'
+'Gesamten Gebäudebaum zurücksetzen': 'Gesamten Gebäudebaum zurücksetzen'
+'Klicken, um Baustelle in die Liste der zu entsperrenden Baustellen aufzunehmen.': 'Klicken, um Baustelle in die Liste der zu entsperrenden Baustellen aufzunehmen.'
+'Klicken, um Baustelle sofort zu entsperren.': 'Klicken, um Baustelle sofort zu entsperren.'
+Notizen: Notizen
+'Notiz hinzufügen': 'Notiz hinzufügen'
