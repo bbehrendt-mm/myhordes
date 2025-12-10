@@ -45,7 +45,7 @@ Französisch: Français
 Spanisch: Espagnol
 Bearbeiten: Modifier
 Hinweis: Note
-Spiel: Jouer
+Spiel: Jeu
 Statistiken: Statistiques
 '{points} Punkte': '{points} points'
 'Dieser Spieler hat bisher noch keine Preise gewonnen...': 'Ce joueur n''a pas encore gagné de distinctions...'
@@ -280,7 +280,7 @@ Auswählen: Choisir
 Avatar: Avatar
 'Gruppe aus {num} Spielern': 'Groupe de {num} joueurs'
 'Wenn Bürger deine Stadt betreten möchten, wird ein Zugangsdode abgefragt. Nur mit korrektem Zugangscode erhalten sie Zutritt. Verteile den Zugangscode darum an die Spieler, die du einladen möchtest. <strong>Und benutze nicht dein privates Passwort als Zugangscode!!!</strong>': 'Ce mot de passe sera demandé à tout citoyen désireux de rejoindre cette ville. Distribuez-le aux personnes que vous souhaitez inviter. <strong>N''utilisez pas votre mot de passe personnel !!!</strong>'
-Groß: Gros
+Groß: Grand
 'Mit offiziellen Gruppen in Kontakt treten': 'Contacter les groupes officiels'
 'Eine offizielle Gruppe kontaktieren': 'Contacter un groupe officiel'
 'via {group_inbox}': 'via {group_inbox}'
@@ -307,7 +307,7 @@ Einblenden: Montrer
 'Wenn du den Absender dieser Nachricht blockierst, kann dieser dir keine neuen Nachrichten schicken. Werdet ihr beide von einer dritten Person in eine Gruppennachricht hinzugefügt, so werden Beiträge des blockierten Spielers standartmäßig für dich versteckt.': 'Si vous bloquez l’expéditeur de ce message, il ne pourra pas vous envoyer de nouveaux messages. Si vous êtes tous les deux ajoutés à un message de groupe par une tierce personne, les publications du joueur bloqué vous seront masquées par défaut.'
 'Dieser Spieler hat dich geblockt. Du kannst ihm keine Nachricht mehr schicken.': 'Cet utilisateur vous a bloqué, vous ne pouvez plus lui envoyer de message.'
 'Bevorzugte Pronomen': 'Pronoms préférés'
-'Hier kannst du festlegen, welche Personalpronomen das Spiel verwenden soll, wenn es sich auf dich bezieht (z.B. "männlich" für "er", "ihn", etc und "weiblich" für "sie", "ihr", etc).<br /><em>Diese Einstellung beeinflusst, wie dir und anderen Spielern bestimmte Texte angezeigt werden, wenn die Option "Neue Übersetzungen verwenden" aktiv ist.</em>.': 'Vous pouvez spécifier ici quels pronoms personnels le jeu doit utiliser s’il se réfère à vous (ex : «\_masculin\_» pour «\_il\_», «\_lui\_», etc. et «\_féminin\_» pour «\_elle\_», «\_la\_», etc.<br /><em>Cette option influence la façon dont vous et les autres joueurs affichent certains textes lorsque l’option «\_Utiliser les nouvelles traductions\_» est active.</em>.'
+'Hier kannst du festlegen, welche Personalpronomen das Spiel verwenden soll, wenn es sich auf dich bezieht (z.B. "männlich" für "er", "ihn", etc und "weiblich" für "sie", "ihr", etc).<br /><em>Diese Einstellung beeinflusst, wie dir und anderen Spielern bestimmte Texte angezeigt werden, wenn die Option "Neue Übersetzungen verwenden" aktiv ist.</em>.': 'Vous pouvez spécifier ici quels pronoms personnels le jeu doit utiliser s’il se réfère à vous (exemple : « masculin » pour « il », « lui », etc., et « féminin » pour « elle », « la », etc.<br /><em>Cette option influence la façon dont certains textes sont affichés (à vous comme aux autres joueurs) lorsque l’option « Utiliser les nouvelles traductions » est active.</em>.'
 Männlich: Masculin
 Weiblich: Féminin
 'Keine Präferenz': 'Pas de préférence'
@@ -407,9 +407,9 @@ Projekt: Projet
 Tag: Jour
 'Ein Script auf dieser Seite ist abgestürzt; weitere Informationen wurden an die Web-Konsole übermittelt. Die Seite funktioniert möglicherweise nicht mehr korrekt. Bitte melde diesen Fehler:': 'Un script sur cette page a crashé; plus d’informations ont été envoyées à la console Web. La page peut ne plus fonctionner correctement. Vous pouvez signaler cette erreur :'
 'Ein Fehler ist aufgetreten. Es stehen keine weiteren Informationen zur Verfügung.': 'Une erreur s’est produite. Aucune autre information n’est disponible.'
-'Schon gewusst? Bei vielen Aktionen wird auf mobilen Geräten zunächst ein Hilfetext eingeblendet. Wenn du die Aktion durchführen möchtest, musst du die Aktion erneut antippen. Wenn du es eilig hast und lieber keine Hilfetexte sehen möchtest, kannst du dieses Verhalten kannst du in deinen Seeleneinstellungen über die Einstellung "Tooltips auf mobilen Geräten durch antippen anzeigen" deaktivieren.': 'Le saviez-vous? Pour de nombreuses actions, une info-bulle s’affiche d’abord sur les appareils mobiles. Si vous souhaitez effectuer l’action, vous devez appuyer à nouveau sur celle-ci. Si vous êtes pressé et préférez ne pas voir les textes d’aide, vous pouvez désactiver cette fonctionnalité dans les paramètres de votre âme via le paramètre «\_Afficher les info-bulles sur les appareils mobiles en appuyant dessus\_».'
+'Schon gewusst? Bei vielen Aktionen wird auf mobilen Geräten zunächst ein Hilfetext eingeblendet. Wenn du die Aktion durchführen möchtest, musst du die Aktion erneut antippen. Wenn du es eilig hast und lieber keine Hilfetexte sehen möchtest, kannst du dieses Verhalten kannst du in deinen Seeleneinstellungen über die Einstellung "Tooltips auf mobilen Geräten durch antippen anzeigen" deaktivieren.': 'Le saviez-vous ? Pour de nombreuses actions, une info-bulle s’affiche d’abord sur les appareils mobiles. Si vous souhaitez effectuer l’action, vous devez appuyer à nouveau sur celle-ci. Si vous êtes pressé et préférez ne pas voir les textes d’aide, vous pouvez désactiver cette fonctionnalité dans les paramètres de votre âme via le paramètre « Afficher les info-bulles sur les appareils mobiles en appuyant dessus ».'
 Offiziell: Officiel
-'Wir MÜSSEN Verteidigungsanlagen bauen. Falls Ressourcen dafür fehlen, geh in die Außenwelt (die Wüste außerhalb der Stadt) und suche danach.': 'Nous DEVONS construire d''avantage de défenses dans les chantiers ! Si des ressources manquent, fouillez l''Outre-monde (le désert autour de la ville) pour en dénicher.'
+'Wir MÜSSEN Verteidigungsanlagen bauen. Falls Ressourcen dafür fehlen, geh in die Außenwelt (die Wüste außerhalb der Stadt) und suche danach.': 'Nous DEVONS construire davantage de défenses aux chantiers ! Si des ressources manquent, fouillez l’Outre-monde (le désert entourant la ville) pour en dénicher.'
 '{n} neue Beiträge in': '{n} nouvelles réponses dans'
 '{n} oder mehr neue Beiträge in': '{n} nouvelles réponses ou plus dans'
 'und andere.': 'et autres.'
@@ -555,7 +555,7 @@ PN: MP
 'Städte werden mit hoher Priorität angelegt': 'La ville sera créée en priorité'
 'Die Städte werden innerhalb der nächsten 30 Minuten erzeugt, statt erst beim nächsten Angriff. Bitte verwendet diese Funktion nur in Notfällen.': 'La ville sera créée dans les 30 minutes qui suivent, au lieu de la prochaine attaque. Merci de n''utiliser cette fonctionnalité qu''en cas d''urgence.'
 'Bitte verwendet diese Funktion nur in Notfällen. Fortfahren?': 'Cette fonctionnalité n''est à utiliser qu''en cas d''urgence. Continuer ?'
-'Kein Tag': 'Aucun jour'
+'Kein Tag': 'Aucun tag'
 ENTER: ENTRÉE
 'Keine Formatierung': 'Pas de mise en forme'
 'Spieler auswählen': 'Choisir un joueur'
@@ -623,3 +623,46 @@ Community-Event: Événement Communautaire
 'Die erhälst die gekennzeichneten Benachrichtigungen nur, wenn sie deiner gewählten Sprache entsprechen. Wenn du die entsprechenden Einstellungen änderst oder deine Sprache wechselst, kann es bis zu 24 Stunden dauern, bis die Änderungen für Benachrichtigungen übernommen werden.': 'Vous ne recevrez les notifications marquées que si elles correspondent à la langue sélectionnée. Si vous modifiez les paramètres concernés ou changez votre langue, les notifications peuvent prendre jusqu''à 24 heures pour refléter les modifications.'
 'Alternativ zu einer E-Mail Adresse kannst du hier auch eine URL eintragen, auf der Spieler eine Kontaktmöglichkeit zu dir finden.': 'Au lieu d''une adresse e-mail, tu peux aussi indiquer ici une URL sur laquelle les joueurs trouveront un moyen de te contacter.'
 'Dein Gerät konnte sich nicht beim Benachrichtigungsdienst anmelden. Dies kann durch einen kurzzeitigen Verbindungsausfall passieren. Möglicherweise musst du den Benachrichtigungsdienst auch zunächst in den Privatsphäre-Einstellungen deines Browsers aktivieren.': 'Ton appareil n''a pas pu se connecter au service de notification. Cela peut être dû à une perte de connexion momentanée. Il est également possible que tu doives d''abord activer le service de notification dans les paramètres de confidentialité de ton navigateur.'
+'Leider scheint dein Gerät oder Browser diese Funktion nicht zu unterstützen.': 'Malheureusement, votre appareil ou votre navigateur ne semble pas prendre en charge cette fonctionnalité.'
+'Dieser Text ist zu lang. Bitte kürze deinen Text oder zerlege ihn in mehrere Posts.': 'Ce texte est trop long. Veuillez raccourcir votre texte ou le diviser en plusieurs messages.'
+'Dieser Indikator zeigt an, ob du aktuell mit dem Live-Dienst von MyHordes verbunden bist.': 'Cet indicateur indique si vous êtes actuellement connecté au service en direct de MyHordes.'
+'Mithilfe des Live-Dienstes erhälst dein System Benachrichtigungen vom MyHordes-Server in Echtzeit, beispielsweise über neue Forenposts oder PNs.': 'Grâce au service en direct, votre système reçoit des notifications du serveur MyHordes en temps réel, par exemple concernant les nouveaux messages sur le forum ou les Messages Privés.'
+'Aktuell besteht keine Verbindung zum Live-Dienst. Du kannst dennoch wie gewohnt weiter spielen, da alle wichtigen Funktionen auch ohne den Live-Dienst arbeiten können.': 'Il n''y a actuellement aucune connexion au service en direct. Vous pouvez toujours continuer à jouer comme d''habitude, car toutes les fonctions importantes peuvent également fonctionner sans le service en direct.'
+'Nicht verbunden': 'Non connecté'
+'Verbindung wird hergestellt': 'Connexion en cours'
+'Verbunden, Verbindungsupdate angefordert': 'Connecté, mise à jour de connexion demandée'
+Verbunden: Connecté
+'Die Taube': 'La colombe'
+'Normaler Post': 'Post normal'
+'Diesen Bonus gibt es nur dann, wenn sich die Bürger während eines Angriffs in der Stadt befinden.': 'Ce bonus ne s''applique que si des citoyens sont dans la ville lors d''une attaque.'
+'Anonymer Post': 'Message anonyme'
+'Bist du sicher, dass du deine Fähigkeiten zurücksetzen möchtest? Du wirst all deine Heldenerfahrung und Fähigkeiten verlieren. Diese Aktion kann nicht rückgängig gemacht werden!': 'Êtes-vous sûr de vouloir réinitialiser vos compétences ? Vous perdrez toute votre expérience et vos compétences de héros. Cette action est irréversible !'
+'Dieser Spieler ist ein Mitglied der Künstlergilde auf MyHordes.': 'Ce joueur est membre du Comité du Bon Goût sur MyHordes.'
+'Die Stadt verfügt über eine <strong>Techniker-Werkbank</strong>.': 'La ville possède un <strong>Établi des Techniciens</strong>.'
+Angepinnt: Épinglé
+'Dieses Thema wird nicht länger in der Tab-Leiste angezeigt.': 'Ce sujet n''apparaît plus dans la barre d''onglets.'
+'Dieses Thema wird in der Tab-Leiste im oberen Bereich der Forenansicht angeheftet, damit du schneller darauf zugreifen kannst. Du kannst maximal 6 Foren oder Themen anpinnen.': 'Si cette option est activée, ce sujet sera épinglé dans la liste des onglets en haut de la vue forum afin que vous puissiez y accéder plus rapidement. Vous pouvez épingler un maximum de 6 forums ou sujets.'
+'Spiel  (forum)': Jeu
+'Spam  (forum)': Flood
+'Themen filtern': 'Filtrer les sujets'
+Zurücksetzen: Réinitialiser
+'Wähle hier eine Sprache aus, um diese Sektion für Spieler mit dieser Sprache automatisch auszuklappen.': 'Sélectionnez une langue ici pour développer automatiquement cette section pour les joueurs utilisant cette langue.'
+'Keine Sprache': 'Aucune langue'
+Support: Support
+Animation: Animaction
+Orakel: Oracle
+Sonstiges: Divers
+'Diese Anwendung befindet sich im Wartungsmodus.': 'Cette application externe est actuellement en maintenance.'
+'Sei vorsichtig, das Betreten geschieht auf eigene Gefahr...': 'Faites attention, entrez à vos risques et périls...'
+'Aufgrund technischer Probleme ist der Funktionsumfang dieser externen Anwendung aktuell eingeschränkt.': 'En raison de problèmes techniques, les fonctionnalités de cette application externe sont actuellement limitées.'
+'Fehler beim Laden der Logeinträge ({error}).': 'Erreur lors du chargement des entrées du registre ({error}).'
+'Log-Einträge können nicht abgerufen werden, bitte versuche, die Seite neu zu laden.': 'Les entrées du registre n''ont pas pu être récupérées, veuillez essayer de recharger la page.'
+'Vertraulichkeit des Fehlerberichts': 'Confidentialité du rapport d''erreur'
+'Dieser Fehlerbericht enthält Informationen, die ich nicht öffentlich teilen möchte; er sollte nur vertrauenswürdigen Entwicklern zugänglich sein.': 'Ce rapport d''erreur contient des informations que je ne souhaite pas partager publiquement ; il ne doit être accessible qu''aux développeurs de confiance.'
+'Dieser Fehlerbericht wird öffentlich zugänglich sein': 'Ce rapport d''erreur sera accessible au public'
+'Dieser Fehlerbericht wird nur für vertrauenswürdige Entwickler zugänglich sein': 'Ce rapport d''erreur ne sera accessible qu''aux développeurs de confiance'
+Warnung: Attention
+'Andere Spiele auf Eternaltwin': 'Découvrez les autres jeux d''Eternaltwin'
+'Wenn du bei der Übersetzung von MyHordes mithelfen willst, kannst du dies auf {crowdin} tun!': 'Si vous souhaitez aider à traduire MyHordes, vous pouvez le faire sur {crowdin} !'
+'My Brute': 'La Brute'
+Spielhilfe: Guide
