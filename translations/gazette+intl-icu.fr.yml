@@ -173,7 +173,7 @@ Phenol: au phénol
 Ponasulfat: au ponasulfate
 'Es gibt einige, die sich auf unsere Kosten einen Spaß machen, das sage ich euch, zum Beispiel <strong>{citizen1}</strong>, der {random} Mal vorbeikam, um eine Kleinigkeit aus der Bank zu holen... Wir verweigern uns nichts.': 'Il y en a qui se font plaisir sur notre dos je vous le dis, avec (par exemple) <strong>{citizen1}</strong> qui est passé(e) {random} fois prendre un petit quelque chose dans la banque... On ne se refuse rien..'
 '<strong>{citizen1}</strong> ist so oft zur Bank gerannt, dass es ja irgendwann mal auffallen MUSSTE! Allein gestern waren es <strong>{random} Mal</strong>.': 'On notera le bon paquet de fois où <strong>{citizen1}</strong> a été aperçu(e) en train de se servir dans la banque. <strong>{random} fois</strong> rien qu''hier.'
-'in der Nähe des Gemüsegartens': 'près de l''aile Nord'
+'in der Nähe des Gemüsegartens': 'près de l’aile Nord'
 'in der Nähe der südlichen Stadtmauer': 'pas loin de la muraille Sud'
 'am Stadttor': 'à la grande porte'
 'am Aussichtsturm': 'à la façade Ouest'
@@ -310,3 +310,8 @@ Kätzchen: le chaton
 'Das neueste Geschwätz:': 'A part ça,'
 'Unsere Späher berichten, dass sie einen Mysteriösen Fremden in der Umgebung der Stadt gesichtet haben...': 'Nos éclaireurs signalent avoir repéré un mystérieux étranger dans les environs de la ville...'
 '<strong>{citizen1}</strong> soll heute Morgen die Leiche von <strong>† {cadaver1}</strong> inmitten einer Baustelle gefunden haben. Laut diesem Bürger handelte es sich um einen Selbstmord.... Nur konnte <strong>{citizen1}</strong> uns das Messer, das im Rücken der Leiche steckte, nicht erklären...': '<strong>{citizen1}</strong> aurait retrouvé le corps de <strong>† {cadaver1}</strong> au milieu d''un chantier ce matin. Selon ce citoyen, il s''agirait d''un suicide... Seulement, <strong>{citizen1}</strong> n''a pas pu nous expliquer le couteau planté dans le dos du corps...'
+'Außerdem wäre es gut, daran zu denken, dass der Schamane der Stadt letzte Nacht gestorben ist.': 'D''ailleurs il serait bon de ne pas oublier que le chaman de la ville est mort cette nuit.'
+'Halten wir kurz inne und gedenken unserem verlorenen Schamanen. Auf Wiedersehen, nutzloser Scharlatan!': 'Petite pensée à notre chaman disparu, adieu charlatan inutile !'
+'Unser geliebter Reiseleiter in der Außenwelt ist gestern verstorben.': 'Notre cher Guide de l''Outre-Monde est mort cette nuit.'
+'Tolle Leistung gestern Abend, der Schamane und der Reiseleiter in der Außenwelt sind beide tot, daher könnte der heutige Tag etwas eintönig werden.': 'Jolie performance la nuit dernière, le Chaman et le Guide de l''Outre-Monde sont tous deux morts, la journée d''aujourd''hui risque de paraître monotone.'
+'Letzte Nacht war die Stadt von Zombies {attack} umzingelt! Einige schafften es, die Mauern zu durchbrechen, ein Zustrom, der uns {deaths} gute Leute kostete.': 'Les zombies étaient environ {attack} autour de notre ville hier soir ! Certains ont franchi les murs, un débordement qui nous a coûté {deaths} bons éléments.'
