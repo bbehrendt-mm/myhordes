@@ -142,3 +142,10 @@ html.lang-base-es #loadzone > div:nth-child(1) { background: url("../img/anims/l
 html.lang-base-en div.loading { background: url("../img/anims/loading.en.gif") center no-repeat; }
 html.lang-base-fr div.loading { background: url("../img/anims/loading.fr.gif") center no-repeat; }
 html.lang-base-es div.loading { background: url("../img/anims/loading.es.gif") center no-repeat; }
+
+div.rps,div.coin,div.card { &[data-value-default]::before { content: attr(data-value-default) } }
+
+html.lang-base-de { div.rps,div.coin,div.card { &[data-value-de]::before { content: attr(data-value-de) } } }
+html.lang-base-en { div.rps,div.coin,div.card { &[data-value-en]::before { content: attr(data-value-en) } } }
+html.lang-base-fr { div.rps,div.coin,div.card { &[data-value-fr]::before { content: attr(data-value-fr) } } }
+html.lang-base-es { div.rps,div.coin,div.card { &[data-value-es]::before { content: attr(data-value-es) } } }

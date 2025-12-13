@@ -56,6 +56,7 @@ security:
         - { path: ^/jx/soul/,           roles: ROLE_USER }
         - { path: ^/jx/pm/,             roles: ROLE_USER }
         - { path: ^/jx/admin/cst/,      roles: ROLE_USER }
+        - { path: ^/jx/art/,            roles: ROLE_USER }
         - { path: ^/jx/admin/com/dash,  roles: PUBLIC_ACCESS }
         - { path: ^/jx/admin/com/,      roles: ROLE_ELEVATED }
         - { path: ^/jx/admin/,          roles: ROLE_CROW }

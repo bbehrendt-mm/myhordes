@@ -11,6 +11,7 @@ use App\Entity\Town;
 use App\Entity\User;
 use App\Enum\Configuration\MyHordesSetting;
 use App\Structures\HTMLParserInsight;
+use App\Translation\T;
 use Doctrine\ORM\EntityManagerInterface;
 use DOMDocument;
 use DOMElement;
@@ -351,13 +352,25 @@ class HTMLService {
             '//div[@class=\'letter-a\']' => function (DOMNode $d) use(&$insight) { $insight->editable = false; $l = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'; $d->nodeValue = $l[mt_rand(0,strlen($l)-1)]; },
             '//div[@class=\'letter-c\']' => function (DOMNode $d) use(&$insight) { $insight->editable = false; $l = 'BCDFGHJKLMNPQRSTVWXZ'; $d->nodeValue = $l[mt_rand(0,strlen($l)-1)]; },
             '//div[@class=\'letter-v\']' => function (DOMNode $d) use(&$insight) { $insight->editable = false; $l = 'AEIOUY'; $d->nodeValue = $l[mt_rand(0,strlen($l)-1)]; },
-            '//div[@class=\'rps\']'      => function (DOMNode $d) use(&$insight) { $insight->editable = false; $d->nodeValue = $this->rand->pick([$this->translator->trans('Schere',[],'global'),$this->translator->trans('Stein',[],'global'),$this->translator->trans('Papier',[],'global')]); },
-            '//div[@class=\'coin\']'     => function (DOMNode $d) use(&$insight) { $insight->editable = false; $d->nodeValue = $this->rand->pick([$this->translator->trans('Kopf',[],'global'),$this->translator->trans('Zahl',[],'global')]); },
-            '//div[@class=\'card\']'     => function (DOMNode $d) use(&$insight) { $insight->editable = false;
-                $s_color = $this->rand->pick([$this->translator->trans('Kreuz',[],'items'),$this->translator->trans('Pik',[],'items'),$this->translator->trans('Herz',[],'items'),$this->translator->trans('Karo',[],'items')]);
+            '//div[@class=\'rps\']'      => function (DOMElement $d) use(&$insight) { $insight->editable = false;
+                $value = $this->rand->pick([T::__('Schere','global'),T::__('Stein','global'),T::__('Papier','global')]);
+                $d->nodeValue = '';
+                $d->setAttribute("data-value-default", $this->translator->trans($value, [], 'global'));
+                foreach (['de','en','es','fr'] as $l) $d->setAttribute("data-value-$l", $this->translator->trans($value, [], 'global', $l));
+            },
+            '//div[@class=\'coin\']'     => function (DOMElement $d) use(&$insight) { $insight->editable = false;
+                $value = $this->rand->pick([T::__('Kopf','global'),T::__('Zahl','global')]);
+                $d->nodeValue = '';
+                $d->setAttribute("data-value-default", $this->translator->trans($value, [], 'global'));
+                foreach (['de','en','es','fr'] as $l) $d->setAttribute("data-value-$l", $this->translator->trans($value, [], 'global', $l));
+            },
+            '//div[@class=\'card\']'     => function (DOMElement $d) use(&$insight) { $insight->editable = false;
+                $s_color = $this->rand->pick([T::__('Kreuz','items'),T::__('Pik','items'),T::__('Herz','items'),T::__('Karo','items')]);
                 $value = mt_rand(0,12);
-                $s_value = $value < 9 ? ('' . ($value+2)) : [$this->translator->trans('Bube',[],'items'),$this->translator->trans('Dame',[],'items'),$this->translator->trans('König',[],'items'),$this->translator->trans('Ass',[],'items')][$value-9];
-                $d->nodeValue = $this->translator->trans('{color} {value}', ['{color}' => $s_color, '{value}' => $s_value], 'global');
+                $s_value = $value < 9 ? ('' . ($value+2)) : [T::__('Bube','items'),T::__('Dame','items'),T::__('König','items'),T::__('Ass','items')][$value-9];
+                $d->nodeValue = '';
+                $d->setAttribute("data-value-default", $this->translator->trans('{color} {value}', ['{color}' => $this->translator->trans($s_color, [], 'items'), '{value}' => $value < 9 ? $s_value : $this->translator->trans($s_value, [], 'items')], 'global'));
+                foreach (['de','en','es','fr'] as $l) $d->setAttribute("data-value-$l", $this->translator->trans('{color} {value}', ['{color}' => $this->translator->trans($s_color, [], 'items', $l), '{value}' => $value < 9 ? $s_value : $this->translator->trans($s_value, [], 'items', $l)], 'global', $l));
             },
             '//div[@class=\'coords\']'   => function (DOMNode $d) use($town, $user, &$insight) { $insight->editable = false; $d->nodeValue = (!$user?->getActiveCitizen()?->getAlive() || $user?->getActiveCitizen()?->getTown()?->getChaos()) ? '???' : ( $user->getActiveCitizen()->getZone() ? "[{$user->getActiveCitizen()->getZone()->getX()}/{$user->getActiveCitizen()->getZone()->getY()}]" : '[0/0]' ); },
             '//div[@class=\'town\']'     => function (DOMNode $d) use($town, $user, &$insight) { $insight->editable = false; $d->nodeValue = (!$user?->getActiveCitizen()?->getAlive()) ? '???' : $user->getActiveCitizen()->getTown()->getName(); },

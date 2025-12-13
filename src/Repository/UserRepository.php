@@ -164,6 +164,8 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
             return levenshtein( mb_strtolower($a->getName()), mb_strtolower( $name ) ) - levenshtein( mb_strtolower($b->getName()), mb_strtolower( $name ) );
         });
 
+        if ($limit < 0) $results = array_slice($results, 0, -$limit);
+
         return $results;
     }
 

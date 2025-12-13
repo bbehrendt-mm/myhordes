@@ -234,7 +234,18 @@ export default class Ajax {
                         { // @ts-ignore
                             c.dataset[key] = value;
                         }
-                react_mounts[c.id].parentElement.insertBefore( c, react_mounts[c.id] );
+
+                let parent_node: Node = react_mounts[c.id].parentNode;
+                let child_node: Node = react_mounts[c.id];
+                do {
+                    if (parent_node.nodeType === Node.ELEMENT_NODE)
+                        parent_node.insertBefore( c, child_node );
+                    else {
+                        child_node = parent_node;
+                        parent_node = parent_node.parentNode;
+                    }
+                } while (parent_node.nodeType !== Node.ELEMENT_NODE);
+
                 react_mounts[c.id].remove();
                 react_mounts[c.id] = c;
             } else c.dispatchEvent(new Event("x-react-degenerate", { bubbles: true, cancelable: false }));

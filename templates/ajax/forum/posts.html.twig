@@ -158,7 +158,10 @@
                     </div>
 
                     {% if (not locked or permission.create_post_on_closed_thread) and not app.user|restricted(constant('App\\Entity\\AccountRestriction::RestrictionForum')) and (permission.create_post or permission.moderate) %}
-                        <div x-forum-action="answer" class="forum-button"><span>{{ 'Antworten'|trans({},'global') }}</span></div>
+                        <div x-forum-action="answer" class="forum-button">
+                            <img alt="" src="{{ asset('build/images/forum/edit.png') }}" />
+                            <span>{{ 'Antworten'|trans({},'global') }}</span>
+                        </div>
                     {% else %}
                         <div class="forum-button-disabled"><img alt="" src="{{ asset('build/images/icons/lock.gif') }}" /><span>{{ 'Antworten'|trans({},'global') }}</span></div>
                     {% endif %}

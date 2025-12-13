@@ -438,6 +438,7 @@ export const TwinoEditorWrapper = ( props: HTMLConfig & { onFieldChanged: FieldC
                                     <div
                                         className="keyboard"><kbd>{strings.common.ctrl}</kbd> + <kbd>{strings.common.enter}</kbd></div>
                                 </span>
+                                    <img alt="" src={strings.controls.send_img} style={{ marginRight: 4 }} />
                                     {strings.common.send}
                                 </div>
                             </div>
