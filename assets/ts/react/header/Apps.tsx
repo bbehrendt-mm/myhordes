@@ -17,6 +17,7 @@ import {Tooltip} from "../misc/Tooltip";
 import Dialog from "../components/dialog";
 import {randomUUIDv4} from "../../shims";
 import {Globals, mountProps} from "./Wrapper";
+import {useSlidingAnimation} from "./commons";
 
 declare var $: Global;
 
@@ -313,33 +314,7 @@ export const HordesHeaderAPIWidget = () => {
         else if (show && outdatedAppList.length === 1) refreshApp( outdatedAppList[0] );
     }, [show, outdatedAppList])
 
-    useLayoutEffect(() => {
-        if (!render || (animation.current && animation.current.playState !== "finished")) return;
-
-        root.current.style.width = root.current.style.height = 'auto';
-        const openBounds = root.current.getBoundingClientRect();
-
-        const frames = show ? [
-            {height: 0, width: 0},
-            {height: `${openBounds.height}px`, width: `${openBounds.width}px`},
-        ] : [
-            {height: `${openBounds.height}px`, width: `${openBounds.width}px`},
-            {height: 0, width: 0},
-        ]
-
-        const clear = () => {
-            root.current.style.width = root.current.style.height = null;
-        }
-
-        animation.current = root.current.animate(frames, {
-            duration: 100,
-            easing: 'ease-in-out',
-            fill: 'none',
-        });
-
-        animation.current.onfinish = clear;
-        animation.current.oncancel = clear;
-    }, [show]);
+    useSlidingAnimation(show,render,animation,root);
 
     useLayoutEffect(() => {
         if (instantApp && instantForm.current) {
@@ -355,13 +330,13 @@ export const HordesHeaderAPIWidget = () => {
 
     return <>
         <App app={selectedApp} onClose={() => setSelectedApp(null)} signalUpdate={() => refreshApp(selectedApp?.id ?? null)}/>
-        <div className={`app-directory ${show ? 'open' : 'closed'}`} ref={root}
+        <div className={`header-directory app-directory ${show ? 'open' : 'closed'}`} ref={root}
              onMouseOver={() => setRender(true)} onClick={() => setRender(!show)}
              onMouseOut={() => setRender(false)}
         >
-            <img alt={globals.strings.apps.list.headline} src={globals.strings.apps.list.icon} className="app-icon"/>
+            <img alt={globals.strings.apps.list.headline} src={globals.strings.apps.list.icon} className="header-directory-icon"/>
             { !selectedApp && instantApp && <div className="hidden"><AppForm app={instantApp} ref={instantForm}/></div> }
-            {render && <div className="app-listing-body">
+            {render && <div className="header-listing-body app-listing-body">
                 <h4>{globals.strings.apps.list.headline}</h4>
                 <p>{globals.strings.apps.list.description}</p>
                 {hasApps && <AppList apps={appList.filter(app => !app.wiki)} onClick={(app, event) => event.shiftKey ? setInstantApp(app) : setSelectedApp(app)}/>}

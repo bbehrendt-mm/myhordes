@@ -43,6 +43,12 @@ export type TranslationStrings = {
 
         },
     },
+    mods: {
+        list: {
+            icon: string;
+            no_icon: string;
+        }
+    },
     clock: {
         panda: string
         day: string

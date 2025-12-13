@@ -126,6 +126,13 @@ class CommonsController extends CustomAbstractCoreController
                 ]
             ],
 
+            'mods' => [
+                'list' => [
+                    'icon' => $asset->getUrl('build/images/building/small_crow.gif'),
+                    'no_icon' => $asset->getUrl('build/images/apps/null.gif'),
+                ],
+            ],
+
             'clock' => [
                 'panda' => $this->translator->trans('Pandämonium', [], 'game'),
                 'day' => $this->translator->trans('Tag {day}', [], 'game'),
@@ -317,31 +324,33 @@ class CommonsController extends CustomAbstractCoreController
 
     public static function getAdminActions(): array {
         return [
-            ['name' => T::__('Kampagnen', 'admin'),   'route' => 'admin_campaigns'],
-            ['name' => T::__('Users', 'admin'),       'route' => 'admin_users'],
-            ['name' => T::__('Foren-Mod.', 'admin'),  'route' => 'admin_reports_forum_posts'],
-            ['name' => T::__('Zukunft', 'admin'),     'route' => 'admin_changelogs'],
-            ['name' => T::__('AntiSpam', 'admin'),    'route' => 'admin_spam_domain_view'],
-            ['name' => T::__('Apps', 'admin'),        'route' => 'admin_app_view'],
-            ['name' => T::__('Saisons', 'admin'),     'route' => 'admin_seasons_view'],
-            ['name' => T::__('Gruppen', 'admin'),     'route' => 'admin_group_view'],
-            ['name' => T::__('Dateisystem', 'admin'), 'route' => 'admin_file_system_dash'],
-            ['name' => T::__('Angriffsplan', 'admin'),'route' => 'admin_schedule_attacks'],
+            ['sort' =>  100, 'name' => T::__('Users', 'admin'),       'route' => 'admin_users'],
+            ['sort' =>  300, 'name' => T::__('Foren-Mod.', 'admin'),  'route' => 'admin_reports_forum_posts'],
+            ['sort' =>  400, 'name' => T::__('Kampagnen', 'admin'),   'route' => 'admin_campaigns'],
+            ['sort' =>  500, 'name' => T::__('Zukunft', 'admin'),     'route' => 'admin_changelogs'],
+            ['sort' =>  600, 'name' => T::__('AntiSpam', 'admin'),    'route' => 'admin_spam_domain_view'],
+            ['sort' =>  700, 'name' => T::__('Apps', 'admin'),        'route' => 'admin_app_view'],
+            ['sort' =>  800, 'name' => T::__('Saisons', 'admin'),     'route' => 'admin_seasons_view'],
+            ['sort' =>  900, 'name' => T::__('Gruppen', 'admin'),     'route' => 'admin_group_view'],
+            ['sort' => 1000, 'name' => T::__('Dateisystem', 'admin'), 'route' => 'admin_file_system_dash'],
+            ['sort' => 1100, 'name' => T::__('Angriffsplan', 'admin'),'route' => 'admin_schedule_attacks'],
+            ['sort' => 1200, 'name' => T::__('Art', 'admin'),         'route' => 'art_dashboard'],
         ];
     }
 
     public static function getCommunityActions(): array {
         return [
-            ['name' => T::__('Dashboard', 'admin'),  'route' => 'admin_dashboard'],
-            ['name' => T::__('Kampagnen', 'admin'),  'route' => 'admin_campaigns'],
-            ['name' => T::__('Zukunft', 'admin'),    'route' => 'admin_changelogs'],
-            ['name' => T::__('Kurztexte', 'admin'),  'route' => 'admin_reports_snippets'],
+            ['sort' =>    0, 'name' => T::__('Dashboard', 'admin'),  'route' => 'admin_dashboard'],
+            ['sort' =>  400, 'name' => T::__('Kampagnen', 'admin'),  'route' => 'admin_campaigns'],
+            ['sort' =>  500, 'name' => T::__('Zukunft', 'admin'),    'route' => 'admin_changelogs'],
+            ['sort' =>  600, 'name' => T::__('Kurztexte', 'admin'),  'route' => 'admin_reports_snippets'],
+            ['sort' => 1200, 'name' => T::__('Art', 'admin'),        'route' => 'art_dashboard'],
         ];
     }
 
     private function permissionBasedActions(): array {
         return [
-            ...($this->isGranted('list', Town::class) ? [['name' => T::__('Städte', 'admin'),      'route' => 'admin_town_list']] : []),
+            ...($this->isGranted('list', Town::class) ? [['sort' => 200, 'name' => T::__('Städte', 'admin'),      'route' => 'admin_town_list']] : []),
         ];
     }
 
@@ -358,6 +367,7 @@ class CommonsController extends CustomAbstractCoreController
         $crow = $capability->hasRole( $this->getUser(), 'ROLE_CROW' );
 
         return new JsonResponse([
+            'same' => $this->getUser()->getOpenModToolsSameWindow(),
             'cat' => match (true) {
                 $capability->hasRole( $this->getUser(), 'ROLE_CROW' )     => $this->translator->trans('Moderation', [], 'global'),
                 $capability->hasRole( $this->getUser(), 'ROLE_ELEVATED' ) => $this->translator->trans('Community-Tools', [], 'global'),
@@ -366,6 +376,7 @@ class CommonsController extends CustomAbstractCoreController
             'links' => array_map( fn(array $entry) => [
                 'name' => $this->translator->trans($entry['name'], [], 'admin'),
                 'url' => $this->generateUrl($entry['route']),
+                'sort' => $entry['sort'] ?? 9999,
             ], [
                 ...match(true) {
                     $capability->hasRole( $this->getUser(), 'ROLE_CROW' ) => self::getAdminActions(),

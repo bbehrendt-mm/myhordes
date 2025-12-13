@@ -27,6 +27,7 @@ export type ExternalApp = {
 }
 
 interface ModListResponse {
+    same?: boolean,
     cat?: string,
     links?: ModLink[];
 }
@@ -34,6 +35,7 @@ interface ModListResponse {
 export type ModLink = {
     name: string
     url: string
+    sort: number
 }
 
 export type TownClock = {

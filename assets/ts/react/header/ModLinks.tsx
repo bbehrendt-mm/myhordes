@@ -4,6 +4,7 @@ import {ExternalApp, HeaderAPI, ModLink} from "./api";
 import {Global} from "../../defaults";
 import {useSharedWorkerMessages, useStickyToggle, useTranslations} from "../utils";
 import {Globals, mountProps} from "./Wrapper";
+import {useSlidingAnimation} from "./commons";
 
 declare var $: Global;
 
@@ -18,11 +19,13 @@ export const HordesHeaderModLinksWidget = () => {
 
     const [show, render, setRender] = useStickyToggle(false);
 
+    const [openInSameWindow, setOpenInSameWindow] = useState(false);
     const [modHeader, setModHeader] = useState<string|null>(null);
     const [modList, setModList] = useState<ModLink[]>([]);
 
     const refreshLinks = () => {
         globals.api.mods().then(r => {
+            setOpenInSameWindow(r.same ?? false);
             setModHeader(r.cat ?? null);
             setModList(r.links ?? []);
         })
@@ -32,45 +35,28 @@ export const HordesHeaderModLinksWidget = () => {
         refreshLinks();
     }, []);
 
-    useLayoutEffect(() => {
-        if (!render || (animation.current && animation.current.playState !== "finished")) return;
-
-        root.current.style.width = root.current.style.height = 'auto';
-        const openBounds = root.current.getBoundingClientRect();
-
-        const frames = show ? [
-            {height: 0},
-            {height: `${openBounds.height}px`},
-        ] : [
-            {height: `${openBounds.height}px`},
-            {height: 0},
-        ]
-
-        const clear = () => {
-            root.current.style.height = null;
-        }
-
-        animation.current = root.current.animate(frames, {
-            duration: 100,
-            easing: 'ease-in-out',
-            fill: 'none',
-        });
-
-        animation.current.onfinish = clear;
-        animation.current.oncancel = clear;
-    }, [show]);
+    useSlidingAnimation(show,render,animation,root);
 
     if (!modHeader || modList.length === 0 || !globals.strings) return;
 
     return <>
-        <div className={`mod-directory ${show ? 'open' : 'closed'}`} ref={root}
+        <div className={`header-directory mod-directory ${show ? 'open' : 'closed'}`} ref={root}
              onMouseOver={() => setRender(true)} onClick={() => setRender(!show)}
              onMouseOut={() => setRender(false)}
         >
-            <span>{ modHeader }</span>
-            <ul>{ modList.map( (link,i) => <li key={i}>
-                <a href={link.url}>{link.name}</a>
-            </li> ) }</ul>
+            <img alt={modHeader} src={globals.strings.mods.list.icon} className="header-directory-icon"/>
+            {render && <div className="header-listing-body mod-listing-body">
+                <h4>{modHeader}</h4>
+                <ul>{ modList.sort( (a,b) => a.sort - b.sort ).map( (link,i) => <li
+                    key={i}
+                    onClick={() => openInSameWindow ? (window.location.href = link.url) : window.open(link.url, '_blank')}
+                >
+                    <div><img alt={link.name} src={globals.strings.mods.list.no_icon}/></div>
+                    <div className="label">
+                        <span className="name">{link.name}</span>
+                    </div>
+                </li> ) }</ul>
+            </div>}
         </div>
     </>
 
