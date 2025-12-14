@@ -28,6 +28,7 @@ use App\Service\TownHandler;
 use App\Service\UserHandler;
 use App\Structures\EventConf;
 use App\Structures\MyHordesConf;
+use Carbon\Carbon;
 use DateTime;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
@@ -329,11 +330,11 @@ class GameOnboardingController extends AbstractController
         try {
             $em->persist($town);
             $em->persist($citizen);
-            if ($town->isMayor() && $town->getCreator()?->getId() !== $user->getId())
-                $em->persist( (new MayorMark())
+            if ($town->isMayor() && $town->getCreator()?->getId() !== $user->getId() && !$town->getType()->is( TownClass::EASY ))
+                $em->persist( new MayorMark()
                     ->setUser( $this->getUser() )
                     ->setCitizen( true )
-                    ->setExpires( (new DateTime())->modify('+15days') )
+                    ->setExpires( new Carbon()->addDays(10) )
                 );
             $em->flush();
         } catch (Exception $e) {

@@ -47,6 +47,7 @@ use App\Structures\TownConf;
 use App\Structures\TownDefenseSummary;
 use DateInterval;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Psr\Log\LoggerInterface;
 
 class NightlyHandler
@@ -1509,7 +1510,7 @@ class NightlyHandler
             $blue_souls = $this->inventory_handler->getAllItems($town, 'soul_blue_#00', true, true, true, true, true, false);
 
             $red_soul_proto = $this->entity_manager->getRepository(ItemPrototype::class)->findOneByName('soul_red_#00');
-            if (!$red_soul_proto) throw new \Exception('No red soul prototype!');
+            if (!$red_soul_proto) throw new Exception('No red soul prototype!');
 
             $soul_transformation_rate = [0.10,0.25,0.50,0.75,1.00];
             foreach ($blue_souls as $soul) {
@@ -1783,7 +1784,9 @@ class NightlyHandler
     /**
      * @param Town $town
      * @param EventConf[] $events
+     * @param AttackSchedule|null $schedule
      * @return bool
+     * @throws Exception
      */
     public function advance_day(Town $town, array $events, ?AttackSchedule $schedule = null): bool {
         $this->skip_reanimation = [];

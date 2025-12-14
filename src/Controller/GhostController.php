@@ -14,6 +14,7 @@ use App\Entity\TeamTicket;
 use App\Entity\Town;
 use App\Entity\TownClass;
 use App\Entity\User;
+use App\Enum\Capability\LobbyCapabilityEnum;
 use App\Enum\Configuration\MyHordesSetting;
 use App\Service\CitizenHandler;
 use App\Service\ConfMaster;
@@ -30,6 +31,7 @@ use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -73,7 +75,7 @@ class GhostController extends CustomAbstractController
         $tickets = $user->getTeamTicketsFor( $season, '!' )->count();
         $cap_left = ($cap >= 0) ? max(0, $cap - $tickets) : -1;
 
-        $mayor_block = $em->getRepository(MayorMark::class)->matching( (new Criteria())
+        $mayor_block = $em->getRepository(MayorMark::class)->matching( new Criteria()
             ->where( new Comparison( 'user', Comparison::EQ, $user )  )
             ->andWhere( new Comparison( 'expires', Comparison::GT, new \DateTime() ) )
             ->orderBy( ['expires' => Order::Descending] )
@@ -90,8 +92,8 @@ class GhostController extends CustomAbstractController
             'coa'                => $coa_members,
             'cdm_warn'           => $cdm_warn,
             'cdm'                => $cdm_lock,
-            'canCreateTown' => true,
-            'mayorBlock' => $mayor_block,
+            'canCreateTown'      => $this->isGranted('create', LobbyCapabilityEnum::Town),
+            'mayorBlock'         => $mayor_block,
         ] ));
     }
 
@@ -137,13 +139,17 @@ class GhostController extends CustomAbstractController
 
     /**
      * @param EntityManagerInterface $em
+     * @param string $tab
      * @return Response
+     * @throws Exception
      */
     #[Route(path: 'jx/ghost/create_town', name: 'ghost_create_town', defaults: ['tab' => 'private'])]
     #[Route(path: 'jx/ghost/create/private', name: 'ghost_create_private_town', defaults: ['tab' => 'private'])]
     #[Route(path: 'jx/ghost/create/public', name: 'ghost_create_public_town', defaults: ['tab' => 'public'])]
     public function create_town(EntityManagerInterface $em, string $tab): Response
     {
+        $this->denyAccessUnlessGranted('create', LobbyCapabilityEnum::Town);
+
         /** @var User $user */
         $user = $this->getUser();
 
@@ -165,8 +171,8 @@ class GhostController extends CustomAbstractController
             'constructions' => $em->getRepository(BuildingPrototype::class)->findAll(),
             'langs' => $this->generatedLangs,
             'mayorTowns' => $open_town,
-            'canMayorTowns' => $user->getAllSoulPoints() >= 250,
-            'mayorBlocked' => $em->getRepository(MayorMark::class)->matching( (new Criteria())
+            'canMayorTowns' => $this->isGranted( 'mayor', LobbyCapabilityEnum::Town ),
+            'mayorBlocked' => $em->getRepository(MayorMark::class)->matching( new Criteria()
                 ->where( new Comparison( 'user', Comparison::EQ, $user )  )
                 ->andWhere( new Comparison( 'expires', Comparison::GT, new \DateTime() ) )
                 ->orderBy( ['expires' => Order::Descending] )

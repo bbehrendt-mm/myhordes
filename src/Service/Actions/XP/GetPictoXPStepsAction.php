@@ -25,17 +25,24 @@ readonly class GetPictoXPStepsAction
 {
     public function __invoke(): Collection
     {
-        $pt_2   = [ 1 => 2,  3 => 1,  5 => 1,  8 => 1, 10 => 1 ];
+
+        $pt_2 = [ 1 => 2, 3 => 1, 5 => 1, 8 => 1, 10 => 1 ];
         $pt_5 = [ 1 => 5, 3 => 2, 5 => 2, 8 => 2, 10 => 2 ];
         $pt_7 = [ 1 => 7, 3 => 2, 5 => 2, 8 => 2, 10 => 2 ];
 
-        $pt_2_6 = [ 6 => 2, 12 => 1, 18 => 1, 24 => 1 ];
-        $pt_2_10 = [ 10 => 2, 20 => 1, 30 => 1, 50 => 1 ];
-        $pt_2_15 = [ 15 => 2, 30 => 1, 45 => 1, 60 => 1 ];
+        $pt_2_5  = [  5 => 2,  10 => 1,  15 => 1,  20 => 1 ];
+        $pt_2_6  = [  6 => 2,  12 => 1,  18 => 1,  24 => 1 ];
+        $pt_2_10 = [ 10 => 2,  20 => 1,  30 => 1,  50 => 1 ];
+        $pt_2_15 = [ 15 => 2,  30 => 1,  45 => 1,  60 => 1 ];
+        $pt_2_50 = [ 50 => 2, 100 => 1, 150 => 1, 200 => 1 ];
 
+        $p_msg = [ 1 => 2,   5 => 2, 15 => 3 ];
         $p_job = [50 => 4, 100 => 7];
 
+
         return new ArrayCollection([
+            'r_forum_#00' => $p_msg,
+
             'r_thermal_#00' => $pt_2,
             'r_ebcstl_#00' =>  $pt_2,
             'r_ebpmv_#00' =>   $pt_2,
@@ -60,21 +67,21 @@ readonly class GetPictoXPStepsAction
             'r_tronco_#00' =>  [ 1 => 8, 2 => 2, 3 => 2, 5 => 2 ],
 
             'r_cobaye_#00' =>  $pt_2_6,
-            'r_solban_#00' =>  $pt_2_6,
+            'r_solban_#00' =>  $pt_2_5,
             'r_explor_#00' =>  $pt_2_6,
             'r_collec_#00' =>  $pt_2_6,
-            'r_guard_#00'  =>  $pt_2_6,
+            'r_guard_#00'  =>  $pt_2_5,
             'r_ruine_#00'  =>  $pt_2_6,
 
-            'r_repair_#00' =>  $pt_2_10,
+            'r_repair_#00' =>  $pt_2_50,
             'r_plundr_#00' =>  $pt_2_10,
             'r_camp_#00'   =>  $pt_2_10,
             'r_digger_#00' =>  $pt_2_10,
 
             'r_theft_#00'  =>  $pt_2_15,
-            'r_cgarb_#00'  =>  $pt_2_15,
-            'r_cwater_#00' =>  $pt_2_15,
-            'r_cburn_#00'  =>  $pt_2_15,
+            'r_cgarb_#00'  =>  $pt_2_5,
+            'r_cwater_#00' =>  $pt_2_5,
+            'r_cburn_#00'  =>  $pt_2_5,
 
             'r_jbasic_#00' =>  $p_job,
             'r_jtamer_#00' =>  $p_job,
@@ -83,6 +90,11 @@ readonly class GetPictoXPStepsAction
             'r_jcolle_#00' =>  $p_job,
             'r_jguard_#00' =>  $p_job,
             'r_jtech_#00'  =>  $p_job,
+
+            'r_refine_#00' => $pt_2_50,
+            'r_buildr_#00' => $pt_2_50,
+            'r_homeup_#00' => $pt_2_6,
+            'r_deco_#00'   => $pt_2_50
         ]);
     }
 }
