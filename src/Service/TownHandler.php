@@ -759,20 +759,23 @@ class TownHandler
         return false;
     }
 
-    public function checkFullyExploredMap(Town $town, ?int $minDiscoveryStatus = Zone::DiscoveryStatePast, bool $force = false): bool
+    public function checkFullyExploredMap(Town $town, ?int $minDiscoveryStatus = Zone::DiscoveryStatePast): bool
     {
         if ($town->getFullyExploredAwarded() || $town->getType()->is(TownClass::EASY)) return false;
 
-        if (!$force && $town->getZones()->matching(
+        if ($town->getZones()->matching(
             new Criteria()
                 // Get zones where either...
                 ->where( Criteria::expr()->orX(
                     // ...discovery status is less than the given value
                     Criteria::expr()->lt( 'discoveryStatus', $minDiscoveryStatus ),
-                    // ...or there is a ruin that is still covered
+                    // ...or there is a ruin that is still covered or not yet scavenged
                     Criteria::expr()->andX(
                         Criteria::expr()->isNotNull( 'prototype' ),
-                        Criteria::expr()->gt( 'buryCount', 0 ),
+                        Criteria::expr()->orX(
+                            Criteria::expr()->gt( 'buryCount', 0 ),
+                            Criteria::expr()->neq( 'scavenged', true ),
+                        ),
                     )
                 ) )
         )->count() > 0) return false;

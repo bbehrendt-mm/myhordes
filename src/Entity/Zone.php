@@ -108,6 +108,9 @@ class Zone
     #[ORM\Column]
     private bool $forceRegenerated = false;
 
+    #[ORM\Column]
+    private bool $scavenged = false;
+
     public function __construct()
     {
         $this->citizens = new ArrayCollection();
@@ -622,9 +625,9 @@ class Zone
      */
     public function getActivityMarkerFor(ZoneActivityMarkerType $type, Citizen $citizen): ?ZoneActivityMarker
     {
-        return $this->getActivityMarkers()->matching( (new Criteria())
-                                                          ->andWhere( new Comparison( 'type', Comparison::EQ, $type->value ) )
-                                                          ->andWhere( new Comparison( 'citizen', Comparison::EQ, $citizen ) )
+        return $this->getActivityMarkers()->matching( new Criteria()
+            ->andWhere( new Comparison( 'type', Comparison::EQ, $type->value ) )
+            ->andWhere( new Comparison( 'citizen', Comparison::EQ, $citizen ) )
         )->first() ?: null;
     }
 
@@ -699,6 +702,18 @@ class Zone
     public function setForceRegenerated(bool $forceRegenerated): static
     {
         $this->forceRegenerated = $forceRegenerated;
+
+        return $this;
+    }
+
+    public function isScavenged(): ?bool
+    {
+        return $this->scavenged;
+    }
+
+    public function setScavenged(bool $scavenged): static
+    {
+        $this->scavenged = $scavenged;
 
         return $this;
     }

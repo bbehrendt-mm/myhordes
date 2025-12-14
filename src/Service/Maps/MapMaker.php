@@ -126,7 +126,7 @@ class MapMaker
      * @param ?callable(ZonePrototype):bool $ruin_filter Optional filter to apply to the list of ruins before spawning
      * @return Zone[] The list of spawned ruin locations
      */
-    public function spawnRuins( Town $town, int $amount, ?callable $ruin_filter = null, ?bool $uncovered = false, bool $lenient_distances = false): array {
+    public function spawnRuins( Town $town, int $amount, ?callable $ruin_filter = null, ?bool $uncovered = false, bool $lenient_distances = false, bool $scavenged = false): array {
 
         $spot_offset = 0;
         if ($ruin_filter === null) {
@@ -214,7 +214,7 @@ class MapMaker
 
             $previous[$target_ruin->getId()] = ($previous[$target_ruin->getId()] ?? 0) + 1;
 
-            $this->spawnRuin( $town, $zone, $target_ruin, $uncovered ? 0 : null );
+            $this->spawnRuin( $town, $zone, $target_ruin, $uncovered ? 0 : null, $scavenged );
             $spawned[] = $zone;
 
             $added++;
@@ -248,7 +248,7 @@ class MapMaker
     /**
      * Spawns a ruin in the specified zone
      */
-    public function spawnRuin( Town $town, Zone $zone, ZonePrototype $target_ruin, ?int $bury_count = null ): void {
+    public function spawnRuin( Town $town, Zone $zone, ZonePrototype $target_ruin, ?int $bury_count = null, bool $scavenged = false ): void {
         $conf = $this->conf->getTownConfiguration( $town );
 
         //Hordes Dig Count is N + rand(N), where rand is between 0 included and N excluded
@@ -257,7 +257,8 @@ class MapMaker
 
         $zone
             ->setPrototype( $target_ruin )
-            ->setRuinDigs($ruin_dig_count);
+            ->setRuinDigs($ruin_dig_count)
+            ->setScavenged($scavenged);
 
         if ($conf->get(TownSetting::OptFeatureCamping))
             $zone->setBlueprint(Zone::BlueprintAvailable);

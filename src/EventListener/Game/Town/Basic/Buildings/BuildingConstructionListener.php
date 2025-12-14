@@ -169,6 +169,7 @@ final readonly class BuildingConstructionListener implements ServiceSubscriberIn
                     fn (ZonePrototype $ruin): bool => $ruin->isAirOnly(),
                     uncovered: true,
                     lenient_distances: true,
+                    scavenged: true,
                 );
 
                 $spawnedRevealed = $mapMaker->spawnRuins(
@@ -177,6 +178,7 @@ final readonly class BuildingConstructionListener implements ServiceSubscriberIn
                     fn (ZonePrototype $ruin): bool => $ruin->isAirReveal(),
                     uncovered: true,
                     lenient_distances: true,
+                    scavenged: true,
                 );
 
                 $newRuins = array_map(fn(Zone $z) => $z->getPrototype(), array_merge($spawnedSpecial, $spawnedRevealed));
@@ -189,7 +191,7 @@ final readonly class BuildingConstructionListener implements ServiceSubscriberIn
                     ) );
                 }
 
-                $townHandler->checkFullyExploredMap($event->town, force: true);
+                $townHandler->checkFullyExploredMap($event->town, minDiscoveryStatus: Zone::DiscoveryStateNone);
                 break;
             case 'small_rocket_#00':
                 /** @var EntityManagerInterface $em */

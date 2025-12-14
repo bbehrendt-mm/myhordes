@@ -685,7 +685,8 @@ class BeyondController extends InventoryAwareController
      * @return Response
      */
     #[Route(path: 'api/beyond/desert/enter', name: 'beyond_desert_enter_ruin_controller')]
-    public function ruin_enter_api() {
+    public function ruin_enter_api(): Response
+    {
         if (!$this->citizen_handler->citizenCanAct($this->getActiveCitizen())) return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
         $citizen = $this->getActiveCitizen();
 
@@ -742,13 +743,14 @@ class BeyondController extends InventoryAwareController
         $this->picto_handler->give_picto($citizen, 'r_ruine_#00', 1);
         $this->citizen_handler->setAP( $citizen, true, -1 );
 
-        $citizen->addExplorerStat((new RuinExplorerStats())->setActive(true)->setGrace(true)->setStarted(new DateTime())->setTimeout( (new DateTime())->add(DateInterval::createFromDateString(
+        $citizen->addExplorerStat(new RuinExplorerStats()->setActive(true)->setGrace(true)->setStarted(new DateTime())->setTimeout(new DateTime()->add(DateInterval::createFromDateString(
             $this->getTownConf()->get($citizen->isProfession('collec')
                                           ? TownSetting::TimingExplorationCollector
                                           : TownSetting::TimingExplorationDefault
             )
         ) )->modify("+{$citizen->property(CitizenProperties::OxygenTimeBonus)}sec")->modify('+30sec')));
         $this->entity_manager->persist($citizen);
+        $this->entity_manager->persist($citizen->getZone()->setScavenged(true));
         try {
             $this->entity_manager->flush();
         } catch (Exception $e) {
@@ -1393,11 +1395,11 @@ class BeyondController extends InventoryAwareController
 			$total_dig_chance = $proxyService->citizenQueryDigChance( $citizen, $zone, ScavengingActionType::Scavenge, $this->getTownConf()->isNightMode() );
             $item_found = $this->random_generator->chance($total_dig_chance);
 
-            $zone->addActivityMarker( (new ZoneActivityMarker())
+            $zone->addActivityMarker( new ZoneActivityMarker()
                 ->setCitizen( $citizen )
                 ->setType( ZoneActivityMarkerType::RuinDig )
                 ->setTimestamp( new DateTime() )
-            );
+            )->setScavenged(true);
 
             if ($item_found) {
 
