@@ -391,3 +391,5 @@ Koalition: crwdns232454:0crwdne232454:0
 'Du kannst dieser Stadt nicht beitreten. Fehlercode: {error}': 'crwdns232458:0{error}crwdne232458:0'
 'Aktive Fähigkeiten': 'crwdns232460:0crwdne232460:0'
 'Da du in mehreren deiner letzten Städte frühzeitig gestorben bist ({death_type}), bist du bis {end_date} vom Spiel ausgeschlossen. Du kannst aktuell keine neue Stadt betreten.': 'crwdns252322:0{death_type}crwdnd252322:0{end_date}crwdne252322:0'
+'Öffentliche Städte, in denen sich zum Zeitpunkt des Angriffs kein einziger Spieler befindet, werden gelöscht!': 'crwdns252676:0crwdne252676:0'
+'Diese Beschränkungen gelten NICHT für Kleine Städte!': 'crwdns252678:0crwdne252678:0'

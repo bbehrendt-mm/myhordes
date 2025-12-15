@@ -391,3 +391,5 @@ Koalition: Coalition
 'Du kannst dieser Stadt nicht beitreten. Fehlercode: {error}': 'You cannot join this town. Error code: {error}'
 'Aktive Fähigkeiten': 'Active skills'
 'Da du in mehreren deiner letzten Städte frühzeitig gestorben bist ({death_type}), bist du bis {end_date} vom Spiel ausgeschlossen. Du kannst aktuell keine neue Stadt betreten.': 'Since you have died prematurely in several of your recent towns ({death_type}), you are being excluded from the game until {end_date}. You currently cannot enter a new town.'
+'Öffentliche Städte, in denen sich zum Zeitpunkt des Angriffs kein einziger Spieler befindet, werden gelöscht!': 'Public towns that do not have a single player in them at the time of attack are deleted.'
+'Diese Beschränkungen gelten NICHT für Kleine Städte!': 'This limitations do NOT apply to Small Towns.'

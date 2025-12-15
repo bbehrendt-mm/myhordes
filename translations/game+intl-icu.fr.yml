@@ -521,7 +521,7 @@ Nachtwächter: Veilleur
 Gegenstand: Objet
 Installieren: Jeter
 'Wie viele Gegenstände möchtest du auf den Müll werfen?': 'Combien d’objets voulez-vous jeter à la décharge ?'
-'Du kannst keine Aktionen ausführen, während du dich versteckst.': 'Vous ne pouvez faire aucune action en étant enterré.'
+'Du kannst keine Aktionen ausführen, während du dich versteckst.': 'Vous ne pouvez faire aucune action en étant enterré(e).'
 'Du kannst dich nicht fortbewegen während du versteckt bist.': 'Vous ne pouvez pas vous déplacer tant que vous êtes caché.'
 'Du kannst das nicht tun während du dich versteckst.': 'Vous ne pouvez pas faire cela en étant caché.'
 'Du kannst helfen und dich der heutigen Nachtwache anschließen!': 'Vous pouvez rejoindre les veilleurs cette nuit !'
@@ -2104,7 +2104,7 @@ Ranking-Ausschluss: Exclusion du classement
 'Städte werden nun basierend auf ihrem Überlebensfaktor bewertet.': 'Les villes sont désormais classées en fonction de leur survie globale'
 'Du kannst nun angreifen wen immer du willst, selbst wenn du kein Ghul bist.': 'L’agression est possible sans Goule, gare à vos voisins'
 'Um Baupläne zu finden musst du nun in Gebäuden in der Außenwelt campen.': 'Les bâtiments du désert nécessitent d’être campés pour que le plan associé soit disponible'
-'Diese letzten Nächte des Überlebens haben deiner verlorenen Seele zugesetzt, aber du bist daraus gestärkt hervorgegangen. Nun bist du bereit für die wirklichen Herausforderungen, die jetzt beginnen.': 'Ces dernières nuits de survie ont renforcé votre âme de damné. Vous voilà plus fort, plus résistant et il est grand temps de découvrir la vraie vie.'
+'Diese letzten Nächte des Überlebens haben deiner verlorenen Seele zugesetzt, aber du bist daraus gestärkt hervorgegangen. Nun bist du bereit für die wirklichen Herausforderungen, die jetzt beginnen.': 'Ces dernières nuits de survie ont renforcé votre âme de damné. Vous voilà plus fort et plus résistant ; il est grand temps de découvrir la vraie vie.'
 'Der Diebstahl, den du gerade begangen hast, wurde bemerkt! Die Bürger werden gewarnt, dass du den(die,das) {item} bei {victim} gestohlen hast.': 'Le larcin que vous venez de commettre a été repéré ! Les citoyens sont avertis que vous avez volé {item} à {victim}.'
 '<strong>Das Stadttor ist geschlossen</strong>, eine Rückkehr ist nicht möglich!': '<strong>Les portes de la ville sont fermées</strong>, impossible d''être rapatrié(e) !'
 'Das Stadttor ist <strong>geschlossen</strong>! Vielleicht kannst du im Forum nach Hilfe fragen...': 'Les portes sont <strong>fermées</strong> ! Peut-être qu''en allant supplier sur le forum...'
@@ -3250,7 +3250,8 @@ Tierklinik: Centre d'essai
 'Du hast keinen Platz für einen weiteren schweren Gegenstand!': 'Vous n''avez plus de place pour un autre objet encombrant !'
 'Verdächtige Scheune': 'Grange étrange'
 'Diese Scheune ist dir bisher völlig entgangen, weil sie mitten in der Wüste so uninteressant wirkte; aber die seltsamen, halb verwischten Zeichnungen in der Umgebung, die die Bürger vom Heißluftballon aus entdeckt hatten, überzeugten dich von ihrer Bedeutung... Bei näherer Betrachtung stellt sich heraus, dass die Scheune einer Gruppe von Überlebenden als Unterschlupf diente. Ihre verbliebenen Vorräte befinden sich noch immer darin – und wenn eines sicher ist: Sie werden sie nicht mehr brauchen.': "Cette grange vous avait complètement échappé, elle semblait sans intérêt au milieu du désert. Cependant, les étranges dessins à moitié effacés dans les environs, que vous avez découverts depuis la montgolfière, vous ont convaincu de son intérêt... En y regardant de plus près, vous constatez que la grange a servi d'abri à un groupe de survivants !\nLeurs provisions restantes se trouvent toujours à l'intérieur, mais une chose est sûre : ils n'en auront plus besoin."
-'An Bord des {building} hat sich {citizen} die Zeit genommen, das gesamte Gebiet zu untersuchen. Es wurden neue Gebäude entdeckt: {ruins}': 'À bord de la {building}, {citizen} a pris le temps d''étudier le secteur dans son intégralité. De nouveaux bâtiments ont été découverts : {ruins}'
+'An Bord des {building} hat sich {citizen} die Zeit genommen, das gesamte Gebiet zu untersuchen. Es wurden neue Gebäude entdeckt: {ruins}': 'À bord de la {building}, {citizen} a pris le temps d''étudier le secteur dans son intégralité. De nouveaux bâtiments ont été découverts : {ruins}.'
 'Du magst stark sein, aber du bist kein mächtiger Chuck. Erleichtere dich deiner überzählichen Gegenstände, bevor du dich der Wache anschließt.': 'Vous êtes peut-être fort(e), mais vous n''êtes pas Chuck Norris. Baissez votre bouclier ou allégez votre sac avant de rejoindre la veille.'
-'Vollständige Erkundung': 'Vollständige Erkundung'
-'Anzahl der Karten, die du vollständig aufgedeckt hast.': 'Anzahl der Karten, die du vollständig aufgedeckt hast.'
+'Vollständige Erkundung': 'Exploration Totale'
+'Anzahl der Karten, die du vollständig aufgedeckt hast.': 'Nombre de fois où vous avez pu voir la carte totalement explorée.'
+'Du hast einen zusätzlichen Fähigkeitenpunkt erhalten und deine bereits vollbrachten Taten wurden zurückgesetzt. Hurra!': 'Du hast einen zusätzlichen Kraftpunkt erhalten und deine bereits vollbrachten Taten wurden zurückgesetzt. Hurra!'

@@ -1,8 +1,7 @@
----
 'Good Taste Dashboard': 'Tableau de bord du Bon Goût'
-'Zentrales Dashboard für Kuratoren des guten Geschmacks, um Spiel-Assets, Texte und UI-Tools zu durchsuchen.': 'Tableau central pour les Conservateurs du Bon Goût afin de parcourir les assets du jeu, les textes et les outils UI.'
-'Alle Assets anzeigen': 'Voir tous les assets'
-Assets: Assets
-'Assets verfügbar': 'Assets disponibles'
-'Übersicht der Dateien unter {path}, gruppiert nach Ordnern. Klappe einen Ordner auf, um die Vorschaubilder zu sehen.': 'Aperçu des fichiers sous {path}, regroupés par dossier. Dépliez pour afficher les vignettes.'
-'Keine Assets gefunden.': 'Aucun asset trouvé.'
+'Zentrales Dashboard für Kuratoren des guten Geschmacks, um Spiel-Assets, Texte und UI-Tools zu durchsuchen.': 'Tableau de bord central permettant aux Conservateurs du Bon Goût de rechercher des ressources de jeu, des textes et des outils d''interface utilisateur.'
+'Alle Assets anzeigen': 'Afficher toutes les ressources'
+Assets: Ressources
+'Assets verfügbar': 'Ressources disponibles'
+'Übersicht der Dateien unter {path}, gruppiert nach Ordnern. Klappe einen Ordner auf, um die Vorschaubilder zu sehen.': 'Aperçu des fichiers sous {path}, regroupés par dossiers. Ouvrez un dossier pour voir les aperçus.'
+'Keine Assets gefunden.': 'Aucune ressource trouvée.'
