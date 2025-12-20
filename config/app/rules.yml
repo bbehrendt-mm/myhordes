@@ -65,9 +65,6 @@ parameters:
           y: 13
           ox: 7
         plan_limits:
-          unusual: -1
-          rare: -1
-          epic: -1
           lists:
             hotel_lv2: ['item_pumpkin_raw_#00', 'small_urban_#00', 'item_shield_#00', 'small_canon_#01', 'small_wallimprove_#02', 'small_wallimprove_#01']
             hotel_lv3: ['small_valve_#00', 'small_appletree_#00', 'small_scarecrow_#00', 'small_ikea_#00', 'small_moving_#00', 'small_labyrinth_#00', 'small_pet_#00', 'item_plate_#05', 'small_gallery_#00', 'small_coffin_#00']
