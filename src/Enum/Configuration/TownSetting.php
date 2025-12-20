@@ -97,6 +97,7 @@ enum TownSetting: string implements Configuration
     case ERuinBPUnusual = 'explorable_ruin_params.plan_limits.unusual';
     case ERuinBPRare = 'explorable_ruin_params.plan_limits.rare';
     case ERuinBPEpic = 'explorable_ruin_params.plan_limits.epic';
+    case ERuinBPNamedLists = 'explorable_ruin_params.plan_limits.lists';
     //</editor-fold>
 
     //<editor-fold desc="Town E-Ruin Zombie Settings">
@@ -339,7 +340,8 @@ enum TownSetting: string implements Configuration
 
             self::ERuinBPUnusual,
             self::ERuinBPRare,
-            self::ERuinBPEpic => self::Section_Explorable_BP,
+            self::ERuinBPEpic,
+            self::ERuinBPNamedLists => self::Section_Explorable_BP,
 
             self::ERuinZombiesInitial,
             self::ERuinZombiesDaily => self::Section_Explorable_Zombies,
@@ -534,6 +536,8 @@ enum TownSetting: string implements Configuration
             self::ERuinBPUnusual,
             self::ERuinBPRare,
             self::ERuinBPEpic => -1,
+
+            self::ERuinBPNamedLists => [],
 
             self::ERuinZombiesInitial => 10,
             self::ERuinZombiesDaily   => 5,

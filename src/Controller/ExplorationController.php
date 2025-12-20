@@ -181,16 +181,15 @@ class ExplorationController extends InventoryAwareController implements HookedIn
             return AjaxResponse::error( BeyondController::ErrorNotDiggable );
 
         // Calculate chances
-        $d = $ruinZone->getDigs() + 1;
         $chances = $proxyService->citizenQueryDigChance( $citizen, $ruinZone, ScavengingActionType::DigExploration, $this->getTownConf()->isNightMode() );
 
         $item = $this->random_generator->chance( $chances )
             ? ($this->calculateItemDropAction)($citizen, $ruinZone, ItemDropType::ERuinDig)
             : null;
 
-        $ruinZone->setDigs( $ruinZone->getDigs() + 1 );
-
         if ($item) {
+            $ruinZone->setDigs( $ruinZone->getDigs() + 1 );
+
             $noPlaceLeftMsg = "";
             // $inventoryDest = $proxyService->placeItem($citizen, $item, [$citizen->getInventory(), $ruinZone->getRoomFloor()]);
             $inventoryDest = $proxyService->placeItem($citizen, $item, [$citizen->getInventory(), $ruinZone->getFloor()]);

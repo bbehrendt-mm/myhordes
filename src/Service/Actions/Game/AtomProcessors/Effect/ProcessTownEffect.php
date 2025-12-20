@@ -48,7 +48,9 @@ class ProcessTownEffect extends AtomEffectProcessor
 
             $filtered = array_filter( $possible, fn(BuildingPrototype $proto) => match(true) {
                 in_array($proto->getName(), $blocked) => false,
-                $data->unlockBlueprintType !== null && $data->unlockBlueprintType === $cache->conf->getBuildingRarity( $proto ) => true,
+                $data->unlockBlueprintType !== null      => $data->unlockBlueprintType === $cache->conf->getBuildingRarity( $proto ),
+                $data->unlockBlueprintNamedList !== null => in_array($proto->getName(), $cache->conf->getSubKey( TownSetting::ERuinBPNamedLists, $data->unlockBlueprintNamedList, [] )),
+                $data->unlockBlueprintList !== null      => in_array($proto->getName(), $data->unlockBlueprintList),
                 default => in_array($proto->getName(), $data->unlockBlueprintList ?? [])
             });
 
