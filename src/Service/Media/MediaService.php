@@ -56,12 +56,24 @@ readonly class MediaService
     }
 
     /**
+     * @param LinksMedia $object
+     * @param string $collection
+     * @return Media|null
+     * @noinspection PhpDocSignatureInspection
+     * @throws Exception
+     */
+    public function getSingleMediaForObject(object $object, string $collection): ?Media {
+        $collection = $this->getMediaForObject($object, $collection);
+        return $collection->count() === 1 ? $collection->first() : null;
+    }
+
+    /**
      * @param Media $media
      * @return LinksMedia|null
      * @noinspection PhpDocSignatureInspection
      */
     public function getObjectForMedia(Media $media): object {
-        return $this->entityManager->getRepository( $media->getModelType() )->find( $media->getModelID());
+        return $this->entityManager->getRepository( $media->getModelType() )->find( $media->getModelID() );
     }
 
     public function getCollectionForMedia(Media $media): ?MediaCollection {
@@ -90,7 +102,7 @@ readonly class MediaService
 
         $conversions = [];
         foreach ($collectionObject->getVariants() as $variant)
-            $conversions[$variant->name] = false;
+            $conversions[] = $variant->name;
 
         $media = new Media()
             ->setId( Uuid::v7() )
@@ -98,8 +110,8 @@ readonly class MediaService
             ->setModelType( $model_type )
             ->setFilename($filename ?? basename($path))
             ->setMime( $mime )
-            ->setMeta( [] )
-            ->setConversions( $conversions );
+            ->setMetaFromImage( $image, mime: $mime, size: filesize($path) )
+            ->registerConversion( $conversions );
 
         $media->transientImage = $image;
         $media->transientOwner = $object;

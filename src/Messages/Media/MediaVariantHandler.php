@@ -37,9 +37,8 @@ readonly class MediaVariantHandler
 
         $original = "{$this->public}/{$media->getUrl( )}";
 
-        $image = $variant->performEncode(
-            $variant->process( new ImageManager( Driver::class, strip: true )->read( $original ) )
-        );
+        $raw = $variant->process( new ImageManager( Driver::class, strip: true )->read( $original ) );
+        $image = $variant->performEncode($raw);
 
         $ext = MediaService::mimeTypeToExtension( $image->mimetype(), true );
         $targetUrl = $media->getTargetUrl( $message->variant, Uuid::v4()->toString() . $ext );
@@ -54,7 +53,7 @@ readonly class MediaVariantHandler
         if ($media->hasConversion($message->variant))
             unlink( "{$this->public}/{$media->getUrl( $message->variant )}" );
 
-        $this->em->persist( $media->setConversion( $message->variant, $targetUrl ) );
+        $this->em->persist( $media->setConversion( $message->variant, $targetUrl, $raw, $image ) );
         $this->em->flush();
 
     }

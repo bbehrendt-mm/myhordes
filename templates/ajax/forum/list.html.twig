@@ -14,9 +14,10 @@
             data-title="{{ forum.localizedTitle(app.locale) }}"
             data-description="{{ forum.localizedDescription(app.locale) }}"
             data-url="{{ url('forum_view', {id: forum.id}) }}"
-            data-icon="{{ (forum.icon is empty)
+            data-srcset="{{ forum|singleMedia('icon') is not null ? forum|singleMedia('icon').sourceSet : '' }}"
+            data-icon="{{ forum|singleMedia('icon') is not null ? forum|singleMedia('icon').source : ((forum.icon is empty)
                 ? (forum.town ? asset('build/images/forum/banner/bannerForumVille.gif') : asset('build/images/forum/banner/bannerForumVoid.gif'))
-                : asset('build/images/forum/banner/' ~ forum.icon) }}"
+                : asset('build/images/forum/banner/' ~ forum.icon)) }}"
             data-sort="{{ forum.worldForumSorting ?? 0 }}"
             data-new="{{ has_new_posts ? '1' : '0' }}"
     ></hordes-forum>
@@ -43,9 +44,10 @@
                 title:       f.localizedTitle(app.locale),
                 description: f.localizedDescription(app.locale),
                 url:         url('forum_view', {id: f.id}),
-                icon:        (f.icon is empty)
+                srcset:      f|singleMedia('icon') is not null ? f|singleMedia('icon').sourceSet : null,
+                icon:        f|singleMedia('icon') is not null ? f|singleMedia('icon').source : ((f.icon is empty)
                     ? asset('build/images/forum/banner/bannerForumVoid.gif')
-                    : asset('build/images/forum/banner/' ~ f.icon),
+                    : asset('build/images/forum/banner/' ~ f.icon)),
                 sort: f.worldForumSorting,
                 new: forums_new[f.id],
             } )|values|json_encode }}"

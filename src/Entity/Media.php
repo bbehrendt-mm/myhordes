@@ -6,6 +6,7 @@ use App\Repository\MediaRepository;
 use App\Traits\Entity\LinksMedia;
 use ArrayHelpers\Arr;
 use Doctrine\ORM\Mapping as ORM;
+use Intervention\Image\Interfaces\EncodedImageInterface;
 use Intervention\Image\Interfaces\ImageInterface;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\Uuid;
@@ -137,12 +138,12 @@ class Media
 
     public function knowsConversion(string $conversion): bool
     {
-        return Arr::get( $this->conversions, $conversion, null ) !== null;
+        return Arr::get( $this->conversions, $conversion ) !== null;
     }
 
     public function hasConversion(string $conversion): bool
     {
-        return Arr::get( $this->conversions, $conversion, false ) !== false;
+        return Arr::get( $this->conversions, "$conversion.created", false ) !== false;
     }
 
     public function getTargetUrl(string $conversion, ?string $filename = null): ?string
@@ -187,10 +188,40 @@ class Media
         return $this;
     }
 
-    public function setConversion(string $conversion, string $url): static
+    public function registerConversion(string|array $conversions): static
+    {
+        if (!is_array($conversions)) $conversions = [$conversions];
+        $data = $this->getConversions();
+
+        $set = false;
+        foreach ($conversions as $conversion) {
+            if ($this->hasConversion($conversion)) continue;
+            Arr::set($data, $conversion, [
+                'created' => false,
+            ]);
+            $set = true;
+        }
+
+        return $set ? $this->setConversions($data) : $this;
+    }
+
+    protected static function generateMetaFromImages(?ImageInterface $rawImage, ?EncodedImageInterface $encodedImage, ?string $mime = null, ?int $size = null): array {
+        return [
+            'width'  => $rawImage?->width(),
+            'height' => $rawImage?->height(),
+            'mime'   => $mime ?? $encodedImage?->mimetype(),
+            'size'   => $size ?? $encodedImage?->size(),
+        ];
+    }
+
+    public function setConversion(string $conversion, string $url, ?ImageInterface $rawImage = null, ?EncodedImageInterface $encodedImage = null): static
     {
         $data = $this->getConversions();
-        Arr::set($data, $conversion, $url);
+        Arr::set($data, $conversion, [
+            'created' => true,
+            'path'   => $url,
+            'meta' => static::generateMetaFromImages($rawImage, $encodedImage),
+        ]);
         return $this->setConversions($data);
     }
 
@@ -206,6 +237,11 @@ class Media
         return $this;
     }
 
+    public function setMetaFromImage(?ImageInterface $rawImage = null, ?EncodedImageInterface $encodedImage = null, ?string $mime = null, ?int $size = null): static
+    {
+        return $this->setMeta(static::generateMetaFromImages($rawImage, $encodedImage, $mime, $size));
+    }
+
     public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;
@@ -216,5 +252,39 @@ class Media
         $this->createdAt = $createdAt;
 
         return $this;
+    }
+
+    private function getSources(bool $includeOriginal = false, bool $sorted = true): array {
+        $entries = array_map(
+            fn(array $entry) => ['/storage/' . Arr::get($entry, 'path'), Arr::get($entry, 'meta.width')],
+            array_filter($this->conversions, fn($entry) =>
+                Arr::get($entry, 'created') &&
+                Arr::get($entry, 'path') &&
+                Arr::get($entry, 'meta.width')
+            )
+        );
+
+        if ($includeOriginal && Arr::get($this->meta, 'width'))
+            $entries[] = ['/storage/' . $this->getUrl(), Arr::get($this->meta, 'width')];
+
+        if ($sorted)
+            usort($entries, fn(array $a, array $b) => $a[1] <=> $b[1]);
+
+        return $entries;
+    }
+
+    public function getSourceSet(bool $includeOriginal = false): string {
+        return implode(', ', array_map(
+            fn(array $entry) => "{$entry[0]} {$entry[1]}w}",
+            $this->getSources( $includeOriginal )
+        ));
+    }
+
+    public function getSource(bool $includeOriginal = false, int $expectedSize = PHP_INT_MAX): string {
+        $entries = $this->getSources( $includeOriginal, true );
+        if (empty($entries)) return "";
+
+        $entry = array_find( $entries, fn(array $entry) => $entry[1] >= $expectedSize ) ?? $entries[array_key_last( $entries )];
+        return $entry[0];
     }
 }
