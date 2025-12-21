@@ -111,7 +111,7 @@ class AdminTownDashboardController extends AdminActionController
                 'toggle_broken_door', 'dbg_enable_stranger', 'dbg_fill_bank', 'dgb_empty_bank', 'dbg_unlock_bank',
                 'dbg_hydrate', 'dbg_set_well', 'dbg_unlock_buildings', 'dbg_map_progress', 'dbg_map_zombie_set',
                 'dbg_adv_days', 'dbg_set_attack', 'dbg_toggle_chaos', 'dbg_toggle_devas', 'ex_del', 'ex_co+', 'ex_co-',
-                'ex_ref', 'ex_inf',
+                'ex_ref', 'ex_inf', 'dbg_unvail_map',
             ]) && !$this->isGranted('cheat', $town))
             return AjaxResponse::error(ErrorHelper::ErrorPermissionError);
 
@@ -299,6 +299,15 @@ class AdminTownDashboardController extends AdminActionController
                     $this->citizen_handler->removeStatus( $citizen, $thirst2 );
                     $this->entity_manager->persist($citizen);
                 }
+                break;
+
+            case 'dbg_unvail_map':
+                foreach ($town->getZones() as &$zone) if ($zone->getX() !== 0 || $zone->getY() !== 0) {
+                    $zone->setDiscoveryStatus( Zone::DiscoveryStateCurrent );
+                    $zone->setZombieStatus( Zone::ZombieStateExact );
+                }
+
+                $this->entity_manager->persist($town);
                 break;
 
             case 'dbg_set_well':
