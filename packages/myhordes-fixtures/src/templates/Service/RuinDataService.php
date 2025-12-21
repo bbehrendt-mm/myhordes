@@ -1655,47 +1655,57 @@ class RuinDataService implements FixtureProcessorInterface {
                 "empty" => 1,
                 "capacity" => 4,
                 "drops" => [
-                    "bbplan_u_#00" => 14,
-                    "bbplan_r_#00" => 8,
-                    "bbplan_e_#00" => 7,
-                    "water_#00" => 4,
-                    "concrete_wall_#00" => 21,
-                    "wood_bad_#00" => 4,
-                    "kalach_#01" => 2,
-                    "meca_parts_#00" => 11,
-                    "wood2_#00" => 6,
-                    "metal_#00" => 8,
-                    "deto_#00" => 1,
-                    "magneticKey_#00" => 9,
-                    "money_#00" => 1,
-                    "pile_#00" => 2,
-                    "big_pgun_empty_#00" => 3,
-                    "gun_#00" => 5,
-                    "wood_log_#00" => 8,
-                    "water_cup_part_#00" => 3,
-                    "metal_bad_#00" => 2,
-                    "metal_beam_#00" => 3,
-                    "electro_box_#00" => 1,
-                    "machine_gun_#00" => 1,
-                    "flare_#00" => 1,
-                    "wood_plate_#00" => 1,
-                    "concrete_#00" => 4,
-                    "rsc_pack_1_#00" => 4,
-                    "rsc_pack_2_#00" => 2,
-                    "rsc_pack_3_#00" => 1,
-                    "wood_beam_#00" => 1,
-                    "rlaunc_#00" => 1,
-                    "tagger_#00" => 1,
-                    "big_pgun_#00" => 1,
-                    "big_pgun_part_#00" => 4,
-                    "bumpKey_#00" => 3,
-                    "repair_kit_part_raw_#00" => 2,
-                    "classicKey_#00" => 3,
-                    "alarm_off_#00" => 3,
-                    "infect_poison_part_#00" => [10, DropMod::Infective]
-                ],
-                "desc" => "Diese heruntergekommene Gebäude scheint einmal ein Bunker gewesen zu sein. Du entdeckst einen Einstieg ins Gebäude, modriger Gestank schlägt dir entgegen. Du verziehst das Gesicht, aber hier könntest du mit ziemlicher Sicherheit etwas Nützliches finden..."
-            ],
+                    // Plans - 1400
+                    'bbplan_u_#00' => 800,
+                    'bbplan_r_#00' => 400,
+                    'bbplan_e_#00' => 200,
+
+                    // Common - 3000
+                    'wood2_#00' => 429,
+                    'metal_#00' => 429,
+                    'meca_parts_#00' => 429,
+                    'concrete_wall_#00' => 429,
+                    'wood_bad_#00' => 429,
+                    'water_#00' => 429,
+                    'water_cup_part_#00' => 429,
+
+                    // Unusual - 1500
+                    'wood_beam_#00' => 188,
+                    'metal_beam_#00' => 188,
+                    'gun_#00' => 188,
+                    'metal_bad_#00' => 188,
+                    'wood_log_#00' => 188,
+                    'wood_plate_#00' => 188,
+                    'money_#00' => 188,
+                    'pile_#00' => 188,
+
+                    // Rare - 500
+                    'big_pgun_empty_#00' => 36,
+                    'big_pgun_#00' => 36,
+                    'big_pgun_part_#00' => 36,
+                    'tagger_#00' => 36,
+                    'flare_#00' => 36,
+                    'machine_gun_#00' => 36,
+                    'deto_#00' => 36,
+                    'electro_box_#00' => 36,
+                    'repair_kit_part_raw_#00' => 36,
+                    'rsc_pack_3_#00' => 36,
+                    'rsc_pack_2_#00' => 36,
+                    'rsc_pack_1_#00' => 36,
+                    'rlaunc_#00' => 36,
+                    'kalach_#01' => 36,
+
+                    // Keys - 500
+                    'magneticKey_#00' => 167,
+                    'bumpKey_#00' => 167,
+                    'classicKey_#00' => 167,
+
+                    // Others
+                    //'concrete_#00' => 4,
+                    //'alarm_off_#00' => 3,
+                    'infect_poison_part_#00' => [429, DropMod::Infective]
+
+                ], 'desc' => 'Diese heruntergekommene Gebäude scheint einmal ein Bunker gewesen zu sein. Du entdeckst einen Einstieg ins Gebäude, modriger Gestank schlägt dir entgegen. Du verziehst das Gesicht, aber hier könntest du mit ziemlicher Sicherheit etwas Nützliches finden...'],
 
             // id 101
             "deserted_hotel" => [
@@ -1711,113 +1721,104 @@ class RuinDataService implements FixtureProcessorInterface {
                 "empty" => 1,
                 "capacity" => 4,
                 "drops" => [
-                    "hbplan_u_#00" => 6900,
-                    "hbplan_r_#00" => 4600,
-                    "hbplan_e_#00" => 2300,
-                    "water_#00" => 9000,
-                    "bumpKey_#00" => 3000,
-                    "classicKey_#00" => 3000,
-                    "can_#00" => 6000,
-                    "food_bag_#00" => 6000,
-                    "chair_basic_#00" => 3000,
-                    "table_#00" => 2000,
-                    "food_bar2_#00" => 4000,
-                    "spices_#00" => 3000,
-                    "bed_#00" => 2000,
-                    "chest_food_#00" => 3000,
-                    "concrete_wall_#00" => 3000,
-                    "bag_#00" => 3000,
-                    "food_noodles_#00" => 4000,
-                    "food_pims_#00" => 3000,
-                    "food_bar1_#00" => 3000,
-                    "food_bar3_#00" => 3000,
-                    "food_chick_#00" => 3000,
-                    "distri_#00" => 2000,
-                    "rlaunc_#00" => 2000,
-                    "dish_#00" => 3000,
-                    "food_sandw_#00" => 3000,
-                    "bureau_#00" => 2000,
-                    "deco_box_#00" => 4000,
-                    "lamp_#00" => 4000,
-                    "teddy_#01" => 2,
-                    "teddy_#00" => 2000,
-                    "carpet_#00" => 2000,
-                    "game_box_#00" => 2000,
-                    "infect_poison_part_#00" => [5000, DropMod::Infective]
-                ],
-                "desc" => "Diese heruntergekommene Gebäude scheint einmal ein Hotel gewesen zu sein. Du entdeckst einen Einstieg ins Gebäude, modriger Gestank schlägt dir entgegen. Du verziehst das Gesicht, aber hier könntest du mit ziemlicher Sicherheit etwas Nützliches finden..."
-            ],
+                    // Plans - 1400
+                    'hbplan_u_#00' => 800,
+                    'hbplan_r_#00' => 400,
+                    'hbplan_e_#00' => 200,
+
+                    // Water (C+U)
+                    'water_#00' => 554,
+
+                    // Common - 3000
+                    'chair_basic_#00' => 429,
+                    'chest_food_#00' => 429,
+                    'food_bag_#00' => 429,
+                    'food_bar1_#00' => 429,
+                    'food_bar2_#00' => 429,
+                    'food_bar3_#00' => 429,
+
+                    // Unusual - 1500
+                    'bed_#00' => 125,
+                    'spices_#00' => 125,
+                    'food_noodles_#00' => 125,
+                    'food_sandw_#00' => 125,
+                    'food_pims_#00' => 125,
+                    'food_chick_#00' => 125,
+                    'food_biscuit_#00' => 125,
+                    'dish_#00' => 125,
+                    'can_#00' => 125,
+                    'lamp_#00' => 125,
+                    'table_#00' => 125,
+
+                    // Rare - 500
+                    'food_noodles_hot_#00' => 42,
+                    'game_box_#00' => 42,
+                    'deco_box_#00' => 42,
+                    'teddy_#00' => 42,
+                    'teddy_#01' => 42,
+                    'dish_tasty_#00' => 42,
+                    'bag_#00' => 42,
+                    'lights_#00' => 42,
+                    'carpet_#00' => 42,
+                    'bureau_#00' => 42,
+                    'distri_#00' => 42,
+                    'rlaunc_#00' => 42,
+
+                    // Keys - 500
+                    'magneticKey_#00' => 167,
+                    'bumpKey_#00' => 167,
+                    'classicKey_#00' => 167,
+
+                    // Others
+                    //'concrete_wall_#00' => 0,
+                    'infect_poison_part_#00' => [429, DropMod::Infective]
+                ], 'desc' => 'Diese heruntergekommene Gebäude scheint einmal ein Hotel gewesen zu sein. Du entdeckst einen Einstieg ins Gebäude, modriger Gestank schlägt dir entgegen. Du verziehst das Gesicht, aber hier könntest du mit ziemlicher Sicherheit etwas Nützliches finden...'],
 
             // id 102
-            "deserted_hospital" => [
-                "label" => "Verlassenes Hospital",
-                "icon" => "deserted_hospital",
-                "camping" => 10,
-                "min_dist" => 5,
-                "max_dist" => 100,
-                "chance" => 0,
-                "explorable" => true,
-                "explorable_skin" => "hospital",
-                "explorable_desc" => null,
-                "empty" => 1,
-                "capacity" => 4,
-                "drops" => [
-                    "mbplan_u_#00" => 20,
-                    "mbplan_r_#00" => 12,
-                    "mbplan_e_#00" => 5,
-                    "water_#00" => 9,
-                    "drug_random_#00" => 10,
-                    "out_def_#00" => 14,
-                    "drug_#00" => 3,
-                    "xanax_#00" => 16,
-                    "water_can_empty_#00" => 4,
-                    "magneticKey_#00" => 9,
-                    "pc_#00" => 2,
-                    "drug_water_#00" => 3,
-                    "distri_#00" => 2,
-                    "disinfect_#00" => 6,
-                    "pharma_#00" => 3,
-                    "chainsaw_empty_#00" => 2,
-                    "bureau_#00" => 1,
-                    "cyanure_#00" => 4,
-                    "classicKey_#00" => 3,
-                    "water_can_3_#00" => 2,
-                    "water_can_2_#00" => 2,
-                    "water_can_1_#00" => 3,
-                    "bed_#00" => 2,
-                    "bumpKey_#00" => 3,
-                    "vagoul_#00" => 1,
-                    "infect_poison_part_#00" => [15, DropMod::Infective]
-                ],
-                "desc" => "Diese heruntergekommene Gebäude scheint einmal ein Hospital gewesen zu sein. Du entdeckst einen Einstieg ins Gebäude, modriger Gestank schlägt dir entgegen. Du verziehst das Gesicht, aber hier könntest du mit ziemlicher Sicherheit etwas Nützliches finden..."
-            ],
+            'deserted_hospital' => ["label" => "Verlassenes Hospital",'icon' => 'deserted_hospital',"camping" => 10,"min_dist" => 5, "max_dist" => 100, "chance" => 0, "explorable" => true,
+                "explorable_skin" => 'hospital', "explorable_desc" => null, "empty" => 1, "capacity" => 4,
+                "drops" => array(
+                    // Plans - 1400
+                    'mbplan_u_#00' => 800,
+                    'mbplan_r_#00' => 400,
+                    'mbplan_e_#00' => 200,
 
-            // Hot Air Balloon special building
-            "crop_circles" => [
-                "label" => "Verdächtige Scheune",
-                "icon" => "crop_circles",
-                "camping" => 15,
-                "min_dist" => 21,
-                "max_dist" => 27,
-                "chance" => 0,
-                "empty" => 0.2,
-                "capacity" => 3,
-                "air_only" => true,
-                "drops" => [
-                    "chest_xl_#00" => 15,
-                    "chainsaw_part_#00" => 15,
-                    "lpoint1_#00" => 25,
-                    "pocket_belt_#00" => 50,
-                    "bagxl_#00" => 50,
-                    "ryebag_#00" => 100,
-                    "cadaver_#00" => 100,
-                    "lawn_part_#00" => 150,
-                    "quantum_#00" => 150,
-                    "hmbrew_#00" => 160,
-                    "vegetable_#00" => 185,
-                ],
-                "desc" => "Diese Scheune ist dir bisher völlig entgangen, weil sie mitten in der Wüste so uninteressant wirkte; aber die seltsamen, halb verwischten Zeichnungen in der Umgebung, die die Bürger vom Heißluftballon aus entdeckt hatten, überzeugten dich von ihrer Bedeutung... Bei näherer Betrachtung stellt sich heraus, dass die Scheune einer Gruppe von Überlebenden als Unterschlupf diente. Ihre verbliebenen Vorräte befinden sich noch immer darin – und wenn eines sicher ist: Sie werden sie nicht mehr brauchen.",
-            ]
+                    // Water (C+U)
+                    'water_#00' => 964,
+
+                    // Common - 3000
+                    'drug_random_#00' => 750,
+                    'xanax_#00' => 750,
+                    'out_def_#00' => 750,
+
+                    // Unusual - 1500
+                    'pharma_#00' => 214,
+                    'drug_water_#00' => 214,
+                    'cyanure_#00' => 214,
+                    'disinfect_#00' => 214,
+                    'pc_#00' => 214,
+                    'water_can_empty_#00' => 214,
+
+                    // Rare - 500
+                    'chainsaw_empty_#00' => 63,
+                    'drug_#00' => 63,
+                    'water_can_1_#00' => 63,
+                    'water_can_2_#00' => 63,
+                    'water_can_3_#00' => 63,
+                    'rlaunc_#00' => 63,
+                    'bureau_#00' => 63,
+                    'distri_#00' => 63,
+
+                    // Keys - 500
+                    'magneticKey_#00' => 167,
+                    'bumpKey_#00' => 167,
+                    'classicKey_#00' => 167,
+
+                    // Others
+                    //'bed_#00' => 2,
+                    'vagoul_#00' => 63,
+                    'infect_poison_part_#00' => array(750, DropMod::Infective)
+                ), 'desc' => 'Diese heruntergekommene Gebäude scheint einmal ein Hospital gewesen zu sein. Du entdeckst einen Einstieg ins Gebäude, modriger Gestank schlägt dir entgegen. Du verziehst das Gesicht, aber hier könntest du mit ziemlicher Sicherheit etwas Nützliches finden...'],
         ]);
     }
 }
