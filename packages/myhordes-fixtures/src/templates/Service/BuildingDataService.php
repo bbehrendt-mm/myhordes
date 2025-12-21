@@ -954,7 +954,7 @@ class BuildingDataService implements FixtureProcessorInterface {
         $container->add()->parentBuilding($item_tagger)
             ->icon('item_scope')->label('Aussichtsplattform')->description( 'Wenn wir den Wachturm noch ein wenig vergrößern, hält die Außenwelt keine Geheimnisse mehr für uns. Dank seines soliden Fundaments können wir sogar noch ein paar Stockwerke hinzufügen, um noch weiter sehen zu können.')
             ->isTemporary(0)->defense(0)->ap(30)->blueprintLevel(0)->resources(["wood2_#00" => 5,"scope_#00" => 1,"metal_beam_#00" => 1,])->orderBy(0)
-            ->voteLevel(5)->baseVoteText('Die Aussichtsplattform ermöglicht es, den Bürger zu wählen, der am besten bei Expeditionen führen kann. Erspäht jeden Morgen alle Zombies, die sich im Umkreis von 3km um die Stadt aufhalten.')
+            ->voteLevel(4)->baseVoteText('Die Aussichtsplattform ermöglicht es, den Bürger zu wählen, der am besten bei Expeditionen führen kann. Erspäht jeden Morgen alle Zombies, die sich im Umkreis von 3km um die Stadt aufhalten.')
             ->upgradeTexts([
                                'Erspäht jeden Morgen alle Zombies, die sich im Umkreis von 6km um die Stadt aufhalten.',
                                'Erspäht jeden Morgen alle Zombies, die sich im Umkreis von 10km um die Stadt aufhalten.',
