@@ -36,7 +36,7 @@ readonly class GetPictoXPStepsAction
         $pt_2_15 = [ 15 => 2,  30 => 1,  45 => 1,  60 => 1 ];
         $pt_2_50 = [ 50 => 2, 100 => 1, 150 => 1, 200 => 1 ];
 
-        $p_msg = [ 1 => 2,   5 => 2, 15 => 3 ];
+        $p_msg = [ 1 => 1,   5 => 2, 15 => 3 ];
         $p_job = [50 => 4, 100 => 7];
 
 
@@ -73,7 +73,7 @@ readonly class GetPictoXPStepsAction
             'r_guard_#00'  =>  $pt_2_5,
             'r_ruine_#00'  =>  $pt_2_6,
 
-            'r_repair_#00' =>  $pt_2_50,
+            'r_repair_#00' =>  $pt_2_10,
             'r_plundr_#00' =>  $pt_2_10,
             'r_camp_#00'   =>  $pt_2_10,
             'r_digger_#00' =>  $pt_2_10,
@@ -93,6 +93,7 @@ readonly class GetPictoXPStepsAction
 
             'r_refine_#00' => $pt_2_50,
             'r_buildr_#00' => $pt_2_50,
+            'r_brep_#00'   => $pt_2_50,
             'r_homeup_#00' => $pt_2_6,
             'r_deco_#00'   => $pt_2_50
         ]);
