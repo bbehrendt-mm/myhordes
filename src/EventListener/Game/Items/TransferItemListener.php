@@ -232,8 +232,8 @@ final class TransferItemListener implements ServiceSubscriberInterface
             $event->item->getPrototype()->getHeavy()
         ) {
             $heavy_limit = $this->getService(InventoryHandler::class)->getHeavyItemSize($event->to);
-            if ($heavy_limit > 0 && $this->getService(InventoryHandler::class)->countHeavyItems($event->to) + 1 > $heavy_limit) {
-                $event->pushError($heavy_limit === 1 ? InventoryHandler::ErrorHeavyLimitHit : InventoryHandler::ErrorMultiHeavyLimitHit);
+            if ($heavy_limit > 0 && ($already = $this->getService(InventoryHandler::class)->countHeavyItems($event->to)) + 1 > $heavy_limit) {
+                $event->pushError(($heavy_limit === 1 && $already === 1) ? InventoryHandler::ErrorHeavyLimitHit : InventoryHandler::ErrorMultiHeavyLimitHit);
                 return;
             }
         }

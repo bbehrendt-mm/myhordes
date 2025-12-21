@@ -24,8 +24,13 @@ class ProcessInventorySpaceRequirement extends AtomRequirementProcessor
 
         $inv_full = $data->ignoreInventory || ($inventoryHandler->getFreeSize( $cache->citizen->getInventory(), $ignore ) < $data->space);
         if ($data->heavy && !$data->ignoreInventory) {
-            $inv_has_heavy = $inventoryHandler->countHeavyItems( $cache->citizen->getInventory(), $ignore );
-        } else $inv_has_heavy = false;
+            $heavy_size = $inventoryHandler->getHeavyItemSize($cache->citizen->getInventory());
+            $heavy_use  = $inventoryHandler->countHeavyItems( $cache->citizen->getInventory(), $ignore );
+            $inv_has_heavy = $heavy_size > 0 && $heavy_use >= $heavy_size;
+        } else {
+            $heavy_size = $heavy_use = 0;
+            $inv_has_heavy = false;
+        }
 
         $trunk_full = ($data->considerTrunk && $cache->citizen->getZone() === null)
             ? ($inventoryHandler->getFreeSize( $cache->citizen->getHome()->getChest(), $ignore ) < $data->space)
@@ -43,8 +48,11 @@ class ProcessInventorySpaceRequirement extends AtomRequirementProcessor
                 $cache->addMessage(T::__('Du brauchst <strong>mehr Platz in deinem Rucksack</strong>, um den Inhalt von {item} mitnehmen zu können.', 'items'), [], 'items');
             else $cache->addMessage(T::__('Du brauchst <strong>mehr Platz in deinem Rucksack</strong>.', 'items'), [], 'items');
 
-        } elseif ($inv_has_heavy)
-            $cache->addMessage(T::__('Du kannst keinen weiteren schweren Gegenstand tragen!', 'game'), [], 'game');
+        } elseif ($inv_has_heavy) {
+            if ($heavy_size === 1 && $heavy_use === 1)
+                $cache->addMessage(T::__('Du kannst keinen weiteren schweren Gegenstand tragen!', 'game'), [], 'game');
+            else $cache->addMessage(T::__('Du hast keinen Platz für einen weiteren schweren Gegenstand!', 'game'), [], 'game');
+        }
 
         return !($inv_full && $trunk_full !== false) && (!$data->heavy || $data->ignoreInventory || !$inv_has_heavy);
     }
