@@ -781,7 +781,13 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->isTemporary(0)->defense(0)->ap(75)->health(75)->blueprintLevel(4)->resources(["electro_#00" => 3,"wood_beam_#00" => 10,"metal_beam_#00" => 5,"lens_#00" => 1,"cinema_#00" => 1,])->orderBy(8)->commit();
         $container->add()->parentBuilding($small_building)
             ->icon('small_balloon')->label('Heißluftballon')->description('Ein großer, runder Ballon steigt hinauf in den Himmel. Aber nur solange, wie der "Freiwillige" in der Gondel braucht, um alles rund um die Stadt zu erfassen. Das Bauwerk ermöglicht es Dir, die gesamte Außenwelt zu entdecken.')
-            ->isTemporary(0)->isImpervious(true)->defense(0)->ap(80)->health(80)->blueprintLevel(4)->resources(["wood2_#00" => 2,"meca_parts_#00" => 1,"lights_#00" => 1,"sheet_#00" => 2,"wood_beam_#00" => 5,"metal_beam_#00" => 5,])->orderBy(12)->commit();
+            ->isTemporary(0)->isImpervious(true)->defense(0)->ap(80)->health(80)->blueprintLevel(4)
+            ->resources(["wood2_#00" => 2,"meca_parts_#00" => 1,"lights_#00" => 1,"sheet_#00" => 2,"wood_beam_#00" => 5,"metal_beam_#00" => 5,])
+            ->adjustForHardMode(
+                null, ["wood2_#00" => 8,"meca_parts_#00" => 3,"lights_#00" => 4,"sheet_#00" => 4,"wood_beam_#00" => 15,"metal_beam_#00" => 15,],
+                null, ["wood2_#00" => 1,"meca_parts_#00" => 1,"lights_#00" => 1,"sheet_#00" => 1,"wood_beam_#00" => 4,"metal_beam_#00" => 4,],
+            )
+            ->orderBy(12)->commit();
         $container->add()->parentBuilding($small_building)
             ->icon('small_labyrinth')->label('Labyrinth')->description('Zombies sind bekanntermaßen einfach gestrickt. Warum ihnen dann nicht einfach ein kleines Labyrinth vor die Nase (das Stadttor) setzen und dabei zusehen, wie ihr Angriff an Schwung verliert. Das Ganze ist äußerst effektiv. Doch jeder Bürger, der die Stadt betreten will, muss dann 1 AP aufbringen.')
             ->isTemporary(0)->defense(150)

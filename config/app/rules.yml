@@ -65,6 +65,9 @@ parameters:
           y: 13
           ox: 7
         plan_limits:
+          unusual: -1
+          rare: -1
+          epic: -1
           lists:
             hotel_lv2: ['item_pumpkin_raw_#00', 'small_urban_#00', 'item_shield_#00', 'small_canon_#01', 'small_wallimprove_#02', 'small_wallimprove_#01']
             hotel_lv3: ['small_valve_#00', 'small_appletree_#00', 'small_scarecrow_#00', 'small_ikea_#00', 'small_moving_#00', 'small_labyrinth_#00', 'small_pet_#00', 'item_plate_#05', 'small_gallery_#00', 'small_coffin_#00']
@@ -337,21 +340,19 @@ parameters:
       explorable_ruin_params:
         max_distance: 100
         plan_limits:
-          unusual: -1
-          rare: -1
-          epic: -1
           lists:
-            hotel_lv2: ['small_wallimprove_#01', 'small_round_path_#00', 'item_meat_#00', 'small_fireworks_#00', 'small_gather_#01']
-            hotel_lv3: ['small_appletree_#00', 'small_labyrinth_#00', 'small_pet_#00', 'small_gallery_#00', 'item_meca_parts_#00']
-            hotel_lv4: ['small_thermal_#00', 'small_wheel_#00']
+            replace:
+              hotel_lv2: ['small_wallimprove_#01', 'small_round_path_#00', 'item_meat_#00', 'small_fireworks_#00', 'small_gather_#01']
+              hotel_lv3: ['small_appletree_#00', 'small_labyrinth_#00', 'small_pet_#00', 'small_gallery_#00', 'item_meca_parts_#00']
+              hotel_lv4: ['small_thermal_#00', 'small_wheel_#00']
 
-            bunker_lv2: ['small_watercanon_#00', 'item_bgrenade_#01', 'item_hmeat_#00', 'small_city_up_#00', 'status_terror_#00']
-            bunker_lv3: ['small_watchmen_#00', 'small_techtable_#00', 'item_home_def_#00', 'small_derrick_#00', 'small_valve_#00']
-            bunker_lv4: ['small_castle_#00', 'small_arma_#00']
+              bunker_lv2: ['small_watercanon_#00', 'item_bgrenade_#01', 'item_hmeat_#00', 'small_city_up_#00', 'status_terror_#00']
+              bunker_lv3: ['small_watchmen_#00', 'small_techtable_#00', 'item_home_def_#00', 'small_derrick_#00', 'small_valve_#00']
+              bunker_lv4: ['small_castle_#00', 'small_arma_#00']
 
-            hospital_lv2: ['small_eden_#00', 'small_armor_#00', 'small_spa4souls_#00', 'item_jerrycan_#00', 'small_waterspray_#00']
-            hospital_lv3: ['small_watchmen_#01', 'small_infirmary_#00', 'small_survarea_#00', 'small_derrick_#00', 'small_watchmen_#00']
-            hospital_lv4: ['small_crow_#00', 'small_pmvbig_#00']
+              hospital_lv2: ['small_eden_#00', 'small_armor_#00', 'small_spa4souls_#00', 'item_jerrycan_#00', 'small_waterspray_#00']
+              hospital_lv3: ['small_watchmen_#01', 'small_infirmary_#00', 'small_survarea_#00', 'small_derrick_#00', 'small_watchmen_#00']
+              hospital_lv4: ['small_crow_#00', 'small_pmvbig_#00']
 
       unlocked_buildings:
         - small_wallimprove_#00
@@ -441,6 +442,7 @@ parameters:
         - item_rp_book2_#00
         - small_cemetery_#00
         - small_pyre_#00
+        - small_balloon_#00
 
       overrides:
         building_rarity:
