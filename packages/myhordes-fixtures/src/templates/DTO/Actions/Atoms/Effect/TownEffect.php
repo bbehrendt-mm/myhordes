@@ -39,7 +39,7 @@ class TownEffect extends EffectAtom {
     }
 
     public function unlocksBlueprint(): bool {
-        return $this->unlockBlueprintType !== null || $this->unlockBlueprintList !== null;
+        return $this->unlockBlueprintType !== null || $this->unlockBlueprintList !== null || $this->unlockBlueprintNamedList !== null;
     }
 
     protected function default(string $name): mixed {
