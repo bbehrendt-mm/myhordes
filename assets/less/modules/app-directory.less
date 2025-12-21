@@ -155,8 +155,14 @@
   &>div {
     display: block; position: absolute; font-size: 1rem; text-align: right;
 
-    &.town-name { color: @myhordes-smalltext; height: 12px; top: 9px; left: 0; right: 75px; font-variant: small-caps }
-    &.town-day { color: #704018; font-weight: bold; height: 12px; top: 25px; left: 0; right: 85px; }
+    &.town-name {
+        color: @myhordes-smalltext; height: 12px; top: 9px; left: 0; right: 75px; font-variant: small-caps;
+        text-overflow: ellipsis; overflow: hidden; white-space: nowrap;
+    }
+    &.town-day {
+        color: #704018; font-weight: bold; height: 12px; top: 25px; left: 0; right: 85px;
+        display: flex; gap: 4px; justify-content: end;
+    }
     &.town-time { text-align: center; top: 32px; left: 195px; right: 25px; cursor: help; z-index: 995; }
     &.attack-time { color: #5e0000; text-align: center; font-weight: bold; top: 58px; left: 195px; right: 25px; cursor: help; z-index: 995; }
 
