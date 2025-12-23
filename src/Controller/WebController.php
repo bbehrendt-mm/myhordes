@@ -577,31 +577,6 @@ class WebController extends CustomAbstractController
     }
 
     /**
-     * @param int $gid
-     * @param string $name
-     * @param string $ext
-     * @return Response
-     */
-    #[Route(path: '/cdn/group/{gid<\d+>}/{name}.{ext<[\w\d]+>}', requirements: ['name' => '[0123456789abcdef]{32}'], condition: '!request.isXmlHttpRequest()')]
-    #[GateKeeperProfile('skip')]
-    public function group_icon(int $gid, string $name, string $ext): Response
-    {
-        if ($r = $this->check_cache($name)) return $r;
-
-        /** @var UserGroup $group */
-        $group = $this->entity_manager->getRepository(UserGroup::class)->find( $gid );
-        if (!$group) return $this->cdn_fallback( "group/{$gid}/{$name}.{$ext}" );
-
-        $meta = $this->entity_manager->getRepository(OfficialGroup::class)->findOneBy(['usergroup' => $group]);
-        if (!$meta) return $this->cdn_fallback( "group/{$gid}/{$name}.{$ext}" );
-
-        if ($meta->getAvatarName() !== $name || $meta->getAvatarExt() !== $ext)
-            return $this->cdn_fallback( "group/{$gid}/{$name}.{$ext}" );
-
-        return $this->image_output($meta->getIcon(), $name, $ext);
-    }
-
-    /**
      * @param string $url
      * @return Response
      */

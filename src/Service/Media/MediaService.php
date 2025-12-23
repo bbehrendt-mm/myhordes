@@ -12,6 +12,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Intervention\Image\Drivers\Imagick\Driver;
 use Intervention\Image\ImageManager;
+use Intervention\Image\Interfaces\ImageInterface;
 use Symfony\Component\Uid\Uuid;
 
 readonly class MediaService
@@ -30,6 +31,39 @@ readonly class MediaService
             ->where( Criteria::expr()->eq( 'modelType', $type ) )
             ->andWhere( Criteria::expr()->eq( 'modelID', $id ) )
             ->andWhere( Criteria::expr()->eq( 'collection', $collection ) );
+    }
+
+    /**
+     * @param LinksMedia $object
+     * @param string $collection
+     * @return int
+     * @noinspection PhpDocSignatureInspection
+     * @throws Exception
+     */
+    public function countMediaForObject(object $object, string $collection): int {
+        if (!$this->checkTrait($object)) return 0;
+
+        $collectionObject = $object::mediaCollection($collection);
+        if ($collectionObject === null) return 0;
+
+        $criteria = $this->getMediaCriteria(
+            $this->entityManager->getClassMetadata($object::class)->getName(),
+            $object->getPrimaryKey(),
+            $collection
+        );
+
+        return $this->entityManager->getRepository(Media::class)->matching($criteria)->count();
+    }
+
+    /**
+     * @param LinksMedia $object
+     * @param string $collection
+     * @return bool
+     * @noinspection PhpDocSignatureInspection
+     * @throws Exception
+     */
+    public function hasMediaForObject(object $object, string $collection): bool {
+        return $this->countMediaForObject($object, $collection) > 0;
     }
 
     /**
@@ -80,6 +114,20 @@ readonly class MediaService
         return $this->getObjectForMedia($media)::mediaCollection($media->getCollection());
     }
 
+    private function attachImageToObjectCollection(object $object, MediaCollection $collection, Media $media, ImageInterface $image): void {
+        $model_type = $this->entityManager->getClassMetadata($object::class)->getName();
+        $model_id = $object->tryPrimaryKey();
+
+        $media->transientImage = $image;
+        $media->transientOwner = $object;
+
+        $this->entityManager->persist($media);
+
+        if ($model_id !== null && $collection->isSingleFile())
+            foreach ($this->entityManager->getRepository(Media::class)->matching($this->getMediaCriteria( $model_type, $model_id, $collection->name )) as $m)
+                $this->entityManager->remove($m);
+    }
+
     /**
      * @param LinksMedia $object
      * @param string $path
@@ -97,32 +145,67 @@ readonly class MediaService
         $image = new ImageManager( Driver::class, strip: true )->read($path);
         $mime = mime_content_type($path);
 
-        $model_type = $this->entityManager->getClassMetadata($object::class)->getName();
-        $model_id = $object->tryPrimaryKey();
-
         $conversions = [];
-        foreach ($collectionObject->getVariants() as $variant)
+        foreach ($collectionObject->getVariants( $image ) as $variant)
             $conversions[] = $variant->name;
 
         $media = new Media()
             ->setId( Uuid::v7() )
             ->setCollection($collection)
-            ->setModelType( $model_type )
+            ->setModelType( $this->entityManager->getClassMetadata($object::class)->getName() )
             ->setFilename($filename ?? basename($path))
             ->setMime( $mime )
             ->setMetaFromImage( $image, mime: $mime, size: filesize($path) )
             ->registerConversion( $conversions );
 
-        $media->transientImage = $image;
-        $media->transientOwner = $object;
-
-        $this->entityManager->persist($media);
-
-        if ($model_id !== null && $collectionObject->isSingleFile())
-            foreach ($this->entityManager->getRepository(Media::class)->matching($this->getMediaCriteria( $model_type, $model_id, $collection )) as $m)
-                $this->entityManager->remove($m);
-
+        $this->attachImageToObjectCollection($object, $collectionObject, $media, $image);
         return $media;
+    }
+
+    /**
+     * @param LinksMedia $object
+     * @param string $data
+     * @param string $mime
+     * @param string $collection
+     * @return Media|null
+     * @noinspection PhpDocSignatureInspection
+     */
+    public function addMediaToObjectFromBinaryString(object $object, string $data, ?string $mime, string $collection): ?Media {
+        if (!$this->checkTrait($object)) return null;
+
+        $collectionObject = $object::mediaCollection($collection);
+        if ($collectionObject === null) return null;
+
+        $image = new ImageManager( Driver::class, strip: true )->read($data);
+        $mime ??= $image->encode()->mimetype();
+
+        $conversions = [];
+        foreach ($collectionObject->getVariants( $image ) as $variant)
+            $conversions[] = $variant->name;
+
+        $media = new Media()
+            ->setId( Uuid::v7() )
+            ->setCollection($collection)
+            ->setModelType( $this->entityManager->getClassMetadata($object::class)->getName() )
+            ->setFilename("blob" . self::mimeTypeToExtension($mime))
+            ->setMime( $mime )
+            ->setMetaFromImage( $image, mime: $mime, size: strlen($data) )
+            ->registerConversion( $conversions );
+
+        $this->attachImageToObjectCollection($object, $collectionObject, $media, $image);
+        return $media;
+    }
+
+    /**
+     * @param LinksMedia $object
+     * @param resource $data
+     * @param string $mime
+     * @param string $collection
+     * @return Media|null
+     * @noinspection PhpDocSignatureInspection
+     */
+    public function addMediaToObjectFromResource(object $object, mixed $data, string $mime, string $collection): ?Media {
+        return $this->addMediaToObjectFromBinaryString($object, stream_get_contents($data), $mime, $collection);
     }
 
     public static function mimeTypeToExtension(string $mime, bool $dot = true): string {
@@ -137,5 +220,10 @@ readonly class MediaService
 
         if ($ext === null) return '';
         else return $dot ? ".$ext" : $ext;
+    }
+
+    public static function extensionToMimeType(string $ext): string {
+        $ext = ltrim($ext, '.');
+        return "image/$ext";
     }
 }

@@ -94,7 +94,7 @@
                 {% if entry.system %}
                     {% include "ajax/soul/playeravatar.html.twig" with {user: 66, gpm: true} only %}
                 {% elseif entry.official is not null and app.user in entry.users %}
-                    {% include "ajax/soul/playeravatar.html.twig" with {user: entry.official, gpm: true} only %}
+                    {% include "ajax/soul/playeravatar.html.twig" with {user: entry.official, gpm: true, w: 40} only %}
                 {% elseif entry.users|length > 1 or entry.official is not null %}
                     {% set i = 0 %}
                     {% for message_partner in entry.users %}

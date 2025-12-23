@@ -275,16 +275,24 @@ class Media
 
     public function getSourceSet(bool $includeOriginal = false): string {
         return implode(', ', array_map(
-            fn(array $entry) => "{$entry[0]} {$entry[1]}w}",
+            fn(array $entry) => "{$entry[0]} {$entry[1]}w",
             $this->getSources( $includeOriginal )
         ));
     }
 
-    public function getSource(bool $includeOriginal = false, int $expectedSize = PHP_INT_MAX): string {
+    public function getSourceSetDPI(?int $baseSize, bool $includeOriginal = false): string {
+        if ($baseSize === null) return $this->getSourceSet($includeOriginal);
+        return implode(', ', array_map(
+            function(array $entry) use ($baseSize) { return "{$entry[0]} " . round( $entry[1] / $baseSize, 1 ) . "x"; },
+            $this->getSources( $includeOriginal )
+        ));
+    }
+
+    public function getSource(?int $expectedSize = PHP_INT_MAX, bool $includeOriginal = false): string {
         $entries = $this->getSources( $includeOriginal, true );
         if (empty($entries)) return "";
 
-        $entry = array_find( $entries, fn(array $entry) => $entry[1] >= $expectedSize ) ?? $entries[array_key_last( $entries )];
+        $entry = array_find( $entries, fn(array $entry) => $entry[1] >= ($expectedSize ?? PHP_INT_MAX) ) ?? $entries[array_key_last( $entries )];
         return $entry[0];
     }
 }

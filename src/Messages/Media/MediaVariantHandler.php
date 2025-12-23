@@ -38,6 +38,8 @@ readonly class MediaVariantHandler
         $original = "{$this->public}/{$media->getUrl( )}";
 
         $raw = $variant->process( new ImageManager( Driver::class, strip: true )->read( $original ) );
+        if (!$variant->enabledFor( $raw )) return;
+
         $image = $variant->performEncode($raw);
 
         $ext = MediaService::mimeTypeToExtension( $image->mimetype(), true );

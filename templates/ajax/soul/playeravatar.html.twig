@@ -12,12 +12,17 @@
         gpm: <bool> GPM-Mode (default: false)
         wrapper: <bool> Wrap the image in a div. When disabled, most other functionality will no longer work. (default: true)
         whitespace: <bool> When background mode is enabled, places a whitespace within the surrounding div. (default: true)
+        w: <int=null> Expected image width
     #}
+    {% if w is not defined %}
+        {% set w = null %}
+    {% endif %}
 
     {# If the user is an official group, restructure the object to fulfill the User interface #}
     {% if user is defined and user|instance_of('App\\Entity\\OfficialGroup') %}
-        {% set url = path('app_web_group_icon', { gid: user.usergroup.id, name: user.avatarName, ext: user.avatarExt }) %}
-        {% set user = {
+        {% set media = user|singleMedia('icon') %}
+        {% set url   = media.source %}
+        {% set user  = {
             id: user.usergroup.id + 100, name: user.usergroup.name,
             avatar: user.avatarName ? {
                 smallName: user.avatarName, filename: user.avatarName,
@@ -62,7 +67,7 @@
         {% endif %}
 
         {% if background is defined and background %}
-            {% set style = 'background: url("' ~ url ~ '") center/cover no-repeat;' %}
+            {% set style = (gpm ? '' : 'position: relative; ') ~ 'overflow: hidden;' %}
             {% if additional_attributes['style'] is defined %}
                 {% set additional_attributes = additional_attributes|merge({style: additional_attributes['style'] ~ ';' ~ style}) %}
             {% else %}
@@ -70,7 +75,7 @@
             {% endif %}
         {% endif %}
 
-        {% if user.id == 66 or url or ((fallback is not defined or fallback) and not gpm) %}
+        {% if user.id == 66 or url or media or ((fallback is not defined or fallback) and not gpm) %}
 
             {% if wrapper is not defined or wrapper %}
                 <div {{ additional_attributes|attributes }} {{ {
@@ -79,8 +84,17 @@
                     'small': small and not gpm, 'no-arma': no_distortion is defined and no_distortion and not gpm,
                     (ua_code): (no_distortion is not defined or not no_distortion) and not gpm
                 }|merge(additional_classes)|classes }}>
+                    {% if background is defined and background %}
+                        {% set attrs = {style: 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;'} %}
+                    {% else %}
+                        {% set attrs = {} %}
+                    {% endif %}
+                    {% if media is defined %}
+                        <img {{ attrs|attributes }} alt="" src="{{ media.source(w) }}" srcset="{{ media.sourceSetDPI(w) }}"/>
+                    {% else %}
+                        <img {{ attrs|attributes }} alt="" src="{{ url }}"/>
+                    {% endif %}
                     {% if background is not defined or not background %}
-                        <img alt="" src="{{ url }}"/>
                         {% if with_player_name is defined and with_player_name and not gpm %}
                             <h4 class="soul-name">
                                 <img src="{{ asset('build/images/icons/small_ghost_red.gif') }}" alt="{{'Held'|trans({}, 'game')}}" /> <a class="username">{{ user.name }}</a>
@@ -89,7 +103,11 @@
                     {% else %}{% if whitespace is not defined or whitespace %}&nbsp;{% endif %}{% endif %}
                 </div>
             {% else %}
-                <img {{ additional_attributes|attributes }} {{ additional_classes|classes }} alt="" src="{{ url }}"/>
+                {% if media is defined %}
+                    <img {{ additional_attributes|attributes }} {{ additional_classes|classes }} alt="" src="{{ media.source(w) }}" srcset="{{ media.sourceSetDPI(w) }}"/>
+                {% else %}
+                    <img {{ additional_attributes|attributes }} {{ additional_classes|classes }} alt="" src="{{ url }}"/>
+                {% endif %}
             {% endif %}
 
         {% elseif (background is not defined or not background) and with_player_name is defined and with_player_name and not gpm %}

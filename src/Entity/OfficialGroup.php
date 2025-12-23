@@ -4,11 +4,19 @@ namespace App\Entity;
 
 use App\Enum\OfficialGroupSemantic;
 use App\Repository\OfficialGroupRepository;
+use App\Structures\MediaCollection;
+use App\Structures\MediaCollectionList;
+use App\Structures\MediaVariant;
+use App\Traits\Entity\LinksMedia;
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
+use Intervention\Image\Interfaces\ImageInterface;
 
 #[ORM\Entity(repositoryClass: OfficialGroupRepository::class)]
 class OfficialGroup
 {
+    use LinksMedia;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
@@ -17,17 +25,17 @@ class OfficialGroup
     private string $lang;
     #[ORM\Column(type: 'text')]
     private string $description;
-    #[ORM\Column(type: 'blob')]
+    #[ORM\Column(type: 'blob', nullable: true)]
     private $icon;
     #[ORM\Column(type: 'boolean')]
-    private $anon;
+    private ?bool $anon;
     #[ORM\OneToOne(targetEntity: UserGroup::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private UserGroup $usergroup;
-    #[ORM\Column(type: 'string', length: 32)]
-    private string $avatarName;
-    #[ORM\Column(type: 'string', length: 9)]
-    private string $avatarExt;
+    #[ORM\Column(type: 'string', length: 32, nullable: true)]
+    private ?string $avatarName;
+    #[ORM\Column(type: 'string', length: 9, nullable: true)]
+    private ?string $avatarExt;
     #[ORM\Column(type: 'integer', enumType: OfficialGroupSemantic::class)]
     private OfficialGroupSemantic $semantic = OfficialGroupSemantic::None;
 
@@ -91,7 +99,7 @@ class OfficialGroup
     {
         return $this->avatarName;
     }
-    public function setAvatarName(string $avatarName): self
+    public function setAvatarName(?string $avatarName): self
     {
         $this->avatarName = $avatarName;
 
@@ -101,7 +109,7 @@ class OfficialGroup
     {
         return $this->avatarExt;
     }
-    public function setAvatarExt(string $avatarExt): self
+    public function setAvatarExt(?string $avatarExt): self
     {
         $this->avatarExt = $avatarExt;
 
@@ -128,5 +136,43 @@ class OfficialGroup
         $this->ticketStyleReadMarkers = $ticketStyleReadMarkers;
 
         return $this;
+    }
+
+    protected static function defineMediaCollections(MediaCollectionList $list): void
+    {
+        $list->add( new MediaCollection('icon')
+                        ->singleFile()
+                        ->addVariant( new MediaVariant('small')
+                            ->coverDown( 24, 24 )
+                            ->toWebp()
+                        )
+                        ->addVariant( new MediaVariant('small-hd')
+                            ->conditional( fn( ImageInterface $image ) => $image->width() > 24 )
+                            ->coverDown( 48, 48 )
+                            ->toWebp()
+                        )
+                        ->addVariant( new MediaVariant('web')
+                            ->coverDown( 100, 100 )
+                            ->toWebp()
+                        )
+                        ->addVariant( new MediaVariant('web-hd')
+                            ->conditional( fn( ImageInterface $image ) => $image->width() > 100 )
+                            ->coverDown( 200, 200 )
+                            ->toWebp()
+                        )
+                        ->addVariant( new MediaVariant('web-uhd')
+                            ->conditional( fn( ImageInterface $image ) => $image->width() > 200 )
+                            ->coverDown( 400, 400 )
+                            ->toWebp()
+                        )
+        );
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getMediaBasePath(): string
+    {
+        return "og/{$this->getPrimaryKey()}";
     }
 }

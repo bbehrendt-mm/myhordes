@@ -11,6 +11,7 @@ class MediaCollection
     private bool $single = false;
 
     private array $variants = [];
+    private array $conditional_variants = [];
 
     public function __construct(
         public readonly string $name,
@@ -38,8 +39,11 @@ class MediaCollection
     /**
      * @return MediaVariant[]
      */
-    public function getVariants(): array {
-        return array_values( $this->variants );
+    public function getVariants( ?ImageInterface $image = null ): array {
+        return array_values( $image === null
+                                 ? $this->variants
+                                 : array_filter( $this->variants, fn( MediaVariant $variant ) => $variant->enabledFor( $image ))
+        );
     }
 
     public function getVariant(string $name): ?MediaVariant {

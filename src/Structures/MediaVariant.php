@@ -3,20 +3,41 @@
 
 namespace App\Structures;
 
+use Closure;
 use Intervention\Image\Interfaces\EncodedImageInterface;
 use Intervention\Image\Interfaces\ImageInterface;
 
 /**
  * @mixin ImageInterface
+ * @method self scale(int $width, int $height)
+ * @method self scaleDown(int $width, int $height)
+ * @method self cover(int $width, int $height, string $position = 'center')
+ * @method self coverDown(int $width, int $height, string $position = 'center')
+ * @method self toWebp()
  */
 class MediaVariant
 {
     private array $chain = [];
     private ?array $encode = null;
 
+    private ?Closure $condition = null;
+
     public function __construct(
         public readonly string $name,
     ) {}
+
+    /**
+     * @param null|Closure(ImageInterface):bool $condition
+     * @return MediaVariant
+     */
+    public function conditional(Closure|null $condition): self {
+        $this->condition = $condition;
+        return $this;
+    }
+
+    public function enabledFor(ImageInterface $image): bool {
+        return $this->condition === null || ($this->condition)($image);
+    }
 
     public function __call(string $name, array $arguments)
     {

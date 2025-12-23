@@ -14,10 +14,12 @@ use App\Response\AjaxResponse;
 use App\Service\ErrorHelper;
 use App\Service\JSONRequestParser;
 use App\Service\Media\ImageService;
+use App\Service\Media\MediaService;
 use App\Service\PermissionHandler;
 use Exception;
 use ReflectionClass;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route(path: '/', condition: 'request.isXmlHttpRequest()')]
@@ -86,7 +88,7 @@ class AdminGroupController extends AdminActionController
      * @return Response
      */
     #[Route(path: 'api/admin/groups/update/{id<-?\d+>}', name: 'admin_group_update')]
-    public function update_group(int $id, JSONRequestParser $parser, PermissionHandler $perm): Response
+    public function update_group(int $id, JSONRequestParser $parser, PermissionHandler $perm, MediaService $mediaService, KernelInterface $kernel): Response
     {
         if (!$this->isGranted('ROLE_SUB_ADMIN')) return AjaxResponse::error( ErrorHelper::ErrorPermissionError );
 
@@ -94,8 +96,8 @@ class AdminGroupController extends AdminActionController
 
         if ($id < 0) {
 
-            $base_group = (new UserGroup())->setType(UserGroup::GroupOfficialGroup);
-            $group_meta = (new OfficialGroup())->setUsergroup($base_group);
+            $base_group = new UserGroup()->setType(UserGroup::GroupOfficialGroup);
+            $group_meta = new OfficialGroup()->setUsergroup($base_group);
 
         } else {
             $group_meta = $this->entity_manager->getRepository(OfficialGroup::class)->find($id);
@@ -147,16 +149,11 @@ class AdminGroupController extends AdminActionController
                     $perm->disassociate($target_user, $message);
         }
 
+        $avatar = null;
         if ($parser->has('icon') && $parser->get('icon') !== false) {
-            $payload = $parser->get_base64('icon');
-            if (strlen( $payload ) > $this->conf->getGlobalConf()->get(MyHordesSetting::AvatarMaxSizeUpload))
+            $avatar = $parser->get_base64('icon');
+            if (strlen( $avatar ) > $this->conf->getGlobalConf()->get(MyHordesSetting::AvatarMaxSizeUpload))
                 return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
-
-            $image = ImageService::createImageFromData( $payload );
-            ImageService::resize( $image, 200, 200, bestFit: true );
-            $payload = ImageService::save( $image, $image->animated ? 'WEBP' : 'AVIF' );
-
-            $group_meta->setIcon($payload)->setAvatarName(md5($payload))->setAvatarExt( strtolower( $image->animated ? 'WEBP' : 'AVIF' ) );
         }
 
         try {
@@ -165,6 +162,16 @@ class AdminGroupController extends AdminActionController
             $this->entity_manager->flush();
         } catch (Exception $e) {
             return AjaxResponse::error(ErrorHelper::ErrorDatabaseException);
+        }
+
+        if ($avatar) {
+            $media = $mediaService->addMediaToObjectFromBinaryString( $group_meta, $avatar, null, 'icon' );
+            $this->entity_manager->persist($media);
+            $this->entity_manager->flush();
+        } elseif ($id < 0) {
+            $media = $mediaService->addMediaToObjectFromFile( $group_meta, $kernel->getProjectDir() . '/assets/img/default/' . $group_meta->getSemantic()->defaultImageFileName(), 'icon' );
+            $this->entity_manager->persist($media);
+            $this->entity_manager->flush();
         }
 
         return AjaxResponse::success();

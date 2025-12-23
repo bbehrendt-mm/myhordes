@@ -128,7 +128,7 @@ class MediaListener implements ServiceSubscriberInterface
             $bus = $this->getService(MessageBusInterface::class);
             $mediaService = $this->getService(MediaService::class);
 
-            foreach ($mediaService->getCollectionForMedia($media)->getVariants() as $variant)
+            foreach ($mediaService->getCollectionForMedia($media)->getVariants( $media->transientImage ) as $variant)
                 $bus->dispatch( new CreateMediaVariantMessage( $media->getId(), $variant->name ) );
         }
     }

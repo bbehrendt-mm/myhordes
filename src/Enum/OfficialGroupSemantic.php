@@ -22,4 +22,14 @@ enum OfficialGroupSemantic: int {
         };
     }
 
+    public function defaultImageFileName(): string {
+        return match($this) {
+            self::Support    => 'group-tech-support.png',
+            self::Moderation => 'group-crows-nest.png',
+            self::Animaction => 'group-animaction.webp',
+            self::Oracle     => 'group-oracle-council.png',
+            default => 'group-default.png',
+        };
+    }
+
 }
