@@ -10,6 +10,7 @@ export type ExternalApp = {
     id: number
     name: string
     icon: string | null
+    iconSet: string | null
     wiki: boolean
     testing: boolean
     auth: string

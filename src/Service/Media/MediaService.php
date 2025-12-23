@@ -92,6 +92,18 @@ readonly class MediaService
     /**
      * @param LinksMedia $object
      * @param string $collection
+     * @return void
+     * @noinspection PhpDocSignatureInspection
+     * @throws Exception
+     */
+    public function clearMediaFromObject(object $object, string $collection): void {
+        foreach ( $this->getMediaForObject($object, $collection) as $media )
+            $this->entityManager->remove($media);
+    }
+
+    /**
+     * @param LinksMedia $object
+     * @param string $collection
      * @return Media|null
      * @noinspection PhpDocSignatureInspection
      * @throws Exception

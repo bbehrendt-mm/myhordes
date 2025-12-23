@@ -23,6 +23,7 @@ use App\Service\Actions\Mercure\BroadcastViaMercureAction;
 use App\Service\CrowService;
 use App\Service\EventProxyService;
 use App\Service\JSONRequestParser;
+use App\Service\Media\MediaService;
 use App\Service\PermissionHandler;
 use App\Service\RandomGenerator;
 use App\Service\RateLimitingFactoryProvider;
@@ -175,11 +176,14 @@ class CommonsController extends CustomAbstractCoreController
         return str_replace(['{','}'], '', $url);
     }
 
-    protected function renderApp(ExternalApp $app): array {
+    protected function renderApp(ExternalApp $app, MediaService $mediaService): array {
+        $media = $mediaService->getSingleMediaForObject($app, 'icon');
+
         return [
             'id' => $app->getId(),
             'name' => $app->getName(),
-            'icon' => $app->getImageName() ? $this->generateUrl('app_web_app_icon', [ 'aid' => $app->getId(), 'name' =>  $app->getImageName(), 'ext' => $app->getImageFormat() ]) : null,
+            'icon' => $media?->getSource(16),
+            'iconSet' => $media?->getSourceSetDPI(16),
             'wiki' => $app->isWiki(),
             'testing' => $app->getTesting(),
             'auth' => ($app->getSecret() && !$app->getLinkOnly()),
@@ -203,7 +207,7 @@ class CommonsController extends CustomAbstractCoreController
      * @return JsonResponse
      */
     #[Route(path: '/apps', name: 'app_list', methods: ['GET'])]
-    public function app_list(EntityManagerInterface $em, UserCapabilityService $capability): JsonResponse {
+    public function app_list(EntityManagerInterface $em, UserCapabilityService $capability, MediaService $mediaService): JsonResponse {
 
         if (!$this->getUser() || !$capability->hasRole( $this->getUser(), 'ROLE_USER' ))
             return new JsonResponse([]);
@@ -220,7 +224,7 @@ class CommonsController extends CustomAbstractCoreController
 
         return new JsonResponse([
             'apps' => $em->getRepository(ExternalApp::class)->matching( $criteria )
-                ->map( fn(ExternalApp $app) => $this->renderApp( $app ) )->toArray()
+                ->map( fn(ExternalApp $app) => $this->renderApp( $app, $mediaService ) )->toArray()
         ]);
 
     }
@@ -231,7 +235,7 @@ class CommonsController extends CustomAbstractCoreController
      * @return JsonResponse
      */
     #[Route(path: '/apps/{id<\d+>}', name: 'app_single', methods: ['GET'])]
-    public function app_single(ExternalApp $app, UserCapabilityService $capability): JsonResponse {
+    public function app_single(ExternalApp $app, UserCapabilityService $capability, MediaService $mediaService): JsonResponse {
 
         if (!$this->getUser() || !$capability->hasRole( $this->getUser(), 'ROLE_USER' ))
             return new JsonResponse([]);
@@ -242,7 +246,7 @@ class CommonsController extends CustomAbstractCoreController
 
 
         return new JsonResponse([
-            'app' => $this->renderApp( $app ),
+            'app' => $this->renderApp( $app, $mediaService ),
         ]);
 
     }

@@ -12,6 +12,7 @@ use App\Service\Actions\Mercure\BroadcastViaMercureAction;
 use App\Service\ErrorHelper;
 use App\Service\JSONRequestParser;
 use App\Service\Media\ImageService;
+use App\Service\Media\MediaService;
 use App\Service\RandomGenerator;
 use App\Translation\T;
 use Exception;
@@ -142,7 +143,7 @@ class AdminAppController extends AdminActionController
 	 */
     #[Route(path: 'api/admin/apps/register/{id<-?\d+>}', name: 'admin_update_ext_app')]
     #[AdminLogProfile(enabled: true)]
-    public function ext_app_update(int $id, JSONRequestParser $parser, RandomGenerator $rand, BroadcastViaMercureAction $broadcast): Response
+    public function ext_app_update(int $id, JSONRequestParser $parser, RandomGenerator $rand, BroadcastViaMercureAction $broadcast, MediaService $mediaService): Response
     {
         if (!$this->isGranted('ROLE_SUB_ADMIN')) return AjaxResponse::error( ErrorHelper::ErrorPermissionError );
 
@@ -168,21 +169,15 @@ class AdminAppController extends AdminActionController
             ->setWiki( (bool)$parser->get('wiki') )
             ->setLinkOnly( !(bool)$parser->get('flux') );
 
+        $icon = null;
         if ($parser->get('icon') !== false) {
             if ($parser->get('icon') === null)
-                $app->setImage(null)->setImageName(null)->setImageFormat(null);
+                $mediaService->clearMediaFromObject( $app, 'icon' );
             else {
-                $payload = $parser->get_base64('icon');
+                $icon = $parser->get_base64('icon');
 
-                if (strlen( $payload ) > $this->conf->getGlobalConf()->get(MyHordesSetting::AvatarMaxSizeUpload))
+                if (strlen( $icon ) > $this->conf->getGlobalConf()->get(MyHordesSetting::AvatarMaxSizeUpload))
                     return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
-
-                $image = ImageService::createImageFromData( $payload );
-                ImageService::resize( $image, 16, 16, bestFit: true );
-                $payload = ImageService::save( $image );
-
-                $app->setImage($payload)->setImageName(md5($payload))->setImageFormat( strtolower( $image->format ) );
-
             }
         }
 
@@ -194,10 +189,12 @@ class AdminAppController extends AdminActionController
         }
 
         $this->entity_manager->persist($app);
-        try {
+        $this->entity_manager->flush();
+
+        if ($icon !== null) {
+            $media = $mediaService->addMediaToObjectFromBinaryString( $app, $icon, null, 'icon' );
+            $this->entity_manager->persist($media);
             $this->entity_manager->flush();
-        } catch (Exception $e) {
-            AjaxResponse::error( ErrorHelper::ErrorDatabaseException );
         }
 
         if($old_app !== null) {

@@ -13,7 +13,8 @@ use Intervention\Image\Interfaces\ImageInterface;
  * @method self scaleDown(int $width, int $height)
  * @method self cover(int $width, int $height, string $position = 'center')
  * @method self coverDown(int $width, int $height, string $position = 'center')
- * @method self toWebp()
+ * @method self toWebp(mixed ...$options)
+ * @method self toPng(mixed ...$options)
  */
 class MediaVariant
 {
@@ -41,7 +42,7 @@ class MediaVariant
 
     public function __call(string $name, array $arguments)
     {
-        if ($name === 'encode' || (str_starts_with( $name, 'to' ) && count($arguments) === 0))
+        if ($name === 'encode' || str_starts_with( $name, 'to' ))
             $this->encode = [$name, $arguments];
         else $this->chain[] = [$name, $arguments];
         return $this;

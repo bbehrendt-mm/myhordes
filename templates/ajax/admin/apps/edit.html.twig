@@ -67,7 +67,7 @@
                 <div class="row">
                     <div class="cell padded rw-4 rw-md-6 note note-lightest"><label for="app_icon">{{ 'Icon'|trans({},'admin') }}</label></div>
                     <div class="cell padded rw-4 rw-md-6">
-                        <img id="app_icon" style="height: 16px; width: 16px;" alt="-" src="{{ (current_app is not null and current_app.imageName is not null) ? path('app_web_app_icon', { aid: current_app.id, name: current_app.imageName, ext: current_app.imageFormat }) : '' }}" />
+                        <img id="app_icon" style="height: 16px; width: 16px;" alt="-" src="{{ (current_app is not null and current_app|singleMedia('icon') is not null) ? current_app|singleMedia('icon').source(16) : '' }}" />
                         <label for="app_icon_select" id="app_icon_edit" class="small inline float-right button"><img alt="" src="{{ asset('build/images/forum/edit.png') }}" /></label>
                         <button id="app_icon_clear" class="small inline float-right {% if current_app is null or current_app.imageName is null %}hidden{% endif %}"><img alt="" src="{{ asset('build/images/icons/small_trash_red.png') }}" /></button>
                     </div>

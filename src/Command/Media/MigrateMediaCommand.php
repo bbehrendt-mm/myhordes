@@ -5,6 +5,7 @@ namespace App\Command\Media;
 
 
 use App\Entity\Avatar;
+use App\Entity\ExternalApp;
 use App\Entity\OfficialGroup;
 use App\Enum\OfficialGroupSemantic;
 use App\Service\CommandHelper;
@@ -44,7 +45,8 @@ class MigrateMediaCommand extends Command
             ->addOption('force', null, InputOption::VALUE_NONE, 'Overwrite existing media')
             ->addOption('keep', null, InputOption::VALUE_NONE, 'Keep legacy data')
 
-            ->addOption('groups', null, InputOption::VALUE_NONE, 'Only perform assignment for official groups')
+            ->addOption('groups', null, InputOption::VALUE_NONE, 'Perform migration for official groups')
+            ->addOption('apps', null, InputOption::VALUE_NONE, 'Perform migration for external apps')
         ;
         parent::configure();
     }
@@ -70,12 +72,32 @@ class MigrateMediaCommand extends Command
 
     }
 
+    protected function handleExternalApp(bool $force, bool $keep, OutputInterface $output): void {
+        $this->helper->leChunk( $output, ExternalApp::class, 1, [], true, false, function(ExternalApp $e) use ($force,$keep) {
+            if (!$force && $this->mediaService->hasMediaForObject( $e, 'icon' )) return false;
+
+            if ($e->getImageName()) {
+                $this->mediaService->addMediaToObjectFromResource( $e, $e->getImage(), MediaService::extensionToMimeType( $e->getImageFormat() ), 'icon' );
+                if (!$keep) $e
+                    ->setImage(null)
+                    ->setImageFormat(null)
+                    ->setImageName(null);
+
+                return true;
+            }
+
+            return false;
+        } );
+
+    }
+
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $force = $input->getOption('force');
         $keep = $input->getOption('keep');
 
         if ($input->getOption('groups')) $this->handleGroups($force, $keep, $output);
+        if ($input->getOption('apps')) $this->handleExternalApp($force, $keep, $output);
 
         return 0;
     }

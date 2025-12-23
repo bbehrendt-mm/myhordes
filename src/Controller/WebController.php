@@ -5,11 +5,9 @@ namespace App\Controller;
 use App\Annotations\GateKeeperProfile;
 use App\Entity\Avatar;
 use App\Entity\Award;
-use App\Entity\ExternalApp;
 use App\Entity\MarketingCampaign;
 use App\Entity\OfficialGroup;
 use App\Entity\User;
-use App\Entity\UserGroup;
 use App\Enum\Configuration\MyHordesSetting;
 use App\Enum\OfficialGroupSemantic;
 use App\Response\AjaxResponse;
@@ -553,27 +551,6 @@ class WebController extends CustomAbstractController
             return $this->cdn_fallback( "icon/{$uid}/{$aid}/{$name}.{$ext}" );
 
         return $this->image_output($award->getCustomIcon(), $name, $ext);
-    }
-
-    /**
-     * @param int $aid
-     * @param string $name
-     * @param string $ext
-     * @return Response
-     */
-    #[Route(path: '/cdn/app/{aid<\d+>}/{name}.{ext<[\w\d]+>}', requirements: ['name' => '[0123456789abcdef]{32}'], condition: '!request.isXmlHttpRequest()')]
-    #[GateKeeperProfile('skip')]
-    public function app_icon(int $aid, string $name, string $ext): Response
-    {
-        if ($r = $this->check_cache($name)) return $r;
-
-        /** @var ExternalApp $app */
-        $app = $this->entity_manager->getRepository(ExternalApp::class)->find( $aid );
-        if (!$app || !$app->getImage()) return $this->cdn_fallback( "app/{$aid}/{$name}.{$ext}" );
-        if ($app->getImageName() !== $name || $app->getImageFormat() !== $ext)
-            return $this->cdn_fallback( "app/{$aid}/{$name}.{$ext}" );
-
-        return $this->image_output($app->getImage(), $name, $ext);
     }
 
     /**

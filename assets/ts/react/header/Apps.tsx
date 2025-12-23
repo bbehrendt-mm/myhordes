@@ -52,7 +52,7 @@ const AppList = ({apps, onClick}: {apps: ExternalApp[], onClick: (app: ExternalA
             onClick(app, e);
             e.preventDefault();
         }}>
-            <div><img alt={app.name} src={app.icon ?? globals.strings.apps.list.no_icon}/></div>
+            <div><img alt={app.name} src={app.icon ?? globals.strings.apps.list.no_icon} srcSet={app.iconSet ?? ''}/></div>
             <div className="label">
                 <span className="name">{ app.name }</span>
                 { app.testing && <span>{ globals.strings.apps.list.testMode }</span> }
@@ -109,7 +109,7 @@ export const App = ({app, onClose, signalUpdate}: {app: ExternalApp|null, onClos
         { app && <>
             <div className="modal-title composed">
                 <div className="flex large-gap middle">
-                    {app?.icon && <img alt={app?.name} src={app?.icon}/>}
+                    {app?.icon && <img alt={app?.name} src={app?.icon} srcSet={app?.iconSet ?? ''}/>}
                     <span>{app?.name}</span>
                 </div>
 
