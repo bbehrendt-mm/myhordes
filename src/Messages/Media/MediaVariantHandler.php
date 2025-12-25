@@ -50,7 +50,7 @@ readonly class MediaVariantHandler
         if ($media->hasConversion($message->variantName))
             unlink( "{$this->public}/{$media->getUrl( $message->variantName )}" );
 
-        $this->em->persist( $media->setConversion( $message->variantName, $targetUrl, $raw, $image ) );
+        $this->em->persist( $media->setConversion( $message->variantName, $targetUrl, $raw, $image, $variant ) );
         $this->em->flush();
 
     }

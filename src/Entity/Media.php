@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\MediaRepository;
+use App\Structures\Media\MediaVariantInterface;
 use App\Traits\Entity\LinksMedia;
 use ArrayHelpers\Arr;
 use Doctrine\ORM\Mapping as ORM;
@@ -188,7 +189,7 @@ class Media
         return $this;
     }
 
-    public function registerConversion(string|array $conversions, string|array $tag): static
+    public function registerConversion(string|array $conversions, string|array $tag, ?array $variantData = null): static
     {
         if (!is_array($conversions)) $conversions = [$conversions];
         if (!is_array($tag)) $tag = [$tag];
@@ -200,7 +201,8 @@ class Media
             if ($this->hasConversion($conversion)) continue;
             Arr::set($data, $conversion, [
                 'created' => false,
-                'tags' => $tag
+                'tags' => $tag,
+                ...($variantData !== null ? ['config' => $variantData] : []),
             ]);
             $set = true;
         }
@@ -226,13 +228,16 @@ class Media
         string $conversion,
         string $url,
         ?ImageInterface $rawImage = null,
-        ?EncodedImageInterface $encodedImage = null
+        ?EncodedImageInterface $encodedImage = null,
+        ?MediaVariantInterface $variant = null,
     ): static
     {
         $data = $this->getConversions();
         Arr::set($data, "$conversion.created", true);
         Arr::set($data, "$conversion.path", $url);
         Arr::set($data, "$conversion.meta", static::generateMetaFromImages($rawImage, $encodedImage));
+        if ($variant)
+            Arr::set($data, "$conversion.config", $variant->serialize());
         return $this->setConversions($data);
     }
 
