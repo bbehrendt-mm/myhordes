@@ -335,9 +335,9 @@
                     {% if award.customTitle %}
                         <div class="padded cell rw-12"><label><input type="radio" name="{{ _self.gen_id(prefix,'titlemakerwidget','what')}}" x-default="{{ award.customTitle }}" x-id="{{ award.id }}" x-type="title" id="{{ _self.gen_id(prefix,'titlemakerwidget','edit_title_' ~ award.id)}}" />{{ award.customTitle }}</label></div>
                     {% endif %}
-                    {% if award.customIcon %}
+                    {% if award|singleMedia('icon') is not null %}
                         <div class="padded cell rw-12"><label><input type="radio" name="{{ _self.gen_id(prefix,'titlemakerwidget','what')}}" x-id="{{ award.id }}" x-type="icon" id="{{ _self.gen_id(prefix,'titlemakerwidget','edit_icon_' ~ award.id)}}" />
-                            <img alt="" src="{{ url('app_web_customicon', {uid: award.user.id, aid: award.id, name: award.customIconName, ext: award.customIconFormat}) }}" />
+                            <img alt="" src="{{ award|singleMedia('icon').source(16) }}" srcset="{{ award|singleMedia('icon').sourceSetDPI(16) }}" />
                         </label></div>
                     {% endif %}
                 {% endif %}

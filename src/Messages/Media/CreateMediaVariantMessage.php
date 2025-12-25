@@ -2,13 +2,9 @@
 
 namespace App\Messages\Media;
 
-use App\Entity\NotificationSubscription;
-use App\Entity\User;
-use App\Messages\AsyncMessageInterface;
-use App\Messages\AsyncMessageLowInterface;
-use Symfony\Component\Uid\Uuid;
+use App\Messages\AsyncMessageMediaInterface;
 
-readonly class CreateMediaVariantMessage implements AsyncMessageLowInterface
+readonly class CreateMediaVariantMessage implements AsyncMessageMediaInterface
 {
     public function __construct(
         public string $uuid,

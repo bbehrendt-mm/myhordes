@@ -530,30 +530,6 @@ class WebController extends CustomAbstractController
     }
 
     /**
-     * @param int $uid
-     * @param int $aid
-     * @param string $name
-     * @param string $ext
-     * @return Response
-     */
-    #[Route(path: '/cdn/icon/{uid<\d+>}/{aid<\d+>}/{name}.{ext<[\w\d]+>}', requirements: ['name' => '[0123456789abcdef]{32}'], condition: '!request.isXmlHttpRequest()')]
-    #[GateKeeperProfile('skip')]
-    public function customIcon(int $uid, int $aid, string $name, string $ext): Response
-    {
-        if ($r = $this->check_cache($name)) return $r;
-
-        /** @var Award $award */
-        $user  = $this->entity_manager->getRepository(User::class)->find( $uid );
-        $award = $this->entity_manager->getRepository(Award::class)->find( $aid );
-        if (!$user || !$award || $award->getUser() !== $user || !$award->getCustomIcon())
-            return $this->cdn_fallback( "icon/{$uid}/{$aid}/{$name}.{$ext}" );
-        if ($award->getCustomIconName() !== $name || $award->getCustomIconFormat() !== $ext)
-            return $this->cdn_fallback( "icon/{$uid}/{$aid}/{$name}.{$ext}" );
-
-        return $this->image_output($award->getCustomIcon(), $name, $ext);
-    }
-
-    /**
      * @param string $url
      * @return Response
      */

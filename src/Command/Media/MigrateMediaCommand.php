@@ -5,12 +5,14 @@ namespace App\Command\Media;
 
 
 use App\Entity\Avatar;
+use App\Entity\Award;
 use App\Entity\ExternalApp;
 use App\Entity\OfficialGroup;
 use App\Enum\OfficialGroupSemantic;
 use App\Service\CommandHelper;
 use App\Service\Media\ImageService;
 use App\Service\Media\MediaService;
+use Doctrine\Common\Collections\Criteria;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
@@ -47,6 +49,7 @@ class MigrateMediaCommand extends Command
 
             ->addOption('groups', null, InputOption::VALUE_NONE, 'Perform migration for official groups')
             ->addOption('apps', null, InputOption::VALUE_NONE, 'Perform migration for external apps')
+            ->addOption('awards', null, InputOption::VALUE_NONE, 'Perform migration for custom awards')
         ;
         parent::configure();
     }
@@ -72,7 +75,7 @@ class MigrateMediaCommand extends Command
 
     }
 
-    protected function handleExternalApp(bool $force, bool $keep, OutputInterface $output): void {
+    protected function handleExternalApps(bool $force, bool $keep, OutputInterface $output): void {
         $this->helper->leChunk( $output, ExternalApp::class, 1, [], true, false, function(ExternalApp $e) use ($force,$keep) {
             if (!$force && $this->mediaService->hasMediaForObject( $e, 'icon' )) return false;
 
@@ -91,13 +94,35 @@ class MigrateMediaCommand extends Command
 
     }
 
+    protected function handleAwards(bool $force, bool $keep, OutputInterface $output): void {
+        $this->helper->leChunk( $output, Award::class, 1,
+            Criteria::create()->where( Criteria::expr()->isNotNull( 'customIconName' ) ), true, false, function(Award $a) use ($force,$keep) {
+
+            if (!$force && $this->mediaService->hasMediaForObject( $a, 'icon' )) return false;
+
+            if ($a->getCustomIconName()) {
+                $this->mediaService->addMediaToObjectFromResource( $a, $a->getCustomIcon(), MediaService::extensionToMimeType( $a->getCustomIconFormat() ), 'icon' );
+                if (!$keep) $a
+                    ->setCustomIcon(null)
+                    ->setCustomIconFormat(null)
+                    ->setCustomIconName(null);
+
+                return true;
+            }
+
+            return false;
+        } );
+
+    }
+
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $force = $input->getOption('force');
         $keep = $input->getOption('keep');
 
         if ($input->getOption('groups')) $this->handleGroups($force, $keep, $output);
-        if ($input->getOption('apps')) $this->handleExternalApp($force, $keep, $output);
+        if ($input->getOption('apps')) $this->handleExternalApps($force, $keep, $output);
+        if ($input->getOption('awards')) $this->handleAwards($force, $keep, $output);
 
         return 0;
     }

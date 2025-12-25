@@ -14,6 +14,7 @@ use Intervention\Image\Interfaces\ImageInterface;
  * @method self coverDown(int $width, int $height, string $position = 'center')
  * @method self toWebp(mixed ...$options)
  * @method self toPng(mixed ...$options)
+ * @method self toGif(mixed ...$options)
  */
 trait MediaProcessor
 {

@@ -53,6 +53,7 @@ use App\Service\EventProxyService;
 use App\Service\HTMLService;
 use App\Service\JSONRequestParser;
 use App\Service\Media\ImageService;
+use App\Service\Media\MediaService;
 use App\Service\PermissionHandler;
 use App\Service\TwinoidHandler;
 use App\Service\User\UserUnlockableService;
@@ -1571,7 +1572,7 @@ class AdminUserController extends AdminActionController
     #[Route(path: 'api/admin/users/{id}/unique_award/manage', name: 'admin_user_manage_unique_award', requirements: ['id' => '\d+'])]
     #[IsGranted('ROLE_SUB_ADMIN')]
     #[AdminLogProfile(enabled: true)]
-    public function user_manage_unique_award(int $id, JSONRequestParser $parser, CrowService $crow): Response {
+    public function user_manage_unique_award(int $id, JSONRequestParser $parser, CrowService $crow, MediaService $mediaService): Response {
         $user = $this->entity_manager->getRepository(User::class)->find($id);
         if (!$user) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
 
@@ -1599,6 +1600,7 @@ class AdminUserController extends AdminActionController
             return AjaxResponse::success();
         }
 
+        $payload = null;
         if ($parser->has('title', true) === $parser->has('icon', true))
             return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
 
@@ -1612,16 +1614,7 @@ class AdminUserController extends AdminActionController
             if (strlen( $payload ) > $this->conf->getGlobalConf()->get(MyHordesSetting::AvatarMaxSizeUpload))
                 return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
 
-            $image = ImageService::createImageFromData( $payload );
-            ImageService::resize( $image, 16, 16, bestFit: true );
-            $payload = ImageService::save( $image );
-
-            $this->entity_manager->persist( $award
-                ->setUser($user)
-                ->setCustomIcon($payload)
-                ->setCustomIconName(md5($payload))
-                ->setCustomIconFormat(strtolower( $image->format ))
-            );
+            $this->entity_manager->persist( $award->setUser($user) );
         }
 
         try {
@@ -1632,6 +1625,12 @@ class AdminUserController extends AdminActionController
             }
         } catch (Exception $e) {
             return AjaxResponse::error(ErrorHelper::ErrorDatabaseException);
+        }
+
+        if ($payload !== null) {
+            $media = $mediaService->addMediaToObjectFromBinaryString( $award, $payload, null, 'icon' );
+            $this->entity_manager->persist($media);
+            $this->entity_manager->flush();
         }
 
         return AjaxResponse::success();
