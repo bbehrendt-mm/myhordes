@@ -12,7 +12,7 @@ readonly class CreateMediaVariantMessage implements AsyncMessageLowInterface
 {
     public function __construct(
         public string $uuid,
-        public string $variant,
-        public bool $force = false
+        public string $variantName,
+        public array $variantData
     ) { }
 }

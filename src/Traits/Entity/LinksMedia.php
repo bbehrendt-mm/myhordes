@@ -2,12 +2,8 @@
 
 namespace App\Traits\Entity;
 
-use App\Entity\ActionCounter;
-use App\Entity\Media;
-use App\Enum\ActionCounterType;
-use App\Structures\MediaCollection;
-use App\Structures\MediaCollectionList;
-use Doctrine\Common\Collections\Collection;
+use App\Structures\Media\MediaCollection;
+use App\Structures\Media\MediaCollectionList;
 use Exception;
 
 trait LinksMedia

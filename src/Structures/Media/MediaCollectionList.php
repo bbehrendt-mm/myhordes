@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Structures;
+namespace App\Structures\Media;
 
 class MediaCollectionList
 {

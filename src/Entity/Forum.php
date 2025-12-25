@@ -2,9 +2,9 @@
 
 namespace App\Entity;
 
-use App\Structures\MediaCollection;
-use App\Structures\MediaCollectionList;
-use App\Structures\MediaVariant;
+use App\Structures\Media\MediaCollection;
+use App\Structures\Media\MediaCollectionList;
+use App\Structures\Media\MediaVariant;
 use App\Traits\Entity\LinksMedia;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;

@@ -188,9 +188,11 @@ class Media
         return $this;
     }
 
-    public function registerConversion(string|array $conversions): static
+    public function registerConversion(string|array $conversions, string|array $tag): static
     {
         if (!is_array($conversions)) $conversions = [$conversions];
+        if (!is_array($tag)) $tag = [$tag];
+
         $data = $this->getConversions();
 
         $set = false;
@@ -198,6 +200,7 @@ class Media
             if ($this->hasConversion($conversion)) continue;
             Arr::set($data, $conversion, [
                 'created' => false,
+                'tags' => $tag
             ]);
             $set = true;
         }
@@ -205,7 +208,12 @@ class Media
         return $set ? $this->setConversions($data) : $this;
     }
 
-    protected static function generateMetaFromImages(?ImageInterface $rawImage, ?EncodedImageInterface $encodedImage, ?string $mime = null, ?int $size = null): array {
+    protected static function generateMetaFromImages(
+        ?ImageInterface $rawImage,
+        ?EncodedImageInterface $encodedImage,
+        ?string $mime = null,
+        ?int $size = null
+    ): array {
         return [
             'width'  => $rawImage?->width(),
             'height' => $rawImage?->height(),
@@ -214,14 +222,17 @@ class Media
         ];
     }
 
-    public function setConversion(string $conversion, string $url, ?ImageInterface $rawImage = null, ?EncodedImageInterface $encodedImage = null): static
+    public function setConversion(
+        string $conversion,
+        string $url,
+        ?ImageInterface $rawImage = null,
+        ?EncodedImageInterface $encodedImage = null
+    ): static
     {
         $data = $this->getConversions();
-        Arr::set($data, $conversion, [
-            'created' => true,
-            'path'   => $url,
-            'meta' => static::generateMetaFromImages($rawImage, $encodedImage),
-        ]);
+        Arr::set($data, "$conversion.created", true);
+        Arr::set($data, "$conversion.path", $url);
+        Arr::set($data, "$conversion.meta", static::generateMetaFromImages($rawImage, $encodedImage));
         return $this->setConversions($data);
     }
 
@@ -254,13 +265,14 @@ class Media
         return $this;
     }
 
-    private function getSources(bool $includeOriginal = false, bool $sorted = true): array {
+    private function getSources(bool $includeOriginal = false, bool $sorted = true, string $tag = 'default'): array {
         $entries = array_map(
             fn(array $entry) => ['/storage/' . Arr::get($entry, 'path'), Arr::get($entry, 'meta.width')],
             array_filter($this->conversions, fn($entry) =>
                 Arr::get($entry, 'created') &&
                 Arr::get($entry, 'path') &&
-                Arr::get($entry, 'meta.width')
+                Arr::get($entry, 'meta.width') &&
+                in_array( $tag, Arr::get($entry, 'tags', ['default']), true )
             )
         );
 
@@ -273,23 +285,23 @@ class Media
         return $entries;
     }
 
-    public function getSourceSet(bool $includeOriginal = false): string {
+    public function getSourceSet(bool $includeOriginal = false, string $tag = 'default'): string {
         return implode(', ', array_map(
             fn(array $entry) => "{$entry[0]} {$entry[1]}w",
-            $this->getSources( $includeOriginal )
+            $this->getSources( $includeOriginal, tag: $tag )
         ));
     }
 
-    public function getSourceSetDPI(?int $baseSize, bool $includeOriginal = false): string {
+    public function getSourceSetDPI(?int $baseSize, bool $includeOriginal = false, string $tag = 'default'): string {
         if ($baseSize === null) return $this->getSourceSet($includeOriginal);
         return implode(', ', array_map(
             function(array $entry) use ($baseSize) { return "{$entry[0]} " . round( $entry[1] / $baseSize, 1 ) . "x"; },
-            $this->getSources( $includeOriginal )
+            $this->getSources( $includeOriginal, tag: $tag )
         ));
     }
 
-    public function getSource(?int $expectedSize = PHP_INT_MAX, bool $includeOriginal = false): string {
-        $entries = $this->getSources( $includeOriginal, true );
+    public function getSource(?int $expectedSize = PHP_INT_MAX, bool $includeOriginal = false, string $tag = 'default'): string {
+        $entries = $this->getSources( $includeOriginal, tag: $tag );
         if (empty($entries)) return "";
 
         $entry = array_find( $entries, fn(array $entry) => $entry[1] >= ($expectedSize ?? PHP_INT_MAX) ) ?? $entries[array_key_last( $entries )];

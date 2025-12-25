@@ -1,9 +1,8 @@
 <?php
 
 
-namespace App\Structures;
+namespace App\Structures\Media;
 
-use Closure;
 use Intervention\Image\Interfaces\EncodedImageInterface;
 use Intervention\Image\Interfaces\ImageInterface;
 
@@ -16,29 +15,10 @@ use Intervention\Image\Interfaces\ImageInterface;
  * @method self toWebp(mixed ...$options)
  * @method self toPng(mixed ...$options)
  */
-class MediaVariant
+trait MediaProcessor
 {
     private array $chain = [];
     private ?array $encode = null;
-
-    private ?Closure $condition = null;
-
-    public function __construct(
-        public readonly string $name,
-    ) {}
-
-    /**
-     * @param null|Closure(ImageInterface):bool $condition
-     * @return MediaVariant
-     */
-    public function conditional(Closure|null $condition): self {
-        $this->condition = $condition;
-        return $this;
-    }
-
-    public function enabledFor(ImageInterface $image): bool {
-        return $this->condition === null || ($this->condition)($image);
-    }
 
     public function __call(string $name, array $arguments)
     {

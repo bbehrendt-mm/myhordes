@@ -2,7 +2,7 @@
 namespace App\Service\Media;
 
 use App\Entity\Media;
-use App\Structures\MediaCollection;
+use App\Structures\Media\MediaCollection;
 use App\Traits\Entity\LinksMedia;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -157,18 +157,16 @@ readonly class MediaService
         $image = new ImageManager( Driver::class, strip: true )->read($path);
         $mime = mime_content_type($path);
 
-        $conversions = [];
-        foreach ($collectionObject->getVariants( $image ) as $variant)
-            $conversions[] = $variant->name;
-
         $media = new Media()
             ->setId( Uuid::v7() )
             ->setCollection($collection)
             ->setModelType( $this->entityManager->getClassMetadata($object::class)->getName() )
             ->setFilename($filename ?? basename($path))
             ->setMime( $mime )
-            ->setMetaFromImage( $image, mime: $mime, size: filesize($path) )
-            ->registerConversion( $conversions );
+            ->setMetaFromImage( $image, mime: $mime, size: filesize($path) );
+
+        foreach ($collectionObject->getVariants( $image ) as $variant)
+            $media->registerConversion( $variant->name, $variant->tags );
 
         $this->attachImageToObjectCollection($object, $collectionObject, $media, $image);
         return $media;
@@ -191,18 +189,16 @@ readonly class MediaService
         $image = new ImageManager( Driver::class, strip: true )->read($data);
         $mime ??= $image->encode()->mimetype();
 
-        $conversions = [];
-        foreach ($collectionObject->getVariants( $image ) as $variant)
-            $conversions[] = $variant->name;
-
         $media = new Media()
             ->setId( Uuid::v7() )
             ->setCollection($collection)
             ->setModelType( $this->entityManager->getClassMetadata($object::class)->getName() )
             ->setFilename("blob" . self::mimeTypeToExtension($mime))
             ->setMime( $mime )
-            ->setMetaFromImage( $image, mime: $mime, size: strlen($data) )
-            ->registerConversion( $conversions );
+            ->setMetaFromImage( $image, mime: $mime, size: strlen($data) );
+
+        foreach ($collectionObject->getVariants( $image ) as $variant)
+            $media->registerConversion( $variant->name, $variant->tags );
 
         $this->attachImageToObjectCollection($object, $collectionObject, $media, $image);
         return $media;

@@ -4,6 +4,7 @@ namespace App\Messages\Media;
 
 use App\Entity\Media;
 use App\Service\Media\MediaService;
+use App\Structures\Media\AnonymousMediaVariant;
 use Doctrine\ORM\EntityManagerInterface;
 use Intervention\Image\Drivers\Imagick\Driver;
 use Intervention\Image\ImageManager;
@@ -16,7 +17,6 @@ readonly class MediaVariantHandler
     private string $public;
 
     public function __construct(
-        private MediaService $mediaService,
         private EntityManagerInterface $em,
         ParameterBagInterface $parameterBag
     ) {
@@ -29,12 +29,7 @@ readonly class MediaVariantHandler
         $media = $this->em->getRepository(Media::class)->find( $message->uuid );
         if (!$media) return;
 
-        if ($media->hasConversion($message->variant) && !$message->force)
-            return;
-
-        $variant = $this->mediaService->getCollectionForMedia( $media )?->getVariant( $message->variant );
-        if (!$variant) return;
-
+        $variant = new AnonymousMediaVariant( $message->variantData );
         $original = "{$this->public}/{$media->getUrl( )}";
 
         $raw = $variant->process( new ImageManager( Driver::class, strip: true )->read( $original ) );
@@ -43,7 +38,7 @@ readonly class MediaVariantHandler
         $image = $variant->performEncode($raw);
 
         $ext = MediaService::mimeTypeToExtension( $image->mimetype(), true );
-        $targetUrl = $media->getTargetUrl( $message->variant, Uuid::v4()->toString() . $ext );
+        $targetUrl = $media->getTargetUrl( $message->variantName, Uuid::v4()->toString() . $ext );
         if ($targetUrl === null) return;
 
         $savePath = "{$this->public}/{$targetUrl}";
@@ -52,10 +47,10 @@ readonly class MediaVariantHandler
 
         $image->save( $savePath );
 
-        if ($media->hasConversion($message->variant))
-            unlink( "{$this->public}/{$media->getUrl( $message->variant )}" );
+        if ($media->hasConversion($message->variantName))
+            unlink( "{$this->public}/{$media->getUrl( $message->variantName )}" );
 
-        $this->em->persist( $media->setConversion( $message->variant, $targetUrl, $raw, $image ) );
+        $this->em->persist( $media->setConversion( $message->variantName, $targetUrl, $raw, $image ) );
         $this->em->flush();
 
     }

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Structures;
+namespace App\Structures\Media;
 
 use Intervention\Image\Interfaces\EncodedImageInterface;
 use Intervention\Image\Interfaces\ImageInterface;
@@ -42,7 +42,7 @@ class MediaCollection
     public function getVariants( ?ImageInterface $image = null ): array {
         return array_values( $image === null
                                  ? $this->variants
-                                 : array_filter( $this->variants, fn( MediaVariant $variant ) => $variant->enabledFor( $image ))
+                                 : array_filter( $this->variants, fn( MediaVariantInterface $variant ) => $variant->enabledFor( $image ))
         );
     }
 
