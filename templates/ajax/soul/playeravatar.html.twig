@@ -24,10 +24,7 @@
         {% set url   = media.source %}
         {% set user  = {
             id: user.usergroup.id + 100, name: user.usergroup.name,
-            avatar: user.avatarName ? {
-                smallName: user.avatarName, filename: user.avatarName,
-                format: user.avatarExt
-            } : null
+            avatar: null
         } %}
     {% elseif user is defined and not user|instance_of('object') and user == 66 %}
         {% set user = {
@@ -62,7 +59,12 @@
             {% if user.id == 66 %}
                 {% set url = asset('build/images/forum/crow/crow.' ~ (small ? 'small.' : '') ~ (app.request.locale|e('html_attr')|split('_', 2))[0] ~ '.png') %}
             {% else %}
-                {% set url = user|avatar(small) %}
+                {% set media = user|singleMedia('avatar') %}
+                {% if media is not null %}
+                    {% set url = media.source %}
+                {% else %}
+                    {% set url = user|avatar(small) %}
+                {% endif %}
             {% endif %}
         {% endif %}
 
@@ -89,7 +91,7 @@
                     {% else %}
                         {% set attrs = {} %}
                     {% endif %}
-                    {% if media is defined %}
+                    {% if media is defined and media is not null %}
                         <img {{ attrs|attributes }} alt="" src="{{ media.source(w) }}" srcset="{{ media.sourceSetDPI(w) }}"/>
                     {% else %}
                         <img {{ attrs|attributes }} alt="" src="{{ url }}"/>

@@ -15,6 +15,7 @@ use App\Service\Actions\Ghost\SanitizeTownConfigAction;
 use App\Service\CrowService;
 use App\Service\EventProxyService;
 use App\Service\JSONRequestParser;
+use App\Service\Media\MediaService;
 use App\Service\PermissionHandler;
 use App\Service\User\UserCapabilityService;
 use DiscordWebhooks\Client;
@@ -22,6 +23,7 @@ use DiscordWebhooks\Embed;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Symfony\Component\Messenger\Exception\ExceptionInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\Asset\Packages;
@@ -287,16 +289,19 @@ class EventController extends CustomAbstractCoreController
      * @param EntityManagerInterface $em
      * @param UrlGeneratorInterface $urlGenerator
      * @param MessageBusInterface $bus
+     * @param MediaService $mediaService
      * @return JsonResponse
+     * @throws ExceptionInterface
      */
-    #[Route(path: '/{id}/proposal', name: 'set_proposal', methods: ['PUT'], defaults: ['option' => true])]
-    #[Route(path: '/{id}/proposal', name: 'remove_proposal', methods: ['DELETE'], defaults: ['option' => false])]
+    #[Route(path: '/{id}/proposal', name: 'set_proposal', defaults: ['option' => true], methods: ['PUT'])]
+    #[Route(path: '/{id}/proposal', name: 'remove_proposal', defaults: ['option' => false], methods: ['DELETE'])]
     public function editEventProposal(
         CommunityEvent $event,
         bool $option,
         EntityManagerInterface $em,
         UrlGeneratorInterface $urlGenerator,
-        MessageBusInterface $bus
+        MessageBusInterface $bus,
+        MediaService $mediaService,
     ): JsonResponse {
         if (!$this->eventIsEditable( $event, $option === false ))
             return new JsonResponse([], Response::HTTP_FORBIDDEN);
@@ -342,7 +347,7 @@ class EventController extends CustomAbstractCoreController
                     ->author(
                         $event->getOwner()->getName(),
                         $urlGenerator->generate( 'admin_users_account_view', ['id' => $event->getOwner()->getId()], UrlGeneratorInterface::ABSOLUTE_URL ),
-                        $event->getOwner()->getAvatar() ? $urlGenerator->generate( 'app_web_avatar', ['uid' => $event->getOwner()->getId(), 'name' => $event->getOwner()->getAvatar()->getFilename(), 'ext' => $event->getOwner()->getAvatar()->getFormat()],UrlGeneratorInterface::ABSOLUTE_URL ) : ''
+                        $mediaService->getSingleMediaForObject( $event->getOwner(), 'avatar' )?->getSource(200) ?? ''
                     )
                 );
 

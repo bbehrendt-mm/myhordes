@@ -865,8 +865,10 @@ class AdminUserController extends AdminActionController
                 if ($user->getAvatar()) {
                     $this->entity_manager->remove($user->getAvatar());
                     $user->setAvatar(null);
-                    $clearCache("user_avatar_{$user->getId()}");
                 }
+
+                $this->mediaService->clearMediaFromObject( $user, 'avatar' );
+                $clearCache("user_avatar_{$user->getId()}");
                 break;
 
             case 'grant':

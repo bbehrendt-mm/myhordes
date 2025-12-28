@@ -18,6 +18,7 @@ readonly class MediaVariantHandler
 
     public function __construct(
         private EntityManagerInterface $em,
+        private MediaService $mediaService,
         ParameterBagInterface $parameterBag
     ) {
         $this->public = $parameterBag->get('kernel.project_dir') . '/public/storage';
@@ -37,20 +38,11 @@ readonly class MediaVariantHandler
 
         $image = $variant->performEncode($raw);
 
-        $ext = MediaService::mimeTypeToExtension( $image->mimetype(), true );
-        $targetUrl = $media->getTargetUrl( $message->variantName, Uuid::v4()->toString() . $ext );
-        if ($targetUrl === null) return;
+        $this->mediaService->storePreConvertedImageAsConversion(
+            $media, $raw, $image, $message->variantName, $variant
+        );
 
-        $savePath = "{$this->public}/{$targetUrl}";
-        $dir = dirname( $savePath );
-        if (!is_dir($dir)) mkdir( $dir, recursive: true );
-
-        $image->save( $savePath );
-
-        if ($media->hasConversion($message->variantName))
-            unlink( "{$this->public}/{$media->getUrl( $message->variantName )}" );
-
-        $this->em->persist( $media->setConversion( $message->variantName, $targetUrl, $raw, $image, $variant ) );
+        $this->em->persist( $media );
         $this->em->flush();
 
     }

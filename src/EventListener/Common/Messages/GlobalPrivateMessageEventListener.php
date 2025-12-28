@@ -17,6 +17,7 @@ use App\EventListener\ContainerTypeTrait;
 use App\Messages\WebPush\WebPushMessage;
 use App\Service\Actions\Mercure\BroadcastPMUpdateViaMercureAction;
 use App\Service\HTMLService;
+use App\Service\Media\MediaService;
 use App\Service\UserHandler;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Container\ContainerInterface;
@@ -46,6 +47,7 @@ final class GlobalPrivateMessageEventListener implements ServiceSubscriberInterf
             HTMLService::class,
             TranslatorInterface::class,
             BroadcastPMUpdateViaMercureAction::class,
+            MediaService::class,
         ];
     }
 
@@ -119,7 +121,7 @@ final class GlobalPrivateMessageEventListener implements ServiceSubscriberInterf
                         new WebPushMessage($subscription,
                             title:         "[{$prefix}] {$group->getName()}",
                             body:          $prepared_post,
-                            avatar:        ($og_link?->getAnon()) ? null : $event->post->getSender()->getAvatar()?->getId()
+                            avatar:        ($og_link?->getAnon()) ? null : $this->getService(MediaService::class)->getSingleMediaForObject( $event->post->getSender(), 'avatar' )?->getId()
                         )
                     );
             }

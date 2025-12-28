@@ -4,6 +4,10 @@ namespace App\Entity;
 
 use App\Enum\NotificationSubscriptionType;
 use App\Enum\UserSetting;
+use App\Structures\Media\MediaCollection;
+use App\Structures\Media\MediaCollectionList;
+use App\Structures\Media\MediaVariant;
+use App\Traits\Entity\LinksMedia;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -16,6 +20,8 @@ use Doctrine\ORM\Mapping\JoinTable;
 use Doctrine\ORM\Mapping\Table;
 use Doctrine\ORM\Mapping\UniqueConstraint;
 use Doctrine\ORM\PersistentCollection;
+use Exception;
+use Intervention\Image\Interfaces\ImageInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -31,6 +37,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[UniqueConstraint(name: 'user_etwin_unique', columns: ['eternal_id'])]
 class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUserInterface
 {
+    use LinksMedia;
+
     const int USER_LEVEL_BASIC  =  0;
     const int USER_LEVEL_CROW   =  3;
     const int USER_LEVEL_ADMIN  =  4;
@@ -1215,5 +1223,92 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
         $this->lastSkillPointDeductedAt = $lastSkillPointDeductedAt;
 
         return $this;
+    }
+
+    protected static function defineMediaCollections(MediaCollectionList $list): void
+    {
+        $list->add( new MediaCollection('avatar')
+            ->singleFile()
+            ->addVariant( new MediaVariant('default-still', ['square'])
+                ->conditional( fn(ImageInterface $image) => !$image->isAnimated() )
+                ->scaleDown( 100, 100 )
+                ->toAvif(quality: 90)
+            )
+            ->addVariant( new MediaVariant('default-animated', ['square', 'animated'])
+                ->conditional( fn(ImageInterface $image) => $image->isAnimated() )
+                ->scaleDown( 100, 100 )
+                ->toWebp(quality: 90)
+            )
+            ->addVariant( new MediaVariant('default-hd-still', ['square'])
+                ->conditional( fn(ImageInterface $image) => !$image->isAnimated() && $image->width() > 100 )
+                ->scaleDown( 200, 200 )
+                ->toAvif(quality: 75)
+            )
+            ->addVariant( new MediaVariant('default-hd-animated', ['square', 'animated'])
+                ->conditional( fn(ImageInterface $image) => $image->isAnimated() && $image->width() > 100 )
+                ->scaleDown( 200, 200 )
+                ->toWebp(quality: 75)
+            )
+
+            ->addVariant( new MediaVariant('bubble-small-still', ['circular'] )
+                ->conditional( fn(ImageInterface $image) => !$image->isAnimated() )
+                ->coverDown( 18, 18 )
+                ->toAvif(quality: 100)
+            )
+            ->addVariant( new MediaVariant('bubble-small-animated', ['circular', 'animated'] )
+                ->conditional( fn(ImageInterface $image) => $image->isAnimated() )
+                ->coverDown( 18, 18 )
+                ->toWebp(quality: 100)
+            )
+            ->addVariant( new MediaVariant('bubble-still', ['circular'] )
+                ->conditional( fn(ImageInterface $image) => !$image->isAnimated() && $image->width() > 18 )
+                ->coverDown( 40, 40 )
+                ->toAvif(quality: 100)
+            )
+            ->addVariant( new MediaVariant('bubble-animated', ['circular', 'animated'] )
+                ->conditional( fn(ImageInterface $image) => $image->isAnimated() && $image->width() > 18 )
+                ->coverDown( 40, 40 )
+                ->toWebp(quality: 100)
+            )
+            ->addVariant( new MediaVariant('bubble-hd-still', ['circular'] )
+                ->conditional( fn( ImageInterface $image ) => !$image->isAnimated() && $image->width() > 40 )
+                ->coverDown( 80, 80 )
+                ->toAvif(quality: 75)
+            )
+            ->addVariant( new MediaVariant('bubble-hd-animated', ['circular', 'animated'] )
+                ->conditional( fn(ImageInterface $image) => $image->isAnimated() && $image->width() > 40 )
+                ->coverDown( 80, 80 )
+                ->toWebp(quality: 75)
+            )
+
+            ->addVariant( new MediaVariant('letterbox-still', ['classic'] )
+                ->conditional( fn(ImageInterface $image) => !$image->isAnimated() )
+                ->coverDown( 90, 30 )
+                ->toAvif(quality: 100)
+            )
+            ->addVariant( new MediaVariant('letterbox-animated', ['classic', 'animated'] )
+                ->conditional( fn(ImageInterface $image) => $image->isAnimated() )
+                ->coverDown( 90, 30 )
+                ->toWebp(quality: 100)
+            )
+            ->addVariant( new MediaVariant('letterbox-hd-still', ['classic'] )
+                ->conditional( fn(ImageInterface $image) => !$image->isAnimated() && $image->width() > 90 )
+                ->coverDown( 180, 60 )
+                ->toAvif(quality: 100)
+            )
+            ->addVariant( new MediaVariant('letterbox-hd-animated', ['classic', 'animated'] )
+                ->conditional( fn(ImageInterface $image) => $image->isAnimated() && $image->width() > 90 )
+                ->coverDown( 180, 60 )
+                ->toWebp(quality: 100)
+            )
+        );
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getMediaBasePath(): string
+    {
+        return "user/{$this->getPrimaryKey()}/avatar";
     }
 }

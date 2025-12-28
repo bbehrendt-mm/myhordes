@@ -2,10 +2,13 @@
 
 namespace App\Entity;
 
+use App\Messages\Media\CreateMediaVariantMessage;
 use App\Repository\MediaRepository;
+use App\Structures\Media\MediaConversion;
 use App\Structures\Media\MediaVariantInterface;
 use App\Traits\Entity\LinksMedia;
 use ArrayHelpers\Arr;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Intervention\Image\Interfaces\EncodedImageInterface;
 use Intervention\Image\Interfaces\ImageInterface;
@@ -158,11 +161,10 @@ class Media
 
     public function getUrl(?string $conversion = null): ?string
     {
-        $basepath = $this->storage;
         if ($conversion !== null && $this->hasConversion($conversion))
-            $basepath .= "/c/{$conversion}";
+            return Arr::get( $this->conversions, "$conversion.path", null );
 
-        return "{$basepath}/{$this->filename}";
+        return "{$this->storage}/{$this->filename}";
     }
 
     public function getMime(): ?string
@@ -210,6 +212,74 @@ class Media
         return $set ? $this->setConversions($data) : $this;
     }
 
+    public function unregisterConversion(string|array $conversions): static
+    {
+        if (!is_array($conversions)) $conversions = [$conversions];
+
+        $data = $this->getConversions();
+
+        $new = [];
+        $set = false;
+        foreach ($data as $conversion => $conversionData) {
+            if ($this->hasConversion($conversion)) continue;
+            if (in_array( $conversion, $conversions ))
+                $set = true;
+            else Arr::set($new, $conversion , $conversionData);
+        }
+
+        return $set ? $this->setConversions($new) : $this;
+    }
+
+    public function tagConversion(string|array $conversions, string|array $tag): static
+    {
+        if (!is_array($conversions)) $conversions = [$conversions];
+        if (!is_array($tag)) $tag = [$tag];
+
+        $data = $this->getConversions();
+
+        $set = false;
+        foreach ($conversions as $conversion)
+            Arr::set( $data, "{$conversion}.tags", array_unique([
+                ...array_values(Arr::get($data, "{$conversion}.tags", [])),
+                ...array_values($tag),
+            ]));
+
+        return $this->setConversions($data);
+    }
+
+    /**
+     * @param string|null $name
+     * @return CreateMediaVariantMessage[]
+     */
+    public function pendingConversionMessages(?string $name = null): array {
+        $data = $this->getConversions();
+
+        $entries = array_filter( $name !== null ? [$name => Arr::get($data, $name, [])] : $data,
+            fn(array $entry) => !Arr::get($entry, 'created', false) && !empty(Arr::get($entry, 'config', null))
+        );
+
+        return array_map( fn(string $key, array $entry) => new CreateMediaVariantMessage(
+            $this->id, $key, Arr::get($entry, 'config', null)
+        ), array_keys($entries), $entries  );
+    }
+
+    /**
+     * @param array|null $includeTags
+     * @param array|null $excludeTags
+     * @return string[]
+     */
+    public function findConversions(
+        ?array $includeTags = null,
+        ?array $excludeTags = null
+    ): array {
+        $tags = new ArrayCollection( $this->getConversions() );
+
+        return $tags->filter( fn(array $entry) =>
+            ($includeTags === null || array_intersect($includeTags, Arr::get( $entry, 'tags', [] ))) &&
+            ($excludeTags === null || !array_intersect($excludeTags, Arr::get( $entry, 'tags', [] )))
+        )->getKeys();
+    }
+
     protected static function generateMetaFromImages(
         ?ImageInterface $rawImage,
         ?EncodedImageInterface $encodedImage,
@@ -219,6 +289,7 @@ class Media
         return [
             'width'  => $rawImage?->width(),
             'height' => $rawImage?->height(),
+            'frames' => $rawImage?->count(),
             'mime'   => $mime ?? $encodedImage?->mimetype(),
             'size'   => $size ?? $encodedImage?->size(),
         ];
@@ -239,6 +310,53 @@ class Media
         if ($variant)
             Arr::set($data, "$conversion.config", $variant->serialize());
         return $this->setConversions($data);
+    }
+
+    public function getConversion(string $conversion): ?MediaConversion
+    {
+        return $this->hasConversion($conversion)
+            ? new MediaConversion($this, $conversion, Arr::get($this->getConversions(), "$conversion.meta"), Arr::get($this->getConversions(), "$conversion.tags", ['default']))
+            : null;
+    }
+
+    /**
+     * @return MediaConversion[]
+     */
+    public function getConversionsByTag(string $tag): array
+    {
+        $conversions = $this->getRawConversionsByTag($tag);
+        return array_map(
+            fn(string $conversion, array $data) => new MediaConversion($this, $conversion, Arr::get($data, 'meta'), Arr::get($data, 'tags', ['default'])),
+            array_keys($conversions), $conversions
+        );
+    }
+
+    /**
+     * @param string $tag
+     * @param int|null $expectedSize
+     * @return MediaConversion|null
+     */
+    public function getLargestConversionByTag(string $tag, ?int $expectedSize = PHP_INT_MAX): ?MediaConversion
+    {
+        $conversions = $this->getConversionsByTag( $tag );
+        usort( $conversions, fn(MediaConversion $a, MediaConversion $b) => $a->width <=> $b->width );
+
+        return
+            array_find( $conversions, fn(MediaConversion $entry) => $entry->width >= ($expectedSize ?? PHP_INT_MAX) ) ??
+            $conversions[array_key_last( $conversions )] ??
+            null;
+    }
+
+
+
+    protected function getRawConversionsByTag(string $tag): array
+    {
+        return array_filter($this->conversions, fn($entry) =>
+            Arr::get($entry, 'created') &&
+            Arr::get($entry, 'path') &&
+            Arr::get($entry, 'meta.width') &&
+            in_array( $tag, Arr::get($entry, 'tags', ['default']), true )
+        );
     }
 
     public function getMeta(): array
@@ -273,12 +391,7 @@ class Media
     private function getSources(bool $includeOriginal = false, bool $sorted = true, string $tag = 'default'): array {
         $entries = array_map(
             fn(array $entry) => ['/storage/' . Arr::get($entry, 'path'), Arr::get($entry, 'meta.width')],
-            array_filter($this->conversions, fn($entry) =>
-                Arr::get($entry, 'created') &&
-                Arr::get($entry, 'path') &&
-                Arr::get($entry, 'meta.width') &&
-                in_array( $tag, Arr::get($entry, 'tags', ['default']), true )
-            )
+            $this->getRawConversionsByTag($tag)
         );
 
         if ($includeOriginal && Arr::get($this->meta, 'width'))

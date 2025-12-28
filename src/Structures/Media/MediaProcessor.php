@@ -8,13 +8,16 @@ use Intervention\Image\Interfaces\ImageInterface;
 
 /**
  * @mixin ImageInterface
- * @method self scale(int $width, int $height)
- * @method self scaleDown(int $width, int $height)
+ * @method self resize(int $width, ?int $height = null)
+ * @method self resizeDown(int $width, ?int $height = null)
+ * @method self scale(int $width, ?int $height = null)
+ * @method self scaleDown(int $width, ?int $height = null)
  * @method self cover(int $width, int $height, string $position = 'center')
  * @method self coverDown(int $width, int $height, string $position = 'center')
  * @method self toWebp(mixed ...$options)
  * @method self toPng(mixed ...$options)
  * @method self toGif(mixed ...$options)
+ * @method self toAvif(mixed ...$options)
  */
 trait MediaProcessor
 {

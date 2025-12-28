@@ -3,6 +3,7 @@ namespace App\Service\Media;
 
 use App\Entity\Media;
 use App\Structures\Media\MediaCollection;
+use App\Structures\Media\MediaVariantInterface;
 use App\Traits\Entity\LinksMedia;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -12,14 +13,17 @@ use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Intervention\Image\Drivers\Imagick\Driver;
 use Intervention\Image\ImageManager;
+use Intervention\Image\Interfaces\EncodedImageInterface;
 use Intervention\Image\Interfaces\ImageInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Uid\Uuid;
 
 readonly class MediaService
 {
 
     public function __construct(
-        private EntityManagerInterface $entityManager
+        private EntityManagerInterface $entityManager,
+        private ParameterBagInterface $parameterBag
     ) {}
 
     private function checkTrait(object $object): bool {
@@ -67,14 +71,14 @@ readonly class MediaService
     }
 
     /**
-     * @param LinksMedia $object
+     * @param LinksMedia|null $object
      * @param string $collection
      * @return Collection
      * @noinspection PhpDocSignatureInspection
      * @throws Exception
      */
-    public function getMediaForObject(object $object, string $collection): Collection {
-        if (!$this->checkTrait($object)) return new ArrayCollection();
+    public function getMediaForObject(?object $object, string $collection): Collection {
+        if (!$object || !$this->checkTrait($object)) return new ArrayCollection();
 
         $collectionObject = $object::mediaCollection($collection);
         if ($collectionObject === null) return new ArrayCollection();
@@ -102,13 +106,13 @@ readonly class MediaService
     }
 
     /**
-     * @param LinksMedia $object
+     * @param LinksMedia|null $object
      * @param string $collection
      * @return Media|null
      * @noinspection PhpDocSignatureInspection
      * @throws Exception
      */
-    public function getSingleMediaForObject(object $object, string $collection): ?Media {
+    public function getSingleMediaForObject(?object $object, string $collection): ?Media {
         $collection = $this->getMediaForObject($object, $collection);
         return $collection->count() === 1 ? $collection->first() : null;
     }
@@ -142,6 +146,44 @@ readonly class MediaService
 
     /**
      * @param LinksMedia $object
+     * @param ImageInterface $image
+     * @param string $collection
+     * @param string $filename
+     * @param string $mime
+     * @param int $size
+     * @return Media|null
+     * @noinspection PhpDocSignatureInspection
+     * @throws Exception
+     */
+    public function addMediaToObjectFromImage(object $object, ImageInterface $image, string $collection, string $filename, string $mime, int $size): ?Media {
+        if (!$this->checkTrait($object)) return null;
+
+        $collectionObject = $object::mediaCollection($collection);
+        if ($collectionObject === null) return null;
+
+        $media = new Media()
+            ->setId( Uuid::v7() )
+            ->setCollection($collection)
+            ->setModelType( $this->entityManager->getClassMetadata($object::class)->getName() )
+            ->setFilename($filename)
+            ->setMime( $mime )
+            ->setMetaFromImage( $image, mime: $mime, size: $size )
+            ->setCreatedAt( new \DateTimeImmutable() );
+
+        if ($object->tryPrimaryKey() !== null)
+            $media
+                ->setModelID( $object->getPrimaryKey() )
+                ->buildStoragePath( $object->getMediaPath() );
+
+        foreach ($collectionObject->getVariants( $image ) as $variant)
+            $media->registerConversion( $variant->name, $variant->tags, $variant->serialize() );
+
+        $this->attachImageToObjectCollection($object, $collectionObject, $media, $image);
+        return $media;
+    }
+
+    /**
+     * @param LinksMedia $object
      * @param string $path
      * @param string $collection
      * @param string|null $filename
@@ -149,27 +191,14 @@ readonly class MediaService
      * @noinspection PhpDocSignatureInspection
      */
     public function addMediaToObjectFromFile(object $object, string $path, string $collection, ?string $filename = null): ?Media {
-        if (!$this->checkTrait($object)) return null;
-
-        $collectionObject = $object::mediaCollection($collection);
-        if ($collectionObject === null) return null;
-
-        $image = new ImageManager( Driver::class, strip: true )->read($path);
-        $mime = mime_content_type($path);
-
-        $media = new Media()
-            ->setId( Uuid::v7() )
-            ->setCollection($collection)
-            ->setModelType( $this->entityManager->getClassMetadata($object::class)->getName() )
-            ->setFilename($filename ?? basename($path))
-            ->setMime( $mime )
-            ->setMetaFromImage( $image, mime: $mime, size: filesize($path) );
-
-        foreach ($collectionObject->getVariants( $image ) as $variant)
-            $media->registerConversion( $variant->name, $variant->tags );
-
-        $this->attachImageToObjectCollection($object, $collectionObject, $media, $image);
-        return $media;
+        return $this->addMediaToObjectFromImage(
+            $object,
+            new ImageManager( Driver::class, strip: true )->read($path),
+            $collection,
+            $filename ?? basename($path),
+            mime_content_type($path),
+            filesize($path)
+        );
     }
 
     /**
@@ -181,27 +210,55 @@ readonly class MediaService
      * @noinspection PhpDocSignatureInspection
      */
     public function addMediaToObjectFromBinaryString(object $object, string $data, ?string $mime, string $collection): ?Media {
-        if (!$this->checkTrait($object)) return null;
-
-        $collectionObject = $object::mediaCollection($collection);
-        if ($collectionObject === null) return null;
-
         $image = new ImageManager( Driver::class, strip: true )->read($data);
         $mime ??= $image->encode()->mimetype();
+        return $this->addMediaToObjectFromImage(
+            $object,
+            $image,
+            $collection,
+            "blob" . self::mimeTypeToExtension($mime),
+            $mime,
+            strlen($data)
+        );
+    }
 
-        $media = new Media()
-            ->setId( Uuid::v7() )
-            ->setCollection($collection)
-            ->setModelType( $this->entityManager->getClassMetadata($object::class)->getName() )
-            ->setFilename("blob" . self::mimeTypeToExtension($mime))
-            ->setMime( $mime )
-            ->setMetaFromImage( $image, mime: $mime, size: strlen($data) );
 
-        foreach ($collectionObject->getVariants( $image ) as $variant)
-            $media->registerConversion( $variant->name, $variant->tags );
+    /**
+     * @param Media $media
+     * @param ImageInterface $image
+     * @param EncodedImageInterface $encoded
+     * @param string $variantName
+     * @param MediaVariantInterface|null $variant
+     * @return bool
+     */
+    public function storePreConvertedImageAsConversion(Media $media, ImageInterface $image, EncodedImageInterface $encoded, string $variantName, ?MediaVariantInterface $variant = null): bool {
 
-        $this->attachImageToObjectCollection($object, $collectionObject, $media, $image);
-        return $media;
+        $public = "{$this->parameterBag->get('kernel.project_dir')}/public/storage";
+
+        $ext = self::mimeTypeToExtension( $encoded->mimetype(), true );
+        $targetUrl = $media->getTargetUrl( $variantName, Uuid::v4()->toString() . $ext );
+        if ($targetUrl === null) return false;
+
+        $savePath = "{$public}/{$targetUrl}";
+        $dir = dirname( $savePath );
+        if (!is_dir($dir)) mkdir( $dir, recursive: true );
+
+        $encoded->save( $savePath );
+
+        if ($media->hasConversion($variantName))
+            unlink( "{$public}/{$media->getUrl( $variantName )}" );
+
+        $media->setConversion( $variantName, $targetUrl, $image, $encoded, $variant );
+        return true;
+    }
+
+    public function getObjectIDsWithMedia(string $entityClass, string $collection): array {
+        return $this->entityManager->getRepository(Media::class)
+            ->createQueryBuilder('q')
+            ->select('q.modelID')->distinct()
+            ->where('q.collection = :collection')->setParameter('collection', $collection)
+            ->andWhere('q.modelType = :modelType')->setParameter('modelType', $entityClass)
+            ->getQuery()->getSingleColumnResult();
     }
 
     /**

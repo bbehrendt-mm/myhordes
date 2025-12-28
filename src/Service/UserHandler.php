@@ -22,6 +22,7 @@ use App\Entity\UserSwapPivot;
 use App\Enum\Configuration\MyHordesSetting;
 use App\Enum\DomainBlacklistType;
 use App\Service\Actions\Cache\InvalidateTagsInAllPoolsAction;
+use App\Service\Media\MediaService;
 use App\Service\User\UserCapabilityService;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\QueryBuilder;
@@ -42,13 +43,14 @@ class UserHandler
     const ErrorAvatarTooManyFrames = ErrorHelper::BaseAvatarErrors + 8;
 
     public function __construct(
-        private readonly EntityManagerInterface $entity_manager,
-        private readonly ContainerInterface $container,
-        private readonly ConfMaster $conf,
+        private readonly EntityManagerInterface         $entity_manager,
+        private readonly ContainerInterface             $container,
+        private readonly ConfMaster                     $conf,
         private readonly InvalidateTagsInAllPoolsAction $clearCache,
-        private readonly UserCapabilityService $capability,
-        private readonly PermissionHandler $permissions,
-        private readonly EventProxyService $proxy,
+        private readonly UserCapabilityService          $capability,
+        private readonly PermissionHandler              $permissions,
+        private readonly EventProxyService              $proxy,
+        private readonly MediaService $mediaService,
     )
     { }
 
@@ -130,10 +132,15 @@ class UserHandler
             ->setLastActionTimestamp( null )
             ->setRightsElevation(0);
 
-        if ($user->getAvatar()) {
-            $this->entity_manager->remove($user->getAvatar());
+
+        $media = $this->mediaService->getMediaForObject( $user, 'avatar' );
+        if ($user->getAvatar() || !$media->isEmpty()) {
+            if ($user->getAvatar()) {
+                $this->entity_manager->remove($user->getAvatar());
+                $user->setAvatar(null);
+            }
+            $this->mediaService->clearMediaFromObject( $user, 'avatar' );
             ($this->clearCache)("user_avatar_{$user->getId()}");
-            $user->setAvatar(null);
         }
 
          $user_coalitions = $this->entity_manager->getRepository(UserGroupAssociation::class)->findBy( [

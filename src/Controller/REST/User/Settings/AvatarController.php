@@ -4,15 +4,18 @@ namespace App\Controller\REST\User\Settings;
 
 use App\Entity\AccountRestriction;
 use App\Entity\Avatar;
+use App\Entity\Media;
 use App\Entity\User;
 use App\Enum\Configuration\MyHordesSetting;
 use App\Service\Actions\Cache\InvalidateTagsInAllPoolsAction;
 use App\Service\ConfMaster;
 use App\Service\JSONRequestParser;
 use App\Service\Media\ImageService;
+use App\Service\Media\MediaService;
 use App\Service\UserHandler;
 use App\Structures\Image;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -86,33 +89,29 @@ class AvatarController extends AbstractController
         ]);
     }
 
-    private function renderAvatar(User $user, bool $small): ?array {
-        $avatar = $user->getAvatar();
-        $stream = ($small && !$avatar?->isClassic()) ? $avatar?->getSmallImage() : $avatar?->getImage();
-        if (!$stream || (!$small && $avatar->isClassic())) return null;
-
+    private function renderAvatar(?Media $media, string $tag): ?array {
+        $conversion = $media?->getLargestConversionByTag( $tag );
+        if (!$conversion) return null;
 
         return [
-            'url' => $this->generateUrl('app_web_avatar', [
-                'uid' => $user->getId(),
-                'name' => $small ? $avatar->getSmallName() : $avatar->getFilename(),
-                'ext' => $avatar->getFormat()
-            ]),
-            'format' => $avatar->getFormat(),
-            'size' => strlen(stream_get_contents( $stream )),
+            'url' => $conversion->url,
+            'format' => MediaService::mimeTypeToExtension( $conversion->mime, false ),
+            'size' => $conversion->size,
         ];
     }
 
-
     /**
+     * @param MediaService $mediaService
      * @return JsonResponse
+     * @throws Exception
      */
     #[Route(path: '/media', name: 'list', methods: ['GET'])]
-    public function fetchMedia(): JsonResponse {
+    public function fetchMedia(MediaService $mediaService): JsonResponse {
+        $media = $mediaService->getSingleMediaForObject( $this->getUser(), 'avatar' );
         return new JsonResponse( [
-            'default' => $this->renderAvatar( $this->getUser(), false ),
-            'round' => null,
-            'small' => $this->renderAvatar( $this->getUser(), true ),
+            'default'   => $this->renderAvatar($media, 'square'),
+            'round'     => $this->renderAvatar($media, 'circular'),
+            'small'     => $this->renderAvatar($media, 'classic'),
         ] );
     }
 
@@ -120,7 +119,6 @@ class AvatarController extends AbstractController
      * @param EntityManagerInterface $em
      * @param InvalidateTagsInAllPoolsAction $clearCache
      * @return JsonResponse
-     * @throws InvalidArgumentException
      */
     #[Route(path: '/media', name: 'delete', methods: ['DELETE'])]
     public function deleteMedia(EntityManagerInterface $em, InvalidateTagsInAllPoolsAction $clearCache): JsonResponse {

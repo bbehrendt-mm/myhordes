@@ -2,28 +2,15 @@
 
 namespace App\Messages\Gitlab;
 
-use App\Entity\Avatar;
-use App\Entity\NotificationSubscription;
-use App\Entity\User;
 use App\Enum\Configuration\MyHordesSetting;
-use App\Enum\NotificationSubscriptionType;
-use App\Messages\WebPush\WebPushMessage;
 use App\Service\Actions\External\GetGitlabClientAction;
 use App\Service\ConfMaster;
 use ArrayHelpers\Arr;
-use Doctrine\ORM\EntityManagerInterface;
-use Gitlab\Client;
-use Symfony\Component\Asset\Packages;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
-use Symfony\Component\Messenger\Exception\UnrecoverableMessageHandlingException;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Uid\UuidV4;
-use WebPush\Message;
-use WebPush\Notification;
-use WebPush\WebPush;
 
 readonly class GitlabMessageHandler
 {

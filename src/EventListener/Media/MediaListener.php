@@ -4,8 +4,6 @@ namespace App\EventListener\Media;
 
 use App\Entity\Media;
 use App\EventListener\ContainerTypeTrait;
-use App\Messages\Media\CreateMediaVariantMessage;
-use App\Service\Media\MediaService;
 use App\Traits\Entity\LinksMedia;
 use DateTimeImmutable;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
@@ -13,8 +11,6 @@ use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
 use Doctrine\ORM\Event\OnClearEventArgs;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
-use Doctrine\ORM\Event\PostPersistEventArgs;
-use Doctrine\ORM\Event\PrePersistEventArgs;
 use Doctrine\ORM\Event\PreRemoveEventArgs;
 use Doctrine\ORM\Events;
 use Exception;
@@ -58,7 +54,7 @@ class MediaListener implements ServiceSubscriberInterface
 
     public static function getSubscribedServices(): array
     {
-        return [MessageBusInterface::class, MediaService::class];
+        return [MessageBusInterface::class];
     }
 
     public function preRemove(PreRemoveEventArgs $args): void {
@@ -84,14 +80,17 @@ class MediaListener implements ServiceSubscriberInterface
             if (!$media->transientImage || !$media->transientOwner)
                 throw new Exception("New media entity has no transientImage or transientOwner set!");
 
-            $media
-                ->setModelID( $media->transientOwner->getPrimaryKey() )
-                ->buildStoragePath( $media->transientOwner->getMediaPath() )
-                ->setCreatedAt(new DateTimeImmutable());
-            $args->getObjectManager()->getUnitOfWork()->recomputeSingleEntityChangeSet(
-                $args->getObjectManager()->getClassMetadata(Media::class),
+            if ($media->getModelID() === null || $media->getStorage() === null || $media->getCreatedAt() === null) {
                 $media
-            );
+                    ->setModelID($media->transientOwner->getPrimaryKey())
+                    ->buildStoragePath($media->transientOwner->getMediaPath())
+                    ->setCreatedAt(new DateTimeImmutable());
+
+                $args->getObjectManager()->getUnitOfWork()->recomputeSingleEntityChangeSet(
+                    $args->getObjectManager()->getClassMetadata(Media::class),
+                    $media
+                );
+            }
         }
     }
 
@@ -126,10 +125,8 @@ class MediaListener implements ServiceSubscriberInterface
 
         if ($media->autoVariants) {
             $bus = $this->getService(MessageBusInterface::class);
-            $mediaService = $this->getService(MediaService::class);
-
-            foreach ($mediaService->getCollectionForMedia($media)->getVariants( $media->transientImage ) as $variant)
-                $bus->dispatch( new CreateMediaVariantMessage( $media->getId(), $variant->name, $variant->serialize() ) );
+            foreach ($media->pendingConversionMessages() as $message)
+                $bus->dispatch( $message );
         }
     }
 

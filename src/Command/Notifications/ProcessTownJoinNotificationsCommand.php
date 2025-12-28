@@ -15,6 +15,7 @@ use App\Enum\UserSetting;
 use App\Messages\WebPush\WebPushMessage;
 use App\Service\GameFactory;
 use App\Service\LogTemplateHandler;
+use App\Service\Media\MediaService;
 use App\Service\UserFactory;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -44,6 +45,7 @@ class ProcessTownJoinNotificationsCommand extends Command
         private readonly TranslatorInterface $trans,
         private readonly GameFactory $gameFactory,
         private readonly LogTemplateHandler $log,
+        private readonly MediaService $mediaService,
     )
     {
         parent::__construct();
@@ -65,8 +67,6 @@ class ProcessTownJoinNotificationsCommand extends Command
             ->getQuery()->execute();
 
         if (empty($accumulators)) return 0;
-
-        $crow_avatar = $this->entityManager->getRepository(User::class)->find(66)?->getAvatar()?->getId();
 
         if (!$input->getOption('no-handle')) {
             foreach ($accumulators as $accumulator)
@@ -119,7 +119,7 @@ class ProcessTownJoinNotificationsCommand extends Command
                     new WebPushMessage($subscription,
                         title:         $this->trans->trans($plural ? 'Freunde sind einer Stadt beigetreten' : 'Ein Freund ist einer Stadt beigetreten', [], 'global', $accumulator->getSubject()->getLanguage() ?? 'en' ),
                         body:          $text,
-                        avatar:        $crow_avatar
+                        avatar:        $this->mediaService->getSingleMediaForObject( $this->entityManager->getRepository(User::class)->find(66), 'avatar' )?->getId()
                     )
                 );
         }

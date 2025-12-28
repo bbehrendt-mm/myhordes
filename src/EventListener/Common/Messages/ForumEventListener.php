@@ -18,6 +18,7 @@ use App\Messages\WebPush\WebPushMessage;
 use App\Service\Actions\Mercure\BroadcastPMUpdateViaMercureAction;
 use App\Service\CitizenHandler;
 use App\Service\CrowService;
+use App\Service\Media\MediaService;
 use App\Service\PermissionHandler;
 use App\Service\PictoHandler;
 use App\Service\UserHandler;
@@ -54,7 +55,8 @@ final class ForumEventListener implements ServiceSubscriberInterface
             CrowService::class,
             PictoHandler::class,
             CitizenHandler::class,
-            BroadcastPMUpdateViaMercureAction::class
+            BroadcastPMUpdateViaMercureAction::class,
+            MediaService::class,
         ];
     }
 
@@ -100,7 +102,7 @@ final class ForumEventListener implements ServiceSubscriberInterface
                             'threadname' => $event->post->getThread()->getTranslatable() ? $this->getService(TranslatorInterface::class)->trans($event->post->getThread()->getTitle(), [], 'game', $lang) : $event->post->getThread()->getTitle(),
                             'forumname' => $event->post->getThread()->getForum()->getLocalizedTitle( $lang )
                         ], 'global', $lang ),
-                        avatar: $event->post->isAnonymous() ? null : $event->post->getOwner()->getAvatar()?->getId()
+                        avatar: $event->post->isAnonymous() ? null : $this->getService(MediaService::class)->getSingleMediaForObject( $event->post->getOwner(), 'avatar' )?->getId()
                     )
                 );
         }
@@ -149,7 +151,7 @@ final class ForumEventListener implements ServiceSubscriberInterface
                                     'threadname' => $event->post->getThread()->getTranslatable() ? $this->getService(TranslatorInterface::class)->trans($event->post->getThread()->getTitle(), [], 'game', $lang) : $event->post->getThread()->getTitle(),
                                     'forumname' => $forum->getLocalizedTitle( $lang )
                                 ], 'global', $lang ),
-                                avatar: $event->post->isAnonymous() ? null : $user->getAvatar()?->getId()
+                                avatar: $event->post->isAnonymous() ? null : $this->getService(MediaService::class)->getSingleMediaForObject( $user, 'avatar' )?->getId()
                             )
                         );
 
