@@ -90,6 +90,10 @@ class Media
         return $this;
     }
 
+    public function getMangledClassName(): string {
+        return md5($this->getModelType());
+    }
+
     public function getModelID(): ?string
     {
         return $this->modelID;

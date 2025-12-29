@@ -330,7 +330,7 @@ const AvatarEditor = ({data, mime, cancel, confirm}:{data:ArrayBuffer, mime: str
         const geo = getGeometry().current;
         const sel = getSelector();
         const mta = getMeta().current;
-        
+
         const onResize = () => {
             updateSelector( dragging.current.x0 || dragging.current.y0 || dragging.current.x1 || dragging.current.y1 );
         }
@@ -632,7 +632,7 @@ const AvatarEditor = ({data, mime, cancel, confirm}:{data:ArrayBuffer, mime: str
                             y: imageDimensions.y - metaSmall.current.y0 - metaSmall.current.y1,
                             width: metaSmall.current.x1,
                             height: metaSmall.current.y1,
-                        } : null, format.current?.value ).then(()=> {
+                        } : null, null, format.current?.value ).then(()=> {
                             confirm();
                             setLoading(false);
                         }).catch(() => setLoading(false));

@@ -39,11 +39,12 @@ export class AvatarCreatorAPI extends TranslatableAPI<ResponseIndex> {
             .request().delete().then(() => true);
     }
 
-    public uploadMedia(mime,data,cropDefault = null,cropSmall = null,format=null): Promise<boolean|number> {
+    public uploadMedia(mime,data,cropDefault = null,cropSmall = null, cropRound = null,format=null): Promise<boolean|number> {
         return this.fetch.from('/media').bodyDeterminesSuccess(true).withErrorMessages()
             .request().put({mime,data,format,crop: {
                 default: cropDefault,
-                small: cropSmall
+                small: cropSmall,
+                round: cropRound
             }}).then(() => true);
     }
 

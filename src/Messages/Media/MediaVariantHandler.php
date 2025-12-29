@@ -47,10 +47,9 @@ readonly class MediaVariantHandler
         $this->em->persist( $media );
         $this->em->flush();
 
-        $mangled_class = md5($media->getModelType());
         ($this->clearCache)([
             ...$message->getRelatedCaches(),
-            "media_{$mangled_class}_{$media->getModelID()}!{$media->getCollection()}"
+            "media_{$media->getMangledClassName()}_{$media->getModelID()}!{$media->getCollection()}"
         ]);
     }
 

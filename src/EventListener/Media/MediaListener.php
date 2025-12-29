@@ -40,6 +40,7 @@ class MediaListener implements ServiceSubscriberInterface
      * @var string[]
      */
     private array $directories_to_delete = [];
+    private array $caches_to_invalidate = [];
 
     /**
      * @var Media[]
@@ -110,6 +111,11 @@ class MediaListener implements ServiceSubscriberInterface
             }
         }
         $this->directories_to_delete = [];
+
+        if (!empty($this->caches_to_invalidate)) {
+            $this->getService(InvalidateTagsInAllPoolsAction::class)($this->caches_to_invalidate);
+            $this->caches_to_invalidate = [];
+        }
     }
 
     public function onClear(OnClearEventArgs $args): void {
@@ -127,8 +133,10 @@ class MediaListener implements ServiceSubscriberInterface
         if (!is_dir($dir)) mkdir( dirname( $full ), recursive: true );
         $media->transientImage?->save($full);
 
-        if (!empty($media->relatedCaches))
-            $this->getService(InvalidateTagsInAllPoolsAction::class)($media->relatedCaches);
+        $this->getService(InvalidateTagsInAllPoolsAction::class)([
+            ...$media->relatedCaches,
+            "media_{$media->getMangledClassName()}_{$media->getModelID()}!{$media->getCollection()}"
+        ]);
 
         if ($media->autoVariants) {
             $bus = $this->getService(MessageBusInterface::class);
@@ -139,5 +147,6 @@ class MediaListener implements ServiceSubscriberInterface
 
     public function deleteFromStorage(Media $media): void {
         $this->directories_to_delete[] = $media->getStorage();
+        $this->caches_to_invalidate[] = "media_{$media->getMangledClassName()}_{$media->getModelID()}!{$media->getCollection()}";
     }
 }

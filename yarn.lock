@@ -7358,6 +7358,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-image-crop@npm:^11.0.10":
+  version: 11.0.10
+  resolution: "react-image-crop@npm:11.0.10"
+  peerDependencies:
+    react: ">=16.13.1"
+  checksum: 10c0/2c2c7066c3a51838fc074a4a125ee2063170e01c26e3b1c8fc8b66155cf7ef576b5747089b4f365ce9dd2728794c39f57643b37eb78116e9db3f4b6299d3f682
+  languageName: node
+  linkType: hard
+
 "react-immutable-proptypes@npm:2.2.0":
   version: 2.2.0
   resolution: "react-immutable-proptypes@npm:2.2.0"
@@ -7879,6 +7888,7 @@ __metadata:
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
     react-error-boundary: "npm:^4.1.2"
+    react-image-crop: "npm:^11.0.10"
     react-konva: "npm:^18.0"
     regenerator-runtime: "npm:^0.14.1"
     sortablejs: "npm:^1.15.6"
