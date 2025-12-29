@@ -147,7 +147,7 @@
                             {% if app.user.activeIcon.prototype %}
                                 <img id="user_current_icon" alt="" src="{{ asset('build/images/icons/title/' ~ app.user.activeIcon.prototype.icon ~ '.gif') }}" />
                             {% elseif app.user.activeIcon|singleMedia('icon') is not null %}
-                                <img id="user_current_icon" alt="" src="{{ app.user.activeIcon|singleMedia('icon').source(16) }}" srcset="{{ app.user.activeIcon|singleMedia('icon').sourceSetDPI(16) }}" />
+                                <img id="user_current_icon" alt="" src="{{ app.user.activeIcon|singleMediaSource('icon', 16) }}" srcset="{{ app.user.activeIcon|singleMediaSource('icon', 16, true) }}" />
                             {% endif %}
                         {% else %}
                             <img id="user_current_icon" alt="" src="" style="display: none" />
@@ -161,7 +161,7 @@
                                     <img {% if app.user|restricted(constant('App\\Entity\\AccountRestriction::RestrictionProfileTitle')) and app.user.activeIcon != award %}disabled{% endif %} class="pointer" x-title-icon="{{ award.id }}" alt="" src="{{ asset('build/images/icons/title/' ~ award.prototype.icon ~ '.gif') }}" />
                                 {% elseif award|singleMedia('icon') is not null %}
                                     {% set has_icon = true %}
-                                    <img {% if app.user|restricted(constant('App\\Entity\\AccountRestriction::RestrictionProfileTitle')) and app.user.activeIcon != award %}disabled{% endif %} class="pointer" x-title-icon="{{ award.id }}" alt="" src="{{ award|singleMedia('icon').source(16) }}" srcset="{{ award|singleMedia('icon').sourceSetDPI(16) }}" />
+                                    <img {% if app.user|restricted(constant('App\\Entity\\AccountRestriction::RestrictionProfileTitle')) and app.user.activeIcon != award %}disabled{% endif %} class="pointer" x-title-icon="{{ award.id }}" alt="" src="{{ award|singleMediaSource('icon',16) }}" srcset="{{ award|singleMediaSource('icon',16,true) }}" />
                                 {% endif %}
 
                             {% endfor %}

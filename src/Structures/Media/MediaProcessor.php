@@ -14,6 +14,7 @@ use Intervention\Image\Interfaces\ImageInterface;
  * @method self scaleDown(int $width, ?int $height = null)
  * @method self cover(int $width, int $height, string $position = 'center')
  * @method self coverDown(int $width, int $height, string $position = 'center')
+ * @method self crop(int $width, int $height, int $offset_x = 0, int $offset_y = 0, mixed $background = 'ffffff', string $position = 'top-left')
  * @method self toWebp(mixed ...$options)
  * @method self toPng(mixed ...$options)
  * @method self toGif(mixed ...$options)
@@ -24,11 +25,22 @@ trait MediaProcessor
     private array $chain = [];
     private ?array $encode = null;
 
+    private bool $prepend_mode = false;
+
+    public function prepend(): self {
+        $this->prepend_mode = true;
+        return $this;
+    }
+
     public function __call(string $name, array $arguments)
     {
         if ($name === 'encode' || str_starts_with( $name, 'to' ))
             $this->encode = [$name, $arguments];
-        else $this->chain[] = [$name, $arguments];
+        elseif (!$this->prepend_mode) $this->chain[] = [$name, $arguments];
+        else {
+            array_unshift($this->chain, [$name, $arguments]);
+            $this->prepend_mode = false;
+        }
         return $this;
     }
 

@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Messages\Media\CreateMediaVariantMessage;
 use App\Repository\MediaRepository;
+use App\Structures\Media\AnonymousMediaVariant;
 use App\Structures\Media\MediaConversion;
 use App\Structures\Media\MediaVariantInterface;
 use App\Traits\Entity\LinksMedia;
@@ -58,6 +59,8 @@ class Media
      */
     public ?object $transientOwner = null;
     public bool $autoVariants = true;
+
+    public array $relatedCaches = [];
 
     #[ORM\Column]
     private \DateTimeImmutable $createdAt;
@@ -228,6 +231,30 @@ class Media
         }
 
         return $set ? $this->setConversions($new) : $this;
+    }
+
+    /**
+     * @param string|array $conversions
+     * @param callable(AnonymousMediaVariant): void $callback
+     * @return Media
+     */
+    public function modifyConversion(string|array $conversions, callable $callback): static
+    {
+        if (!is_array($conversions)) $conversions = [$conversions];
+        $data = $this->getConversions();
+
+        $set = false;
+        foreach ($conversions as $conversion) {
+            $config = Arr::get($data, "$conversion.config", null);
+            if (!$config) continue;
+
+            $temp = new AnonymousMediaVariant($config);
+            $callback($temp);
+            Arr::set($data, "$conversion.config", $temp->serialize());
+            $set = true;
+        }
+
+        return $set ? $this->setConversions($data) : $this;
     }
 
     public function tagConversion(string|array $conversions, string|array $tag): static

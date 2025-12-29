@@ -12,10 +12,14 @@ use App\Service\ConfMaster;
 use App\Service\JSONRequestParser;
 use App\Service\Media\ImageService;
 use App\Service\Media\MediaService;
+use App\Service\PermissionHandler;
 use App\Service\UserHandler;
 use App\Structures\Image;
+use App\Structures\Media\AnonymousMediaVariant;
+use App\Structures\Media\MediaVariantInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Intervention\Image\Interfaces\ImageInterface;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,6 +27,7 @@ use Symfony\Component\Asset\Packages;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 
@@ -118,22 +123,32 @@ class AvatarController extends AbstractController
     /**
      * @param EntityManagerInterface $em
      * @param InvalidateTagsInAllPoolsAction $clearCache
+     * @param MediaService $mediaService
      * @return JsonResponse
+     * @throws Exception
      */
     #[Route(path: '/media', name: 'delete', methods: ['DELETE'])]
-    public function deleteMedia(EntityManagerInterface $em, InvalidateTagsInAllPoolsAction $clearCache): JsonResponse {
+    public function deleteMedia(EntityManagerInterface $em, InvalidateTagsInAllPoolsAction $clearCache, MediaService $mediaService): JsonResponse {
 
-        if ($this->getUser()->getAvatar()) {
+        $avatar = $this->getUser()->getAvatar();
+        $media = $mediaService->getMediaForObject( $this->getUser(), 'avatar' );
+
+        if ($avatar || !$media->isEmpty()) {
+            if ($avatar) {
+                $em->remove($this->getUser()->getAvatar());
+                $this->getUser()->setAvatar(null);
+            }
+
+            $mediaService->clearMediaFromObject( $this->getUser(), 'avatar' );
+
             $clearCache("user_avatar_{$this->getUser()->getId()}");
-            $em->remove($this->getUser()->getAvatar());
-            $this->getUser()->setAvatar(null);
             $em->flush();
         }
 
         return new JsonResponse();
     }
 
-    private function validateCrop(?array $crop, ?Image $image = null): ?array {
+    private function validateCrop(?array $crop, ?ImageInterface $image = null): ?array {
         if (!$crop) return null;
 
         try {
@@ -141,8 +156,8 @@ class AvatarController extends AbstractController
             if ($h < 0 || $w < 0 || $x < 0 || $y < 0) return null;
 
             if ($image) {
-                if (($x + $w > $image->width) || ($y + $h > $image->height)) return null;
-                if ($x === 0 && $y === 0 && $w === $image->width && $h === $image->height) return null;
+                if (($x + $w > $image->width()) || ($y + $h > $image->height())) return null;
+                if ($x === 0 && $y === 0 && $w === $image->width() && $h === $image->height()) return null;
             }
 
             return $crop;
@@ -154,19 +169,20 @@ class AvatarController extends AbstractController
 
     /**
      * @param JSONRequestParser $parser
-     * @param UserHandler $userHandler
+     * @param PermissionHandler $permissionHandler
      * @param ConfMaster $conf
      * @param EntityManagerInterface $em
      * @param InvalidateTagsInAllPoolsAction $clearCache
      * @return JsonResponse
+     * @throws Exception
      */
     #[Route(path: '/media', name: 'upload', methods: ['PUT'])]
     public function uploadMedia(
         JSONRequestParser $parser,
-        UserHandler $userHandler,
+        PermissionHandler $permissionHandler,
         ConfMaster $conf,
         EntityManagerInterface $em,
-        InvalidateTagsInAllPoolsAction $clearCache
+        MediaService $mediaService,
     ): JsonResponse {
         $payload = $parser->get_base64('data');
         $format = $parser->get('format', 'avif');
@@ -174,7 +190,7 @@ class AvatarController extends AbstractController
         if ($lossless) $format = 'webp';
 
         $user = $this->getUser();
-        if ($userHandler->isRestricted($user, AccountRestriction::RestrictionProfileAvatar))
+        if ($permissionHandler->checkRestriction($user, AccountRestriction::RestrictionProfileAvatar))
             return new JsonResponse(status: Response::HTTP_FORBIDDEN);
 
         if (!$payload) return new JsonResponse(status: Response::HTTP_BAD_REQUEST);
@@ -182,69 +198,44 @@ class AvatarController extends AbstractController
         if (strlen( $payload ) > $conf->getGlobalConf()->get(MyHordesSetting::AvatarMaxSizeUpload))
             return new JsonResponse(['error' => UserHandler::ErrorAvatarTooLarge]);
 
-        $image = ImageService::createImageFromData( $payload );
-        if (!$image) return new JsonResponse(['error' => UserHandler::ErrorAvatarFormatUnsupported]);
+        $media = $mediaService->addMediaToObjectFromBinaryString( $user, $payload, null, 'avatar', Uuid::v7() );
 
-        $cropDefault = $this->validateCrop( $parser->get_array( 'crop' )['default'] ?? null, $image );
-        $cropSmall = $this->validateCrop( $parser->get_array( 'crop' )['small'] ?? null, $image );
+        $all_conversions     = $media->findConversions();
+        $classic_conversions = $media->findConversions(includeTags: ['classic']);
+        $square_conversions  = $media->findConversions(includeTags: ['square']);
+        $round_conversions   = $media->findConversions(includeTags: ['circular']);
 
-        if (($cropSmall || $cropDefault) && $image->frames > 10)
-            return new JsonResponse(['error' => UserHandler::ErrorAvatarTooManyFrames]);
+        $classic_crop = $this->validateCrop( $parser->get_array( 'crop.small'), $media->transientImage );
+        $square_crop = $this->validateCrop( $parser->get_array( 'crop.default'), $media->transientImage );
+        $round_crop = $this->validateCrop( $parser->get_array( 'crop.round' ), $media->transientImage );
 
-        if ($cropSmall) {
-            list('height' => $h, 'width' => $w, 'x' => $x, 'y' => $y) = $cropSmall;
-            $small_image = ImageService::cloneImage( $image );
-            ImageService::crop( $small_image, $x, $y, $w, $h );
-            $final_w = max( 90, min( $w, 180 ) );
-            $final_h = round( $final_w / 3 );
-            ImageService::resize( $small_image, $final_w, $final_h );
-        } else $small_image = null;
+        $media->tagConversion( $square_conversions, 'default' );
 
-        if ($cropDefault) {
-            list('height' => $h, 'width' => $w, 'x' => $x, 'y' => $y) = $cropDefault;
-            ImageService::crop( $image, $x, $y, $w, $h );
-        }
+        if ($classic_crop) $media->modifyConversion( $classic_conversions, fn(AnonymousMediaVariant $variant) => $variant->prepend()->crop(
+            $classic_crop['width'], $classic_crop['height'], $classic_crop['x'], $classic_crop['y'],
+        ) );
 
-        $final_d = min(200, max( $image->width, $image->height ));
-        if (max( $image->width, $image->height ) > $final_d)
-            ImageService::resize( $image, $final_d, $final_d, bestFit: true );
+        if ($square_crop) $media->modifyConversion( $square_conversions, fn(AnonymousMediaVariant $variant) => $variant->prepend()->crop(
+            $square_crop['width'], $square_crop['height'], $square_crop['x'], $square_crop['y'],
+        ) );
 
-        $converter_formats = ImageService::getCompressionOptions( $image, $format, $lossless );
+        if ($round_crop) $media->modifyConversion( $round_conversions, fn(AnonymousMediaVariant $variant) => $variant->prepend()->crop(
+            $round_crop['width'], $round_crop['height'], $round_crop['x'], $round_crop['y'],
+        ) );
 
-        $format = null;
-        $data = null;
-        foreach ($converter_formats as $test_format) {
-            if (!($test_data = ImageService::save( $image, $test_format, $lossless ? 1.0 : 0.9 ))) continue;
-            if ($data === null || strlen( $data ) > strlen( $test_data )) {
-                $format = $test_format;
-                $data = $test_data;
+        if ($media->transientImage->count() === 1) $media->modifyConversion( $all_conversions, function(AnonymousMediaVariant $variant) use ($format) {
+            switch ($format) {
+                case 'webp':
+                    $variant->toWebp(quality: 90);
+                    break;
+                case 'lossless':
+                    $variant->toWebp(quality: 100);
+                    break;
             }
-        }
+        } );
 
-        if (!$data) return new JsonResponse(['error' => UserHandler::ErrorAvatarFormatUnsupported]);
-
-        if (strlen($data) > $conf->getGlobalConf()->get(MyHordesSetting::AvatarMaxSizeProcess))
-            return new JsonResponse(['error' => UserHandler::ErrorAvatarInsufficientCompression]);
-
-        if (!($avatar = $user->getAvatar())) {
-            $avatar = new Avatar();
-            $user->setAvatar($avatar);
-        }
-
-        $avatar
-            ->setChanged(new \DateTime())
-            ->setFilename( md5( $data ) )
-            ->setFormat( strtolower( $format ?? $image->format ) )
-            ->setImage( $data )
-            ->setX( $image->width )
-            ->setY( $image->height );
-
-        if ($small_image && $small_data = ImageService::save( $small_image, $format ?? $image->format ))
-            $avatar->setSmallName( md5($small_data) )->setSmallImage( $small_data );
-        else $avatar->setSmallName( null )->setSmallImage( null );
-
-        $clearCache("user_avatar_{$user->getId()}");
-        $em->persist( $user );
+        $media->relatedCaches = ["user_avatar_{$user->getId()}"];
+        $em->persist( $media );
         $em->flush();
 
         return new JsonResponse(['success' => true]);

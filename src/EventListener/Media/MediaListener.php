@@ -4,6 +4,7 @@ namespace App\EventListener\Media;
 
 use App\Entity\Media;
 use App\EventListener\ContainerTypeTrait;
+use App\Service\Actions\Cache\InvalidateTagsInAllPoolsAction;
 use App\Traits\Entity\LinksMedia;
 use DateTimeImmutable;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
@@ -54,7 +55,10 @@ class MediaListener implements ServiceSubscriberInterface
 
     public static function getSubscribedServices(): array
     {
-        return [MessageBusInterface::class];
+        return [
+            MessageBusInterface::class,
+            InvalidateTagsInAllPoolsAction::class,
+        ];
     }
 
     public function preRemove(PreRemoveEventArgs $args): void {
@@ -123,10 +127,13 @@ class MediaListener implements ServiceSubscriberInterface
         if (!is_dir($dir)) mkdir( dirname( $full ), recursive: true );
         $media->transientImage?->save($full);
 
+        if (!empty($media->relatedCaches))
+            $this->getService(InvalidateTagsInAllPoolsAction::class)($media->relatedCaches);
+
         if ($media->autoVariants) {
             $bus = $this->getService(MessageBusInterface::class);
             foreach ($media->pendingConversionMessages() as $message)
-                $bus->dispatch( $message );
+                $bus->dispatch( $message->appendToRelatedCaches( $media->relatedCaches ) );
         }
     }
 

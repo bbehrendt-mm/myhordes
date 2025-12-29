@@ -225,11 +225,9 @@
                             {% if user.activeTitle or user.activeIcon %}
                                 <div>
                                     {% if user.activeIcon %}
-                                        {% if user.activeIcon|singleMedia('icon') is not null %}
-                                            <img alt="" src="{{ user.activeIcon|singleMedia('icon').source(16) }}" srcset="{{ user.activeIcon|singleMedia('icon').sourceSetDPI(16) }}" />
-                                        {% else %}
-                                            <img alt="" src="{{ asset('build/images/icons/title/' ~ user.activeIcon.prototype.icon ~ '.gif') }}" />
-                                        {% endif %}
+                                        <img alt=""
+                                             src="{{ user.activeIcon|singleMediaSource('icon', 16, false, asset('build/images/icons/title/' ~ user.activeIcon.prototype.icon ~ '.gif')) }}"
+                                             srcset="{{ user.activeIcon|singleMediaSource('icon', 16, true) }}" />
                                     {% endif %}
                                     {% if user.activeTitle %} {{ user.activeTitle.customTitle ?? user|translated_title(app.user)|raw }}{% endif %}
                                 </div>

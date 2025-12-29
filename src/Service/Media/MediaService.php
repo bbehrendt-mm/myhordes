@@ -206,17 +206,19 @@ readonly class MediaService
      * @param string $data
      * @param string $mime
      * @param string $collection
+     * @param string|null $filename
      * @return Media|null
      * @noinspection PhpDocSignatureInspection
+     * @throws Exception
      */
-    public function addMediaToObjectFromBinaryString(object $object, string $data, ?string $mime, string $collection): ?Media {
+    public function addMediaToObjectFromBinaryString(object $object, string $data, ?string $mime, string $collection, ?string $filename = null): ?Media {
         $image = new ImageManager( Driver::class, strip: true )->read($data);
         $mime ??= $image->encode()->mimetype();
         return $this->addMediaToObjectFromImage(
             $object,
             $image,
             $collection,
-            "blob" . self::mimeTypeToExtension($mime),
+            ($filename ?? 'blob') . self::mimeTypeToExtension($mime),
             $mime,
             strlen($data)
         );
@@ -268,6 +270,7 @@ readonly class MediaService
      * @param string $collection
      * @return Media|null
      * @noinspection PhpDocSignatureInspection
+     * @throws Exception
      */
     public function addMediaToObjectFromResource(object $object, mixed $data, string $mime, string $collection): ?Media {
         return $this->addMediaToObjectFromBinaryString($object, stream_get_contents($data), $mime, $collection);

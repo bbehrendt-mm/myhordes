@@ -25,6 +25,7 @@ use App\Service\Media\MediaService;
 use App\Service\PermissionHandler;
 use App\Service\UserHandler;
 use App\Structures\MyHordesConf;
+use App\Traits\Entity\LinksMedia;
 use ArrayHelpers\Arr;
 use DateTime;
 use Doctrine\Common\Collections\Collection;
@@ -32,9 +33,12 @@ use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use MyHordes\Fixtures\DTO\Container;
 use Normalizer;
+use Psr\Cache\InvalidArgumentException;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Contracts\Cache\ItemInterface;
+use Symfony\Contracts\Cache\TagAwareCacheInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\Extension\GlobalsInterface;
@@ -47,6 +51,8 @@ class MediaExtensions extends AbstractExtension implements GlobalsInterface
 
     public function __construct(
         private readonly MediaService $mediaService,
+        private readonly TagAwareCacheInterface $gameCachePool,
+        private readonly EntityManagerInterface $entityManager,
     ) { }
 
     public function getFilters(): array
@@ -54,6 +60,7 @@ class MediaExtensions extends AbstractExtension implements GlobalsInterface
         return [
             new TwigFilter('media', [$this, 'media']),
             new TwigFilter('singleMedia', [$this, 'singleMedia']),
+            new TwigFilter('singleMediaSource', [$this, 'singleMediaSource']),
         ];
     }
 
@@ -98,5 +105,59 @@ class MediaExtensions extends AbstractExtension implements GlobalsInterface
      */
     public function singleMedia(object $data, string $collection) : ?Media {
         return $this->cacheMedia(true, $data, $collection);
+    }
+
+    /**
+     * @param ?object $data
+     * @param string $collection
+     * @param int|null $expected_size
+     * @param bool $sourceSet
+     * @return string
+     * @throws InvalidArgumentException
+     */
+    public function singleMediaSource(?object $data, string $collection, ?int $expected_size = null, bool $sourceSet = false, string $fallback = '') : string {
+        if ($data === null) return '';
+
+        $class = md5($this->entityManager->getClassMetadata($data::class)->getName());
+        $identifier = $data->getPrimaryKey();
+
+        $ex = explode('@', $collection);
+        $collection = $ex[0];
+        $tags = $ex[1] ?? 'default';
+
+        $key = 'media_source_' .
+            $class . '_' .
+            $identifier . '_' .
+            $collection . '_' .
+            $tags . '_' .
+            ($sourceSet ? 'set' : 'single') . '_' .
+            ($expected_size === null ? 'max' : $expected_size);
+
+        $tags = explode('|', $tags);
+
+        $result = $this->gameCachePool->get($key, function (ItemInterface $item) use ($sourceSet, $class, $identifier, $collection, $tags, $data, $expected_size, $fallback) {
+            $item->expiresAfter(604800)->tag([
+                'media', "media_$class", "media_{$class}_{$identifier}",
+                "media_{$class}_{$identifier}!{$collection}",
+                "media_{$class}!{$collection}",
+            ]);
+
+            $media = $this->cacheMedia(true, $data, $collection);
+            if (!$media) return '';
+
+            foreach ($tags as $tag) {
+                $result = match(true) {
+                    $sourceSet && $expected_size !== null => $media->getSourceSetDPI( $expected_size, tag: $tag ),
+                    $sourceSet => $media->getSourceSet(tag: $tag),
+                    !$sourceSet => $media->getSource( $expected_size, tag: $tag )
+                };
+
+                if (!empty($result)) return $result;
+            }
+
+            return '';
+        });
+
+        return (empty($result)) ? $fallback : $result;
     }
 }

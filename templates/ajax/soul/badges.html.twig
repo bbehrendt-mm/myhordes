@@ -3,11 +3,9 @@
     {% if badger.activeTitle or badger.activeIcon %}
         <div class="badge-title">
             {% if badger.activeIcon %}
-                {% if badger.activeIcon|singleMedia('icon') is not null %}
-                    <img alt="" src="{{ badger.activeIcon|singleMedia('icon').source(16) }}" srcset="{{ badger.activeIcon|singleMedia('icon').sourceSetDPI(16) }}" />
-                {% else %}
-                    <img alt="" src="{{ asset('build/images/icons/title/' ~ badger.activeIcon.prototype.icon ~ '.gif') }}" />
-                {% endif %}
+                <img alt=""
+                     src="{{ badger.activeIcon|singleMediaSource('icon', 16, false, asset('build/images/icons/title/' ~ badger.activeIcon.prototype.icon ~ '.gif')) }}"
+                     srcset="{{ badger.activeIcon|singleMediaSource('icon', 16, true) }}" />
             {% endif %}
             {% if badger.activeTitle %}<span>{{ badger.activeTitle.customTitle ?? badger|translated_title(app.user)|raw }}</span>{% endif %}
         </div><br />

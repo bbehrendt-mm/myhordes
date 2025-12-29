@@ -3,6 +3,7 @@
 namespace App\Messages\Media;
 
 use App\Entity\Media;
+use App\Service\Actions\Cache\InvalidateTagsInAllPoolsAction;
 use App\Service\Media\MediaService;
 use App\Structures\Media\AnonymousMediaVariant;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,7 +20,8 @@ readonly class MediaVariantHandler
     public function __construct(
         private EntityManagerInterface $em,
         private MediaService $mediaService,
-        ParameterBagInterface $parameterBag
+        private InvalidateTagsInAllPoolsAction $clearCache,
+        ParameterBagInterface $parameterBag,
     ) {
         $this->public = $parameterBag->get('kernel.project_dir') . '/public/storage';
     }
@@ -45,6 +47,11 @@ readonly class MediaVariantHandler
         $this->em->persist( $media );
         $this->em->flush();
 
+        $mangled_class = md5($media->getModelType());
+        ($this->clearCache)([
+            ...$message->getRelatedCaches(),
+            "media_{$mangled_class}_{$media->getModelID()}!{$media->getCollection()}"
+        ]);
     }
 
 }

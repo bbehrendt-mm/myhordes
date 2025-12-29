@@ -20,8 +20,9 @@
 
     {# If the user is an official group, restructure the object to fulfill the User interface #}
     {% if user is defined and user|instance_of('App\\Entity\\OfficialGroup') %}
-        {% set media = user|singleMedia('icon') %}
-        {% set url   = media.source %}
+        {% set mediaCollection = 'icon' %}
+        {% set mediaHost = user %}
+        {% set url   = mediaHost|singleMediaSource('icon') %}
         {% set user  = {
             id: user.usergroup.id + 100, name: user.usergroup.name,
             avatar: null
@@ -59,12 +60,9 @@
             {% if user.id == 66 %}
                 {% set url = asset('build/images/forum/crow/crow.' ~ (small ? 'small.' : '') ~ (app.request.locale|e('html_attr')|split('_', 2))[0] ~ '.png') %}
             {% else %}
-                {% set media = user|singleMedia('avatar') %}
-                {% if media is not null %}
-                    {% set url = media.source %}
-                {% else %}
-                    {% set url = user|avatar(small) %}
-                {% endif %}
+                {% set mediaCollection = 'avatar' ~ (gpm ? '@circular|default' : (small ? '@classic|default' : '')) %}
+                {% set mediaHost = user %}
+                {% set url = mediaHost|singleMediaSource(mediaCollection, null, false, user|avatar(small)) %}
             {% endif %}
         {% endif %}
 
@@ -77,7 +75,7 @@
             {% endif %}
         {% endif %}
 
-        {% if user.id == 66 or url or media or ((fallback is not defined or fallback) and not gpm) %}
+        {% if user.id == 66 or url or mediaCollection or ((fallback is not defined or fallback) and not gpm) %}
 
             {% if wrapper is not defined or wrapper %}
                 <div {{ additional_attributes|attributes }} {{ {
@@ -91,8 +89,8 @@
                     {% else %}
                         {% set attrs = {} %}
                     {% endif %}
-                    {% if media is defined and media is not null %}
-                        <img {{ attrs|attributes }} alt="" src="{{ media.source(w) }}" srcset="{{ media.sourceSetDPI(w) }}"/>
+                    {% if mediaHost is defined %}
+                        <img {{ attrs|attributes }} alt="" src="{{ mediaHost|singleMediaSource(mediaCollection, w, false, url) }}" srcset="{{ mediaHost|singleMediaSource(mediaCollection, w, true) }}"/>
                     {% else %}
                         <img {{ attrs|attributes }} alt="" src="{{ url }}"/>
                     {% endif %}
@@ -105,8 +103,8 @@
                     {% else %}{% if whitespace is not defined or whitespace %}&nbsp;{% endif %}{% endif %}
                 </div>
             {% else %}
-                {% if media is defined %}
-                    <img {{ additional_attributes|attributes }} {{ additional_classes|classes }} alt="" src="{{ media.source(w) }}" srcset="{{ media.sourceSetDPI(w) }}"/>
+                {% if mediaHost is defined %}
+                    <img {{ additional_attributes|attributes }} {{ additional_classes|classes }} alt="" src="{{ mediaHost|singleMediaSource(mediaCollection, w, false, url) }}" srcset="{{ mediaHost|singleMediaSource(mediaCollection, w, true) }}"/>
                 {% else %}
                     <img {{ additional_attributes|attributes }} {{ additional_classes|classes }} alt="" src="{{ url }}"/>
                 {% endif %}

@@ -337,7 +337,7 @@
                     {% endif %}
                     {% if award|singleMedia('icon') is not null %}
                         <div class="padded cell rw-12"><label><input type="radio" name="{{ _self.gen_id(prefix,'titlemakerwidget','what')}}" x-id="{{ award.id }}" x-type="icon" id="{{ _self.gen_id(prefix,'titlemakerwidget','edit_icon_' ~ award.id)}}" />
-                            <img alt="" src="{{ award|singleMedia('icon').source(16) }}" srcset="{{ award|singleMedia('icon').sourceSetDPI(16) }}" />
+                            <img alt="" src="{{ award|singleMediaSource('icon', 16) }}" srcset="{{ award|singleMediaSource('icon', 16, true) }}" />
                         </label></div>
                     {% endif %}
                 {% endif %}

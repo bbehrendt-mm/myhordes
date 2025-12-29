@@ -287,11 +287,9 @@
                             {% elseif post.owner.activeTitle or post.owner.activeIcon %}
                                 <span class="small">
                                     {% if post.owner.activeIcon %}
-                                        {% if post.owner.activeIcon|singleMedia('icon') is not null %}
-                                            <img alt="" src="{{ post.owner.activeIcon|singleMedia('icon').source(16) }}" srcset="{{ post.owner.activeIcon|singleMedia('icon').sourceSetDPI(16) }}" />
-                                        {% else %}
-                                            <img alt="" src="{{ asset('build/images/icons/title/' ~ post.owner.activeIcon.prototype.icon ~ '.gif') }}" />
-                                        {% endif %}
+                                        <img alt=""
+                                             src="{{ post.owner.activeIcon|singleMediaSource('icon', 16, false, asset('build/images/icons/title/' ~ post.owner.activeIcon.prototype.icon ~ '.gif')) }}"
+                                             srcset="{{ post.owner.activeIcon|singleMediaSource('icon', 16, true) }}" />
                                     {% endif %}
                                     {% if post.owner.activeTitle %}<i>{{ post.owner.activeTitle.customTitle ?? post.owner|translated_title(app.user)|raw }}</i>{% endif %}
                                 </span>
