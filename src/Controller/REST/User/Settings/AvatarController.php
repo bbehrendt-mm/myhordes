@@ -54,10 +54,11 @@ class AvatarController extends AbstractController
 
                     'no_avatar' => $trans->trans('Damit andere Spieler dich besser erkennen, kannst du hier ein Profilbild hochladen', [], 'soul'),
 
-                    'edit_help' => $trans->trans('Wenn du möchtest, kannst du deinen Avatar vor dem Speichern noch zuschneiden. Ziehe dafür einfach das weiße Auswahlrechteck auf den Bildausschnitt, den du als Avatar verwenden möchtest. Du kannst auch den komprimierten 90/30-Bereich einzeln bearbeiten.', [], 'soul'),
-                    'edit_help2' => $trans->trans('Bist du fertig, klicke auf "Profilbild speichern" um deinen Avatar hochzuladen.', [], 'soul'),
+                    'edit_help' => $trans->trans('MyHordes verwendet drei unterschiedliche Bildformate für dein Profilbild. Standartmäßig werden diese automatisch aus deinem ausgewählten Bild ermittelt. Du kannst die Bildausschnitte aber auch selbst wählen, wenn du möchtest. Klicke dazu einfach bei dem entsprechenden Bildformat auf "Bearbeiten".', [], 'soul'),
+                    'edit_help2' => $trans->trans('Bist du fertig, klicke auf "Profilbild speichern" um deinen Avatar hochzuladen. Dein Bild wird dann vom System automatisch komprimiert und zugeschnitten.', [], 'soul'),
+                    'edit_help3' => $trans->trans('Das automatische Komprimieren und Zuschneiden kann einige Sekunden dauern. Sobald dein Bild fertig verarbeitet wurde, siehst du noch einmal eine Vorschau und kannst das Bild dann final als deinen neuen Avatar festlegen.', [], 'soul'),
 
-                    'format_upload' => $trans->trans('Hochgeladenes Bild', [], 'soul'),
+                    'format_upload' => $trans->trans('Originales Bild', [], 'soul'),
                     'format_default' => $trans->trans('Normale Anzeige', [], 'soul'),
                     'format_round' => $trans->trans('Runde Anzeige', [], 'soul'),
                     'format_small' => $trans->trans('Komprimierte Anzeige', [], 'soul'),
@@ -80,9 +81,11 @@ class AvatarController extends AbstractController
                     'error_too_large' => $trans->trans('Die Datei ist zu groß.', [], 'soul'),
                     'error_unknown_format' => $trans->trans('Dieses Dateiformat wird nicht unterstützt.', [], 'soul'),
 
+                    'edit_redo' => $trans->trans('Anderes Bild auswählen', [], 'soul'),
                     'edit_auto' => $trans->trans('Komprimierten Ausschnitt automatisch festlegen', [], 'soul'),
                     'edit_manual' => $trans->trans('Ich möchte den komprimierten Ausschnitt selbst festlegen', [], 'soul'),
                     'edit_now' => $trans->trans('Bearbeiten', [], 'soul'),
+                    'edit_finish' => $trans->trans('Fertig', [], 'soul'),
 
                     'compression' => $trans->trans('Bildformat', [], 'soul'),
                     'compression_help'   => $trans->trans('Die empfohlene Einstellung erzeugt in den allermeisten Fällen ein Bild in bestmöglicher Qualität. In seltenen Fällen, insbesondere bei sehr dunklen Bildern, kann das Ergebnis jedoch verwaschen aussehen. Versuche in diesem Fall, die alternative Option auszuwählen.', [], 'soul'),

@@ -33,7 +33,7 @@ const NotificationManagerWrapper = ( {}: {} ) => {
 
     const supported = pushAPIIsSupported();
 
-    const apiRef = useRef<NotificationManagerAPI>();
+    const apiRef = useRef<NotificationManagerAPI>( new NotificationManagerAPI() );
 
     const strings = useTranslations( apiRef.current );
     const [list, setList] = useState<Array<NotificationSubscription>>(null)
@@ -49,7 +49,6 @@ const NotificationManagerWrapper = ( {}: {} ) => {
     }
 
     useEffect( () => {
-        apiRef.current = new NotificationManagerAPI();
         apiRef.current.list('webpush').then( list => setList(list.subscriptions) );
     }, [] )
 

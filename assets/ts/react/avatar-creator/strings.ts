@@ -6,6 +6,7 @@ export type TranslationStrings = {
 
         edit_help: string,
         edit_help2: string,
+        edit_help3: string,
 
         format_upload: string
         format_default: string
@@ -30,9 +31,11 @@ export type TranslationStrings = {
         error_too_large: string,
         error_unknown_format: string,
 
+        edit_redo: string,
         edit_auto: string,
         edit_manual: string,
         edit_now: string,
+        edit_finish: string,
 
         compression: string,
         compression_help: string,

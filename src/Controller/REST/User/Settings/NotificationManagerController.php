@@ -85,7 +85,6 @@ class NotificationManagerController extends AbstractController
     #[Route(path: '/', name: 'index', methods: ['GET'])]
     public function index(Packages $assets, UserCapabilityService $capability, TranslatorInterface $trans): JsonResponse {
         return new JsonResponse([
-            'strings' => [
                 'common' => [
                     'help' => $trans->trans('Hilfe', [], 'global'),
                     'infoText1' => $trans->trans('Wenn du möchtest, kannst du auch dann Benachrichtigungen auf deinen Computer oder Smartphone bekommen, wenn du gerade nicht auf MyHordes unterwegs bist. So bist du immer auf dem neusten Stand und kannst keine wichtigen Meldungen mehr verpassen!', [], 'global'),
@@ -126,7 +125,6 @@ class NotificationManagerController extends AbstractController
                     'headline' => $trans->trans('Einstellungen für Push-Benachrichtigungen', [], 'soul' ),
                     'toggle' => $this->getToggleOptions( $capability, $trans )
                 ]
-            ]
         ]);
     }
 
