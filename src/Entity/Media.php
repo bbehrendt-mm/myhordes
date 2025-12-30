@@ -37,6 +37,9 @@ class Media
     #[ORM\Column(length: 255)]
     private ?string $collection = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $collectionFolder = null;
+
     #[ORM\Column(length: 1023)]
     private ?string $storage = null;
 
@@ -118,6 +121,18 @@ class Media
         return $this;
     }
 
+    public function getCollectionFolder(): ?string
+    {
+        return $this->collectionFolder;
+    }
+
+    public function setCollectionFolder(?string $collectionFolder): static
+    {
+        $this->collectionFolder = $collectionFolder;
+
+        return $this;
+    }
+
     public function getStorage(): ?string
     {
         return $this->storage;
@@ -144,7 +159,8 @@ class Media
 
     public function buildStoragePath(string $storage): static
     {
-        return $this->setStorage("{$storage}/{$this->collection}/{$this->id}");
+        $folder = $this->getCollectionFolder() ?? $this->getCollection();
+        return $this->setStorage("{$storage}/{$folder}/{$this->id}");
     }
 
     public function knowsConversion(string $conversion): bool
@@ -164,6 +180,13 @@ class Media
         $filename = $filename ?? $this->filename;
 
         return "{$this->storage}/c/{$conversion}/{$filename}";
+    }
+
+    public function getConversionUrl(string $conversion): ?string
+    {
+        return $this->hasConversion($conversion)
+            ? Arr::get( $this->conversions, "$conversion.path", null )
+            : null;
     }
 
     public function getUrl(?string $conversion = null): ?string
@@ -353,11 +376,11 @@ class Media
     /**
      * @return MediaConversion[]
      */
-    public function getConversionsByTag(string $tag): array
+    public function getConversionsByTag(string $tag, bool $include_pending = false): array
     {
-        $conversions = $this->getRawConversionsByTag($tag);
+        $conversions = $this->getRawConversionsByTag($tag, $include_pending);
         return array_map(
-            fn(string $conversion, array $data) => new MediaConversion($this, $conversion, Arr::get($data, 'meta'), Arr::get($data, 'tags', ['default'])),
+            fn(string $conversion, array $data) => new MediaConversion($this, $conversion, Arr::get($data, 'meta', []), Arr::get($data, 'tags', ['default'])),
             array_keys($conversions), $conversions
         );
     }
@@ -365,11 +388,12 @@ class Media
     /**
      * @param string $tag
      * @param int|null $expectedSize
+     * @param bool $include_pending
      * @return MediaConversion|null
      */
-    public function getLargestConversionByTag(string $tag, ?int $expectedSize = PHP_INT_MAX): ?MediaConversion
+    public function getLargestConversionByTag(string $tag, ?int $expectedSize = PHP_INT_MAX, bool $include_pending = false): ?MediaConversion
     {
-        $conversions = $this->getConversionsByTag( $tag );
+        $conversions = $this->getConversionsByTag( $tag, $include_pending );
         usort( $conversions, fn(MediaConversion $a, MediaConversion $b) => $a->width <=> $b->width );
 
         return
@@ -380,12 +404,12 @@ class Media
 
 
 
-    protected function getRawConversionsByTag(string $tag): array
+    protected function getRawConversionsByTag(string $tag, bool $include_pending = false): array
     {
         return array_filter($this->conversions, fn($entry) =>
-            Arr::get($entry, 'created') &&
+            ($include_pending || (Arr::get($entry, 'created') &&
             Arr::get($entry, 'path') &&
-            Arr::get($entry, 'meta.width') &&
+            Arr::get($entry, 'meta.width'))) &&
             in_array( $tag, Arr::get($entry, 'tags', ['default']), true )
         );
     }

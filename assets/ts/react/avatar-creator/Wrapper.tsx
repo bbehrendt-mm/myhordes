@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import {AvatarCreatorAPI, ResponseIndex, ResponseMedia} from "./api";
+import {AvatarCreatorAPI, MediaGroup, ResponseMedia} from "./api";
 import {useContext, useEffect, useLayoutEffect, useRef, useState} from "react";
 import {TranslationStrings} from "./strings";
 import {Global} from "../../defaults";
@@ -30,7 +30,7 @@ const AvatarCreatorWrapper = ( {maxSize}: {maxSize: number} ) => {
     const uploadRef = useRef<HTMLInputElement>();
 
     const index = useTranslations(apiRef.current);
-    const [media, setMedia] = useState<ResponseMedia>(null)
+    const [media, setMedia] = useState<MediaGroup>(null)
 
     const [loading, setLoading] = useState<boolean>(false)
     const [editMode, setEditMode] = useState<{ mime: string, data: ArrayBuffer }>(null)
@@ -38,7 +38,7 @@ const AvatarCreatorWrapper = ( {maxSize}: {maxSize: number} ) => {
     const [editBlockedByResolution, setEditBlockedByResolution] = useState<boolean>(false);
 
     useEffect( () => {
-        apiRef.current.getMedia().then( media => setMedia(media) );
+        apiRef.current.getMedia().then( media => setMedia(media?.avatar) );
     }, [] )
 
     return (
@@ -79,7 +79,7 @@ const AvatarCreatorWrapper = ( {maxSize}: {maxSize: number} ) => {
                     <div className="row">
                         { index && media && (media.default || media.round || media.small) && <>
                             <div className="padded cell rw-4 rw-md-6 rw-sm-12">
-                                <button onClick={()=>uploadRef.current?.click()}>
+                                <button onClick={()=> uploadRef.current?.click()}>
                                     { index.strings.common.action_edit }
                                 </button>
                             </div>
@@ -108,7 +108,7 @@ const AvatarCreatorWrapper = ( {maxSize}: {maxSize: number} ) => {
                                         setLoading(true);
                                         await apiRef.current.deleteMedia();
                                         const media = await apiRef.current.getMedia();
-                                        setMedia(media);
+                                        setMedia(media?.avatar);
                                         setLoading(false);
                                     }
                                 }}>{ index.strings.common.action_delete }</button>
@@ -127,7 +127,7 @@ const AvatarCreatorWrapper = ( {maxSize}: {maxSize: number} ) => {
             { editMode && <AvatarEditor {...editMode} cancel={()=>setEditMode(null)} confirm={()=>{
                 setEditMode(null);
                 setMedia(null);
-                apiRef.current.getMedia().then( media => setMedia(media) );
+                apiRef.current.getMedia().then( media => setMedia(media?.avatar) );
             }} /> }
         </Globals.Provider>
     )
@@ -144,7 +144,7 @@ const getMediaDimensions = ( url: string, callback: (d: ImageDimensions)=>void )
     i.src = url;
 }
 
-const AvatarDisplay = ({media,defaultResolutionCallback}:{media:ResponseMedia, defaultResolutionCallback: (x: number, y: number) => void}) => {
+const AvatarDisplay = ({media,defaultResolutionCallback}:{media:MediaGroup, defaultResolutionCallback: (x: number, y: number) => void}) => {
 
     const globals = useContext(Globals)
     const [defaultImageDimensions, setDefaultImageDimensions] = useState<ImageDimensions>(null)

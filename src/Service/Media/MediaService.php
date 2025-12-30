@@ -159,11 +159,12 @@ readonly class MediaService
         if (!$this->checkTrait($object)) return null;
 
         $collectionObject = $object::mediaCollection($collection);
-        if ($collectionObject === null) return null;
+        if ($collectionObject === null || $collectionObject->isArchiveCollection()) return null;
 
         $media = new Media()
             ->setId( Uuid::v7() )
-            ->setCollection($collection)
+            ->setCollection($collectionObject->name)
+            ->setCollectionFolder($collectionObject->folder)
             ->setModelType( $this->entityManager->getClassMetadata($object::class)->getName() )
             ->setFilename($filename)
             ->setMime( $mime )

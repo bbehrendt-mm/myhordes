@@ -8,6 +8,11 @@ export type TranslationStrings = {
         edit_help2: string,
         edit_help3: string,
 
+        view_current: string,
+        view_pending: string,
+        view_check: string,
+        view_warn: string,
+
         format_upload: string
         format_default: string
         format_round: string

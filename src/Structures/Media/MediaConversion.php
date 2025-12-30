@@ -24,12 +24,17 @@ readonly class MediaConversion
         public array $tags,
     ) {}
 
+    private function getUrl(): ?string {
+        $url = $this->media->getConversionUrl($this->conversion);
+        return empty($url) ? null : "/storage/$url";
+    }
+
     public function __get(string $name)
     {
         return match ($name) {
             'width', 'height', 'frames', 'size' => Arr::get($this->meta, $name, 0),
             'mime' => Arr::get($this->meta, 'mime', 'application/octet-stream'),
-            'url'  => "/storage/{$this->media->getUrl($this->conversion)}",
+            'url'  => $this->getUrl(),
             default => null,
         };
     }

@@ -3,7 +3,9 @@
 namespace App\Messages\Media;
 
 use App\Entity\Media;
+use App\Entity\User;
 use App\Service\Actions\Cache\InvalidateTagsInAllPoolsAction;
+use App\Service\Actions\Mercure\BroadcastViaMercureAction;
 use App\Service\Media\MediaService;
 use App\Structures\Media\AnonymousMediaVariant;
 use Doctrine\ORM\EntityManagerInterface;
@@ -21,6 +23,7 @@ readonly class MediaVariantHandler
         private EntityManagerInterface $em,
         private MediaService $mediaService,
         private InvalidateTagsInAllPoolsAction $clearCache,
+        private BroadcastViaMercureAction $broadcast,
         ParameterBagInterface $parameterBag,
     ) {
         $this->public = $parameterBag->get('kernel.project_dir') . '/public/storage';
@@ -51,6 +54,29 @@ readonly class MediaVariantHandler
             ...$message->getRelatedCaches(),
             "media_{$media->getMangledClassName()}_{$media->getModelID()}!{$media->getCollection()}"
         ]);
+
+        if ($media->getModelType() === User::class) {
+            $owner = $this->em->getRepository(User::class)->find($media->getModelID());
+            $conversion = $media->getConversion($message->variantName);
+            if ($owner && $conversion)
+                ($this->broadcast)(
+                       'related-media-update',
+                       [
+                           'media' => $media->getId(),
+                           'collection' => $media->getCollection(),
+                           'data' => [
+                               'id' => $conversion->conversion,
+                               'url' => $conversion->url,
+                               'format' => $conversion->mime,
+                               'size' => $conversion->size,
+                               'x' => $conversion->width,
+                               'y' => $conversion->height,
+                               'f' => $conversion->frames
+                           ]
+                       ],
+                    users: $owner
+                );
+        }
     }
 
 }

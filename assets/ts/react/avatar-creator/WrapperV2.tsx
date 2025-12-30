@@ -1,13 +1,16 @@
 import * as React from "react";
 
-import {AvatarCreatorAPI, ResponseMedia} from "./api";
+import {AvatarCreatorAPI, Media, MediaSet, ResponseMedia} from "./api";
 import {useContext, useEffect, useLayoutEffect, useRef, useState} from "react";
 import {TranslationStrings} from "./strings";
 import {Global} from "../../defaults";
 import {BaseMounter} from "../index";
-import {useTranslations} from "../utils";
+import {useSharedWorkerMessages, useTranslations} from "../utils";
 import {Buffer} from "buffer";
 import {AvatarModeEdit} from "./AvatarEditorV2";
+import {AvatarModeView} from "./AvatarViewerV2";
+import {useBroadcastSignal} from "../../v2/client-modules/Signal";
+import {sharedWorkerMessageHandler} from "../../v2/init";
 
 declare var $: Global;
 
@@ -32,6 +35,14 @@ type TransientMedia = {
     data: Buffer
 }
 
+type MediaSignal = {
+    media: string,
+    collection: string,
+    data: Media
+}
+
+export type SignalCache = {[key: string]: {[key: string]: Media}};
+
 const AvatarCreatorWrapper = ( {maxSize}: {maxSize: number} ) => {
 
     const api = useRef<AvatarCreatorAPI>(new AvatarCreatorAPI());
@@ -43,14 +54,28 @@ const AvatarCreatorWrapper = ( {maxSize}: {maxSize: number} ) => {
     const [media, setMedia] = useState<ResponseMedia>(null);
     const [mode, setMode] = useState<'empty'|'view'|'new'|'edit'>('empty')
 
-    const hasMedia = media !== null && (media.default !== null || media.round !== null || media.small !== null);
+    const [signalCache, setSignalCache] = useState<SignalCache>({})
+
+    useSharedWorkerMessages<MediaSignal>('related-media-update', (data) => {
+        if (data.collection !== 'avatar-pending') return;
+        setSignalCache(c => {
+            c = {...c};
+            c[data.media] = c[data.media] ?? {};
+            c[data.media][data.data.id] = data.data;
+            return c;
+        });
+    }, 'live', [])
+
+    const checkHasMedia = (m: ResponseMedia): boolean => m !== null && (m.avatar || m.pending || m.history) && true;
+
+    const hasMedia = checkHasMedia(media);
 
     useEffect( () => {
         setMedia(null);
         api.current.getMedia().then( media => {
             setImage(null);
             setMedia(media);
-            if (media.default !== null || media.round !== null || media.small !== null) setMode('view');
+            if (checkHasMedia(media)) setMode('view');
             else setMode('empty');
         } );
     }, [etag] )
@@ -67,6 +92,7 @@ const AvatarCreatorWrapper = ( {maxSize}: {maxSize: number} ) => {
                     {(!index || !media) && <div className="loading"/>}
                     {(index && media) && <>
                         { mode === 'empty' && <AvatarModeEmpty/> }
+                        { mode === 'view' && <AvatarModeView current={media.avatar} pending={media.pending} signalCache={signalCache} /> }
                         { mode === 'new' && <AvatarModeNew maxSize={maxSize} hasMedia={hasMedia}/> }
                         { mode === 'edit' && <AvatarModeEdit mime={ image.mime } data={ image.data } hasMedia={hasMedia}/> }
                     </>}

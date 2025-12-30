@@ -9,12 +9,13 @@ use Intervention\Image\Interfaces\ImageInterface;
 class MediaCollection
 {
     private bool $single = false;
+    private bool $archive = false;
 
     private array $variants = [];
-    private array $conditional_variants = [];
 
     public function __construct(
         public readonly string $name,
+        public readonly ?string $folder = null
     ) {}
 
     public function singleFile($single = true): self {
@@ -24,6 +25,15 @@ class MediaCollection
 
     public function isSingleFile(): bool {
         return $this->single;
+    }
+
+    public function archiveCollection($archive = true): self {
+        $this->archive = $archive;
+        return $this;
+    }
+
+    public function isArchiveCollection(): bool {
+        return $this->archive;
     }
 
     /**

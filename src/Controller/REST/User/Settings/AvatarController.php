@@ -16,6 +16,7 @@ use App\Service\PermissionHandler;
 use App\Service\UserHandler;
 use App\Structures\Image;
 use App\Structures\Media\AnonymousMediaVariant;
+use App\Structures\Media\MediaConversion;
 use App\Structures\Media\MediaVariantInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -53,6 +54,11 @@ class AvatarController extends AbstractController
                     'help' => $trans->trans('Hilfe', [], 'global'),
 
                     'no_avatar' => $trans->trans('Damit andere Spieler dich besser erkennen, kannst du hier ein Profilbild hochladen', [], 'soul'),
+
+                    'view_current' => $trans->trans('Aktueller Avatar', [], 'soul'),
+                    'view_pending' => $trans->trans('Vorschau des neuen Avatars', [], 'soul'),
+                    'view_check' => $assets->getUrl('build/images/icons/done.png'),
+                    'view_warn' => $assets->getUrl('build/images/icons/warning_anim.gif'),
 
                     'edit_help' => $trans->trans('MyHordes verwendet drei unterschiedliche Bildformate für dein Profilbild. Standartmäßig werden diese automatisch aus deinem ausgewählten Bild ermittelt. Du kannst die Bildausschnitte aber auch selbst wählen, wenn du möchtest. Klicke dazu einfach bei dem entsprechenden Bildformat auf "Bearbeiten".', [], 'soul'),
                     'edit_help2' => $trans->trans('Bist du fertig, klicke auf "Profilbild speichern" um deinen Avatar hochzuladen. Dein Bild wird dann vom System automatisch komprimiert und zugeschnitten.', [], 'soul'),
@@ -97,14 +103,28 @@ class AvatarController extends AbstractController
         ]);
     }
 
-    private function renderAvatar(?Media $media, string $tag): ?array {
-        $conversion = $media?->getLargestConversionByTag( $tag );
-        if (!$conversion) return null;
-
+    private function renderAvatarConversion( MediaConversion $conversion, ?string $id = null ): array {
         return [
+            'id' => $id ?? $conversion->conversion,
             'url' => $conversion->url,
             'format' => MediaService::mimeTypeToExtension( $conversion->mime, false ),
             'size' => $conversion->size,
+            'x' => $conversion->width,
+            'y' => $conversion->height,
+            'f' => $conversion->frames,
+        ];
+    }
+
+    private function renderAvatar(?Media $media, string $tag, bool $include_pending = false): ?array {
+        $conversion = $media?->getLargestConversionByTag( $tag, include_pending: $include_pending );
+        if (!$conversion) return null;
+
+        return [
+            ...$this->renderAvatarConversion( $conversion, $media->getId() ),
+            'conversions' => array_map(
+                fn(MediaConversion $c) => $this->renderAvatarConversion( $c ),
+                $media?->getConversionsByTag( $tag, $include_pending ),
+            )
         ];
     }
 
@@ -115,12 +135,21 @@ class AvatarController extends AbstractController
      */
     #[Route(path: '/media', name: 'list', methods: ['GET'])]
     public function fetchMedia(MediaService $mediaService): JsonResponse {
-        $media = $mediaService->getSingleMediaForObject( $this->getUser(), 'avatar' );
-        return new JsonResponse( [
-            'default'   => $this->renderAvatar($media, 'square'),
-            'round'     => $this->renderAvatar($media, 'circular'),
-            'small'     => $this->renderAvatar($media, 'classic'),
-        ] );
+        $render = function(?Media $media, bool $include_pending = false) {
+            $data = $media ? array_filter([
+                'default'   => $this->renderAvatar($media, 'square', $include_pending),
+                'round'     => $this->renderAvatar($media, 'circular', $include_pending),
+                'small'     => $this->renderAvatar($media, 'classic', $include_pending),
+            ]) : null;
+
+            return empty($data) ? null : $data;
+        };
+
+        return new JsonResponse( array_filter([
+            'avatar'  => $render( $mediaService->getSingleMediaForObject( $this->getUser(), 'avatar' ) ),
+            'pending' => $render( $mediaService->getSingleMediaForObject( $this->getUser(), 'avatar-pending' ), true ),
+            'history' => $mediaService->getMediaForObject( $this->getUser(), 'avatar-history' )->map( fn(Media $m) => $render( $m ) )->toArray(),
+        ]));
     }
 
     /**
@@ -134,7 +163,14 @@ class AvatarController extends AbstractController
     public function deleteMedia(EntityManagerInterface $em, InvalidateTagsInAllPoolsAction $clearCache, MediaService $mediaService): JsonResponse {
 
         $avatar = $this->getUser()->getAvatar();
-        $media = $mediaService->getMediaForObject( $this->getUser(), 'avatar' );
+
+        $collection = 'avatar-pending';
+        $media =  $mediaService->getMediaForObject( $this->getUser(), $collection );
+        if ($media->isEmpty()) {
+            $collection = 'avatar';
+            $media = $mediaService->getMediaForObject($this->getUser(), $collection);
+        }
+        if ($media->isEmpty()) $collection = null;
 
         if ($avatar || !$media->isEmpty()) {
             if ($avatar) {
@@ -142,7 +178,8 @@ class AvatarController extends AbstractController
                 $this->getUser()->setAvatar(null);
             }
 
-            $mediaService->clearMediaFromObject( $this->getUser(), 'avatar' );
+            if ($collection !== null)
+                $mediaService->clearMediaFromObject( $this->getUser(), $collection);
 
             $clearCache("user_avatar_{$this->getUser()->getId()}");
             $em->flush();
@@ -175,7 +212,7 @@ class AvatarController extends AbstractController
      * @param PermissionHandler $permissionHandler
      * @param ConfMaster $conf
      * @param EntityManagerInterface $em
-     * @param InvalidateTagsInAllPoolsAction $clearCache
+     * @param MediaService $mediaService
      * @return JsonResponse
      * @throws Exception
      */
@@ -188,6 +225,7 @@ class AvatarController extends AbstractController
         MediaService $mediaService,
     ): JsonResponse {
         $payload = $parser->get_base64('data');
+        $pending = $parser->get('pending', true);
         $format = $parser->get('format', 'avif');
         $lossless = $format === 'lossless';
         if ($lossless) $format = 'webp';
@@ -201,7 +239,7 @@ class AvatarController extends AbstractController
         if (strlen( $payload ) > $conf->getGlobalConf()->get(MyHordesSetting::AvatarMaxSizeUpload))
             return new JsonResponse(['error' => UserHandler::ErrorAvatarTooLarge]);
 
-        $media = $mediaService->addMediaToObjectFromBinaryString( $user, $payload, null, 'avatar', Uuid::v7() );
+        $media = $mediaService->addMediaToObjectFromBinaryString( $user, $payload, null, $pending ? 'avatar-pending' : 'avatar', Uuid::v7() );
 
         $all_conversions     = $media->findConversions();
         $classic_conversions = $media->findConversions(includeTags: ['classic']);

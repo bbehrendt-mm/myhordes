@@ -157,7 +157,10 @@
   &.inline {display: inline-flex; }
   &:not(.inline) {display: flex; }
 
-  &.column { flex-direction: column }
+  &.column {
+      flex-direction: column;
+      &>hr.section { width: 80% }
+  }
   &.wrap {flex-wrap: wrap}
 
   &.top { align-items: flex-start; }

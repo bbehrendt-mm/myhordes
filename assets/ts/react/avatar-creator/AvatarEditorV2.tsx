@@ -5,13 +5,7 @@ import {byteToText} from "../../v2/utils";
 import {centerCrop, Crop, makeAspectCrop, ReactCrop} from "react-image-crop";
 import {Buffer} from "buffer";
 import {Globals} from "./WrapperV2";
-
-type PixelCrop = {
-    x: number,
-    y: number,
-    width: number,
-    height: number
-}
+import {PixelCrop} from "./api";
 
 type AvatarEditorProps = {
     mime: string,
@@ -288,6 +282,7 @@ export const AvatarModeEdit = (props: AvatarEditorProps) => {
                             importCrop(squareCrop, meta.width, meta.height),
                             importCrop(classicCrop, meta.width, meta.height),
                             importCrop(circularCrop, meta.width, meta.height),
+                            null, true
                         ).then( () => {
                             window.setTimeout(() => globals.refresh(), 1000);
                         } );

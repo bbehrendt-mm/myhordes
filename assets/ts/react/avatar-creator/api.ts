@@ -6,23 +6,37 @@ export type ResponseIndex = {
     strings: TranslationStrings,
 }
 
-type Media = {
+export type Media = {
+    id: string
     url: string,
     format: string,
-    size: number
-}
-
-export type ResponseMedia =  {
-    default: Media|null,
-    round: Media|null,
-    small: Media|null,
-}
-
-export type Crop = {
+    size: number,
     x: number,
     y: number,
-    height: number,
-    width: number
+    f: number
+}
+
+export type MediaSet  = Media & {
+    conversions: Media[]
+}
+
+export type MediaGroup =  {
+    default: MediaSet|null,
+    round: MediaSet|null,
+    small: MediaSet|null,
+}
+
+export type ResponseMedia = {
+    avatar: MediaGroup|null,
+    pending: MediaGroup|null,
+    history: MediaGroup[]
+}
+
+export type PixelCrop = {
+    x: number,
+    y: number,
+    width: number,
+    height: number
 }
 
 export class AvatarCreatorAPI extends TranslatableAPI<ResponseIndex> {
@@ -39,9 +53,9 @@ export class AvatarCreatorAPI extends TranslatableAPI<ResponseIndex> {
             .request().delete().then(() => true);
     }
 
-    public uploadMedia(mime,data,cropDefault = null,cropSmall = null, cropRound = null,format=null): Promise<boolean|number> {
+    public uploadMedia(mime,data,cropDefault = null,cropSmall = null, cropRound = null, format=null, pending = false): Promise<boolean|number> {
         return this.fetch.from('/media').bodyDeterminesSuccess(true).withErrorMessages()
-            .request().put({mime,data,format,crop: {
+            .request().put({mime,data,format,pending,crop: {
                 default: cropDefault,
                 small: cropSmall,
                 round: cropRound
