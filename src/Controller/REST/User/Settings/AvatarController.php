@@ -137,6 +137,7 @@ class AvatarController extends AbstractController
     public function fetchMedia(MediaService $mediaService): JsonResponse {
         $render = function(?Media $media, bool $include_pending = false) {
             $data = $media ? array_filter([
+                'id' => $media->getId(),
                 'default'   => $this->renderAvatar($media, 'square', $include_pending),
                 'round'     => $this->renderAvatar($media, 'circular', $include_pending),
                 'small'     => $this->renderAvatar($media, 'classic', $include_pending),
@@ -187,6 +188,29 @@ class AvatarController extends AbstractController
 
         return new JsonResponse();
     }
+
+    /**
+     * @param Media $media
+     * @param EntityManagerInterface $em
+     * @param InvalidateTagsInAllPoolsAction $clearCache
+     * @return JsonResponse
+     */
+    #[Route(path: '/media/<id>', name: 'delete', methods: ['DELETE'])]
+    public function deleteSpecificMedia(Media $media, EntityManagerInterface $em, InvalidateTagsInAllPoolsAction $clearCache): JsonResponse {
+
+        if ($media->getModelType() !== User::class || $media->getModelId() !== $this->getUser()->getId())
+            return new JsonResponse([], Response::HTTP_NOT_FOUND);
+
+        if (!in_array( $media->getCollection(), ['avatar', 'avatar-pending', 'avatar-history'] ))
+            return new JsonResponse([], Response::HTTP_BAD_REQUEST);
+
+        $em->remove($media);
+        $em->flush();
+
+        $clearCache("user_avatar_{$this->getUser()->getId()}");
+        return new JsonResponse();
+    }
+
 
     private function validateCrop(?array $crop, ?ImageInterface $image = null): ?array {
         if (!$crop) return null;
@@ -279,6 +303,39 @@ class AvatarController extends AbstractController
         $em->persist( $media );
         $em->flush();
 
+        return new JsonResponse(['success' => true]);
+    }
+
+    /**
+     * @param JSONRequestParser $parser
+     * @param PermissionHandler $permissionHandler
+     * @param ConfMaster $conf
+     * @param EntityManagerInterface $em
+     * @param MediaService $mediaService
+     * @return JsonResponse
+     * @throws Exception
+     */
+    #[Route(path: '/media/<id>', name: 'promote', methods: ['PUT'])]
+    public function promoteMedia(
+        Media $media,
+        PermissionHandler $permissionHandler,
+        EntityManagerInterface $em,
+        MediaService $mediaService,
+    ): JsonResponse {
+        if ($media->getModelType() !== User::class || $media->getModelId() !== $this->getUser()->getId())
+            return new JsonResponse([], Response::HTTP_NOT_FOUND);
+
+        if (!in_array( $media->getCollection(), ['avatar-pending', 'avatar-history'] ))
+            return new JsonResponse([], Response::HTTP_BAD_REQUEST);
+
+        $user = $this->getUser();
+        if ($permissionHandler->checkRestriction($user, AccountRestriction::RestrictionProfileAvatar))
+            return new JsonResponse(status: Response::HTTP_FORBIDDEN);
+
+        if (!$mediaService->moveMediaToNewCollection( $media, 'avatar' ))
+            return new JsonResponse([], Response::HTTP_CONFLICT);
+
+        $em->flush();
         return new JsonResponse(['success' => true]);
     }
 }

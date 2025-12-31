@@ -26,6 +26,7 @@ use Symfony\Contracts\Service\ServiceSubscriberInterface;
 #[AsEntityListener(event: Events::prePersist, method: 'queueToStorage', entity: Media::class)]
 #[AsEntityListener(event: Events::postPersist, method: 'writeToStorage', entity: Media::class)]
 #[AsEntityListener(event: Events::preRemove, method: 'deleteFromStorage', entity: Media::class)]
+#[AsEntityListener(event: Events::postUpdate, method: 'flushCaches', entity: Media::class)]
 #[AsDoctrineListener(event: Events::preRemove)]
 #[AsDoctrineListener(event: Events::onFlush)]
 #[AsDoctrineListener(event: Events::postFlush)]
@@ -148,5 +149,12 @@ class MediaListener implements ServiceSubscriberInterface
     public function deleteFromStorage(Media $media): void {
         $this->directories_to_delete[] = $media->getStorage();
         $this->caches_to_invalidate[] = "media_{$media->getMangledClassName()}_{$media->getModelID()}!{$media->getCollection()}";
+    }
+
+    public function flushCaches(Media $media): void {
+        $this->getService(InvalidateTagsInAllPoolsAction::class)([
+            ...$media->relatedCaches,
+            "media_{$media->getMangledClassName()}_{$media->getModelID()}!{$media->getCollection()}"
+        ]);
     }
 }

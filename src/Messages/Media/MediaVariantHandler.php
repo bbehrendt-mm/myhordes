@@ -22,7 +22,7 @@ readonly class MediaVariantHandler
     public function __construct(
         private EntityManagerInterface $em,
         private MediaService $mediaService,
-        private InvalidateTagsInAllPoolsAction $clearCache,
+        //private InvalidateTagsInAllPoolsAction $clearCache,
         private BroadcastViaMercureAction $broadcast,
         ParameterBagInterface $parameterBag,
     ) {
@@ -50,10 +50,10 @@ readonly class MediaVariantHandler
         $this->em->persist( $media );
         $this->em->flush();
 
-        ($this->clearCache)([
-            ...$message->getRelatedCaches(),
-            "media_{$media->getMangledClassName()}_{$media->getModelID()}!{$media->getCollection()}"
-        ]);
+        //($this->clearCache)([
+        //    ...$message->getRelatedCaches(),
+        //    "media_{$media->getMangledClassName()}_{$media->getModelID()}!{$media->getCollection()}"
+        //]);
 
         if ($media->getModelType() === User::class) {
             $owner = $this->em->getRepository(User::class)->find($media->getModelID());

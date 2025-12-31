@@ -277,6 +277,59 @@ readonly class MediaService
         return $this->addMediaToObjectFromBinaryString($object, stream_get_contents($data), $mime, $collection);
     }
 
+    public function moveMediaToNewCollection(Media $media, string $collection): bool {
+        if ($media->getCollection() === $collection) return true;
+
+        $object = $this->getObjectForMedia( $media );
+
+        $collectionObject = $object::mediaCollection($collection);
+        if ($collectionObject === null) return false;
+
+        $media->setCollection( $collectionObject->name );
+        $this->entityManager->persist($media);
+
+        if ($collectionObject->isSingleFile())
+            foreach ($this->entityManager->getRepository(Media::class)->matching($this->getMediaCriteria( $media->getModelType(), $media->getModelID(), $collection )) as $m)
+                $this->entityManager->remove($m);
+
+        return true;
+    }
+
+    public function swapMediaCollections(Media $media1, Media $media2): bool {
+        if (
+            $media1->getModelType() !== $media2->getModelType() ||
+            $media1->getModelID() !== $media2->getModelID()
+        ) return false;
+
+        if ($media1->getCollection() === $media2->getCollection()) return true;
+
+        $object = $this->getObjectForMedia( $media1 );
+        $collectionObject1 = $object::mediaCollection($media1->getCollection());
+        $collectionObject2 = $object::mediaCollection($media2->getCollection());
+        if ($collectionObject1 === null || $collectionObject2 === null) return false;
+
+        $media1->setCollection( $collectionObject2->name );
+        $media2->setCollection( $collectionObject1->name );
+        $this->entityManager->persist($media1);
+        $this->entityManager->persist($media2);
+
+        if ($collectionObject1->isSingleFile())
+            foreach ($this->entityManager->getRepository(Media::class)->matching(
+                $this->getMediaCriteria( $media1->getModelType(), $media1->getModelID(), $collectionObject1->name )
+                    ->andWhere( Criteria::expr()->notIn('id', [$media1->getId(), $media2->getId()] ) )
+            ) as $m)
+                $this->entityManager->remove($m);
+
+        if ($collectionObject2->isSingleFile())
+            foreach ($this->entityManager->getRepository(Media::class)->matching(
+                $this->getMediaCriteria( $media2->getModelType(), $media2->getModelID(), $collectionObject2->name )
+                    ->andWhere( Criteria::expr()->notIn('id', [$media1->getId(), $media2->getId()] ) )
+            ) as $m)
+                $this->entityManager->remove($m);
+
+        return true;
+    }
+
     public static function mimeTypeToExtension(string $mime, bool $dot = true): string {
 
         $ext = match($mime) {

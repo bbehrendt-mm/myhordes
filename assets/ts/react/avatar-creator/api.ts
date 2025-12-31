@@ -21,6 +21,7 @@ export type MediaSet  = Media & {
 }
 
 export type MediaGroup =  {
+    id: string,
     default: MediaSet|null,
     round: MediaSet|null,
     small: MediaSet|null,
@@ -48,18 +49,22 @@ export class AvatarCreatorAPI extends TranslatableAPI<ResponseIndex> {
             .request().get() as Promise<ResponseMedia>;
     }
 
-    public deleteMedia(): Promise<boolean> {
-        return this.fetch.from('/media')
-            .request().delete().then(() => true);
+    public async deleteMedia(id: string = null): Promise<boolean> {
+        await this.fetch.from(id === null ? '/media' : `/media/${id}`)
+            .request().delete();
+        return true;
     }
 
-    public uploadMedia(mime,data,cropDefault = null,cropSmall = null, cropRound = null, format=null, pending = false): Promise<boolean|number> {
-        return this.fetch.from('/media').bodyDeterminesSuccess(true).withErrorMessages()
-            .request().put({mime,data,format,pending,crop: {
-                default: cropDefault,
-                small: cropSmall,
-                round: cropRound
-            }}).then(() => true);
+    public async uploadMedia(mime, data, cropDefault = null, cropSmall = null, cropRound = null, format = null, pending = false): Promise<boolean | number> {
+        await this.fetch.from('/media').bodyDeterminesSuccess(true).withErrorMessages()
+            .request().put({
+                mime, data, format, pending, crop: {
+                    default: cropDefault,
+                    small: cropSmall,
+                    round: cropRound
+                }
+            });
+        return true;
     }
 
 }

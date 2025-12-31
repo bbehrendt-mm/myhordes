@@ -19,8 +19,9 @@ export const AvatarModeView = (props: AvatarViewerProps) => {
         if (!props.pending) return;
 
         const base = JSON.parse( JSON.stringify( props.pending ) ) as MediaGroup;
+        const source = (props.signalCache[props.pending?.id] ?? {});
+
         props.pending.default.conversions.forEach((conversion) => {
-            const source = (props.signalCache[props.pending.default.id] ?? {});
             base.default.conversions = base.default.conversions.map(c => source[c.id] ?? c);
         })
         base.default.conversions.forEach( c => {
@@ -29,7 +30,6 @@ export const AvatarModeView = (props: AvatarViewerProps) => {
         } )
 
         props.pending.round.conversions.forEach((conversion) => {
-            const source = props.signalCache[props.pending.round.id] ?? {};
             base.round.conversions = base.round.conversions.map(c => source[c.id] ?? c);
         })
         base.round.conversions.forEach( c => {
@@ -38,7 +38,6 @@ export const AvatarModeView = (props: AvatarViewerProps) => {
         } )
 
         props.pending.small.conversions.forEach((conversion) => {
-            const source = props.signalCache[props.pending.small.id] ?? {};
             base.small.conversions = base.small.conversions.map(c => source[c.id] ?? c);
         })
         base.small.conversions.forEach( c => {
@@ -57,7 +56,7 @@ export const AvatarModeView = (props: AvatarViewerProps) => {
 
         { pending && <>
             <div className="flex">
-                <div><button onClick={()=> globals.api.deleteMedia().then(() => globals.refresh())}>
+                <div><button onClick={()=> globals.api.deleteMedia(props.pending.id).then(() => globals.refresh())}>
                     { globals.strings.common.action_delete }
                 </button></div>
             </div>
@@ -78,7 +77,7 @@ export const AvatarModeView = (props: AvatarViewerProps) => {
                     { globals.strings.common.action_modify }
                 </button></div>
 
-                <div><button onClick={()=> globals.api.deleteMedia().then(() => globals.refresh())}>
+                <div><button onClick={()=> globals.api.deleteMedia(props.current.id).then(() => globals.refresh())}>
                     { globals.strings.common.action_delete }
                 </button></div>
             </div>
