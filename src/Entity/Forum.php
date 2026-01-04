@@ -2,46 +2,53 @@
 
 namespace App\Entity;
 
+use App\Structures\Media\MediaCollection;
+use App\Structures\Media\MediaCollectionList;
+use App\Structures\Media\MediaVariant;
+use App\Traits\Entity\LinksMedia;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Expr\Comparison;
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
 
 #[ORM\Entity(repositoryClass: 'App\Repository\ForumRepository')]
 class Forum
 {
-    const ForumTypeDefault = 0;
-    const ForumTypeElevated = 1;
-    const ForumTypeMods = 2;
-    const ForumTypeAdmins = 3;
-    const ForumTypeCustom = 4;
-    const ForumTypeAnimac = 5;
-    const ForumTypeDev = 6;
+    use LinksMedia;
+
+    const int ForumTypeDefault = 0;
+    const int ForumTypeElevated = 1;
+    const int ForumTypeMods = 2;
+    const int ForumTypeAdmins = 3;
+    const int ForumTypeCustom = 4;
+    const int ForumTypeAnimac = 5;
+    const int ForumTypeDev = 6;
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private $id;
-    #[ORM\OneToOne(targetEntity: 'App\Entity\Town', inversedBy: 'forum', cascade: ['persist'])]
-    private $town;
+    #[ORM\OneToOne(targetEntity: Town::class, inversedBy: 'forum', cascade: ['persist'])]
+    private ?Town $town;
     #[ORM\Column(type: 'string', length: 128)]
-    private $title;
-    #[ORM\OneToMany(targetEntity: 'App\Entity\Thread', mappedBy: 'forum', cascade: ['persist', 'remove'])]
-    private $threads;
+    private ?string $title;
+    #[ORM\OneToMany(targetEntity: Thread::class, mappedBy: 'forum', cascade: ['persist', 'remove'])]
+    private Collection $threads;
     #[ORM\Column(type: 'integer', nullable: true)]
-    private $type;
+    private ?int $type;
     #[ORM\Column(type: 'text', nullable: true)]
-    private $description;
+    private ?string $description;
     #[ORM\Column(type: 'string', length: 190, nullable: true)]
-    private $icon;
+    private ?string $icon;
     #[ORM\ManyToMany(targetEntity: ThreadTag::class)]
-    private $allowedTags;
+    private Collection $allowedTags;
     #[ORM\Column(type: 'string', length: 2, nullable: true)]
-    private $worldForumLanguage;
+    private ?string $worldForumLanguage;
     #[ORM\Column(type: 'integer', nullable: true)]
-    private $worldForumSorting;
+    private ?int $worldForumSorting;
 
-    #[ORM\OneToMany(mappedBy: 'forum', targetEntity: ForumTitle::class, cascade: ['persist', 'remove'], fetch: 'EXTRA_LAZY', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: ForumTitle::class, mappedBy: 'forum', cascade: ['persist', 'remove'], fetch: 'EXTRA_LAZY', orphanRemoval: true)]
     private Collection $titles;
 
     #[ORM\ManyToOne(inversedBy: 'forums')]
@@ -243,5 +250,29 @@ class Forum
         $this->forumGroup = $forumGroup;
 
         return $this;
+    }
+
+    protected static function defineMediaCollections(MediaCollectionList $list): void
+    {
+        $list->add( new MediaCollection('icon')
+            ->singleFile()
+            ->addVariant( new MediaVariant('web')
+                ->coverDown( 100, 30 )
+                ->toWebp()
+            )
+        );
+    }
+
+    public function getMediaPathPrefix(): ?string
+    {
+        return "meta";
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getMediaBasePath(): string
+    {
+        return "forum/{$this->getPrimaryKey()}";
     }
 }

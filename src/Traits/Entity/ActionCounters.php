@@ -19,7 +19,7 @@ trait ActionCounters
     public function getSpecificActionCounter( ActionCounterType $type, ?int $ref = null, int $default = 0 ): ActionCounter {
         foreach ($this->getActionCounters() as $c)
             if ($c->getType() === $type && ($ref === null || $c->getReferenceID() === $ref)) return $c;
-        $a = (new ActionCounter())->setType($type)->setCount($default);
+        $a = new ActionCounter()->setType($type)->setCount($default);
         if ($ref !== null) $a->setReferenceID( $ref );
 
         $this->addActionCounter($a);

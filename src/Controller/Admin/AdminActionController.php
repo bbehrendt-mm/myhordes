@@ -26,6 +26,7 @@ use App\Service\HookExecutor;
 use App\Service\InventoryHandler;
 use App\Service\JSONRequestParser;
 use App\Service\LogTemplateHandler;
+use App\Service\Media\MediaService;
 use App\Service\TimeKeeperService;
 use App\Service\TownHandler;
 use App\Service\UserHandler;
@@ -59,7 +60,7 @@ class AdminActionController extends CustomAbstractController
 
     protected InvalidateTagsInAllPoolsAction $clear;
 
-    public function __construct(EntityManagerInterface $em, ConfMaster $conf, LogTemplateHandler $lth, TranslatorInterface $translator, ZoneHandler $zh, TimeKeeperService $tk, CitizenHandler $ch, InventoryHandler $ih, UserHandler $uh, CrowService $crow, AdminLog $adminLogger, UrlGeneratorInterface $urlGenerator, AdminHandler $adminHandler, TownHandler $townHandler, HookExecutor $hookExecutor, InvalidateTagsInAllPoolsAction $clear, MapMaker $mapMaker)
+    public function __construct(EntityManagerInterface $em, ConfMaster $conf, LogTemplateHandler $lth, TranslatorInterface $translator, ZoneHandler $zh, TimeKeeperService $tk, CitizenHandler $ch, InventoryHandler $ih, UserHandler $uh, CrowService $crow, AdminLog $adminLogger, UrlGeneratorInterface $urlGenerator, AdminHandler $adminHandler, TownHandler $townHandler, HookExecutor $hookExecutor, InvalidateTagsInAllPoolsAction $clear, MapMaker $mapMaker, MediaService $mediaService)
     {
         parent::__construct($conf, $em, $tk, $ch, $ih, $translator, $hookExecutor);
         $this->logTemplateHandler = $lth;
@@ -72,6 +73,7 @@ class AdminActionController extends CustomAbstractController
 		$this->town_handler = $townHandler;
         $this->clear = $clear;
 		$this->map_maker = $mapMaker;
+        $this->mediaService = $mediaService;
     }
 
     protected function clearTownCaches(Town $town): void

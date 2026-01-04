@@ -139,9 +139,9 @@ html.lang-base-en #loadzone > div:nth-child(1) { background: url("../img/anims/l
 html.lang-base-fr #loadzone > div:nth-child(1) { background: url("../img/anims/loading.fr.gif"); }
 html.lang-base-es #loadzone > div:nth-child(1) { background: url("../img/anims/loading.es.gif"); }
 
-html.lang-base-en div.loading { background: url("../img/anims/loading.en.gif") center no-repeat; }
-html.lang-base-fr div.loading { background: url("../img/anims/loading.fr.gif") center no-repeat; }
-html.lang-base-es div.loading { background: url("../img/anims/loading.es.gif") center no-repeat; }
+html.lang-base-en div.loading:not(.small):not(.smaller) { background: url("../img/anims/loading.en.gif") center no-repeat; }
+html.lang-base-fr div.loading:not(.small):not(.smaller) { background: url("../img/anims/loading.fr.gif") center no-repeat; }
+html.lang-base-es div.loading:not(.small):not(.smaller) { background: url("../img/anims/loading.es.gif") center no-repeat; }
 
 div.rps,div.coin,div.card { &[data-value-default]::before { content: attr(data-value-default) } }
 

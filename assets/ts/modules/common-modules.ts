@@ -214,6 +214,7 @@ customElements.define('hordes-forum-group', class HordesForumGroupElement extend
         return {
             id: this.dataset.id ?? null,
             icon: this.dataset.icon,
+            srcset: this.dataset.srcset,
             title: this.dataset.title,
             collapse: parseInt(this.dataset.collapse ?? '0') != 0,
             forums: data
@@ -221,7 +222,7 @@ customElements.define('hordes-forum-group', class HordesForumGroupElement extend
     }
 
     protected static observedAttributeNames() {
-        return ['data-icon', 'data-title', 'data-forums', 'data-collapse', 'data-id'];
+        return ['data-icon', 'data-title', 'data-srcset', 'data-forums', 'data-collapse', 'data-id'];
     }
 
 }, {  });
@@ -236,6 +237,7 @@ customElements.define('hordes-forum', class HordesForumElement extends Shim<Hord
             icon: this.dataset.icon,
             title: this.dataset.title,
             url: this.dataset.url,
+            srcset: this.dataset.srcset,
             sort: parseInt(this.dataset.sort ?? '0'),
             new: parseInt(this.dataset.new ?? '0') != 0,
             description: this.dataset.description
@@ -243,7 +245,7 @@ customElements.define('hordes-forum', class HordesForumElement extends Shim<Hord
     }
 
     protected static observedAttributeNames() {
-        return ['data-icon', 'data-title', 'data-url', 'data-sort', 'data-new', 'data-description'];
+        return ['data-icon', 'data-title', 'data-url', 'data-srcset', 'data-sort', 'data-new', 'data-description'];
     }
 
 }, {  });

@@ -15,6 +15,7 @@ use App\Entity\TownRankingProxy;
 use App\Entity\User;
 use App\Service\Actions\Cache\InvalidateTagsInAllPoolsAction;
 use App\Service\CommandHelper;
+use App\Service\Media\MediaService;
 use App\Service\UserHandler;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Asset\Package;
@@ -37,22 +38,14 @@ use Symfony\Contracts\Cache\TagAwareCacheInterface;
 )]
 class UserInfoCommand extends Command
 {
-    private EntityManagerInterface $entityManager;
-    private UserHandler $user_handler;
-    private UserPasswordHasherInterface $pwenc;
-    private CommandHelper $helper;
-    private UrlGeneratorInterface $router;
-    private InvalidateTagsInAllPoolsAction $clearCache;
-
-    public function __construct(EntityManagerInterface $em, UserPasswordHasherInterface $passwordEncoder,
-                                UserHandler $uh, CommandHelper $ch, UrlGeneratorInterface $router, InvalidateTagsInAllPoolsAction $clearCache)
-    {
-        $this->entityManager = $em;
-        $this->pwenc = $passwordEncoder;
-        $this->user_handler = $uh;
-        $this->helper = $ch;
-        $this->router = $router;
-        $this->clearCache = $clearCache;
+    public function __construct(
+        private readonly EntityManagerInterface $entityManager,
+        private readonly UserPasswordHasherInterface $pwenc,
+        private readonly CommandHelper $helper,
+        private readonly UrlGeneratorInterface $router,
+        private readonly InvalidateTagsInAllPoolsAction $clearCache,
+        private readonly MediaService $mediaService
+    ) {
         parent::__construct();
     }
 
@@ -294,10 +287,15 @@ class UserInfoCommand extends Command
             } elseif ($input->getOption('remove-avatar')) {
 
                 $a = $user->getAvatar();
-                if ($a !== null) {
+                $media = $this->mediaService->getMediaForObject($user, 'avatar');
+                if ($a !== null || !$media->isEmpty()) {
 
-                    $user->setAvatar(null);
-                    $this->entityManager->remove($a);
+                    if ($a !== null) {
+                        $user->setAvatar(null);
+                        $this->entityManager->remove($a);
+                    }
+                    $this->mediaService->clearMediaFromObject( $user, 'avatar' );
+
                     ($this->clearCache)("user_avatar_{$user->getId()}");
                     $output->writeln('Avatar has been deleted.');
 

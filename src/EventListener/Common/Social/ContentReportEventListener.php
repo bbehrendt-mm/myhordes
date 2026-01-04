@@ -26,6 +26,7 @@ use App\Messages\Discord\DiscordMessage;
 use App\Messages\WebPush\WebPushMessage;
 use App\Service\ConfMaster;
 use App\Service\HTMLService;
+use App\Service\Media\MediaService;
 use App\Service\UserHandler;
 use DiscordWebhooks\Client;
 use DiscordWebhooks\Embed;
@@ -67,7 +68,8 @@ final class ContentReportEventListener implements ServiceSubscriberInterface
             ConfMaster::class,
             UrlGeneratorInterface::class,
             HTMLService::class,
-            UserHandler::class
+            UserHandler::class,
+            MediaService::class,
         ];
     }
 
@@ -186,7 +188,7 @@ final class ContentReportEventListener implements ServiceSubscriberInterface
             if ($user) $message_embed->author(
                 $user->getName(),
                 $this->getService(UrlGeneratorInterface::class)->generate( 'admin_users_account_view', ['id' => $user->getId()], UrlGeneratorInterface::ABSOLUTE_URL ),
-                $user->getAvatar() ? $this->getService(UrlGeneratorInterface::class)->generate( 'app_web_avatar', ['uid' => $user->getId(), 'name' => $user->getAvatar()->getFilename(), 'ext' => $user->getAvatar()->getFormat()],UrlGeneratorInterface::ABSOLUTE_URL ) : ''
+                $this->getService(MediaService::class)->getSingleMediaForObject( $user, 'avatar' )?->getSource(200) ?? '',
             );
 
             $report_embed = (new Embed())
@@ -197,7 +199,7 @@ final class ContentReportEventListener implements ServiceSubscriberInterface
             $report_embed->author(
                 $event->reporter->getName(),
                 $this->getService(UrlGeneratorInterface::class)->generate( 'admin_users_account_view', ['id' => $event->reporter->getId()], UrlGeneratorInterface::ABSOLUTE_URL ),
-                $event->reporter->getAvatar() ? $this->getService(UrlGeneratorInterface::class)->generate( 'app_web_avatar', ['uid' => $event->reporter->getId(), 'name' => $event->reporter->getAvatar()->getFilename(), 'ext' => $event->reporter->getAvatar()->getFormat()],UrlGeneratorInterface::ABSOLUTE_URL ) : ''
+                $this->getService(MediaService::class)->getSingleMediaForObject( $event->reporter, 'avatar' )?->getSource(200) ?? '',
             );
 
             $discord
@@ -240,7 +242,7 @@ final class ContentReportEventListener implements ServiceSubscriberInterface
                     new WebPushMessage($subscription,
                         title: $title,
                         body: $body,
-                        avatar: $owner?->getAvatar()?->getId()
+                        avatar: $this->getService(MediaService::class)->getSingleMediaForObject( $owner, 'avatar' )?->getId()
                     )
                 );
         }

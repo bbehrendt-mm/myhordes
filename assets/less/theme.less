@@ -18,6 +18,8 @@
 @import (once) "modules/events";
 @import (once) "modules/app-directory";
 
+@import (once) "react-image-crop/dist/ReactCrop.css";
+
 @myhordes-fixed-font: "Courier Prime", fixed;
 @myhordes-sans-serif-font: "Comic Neue", sans-serif;
 @myhordes-serif-font: "Lora", serif;
@@ -2228,6 +2230,8 @@ span.tag {
 div.loading {
   min-height: 24px; width: 100%;
   background: url('../img/anims/loading.gif') center no-repeat;
+  &.small { width: 24px; height: 24px; background: url('../img/anims/loading_wheel.gif') center no-repeat; }
+  &.smaller { width: 16px; height: 16px; background: url('../img/anims/loading_wheel.gif') center/contain no-repeat; }
 }
 
 i.h-icon {

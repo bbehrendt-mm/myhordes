@@ -2,35 +2,21 @@
 
 namespace App\Messages\Gitlab;
 
-use App\Entity\Avatar;
 use App\Entity\GlobalPrivateMessage;
 use App\Entity\LogEntryTemplate;
-use App\Entity\NotificationSubscription;
 use App\Entity\OfficialGroup;
 use App\Entity\OfficialGroupMessageLink;
 use App\Entity\User;
 use App\Entity\UserGroup;
 use App\Entity\UserGroupAssociation;
 use App\Enum\Configuration\MyHordesSetting;
-use App\Enum\NotificationSubscriptionType;
 use App\Enum\OfficialGroupSemantic;
-use App\Messages\WebPush\WebPushMessage;
 use App\Service\ConfMaster;
 use App\Service\EventProxyService;
 use App\Service\PermissionHandler;
-use ArrayHelpers\Arr;
 use Doctrine\ORM\EntityManagerInterface;
-use Gitlab\Client;
-use Symfony\Component\Asset\Packages;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Messenger\Exception\UnrecoverableMessageHandlingException;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Uid\UuidV4;
-use WebPush\Message;
-use WebPush\Notification;
-use WebPush\WebPush;
 
 readonly class SupportChannelMessageHandler
 {

@@ -17,6 +17,7 @@ use App\Event\Game\Town\Basic\Core\JoinTownEvent;
 use App\EventListener\ContainerTypeTrait;
 use App\Messages\WebPush\WebPushMessage;
 use App\Service\CrowService;
+use App\Service\Media\MediaService;
 use App\Service\UserHandler;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Container\ContainerInterface;
@@ -45,6 +46,7 @@ final class SocialEventListener implements ServiceSubscriberInterface
             TranslatorInterface::class,
             CrowService::class,
             UserHandler::class,
+            MediaService::class,
         ];
     }
 
@@ -63,7 +65,7 @@ final class SocialEventListener implements ServiceSubscriberInterface
                         body: $this->getService(TranslatorInterface::class)->trans( $reverse ? '{player} hat deine Freundschaftserklärung erwidert.' : '{player} hat dich als "Freund" hinzugefügt.', [
                             'player' => $event->actor,
                         ], 'game', $lang ),
-                        avatar: $event->actor->getAvatar()?->getId()
+                        avatar: $this->getService(MediaService::class)->getSingleMediaForObject( $event->actor, 'avatar' )?->getId()
                     )
                 );
         }

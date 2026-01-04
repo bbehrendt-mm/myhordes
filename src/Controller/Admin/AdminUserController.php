@@ -9,15 +9,10 @@ use App\Entity\ActivityCluster;
 use App\Entity\AntiSpamDomains;
 use App\Entity\Award;
 use App\Entity\Citizen;
-use App\Entity\CitizenHomeUpgradePrototype;
-use App\Entity\CitizenProfession;
 use App\Entity\CitizenRankingProxy;
-use App\Entity\CitizenRole;
-use App\Entity\CitizenStatus;
 use App\Entity\ConnectionWhitelist;
 use App\Entity\FeatureUnlock;
 use App\Entity\FeatureUnlockPrototype;
-use App\Entity\ItemPrototype;
 use App\Entity\Picto;
 use App\Entity\PictoComment;
 use App\Entity\PictoPrototype;
@@ -38,7 +33,6 @@ use App\Entity\UserReferLink;
 use App\Entity\UserSponsorship;
 use App\Entity\UserSwapPivot;
 use App\Enum\Configuration\MyHordesSetting;
-use App\Enum\Configuration\TownSetting;
 use App\Enum\DomainBlacklistType;
 use App\Enum\ServerSetting;
 use App\Response\AjaxResponse;
@@ -46,21 +40,18 @@ use App\Service\Actions\Cache\InvalidateLogCacheAction;
 use App\Service\Actions\Cache\InvalidateTagsInAllPoolsAction;
 use App\Service\AdminHandler;
 use App\Service\AntiCheatService;
-use App\Service\ConfMaster;
 use App\Service\CrowService;
 use App\Service\ErrorHelper;
 use App\Service\EventProxyService;
 use App\Service\HTMLService;
 use App\Service\JSONRequestParser;
-use App\Service\Media\ImageService;
+use App\Service\Media\MediaService;
 use App\Service\PermissionHandler;
 use App\Service\TwinoidHandler;
 use App\Service\User\UserUnlockableService;
 use App\Service\User\UserAccountService;
 use App\Service\UserFactory;
 use App\Service\UserHandler;
-use App\Structures\MyHordesConf;
-use App\Structures\TownConf;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Order;
 use Doctrine\ORM\EntityManagerInterface;
@@ -864,8 +855,10 @@ class AdminUserController extends AdminActionController
                 if ($user->getAvatar()) {
                     $this->entity_manager->remove($user->getAvatar());
                     $user->setAvatar(null);
-                    $clearCache("user_avatar_{$user->getId()}");
                 }
+
+                $this->mediaService->clearMediaFromObject( $user, 'avatar' );
+                $clearCache("user_avatar_{$user->getId()}");
                 break;
 
             case 'grant':
@@ -1571,7 +1564,7 @@ class AdminUserController extends AdminActionController
     #[Route(path: 'api/admin/users/{id}/unique_award/manage', name: 'admin_user_manage_unique_award', requirements: ['id' => '\d+'])]
     #[IsGranted('ROLE_SUB_ADMIN')]
     #[AdminLogProfile(enabled: true)]
-    public function user_manage_unique_award(int $id, JSONRequestParser $parser, CrowService $crow): Response {
+    public function user_manage_unique_award(int $id, JSONRequestParser $parser, CrowService $crow, MediaService $mediaService): Response {
         $user = $this->entity_manager->getRepository(User::class)->find($id);
         if (!$user) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
 
@@ -1599,6 +1592,7 @@ class AdminUserController extends AdminActionController
             return AjaxResponse::success();
         }
 
+        $payload = null;
         if ($parser->has('title', true) === $parser->has('icon', true))
             return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
 
@@ -1612,16 +1606,7 @@ class AdminUserController extends AdminActionController
             if (strlen( $payload ) > $this->conf->getGlobalConf()->get(MyHordesSetting::AvatarMaxSizeUpload))
                 return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
 
-            $image = ImageService::createImageFromData( $payload );
-            ImageService::resize( $image, 16, 16, bestFit: true );
-            $payload = ImageService::save( $image );
-
-            $this->entity_manager->persist( $award
-                ->setUser($user)
-                ->setCustomIcon($payload)
-                ->setCustomIconName(md5($payload))
-                ->setCustomIconFormat(strtolower( $image->format ))
-            );
+            $this->entity_manager->persist( $award->setUser($user) );
         }
 
         try {
@@ -1632,6 +1617,12 @@ class AdminUserController extends AdminActionController
             }
         } catch (Exception $e) {
             return AjaxResponse::error(ErrorHelper::ErrorDatabaseException);
+        }
+
+        if ($payload !== null) {
+            $media = $mediaService->addMediaToObjectFromBinaryString( $award, $payload, null, 'icon' );
+            $this->entity_manager->persist($media);
+            $this->entity_manager->flush();
         }
 
         return AjaxResponse::success();

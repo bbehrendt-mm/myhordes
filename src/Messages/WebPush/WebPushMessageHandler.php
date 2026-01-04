@@ -3,8 +3,10 @@
 namespace App\Messages\WebPush;
 
 use App\Entity\Avatar;
+use App\Entity\Media;
 use App\Entity\NotificationSubscription;
 use App\Enum\NotificationSubscriptionType;
+use App\Service\Media\MediaService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
@@ -20,7 +22,6 @@ readonly class WebPushMessageHandler
         private WebPush $sender,
         private EntityManagerInterface $em,
         private Packages $asset,
-        private UrlGeneratorInterface $generator,
         private string $uri,
     ) {}
 
@@ -32,11 +33,8 @@ readonly class WebPushMessageHandler
             ->withBadge( $this->uri . $this->asset->getUrl('build/favicon/android-chrome-72x72.png') );
 
         if ($message->avatar) {
-            $avatar = $this->em->getRepository(Avatar::class)->find( $message->avatar );
-            if ($avatar) $payload->withIcon( $this->uri . $this->generator->generate( 'app_web_avatar_for_webpush', [
-                                                 'uid' => $avatar->getId(), 'name' => $avatar->getFilename() ?? $avatar->getSmallName(), 'ext' => $avatar->getFormat()
-                                             ] )
-            );
+            $avatar = $this->em->getRepository(Media::class)->find( $message->avatar )?->getLargestConversionByTag('default', 200);
+            if ($avatar) $payload->withIcon( $avatar->url );
         }
 
         return $payload;

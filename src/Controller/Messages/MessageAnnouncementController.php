@@ -16,6 +16,7 @@ use App\Service\ErrorHelper;
 use App\Service\EventProxyService;
 use App\Service\HTMLService;
 use App\Service\JSONRequestParser;
+use App\Service\Media\MediaService;
 use DateTime;
 use DiscordWebhooks\Client;
 use DiscordWebhooks\Embed;
@@ -243,7 +244,7 @@ class MessageAnnouncementController extends MessageController
      * @return Response
      */
     #[Route(path: 'api/admin/com/changelogs/new_announcement', name: 'admin_changelog_new_announcement')]
-    public function create_announcement_api(EntityManagerInterface $em, JSONRequestParser $parser, UrlGeneratorInterface $urlGenerator, MessageBusInterface $bus, EventProxyService $proxy): Response {
+    public function create_announcement_api(EntityManagerInterface $em, JSONRequestParser $parser, UrlGeneratorInterface $urlGenerator, MessageBusInterface $bus, EventProxyService $proxy, MediaService $mediaService): Response {
         $title     = $parser->get('title', '');
         $content   = $parser->get('content', '');
         $lang      = $parser->get('lang', 'de');
@@ -285,7 +286,7 @@ class MessageAnnouncementController extends MessageController
                                  ->author(
                                      $this->getUser()->getName(),
                                      $urlGenerator->generate( 'admin_users_account_view', ['id' => $this->getUser()->getId()], UrlGeneratorInterface::ABSOLUTE_URL ),
-                                     $this->getUser()->getAvatar() ? $urlGenerator->generate( 'app_web_avatar', ['uid' => $this->getUser()->getId(), 'name' => $this->getUser()->getAvatar()->getFilename(), 'ext' => $this->getUser()->getAvatar()->getFormat()],UrlGeneratorInterface::ABSOLUTE_URL ) : ''
+                                     $mediaService->getSingleMediaForObject( $this->getUser(), 'avatar' )?->getLargestConversionByTag('default', 200)?->url
                                  )
             );
 

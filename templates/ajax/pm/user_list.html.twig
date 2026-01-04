@@ -32,7 +32,9 @@
                 {% endfor %}
                 {% if og %}
                     <div class="cell"><div class="pm-userbox">
-                        <div class="pm-avatar" style="background: url({{ path('app_web_group_icon', { gid: og.usergroup.id, name: og.avatarName, ext: og.avatarExt }) }}) center/cover"></div>
+                        {% include "ajax/soul/playeravatar.html.twig" with {
+                            user: og, background: true, gpm: true, w: 24
+                        } only %}
                         <div class="pm-userbox-name">{{ og.usergroup.name }}</div>
                     </div></div>
                 {% endif %}

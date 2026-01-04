@@ -2,7 +2,7 @@
 {% block ajax_base %}
     <div>
         <input type="hidden" id="og-resolved" value="{{ group.id }}" />
-        {% include "ajax/soul/playeravatar.html.twig" with {user: group, wrapper: false, attributes: {style: 'max-height: 24px'}} only %}
+        {% include "ajax/soul/playeravatar.html.twig" with {user: group, wrapper: false, attributes: {style: 'max-height: 24px'}, w: 24} only %}
         <b>{{ group.usergroup.name }}</b>
     </div>
 {% endblock %}
