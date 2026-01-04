@@ -694,3 +694,31 @@ Phablet-Layout: Diseño para tableta grande (o gran smartphone)
 Tablet-Layout: Diseño para tablet
 'Desktop-Layout (Vollbild)': 'Diseño para escritorio (pantalla completa)'
 'Desktop-Layout (Normal)': 'Diseño para escritorio (normal)'
+'Aktuelles Profilbild': 'Aktuelles Profilbild'
+'Vorschau des neuen Profilbilds': 'Vorschau des neuen Profilbilds'
+'Frühere Profilbilder': 'Frühere Profilbilder'
+'MyHordes verwendet drei unterschiedliche Bildformate für dein Profilbild. Standartmäßig werden diese automatisch aus deinem ausgewählten Bild ermittelt. Du kannst die Bildausschnitte aber auch selbst wählen, wenn du möchtest. Klicke dazu einfach bei dem entsprechenden Bildformat auf "Bearbeiten".': 'MyHordes verwendet drei unterschiedliche Bildformate für dein Profilbild. Standartmäßig werden diese automatisch aus deinem ausgewählten Bild ermittelt. Du kannst die Bildausschnitte aber auch selbst wählen, wenn du möchtest. Klicke dazu einfach bei dem entsprechenden Bildformat auf "Bearbeiten".'
+'Bist du fertig, klicke auf "Profilbild speichern" um deinen Avatar hochzuladen. Dein Bild wird dann vom System automatisch komprimiert und zugeschnitten.': 'Bist du fertig, klicke auf "Profilbild speichern" um deinen Avatar hochzuladen. Dein Bild wird dann vom System automatisch komprimiert und zugeschnitten.'
+'Das automatische Komprimieren und Zuschneiden kann einige Sekunden dauern. Sobald dein Bild fertig verarbeitet wurde, siehst du noch einmal eine Vorschau und kannst das Bild dann final als deinen neuen Avatar festlegen.': 'Das automatische Komprimieren und Zuschneiden kann einige Sekunden dauern. Sobald dein Bild fertig verarbeitet wurde, siehst du noch einmal eine Vorschau und kannst das Bild dann final als deinen neuen Avatar festlegen.'
+Seitenverhältnis: Seitenverhältnis
+Beliebig: Beliebig
+'Wie Originalbild': 'Wie Originalbild'
+'Sieht alles gut aus?': 'Sieht alles gut aus?'
+'Dein neues Profilbild ist noch nicht aktiviert.': 'Dein neues Profilbild ist noch nicht aktiviert.'
+'Klicke unten auf "Profilbild aktivieren", um zu deinem neuen Avatar zu wechseln.': 'Klicke unten auf "Profilbild aktivieren", um zu deinem neuen Avatar zu wechseln.'
+'Dein altes Profilbilds wird noch für eine Weile gespeichert, sodass du für eine begrenzte Zeit einfach zurückwechseln kannst, ohne dein altes Profilbild erneut hochladen zu müssen.': 'Dein altes Profilbilds wird noch für eine Weile gespeichert, sodass du für eine begrenzte Zeit einfach zurückwechseln kannst, ohne dein altes Profilbild erneut hochladen zu müssen.'
+'Dein neues Profilbild wird gerade verarbeitet. Bitte hab einen Augenblick Geduld...': 'Dein neues Profilbild wird gerade verarbeitet. Bitte hab einen Augenblick Geduld...'
+'Originales Bild': 'Originales Bild'
+'Wird berechnet...': 'Wird berechnet...'
+'Format konnte nicht berechnet werden': 'Format konnte nicht berechnet werden'
+Verwerfen: Verwerfen
+'Profilbild aktivieren': 'Profilbild aktivieren'
+'Dieses Profilbild verwenden': 'Dieses Profilbild verwenden'
+'Dieses Profilbild wird in ungefähr {days} Tagen automatisch gelöscht.': 'Dieses Profilbild wird in ungefähr {days} Tagen automatisch gelöscht.'
+'Dieses Profilbild wird in Kürze automatisch gelöscht.': 'Dieses Profilbild wird in Kürze automatisch gelöscht.'
+'Anderes Bild auswählen': 'Anderes Bild auswählen'
+Fertig: Fertig
+animiert: animiert
+'hohe Auflösung': 'hohe Auflösung'
+'reduzierte Auflösung': 'reduzierte Auflösung'
+importiert: importiert

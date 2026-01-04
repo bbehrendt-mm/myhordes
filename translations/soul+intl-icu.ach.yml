@@ -694,3 +694,31 @@ Phablet-Layout: crwdns252308:0crwdne252308:0
 Tablet-Layout: crwdns252310:0crwdne252310:0
 'Desktop-Layout (Vollbild)': 'crwdns252312:0crwdne252312:0'
 'Desktop-Layout (Normal)': 'crwdns252314:0crwdne252314:0'
+'Aktuelles Profilbild': 'crwdns252688:0crwdne252688:0'
+'Vorschau des neuen Profilbilds': 'crwdns252690:0crwdne252690:0'
+'Frühere Profilbilder': 'crwdns252692:0crwdne252692:0'
+'MyHordes verwendet drei unterschiedliche Bildformate für dein Profilbild. Standartmäßig werden diese automatisch aus deinem ausgewählten Bild ermittelt. Du kannst die Bildausschnitte aber auch selbst wählen, wenn du möchtest. Klicke dazu einfach bei dem entsprechenden Bildformat auf "Bearbeiten".': 'crwdns252694:0crwdne252694:0'
+'Bist du fertig, klicke auf "Profilbild speichern" um deinen Avatar hochzuladen. Dein Bild wird dann vom System automatisch komprimiert und zugeschnitten.': 'crwdns252696:0crwdne252696:0'
+'Das automatische Komprimieren und Zuschneiden kann einige Sekunden dauern. Sobald dein Bild fertig verarbeitet wurde, siehst du noch einmal eine Vorschau und kannst das Bild dann final als deinen neuen Avatar festlegen.': 'crwdns252698:0crwdne252698:0'
+Seitenverhältnis: crwdns252700:0crwdne252700:0
+Beliebig: crwdns252702:0crwdne252702:0
+'Wie Originalbild': 'crwdns252704:0crwdne252704:0'
+'Sieht alles gut aus?': 'crwdns252706:0crwdne252706:0'
+'Dein neues Profilbild ist noch nicht aktiviert.': 'crwdns252708:0crwdne252708:0'
+'Klicke unten auf "Profilbild aktivieren", um zu deinem neuen Avatar zu wechseln.': 'crwdns252710:0crwdne252710:0'
+'Dein altes Profilbilds wird noch für eine Weile gespeichert, sodass du für eine begrenzte Zeit einfach zurückwechseln kannst, ohne dein altes Profilbild erneut hochladen zu müssen.': 'crwdns252712:0crwdne252712:0'
+'Dein neues Profilbild wird gerade verarbeitet. Bitte hab einen Augenblick Geduld...': 'crwdns252714:0crwdne252714:0'
+'Originales Bild': 'crwdns252716:0crwdne252716:0'
+'Wird berechnet...': 'crwdns252718:0crwdne252718:0'
+'Format konnte nicht berechnet werden': 'crwdns252720:0crwdne252720:0'
+Verwerfen: crwdns252722:0crwdne252722:0
+'Profilbild aktivieren': 'crwdns252724:0crwdne252724:0'
+'Dieses Profilbild verwenden': 'crwdns252726:0crwdne252726:0'
+'Dieses Profilbild wird in ungefähr {days} Tagen automatisch gelöscht.': 'crwdns252728:0{days}crwdne252728:0'
+'Dieses Profilbild wird in Kürze automatisch gelöscht.': 'crwdns252730:0crwdne252730:0'
+'Anderes Bild auswählen': 'crwdns252732:0crwdne252732:0'
+Fertig: crwdns252734:0crwdne252734:0
+animiert: crwdns252736:0crwdne252736:0
+'hohe Auflösung': 'crwdns252738:0crwdne252738:0'
+'reduzierte Auflösung': 'crwdns252740:0crwdne252740:0'
+importiert: crwdns252742:0crwdne252742:0

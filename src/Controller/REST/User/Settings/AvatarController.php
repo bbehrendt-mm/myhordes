@@ -374,7 +374,7 @@ class AvatarController extends AbstractController
         $media = $mediaService->addMediaToObjectFromBinaryString( $user, $payload, null, $pending ? 'avatar-pending' : 'avatar', Uuid::v7() );
 
         $this->handleCreatedMedia( $user, $media, $format, $parser->get_array( 'crop.small'), $parser->get_array( 'crop.default'), $parser->get_array( 'crop.round' ) );
-        $em->persist( $media );
+        $em->persist( $media->setDeleteAt( Carbon::now()->addDay()->toDateTimeImmutable() ) );
         $em->flush();
 
         return new JsonResponse(['success' => true]);
@@ -432,7 +432,7 @@ class AvatarController extends AbstractController
 
         $this->handleCreatedMedia( $user, $media, $format, $parser->get_array( 'crop.small'), $parser->get_array( 'crop.default'), $parser->get_array( 'crop.round' ) );
 
-        $em->persist( $media->setMetaKey('source', $originalMedia->getMetaKey('source') ?? $originalMedia->getId()) );
+        $em->persist( $media->setDeleteAt( Carbon::now()->addDay()->toDateTimeImmutable() )->setMetaKey('source', $originalMedia->getMetaKey('source') ?? $originalMedia->getId()) );
         $em->persist( $originalMedia->pushMetaKey('copies', $media->getId(), true) );
         $em->flush();
 
