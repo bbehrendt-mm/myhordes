@@ -68,6 +68,12 @@ class Media
     #[ORM\Column]
     private \DateTimeImmutable $createdAt;
 
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $inCollectionSince = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $deleteAt = null;
+
     public function getId(): ?Uuid
     {
         return $this->id;
@@ -369,7 +375,11 @@ class Media
     public function getConversion(string $conversion): ?MediaConversion
     {
         return $this->hasConversion($conversion)
-            ? new MediaConversion($this, $conversion, Arr::get($this->getConversions(), "$conversion.meta"), Arr::get($this->getConversions(), "$conversion.tags", ['default']))
+            ? new MediaConversion($this, $conversion,
+                                  Arr::get($this->getConversions(), "$conversion.meta", []),
+                                  Arr::get($this->getConversions(), "$conversion.config", []),
+                                  Arr::get($this->getConversions(), "$conversion.tags", ['default'])
+            )
             : null;
     }
 
@@ -380,7 +390,11 @@ class Media
     {
         $conversions = $this->getRawConversionsByTag($tag, $include_pending);
         return array_map(
-            fn(string $conversion, array $data) => new MediaConversion($this, $conversion, Arr::get($data, 'meta', []), Arr::get($data, 'tags', ['default'])),
+            fn(string $conversion, array $data) => new MediaConversion($this, $conversion,
+                                                                       Arr::get($data, 'meta', []),
+                                                                       Arr::get($data, 'config', []),
+                                                                       Arr::get($data, 'tags', ['default'])
+            ),
             array_keys($conversions), $conversions
         );
     }
@@ -419,11 +433,32 @@ class Media
         return $this->meta;
     }
 
+    public function getMetaKey(string $key, mixed $default = null): mixed
+    {
+        return Arr::get( $this->meta ?? [], $key, $default);
+    }
+
     public function setMeta(array $meta): static
     {
         $this->meta = $meta;
 
         return $this;
+    }
+
+    public function setMetaKey(string $key, mixed $data): static
+    {
+        $meta = $this->getMeta();
+        Arr::set($meta, $key, $data);
+        return $this->setMeta( $meta );
+    }
+
+    public function pushMetaKey(string $key, mixed $data, bool $unique = false): static
+    {
+        $array = $this->getMetaKey($key, []);
+        if (!is_array($array)) return $this;
+        $array[] = $data;
+        if ($unique) $array = array_unique($array);
+        return $this->setMetaKey( $key, $array );
     }
 
     public function setMetaFromImage(?ImageInterface $rawImage = null, ?EncodedImageInterface $encodedImage = null, ?string $mime = null, ?int $size = null): static
@@ -479,5 +514,29 @@ class Media
 
         $entry = array_find( $entries, fn(array $entry) => $entry[1] >= ($expectedSize ?? PHP_INT_MAX) ) ?? $entries[array_key_last( $entries )];
         return $entry[0];
+    }
+
+    public function getInCollectionSince(): ?\DateTimeImmutable
+    {
+        return $this->inCollectionSince;
+    }
+
+    public function setInCollectionSince(?\DateTimeImmutable $inCollectionSince): static
+    {
+        $this->inCollectionSince = $inCollectionSince;
+
+        return $this;
+    }
+
+    public function getDeleteAt(): ?\DateTimeImmutable
+    {
+        return $this->deleteAt;
+    }
+
+    public function setDeleteAt(?\DateTimeImmutable $deleteAt): static
+    {
+        $this->deleteAt = $deleteAt;
+
+        return $this;
     }
 }

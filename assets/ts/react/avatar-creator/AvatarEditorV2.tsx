@@ -6,8 +6,12 @@ import {centerCrop, Crop, makeAspectCrop, ReactCrop} from "react-image-crop";
 import {Buffer} from "buffer";
 import {Globals} from "./WrapperV2";
 import {PixelCrop} from "./api";
+import {Global} from "../../defaults";
+
+declare var $: Global;
 
 type AvatarEditorProps = {
+    original?: string|null,
     mime: string,
     data: Buffer,
     hasMedia: boolean,
@@ -176,7 +180,7 @@ export const AvatarModeEdit = (props: AvatarEditorProps) => {
                     { dataString && <img style={{maxWidth: '100%'}} ref={image} alt={ globals.strings.common.format_upload } src={dataString} />}
                 </div>
                 <div className="small flex-none">
-                    <button disabled={edit !== null} onClick={()=> globals.setMode('new')}>
+                    <button disabled={edit !== null || !!props.original} onClick={()=> globals.setMode('new')}>
                         { globals.strings.common.edit_redo }
                     </button>
                 </div>
@@ -233,14 +237,14 @@ export const AvatarModeEdit = (props: AvatarEditorProps) => {
 
         { edit && <div className="flex column large-gap" style={{marginTop: '1rem'}}>
             { edit === 'square' && <div className="flex-none flex large-gap">
-                <div className="note note-lightest">TODO Aspect Ratio</div>
+                <div className="note note-lightest">{ globals.strings.common.edit_aspect }</div>
                 <div className="flex-1"><select value={fixedAspect ?? 0} onChange={(e)=> {
                     const value = parseFloat(e.target.value);
                     setFixedAspect(value === 0 ? null : value);
                     if (value !== 0) setSquareCrop(recrop(squareCrop, value));
                 }}>
-                    <option value={0}>TODO FREE</option>
-                    { ![1,3,4/3,16/9].includes(meta.aspect) && <option value={meta.width/meta.height}>TODO LIKE ORIGINAL</option> }
+                    <option value={0}>{ globals.strings.common.edit_aspect_free }</option>
+                    { ![1,3,4/3,16/9].includes(meta.aspect) && <option value={meta.width/meta.height}>{ globals.strings.common.edit_aspect_original }</option> }
                     <option value={1}>1:1</option>
                     <option value={3}>3:1</option>
                     <option value={4/3}>4:3</option>
@@ -276,16 +280,32 @@ export const AvatarModeEdit = (props: AvatarEditorProps) => {
             <div className="flex large-gap">
                 <div>
                     <button onClick={() => {
-                        globals.api.uploadMedia(
-                            props.mime,
-                            props.data.toString('base64'),
-                            importCrop(squareCrop, meta.width, meta.height),
-                            importCrop(classicCrop, meta.width, meta.height),
-                            importCrop(circularCrop, meta.width, meta.height),
-                            null, true
-                        ).then( () => {
-                            window.setTimeout(() => globals.refresh(), 1000);
-                        } );
+                        $.html.addLoadStack();
+
+                        if (props.original)
+                            globals.api.patchMedia(
+                                props.original,
+                                importCrop(squareCrop, meta.width, meta.height),
+                                importCrop(classicCrop, meta.width, meta.height),
+                                importCrop(circularCrop, meta.width, meta.height)
+                            ).then( () => {
+                                $.html.notice( globals.strings.common.success_create );
+                                $.html.removeLoadStack();
+                                globals.refresh();
+                            } ).catch(() => $.html.removeLoadStack());
+                        else
+                            globals.api.uploadMedia(
+                                props.mime,
+                                props.data.toString('base64'),
+                                importCrop(squareCrop, meta.width, meta.height),
+                                importCrop(classicCrop, meta.width, meta.height),
+                                importCrop(circularCrop, meta.width, meta.height),
+                                null, true
+                            ).then( () => {
+                                $.html.notice( globals.strings.common.success_create );
+                                $.html.removeLoadStack();
+                                globals.refresh();
+                            } ).catch(() => $.html.removeLoadStack());
                     }}>{globals.strings.common.action_create}</button>
                 </div>
                 <div>

@@ -6,6 +6,7 @@ use App\Entity\Media;
 use App\Entity\User;
 use App\Service\Actions\Cache\InvalidateTagsInAllPoolsAction;
 use App\Service\Actions\Mercure\BroadcastViaMercureAction;
+use App\Service\Locksmith;
 use App\Service\Media\MediaService;
 use App\Structures\Media\AnonymousMediaVariant;
 use Doctrine\ORM\EntityManagerInterface;
@@ -22,7 +23,7 @@ readonly class MediaVariantHandler
     public function __construct(
         private EntityManagerInterface $em,
         private MediaService $mediaService,
-        //private InvalidateTagsInAllPoolsAction $clearCache,
+        private Locksmith $locksmith,
         private BroadcastViaMercureAction $broadcast,
         ParameterBagInterface $parameterBag,
     ) {
@@ -31,6 +32,8 @@ readonly class MediaVariantHandler
 
     #[AsMessageHandler]
     public function createVariant( CreateMediaVariantMessage $message ): void {
+        $lock = $this->locksmith->waitForLock("media_{$message->uuid}_process", 120);
+
         /** @var Media $media */
         $media = $this->em->getRepository(Media::class)->find( $message->uuid );
         if (!$media) return;
@@ -50,10 +53,7 @@ readonly class MediaVariantHandler
         $this->em->persist( $media );
         $this->em->flush();
 
-        //($this->clearCache)([
-        //    ...$message->getRelatedCaches(),
-        //    "media_{$media->getMangledClassName()}_{$media->getModelID()}!{$media->getCollection()}"
-        //]);
+        $lock->release();
 
         if ($media->getModelType() === User::class) {
             $owner = $this->em->getRepository(User::class)->find($media->getModelID());

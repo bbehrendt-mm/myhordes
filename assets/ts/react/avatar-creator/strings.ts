@@ -8,8 +8,19 @@ export type TranslationStrings = {
         edit_help2: string,
         edit_help3: string,
 
+        edit_aspect: string,
+        edit_aspect_free: string,
+        edit_aspect_original: string,
+
+        preview_help: string,
+        preview_help2: string,
+        preview_help3: string,
+        preview_help4: string,
+        preview_help5: string,
+
         view_current: string,
         view_pending: string,
+        view_history: string,
         view_check: string,
         view_warn: string,
 
@@ -18,19 +29,29 @@ export type TranslationStrings = {
         format_round: string
         format_small: string
 
+        pending: string
+        missing: string
         info: string
         dimensions: string
         none: string
         fallback: string
 
         action_delete: string,
+        action_delete_preview: string,
+        action_activate_preview: string,
+        action_activate_history: string,
         action_edit: string,
         action_modify: string,
         action_create: string,
         action_cancel: string,
         action_upload: string,
 
+        action_icon_delete: string,
+        action_icon_restore: string,
+
         confirm: string,
+        success_create: string,
+        success_delete: string,
 
         error_single_file: string,
         error_too_large: string,
@@ -48,4 +69,6 @@ export type TranslationStrings = {
         compression_webp: string,
         compression_noloss: string,
     },
+
+    formats: {[key: string]: string},
 }

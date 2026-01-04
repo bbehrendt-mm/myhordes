@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import {AvatarCreatorAPI, Media, MediaSet, ResponseMedia} from "./api";
+import {AvatarCreatorAPI, Media, MediaSet, PixelCrop, ResponseMedia} from "./api";
 import {useContext, useEffect, useLayoutEffect, useRef, useState} from "react";
 import {TranslationStrings} from "./strings";
 import {Global} from "../../defaults";
@@ -9,8 +9,6 @@ import {useSharedWorkerMessages, useTranslations} from "../utils";
 import {Buffer} from "buffer";
 import {AvatarModeEdit} from "./AvatarEditorV2";
 import {AvatarModeView} from "./AvatarViewerV2";
-import {useBroadcastSignal} from "../../v2/client-modules/Signal";
-import {sharedWorkerMessageHandler} from "../../v2/init";
 
 declare var $: Global;
 
@@ -32,7 +30,13 @@ export const Globals = React.createContext<AvatarCreatorGlobals>(null);
 
 type TransientMedia = {
     mime: string,
-    data: Buffer
+    data: Buffer,
+    id?: string,
+    crops?: {
+        default: PixelCrop|null,
+        round: PixelCrop|null,
+        small: PixelCrop|null,
+    }
 }
 
 type MediaSignal = {
@@ -47,8 +51,8 @@ const AvatarCreatorWrapper = ( {maxSize}: {maxSize: number} ) => {
 
     const api = useRef<AvatarCreatorAPI>(new AvatarCreatorAPI());
     const index = useTranslations( api.current );
-    const uploadRef = useRef<HTMLInputElement>();
 
+    const [loading, setLoading] = useState<boolean>(false);
     const [etag, setEtag] = useState<number>(0);
     const [image, setImage] = useState<TransientMedia>(null);
     const [media, setMedia] = useState<ResponseMedia>(null);
@@ -71,13 +75,16 @@ const AvatarCreatorWrapper = ( {maxSize}: {maxSize: number} ) => {
     const hasMedia = checkHasMedia(media);
 
     useEffect( () => {
-        setMedia(null);
+        setLoading(true);
+        $.html.addLoadStack();
         api.current.getMedia().then( media => {
             setImage(null);
             setMedia(media);
             if (checkHasMedia(media)) setMode('view');
             else setMode('empty');
-        } );
+            $.html.removeLoadStack();
+            setLoading(false);
+        } ).catch(() => $.html.removeLoadStack());
     }, [etag] )
 
     return (
@@ -87,14 +94,19 @@ const AvatarCreatorWrapper = ( {maxSize}: {maxSize: number} ) => {
             setMode, setTransientImage: setImage,
             refresh: () => setEtag(etag + 1),
         }}>
-            <div className="row">
+            <div className="row" style={{pointerEvents: loading ? 'none' : 'auto'}}>
                 <div className="padded cell rw-12">
                     {(!index || !media) && <div className="loading"/>}
                     {(index && media) && <>
                         { mode === 'empty' && <AvatarModeEmpty/> }
-                        { mode === 'view' && <AvatarModeView current={media.avatar} pending={media.pending} signalCache={signalCache} /> }
+                        { mode === 'view' && <AvatarModeView current={media.avatar} pending={media.pending} history={media.history} signalCache={signalCache} /> }
                         { mode === 'new' && <AvatarModeNew maxSize={maxSize} hasMedia={hasMedia}/> }
-                        { mode === 'edit' && <AvatarModeEdit mime={ image.mime } data={ image.data } hasMedia={hasMedia}/> }
+                        { mode === 'edit' && <AvatarModeEdit
+                            original={ image.id } mime={ image.mime } data={ image.data } hasMedia={hasMedia}
+                            squareCrop={ image.crops?.default ?? null }
+                            circularCrop={ image.crops?.round ?? null }
+                            classicCrop={ image.crops?.small ?? null }
+                        /> }
                     </>}
                 </div>
             </div>

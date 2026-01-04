@@ -448,7 +448,7 @@ div.tooltip.badge-tooltip {
             font-size: 1.3rem; background: #5c2b20; border-right: 1px solid #7e4d2a; border-bottom: 1px solid #7e4d2a;
             cursor: pointer; text-decoration: underline;
             &:hover { color: lighten(@myhordes-smalltext, 20%); background: #965C36; }
-                
+
             .rp-text {
                 .title { color: #f0d79e; }
                 em { font-size: 1.2rem; color: @myhordes-smalltext; }
@@ -588,7 +588,7 @@ ul.coa-users {
         font-size: 0.8em; line-height: 0.9em;
         &.my-entry { background: #3b3249 }
         & span { font-size: 0.7em; i { color: #ddab76 } }
-        & br { 
+        & br {
             content: "";
             display: block;
             margin-bottom: 0.3em;
@@ -934,4 +934,13 @@ hr.section {
     &:not(.skill-sell-locked) > div.inactive { background-image: url("../../img/icons/tickOff.gif") }
 
   }
+}
+
+.avatar-history-element {
+    padding: 4px;
+    background: #5c2b20;
+    border: 1px solid #704328;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+
+    [data-slide]:not(:empty) { padding-top: 12px; }
 }

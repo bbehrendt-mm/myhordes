@@ -5,6 +5,7 @@ use App\Entity\Media;
 use App\Structures\Media\MediaCollection;
 use App\Structures\Media\MediaVariantInterface;
 use App\Traits\Entity\LinksMedia;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
@@ -31,7 +32,10 @@ readonly class MediaService
     }
 
     private function getMediaCriteria(string $type, string $id, string $collection): Criteria {
-        return Criteria::create()->orderBy(['createdAt' => Order::Descending])
+        return Criteria::create()->orderBy([
+                'inCollectionSince' => Order::Descending,
+                'createdAt' => Order::Descending
+            ])
             ->where( Criteria::expr()->eq( 'modelType', $type ) )
             ->andWhere( Criteria::expr()->eq( 'modelID', $id ) )
             ->andWhere( Criteria::expr()->eq( 'collection', $collection ) );
@@ -169,7 +173,7 @@ readonly class MediaService
             ->setFilename($filename)
             ->setMime( $mime )
             ->setMetaFromImage( $image, mime: $mime, size: $size )
-            ->setCreatedAt( new \DateTimeImmutable() );
+            ->setCreatedAt( new DateTimeImmutable() );
 
         if ($object->tryPrimaryKey() !== null)
             $media
@@ -190,6 +194,7 @@ readonly class MediaService
      * @param string|null $filename
      * @return Media|null
      * @noinspection PhpDocSignatureInspection
+     * @throws Exception
      */
     public function addMediaToObjectFromFile(object $object, string $path, string $collection, ?string $filename = null): ?Media {
         return $this->addMediaToObjectFromImage(
@@ -285,7 +290,7 @@ readonly class MediaService
         $collectionObject = $object::mediaCollection($collection);
         if ($collectionObject === null) return false;
 
-        $media->setCollection( $collectionObject->name );
+        $media->setCollection( $collectionObject->name )->setInCollectionSince( new DateTimeImmutable() );
         $this->entityManager->persist($media);
 
         if ($collectionObject->isSingleFile())
@@ -308,8 +313,8 @@ readonly class MediaService
         $collectionObject2 = $object::mediaCollection($media2->getCollection());
         if ($collectionObject1 === null || $collectionObject2 === null) return false;
 
-        $media1->setCollection( $collectionObject2->name );
-        $media2->setCollection( $collectionObject1->name );
+        $media1->setCollection( $collectionObject2->name )->setInCollectionSince( new DateTimeImmutable() );
+        $media2->setCollection( $collectionObject1->name )->setInCollectionSince( new DateTimeImmutable() );
         $this->entityManager->persist($media1);
         $this->entityManager->persist($media2);
 
