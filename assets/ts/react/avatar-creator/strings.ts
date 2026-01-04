@@ -53,6 +53,9 @@ export type TranslationStrings = {
         success_create: string,
         success_delete: string,
 
+        will_delete_in: string,
+        will_delete: string,
+
         error_single_file: string,
         error_too_large: string,
         error_unknown_format: string,

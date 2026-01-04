@@ -204,7 +204,10 @@ const AvatarMediaGroupCollapse = ({mediaGroup, activeElement, setActiveElement}:
                 <div className="avatar small no-arma"><img alt="" src={ mediaGroup.small.url ?? mediaGroup.default.url ?? mediaGroup.round.url } /></div>
             </div>
             <div className="flex-1">
-
+                { (mediaGroup.expires ?? null) !== null && <>
+                    {mediaGroup.expires > 1 && <span className="small">{ globals.strings.common.will_delete_in.replace('{days}', `${mediaGroup.expires}`) }</span>}
+                    {mediaGroup.expires <= 1 && <span className="small">{ globals.strings.common.will_delete }</span>}
+                </> }
             </div>
             <div className="flex-none flex middle">
                 <img className="pointer"
@@ -277,17 +280,17 @@ const AvatarMediaSet = ({pending, text, type, mediaSet}: {pending?: boolean, tex
                         .replace('{x}', `${conversion.x}`)
                         .replace('{y}', `${conversion.y}`)
                         .replace('{size}', byteToText(conversion.size))
-                    }>{ globals.strings.formats[conversion.id] ?? 'unknown' }</span>
+                    }>{ globals.strings.formats[conversion.id] ?? conversion.id }</span>
                 </> }
 
                 { !conversion.url && !pending && <>
                     <div className="flex-none"><img alt="" src={ globals.strings.common.view_warn } /></div>
-                    <span className="small" title={ globals.strings.common.missing }>{ globals.strings.formats[conversion.id] ?? 'unknown' }</span>
+                    <span className="small" title={ globals.strings.common.missing }>{ globals.strings.formats[conversion.id] ?? conversion.id }</span>
                 </> }
 
                 { !conversion.url && pending && <>
                     <div className="flex-none"><div className="loading smaller"/></div>
-                    <span className="small" title={ globals.strings.common.pending }>{ globals.strings.formats[conversion.id] ?? 'unknown' }</span>
+                    <span className="small" title={ globals.strings.common.pending }>{ globals.strings.formats[conversion.id] ?? conversion.id }</span>
                 </> }
             </div>) }
         </div>

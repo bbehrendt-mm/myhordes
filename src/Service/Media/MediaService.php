@@ -12,10 +12,13 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Order;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use FilesystemIterator;
 use Intervention\Image\Drivers\Imagick\Driver;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Interfaces\EncodedImageInterface;
 use Intervention\Image\Interfaces\ImageInterface;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Uid\Uuid;
 
@@ -77,7 +80,7 @@ readonly class MediaService
     /**
      * @param LinksMedia|null $object
      * @param string $collection
-     * @return Collection
+     * @return Collection<Media>
      * @noinspection PhpDocSignatureInspection
      * @throws Exception
      */
@@ -352,5 +355,22 @@ readonly class MediaService
     public static function extensionToMimeType(string $ext): string {
         $ext = ltrim($ext, '.');
         return "image/$ext";
+    }
+
+    public function getTotalMediaSize( Media $media ): int {
+        $folder = "{$this->parameterBag->get('kernel.project_dir')}/public/storage/{$media->getStorage()}";
+
+        if (!is_dir($folder)) return 0;
+
+        $totalSize = 0;
+        $files = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($folder, FilesystemIterator::SKIP_DOTS)
+        );
+
+        foreach ($files as $file)
+            if ($file->isFile())
+                $totalSize += $file->getSize();
+
+        return $totalSize;
     }
 }

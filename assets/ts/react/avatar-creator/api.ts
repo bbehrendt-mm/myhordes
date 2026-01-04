@@ -23,6 +23,7 @@ export type MediaSet  = Media & {
 export type MediaGroup =  {
     id: string,
     source?: boolean,
+    expires?: number
     default: MediaSet|null,
     round: MediaSet|null,
     small: MediaSet|null,

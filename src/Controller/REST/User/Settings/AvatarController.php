@@ -8,6 +8,7 @@ use App\Entity\Media;
 use App\Entity\User;
 use App\Enum\Configuration\MyHordesSetting;
 use App\Service\Actions\Cache\InvalidateTagsInAllPoolsAction;
+use App\Service\Actions\User\RecalculateMediaExpirationAction;
 use App\Service\ConfMaster;
 use App\Service\JSONRequestParser;
 use App\Service\Media\ImageService;
@@ -19,6 +20,7 @@ use App\Structures\Media\AnonymousMediaVariant;
 use App\Structures\Media\MediaConversion;
 use App\Structures\Media\MediaVariantInterface;
 use ArrayHelpers\Arr;
+use Carbon\Carbon;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Intervention\Image\Interfaces\ImageInterface;
@@ -111,6 +113,9 @@ class AvatarController extends AbstractController
                     'error_too_large' => $trans->trans('Die Datei ist zu groß.', [], 'soul'),
                     'error_unknown_format' => $trans->trans('Dieses Dateiformat wird nicht unterstützt.', [], 'soul'),
 
+                    'will_delete_in' => $trans->trans('Dieses Profilbild wird in ungefähr {days} Tagen automatisch gelöscht.', [], 'soul'),
+                    'will_delete' => $trans->trans('Dieses Profilbild wird in Kürze automatisch gelöscht.', [], 'soul'),
+
                     'edit_redo' => $trans->trans('Anderes Bild auswählen', [], 'soul'),
                     'edit_auto' => $trans->trans('Komprimierten Ausschnitt automatisch festlegen', [], 'soul'),
                     'edit_manual' => $trans->trans('Ich möchte den komprimierten Ausschnitt selbst festlegen', [], 'soul'),
@@ -141,6 +146,11 @@ class AvatarController extends AbstractController
                     'letterbox-animated'        => $trans->trans('Komprimierte Anzeige', [], 'soul') . ' (' . $trans->trans('animiert', [], 'soul') . ')',
                     'letterbox-hd-still'        => $trans->trans('Komprimierte Anzeige', [], 'soul') . ' / ' . $trans->trans('hohe Auflösung', [], 'soul'),
                     'letterbox-hd-animated'     => $trans->trans('Komprimierte Anzeige', [], 'soul') . ' (' . $trans->trans('animiert', [], 'soul') . ')' . ' / ' . $trans->trans('hohe Auflösung', [], 'soul'),
+
+                    'legacy-default'         => $trans->trans('Normale Anzeige', [], 'soul') . ' (' . $trans->trans('importiert', [], 'soul') . ')',
+                    'legacy-default-hd'      => $trans->trans('Normale Anzeige', [], 'soul') . ' (' . $trans->trans('importiert', [], 'soul') . ')' . ' / ' . $trans->trans('hohe Auflösung', [], 'soul'),
+                    'legacy-classic'         => $trans->trans('Komprimierte Anzeige', [], 'soul') . ' (' . $trans->trans('importiert', [], 'soul') . ')',
+                    'legacy-classic-hd'      => $trans->trans('Komprimierte Anzeige', [], 'soul') . ' (' . $trans->trans('importiert', [], 'soul') . ')' . ' / ' . $trans->trans('hohe Auflösung', [], 'soul'),
                 ]
             ]
         ]);
@@ -178,11 +188,14 @@ class AvatarController extends AbstractController
      */
     #[Route(path: '/media', name: 'list', methods: ['GET'])]
     public function fetchMedia(MediaService $mediaService): JsonResponse {
-        $render = function(?Media $media, bool $include_pending = false, bool $include_source = false) {
+        $render = function(?Media $media, bool $include_pending = false, bool $include_source = false, bool $include_expiration = false): ?array {
             $data = $media ? array_filter([
                 'id' => $media->getId(),
                 ...( $include_source ? [
                     'source' => true,
+                ] : []),
+                ...( $include_expiration && $media->getDeleteAt() !== null ? [
+                    'expires' => (int)floor(Carbon::parse( $media->getDeleteAt() )->diffInDays( Carbon::now(), true )),
                 ] : []),
                 'default'   => $this->renderAvatar($media, 'square', $include_pending),
                 'round'     => $this->renderAvatar($media, 'circular', $include_pending),
@@ -195,7 +208,7 @@ class AvatarController extends AbstractController
         return new JsonResponse( array_filter([
             'avatar'  => $render( $mediaService->getSingleMediaForObject( $this->getUser(), 'avatar' ), include_source: true ),
             'pending' => $render( $mediaService->getSingleMediaForObject( $this->getUser(), 'avatar-pending' ), true ),
-            'history' => $mediaService->getMediaForObject( $this->getUser(), 'avatar-history' )->map( fn(Media $m) => $render( $m ) )->toArray(),
+            'history' => $mediaService->getMediaForObject( $this->getUser(), 'avatar-history' )->map( fn(Media $m) => $render( $m, include_expiration: true ) )->toArray(),
         ]));
     }
 
@@ -203,11 +216,12 @@ class AvatarController extends AbstractController
      * @param EntityManagerInterface $em
      * @param InvalidateTagsInAllPoolsAction $clearCache
      * @param MediaService $mediaService
+     * @param RecalculateMediaExpirationAction $expirationAction
      * @return JsonResponse
      * @throws Exception
      */
     #[Route(path: '/media', name: 'delete', methods: ['DELETE'])]
-    public function deleteMedia(EntityManagerInterface $em, InvalidateTagsInAllPoolsAction $clearCache, MediaService $mediaService): JsonResponse {
+    public function deleteMedia(EntityManagerInterface $em, InvalidateTagsInAllPoolsAction $clearCache, MediaService $mediaService, RecalculateMediaExpirationAction $expirationAction): JsonResponse {
 
         $avatar = $this->getUser()->getAvatar();
 
@@ -230,6 +244,8 @@ class AvatarController extends AbstractController
 
             $clearCache("user_avatar_{$this->getUser()->getId()}");
             $em->flush();
+
+            ($expirationAction)($this->getUser(), true);
         }
 
         return new JsonResponse();
@@ -245,7 +261,7 @@ class AvatarController extends AbstractController
     public function deleteSpecificMedia(
         #[MapEntity(id: 'id')]
         Media $media,
-        EntityManagerInterface $em, InvalidateTagsInAllPoolsAction $clearCache): JsonResponse {
+        EntityManagerInterface $em, InvalidateTagsInAllPoolsAction $clearCache, RecalculateMediaExpirationAction $expirationAction): JsonResponse {
 
         if ($media->getModelType() !== User::class || (int)$media->getModelId() !== $this->getUser()->getId())
             return new JsonResponse([], Response::HTTP_NOT_FOUND);
@@ -257,6 +273,9 @@ class AvatarController extends AbstractController
         $em->flush();
 
         $clearCache("user_avatar_{$this->getUser()->getId()}");
+
+        ($expirationAction)($this->getUser(), true);
+
         return new JsonResponse();
     }
 
@@ -374,6 +393,7 @@ class AvatarController extends AbstractController
      * @param MediaService $mediaService
      * @param KernelInterface $kernel
      * @return JsonResponse
+     * @throws Exception
      */
     #[Route(path: '/media/{id}', name: 'patch', methods: ['PATCH'])]
     public function patchMedia(
@@ -413,7 +433,7 @@ class AvatarController extends AbstractController
 
         if ($same) return new JsonResponse(['success' => true]);
 
-        $media = $mediaService->addMediaToObjectFromFile( $user, "{$kernel->getProjectDir()}/public/storage/{$originalMedia->getUrl()}", 'avatar-pending', $originalMedia->getUrl() );
+        $media = $mediaService->addMediaToObjectFromFile( $user, "{$kernel->getProjectDir()}/public/storage/{$originalMedia->getUrl()}", 'avatar-pending', $originalMedia->getFilename() );
 
         $this->handleCreatedMedia( $user, $media, $format, $parser->get_array( 'crop.small'), $parser->get_array( 'crop.default'), $parser->get_array( 'crop.round' ) );
 
@@ -429,6 +449,7 @@ class AvatarController extends AbstractController
      * @param PermissionHandler $permissionHandler
      * @param EntityManagerInterface $em
      * @param MediaService $mediaService
+     * @param RecalculateMediaExpirationAction $expirationAction
      * @return JsonResponse
      * @throws Exception
      */
@@ -439,6 +460,7 @@ class AvatarController extends AbstractController
         PermissionHandler $permissionHandler,
         EntityManagerInterface $em,
         MediaService $mediaService,
+        RecalculateMediaExpirationAction $expirationAction
     ): JsonResponse {
         if ($media->getModelType() !== User::class || (int)$media->getModelId() !== $this->getUser()->getId())
             return new JsonResponse([], Response::HTTP_NOT_FOUND);
@@ -457,10 +479,12 @@ class AvatarController extends AbstractController
             $em->flush();
         }
 
-        if (!$mediaService->moveMediaToNewCollection( $media, 'avatar' ))
+        if (!$mediaService->moveMediaToNewCollection( $media->setDeleteAt(null), 'avatar' ))
             return new JsonResponse([], Response::HTTP_CONFLICT);
 
         $em->flush();
+
+        $expirationAction($this->getUser());
         return new JsonResponse(['success' => true]);
     }
 

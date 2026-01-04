@@ -143,18 +143,21 @@ const AvatarModeNew = ({maxSize, hasMedia}: {maxSize: number, hasMedia: boolean}
         if (uploadRef.current.files.length !== 1) {
             $.html.error(globals.strings.common.error_single_file);
             globals.setMode(hasMedia ? 'view' : 'empty');
+            return;
         }
 
         const file = uploadRef.current.files[0];
         if (maxSize > 0 && file.size >= maxSize) {
             $.html.error(globals.strings.common.error_too_large);
             globals.setMode(hasMedia ? 'view' : 'empty');
+            return;
         }
 
         const type_info = file.type.split('/',2);
         if (type_info.length < 2 || type_info[0] !== 'image') {
             $.html.error(globals.strings.common.error_unknown_format);
             globals.setMode(hasMedia ? 'view' : 'empty');
+            return;
         }
 
         const reader = new FileReader();
