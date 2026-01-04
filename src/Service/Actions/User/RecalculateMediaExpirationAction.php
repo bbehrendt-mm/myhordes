@@ -47,14 +47,26 @@ readonly class RecalculateMediaExpirationAction
         $current_avatar = $this->mediaService->getSingleMediaForObject( $user, 'avatar' );
         $avatar_history = $this->mediaService->getMediaForObject( $user, 'avatar-history' );
 
+        $all = array_filter([
+            $current_avatar->getId()->toString(),
+            ...$avatar_history->map( fn(Media $m) => $m->getId()->toString() )->toArray(),
+        ]);
+
         $objects_with_source = 0;
         foreach ($avatar_history as $avatar_history_item) {
-            if ($avatar_history_item->getMetaKey('source')) {
-                $objects_with_source++;
+            if (array_intersect($avatar_history_item->getMetaKey('copies', []), $all)) {
                 if ($objects_with_source) $must_delete[] = $avatar_history_item->getId()->toString();
-                else $expiration[$avatar_history_item->getId()] = self::earliest( $avatar_history_item->getDeleteAt(), new Carbon()->addDay() );
+                else $expiration[$avatar_history_item->getId()->toString()] = self::earliest( $avatar_history_item->getDeleteAt(), new Carbon()->addDay() );
+
+                $objects_with_source++;
+            } elseif ( $avatar_history_item->getMetaKey('source', '') === $current_avatar?->getId()?->toString() ) {
+                if ($objects_with_source) $must_delete[] = $avatar_history_item->getId()->toString();
+                else $expiration[$avatar_history_item->getId()->toString()] = self::earliest( $avatar_history_item->getDeleteAt(), new Carbon()->addDay() );
+
+                $objects_with_source++;
             }
         }
+
 
         $totalSize = $current_avatar ? $this->mediaService->getTotalMediaSize( $current_avatar ) : 0;
         $position = 0;
@@ -64,14 +76,16 @@ readonly class RecalculateMediaExpirationAction
 
             $totalSize += $this->mediaService->getTotalMediaSize( $avatar_history_item );
 
-            if ($position === 0) $expiration[$avatar_history_item->getId()->toString()] = null;
-            elseif ($totalSize <= 1048576) {
-                if ($recalculate) $expiration[$avatar_history_item->getId()->toString()] = null;
+            if (!array_key_exists($avatar_history_item->getId()->toString(), $expiration)) {
+                if ($position === 0) $expiration[$avatar_history_item->getId()->toString()] = null;
+                elseif ($totalSize <= 1048576) {
+                    if ($recalculate) $expiration[$avatar_history_item->getId()->toString()] = null;
+                }
+                elseif ($totalSize <= 2097152) $expiration[$avatar_history_item->getId()->toString()] = self::earliest( $recalculate ? null : $avatar_history_item->getDeleteAt(), new Carbon()->addDays(30) );
+                elseif ($totalSize <= 4194304) $expiration[$avatar_history_item->getId()->toString()] = self::earliest( $recalculate ? null : $avatar_history_item->getDeleteAt(), new Carbon()->addDays(7) );
+                elseif ($totalSize <= 6291456) $expiration[$avatar_history_item->getId()->toString()] = self::earliest( $recalculate ? null : $avatar_history_item->getDeleteAt(), new Carbon()->addDay() );
+                else $must_delete[] = $avatar_history_item->getId()->toString();
             }
-            elseif ($totalSize <= 2097152) $expiration[$avatar_history_item->getId()->toString()] = self::earliest( $recalculate ? null : $avatar_history_item->getDeleteAt(), new Carbon()->addDays(30) );
-            elseif ($totalSize <= 4194304) $expiration[$avatar_history_item->getId()->toString()] = self::earliest( $recalculate ? null : $avatar_history_item->getDeleteAt(), new Carbon()->addDays(7) );
-            elseif ($totalSize <= 6291456) $expiration[$avatar_history_item->getId()->toString()] = self::earliest( $recalculate ? null : $avatar_history_item->getDeleteAt(), new Carbon()->addDay() );
-            else $must_delete[] = $avatar_history_item->getId()->toString();
 
             $position++;
         }

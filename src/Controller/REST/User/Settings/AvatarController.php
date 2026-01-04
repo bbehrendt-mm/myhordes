@@ -190,12 +190,12 @@ class AvatarController extends AbstractController
                     'source' => true,
                 ] : []),
                 ...( $include_expiration && $media->getDeleteAt() !== null ? [
-                    'expires' => (int)floor(Carbon::parse( $media->getDeleteAt() )->diffInDays( Carbon::now(), true )),
+                    'expires' => max(0,-(int)floor(Carbon::parse( $media->getDeleteAt() )->diffInDays( Carbon::now() ))),
                 ] : []),
                 'default'   => $this->renderAvatar($media, 'square', $include_pending),
                 'round'     => $this->renderAvatar($media, 'circular', $include_pending),
                 'small'     => $this->renderAvatar($media, 'classic', $include_pending),
-            ]) : null;
+            ], fn(mixed $v) => $v !== null) : null;
 
             return empty($data) ? null : $data;
         };
