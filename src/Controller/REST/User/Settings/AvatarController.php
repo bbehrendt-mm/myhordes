@@ -3,7 +3,6 @@
 namespace App\Controller\REST\User\Settings;
 
 use App\Entity\AccountRestriction;
-use App\Entity\Avatar;
 use App\Entity\Media;
 use App\Entity\User;
 use App\Enum\Configuration\MyHordesSetting;
@@ -11,20 +10,16 @@ use App\Service\Actions\Cache\InvalidateTagsInAllPoolsAction;
 use App\Service\Actions\User\RecalculateMediaExpirationAction;
 use App\Service\ConfMaster;
 use App\Service\JSONRequestParser;
-use App\Service\Media\ImageService;
 use App\Service\Media\MediaService;
 use App\Service\PermissionHandler;
 use App\Service\UserHandler;
-use App\Structures\Image;
 use App\Structures\Media\AnonymousMediaVariant;
 use App\Structures\Media\MediaConversion;
-use App\Structures\Media\MediaVariantInterface;
 use ArrayHelpers\Arr;
 use Carbon\Carbon;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Intervention\Image\Interfaces\ImageInterface;
-use Psr\Cache\InvalidArgumentException;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;

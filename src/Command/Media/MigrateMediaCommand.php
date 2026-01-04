@@ -4,14 +4,11 @@
 namespace App\Command\Media;
 
 
-use App\Entity\Avatar;
 use App\Entity\Award;
 use App\Entity\ExternalApp;
 use App\Entity\OfficialGroup;
 use App\Entity\User;
-use App\Enum\OfficialGroupSemantic;
 use App\Service\CommandHelper;
-use App\Service\Media\ImageService;
 use App\Service\Media\MediaService;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,7 +16,6 @@ use Intervention\Image\Drivers\Imagick\Driver;
 use Intervention\Image\ImageManager;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;

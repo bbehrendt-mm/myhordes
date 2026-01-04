@@ -11,7 +11,6 @@ use App\Response\AjaxResponse;
 use App\Service\Actions\Mercure\BroadcastViaMercureAction;
 use App\Service\ErrorHelper;
 use App\Service\JSONRequestParser;
-use App\Service\Media\ImageService;
 use App\Service\Media\MediaService;
 use App\Service\RandomGenerator;
 use App\Translation\T;

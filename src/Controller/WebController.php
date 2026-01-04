@@ -475,18 +475,7 @@ class WebController extends CustomAbstractController
         // HEIC images should be referred to as AVIF towards the browser
         if ($ext === 'heic') $ext = 'avif';
 
-        // If the image is in avif format, we must convert it to webp for MS Edge users
-        if ($ext === 'avif' && !in_array('image/avif', Request::createFromGlobals()->getAcceptableContentTypes())) {
-            $ext = 'webp';
-
-            if ($identifier) {
-                $response = new Response( (new FilesystemAdapter())->get("mh_image_processor_$identifier", fn() =>
-                    ImageService::convertImageData( stream_get_contents( $data ), 'webp' )
-                ) );
-            } else $response = new Response(ImageService::convertImageData( stream_get_contents( $data ), 'webp' ));
-
-        } else $response = new Response(stream_get_contents( $data ));
-
+        $response = new Response(stream_get_contents( $data ));
         $disposition = HeaderUtils::makeDisposition(
             HeaderUtils::DISPOSITION_INLINE,
             "{$name}.{$ext}"
