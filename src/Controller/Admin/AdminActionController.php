@@ -60,6 +60,8 @@ class AdminActionController extends CustomAbstractController
 
     protected InvalidateTagsInAllPoolsAction $clear;
 
+    protected MediaService $mediaService;
+
     public function __construct(EntityManagerInterface $em, ConfMaster $conf, LogTemplateHandler $lth, TranslatorInterface $translator, ZoneHandler $zh, TimeKeeperService $tk, CitizenHandler $ch, InventoryHandler $ih, UserHandler $uh, CrowService $crow, AdminLog $adminLogger, UrlGeneratorInterface $urlGenerator, AdminHandler $adminHandler, TownHandler $townHandler, HookExecutor $hookExecutor, InvalidateTagsInAllPoolsAction $clear, MapMaker $mapMaker, MediaService $mediaService)
     {
         parent::__construct($conf, $em, $tk, $ch, $ih, $translator, $hookExecutor);
