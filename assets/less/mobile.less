@@ -262,13 +262,17 @@
     }
   }
 
-  .app-directory {
+  .header-directory {
     min-height: 37px; min-width: 44px;
-    .app-icon { height: 32px; width: 32px; image-rendering: pixelated }
-    .app-listing-body {
+    .header-directory-icon { height: 32px; width: 32px; image-rendering: pixelated }
+    .header-listing-body {
       h4 { padding: 10px 0 11px 43px; }
       ul { grid-template-columns: 1fr; }
     }
+  }
+
+  .mod-directory {
+      left: 64px;
   }
 
   #wrapper > #content #apps #apps-list ul li.app-external { width: 100% !important; }
@@ -531,6 +535,11 @@
         &.padded-small-@{postfix} {padding: @myhordes-grid-padsize-small;}
         &.padded-none-@{postfix}  {padding: 0}
       }
+    }
+
+    .flex {
+        &.direction-row-@{postfix} { flex-direction: row; }
+        &.column-@{postfix} { flex-direction: column; &>hr.section { width: 80% } }
     }
   }
 }

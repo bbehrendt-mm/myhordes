@@ -157,10 +157,8 @@
   &.inline {display: inline-flex; }
   &:not(.inline) {display: flex; }
 
-  &.column {
-      flex-direction: column;
-      &>hr.section { width: 80% }
-  }
+  &.direction-row { flex-direction: row; }
+  &.column { flex-direction: column; &>hr.section { width: 80% } }
   &.wrap {flex-wrap: wrap}
 
   &.top { align-items: flex-start; }

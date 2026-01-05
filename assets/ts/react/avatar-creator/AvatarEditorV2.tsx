@@ -167,8 +167,8 @@ export const AvatarModeEdit = (props: AvatarEditorProps) => {
     }, [dataString]);
 
     return <div className="flex column large-gap">
-        <div className="row-flex h-center gap">
-            <div className="cell rw-3 center flex column large-gap">
+        <div className="row-flex wrap-md h-center gap">
+            <div className="cell rw-3 rw-md-12 center flex column large-gap">
                 <div className="small flex-none"><strong>{ globals.strings.common.format_upload }</strong></div>
                 { meta && <div className="small flex-none"><strong>{globals.strings.common.info
                     .replace('{x}', `${meta.width}`)
@@ -186,7 +186,7 @@ export const AvatarModeEdit = (props: AvatarEditorProps) => {
                 </div>
             </div>
 
-            <div className="cell rw-3 center flex column large-gap">
+            <div className="cell rw-3 rw-md-5 center flex column large-gap">
                 <div className="small flex-none"><strong>{ globals.strings.common.format_default }</strong></div>
                 <div className="small flex-none"><strong><AvatarDimensionsDisplay crop={squareCrop} defaultCrop={squareCropDefault} w={meta?.width} h={meta?.height}/></strong></div>
                 <div className="flex-1">
@@ -202,7 +202,7 @@ export const AvatarModeEdit = (props: AvatarEditorProps) => {
                 </div>
             </div>
 
-            <div className="cell rw-3 center flex column large-gap">
+            <div className="cell rw-3 rw-md-5 center flex column large-gap">
                 <div className="small flex-none"><strong>{ globals.strings.common.format_round }</strong></div>
                 <div className="small flex-none"><strong><AvatarDimensionsDisplay crop={circularCrop} defaultCrop={circularCropDefault} w={meta?.width} h={meta?.height}/></strong></div>
                 <div className="flex-1">
@@ -218,7 +218,7 @@ export const AvatarModeEdit = (props: AvatarEditorProps) => {
                 </div>
             </div>
 
-            <div className="cell rw-3 center flex column large-gap">
+            <div className="cell rw-3 rw-md-5 center flex column large-gap">
                 <div className="small flex-none"><strong>{ globals.strings.common.format_small }</strong></div>
                 <div className="small flex-none"><strong><AvatarDimensionsDisplay crop={classicCrop} defaultCrop={classicCropDefault} w={meta?.width} h={meta?.height}/></strong></div>
                 <div className="flex-1">

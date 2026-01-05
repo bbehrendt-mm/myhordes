@@ -19,6 +19,7 @@ use ArrayHelpers\Arr;
 use Carbon\Carbon;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use finfo;
 use Intervention\Image\Interfaces\ImageInterface;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -250,6 +251,7 @@ class AvatarController extends AbstractController
      * @param Media $media
      * @param EntityManagerInterface $em
      * @param InvalidateTagsInAllPoolsAction $clearCache
+     * @param RecalculateMediaExpirationAction $expirationAction
      * @return JsonResponse
      */
     #[Route(path: '/media/{id}', name: 'deleteSpecific', methods: ['DELETE'])]
@@ -359,8 +361,6 @@ class AvatarController extends AbstractController
         $payload = $parser->get_base64('data');
         $pending = $parser->get('pending', true);
         $format = $parser->get('format', 'avif');
-        $lossless = $format === 'lossless';
-        if ($lossless) $format = 'webp';
 
         $user = $this->getUser();
         if ($permissionHandler->checkRestriction($user, AccountRestriction::RestrictionProfileAvatar))
@@ -370,6 +370,14 @@ class AvatarController extends AbstractController
 
         if (strlen( $payload ) > $conf->getGlobalConf()->get(MyHordesSetting::AvatarMaxSizeUpload))
             return new JsonResponse(['error' => UserHandler::ErrorAvatarTooLarge]);
+
+        $detected_mime = new finfo(FILEINFO_MIME_TYPE)->buffer($payload);
+        if (
+            !str_starts_with($detected_mime, 'image/' )     || // File is not an image
+            str_starts_with($detected_mime, 'image/vnd.')   || // File is a propietary image format
+            str_starts_with($detected_mime, 'image/x-')     || // File is a propietary image format
+            $detected_mime === 'image/svg+xml'                 // File is SVG
+        ) return new JsonResponse(['error' => UserHandler::ErrorAvatarFormatUnsupported]);
 
         $media = $mediaService->addMediaToObjectFromBinaryString( $user, $payload, null, $pending ? 'avatar-pending' : 'avatar', Uuid::v7() );
 

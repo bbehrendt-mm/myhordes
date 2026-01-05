@@ -90,7 +90,7 @@ export const AvatarModeView = (props: AvatarViewerProps) => {
         </div> }
 
         { pending && <>
-            <div className="flex">
+            <div className="flex column-sm">
                 <div><button disabled={ has_pending_conversions } onClick={()=> {
                     $.html.addLoadStack();
                     globals.api.promoteMedia(props.pending.id)
@@ -122,7 +122,7 @@ export const AvatarModeView = (props: AvatarViewerProps) => {
         </div> }
 
         { !pending && <>
-            <div className="flex">
+            <div className="flex column-sm">
                 <div><button onClick={()=> globals.setMode('new')}>
                     { globals.strings.common.action_edit }
                 </button></div>
@@ -196,7 +196,7 @@ const AvatarMediaGroupCollapse = ({mediaGroup, activeElement, setActiveElement}:
         setShowElements(activeElement === mediaGroup.id);
     }, [activeElement]);
 
-    return <div ref={ref} className="avatar-history-element">
+    return <div ref={ref} className="avatar-history-element flex column">
         <div className="flex large-gap middle">
             <div className="flex-none pointer" onClick={() => {
                 setActiveElement(showElements ? null : mediaGroup.id)
@@ -204,10 +204,10 @@ const AvatarMediaGroupCollapse = ({mediaGroup, activeElement, setActiveElement}:
                 <div className="avatar small no-arma"><img alt="" src={ mediaGroup.small.url ?? mediaGroup.default.url ?? mediaGroup.round.url } /></div>
             </div>
             <div className="flex-1">
-                { (mediaGroup.expires ?? null) !== null && <>
+                { (mediaGroup.expires ?? null) !== null && <div className="hide-sm">
                     {mediaGroup.expires > 1 && <span className="small">{ globals.strings.common.will_delete_in.replace('{days}', `${mediaGroup.expires}`) }</span>}
                     {mediaGroup.expires <= 1 && <span className="small">{ globals.strings.common.will_delete }</span>}
-                </> }
+                </div> }
             </div>
             <div className="flex-none flex middle">
                 <img className="pointer"
@@ -238,6 +238,10 @@ const AvatarMediaGroupCollapse = ({mediaGroup, activeElement, setActiveElement}:
                 />
             </div>
         </div>
+        { (mediaGroup.expires ?? null) !== null && <div className="hide-md hide-lg hide-desktop">
+            {mediaGroup.expires > 1 && <span className="small">{ globals.strings.common.will_delete_in.replace('{days}', `${mediaGroup.expires}`) }</span>}
+            {mediaGroup.expires <= 1 && <span className="small">{ globals.strings.common.will_delete }</span>}
+        </div> }
         <div data-slide={1}>
             { renderElements && <AvatarMediaGroup mediaGroup={mediaGroup} pending={false}/>}
         </div>
