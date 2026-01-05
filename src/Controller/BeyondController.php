@@ -189,6 +189,16 @@ class BeyondController extends InventoryAwareController
         $scout_level = null;
         $scout_sense = false;
 
+        $is_collect = $this->getActiveCitizen()->isProfession('collec');
+        $dig_level = match(true) {
+            $is_collect && $zone->getDigs() <= 0 => 0,
+            !$is_collect && $zone->getDigs() <= 0 => -1,
+            !$is_collect => null,
+            $zone->getDigs() <= 2  => 1,
+            $zone->getDigs() <= 6  => 2,
+            default => 3,
+        };
+
         if ($this->getActiveCitizen()->isProfession('hunter')) {
             $scout_sense = true;
             $scout_markings_global = $this->getActiveCitizen()->hasRole('guide');
@@ -229,6 +239,7 @@ class BeyondController extends InventoryAwareController
             'active_scout_mode' => $scout_movement,
             'scout_level' => $scout_level,
             'scout_sense' => $scout_sense,
+            'dig_level' => $dig_level,
             'scavenger_sense' => $scavenger_sense,
             'heroics' => $this->getHeroicActions(),
             'specials' => $this->getSpecialActions(),
@@ -393,14 +404,6 @@ class BeyondController extends InventoryAwareController
                 $zone_tags = $this->entity_manager->getRepository(ZoneTag::class)->findAll();
             }
 
-            $digLevel = match(true) {
-                $zone->getDigs() <= 0 => 0,
-                !$citizen->isProfession('collec') => null,
-                $zone->getDigs() <= 2  => 1,
-                $zone->getDigs() <= 6  => 2,
-                default => 3,
-            };
-
             return [
                 'scout' => $citizen->isProfession('hunter'),
                 'allow_enter_town' => $can_enter,
@@ -433,8 +436,7 @@ class BeyondController extends InventoryAwareController
                 'blueprintFound' => $blueprintFound ?? '',
                 'camping_debug' => $camping_debug ?? '',
                 'zone_tags' => $zone_tags,
-                'sect' => $sect,
-                'digLevel' => $digLevel,
+                'sect' => $sect
             ];
         }/*, INF*/);
 
