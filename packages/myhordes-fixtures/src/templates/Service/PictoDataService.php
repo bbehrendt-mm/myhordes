@@ -187,7 +187,7 @@ class PictoDataService implements FixtureProcessorInterface {
             ],
             [
                 'label' => 'Vollständige Erkundung',
-                'description' => 'Anzahl der Karten, die du vollständig aufgedeckt hast.',
+                'description' => 'Anzahl der Karten, die du vollständig aufgedeckt erlebt hast und auf der sämtliche initialen Ruinen und begehbaren Ruinen zumindest einmal besucht oder betreten worden.',
                 'icon' => 'r_explot',
                 'rare' => true
             ],

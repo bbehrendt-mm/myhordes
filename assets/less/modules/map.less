@@ -350,10 +350,19 @@ div.react_map_area {
 
           &.town:not(.devast)>div.icon { background: url("../../img/icons/map/map_zone_town.svg") center/contain no-repeat; }
           &.town.devast>div.icon { background: url("../../img/icons/map/map_zone_town_devast.svg") center/contain no-repeat; }
-          &.ruin:not(.buried)>div.icon { background: url("../../img/icons/map/map_zone_ruin.svg") center/contain no-repeat; }
-          &.ruin:not(.buried).past>div.icon { background: url("../../img/icons/map/map_zone_ruin_past.svg") center/contain no-repeat; }
-          &.ruin.buried>div.icon { background: url("../../img/icons/map/map_zone_buried.svg") center/contain no-repeat; }
-          &.ruin.buried.past>div.icon { background: url("../../img/icons/map/map_zone_buried_past.svg") center/contain no-repeat; }
+          &.ruin:not(.modified-ruin) {
+              &:not(.buried)>div.icon { background: url("../../img/icons/map/map_zone_ruin.svg") center/contain no-repeat; }
+              &:not(.buried).past>div.icon { background: url("../../img/icons/map/map_zone_ruin_past.svg") center/contain no-repeat; }
+              &.buried>div.icon { background: url("../../img/icons/map/map_zone_buried.svg") center/contain no-repeat; }
+              &.buried.past>div.icon { background: url("../../img/icons/map/map_zone_buried_past.svg") center/contain no-repeat; }
+          }
+          &.ruin.modified-ruin {
+              &:not(.buried)>div.icon { background: url("../../img/icons/map/map_zone_ruin_m.svg") center/contain no-repeat; }
+              &:not(.buried).past>div.icon { background: url("../../img/icons/map/map_zone_ruin_past_m.svg") center/contain no-repeat; }
+              &.buried>div.icon { background: url("../../img/icons/map/map_zone_buried_m.svg") center/contain no-repeat; }
+              &.buried.past>div.icon { background: url("../../img/icons/map/map_zone_buried_past_m.svg") center/contain no-repeat; }
+          }
+          &.ruin.scavenged-ruin>div.icon { filter: invert(1) }
           &.past   >div.icon { background: url("../../img/icons/map/map_zone_past.svg") center/contain no-repeat; }
           &.unknown>div.icon { background-image: url("../../img/icons/map/map_zone_unknown.png"); background-repeat: no-repeat; background-position: center; }
         }

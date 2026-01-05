@@ -11,6 +11,8 @@ type MapZoneRuin = {
     n: string,      // Translated name
     b: boolean,     // Buried?
     e: boolean,     // Explorable?
+    s?: boolean,     // Scavenged?
+    m: boolean,     // Prototype modified (flag)
 }
 
 export type MapCoordinate = {

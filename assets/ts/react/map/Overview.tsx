@@ -207,6 +207,8 @@ const MapOverviewZone = ( props: MapOverviewZoneProps ) => {
             ${typeof props.zone.t  !== "undefined" ? (props.zone.t ? '' : 'past') : 'unknown'}
             ${props.zone.g ? 'global' : ''}
             ${(typeof props.zone.r !== "undefined" && typeof props.zone.td === "undefined") ? `ruin ${props.zone.r.b ? 'buried' : ''}` : ''}
+            ${(props.zone.r?.s && typeof props.zone.td === "undefined") ? `scavenged-ruin` : ''}
+            ${(props.zone.r?.m && typeof props.zone.td === "undefined") ? `modified-ruin` : ''}
             ${typeof props.zone.d  !== "undefined" ? `danger-${props.zone.d}` : ''}
             ${props.zone.s ? 'soul' : ''}
         `} style={{

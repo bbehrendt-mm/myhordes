@@ -170,6 +170,7 @@ final readonly class BuildingConstructionListener implements ServiceSubscriberIn
                     uncovered: true,
                     lenient_distances: true,
                     scavenged: true,
+                    setModFlag: true,
                 );
 
                 $spawnedRevealed = $mapMaker->spawnRuins(
@@ -179,6 +180,7 @@ final readonly class BuildingConstructionListener implements ServiceSubscriberIn
                     uncovered: true,
                     lenient_distances: true,
                     scavenged: true,
+                    setModFlag: true,
                 );
 
                 $newRuins = array_map(fn(Zone $z) => $z->getPrototype(), array_merge($spawnedSpecial, $spawnedRevealed));

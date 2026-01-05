@@ -154,7 +154,9 @@ readonly class RenderMapAction
                     $current_zone['r'] = [
                         'n' => $this->translator->trans( $zone->getPrototype()->getLabel(), [], 'game' ) . ($zone->getBuryCount() > 0 ? " (" . $this->translator->trans('Verschüttet', [], 'admin') . ")" : ""),
                         'b' => $zone->getBuryCount() > 0,
-                        'e'=> $zone->getPrototype()->getExplorable()
+                        'e' => $zone->getPrototype()->getExplorable(),
+                        'm' => $zone->isModifiedFromDefault(),
+                        's' => $zone->isScavenged(),
                     ];
                 } else {
                     $current_zone['r'] = [
@@ -162,7 +164,8 @@ readonly class RenderMapAction
                             ? $this->translator->trans( 'Verschüttete Ruine', [], 'game' )
                             : $this->translator->trans( $zone->getPrototype()->getLabel(), [], 'game' ),
                         'b' => $zone->getBuryCount() > 0,
-                        'e' => $zone->getPrototype()->getExplorable()
+                        'e' => $zone->getPrototype()->getExplorable(),
+                        'm' => $zone->isModifiedFromDefault(),
                     ];
                 }
             }

@@ -111,6 +111,9 @@ class Zone
     #[ORM\Column]
     private bool $scavenged = false;
 
+    #[ORM\Column]
+    private bool $modifiedFromDefault = false;
+
     public function __construct()
     {
         $this->citizens = new ArrayCollection();
@@ -714,6 +717,18 @@ class Zone
     public function setScavenged(bool $scavenged): static
     {
         $this->scavenged = $scavenged;
+
+        return $this;
+    }
+
+    public function isModifiedFromDefault(): ?bool
+    {
+        return $this->modifiedFromDefault;
+    }
+
+    public function setModifiedFromDefault(bool $modifiedFromDefault): static
+    {
+        $this->modifiedFromDefault = $modifiedFromDefault;
 
         return $this;
     }
