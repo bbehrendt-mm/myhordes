@@ -119,12 +119,14 @@ class RecipeFixtures extends Fixture implements DependentFixtureInterface
         $cache = [];
         foreach ($recipe_fixture_data as $name => $recipe_data) {
             $recipe = $manager->getRepository(Recipe::class)->findOneBy( ['name' => $name] );
-            if ($recipe === null) $recipe = new Recipe()->setName($name );
-
-            if ($recipe->getSource()) { $manager->remove( $recipe->getSource() ); $recipe->setSource( null ); }
-            if ($recipe->getResult()) { $manager->remove( $recipe->getResult() ); $recipe->setResult( null ); }
-            $recipe->getProvoking()->clear();
-            $recipe->getKeep()->clear();
+            if ($recipe === null) {
+                $recipe = new Recipe()->setName($name);
+            } else {
+                if ($recipe->getSource()) { $manager->remove( $recipe->getSource() ); $recipe->setSource( null ); }
+                if ($recipe->getResult()) { $manager->remove( $recipe->getResult() ); $recipe->setResult( null ); }
+                $recipe->getProvoking()->clear();
+                $recipe->getKeep()->clear();
+            }
 
             $unpack = function( $data ): array {
                 if (!is_array($data)) return [ $data => 1 ];
@@ -172,7 +174,11 @@ class RecipeFixtures extends Fixture implements DependentFixtureInterface
             foreach ($provoking as $item)
                 $recipe->addProvoking( $manager->getRepository(ItemPrototype::class)->findOneBy( ['name' => $item] ) );
 
-            $recipe->setType( $recipe_data['type'] )->setStealthy( $recipe_data['stealthy'] ?? false );
+            $recipe
+                ->setType( $recipe_data['type'] )
+                ->setStealthy( $recipe_data['stealthy'] ?? false )
+                ->setForcedErrorMessage( $recipe_data['error'] ?? null );
+
             if (array_key_exists('action', $recipe_data)) {
               $recipe->setAction($recipe_data['action']);
             }

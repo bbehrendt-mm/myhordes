@@ -56,6 +56,9 @@ class Recipe
     #[ORM\Column]
     private int $additionalAP = 0;
 
+    #[ORM\Column(length: 190, nullable: true)]
+    private ?string $forcedErrorMessage = null;
+
     public function __construct()
     {
         $this->provoking = new ArrayCollection();
@@ -212,6 +215,18 @@ class Recipe
     public function setAdditionalAP(int $additionalAP): static
     {
         $this->additionalAP = $additionalAP;
+
+        return $this;
+    }
+
+    public function getForcedErrorMessage(): ?string
+    {
+        return $this->forcedErrorMessage;
+    }
+
+    public function setForcedErrorMessage(?string $forcedErrorMessage): static
+    {
+        $this->forcedErrorMessage = $forcedErrorMessage;
 
         return $this;
     }

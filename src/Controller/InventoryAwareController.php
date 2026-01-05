@@ -674,6 +674,11 @@ class InventoryAwareController extends CustomAbstractController
             }
         }
 
+        if ($recipe->getForcedErrorMessage()) {
+            $this->addFlash("error", $this->translator->trans($recipe->getForcedErrorMessage(), [], 'game'));
+            return AjaxResponse::success();
+        }
+
         if (($error = $handler->execute_recipe( $citizen, $recipe, $remove, $message )) !== ActionHandler::ErrorNone ) {
             if ($error === ErrorHelper::ErrorItemsMissing && in_array($recipe->getType(), [Recipe::ManualAnywhere, Recipe::ManualInside, Recipe::ManualOutside])) {
                 $items = "";

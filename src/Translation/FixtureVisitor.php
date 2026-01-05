@@ -138,7 +138,7 @@ final class FixtureVisitor extends AbstractVisitor implements NodeVisitor
             AwardTitle::class => $this->extractColumnDataAndHandleFemaleTitles($data, 'title', 'game'),
             Item::class =>
                 $this->extractColumnData( $data, ['label','description'], 'items'),
-            Recipe::class => $this->extractColumnData( $data, ['action','tooltip'], 'items'),
+            Recipe::class => $this->extractColumnData( $data, ['action','tooltip','error'], 'items'),
             ItemCategory::class => $this->extractColumnData( $data, 'label', 'items'),
             AwardFeature::class => $this->extractColumnData( $data, ['label', 'desc'], 'items'),
             Building::class =>
