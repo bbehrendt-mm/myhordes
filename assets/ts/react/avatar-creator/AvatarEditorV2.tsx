@@ -256,8 +256,8 @@ export const AvatarModeEdit = (props: AvatarEditorProps) => {
                     crop={activeCrop}
                     onChange={(crop, percentCrop) => setActiveCrop(percentCrop)}
                     aspect={edit === 'circle' ? 1 : (edit === 'classic' ? 3 : fixedAspect)}
-                    minWidth={20}
-                    minHeight={20}
+                    minWidth={Math.min(edit === 'circle' ? 20 : (edit === 'classic' ? 90 : 100), meta?.width ?? 20)}
+                    minHeight={Math.min(edit === 'circle' ? 20 : (edit === 'classic' ? 30 : 100), meta?.height ?? 20)}
                     circularCrop={edit === 'circle'}
                 >
                     <img style={{maxWidth: '100%', maxHeight: '75dvh'}} src={dataString} alt=""/>

@@ -48,7 +48,7 @@ readonly class RecalculateMediaExpirationAction
         $avatar_history = $this->mediaService->getMediaForObject( $user, 'avatar-history' );
 
         $all = array_filter([
-            $current_avatar->getId()->toString(),
+            $current_avatar?->getId()?->toString(),
             ...$avatar_history->map( fn(Media $m) => $m->getId()->toString() )->toArray(),
         ]);
 

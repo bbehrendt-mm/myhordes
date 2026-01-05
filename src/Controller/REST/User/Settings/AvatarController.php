@@ -15,6 +15,7 @@ use App\Service\PermissionHandler;
 use App\Service\UserHandler;
 use App\Structures\Media\AnonymousMediaVariant;
 use App\Structures\Media\MediaConversion;
+use App\Structures\Media\MediaVariant;
 use ArrayHelpers\Arr;
 use Carbon\Carbon;
 use Doctrine\ORM\EntityManagerInterface;
@@ -299,21 +300,44 @@ class AvatarController extends AbstractController
     private function handleCreatedMedia(
         User $user,
         Media $media,
+        MediaService $mediaService,
         ?string $format = null,
         ?array $crop_small = null,
         ?array $crop_default = null,
         ?array $crop_round = null,
     ): void {
+        $classic_crop = $this->validateCrop( $crop_small, $media->transientImage );
+        $square_crop = $this->validateCrop( $crop_default, $media->transientImage );
+        $round_crop = $this->validateCrop( $crop_round, $media->transientImage );
+
+        $classic_crop_is_default = ($classic_crop && $square_crop &&
+            $classic_crop['x'] === $square_crop['x'] &&
+            $classic_crop['y'] === $square_crop['y'] &&
+            $classic_crop['width'] === $square_crop['width'] &&
+            $classic_crop['height'] === $square_crop['height']) || ($classic_crop === null && $square_crop === null &&
+                (int)round($media->transientImage->width() / 3) === $media->transientImage->height()
+            );
+
+        if ($classic_crop || $square_crop || $round_crop || $classic_crop_is_default)
+            $mediaService->rebuildConversions( $media, function(MediaVariant $variant) use ($classic_crop, $square_crop, $round_crop, $classic_crop_is_default) {
+                if ($classic_crop && in_array('classic', $variant->tags))
+                    return $variant->enabledForResolution( $classic_crop['width'], $classic_crop['height'] );
+
+                if (($square_crop || $classic_crop_is_default) && in_array('square', $variant->tags))
+                    return !$classic_crop_is_default && $variant->enabledForResolution( $square_crop['width'], $square_crop['height'] );
+
+                if ($round_crop && in_array('circular', $variant->tags))
+                    return $variant->enabledForResolution( $round_crop['width'], $round_crop['height'] );
+
+                return true;
+            } );
+
         $all_conversions     = $media->findConversions();
         $classic_conversions = $media->findConversions(includeTags: ['classic']);
         $square_conversions  = $media->findConversions(includeTags: ['square']);
         $round_conversions   = $media->findConversions(includeTags: ['circular']);
 
-        $classic_crop = $this->validateCrop( $crop_small, $media->transientImage );
-        $square_crop = $this->validateCrop( $crop_default, $media->transientImage );
-        $round_crop = $this->validateCrop( $crop_round, $media->transientImage );
-
-        $media->tagConversion( $square_conversions, 'default' );
+        $media->tagConversion( $classic_crop_is_default ? $classic_conversions : $square_conversions, 'default' );
 
         if ($classic_crop) $media->modifyConversion( $classic_conversions, fn(AnonymousMediaVariant $variant) => $variant->prepend()->crop(
             $classic_crop['width'], $classic_crop['height'], $classic_crop['x'], $classic_crop['y'],
@@ -381,7 +405,10 @@ class AvatarController extends AbstractController
 
         $media = $mediaService->addMediaToObjectFromBinaryString( $user, $payload, null, $pending ? 'avatar-pending' : 'avatar', Uuid::v7() );
 
-        $this->handleCreatedMedia( $user, $media, $format, $parser->get_array( 'crop.small'), $parser->get_array( 'crop.default'), $parser->get_array( 'crop.round' ) );
+        if ($media->transientImage->width() < 30 || $media->transientImage->height() < 30)
+            return new JsonResponse(['error' => UserHandler::ErrorAvatarResolutionUnacceptable]);
+
+        $this->handleCreatedMedia( $user, $media, $mediaService, $format, $parser->get_array( 'crop.small'), $parser->get_array( 'crop.default'), $parser->get_array( 'crop.round' ) );
         $em->persist( $media->setDeleteAt( Carbon::now()->addDay()->toDateTimeImmutable() ) );
         $em->flush();
 
@@ -438,7 +465,7 @@ class AvatarController extends AbstractController
 
         $media = $mediaService->addMediaToObjectFromFile( $user, "{$kernel->getProjectDir()}/public/storage/{$originalMedia->getUrl()}", 'avatar-pending', $originalMedia->getFilename() );
 
-        $this->handleCreatedMedia( $user, $media, $format, $parser->get_array( 'crop.small'), $parser->get_array( 'crop.default'), $parser->get_array( 'crop.round' ) );
+        $this->handleCreatedMedia( $user, $media, $mediaService, $format, $parser->get_array( 'crop.small'), $parser->get_array( 'crop.default'), $parser->get_array( 'crop.round' ) );
 
         $em->persist( $media->setDeleteAt( Carbon::now()->addDay()->toDateTimeImmutable() )->setMetaKey('source', $originalMedia->getMetaKey('source') ?? $originalMedia->getId()) );
         $em->persist( $originalMedia->pushMetaKey('copies', $media->getId(), true) );

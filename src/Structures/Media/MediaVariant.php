@@ -13,6 +13,9 @@ class MediaVariant implements MediaVariantInterface
 
     private ?Closure $condition = null;
 
+    private int $min_width = 0;
+    private int $min_height = 0;
+
     public readonly array $tags;
 
     public function __construct(
@@ -31,7 +34,17 @@ class MediaVariant implements MediaVariantInterface
         return $this;
     }
 
+    public function minResolution(?int $width = null, ?int $height = null): self {
+        $this->min_width = $width ?? $this->min_width;
+        $this->min_height = $height ?? $this->min_height;
+        return $this;
+    }
+
+    public function enabledForResolution(int $width, int $height): bool {
+        return $width >= $this->min_width && $height >= $this->min_height;
+    }
+
     public function enabledFor(ImageInterface $image): bool {
-        return $this->condition === null || ($this->condition)($image);
+        return $this->enabledForResolution($image->width(), $image->height()) && ($this->condition === null || ($this->condition)($image));
     }
 }

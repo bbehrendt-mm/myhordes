@@ -3,6 +3,7 @@ namespace App\Service\Media;
 
 use App\Entity\Media;
 use App\Structures\Media\MediaCollection;
+use App\Structures\Media\MediaVariant;
 use App\Structures\Media\MediaVariantInterface;
 use App\Traits\Entity\LinksMedia;
 use DateTimeImmutable;
@@ -158,11 +159,12 @@ readonly class MediaService
      * @param string $filename
      * @param string $mime
      * @param int $size
+     * @param callable(MediaVariant): bool $variantFilter
      * @return Media|null
      * @noinspection PhpDocSignatureInspection
      * @throws Exception
      */
-    public function addMediaToObjectFromImage(object $object, ImageInterface $image, string $collection, string $filename, string $mime, int $size): ?Media {
+    public function addMediaToObjectFromImage(object $object, ImageInterface $image, string $collection, string $filename, string $mime, int $size, ?callable $variantFilter = null): ?Media {
         if (!$this->checkTrait($object)) return null;
 
         $collectionObject = $object::mediaCollection($collection);
@@ -183,11 +185,28 @@ readonly class MediaService
                 ->setModelID( $object->getPrimaryKey() )
                 ->buildStoragePath( $object->getMediaPath() );
 
-        foreach ($collectionObject->getVariants( $image ) as $variant)
-            $media->registerConversion( $variant->name, $variant->tags, $variant->serialize() );
-
+        $this->rebuildConversions( $media, $variantFilter );
         $this->attachImageToObjectCollection($object, $collectionObject, $media, $image);
         return $media;
+    }
+
+    /**
+     * @param Media $media
+     * @param callable|null $variantFilter
+     * @param bool $clear
+     * @return void
+     */
+    public function rebuildConversions(Media $media, ?callable $variantFilter = null, bool $clear = false): void {
+
+        if (!$media->transientImage || !$media->transientOwner) return;
+
+        $collectionObject = $media->transientOwner::mediaCollection($media->getCollection());
+        if ($collectionObject === null || $collectionObject->isArchiveCollection()) return;
+
+        if ($clear) $media->setConversions([]);
+        foreach ($collectionObject->getVariants( $media->transientImage ) as $variant)
+            if (!$variantFilter || $variantFilter($variant))
+                $media->registerConversion($variant->name, $variant->tags, $variant->serialize());
     }
 
     /**
@@ -195,18 +214,20 @@ readonly class MediaService
      * @param string $path
      * @param string $collection
      * @param string|null $filename
+     * @param callable(MediaVariant): bool $variantFilter
      * @return Media|null
      * @noinspection PhpDocSignatureInspection
      * @throws Exception
      */
-    public function addMediaToObjectFromFile(object $object, string $path, string $collection, ?string $filename = null): ?Media {
+    public function addMediaToObjectFromFile(object $object, string $path, string $collection, ?string $filename = null, ?callable $variantFilter = null): ?Media {
         return $this->addMediaToObjectFromImage(
             $object,
             new ImageManager( Driver::class, strip: true )->read($path),
             $collection,
             $filename ?? basename($path),
             mime_content_type($path),
-            filesize($path)
+            filesize($path),
+            $variantFilter
         );
     }
 
@@ -216,11 +237,12 @@ readonly class MediaService
      * @param string $mime
      * @param string $collection
      * @param string|null $filename
+     * @param callable(MediaVariant): bool $variantFilter
      * @return Media|null
      * @noinspection PhpDocSignatureInspection
      * @throws Exception
      */
-    public function addMediaToObjectFromBinaryString(object $object, string $data, ?string $mime, string $collection, ?string $filename = null): ?Media {
+    public function addMediaToObjectFromBinaryString(object $object, string $data, ?string $mime, string $collection, ?string $filename = null, ?callable $variantFilter = null): ?Media {
         $image = new ImageManager( Driver::class, strip: true )->read($data);
         $mime ??= $image->encode()->mimetype();
         return $this->addMediaToObjectFromImage(
@@ -229,7 +251,8 @@ readonly class MediaService
             $collection,
             ($filename ?? 'blob') . self::mimeTypeToExtension($mime),
             $mime,
-            strlen($data)
+            strlen($data),
+            $variantFilter
         );
     }
 

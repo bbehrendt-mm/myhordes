@@ -182,6 +182,6 @@ const AvatarModeNew = ({maxSize, hasMedia}: {maxSize: number, hasMedia: boolean}
 
     return <>
         <div className="loading" />
-        <input ref={uploadRef} className="hidden" type="file" accept=".gif,.jpg,.jpeg,.jif,.jfif,.png,.webp,.bmp,.heic"/>
+        <input ref={uploadRef} className="hidden" type="file" accept=".gif,.jpg,.jpeg,.jif,.jfif,.png,.webp,.bmp,.heic,.avif"/>
     </>
 }

@@ -31,26 +31,26 @@ export const AvatarModeView = (props: AvatarViewerProps) => {
         const base = JSON.parse( JSON.stringify( props.pending ) ) as MediaGroup;
         const source = (props.signalCache[props.pending?.id] ?? {});
 
-        props.pending.default.conversions.forEach((conversion) => {
+        props.pending.default?.conversions.forEach((conversion) => {
             base.default.conversions = base.default.conversions.map(c => source[c.id] ?? c);
         })
-        base.default.conversions.forEach( c => {
+        base.default?.conversions.forEach( c => {
             if (!base.default.url || (base.default.x * base.default.y) < (c.x * c.y))
                 base.default = {...base.default, ...c}
         } )
 
-        props.pending.round.conversions.forEach((conversion) => {
+        props.pending.round?.conversions.forEach((conversion) => {
             base.round.conversions = base.round.conversions.map(c => source[c.id] ?? c);
         })
-        base.round.conversions.forEach( c => {
+        base.round?.conversions.forEach( c => {
             if (!base.round.url || (base.round.x * base.round.y) < (c.x * c.y))
                 base.round = {...base.round, ...c}
         } )
 
-        props.pending.small.conversions.forEach((conversion) => {
+        props.pending.small?.conversions.forEach((conversion) => {
             base.small.conversions = base.small.conversions.map(c => source[c.id] ?? c);
         })
-        base.small.conversions.forEach( c => {
+        base.small?.conversions.forEach( c => {
             if (!base.small.url || (base.small.x * base.small.y) < (c.x * c.y))
                 base.small = {...base.small, ...c}
         } )
