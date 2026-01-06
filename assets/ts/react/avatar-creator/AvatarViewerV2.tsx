@@ -201,7 +201,7 @@ const AvatarMediaGroupCollapse = ({mediaGroup, activeElement, setActiveElement}:
             <div className="flex-none pointer" onClick={() => {
                 setActiveElement(showElements ? null : mediaGroup.id)
             }}>
-                <div className="avatar small no-arma"><img alt="" src={ mediaGroup.small.url ?? mediaGroup.default.url ?? mediaGroup.round.url } /></div>
+                <div className="avatar small no-arma"><img alt="" src={ mediaGroup.small?.url ?? mediaGroup.default?.url ?? mediaGroup.round?.url } /></div>
             </div>
             <div className="flex-1">
                 { (mediaGroup.expires ?? null) !== null && <div className="hide-sm">
@@ -256,7 +256,7 @@ const AvatarMediaGroup = ({mediaGroup, pending}: {mediaGroup: MediaGroup, pendin
         { mediaGroup.default && (mediaGroup.round || mediaGroup.small) && <hr className="section"/> }
         { mediaGroup.round && <AvatarMediaSet pending={pending} text={ globals.strings.common.format_round } type="round" mediaSet={ mediaGroup.round } /> }
         { mediaGroup.round && mediaGroup.small && <hr className="section"/> }
-        { mediaGroup.round && <AvatarMediaSet pending={pending} text={ globals.strings.common.format_small } type="small" mediaSet={ mediaGroup.small } /> }
+        { mediaGroup.small && <AvatarMediaSet pending={pending} text={ globals.strings.common.format_small } type="small" mediaSet={ mediaGroup.small } /> }
     </div>
 }
 
