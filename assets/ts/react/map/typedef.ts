@@ -36,6 +36,7 @@ export interface MapZone extends MapCoordinate {
     xc?: boolean,       // Excavated?
     scoutLevel?: number  // Scout level
     fractional?: boolean // Show scout level when at 0
+    wd?: number          // Wind direction
 }
 
 export interface LocalZone {
@@ -68,6 +69,7 @@ export type MapRoute = {
 export type MapConfig = {
     scout: boolean,
     scav: boolean,
+    wind: boolean,
 }
 
 export type MapData = {
@@ -106,6 +108,7 @@ export type RuntimeMapState = {
     globalEnabled: boolean,
     scoutEnabled: boolean,
     scavEnabled: boolean,
+    windEnabled: boolean,
     activeRoute: number | undefined;
     activeZone: MapCoordinate | undefined;
     routeEditor: MapCoordinate[];
@@ -121,6 +124,7 @@ export type RuntimeMapStateAction = {
     globalEnabled?: boolean,
     scoutEnabled?: boolean,
     scavEnabled?: boolean,
+    windEnabled?: boolean,
     activeRoute?: number | boolean,
     activeZone?: MapCoordinate | boolean,
     routeEditorPush?: MapCoordinate,
@@ -163,8 +167,10 @@ export type MapControlProps = {
     globalEnabled: boolean,
     scoutEnabled: boolean,
     scavEnabled: boolean,
+    windEnabled: boolean,
     showScoutButton: boolean,
     showScavButton: boolean,
+    showWindButton: boolean,
     showRoutes: boolean,
     showRoutesPanel: boolean,
     showGlobalButton: boolean,

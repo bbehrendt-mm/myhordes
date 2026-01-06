@@ -317,7 +317,22 @@ div.react_map_area {
             &.scav-excavated {
                 background: url('../../img/professions/dig.gif') no-repeat center center / 75%;
             }
-        }
+          }
+          &>div.windMark {
+              display: none; opacity: 1;
+              height: 80%; width: 80%;
+              top: 10%; left: 10%;
+              z-index: 0;
+              &.wind-1 { background: #71BAD0 }
+              &.wind-2 { background: #FD6B3F }
+              &.wind-3 { background: #49925A }
+              &.wind-4 { background: #411001 }
+              &.wind-5 { background: #FFFFFF }
+              &.wind-6 { background: #BE4162 }
+              &.wind-7 { background: #95DA7C }
+              &.wind-8 { background: #D03203 }
+              &.wind-9 { background: #FECDBE }
+          }
 
           &>div.soul-area {
             width: 200%;
@@ -409,6 +424,14 @@ div.react_map_area {
         &>.scroll-plane .zone {
             &>div.scavExcavationMark {
                 display: block;
+            }
+        }
+    }
+
+    &.show-wind {
+        &>.scroll-plane .zone {
+            &>div.windMark {
+                display: block !important;
             }
         }
     }
@@ -542,6 +565,8 @@ div.react_map_area {
         &.map_button_scout.show-tags { background: url(../../img/icons/tickOn.gif) 3px 0 no-repeat, url(../../img/professions/vest.gif) 13px 1px / 50% no-repeat, url(../../img/background/bg_button.gif) center / cover no-repeat; min-width: 27px; }
         &.map_button_scav.hide-tags { background: url(../../img/icons/tickOff.gif) 3px 0 no-repeat, url(../../img/professions/dig.gif) 13px 1px / 50% no-repeat, url(../../img/background/bg_button.gif) center / cover no-repeat; min-width: 27px; }
         &.map_button_scav.show-tags { background: url(../../img/icons/tickOn.gif) 3px 0 no-repeat, url(../../img/professions/dig.gif) 13px 1px / 50% no-repeat, url(../../img/background/bg_button.gif) center / cover no-repeat; min-width: 27px; }
+        &.map_button_wind.hide-tags { background: url(../../img/icons/tickOff.gif) 3px 0 no-repeat, url(../../img/icons/small_world.gif) 13px 1px / 50% no-repeat, url(../../img/background/bg_button.gif) center / cover no-repeat; min-width: 27px; }
+        &.map_button_wind.show-tags { background: url(../../img/icons/tickOn.gif) 3px 0 no-repeat, url(../../img/icons/small_world.gif) 13px 1px / 50% no-repeat, url(../../img/background/bg_button.gif) center / cover no-repeat; min-width: 27px; }
         &.map_button_close { background: url(../../img/icons/small_x.gif) 0 -1px no-repeat, url(../../img/background/bg_button.gif) center / cover no-repeat; min-width: 17px; }
         &.hide-tags,&.show-tags { padding-left: 12px; padding-right: 2px; }
         &.route_button > div {  margin: -4px -9px 0 -9px; }

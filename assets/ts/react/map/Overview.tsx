@@ -218,9 +218,10 @@ const MapOverviewZone = ( props: MapOverviewZoneProps ) => {
             { props.zone.s && <div className="soul-area"><span/></div> }
             <div className="icon"/>
             <div className="overlay"/>
-            { props.zone.tg && <div className={`tag tag-${props.zone.tg}`}/> }
-            { props.zone.z && <div className="count">{props.zone.z}</div> }
+            { props.zone.tg > 0 && <div className={`tag tag-${props.zone.tg}`}/> }
+            { props.zone.z > 0 && <div className="count">{props.zone.z}</div> }
             { (props.zone.scoutLevel || props.zone.fractional) && <div className={`scoutLevelMark scout-${props.zone.scoutLevel}`}/> }
+            { (typeof props.zone.wd !== "undefined") && <div className={`windMark wind-${props.zone.wd}`}/> }
             { typeof props.zone.xc  !== "undefined" && <div className={`scavExcavationMark scav-${props.zone.xc ? 'excavated' : 'non-excavated'}`}/> }
             { (props.zone.c ?? []).length > 0 && <div className="citizen_marker"/> }
             <MapOverviewZoneTooltip zone={props.zone} local={props.local} />

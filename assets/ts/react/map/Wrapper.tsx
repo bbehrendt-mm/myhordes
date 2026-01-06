@@ -112,6 +112,10 @@ const MapWrapper = ( props: ReactDataMapCore ) => {
             new_state.scavEnabled = action.scavEnabled;
             $.client.set('map', 'scav', new_state.markEnabled ? 'show' : 'hide', true);
         }
+        if (typeof action.windEnabled !== "undefined") {
+            new_state.windEnabled = action.windEnabled;
+            $.client.set('map', 'wind', new_state.windEnabled ? 'show' : 'hide', true);
+        }
         if (typeof action.activeRoute !== "undefined") {
             new_state.activeRoute = action.activeRoute === false ? undefined : action.activeRoute as number;
             $.client.set('current','routes', new_state.activeRoute, false);
@@ -148,6 +152,7 @@ const MapWrapper = ( props: ReactDataMapCore ) => {
         globalEnabled: $.client.get('map', 'global', 'hide', Client.DomainScavenger) === 'show' || props.data.displayType.split('-')[0] !== 'beyond',
         scoutEnabled: $.client.get('map', 'scout', 'hide', Client.DomainScavenger) === 'show',
         scavEnabled: $.client.get('map', 'scav', 'hide', Client.DomainScavenger) === 'show',
+        windEnabled: $.client.get('map', 'wind', 'hide', Client.DomainScavenger) === 'show',
         activeRoute: $.client.get('current','routes', null, Client.DomainDaily) ?? undefined,
         zoomChanged: false,
         activeZone: mk,
@@ -283,7 +288,7 @@ const MapWrapper = ( props: ReactDataMapCore ) => {
                 onMouseLeave={props.data.fx ? mouseLeaveHandler : null}
             >
                 { (!map || !strings) && <div className={'map-load-container'}/> }
-                <div className={`map map-inner-react ${props.data.className} ${state.globalEnabled ? '' : 'show-global'} ${state.markEnabled ? 'show-tags' : ''}  ${state.scoutEnabled ? 'show-scout' : ''} ${state.scavEnabled ? 'show-scav' : ''}`}>
+                <div className={`map map-inner-react ${props.data.className} ${state.globalEnabled ? '' : 'show-global'} ${state.markEnabled ? 'show-tags' : ''}  ${state.scoutEnabled ? 'show-scout' : ''} ${state.scavEnabled ? 'show-scav' : ''} ${state.windEnabled ? 'show-wind' : ''}`}>
                     <div className="frame-plane">
                         { ['tl','tr','bl','br','t0l','t1','t0r','l0t','l1','l0m','l0b','l2','r0t','r1','r0b','b']
                             .map(s=><div key={s} className={s}/>) }
@@ -316,8 +321,10 @@ const MapWrapper = ( props: ReactDataMapCore ) => {
                     scrollAreaRef={scrollPlaneRef} showGlobalButton={state.conf.enableGlobalButton}
                     showZoneViewerButtons={state.conf.enableLocalView} scoutEnabled={state.scoutEnabled}
                     scavEnabled={state.scavEnabled}
+                    windEnabled={state.windEnabled}
                     showScoutButton={map?.conf?.scout ?? false}
                     showScavButton={map?.conf?.scav ?? false}
+                    showWindButton={map?.conf?.wind ?? false}
                 />
             </div>
         </Globals.Provider>
