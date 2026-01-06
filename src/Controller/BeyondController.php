@@ -700,6 +700,9 @@ class BeyondController extends InventoryAwareController
         if ($this->citizen_handler->isWounded( $citizen ) || $citizen->hasStatus('terror'))
             return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
 
+        if ($this->inventory_handler->isOverEncumbered( $citizen->getInventory() ))
+            return AjaxResponse::error( ErrorHelper::ErrorEncumbered );
+
         $this->clearZoneCache();
 
         // Make sure the citizen has not already explored the ruin today
