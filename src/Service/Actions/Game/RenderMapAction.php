@@ -22,7 +22,6 @@ readonly class RenderMapAction
         private TranslatorInterface    $translator,
         private TownHandler            $town_handler,
         private ZoneHandler            $zone_handler,
-        private CitizenHandler         $citizen_handler,
         private Packages               $asset,
         private EventProxyService      $proxy,
     ) { }
@@ -130,6 +129,7 @@ readonly class RenderMapAction
                 $current_zone['t'] = true;
                 $current_zone['z'] = $zone->getZombies();
                 $current_zone['d'] = $this->zone_handler->getZoneDangerLevelNumber($zone, mt_rand(PHP_INT_MIN, PHP_INT_MAX), true);
+                $current_zone['wd'] = $zone->getDirection();
             } else {
                 $current_zone['t'] = $discovery_state >= Zone::DiscoveryStateCurrent;
                 if ($discovery_state >= Zone::DiscoveryStateCurrent) {
@@ -197,7 +197,8 @@ readonly class RenderMapAction
             'lid' => $citizen_zone?->getId() ?? 0,
             'conf' => [
                 'scav' => ($admin || $scavenger_sense),
-                'scout' => ($admin || $scout_markings_global || $scout_markings_own)
+                'scout' => ($admin || $scout_markings_global || $scout_markings_own),
+                'wind' => $admin,
             ],
             'local' => array_map( function(Zone $z) use ($activeCitizen, $town, $citizen_zone, $scavenger_sense, $scout_sense, $admin, $scout_markings_own, $scout_markings_global) {
                 $local = $citizen_zone === $z;
