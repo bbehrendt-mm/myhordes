@@ -180,8 +180,8 @@ class GameFactory
             return false;
         }
 
-        if (!$internal && $town->isMayor() && $town->getCreator()?->getId() !== $user->getId()) {
-            $mark = !$this->entity_manager->getRepository(MayorMark::class)->matching( (new Criteria())
+        if (!$internal && $town->isMayor() && !$town->getType()->is( TownClass::EASY ) && $town->getCreator()?->getId() !== $user->getId()) {
+            $mark = !$this->entity_manager->getRepository(MayorMark::class)->matching( new Criteria()
                 ->where( new Comparison( 'user', Comparison::EQ, $user )  )
                 ->andWhere( new Comparison( 'expires', Comparison::GT, new \DateTime() ) )
             )->isEmpty();

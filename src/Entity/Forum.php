@@ -30,7 +30,7 @@ class Forum
     #[ORM\Column(type: 'integer')]
     private $id;
     #[ORM\OneToOne(targetEntity: Town::class, inversedBy: 'forum', cascade: ['persist'])]
-    private ?Town $town;
+    private ?Town $town = null;
     #[ORM\Column(type: 'string', length: 128)]
     private ?string $title;
     #[ORM\OneToMany(targetEntity: Thread::class, mappedBy: 'forum', cascade: ['persist', 'remove'])]

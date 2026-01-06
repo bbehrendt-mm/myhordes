@@ -95,7 +95,7 @@
                     </div>
                 </div>
 
-                {% if mayorTowns is empty and canMayorTowns and not tooMany and mayorBlocked is null %}
+                {% if mayorTowns is empty and canMayorTowns and not tooMany is null %}
                     <div class="cell padded rw-12">
                     <h5>{{ 'Grundlegende Einstellungen'|trans({},'ghost') }}</h5>
 
@@ -115,14 +115,24 @@
                         </div>
 
                         <div class="row">
+
+                            {% if (mayorBlocked is not null) %}
+                                <div class="cell padded rw-12">
+                                    <div class="note note-warning">
+                                        {{ 'Du kannst aktuell keine öffentlichen Städte erstellen (Missbrauchsschutz). Bitte warte ein paar Tage und versuche es dann erneut.'|trans({},'soul') }}
+                                        {{ 'Diese Sperre endet am {date} um {time}.'|trans({ date: mayorBlocked.expires|format_datetime('medium', 'none'), time: mayorBlocked.expires|format_datetime('none', 'short') },'ghost')|raw }}
+                                    </div>
+                                </div>
+                            {% endif %}
+
                             <div class="cell padded rw-3 rw-md-6 rw-sm-12 note note-lightest">
                                 <label for="pTownType" style="display: inline-flex; column-gap: 6px; align-items: center;">{{ 'Stadttyp'|trans({},'ghost') }}</label>
                             </div>
                             <div class="cell padded rw-6 rw-sm-12">
                                 <select name="pTownType" id="pTownType">
-                                    <option value="small">{{ 'Kleine Stadt'|trans({},'game') }}</option>
-                                    <option selected value="remote">{{ 'Entfernte Regionen'|trans({},'game') }}</option>
-                                    <option value="panda">{{ 'Pandämonium'|trans({},'game') }}</option>
+                                    <option {% if (mayorBlocked is not null) %}selected{% endif%} value="small">{{ 'Kleine Stadt'|trans({},'game') }}</option>
+                                    <option {% if (mayorBlocked is not null) %}disabled{% else %}selected{% endif%} value="remote">{{ 'Entfernte Regionen'|trans({},'game') }}</option>
+                                    <option {% if (mayorBlocked is not null) %}disabled{% endif%} value="panda">{{ 'Pandämonium'|trans({},'game') }}</option>
                                 </select>
                             </div>
                         </div>
@@ -190,13 +200,6 @@
                             {% endfor %}
                         </div>
 
-                    </div>
-                {% elseif (mayorBlocked is not null) %}
-                    <div class="cell padded rw-12">
-                        <div class="note note-warning">
-                            {{ 'Du kannst aktuell keine öffentlichen Städte erstellen (Missbrauchsschutz). Bitte warte ein paar Tage und versuche es dann erneut.'|trans({},'soul') }}
-                            {{ 'Diese Sperre endet am {date} um {time}.'|trans({ date: mayorBlocked.expires|format_datetime('medium', 'none'), time: mayorBlocked.expires|format_datetime('none', 'short') },'ghost')|raw }}
-                        </div>
                     </div>
                 {% elseif (tooMany) %}
                     <div class="cell padded rw-12">
