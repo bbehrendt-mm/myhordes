@@ -245,8 +245,8 @@ class HeroSkillDataService implements FixtureProcessorInterface {
                       ])
             ->addCitizenProperty(CitizenProperties::InventorySpaceBonus, 1)
             ->addCitizenProperty(CitizenProperties::ChestSpaceBonus, 1)
-            ->addCitizenProperty(CitizenProperties::HeroSecondWindBonusAP, 2)
-            ->addCitizenProperty(CitizenProperties::HeroSecondWindBaseSP, 2)
+            ->addCitizenProperty(CitizenProperties::HeroSecondWindBonusAP, 3)
+            ->addCitizenProperty(CitizenProperties::HeroSecondWindBaseSP, 1)
             ->unlocksAction('hero_generic_punch')
             ->unlocksAction('hero_generic_ap')
             ->level(0)->unlockAt(0)->commit();
@@ -261,7 +261,8 @@ class HeroSkillDataService implements FixtureProcessorInterface {
             ->addCitizenProperty(CitizenProperties::InventorySpaceBonus, 2)
             ->addCitizenProperty(CitizenProperties::ChestSpaceBonus, 2)
             ->addCitizenProperty( CitizenProperties::HeroPunchKills, 3 )
-            ->addCitizenProperty(CitizenProperties::HeroSecondWindBaseSP, 4)
+            ->addCitizenProperty(CitizenProperties::HeroSecondWindBonusAP, 3)
+            ->addCitizenProperty(CitizenProperties::HeroSecondWindBaseSP, 3)
             ->level(1)->unlockAt(0)->commit();
         $container->clone('super_enduring_1')
             ->icon('super_e2')->name('super_enduring_2')
@@ -275,6 +276,7 @@ class HeroSkillDataService implements FixtureProcessorInterface {
             ->addCitizenProperty( CitizenProperties::HeroPunchKills, 4 )
             ->addCitizenProperty( CitizenProperties::OxygenTimeBonus, 45 )
             ->addCitizenProperty(CitizenProperties::HeroSecondWindBonusAP, 4)
+            ->addCitizenProperty(CitizenProperties::HeroSecondWindBaseSP, 4)
             ->level(2)->unlockAt(40)->commit();
         $container->clone('super_enduring_2')
             ->icon('super_e3')->name('super_enduring_3')
@@ -286,6 +288,7 @@ class HeroSkillDataService implements FixtureProcessorInterface {
             ->addCitizenProperty(CitizenProperties::InventorySpaceBonus, 3)
             // ->addCitizenProperty(CitizenProperties::HeroPunchEscapeTime, 30) // [S19] Removal of the 30-second control gain at the Enduring Master level.
             ->addCitizenProperty(CitizenProperties::OxygenTimeBonus, 90)
+            ->addCitizenProperty(CitizenProperties::HeroSecondWindBonusAP, 4)
             ->addCitizenProperty(CitizenProperties::HeroSecondWindBaseSP, 6)
             ->level(3)->unlockAt(80)->commit();
 
