@@ -609,8 +609,8 @@ class HTMLService {
                 'inserts' => ['... ¡JA JA JA!...', '... voy a... ¡a todos!...', '... las... voces...', '... mi cabezaaa...', ' ¡NoOoOo!...', ' ¡un pájaro!...', '... ji ji...', '¡QUE SE VAYAN!..', 'veo arañas...', '... en todas partes...', '... ¡Dejadme!...', '... Ah... Ah ah...', '... ¿quién está ahi?...', '... rrRRR... ¡RrAAAAaah!....', '... ma...tar...', '... no fui...', '... ¡fuera todos de aquí!', '... a Belén pastorcitos.. ¡¡NOOOO!!...', ' estas son las mañaanii...', '... ¿ah?...', '... frío..', '... o este...', '... Pero qué...', ' ¿no?... ¿si?', '... que bonitos ojos tienes...', '... ¡suéltame!...', '...¡jiii jiji!...', 'grrrr...', '... ¡un pitufito!...', '... ¿mamá?...', '... lo que pasa es que...', '... qué linda mi faldita... ¿verdad?..', ' shhh... ¿oyes las mariposas?...', '... se llamaba Chaaarlyy...', ' ¡looca looca looca! ¡ah-ah!...', '... FUAAAAA...', '... ¡no, yo no me llamo Javier!...', '... ¡quién soy!', '... onde estoy', '... ¡Ay!...', '... ¡basta!...', '... ¡silencio!...'],
             ],
             'fr' => [
-                'words'   => ['zombie', 'cadavre', 'souffrances', 'atroce', 'pourriture', 'infection', 'putride', 'fantôme', 'horrible', 'immonde', 'monstre', 'tomate', 'poire', 'banane', 'pomme', 'tulipe', 'peur', 'avion', 'pépin', 'rigolo', 'fleur', 'youpi-banane', 'avion', 'polompolom', 'sapine', 'galinacée', 'canard', 'biloute', 'berlingot', 'patate', 'gourde', 'carotte', 'sapin', 'papa Noël', 'pelle', 'pouic', 'schtroumpfer', 'folie', 'abeille', 'patapon', 'lalala', 'manger', 'dévorer', 'broyer'],
-                'inserts' => ['.. AH AH AH !...', '..vais tous vous...', '..les.. voix...', '.gghhh...', 'NOOOoon !...', 'marmonne...', '..hin hin...', 'ALLEZ VOUS EN !..', 'des araignées...', '..ils sont partout...', '..Lachez moi !..', '.. Ah... Ah ah..', '.. qui est là ?..', '..rrRRR... RAAAAaah !', '.r.tuer...', '...ricane..', '...', '..Petiiit papaa Noo.. NOOOON !!...', ' et pirouette cacahuètes ...', '..hein ?', '..froid..', '..ou bien...', '.. Qu\'est-ce que...', ' non ?.. Oui ?', '. Pas du tout..', '.. Laissez moi !', '..Hi hi hi ! ...', 'grogne...', '... Mon beau sapiiin ! ....', '.. roule petit patapon ...', '... toujours un beau temps au nord ...', '.. Alouetteuuh gentiiil.. Hein ?..', ' car il y a longtemps que je t\'aime...', 'mon ami Pierroooot', 'et ainsi font font FONT !! Ah !...'],
+                'words'   => ['zombie', 'cadavre', 'souffrances', 'atroce', 'pourriture', 'infection', 'putride', 'fantôme', 'horrible', 'immonde', 'monstre', 'peur', 'folie', 'dévorer', 'broyer'],
+                'inserts' => ['.. AH AH AH !...', '..vais tous vous...', '..les.. voix...', '.gghhh...', 'NOOOoon !...', 'marmonne...', '..hin hin...', 'ALLEZ VOUS EN !..', 'des araignées...', '..ils sont partout...', '..Lachez moi !..', '.. Ah... Ah ah..', '.. qui est là ?..', '..rrRRR... RAAAAaah !', '.r.tuer...', '...ricane..', '...', '..hein ?', '..froid..', '..ou bien...', '.. Qu\'est-ce que...', ' non ?.. Oui ?', '. Pas du tout..', '.. Laissez moi !', 'grogne...' ],
             ],
         ],
         self::ModulationHead => [
@@ -624,13 +624,8 @@ class HTMLService {
     public function htmlDistort( string $text, int $modulation, string $lang = 'de', ?bool &$distorted = null ): string {
         $mod_list = [];
 
-        if ($this->rand->chance(0.05)) {
-            $distorted = false;
-            return $text;
-        }
-
         foreach (static::MODULATION_LIST as $m => $langs)
-            if (($m & $modulation) === $m && isset($langs[$lang]) && !empty($langs[$lang]))
+            if (($m & $modulation) === $m && isset($langs[$lang]) && !empty($langs[$lang]) && !$this->rand->chance(0.05))
                 $mod_list[$m] = $langs[$lang];
 
         if (empty($mod_list)) {
@@ -713,65 +708,105 @@ class HTMLService {
             return $text;
         }
 
-        $mod_double_letters = function(array &$segments, float $chance) {
+        $mod_class = function(int $mod) {
+            switch ($mod) {
+                case HTMLService::ModulationHead:
+                    return 'mod-w1';
+                case HTMLService::ModulationTerror:
+                    return 'mod-t';
+                case HTMLService::ModulationDrunk:
+                    return 'mod-d';
+            }
+        };
+
+        $mod_text = function(string $text, int $mod) use ($dom, $mod_class) {
+            $span = $dom->createElement('span');
+            $span->setAttribute('class', $mod_class($mod));
+            $span->appendChild($dom->createTextNode($text));
+            return $span;
+        };
+
+        $mod_double_letters = function(array &$segments, int $mod, float $chance) use ($mod_text) {
             foreach ($segments as &$segment) {
                 $o = ord(strtoupper($segment));
                 if ($o >= 65 && $o <= 90 && $this->rand->chance($chance))
-                    $segment = chr($o) . '...' . strtolower(chr($o)) . '...' . $segment;
+                    $segment = $mod_text(chr($o) . '...' . strtolower(chr($o)) . '...' . $segment, $mod);
                 else {
                     $ri = mt_rand(0, mb_strlen($segment));
                     $o = ord(strtoupper(substr($segment, $ri)));
                     if ($o >= 65 && $o <= 90 && $this->rand->chance($chance))
-                        $segment = substr($segment, 0, $ri) . '...' . strtolower(chr($o)) . '...' . substr($segment, $ri);
+                        $segment = $mod_text(substr($segment, 0, $ri) . '...' . strtolower(chr($o)) . '...' . substr($segment, $ri), $mod);
                 }
             }
         };
 
-        $mod_insert_replace = function(array &$segments, float $replace_chance,  int $r, array $word_list, array $insert_list) {
-            if ($this->rand->chance($replace_chance)) $segments[$r] = $this->rand->pick( $word_list );
+        $mod_insert_replace = function(array &$segments, int $mod, float $replace_chance, int $r) use ($mod_list, $mod_text) {
+            if ($this->rand->chance($replace_chance)) $segments[$r] = $mod_text($this->rand->pick( $mod_list[$mod]['words'] ), $mod);
             else $segments = array_merge(
                 array_slice($segments,0,$r),
-                [$this->rand->pick( $insert_list )],
+                [$mod_text($this->rand->pick( $mod_list[$mod]['inserts'] ), $mod)],
                 array_slice($segments,$r)
             );
         };
 
-        $mod_fun = function(array &$segments, int $mod, int $r, float $factor = 1.0) use (&$mod_list, &$mod_double_letters, &$mod_insert_replace) {
+        $mod_fun = function(array &$segments, int $mod, int $r, float $factor = 1.0) use (&$mod_list, &$mod_double_letters, &$mod_insert_replace, $mod_text) {
             switch ($mod) {
                 case HTMLService::ModulationHead:
                     // Head modulation: Insert distortion in any word
                     $ri = mt_rand(0, mb_strlen($segments[$r]));
-                    $segments[$r] = substr($segments[$r], 0, $ri) . $this->rand->pick($mod_list[$mod]) . substr($segments[$r], $ri);
+                    $inserted = $this->rand->pick($mod_list[$mod]);
+
+                    // Add some dots where they are missing when cutting a word
+                    $before = $ri > 0 && $inserted[0] != '.' ? '..' : '';
+                    $after = $ri < (mb_strlen($segments[$r]) - 1) && $inserted[mb_strlen($inserted) - 1] != '.' ? '..' : '';
+
+                    $segments[$r] = $mod_text(substr($segments[$r], 0, $ri) . $before . $inserted . $after . substr($segments[$r], $ri), $mod);
                     break;
                 case HTMLService::ModulationTerror:
-                    $mod_double_letters($segments, 0.075 * $factor);
-                    $mod_insert_replace( $segments, 0.75 * $factor, $r, $mod_list[$mod]['words'], $mod_list[$mod]['inserts'] );
+                    $mod_double_letters($segments, $mod, 0.075 * $factor);
+                    $mod_insert_replace($segments, $mod, 0.75 * $factor, $r);
                     break;
                 case HTMLService::ModulationDrunk:
-                    $mod_double_letters($segments, 0.033 * $factor);
-                    $mod_insert_replace( $segments, 0.33 * $factor, $r, $mod_list[$mod]['words'], $mod_list[$mod]['inserts'] );
+                    $mod_double_letters($segments, $mod, 0.033 * $factor);
+                    $mod_insert_replace($segments, $mod, 0.33 * $factor, $r);
                     break;
             }
         };
 
-        foreach ($node_collection as $potential_node)
-            if ($this->rand->chance( $potential_node[1] / 80.0 )) {
+        foreach ($node_collection as $potential_node) {
+            if (!$this->rand->chance( $potential_node[1] / 80.0 )) continue;
+            $frag = $dom->createDocumentFragment();
 
-                // Chose a modulation
-                $mod = $this->rand->pick(array_keys($mod_list));
+            // Chose a modulation
+            $mod = $this->rand->pick(array_keys($mod_list));
 
-                $segments = preg_split('/\s+/', $potential_node[0]->textContent, -1 );
+            $segments = preg_split('/\s+/', $potential_node[0]->textContent, -1);
 
-                $distorted = true;
-                $r = mt_rand(0,count($segments) - 1);
-                $mod_fun($segments, $mod, $r);
+            $distorted = true;
+            $r = mt_rand(0, count($segments) - 1);
+            $mod_fun($segments, $mod, $r);
 
-                foreach ($segments as $r0 => $segment)
-                    if ($r0 !== $r && mb_strlen( $segment ) > 24)
-                        $mod_fun($segments, $mod, $r, 1.1);
-
-                $potential_node[0]->textContent = implode(' ', $segments);
+            foreach ($segments as $r0 => $segment) {
+                if ($r0 !== $r && !($segment instanceof DOMNode) && !($segments[$r] instanceof DOMNode) && mb_strlen($segment) > 24) {
+                    $mod_fun($segments, $mod, $r, 1.1);
+                }
             }
+
+            foreach ($segments as $segment) {
+                if ($segment instanceof DOMNode) {
+                    $frag->appendChild($segment);
+                } else {
+                    $frag->appendChild($dom->createTextNode($segment));
+                }
+                $frag->appendChild($dom->createTextNode(' '));
+            }
+            // Remove last whitespace
+            if ($frag->lastChild) {
+                $frag->removeChild($frag->lastChild);
+            }
+
+            $potential_node[0]->parentNode->replaceChild($frag, $potential_node[0]);
+        }
 
         $tmp_str = "";
         foreach ($body->item(0)->childNodes as $child)
