@@ -112,6 +112,31 @@ final class BuildingEffectListener implements ServiceSubscriberInterface
 
                 break;
 
+            case 'small_pool_#00':
+                // Attempt to deduct water from the well
+                $day = $event->town->getDay();
+                if ($day >= 30) $water_needed = 18;
+                elseif ($day >= 26) $water_needed = 12;
+                elseif ($day >= 21) $water_needed = 6;
+                elseif ($day >= 11) $water_needed = 3;
+                else $water_needed = 1;
+
+                if ($event->town->getWell() >= $water_needed) {
+                    $event->waterConsumed += $water_needed;
+                    
+                    $em = $this->getService(EntityManagerInterface::class);
+                    $pool_filled_status = $em->getRepository(CitizenStatus::class)->findOneByName('tg_pool_filled');
+                    $citizenHandler = $this->getService(CitizenHandler::class);
+                    foreach ($event->town->getCitizens() as $citizen) {
+                        if ($citizen->getAlive()) {
+                            $citizenHandler->inflictStatus($citizen, $pool_filled_status);
+                            $em->persist($citizen);
+                        }
+                    }
+                }
+
+                break;
+
             case 'item_boomfruit_#00':
                 if ($event->building->getLevel() <= 0) break;
 
@@ -255,6 +280,15 @@ final class BuildingEffectListener implements ServiceSubscriberInterface
             $gazette->setWaterlost($gazette->getWaterlost() + $event->waterDeducted );
             $this->getService(EntityManagerInterface::class)->persist($gazette);
             $this->getService(EntityManagerInterface::class)->persist( $this->getService(LogTemplateHandler::class)->nightlyAttackBuildingDefenseWater( $event->building, $event->waterDeducted ) );
+            $event->markModified();
+        }
+
+        if ($event->waterConsumed > 0) {
+            $event->town->setWell( $event->town->getWell() - $event->waterConsumed );
+            $gazette = $event->town->findGazette( $event->town->getDay(), true );
+            $gazette->setWaterlost($gazette->getWaterlost() + $event->waterConsumed );
+            $this->getService(EntityManagerInterface::class)->persist($gazette);
+            $this->getService(EntityManagerInterface::class)->persist( $this->getService(LogTemplateHandler::class)->nightlyAttackBuildingWater( $event->building, $event->waterConsumed ) );
             $event->markModified();
         }
 

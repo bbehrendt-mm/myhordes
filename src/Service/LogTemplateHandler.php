@@ -1577,6 +1577,18 @@ class LogTemplateHandler
             ->setTimestamp( new DateTime('now') );
     }
 
+    public function nightlyAttackBuildingWater( Building $building, int $num ): TownLogEntry {
+        $variables = array('building' => $building->getPrototype()->getId(), 'num' => $num);
+        $template = $this->entity_manager->getRepository(LogEntryTemplate::class)->findOneBy(['name' => 'nightlyAttackBuildingWater']);
+
+        return (new TownLogEntry())
+            ->setLogEntryTemplate($template)
+            ->setVariables($variables)
+            ->setTown( $building->getTown() )
+            ->setDay( $building->getTown()->getDay() )
+            ->setTimestamp( new DateTime('now') );
+    }
+
     public function nightlyAttackBuildingBatteries( Building $building, int $num ): TownLogEntry {
         $variables = array('building' => $building->getPrototype()->getId(), 'num' => $num);
         $template = $this->entity_manager->getRepository(LogEntryTemplate::class)->findOneBy(['name' => 'nightlyAttackBuildingBatteries']);

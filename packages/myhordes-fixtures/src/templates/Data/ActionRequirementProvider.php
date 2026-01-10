@@ -161,6 +161,7 @@ class ActionRequirementProvider
         $requirement_container->add()->identifier('not_yet_flag')->type( Requirement::CrossOnFail )->add( new StatusRequirement()->status('tg_flag', false) )->text_key('once_a_day')->commit();
 
         $requirement_container->add()->identifier('not_yet_home_pooled')->type( Requirement::CrossOnFail )->add( new StatusRequirement()->status('tg_home_pool', false) )->commit();
+        $requirement_container->add()->identifier('pool_has_water')->type( Requirement::CrossOnFail )->add( new StatusRequirement()->status('tg_pool_filled', true) )->commit();
         $requirement_container->add()->identifier('is_not_wounded_foot')->type( Requirement::CrossOnFail )->add( new StatusRequirement()->status('wound6', false) )->commit();
         $requirement_container->add()->identifier('is_not_wounded_leg')->type( Requirement::CrossOnFail )->add( new StatusRequirement()->status('wound4', false) )->commit();
         //</editor-fold>

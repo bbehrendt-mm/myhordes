@@ -93,6 +93,7 @@ class CitizenStatusDataService implements FixtureProcessorInterface {
             'tg_start_sp' => ['name' => 'tg_start_sp', 'volatile' => true],
 
             'tg_home_pool'  => ['name' => 'tg_home_pool',  'volatile' => true],
+            'tg_pool_filled'  => ['name' => 'tg_pool_filled',  'volatile' => true],
 
             'tg_got_xmas1' => ['name' => 'tg_got_xmas1', 'volatile' => false],
             'tg_got_xmas2' => ['name' => 'tg_got_xmas2', 'volatile' => false],
