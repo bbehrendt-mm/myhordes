@@ -674,7 +674,7 @@ class TownCreatorController extends CustomAbstractCoreController
                 $em->persist( new MayorMark()
                     ->setUser( $this->getUser() )
                     ->setMayor( true )
-                    ->setExpires( ( $town_time?->copy() ?? new Carbon() )->addDays(15) )
+                    ->setExpires( ( $town_time?->copy() ?? new Carbon() )->addDays(10) )
                 );
 
             $em->flush();
