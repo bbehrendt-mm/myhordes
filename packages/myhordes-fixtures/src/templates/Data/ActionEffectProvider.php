@@ -778,6 +778,8 @@ class ActionEffectProvider
 
         $effects_container->add()->identifier('status_home_pool')->add( new CustomEffect()->effectIndex(100) )->add(new StatusEffect()->addsStatus('tg_home_pool'))->commit();
 
+        $effects_container->add()->identifier('status_good_smell')->add( new CustomEffect()->effectIndex(101) )->add(new StatusEffect()->addsStatus('good_smell'))->commit();
+
         return $effects_container;
     }
 }

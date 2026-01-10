@@ -346,13 +346,14 @@ class NightlyHandler
         $cod_infect = $this->entity_manager->getRepository(CauseOfDeath::class)->findOneBy(['ref' => CauseOfDeath::Infection]);
         $cod_ghoul  = $this->entity_manager->getRepository(CauseOfDeath::class)->findOneBy(['ref' => CauseOfDeath::GhulStarved]);
 
-        $status_infected  = $this->entity_manager->getRepository(CitizenStatus::class)->findOneBy(['name' => 'infection']);
-        $status_survive   = $this->entity_manager->getRepository(CitizenStatus::class)->findOneBy(['name' => 'hsurvive']);
-        $status_survive2  = $this->entity_manager->getRepository(CitizenStatus::class)->findOneBy(['name' => 'hsurvive2']);
-        $status_survive3  = $this->entity_manager->getRepository(CitizenStatus::class)->findOneBy(['name' => 'hsurvive3']);
-        $status_thirst2   = $this->entity_manager->getRepository(CitizenStatus::class)->findOneBy(['name' => 'thirst2']);
-        $status_drugged   = $this->entity_manager->getRepository(CitizenStatus::class)->findOneBy(['name' => 'drugged']);
-        $status_addicted  = $this->entity_manager->getRepository(CitizenStatus::class)->findOneBy(['name' => 'addict']);
+        $status_infected   = $this->entity_manager->getRepository(CitizenStatus::class)->findOneBy(['name' => 'infection']);
+        $status_survive    = $this->entity_manager->getRepository(CitizenStatus::class)->findOneBy(['name' => 'hsurvive']);
+        $status_survive2   = $this->entity_manager->getRepository(CitizenStatus::class)->findOneBy(['name' => 'hsurvive2']);
+        $status_survive3   = $this->entity_manager->getRepository(CitizenStatus::class)->findOneBy(['name' => 'hsurvive3']);
+        $status_thirst2    = $this->entity_manager->getRepository(CitizenStatus::class)->findOneBy(['name' => 'thirst2']);
+        $status_drugged    = $this->entity_manager->getRepository(CitizenStatus::class)->findOneBy(['name' => 'drugged']);
+        $status_addicted   = $this->entity_manager->getRepository(CitizenStatus::class)->findOneBy(['name' => 'addict']);
+        $status_good_smell = $this->entity_manager->getRepository(CitizenStatus::class)->findOneBy(['name' => 'good_smell']);
 
         foreach ($town->getCitizens() as $citizen) {
 
@@ -396,7 +397,13 @@ class NightlyHandler
 
             if (!in_array('infection', $protection_list) && $citizen->getStatus()->contains( $status_infected ) && !$ghoul) {
                 $this->log->debug( "Citizen <info>{$citizen->getUser()->getUsername()}</info> has <info>{$status_infected->getLabel()}</info>." );
-                if ($this->random->chance($this->conf->getTownConfiguration($town)->get( TownSetting::OptModifierInfectDeath ))) {
+                $fatal_infection_chance = $this->conf->getTownConfiguration($town)->get( TownSetting::OptModifierInfectDeath );
+
+                if ($citizen->hasStatus($status_good_smell)) {
+                    $fatal_infection_chance -= 0.25;
+                }
+
+                if ($this->random->chance($fatal_infection_chance)) {
                     $this->kill_wrap( $citizen, $cod_infect, true, 0, false, $town->getDay()+1 );
                     continue;
                 }
@@ -637,7 +644,8 @@ class NightlyHandler
 	private function stage2_attack(Town &$town, ?AttackSchedule $schedule) {
         $this->log->info('<info>Marching the horde</info> ...');
         $cod = $this->entity_manager->getRepository(CauseOfDeath::class)->findOneBy(['ref' => CauseOfDeath::NightlyAttack]);
-        $status_terror  = $this->entity_manager->getRepository(CitizenStatus::class)->findOneBy(['name' => 'terror']);
+        $status_terror      = $this->entity_manager->getRepository(CitizenStatus::class)->findOneBy(['name' => 'terror']);
+        $status_good_smell  = $this->entity_manager->getRepository(CitizenStatus::class)->findOneBy(['name' => 'good_smell']);
 
         // Do not enable this effect for now until we know how it is handled on Hordes
         $has_kino = false;//$this->town_handler->getBuilding($town, 'small_cinema_#00', true);
@@ -784,7 +792,7 @@ class NightlyHandler
 
                 if( $this->random->pickEntryFromRawRandomArray( [ [true, round($chances['wound'] * 100)], [false, round($chances['terror'] * 100)] ] ) ){
                     // Wound
-                    if (!$this->citizen_handler->isWounded($ctz)) {
+                    if (!$this->citizen_handler->isWounded($ctz) && !($ctz->hasStatus($status_good_smell) && $this->random->chance(0.25))) {
                         $this->citizen_handler->inflictWound($ctz);
                         $this->log->debug("Watcher <info>{$ctz->getUser()->getUsername()}</info> is now <info>wounded</info>");
                         $this->skip_infection[] = $ctz->getId();
@@ -793,7 +801,7 @@ class NightlyHandler
                     }
                 } elseif (!$this->town_handler->getBuilding($town, 'small_catapult3_#00', true)) {
                     // Terror
-                    if (!$ctz->hasStatus($status_terror)) {
+                    if (!$ctz->hasStatus($status_terror) && !($ctz->hasStatus($status_good_smell) && $this->random->chance(0.25))) {
                         $this->citizen_handler->inflictStatus($ctz, $status_terror);
                         $this->log->debug("Watcher <info>{$ctz->getUser()->getUsername()}</info> now suffers from <info>{$status_terror->getLabel()}</info>");
                         $gazette->setTerror($gazette->getTerror() + 1);
@@ -1078,6 +1086,7 @@ class NightlyHandler
                     $terror_chance -= $clean                                        ?  3 : 0;
                     $terror_chance -= $c->hasStatus( 'tg_home_clean' )  ?  5 : 0;
                     $terror_chance -= $c->hasStatus( 'tg_home_shower' ) ? 10 : 0;
+                    $terror_chance -= $c->hasStatus( 'good_smell' )     ? 25 : 0;
                     $terror_chance -= $quies                                        ? 10 : 0;
 
                     if ($this->random->chance($terror_chance / 100)) {
@@ -1112,12 +1121,13 @@ class NightlyHandler
     private function stage3_status(Town $town, ?AttackSchedule $schedule) {
         $this->log->info('<info>Processing status changes</info> ...');
 
-        $status_survive   = $this->entity_manager->getRepository(CitizenStatus::class)->findOneBy( ['name' => 'hsurvive'] );
+        $status_survive    = $this->entity_manager->getRepository(CitizenStatus::class)->findOneBy( ['name' => 'hsurvive'] );
         $status_survive2   = $this->entity_manager->getRepository(CitizenStatus::class)->findOneBy( ['name' => 'hsurvive2'] );
         $status_survive3   = $this->entity_manager->getRepository(CitizenStatus::class)->findOneBy( ['name' => 'hsurvive3'] );
-        $status_hasdrunk  = $this->entity_manager->getRepository(CitizenStatus::class)->findOneBy( ['name' => 'hasdrunk'] );
-        $status_infection = $this->entity_manager->getRepository(CitizenStatus::class)->findOneBy( ['name' => 'infection'] );
-        $status_camping   = $this->entity_manager->getRepository(CitizenStatus::class)->findOneBy( ['name' => 'camper'] );
+        $status_hasdrunk   = $this->entity_manager->getRepository(CitizenStatus::class)->findOneBy( ['name' => 'hasdrunk'] );
+        $status_infection  = $this->entity_manager->getRepository(CitizenStatus::class)->findOneBy( ['name' => 'infection'] );
+        $status_camping    = $this->entity_manager->getRepository(CitizenStatus::class)->findOneBy( ['name' => 'camper'] );
+        $status_good_smell = $this->entity_manager->getRepository(CitizenStatus::class)->findOneBy( ['name' => 'good_smell'] );
 
         $status_wound_infection = $this->entity_manager->getRepository(CitizenStatus::class)->findOneBy( ['name' => 'tg_meta_winfect'] );
 
@@ -1196,7 +1206,7 @@ class NightlyHandler
                 $this->citizen_handler->increaseThirstLevel( $citizen );
             }
 
-            if (!$citizen->getStatus()->contains($status_infection) && $this->citizen_handler->isWounded( $citizen ) && !in_array( $citizen->getId(), $this->skip_infection )) {
+            if (!$citizen->getStatus()->contains($status_infection) && $this->citizen_handler->isWounded( $citizen ) && !in_array( $citizen->getId(), $this->skip_infection ) && !($citizen->hasStatus($status_good_smell) && $this->random->chance(0.25))) {
                 $this->log->debug("Citizen <info>{$citizen->getUser()->getUsername()}</info> is <info>wounded</info>. Adding an <info>infection</info>.");
                 $this->citizen_handler->inflictStatus($citizen, $status_wound_infection);
             }

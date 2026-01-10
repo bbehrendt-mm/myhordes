@@ -35,6 +35,7 @@ class CitizenStatusDataService implements FixtureProcessorInterface {
             'healed' 	=> ['name' => 'healed',    'nw_def' => -15, 'nw_death' =>  0.05,  'label' => 'Bandagiert', 'description' => 'Du hast dich bereits von einer Verletzung erholt. Du kannst heute nicht erneut geheilt werden.', 'volatile' => true],
             'hydrated'  => ['name' => 'hydrated',                                         'label' => 'Gut hydriert', 'description' => 'Es ist wichtig, regelmäßig zu trinken!', 'volatile' => false],
             'sober'     => ['name' => 'sober',                                            'label' => 'Nüchtern', 'description' => 'Du bist nüchtern, gut gemacht!', 'volatile' => false],
+            'good_smell'=> ['name' => 'good_smell', 'label' => 'Good smell', 'description' => 'You smell... strange. But not in a bad way.', 'volatile' => true],
 
             'tamer_guard_1' => ['name' => 'tamer_guard_1','nw_def' => 10, 'nw_death' =>  -0.02, 'label' => 'Wachthund', 'description' => 'Dein Hund passt heute Nacht besonders gut auf dich auf, solltest du dich entscheiden, als Nachtwächter auf den Zinnen zu stehen.'],
             'tamer_guard_2' => ['name' => 'tamer_guard_2','nw_def' => 15, 'nw_death' =>  -0.03, 'label' => 'Gedopter Wachthund', 'description' => 'Dein Hund passt heute Nacht besonders gut auf dich auf, solltest du dich entscheiden, als Nachtwächter auf den Zinnen zu stehen. Keine Sorge, der Schaum vor seinem Mund ist ganz normal...'],
@@ -109,7 +110,7 @@ class CitizenStatusDataService implements FixtureProcessorInterface {
             'tg_tamer_lure' => ['name' => 'tg_tamer_lure', 'volatile' => true ],
             'tg_scary_mask' => ['name' => 'tg_scary_mask', 'volatile' => true ],
             'tg_was_scared' => ['name' => 'tg_was_scared', 'volatile' => false ],
-            'tg_msk_scared' => ['name' => 'tg_was_scared', 'volatile' => false ],
+            'tg_msk_scared' => ['name' => 'tg_msk_scared', 'volatile' => false ],
         ]);
     }
 }
