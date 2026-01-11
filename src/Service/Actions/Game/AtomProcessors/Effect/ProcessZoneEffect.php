@@ -113,8 +113,6 @@ class ProcessZoneEffect extends AtomEffectProcessor
                                     min( ceil($kills / $initial_count ), $left, $zone->getZombies())
                                 ));
 
-                                dump([$kills, $kills_in_zone, $left, $zone->getZombies(), $zone->getId()]);
-
                                 $zone->setZombies( $zone->getZombies() - $kills_in_zone );
                                 $cache->addToCounter( CountType::Kills, $kills );
                                 $left -= $kills_in_zone;
