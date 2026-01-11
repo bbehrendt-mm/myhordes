@@ -2,13 +2,14 @@
 
 namespace MyHordes\Fixtures\Service;
 
+use ArrayHelpers\Arr;
 use MyHordes\Plugins\Interfaces\FixtureProcessorInterface;
 
 class ItemPropertyDataService implements FixtureProcessorInterface {
 
     public function process(array &$data, ?string $tag = null): void
     {
-        $data = array_replace_recursive($data, [
+        $content = [
             'saw_tool_#00'               => [ 'impoundable', 'can_opener', 'box_opener' ],
             'saw_tool_temp_#00'          => [ 'impoundable', 'can_opener', 'box_opener' ],
             'saw_tool_part_#00'          => [ 'impoundable' ],
@@ -59,8 +60,8 @@ class ItemPropertyDataService implements FixtureProcessorInterface {
             'pumpkin_raw_#00'            => [ 'impoundable' ],
             'mecanism_#00'               => [ 'ressource', 'hero_find_lucky', 'hero_find_lucky2', 'hero_find_lucky3' ],
             'grenade_#00'                => [ 'weapon', 'hero_find', 'hero_find_lucky', 'nw_shooting', 'hero_find_lucky2' ],
-            'bgrenade_#00'               => [ 'weapon', 'nw_shooting', 'catapult' ],
-            'boomfruit_#00'              => [ 'weapon', 'hero_find_lucky3', 'catapult' ],
+            'bgrenade_#00'               => [ 'weapon', 'nw_shooting' ],
+            'boomfruit_#00'              => [ 'weapon', 'hero_find_lucky3' ],
             'pilegun_#00'                => [ 'weapon' ],
             'pilegun_up_#00'             => [ 'impoundable', 'weapon', 'esc_fixed' ],
             'pilegun_up_empty_#00'       => [ 'impoundable' ],
@@ -265,6 +266,12 @@ class ItemPropertyDataService implements FixtureProcessorInterface {
             'soul_blue_#00'              => [ 'haunting_soul' ],
             'soul_blue_#01'              => [ 'haunting_soul' ],
             'soul_red_#00'               => [ 'haunting_soul', 'angry_soul' ],
-        ]);
+        ];
+
+        foreach ($content as $key => $entry)
+            Arr::set($data, $key, array_unique([
+                ...Arr::get( $data, $key, [] ),
+                ...$entry
+            ]));
     }
 }

@@ -197,6 +197,7 @@ class InventoryAwareController extends CustomAbstractController
      * @param ItemTargetDefinition $definition
      * @param Citizen|null $reference
      * @return array
+     * @throws Exception
      */
     private function decodeActionItemTargets( array $inventories, ItemTargetDefinition $definition, ?Citizen $reference = null ): array
     {

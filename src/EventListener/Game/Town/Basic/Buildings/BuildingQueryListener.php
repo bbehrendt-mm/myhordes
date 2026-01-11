@@ -8,7 +8,6 @@ use App\Entity\Town;
 use App\Enum\Configuration\TownSetting;
 use App\Enum\EventStages\BuildingValueQuery;
 use App\Event\Game\Town\Basic\Buildings\BuildingAddonProviderEvent;
-use App\Event\Game\Town\Basic\Buildings\BuildingCatapultItemTransformEvent;
 use App\Event\Game\Town\Basic\Buildings\BuildingQueryNightwatchDefenseBonusEvent;
 use App\Event\Game\Town\Basic\Buildings\BuildingQueryTownParameterEvent;
 use App\Event\Game\Town\Basic\Buildings\BuildingQueryTownRoleEnabledEvent;
@@ -31,7 +30,6 @@ use Symfony\Contracts\Service\ServiceSubscriberInterface;
 #[AsEventListener(event: BuildingQueryNightwatchDefenseBonusEvent::class, method: 'onQueryNightwatchDefenseBonusFinish', priority: -115)]
 #[AsEventListener(event: BuildingQueryTownParameterEvent::class, method: 'onQueryTownParameter', priority: 0)]
 #[AsEventListener(event: BuildingQueryTownRoleEnabledEvent::class, method: 'onQueryTownRoleEnabled', priority: 0)]
-#[AsEventListener(event: BuildingCatapultItemTransformEvent::class, method: 'onQueryCatapultItemTransformation', priority: 0)]
 #[AsEventListener(event: BuildingAddonProviderEvent::class, method: 'onCollectAddons', priority: 0)]
 final class BuildingQueryListener implements ServiceSubscriberInterface
 {
@@ -223,12 +221,6 @@ final class BuildingQueryListener implements ServiceSubscriberInterface
             'cata'      => $this->getService(TownHandler::class)->getBuilding($event->town, 'item_courroie_#00' ) !== null,
             default => true
         };
-    }
-
-    public function onQueryCatapultItemTransformation( BuildingCatapultItemTransformEvent $event ): void {
-        $event->out = ($event->in->getFragile() && (!$event->in->hasProperty('pet') || !$this->getService(TownHandler::class)->getBuilding($event->town, 'small_catapult3_#00' ))) ? (
-            $this->getService(EntityManagerInterface::class)->getRepository( ItemPrototype::class )->findOneByName( $event->in->hasProperty('pet') ? 'undef_#00' : 'broken_#00' )
-        ) : null;
     }
 
     public function onCollectAddons( BuildingAddonProviderEvent $event ): void {

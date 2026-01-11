@@ -14,10 +14,11 @@ class ProcessLocationRequirement extends AtomRequirementProcessor
 {
     public function __invoke(Evaluation $cache, RequirementsAtom|LocationRequirement $data): bool
     {
-        if ($data->town !== null && $data->town === !!$cache->citizen->getZone())
+        $zone = $cache->zone();
+        if ($data->town !== null && $data->town === !!$zone)
             return false;
 
-        if ($data->beyond !== null && $data->beyond !== !!$cache->citizen->getZone())
+        if ($data->beyond !== null && $data->beyond !== !!$zone)
             return false;
 
         if ($data->exploring !== null && $data->exploring !== !!$cache->citizen->activeExplorerStats())
@@ -25,7 +26,6 @@ class ProcessLocationRequirement extends AtomRequirementProcessor
 
         if ($data->requiresZone()) {
 
-            $zone = $cache->citizen->getZone();
             if (!$zone) return false;
 
             if ( $data->requiresFillrateCheck() && ($zone->getDigs() <= 0) !== $data->isEmpty )
@@ -41,7 +41,7 @@ class ProcessLocationRequirement extends AtomRequirementProcessor
             $cp = 0;
             if ($data->requiresCPCheck() && !$cache->citizen->activeExplorerStats()) {
                 $citizenHandler = $this->container->get(CitizenHandler::class);
-                foreach ($cache->citizen->getZone()->getCitizens() as $c)
+                foreach ($zone->getCitizens() as $c)
                     $cp += $citizenHandler->getCP($c);
             }
 

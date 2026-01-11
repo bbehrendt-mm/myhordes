@@ -236,6 +236,13 @@ class ActionEffectProvider
         $effects_container->add()->identifier('morph_alarm_2')->add(new ItemEffect()->morphSource('alarm_2_#00'))->commit();
         $effects_container->add()->identifier('morph_alarm_3')->add(new ItemEffect()->morphSource('alarm_3_#00'))->commit();
 
+        $effects_container->add()->identifier('morph_cata_undef'  )->add(new ItemEffect()->morphSource('undef_#00', drop: true))->commit();
+        $effects_container->add()->identifier('morph_cata_remains')->add(new ItemEffect()->morphSource('broken_#00', drop: true))->commit();
+        $effects_container->add()->identifier('morph_cata_moldy'  )->add(new ItemEffect()->morphSource('moldy_food_subpart_#00', drop: true))->commit();
+        $effects_container->add()->identifier('morph_cata_scrap'   )->add(new ItemEffect()->morphSource('metal_bad_#00', drop: true))->commit();
+        $effects_container->add()->identifier('morph_cata_break'  )->add(new ItemEffect()->morphSource(break: true, drop: true))->commit();
+        $effects_container->add()->identifier('morph_cata_fine'   )->add(new ItemEffect()->morphSource(drop: true))->commit();
+
         $effects_container->add()->identifier('morph_lens')->add(new ItemEffect()->morphSource('lens_#00'))->commit();
         $effects_container->add()->identifier('morph_lamp')->add(new ItemEffect()->morphSource('lamp_#00'))->commit();
         $effects_container->add()->identifier('morph_music_part')->add(new ItemEffect()->morphSource('music_part_#00'))->commit();
@@ -748,6 +755,24 @@ class ActionEffectProvider
         $effects_container->add()->identifier('kill_all_zombie')
             ->add(new ZoneEffect()->kills(999999))
             ->commit();
+
+        $effects_container->add()->identifier('cata_kill_1_rid')->add(new ZoneEffect()->kills(  0,  3, 0))->commit();
+        $effects_container->add()->identifier('cata_kill_1_low')->add(new ZoneEffect()->kills(  4, 10, 0))->commit();
+        $effects_container->add()->identifier('cata_kill_1_high')->add(new ZoneEffect()->kills(11, 20, 0))->commit();
+        $effects_container->add()->identifier('cata_kill_1_imp')->add(new ZoneEffect()->kills( 21, 30, 0))->commit();
+        $effects_container->add()->identifier('cata_kill_1_ctrl')->add(new ZoneEffect()->escape( 300, 0))->commit();
+
+        $effects_container->add()->identifier('cata_kill_c_rid')->add(new ZoneEffect()->kills(  0,  3, 1))->commit();
+        $effects_container->add()->identifier('cata_kill_c_low')->add(new ZoneEffect()->kills(  4, 10, 1))->commit();
+        $effects_container->add()->identifier('cata_kill_c_high')->add(new ZoneEffect()->kills(11, 20, 1))->commit();
+        $effects_container->add()->identifier('cata_kill_c_imp')->add(new ZoneEffect()->kills( 21, 30, 1))->commit();
+        $effects_container->add()->identifier('cata_kill_c_ctrl')->add(new ZoneEffect()->escape( 300, 1))->commit();
+
+        $effects_container->add()->identifier('cata_kill_s_rid')->add(new ZoneEffect()->kills(  0,  3, 2))->commit();
+        $effects_container->add()->identifier('cata_kill_s_low')->add(new ZoneEffect()->kills(  4, 10, 2))->commit();
+        $effects_container->add()->identifier('cata_kill_s_high')->add(new ZoneEffect()->kills(11, 20, 2))->commit();
+        $effects_container->add()->identifier('cata_kill_s_imp')->add(new ZoneEffect()->kills( 21, 30, 2))->commit();
+        $effects_container->add()->identifier('cata_kill_s_ctrl')->add(new ZoneEffect()->escape( 300, 2))->commit();
 
         $effects_container->add()->identifier('home_lab_success')
             ->add(new ItemEffect()->spawnAt(ItemDropTarget::DropTargetFloor)

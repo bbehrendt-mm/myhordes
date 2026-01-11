@@ -791,7 +791,7 @@ class NightlyHandler
                         $wounded_citizens[] = $ctz;
                         $this->crow->postAsPM($ctz, '', '', PrivateMessage::TEMPLATE_CROW_NIGHTWATCH_WOUND, $defBonus);
                     }
-                } elseif (!$this->town_handler->getBuilding($town, 'small_catapult3_#00', true)) {
+                } else {
                     // Terror
                     if (!$ctz->hasStatus($status_terror)) {
                         $this->citizen_handler->inflictStatus($ctz, $status_terror);
@@ -806,7 +806,6 @@ class NightlyHandler
             if($overflow > 0){
                 $this->log->debug("Watcher <info>{$watcher->getCitizen()->getUser()->getUsername()}</info> has stopped <info>$defBonus</info> zombies from his watch");
 
-                $null = null;
                 foreach ($watcher->getCitizen()->getInventory()->getItems() as $item) {
 
                     if (!$weapons_are_active && $item->getPrototype()->getWatchpoint())
@@ -814,7 +813,7 @@ class NightlyHandler
 
                     if ($item->getPrototype()->getNightWatchAction()) {
                         $this->log->debug("Executing night watch action for '<info>{$item->getPrototype()->getLabel()}</info> : '<info>{$item->getPrototype()->getNightWatchAction()->getName()}</info>' held by Watcher <info>{$watcher->getCitizen()->getUser()->getUsername()}</info>.");
-                        $this->action_handler->execute($ctz, $item, $null, $item->getPrototype()->getNightWatchAction(), $msg, $r, true);
+                        $this->action_handler->execute($ctz, $item, null, $item->getPrototype()->getNightWatchAction(), $msg, $r, true);
                         $used_items++;
                         foreach ($r as $rr) $this->entity_manager->remove($rr);
                     } else if ($item->getPrototype()->getWatchpoint())

@@ -5,6 +5,7 @@ namespace MyHordes\Fixtures\Service;
 use App\Entity\ItemAction;
 use App\Entity\ItemTargetDefinition;
 use App\Enum\Configuration\CitizenProperties;
+use MyHordes\Fixtures\Data\ActionCatapultProvider;
 use MyHordes\Fixtures\Data\ActionEffectProvider;
 use MyHordes\Fixtures\Data\ActionRequirementProvider;
 use MyHordes\Fixtures\DTO\ArrayDecoratorReadInterface;
@@ -630,6 +631,47 @@ class ActionDataService implements FixtureProcessorInterface {
                 'nw_empty_music'        => [ 'label' => '', 'meta' => [], 'result' => [ 'morph_music_part' ] ],
                 'nw_empty_sport'        => [ 'label' => '', 'meta' => [], 'result' => [ 'morph_elec_empty' ] ],
                 'nw_empty_radio'        => [ 'label' => '', 'meta' => [], 'result' => [ 'morph_radio_off' ] ],
+
+                'cata_rsc_undef'    => [ 'label' => '', 'meta' => [], 'result' => [ 'morph_cata_undef' ] ],
+                'cata_rsc_remains'  => [ 'label' => '', 'meta' => [], 'result' => [ 'morph_cata_remains' ] ],
+                'cata_rsc_moldy'    => [ 'label' => '', 'meta' => [], 'result' => [ 'morph_cata_moldy' ] ],
+                'cata_rsc_scrap'     => [ 'label' => '', 'meta' => [], 'result' => [ 'morph_cata_scrap' ] ],
+                'cata_rsc_break'    => [ 'label' => '', 'meta' => [], 'result' => [ 'morph_cata_break' ] ],
+                'cata_rsc_fine'     => [ 'label' => '', 'meta' => [], 'result' => [ 'morph_cata_fine' ] ],
+                'cata_rsc_destroy'  => [ 'label' => '', 'meta' => [], 'result' => [ 'consume_item' ] ],
+
+                'cata_wpn_scrap_1_rid'  => [ 'label' => '', 'meta' => [], 'result' => [ 'morph_cata_scrap', 'cata_kill_1_rid' ] ],
+                'cata_wpn_remains_1_rid'  => [ 'label' => '', 'meta' => [], 'result' => [ 'morph_cata_remains', 'cata_kill_1_rid' ] ],
+                'cata_wpn_destroy_1_rid'  => [ 'label' => '', 'meta' => [], 'result' => [ 'consume_item', 'cata_kill_1_rid' ] ],
+                'cata_wpn_break_1_rid'  => [ 'label' => '', 'meta' => [], 'result' => [ 'morph_cata_break', 'cata_kill_1_rid' ] ],
+
+                'cata_wpn_remains_1_low'  => [ 'label' => '', 'meta' => [], 'result' => [ 'morph_cata_remains', 'cata_kill_1_low' ] ],
+                'cata_wpn_destroy_1_low'  => [ 'label' => '', 'meta' => [], 'result' => [ 'consume_item', 'cata_kill_1_low' ] ],
+                'cata_wpn_break_1_low'  => [ 'label' => '', 'meta' => [], 'result' => [ 'morph_cata_break', 'cata_kill_1_low' ] ],
+
+                'cata_wpn_destroy_1_high'  => [ 'label' => '', 'meta' => [], 'result' => [ 'consume_item', 'cata_kill_1_high' ] ],
+
+                'cata_wpn_destroy_1_imp'  => [ 'label' => '', 'meta' => [], 'result' => [ 'consume_item', 'cata_kill_1_imp' ] ],
+                'cata_wpn_break_1_imp'  => [ 'label' => '', 'meta' => [], 'result' => [ 'morph_cata_break', 'cata_kill_1_imp' ] ],
+
+                'cata_wpn_scrap_c_low'  => [ 'label' => '', 'meta' => [], 'result' => [ 'morph_cata_scrap', 'cata_kill_c_low' ] ],
+                'cata_wpn_remains_c_low'  => [ 'label' => '', 'meta' => [], 'result' => [ 'morph_cata_remains', 'cata_kill_c_low' ] ],
+                'cata_wpn_destroy_c_low'  => [ 'label' => '', 'meta' => [], 'result' => [ 'consume_item', 'cata_kill_c_low' ] ],
+                'cata_wpn_break_c_low'  => [ 'label' => '', 'meta' => [], 'result' => [ 'morph_cata_break', 'cata_kill_c_low' ] ],
+
+                'cata_wpn_destroy_c_high'  => [ 'label' => '', 'meta' => [], 'result' => [ 'consume_item', 'cata_kill_c_high' ] ],
+                'cata_wpn_break_c_high'  => [ 'label' => '', 'meta' => [], 'result' => [ 'morph_cata_break', 'cata_kill_c_high' ] ],
+
+                'cata_wpn_scrap_c_imp'  => [ 'label' => '', 'meta' => [], 'result' => [ 'morph_cata_scrap', 'cata_kill_c_imp' ] ],
+
+                'cata_wpn_destroy_c_ctrl'  => [ 'label' => '', 'meta' => [], 'result' => [ 'consume_item', 'cata_kill_c_ctrl' ] ],
+
+                'cata_wpn_destroy_s_low'  => [ 'label' => '', 'meta' => [], 'result' => [ 'consume_item', 'cata_kill_s_low' ] ],
+
+                'cata_wpn_destroy_s_high'  => [ 'label' => '', 'meta' => [], 'result' => [ 'consume_item', 'cata_kill_s_high' ] ],
+
+                'cata_wpn_remains_s_imp'  => [ 'label' => '', 'meta' => [], 'result' => [ 'morph_cata_remains', 'cata_kill_s_imp' ] ],
+                'cata_wpn_destroy_s_imp'  => [ 'label' => '', 'meta' => [], 'result' => [ 'consume_item', 'cata_kill_s_imp' ] ],
             ],
 
             'heroics' => [
@@ -1127,6 +1169,8 @@ class ActionDataService implements FixtureProcessorInterface {
                 'machine_gun_#00'   => 'nw_destroy',
                 'pumpkin_tasty_#00' => 'nw_destroy',
             ],
+
+            'items_cata' => ActionCatapultProvider::create(),
 
             'message_keys' => [
                 'water_drink'               => 'Du trinkst deine Wasserration in einem Zug aus. Ah! Das tut gut!',

@@ -41,6 +41,7 @@ use App\Service\JSONRequestParser;
 use App\Service\LogTemplateHandler;
 use App\Service\RandomGenerator;
 use App\Service\TownHandler;
+use App\Structures\CatapultActionTarget;
 use App\Structures\ItemRequest;
 use App\Structures\TownConf;
 use ArrayHelpers\Arr;
@@ -480,6 +481,8 @@ class TownAddonsController extends TownController
      * @param Packages $asset
      * @param TranslatorInterface $trans
      * @return Response
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     #[Route(path: 'api/town/catapult/do', name: 'town_catapult_do_controller')]
     public function catapult_do_api(JSONRequestParser $parser, CitizenHandler $ch, ItemFactory $if, Packages $asset, TranslatorInterface $trans): Response {
@@ -499,11 +502,8 @@ class TownAddonsController extends TownController
 
         $item = $this->entity_manager->getRepository(Item::class)->find($item_id);
 
-        if ($item === null || $item->getEssential() || $item->getBroken() || !$citizen->getInventory()->getItems()->contains($item))
+        if ($item === null || $item->getEssential() || $item->getBroken() || ($action = $item->getPrototype()->getCatapultAction()) === null || !$citizen->getInventory()->getItems()->contains($item))
             return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
-
-        if (in_array($item->getPrototype()->getName(), ['bagxl_#00', 'bag_#00', 'cart_#00', 'pocket_belt_#00']))
-            return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
 
         $target_zone = $this->entity_manager->getRepository(Zone::class)->findOneByPosition($town,$x,$y);
         if (!$target_zone) return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
@@ -514,48 +514,32 @@ class TownAddonsController extends TownController
         // Make sure the citizen has enough AP
         if ($citizen->getAp() < $ap || $ch->isTired($citizen)) return AjaxResponse::error(ErrorHelper::ErrorNoAP);
 
+        if ($item->getPrototype()->hasProperty('pet') && !$this->town_handler->getBuilding($town, 'small_catapult3_#00' ))
+            return AjaxResponse::errorMessage( $this->translator->trans('Die Stadt benötigt einen Kleinen Tribok, um Haustiere katapultieren zu können...', [], 'game') );
+
         // Different target zone
         if ($this->random_generator->chance(0.10)) {
-
-            $alt_zones = [];
-
-            $alt_zone = $this->entity_manager->getRepository(Zone::class)->findOneByPosition($town,$x-1,$y);
-            if ($alt_zone) $alt_zones[] = $alt_zone;
-
-            $alt_zone = $this->entity_manager->getRepository(Zone::class)->findOneByPosition($town,$x+1,$y);
-            if ($alt_zone) $alt_zones[] = $alt_zone;
-
-            $alt_zone = $this->entity_manager->getRepository(Zone::class)->findOneByPosition($town,$x,$y-1);
-            if ($alt_zone) $alt_zones[] = $alt_zone;
-
-            $alt_zone = $this->entity_manager->getRepository(Zone::class)->findOneByPosition($town,$x,$y+1);
-            if ($alt_zone) $alt_zones[] = $alt_zone;
-
+            $alt_zones = array_filter( $town->getZoneCross( $x, $y, 1 )->toArray(), fn(Zone $z) => $z->getId() !== $target_zone->getId() );
             if (!empty($alt_zones)) $target_zone = $this->random_generator->pick($alt_zones);
         }
 
         // Deduct AP
         $this->citizen_handler->setAP($citizen, true, -$ap);
-
         $this->entity_manager->persist($this->log->catapultUsage($citizen, $item, $target_zone));
 
-        $target_inv = ($target_zone->getX() === 0 && $target_zone->getY() === 0) ? $town->getBank() : $target_zone->getFloor();
-
-        $transform = $this->events->queryCatapultItemTransformation( $town, $item->getPrototype() );
-
-        if ($transform !== $item->getPrototype()) {
-            $this->inventory_handler->forceMoveItem($target_inv, $debris = $if->createItem($transform));
-            $this->inventory_handler->forceRemoveItem($item);
-            $this->entity_manager->persist($this->log->catapultImpact($debris, $target_zone));
-        } else {
-            $this->entity_manager->persist($this->log->catapultImpact($item, $target_zone));
-            $this->inventory_handler->forceMoveItem( $target_inv, $item );
-        }
-
-        $this->addFlash('notice', $trans->trans('Sorgfältig verpackt hast du {item} in das Katapult gelegt. Der Gegenstand wurde auf {zone} geschleudert.', [
+        $this->action_handler->execute(
+            $citizen, $item, new CatapultActionTarget($target_zone),
+            $action, $msg, $r, true
+        );
+        $notice = $trans->trans('Sorgfältig verpackt hast du {item} in das Katapult gelegt. Der Gegenstand wurde auf {zone} geschleudert.', [
             '{item}' => "<span><img alt='' src='" . $asset->getUrl("build/images/item/item_{$item->getPrototype()->getIcon()}.gif") . "' />" . $trans->trans($item->getPrototype()->getLabel(), [], 'items') . "</span>",
             '{zone}' => "<strong>[{$target_zone->getX()}/{$target_zone->getY()}]</strong>"
-        ], 'game'));
+        ], 'game');
+
+        if ($msg) $this->addFlash('notice', "$notice<hr/>$msg");
+        else $this->addFlash('notice', $notice);
+
+        foreach ($r as $rr) $this->entity_manager->remove($rr);
 
         // Persist
         $this->entity_manager->persist( $citizen );

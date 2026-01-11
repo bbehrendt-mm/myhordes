@@ -77,6 +77,12 @@ class ItemCommand extends LanguageCommand
             $output->writeln('');
         }
 
+        if ($item->getCatapultAction()) {
+            $output->writeln('Catapult Action:');
+            $output->writeln( "\t{$item->getCatapultAction()->getName()}" );
+            $output->writeln('');
+        }
+
         $output->writeln("Sort: <info>{$item->getSort()}</info>");
         $output->writeln("Deco: <info>{$item->getDeco()}</info>");
         $output->writeln("Watchpoints: <info>{$item->getWatchpoint()}</info>");

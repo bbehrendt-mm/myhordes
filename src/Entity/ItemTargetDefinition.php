@@ -20,7 +20,7 @@ class ItemTargetDefinition
     const int ItemTypeChestSelectionType = 9;
     const int ItemFriendshipXPType = 10;
     const int ItemCitizenOnZoneSMType = 11;
-
+    const int CatapultType = 12;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]

@@ -497,11 +497,11 @@ const SingleItem = (props: { item: Item, data: VaultItemEntry | null, mods: Inve
                 { (props.data.deco > 0 || props.data.props.includes('deco')) && <div className="item-tag item-tag-deco">{ globals.strings.props.deco }</div> }
                 { props.data.props.includes('defence') && <div className="item-tag item-tag-defense">{ globals.strings.props.defence }</div> }
                 { props.data.props.includes('weapon') && <div className="item-tag item-tag-weapon">{ globals.strings.props.weapon }</div> }
-                { props.data.props.includes('catapult') && <div className="item-tag item-tag-catapult">{ globals.strings.props.catapult }</div> }
                 { props.data.watch != 0 && <div className="item-tag item-tag-weapon">
                     { globals.strings.props["nw-weapon"] }
                     {props.item.w && <>&nbsp;<em>{ props.item.w }</em></> }
                 </div> }
+                { props.data.cata && <div className="item-tag item-tag-catapult">{ globals.strings.props.catapult }</div> }
             </ItemTooltip>
         </li>
         :
