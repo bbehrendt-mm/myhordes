@@ -3259,3 +3259,7 @@ Tierklinik: crwdns225726:0crwdne225726:0
 'Abgesuchte Zone': 'crwdns252748:0crwdne252748:0'
 'Kaum durchsuchte Zone': 'crwdns252750:0crwdne252750:0'
 'Reichhaltige Zone': 'crwdns252752:0crwdne252752:0'
+'Die Stadt benötigt einen Kleinen Tribok, um Haustiere katapultieren zu können...': 'crwdns252930:0crwdne252930:0'
+'Du riechst... komisch. Aber auf eine gute Art.': 'crwdns252932:0crwdne252932:0'
+'Der Betrieb und die Instanthaltung von {building} haben uns {num} Wasserration(en) gekostet.': 'crwdns252934:0{building}crwdnd252934:0{num}crwdne252934:0'
+'Angenehmer Geruch': 'crwdns252936:0crwdne252936:0'
