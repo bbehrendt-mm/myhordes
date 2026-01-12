@@ -14,6 +14,7 @@ export type VaultItemEntry = VaultEntry & {
     heavy: boolean,
     deco: number|null,
     watch: number|null,
+    cata: boolean,
 }
 
 export type VaultBuildingEntry = VaultEntry & {

@@ -7,7 +7,7 @@ namespace App\Structures;
 use App\Entity\Citizen;
 use App\Entity\HeroicActionPrototype;
 
-class FriendshipActionTarget
+readonly class FriendshipActionTarget
 {
     public function __construct(
         private HeroicActionPrototype $action,

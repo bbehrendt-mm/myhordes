@@ -2,13 +2,14 @@
 
 namespace MyHordes\Fixtures\Service;
 
+use ArrayHelpers\Arr;
 use MyHordes\Plugins\Interfaces\FixtureProcessorInterface;
 
 class ItemPropertyDataService implements FixtureProcessorInterface {
 
     public function process(array &$data, ?string $tag = null): void
     {
-        $data = array_replace_recursive($data, [
+        $content = [
             'saw_tool_#00'               => [ 'impoundable', 'can_opener', 'box_opener' ],
             'saw_tool_temp_#00'          => [ 'impoundable', 'can_opener', 'box_opener' ],
             'saw_tool_part_#00'          => [ 'impoundable' ],
@@ -265,6 +266,12 @@ class ItemPropertyDataService implements FixtureProcessorInterface {
             'soul_blue_#00'              => [ 'haunting_soul' ],
             'soul_blue_#01'              => [ 'haunting_soul' ],
             'soul_red_#00'               => [ 'haunting_soul', 'angry_soul' ],
-        ]);
+        ];
+
+        foreach ($content as $key => $entry)
+            Arr::set($data, $key, array_unique([
+                ...Arr::get( $data, $key, [] ),
+                ...$entry
+            ]));
     }
 }

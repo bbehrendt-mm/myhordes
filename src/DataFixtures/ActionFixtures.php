@@ -49,7 +49,7 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
      * @return Requirement
      * @throws Exception
      */
-    private function process_meta_requirement(        
+    private function process_meta_requirement(
         ObjectManager $manager, ConsoleOutputInterface $out,
         array &$cache, string $id, array &$sub_cache, ?array &$data = null): Requirement
     {
@@ -72,7 +72,7 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
 
             $manager->persist( $cache[$id] = $requirement );
         } else $out->writeln( "\t\t<comment>Skip</comment> meta condition <info>$id</info>", OutputInterface::VERBOSITY_DEBUG );
-        
+
         return $cache[$id];
     }
 
@@ -386,10 +386,13 @@ class ActionFixtures extends Fixture implements DependentFixtureInterface
 
             if ($prototype->getWatchpoint() !== 0 && !isset($this->action_data_cache['items_nw'][$prototype->getName()]))
                 throw new Exception("Item prototype '{$prototype->getName()}' ({$prototype->getLabel()}) has {$prototype->getWatchpoint()} watch points, but no night watch action!");
-            else if (isset($this->action_data_cache['items_nw'][$prototype->getName()])) {
+            else if (isset($this->action_data_cache['items_nw'][$prototype->getName()]))
                 $prototype->setNightWatchAction( $this->generate_action( $manager, $out, $this->action_data_cache['items_nw'][$prototype->getName()], $set_meta_requirements, $set_sub_requirements, $set_meta_results, $set_sub_results, $set_actions ) );
-                $this->entityManager->persist($prototype);
-            }
+            else $prototype->setNightWatchAction(null);
+
+            if (isset($this->action_data_cache['items_cata'][$prototype->getName()]))
+                $prototype->setCatapultAction( $this->generate_action( $manager, $out, $this->action_data_cache['items_cata'][$prototype->getName()], $set_meta_requirements, $set_sub_requirements, $set_meta_results, $set_sub_results, $set_actions ) );
+            else $prototype->setCatapultAction(null);
         }
 
         foreach ($this->action_data_cache['items'] as $item_name => $actions) {

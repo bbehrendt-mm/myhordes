@@ -131,7 +131,7 @@ class Execution extends Base
         if (!empty($this->morphed_items))
             $tags[] = 'morphed';
 
-        $tags[] = $this->citizen->getZone() ? 'outside' : 'inside';
+        $tags[] = $this->zone() ? 'outside' : 'inside';
 
         $tags[] = empty($this->discovered_plans) ? 'bp_fail' : 'bp_ok';
         if (!empty( array_filter( $this->discovered_plans, fn(BuildingPrototype $b) => !!$b->getParent() ) ))
@@ -163,7 +163,7 @@ class Execution extends Base
         foreach ($this->consumed_items as $key => $data)
             $dynamic["{items_consume_$key}"] = $wrapper($data);
 
-        $zone = $this->target_zone ?? $this->citizen?->getZone() ?? null;
+        $zone = $this->target_zone ?? $this->zone() ?? null;
 
         return [
             ...$dynamic,

@@ -6,8 +6,10 @@ use App\Entity\Citizen;
 use App\Entity\Inventory;
 use App\Entity\Item;
 use App\Entity\ItemPrototype;
+use App\Entity\Zone;
 use App\Service\Actions\Game\DecodeConditionalMessageAction;
 use App\Service\Actions\Game\WrapObjectsForOutputAction;
+use App\Structures\CatapultActionTarget;
 use App\Structures\FriendshipActionTarget;
 use App\Structures\MyHordesConf;
 use App\Structures\TownConf;
@@ -36,7 +38,7 @@ class Base
         public readonly EntityManagerInterface $em,
         public readonly Citizen $citizen,
         public readonly Item|null $item,
-        public readonly Item|ItemPrototype|Citizen|FriendshipActionTarget|null $target,
+        public readonly Item|ItemPrototype|Citizen|FriendshipActionTarget|CatapultActionTarget|null $target,
         public readonly TownConf $conf,
         public readonly MyHordesConf $sysConf
     ) {
@@ -54,6 +56,10 @@ class Base
             $this->originalTargetInventory = null;
         }
 
+    }
+
+    public function zone(): ?Zone {
+        return ($this->target && is_a( $this->target, CatapultActionTarget::class )) ? $this->target->zone() : $this->citizen->getZone();
     }
 
     public function addMessage(string $message, array $variables = [], ?string $translationDomain = null, int $order = 0): void {

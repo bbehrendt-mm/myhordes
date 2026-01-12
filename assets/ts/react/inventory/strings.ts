@@ -24,6 +24,7 @@ export type TranslationStrings = {
         weapon: string,
         "nw-weapon": string,
         "nw-weapon-v": string,
+        catapult: string,
     },
     actions: {
         more: string,

@@ -35,6 +35,7 @@ use App\Service\Actions\Game\WrapObjectsForOutputAction;
 use App\Service\Globals\ResponseGlobal;
 use App\Structures\ActionHandler\Evaluation;
 use App\Structures\ActionHandler\Execution;
+use App\Structures\CatapultActionTarget;
 use App\Structures\EscortItemActionSet;
 use App\Structures\FriendshipActionTarget;
 use App\Structures\TownConf;
@@ -43,6 +44,8 @@ use ArrayHelpers\Arr;
 use Doctrine\ORM\EntityManagerInterface;
 use MyHordes\Fixtures\DTO\Actions\EffectsDataContainer;
 use MyHordes\Fixtures\DTO\Actions\RequirementsDataContainer;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -70,7 +73,15 @@ class ActionHandler
         private readonly ResponseGlobal $response,
     ) {}
 
-    protected function evaluate( Citizen $citizen, ?Item $item, $target, ItemAction $action, ?string &$message, ?Evaluation &$cache = null, ?Citizen $contextCitizen = null ): ActionValidity {
+    protected function evaluate(
+        Citizen $citizen,
+        ?Item $item,
+        Item|ItemPrototype|Citizen|FriendshipActionTarget|CatapultActionTarget|null $target,
+        ItemAction $action,
+        ?string &$message,
+        ?Evaluation &$cache = null,
+        ?Citizen $contextCitizen = null
+    ): ActionValidity {
 
         if ($item && !$item->getPrototype()->getActions()->contains( $action )) return ActionValidity::None;
         if ($target && (!$action->getTarget() || !$this->targetDefinitionApplies($target, $action->getTarget(), reference: $citizen)))
@@ -127,6 +138,7 @@ class ActionHandler
      * @param ItemAction[] $available
      * @param ItemAction[] $crossed
      * @param array|null $messages
+     * @param bool $ignore_broken_flag
      */
     public function getAvailableItemActions(Citizen $citizen, Item $item, ?array &$available, ?array &$crossed, ?array &$messages = null, bool $ignore_broken_flag = false ) {
 
@@ -178,7 +190,8 @@ class ActionHandler
      * @param ItemAction[] $available
      * @param ItemAction[] $crossed
      */
-    public function getAvailableCampingActions(Citizen $citizen, ?array &$available, ?array &$crossed ) {
+    public function getAvailableCampingActions(Citizen $citizen, ?array &$available, ?array &$crossed ): void
+    {
 
       $available = $crossed = [];
       $campingActions = $this->entity_manager->getRepository(CampingActionPrototype::class)->findAll();
@@ -196,7 +209,8 @@ class ActionHandler
      * @param ItemAction[] $available
      * @param ItemAction[] $crossed
      */
-    public function getAvailableHomeActions(Citizen $citizen, ?array &$available, ?array &$crossed ) {
+    public function getAvailableHomeActions(Citizen $citizen, ?array &$available, ?array &$crossed ): void
+    {
 
         $available = $crossed = [];
         $home_actions = $this->entity_manager->getRepository(HomeActionPrototype::class)->findAll();
@@ -229,7 +243,8 @@ class ActionHandler
      * @param HeroicActionPrototype[] $crossed
      * @param HeroicActionPrototype[] $used
      */
-    public function getAvailableIHeroicActions(Citizen $citizen, ?array &$available, ?array &$crossed, ?array &$used ) {
+    public function getAvailableIHeroicActions(Citizen $citizen, ?array &$available, ?array &$crossed, ?array &$used ): void
+    {
         $available = $crossed = $used = [];
 
         if (!$citizen->getProfession()->getHeroic()) return;
@@ -255,7 +270,8 @@ class ActionHandler
      * @param ItemAction[] $available
      * @param ItemAction[] $crossed
      */
-    public function getAvailableISpecialActions(Citizen $citizen, ?array &$available, ?array &$crossed ) {
+    public function getAvailableISpecialActions(Citizen $citizen, ?array &$available, ?array &$crossed ): void
+    {
         $available = $crossed = [];
 
         foreach ($citizen->getSpecialActions() as $special) {
@@ -267,12 +283,14 @@ class ActionHandler
     }
 
     /**
-     * @param Citizen|FriendshipActionTarget|Item|ItemPrototype $target
+     * @param Item|ItemPrototype|Citizen|FriendshipActionTarget|CatapultActionTarget $target
      * @param ItemTargetDefinition $definition
+     * @param bool $forSelection
+     * @param Citizen|null $reference
      * @return bool
      */
     public function targetDefinitionApplies(
-        Citizen|ItemPrototype|FriendshipActionTarget|Item $target,
+        Item|ItemPrototype|Citizen|FriendshipActionTarget|CatapultActionTarget $target,
         ItemTargetDefinition $definition,
         bool $forSelection = false,
         ?Citizen $reference = null
@@ -304,6 +322,10 @@ class ActionHandler
             case ItemTargetDefinition::ItemFriendshipType:
                 if (!is_a( $target, FriendshipActionTarget::class )) return false;
                 if (!$target->citizen()->getAlive() || $target->action()->getName() === 'hero_generic_friendship' || $target->citizen()->hasStatus('tg_rec_heroic' )) return false;
+                break;
+            case ItemTargetDefinition::CatapultType:
+                if (!is_a( $target, CatapultActionTarget::class )) return false;
+                if ($reference && $target->zone()->getTown()->getId() !== $reference->getTown()->getId()) return false;
                 break;
             default: return false;
         }
@@ -360,15 +382,30 @@ class ActionHandler
     /**
      * @param Citizen $citizen
      * @param Item|null $item
-     * @param Item|ItemPrototype|Citizen|FriendshipActionTarget|null $target
+     * @param Item|ItemPrototype|Citizen|FriendshipActionTarget|CatapultActionTarget|null $target
      * @param ItemAction $action
      * @param string|null $message
      * @param array|null $remove
      * @param bool $force Do not check if the action is valid
      * @param bool $escort_mode
+     * @param Citizen|null $contextCitizen
+     * @param bool|null $map_updated
      * @return int
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
-    public function execute( Citizen &$citizen, ?Item &$item, &$target, ItemAction $action, ?string &$message, ?array &$remove, bool $force = false, bool $escort_mode = false, ?Citizen $contextCitizen = null, ?bool &$map_updated = false ): int {
+    public function execute(
+        Citizen $citizen,
+        ?Item $item,
+        Item|ItemPrototype|Citizen|FriendshipActionTarget|CatapultActionTarget|null $target,
+        ItemAction $action,
+        ?string &$message,
+        ?array &$remove,
+        bool $force = false,
+        bool $escort_mode = false,
+        ?Citizen $contextCitizen = null,
+        ?bool &$map_updated = false
+    ): int {
 
         $remove = [];
 

@@ -32,7 +32,7 @@ class ProcessInventorySpaceRequirement extends AtomRequirementProcessor
             $inv_has_heavy = false;
         }
 
-        $trunk_full = ($data->considerTrunk && $cache->citizen->getZone() === null)
+        $trunk_full = ($data->considerTrunk && $cache->zone() === null)
             ? ($inventoryHandler->getFreeSize( $cache->citizen->getHome()->getChest(), $ignore ) < $data->space)
             : null;
 

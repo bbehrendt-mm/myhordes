@@ -501,6 +501,7 @@ const SingleItem = (props: { item: Item, data: VaultItemEntry | null, mods: Inve
                     { globals.strings.props["nw-weapon"] }
                     {props.item.w && <>&nbsp;<em>{ props.item.w }</em></> }
                 </div> }
+                { props.data.cata && <div className="item-tag item-tag-catapult">{ globals.strings.props.catapult }</div> }
             </ItemTooltip>
         </li>
         :

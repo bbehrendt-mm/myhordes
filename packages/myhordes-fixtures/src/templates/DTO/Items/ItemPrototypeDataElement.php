@@ -23,8 +23,6 @@ use MyHordes\Fixtures\DTO\LabeledIconElementInterface;
  * @method self heavy(bool $v)
  * @property int $watchpoint
  * @method self watchpoint(int $v)
- * @property bool $fragile
- * @method self fragile(bool $v)
  * @property string $deco_text
  * @method self deco_text(string $v)
  * @property int $sort
@@ -68,7 +66,6 @@ class ItemPrototypeDataElement extends Element implements LabeledIconElementInte
                 ->setDecoText($this->deco_text)
                 ->setIndividual( $this->unstackable ?? false )
                 ->setWatchpoint($this->watchpoint ?? 0)
-                ->setFragile( $this->fragile ?? false )
 				->setWatchimpact($this->watchimpact ?? 0)
                 ->setPersistentEssential( $this->isPersistentWhenEssential ?? false )
                 ->setEmote( $this->isEmote ?? false );

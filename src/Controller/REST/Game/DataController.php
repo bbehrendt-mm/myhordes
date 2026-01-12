@@ -47,8 +47,8 @@ class DataController extends CustomAbstractCoreController
      */
     private static function resolve(EntityManagerInterface $em, string $class, string $ids): Collection {
         return $em->getRepository($class)->matching(
-            (new Criteria( ))->where( Criteria::expr()->in( 'id', array_unique(
-                (new ArrayCollection( explode(',',  $ids) ))
+            new Criteria( )->where(Criteria::expr()->in('id', array_unique(
+                new ArrayCollection( explode(',',  $ids) )
                     ->filter( fn(string $s) => !empty($s) && is_numeric($s) )
                     ->map( fn(string $s) => (int)$s )
                     ->toArray()
@@ -78,6 +78,7 @@ class DataController extends CustomAbstractCoreController
                 'heavy' => $p->getHeavy(),
                 'deco' => $p->getDeco(),
                 'watch' => $p->getWatchpoint(),
+                'cata' => $p->getCatapultAction() !== null,
             ])->toArray()
         ]);
     }

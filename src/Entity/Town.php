@@ -350,6 +350,45 @@ class Town
         return $this->zones->matching( $criteria )->first() ?: null;
     }
 
+    /**
+     * @param int $x
+     * @param int $y
+     * @param int $dist
+     * @return Collection<Zone>
+     */
+    public function getZoneCross(int $x, int $y, int $dist): Collection
+    {
+        return $this->zones->matching( Criteria::create()
+            ->orWhere( Criteria::expr()->andX(
+                Criteria::expr()->gte( 'x', $x - $dist ),
+                Criteria::expr()->lte( 'x', $x + $dist ),
+                Criteria::expr()->eq( 'y', $y ),
+            ) )
+            ->orWhere( Criteria::expr()->andX(
+                Criteria::expr()->eq( 'x', $x ),
+                Criteria::expr()->gte( 'y', $y - $dist ),
+                Criteria::expr()->lte( 'y', $y + $dist ),
+            ) )
+        );
+    }
+
+    /**
+     * @param int $x_min
+     * @param int $x_max
+     * @param int $y_min
+     * @param int $y_max
+     * @return Collection<Zone>
+     */
+    public function getZoneRect(int $x_min, int $x_max, int $y_min, int $y_max): Collection
+    {
+        return $this->zones->matching( Criteria::create()
+            ->andWhere( Criteria::expr()->gte( 'x', $x_min ) )
+            ->andWhere( Criteria::expr()->gte( 'y', $y_min ) )
+            ->andWhere( Criteria::expr()->lte( 'x', $x_max ) )
+            ->andWhere( Criteria::expr()->lte( 'y', $y_max ) )
+        );
+    }
+
     public function getTownZone(): Zone {
         return $this->getZone(0,0);
     }
