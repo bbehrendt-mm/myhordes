@@ -817,14 +817,14 @@ ul.inventory {
       &:empty {display: none}
       background: #965C36;
       padding: 2px 6px;
-      margin-right: 2px;
+      margin-right: 4px;
     }
     &.item {
-    	border-color: rgba(0,0,0,0); height: 18px; max-width: 40px;
-        &.bg-locked { width: 18px; background: url("../img/large_empty_inv_l.gif") center no-repeat; }
-        &.bg-light { width: 18px; background: url("../img/large_empty_inv.png") center no-repeat; }
-        &.bg-heavy { width: 18px; background: url("../img/large_empty_inv_h.png") center no-repeat; }
-        &.bg-over { width: 18px; background: url("../img/large_empty_inv_r.png") center no-repeat; }
+    	border-color: rgba(0,0,0,0); height: 20px; max-width: 40px;
+        &.bg-light { width: 20px; background: url("../img/inventory/large_inv.png") center no-repeat; }
+        &.bg-locked { width: 20px; background: url("../img/inventory/large_inv_l.png") center no-repeat; }
+        &.bg-heavy { width: 20px; background: url("../img/inventory/large_inv_h.png") center no-repeat; margin-right: 1px; margin-left: 1px; }
+        &.bg-over { width: 20px; background: url("../img/inventory/large_inv_r.png") center no-repeat; }
     	&:hover { border-color: #F0D79E; background-color: #B37C4A; }
     }
     &.item:not(.locked) { cursor: pointer; }
@@ -832,8 +832,11 @@ ul.inventory {
     &.item.banished_hidden { opacity: 0.25; }
     &.free {
         border-color: transparent;
-        height: 18px; width: 18px; background: url("../img/large_empty_inv.png") center no-repeat;
-        &.bg-heavy { background: url("../img/large_empty_inv_h.png") center no-repeat; }
+        height: 20px; width: 20px; background: url("../img/inventory/large_empty_inv.png") center no-repeat;
+        &.bg-light { background: url("../img/inventory/large_empty_inv.png") center no-repeat; }
+        &.bg-locked { background: url("../img/inventory/large_empty_inv_l.png") center no-repeat; }
+        &.bg-heavy { background: url("../img/inventory/large_empty_inv_h.png") center no-repeat; }
+        &.bg-over { background: url("../img/inventory/large_empty_inv_r.png") center no-repeat; }
     }
     &.item.counted{
       font-size: 0;
@@ -848,6 +851,15 @@ ul.inventory {
     }
   }
 
+  &.chest > li {
+    &.free {
+      background: url("../img/inventory/large_empty_inv.png") center no-repeat;
+    }
+    &.item {
+      background: url("../img/inventory/large_inv.png") center no-repeat;
+    }
+  }
+
   &.bank {
     li.item {
       width: 31px; position: relative;
@@ -856,9 +868,10 @@ ul.inventory {
   }
 
   &.inventory-react {
-    display: flex; flex-wrap: wrap; gap: 2px; align-items: center; justify-content: flex-start; min-height: 35px;
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-start; min-height: 35px;
     &>li {
       margin: 0;
+      padding: 1px 0 0 1px;
       &.category:not(.label) {
         flex-basis: 100%;
         &:not(:first-child) {padding-top: 12px;}
@@ -867,7 +880,7 @@ ul.inventory {
         border: none; flex-grow: 1;
       }
       &.item.pending {
-        height: 18px; width: 18px; position: relative;
+        height: 20px; width: 20px; position: relative;
         &::before {
           position: absolute; inset: 4px; content: " "; background: #EFDBA8;
         }
@@ -1181,9 +1194,9 @@ div.game-menu-area {
           &:not(.civil) { min-width: 64px; background: url("../img/game-bar/panel_tl.png") 0 0 no-repeat,url("../img/game-bar/panel_tr.png") 100% 0 no-repeat,url("../img/game-bar/panel_bl.png") 0 100% no-repeat,url("../img/game-bar/panel_br.png") 100% 100% no-repeat,url("../img/game-bar/panel_t.png") 0 0 repeat-x,url("../img/game-bar/panel_l.png") 0 0 repeat-y,url("../img/game-bar/panel_r.png") 100% 0 repeat-y,url("../img/game-bar/panel_b.png") 0 100% repeat-x,url("../img/game-bar/background_sq.png"); };
           &.rucksack { z-index: 2 }
           &>li:not(.text) {
-            height: 18px; margin-top: 6px; vertical-align: bottom;
+            height: 20px; margin-top: 6px; vertical-align: bottom;
             &.free,&.item {width: 16px;}
-            &.free { background: url("../img/small_empty_inv.gif") no-repeat; }
+            &.free { background: url("../img/inventory/small_inv.gif") no-repeat; }
             &.item.broken { outline: 1px dotted #ff0000; }
           }
           .status-ghoul {
@@ -1212,7 +1225,7 @@ div.game-menu-area {
         &.rucksack {
           max-width: 176px; overflow: hidden; font-size: 0;
           &.expanded {
-            .more { width: 18px; position: absolute; top: 7px; right: 0px; }
+            .more { width: 20px; position: absolute; top: 7px; right: 0px; }
             &:hover {
               overflow: visible; height: 56px;
               .more { display: none; }
