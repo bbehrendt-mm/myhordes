@@ -289,7 +289,24 @@ final readonly class BuildingConstructionListener implements ServiceSubscriberIn
                 // If the novelty lamps are built, it's effect must be applied immediately
                 $novlamp_status = $em->getRepository(CitizenStatus::class)->findOneBy(['name' => 'tg_novlamps']);
                 foreach ($event->town->getCitizens() as $citizen) {
-                    if ($citizen->getAlive()) $citizenHandler->inflictStatus($citizen, $novlamp_status);
+                    if ($citizen->getAlive()) {
+                        $citizenHandler->inflictStatus($citizen, $novlamp_status);
+                        $em->persist($citizen);
+                    }
+                }
+
+                break;
+
+            case 'small_pool_#00':
+                /** @var CitizenHandler $citizenHandler */
+                $citizenHandler = $this->getService(CitizenHandler::class);
+                /** @var EntityManagerInterface $em */
+                $em = $this->getService(EntityManagerInterface::class);
+
+                // If the pool is built, it's effect must be applied immediately
+                $pool_filled_status = $em->getRepository(CitizenStatus::class)->findOneBy(['name' => 'tg_pool_filled']);
+                foreach ($event->town->getCitizens() as $citizen) {
+                    if ($citizen->getAlive()) $citizenHandler->inflictStatus($citizen, $pool_filled_status);
                     $em->persist($citizen);
                 }
 
