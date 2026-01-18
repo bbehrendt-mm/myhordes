@@ -351,7 +351,7 @@ parameters:
               bunker_lv4: ['small_castle_#00', 'small_arma_#00', 'small_balloon_#00']
 
               hospital_lv2: ['small_eden_#00', 'small_armor_#00', 'small_spa4souls_#00', 'item_jerrycan_#00', 'small_waterspray_#00']
-              hospital_lv3: ['small_watchmen_#01', 'small_infirmary_#00', 'small_survarea_#00', 'small_lighthouse_#00', 'small_watchmen_#00']
+              hospital_lv3: ['small_watchmen_#01', 'small_infirmary_#00', 'small_survarea_#00', 'small_lighthouse_#00', 'small_watchmen_#02']
               hospital_lv4: ['small_crow_#00', 'small_pmvbig_#00', 'small_balloon_#00']
 
       unlocked_buildings:
