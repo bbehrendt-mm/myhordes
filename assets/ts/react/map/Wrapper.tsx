@@ -1,8 +1,9 @@
 import * as React from "react";
 
-import {BaseMounter, ReactData} from "../index";
+import {BaseMounter, ReactData, ReactMapBootstrapData} from "../index";
 
 import {
+    LocalZone,
     MapCoordinate,
     MapData, MapRoute,
     RuntimeMapState,
@@ -17,6 +18,8 @@ import LocalZoneView from "./ZoneView";
 import Client from "../../client";
 import {BeyondMapAPI, RuntimeMapStrings} from "./api";
 import {useTranslations} from "../utils";
+import {useSignal} from "../../v2/client-modules/Signal";
+import {ServerInducedSignalProps} from "../../v2/fetch";
 
 declare var $: Global;
 
@@ -64,20 +67,58 @@ export class HordesMap extends BaseMounter<object> {
     }
 }
 
+type HordesEmbedProps = ReactMapBootstrapData & {
+    id: string,
+    onRouteSelected?: (route: number|null) => void,
+    onPlannerStepAdded?: (data: {valid: boolean, route: number[][]}) => void,
+    onPlayerMovement?: (x: number, y: number) => void,
+    onZoneClick?: (x: number, y: number, id: number) => void,
+    onZoneActivate?: (x: number, y: number) => void,
+    onZoneDeactivate?: (x: number, y: number) => void,
+    onActivateZoneChanged?: (zone: null|{x: number, y: number}) => void,
+}
+
+export const Map = (props: HordesEmbedProps) => {
+    const events = useRef<{[key: string]: ((data: object) => void)[]}>({})
+
+    useSignal<{event: string, data: object}>(
+        `map-event-${props.id}`,
+        ({event,data}) => events.current[event]?.forEach(f => f(data)),
+        []
+    )
+
+    return <MapWrapper
+        data={props}
+        eventGateway={(event: string, data: object) => {
+            window.requestAnimationFrame(() => {
+                if (event === 'route-selected') props.onRouteSelected?.(data['route'] as number|null);
+                else if (event === 'planner-step') props.onPlannerStepAdded?.(data as {valid: boolean, route: number[][]});
+                else if (event === 'player-movement') props.onPlayerMovement?.(data['x'] as number, data['y'] as number);
+                else if (event === 'zone-click') props.onZoneClick?.(data['x'] as number, data['y'] as number, data['id'] as number);
+                else if (event === 'zone-activate') props.onZoneActivate?.(data['x'] as number, data['y'] as number);
+                else if (event === 'zone-deactivate') props.onZoneDeactivate?.(data['x'] as number, data['y'] as number);
+                else if (event === 'zone-change') props.onActivateZoneChanged?.(data['zone'] as {x: number, y: number}|null);
+            })
+        } }
+        eventRegistrar={(event: string, callback: (data: object) => void, unregister: boolean) => {
+            events.current[event] = events.current[event] ?? [];
+            if (unregister) events.current[event] = events.current[event].filter(f => f !== callback);
+            else events.current[event].push(callback);
+        } }
+    />
+}
+
 type MapGlobals = {
     //api: EventCreationAPI,
     strings: RuntimeMapStrings,
     etag: number,
+    localEtag: number,
 }
 
 export const Globals = React.createContext<MapGlobals>(null);
 
 const MapWrapper = ( props: ReactDataMapCore ) => {
     const api = new BeyondMapAPI();
-
-    let mk = $.client.get('marker','routes',null, Client.DomainScavenger);
-    if (!mk) mk = undefined;
-    else mk = {x: mk[0] ?? 0, y: mk[1] ?? 0}
 
     const scrollPlaneRef = useRef<HTMLDivElement>(null);
     let dx = 0, dy = 0;
@@ -86,6 +127,15 @@ const MapWrapper = ( props: ReactDataMapCore ) => {
     const [map, setMap] = useState<MapData>( null );
     const [routes, setRoutes] = useState<MapRoute[]>( [] );
     const [inc, setInc] = useState<number>( 0 );
+
+    const [etag, setEtag] = useState<number>( 0 );
+
+    let mk = (props.data.displayType.split('-')[0] === 'beyond')
+        ? $.client.get('marker','routes',null, Client.DomainScavenger)
+        : undefined;
+
+    if (!mk) mk = undefined;
+    else mk = {x: mk[0] ?? 0, y: mk[1] ?? 0}
 
     const [state, dispatch] = React.useReducer((state: RuntimeMapState, action: RuntimeMapStateAction): RuntimeMapState => {
         const new_state = {...state};
@@ -122,14 +172,28 @@ const MapWrapper = ( props: ReactDataMapCore ) => {
             props.eventGateway('route-selected', {route: new_state.activeRoute ?? null});
         }
         if (typeof action.activeZone  !== "undefined") {
-            if (action.activeZone === false ) new_state.activeZone = undefined;
-            else if (action.activeZone !== true ) {
-                if (typeof new_state.activeZone  === "undefined") new_state.activeZone = action.activeZone;
-                else if ( new_state.activeZone.x !== action.activeZone.x || new_state.activeZone.y !== action.activeZone.y )
-                    new_state.activeZone = action.activeZone;
-                else new_state.activeZone = undefined;
+
+            if (action.activeZone === false ) {
+                if (new_state.activeZone)
+                    props.eventGateway('zone-deactivate', new_state.activeZone);
+                new_state.activeZone = undefined;
             }
-            $.client.set('marker','routes',new_state.activeZone ? [new_state.activeZone.x,new_state.activeZone.y] : null, false)
+            else if (action.activeZone !== true ) {
+                if (typeof new_state.activeZone  === "undefined") {
+                    props.eventGateway('zone-activate', action.activeZone);
+                    new_state.activeZone = action.activeZone;
+                }
+                else if ( new_state.activeZone.x !== action.activeZone.x || new_state.activeZone.y !== action.activeZone.y ) {
+                    props.eventGateway('zone-deactivate', new_state.activeZone);
+                    props.eventGateway('zone-activate', action.activeZone);
+                    new_state.activeZone = action.activeZone;
+                }
+                else new_state.activeZone = undefined;
+                props.eventGateway('zone-change', {zone: new_state.activeZone ? {x: new_state.activeZone.x, y: new_state.activeZone.y} : null});
+            }
+
+            if (new_state.conf.enableZoneMarkingStorage)
+                $.client.set('marker','routes',new_state.activeZone ? [new_state.activeZone.x,new_state.activeZone.y] : null, false)
         }
         if (typeof action.routeEditorPop  !== "undefined") {
             new_state.routeEditor = action.routeEditorPop === true ? [] : new_state.routeEditor.slice(0,-1);
@@ -163,9 +227,10 @@ const MapWrapper = ( props: ReactDataMapCore ) => {
         zoom: 0,
 
         conf: {
-            enableZoneMarking:  props.data.displayType.split('-')[0] === 'beyond',
-            enableGlobalButton: props.data.displayType.split('-')[0] === 'beyond',
-            enableZoneRouting:  props.data.displayType === 'door-planner',
+            enableZoneMarking:          props.data.displayType.split('-')[0] === 'beyond' || props.data.displayType === 'catapult',
+            enableZoneMarkingStorage:   props.data.displayType.split('-')[0] === 'beyond',
+            enableGlobalButton:         props.data.displayType.split('-')[0] === 'beyond',
+            enableZoneRouting:          props.data.displayType === 'door-planner',
 
             enableLocalView: props.data.displayType.split('-')[0] === 'beyond',
             enableMovementControls: props.data.displayType.split('-')[0] === 'beyond',
@@ -230,6 +295,7 @@ const MapWrapper = ( props: ReactDataMapCore ) => {
         Promise.all([api.map( props.data.endpoint ), api.routes( props.data.endpoint )]).then( ([m,r]) => {
             setMap(m as MapData);
             setRoutes(r as MapRoute[]);
+            setEtag(e => e+1);
         } )
     }, [props.data.etag])
 
@@ -278,8 +344,19 @@ const MapWrapper = ( props: ReactDataMapCore ) => {
         timeout = timeout ?? window.setTimeout( apply, 100 );
     }
 
+    useSignal<ServerInducedSignalProps>(
+        'map-changed',
+        () => {
+            Promise.all([api.map( props.data.endpoint ), api.routes( props.data.endpoint )]).then( ([m,r]) => {
+                setMap(m as MapData);
+                setRoutes(r as MapRoute[]);
+                setEtag(e => e+1);
+            } )
+        }
+    );
+
     return (
-        <Globals.Provider value={{ strings, etag: props.data.etag }}>
+        <Globals.Provider value={{ strings, etag: props.data.etag, localEtag: etag }}>
             <div
                 draggable={false} ref={reactRef}
                 className={`react_map_area ${state.showViewer ? 'zone-viewer-mode' : ''}`}
@@ -294,7 +371,8 @@ const MapWrapper = ( props: ReactDataMapCore ) => {
                             .map(s=><div key={s} className={s}/>) }
                     </div>
                     { map && strings && <MapOverviewParent map={map} settings={state.conf}
-                        marking={state.activeZone} wrapDispatcher={dispatch} etag={props.data.etag}
+                        eventGateway={props.eventGateway}
+                        marking={state.activeZone} wrapDispatcher={dispatch} etag={props.data.etag} localEtag={etag}
                         routeEditor={state.routeEditor} zoom={state.zoom} zoomChanged={state.zoomChanged}
                         routeViewer={activeRoute?.stops ?? []}
                         scrollAreaRef={scrollPlaneRef}

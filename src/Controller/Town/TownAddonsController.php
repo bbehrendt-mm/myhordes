@@ -4,7 +4,6 @@ namespace App\Controller\Town;
 
 use App\Annotations\GateKeeperProfile;
 use App\Annotations\Semaphore;
-use App\Entity\ActionCounter;
 use App\Entity\Building;
 use App\Entity\Citizen;
 use App\Entity\CitizenRole;
@@ -14,24 +13,15 @@ use App\Entity\Item;
 use App\Entity\ItemProperty;
 use App\Entity\ItemPrototype;
 use App\Entity\Recipe;
-use App\Entity\LogEntryTemplate;
 use App\Entity\ZombieEstimation;
-use App\Entity\Zone;
 use App\Enum\ActionCounterType;
 use App\Enum\Configuration\CitizenProperties;
 use App\Enum\Configuration\MyHordesSetting;
 use App\Enum\Configuration\TownSetting;
 use App\Enum\EventStages\BuildingValueQuery;
-use App\Event\Game\Citizen\CitizenQueryNightwatchDeathChancesEvent;
-use App\Event\Game\Citizen\CitizenQueryNightwatchDefenseEvent;
-use App\Event\Game\Citizen\CitizenQueryNightwatchInfoEvent;
 use App\Event\Game\Town\Addon\Dump\DumpInsertionCheckEvent;
-use App\Event\Game\Town\Addon\Dump\DumpRetrieveCheckEvent;
-use App\Event\Game\Town\Addon\Dump\DumpRetrieveExecuteEvent;
-use App\Kernel;
 use App\Response\AjaxResponse;
 use App\Service\ActionHandler;
-use App\Service\CitizenHandler;
 use App\Service\ErrorHelper;
 use App\Service\EventFactory;
 use App\Service\EventProxyService;
@@ -39,25 +29,18 @@ use App\Service\InventoryHandler;
 use App\Service\ItemFactory;
 use App\Service\JSONRequestParser;
 use App\Service\LogTemplateHandler;
-use App\Service\RandomGenerator;
 use App\Service\TownHandler;
-use App\Structures\CatapultActionTarget;
 use App\Structures\ItemRequest;
-use App\Structures\TownConf;
 use ArrayHelpers\Arr;
 use Doctrine\Common\Collections\Criteria;
-use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\Asset\Packages;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Yaml\Yaml;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route(path: '/', condition: 'request.isXmlHttpRequest()')]
 #[GateKeeperProfile(only_alive: true, only_with_profession: true, only_in_town: true)]
@@ -471,91 +454,9 @@ class TownAddonsController extends TownController
             'catapult_master' => $cata_master,
             'is_catapult_master' => $this->getActiveCitizen()->hasRole('cata'),
             'day' => $this->getActiveCitizen()->getTown()->getDay(),
+            'map_public_json' => json_encode( $th->get_public_map_blob($this->getActiveCitizen()->getTown(), $this->getActiveCitizen(), 'catapult', $this->getTownConf()->isNightTime() ? 'night' : 'day', 'satellite' ) )
         ]) );
     }
-
-    /**
-     * @param JSONRequestParser $parser
-     * @param CitizenHandler $ch
-     * @param ItemFactory $if
-     * @param Packages $asset
-     * @param TranslatorInterface $trans
-     * @return Response
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     */
-    #[Route(path: 'api/town/catapult/do', name: 'town_catapult_do_controller')]
-    public function catapult_do_api(JSONRequestParser $parser, CitizenHandler $ch, ItemFactory $if, Packages $asset, TranslatorInterface $trans): Response {
-        $citizen = $this->getActiveCitizen();
-        $town = $citizen->getTown();
-
-        // Check if catapult is build
-        if (!$this->town_handler->getBuilding($town, 'item_courroie_#00', true) || !$citizen->hasRole('cata'))
-            return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
-
-        // Get prototype ID
-        if (!$parser->has_all(['item','x','y'], false))
-            return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
-        $item_id = (int)$parser->get('item');
-        $x = (int)$parser->get('x');
-        $y = (int)$parser->get('y');
-
-        $item = $this->entity_manager->getRepository(Item::class)->find($item_id);
-
-        if ($item === null || $item->getEssential() || $item->getBroken() || ($action = $item->getPrototype()->getCatapultAction()) === null || !$citizen->getInventory()->getItems()->contains($item))
-            return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
-
-        $target_zone = $this->entity_manager->getRepository(Zone::class)->findOneByPosition($town,$x,$y);
-        if (!$target_zone) return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
-
-        // Check if the improved catapult is built
-        $ap = ($this->town_handler->getBuilding( $town, 'item_courroie_#01', true ) !== null ? 2 : 4);
-
-        // Make sure the citizen has enough AP
-        if ($citizen->getAp() < $ap || $ch->isTired($citizen)) return AjaxResponse::error(ErrorHelper::ErrorNoAP);
-
-        if ($item->getPrototype()->hasProperty('pet') && !$this->town_handler->getBuilding($town, 'small_catapult3_#00' ))
-            return AjaxResponse::errorMessage( $this->translator->trans('Die Stadt benötigt einen Kleinen Tribok, um Haustiere katapultieren zu können...', [], 'game') );
-
-        // Different target zone
-        if ($this->random_generator->chance(0.10)) {
-            $alt_zones = array_filter( $town->getZoneCross( $x, $y, 1 )->toArray(), fn(Zone $z) => $z->getId() !== $target_zone->getId() );
-            if (!empty($alt_zones)) $target_zone = $this->random_generator->pick($alt_zones);
-        }
-
-        // Deduct AP
-        $this->citizen_handler->setAP($citizen, true, -$ap);
-        $this->entity_manager->persist($this->log->catapultUsage($citizen, $item, $target_zone));
-
-        $this->action_handler->execute(
-            $citizen, $item, new CatapultActionTarget($target_zone),
-            $action, $msg, $r, true
-        );
-        $notice = $trans->trans('Sorgfältig verpackt hast du {item} in das Katapult gelegt. Der Gegenstand wurde auf {zone} geschleudert.', [
-            '{item}' => "<span><img alt='' src='" . $asset->getUrl("build/images/item/item_{$item->getPrototype()->getIcon()}.gif") . "' />" . $trans->trans($item->getPrototype()->getLabel(), [], 'items') . "</span>",
-            '{zone}' => "<strong>[{$target_zone->getX()}/{$target_zone->getY()}]</strong>"
-        ], 'game');
-
-        if ($msg) $this->addFlash('notice', "$notice<hr/>$msg");
-        else $this->addFlash('notice', $notice);
-
-        foreach ($r as $rr) $this->entity_manager->remove($rr);
-
-        // Persist
-        $this->entity_manager->persist( $citizen );
-        $this->entity_manager->persist( $target_zone );
-        $this->entity_manager->persist( $town );
-
-        // Flush
-        try {
-
-            $this->entity_manager->flush();
-            return AjaxResponse::success();
-        } catch (Exception $e) {
-            return AjaxResponse::error( ErrorHelper::ErrorDatabaseException );
-        }
-    }
-
 
     #[Route(path: 'jx/town/clinic', name: 'town_tamer_clinic')]
     public function townTamerClinic(): Response {

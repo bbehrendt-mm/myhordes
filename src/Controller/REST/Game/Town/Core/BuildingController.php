@@ -393,7 +393,7 @@ class BuildingController extends CustomAbstractCoreController
             return new JsonResponse(['error' => ErrorHelper::ErrorActionNotAvailableBanished], status: Response::HTTP_NOT_ACCEPTABLE);
 
         try {
-            $citizen->setBuildingVote( (new BuildingVote())->setBuilding( $building ) );
+            $citizen->setBuildingVote( new BuildingVote()->setBuilding($building ) );
             $citizenHandler->inflictStatus($citizen, 'tg_build_vote');
             $em->persist($citizen);
             $em->flush();

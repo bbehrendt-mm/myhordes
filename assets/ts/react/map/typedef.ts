@@ -91,6 +91,7 @@ export type MapCoreProps = {
 
 export type RuntimeMapSettings = {
     enableZoneMarking: boolean,
+    enableZoneMarkingStorage: boolean,
     enableGlobalButton: boolean,
     enableZoneRouting: boolean,
 
@@ -141,8 +142,10 @@ export type MapOverviewParentProps = {
     routeEditor: MapCoordinate[],
     routeViewer: MapCoordinate[],
     etag: number,
+    localEtag: number,
     zoom: number, zoomChanged: boolean,
     scrollAreaRef:  {current: HTMLDivElement}
+    eventGateway?: (event: string, data: object)=>void,
 }
 
 export interface MapOverviewGridProps extends MapOverviewParentProps {

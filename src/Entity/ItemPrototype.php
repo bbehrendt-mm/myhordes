@@ -48,7 +48,7 @@ class ItemPrototype implements NamedEntity
     #[ORM\Column(type: 'boolean')]
     private bool $hideInForeignChest = false;
     #[ORM\Column(type: 'integer', nullable: true)]
-    private int $sort = 0;
+    private ?int $sort = 0;
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $deco_text = null;
     #[ORM\Column(type: 'boolean')]

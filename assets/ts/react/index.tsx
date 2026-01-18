@@ -8,7 +8,7 @@ import {Fetch} from "../v2/fetch";
 
 declare var $: Global;
 
-type ReactMapBootstrapData = {
+export type ReactMapBootstrapData = {
     displayType: string,
     className: string,
     etag: number,

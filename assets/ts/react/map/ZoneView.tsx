@@ -138,7 +138,7 @@ const LocalZoneView = React.memo( ( props: LocalZoneProps ) => {
             lastInc.current = props.inc;
             ignoreNext.current = !ignoreNext.current;
         }
-    }, [props.dx, props.dy, globals.etag])
+    }, [props.dx, props.dy, globals.etag, globals.localEtag])
 
     return (
         <>

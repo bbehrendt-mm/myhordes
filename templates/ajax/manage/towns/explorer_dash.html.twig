@@ -352,11 +352,9 @@
                 });
             }
 
-            document.querySelector('hordes-map')?.addEventListener("zone-clicked", function(ev) {
-                ev.preventDefault();
-                ev.stopPropagation();
-                load_zone_panel(ev.detail.zone.id);
-		    });
+            $.components.attachEventListener( document.querySelector('hordes-map'), 'zone-click', function({id}) {
+                load_zone_panel(id);
+            })
 
             {% if zone %}load_zone_panel({{ zone }}){% endif %}
         {% endif %}

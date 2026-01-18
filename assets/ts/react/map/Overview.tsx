@@ -80,12 +80,12 @@ const MapOverviewRoutePainter = ( props: MapOverviewParentProps ) => {
                     {props.marking && (
                         <rect x={props.marking.x} y={props.marking.y}
                               height={1} width={1}
-                              fill={'transparent'} opacity={0.5} strokeWidth={0.08} stroke={'white'}
+                              fill="rgba(255,255,255,0.5)" opacity={0.5} strokeWidth={0.1} stroke="white"
                         />
                     )}
-                    <RouteRenderer route={props.routeViewer} color={'#b4da4c'} secondaryColor={'#2e3a0c'} opacity={1} simple={false} id="selected"/>
+                    <RouteRenderer route={props.routeViewer} color="#b4da4c" secondaryColor="#2e3a0c" opacity={1} simple={false} id="selected"/>
                     { props.settings.enableSimpleZoneRouting && (
-                        <RouteRenderer route={props.routeEditor} color={'white'} secondaryColor={'#373737'} opacity={0.5}
+                        <RouteRenderer route={props.routeEditor} color={'white'} secondaryColor="#373737" opacity={0.5}
                                        simple={!props.settings.enableComplexZoneRouting} id="editor"
                         />
                     ) }
@@ -182,7 +182,8 @@ type MapOverviewZoneProps = {
     zone: MapZone,
     local: LocalZone|null
     conf: RuntimeMapSettings,
-    wrapDispatcher: (RuntimeMapStateAction)=>void
+    wrapDispatcher: (RuntimeMapStateAction)=>void,
+    eventGateway: (event: string, data: object)=>void,
 }
 
 const MapOverviewZone = ( props: MapOverviewZoneProps ) => {
@@ -197,7 +198,7 @@ const MapOverviewZone = ( props: MapOverviewZoneProps ) => {
 
         if (Object.entries(data).length > 0) props.wrapDispatcher(data);
 
-        e.target.closest('hordes-map').dispatchEvent( new CustomEvent('zone-clicked', { bubbles: true, detail: { zone: props.zone }}) );
+        props.eventGateway('zone-click', {x: props.zone.x, y: props.zone.y, id: props.zone.id});
     };
 
     return (
@@ -248,13 +249,13 @@ const MapOverviewGrid = React.memo(( props: MapOverviewGridProps ) => {
             }}>
                 {Object.entries(cache).map(([k,z]) =>
                     <MapOverviewZone key={k} geo={props.map.geo} local={(props.map.local ?? []).filter(v => v.xr === 0 && v.yr === 0)[0] ?? null}
-                                     zone={z as MapZone} conf={props.settings}
+                                     zone={z as MapZone} conf={props.settings} eventGateway={props.eventGateway}
                                      wrapDispatcher={props.wrapDispatcher}
                     />)}
             </div>
         )
 }, (prevProps:MapOverviewGridProps, nextProps:MapOverviewGridProps) => {
-    if (prevProps.zoom !== nextProps.zoom || prevProps.etag !== nextProps.etag || prevProps.map?.lid !== nextProps.map?.lid) return false;
+    if (prevProps.zoom !== nextProps.zoom || prevProps.etag !== nextProps.etag || prevProps.localEtag !== nextProps.localEtag || prevProps.map?.lid !== nextProps.map?.lid) return false;
     return Object.entries(prevProps.settings).map(([k,v]) => nextProps.settings[k] === v).filter(v=>!v).length === 0;
 });
 
@@ -340,11 +341,11 @@ const MapOverviewParent = ( props: MapOverviewParentProps ) => {
         >
             <MapOverviewRoutePainter map={props.map} settings={props.settings}
                                      scrollAreaRef={props.scrollAreaRef} zoomChanged={props.zoomChanged}
-                                     marking={props.marking} wrapDispatcher={props.wrapDispatcher} etag={props.etag}
+                                     marking={props.marking} wrapDispatcher={props.wrapDispatcher} etag={props.etag} localEtag={props.localEtag}
                                      routeEditor={props.routeEditor} routeViewer={props.routeViewer} zoom={props.zoom}
             />
-            <MapOverviewGrid map={props.map} settings={props.settings} marking={props.marking}
-                             wrapDispatcher={props.wrapDispatcher} routeEditor={props.routeEditor} etag={props.etag}
+            <MapOverviewGrid map={props.map} settings={props.settings} marking={props.marking} eventGateway={props.eventGateway}
+                             wrapDispatcher={props.wrapDispatcher} routeEditor={props.routeEditor} etag={props.etag} localEtag={props.localEtag}
                              zoom={props.zoom} routeViewer={props.routeViewer} scrollAreaRef={props.scrollAreaRef}
                              zoomChanged={props.zoomChanged}/>
         </div>

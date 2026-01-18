@@ -9,4 +9,5 @@ enum ClientSignal: string
     case InventoryHeadlessUpdate = 'inventory-changed-headless';
     case StatusUpdated = 'status-changed';
     case LogUpdated = 'log-changed';
+    case MapUpdated = 'map-changed';
 }

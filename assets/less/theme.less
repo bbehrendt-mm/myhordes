@@ -799,6 +799,7 @@ input[type='number']::-webkit-outer-spin-button {
 a { color: @myhordes-smalltext; font-weight: bold; }
 
 ul.inventory {
+  &.display-plain { margin: 0 }
   &:not(.borderless){
     border: 1px solid @myhordes-input-border; padding: 6px;
   }
@@ -825,11 +826,13 @@ ul.inventory {
         &.bg-locked { width: 20px; background: url("../img/inventory/large_inv_l.png") center no-repeat; }
         &.bg-heavy { width: 20px; background: url("../img/inventory/large_inv_h.png") center no-repeat; margin-right: 1px; margin-left: 1px; }
         &.bg-over { width: 20px; background: url("../img/inventory/large_inv_r.png") center no-repeat; }
-    	&:hover { border-color: #F0D79E; background-color: #B37C4A; }
+    	&:not(.locked):hover { border-color: #F0D79E; background-color: #B37C4A; }
+        &:not(.locked):not(.disabled) { cursor: pointer; }
+        &.broken { border: 1px dotted #ff0000; }
+        &.banished_hidden { opacity: 0.25; }
+        &.disabled { filter: grayscale(100%) contrast(0.25); pointer-events: none }
     }
-    &.item:not(.locked) { cursor: pointer; }
-    &.item.broken { border: 1px dotted #ff0000; }
-    &.item.banished_hidden { opacity: 0.25; }
+
     &.free {
         border-color: transparent;
         height: 20px; width: 20px; background: url("../img/inventory/large_empty_inv.png") center no-repeat;
@@ -2321,6 +2324,22 @@ i.h-icon {
       justify-content: center;
     }
   }
+}
+
+.item-line {
+    display: flex;
+    &.inline { display: inline-flex; }
+    gap: 2px;
+
+    background: rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    padding: 1px 5px;
+    border-radius: 6px;
+    font-variant: small-caps;
+    color: white;
+    font-size: 1.2rem;
+    &>img { flex: none }
+    &>span { flex: 1 }
 }
 
 // Header

@@ -54,7 +54,10 @@ interface mountProps {
     uncloak: boolean,
     hide: number|null,
 
-    tutorial: TutorialConfig|null,
+    tutorial?: TutorialConfig|null,
+
+    onItemClick?: (i: Item) => void,
+    filterEnabledItems?: (i: Item, v: VaultItemEntry|null) => boolean,
 }
 
 interface passiveMountProps {
@@ -75,7 +78,9 @@ interface escortMountProps {
 
 interface standaloneItemMountProps {
     item: number,
-    extra: string|null,
+    extra?: string|null,
+    line?: boolean
+    inline?: boolean
 }
 
 interface InventoryBagLoadedSignalProps {
@@ -181,7 +186,41 @@ const commonInventoryResponseHandler = (s: TransportResponse, d: string, t: Tuto
     }
 }
 
-const HordesInventoryWrapper = (props: mountProps &
+type SingleInventoryProps = {
+    id: number,
+    label?: string,
+    type?: string,
+    locked?: boolean,
+    parent: HTMLElement,
+    onItemClick?: (i: Item) => void,
+    filterEnabledItems?: (i: Item, v: VaultItemEntry|null) => boolean,
+}
+
+export const SingleInventory = (props: SingleInventoryProps) => {
+
+    const item_cache = useRef<{[key:number]: InventoryBagData}>({});
+    const etag = useRef<string>(randomUUIDv4());
+
+    return <HordesInventoryWrapper
+        className="display-plain"
+
+        inventoryAId={props.id}
+        inventoryAType={props.type ?? 'rucksack'}
+        etag={etag.current}
+        locked={props.locked ?? false}
+        inventoryALabel={props.label ?? null}
+        inventoryBId={null} inventoryBType={'none'} inventoryBLabel={''}
+
+        reload={null} reset={false} steal={false} log={false} uncloak={false}
+        hide={0} setCache={(id: number, items: InventoryBagData|null): void => { item_cache.current[id] = items; } }
+        parent={props.parent}
+        onItemClick={props.onItemClick}
+        filterEnabledItems={props.filterEnabledItems}
+    />
+
+}
+
+const HordesInventoryWrapper = (props: mountProps & {className?: string} &
     {setCache: (i:number,items:InventoryBagData|null) => void} &
     {parent: HTMLElement}
 ) => {
@@ -271,8 +310,12 @@ const HordesInventoryWrapper = (props: mountProps &
         }).catch(() => setLoading(false))
     }
 
-    const handleTransfer = (from: number, to: number, direction: string) => {
-        return (i:Item) => manageTransfer(i.i, from, to, direction);
+    const handleTransfer = (from: number|null|undefined, to: number|null|undefined, direction: string) => {
+        if (props.onItemClick)
+            return props.onItemClick;
+        else if (from && to)
+            return (i:Item) => manageTransfer(i.i, from, to, direction);
+        else return () => {};
     }
 
     const lock_a = props.locked === true || props.locked === 'a';
@@ -280,12 +323,12 @@ const HordesInventoryWrapper = (props: mountProps &
 
     return <Globals.Provider value={{api: api.current, strings}}>
         { props.inventoryAType !== 'none' && <>
-            <SwitchInventory id={props.inventoryAId} type={props.inventoryAType} label={props.inventoryALabel} inventory={inventoryA} locked={lock_a || loading || theftMode} onItemClick={handleTransfer( props.inventoryAId, props.inventoryBId, 'down' )} />
+            <SwitchInventory id={props.inventoryAId} type={props.inventoryAType} label={props.inventoryALabel} inventory={inventoryA} locked={lock_a || loading || theftMode} className={props.className} enableItemCallback={props.filterEnabledItems} onItemClick={handleTransfer( props.inventoryAId, props.inventoryBId, 'down' )} />
         </> }
 
         { props.inventoryAType !== 'none' && props.uncloak && strings && !props.locked && <div className="note"><b>{strings.global.warning}</b>:&nbsp;{strings.actions["uncloak-warn"]}</div>}
 
-        { props.inventoryAType === 'rucksack' && !lock_a && <>
+        { props.inventoryAType === 'rucksack' && !lock_a && props.inventoryBType !== 'none' && <>
             <button onClick={() => manageTransfer(null, props.inventoryAId, props.inventoryBId, 'down-all')}>
                 <img src={strings?.actions["down-all-icon"] ?? ''} alt={strings?.actions[`down-all-${props.inventoryBType}`] ?? strings?.actions['down-all-any'] ?? ''}/>
                 &nbsp;
@@ -333,7 +376,10 @@ const HordesInventoryWrapper = (props: mountProps &
                 id={props.inventoryBId} type={props.inventoryBType} inventory={inventoryB}
                 label={props.inventoryBLabel}
                 locked={lock_b || loading} theft={theftMode}
-                onItemClick={handleTransfer( props.inventoryBId, props.inventoryAId, 'up' )} />
+                onItemClick={handleTransfer( props.inventoryBId, props.inventoryAId, 'up' )}
+                enableItemCallback={props.filterEnabledItems}
+                className={props.className}
+            />
         </>}
 
         { props.inventoryBType === 'desert' && strings && inventoryB && !inventoryB.bank && (inventoryB as InventoryBagData).items.filter(i => i.h).length > 0 &&
@@ -356,6 +402,8 @@ interface InventoryProps {
     inventory: InventoryResponse,
     onItemClick: (i: Item) => void,
     theft?: boolean,
+    className?: string,
+    enableItemCallback?: (i: Item, v: VaultItemEntry|null) => boolean,
 }
 
 interface InventoryPropsBag extends InventoryProps {
@@ -371,7 +419,7 @@ const SwitchInventory = (props: InventoryProps) => {
     const loaded = props.inventory && globals.strings;
 
     return <>
-        { !loaded && <ul className={`inventory inventory-react ${props.type}`}>
+        { !loaded && <ul className={`inventory inventory-react ${props.type} ${props.className ?? ''}`}>
             <li className="placeholder">
                 <div className="loading"/>
             </li>
@@ -396,9 +444,10 @@ const BagInventory = (props: InventoryPropsBag) => {
     const lightItems = itemList.filter(i => props.inventory.heavy === 0 || !(vaultData ?? {})[i.p]?.heavy);
     const heavyItems = itemList.filter(i => props.inventory.heavy > 0 && (vaultData ?? {})[i.p]?.heavy);
 
-    return <ul className={`inventory inventory-react ${props.type}`}>
+    return <ul className={`inventory inventory-react ${props.type} ${props.className ?? ''}`}>
         {label !== null && label !== '' && <li className="title">{label}</li> }
         {lightItems.map((i, index) => <React.Fragment key={i.i}><SingleItem
+            disabled={props.enableItemCallback && !props.enableItemCallback(i, (vaultData ?? {})[i.p])}
             blur={null} className={props.inventory.size > 0 ? (i.e
                 ? "bg-locked"
                 : (index < (props.inventory.size - props.inventory.heavy) ? (props.inventory.heavy > 0 ? "bg-light" : "bg-heavy") : (
@@ -419,6 +468,7 @@ const BagInventory = (props: InventoryPropsBag) => {
             </li>)
         }
         {heavyItems.map((i,index) => <React.Fragment key={i.i}><SingleItem
+            disabled={props.enableItemCallback && !props.enableItemCallback(i, (vaultData ?? {})[i.p])}
             blur={null} className={index >= props.inventory.heavy ? "bg-over" : "bg-heavy"}
             item={i} mods={props.inventory.mods} data={(vaultData ?? {})[i.p] ?? null}
             locked={props.locked || i.e} onClick={props.onItemClick}
@@ -456,11 +506,12 @@ const BankInventory = (props: InventoryPropsBank) => {
                 { Object.values( vaultData ?? {} ).map(v => <option key={v.id} value={v.name}/>) }
             </datalist>
         </p>
-        <ul className={`inventory inventory-react ${props.type} ${props.theft ? 'theft' : ''}`}>
+        <ul className={`inventory inventory-react ${props.type} ${props.theft ? 'theft' : ''} ${props.className ?? ''}`}>
             {props.inventory.categories.sort((c1, c2) => category_map[c1.id][1] - category_map[c2.id][1] || c1.id - c2.id).map(c => <React.Fragment key={c.id}>
                 { showCategories && <li className="category">{category_map[c.id][0]}</li> }
                 { c.items.sort(sort).map(i => <React.Fragment key={i.i}>
                     <SingleItem
+                        disabled={props.enableItemCallback && !props.enableItemCallback(i, (vaultData ?? {})[i.p])}
                         blur={ searchString === '' ? null : !(vaultData ?? {})[i.p]?.name?.normalize("NFD").replace(/[\u0300-\u036f]/g, "")?.toLowerCase()?.includes( normalizedSearchString ) }
                         item={i} mods={props.inventory.mods} data={(vaultData ?? {})[i.p] ?? null}
                         locked={props.locked || i.e} onClick={props.onItemClick} highlightDefense={true}
@@ -479,12 +530,12 @@ const BankInventory = (props: InventoryPropsBank) => {
     </>
 }
 
-const SingleItem = (props: { item: Item, data: VaultItemEntry | null, mods: InventoryMods, locked: boolean, onClick?: (i:Item) => void, blur: null|boolean, className?: string, highlightDefense?: boolean })=> {
+const SingleItem = (props: { item: Item, data: VaultItemEntry | null, mods: InventoryMods, disabled?: boolean, locked: boolean, onClick?: (i:Item) => void, blur: null|boolean, className?: string, highlightDefense?: boolean })=> {
     const globals = useContext(Globals);
 
     return props.data !== null
         ? <li
-            className={`item ${props.className ?? ''} ${(props.blur === true && 'blur') || ''} ${(props.blur === false && 'focus') || ''} ${(props.locked && 'locked') || ''} ${(props.item.b && 'broken') || ''} ${(props.item.h && 'banished_hidden') || ''} ${(props.item.c > 1 && 'counted') || ''} ${(props.item.c >= 100 && 'excessive') || ''} ${(props.highlightDefense && props.data.props.includes('defence') && 'defense') || ''}`}
+            className={`item ${props.className ?? ''} ${(props.blur === true && 'blur') || ''} ${(props.blur === false && 'focus') || ''} ${props.disabled && 'disabled'} ${(props.locked && 'locked') || ''} ${(props.item.b && 'broken') || ''} ${(props.item.h && 'banished_hidden') || ''} ${(props.item.c > 1 && 'counted') || ''} ${(props.item.c >= 100 && 'excessive') || ''} ${(props.highlightDefense && props.data.props.includes('defence') && 'defense') || ''}`}
             onClick={ props.locked ? null : i => props.onClick(props.item) }
         >
             <span className="item-icon"><img src={ props.data?.icon ?? '' } alt={ props.data?.name ?? '...' }/></span>
@@ -645,6 +696,15 @@ const HordesPassiveInventoryWrapper = (props: passiveMountProps) => {
 }
 
 const HordesStandaloneItemWrapper = (props: standaloneItemMountProps) => {
+    return <StandaloneItem {...props} />
+}
+
+export const StandaloneItem = (props: {
+    item: number,
+    extra?: string,
+    line?: boolean
+    inline?: boolean
+}) => {
 
     const vaultData = useVault<VaultItemEntry>(
         'items', [props.item]
@@ -652,9 +712,13 @@ const HordesStandaloneItemWrapper = (props: standaloneItemMountProps) => {
 
     const item = (vaultData ?? {})[props.item] ?? null;
 
-    return <div className="inline">
+    return <div className={props.line ? (props.inline ? 'inline-block' : '') : 'inline'}>
         { item && <>
-            <img alt={item.name} src={item.icon}/>
+            { props.line && <div className={`item-line ${props.inline ? 'inline' : ''}`}>
+                <img alt={item.name} src={item.icon}/>
+                <span>{item.name}</span>
+            </div> }
+            { !props.line && <img alt={item.name} src={item.icon}/> }
             <ItemTooltip data={item}>
                 { props.extra?.length > 0 && <>
                     <hr/>
@@ -663,9 +727,7 @@ const HordesStandaloneItemWrapper = (props: standaloneItemMountProps) => {
             </ItemTooltip>
         </> }
     </div>
-
 }
-
 
 const HordesEscortInventoryWrapper = (props: escortMountProps) => {
 
