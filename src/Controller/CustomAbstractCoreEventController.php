@@ -41,7 +41,7 @@ class CustomAbstractCoreEventController extends AbstractController {
         if ($error_code !== null)
             return AjaxResponse::error(empty($error_messages) ? $error_code : 'message', [
                 'message' => empty($error_messages) ? null : implode('<hr/>', $error_messages)
-            ]);
+            ], 400);
         else return AjaxResponse::success();
     }
 }

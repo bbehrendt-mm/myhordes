@@ -241,7 +241,7 @@ class HeroSkillDataService implements FixtureProcessorInterface {
                           'Ein zusätzlicher Platz im Rucksack',
                           'Ein zusätzlicher Platz in der Truhe',
                           'Wildstyle Uppercut',
-                          'Zweite Lunge (2 AP, 2 EP)',
+                          'Zweite Lunge (3 AP, 1 EP)',
                       ])
             ->addCitizenProperty(CitizenProperties::InventorySpaceBonus, 1)
             ->addCitizenProperty(CitizenProperties::ChestSpaceBonus, 1)
@@ -256,7 +256,7 @@ class HeroSkillDataService implements FixtureProcessorInterface {
                           'Ein weiterer zusätzlicher Platz im Rucksack',
                           'Ein weiterer zusätzlicher Platz in der Truhe',
                           'Verbesserung Wildstyle Uppercut (3 Zombies)',
-                          'Verbesserung Zweite Lunge (2 AP, 4 EP)',
+                          'Verbesserung Zweite Lunge (3 AP, 3 EP)',
                       ])
             ->addCitizenProperty(CitizenProperties::InventorySpaceBonus, 2)
             ->addCitizenProperty(CitizenProperties::ChestSpaceBonus, 2)
