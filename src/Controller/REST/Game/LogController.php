@@ -100,6 +100,7 @@ class LogController extends CustomAbstractCoreController
 
                 'protected' => $this->translator->trans('Dieser Registereintrag kann <strong>nicht</strong> gefälscht werden.', [], 'game'),
                 'manipulated' => $this->translator->trans('Du hast heimlich einen Eintrag im Register unkenntlich gemacht... Du kannst das noch {times} mal tun.', [], 'game'),
+                'purged' => $this->translator->trans('Du hast heimlich einen Eintrag vollständig aus dem Register entfernt... Du kannst das noch {times} mal tun.', [], 'game'),
 
                 'hiddenBy' => $this->translator->trans('Versteckt von {player}', [], 'admin'),
 
@@ -385,6 +386,7 @@ class LogController extends CustomAbstractCoreController
             'total' => 1,
             'manipulations' => $manipulations - ($purge ? 0 : 1),
             'purges' => $purges - ($purge ? 1 : 0),
+            'purged' => $purge,
         ]);
     }
 

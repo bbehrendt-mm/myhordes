@@ -27,7 +27,8 @@ export interface LogEntryResponse {
     entries: LogEntry[],
     total: number,
     manipulations: number
-    purges: number
+    purges: number,
+    purged?: boolean,
 }
 
 export interface ChatResponse {

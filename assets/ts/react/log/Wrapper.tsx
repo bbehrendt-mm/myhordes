@@ -222,7 +222,7 @@ const HordesLogWrapper = (props: mountProps) => {
             setManipulations( v.manipulations );
             setPurges( v.purges );
             setInteractive( true );
-            $.html.notice(strings?.content.manipulated.replace( '{times}', `${purge ? v.purges : v.manipulations}` ))
+            $.html.notice((v.purged ? strings?.content.purged : strings?.content.manipulated).replace( '{times}', `${purge ? v.purges : v.manipulations}` ))
         })
     }
 
