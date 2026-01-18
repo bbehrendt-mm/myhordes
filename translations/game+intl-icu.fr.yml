@@ -3264,3 +3264,4 @@ Tierklinik: Centre d'essai
 'Der Betrieb und die Instanthaltung von {building} haben uns {num} Wasserration(en) gekostet.': 'L''entretien de {building} nous a coûté {num} ration(s) d\''eau.'
 'Angenehmer Geruch': 'Agréable parfum'
 'Wähle einen Gegenstand aus deinem Inventar und klicke auf eine Zone auf der Karte, um diese als Ziel anzuvisieren.': 'Vous pouvez choisir un objet (parmi ceux présents dans votre inventaire) et cliquer sur une zone de la carte pour la désigner comme destination.'
+'Du hast die/den {item} repariert.': 'Vous avez réparé {item}.'

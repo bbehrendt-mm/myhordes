@@ -3264,3 +3264,4 @@ Tierklinik: Experiment Center
 'Der Betrieb und die Instanthaltung von {building} haben uns {num} Wasserration(en) gekostet.': 'The operation and maintenance of {building} cost us {num} water ration(s).'
 'Angenehmer Geruch': 'Good Smell'
 'Wähle einen Gegenstand aus deinem Inventar und klicke auf eine Zone auf der Karte, um diese als Ziel anzuvisieren.': 'You can choose an object (from those present in your inventory) and click a zone on the map to set the coordinates.'
+'Du hast die/den {item} repariert.': 'You''ve repaired the {item}.'

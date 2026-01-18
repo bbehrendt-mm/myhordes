@@ -3264,3 +3264,4 @@ Tierklinik: crwdns225726:0crwdne225726:0
 'Der Betrieb und die Instanthaltung von {building} haben uns {num} Wasserration(en) gekostet.': 'crwdns252934:0{building}crwdnd252934:0{num}crwdne252934:0'
 'Angenehmer Geruch': 'crwdns252936:0crwdne252936:0'
 'Wähle einen Gegenstand aus deinem Inventar und klicke auf eine Zone auf der Karte, um diese als Ziel anzuvisieren.': 'crwdns252938:0crwdne252938:0'
+'Du hast die/den {item} repariert.': 'crwdns252944:0{item}crwdne252944:0'
