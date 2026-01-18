@@ -325,7 +325,7 @@
                 }
             }
 
-            document.querySelectorAll("button[data-building-admin-action],input[type=\"checkbox\"][data-building-admin-action]").forEach( e => e.addEventListener('click', () => manage( e.dataset.buildingAdminAction, e )) )
+            document.querySelectorAll("img[data-building-admin-action],button[data-building-admin-action],input[type=\"checkbox\"][data-building-admin-action]").forEach( e => e.addEventListener('click', () => manage( e.dataset.buildingAdminAction, e )) )
             document.querySelectorAll("select[data-building-admin-action]").forEach( e => e.addEventListener('change', () => manage( e.dataset.buildingAdminAction, e )) )
 	    </script>
     {% endif %}

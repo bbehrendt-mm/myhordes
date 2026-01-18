@@ -200,6 +200,7 @@ class TownHandler
                 $this->removeBuilding($town, $child);
             }
             $town->removeBuilding($building);
+            $this->entity_manager->remove($building);
         }
 
         return true;

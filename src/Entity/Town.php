@@ -466,13 +466,8 @@ class Town
     }
     public function removeBuilding(Building $building): self
     {
-        if ($this->buildings->contains($building)) {
+        if ($this->buildings->contains($building))
             $this->buildings->removeElement($building);
-            // set the owning side to null (unless already changed)
-            if ($building->getTown() === $this) {
-                $building->setTown(null);
-            }
-        }
 
         return $this;
     }
