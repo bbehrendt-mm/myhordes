@@ -3,5 +3,5 @@
 'Alle Assets anzeigen': 'Show all assets'
 Assets: Assets
 'Assets verfügbar': 'Assets available'
-'Übersicht der Dateien unter {path}, gruppiert nach Ordnern. Klappe einen Ordner auf, um die Vorschaubilder zu sehen.': 'Overview of files under {path}, grouped by folder. Open a folder to see the preview images.'
+'Übersicht der Dateien unter {path}, gruppiert nach Ordnern. Klappe einen Ordner auf, um die Vorschaubilder zu sehen.': 'Overview of files under {path}, grouped by folder. Open a folder to display the previews.'
 'Keine Assets gefunden.': 'No assets found.'

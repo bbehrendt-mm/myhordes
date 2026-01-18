@@ -1404,7 +1404,7 @@ Buddha: Buddha
 'Personalisierter Titel - Techniker (T-ID: 631944)': 'Never walk without his keys'
 'Holy F***ing Iceberg': 'Holy F***ing Iceberg'
 'Verrückter Skeptiker': 'Keen Sceptic'
-Seelenknipser: Soul Calipers
+Seelenknipser: Soul Callipers
 'Wächter der Seelen': 'Watches with Scouts'
 'Die Wahrheit ist irgendwo da draußen': 'The truth is elsewhere'
 'Ich glaube!': 'I''m a believer'
@@ -2802,7 +2802,7 @@ Buddha_f: Buddha
 'Ich bin ein Gott! Ich werde ewig leben!_f': 'I am a god! I will live forever!'
 'Eine Stadt sie zu knechten!_f': 'One town to rule them all!'
 'Verrückter Skeptiker_f': 'Keen Sceptic'
-Seelenknipser_f: Soul Calipers
+Seelenknipser_f: Soul Callipers
 'Wächter der Seelen_f': 'Watches with Scouts'
 'Die Wahrheit ist irgendwo da draußen_f': 'The truth is elsewhere'
 'Ich glaube!_f': 'I''m a believer'
@@ -3263,3 +3263,4 @@ Tierklinik: Experiment Center
 'Du riechst... komisch. Aber auf eine gute Art.': 'You smell... strange. But not in a bad way.'
 'Der Betrieb und die Instanthaltung von {building} haben uns {num} Wasserration(en) gekostet.': 'The operation and maintenance of {building} cost us {num} water ration(s).'
 'Angenehmer Geruch': 'Good Smell'
+'Wähle einen Gegenstand aus deinem Inventar und klicke auf eine Zone auf der Karte, um diese als Ziel anzuvisieren.': 'You can choose an object (from those present in your inventory) and click a zone on the map to set the coordinates.'
