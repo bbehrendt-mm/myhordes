@@ -210,7 +210,7 @@ class ActionRequirementProvider
         $requirement_container->add()->identifier('kitchen_counter_below_5')->type( Requirement::CrossOnFail )->add( new CounterRequirement()->counter(ActionCounterType::HomeKitchen)->max(4 ) )->commit();
         $requirement_container->add()->identifier('kitchen_counter_below_6')->type( Requirement::CrossOnFail )->add( new CounterRequirement()->counter(ActionCounterType::HomeKitchen)->max(5 ) )->commit();
 
-        $requirement_container->add()->identifier('scav_counter_below_1')->type( Requirement::CrossOnFail )->add( new CounterRequirement()->counter(ActionCounterType::SpecialActionScav)->max(0 ) )->commit();
+        $requirement_container->add()->identifier('scav_counter_below_1')->type( Requirement::CrossOnFail )->add( new CounterRequirement()->counter(ActionCounterType::SpecialActionScav)->max(0 ) )->text('Du hast heute bereits eine Zone ausgehoben...')->commit();
 
         $requirement_container->add()->identifier('scav_building_counter_below_1')->type( Requirement::CrossOnFail )->add( new CounterRequirement()->counter(ActionCounterType::SpecialDigScavenger)->max(0 ) )->commit();
         $requirement_container->add()->identifier('scav_building_counter_below_3')->type( Requirement::CrossOnFail )->add( new CounterRequirement()->counter(ActionCounterType::SpecialDigScavenger)->max(2 ) )->commit();
