@@ -110,6 +110,7 @@ class RecipeDataService implements FixtureProcessorInterface {
             'com054' => ['type' => Recipe::ManualAnywhere, 'out' => 'moldy_food_part_#00',      'provoking' => 'moldy_food_subpart_#00',  'in' => ['moldy_food_subpart_#00', 'moldy_food_subpart_#00' ] ],
             'com055' => ['type' => Recipe::ManualAnywhere, 'out' => 'moldy_food_#00',           'provoking' => 'moldy_food_part_#00',     'in' => ['moldy_food_part_#00', 'moldy_food_subpart_#00' ] ],
             'com056' => ['type' => Recipe::ManualAnywhere, 'out' => 'moldy_food_spicy_#00',     'provoking' => 'spices_#00',              'in' => ['moldy_food_subpart_#00', 'spices_#00' ] ],
+            'com057' => ['type' => Recipe::ManualAnywhere, 'out' => 'broken_ball_#00',          'provoking' => 'broken_#00',              'in' => ['broken_#00', 'broken_#00', 'broken_#00', 'rustine_#00' ] ],
         ]);
 
         $add = [];

@@ -398,6 +398,7 @@ class ItemDataService implements FixtureProcessorInterface {
         $container->add()->label('Krabbelnde Krümel')->icon('moldy_food')->category('Food')->deco(0)->heavy(false)->watchpoint(0)->commit(); // Spicy moldy food
         $container->add()->label('Schaurige Maske')->icon('scary_mask')->category('Misc')->deco(5)->heavy(false)->watchpoint(0)->commit(); // Scary Mask
         $container->add()->label('Schutzschild (abgelegt)')->icon('shield_off')->category('Misc')->deco(0)->heavy(false)->watchpoint(0)->sort(80)->commit(); // shield_off
+        $container->add()->label('Trümmerkugel')->icon('broken_ball')->category('Misc')->deco(0)->heavy(false)->watchpoint(0)->sort(81)->commit(); // Ball of Remains
 
         $container->modify('water_#00')->description('Das Wasser gibt dir einmal pro Tag deine Aktionpunkte zurück oder löscht alternativ deinen Durst (unbegrenzt).')->commit();
         $container->modify('pile_#00')->description('Die Batterie ist für vieles nützlich. Allerdings ist sie auch ziemlich schnell leer ...')->commit();
@@ -780,6 +781,7 @@ class ItemDataService implements FixtureProcessorInterface {
         $container->modify('moldy_food_part_#00')->description('Ein köstlicher Insektenbrei, der sehr nahrhaft ist. Er ist knusprig und gleichzeitig wirklich saftig!')->commit(); // Unappetizing leftovers
         $container->modify('moldy_food_#00')->description('Ein köstliches Protein-Dessert! Anscheinend ist es besser, wenn es sich noch bewegt...')->commit(); // Leftovers roast roast
         $container->modify('scary_mask_#00')->description('Irgendwie erinnert diese Maske dich an jemanden...')->commit(); // Leftovers roast roast
+        $container->modify('broken_ball_#00')->description('Ein kugelförmiges Etwas, das aus zufälligen Trümmerstücken zusammengeklebt wurde. Viel kann man damit nicht anfangen... außer vielleicht, es mit hoher Geschwindigkeit in eine Zombiemeute zu katapultieren!')->commit();
 
         // Installed Crow Garland
         $container->clone('xmas_gift_#00')->label('Aufgehängte Krähengirlande')->deco(5)->isEmote(false)->commit();

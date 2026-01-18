@@ -343,6 +343,7 @@ class ActionCatapultProvider
         self::write( $data, 'cata_wpn_destroy_s_high', [
             'bgrenade_#00',
             'boomfruit_#00',
+            'broken_ball_#00'
         ]);
 
         self::write( $data, 'cata_wpn_remains_s_imp', ['claymo_#00']);

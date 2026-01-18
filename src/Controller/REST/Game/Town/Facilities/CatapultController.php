@@ -78,6 +78,9 @@ class CatapultController extends CustomAbstractCoreController
         if (!$townHandler->getBuilding($town, 'item_courroie_#00', true) || !$citizen->hasRole('cata'))
             return new JsonResponse(status: Response::HTTP_PRECONDITION_FAILED);
 
+        // Check if improved catapult is build
+        $improved = $townHandler->getBuilding( $town, 'item_courroie_#01', true ) !== null;
+
         // Get prototype ID
         if (!$parser->has_all(['x','y'], false))
             return new JsonResponse(status: Response::HTTP_BAD_REQUEST);
@@ -92,7 +95,7 @@ class CatapultController extends CustomAbstractCoreController
         if (!$target_zone) return new JsonResponse(status: Response::HTTP_NOT_FOUND);
 
         // Check if the improved catapult is built
-        $ap = ($townHandler->getBuilding( $town, 'item_courroie_#01', true ) !== null ? 2 : 4);
+        $ap = $improved ? 2 : 4;
 
         // Make sure the citizen has enough AP
         if ($citizen->getAp() < $ap || $ch->isTired($citizen))
@@ -102,7 +105,8 @@ class CatapultController extends CustomAbstractCoreController
             return new JsonResponse( ['success' => false, 'message' => $this->translator->trans('Die Stadt benötigt einen Kleinen Tribok, um Haustiere katapultieren zu können...', [], 'game')] );
 
         // Different target zone
-        if ($randomGenerator->chance(0.10)) {
+        $deviantChance = $improved ? 0.05 : 0.25;
+        if ($randomGenerator->chance($deviantChance)) {
             $alt_zones = array_filter( $town->getZoneCross( $x, $y, 1 )->toArray(), fn(Zone $z) => $z->getId() !== $target_zone->getId() );
             if (!empty($alt_zones)) $target_zone = $randomGenerator->pick($alt_zones);
         }
