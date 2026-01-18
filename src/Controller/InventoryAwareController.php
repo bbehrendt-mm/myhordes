@@ -676,7 +676,7 @@ class InventoryAwareController extends CustomAbstractController
         }
 
         if ($recipe->getForcedErrorMessage()) {
-            $this->addFlash("error", $this->translator->trans($recipe->getForcedErrorMessage(), [], 'game'));
+            $this->addFlash("error", $this->translator->trans($recipe->getForcedErrorMessage(), [], 'items'));
             return AjaxResponse::success();
         }
 
