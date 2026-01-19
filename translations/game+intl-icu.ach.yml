@@ -3265,3 +3265,6 @@ Tierklinik: crwdns225726:0crwdne225726:0
 'Angenehmer Geruch': 'crwdns252936:0crwdne252936:0'
 'Wähle einen Gegenstand aus deinem Inventar und klicke auf eine Zone auf der Karte, um diese als Ziel anzuvisieren.': 'crwdns252938:0crwdne252938:0'
 'Du hast die/den {item} repariert.': 'crwdns252944:0{item}crwdne252944:0'
+'Du hast heimlich einen Eintrag vollständig aus dem Register entfernt... Du kannst das noch {times} mal tun.': 'crwdns252950:0{times}crwdne252950:0'
+'Zweite Lunge (3 AP, 1 EP)': 'crwdns252952:0crwdne252952:0'
+'Verbesserung Zweite Lunge (3 AP, 3 EP)': 'crwdns252954:0crwdne252954:0'

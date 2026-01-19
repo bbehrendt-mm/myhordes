@@ -3265,3 +3265,6 @@ Tierklinik: Experiment Center
 'Angenehmer Geruch': 'Good Smell'
 'Wähle einen Gegenstand aus deinem Inventar und klicke auf eine Zone auf der Karte, um diese als Ziel anzuvisieren.': 'You can choose an object (from those present in your inventory) and click a zone on the map to set the coordinates.'
 'Du hast die/den {item} repariert.': 'You''ve repaired the {item}.'
+'Du hast heimlich einen Eintrag vollständig aus dem Register entfernt... Du kannst das noch {times} mal tun.': 'You have discretely removed an entry from the register entirely... You can do this {times} more times.'
+'Zweite Lunge (3 AP, 1 EP)': 'Second Wind (3 AP, 1 EP)'
+'Verbesserung Zweite Lunge (3 AP, 3 EP)': 'Improved Second Wind (3 AP, 3 EP)'

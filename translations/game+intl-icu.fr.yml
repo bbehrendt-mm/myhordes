@@ -3265,3 +3265,6 @@ Tierklinik: Centre d'essai
 'Angenehmer Geruch': 'Agréable parfum'
 'Wähle einen Gegenstand aus deinem Inventar und klicke auf eine Zone auf der Karte, um diese als Ziel anzuvisieren.': 'Vous pouvez choisir un objet (parmi ceux présents dans votre inventaire) et cliquer sur une zone de la carte pour la désigner comme destination.'
 'Du hast die/den {item} repariert.': 'Vous avez réparé {item}.'
+'Du hast heimlich einen Eintrag vollständig aus dem Register entfernt... Du kannst das noch {times} mal tun.': 'Vous avez complètement supprimé une entrée du registre. Vous pouvez encore le faire {times} fois.'
+'Zweite Lunge (3 AP, 1 EP)': 'Second Souffle (3 PA, 1 PE)'
+'Verbesserung Zweite Lunge (3 AP, 3 EP)': 'Amélioration du Second Souffle (3 PA, 3 PE)'
