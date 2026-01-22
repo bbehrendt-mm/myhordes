@@ -144,10 +144,10 @@ class ItemDataService implements FixtureProcessorInterface {
 		$container->add()->label('Kalaschni-Splash (leer)')->icon('kalach')->category('Weapon')->deco(0)->heavy(false)->watchpoint(0)->commit();
 		$container->modify('kalach_#01')->icon('kalach_0')->commit();
 		$container->add()->label('Tretmine')->icon('claymo')->category('Weapon')->deco(0)->heavy(false)->watchpoint(40)->commit();
-		$container->add()->label('Einkaufswagen')->icon('cart')->category('Box')->deco(0)->heavy(true)->watchpoint(15)->sort(2)->commit();
-		$container->add()->label('Extra Tasche')->icon('bag')->category('Box')->deco(0)->heavy(false)->watchpoint(0)->sort(2)->commit();
-		$container->add()->label('Superpraktischer Rucksack')->icon('bagxl')->category('Box')->deco(0)->heavy(false)->watchpoint(0)->sort(2)->commit();
-		$container->add()->label('Gürtel mit Tasche')->icon('pocket_belt')->category('Box')->deco(0)->heavy(false)->watchpoint(0)->sort(1)->commit();
+		$container->add()->label('Einkaufswagen')->icon('cart')->category('Box')->deco(0)->heavy(true)->watchpoint(15)->bagExtensionType(1)->sort(2)->commit();
+		$container->add()->label('Extra Tasche')->icon('bag')->category('Box')->deco(0)->heavy(false)->watchpoint(0)->bagExtensionType(1)->sort(2)->commit();
+		$container->add()->label('Superpraktischer Rucksack')->icon('bagxl')->category('Box')->deco(0)->heavy(false)->watchpoint(0)->bagExtensionType(1)->sort(2)->commit();
+		$container->add()->label('Gürtel mit Tasche')->icon('pocket_belt')->category('Box')->deco(0)->heavy(false)->watchpoint(0)->bagExtensionType(2)->sort(1)->commit();
 		$container->add()->label('Metallkiste')->icon('chest')->category('Box')->deco(0)->heavy(true)->watchpoint(8)->commit();
 		$container->add()->label('Großer Metallkoffer')->icon('chest_xl')->category('Box')->deco(0)->heavy(true)->watchpoint(10)->commit();
 		$container->add()->label('Werkzeugkiste')->icon('chest_tools')->category('Box')->deco(0)->heavy(true)->watchpoint(5)->commit();

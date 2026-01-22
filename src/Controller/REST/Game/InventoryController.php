@@ -401,25 +401,24 @@ class InventoryController extends CustomAbstractCoreController
             return new JsonResponse([], Response::HTTP_BAD_REQUEST);
 
         $reload = false;
-        $carrier_items = ['bag_#00','bagxl_#00','cart_#00','pocket_belt_#00'];
 
         $drop_all = !$restrictive && ($direction === 'down-all' || (
                 // dropping item ...
                 $direction === 'down' &&
                 // item is carrier...
-                in_array($item->getPrototype()->getName(), $carrier_items) &&
+                $item->getPrototype()->isCarrierItem() &&
                 // item is single...
                 $item->getCount() === 1 &&
                 // no other carriers or full inventory...
                 (
-                    $inventory->getItems()->filter(fn(Item $i) => $i->getId() !== $item->getId() && in_array($i->getPrototype()->getName(), $carrier_items))->isEmpty() ||
+                    $inventory->getItems()->filter(fn(Item $i) => $i->getId() !== $item->getId() && $item->getPrototype()->isCarrierItem())->isEmpty() ||
                     $ih->getFreeSize( $inventory ) < 2
                 )
             ));
 
         $items = match(true) {
             $mod === 'hide' => $inventory->getItems()->filter(fn(Item $i) => !$i->getEssential())->getValues(),
-            $drop_all && $direction === 'down-all' => $inventory->getItems()->filter(fn(Item $i) => !$i->getEssential() && !in_array($i->getPrototype()->getName(), $carrier_items))->getValues(),
+            $drop_all && $direction === 'down-all' => $inventory->getItems()->filter(fn(Item $i) => !$i->getEssential() && !$i->getPrototype()->isCarrierItem())->getValues(),
             $drop_all => $inventory->getItems()->filter(fn(Item $i) => !$i->getEssential())->getValues(),
             $item !== null => [$item],
             default => [],

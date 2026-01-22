@@ -12,6 +12,7 @@ export type VaultItemEntry = VaultEntry & {
     icon: string,
     props: string[],
     heavy: boolean,
+    extension: boolean,
     deco: number|null,
     watch: number|null,
     cata: boolean,

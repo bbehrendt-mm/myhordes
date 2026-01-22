@@ -13,7 +13,7 @@ import {Tooltip} from "../misc/Tooltip";
 import {Const, Global} from "../../defaults";
 import {TranslationStrings} from "./strings";
 import {useVault} from "../../v2/client-modules/Vault";
-import {VaultItemEntry} from "../../v2/typedef/vault_td";
+import {VaultItemEntry, VaultStorage} from "../../v2/typedef/vault_td";
 import {BaseMounter} from "../index";
 import {emitSignal, useBroadcastSignal, useSignal} from "../../v2/client-modules/Signal";
 import {ServerInducedSignalProps} from "../../v2/fetch";
@@ -34,16 +34,18 @@ interface TutorialConfig {
     restrict: "a"|"b"|null,
 }
 
+type InventoryType = keyof TranslationStrings['type'];
+
 interface mountProps {
     etag: string,
     locked: boolean|string,
 
     inventoryAId: number,
-    inventoryAType: string,
+    inventoryAType: InventoryType | 'none',
     inventoryALabel: string|null,
 
     inventoryBId: number,
-    inventoryBType: string,
+    inventoryBType: InventoryType | 'none',
     inventoryBLabel: string|null,
 
     reload: string|null,
@@ -140,10 +142,42 @@ interface InventoryGlobal {
 
 export const Globals = React.createContext<InventoryGlobal>(null);
 
-function  sort(a: Item, b: Item): number {
+function sort(a: Item, b: Item): number {
     return a.s
         .map((v,i) => [v,b.s[i]])
         .reduce((carry, [a,b]) => carry === 0 ? b-a : carry, 0 );
+}
+
+function getBagSorter(vaultData?: VaultStorage<VaultItemEntry>) {
+    const BAG_ITEM_PRIORITY = [
+        ['essential', (a: Item) => a.e],
+        ['carrier+heavy', (a: Item) => vaultData?.[a.p]?.heavy && vaultData?.[a.p]?.extension],
+        ['heavy', (a: Item) => vaultData?.[a.p]?.heavy],
+        // ['empty-heavy'],
+        ['carrier', (a: Item) => vaultData?.[a.p]?.extension],
+        ['regular', (a: Item) => !!vaultData?.[a.p]],
+        ['loading', (a: Item) => !vaultData?.[a.p]],
+        // ['empty-regular'],
+    ] as const satisfies [string, (a: Item) => boolean][];
+
+    return {
+        BAG_ITEM_PRIORITY,
+        bagSort: (a: Item, b: Item) => {
+            const va = vaultData?.[a.p];
+            const vb = vaultData?.[b.p];
+
+            // Loaded items first
+            if (!va || !vb) return a ? 1 : 0;
+
+            for (const [, check] of BAG_ITEM_PRIORITY) {
+                if (check(a) && !check(b)) return -1;
+                if (check(b) && !check(a)) return 1;
+            }
+
+            // Default
+            return sort(a, b);
+        }
+    }
 }
 
 const extractAllItems = (data: InventoryBankData | InventoryBagData) => {
@@ -190,7 +224,7 @@ const commonInventoryResponseHandler = (s: TransportResponse, d: string, t: Tuto
 type SingleInventoryProps = {
     id: number,
     label?: string,
-    type?: string,
+    type?: InventoryType,
     locked?: boolean,
     parent: HTMLElement,
     onItemClick?: (i: Item) => void,
@@ -397,7 +431,7 @@ const HordesInventoryWrapper = (props: mountProps & {className?: string} &
 
 interface InventoryProps {
     id: number,
-    "type": string,
+    "type": InventoryType,
     label?: string|null,
     locked: boolean,
     inventory: InventoryResponse,
@@ -430,6 +464,66 @@ const SwitchInventory = (props: InventoryProps) => {
     </>
 }
 
+interface SlotProps {
+    free: boolean,
+    itemInfo?: {
+        item: Item,
+        vault?: VaultItemEntry,
+    },
+    heavy?: boolean,
+    over?: boolean,
+}
+
+interface BagInventorySlotProps extends SlotProps {
+    bag: InventoryPropsBag,
+    vaultData: VaultStorage<VaultItemEntry>,
+}
+
+const BagInventorySlot = (props: BagInventorySlotProps) => {
+    const globals = useContext(Globals);
+
+    const className = React.useMemo(() => {
+        const classes = new Set();
+
+        if (!props.itemInfo) {
+            classes.add('free');
+        }
+
+        if (props.itemInfo && props.itemInfo.item.e) {
+            classes.add('bg-locked');
+        }
+
+        if (props.over) {
+            classes.add('bg-over');
+        }
+
+        if (props.heavy || props.itemInfo?.vault?.heavy) {
+            classes.add('bg-heavy');
+        } else if (props.itemInfo) {
+            classes.add('bg-light');
+        }
+
+        return Array.from(classes.values()).join(' ');
+    }, [props.itemInfo, props.over, props.heavy]);
+
+    if (props.itemInfo) {
+        return <React.Fragment>
+            <SingleItem
+                item={props.itemInfo.item}
+                disabled={props.bag.enableItemCallback && !props.bag.enableItemCallback(props.itemInfo.item, props.itemInfo.vault ?? null)}
+                blur={null}
+                className={className}
+                mods={props.bag.inventory.mods}
+                data={props.itemInfo.vault ?? null}
+                locked={props.bag.locked || props.itemInfo.item.e} onClick={props.bag.onItemClick}
+            />
+        </React.Fragment>;
+    }
+    return <li className={className}>
+        {props.heavy && <Tooltip additionalClasses="help" html={ globals.strings?.global.heavy_slot } />}
+    </li>
+}
+
 const BagInventory = (props: InventoryPropsBag) => {
 
     const globals = useContext(Globals);
@@ -438,45 +532,129 @@ const BagInventory = (props: InventoryPropsBag) => {
         'items', props.inventory?.items?.map(v => v.p)
     )
 
-    const label = props.label ?? globals.strings.type[props.type] ?? '';
+    const label = props.label ?? globals.strings?.type[props.type] ?? '';
 
-    const itemList = props.inventory.items.sort(sort);
+    const slots: SlotProps[] = React.useMemo(() => {
+        const inventorySize = props.inventory.size ?? 0;
+        const inventoryHeavySlots = props.inventory.heavy ?? 0;
+        const isBag = props.type === 'rucksack';
+        const items = [...props.inventory.items].sort(sort);
+        const slots: SlotProps[] = [];
 
-    const lightItems = itemList.filter(i => props.inventory.heavy === 0 || !(vaultData ?? {})[i.p]?.heavy);
-    const heavyItems = itemList.filter(i => props.inventory.heavy > 0 && (vaultData ?? {})[i.p]?.heavy);
+        if (!isBag) {
+            // Not a player bag : Display items / free slots normally
+            let free = inventorySize;
+            for(const item of items) {
+                free--;
+                slots.push({
+                    free: false,
+                    itemInfo: {
+                        item,
+                        vault: vaultData?.[item.p],
+                    },
+                });
+            }
+
+            for (let i = 0; i < free; i++) {
+                slots.push({
+                    free: true,
+                });
+            }
+
+            return slots;
+        }
+
+        const {BAG_ITEM_PRIORITY, bagSort} = getBagSorter(vaultData);
+        items.sort(bagSort);
+
+        const getItemStep = (a: Item) => BAG_ITEM_PRIORITY.find(([, check]) => check(a))?.[0] ?? 'loading';
+
+        let heavyUsed = 0;
+        let currentStep = BAG_ITEM_PRIORITY[0][0];
+
+        const lightItems = items.reduce((total, item) => total + (!vaultData?.[item.p]?.heavy ? 1 : 0), 0);
+
+        // Light items can use heavy item slots
+        let heavyUsedByLight = 0;
+        if (lightItems > (inventorySize - inventoryHeavySlots)) {
+            heavyUsedByLight = lightItems - (inventorySize - inventoryHeavySlots);
+            heavyUsed += heavyUsedByLight;
+        }
+
+        for (let i = 0; (i < inventorySize) || items.length > 0; i++) {
+            const item = items.shift();
+            const vault = item ? vaultData?.[item.p] : undefined;
+            const step = item ? getItemStep(item) : currentStep;
+
+            let heavy = false;
+            switch(step) {
+                case 'carrier+heavy':
+                case 'heavy':
+                    heavyUsed++;
+                    heavy = true;
+                    break;
+                case 'carrier':
+                case 'regular':
+                case 'loading':
+                    // Heavy items are finished : Flush out extra empty heavy slots
+                    while(heavyUsed < inventoryHeavySlots) {
+                        heavyUsed++;
+                        i++;
+                        slots.push({
+                            free: true,
+                            heavy: true,
+                        });
+                    }
+                    break;
+            }
+
+            const data: SlotProps = {
+                free: !item,
+                heavy: (heavy && (!vault || vault.heavy)) || (item && !item.e && (heavyUsedByLight && heavyUsedByLight-- > 0)),
+                over: heavy && (heavyUsed > inventoryHeavySlots),
+            };
+
+            if (item) {
+                data.itemInfo = {
+                    item,
+                    vault
+                };
+            }
+
+            if (!item && !items.length) {
+                // Flush out extra empty slots (don't forget we also have a final push)
+                while(i < (inventorySize - 1)) {
+                    i++;
+                    slots.push({
+                        free: true,
+                        heavy: heavyUsed < inventoryHeavySlots,
+                    });
+                    if (heavyUsed < inventoryHeavySlots) {
+                        heavyUsed++;
+                    }
+                }
+            }
+
+            slots.push(data);
+        }
+
+        return slots;
+    }, [vaultData, props.type, props.inventory.items, props.inventory.size]);
 
     return <ul className={`inventory inventory-react ${props.type} ${props.className ?? ''}`}>
         {label !== null && label !== '' && <li className="title">{label}</li> }
-        {lightItems.map((i, index) => <React.Fragment key={i.i}><SingleItem
-            disabled={props.enableItemCallback && !props.enableItemCallback(i, (vaultData ?? {})[i.p])}
-            blur={null} className={props.inventory.size > 0 ? (i.e
-                ? "bg-locked"
-                : (index < (props.inventory.size - props.inventory.heavy) ? (props.inventory.heavy > 0 ? "bg-light" : "bg-heavy") : (
-                    index < props.inventory.size
-                    ? "bg-heavy"
-                    : "bg-over"
-                ))
-            ) : ''}
-            item={i} mods={props.inventory.mods} data={(vaultData ?? {})[i.p] ?? null}
-            locked={props.locked || i.e} onClick={props.onItemClick}
-        /></React.Fragment>)}
         {props.type === 'desert' && !props.inventory.size && props.inventory.items.length === 0 && <li className="category label">
-            <em className="small">{ globals.strings.props.nothing }</em>
+            <em className="small">{ globals.strings?.props.nothing ?? '' }</em>
         </li>}
-        {props.inventory.size > 0 && Array.from(Array(Math.max(0, props.inventory.size - lightItems.length - Math.max(props.inventory.heavy,heavyItems.length))).keys()).map(i =>
-            <li key={i} className={`free ${props.inventory.heavy > 0 ? '' : 'bg-heavy'}`}>
-                { props.inventory.heavy > 0 && <Tooltip additionalClasses="help"  html={ globals.strings.global.slot } /> }
-            </li>)
-        }
-        {heavyItems.map((i,index) => <React.Fragment key={i.i}><SingleItem
-            disabled={props.enableItemCallback && !props.enableItemCallback(i, (vaultData ?? {})[i.p])}
-            blur={null} className={index >= props.inventory.heavy ? "bg-over" : "bg-heavy"}
-            item={i} mods={props.inventory.mods} data={(vaultData ?? {})[i.p] ?? null}
-            locked={props.locked || i.e} onClick={props.onItemClick}
-        /></React.Fragment>)}
-        {props.inventory.heavy > 0 && Array.from(Array(Math.max(0, props.inventory.heavy - heavyItems.length - Math.max(0, lightItems.length - (props.inventory.size - props.inventory.heavy)))).keys()).map(i =>
-            <li key={i} className="free bg-heavy"><Tooltip additionalClasses="help" html={ globals.strings.global.heavy_slot } /></li>)
-        }
+        {slots.map((slot, i) => <BagInventorySlot
+            key={i}
+            free={slot.free}
+            itemInfo={slot.itemInfo}
+            heavy={slot.heavy}
+            over={slot.over}
+            bag={props}
+            vaultData={vaultData}
+        />)}
     </ul>
 }
 
@@ -534,10 +712,10 @@ const BankInventory = (props: InventoryPropsBank) => {
 const SingleItem = (props: { item: Item, data: VaultItemEntry | null, mods: InventoryMods, disabled?: boolean, locked: boolean, onClick?: (i:Item) => void, blur: null|boolean, className?: string, highlightDefense?: boolean })=> {
     const globals = useContext(Globals);
 
-    return props.data !== null
+    return (globals.strings && props.data)
         ? <li
-            className={`item ${props.className ?? ''} ${(props.blur === true && 'blur') || ''} ${(props.blur === false && 'focus') || ''} ${props.disabled && 'disabled'} ${(props.locked && 'locked') || ''} ${(props.item.b && 'broken') || ''} ${(props.item.h && 'banished_hidden') || ''} ${(props.item.c > 1 && 'counted') || ''} ${(props.item.c >= 100 && 'excessive') || ''} ${(props.highlightDefense && props.data.props.includes('defence') && 'defense') || ''}`}
-            onClick={ props.locked ? null : i => props.onClick(props.item) }
+            className={`item ${props.className ?? ''} ${(props.blur === true && 'blur') || ''} ${(props.blur === false && 'focus') || ''} ${(props.disabled && 'disabled') || ''} ${(props.locked && 'locked') || ''} ${(props.item.b && 'broken') || ''} ${(props.item.h && 'banished_hidden') || ''} ${(props.item.c > 1 && 'counted') || ''} ${(props.item.c >= 100 && 'excessive') || ''} ${(props.highlightDefense && props.data.props.includes('defence') && 'defense') || ''}`}
+            onClick={ props.locked ? () => undefined : () => props.onClick?.(props.item) }
         >
             <span className="item-icon"><img src={ props.data?.icon ?? '' } alt={ props.data?.name ?? '...' }/></span>
             {props.item.c > 1 && <span>{props.item.c}</span>}
@@ -546,7 +724,7 @@ const SingleItem = (props: { item: Item, data: VaultItemEntry | null, mods: Inve
                 { props.item.e && <div className="item-tag item-tag-essential">{ globals.strings.props.essential }</div> }
                 { props.data.props.includes('single_use') && <div className="item-tag item-tag-use-1">{ globals.strings.props.single_use }</div> }
                 { props.data.heavy && <div className="item-tag item-tag-heavy">{ globals.strings.props.heavy }</div> }
-                { (props.data.deco > 0 || props.data.props.includes('deco')) && <div className="item-tag item-tag-deco">{ globals.strings.props.deco }</div> }
+                { ((props.data.deco ?? 0) > 0 || props.data.props.includes('deco')) && <div className="item-tag item-tag-deco">{ globals.strings.props.deco }</div> }
                 { props.data.props.includes('defence') && <div className="item-tag item-tag-defense">{ globals.strings.props.defence }</div> }
                 { props.data.props.includes('weapon') && <div className="item-tag item-tag-weapon">{ globals.strings.props.weapon }</div> }
                 { props.data.watch != 0 && <div className="item-tag item-tag-weapon">
@@ -678,10 +856,12 @@ const HordesPassiveInventoryWrapper = (props: passiveMountProps) => {
         props.parent.addEventListener('click', handler);
         return () => props.parent.removeEventListener('click', handler);
     }, [props.link])
+    
+    const {bagSort} = getBagSorter(vaultData);
 
     return <Globals.Provider value={{api: api.current, strings}}>
         {strings && bag && <>
-            {bag?.items?.sort(sort).map((item,index) => <React.Fragment key={item.i}><SingleItem
+            {bag?.items?.sort(bagSort).map((item,index) => <React.Fragment key={item.i}><SingleItem
                 item={item} data={(vaultData ?? {})[item.p] ?? null} mods={bag.mods} locked={true}
                 blur={null} className={(props.max > 0 && index >= props.max) ? 'over' : ''}/>
             </React.Fragment>)}

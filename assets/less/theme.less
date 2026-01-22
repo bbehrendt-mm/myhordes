@@ -801,7 +801,7 @@ a { color: @myhordes-smalltext; font-weight: bold; }
 ul.inventory {
   &.display-plain { margin: 0 }
   &:not(.borderless){
-    border: 1px solid @myhordes-input-border; padding: 6px;
+    border: 1px solid @myhordes-input-border; padding: 6px 5px 6px 6px;
   }
   &.borderless {
     padding: 0;
@@ -824,7 +824,7 @@ ul.inventory {
     	border-color: rgba(0,0,0,0); height: 20px; max-width: 40px;
         &.bg-light { width: 20px; background: url("../img/inventory/large_inv.png") center no-repeat; }
         &.bg-locked { width: 20px; background: url("../img/inventory/large_inv_l.png") center no-repeat; }
-        &.bg-heavy { width: 20px; background: url("../img/inventory/large_inv_h.png") center no-repeat; margin-right: 1px; margin-left: 1px; }
+        &.bg-heavy { width: 20px; background: url("../img/inventory/large_inv_h.png") center no-repeat; }
         &.bg-over { width: 20px; background: url("../img/inventory/large_inv_r.png") center no-repeat; }
     	&:not(.locked):hover { border-color: #F0D79E; background-color: #B37C4A; }
         &:not(.locked):not(.disabled) { cursor: pointer; }
@@ -871,7 +871,7 @@ ul.inventory {
   }
 
   &.inventory-react {
-    display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-start; min-height: 35px;
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-start; min-height: 35px; row-gap: 3px;
     &>li {
       margin: 0;
       padding: 1px 0 0 1px;
