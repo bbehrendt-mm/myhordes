@@ -12,6 +12,7 @@ use App\Service\ActionHandler;
 use App\Service\EventProxyService;
 use App\Service\InventoryHandler;
 use App\Service\ItemFactory;
+use App\Service\LogTemplateHandler;
 use App\Service\RandomGenerator;
 use App\Structures\ActionHandler\Execution;
 use App\Structures\ItemRequest;
@@ -35,6 +36,8 @@ class ProcessItemEffect extends AtomEffectProcessor
         $rg = $this->container->get(RandomGenerator::class);
         /** @var EventProxyService $proxy */
         $proxy = $this->container->get(EventProxyService::class);
+        /** @var LogTemplateHandler $log */
+        $log = $this->container->get(LogTemplateHandler::class);
 
         $zone = $cache->zone();
         if (!$zone)
@@ -53,7 +56,7 @@ class ProcessItemEffect extends AtomEffectProcessor
             $item_req = null;
             foreach ($requirements as $requirement)
                 if ($requirement->getAtoms()) {
-                    $container = (new RequirementsDataContainer())->fromArray([['atomList' => $requirement->getAtoms()]]);
+                    $container = new RequirementsDataContainer()->fromArray([['atomList' => $requirement->getAtoms()]]);
                     foreach ( $container->findRequirements( ItemRequirement::class ) as $item_requirement ) {
                         /** @var ItemRequirement|null $item_requirement */
                         if ($item_requirement->item !== $data->consumeItem) continue;
@@ -151,8 +154,12 @@ class ProcessItemEffect extends AtomEffectProcessor
                     $ih->forceMoveItem($cache->citizen->getInventory(), $cache->item);
                 }
             }
-            if ($data->dropSource && $data->equipSource === null)
+            if ($data->dropSource && $data->equipSource === null) {
                 $ih->forceMoveItem($zone->getFloor(), $cache->item);
+                if ($cache->citizen->getZone()?->getId() === $zone->getId())
+                    $cache->em->persist( $log->beyondItemLog( $cache->citizen, $cache->item->getPrototype(), true, $cache->item->getBroken() ) );
+                else $cache->em->persist( $log->catapultImpact( $cache->item, $zone ) );
+            }
         }
 
         if ($data->spawnTarget && is_a($cache->target, ItemPrototype::class)) {

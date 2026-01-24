@@ -142,7 +142,7 @@ class CatapultController extends CustomAbstractCoreController
         foreach ($r as $rr) $em->remove($rr);
 
         // Log entry
-        $em->persist($log->catapultUsage($citizen, $item, $target_zone, $kills));
+        $em->persist($log->catapultUsage($citizen, $cachedItemPrototype, $target_zone, $kills));
 
         // Persist
         $em->persist( $citizen );

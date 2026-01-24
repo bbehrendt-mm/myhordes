@@ -2197,14 +2197,14 @@ class LogTemplateHandler
             ->setTimestamp( new DateTime('now') );
     }
 
-    public function catapultUsage( Citizen $master, Item $item, Zone $target, int $kills = 0 ): TownLogEntry {
+    public function catapultUsage( Citizen $master, ItemPrototype $item, Zone $target, int $kills = 0 ): TownLogEntry {
         $template = $this->entity_manager->getRepository(LogEntryTemplate::class)->findOneBy(['name' => $kills > 0 ? 'catapultUsageKills' : 'catapultUsage']);
 
         return (new TownLogEntry())
             ->setLogEntryTemplate($template)
             ->setVariables([
                 'master' => $master->getId(),
-                'item' => $item->getPrototype()->getId(),
+                'item' => $item->getId(),
                 'x' => $target->getX(),
                 'y' => $target->getY(),
                 ...($kills > 0 ? ['kills' => $kills] : [])
