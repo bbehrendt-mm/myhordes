@@ -8,6 +8,7 @@ use App\Controller\CustomAbstractCoreController;
 use App\Controller\CustomAbstractCoreEventController;
 use App\Entity\Item;
 use App\Entity\Zone;
+use App\Enum\ActionHandler\CountType;
 use App\Enum\ClientSignal;
 use App\Event\Game\Town\Basic\Well\WellExtractionCheckEvent;
 use App\Event\Game\Town\Basic\Well\WellExtractionExecuteEvent;
@@ -22,6 +23,8 @@ use App\Service\JSONRequestParser;
 use App\Service\LogTemplateHandler;
 use App\Service\RandomGenerator;
 use App\Service\TownHandler;
+use App\Structures\ActionHandler\Evaluation;
+use App\Structures\ActionHandler\Execution;
 use App\Structures\CatapultActionTarget;
 use App\Traits\Controller\ActiveCitizen;
 use Doctrine\ORM\EntityManagerInterface;
@@ -113,23 +116,33 @@ class CatapultController extends CustomAbstractCoreController
 
         // Deduct AP
         $ch->setAP($citizen, true, -$ap);
-        $em->persist($log->catapultUsage($citizen, $item, $target_zone));
 
         $cachedItemPrototype = $item->getPrototype();
 
-        $actionHandler->execute(
+        /** @var Execution $result */
+        $error = $actionHandler->execute(
             $citizen, $item, new CatapultActionTarget($target_zone),
-            $action, $msg, $r, true
+            $action, $msg, $r, true,
+            execution: $result
         );
-        $notice = $this->translator->trans('Sorgfältig verpackt hast du {item} in das Katapult gelegt. Der Gegenstand wurde auf {zone} geschleudert.', [
+
+        if ($error !== ActionHandler::ErrorNone)
+            return new JsonResponse(['error' => $error], status: Response::HTTP_INTERNAL_SERVER_ERROR);
+
+        $messages = [];
+        if ($msg) $messages[] = $msg;
+        $messages[] = $this->translator->trans('Sorgfältig verpackt hast du {item} in das Katapult gelegt. Der Gegenstand wurde auf {zone} geschleudert.', [
             '{item}' => "<span><img alt='' src='" . $asset->getUrl("build/images/item/item_{$cachedItemPrototype->getIcon()}.gif") . "' />" . $this->translator->trans($cachedItemPrototype->getLabel(), [], 'items') . "</span>",
             '{zone}' => "<strong>[{$target_zone->getX()}/{$target_zone->getY()}]</strong>"
         ], 'game');
 
-        if ($msg) $msg ="$notice<hr/>$msg";
-        else $msg = $notice;
+        $kills = $result->getCounter( CountType::Kills );
+        if ($kills > 0) $messages[] = $this->translator->trans('Durch den Einschlag wurden {kills} Zombies getötet!', ['kills' => $kills], 'game');
 
         foreach ($r as $rr) $em->remove($rr);
+
+        // Log entry
+        $em->persist($log->catapultUsage($citizen, $item, $target_zone, $kills));
 
         // Persist
         $em->persist( $citizen );
@@ -140,6 +153,6 @@ class CatapultController extends CustomAbstractCoreController
         $em->flush();
 
         $response->withSignal(ClientSignal::InventoryUpdated, ClientSignal::StatusUpdated, ClientSignal::LogUpdated, ClientSignal::MapUpdated );
-        return new JsonResponse(['success' => true, 'message' => $msg]);
+        return new JsonResponse(['success' => true, 'message' => implode('<hr/>', $messages)]);
     }
 }

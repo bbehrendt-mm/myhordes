@@ -1853,7 +1853,7 @@ class LogTemplateHandler
             ->setTimestamp( new DateTime('now') );
     }
 
-    public function zombieKill( Citizen $citizen, ?ItemPrototype $item, int $kills, ?string $sourceAction = null ): TownLogEntry {
+    public function zombieKill( Citizen $citizen, ?ItemPrototype $item, int $kills, ?string $sourceAction = null, ?Zone $zone = null ): TownLogEntry {
         if ($sourceAction === "hero_generic_punch") {
             $variables = array('citizen' => $citizen->getId(), 'kills' => $kills);
             $template = $this->entity_manager->getRepository(LogEntryTemplate::class)->findOneBy(['name' => 'zombieKillHeroPunch']);
@@ -1870,10 +1870,33 @@ class LogTemplateHandler
             ->setVariables($variables)
             ->setTown( $citizen->getTown() )
             ->setDay( $citizen->getTown()->getDay() )
-            ->setZone( $citizen->getZone() )
+            ->setZone( $zone ?? $citizen->getZone() )
             ->setTimestamp( new DateTime('now') )
             ->setCitizen( $citizen );
     }
+
+    public function zombieKillCatapult( Citizen $citizen, ItemPrototype $item, int $kills, Zone $impactZone, Zone $zone ): TownLogEntry {
+
+        $blast = $impactZone->getId() !== $zone->getId();
+        $variables = [
+            'citizen' => $citizen->getId(), 'item' => $item->getId(), 'kills' => $kills,
+            ...($blast ? ['x' => $impactZone->getX(), 'y' => $impactZone->getY()] : [])
+        ];
+        $template = $this->entity_manager->getRepository(LogEntryTemplate::class)->findOneBy(['name' => $blast
+            ? 'zombieKillCatapultBlast'
+            : 'zombieKillCatapult'
+        ]);
+
+        return new TownLogEntry()
+            ->setLogEntryTemplate($template)
+            ->setVariables($variables)
+            ->setTown( $citizen->getTown() )
+            ->setDay( $citizen->getTown()->getDay() )
+            ->setZone( $zone )
+            ->setTimestamp( new DateTime('now') )
+            ->setCitizen( $citizen );
+    }
+
 
     public function zombieKillHandsFail( Citizen $citizen): TownLogEntry {
         $variables = array('citizen' => $citizen->getId());
@@ -2174,8 +2197,8 @@ class LogTemplateHandler
             ->setTimestamp( new DateTime('now') );
     }
 
-    public function catapultUsage( Citizen $master, Item $item, Zone $target ): TownLogEntry {
-        $template = $this->entity_manager->getRepository(LogEntryTemplate::class)->findOneBy(['name' => 'catapultUsage']);
+    public function catapultUsage( Citizen $master, Item $item, Zone $target, int $kills = 0 ): TownLogEntry {
+        $template = $this->entity_manager->getRepository(LogEntryTemplate::class)->findOneBy(['name' => $kills > 0 ? 'catapultUsageKills' : 'catapultUsage']);
 
         return (new TownLogEntry())
             ->setLogEntryTemplate($template)
@@ -2183,7 +2206,8 @@ class LogTemplateHandler
                 'master' => $master->getId(),
                 'item' => $item->getPrototype()->getId(),
                 'x' => $target->getX(),
-                'y' => $target->getY()
+                'y' => $target->getY(),
+                ...($kills > 0 ? ['kills' => $kills] : [])
             ])
             ->setTown( $master->getTown() )
             ->setDay( $master->getTown()->getDay() )

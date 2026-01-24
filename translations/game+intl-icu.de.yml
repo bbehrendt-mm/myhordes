@@ -3268,3 +3268,7 @@ Tierklinik: Tierklinik
 'Du hast heimlich einen Eintrag vollständig aus dem Register entfernt... Du kannst das noch {times} mal tun.': 'Du hast heimlich einen Eintrag vollständig aus dem Register entfernt... Du kannst das noch {times} mal tun.'
 'Zweite Lunge (3 AP, 1 EP)': 'Zweite Lunge (3 AP, 1 EP)'
 'Verbesserung Zweite Lunge (3 AP, 3 EP)': 'Verbesserung Zweite Lunge (3 AP, 3 EP)'
+'Durch den Einschlag wurden {kills} Zombies getötet!': 'Durch den Einschlag {kills, plural, one {wurde ein Zombie} other {wurden # Zombies}} getötet!'
+'{citizen} hat den Gegenstand {item} auf diese Zone katapultiert und damit {kills} Zombie(s) getötet.': '{citizen} hat den Gegenstand {item} auf diese Zone katapultiert und damit {raw_kills, plural, one {einen Zombie} other {# Zombies}} getötet.'
+'{citizen} hat den Gegenstand {item} auf <strong>[{x}/{y}]</strong> katapultiert und durch die Detonation auf dieser Zone {kills} Zombie(s) getötet.': '{citizen} hat den Gegenstand {item} auf <strong>[{x}/{y}]</strong> katapultiert und durch die Detonation auf dieser Zone {raw_kills, plural, one {einen Zombie} other {# Zombies}} getötet.'
+'{master} hat {item} nach <strong>[{x}/{y}]</strong> <strong>katapultiert</strong> und durch den Einschlag <strong>{kills} Zombies</strong> getötet!': '{master} hat {item} nach <strong>[{x}/{y}]</strong> <strong>katapultiert</strong> und durch den Einschlag <strong>{raw_kills, plural, one {einen Zombie} other {# Zombies}}</strong> getötet!'

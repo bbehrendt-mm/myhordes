@@ -97,6 +97,8 @@ class ProcessZoneEffect extends AtomEffectProcessor
                     }
                 }
                 else {
+                    $is_remote_kill = $cache->citizen->getZone()?->getId() !== $base_zone->getId();
+
                     $zones = $this->getAdjacentZones( $base_zone, $data->zombieKillRange );
                     $total_zombies = array_reduce( $zones, fn($carry, Zone $zone) => $carry + $zone->getZombies(), 0 );
 
@@ -114,7 +116,7 @@ class ProcessZoneEffect extends AtomEffectProcessor
                                 ));
 
                                 $zone->setZombies( $zone->getZombies() - $kills_in_zone );
-                                $cache->addToCounter( CountType::Kills, $kills );
+                                $cache->addToCounter( CountType::Kills, $kills_in_zone );
                                 $left -= $kills_in_zone;
 
                                 Arr::set($zone_count_cache, $zone->getId(), Arr::get( $zone_count_cache, $zone->getId(), 0 ) + $kills_in_zone);
@@ -126,7 +128,11 @@ class ProcessZoneEffect extends AtomEffectProcessor
                         if (!$cache->isFlagged('kills_silent'))
                             foreach ($zones as $zone)
                                 if (($k = Arr::get( $zone_count_cache, $zone->getId(), 0 )) > 0)
-                                    $cache->em->persist( $lh->zombieKill( $cache->citizen, $cache->originalPrototype, $k, $cache->getAction()?->getName() ) );
+                                    if ($is_remote_kill) {
+                                        $cache->em->persist( $lh->zombieKillCatapult( $cache->citizen, $cache->originalPrototype, $k, $base_zone, $zone ) );
+                                    } else {
+                                        $cache->em->persist( $lh->zombieKill( $cache->citizen, $cache->originalPrototype, $k, $cache->getAction()?->getName(), $zone ) );
+                                    }
 
                         $ph->give_picto($cache->citizen, 'r_killz_#00', $kills);
                         if(array_reduce( $zones, fn($carry, Zone $zone) => $carry + $zone->getZombies(), 0 ) <= 0)

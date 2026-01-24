@@ -404,7 +404,9 @@ class ActionHandler
         bool $force = false,
         bool $escort_mode = false,
         ?Citizen $contextCitizen = null,
-        ?bool &$map_updated = false
+        ?bool &$map_updated = false,
+        ?Evaluation &$evaluation = null,
+        ?Execution &$execution = null,
     ): int {
 
         $remove = [];
@@ -413,9 +415,6 @@ class ActionHandler
         $infect_by_poison = $item && ($item->getPoison() === ItemPoisonType::Infectious) && ($action->getPoisonHandler() & ItemAction::PoisonHandlerConsume);
         $random_by_poison = $item && ($item->getPoison() === ItemPoisonType::Strange) && ($action->getPoisonHandler() & ItemAction::PoisonHandlerConsume);
         $spread_poison = ItemPoisonType::None;
-
-        /** @var ?Evaluation $evaluation */
-        $evaluation = null;
 
         if (!$force) {
             $mode = $this->evaluate( $citizen, $item, $target, $action, $tx, $evaluation, $contextCitizen );
@@ -435,18 +434,18 @@ class ActionHandler
             if ($mode != ActionValidity::Full) return self::ErrorActionUnregistered;
         }
 
-        $cache = new Execution($this->entity_manager, $citizen, $item, $target, $this->conf->getTownConfiguration( $citizen->getTown() ), $this->conf->getGlobalConf());
+        $execution = new Execution($this->entity_manager, $citizen, $item, $target, $this->conf->getTownConfiguration( $citizen->getTown() ), $this->conf->getGlobalConf());
         $default_message = $escort_mode ? $action->getEscortMessage() : $action->getMessage();
-        $cache->setEscortMode($escort_mode);
-        $cache->setAction($action);
+        $execution->setEscortMode($escort_mode);
+        $execution->setAction($action);
 
-        if ($default_message) $cache->addMessage($default_message, translationDomain: 'items');
-        foreach ($evaluation?->getProcessedItems('item_tool') ?? [] as $tool) $cache->addToolItem( $tool );
+        if ($default_message) $execution->addMessage($default_message, translationDomain: 'items');
+        foreach ($evaluation?->getProcessedItems('item_tool') ?? [] as $tool) $execution->addToolItem( $tool );
 
-        $cache->addTranslationKey('tamer_dog', LogTemplateHandler::generateDogName($citizen->getId(), $this->translator));
+        $execution->addTranslationKey('tamer_dog', LogTemplateHandler::generateDogName($citizen->getId(), $this->translator));
 
         if ($citizen->activeExplorerStats())
-            $cache->setTargetRuinZone($ruinZone = $this->entity_manager->getRepository(RuinZone::class)->findOneByExplorerStats($citizen->activeExplorerStats()));
+            $execution->setTargetRuinZone($ruinZone = $this->entity_manager->getRepository(RuinZone::class)->findOneByExplorerStats($citizen->activeExplorerStats()));
 
         $all_atoms = [];
 
@@ -467,20 +466,20 @@ class ActionHandler
         if (!empty($all_atoms)) {
             $container = (new EffectsDataContainer())->fromArray([['atomList' => $all_atoms]]);
             foreach ( $container->all() as $effectsDataElement ) {
-                AtomEffectProcessor::process($this->container, $cache, $effectsDataElement->atomList, $contextCitizen);
-                if ($cache->getRegisteredError()) return $cache->getRegisteredError();
+                AtomEffectProcessor::process($this->container, $execution, $effectsDataElement->atomList, $contextCitizen);
+                if ($execution->getRegisteredError()) return $execution->getRegisteredError();
             }
         }
 
         foreach (ItemPoisonType::cases() as $pt)
-            if ($pt->poisoned() && $cache->isFlagged("transgress_poison_{$pt->value}"))
+            if ($pt->poisoned() && $execution->isFlagged("transgress_poison_{$pt->value}"))
                 $item?->setPoison($spread_poison = $spread_poison->mix( $pt ));
 
-        if (($kill_by_poison || $cache->isFlagged('kill_by_poison')) && $citizen->getAlive()) {
+        if (($kill_by_poison || $execution->isFlagged('kill_by_poison')) && $citizen->getAlive()) {
             $this->death_handler->kill( $citizen, CauseOfDeath::Poison, $r );
             $this->entity_manager->persist( $this->log->citizenDeath( $citizen ) );
-            $cache->clearMessages();
-        } elseif ($infect_by_poison || ($cache->isFlagged('infect_by_poison')) && $citizen->getAlive()) {
+            $execution->clearMessages();
+        } elseif ($infect_by_poison || ($execution->isFlagged('infect_by_poison')) && $citizen->getAlive()) {
             $this->citizen_handler->inflictStatus( $citizen, 'infection' );
         } elseif ($random_by_poison && $citizen->getAlive() && $this->random_generator->chance(0.5)) {
 
@@ -490,10 +489,10 @@ class ActionHandler
                     $this->picto_handler->award_picto_to($citizen, 'r_drug_#00');
                     if (!$citizen->hasStatus('drugged')) {
                         $this->citizen_handler->inflictStatus($citizen, 'drugged');
-                        $cache->addMessage(T::__('Aber eine Frage bleibt: Waren diese fliegenden grünen Mäuse schon immer da?','items'), translationDomain: 'items');
+                        $execution->addMessage(T::__('Aber eine Frage bleibt: Waren diese fliegenden grünen Mäuse schon immer da?','items'), translationDomain: 'items');
                     } elseif (!$citizen->hasStatus('addict')) {
                         $this->citizen_handler->inflictStatus($citizen, 'addict');
-                        $cache->addMessage(T::__('Sofort nach dem herunterschlucken verspürst du das Verlangen nach mehr... du bist nun <b>drogenabhängig</b>!','items'), translationDomain: 'items');
+                        $execution->addMessage(T::__('Sofort nach dem herunterschlucken verspürst du das Verlangen nach mehr... du bist nun <b>drogenabhängig</b>!','items'), translationDomain: 'items');
                     }
                     break;
 
@@ -504,17 +503,17 @@ class ActionHandler
                     $this->citizen_handler->removeStatus($citizen, 'tg_no_hangover');
                     if (!$citizen->hasStatus('drunk')) {
                         $this->citizen_handler->inflictStatus($citizen, 'drunk');
-                        $cache->addMessage(T::__('Plötzlich fängt alles um dich herum an, sich zu drehen ...','items'), translationDomain: 'items');
+                        $execution->addMessage(T::__('Plötzlich fängt alles um dich herum an, sich zu drehen ...','items'), translationDomain: 'items');
                     }
                     break;
             }
 
         }
 
-        if($cache->hasMessages())
-            $message = implode('<hr />', $cache->getMessages( $this->translator, $this->wrapObjectsForOutputAction, $this->messageDecoder, ($contextCitizen ?? $citizen)->fullPropertySet()));
+        if($execution->hasMessages())
+            $message = implode('<hr />', $execution->getMessages( $this->translator, $this->wrapObjectsForOutputAction, $this->messageDecoder, ($contextCitizen ?? $citizen)->fullPropertySet()));
 
-        $map_updated = $cache->altered_map_discovery;
+        $map_updated = $execution->altered_map_discovery;
 
         return self::ErrorNone;
     }
