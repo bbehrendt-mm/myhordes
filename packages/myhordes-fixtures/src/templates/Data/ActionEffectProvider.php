@@ -240,6 +240,7 @@ class ActionEffectProvider
         $effects_container->add()->identifier('morph_cata_remains')->add(new ItemEffect()->morphSource('broken_#00', drop: true))->commit();
         $effects_container->add()->identifier('morph_cata_moldy'  )->add(new ItemEffect()->morphSource('moldy_food_subpart_#00', drop: true))->commit();
         $effects_container->add()->identifier('morph_cata_scrap'   )->add(new ItemEffect()->morphSource('metal_bad_#00', drop: true))->commit();
+        $effects_container->add()->identifier('morph_cata_break_staff' )->add(new ItemEffect()->morphSource('staff2_#00', drop: true))->commit();
         $effects_container->add()->identifier('morph_cata_break'  )->add(new ItemEffect()->morphSource(break: true, drop: true))->commit();
         $effects_container->add()->identifier('morph_cata_fine'   )->add(new ItemEffect()->morphSource(drop: true))->commit();
 

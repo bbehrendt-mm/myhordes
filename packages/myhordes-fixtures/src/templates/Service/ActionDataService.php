@@ -637,6 +637,7 @@ class ActionDataService implements FixtureProcessorInterface {
                 'cata_rsc_moldy'    => [ 'label' => '', 'meta' => [], 'result' => [ 'morph_cata_moldy' ] ],
                 'cata_rsc_scrap'     => [ 'label' => '', 'meta' => [], 'result' => [ 'morph_cata_scrap' ] ],
                 'cata_rsc_break'    => [ 'label' => '', 'meta' => [], 'result' => [ 'morph_cata_break' ] ],
+                'cata_rsc_break_staff'    => [ 'label' => '', 'meta' => [], 'result' => [ 'morph_cata_break_staff' ] ],
                 'cata_rsc_fine'     => [ 'label' => '', 'meta' => [], 'result' => [ 'morph_cata_fine' ] ],
                 'cata_rsc_destroy'  => [ 'label' => '', 'meta' => [], 'result' => [ 'consume_item' ] ],
 

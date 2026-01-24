@@ -51,6 +51,7 @@ class ActionCatapultProvider
             'big_pgun_#00',
             'big_pgun_empty_#00',
             'big_pgun_part_#00',
+            'taser_empty_#00',
             'bike_#00',
             'bquies_#00',
             'bretz_#00',
@@ -106,6 +107,7 @@ class ActionCatapultProvider
             'jerrygun_part_#00',
             'jerrygun_off_#00',
             'kalach_#00',
+            'kalach_#01',
             'lawn_part_#00',
             'lights_#00',
             'lilboo_#00',
@@ -195,7 +197,7 @@ class ActionCatapultProvider
             'wood_bad_#00',
             'xanax_#00',
         ] );
-        self::write( $data, 'cata_rsc_break', ['staff_#00']);
+        self::write( $data, 'cata_rsc_break_staff', ['staff_#00']);
         self::write( $data, 'cata_rsc_destroy', ['egg_#00']);
         self::write( $data, 'cata_rsc_scrap', [
             'coffee_machine_#00',
@@ -265,6 +267,7 @@ class ActionCatapultProvider
             'dfhifi_#00',
             'home_def_#00',
             'music_#00',
+            'music_part_#00',
             'paques_#00',
             'pet_chick_#00',
             'pet_rat_#00',
@@ -346,8 +349,7 @@ class ActionCatapultProvider
             'broken_ball_#00'
         ]);
 
-        self::write( $data, 'cata_wpn_remains_s_imp', ['claymo_#00']);
-        self::write( $data, 'cata_wpn_destroy_s_imp', ['concrete_wall_#00']);
+        self::write( $data, 'cata_wpn_destroy_s_imp', ['claymo_#00', 'concrete_wall_#00']);
 
         foreach ( $data as $key => $value )
             if ($value === null) throw new \Exception("No effect set for item $key");
