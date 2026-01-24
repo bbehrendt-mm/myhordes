@@ -42,7 +42,7 @@ const Catapult = (
                 <SingleInventory
                     id={props.inventory} parent={props.parent}
                     onItemClick={i => setTargetItem({i: i.i, p: i.p})}
-                    filterEnabledItems={(i,v) => !i.e && v?.cata}
+                    filterEnabledItems={(i,v) => !i.e && !i.b && v?.cata}
                 />
                 { strings && <CatapultSummary targetZone={targetZone} targetItem={targetItem} onSuccessfulThrow={() => {
                     setTargetItem(null);
