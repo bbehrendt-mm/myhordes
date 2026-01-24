@@ -115,12 +115,14 @@ class CatapultController extends CustomAbstractCoreController
         $ch->setAP($citizen, true, -$ap);
         $em->persist($log->catapultUsage($citizen, $item, $target_zone));
 
+        $cachedItemPrototype = $item->getPrototype();
+
         $actionHandler->execute(
             $citizen, $item, new CatapultActionTarget($target_zone),
             $action, $msg, $r, true
         );
         $notice = $this->translator->trans('Sorgfältig verpackt hast du {item} in das Katapult gelegt. Der Gegenstand wurde auf {zone} geschleudert.', [
-            '{item}' => "<span><img alt='' src='" . $asset->getUrl("build/images/item/item_{$item->getPrototype()->getIcon()}.gif") . "' />" . $this->translator->trans($item->getPrototype()->getLabel(), [], 'items') . "</span>",
+            '{item}' => "<span><img alt='' src='" . $asset->getUrl("build/images/item/item_{$cachedItemPrototype->getIcon()}.gif") . "' />" . $this->translator->trans($cachedItemPrototype->getLabel(), [], 'items') . "</span>",
             '{zone}' => "<strong>[{$target_zone->getX()}/{$target_zone->getY()}]</strong>"
         ], 'game');
 
