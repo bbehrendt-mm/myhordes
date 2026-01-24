@@ -153,6 +153,12 @@ class CatapultController extends CustomAbstractCoreController
         $em->flush();
 
         $response->withSignal(ClientSignal::InventoryUpdated, ClientSignal::StatusUpdated, ClientSignal::LogUpdated, ClientSignal::MapUpdated );
-        return new JsonResponse(['success' => true, 'message' => implode('<hr/>', $messages)]);
+        return new JsonResponse([
+            'success' => true,
+            'message' => implode('<hr/>', $messages),
+            'incidentals' => [
+                'ap' => $citizen->getAp(),
+            ]
+        ]);
     }
 }
