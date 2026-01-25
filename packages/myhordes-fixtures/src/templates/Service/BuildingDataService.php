@@ -721,7 +721,7 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->defense(15)->ap(40)->health(40)->blueprintLevel(3)->resources(["wood2_#00" => 5,"wood_beam_#00" => 3,"rustine_#00" => 3,])->orderBy(0)->commit();
         $container->add()->parentBuilding($small_building)
             ->icon('small_trash')->label('Müllhalde')->description('Der Eckpfeiler einer jeden großen Stadt: eine riesige, stinkende Müllhalde, die die ganze Stadt umgibt. Zugegeben, das ist nicht gerade ästhetisch, aber immerhin könnt ihr so Alltagsgegenstände in eine effektive Verteidigung verwandeln (nur eine Nacht haltbar).')
-            ->isTemporary(0)->defense(0)->ap(80)->health(80)->blueprintLevel(1)->resources(["wood2_#00" => 5,"wood_beam_#00" => 15,"metal_#00" => 10,"metal_beam_#00" => 15,"meca_parts_#00" => 1,"concrete_wall_#00" => 3,])->orderBy(4)
+            ->isTemporary(0)->defense(0)->ap(50)->health(50)->blueprintLevel(1)->resources(["wood2_#00" => 3,"wood_beam_#00" => 10,"metal_#00" => 5,"metal_beam_#00" => 10,"meca_parts_#00" => 1,"concrete_wall_#00" => 2,])->orderBy(4)
             ->voteLevel(2)->baseVoteText('Ermöglicht das Zerstören von Gegenständen für 1 Verteidigungspunkt.')
             ->upgradeTexts([
                                'Ermöglicht die fachgerechte Entsorgung von Waffen und Nahrung auf der Müllhalde.',
