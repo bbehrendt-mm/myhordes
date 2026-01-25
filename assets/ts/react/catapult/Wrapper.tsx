@@ -37,8 +37,8 @@ const Catapult = (
     const [targetItem, setTargetItem] = useState<{i: number, p: number}|null>();
 
     return <Globals.Provider value={{ strings: strings, api: apiRef.current }}>
-        <div className="row-flex gap">
-            <div className="cell rw-6 flex column element-gap">
+        <div className="row-flex wrap-inverse-md gap">
+            <div className="cell rw-6 rw-md-12 flex column element-gap">
                 <SingleInventory
                     id={props.inventory} parent={props.parent}
                     onItemClick={i => setTargetItem({i: i.i, p: i.p})}
@@ -49,7 +49,7 @@ const Catapult = (
                 }}/> }
                 {!strings && <div className="loading"/>}
             </div>
-            <div className="cell rw-6">
+            <div className="cell rw-6 rw-md-12">
                 <Map {...props.map} etag={etag} id="catapult"
                      onActivateZoneChanged={zone => setTargetZone(zone)}
                 />
