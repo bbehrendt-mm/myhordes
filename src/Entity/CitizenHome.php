@@ -46,6 +46,10 @@ class CitizenHome
 
     #[ORM\Column]
     private int $temporaryDefense = 0;
+
+    #[ORM\Column]
+    private int $dumpTemporaryDefense = 0;
+
     public function __construct()
     {
         $this->citizenHomeUpgrades = new ArrayCollection();
@@ -226,6 +230,18 @@ class CitizenHome
     public function setTemporaryDefense(int $temporaryDefense): static
     {
         $this->temporaryDefense = $temporaryDefense;
+
+        return $this;
+    }
+
+    public function getDumpTemporaryDefense(): ?int
+    {
+        return $this->dumpTemporaryDefense;
+    }
+
+    public function setDumpTemporaryDefense(int $dumpTemporaryDefense): static
+    {
+        $this->dumpTemporaryDefense = $dumpTemporaryDefense;
 
         return $this;
     }

@@ -8,7 +8,7 @@ export interface EventEmitProps<E extends Event = Event> {
     event: E,
 }
 
-function constructPayloadForFetch( node: HTMLElement, e: MouseEvent ): null|object {
+function constructPayloadForFetch( node: HTMLElement, e: MouseEvent ): null|object|false {
     // Attempt to get payload from payload field
     let payload = node.dataset.fetchPayload ? JSON.parse( node.dataset.fetchPayload ) : null;
 
@@ -21,9 +21,10 @@ function constructPayloadForFetch( node: HTMLElement, e: MouseEvent ): null|obje
     // Check if a payload query field exists and prompt the user for a value to use as the payload query field value
     let payloadQuery = node.dataset.fetchPayloadQuery;
     let payloadQueryField = node.dataset.fetchPayloadQueryField;
+    let payloadQueryDefault = node.dataset.fetchPayloadQueryDefault;
     if (payloadQuery && payloadQueryField) {
-        const q = prompt( payloadQuery );
-        if (q === null) return;
+        const q = prompt( payloadQuery, payloadQueryDefault ?? '' );
+        if (q === null) return false;
 
         let data = {};
         data[payloadQueryField] = q;
@@ -59,6 +60,8 @@ function applyFetchFunctions( node: HTMLElement ) {
             if (node.dataset.fetchConfirm && !confirm( node.dataset.fetchConfirm )) return;
 
             const payload = constructPayloadForFetch( node, e );
+            if (payload === false) return;
+
             const spinner = node.dataset.fetchNoSpin !== "0";
             const classic = node.dataset.fetchV2 !== "1";
 

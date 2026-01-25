@@ -10,6 +10,7 @@ use App\Event\Game\Town\Addon\Dump\DumpInsertionCheckEvent;
 use App\Event\Game\Town\Addon\Dump\DumpInsertionExecuteEvent;
 use App\Event\Game\Town\Addon\Dump\DumpRetrieveCheckEvent;
 use App\Event\Game\Town\Addon\Dump\DumpRetrieveExecuteEvent;
+use App\EventListener\Game\Town\Addon\Dump\DumpUpgradesCheckListener;
 use App\Service\EventFactory;
 use App\Service\JSONRequestParser;
 use Doctrine\ORM\EntityManagerInterface;
@@ -29,10 +30,13 @@ class DumpController extends CustomAbstractCoreEventController
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    #[Route(path: '/insert', name: 'insert', methods: ['POST'])]
-    public function insert(EventFactory $e, JSONRequestParser $parser, EntityManagerInterface $em): JsonResponse {
+    #[Route(path: '/{id}', name: 'insert', methods: ['PUT'])]
+    public function insert(
+        ItemPrototype $itemPrototype,
+        EventFactory $e, JSONRequestParser $parser,
+    ): JsonResponse {
         return $this->processEventChain(
-            $e->gameInteractionEvent( DumpInsertionCheckEvent::class )->setup($em->getRepository(ItemPrototype::class)->find($parser->get('id')), $parser->get('ap')),
+            $e->gameInteractionEvent( DumpInsertionCheckEvent::class )->setup($itemPrototype, $parser->get_int('ap', 1, 1)),
             DumpInsertionExecuteEvent::class
         );
     }
@@ -41,11 +45,25 @@ class DumpController extends CustomAbstractCoreEventController
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    #[Route(path: '/retrieve', name: 'retrieve', methods: ['POST'])]
-    public function retrieve(EventFactory $e, JSONRequestParser $parser, EntityManagerInterface $em): JsonResponse {
+    #[Route(path: '/{id}', name: 'retrieve', methods: ['PATCH'])]
+    public function retrieve(
+        ItemPrototype $itemPrototype,
+        EventFactory $e, JSONRequestParser $parser
+    ): JsonResponse {
         return $this->processEventChain(
-            $e->gameInteractionEvent( DumpRetrieveCheckEvent::class )->setup($em->getRepository(ItemPrototype::class)->find($parser->get('id')), $parser->get('ap')),
+            $e->gameInteractionEvent( DumpRetrieveCheckEvent::class )->setup($itemPrototype, $parser->get_int('ap', 1, 1)),
             DumpRetrieveExecuteEvent::class
+        );
+    }
+
+    #[Route(path: '/{id}', name: 'insert_home', methods: ['POST'])]
+    public function insert_home(
+        ItemPrototype $itemPrototype,
+        EventFactory $e,
+    ): JsonResponse {
+        return $this->processEventChain(
+            $e->gameInteractionEvent( DumpInsertionCheckEvent::class )->setup($itemPrototype, 1, true),
+            DumpInsertionExecuteEvent::class
         );
     }
 }

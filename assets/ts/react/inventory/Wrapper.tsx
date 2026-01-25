@@ -79,8 +79,9 @@ interface escortMountProps {
 interface standaloneItemMountProps {
     item: number,
     extra?: string|null,
-    line?: boolean
-    inline?: boolean
+    line?: boolean,
+    inline?: boolean,
+    labelClass?: string,
 }
 
 interface InventoryBagLoadedSignalProps {
@@ -703,7 +704,8 @@ export const StandaloneItem = (props: {
     item: number,
     extra?: string,
     line?: boolean
-    inline?: boolean
+    inline?: boolean,
+    labelClass?: string,
 }) => {
 
     const vaultData = useVault<VaultItemEntry>(
@@ -716,7 +718,7 @@ export const StandaloneItem = (props: {
         { item && <>
             { props.line && <div className={`item-line ${props.inline ? 'inline' : ''}`}>
                 <img alt={item.name} src={item.icon}/>
-                <span>{item.name}</span>
+                <span className={props.labelClass}>{item.name}</span>
             </div> }
             { !props.line && <img alt={item.name} src={item.icon}/> }
             <ItemTooltip data={item}>

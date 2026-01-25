@@ -171,13 +171,14 @@ customElements.define('hordes-standalone-item', class HordesStandaloneItemElemen
             item: parseInt(this.dataset.item ?? '0'),
             line: parseInt(this.dataset.line ?? '0') != 0,
             inline: parseInt(this.dataset.inline ?? '0') != 0,
+            labelClass: this.dataset.labelClass,
             extra: this.initial_inner_html
         }
     }
 
     protected static observedAttributeNames() {
         return [
-            'data-item', 'data-line', 'data-inline'
+            'data-item', 'data-line', 'data-inline', 'data-label-class'
         ];
     }
 }, {  });

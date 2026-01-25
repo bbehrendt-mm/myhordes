@@ -2329,6 +2329,7 @@ i.h-icon {
 .item-line {
     display: flex;
     &.inline { display: inline-flex; }
+    &:not(.inline) { min-width: 28px; }
     gap: 2px;
 
     background: rgba(0, 0, 0, 0.15);
@@ -2338,7 +2339,7 @@ i.h-icon {
     font-variant: small-caps;
     color: white;
     font-size: 1.2rem;
-    &>img { flex: none }
+    &>img { flex: none; align-self: center; }
     &>span { flex: 1 }
 }
 

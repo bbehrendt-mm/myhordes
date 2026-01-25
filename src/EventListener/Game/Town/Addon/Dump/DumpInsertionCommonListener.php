@@ -53,13 +53,16 @@ final readonly class DumpInsertionCommonListener implements ServiceSubscriberInt
     }
 
     public function onCheckDumpAvailability(DumpInsertionCheckEvent $event ): void {
-        if ($event->citizen->getBanished() || !$event->dump_built) {
+        if (($event->citizen->getBanished() && !$event->to_home) || !$event->dump_built) {
             $event->pushErrorCode( ErrorHelper::ErrorActionNotAvailable )->stopPropagation();
             return;
         }
 
-        /** @var InventoryHandler $inventoryHandler */
-        $inventoryHandler = $this->container->get(InventoryHandler::class);
+        if ($event->to_home && ($event->citizen->getSpecificActionCounterValue(ActionCounterType::HomeDump) + $event->quantity) > ($event->citizen->getHome()->getPrototype()->getLevel() * 2)) {
+            $event->pushErrorCode( ErrorHelper::ErrorActionNotAvailable )->stopPropagation();
+            return;
+        }
+
         /** @var TownHandler $townHandler */
         $townHandler = $this->container->get(TownHandler::class);
 
@@ -72,14 +75,13 @@ final readonly class DumpInsertionCommonListener implements ServiceSubscriberInt
             $dumpDef = DumpUpgradesCheckListener::getDumpItemDef( $item->getPrototype(), $event );
             if ($dumpDef == 0) continue;
 
-            $dumpedItems = $inventoryHandler->fetchSpecificItems($dump->getInventory(), [new ItemRequest($item->getPrototype()->getName())]);
-
             if (!isset($cache[$item->getPrototype()->getId()]))
                 $cache[$item->getPrototype()->getId()] = [
-                    $item->getPrototype(),
+                    $item->getPrototype()->getId(),
                     $item->getCount(),
                     $dumpDef,
-                    empty($dumpedItems) ? 0 : $dumpedItems[0]->getCount()
+                    0,
+                    0,
                 ];
             else $cache[$item->getPrototype()->getId()][1] += $item->getCount();
         }
@@ -87,16 +89,33 @@ final readonly class DumpInsertionCommonListener implements ServiceSubscriberInt
         foreach ($dump->getInventory()->getItems() as $item)
             if (!isset($cache[$item->getPrototype()->getId()])) {
                 $cache[$item->getPrototype()->getId()] = [
-                    $item->getPrototype(),
+                    $item->getPrototype()->getId(),
                     0,
                     DumpUpgradesCheckListener::getDumpItemDef( $item->getPrototype(), $event ),
-                    $item->getCount()
+                    $item->getCount(),
+                    0
                 ];
+            } else $cache[$item->getPrototype()->getId()][3] += $item->getCount();
+
+        if ($event->citizen->getHome()->getPrototype()->getLevel() > 0)
+            foreach ($event->citizen->getInventory()->getItems() as $item) {
+
+                $dumpDef = DumpUpgradesCheckListener::getDumpItemDef( $item->getPrototype(), $event );
+                if ($dumpDef == 0) continue;
+
+                if (!isset($cache[$item->getPrototype()->getId()])) {
+                    $cache[$item->getPrototype()->getId()] = [
+                        $item->getPrototype()->getId(),
+                        0,
+                        DumpUpgradesCheckListener::getDumpItemDef( $item->getPrototype(), $event ),
+                        0,
+                        $item->getCount(),
+                    ];
+                } else $cache[$item->getPrototype()->getId()][4] += $item->getCount();
+
             }
 
-        usort( $cache, function(array $a, array $b) {
-            return ($a[2] === $b[2]) ? ( $a[0]->getId() < $b[0]->getId() ? -1 : 1 ) : ($a[2] < $b[2] ? 1 : -1);
-        } );
+        usort( $cache, fn(array $a, array $b) => $a[2] <=> $b[2] ?: $a[0] <=> $b[0]);
 
         $event->dumpableItems = $cache;
     }
@@ -119,8 +138,7 @@ final readonly class DumpInsertionCommonListener implements ServiceSubscriberInt
         }
 
         $translator = $this->container->get(TranslatorInterface::class);
-
-        if ($event->quantity > 20) {
+        if (($event->to_home && $event->quantity > 1) || $event->quantity > 20) {
             $event->pushError( ErrorHelper::ErrorActionNotAvailable, $translator->trans('Du kannst nicht so viele Gegenstände auf die Müllhalde werfen.', [], 'game') )->stopPropagation();
             return;
         }
@@ -135,7 +153,10 @@ final readonly class DumpInsertionCommonListener implements ServiceSubscriberInt
         }
 
         // Check if items are available
-        $items = $inventoryHandler->fetchSpecificItems( $event->citizen->getTown()->getBank(), [new ItemRequest($proto->getName(), $event->quantity)] );
+        $items = $inventoryHandler->fetchSpecificItems( $event->to_home
+                                                            ? $event->citizen->getInventory()
+                                                            : $event->citizen->getTown()->getBank(),
+                                                        [new ItemRequest($proto->getName(), $event->quantity)] );
         if (!$items) {
             $event->pushErrorCode(ErrorHelper::ErrorItemsMissing)->stopPropagation();
         }
@@ -159,14 +180,20 @@ final readonly class DumpInsertionCommonListener implements ServiceSubscriberInt
 
         $dump = $townHandler->getBuilding($event->citizen->getTown(), "small_trash_#00");
 
-        $items = $inventoryHandler->fetchSpecificItems( $event->citizen->getTown()->getBank(), [new ItemRequest($event->check->consumable->getName(), $event->quantity)] );
+        $items = $inventoryHandler->fetchSpecificItems( $event->check->to_home
+                                                            ? $event->citizen->getInventory()
+                                                            : $event->citizen->getTown()->getBank(),
+                                                        [new ItemRequest($event->check->consumable->getName(), $event->quantity)] );
+
         // Remove items
         $n = $event->quantity;
         while (!empty($items) && $n > 0) {
             $item = array_pop($items);
             $c = $item->getCount();
             $qtyMoved = min($c, $n);
-            $inventoryHandler->forceMoveItem($dump->getInventory(), $item, $qtyMoved);
+            if ($event->check->to_home)
+                $inventoryHandler->forceRemoveItem($item, $qtyMoved);
+            else $inventoryHandler->forceMoveItem($dump->getInventory(), $item, $qtyMoved);
             $n -= $c;
         }
 
@@ -175,13 +202,15 @@ final readonly class DumpInsertionCommonListener implements ServiceSubscriberInt
             $event->citizen->setAp( $event->citizen->getAp() - $event->check->ap_cost );
 
         // Increase def
-        $dump->setTempDefenseBonus( $dump->getTempDefenseBonus() + $event->quantity * $dump_def );
+        if ($event->check->to_home)
+            $event->citizen->getHome()->setDumpTemporaryDefense( $event->citizen->getHome()->getDumpTemporaryDefense() + $event->quantity * $dump_def );
+        else $dump->setTempDefenseBonus( $dump->getTempDefenseBonus() + $event->quantity * $dump_def );
 
         $event->addedDefense = $event->quantity * $dump_def;
 
         // Set ActionCounter
-        $counter = $event->citizen->getSpecificActionCounter(ActionCounterType::DumpInsertion);
-        $counter->setCount($counter->getCount() + 1);
+        $event->citizen->getSpecificActionCounter(ActionCounterType::DumpInsertion)->increment();
+        if ($event->check->to_home) $event->citizen->getSpecificActionCounter(ActionCounterType::HomeDump)->increment( $event->quantity );
 
         $event->markModified();
     }
@@ -191,6 +220,8 @@ final readonly class DumpInsertionCommonListener implements ServiceSubscriberInt
      * @throws NotFoundExceptionInterface
      */
     public function onLogMessages(DumpInsertionExecuteEvent $event ): void {
+        if ($event->check->to_home) return;
+
 		$itemsForLog = [
 			$event->check->consumable->getId() => [
 				'item' => $event->check->consumable,
@@ -206,9 +237,16 @@ final readonly class DumpInsertionCommonListener implements ServiceSubscriberInt
     }
 
     public function onFlashMessages(DumpInsertionExecuteEvent $event ): void {
-        $event->addFlashMessage(
-            T::__('Du hast {count} x {item} auf der öffentlichen Müllhalde abgeladen. <strong>Die Stadt hat {def} Verteidigungspunkt(e) dazugewonnen.</strong>', 'game'), 'notice',
-            'game', ['item' => $event->check->consumable, 'count' => $event->check->quantity, 'def' => $event->addedDefense]);
+        if ($event->check->to_home)
+            $event->addFlashMessage(
+                T::__('Du hast {item} verwendet, um dein Haus abzusichern. <strong>Dein Haus hat {def} Verteidigungspunkt(e) dazugewonnen.</strong> Was werden die anderen Stadtbewohner wohl dazu sagen..?', 'game'), 'notice',
+                'game', ['item' => $event->check->consumable, 'count' => $event->check->quantity, 'def' => $event->addedDefense]
+            );
+        else
+            $event->addFlashMessage(
+                T::__('Du hast {count} x {item} auf der öffentlichen Müllhalde abgeladen. <strong>Die Stadt hat {def} Verteidigungspunkt(e) dazugewonnen.</strong>', 'game'), 'notice',
+                'game', ['item' => $event->check->consumable, 'count' => $event->check->quantity, 'def' => $event->addedDefense]
+            );
     }
 
     public function onProcessPostAttackEffect(BuildingEffectEvent $event): void {

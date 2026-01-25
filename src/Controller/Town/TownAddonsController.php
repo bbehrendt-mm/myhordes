@@ -334,10 +334,15 @@ class TownAddonsController extends TownController
 
 		$dump = $th->getBuilding($town, 'small_trash_#00');
         return $this->render( 'ajax/game/town/dump.html.twig', $this->addDefaultTwigArgs('dump', [
+            'home_dump_max'     => $event->citizen->getHome()->getPrototype()->getLevel() * 2,
+            'home_dump_current' => $event->citizen->getSpecificActionCounterValue( ActionCounterType::HomeDump ),
+            'home_dump_def' => $event->citizen->getHome()->getDumpTemporaryDefense(),
+            'home_def_total' => $th->calculate_home_def($event->citizen->getHome()),
             'ap_cost' => $event->ap_cost,
             'items' => $event->dumpableItems,
             'dump_def' => $dump->getTempDefenseBonus(),
             'total_def' => $th->calculate_town_def( $town ),
+            'improved_dump_built' => $th->getBuilding($town, 'small_trashclean_#00'),
             'day' => $this->getActiveCitizen()->getTown()->getDay(),
         ]) );
     }

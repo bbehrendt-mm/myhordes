@@ -3,7 +3,6 @@
 namespace MyHordes\Fixtures\Service;
 
 use App\Hooks\ClassHooks;
-use App\Hooks\DumpHooks;
 use App\Hooks\HomeHooks;
 use App\Hooks\ItemTargetRendererHooks;
 use App\Hooks\NightwatchHooks;
@@ -17,30 +16,12 @@ class HookDataService implements FixtureProcessorInterface {
     public function process(array &$data, ?string $tag = null): void
     {
         $data = array_replace_recursive($data, [
-            'dumpDisplayCostCore' => [
-				'hookname' => 'dumpDisplayCost',
-				'classname' => DumpHooks::class,
-				'active' => true,
-				'position' => 0
-			],
             'additionalCitizenRowClassCore' => [
                 'hookname' => 'additionalCitizenRowClass',
                 'classname' => ClassHooks::class,
                 'active' => true,
                 'position' => 0
             ],
-			'dumpDisplayItemsCore' => [
-				'hookname' => 'dumpDisplayItems',
-				'classname' => DumpHooks::class,
-				'active' => true,
-				'position' => 0
-			],
-			'dumpDisplayActionsCoreJs' => [
-				'hookname' => 'dumpDisplayActionsJs',
-				'classname' => DumpHooks::class,
-				'active' => true,
-				'position' => 0
-			],
             'nightwatchHeader' => [
                 'hookname' => 'nightwatchHeader',
                 'classname' => NightwatchHooks::class,
