@@ -9,9 +9,11 @@ use App\Enum\Configuration\MyHordesSetting;
 use App\Messages\Gitlab\GitlabCreateIssueMessage;
 use App\Service\ConfMaster;
 use App\Service\JSONRequestParser;
+use App\Service\PermissionHandler;
 use App\Service\RateLimitingFactoryProvider;
 use App\Service\UserHandler;
 use ArrayHelpers\Arr;
+use Exception;
 use Gitlab\Client;
 use Shivas\VersioningBundle\Service\VersionManagerInterface;
 use Symfony\Component\Asset\Packages;
@@ -54,17 +56,18 @@ class GitlabController extends CustomAbstractCoreController
     }
 
     /**
+     * @param Packages $asset
      * @param ConfMaster $confMaster
-     * @param UserHandler $handler
+     * @param PermissionHandler $handler
      * @return JsonResponse
-     * @throws \Exception
+     * @throws Exception
      */
     #[Route(path: '', name: 'base', methods: ['GET'])]
-    public function index(Packages $asset, ConfMaster $confMaster, UserHandler $handler): JsonResponse {
+    public function index(Packages $asset, ConfMaster $confMaster, PermissionHandler $handler): JsonResponse {
 
         $blocked = !$this->getUser()
-            || ($handler->isRestricted($this->getUser(), AccountRestriction::RestrictionReportToGitlab))
-            || $handler->isRestricted( $this->getUser(), AccountRestriction::RestrictionGameplay );
+            || ($handler->checkRestriction($this->getUser(), AccountRestriction::RestrictionReportToGitlab))
+            || $handler->checkRestriction( $this->getUser(), AccountRestriction::RestrictionGameplay );
 
         return new JsonResponse([
             'strings' => [
@@ -130,22 +133,23 @@ class GitlabController extends CustomAbstractCoreController
      * @param JSONRequestParser $parser
      * @param ConfMaster $confMaster
      * @param VersionManagerInterface $version
-     * @param UserHandler $handler
+     * @param PermissionHandler $handler
      * @param RateLimitingFactoryProvider $rateLimiter
      * @param MessageBusInterface $bus
      * @return JsonResponse
      * @throws ExceptionInterface
      */
     #[Route(path: '', name: 'create_issue', methods: ['PUT'])]
-    public function create_issue(JSONRequestParser $parser, ConfMaster $confMaster, VersionManagerInterface $version, UserHandler $handler, RateLimitingFactoryProvider $rateLimiter, MessageBusInterface $bus): JsonResponse {
+    public function create_issue(JSONRequestParser $parser, ConfMaster $confMaster, VersionManagerInterface $version, PermissionHandler $handler, RateLimitingFactoryProvider $rateLimiter, MessageBusInterface $bus): JsonResponse {
 
-        if (!$this->getUser() || !$this->isGranted('ROLE_USER') || $handler->isRestricted($this->getUser(), AccountRestriction::RestrictionReportToGitlab))
+        if (!$this->getUser() || !$this->isGranted('ROLE_USER') || $handler->checkRestriction($this->getUser(), AccountRestriction::RestrictionReportToGitlab))
             return new JsonResponse([], Response::HTTP_FORBIDDEN);
 
-        if ( !$this->isGranted('ROLE_ELEVATED') && !$rateLimiter->reportLimiter($this->getUser())->create( $this->getUser()->getId() )->consume( 2 )->isAccepted())
+        $staging = $confMaster->getGlobalConf()->get( MyHordesSetting::StagingSettingsEnabled );
+        if ( !$this->isGranted('ROLE_ELEVATED') && !$staging && !$rateLimiter->reportLimiter($this->getUser())->create( $this->getUser()->getId() )->consume( 2 )->isAccepted())
             return new JsonResponse([], Response::HTTP_TOO_MANY_REQUESTS);
 
-        if ( !$this->isGranted('ROLE_ELEVATED') && !$rateLimiter->reportToGitlab->create( $this->getUser()->getId() )->consume()->isAccepted())
+        if ( !$this->isGranted('ROLE_ELEVATED') && !$staging && !$rateLimiter->reportToGitlab->create( $this->getUser()->getId() )->consume()->isAccepted())
             return new JsonResponse([], Response::HTTP_TOO_MANY_REQUESTS);
 
         if (!$this->validateConfig( $confMaster )) return new JsonResponse([], Response::HTTP_PRECONDITION_FAILED);

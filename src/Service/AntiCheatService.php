@@ -5,14 +5,13 @@ namespace App\Service;
 use App\Entity\AccountRestriction;
 use App\Entity\Activity;
 use App\Entity\User;
+use App\Service\User\UserCapabilityService;
 use App\Structures\CheatTable;
 use DateTime;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Lock\LockFactory;
-use Symfony\Component\Lock\Store\SemaphoreStore;
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\Cache\TagAwareCacheInterface;
 use WhichBrowser\Parser;
@@ -21,14 +20,15 @@ readonly class AntiCheatService {
 
     public function __construct(
         private EntityManagerInterface $em,
-        private UserHandler            $user_handler,
+        private PermissionHandler      $permission_handler,
+        private UserCapabilityService  $capabilities,
         private TagAwareCacheInterface $gameCachePool,
         private Locksmith              $locksmith,
     ) { }
 
-    public function cleanseConnectionIdentifiers() {
+    public function cleanseConnectionIdentifiers(): void {
         $old = $this->em->getRepository(Activity::class)->matching(
-            (new Criteria())->where(Criteria::expr()->lte('dateTimeEnd', new DateTime('-7 days')))
+            new Criteria()->where(Criteria::expr()->lte('dateTimeEnd', new DateTime('-7 days')))
         );
         foreach ($old as $e) $this->em->remove($e);
     }
@@ -37,10 +37,10 @@ readonly class AntiCheatService {
         $base = (clone $dateTime)->modify('today')->getTimestamp();
         $offset = (float)($dateTime->getTimestamp() - $base + ($up ? 1 : 0)) / (float)$interval;
 
-        return (new \DateTime())->setTimestamp($base + round(($up ? ceil($offset) : floor($offset)) * $interval));
+        return new \DateTime()->setTimestamp($base + round(($up ? ceil($offset) : floor($offset)) * $interval));
     }
 
-    public function recordConnection(?User $user, Request $request) {
+    public function recordConnection(?User $user, Request $request): void {
         if (!$user || in_array('IS_IMPERSONATOR', $user->getRoles() ?? [])) return;
 
         // Check if we're moving from GMT+2 to GMT+1 today
@@ -153,15 +153,15 @@ readonly class AntiCheatService {
         };
 
         foreach ($user_matrix as $principal => $user_list) {
-            if ($this->user_handler->hasRole($fun_get_user($principal), "ROLE_CROW")) continue;
+            if ($this->capabilities->hasRole($fun_get_user($principal), "ROLE_CROW")) continue;
             $struct = new CheatTable($fun_get_user($principal));
             foreach ($user_list as $multi => $time_list) {
-                if ($this->user_handler->hasRole($fun_get_user($multi), "ROLE_CROW")) continue;
+                if ($this->capabilities->hasRole($fun_get_user($multi), "ROLE_CROW")) continue;
                 foreach ($fun_get_user($principal)->getConnectionWhitelists() as $wl)
                     if ($wl->getUsers()->contains( $fun_get_user($multi) )) continue 2;
                 $struct->addUser( $fun_get_user($multi) );
 
-                $factor = $this->user_handler->isRestricted( $fun_get_user($multi), AccountRestriction::RestrictionGameplay ) ? 2 : 1;
+                $factor = $this->permission_handler->checkRestriction( $fun_get_user($multi), AccountRestriction::RestrictionGameplay ) ? 2 : 1;
 
                 $lev = min(
                     levenshtein( $fun_get_user($principal)->getUsername(), $fun_get_user($multi)->getUsername() ),
