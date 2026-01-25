@@ -217,6 +217,7 @@ class ActionCatapultProvider
             'omg_this_will_kill_you_#00',
             'poison_#00',
             'poison_part_#00',
+            'infect_poison_#00',
             'quantum_#00',
             'radio_on_#00',
             'rhum_#00',
