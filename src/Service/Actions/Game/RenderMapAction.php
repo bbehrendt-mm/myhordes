@@ -81,6 +81,8 @@ readonly class RenderMapAction
         $scout_markings_own = $scout_markings && $scout_sense;
         $scout_markings_global = $admin || ($scout_markings && ($scout_markings_own || $activeCitizen->hasRole('guide')));
 
+        $wind = $upgraded_map || $admin;
+
         $citizen_zone_cache = [];
         foreach ($town->getCitizens() as $citizen)
             if ($citizen->getAlive() && $citizen->getZone() !== null) {
@@ -129,7 +131,6 @@ readonly class RenderMapAction
                 $current_zone['t'] = true;
                 $current_zone['z'] = $zone->getZombies();
                 $current_zone['d'] = $this->zone_handler->getZoneDangerLevelNumber($zone, mt_rand(PHP_INT_MIN, PHP_INT_MAX), true);
-                $current_zone['wd'] = $zone->getDirection();
             } else {
                 $current_zone['t'] = $discovery_state >= Zone::DiscoveryStateCurrent;
                 if ($discovery_state >= Zone::DiscoveryStateCurrent) {
@@ -141,6 +142,8 @@ readonly class RenderMapAction
                     }
                 }
             }
+
+            if ($wind) $current_zone['wd'] = $zone->getDirection();
 
             if ($zone->isTownZone()) {
                 $current_zone['td'] = $town->getDevastated();
@@ -198,7 +201,7 @@ readonly class RenderMapAction
             'conf' => [
                 'scav' => ($admin || $scavenger_sense),
                 'scout' => ($admin || $scout_markings_global || $scout_markings_own),
-                'wind' => $admin,
+                'wind' => $wind,
             ],
             'local' => array_map( function(Zone $z) use ($activeCitizen, $town, $citizen_zone, $scavenger_sense, $scout_sense, $admin, $scout_markings_own, $scout_markings_global) {
                 $local = $citizen_zone === $z;

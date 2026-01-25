@@ -5,6 +5,8 @@ import {TranslatableAPI} from "../index";
 export type RuntimeMapStrings = {
     zone: string,
     distance: string,
+    direction: string,
+    directionValues: string[],
     distanceTown: string,
     distanceSelf: string,
     danger: string[],
