@@ -70,7 +70,7 @@
                             {% endif %}
 
                             {% if entry.renderer is null %}
-                                {% if entry.tooltip is defined and entry.tooltip is not null and not (entry.broken is defined and entry.broken) %}
+                                {% if entry.tooltip is defined and entry.tooltip is not empty and not (entry.broken is defined and entry.broken) %}
                                     <div class="tooltip normal">{{ entry.tooltip|raw }}</div>
                                 {% elseif entry.message is defined and entry.message is not null and not (entry.broken is defined and entry.broken) %}
                                     <div class="tooltip normal">{{ entry.message|raw }}</div>
