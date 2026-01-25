@@ -13,39 +13,29 @@ use App\Entity\CitizenHomePrototype;
 use App\Entity\CitizenHomeUpgrade;
 use App\Entity\CitizenHomeUpgradePrototype;
 use App\Entity\CitizenRole;
-use App\Entity\CitizenStatus;
 use App\Entity\CitizenWatch;
-use App\Entity\Complaint;
 use App\Entity\EventActivationMarker;
-use App\Entity\ExpeditionRoute;
 use App\Entity\Item;
 use App\Entity\ItemPrototype;
 use App\Entity\Inventory;
 use App\Entity\PictoPrototype;
-use App\Entity\PrivateMessage;
 use App\Entity\Town;
 use App\Entity\TownClass;
 use App\Entity\ZombieEstimation;
 use App\Entity\Zone;
 use App\Entity\ZoneActivityMarker;
-use App\Entity\ZoneTag;
 use App\Enum\Configuration\CitizenProperties;
 use App\Enum\Configuration\TownSetting;
 use App\Enum\EventStages\BuildingValueQuery;
 use App\Enum\ZoneActivityMarkerType;
 use App\Service\Actions\Game\EstimateZombieAttackAction;
-use App\Service\Actions\Game\PrepareZombieAttackEstimationAction;
 use App\Structures\EventConf;
 use App\Structures\HomeDefenseSummary;
 use App\Structures\TownDefenseSummary;
-use App\Structures\TownConf;
-use App\Structures\WatchtowerEstimation;
+use App\Structures\TownWaterConsumptionSummary;
 use DateInterval;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Asset\Packages;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class TownHandler
 {
@@ -326,11 +316,12 @@ class TownHandler
     }
 
     public function bonus_defense_blocked(Town $town, Building $building): bool {
+        $waterItem = $this->calculate_town_water_consumption($town)->getBuilding($building->getPrototype()->getName());
+        if ($waterItem != null && $waterItem->active == false) {
+            return true;
+        }
+
         switch ($building->getPrototype()->getName()) {
-            case 'item_tube_#00':
-                if ($building->getLevel() <= 0) return false;
-                $water_needed = [0, 2, 4, 6, 9, 12][$building->getLevel()] ?? 12;
-                return $town->getWell() < $water_needed;
             case 'item_boomfruit_#00':
                 $grapefruits_needed = min(5, $building->getLevel());
                 $items = $this->inventory_handler->countSpecificItems( $town->getBank(), 'boomfruit_#00', broken: false, poison: false );
@@ -437,6 +428,42 @@ class TownHandler
         $summary->nightwatch_defense = $this->calculate_watch_def($town);
 
         return $summary->sum();
+    }
+
+    public function calculate_town_water_consumption(Town $town): TownWaterConsumptionSummary {
+        $summary = new TownWaterConsumptionSummary();
+
+        $buildings = array_filter(
+            array_map(
+                function(string $name) use ($town) {
+                    $b = $this->getBuilding($town, $name, true);
+                    return [$b, $b ? $b->getWaterConsumption($town->getDay()) : 0];
+                },
+                $this->getCachedBuildingList($town, true)
+            ),
+            fn(array $info) => $info[1] > 0
+        );
+
+        // Sort by water consumption, TODO: sort by defense / other
+        usort($buildings, fn(array $a, array $b) => $a[1] <=> $b[1]);
+
+        $summary->total_required = array_reduce($buildings, fn(int $t, array $info) => $t + $info[1], 0);
+
+        $well = $town->getWell();
+        foreach($buildings as [$building, $water]) {
+            /** @var Building $building */
+            /** @var int $water */
+            $active = $water <= $well;
+
+            if ($active) {
+                $well -= $water;
+                $summary->total_consumed += $water;
+            }
+
+            $summary->addBuilding($building->getPrototype(), $water, $active);
+        }
+
+        return $summary;
     }
 
     public function calculate_watch_def(Town $town, int $day = 0){
