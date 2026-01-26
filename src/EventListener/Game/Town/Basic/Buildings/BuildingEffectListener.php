@@ -92,6 +92,9 @@ final class BuildingEffectListener implements ServiceSubscriberInterface
     }
 
     public function onProcessPostAttackEffect( BuildingEffectEvent $event ): void {
+        /** @var TownHandler $th */
+        $th = $this->getService(TownHandler::class);
+
         if ( $event->building->getPrototype()->getName() === 'small_refine_#01' && ( $event->upgradedBuilding !== $event->building || $event->building->getLevel() === 1 ) ) {
             $event->produceDailyBlueprint = array_merge($event->produceDailyBlueprint, ['bplan_c_#00']);
             $event->markModified();
@@ -100,38 +103,35 @@ final class BuildingEffectListener implements ServiceSubscriberInterface
         $maximizeProd = false;
         $inventoryHandler = $this->getService(InventoryHandler::class);
 
+        if ($event->building->getWaterConsumption($event->town->getDay())) {
+            $waterItem = $th->calculate_town_water_consumption($event->town)
+                ->getBuilding($event->building->getPrototype()->getName());
+
+            if ($waterItem->active) {
+                switch($event->building->getWaterConsumptionType()) {
+                    case 1:
+                        $event->waterDeducted += $waterItem->water_consumed;
+                        break;
+                    case 2:
+                        $event->waterConsumed += $waterItem->water_consumed;
+                        break;
+                }
+            } else {
+                // Building is disabled : Abort effect
+                return;
+            }
+        }
+
         switch ($event->building->getPrototype()->getName()) {
 
-            case 'item_tube_#00':
-                if ($event->building->getLevel() <= 0) break;
-
-                // Attempt to deduct water from the well
-                $water_needed = [0,2,4,6,9,12][ $event->building->getLevel() ] ?? 12;
-                if ($event->town->getWell() >= $water_needed)
-                    $event->waterDeducted += $water_needed;
-
-                break;
-
             case 'small_pool_#00':
-                // Attempt to deduct water from the well
-                $day = $event->town->getDay();
-                if ($day >= 30) $water_needed = 18;
-                elseif ($day >= 26) $water_needed = 12;
-                elseif ($day >= 21) $water_needed = 6;
-                elseif ($day >= 11) $water_needed = 3;
-                else $water_needed = 1;
-
-                if ($event->town->getWell() >= $water_needed) {
-                    $event->waterConsumed += $water_needed;
-                    
-                    $em = $this->getService(EntityManagerInterface::class);
-                    $pool_filled_status = $em->getRepository(CitizenStatus::class)->findOneByName('tg_pool_filled');
-                    $citizenHandler = $this->getService(CitizenHandler::class);
-                    foreach ($event->town->getCitizens() as $citizen) {
-                        if ($citizen->getAlive()) {
-                            $citizenHandler->inflictStatus($citizen, $pool_filled_status);
-                            $em->persist($citizen);
-                        }
+                $em = $this->getService(EntityManagerInterface::class);
+                $pool_filled_status = $em->getRepository(CitizenStatus::class)->findOneByName('tg_pool_filled');
+                $citizenHandler = $this->getService(CitizenHandler::class);
+                foreach ($event->town->getCitizens() as $citizen) {
+                    if ($citizen->getAlive()) {
+                        $citizenHandler->inflictStatus($citizen, $pool_filled_status);
+                        $em->persist($citizen);
                     }
                 }
 

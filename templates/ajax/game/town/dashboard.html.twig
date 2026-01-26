@@ -1,5 +1,38 @@
 {% extends "ajax/game/town/town.html.twig" %}
 {% block title %}{{'Gesamtansicht der Stadt'|trans({}, 'game')|raw}}{% endblock %}
+
+{% macro water_indicator(summary) %}
+    <span>
+        {% if summary.total_required == 0 %}
+            <img src="{{ asset('build/images/item/item_water.gif') }}" />
+        {% elseif summary.total_required == summary.total_consumed %}
+            <img src="{{ asset('build/images/status/status_hasdrunk.gif') }}" />
+        {% elseif summary.total_consumed > 0 %}
+            <img src="{{ asset('build/images/status/status_thirst1.gif') }}" />
+        {% else %}
+            <img src="{{ asset('build/images/status/status_thirst2.gif') }}" />
+        {% endif %}
+        <div class="tooltip help">
+            <table>
+                {% for info in summary.buildings %}
+                <tr>
+                    <td><img src="{{ asset('build/images/building/' ~ info.icon ~ '.gif') }}" /></td>
+                    <td>{{ info.label|trans({}, 'buildings') }}</td>
+                    <td>{{ info.water_consumed }} <img src="{{ asset('build/images/status/status_thirst1.gif') }}" /></td>
+                    <td>
+                        {% if info.active %}
+                            <img src="{{ asset('build/images/icons/done.png') }}" />
+                        {% else %}
+                            <img src="{{ asset('build/images/icons/warning_anim.gif') }}" />
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </span>
+{% endmacro %}
+
 {% block content %}
     <div class="town-header{% if town.type.name == 'panda' %} hardcore{% endif %}">
         <div><b>{{ town.name }}</b></div>
@@ -124,7 +157,7 @@
                     <ul class="overview-list">
                         <li>{{ 'Stadttyp:'|trans({}, 'game') }} <strong>{{ town.type.label|trans({}, 'game') }}</strong></li>
                         <li>{{ 'Stadttor:'|trans({}, 'game') }} <strong class="{% if(town.door) %}warning{% endif %}">{% if(town.door and (town.devastated or town.brokenDoor)) %} {{ 'ZERSTÖRT!!'|trans({}, 'game')}} {% elseif (town.door) %} {{ 'Offen!'|trans({}, 'game')}} {% else %} {{'Geschlossen'|trans({}, 'game')}} {% endif %}</strong></li>
-                        <li>{{ 'Wasservorräte:'|trans({}, 'game') }} <strong>{{ town.well}}</strong> <img src="{{ asset('build/images/item/item_water.gif') }}" />{% if town.well < 15 %} <span class="warning">(<img src="{{ asset('build/images/icons/small_warning.gif') }}" alt="" /> {{ 'Gefahr'|trans({}, 'game') }})</span>{% endif %}</li>
+                        <li>{{ 'Wasservorräte:'|trans({}, 'game') }} <strong>{{ town.well}}</strong> {{ _self.water_indicator(water_summary) }}{% if town.well < 15 %} <span class="warning">(<img src="{{ asset('build/images/icons/small_warning.gif') }}" alt="" /> {{ 'Gefahr'|trans({}, 'game') }})</span>{% endif %}</li>
                         <li>{{ 'Einwohner am Leben:'|trans({}, 'game') }} <strong>{{ living_citizens + town.strangers }}</strong> <img src="{{ asset('build/images/icons/small_human.gif') }}" /></li>
                         <li>{{ 'Geschätzter Angriff :'|trans({}, 'game') }} <strong>{% if zeds_today[4] and zeds_today[0] %}{{ zeds_today[1] }} - {{ zeds_today[2] }}{% else %}{{ 'Unbekannt'|trans({}, 'game')}}{% endif %}</strong> <img src="{{ asset('build/images/icons/small_zombie.gif') }}" /></li>
                         {% for obj in additional_situation_points %}

@@ -301,4 +301,36 @@ class Building
             repeat: $this->getCompletedTimes()
         )->getResources();
     }
+    
+    /**
+     * There is probably a better way of doing this
+     * But I don't know how to configure 'functions' for fixtures, or to provide configurable-enough properties
+     */
+    public function getWaterConsumption(int $day): int {
+        switch ($this->getPrototype()->getName()) {
+            case 'item_tube_#00':
+                return [0,2,4,6,9,12][ $this->getLevel() ] ?? 12;
+            case 'small_pool_#00':
+                if ($day >= 30) return 18;
+                elseif ($day >= 26) return 12;
+                elseif ($day >= 21) return 6;
+                elseif ($day >= 11) return 3;
+                else return 1;
+            default:
+                return 0;
+        }
+    }
+
+    public function getWaterConsumptionType(): int {
+        switch ($this->getPrototype()->getName()) {
+            /** Defense consumption */
+            case 'item_tube_#00':
+                return 1;
+            /** Regular consumption */
+            case 'small_pool_#00':
+                return 2;
+            default:
+                return 0;
+        }
+    }
 }

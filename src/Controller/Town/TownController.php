@@ -258,6 +258,7 @@ class TownController extends InventoryAwareController
             'zeds_tomorrow' => $zeds_tomorrow,
             'living_citizens' => $alive,
             'def_summary' => $defSummary,
+            'water_summary' => $this->town_handler->calculate_town_water_consumption($town)->toArray(),
             'item_def_count' => $item_def_count,
             'item_def_factor' => $item_def_factor,
             'has_battlement' => $has_battlement,
