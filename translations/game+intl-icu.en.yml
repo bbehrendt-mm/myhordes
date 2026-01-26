@@ -3268,3 +3268,12 @@ Tierklinik: Experiment Center
 'Du hast heimlich einen Eintrag vollständig aus dem Register entfernt... Du kannst das noch {times} mal tun.': 'You have discretely removed an entry from the register entirely... You can do this {times} more times.'
 'Zweite Lunge (3 AP, 1 EP)': 'Second Wind (3 AP, 1 EP)'
 'Verbesserung Zweite Lunge (3 AP, 3 EP)': 'Improved Second Wind (3 AP, 3 EP)'
+'Durch den Einschlag wurden {kills} Zombies getötet!': 'The impact has killed {kills, plural, one {one zombie} other {# zombies}}!'
+'{citizen} hat den Gegenstand {item} auf diese Zone katapultiert und damit {kills} Zombie(s) getötet.': '{citizen} has catapulted {item} into this zone and killed {raw_kills, plural, one {one zombie} other {# zombies}}.'
+'{citizen} hat den Gegenstand {item} auf <strong>[{x}/{y}]</strong> katapultiert und durch die Detonation auf dieser Zone {kills} Zombie(s) getötet.': '{citizen} has catapulted {item} into zone <strong>[{x}/{y}]</strong>. The resulting detonation killed {raw_kills, plural, one {one zombie} other {# zombies}} in this zone.'
+'{master} hat {item} nach <strong>[{x}/{y}]</strong> <strong>katapultiert</strong> und durch den Einschlag <strong>{kills} Zombies</strong> getötet!': '{master} has <strong>catapulted</strong> {item} towards <strong>[{x}/{y}]</strong> and killed <strong>{raw_kills, plural, one {one zombie} other {# zombies}}</strong> with the impact!'
+'Du hast {item} verwendet, um dein Haus abzusichern. <strong>Dein Haus hat {def} Verteidigungspunkt(e) dazugewonnen.</strong> Was werden die anderen Stadtbewohner wohl dazu sagen..?': 'You''ve used {item} to secure your home. <strong>Your home received {def} defense point(s).</strong> What will the other citizens say about this...?'
+Windrichtung: Cardinal direction
+'Zusätzlich kannst du Gegenstände aus deinem Rucksack verwenden, um temporär die Verteidigung deiner Behausung zu verbessern. Pro Stufe deines Hauses kannst du 2 Gegenstände für die Verbesserung deines Hauses verwenden.': 'In addition to this, you may use items from your rucksack to temporarily boost your home defense. For each level of your home, you may dump 2 items to fortify it.'
+'Du wurdest verbannt und kannst die Müllhalde daher nicht länger nutzen, um die Verteidigung der Stadt zu verbessern.': 'Due to your banishment you can no longer use the dump to imrove the town''s defenses.'
+'Haus verstärken': 'Improve home'

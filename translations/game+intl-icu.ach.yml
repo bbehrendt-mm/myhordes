@@ -3268,3 +3268,12 @@ Tierklinik: crwdns225726:0crwdne225726:0
 'Du hast heimlich einen Eintrag vollständig aus dem Register entfernt... Du kannst das noch {times} mal tun.': 'crwdns252950:0{times}crwdne252950:0'
 'Zweite Lunge (3 AP, 1 EP)': 'crwdns252952:0crwdne252952:0'
 'Verbesserung Zweite Lunge (3 AP, 3 EP)': 'crwdns252954:0crwdne252954:0'
+'Durch den Einschlag wurden {kills} Zombies getötet!': 'crwdns252956:0kills={kills}crwdne252956:0'
+'{citizen} hat den Gegenstand {item} auf diese Zone katapultiert und damit {kills} Zombie(s) getötet.': 'crwdns252958:0citizen={citizen}crwdnd252958:0item={item}crwdnd252958:0raw_kills={raw_kills}crwdne252958:0'
+'{citizen} hat den Gegenstand {item} auf <strong>[{x}/{y}]</strong> katapultiert und durch die Detonation auf dieser Zone {kills} Zombie(s) getötet.': 'crwdns252960:0citizen={citizen}crwdnd252960:0item={item}crwdnd252960:0x={x}crwdnd252960:0y={y}crwdnd252960:0raw_kills={raw_kills}crwdne252960:0'
+'{master} hat {item} nach <strong>[{x}/{y}]</strong> <strong>katapultiert</strong> und durch den Einschlag <strong>{kills} Zombies</strong> getötet!': 'crwdns252962:0master={master}crwdnd252962:0item={item}crwdnd252962:0x={x}crwdnd252962:0y={y}crwdnd252962:0raw_kills={raw_kills}crwdne252962:0'
+'Du hast {item} verwendet, um dein Haus abzusichern. <strong>Dein Haus hat {def} Verteidigungspunkt(e) dazugewonnen.</strong> Was werden die anderen Stadtbewohner wohl dazu sagen..?': 'crwdns252964:0{item}crwdnd252964:0{def}crwdne252964:0'
+Windrichtung: crwdns252966:0crwdne252966:0
+'Zusätzlich kannst du Gegenstände aus deinem Rucksack verwenden, um temporär die Verteidigung deiner Behausung zu verbessern. Pro Stufe deines Hauses kannst du 2 Gegenstände für die Verbesserung deines Hauses verwenden.': 'crwdns252968:0crwdne252968:0'
+'Du wurdest verbannt und kannst die Müllhalde daher nicht länger nutzen, um die Verteidigung der Stadt zu verbessern.': 'crwdns252970:0crwdne252970:0'
+'Haus verstärken': 'crwdns252972:0crwdne252972:0'
