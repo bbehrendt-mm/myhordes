@@ -48,6 +48,8 @@ class ItemPrototype implements NamedEntity
     #[ORM\Column(type: 'boolean')]
     private bool $hideInForeignChest = false;
     #[ORM\Column(type: 'integer', nullable: true)]
+    private ?int $bagExtensionType = 0;
+    #[ORM\Column(type: 'integer', nullable: true)]
     private ?int $sort = 0;
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $deco_text = null;
@@ -234,6 +236,21 @@ class ItemPrototype implements NamedEntity
         $this->hideInForeignChest = $hideInForeignChest;
 
         return $this;
+    }
+
+    public function getBagExtensionType(): ?int
+    {
+        return $this->bagExtensionType;
+    }
+    public function setBagExtensionType(?int $bagExtensionType): self
+    {
+        $this->bagExtensionType = $bagExtensionType;
+
+        return $this;
+    }
+    public function isCarrierItem(): bool
+    {
+        return $this->getBagExtensionType() != 0;
     }
 
     public function getSort(): ?int

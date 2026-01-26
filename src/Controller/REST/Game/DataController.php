@@ -76,6 +76,7 @@ class DataController extends CustomAbstractCoreController
                 'icon' => $this->assets->getUrl( "build/images/item/item_{$p->getIcon()}.gif" ),
                 'props' => $p->getProperties()->filter( fn(ItemProperty $p) => in_array( $p->getName(), $fe_props ) )->map( fn(ItemProperty $p) => $p->getName() )->getValues(),
                 'heavy' => $p->getHeavy(),
+                'extension' => $p->isCarrierItem(),
                 'deco' => $p->getDeco(),
                 'watch' => $p->getWatchpoint(),
                 'cata' => $p->getCatapultAction() !== null,

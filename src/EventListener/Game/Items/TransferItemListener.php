@@ -152,6 +152,12 @@ final class TransferItemListener implements ServiceSubscriberInterface
         $opt_allow_extra_bag   = in_array( TransferItemOption::AllowExtraBag, $event->options );
         $opt_allow_multi_heavy = in_array( TransferItemOption::AllowMultiHeavy, $event->options );
 
+        /** @var Item */
+        $item = $event->item;
+
+        /** @var Inventory */
+        $to = $event->to;
+
         // Can't steal from the bank if it's not night time
         if ($event->modality === TransferItemModality::BankTheft && !$event->townConfig->isNightMode()) {
             $event->pushError(ErrorHelper::ErrorActionNotAvailable);
@@ -203,27 +209,22 @@ final class TransferItemListener implements ServiceSubscriberInterface
         }
 
         // Check exp_b items
-        if (!$opt_enforce_placement){
-            $bag_item_groups = [
-                ['bagxl_#00', 'bag_#00', 'cart_#00'],
-                ['pocket_belt_#00']
-            ];
+        if (!$opt_enforce_placement) {
+            if (
+                // When trying to pick up a bag extension
+                $type_to->isRucksack() && !$opt_allow_extra_bag && $item->getPrototype()->isCarrierItem()
+                // Check if we don't already have an extension of the same type
+                && $to->findItem(fn(Item $i) => $i->getPrototype()->getBagExtensionType() == $item->getPrototype()->getBagExtensionType())
+            ) {
+                $event->pushError(InventoryHandler::ErrorExpandBlocked);
+                return;
+            }
 
-            // Cannot carry multiple bag extensions of the same type
-            if ( $type_to->isRucksack() && !$opt_allow_extra_bag )
-                foreach ($bag_item_groups as $bag_item_group)
-                    if (in_array($event->item->getPrototype()->getName(), $bag_item_group) && $event->to->hasAnyItem( ...$bag_item_group ) ) {
-                        $event->pushError(InventoryHandler::ErrorExpandBlocked);
-                        return;
-                    }
-
-            // Cannot deposit a bag extension
-            if ( $type_to === TransferItemType::Steal )
-                foreach ($bag_item_groups as $bag_item_group)
-                    if (in_array($event->item->getPrototype()->getName(), $bag_item_group)) {
-                        $event->pushError(InventoryHandler::ErrorTransferStealDropInvalid);
-                        return;
-                    }
+            // Cannot deposit (thief) a bag extension                    
+            if ( $type_to === TransferItemType::Steal && $item->getPrototype()->isCarrierItem()) {
+                $event->pushError(InventoryHandler::ErrorTransferStealDropInvalid);
+                return;
+            }
         }
 
         // Check Heavy item limit

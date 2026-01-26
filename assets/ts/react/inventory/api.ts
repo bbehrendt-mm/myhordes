@@ -3,13 +3,21 @@ import {TranslationStrings} from "./strings";
 import {TranslatableAPI} from "../index";
 
 export type Item = {
+    /** Item ID */
     i: number,
+    /** Item Prototype id */
     p: number,
+    /** Item count */
     c: number,
+    /** Watch attack points (tooltip) */
     w: string|null,
+    /** is Broken */
     b: boolean,
+    /** is Hidden */
     h: boolean,
+    /** is Essential */
     e: boolean,
+    /** Sort indexes */
     s: number[],
 }
 

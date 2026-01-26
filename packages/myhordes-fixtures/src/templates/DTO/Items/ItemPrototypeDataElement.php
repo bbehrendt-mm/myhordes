@@ -25,6 +25,8 @@ use MyHordes\Fixtures\DTO\LabeledIconElementInterface;
  * @method self watchpoint(int $v)
  * @property string $deco_text
  * @method self deco_text(string $v)
+ * @property int $bagExtensionType
+ * @method self bagExtensionType(int $v)
  * @property int $sort
  * @method self sort(int $v)
  * @property bool $hideInForeignChest
@@ -60,6 +62,7 @@ class ItemPrototypeDataElement extends Element implements LabeledIconElementInte
                 ->setDeco( $this->deco ?? 0 )
                 ->setHeavy( $this->heavy ?? false )
                 ->setCategory( $category )
+                ->setBagExtensionType( $this->bagExtensionType ?? 0 )
                 ->setSort( $this->sort ?? 0 )
                 ->setDescription( $this->description )
                 ->setHideInForeignChest( $this->hideInForeignChest ?? false )

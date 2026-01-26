@@ -175,6 +175,22 @@ class Inventory
         return $this;
     }
 
+    /**
+     * Finds any item in the inventory
+     * By default, searches for a prototype name
+     * If a callable is passed, will return the first item passing the filter
+     *
+     * Ex: ...->findItem(fn(Item $i) => $i->getPrototype->getHeavy())
+     * Would return the first heavy item if one is present
+     */
+    public function findItem(string|callable $filter): ?Item
+    {
+        if (is_callable($filter)) {
+            return $this->getItems()->findFirst(fn(int $key, Item $i) => $filter($i));
+        }
+        return $this->getItems()->findFirst(fn(int $key, Item $i) => $i->getPrototype()->getName() == $filter);
+    }
+
     public function hasAnyItem(string ...$item_names): bool
     {
         return !empty(array_intersect( $item_names, $this->getItems()->map( fn(Item $i) => $i->getPrototype()->getName() )->toArray() ));
