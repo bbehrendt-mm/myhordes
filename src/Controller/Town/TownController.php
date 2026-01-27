@@ -868,6 +868,7 @@ class TownController extends InventoryAwareController
         $dispatcher->dispatch($event = $e->gameInteractionEvent( WellExtractionCheckEvent::class )->setup( 0 ));
 
         return $this->render( 'ajax/game/town/well.html.twig', $this->addDefaultTwigArgs('well', [
+            'water_summary' => $th->calculate_town_water_consumption($this->getActiveCitizen()->getTown())->toArray(),
             'rations_left' => $this->getActiveCitizen()->getTown()->getWell(),
             'first_take' => $event->already_taken === 0,
             'allow_take' => $event->already_taken < $event->allowed_to_take,

@@ -16,9 +16,22 @@
         <div class="cell rw-12 town-banner town-banner-well time-{{ hour }} {% if conf.isNightTime %}night{% endif %}"></div>
     </div>
 
-    {% if rations_left < 15 %}
+    {% if water_summary and water_summary.total_required > 0 %}
         <div class="note note-critical">
-            {{'<strong>Achtung:</strong> Ohne Wasser können bestimmte Verteidigungen (wie z.B. die Wassergeschütztürme) beim Angriff der Zombies nicht eingesetzt werden!'|trans({}, 'game')|raw}}
+            {% if water_summary.total_consumed > 1 %}
+                {{'<strong>Attention:</strong> Cette nuit, les chantiers consommeront {{water}} rations d\'eau du puits.'|trans({'{water}': water_summary.total_consumed}, 'game')|raw}}
+            {% elseif water_summary.total_consumed == 1 %}
+                {{'<strong>Attention:</strong> Cette nuit, les chantiers consommeront une ration d\'eau du puits.'|trans({}, 'game')|raw}}
+            {% else %}
+                {{'<strong>Attention:</strong> Cette nuit, les chantiers ne consommeront pas d\'eau du puits.'|trans({}, 'game')|raw}}
+            {% endif %}
+            {% if water_summary.total_required > water_summary.total_consumed %}
+                {{' La ville ne dispose pas de suffisamment d\'eau pour couvrir les besoins de tous les chantiers !'|trans({}, 'game')|raw}}
+            {% endif %}
+            <a class="help-button">
+                {% include 'ajax/game/town/partials/water-summary-tooltip.twig' with {'summary': water_summary} %}
+                {{ 'Hilfe'|trans({},'global') }}
+            </a>
         </div>
     {% endif %}
 
