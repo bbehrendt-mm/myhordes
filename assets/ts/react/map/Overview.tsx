@@ -139,7 +139,7 @@ const MapOverviewZoneTooltip = ( props: MapOverviewZoneTooltipProps ) => {
                         <div className="cell rw-6 left">{globals.strings.zone}</div>
                         <div className="cell rw-6 right">[{props.zone.x} / {props.zone.y}]</div>
                     </div>
-                    { (!displayLocalDistance || props.zone.x !== 0 || props.zone.x !== 0 ) && (
+                    { (!displayLocalDistance || props.zone.x !== 0 || props.zone.y !== 0 ) && (
                         <div className="row">
                             <div className="cell rw-9 left">{displayLocalDistance ? globals.strings.distanceTown : globals.strings.distance}</div>
                             <div className="cell rw-3 right">
