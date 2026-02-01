@@ -368,6 +368,24 @@ class GazetteDataService implements FixtureProcessorInterface {
                     ['type'=>"citizen",'name'=>'cadaver2'],
                 ],
             ],
+            ['text'=>'Heute Morgen hätte es in der Stadt fast ein <strong>Erbschaftsproblem</strong> gegeben: Auf dem Zettel, der im Haus von † {cadaver1} gefunden wurde, stand „Ich hinterlasse meinen gesamten Besitz meinem Nachbarn † {cadaver2}“. Dieser Nachbar hatte jedoch genau das Gleiche angekündigt. Wir hielten es für sicherer, alle ihre Sachen der Stadt zur freien Verfügung zu stellen. Bedient euch!',
+                'name'=>'gazetteTownTwoDeaths_003',
+                'type'=>GazetteEntryTemplate::TypeGazetteTwoDeaths,
+                'requirement'=>GazetteEntryTemplate::RequiresTwoCadavers,
+                'fot' => GazetteEntryTemplate::FollowUpTypeBad,
+                'variableTypes'=>[
+                    ['type'=>"citizen",'name'=>'cadaver1'],
+                    ['type'=>"citizen",'name'=>'cadaver2'],
+                ],
+            ],
+            ['text'=>'Die Bürger hatten gestern die Wahl zwischen zwei Beerdigungen. Einstimmig gingen sie zu der, bei der Snacks serviert wurden.',
+                'name'=>'gazetteTownTwoDeaths_004',
+                'type'=>GazetteEntryTemplate::TypeGazetteTwoDeaths,
+                'requirement'=>GazetteEntryTemplate::RequiresTwoCadavers,
+                'fot' => GazetteEntryTemplate::FollowUpTypeBad,
+                'variableTypes'=>[
+                ],
+            ],
 
             // Gazette: Multiple deaths in town.
             ['text'=>'Eine schreckliche Nacht für die Stadt. Die lebenden Toten massakrierten {deaths} unserer Gemeinde während des Angriffs. Vielleicht möchtet ihr vor heute Abend noch einmal einen Blick auf unsere Verteidigung werfen...',
