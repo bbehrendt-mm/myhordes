@@ -147,10 +147,8 @@ class CitizenHandler
         if ( $status->getName() === 'tg_meta_winfect')
             $status = $this->entity_manager->getRepository(CitizenStatus::class)->findOneByName('infection');
 
-        // Prevent terror when holding a zen booklet
-        if ( !$force && $status->getName() === 'terror' && $this->inventory_handler->countSpecificItems(
-                $citizen->getInventory(),
-                $this->entity_manager->getRepository(ItemPrototype::class)->findOneByName('lilboo_#00') )
+        // Prevent terror when owning a terror counter item
+        if ( !$force && $status->getName() === 'terror' && $this->inventory_handler->countSpecificItems([$citizen->getInventory(), $citizen->getHome()->getChest()], 'prevent_terror', true) > 0
         ) return $citizen->hasStatus('terror');
 
         if (in_array($status->getName(), ['drugged','addict']))
