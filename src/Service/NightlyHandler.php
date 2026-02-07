@@ -792,7 +792,7 @@ class NightlyHandler
 
                 if( $this->random->pickEntryFromRawRandomArray( [ [true, round($chances['wound'] * 100)], [false, round($chances['terror'] * 100)] ] ) ){
                     // Wound
-                    if (!$this->citizen_handler->isWounded($ctz) && !($ctz->hasStatus($status_good_smell) && $this->random->chance(0.25))) {
+                    if (!$this->citizen_handler->isWounded($ctz)) {
                         $this->citizen_handler->inflictWound($ctz);
                         $this->log->debug("Watcher <info>{$ctz->getUser()->getUsername()}</info> is now <info>wounded</info>");
                         $this->skip_infection[] = $ctz->getId();
@@ -801,7 +801,7 @@ class NightlyHandler
                     }
                 } else {
                     // Terror
-                    if (!$ctz->hasStatus($status_terror) && !($ctz->hasStatus($status_good_smell) && $this->random->chance(0.25))) {
+                    if (!$ctz->hasStatus($status_terror)) {
                         $this->citizen_handler->inflictStatus($ctz, $status_terror);
                         $this->log->debug("Watcher <info>{$ctz->getUser()->getUsername()}</info> now suffers from <info>{$status_terror->getLabel()}</info>");
                         $gazette->setTerror($gazette->getTerror() + 1);

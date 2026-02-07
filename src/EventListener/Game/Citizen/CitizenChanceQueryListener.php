@@ -101,6 +101,12 @@ final class CitizenChanceQueryListener implements ServiceSubscriberInterface
         $log_info['ratio terror'] = ($terrorRatio = ($citizen->getTown()->getType()->getName() == "panda" ? 0.2 : 0.1));
         $event->woundChance = round(max(0.0, min(1 - ((1-$chances)-(1-$chances)*$woundRatio), 1.0)),2);
         $event->terrorChance = round(max(0.0, min(1 - ((1-$chances)-(1-$chances)*$terrorRatio), 1.0)),2);
+        
+        // Good Smell status
+        if ($citizen->hasStatus('good_smell')) {
+            $event->woundChance = min(0.0, $event->woundChance - 0.25);
+            $event->terrorChance = min(0.0, $event->terrorChance - 0.25);
+        }
 
         $log_info['core chances'] = [
             'death' => $event->deathChance,
