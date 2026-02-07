@@ -1,0 +1,104 @@
+{% extends "ajax/ajax.html.twig" %}
+
+{% block title %}
+    {% trans from 'art' %}RP-Texte{% endtrans %}
+{% endblock %}
+
+{% block ajax %}
+    <div class="row">
+        <div class="cell padded header rw-12">
+            <h4>
+                {% trans from 'art' %}Alle RP-Texte{% endtrans %}
+                ({{ rpTexts|length }})
+            </h4>
+            <p class="justify">
+                {% trans from 'art' %}Übersicht aller verfügbaren Rollenspiel-Texte im Spiel.{% endtrans %}
+            </p>
+        </div>
+    </div>
+
+    {% if rpTexts is empty %}
+        <div class="row">
+            <div class="cell padded rw-12">
+                <p>{% trans from 'art' %}Keine RP-Texte gefunden.{% endtrans %}</p>
+            </div>
+        </div>
+    {% endif %}
+
+    {% for item in rpTexts %}
+        {% set rp = item.rp %}
+        <div class="row">
+            <div class="cell padded rw-12">
+                <details>
+                    <summary>
+                        <strong>{{ rp.title }}</strong>
+                        {% if rp.author %}
+                            <span class="small">({{ rp.author }})</span>
+                        {% endif %}
+                        <span class="small">[{{ rp.language }}]</span>
+                    </summary>
+                    
+                    <div class="rp-details" style="padding: 10px; margin-top: 10px; background: rgba(0,0,0,0.05); border-radius: 4px;">
+                        <div class="rp-meta">
+                            <div class="row">
+                                <div class="cell rw-3"><strong>{% trans from 'art' %}ID{% endtrans %}:</strong></div>
+                                <div class="cell rw-9">{{ rp.id }}</div>
+                            </div>
+                            <div class="row">
+                                <div class="cell rw-3"><strong>{% trans from 'art' %}Name{% endtrans %}:</strong></div>
+                                <div class="cell rw-9"><code>{{ rp.name }}</code></div>
+                            </div>
+                            <div class="row">
+                                <div class="cell rw-3"><strong>{% trans from 'art' %}Titel{% endtrans %}:</strong></div>
+                                <div class="cell rw-9">{{ rp.title }}</div>
+                            </div>
+                            <div class="row">
+                                <div class="cell rw-3"><strong>{% trans from 'art' %}Autor{% endtrans %}:</strong></div>
+                                <div class="cell rw-9">{{ rp.author|default('—') }}</div>
+                            </div>
+                            <div class="row">
+                                <div class="cell rw-3"><strong>{% trans from 'art' %}Sprache{% endtrans %}:</strong></div>
+                                <div class="cell rw-9">{{ rp.language }}</div>
+                            </div>
+                            <div class="row">
+                                <div class="cell rw-3"><strong>{% trans from 'art' %}Design{% endtrans %}:</strong></div>
+                                <div class="cell rw-9">{{ rp.design|default('—') }}</div>
+                            </div>
+                            <div class="row">
+                                <div class="cell rw-3"><strong>{% trans from 'art' %}Hintergrund{% endtrans %}:</strong></div>
+                                <div class="cell rw-9">{{ rp.background|default('—') }}</div>
+                            </div>
+                            <div class="row">
+                                <div class="cell rw-3"><strong>{% trans from 'art' %}Chance{% endtrans %}:</strong></div>
+                                <div class="cell rw-9">{{ rp.chance|default('—') }}</div>
+                            </div>
+                            <div class="row">
+                                <div class="cell rw-3"><strong>{% trans from 'art' %}Seiten{% endtrans %}:</strong></div>
+                                <div class="cell rw-9">{{ item.processedPages|length }}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="rp-preview" style="margin-top: 15px; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+                            <h5 style="margin-top: 0;">{% trans from 'art' %}Vorschau{% endtrans %}</h5>
+                            {% if item.processedPages|length > 0 %}
+                                {% for pageContent in item.processedPages %}
+                                    <div class="soul" style="margin-bottom: 15px;">
+                                        <div class="view-rp">
+                                            <div class="{{ rp.background|default('white') }}">
+                                                <div class="rp-content design-{{ rp.design|default('written') }}" style="max-height: 420px; overflow-y: auto;">
+                                                    {{ pageContent|raw }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <p class="small">{% trans from 'art' %}Keine Seiten vorhanden.{% endtrans %}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </details>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}

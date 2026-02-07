@@ -2,7 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\RolePlayText;
+use App\Entity\RolePlayTextPage;
 use SplFileInfo;
+use Symfony\Component\Asset\Packages;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -72,6 +75,42 @@ class ArtController extends CustomAbstractController
 
         return $this->render('ajax/art/assets.html.twig', $this->addDefaultTwigArgs(null, [
             'assets' => $assets,
+        ]));
+    }
+
+    #[Route(path: 'jx/art/rp-texts', name: 'art_rp_texts', condition: 'request.isXmlHttpRequest()')]
+    public function rpTexts(Packages $assetPackages): Response
+    {
+        if ($resp = $this->denyUnlessArt()) {
+            return $resp;
+        }
+
+        $rpTexts = $this->entity_manager->getRepository(RolePlayText::class)->findAll();
+        
+        // Process RP texts to convert {asset} tags to actual image URLs
+        $processedRpTexts = [];
+        foreach ($rpTexts as $rp) {
+            $processedPages = [];
+            foreach ($rp->getPages() as $page) {
+                $content = $page->getContent();
+                // Replace {asset}path{endasset} with <img src="path" />
+                $content = preg_replace_callback(
+                    '/{asset}([a-zA-Z0-9.\/_-]+){endasset}/',
+                    function($matches) use ($assetPackages) {
+                        return "<img src='" . $assetPackages->getUrl($matches[1]) . "' alt='' style='max-width: 100%;' />";
+                    },
+                    $content
+                );
+                $processedPages[] = $content;
+            }
+            $processedRpTexts[] = [
+                'rp' => $rp,
+                'processedPages' => $processedPages,
+            ];
+        }
+
+        return $this->render('ajax/art/rp_texts.html.twig', $this->addDefaultTwigArgs(null, [
+            'rpTexts' => $processedRpTexts,
         ]));
     }
 }
