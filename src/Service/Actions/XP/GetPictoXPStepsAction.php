@@ -56,7 +56,7 @@ readonly class GetPictoXPStepsAction
             'r_batgun_#00' =>  $pt_5,
             'r_door_#00'   =>  $pt_5,
             'r_explo2_#00' =>  $pt_5,
-            'r_explot_#00' =>  $pt_5, // TODO: determine XP gain for Total Exploration
+            'r_explot_#00' =>  $pt_5,
             'r_ebuild_#00' =>  $pt_5,
             'r_chstxl_#00' =>  [ 1 => 5, 2 => 2, 3 => 2, 5 => 2 ],
 
