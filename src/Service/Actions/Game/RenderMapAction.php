@@ -225,10 +225,12 @@ readonly class RenderMapAction
                     $obj['r'] = $this->asset->getUrl('build/images/ruin/burried.gif');
                     if ($local) $obj['n'] = $this->translator->trans( 'Verschüttete Ruine', [], 'game' );
                 } elseif ($z->getPrototype() && $obj['v']) {
-                    $obj['r'] = $this->asset->getUrl("build/images/ruin/{$z->getPrototype()->getIcon()}.gif");
+                    $obj['r'] = $this->asset->getUrl("build/images/ruin/{$z->getPrototype()->getIcon()}.gif")
+                        ?? $this->asset->getUrl("build/images/ruin/{$z->getPrototype()->getIcon()}.png");
                     if ($local) $obj['n'] = $this->translator->trans( $z->getPrototype()->getLabel(), [], 'game' );
 
-                    $night_icon = $this->asset->getUrl("build/images/ruin/{$z->getPrototype()->getIcon()}.night.gif");
+                    $night_icon = $this->asset->getUrl("build/images/ruin/{$z->getPrototype()->getIcon()}.night.gif")
+                        ?? $this->asset->getUrl("build/images/ruin/{$z->getPrototype()->getIcon()}.night.png");
                     if ($night_icon) $obj['rn'] = $night_icon;
                 }
 
