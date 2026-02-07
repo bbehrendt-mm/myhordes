@@ -1,9 +1,8 @@
 import * as React from "react";
-import {Layer, Image, Group, Rect, Shape} from "react-konva";
-import {useContext, useEffect, useLayoutEffect, useRef} from "react";
+import {Image, Group, Shape} from "react-konva";
+import {useContext, useLayoutEffect, useRef} from "react";
 import {AssetHelper, ScaleHelper} from "./Map";
 import Konva from "konva";
-import {GifImage} from "../konva-utils";
 import {SceneContext} from "konva/lib/Context";
 
 export type MapFOWProperties = {
@@ -25,16 +24,6 @@ export const MapFOWLayer = (props: MapFOWProperties) => {
     const poisonRefs = Array.from(Array(poisonLayers).keys()).map( () => useRef<Konva.Group>(null) );
     const poisonAnimRef = useRef(null);
     const poisonInitialRotationRef = useRef(Array.from(Array(poisonLayers).keys()).map( () => 360 * Math.random() ));
-
-    //const shadowClipFunc = (ctx: SceneContext) => {
-    //    ctx.globalCompositeOperation = 'source-over';
-    //    //ctx.fillRect(0, 0, scaler.x(2), scaler.y(2))
-    //    //ctx.globalCompositeOperation = 'xor';
-    //    ctx.beginPath();
-    //    ctx.arc( scaler.x(1), scaler.y(1), scaler.s(props.shadowDistance / 2), 0, 2 * Math.PI, false );
-    //    ctx.fill();
-    //    ctx.globalCompositeOperation = 'source-over';
-    //}
 
     const shadowShapeFunc = (ctx: SceneContext, shape: Konva.Shape) => {
         ctx.beginPath();
