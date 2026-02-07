@@ -200,9 +200,12 @@ const ReportIssueDialog = (props: {
 
         if (files.length > 0) setSending(true);
 
+        let attachedFilesSize = 0
+        attachedFiles.forEach(f => { attachedFilesSize += f.size})
+
         for (const file of files) {
-            if ((size + file.size) > 3145728) return;
-            size += file.size;
+            if ((attachedFilesSize + file.size) > 3145728) { setSending(false); return};
+            attachedFilesSize += file.size
 
             const reader = new FileReader();
             reader.onload = function(r) {

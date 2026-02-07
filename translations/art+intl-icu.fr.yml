@@ -1,7 +1,24 @@
 'Good Taste Dashboard': 'Tableau de bord du Bon Goût'
 'Zentrales Dashboard für Kuratoren des guten Geschmacks, um Spiel-Assets, Texte und UI-Tools zu durchsuchen.': 'Tableau de bord central permettant aux Conservateurs du Bon Goût de rechercher des ressources de jeu, des textes et des outils d''interface utilisateur.'
 'Alle Assets anzeigen': 'Afficher toutes les ressources'
+'Alle RP-Texte anzeigen': 'Voir tous les textes RP'
 Assets: Ressources
 'Assets verfügbar': 'Ressources disponibles'
 'Übersicht der Dateien unter {path}, gruppiert nach Ordnern. Klappe einen Ordner auf, um die Vorschaubilder zu sehen.': 'Aperçu des fichiers sous {path}, regroupés par dossiers. Ouvrez un dossier pour voir les aperçus.'
 'Keine Assets gefunden.': 'Aucune ressource trouvée.'
+'RP-Texte': 'Textes RP'
+'Alle RP-Texte': 'Tous les textes RP'
+'Übersicht aller verfügbaren Rollenspiel-Texte im Spiel.': 'Aperçu de tous les textes de jeu de rôle disponibles dans le jeu.'
+'Keine RP-Texte gefunden.': 'Aucun texte RP trouvé.'
+ID: ID
+Name: Nom
+Titel: Titre
+Autor: Auteur
+Sprache: Langue
+Design: Design
+Hintergrund: Arrière-plan
+Chance: Chance
+Seiten: Pages
+Vorschau: Aperçu
+Schriften: Écrits
+'Keine Seiten vorhanden.': 'Aucune page disponible.'
