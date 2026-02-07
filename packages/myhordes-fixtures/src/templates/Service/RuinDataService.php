@@ -1649,6 +1649,34 @@ class RuinDataService implements FixtureProcessorInterface {
                 "desc" => "Das Grab der ehemaligen Sportler..."
             ],
 
+            // Hot Air Balloon special building
+            "crop_circles" => [
+                "label" => "Verdächtige Scheune",
+                "icon" => "crop_circles",
+                "camping" => 15,
+                "min_dist" => 21,
+                "max_dist" => 27,
+                "chance" => 0,
+                "empty" => 0.2,
+                "capacity" => 3,
+                "air_only" => true,
+                "drops" => [
+                    "vagoul_#00" => 5,
+                    "chest_xl_#00" => 15,
+                    "chainsaw_part_#00" => 15,
+                    "lpoint1_#00" => 25,
+                    "pocket_belt_#00" => 50,
+                    "bagxl_#00" => 50,
+                    "ryebag_#00" => 100,
+                    "cadaver_#00" => 100,
+                    "lawn_part_#00" => 150,
+                    "quantum_#00" => 150,
+                    "hmbrew_#00" => 160,
+                    "vegetable_#00" => 185,
+                ],
+                "desc" => "Diese Scheune ist dir bisher völlig entgangen, weil sie mitten in der Wüste so uninteressant wirkte; aber die seltsamen, halb verwischten Zeichnungen in der Umgebung, die die Bürger vom Heißluftballon aus entdeckt hatten, überzeugten dich von ihrer Bedeutung... Bei näherer Betrachtung stellt sich heraus, dass die Scheune einer Gruppe von Überlebenden als Unterschlupf diente. Ihre verbliebenen Vorräte befinden sich noch immer darin – und wenn eines sicher ist: Sie werden sie nicht mehr brauchen.",
+            ],
+
             // Explorable Ruins.
             // id 100
             "deserted_bunker" => [
