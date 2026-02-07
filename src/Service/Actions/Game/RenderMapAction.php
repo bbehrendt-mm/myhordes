@@ -227,6 +227,9 @@ readonly class RenderMapAction
                 } elseif ($z->getPrototype() && $obj['v']) {
                     $obj['r'] = $this->asset->getUrl("build/images/ruin/{$z->getPrototype()->getIcon()}.gif");
                     if ($local) $obj['n'] = $this->translator->trans( $z->getPrototype()->getLabel(), [], 'game' );
+
+                    $night_icon = $this->asset->getUrl("build/images/ruin/{$z->getPrototype()->getIcon()}.night.gif");
+                    if ($night_icon) $obj['rn'] = $night_icon;
                 }
 
                 if (!$local && $adjacent && !$z->isTownZone()) {

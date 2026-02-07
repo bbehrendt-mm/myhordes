@@ -50,6 +50,7 @@ export interface LocalZone {
     z?: number,     // Exact number of zombies
     zc?: number,    // Exact number of killed zombies
     r?: string,     // URL to ruin icon
+    rn?: string,     // URL to ruin icon (night version)
     n?: string,     // Name of the local ruin
 
     vv?: boolean    // Player has been here already
@@ -209,6 +210,7 @@ export type LocalZoneProps = {
     movement: boolean,
     blocked: boolean
     activeRoute: MapRoute | null,
+    nightMode: boolean,
     wrapDispatcher: (RuntimeMapStateAction)=>void,
     dx: number,
     dy: number,

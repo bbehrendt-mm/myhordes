@@ -3,15 +3,19 @@ import * as React from "react";
 import {
     LocalZone,
     LocalZoneProps, LocalZoneSurroundings,
-    MapControlProps, MapOverviewGridProps,
 } from "./typedef";
 import ZoneControlParent from "./HUD";
 import {useContext, useLayoutEffect, useRef} from "react";
 import {Globals} from "./Wrapper";
-import {string} from "prop-types";
+
+type LocalZoneViewProps = {
+    zone: LocalZone,
+    identifier: string,
+    nightMode: boolean
+}
 
 // React.memo(( props: MapOverviewGridProps ) => {
-const LocalZone = React.memo(( props: { zone: LocalZone, identifier: string } ) => {
+const LocalZone = React.memo(( props: LocalZoneViewProps ) => {
 
     const defaultPositions:{x:number,y:number}[] = [];
     const [citizenPositions, setCitizenPositions] = React.useState(defaultPositions);
@@ -43,12 +47,15 @@ const LocalZone = React.memo(( props: { zone: LocalZone, identifier: string } ) 
     citizenPositions.forEach( (p,i) => actors.push(<div key={`c${i}`} data-z={p.y} className="actor citizen" style={{left: `${p.x}%`, top: `${p.y}%`}}/>));
     zombiePositions.forEach(  (p,i) => actors.push(<div key={`z${i}`} data-z={p.y - (i<props.zone.z ? 0 : 666)} className={`actor ${i<props.zone.z ? 'zombie' : 'splatter'}`} style={{left: `${p.x}%`, top: `${p.y}%`}}/>));
 
-    actors.sort( (a,b) => a.props['data-z'] - b.props['data-z'] )
+    actors.sort( (a,b) => a.props['data-z'] - b.props['data-z'] );
+
+    // If no special night sprite, apply a filter
+    const nightly = props.nightMode && !props.zone.rn;
 
     return (
             <div className={`zone-subplane ${(props.zone.xr === 0 && props.zone.yr === 0) ? 'center' : ''}`}>
                 {props.zone.r && (
-                    <div className="ruin" style={{backgroundImage: `url("${props.zone.r}")`}}/>
+                    <div className={`ruin ${nightly ? 'nightly' : ''}`} style={{backgroundImage: `url("${(props.nightMode && props.zone.rn) ? props.zone.rn : props.zone.r}")`}}/>
                 )}
                 { actors }
                 { props.zone.n && (
@@ -59,7 +66,7 @@ const LocalZone = React.memo(( props: { zone: LocalZone, identifier: string } ) 
             </div>
     );
 
-}, (prevProps: { zone: LocalZone, identifier: string }, nextProps: { zone: LocalZone, identifier: string }) => {
+}, (prevProps: LocalZoneViewProps, nextProps: LocalZoneViewProps) => {
     //return false;
     if (prevProps.identifier !== nextProps.identifier) return false;
     if (Object.entries(prevProps.zone).length !== Object.entries(nextProps.zone).length) return false;
@@ -76,13 +83,13 @@ const LocalCensorZone = ( props: { zone: LocalZone, key: string } ) => {
     );
 }
 
-const LocalZoneGrid = ( props: { cache: { [key: string]: LocalZone; } } ) => {
+const LocalZoneGrid = ( props: { nightMode: boolean, cache: { [key: string]: LocalZone; } } ) => {
     const bar = [-2,-1,0,1,2];
     let zones = [];
     let censor = [];
 
     bar.forEach( yr =>  bar.forEach( xr => {
-        zones.push(<LocalZone zone={props.cache[`${-yr}-${xr}`]} key={`${-yr}-${xr}`} identifier={`${-yr}-${xr}`}/>)
+        zones.push(<LocalZone zone={props.cache[`${-yr}-${xr}`]} key={`${-yr}-${xr}`} identifier={`${-yr}-${xr}`} nightMode={props.nightMode} />)
         censor.push(<LocalCensorZone zone={props.cache[`${-yr}-${xr}`]} key={`${-yr}-${xr}`}/>)
     } ));
 
@@ -148,7 +155,7 @@ const LocalZoneView = React.memo( ( props: LocalZoneProps ) => {
             <div className="zone-plane-parent">
                 <div className={`zone-plane ${props.fx ? 'retro' : ''} ox-${ox < 0 ? 3 + ox : ox} oy-${oy < 0 ? 3 + oy : oy} `} ref={plane} style={style}>
                     { (props.fx ? [0,1,2,3,4] : []).map(i => <div key={i} className="retro-effect hide-lg hide-md hide-sm"/>) }
-                    <LocalZoneGrid cache={cache}/>
+                    <LocalZoneGrid nightMode={props.nightMode} cache={cache}/>
                 </div>
 
             </div>
