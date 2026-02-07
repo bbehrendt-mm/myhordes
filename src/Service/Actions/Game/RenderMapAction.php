@@ -11,8 +11,8 @@ use App\Service\CitizenHandler;
 use App\Service\EventProxyService;
 use App\Service\TownHandler;
 use App\Service\ZoneHandler;
+use App\Service\Asset\Assets;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Asset\Packages;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 readonly class RenderMapAction
@@ -22,7 +22,7 @@ readonly class RenderMapAction
         private TranslatorInterface    $translator,
         private TownHandler            $town_handler,
         private ZoneHandler            $zone_handler,
-        private Packages               $asset,
+        private Assets                 $asset,
         private EventProxyService      $proxy,
     ) { }
 
@@ -225,12 +225,16 @@ readonly class RenderMapAction
                     $obj['r'] = $this->asset->getUrl('build/images/ruin/burried.gif');
                     if ($local) $obj['n'] = $this->translator->trans( 'Verschüttete Ruine', [], 'game' );
                 } elseif ($z->getPrototype() && $obj['v']) {
-                    $obj['r'] = $this->asset->getUrl("build/images/ruin/{$z->getPrototype()->getIcon()}.gif")
-                        ?? $this->asset->getUrl("build/images/ruin/{$z->getPrototype()->getIcon()}.png");
+                    $obj['r'] = $this->asset->getAvailableAsset(
+                        "build/images/ruin/{$z->getPrototype()->getIcon()}.gif",
+                        "build/images/ruin/{$z->getPrototype()->getIcon()}.png"
+                    );
                     if ($local) $obj['n'] = $this->translator->trans( $z->getPrototype()->getLabel(), [], 'game' );
 
-                    $night_icon = $this->asset->getUrl("build/images/ruin/{$z->getPrototype()->getIcon()}.night.gif")
-                        ?? $this->asset->getUrl("build/images/ruin/{$z->getPrototype()->getIcon()}.night.png");
+                    $night_icon = $this->asset->getAvailableAsset(
+                        "build/images/ruin/{$z->getPrototype()->getIcon()}.night.gif",
+                        "build/images/ruin/{$z->getPrototype()->getIcon()}.night.png"
+                    );
                     if ($night_icon) $obj['rn'] = $night_icon;
                 }
 
