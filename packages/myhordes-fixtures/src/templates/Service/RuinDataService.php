@@ -1664,7 +1664,7 @@ class RuinDataService implements FixtureProcessorInterface {
                     "vagoul_#00" => 5,
                     "chest_xl_#00" => 15,
                     "chainsaw_part_#00" => 15,
-                    "lpoint1_#00" => 25,
+                    "lpoint_#00" => 25,
                     "pocket_belt_#00" => 50,
                     "bagxl_#00" => 50,
                     "ryebag_#00" => 100,
