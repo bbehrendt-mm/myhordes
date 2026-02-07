@@ -824,9 +824,7 @@ ul.inventory {
     	border-color: rgba(0,0,0,0); height: 20px; max-width: 40px;
         &.bg-light { width: 20px; background: url("../img/inventory/large_inv.png") center no-repeat; }
         &.bg-locked { width: 20px; background: url("../img/inventory/large_inv_l.png") center no-repeat; }
-        &.bg-heavy { width: 20px; background: url("../img/inventory/large_inv_h.png") center no-repeat; }
-        &.bg-over { width: 20px; background: url("../img/inventory/large_inv_r.png") center no-repeat; }
-    	&:not(.locked):hover { border-color: #F0D79E; background-color: #B37C4A; }
+        &:not(.locked):hover { border-color: #F0D79E; background-color: #B37C4A; }
         &:not(.locked):not(.disabled) { cursor: pointer; }
         &.broken { border: 1px dotted #ff0000; }
         &.banished_hidden { opacity: 0.25; }
@@ -838,8 +836,6 @@ ul.inventory {
         height: 20px; width: 20px; background: url("../img/inventory/large_empty_inv.png") center no-repeat;
         &.bg-light { background: url("../img/inventory/large_empty_inv.png") center no-repeat; }
         &.bg-locked { background: url("../img/inventory/large_empty_inv_l.png") center no-repeat; }
-        &.bg-heavy { background: url("../img/inventory/large_empty_inv_h.png") center no-repeat; }
-        &.bg-over { background: url("../img/inventory/large_empty_inv_r.png") center no-repeat; }
     }
     &.item.counted{
       font-size: 0;
@@ -851,6 +847,18 @@ ul.inventory {
     &.focus {
       box-shadow: 0 0 4px 2px #EFDBA8;
       border-radius: 4px;
+    }
+  }
+
+  &.rucksack > li {
+    &.item {
+        &.bg-heavy { width: 20px; background: url("../img/inventory/large_inv_h.png") center no-repeat; margin-left: 1px; margin-right: 2px; }
+        &.bg-over { width: 20px; background: url("../img/inventory/large_inv_r.png") center no-repeat; }
+    }
+
+    &.free {
+        &.bg-heavy { background: url("../img/inventory/large_empty_inv_h.png") center no-repeat; margin-left: 1px; margin-right: 2px; }
+        &.bg-over { background: url("../img/inventory/large_empty_inv_r.png") center no-repeat; }
     }
   }
 
