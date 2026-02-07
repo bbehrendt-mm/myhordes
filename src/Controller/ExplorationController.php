@@ -271,7 +271,7 @@ class ExplorationController extends InventoryAwareController implements HookedIn
             'controller_action' => 'beyond_ruin_action_controller',
             'controller_recipe' => 'beyond_ruin_recipe_controller',
             'controller_dash' => 'exploration_dashboard',
-            'render_frame' => 'beyond_desert_content',
+            'render_frame' => 'exploration_dashboard',
             'native_margins' => true,
         ];
     }
