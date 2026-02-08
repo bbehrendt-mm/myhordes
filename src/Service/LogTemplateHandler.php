@@ -1214,15 +1214,15 @@ class LogTemplateHandler
             ->setZone( $citizen->getZone() );
     }
 
-    public function dumpItems(Citizen $citizen, $items, int $defense): TownLogEntry {
+    public function dumpItems(Citizen $citizen, $items, int $defense, bool $to_home = false): TownLogEntry {
         $variables = [
             'citizen' => $citizen->getId(),
             'items' => array_map( function($e) { if(array_key_exists('count', $e)) {return array('id' => $e['item']->getId(),'count' => $e['count']);} else { return array('id' => $e[0]->getId()); } }, $items ),
             'def' => $defense
         ];
-        $template = $this->entity_manager->getRepository(LogEntryTemplate::class)->findOneBy(['name' => 'dumpItems']);
+        $template = $this->entity_manager->getRepository(LogEntryTemplate::class)->findOneBy(['name' => $to_home ? 'dumpItemsHome' : 'dumpItems']);
 
-        return (new TownLogEntry())
+        return new TownLogEntry()
             ->setLogEntryTemplate($template)
             ->setVariables($variables)
             ->setTown( $citizen->getTown() )

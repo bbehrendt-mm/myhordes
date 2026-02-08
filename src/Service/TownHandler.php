@@ -276,7 +276,8 @@ class TownHandler
         if ($this->getBuilding($town, 'small_city_up_#00', true))
             $summary->house_defense += 4;
 
-        $summary->upgrades_defense = $home->getAdditionalDefense() + $home->getTemporaryDefense() + $home->getDumpTemporaryDefense();
+        $summary->upgrades_defense_base = $home->getAdditionalDefense() + $home->getTemporaryDefense();
+        $summary->upgrades_defense_dump = $home->getDumpTemporaryDefense();
 
         if ($home->getCitizen()->getProfession()->getHeroic()) {
             /** @var CitizenHomeUpgrade|null $n */
@@ -285,14 +286,14 @@ class TownHandler
             if($defenseIndex !== false) {
                 $n = $homeUpgrades[$defenseIndex];
                 if($n->getLevel() <= 6)
-                    $summary->upgrades_defense += $n->getLevel();
+                    $summary->upgrades_defense_base += $n->getLevel();
                 else {
-                    $summary->upgrades_defense += 6 + 2 * ($n->getLevel() - 6);
+                    $summary->upgrades_defense_base += 6 + 2 * ($n->getLevel() - 6);
                 }
             }
 
             $n = in_array($this->doctrineCache->getEntityByIdentifier(CitizenHomeUpgradePrototype::class,"fence"), $homeUpgradesPrototypes);
-            $summary->upgrades_defense += ($n ? 3 : 0);
+            $summary->upgrades_defense_base += ($n ? 3 : 0);
         }
 
 

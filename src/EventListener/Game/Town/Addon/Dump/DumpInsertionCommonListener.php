@@ -220,8 +220,6 @@ final readonly class DumpInsertionCommonListener implements ServiceSubscriberInt
      * @throws NotFoundExceptionInterface
      */
     public function onLogMessages(DumpInsertionExecuteEvent $event ): void {
-        if ($event->check->to_home) return;
-
 		$itemsForLog = [
 			$event->check->consumable->getId() => [
 				'item' => $event->check->consumable,
@@ -230,7 +228,7 @@ final readonly class DumpInsertionCommonListener implements ServiceSubscriberInt
 		];
 
         $this->container->get(EntityManagerInterface::class)->persist(
-            $this->container->get(LogTemplateHandler::class)->dumpItems( $event->citizen, $itemsForLog, $event->addedDefense )
+            $this->container->get(LogTemplateHandler::class)->dumpItems( $event->citizen, $itemsForLog, $event->addedDefense, $event->check->to_home )
         );
 
         $event->markModified();
