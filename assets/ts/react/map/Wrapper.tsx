@@ -366,6 +366,7 @@ const MapWrapper = ( props: ReactDataMapCore ) => {
             >
                 { (!map || !strings) && <div className={'map-load-container'}/> }
                 <div className={`map map-inner-react ${props.data.className} ${state.globalEnabled ? '' : 'show-global'} ${state.markEnabled ? 'show-tags' : ''}  ${state.scoutEnabled ? 'show-scout' : ''} ${state.scavEnabled ? 'show-scav' : ''} ${state.windEnabled ? 'show-wind' : ''}`}>
+                    <div className={`map-blur ${props.data.fx ? '' : 'no-blur'}`} />
                     <div className="frame-plane">
                         { ['tl','tr','bl','br','t0l','t1','t0r','l0t','l1','l0m','l0b','l2','r0t','r1','r0b','b']
                             .map(s=><div key={s} className={s}/>) }
