@@ -3282,3 +3282,4 @@ Windrichtung: Windrichtung
 Kartograph: Kartograph
 Kartograph_f: Kartograph_f
 '{citizen} hat {items} in der Müllhalde zerstört, um sein Haus zu verbessern (+{def} Verteidigung)!': '{citizen} hat {items} in der Müllhalde zerstört, um {citizen__gender, select, female {ihr} other {sein}} Haus zu verbessern (+{def} Verteidigung)!'
+'Praktisch zur Versorgung und um den Zombies aus der Ferne die Hölle heiß zu machen.': 'Praktisch zur Versorgung und um den Zombies aus der Ferne die Hölle heiß zu machen.'
