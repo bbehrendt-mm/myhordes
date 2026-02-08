@@ -380,7 +380,7 @@ class TownHandler
                 $home = $citizen->getHome();
                 $this->calculate_home_def($home, $home_summary);
                 /** @var HomeDefenseSummary $home_summary */
-                $f_house_def += ($home_summary->house_defense + $home_summary->job_defense + $home_summary->upgrades_defense);
+                $f_house_def += ($home_summary->house_defense + $home_summary->job_defense + $home_summary->upgrades_defense_base);
 
                 if (!$citizen->getZone()) {
                     $summary->citizen_defense += $citizen->property( CitizenProperties::TownDefense );
