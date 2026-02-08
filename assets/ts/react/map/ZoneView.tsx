@@ -66,11 +66,11 @@ const LocalZone = React.memo(( props: { zone: LocalZone, identifier: string } ) 
     return Object.entries(prevProps.zone).map(([k,v]) => nextProps.zone[k] === v).filter(v=>!v).length === 0;
 });
 
-const LocalCensorZone = ( props: { zone: LocalZone, key: string } ) => {
+const LocalCensorZone = ( props: { zone: LocalZone, key: string, n: boolean, s: boolean, e: boolean, w: boolean } ) => {
     return (
         <div className={`zone-subplane ${(props.zone.xr === 0 && props.zone.yr === 0) ? 'center' : ''}`}>
             { !props.zone.v && (
-                <div className="censor"/>
+                <div className={`censor ${!props.n && 'censor-n'} ${!props.s && 'censor-s'} ${!props.w && 'censor-w'} ${!props.e && 'censor-e'}`}/>
             )}
         </div>
     );
@@ -83,7 +83,13 @@ const LocalZoneGrid = ( props: { cache: { [key: string]: LocalZone; } } ) => {
 
     bar.forEach( yr =>  bar.forEach( xr => {
         zones.push(<LocalZone zone={props.cache[`${-yr}-${xr}`]} key={`${-yr}-${xr}`} identifier={`${-yr}-${xr}`}/>)
-        censor.push(<LocalCensorZone zone={props.cache[`${-yr}-${xr}`]} key={`${-yr}-${xr}`}/>)
+        censor.push(<LocalCensorZone
+            n={!!props.cache[`${-yr+1}-${xr}`]?.v}
+            s={!!props.cache[`${-yr-1}-${xr}`]?.v}
+            e={!!props.cache[`${-yr}-${xr+1}`]?.v}
+            w={!!props.cache[`${-yr}-${xr-1}`]?.v}
+            zone={props.cache[`${-yr}-${xr}`]} key={`${-yr}-${xr}`}
+        />)
     } ));
 
     return (

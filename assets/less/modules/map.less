@@ -72,7 +72,11 @@ div.react_map_area {
       top: -200%; left: -200%; width: 500%; height: 500%; font-size: 0;
       &>.zone-sub-container {
         position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-        &.censor-master { filter: blur(60px) }
+        &.censor-master {
+            filter: blur(60px);
+            --bg-map-censor-offset: 15%;
+            --bg-map-censor-offset-color: rgba(255,0,0,0.5);
+        }
         &>.zone-subplane {
           position: relative; display: inline-block; padding: 0; margin: 0; width: 20%; height: 20%;
           &>div.hovertext {
@@ -81,7 +85,15 @@ div.react_map_area {
             &>span { border: 1px solid #b4da4c; background: fade(@myhordes-map-background,80%); color: #b4da4c; padding: 3px; pointer-events: none; }
             &:hover { opacity: 1 }
           }
-          &>.censor { top: 0; left: 0; width: 100%; height: 100%; background: black; }
+          &>.censor {
+              position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-map-censor-offset-color, rgba(255,0,0,0.5));
+              &:after { position: absolute; content: " "; left: var(--bg-map-censor-offset, 20%); top: var(--bg-map-censor-offset, 20%); right: var(--bg-map-censor-offset, 20%); bottom: var(--bg-map-censor-offset, 20%); background: black; }
+
+              &.censor-n:after { top: 0; }
+              &.censor-s:after { bottom: 0; }
+              &.censor-w:after { left: 0; }
+              &.censor-e:after { right: 0; }
+          }
           &>.ruin {
             background: url("../../img/ruin/unknown.gif") center no-repeat; position: absolute; transform: scale(2.5);
             top: 0; left: 0; width: 100%; height: 100%;
@@ -158,22 +170,28 @@ div.react_map_area {
         }
       }
     }
-    &.night>.zone-plane-parent>.zone-plane {
-      background: url("../../img/background/bg_zone_map_night.jpg") repeat, black; z-index: 2;
-      background-size: var(--bg-map-s, 60%);
-      background-position-x: var(--bg-map-ox, 0%);
-      background-position-y: var(--bg-map-oy, 0%);
-      .ruin { filter: hue-rotate(190deg) contrast(150%) brightness(50%); }
-      .retro-effect {
-        background: url("../../img/background/bg_zone_map_night.jpg") repeat, black;
-        background-size: var(--bg-map-s, 60%);
-        background-position-x: var(--bg-map-ox, 0%);
-        background-position-y: var(--bg-map-oy, 0%);
-        &:nth-child(1) { background-color: #2e3576 !important; }
-        &:nth-child(4) { background-color: #17233e !important; }
-        &:nth-last-child(5) {background-color: #2e3576 !important; }
-      }
+    &.night {
+        &>.zone-plane-parent>.zone-plane {
+            background: url("../../img/background/bg_zone_map_night.jpg") repeat, black; z-index: 2;
+            background-size: var(--bg-map-s, 60%);
+            background-position-x: var(--bg-map-ox, 0%);
+            background-position-y: var(--bg-map-oy, 0%);
+            .ruin { filter: hue-rotate(190deg) contrast(150%) brightness(50%); }
+            .retro-effect {
+                background: url("../../img/background/bg_zone_map_night.jpg") repeat, black;
+                background-size: var(--bg-map-s, 60%);
+                background-position-x: var(--bg-map-ox, 0%);
+                background-position-y: var(--bg-map-oy, 0%);
+                &:nth-child(1) { background-color: #2e3576 !important; }
+                &:nth-child(4) { background-color: #17233e !important; }
+                &:nth-last-child(5) {background-color: #2e3576 !important; }
+            }
+            &>.zone-sub-container.censor-master {
+                --bg-map-censor-offset-color: rgba(0, 4, 255, 0.5);
+            }
+        }
     }
+
     &>.zone-plane-controls {
       top: 0; left: 0; width: 100%; height: 100%; transform: scale(1.2); z-index: 4; pointer-events: none;
       &.hide { opacity: 0 };
