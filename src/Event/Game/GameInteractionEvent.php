@@ -4,6 +4,7 @@ namespace App\Event\Game;
 
 use App\Entity\Citizen;
 use App\Entity\Town;
+use App\Enum\ClientSignal;
 use App\Service\ConfMaster;
 use App\Structures\MyHordesConf;
 use App\Structures\TownConf;
@@ -26,6 +27,11 @@ abstract class GameInteractionEvent extends GameEvent
      * @var array $messages
      */
     private array $messages = [];
+
+    /**
+     * @var array $messages
+     */
+    private array $signals = [];
 
     private bool $process_common_effects = true;
 
@@ -92,5 +98,16 @@ abstract class GameInteractionEvent extends GameEvent
     public function getMessages(): array {
         ksort( $this->messages );
         return array_reduce( $this->messages, fn(array $carry, array $list) => array_merge( $carry, $list ), [] );
+    }
+
+    public function withSignal(ClientSignal ...$signals): void {
+        $this->signals = [
+            ...$this->signals,
+            ...$signals
+        ];
+    }
+
+    public function getSignals(): array {
+        return $this->signals;
     }
 }

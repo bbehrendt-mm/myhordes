@@ -59,10 +59,10 @@ class DumpController extends CustomAbstractCoreEventController
     #[Route(path: '/{id}', name: 'insert_home', methods: ['POST'])]
     public function insert_home(
         ItemPrototype $itemPrototype,
-        EventFactory $e,
+        EventFactory $e, JSONRequestParser $parser
     ): JsonResponse {
         return $this->processEventChain(
-            $e->gameInteractionEvent( DumpInsertionCheckEvent::class )->setup($itemPrototype, 1, true),
+            $e->gameInteractionEvent( DumpInsertionCheckEvent::class )->setup($itemPrototype, $parser->get_int('ap', 1, 1), true),
             DumpInsertionExecuteEvent::class
         );
     }

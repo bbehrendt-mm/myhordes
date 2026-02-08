@@ -8,6 +8,7 @@ use App\Controller\Town\TownController;
 use App\Entity\ActionCounter;
 use App\Entity\ItemPrototype;
 use App\Enum\ActionCounterType;
+use App\Enum\ClientSignal;
 use App\Event\Game\Town\Addon\Dump\DumpInsertionCheckData;
 use App\Event\Game\Town\Addon\Dump\DumpInsertionCheckEvent;
 use App\Event\Game\Town\Addon\Dump\DumpInsertionExecuteEvent;
@@ -138,7 +139,7 @@ final readonly class DumpInsertionCommonListener implements ServiceSubscriberInt
         }
 
         $translator = $this->container->get(TranslatorInterface::class);
-        if (($event->to_home && $event->quantity > 1) || $event->quantity > 20) {
+        if ($event->quantity > 20) {
             $event->pushError( ErrorHelper::ErrorActionNotAvailable, $translator->trans('Du kannst nicht so viele Gegenstände auf die Müllhalde werfen.', [], 'game') )->stopPropagation();
             return;
         }
@@ -197,6 +198,8 @@ final readonly class DumpInsertionCommonListener implements ServiceSubscriberInt
             $n -= $c;
         }
 
+        $event->withSignal( ClientSignal::InventoryUpdated );
+
         // Reduce AP
         if ($event->citizen->getSpecificActionCounterValue(ActionCounterType::DumpInsertion) > 0)
             $event->citizen->setAp( $event->citizen->getAp() - $event->check->ap_cost );
@@ -237,7 +240,7 @@ final readonly class DumpInsertionCommonListener implements ServiceSubscriberInt
     public function onFlashMessages(DumpInsertionExecuteEvent $event ): void {
         if ($event->check->to_home)
             $event->addFlashMessage(
-                T::__('Du hast {item} verwendet, um dein Haus abzusichern. <strong>Dein Haus hat {def} Verteidigungspunkt(e) dazugewonnen.</strong> Was werden die anderen Stadtbewohner wohl dazu sagen..?', 'game'), 'notice',
+                T::__('Du hast {count} x {item} verwendet, um dein Haus abzusichern. <strong>Dein Haus hat {def} Verteidigungspunkt(e) dazugewonnen.</strong> Was werden die anderen Stadtbewohner wohl dazu sagen..?', 'game'), 'notice',
                 'game', ['item' => $event->check->consumable, 'count' => $event->check->quantity, 'def' => $event->addedDefense]
             );
         else

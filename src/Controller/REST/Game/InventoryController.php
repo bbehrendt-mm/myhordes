@@ -444,7 +444,7 @@ class InventoryController extends CustomAbstractCoreController
         $errors = [];
         foreach ($items as $current_item) if ($citizen->getAlive() && $target_citizen->getAlive()) {
 
-            if (($error = $this->processEventChainUsing( $ef, $ed, $em,
+            if (($error = $this->processEventChainUsing( $ef, $ed, $em, $response,
                                                          $ef->gameInteractionEvent( TransferItemEvent::class )->setup($current_item, $citizen, $inventory, $target_inventory, match (true) {
                                                              $mod === 'theft' => TransferItemModality::BankTheft,
                                                              ($mod === 'hide' && $hide_should_succeed) => TransferItemModality::HideItem,

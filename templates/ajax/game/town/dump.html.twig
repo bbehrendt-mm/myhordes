@@ -80,6 +80,9 @@
                                 data-fetch="{{ path('rest_town_facilities_dump_insert_home', {id: item[0]}) }}"
                                 data-fetch-method="post"
                                 data-fetch-load="{{ path('town_dump') }}"
+                                data-fetch-payload-query="{{ 'Wie viele Gegenstände möchtest du auf den Müll werfen?'|trans({}, 'game') }}"
+                                data-fetch-payload-query-field="ap"
+                                data-fetch-payload-query-default="1"
                             {% else %}
                                 disabled="disabled"
                             {% endif %}

@@ -20,7 +20,7 @@ class DumpInsertionCheckData
 	 */
 	public function setup( ?ItemPrototype $item = null, int $quantity = 0, bool $to_home = false ): void {
 		$this->consumable = $item;
-		$this->quantity = $to_home ? 1 : $quantity;
+		$this->quantity = $quantity;
         $this->to_home = $to_home;
 		$this->dumpableItems = [];
 	}
