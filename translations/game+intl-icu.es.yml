@@ -3277,3 +3277,10 @@ Windrichtung: Windrichtung
 'Zusätzlich kannst du Gegenstände aus deinem Rucksack verwenden, um temporär die Verteidigung deiner Behausung zu verbessern. Pro Stufe deines Hauses kannst du 2 Gegenstände für die Verbesserung deines Hauses verwenden.': 'Zusätzlich kannst du Gegenstände aus deinem Rucksack verwenden, um temporär die Verteidigung deiner Behausung zu verbessern. Pro Stufe deines Hauses kannst du 2 Gegenstände für die Verbesserung deines Hauses verwenden.'
 'Du wurdest verbannt und kannst die Müllhalde daher nicht länger nutzen, um die Verteidigung der Stadt zu verbessern.': 'Du wurdest verbannt und kannst die Müllhalde daher nicht länger nutzen, um die Verteidigung der Stadt zu verbessern.'
 'Haus verstärken': 'Haus verstärken'
+'Leidenschaftlicher Entdecker': 'Leidenschaftlicher Entdecker'
+'Leidenschaftlicher Entdecker_f': 'Leidenschaftlicher Entdecker_f'
+Kartograph: Kartograph
+Kartograph_f: Kartograph_f
+'{citizen} hat {items} in der Müllhalde zerstört, um sein Haus zu verbessern (+{def} Verteidigung)!': '{citizen} hat {items} in der Müllhalde zerstört, um {citizen__gender, select, female {ihr} other {sein}} Haus zu verbessern (+{def} Verteidigung)!'
+'Praktisch zur Versorgung und um den Zombies aus der Ferne die Hölle heiß zu machen.': 'Praktisch zur Versorgung und um den Zombies aus der Ferne die Hölle heiß zu machen.'
+'Du hast {count} x {item} verwendet, um dein Haus abzusichern. <strong>Dein Haus hat {def} Verteidigungspunkt(e) dazugewonnen.</strong> Was werden die anderen Stadtbewohner wohl dazu sagen..?': 'Du hast {count} x {item} verwendet, um dein Haus abzusichern. <strong>Dein Haus hat {def} Verteidigungspunkt(e) dazugewonnen.</strong> Was werden die anderen Stadtbewohner wohl dazu sagen..?'

@@ -1,7 +1,24 @@
 'Good Taste Dashboard': 'crwdns252662:0crwdne252662:0'
 'Zentrales Dashboard für Kuratoren des guten Geschmacks, um Spiel-Assets, Texte und UI-Tools zu durchsuchen.': 'crwdns252664:0crwdne252664:0'
 'Alle Assets anzeigen': 'crwdns252666:0crwdne252666:0'
+'Alle RP-Texte anzeigen': 'crwdns252992:0crwdne252992:0'
 Assets: crwdns252668:0crwdne252668:0
 'Assets verfügbar': 'crwdns252670:0crwdne252670:0'
 'Übersicht der Dateien unter {path}, gruppiert nach Ordnern. Klappe einen Ordner auf, um die Vorschaubilder zu sehen.': 'crwdns252672:0{path}crwdne252672:0'
 'Keine Assets gefunden.': 'crwdns252674:0crwdne252674:0'
+RP-Texte: crwdns252994:0crwdne252994:0
+'Alle RP-Texte': 'crwdns252996:0crwdne252996:0'
+'Übersicht aller verfügbaren Rollenspiel-Texte im Spiel.': 'crwdns252998:0crwdne252998:0'
+'Keine RP-Texte gefunden.': 'crwdns253000:0crwdne253000:0'
+ID: crwdns253002:0crwdne253002:0
+Name: crwdns253004:0crwdne253004:0
+Titel: crwdns253006:0crwdne253006:0
+Autor: crwdns253008:0crwdne253008:0
+Sprache: crwdns253010:0crwdne253010:0
+Design: crwdns253012:0crwdne253012:0
+Hintergrund: crwdns253014:0crwdne253014:0
+Chance: crwdns253016:0crwdne253016:0
+Seiten: crwdns253018:0crwdne253018:0
+Vorschau: crwdns253020:0crwdne253020:0
+Schriften: crwdns253022:0crwdne253022:0
+'Keine Seiten vorhanden.': 'crwdns253024:0crwdne253024:0'

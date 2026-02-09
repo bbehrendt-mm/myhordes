@@ -1,24 +1,24 @@
 'Good Taste Dashboard': 'Cuadro de mando del Buen Gusto'
 'Zentrales Dashboard für Kuratoren des guten Geschmacks, um Spiel-Assets, Texte und UI-Tools zu durchsuchen.': 'Cuadro de mando central para los Conservadores del Buen Gusto que permite buscar recursos, textos y herramientas.'
 'Alle Assets anzeigen': 'Todos los recursos'
-'Alle RP-Texte anzeigen': 'Ver todos los textos RP'
+'Alle RP-Texte anzeigen': 'Alle RP-Texte anzeigen'
 Assets: Recursos
 'Assets verfügbar': 'Recursos disponibles'
 'Übersicht der Dateien unter {path}, gruppiert nach Ordnern. Klappe einen Ordner auf, um die Vorschaubilder zu sehen.': 'Übersicht der Dateien unter {path}, gruppiert nach Ordnern. Klappe einen Ordner auf, um die Vorschaubilder zu sehen.'
 'Keine Assets gefunden.': 'Keine Assets gefunden.'
-'RP-Texte': 'Textos RP'
-'Alle RP-Texte': 'Todos los textos RP'
-'Übersicht aller verfügbaren Rollenspiel-Texte im Spiel.': 'Vista general de todos los textos de rol disponibles en el juego.'
-'Keine RP-Texte gefunden.': 'No se encontraron textos RP.'
+RP-Texte: RP-Texte
+'Alle RP-Texte': 'Alle RP-Texte'
+'Übersicht aller verfügbaren Rollenspiel-Texte im Spiel.': 'Übersicht aller verfügbaren Rollenspiel-Texte im Spiel.'
+'Keine RP-Texte gefunden.': 'Keine RP-Texte gefunden.'
 ID: ID
-Name: Nombre
-Titel: Título
+Name: Name
+Titel: Titel
 Autor: Autor
-Sprache: Idioma
-Design: Diseño
-Hintergrund: Fondo
-Chance: Probabilidad
-Seiten: Páginas
-Vorschau: Vista previa
-Schriften: Escritos
-'Keine Seiten vorhanden.': 'No hay páginas disponibles.'
+Sprache: Sprache
+Design: Design
+Hintergrund: Hintergrund
+Chance: Chance
+Seiten: Seiten
+Vorschau: Vorschau
+Schriften: Schriften
+'Keine Seiten vorhanden.': 'Keine Seiten vorhanden.'

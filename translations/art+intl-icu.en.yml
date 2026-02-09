@@ -6,9 +6,9 @@ Assets: Assets
 'Assets verfügbar': 'Assets available'
 'Übersicht der Dateien unter {path}, gruppiert nach Ordnern. Klappe einen Ordner auf, um die Vorschaubilder zu sehen.': 'Overview of files under {path}, grouped by folder. Open a folder to display the previews.'
 'Keine Assets gefunden.': 'No assets found.'
-'RP-Texte': 'RP Texts'
-'Alle RP-Texte': 'All RP Texts'
-'Übersicht aller verfügbaren Rollenspiel-Texte im Spiel.': 'Overview of all available roleplay texts in the game.'
+RP-Texte: RP texts
+'Alle RP-Texte': 'All RP texts'
+'Übersicht aller verfügbaren Rollenspiel-Texte im Spiel.': 'Overview over all RP texts in the game'
 'Keine RP-Texte gefunden.': 'No RP texts found.'
 ID: ID
 Name: Name
@@ -20,5 +20,5 @@ Hintergrund: Background
 Chance: Chance
 Seiten: Pages
 Vorschau: Preview
-Schriften: Writings
-'Keine Seiten vorhanden.': 'No pages available.'
+Schriften: Texts
+'Keine Seiten vorhanden.': 'No pages available'
