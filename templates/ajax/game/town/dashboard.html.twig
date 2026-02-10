@@ -8,28 +8,11 @@
         {% elseif summary.total_required == summary.total_consumed %}
             <img src="{{ asset('build/images/status/status_hasdrunk.gif') }}" />
         {% elseif summary.total_consumed > 0 %}
-            <img src="{{ asset('build/images/status/status_thirst1.gif') }}" />
+            <img src="{{ asset('build/images/icons/water_warning.gif') }}" />
         {% else %}
-            <img src="{{ asset('build/images/status/status_thirst2.gif') }}" />
+            <img src="{{ asset('build/images/icons/water_danger.gif') }}" />
         {% endif %}
-        <div class="tooltip help">
-            <table>
-                {% for info in summary.buildings %}
-                <tr>
-                    <td><img src="{{ asset('build/images/building/' ~ info.icon ~ '.gif') }}" /></td>
-                    <td>{{ info.label|trans({}, 'buildings') }}</td>
-                    <td>{{ info.water_consumed }} <img src="{{ asset('build/images/status/status_thirst1.gif') }}" /></td>
-                    <td>
-                        {% if info.active %}
-                            <img src="{{ asset('build/images/icons/done.png') }}" />
-                        {% else %}
-                            <img src="{{ asset('build/images/icons/warning_anim.gif') }}" />
-                        {% endif %}
-                    </td>
-                </tr>
-                {% endfor %}
-            </table>
-        </div>
+        {% include "ajax/game/town/partials/water-summary-tooltip.twig" with {'summary': summary} %}
     </span>
 {% endmacro %}
 
