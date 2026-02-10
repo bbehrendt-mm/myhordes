@@ -1482,7 +1482,7 @@ class JSONv1Controller extends CoreController {
     private function getResources(Building|BuildingPrototype $building, array $fields = []): array {
         $data = [];
 
-        $resources = is_a($building,Building::class) ? $building->getPrototypeResources() : $building->getPrototype()->getResourceSet()->getResources();
+        $resources = is_a($building,Building::class) ? $building->getPrototypeResources() : $building->getResourceSet()->getResources();
 
         if (empty($fields)) {
             $fields = ['amount', 'rsc'];

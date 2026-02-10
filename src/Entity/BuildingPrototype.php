@@ -321,11 +321,14 @@ class BuildingPrototype implements NamedEntity
                         'level' => Order::Descending,
                         'times' => Order::Descending,
                     ])
-            )->first();
+            )->first() ?: null;
 
         if ($type !== BuildingResourceSetType::Default)
             $set ??= $this->getResourceSet( level: $level, repeat: $repeat );
 
-        return $set;
+
+        if ($level !== 0 || $repeat !== 0) $set ??= $this->getResourceSet();
+
+        return $set ?? new BuildingConstructionResourceSet();
     }
 }
