@@ -303,8 +303,8 @@ class Building
     }
     
     /**
-     * There is probably a better way of doing this
-     * But I don't know how to configure 'functions' for fixtures, or to provide configurable-enough properties
+     * Get the water consumption of the building at a given day.
+     * During the night from day N to N+1, the param is N.
      */
     public function getWaterConsumption(int $day): int {
         switch ($this->getPrototype()->getName()) {
@@ -321,12 +321,15 @@ class Building
         }
     }
 
+    /**
+     * Get the water consumption category.
+     */
     public function getWaterConsumptionType(): int {
         switch ($this->getPrototype()->getName()) {
-            /** Defense consumption */
+            /** Defense buildings (post day change, pre attack) */
             case 'item_tube_#00':
                 return 1;
-            /** Regular consumption */
+            /** Effect Buildings (post attack, post status change) */
             case 'small_pool_#00':
                 return 2;
             default:
