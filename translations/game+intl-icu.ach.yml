@@ -3287,3 +3287,4 @@ Kartograph_f: crwdns252986:0crwdne252986:0
 '<strong>Achtung:</strong> In dieser Nacht werden die Gebäude der Stadt {water} Wasserrationen aus dem Brunnen verbrauchen.': 'crwdns253030:0water={water}crwdne253030:0'
 'Die Stadt verfügt nicht über genügend Wasser, um den Bedarf zu decken!': 'crwdns253032:0crwdne253032:0'
 'Diese Gebäude verbrauchen jede Nacht Wasser aus dem Brunnen. Wenn die Stadt nicht genug Wasser hat, können sie nicht ordnungsgemäß funktionieren.': 'crwdns253034:0crwdne253034:0'
+'Anzahl deiner Akte von Selbstlosigkeit gegenüber anderen Bürgern in Not.': 'crwdns253208:0crwdne253208:0'

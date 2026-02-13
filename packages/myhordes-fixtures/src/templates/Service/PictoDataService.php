@@ -193,7 +193,7 @@ class PictoDataService implements FixtureProcessorInterface {
             ],
             [
                 'label' => 'Großzügigkeit',
-                'description' => 'Anzahl der Heldentage, die du einem anderem Bürger in Not geschenkt hast.',
+                'description' => 'Anzahl deiner Akte von Selbstlosigkeit gegenüber anderen Bürgern in Not.',
                 'icon' => 'r_share',
                 'rare' => false
             ],

@@ -332,6 +332,8 @@ final class HeroicItemActionListener implements ServiceSubscriberInterface
                             'town' => $event->town->getName()
                         ], town: $event->town, citizen: $event->target );
 
+                        $this->getService(PictoHandler::class)->award_picto_to( $event->citizen, 'r_share_#00' );
+
                         $event->target->getSpecificActionCounter(
                             ActionCounterType::ReceiveXP
                         )->increment()->addRecord( [

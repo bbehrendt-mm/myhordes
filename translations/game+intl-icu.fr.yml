@@ -3254,7 +3254,7 @@ Tierklinik: Centre d'essai
 'Du magst stark sein, aber du bist kein mächtiger Chuck. Erleichtere dich deiner überzählichen Gegenstände, bevor du dich der Wache anschließt.': 'Vous êtes peut-être fort(e), mais vous n''êtes pas Chuck Norris. Baissez votre bouclier ou allégez votre sac avant de rejoindre la veille.'
 'Vollständige Erkundung': 'Exploration Totale'
 'Du hast einen zusätzlichen Fähigkeitenpunkt erhalten und deine bereits vollbrachten Taten wurden zurückgesetzt. Hurra!': 'Vous avez gagné un point de puissance supplémentaire, et vos défis déjà accomplis ont été réinitialisés. Hourra !'
-'Anzahl der Karten, die du vollständig aufgedeckt erlebt hast und auf der sämtliche initialen Ruinen und begehbaren Ruinen zumindest einmal besucht oder betreten worden.': 'Le nombre de fois que vous avez vu une carte totalement révélée, et chacun de ses bâtiments initiaux et ruine(s) fouillés et explorés au moins une fois.'
+'Anzahl der Karten, die du vollständig aufgedeckt erlebt hast und auf der sämtliche initialen Ruinen und begehbaren Ruinen zumindest einmal besucht oder betreten worden.': 'Nombre de fois où le désert n''a plus eu aucun secret pour votre ville.'
 'Leergesuchte Zone': 'Zone épuisée'
 'Abgesuchte Zone': 'Zone presque épuisée'
 'Kaum durchsuchte Zone': 'Zone à moitié vide'
@@ -3287,3 +3287,4 @@ Kartograph_f: Cartographe
 '<strong>Achtung:</strong> In dieser Nacht werden die Gebäude der Stadt {water} Wasserrationen aus dem Brunnen verbrauchen.': '<strong>Attention:</strong> Cette nuit, les chantiers {water, plural, =0 {ne consommeront pas} one {consommeront une ration} other {consommeront # rations}} d''eau du puits.'
 'Die Stadt verfügt nicht über genügend Wasser, um den Bedarf zu decken!': 'La ville ne dispose pas de suffisamment d''eau pour couvrir les besoins de tous les chantiers !'
 'Diese Gebäude verbrauchen jede Nacht Wasser aus dem Brunnen. Wenn die Stadt nicht genug Wasser hat, können sie nicht ordnungsgemäß funktionieren.': 'Ces chantiers consomment de l''eau du puits chaque nuit. Si la ville manque d''eau, ils ne pourront pas fonctionner correctement.'
+'Anzahl deiner Akte von Selbstlosigkeit gegenüber anderen Bürgern in Not.': 'Nombre de vos actes d''altruisme envers d''autres citoyens dans le besoin.'

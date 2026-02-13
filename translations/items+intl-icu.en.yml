@@ -5,7 +5,7 @@
 'Nicht schlecht, du hast einen Pasch geworfen.': 'You rolled a double! Check you out!'
 'Was für ein Spaß!': 'What fun!'
 'Du ziehst eine Karte... und stellst fest, dass dein Name darauf mit Blut geschrieben steht! Du erstarrst vor Schreck!': 'You have drawn the... You scream, discovering that your name is written on the card in blood! You don''t know who is behind this sick joke... You are now terrorized!'
-'Du ziehst eine Karte... und stellst fest, dass du die Karte mit den Spielregeln gezogen hast! Das erheitert dich so sehr, dass du 1AP gewinnst.': 'You draw a card... and find that you have drawn the card with the rules of the game! This amuses you so much that you win 1AP.'
+'Du ziehst eine Karte... und stellst fest, dass du die Karte mit den Spielregeln gezogen hast! Das erheitert dich so sehr, dass du 1AP gewinnst.': 'You draw a card... and find that you have drawn the card with the rules of the game! This amuses you so much that you win <strong>1 AP</strong>.'
 'Das muss ein Zeichen sein! In dieser Welt ist kein Platz für Moral... du erhälst 1AP.': 'It''s a sign! It just goes to show that there is no place for morals in this world... You have won 1AP.'
 'Das Symbol der Liebe... dein Herz schmilzt dahin und du erhälst 1AP.': 'The Queen of Hearts... The symbol of love... *sigh*... You have won 1AP as compensation for your disillusionment.'
 'Mit deiner Gitarre hast du die Stadt gerockt! Die Bürger haben {ap} AP erhalten.': 'A little live music can seduce the ladies and restores the spirit... but you''ll have to be content with the 2nd effect. Your playing has generated {ap} action points which will be shared amongst the townsfolk.'
@@ -377,7 +377,7 @@ Dopen: Dope
 'Essen suchen': Food
 Tarnen: Camouflage
 'Du bist nun getarnt.': 'You are now camouflaged.'
-'Du ziehst eine Karte... es ist: {color} {value}.': 'You draw a card ... it is the: {value} of {color}.'
+'Du ziehst eine Karte... es ist: {color} {value}.': 'You draw a card... it is the: {value} of {color}.'
 'Äußerst erfrischend, und sogar mit einer leichten Note von Cholera.': 'Extremely refreshing, and even with a slight touch of cholera.'
 'Immer noch besser als das Zeug, was die Köche in der Stadt zubereiten....': 'Still better than what the cooks are preparing in town...'
 'Die Rückkehr des Helden': 'Heroic Return'
@@ -507,7 +507,7 @@ Rettung: Rescue
 'Trotz all der Jahre, die sie wahrscheinlich schon in dieser Wüste liegen, haben diese Nudeln ihr Aussehen und ihren Geschmack behalten. Erstaunlich.': 'Despite years spent in the desert, these chinese noodles still look and taste exactly the same.'
 'Ein Säckchen mit starken Gewürzen ...': 'A small sachet of mixed spices...'
 "Richtig gut gewürzte chinesische Nudeln! Das ist mal'ne Abwechslung von dem sonstigen verschimmelten Fraß.": "Heavily seasoned chinese noodles! This makes a pleasant change from eating things that are decomposing."
-'Ein Kartenset mit 54 abgegriffenen Karten, die ein paar Eselsohren haben... Du solltest gleich mal eine Runde zocken, denn oft wirst du hier nicht zum Spielen kommen.': 'What should be a 54 card deck is, well, not. The missing cards don''t stop you playing with them though, because every moment of enjoyment is to be treasured in this hellhole... Go big or go broke !'
+'Ein Kartenset mit 54 abgegriffenen Karten, die ein paar Eselsohren haben... Du solltest gleich mal eine Runde zocken, denn oft wirst du hier nicht zum Spielen kommen.': 'What should be a 54 card deck is, well, not. The missing cards don''t stop you playing with them though, because every moment of enjoyment is to be treasured in this hellhole... Go big or go broke!'
 'Ein altes Spiel welches du noch nicht kennst. Wow!': 'The box contains a game... probably !'
 'Eine furchterregende Waffe, der nur ein paar Teile fehlen...': 'A formidable weapon, but it needs a few more parts to get it working...'
 'Er vibriert und kitzelt dich am ganzen Körper und lässt dich für einen Augenblick all deine Sorgen vergessen (benötigt 1 Batterie).': 'It vibrates, tickles, and titillates, making you forget all your worries for a little while (requires 1 battery).'
@@ -1171,16 +1171,16 @@ Besinnen: Reflect
 'Es schmeckt wirklich komisch... aber wenigstens ist dein Hunger ein wenig gestillt. Glaub aber nicht, dass du dadurch zusätzliche APs erhältst...': 'This has a truly bizarre taste, it''s difficult to define. At least it does the job: fills your stomach partially. On the other hand, it doesn''t give you any extra energy...'
 'Es sieht wirklich nicht so aus, als würdest du hier noch neue Buddelmöglichkeiten finden können...': 'It really doesn''t look like you''ll be able to find any new digging spots here...'
 'Nach neuen Buddelmöglichkeiten zu suchen macht nur Sinn, wenn es keine offensichtlichen Buddelmöglichkeiten mehr gibt.': 'Looking for new digging opportunities only makes sense if there are no obvious digging opportunities left.'
-Senken: Lower
-'Du senkst deinen Schild. Zwar kannst du dich jetzt nicht mehr so gut verteidigen, dafür kannst du aber einen weiteren, schweren Gegenstand mit dir führen.': 'You lower your shield. Although you can no longer defend yourself as well, you can now carry another heavy item with you.'
-'Schutzschild (abgelegt)': 'Riot Shield (lowered)'
-'Ein großer Schutzschild. Wenn du ihn vor dich halten würdest, könntest du damit 2 zusätzliche Zombies auf Distanz zu halten. Aktuell fungiert er nur als kleidsames Accessoire.': 'It''s big and it''s zombie-proof. Or it would be, if you didn''t lower it. Normally, it allows you to face 2 additional zombies in the desert. Currently, it serves only as a stylish accessory.'
+Senken: Strap
+'Du senkst deinen Schild. Zwar kannst du dich jetzt nicht mehr so gut verteidigen, dafür kannst du aber einen weiteren, schweren Gegenstand mit dir führen.': 'You strap your shield onto your back. Although you can no longer defend yourself as well, you can now carry another heavy item with you. How strong!'
+'Schutzschild (abgelegt)': 'Riot Shield (strapped)'
+'Ein großer Schutzschild. Wenn du ihn vor dich halten würdest, könntest du damit 2 zusätzliche Zombies auf Distanz zu halten. Aktuell fungiert er nur als kleidsames Accessoire.': 'It''s big and it''s zombie-proof. Or it would be, if you didn''t strap it on your back. Normally, it allows you to face 2 additional zombies in the desert. Currently, it serves only as a stylish accessory.'
 'Du tötest 1 Zombie in der Zone und erhältst du die Kontrolle über die Zone für 5 Minuten.': 'You kill a zombie in a given zone and gain control of the zone for 5 minutes.'
-' Ein großer Schutzschild, der keine Wünsche offen lässt, ermöglicht es dir, in der Wüste bis zu 2 zusätzliche Zombies auf Distanz zu halten. Dabei ist er aber ganz schön schwer... vielleicht könntest du mehr schwere Dinge bei dir tragen, wenn du den Schild senken würdest?': ' It''s big and it''s zombie-proof. In this world who could ask for more... It allows you to face 2 additional zombies in the desert, but it''s also heavy... Maybe you could carry more if you put it down?'
-'Es ist hier einfach zu staubig, um diesen Gegenstand zusammenbauen zu können...': 'There is far too much dust here for you to assemble this object effectively.'
+' Ein großer Schutzschild, der keine Wünsche offen lässt, ermöglicht es dir, in der Wüste bis zu 2 zusätzliche Zombies auf Distanz zu halten. Dabei ist er aber ganz schön schwer... vielleicht könntest du mehr schwere Dinge bei dir tragen, wenn du den Schild senken würdest?': 'It''s big and it''s zombie-proof. In this world who could ask for more... It allows you to face 2 additional zombies in the desert, but it''s also heavy... Maybe if you carried it some other way you could grab more things?'
+'Es ist hier einfach zu staubig, um diesen Gegenstand zusammenbauen zu können...': 'There is far too much dust and potential dangers here for you to assemble this object effectively.'
 'Du jonglierst mit dem Ball und schaffst es sehr gut, den Ball in der Luft zu halten. Man könnte dich fast für einen professionellen Fußballspieler halten!<hr />Du hattest viel Spaß und erhältst <strong>1 Erkundungspunkt</strong>.': 'You juggle with the ball and manage rebounds very well, you could almost be mistaken for a professional player!<hr />You’ve had a lot of fun and received <strong>1 Exploration Point</strong>.'
 'Du hast die/den {item} repariert.': 'You''ve repaired the {item}.'
-Trümmerkugel: Ball of remains
+Trümmerkugel: Ball of debris
 'Ein kugelförmiges Etwas, das aus zufälligen Trümmerstücken zusammengeklebt wurde. Viel kann man damit nicht anfangen... außer vielleicht, es mit hoher Geschwindigkeit in eine Zombiemeute zu katapultieren!': 'A spherical object cobbled together from random pieces of debris. Not much use... except perhaps to catapult it at high speed into a horde of zombies!'
 'Du hast heute bereits eine Zone ausgehoben...': 'You''ve already excavated a zone today...'
 'Es sieht so aus, als könntest du mit deiner Schaufel an dieser Stelle tiefer graben als sonst... Möglicherweise kannst du dieser Zone neues Leben einhauchen, sodass du und andere Bürger hier wieder wertvolle Gegenstände finden können? Du kannst diese Aktion nur einmal pro Tag verwenden. Außerdem kann jede Zone nur einmalig durch diese Aktion erneuert werden.': 'It looks like you can dig deeper than usual with your shovel in this spot... Maybe you can breathe new life into this zone so that you and other citizens can find valuable items here again? You can only use this action once per day. In addition, each zone can only be excavated once with this action.'

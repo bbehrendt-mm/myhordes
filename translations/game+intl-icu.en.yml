@@ -3262,7 +3262,7 @@ Tierklinik: Experiment Center
 'Die Stadt benötigt einen Kleinen Tribok, um Haustiere katapultieren zu können...': 'The city needs a small trebuchet to catapult pets...'
 'Du riechst... komisch. Aber auf eine gute Art.': 'You smell... strange. But not in a bad way.'
 'Der Betrieb und die Instanthaltung von {building} haben uns {num} Wasserration(en) gekostet.': 'The operation and maintenance of {building} cost us {num} water ration(s).'
-'Angenehmer Geruch': 'Good Smell'
+'Angenehmer Geruch': 'Pleasant aroma'
 'Wähle einen Gegenstand aus deinem Inventar und klicke auf eine Zone auf der Karte, um diese als Ziel anzuvisieren.': 'You can choose an object (from those present in your inventory) and click a zone on the map to set the coordinates.'
 'Du hast die/den {item} repariert.': 'You''ve repaired the {item}.'
 'Du hast heimlich einen Eintrag vollständig aus dem Register entfernt... Du kannst das noch {times} mal tun.': 'You have discretely removed an entry from the register entirely... You can do this {times} more times.'
@@ -3273,10 +3273,10 @@ Tierklinik: Experiment Center
 '{citizen} hat den Gegenstand {item} auf <strong>[{x}/{y}]</strong> katapultiert und durch die Detonation auf dieser Zone {kills} Zombie(s) getötet.': '{citizen} has catapulted {item} into zone <strong>[{x}/{y}]</strong>. The resulting detonation killed {raw_kills, plural, one {one zombie} other {# zombies}} in this zone.'
 '{master} hat {item} nach <strong>[{x}/{y}]</strong> <strong>katapultiert</strong> und durch den Einschlag <strong>{kills} Zombies</strong> getötet!': '{master} has <strong>catapulted</strong> {item} towards <strong>[{x}/{y}]</strong> and killed <strong>{raw_kills, plural, one {one zombie} other {# zombies}}</strong> with the impact!'
 'Du hast {item} verwendet, um dein Haus abzusichern. <strong>Dein Haus hat {def} Verteidigungspunkt(e) dazugewonnen.</strong> Was werden die anderen Stadtbewohner wohl dazu sagen..?': 'You''ve used {item} to secure your home. <strong>Your home received {def} defense point(s).</strong> What will the other citizens say about this...?'
-Windrichtung: Cardinal direction
+Windrichtung: Wind direction
 'Zusätzlich kannst du Gegenstände aus deinem Rucksack verwenden, um temporär die Verteidigung deiner Behausung zu verbessern. Pro Stufe deines Hauses kannst du 2 Gegenstände für die Verbesserung deines Hauses verwenden.': 'In addition to this, you may use items from your rucksack to temporarily boost your home defense. For each level of your home, you may dump 2 items to fortify it.'
-'Du wurdest verbannt und kannst die Müllhalde daher nicht länger nutzen, um die Verteidigung der Stadt zu verbessern.': 'Due to your banishment you can no longer use the dump to improve the town''s defenses.'
-'Haus verstärken': 'Improve home'
+'Du wurdest verbannt und kannst die Müllhalde daher nicht länger nutzen, um die Verteidigung der Stadt zu verbessern.': 'You are shunned. You can no longer use the dump to improve the town''s defenses.'
+'Haus verstärken': 'Barricade your home'
 'Leidenschaftlicher Entdecker': 'Totally impetuous explorer'
 'Leidenschaftlicher Entdecker_f': 'Totally impetuous explorer'
 Kartograph: Cartographer
@@ -3285,5 +3285,6 @@ Kartograph_f: Cartographer
 'Praktisch zur Versorgung und um den Zombies aus der Ferne die Hölle heiß zu machen.': 'Useful for supplying citizens and giving the zombies hell from a distance.'
 'Du hast {count} x {item} verwendet, um dein Haus abzusichern. <strong>Dein Haus hat {def} Verteidigungspunkt(e) dazugewonnen.</strong> Was werden die anderen Stadtbewohner wohl dazu sagen..?': 'You''ve used {count} x {item} to secure your home. <strong>Your home received {def} defense point(s).</strong> What will the other citizens say about this...?'
 '<strong>Achtung:</strong> In dieser Nacht werden die Gebäude der Stadt {water} Wasserrationen aus dem Brunnen verbrauchen.': '<strong>Attention:</strong> Tonight, the towns buildings will consume {water, plural, =0 {no water rations} one {one water rations} other {# water rations}} from the well.'
-'Die Stadt verfügt nicht über genügend Wasser, um den Bedarf zu decken!': ' The town does not have enough water to meet demand!'
+'Die Stadt verfügt nicht über genügend Wasser, um den Bedarf zu decken!': 'The town does not have enough water to meet the constructions'' demand!'
 'Diese Gebäude verbrauchen jede Nacht Wasser aus dem Brunnen. Wenn die Stadt nicht genug Wasser hat, können sie nicht ordnungsgemäß funktionieren.': 'These buildings consume water from the well every night. If the town does not have enough water, they cannot function properly.'
+'Anzahl deiner Akte von Selbstlosigkeit gegenüber anderen Bürgern in Not.': 'Number of your acts of selflessness towards other citizens in need.'
