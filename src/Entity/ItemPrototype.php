@@ -21,41 +21,43 @@ class ItemPrototype implements NamedEntity
     #[ORM\Column(type: 'integer')]
     private $id;
     #[ORM\Column(type: 'string', length: 190)]
-    private $label;
+    private string $label;
     #[ORM\Column(type: 'string', length: 32)]
-    private $icon;
+    private string $icon;
     #[ORM\Column(type: 'integer')]
-    private $deco;
+    private int $deco = 0;
     #[ORM\ManyToOne(targetEntity: 'App\Entity\ItemCategory', inversedBy: 'itemPrototypes')]
     #[ORM\JoinColumn(nullable: false)]
-    private $category;
+    private ItemCategory $category;
     #[ORM\ManyToMany(targetEntity: 'App\Entity\ItemProperty', inversedBy: 'itemPrototypes')]
-    private $properties;
+    private Collection $properties;
     #[ORM\Column(type: 'string', length: 64)]
-    private $name;
+    private string $name;
     #[ORM\Column(type: 'boolean')]
-    private $heavy;
+    private bool $heavy = false;
     #[ORM\ManyToMany(targetEntity: 'App\Entity\ItemAction')]
-    private $actions;
+    private Collection $actions;
     #[ORM\Column(type: 'text')]
-    private $description;
+    private string $description;
     #[ORM\Column(type: 'integer')]
-    private $watchpoint = 0;
+    private int $watchpoint = 0;
     #[ORM\ManyToOne(targetEntity: ItemAction::class)]
-    private $nightWatchAction;
+    private ?ItemAction $nightWatchAction;
+    #[ORM\ManyToOne(targetEntity: ItemAction::class)]
+    private ?ItemAction $catapultAction;
     #[ORM\Column(type: 'boolean')]
-    private $hideInForeignChest;
-    #[ORM\Column(type: 'boolean', nullable: true)]
-    private $fragile;
+    private bool $hideInForeignChest = false;
     #[ORM\Column(type: 'integer', nullable: true)]
-    private $sort;
+    private ?int $bagExtensionType = 0;
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private ?int $sort = 0;
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $deco_text;
+    private ?string $deco_text = null;
     #[ORM\Column(type: 'boolean')]
-    private $individual = false;
+    private bool $individual = false;
 
     #[ORM\Column(type: 'integer')]
-    private ?int $watchimpact = 0;
+    private int $watchimpact = 0;
 
     #[ORM\Column]
     private bool $persistentEssential = false;
@@ -213,6 +215,18 @@ class ItemPrototype implements NamedEntity
 
         return $this;
     }
+
+    public function getCatapultAction(): ?ItemAction
+    {
+        return $this->catapultAction;
+    }
+    public function setCatapultAction(?ItemAction $catapultAction): self
+    {
+        $this->catapultAction = $catapultAction;
+
+        return $this;
+    }
+
     public function getHideInForeignChest(): ?bool
     {
         return $this->hideInForeignChest;
@@ -223,16 +237,22 @@ class ItemPrototype implements NamedEntity
 
         return $this;
     }
-    public function getFragile(): ?bool
+
+    public function getBagExtensionType(): ?int
     {
-        return $this->fragile;
+        return $this->bagExtensionType;
     }
-    public function setFragile(?bool $fragile): self
+    public function setBagExtensionType(?int $bagExtensionType): self
     {
-        $this->fragile = $fragile;
+        $this->bagExtensionType = $bagExtensionType;
 
         return $this;
     }
+    public function isCarrierItem(): bool
+    {
+        return $this->getBagExtensionType() != 0;
+    }
+
     public function getSort(): ?int
     {
         return $this->sort;

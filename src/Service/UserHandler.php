@@ -22,6 +22,7 @@ use App\Entity\UserSwapPivot;
 use App\Enum\Configuration\MyHordesSetting;
 use App\Enum\DomainBlacklistType;
 use App\Service\Actions\Cache\InvalidateTagsInAllPoolsAction;
+use App\Service\Media\MediaService;
 use App\Service\User\UserCapabilityService;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\QueryBuilder;
@@ -42,12 +43,14 @@ class UserHandler
     const ErrorAvatarTooManyFrames = ErrorHelper::BaseAvatarErrors + 8;
 
     public function __construct(
-        private readonly EntityManagerInterface $entity_manager,
-        private readonly ContainerInterface $container,
-        private readonly ConfMaster $conf,
+        private readonly EntityManagerInterface         $entity_manager,
+        private readonly ContainerInterface             $container,
+        private readonly ConfMaster                     $conf,
         private readonly InvalidateTagsInAllPoolsAction $clearCache,
-        private readonly UserCapabilityService $capability,
-        private readonly EventProxyService $proxy,
+        private readonly UserCapabilityService          $capability,
+        private readonly PermissionHandler              $permissions,
+        private readonly EventProxyService              $proxy,
+        private readonly MediaService $mediaService,
     )
     { }
 
@@ -129,10 +132,15 @@ class UserHandler
             ->setLastActionTimestamp( null )
             ->setRightsElevation(0);
 
-        if ($user->getAvatar()) {
-            $this->entity_manager->remove($user->getAvatar());
+
+        $media = $this->mediaService->getMediaForObject( $user, 'avatar' );
+        if ($user->getAvatar() || !$media->isEmpty()) {
+            if ($user->getAvatar()) {
+                $this->entity_manager->remove($user->getAvatar());
+                $user->setAvatar(null);
+            }
+            $this->mediaService->clearMediaFromObject( $user, 'avatar' );
             ($this->clearCache)("user_avatar_{$user->getId()}");
-            $user->setAvatar(null);
         }
 
          $user_coalitions = $this->entity_manager->getRepository(UserGroupAssociation::class)->findBy( [
@@ -186,7 +194,8 @@ class UserHandler
      * @return bool True if the user has the given role; false otherwise.
      * @deprecated User the hasRole function in UserCapabilityService instead
      */
-    public function hasRole(User $user, string $role) {
+    public function hasRole(User $user, string $role): bool
+    {
         return $this->capability->hasRole( $user, $role );
     }
 
@@ -203,7 +212,7 @@ class UserHandler
      * @return string[]
      */
     public function admin_validFlags(): array {
-        return ['FLAG_ORACLE', 'FLAG_ANIMAC', 'FLAG_TEAM', 'FLAG_RUFFIAN', 'FLAG_DEV','FLAG_ART'];
+        return ['FLAG_ORACLE', 'FLAG_ANIMAC', 'FLAG_TEAM', 'FLAG_RUFFIAN', 'FLAG_DEV','FLAG_ART', 'FLAG_CHEATER'];
     }
 
     /**
@@ -277,7 +286,7 @@ class UserHandler
      * @param User|UserGroup|UserGroupAssociation $principal
      * @return Shoutbox|null
      */
-    public function getShoutbox($principal): ?Shoutbox {
+    public function getShoutbox(User|UserGroup|UserGroupAssociation $principal): ?Shoutbox {
 
         if (is_a($principal, User::class)) $principal = $this->getCoalitionMembership($principal);
         if (is_a($principal, UserGroupAssociation::class) && in_array($principal->getAssociationType(),
@@ -289,7 +298,7 @@ class UserHandler
         return null;
     }
 
-    public function getConsecutiveDeathLock(User $user, bool &$warning = null): ?ConsecutiveDeathMarker {
+    public function getConsecutiveDeathLock(User $user, ?bool &$warning = null): ?ConsecutiveDeathMarker {
         /** @var ConsecutiveDeathMarker $cdm */
         $cdm = $this->entity_manager->getRepository(ConsecutiveDeathMarker::class)->matching((new Criteria())
             ->where(Criteria::expr()->eq('user', $user))
@@ -333,7 +342,7 @@ class UserHandler
                 ($timeout <= 0 || $member->getUser()->getLastActionTimestamp()->getTimestamp() > (time() - $timeout)) &&
                 $member->getUser()->getActiveCitizen() === null &&
                 !$this->getConsecutiveDeathLock($member->getUser()) &&
-                !$this->isRestricted( $member->getUser(), AccountRestriction::RestrictionGameplay ) &&
+                !$this->permissions->checkRestriction( $member->getUser(), AccountRestriction::RestrictionGameplay ) &&
                 !$this->entity_manager->getRepository(CitizenRankingProxy::class)->findNextUnconfirmedDeath($member->getUser())
             ) {
                 if ($member->getUser() === $user) $active = true;
@@ -364,23 +373,6 @@ class UserHandler
         return array_filter( array_map( fn(UserGroupAssociation $ua) => $ua->getUser(), $all_coalition_members ), fn(User $u) => $u !== $user );
     }
 
-    public function getActiveRestrictions(User $user): int {
-        $r = AccountRestriction::RestrictionNone;
-
-        /** @var QueryBuilder $qb */
-        $qb = $this->entity_manager->getRepository(AccountRestriction::class)->createQueryBuilder('a');
-        foreach ($qb
-                     ->select('a.restriction AS r')
-                     ->andWhere('a.user = :user' )->setParameter('user', $user)
-                     ->andWhere('(a.active = TRUE AND a.confirmed = true)')
-                     ->andWhere('(a.expires IS NULL or a.expires > :now)')->setParameter('now', new DateTime())
-                     ->getQuery()->getResult() as $entry)
-
-            $r |= $entry['r'];
-
-        return $r;
-    }
-
     public function getActiveRestrictionExpiration(User $user, ?int $restriction): ?DateTime {
         $dt = null;
 
@@ -401,9 +393,14 @@ class UserHandler
         return $dt;
     }
 
+    /**
+     * @deprecated
+     * @param User $user
+     * @param int|null $restriction
+     * @return bool
+     */
     public function isRestricted(User $user, ?int $restriction = null): bool {
-        $r = $this->getActiveRestrictions($user);
-        return $restriction === null ? ($r !== AccountRestriction::RestrictionNone) : (($r & $restriction) === $restriction);
+        return $this->permissions->checkRestriction( $user, $restriction );
     }
 
     protected array $_relation_cache = [];
@@ -442,15 +439,20 @@ class UserHandler
 	 * @param bool $disable_preg If we should match the username against the pattern /[^\p{L}\w]/u
      * @return bool The validity of the username
      */
-    public function isNameValid(string $name, ?bool &$too_long = null, int $custom_length = 16, bool $disable_preg = false): bool {
-		// Define banned starting display name
+    public function isNameValid(string $name, ?bool &$too_long = null, int $custom_length = 16, bool $disable_preg = false, ?array &$debug = null): bool {
+		$debug ??= [];
+
+        // Define banned starting display name
         $invalidNameStarters = [
             'Corvus', 'Corbilla', '_'
         ];
 
 		// If wanted name starts with a banned starter
         foreach ($invalidNameStarters as $starter)
-            if (str_starts_with($name, $starter)) return false;
+            if (str_starts_with($name, $starter)) {
+                $debug['rule:starts_with'] = $starter;
+                return false;
+            }
 
 		//Define static forbidden names
         $invalidNames = [
@@ -472,26 +474,33 @@ class UserHandler
 		// We save [distance, match]
         $closestDistance = [PHP_INT_MAX, ''];
 
+        $debug['rule:matches'] = [];
         foreach ([...$invalidNames,...$additional_names] as $invalidName) {
 			// Remove wildcard chars from the banned name
             $base = str_replace(["'", '*', '?', '[', ']', '!'], '', $invalidName);
 
 			// Match wildcardly
             if (fnmatch(strtolower($invalidName), strtolower($name))) {
-				$closestDistance = [0, $base];
+                $closestDistance = $debug['rule:matches'][] = [0, $base];
 			} else {
                 // Calculate the levenshtein distance
                 $levenshtein = levenshtein(strtolower($name), strtolower($base));
-                if ($levenshtein < $closestDistance[0]) {
+                $temp = [$levenshtein, $base];
+
+                $levenshtein_max = mb_strlen( $temp[1] ) <= 5 ? 1 : 2;
+                if ($levenshtein <= $levenshtein_max) $debug['rule:matches'][] = [$levenshtein, $base];
+                if ($levenshtein < $closestDistance[0])
                     $closestDistance = [$levenshtein, $base];
-                }
             }
         }
 
 		$levenshtein_max = mb_strlen( $closestDistance[1] ) <= 5 ? 1 : 2;
 
-        $too_long = mb_strlen($name) > $custom_length;
-        return ($disable_preg || !preg_match('/[^\p{LC}_\p{N}]/u', $name)) && mb_strlen($name) >= 3 && !$too_long && $closestDistance[0] > $levenshtein_max;
+        $debug['rule:length'] = $too_long = mb_strlen($name) > $custom_length;
+        $matches = [];
+        $preg_ok = $disable_preg || !preg_match_all('/[^\p{LC}_\p{N}]/u', $name, $matches);
+        $debug['rule:preg'] = array_unique($matches[0]);
+        return $preg_ok && mb_strlen($name) >= 3 && !$too_long && $closestDistance[0] > $levenshtein_max;
     }
 
 	public function isEmailValid(string $mail): bool {
@@ -546,7 +555,7 @@ class UserHandler
         if ($nextDeath === null || ($nextDeath->getCitizen() && $nextDeath->getCitizen()->getAlive()))
             return false;
 
-        $lastWords = $this->isRestricted( $user, AccountRestriction::RestrictionComments ) ? '' : $lastWords;
+        $lastWords = $this->permissions->checkRestriction( $user, AccountRestriction::RestrictionComments ) ? '' : $lastWords;
         $this->proxy->deathConfirmed( $nextDeath, $lastWords, true );
 
         $this->entity_manager->persist( $nextDeath );

@@ -48,7 +48,7 @@ class Town
     private int $day = 1;
     #[ORM\Column(type: 'integer')]
     private ?int $well = 0;
-    #[ORM\OneToMany(targetEntity: 'App\Entity\Zone', mappedBy: 'town', orphanRemoval: true, cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(targetEntity: 'App\Entity\Zone', mappedBy: 'town', cascade: ['persist', 'remove'], fetch: 'EXTRA_LAZY', orphanRemoval: true)]
     private $zones;
     #[ORM\Column(type: 'boolean')]
     private bool $door = false;
@@ -56,16 +56,16 @@ class Town
     private bool $chaos = false;
     #[ORM\Column(type: 'boolean')]
     private bool $devastated = false;
-    #[ORM\OneToMany(targetEntity: 'App\Entity\Building', mappedBy: 'town', orphanRemoval: true, cascade: ['persist', 'remove'], fetch: 'EXTRA_LAZY')]
+    #[ORM\OneToMany(targetEntity: 'App\Entity\Building', mappedBy: 'town', cascade: ['persist', 'remove'], fetch: 'EXTRA_LAZY', orphanRemoval: true)]
     #[ORM\OrderBy(['position' => 'ASC'])]
     private $buildings;
-    #[ORM\OneToMany(targetEntity: 'App\Entity\ZombieEstimation', mappedBy: 'town', orphanRemoval: true, cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: 'App\Entity\ZombieEstimation', mappedBy: 'town', cascade: ['persist'], orphanRemoval: true)]
     private $zombieEstimations;
-    #[ORM\OneToMany(targetEntity: 'App\Entity\Gazette', mappedBy: 'town', orphanRemoval: true, cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: 'App\Entity\Gazette', mappedBy: 'town', cascade: ['persist'], orphanRemoval: true)]
     private $gazettes;
     #[ORM\OneToOne(targetEntity: 'App\Entity\Forum', mappedBy: 'town', cascade: ['persist', 'remove'])]
     private ?Forum $forum = null;
-    #[ORM\Column(type: 'array', nullable: true)]
+    #[ORM\Column(type: 'json', nullable: true)]
     private array $conf = [];
     #[ORM\Column(type: 'integer')]
     private int $soulDefense = 0;
@@ -109,6 +109,8 @@ class Town
     private bool $lockdown = false;
     #[ORM\Column(type: 'boolean')]
     private bool $brokenDoor = false;
+    #[ORM\Column(type: 'boolean')]
+    private bool $fullyExploredAwarded = false;
 
     #[ORM\OneToMany(mappedBy: 'town', targetEntity: ActionCounter::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $actionCounters;
@@ -225,6 +227,16 @@ class Town
         }
         return false;
     }
+    public function getRandomCitizenInside(bool $aliveOnly = true): ?Citizen {
+        $citizens = $this->getCitizens()->toArray();
+        shuffle($citizens);
+        foreach ($citizens as $citizen) {
+            if ($citizen->getZone()) continue;
+            if ($aliveOnly && !$citizen->getAlive()) continue;
+            return $citizen;
+        }
+        return null;
+    }
     /**
      * @return Collection|Citizen[]
      */
@@ -295,9 +307,9 @@ class Town
     }
 
     /**
-     * @return Collection<int, Zone>
+     * @return ArrayCollection<Zone>|PersistentCollection<Zone>
      */
-    public function getZones(): Collection
+    public function getZones(): ArrayCollection|PersistentCollection
     {
         return $this->zones;
     }
@@ -326,24 +338,6 @@ class Town
     }
 
     /**
-     * @param int $x0
-     * @param int $x1
-     * @param int $y0
-     * @param int $y1
-     * @return Collection<int, Zone>
-     */
-    public function getZoneRect(int $x0, int $x1, int $y0, int $y1): Collection
-    {
-        return $this->zones->matching(
-            (new Criteria())
-                ->andWhere( new Comparison( 'x', Comparison::GTE, $x0 ) )
-                ->andWhere( new Comparison( 'x', Comparison::LTE, $x1 ) )
-                ->andWhere( new Comparison( 'y', Comparison::GTE, $y0 ) )
-                ->andWhere( new Comparison( 'y', Comparison::LTE, $y1 ) )
-        );
-    }
-
-    /**
      * @param int $x
      * @param int $y
      * @return ?Zone
@@ -354,6 +348,45 @@ class Town
         $criteria->andWhere( new Comparison( 'x', Comparison::EQ, $x ) );
         $criteria->andWhere( new Comparison( 'y', Comparison::EQ, $y ) );
         return $this->zones->matching( $criteria )->first() ?: null;
+    }
+
+    /**
+     * @param int $x
+     * @param int $y
+     * @param int $dist
+     * @return Collection<Zone>
+     */
+    public function getZoneCross(int $x, int $y, int $dist): Collection
+    {
+        return $this->zones->matching( Criteria::create()
+            ->orWhere( Criteria::expr()->andX(
+                Criteria::expr()->gte( 'x', $x - $dist ),
+                Criteria::expr()->lte( 'x', $x + $dist ),
+                Criteria::expr()->eq( 'y', $y ),
+            ) )
+            ->orWhere( Criteria::expr()->andX(
+                Criteria::expr()->eq( 'x', $x ),
+                Criteria::expr()->gte( 'y', $y - $dist ),
+                Criteria::expr()->lte( 'y', $y + $dist ),
+            ) )
+        );
+    }
+
+    /**
+     * @param int $x_min
+     * @param int $x_max
+     * @param int $y_min
+     * @param int $y_max
+     * @return Collection<Zone>
+     */
+    public function getZoneRect(int $x_min, int $x_max, int $y_min, int $y_max): Collection
+    {
+        return $this->zones->matching( Criteria::create()
+            ->andWhere( Criteria::expr()->gte( 'x', $x_min ) )
+            ->andWhere( Criteria::expr()->gte( 'y', $y_min ) )
+            ->andWhere( Criteria::expr()->lte( 'x', $x_max ) )
+            ->andWhere( Criteria::expr()->lte( 'y', $y_max ) )
+        );
     }
 
     public function getTownZone(): Zone {
@@ -417,7 +450,7 @@ class Town
 
     public function getBuilding(BuildingPrototype $prototype): ?Building
     {
-        return $this->buildings->matching( (new Criteria())
+        return $this->buildings->matching( new Criteria()
             ->where( new Comparison( 'prototype', Comparison::EQ, $prototype )  )
         )->first() ?: null;
     }
@@ -433,13 +466,8 @@ class Town
     }
     public function removeBuilding(Building $building): self
     {
-        if ($this->buildings->contains($building)) {
+        if ($this->buildings->contains($building))
             $this->buildings->removeElement($building);
-            // set the owning side to null (unless already changed)
-            if ($building->getTown() === $this) {
-                $building->setTown(null);
-            }
-        }
 
         return $this;
     }
@@ -980,5 +1008,17 @@ class Town
         $this->door_changed_at = $door_changed_at;
 
         return $this;
+    }
+
+    public function setFullyExploredAwarded(bool $awarded): static
+    {
+        $this->fullyExploredAwarded = $awarded;
+
+        return $this;
+    }
+
+    public function getFullyExploredAwarded(): bool
+    {
+        return $this->fullyExploredAwarded;
     }
 }

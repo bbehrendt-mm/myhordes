@@ -1,6 +1,6 @@
 import {sharedWorkerCall} from "../init";
 import {VaultEntry, VaultStorage} from "../typedef/vault_td";
-import {useEffect, useRef, useState, EffectCallback} from "react";
+import {useEffect, useRef, useState, EffectCallback, useMemo} from "react";
 import {html} from "../helpers";
 
 export class Vault<V extends VaultEntry> {
@@ -34,16 +34,16 @@ export class Vault<V extends VaultEntry> {
 export function useVault<V extends VaultEntry>(
     type: string,
     ids: null|Array<number>,
-    effect: EffectCallback = null,
+    effect: EffectCallback | null = null,
 ): VaultStorage<V> {
     const idSet = useRef<Set<number>>(new Set)
     const [state, setState] = useState<VaultStorage<V>>({})
 
-    const missing = [...new Set(
+    const missing = useMemo(() => [...new Set(
         (ids ?? [])
             .filter(id => !idSet.current.has(id))
             .sort((a, b) => a - b)
-    )];
+    )], [ids]);
 
     useEffect(() => {
         if (missing?.length > 0) {

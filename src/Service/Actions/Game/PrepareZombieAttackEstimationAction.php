@@ -115,13 +115,13 @@ readonly class PrepareZombieAttackEstimationAction
         if ($conf->get(TownSetting::OptFeatureAttacks) === 'hard')
             $value = mt_rand( $target_min, $target_max );
 
-        return (new ZombieEstimation())
+        return new ZombieEstimation()
                 ->setDay( $day )
-                ->setZombies( $value )
-                ->setOffsetMin( $off_min )
-                ->setOffsetMax( $off_max )
-                ->setTargetMin( $target_min )
-                ->setTargetMax( $target_max )
+                ->setZombies( floor($value) )
+                ->setOffsetMin( floor($off_min) )
+                ->setOffsetMax( floor($off_max) )
+                ->setTargetMin( floor($target_min) )
+                ->setTargetMax( floor($target_max) )
         ;
     }
 

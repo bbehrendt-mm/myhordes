@@ -73,9 +73,9 @@ final class CitizenChanceQueryListener implements ServiceSubscriberInterface
             ($is_pro = $citizen->property( CitizenProperties::EnableProWatchman ));
 
         $chances = 0;
-        if ($citizen->getProfession()->getName() === "guardian")
+        if ($citizen->isProfession("guardian"))
             $log_info['death base [guardian]'] = ($chances = 0.03);
-        //else if ($citizen->getProfession()->getName() === "tamer" && $town_handler->getBuilding($citizen->getTown(), "small_pet_#00"))
+        //else if ($citizen->isProfession("tamer") && $town_handler->getBuilding($citizen->getTown(), "small_pet_#00"))
         //    $log_info['death base [tamer & small_pet_#00]'] = ($chances = 0.05);
         else $log_info['death base'] = ($chances = 0.08);
 
@@ -101,6 +101,12 @@ final class CitizenChanceQueryListener implements ServiceSubscriberInterface
         $log_info['ratio terror'] = ($terrorRatio = ($citizen->getTown()->getType()->getName() == "panda" ? 0.2 : 0.1));
         $event->woundChance = round(max(0.0, min(1 - ((1-$chances)-(1-$chances)*$woundRatio), 1.0)),2);
         $event->terrorChance = round(max(0.0, min(1 - ((1-$chances)-(1-$chances)*$terrorRatio), 1.0)),2);
+        
+        // Good Smell status
+        if ($citizen->hasStatus('good_smell')) {
+            $event->woundChance = min(0.0, $event->woundChance - 0.25);
+            $event->terrorChance = min(0.0, $event->terrorChance - 0.25);
+        }
 
         $log_info['core chances'] = [
             'death' => $event->deathChance,
@@ -230,14 +236,14 @@ final class CitizenChanceQueryListener implements ServiceSubscriberInterface
 		/** @var EventProxyService $events */
 		$events = $this->getService(EventProxyService::class);
 
-		$def = 10 + $citizen->property(CitizenProperties::WatchDefense) + $citizen->getProfession()->getNightwatchDefenseBonus();
+		$def = 10 + $citizen->property(CitizenProperties::WatchDefense);
 
 		foreach ($citizen->getStatus() as $status) {
 			$def += $status->getNightWatchDefenseBonus();
 		}
 
 		foreach ($citizen->getInventory()->getItems() as $item) {
-			$itemDef = $events->buildingQueryNightwatchDefenseBonus($citizen->getTown(), $item);;
+			$itemDef = $events->buildingQueryNightwatchDefenseBonus($citizen->getTown(), $item);
 			$def += $itemDef;
 		}
 
@@ -251,10 +257,10 @@ final class CitizenChanceQueryListener implements ServiceSubscriberInterface
 		$events = $this->getService(EventProxyService::class);
 
 		$def = $event->data->nightwatchInfo['def'] ?? 0;
-		$def += 10 + $citizen->property(CitizenProperties::WatchDefense) + $citizen->getProfession()->getNightwatchDefenseBonus();
+		$def += 10 + $citizen->property(CitizenProperties::WatchDefense);
 
-        $event->data->nightwatchInfo['bonusDef'] = $citizen->getProfession()->getNightwatchDefenseBonus();
-        $event->data->nightwatchInfo['bonusSurvival'] = $citizen->getProfession()->getNightwatchSurvivalBonus();
+        $event->data->nightwatchInfo['bonusDef'] = 0;
+        $event->data->nightwatchInfo['bonusSurvival'] = 0;
 
 		foreach ($citizen->getStatus() as $status) {
 			if ($status->getNightWatchDefenseBonus() === 0 && $status->getNightWatchDeathChancePenalty() === 0.0) continue;
@@ -341,9 +347,9 @@ final class CitizenChanceQueryListener implements ServiceSubscriberInterface
 
                 // A depleted zone does not take into account the statuses
                 if (!$event->empty) {
-                    if ($this->getService(CitizenHandler::class)->hasStatusEffect( $event->citizen, 'camper' )) $chance += 0.1;
-                    if ($this->getService(CitizenHandler::class)->hasStatusEffect( $event->citizen, 'wound5' )) $chance *= 0.5;
-                    if ($this->getService(CitizenHandler::class)->hasStatusEffect( $event->citizen, 'drunk'  )) $chance -= 0.2;
+                    if ($event->citizen->hasStatus( 'camper' )) $chance += 0.1;
+                    if ($event->citizen->hasStatus( 'wound5' )) $chance *= 0.5;
+                    if ($event->citizen->hasStatus( 'drunk'  )) $chance -= 0.2;
                 }
 
                 $event->chance = $chance + ($event->zone?->getScoutLevel() ?? 0) * 0.025;
@@ -356,8 +362,8 @@ final class CitizenChanceQueryListener implements ServiceSubscriberInterface
                 $chance = (1.0 + $event->citizen->getProfession()->getDigBonus()) / ( 1.0 + ( $digs / max( 1, $event->townConfig->get(TownSetting::ERuinItemFillrate) - ($digs/3.0) ) ) );
                 //$chance = $event->townConfig->get(TownConf::CONF_EXPLORABLES_DIG_CHANCE, 0.55) + $event->citizen->getProfession()->getDigBonus();
 
-                if ($this->getService(CitizenHandler::class)->hasStatusEffect( $event->citizen, 'wound5' )) $chance -= 0.2;
-                if ($this->getService(CitizenHandler::class)->hasStatusEffect( $event->citizen, 'drunk'  )) $chance -= 0.2;
+                if ($event->citizen->hasStatus( 'wound5' )) $chance -= 0.2;
+                if ($event->citizen->hasStatus( 'drunk'  )) $chance -= 0.2;
 
                 $event->chance = $chance;
                 break;
@@ -366,8 +372,8 @@ final class CitizenChanceQueryListener implements ServiceSubscriberInterface
                 // We're searching a building
                 $chance = 1.0 - ($event->prototype?->getEmptyDropChance() ?? 0.25) + $event->citizen->getProfession()->getDigBonus();
 
-                if ($this->getService(CitizenHandler::class)->hasStatusEffect( $event->citizen, 'wound5' )) $chance -= 0.2;
-                if ($this->getService(CitizenHandler::class)->hasStatusEffect( $event->citizen, 'drunk'  )) $chance -= 0.2;
+                if ($event->citizen->hasStatus( 'wound5' )) $chance -= 0.2;
+                if ($event->citizen->hasStatus( 'drunk'  )) $chance -= 0.2;
 
                 // We apply the night malus
                 $chance -= $this->applyNightMalus( $event->citizen, $base_night_malus, $event->distance );
@@ -389,7 +395,8 @@ final class CitizenChanceQueryListener implements ServiceSubscriberInterface
                 break;
             case CitizenValueQuery::NightlyAttraction:
                 $value = $event->value;
-                if ($event->citizen->hasStatus('tg_flag')) $value += 0.025;
+                // [S19] Disable flag attraction
+                // if ($event->citizen->hasStatus('tg_flag')) $value += 0.025;
                 $event->value = $value;
                 break;
             default:

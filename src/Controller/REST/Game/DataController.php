@@ -47,8 +47,8 @@ class DataController extends CustomAbstractCoreController
      */
     private static function resolve(EntityManagerInterface $em, string $class, string $ids): Collection {
         return $em->getRepository($class)->matching(
-            (new Criteria( ))->where( Criteria::expr()->in( 'id', array_unique(
-                (new ArrayCollection( explode(',',  $ids) ))
+            new Criteria( )->where(Criteria::expr()->in('id', array_unique(
+                new ArrayCollection( explode(',',  $ids) )
                     ->filter( fn(string $s) => !empty($s) && is_numeric($s) )
                     ->map( fn(string $s) => (int)$s )
                     ->toArray()
@@ -76,8 +76,10 @@ class DataController extends CustomAbstractCoreController
                 'icon' => $this->assets->getUrl( "build/images/item/item_{$p->getIcon()}.gif" ),
                 'props' => $p->getProperties()->filter( fn(ItemProperty $p) => in_array( $p->getName(), $fe_props ) )->map( fn(ItemProperty $p) => $p->getName() )->getValues(),
                 'heavy' => $p->getHeavy(),
+                'extension' => $p->isCarrierItem(),
                 'deco' => $p->getDeco(),
                 'watch' => $p->getWatchpoint(),
+                'cata' => $p->getCatapultAction() !== null,
             ])->toArray()
         ]);
     }
@@ -110,7 +112,7 @@ class DataController extends CustomAbstractCoreController
                 'levels' => $p->getMaxLevel() ?? 0,
                 'parent' => $p->getParent()?->getId() ?? null,
                 'order' => $p->getOrderBy() ?? 0,
-                'rsc' => self::renderItemGroup( $p->getResources() )
+                'rsc' => self::renderItemGroup( $p->getResourceSet()->getResources() )
             ])->toArray()
         ]);
     }

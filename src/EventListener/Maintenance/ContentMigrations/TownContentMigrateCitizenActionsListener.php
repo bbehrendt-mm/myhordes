@@ -46,7 +46,7 @@ class TownContentMigrateCitizenActionsListener extends TownContentMigrationListe
         ), fn(?SpecialActionPrototype $a) => $a !== null);
 
         foreach ($event->town->getCitizens() as $citizen)
-            if ($citizen->getAlive() && $citizen->getProfession()->getName() !== CitizenProfession::DEFAULT) {
+            if ($citizen->getAlive() && !$citizen->isProfession(CitizenProfession::DEFAULT)) {
 
                 foreach ($actions as $action)
                     if (!$citizen->getSpecialActions()->contains($action)) {

@@ -1,9 +1,6 @@
 import {TranslationStrings} from "./strings";
 import {Fetch} from "../../v2/fetch";
-
-export type ResponseIndex = {
-    strings: TranslationStrings,
-}
+import {TranslatableAPI} from "../index";
 
 export type ResponseList = {
     subscriptions: Array<NotificationSubscription>,
@@ -33,18 +30,8 @@ export type Setting = {
     help: string
 }
 
-export class NotificationManagerAPI {
-
-    private fetch: Fetch;
-
-    constructor() {
-        this.fetch = new Fetch( 'user/settings/notifications' );
-    }
-
-    public index(): Promise<ResponseIndex> {
-        return this.fetch.from('/')
-            .request().withCache().get() as Promise<ResponseIndex>;
-    }
+export class NotificationManagerAPI extends TranslatableAPI<TranslationStrings> {
+    constructor() { super( 'user/settings/notifications' ) }
 
     public list( type: string ): Promise<ResponseList> {
         return this.fetch.from(`/${type}`)

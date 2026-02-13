@@ -54,7 +54,7 @@ window.addEventListener('popstate', function(event) {
 
 const resize_game_menu = function() {
     let game_menu = document.querySelector('#gma');
-    let game_menu_elems = document.querySelectorAll('#gma>div.game-bar>*:not(.clock)');
+    let game_menu_elems = document.querySelectorAll('#gma>div.game-bar>*');
     let game_menu_burger = document.querySelector('#gma>div.game-bar>ul.text-menu>li.burger-button');
     let game_menu_hide = document.querySelectorAll('#gma>div.game-bar>ul.text-menu>li:not(.burger-button),#poll-spacer');
 

@@ -105,6 +105,15 @@ class Zone
     #[ORM\Column]
     private int $soulPositionOffset = 0;
 
+    #[ORM\Column]
+    private bool $forceRegenerated = false;
+
+    #[ORM\Column]
+    private bool $scavenged = false;
+
+    #[ORM\Column]
+    private bool $modifiedFromDefault = false;
+
     public function __construct()
     {
         $this->citizens = new ArrayCollection();
@@ -358,20 +367,32 @@ class Zone
         return $this;
     }
     public function getDirection(): int {
-        if ($this->getX() === 0 && $this->getY() === 0) return self::DirectionCenter;
-        elseif ($this->getX() != 0 && $this->getY() != 0 && (abs(abs($this->getX())-abs($this->getY())) < min(abs($this->getX()),abs($this->getY())))) {
-            if ($this->getX() < 0 && $this->getY() < 0) return self::DirectionSouthWest;
-            if ($this->getX() < 0 && $this->getY() > 0) return self::DirectionNorthWest;
-            if ($this->getX() > 0 && $this->getY() < 0) return self::DirectionSouthEast;
-            if ($this->getX() > 0 && $this->getY() > 0) return self::DirectionNorthEast;
-        } else {
-            if (abs($this->getX()) > abs($this->getY()) && $this->getX() < 0) return self::DirectionWest;
-            if (abs($this->getX()) > abs($this->getY()) && $this->getX() > 0) return self::DirectionEast;
-            if (abs($this->getX()) < abs($this->getY()) && $this->getY() < 0) return self::DirectionSouth;
-            if (abs($this->getX()) < abs($this->getY()) && $this->getY() > 0) return self::DirectionNorth;
-        }
+        $x = $this->getX();
+        $y = $this->getY();
 
-        return self::DirectionCenter;
+        $deg = $x !== 0 && $y !== 0 ? rad2deg(asin( $x / sqrt( $x*$x + $y*$y ) )) : 0;
+
+        return match(true) {
+            $x === 0 && $y === 0 => self::DirectionCenter,
+            $x === 0 && $y > 0   => self::DirectionNorth,
+            $x === 0 && $y < 0   => self::DirectionSouth,
+            $x > 0 && $y === 0   => self::DirectionEast,
+            $x < 0 && $y === 0   => self::DirectionWest,
+
+            $y > 0 && $deg >=  67.5 => self::DirectionEast,
+            $y > 0 && $deg >=  22.5 => self::DirectionNorthEast,
+            $y > 0 && $deg >= -22.5 => self::DirectionNorth,
+            $y > 0 && $deg >= -67.5 => self::DirectionNorthWest,
+            $y > 0                  => self::DirectionWest,
+
+            $y < 0 && $deg >=  67.5 => self::DirectionEast,
+            $y < 0 && $deg >=  22.5 => self::DirectionSouthEast,
+            $y < 0 && $deg >= -22.5 => self::DirectionSouth,
+            $y < 0 && $deg >= -67.5 => self::DirectionSouthWest,
+            $y < 0                  => self::DirectionWest,
+
+            default => self::DirectionCenter,
+        };
     }
     public function getBuryCount(): ?int
     {
@@ -619,9 +640,9 @@ class Zone
      */
     public function getActivityMarkerFor(ZoneActivityMarkerType $type, Citizen $citizen): ?ZoneActivityMarker
     {
-        return $this->getActivityMarkers()->matching( (new Criteria())
-                                                          ->andWhere( new Comparison( 'type', Comparison::EQ, $type->value ) )
-                                                          ->andWhere( new Comparison( 'citizen', Comparison::EQ, $citizen ) )
+        return $this->getActivityMarkers()->matching( new Criteria()
+            ->andWhere( new Comparison( 'type', Comparison::EQ, $type->value ) )
+            ->andWhere( new Comparison( 'citizen', Comparison::EQ, $citizen ) )
         )->first() ?: null;
     }
 
@@ -684,6 +705,42 @@ class Zone
     public function setSoulPositionOffset(int $soulPositionOffset): static
     {
         $this->soulPositionOffset = $soulPositionOffset;
+
+        return $this;
+    }
+
+    public function isForceRegenerated(): bool
+    {
+        return $this->forceRegenerated;
+    }
+
+    public function setForceRegenerated(bool $forceRegenerated): static
+    {
+        $this->forceRegenerated = $forceRegenerated;
+
+        return $this;
+    }
+
+    public function isScavenged(): ?bool
+    {
+        return $this->scavenged;
+    }
+
+    public function setScavenged(bool $scavenged): static
+    {
+        $this->scavenged = $scavenged;
+
+        return $this;
+    }
+
+    public function isModifiedFromDefault(): ?bool
+    {
+        return $this->modifiedFromDefault;
+    }
+
+    public function setModifiedFromDefault(bool $modifiedFromDefault): static
+    {
+        $this->modifiedFromDefault = $modifiedFromDefault;
 
         return $this;
     }

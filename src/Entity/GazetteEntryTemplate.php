@@ -85,8 +85,8 @@ class GazetteEntryTemplate
     private $type;
     #[ORM\Column(type: 'integer', nullable: true)]
     private $requirement;
-    #[ORM\Column(type: 'array', nullable: true)]
-    private $variableTypes = [];
+    #[ORM\Column(type: 'json', nullable: true)]
+    private array $variableTypes = [];
     #[ORM\Column(type: 'integer')]
     private $followUpType;
     public function getId(): ?int

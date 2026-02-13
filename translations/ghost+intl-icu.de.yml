@@ -391,3 +391,5 @@ Koalition: Koalition
 'Du kannst dieser Stadt nicht beitreten. Fehlercode: {error}': 'Du kannst dieser Stadt nicht beitreten. Fehlercode: {error}'
 'Aktive Fähigkeiten': 'Aktive Fähigkeiten'
 'Da du in mehreren deiner letzten Städte frühzeitig gestorben bist ({death_type}), bist du bis {end_date} vom Spiel ausgeschlossen. Du kannst aktuell keine neue Stadt betreten.': 'Da du in mehreren deiner letzten Städte frühzeitig gestorben bist ({death_type}), bist du bis {end_date} vom Spiel ausgeschlossen. Du kannst aktuell keine neue Stadt betreten.'
+'Öffentliche Städte, in denen sich zum Zeitpunkt des Angriffs kein einziger Spieler befindet, werden gelöscht!': 'Öffentliche Städte, in denen sich zum Zeitpunkt des Angriffs kein einziger Spieler befindet, werden gelöscht!'
+'Diese Beschränkungen gelten NICHT für Kleine Städte!': 'Diese Beschränkungen gelten NICHT für Kleine Städte!'

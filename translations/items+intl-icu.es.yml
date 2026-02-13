@@ -1,4 +1,3 @@
----
 'Du hast folgendes gewürfelt: {dc1}, {dc2} und {dc3}.': 'Lanzas los dados y obtienes {dc1}, {dc2} y {dc3}.'
 'Wow, du hast einen Trippel geworfen. Das hat so viel Spaß gemacht, dass du 1AP gewinnst!': '¡Bravo, obtienes un Trío! ¡Es genial!<hr />Eso te pone tan contento que <strong>ganas 1PA</strong>.'
 'Wow, du hast eine Straße geworfen. Das hat so viel Spaß gemacht, dass du 1AP gewinnst!': '¡Formas una escalera!<hr />Eso te pone tan contento que <strong>ganas 1PA</strong>.'
@@ -6,7 +5,7 @@
 'Nicht schlecht, du hast einen Pasch geworfen.': '¡Obtienes un par! ¡Qué suerte!'
 'Was für ein Spaß!': '¡Qué divertido!'
 'Du ziehst eine Karte... und stellst fest, dass dein Name darauf mit Blut geschrieben steht! Du erstarrst vor Schreck!': 'Lanzas una carta... ¡Y pegas un grito al descubrir que <strong>lleva tu nombre escrito con sangre</strong>! ¿Quién pudo hacerte esta broma de mal gusto? ¡La impresión te deja <strong>aterrorizado</strong>!'
-'Du ziehst eine Karte... und stellst fest, dass du die Karte mit den Spielregeln gezogen hast! Das erheitert dich so sehr, dass du 1AP gewinnst.': 'Lanzas la carta... en la cual están escritas las reglas del juego. Al menos ganas 1 PA.'
+'Du ziehst eine Karte... und stellst fest, dass du die Karte mit den Spielregeln gezogen hast! Das erheitert dich so sehr, dass du 1AP gewinnst.': 'Lanzas la carta... en la cual están escritas las reglas del juego. Esto te divierte tanto que ganas <strong>1 PA</strong>.'
 'Das muss ein Zeichen sein! In dieser Welt ist kein Platz für Moral... du erhälst 1AP.': '¡Es una señal! Simplemente demuestra que no hay lugar para la moral en este mundo... Has ganado 1PA.'
 'Das Symbol der Liebe... dein Herz schmilzt dahin und du erhälst 1AP.': 'La Reina de Corazones... El símbolo del amor... suspiro... Has ganado 1PA como compensación por tu desilusión.'
 'Mit deiner Gitarre hast du die Stadt gerockt! Die Bürger haben {ap} AP erhalten.': 'Una canción puede animar hasta un velorio... Tu talento le da {ap} puntos de acción a tus vecinos.'
@@ -675,6 +674,7 @@ Berufsgegenstand: Objeto de oficio (no puede ser depositado)
 Einrichtungsgegenstand: Equipamiento de vivienda
 Verteidigungsgegenstand: Defensa
 Waffe: Arma
+Katapultierbar: Catapultable
 Super-Flaum-Pulver: Polvo Súper-Fuzz
 'Je nach Epoche wurde dieses Pulver nacheinander als Zünder für verschiedene Artilleriegeschütze, dann als billige Droge für bedürftige Bürger und schließlich als Hauptbestandteil von Feuerwerkskörpern verwendet. In allen drei Fällen haben viele Menschen nicht überlebt.': 'Dependiendo de la era, este polvo fue usado esencialmente como detonador para varias piezas de artillería, luego como una droga barata para los habitantes necesitados y, finalmente como el principal componente de los fuegos artificiales. En los tres casos, muchas personas no han sobrevivido.'
 Flush-Abschussrohr: Tubo de lanzamiento de fuegos artificiales
@@ -1087,7 +1087,7 @@ Fußball: Balón de fútbol
 'Du schluckst die {item} hinunter. Nach ein paar Minuten schmerzt deine Leber und deine Sicht wird verschwommen. Du bist jetzt <strong>betrunken</strong>!': 'Te tragas {item} de golpe. Al cabo de unos minutos, te empieza a doler el hígado y empiezas a ver borroso... ¡Ahora estás <strong>borracho</strong>!'
 'Du schluckst die {item} hinunter. Nach ein paar Minuten entspannt sich dein Körper und du fühlst dich ein wenig besser... Nur ein bisschen.': 'Te tragas {item}. Tras un ratito, tu cuerpo se relaja y te sientes un poco mejor... Bueno, solo un poquito.'
 'Du jonglierst mit dem Ball, aber leider fliegt er immer wieder in alle Richtungen. Das frustriert dich, daher gibst du den Gedanken auf, weiter mit dem Ball zu spielen.': 'Haces malabarismos con la pelota, pero por desgracia siempre sale volando por cualquier lado. Esto te frustra, así que abandonas la idea de seguir jugando con la pelota.'
-'Du jonglierst mit dem Ball und schaffst es sehr gut, den Ball in der Luft zu halten. Man könnte dich fast für einen professionellen Fußballspieler halten!<hr />Du hattest viel Spaß und erhältst <strong>1 Aktionspunkt</strong>.': 'Haces malabarismos con el balón y consigues mantenerlo en el aire muy bien. ¡Casi te podrían confundir con un futbolista profesional!<hr />Te has divertido mucho y recibes <strong>1 punto de acción</strong>.'
+'Du jonglierst mit dem Ball und schaffst es sehr gut, den Ball in der Luft zu halten. Man könnte dich fast für einen professionellen Fußballspieler halten!<hr />Du hattest viel Spaß und erhältst <strong>1 Aktionspunkt</strong>.': 'Haces malabarismos con el balón y consigues mantenerlo en el aire muy bien. ¡Casi te podrían confundir con un futbolista profesional!<hr />Te has divertido mucho y recibes <strong>1 punto de exploración</strong>.'
 'Du jonglieren mit dem Ball, aber beim ersten Aufprall fliegt er direkt auf einen spitzen Gegenstand. Als du dich dem Ball näherst, hörst du ein Pfeifen der Luft und stellst mit Enttäuschung fest, <strong>dass er nun durchstochen ist</strong>!': 'Haces malabarismos con la pelota, pero en el primer rebote vuela directamente hacia un objeto punzante. ¡Cuando te acercas a la pelota, oyes un silbido en el aire y te das cuenta con decepción <strong>de que está pinchada</strong>!'
 'Geplatzter Fußball': 'Balón de fútbol reventado'
 'Ein Ball, mit dem wir einiges an Spaß haben könnten. Wenn er nur nicht schon geplatzt wäre...': 'Una pelota con la que podríamos divertirnos mucho. Si no hubiera reventado ya...'
@@ -1164,3 +1164,23 @@ Larven-Marmelade: Mermelada de larvas
 Erschrecken: Aterrorizar
 'Schaurige Maske': 'Máscara Escalofriante'
 'Irgendwie erinnert diese Maske dich an jemanden...': 'De alguna manera, esta máscara te recuerda a alguien… en todo caso, te pone los pelos en punta.'
+Besinnen: Recogerse
+'Du nimmst dir einen Moment Zeit, um zur Ruhe zu kommen und dich auf das wesentliche zu besinnen.': 'Te recoges un instante en silencio para enfocar tu mente en lo esencial.'
+'Zone ausheben': 'Excavar la zona'
+'Du hast diese Zone erfolgreich ausgehoben und zahlreiche neue Buddelmöglichkeiten entdeckt.': 'Has conseguido cavar en esta zona y descubrir nuevas oportunidades de sitios de búsqueda.'
+'Es schmeckt wirklich komisch... aber wenigstens ist dein Hunger ein wenig gestillt. Glaub aber nicht, dass du dadurch zusätzliche APs erhältst...': 'Sabe realmente extraño… pero al menos tu hambre se ha calmado un poco. Aunque no creas que eso te dé cualquier energía…'
+'Es sieht wirklich nicht so aus, als würdest du hier noch neue Buddelmöglichkeiten finden können...': 'Realmente no parece que puedas encontrar nuevas posibilidades de excavar aquí…'
+'Nach neuen Buddelmöglichkeiten zu suchen macht nur Sinn, wenn es keine offensichtlichen Buddelmöglichkeiten mehr gibt.': 'Buscar nuevas posibilidades de excavar solo tiene sentido cuando ya no quedan opciones de excavación evidentes.'
+Senken: Bajar
+'Du senkst deinen Schild. Zwar kannst du dich jetzt nicht mehr so gut verteidigen, dafür kannst du aber einen weiteren, schweren Gegenstand mit dir führen.': 'Aseguras firmemente el escudo en tu espalda. Aunque ya no puedes defenderte con él, ahora puedes transportar otro objeto voluminoso contigo, ¡que fuerza!'
+'Schutzschild (abgelegt)': 'Escudo Antidisturbios (bajado)'
+'Ein großer Schutzschild. Wenn du ihn vor dich halten würdest, könntest du damit 2 zusätzliche Zombies auf Distanz zu halten. Aktuell fungiert er nur als kleidsames Accessoire.': 'Es grande y resistente a los zombies. O al menos lo sería si no lo hubieras asegurado tan firmemente. Sosteniéndolo en brazo, te permitiría enfrentarte a 2 zombies adicionales en el desierto. Actualmente, solo sirve como un accesorio de estilo.'
+'Du tötest 1 Zombie in der Zone und erhältst du die Kontrolle über die Zone für 5 Minuten.': 'Matas a 1 zombie en la zona y obtienes el control de la zona durante 5 minutos.'
+' Ein großer Schutzschild, der keine Wünsche offen lässt, ermöglicht es dir, in der Wüste bis zu 2 zusätzliche Zombies auf Distanz zu halten. Dabei ist er aber ganz schön schwer... vielleicht könntest du mehr schwere Dinge bei dir tragen, wenn du den Schild senken würdest?': 'En el desierto, retiene a 4 zombies en lugar de 2 (para un habitante normal). Pero es bastante pesado… ¿Quizás estarías menos cargado si encontraras una forma más práctica de transportarlo?'
+'Es ist hier einfach zu staubig, um diesen Gegenstand zusammenbauen zu können...': 'Aquí hay demasiada arena y potenciales peligros para poder ensamblar este objeto eficazmente…'
+'Du jonglierst mit dem Ball und schaffst es sehr gut, den Ball in der Luft zu halten. Man könnte dich fast für einen professionellen Fußballspieler halten!<hr />Du hattest viel Spaß und erhältst <strong>1 Erkundungspunkt</strong>.': 'Haces malabarismos con el balón y consigues mantenerlo en el aire muy bien. ¡Casi te podrían confundir con un futbolista profesional!<hr />Te has divertido mucho y recibes <strong>1 punto de exploración</strong>.'
+'Du hast die/den {item} repariert.': 'Has reparado {item}.'
+Trümmerkugel: Bola de escombros
+'Ein kugelförmiges Etwas, das aus zufälligen Trümmerstücken zusammengeklebt wurde. Viel kann man damit nicht anfangen... außer vielleicht, es mit hoher Geschwindigkeit in eine Zombiemeute zu katapultieren!': 'Un objeto esférico hecho de fragmentos de escombros pegados al azar. No se puede hacer mucho con él… ¡Excepto, tal vez, catapultarlo a gran velocidad contra una horda de zombies!'
+'Du hast heute bereits eine Zone ausgehoben...': 'Ya has excavado una zona hoy...'
+'Es sieht so aus, als könntest du mit deiner Schaufel an dieser Stelle tiefer graben als sonst... Möglicherweise kannst du dieser Zone neues Leben einhauchen, sodass du und andere Bürger hier wieder wertvolle Gegenstände finden können? Du kannst diese Aktion nur einmal pro Tag verwenden. Außerdem kann jede Zone nur einmalig durch diese Aktion erneuert werden.': 'Parece que con tu pala puedes cavar más profundo en este lugar que de costumbre… ¿Quizás puedas dar nueva vida a esta zona, para que tú y otros habitantes puedan encontrar objetos valiosos aquí nuevamente? Solo te dan las fuerzas para usar esta acción una vez al día. Además, cada zona solo puede renovarse una vez mediante esta acción.'

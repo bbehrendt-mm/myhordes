@@ -17,148 +17,33 @@
             {% embed "ajax/admin/users/tabs.html.twig" %}{% endembed %}
 
             <div class="row">
-                <div class="padded cell rw-4 rw-sm-12">
-                    <h5>{{ 'Entkoppelte Leben'|trans({}, 'admin') }}</h5>
+                <div class="padded cell rw-8 ro-2 rw-md-12 ro-md-0">
+                    <h5>{{ 'Leben'|trans({}, 'admin') }}</h5>
                     {% for other_life in user.citizens %}
                         {# @var other_life \App\Entity\Citizen #}
-                        {% if not other_life.active %}
-                            <div class="row-flex">
-                                <div class="padded cell grow-0 shrink-0">
-                                    {% if other_life.alive %}
-                                        <img alt="{{ other_life.profession.label|trans({},'game') }}" src="{{ asset('build/images/professions/' ~ other_life.profession.icon ~ '.gif') }}" />
-                                    {% else %}
-                                        <img alt="{{ 'Tot!'|trans({},'game') }}" src="{{ asset('build/images/professions/death.gif') }}" />
-                                    {% endif %}
-                                </div>
-                                <div class="padded cell grow-1 shrink-1">
-                                    {{ other_life.town.name }}
-                                </div>
-                                <div class="padded cell grow-0 shrink-0">
-                                    <button class="small inline icon-only" {% if not is_granted("ROLE_SUB_ADMIN") or other_life.rankingEntry.confirmed %}disabled{% endif %} x-engage="{{ path('admin_users_citizen_engage', {id: user.id, cid: other_life.id}) }}"><img src="{{ asset("build/images/icons/escort_off.gif") }}" alt="" /></button>
-                                </div>
+                        <div class="row-flex">
+                            <div class="padded cell grow-0 shrink-0">
+                                {% if other_life.alive %}
+                                    <img alt="{{ other_life.profession.label|trans({},'game') }}" src="{{ asset('build/images/professions/' ~ other_life.profession.icon ~ '.gif') }}" />
+                                {% else %}
+                                    <img alt="{{ 'Tot!'|trans({},'game') }}" src="{{ asset('build/images/professions/death.gif') }}" />
+                                {% endif %}
                             </div>
-                        {% endif %}
+                            <div class="padded cell grow-1 shrink-1">
+                                {{ other_life.town.name }}
+                            </div>
+                            <div class="padded cell grow-0 shrink-0">
+                                {% if other_life.active %}
+                                    <button class="small inline icon-only" {% if not is_granted('administrate', other_life) or other_life.rankingEntry.confirmed %}disabled{% endif %} x-engage="{{ path('admin_town_citizen_disengage', {town: other_life.town.id, id: other_life.id}) }}"><img src="{{ asset("build/images/icons/escort_off.gif") }}" alt="" /></button>
+                                {% else %}
+                                    <button class="small inline icon-only" {% if not is_granted('administrate', other_life) or other_life.rankingEntry.confirmed %}disabled{% endif %} x-engage="{{ path('admin_town_citizen_engage', {town: other_life.town.id, id: other_life.id}) }}"><img src="{{ asset("build/images/icons/escort_on.gif") }}" alt="" /></button>
+                                {% endif %}
+                                {% if is_granted('spy', other_life.town) %}
+                                    <button class="small inline icon-only" x-ajax-href="{{ path('admin_town_citizen_view', {town: other_life.town.id, id: other_life.id}) }}"><img src="{{ asset("build/images/icons/small_view.gif") }}" alt="" /></button>
+                                {% endif %}
+                            </div>
+                        </div>
                     {% endfor %}
-                </div>
-                <div class="cell rw-8 rw-sm-12">
-                    <div class="row">
-                        <div class="cell padded rw-12">
-                            <h5>{{ 'Derzeitiges Leben'|trans({}, 'admin') }}</h5>
-                            {% if alive %}
-                                <div class="tooltip">{{ widget_citizen(user_citizen) }}</div>
-                            {% endif %}
-                        </div>
-                        <div class="cell padded rw-12" {% if user_citizen is not null %}id="citizen_base_selector" x-id="{{ user_citizen.id }}"{% endif %}>
-                            <label><input disabled style="width: 100%;" value="{% if active %}{{ town.name }}{% if not alive %}{{ " -- " }}{{ 'TOD NICHT BESTÄTIGT'|trans({}, 'admin') }}{% endif %}{% else %}{{ "--" }}{% endif %}" /></label>
-                        </div>
-
-                        {% if user_citizen is not null %}
-                            <div class="cell padded rw-12">
-                            <div class="row-table">
-                                <div class="row header">
-                                    <div class="padded cell rw-3">{{ 'Nachricht'|trans({},'admin') }}</div>
-                                    <div class="padded cell rw-6">{{ 'Inhalt'|trans({},'admin') }}</div>
-                                </div>
-                                <div class="row">
-                                    <div class="padded cell rw-3"><b>{{ 'Nachricht'|trans({},'game') }}</b></div>
-                                    <div class="padded cell rw-6"><span class="small">{{ user_citizen.home.description }}</span></div>
-                                    <div class="padded cell rw-3 right">
-                                        {% if user_citizen.home.description %}
-                                            <div class="inline pointer" data-delete-subject="status">
-                                                <img alt="" src="{{ asset('build/images/icons/small_trash_red.png') }}" />
-                                                <div class="tooltip"><b>{{ 'Löschen'|trans({}, 'admin') }}</b></div>
-                                            </div>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="padded cell rw-3"><b>{{ 'Kommentar'|trans({},'soul') }}</b></div>
-                                    <div class="padded cell rw-6"><span class="small">{{ user_citizen.comment }}</span></div>
-                                    <div class="padded cell rw-3">
-                                        {% if user_citizen.comment %}
-                                            <div class="inline pointer" data-delete-subject="comment">
-                                                <img alt="" src="{{ asset('build/images/icons/small_trash_red.png') }}" />
-                                                <div class="tooltip"><b>{{ 'Löschen'|trans({}, 'admin') }}</b></div>
-                                            </div>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="padded cell rw-3"><b>{{ 'Letzte Worte'|trans({},'soul') }}</b></div>
-                                    <div class="padded cell rw-6"><span class="small">{{ user_citizen.lastWords }}</span></div>
-                                    <div class="padded cell rw-3">
-                                        {% if user_citizen.lastWords %}
-                                            <div class="inline pointer" data-delete-subject="lastWords">
-                                                <img alt="" src="{{ asset('build/images/icons/small_trash_red.png') }}" />
-                                                <div class="tooltip"><b>{{ 'Löschen'|trans({}, 'admin') }}</b></div>
-                                            </div>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        {% endif %}
-
-                        {% if active %}
-                            {% if alive %}
-                                <div class="row">
-                                {% if is_granted("ROLE_CROW") %}
-                                    {% if is_granted("ROLE_SUB_ADMIN") %}
-                                        <div class="cell padded rw-2 text-center">
-                                            <button class="small inline text-center" id="x-headshot">
-                                                <img src="{{ asset('build/images/actions/bullets.gif') }}" alt="" /><br />
-                                                <span class="hide-md hide-sm">{{ 'Kopfschuss'|trans({}, 'admin') }}</span>
-                                            </button>
-                                        </div>
-                                    {% endif %}
-                                    <div class="cell padded rw-2 text-center">
-                                        <button class="small inline text-center" id="x-liver-eat">
-                                            <img src="{{ asset('build/images/actions/canteen.gif') }}" alt="" /><br />
-                                            <span class="hide-md hide-sm">{{ 'Leber fressen'|trans({}, 'admin') }}</span>
-                                        </button>
-                                    </div>
-                                {% endif %}
-
-                                <div class="cell padded rw-2 text-center">
-                                    <button class="small inline text-center" {% if not is_granted("ROLE_SUB_ADMIN") %}disabled{% endif %} x-engage="{{ path('admin_users_citizen_engage', {id: user.id, cid: 0}) }}">
-                                        <img src="{{ asset("build/images/icons/escort_off.gif") }}" alt="" /><br />
-                                         <span class="hide-md hide-sm">{{ 'Entkoppeln'|trans({}, 'admin') }}</span>
-                                    </button>
-                                </div>
-                                <div class="cell padded rw-2 text-center">
-                                    <button class="small inline text-center" id="x-pm">
-                                        <img alt="" src="{{ asset('build/images/building/small_crow.gif') }}" /><br />
-                                        <span class="hide-md hide-sm">{{ 'PM vom Raben'|trans({}, 'admin') }}</span>
-                                    </button>
-                                </div>
-                                <div class="cell padded rw-2 text-center">
-                                    <button class="small inline text-center" x-ajax-href="{{ path("admin_town_dashboard", {id: town.id}) }}">
-                                        <img alt="" src="{{ asset('build/images/heroskill/small_view.gif') }}" /><br />
-                                        <span class="hide-md hide-sm">{{ 'Stadt ansehen'|trans({}, 'admin') }}</span>
-                                    </button>
-                                </div>
-                                </div>
-
-                                {% if is_granted("ROLE_SUB_ADMIN") %}
-                                    <div class="cell padded rw-6 rw-md-12">{{ point_control() }}</div>
-                                    <div class="cell padded rw-6 rw-md-12">{{ profession_control(citizenProfessions) }}</div>
-                                    <div class="cell padded rw-12">{{ teleport_control() }}</div>
-                                    <div class="cell padded rw-6 rw-md-12">{{ status_control(citizenStati) }}</div>
-                                    <div class="cell padded rw-6 rw-md-12">{{ role_control(citizenRoles) }}</div>
-                                    <div class="cell padded rw-12">{{ home_control(user_citizen,home_upgrades) }}</div>
-                                    {% if town.conf and (town.conf.features is defined) and (town.conf.features.citizen_alias is defined) and town.conf.features.citizen_alias %}
-                                        <div class="cell padded rw-12">{{ alias_control(user_citizen) }}</div>
-                                    {% endif %}
-                                {% endif %}
-                            {% endif %}
-                        {% endif %}
-                    </div>
-                    <div class="row">
-                        <div class="cell padded rw-12">
-                            <input type="hidden" id="pmidrecipient" value="{{ citizen_id }}">
-                            <div id="forum-content"></div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -167,15 +52,6 @@
 {% endblock %}
 {% block js %}
     {{ parent() }}
-    {% if is_granted("ROLE_SUB_ADMIN") and alive %}
-        {{ home_control_js('#citizen_base_selector', path('admin_town_manage_home', {id: user_citizen.town.id}), path('admin_users_citizen_view', {id: user.id})) }}
-        {{ status_control_js('#citizen_base_selector', path('admin_town_manage_status', {id: user_citizen.town.id}), path('admin_users_citizen_view', {id: user.id})) }}
-        {{ role_control_js('#citizen_base_selector', path('admin_town_manage_role', {id: user_citizen.town.id}), path('admin_users_citizen_view', {id: user.id})) }}
-        {{ point_control_js('#citizen_base_selector', path('admin_town_alter_pp', {id: user_citizen.town.id}), path('admin_users_citizen_view', {id: user.id})) }}
-        {{ profession_control_js('#citizen_base_selector', path('admin_modify_profession', {id: user_citizen.town.id}), path('admin_users_citizen_view', {id: user.id})) }}
-        {{ teleport_control_js('#citizen_base_selector', path('admin_teleport_citizen', {id: user_citizen.town.id}), path('admin_users_citizen_view', {id: user.id})) }}
-        {{ alias_control_js('#citizen_base_selector', path('admin_alias_citizen', {id: user_citizen.town.id}), path('admin_users_citizen_view', {id: user.id})) }}
-    {% endif %}
     <script>
         {% if is_granted("ROLE_SUB_ADMIN") %}
             $.html.addEventListenerAll('[x-engage]', 'click', (e,elem) => {
@@ -184,47 +60,6 @@
                         $.ajax.load(null, '{{ path('admin_users_citizen_view', { 'id': user.Id }) }}', true);
                     } )
             });
-        {% endif %}
-
-        {% if is_granted("ROLE_CROW") %}
-            $.html.addEventListenerAll('[data-delete-subject]', 'click', (e,elem) => {
-                if (confirm('{{ 'Bestätigen?'|trans({},'global')|e('js') }}'))
-                    $.ajax.easySend( '{{ path('admin_users_citizen_remove_aspect', { 'id': user.Id }) }}', {'subject': elem.dataset.deleteSubject},
-                        function () {
-                            $.ajax.load(null, '{{ path('admin_users_citizen_view', { 'id': user.Id }) }}', true);
-                        } )
-            });
-        {% endif %}
-
-        {% if active %}
-            {% if alive %}
-                {% if is_granted("ROLE_SUB_ADMIN") %}
-                document.getElementById('x-headshot').addEventListener('click', function(e) {
-                    e.preventDefault();
-                    if (confirm('{{ 'Das Leben dieses Bürgers sofort beenden?'|trans({},'admin') }}'))
-                        $.ajax.easySend( '{{ path('admin_users_citizen_headshot', { 'id': user_citizen.id }) }}', [],
-                            function () {
-                                $.ajax.load(null, '{{ path('admin_users_citizen_view', { 'id': user.Id }) }}', true);
-                            } )
-                });
-                {% endif %}
-
-                {% if is_granted("ROLE_CROW") %}
-                    document.getElementById('x-liver-eat')?.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        if (confirm('{{ 'Das Leben dieses Bürgers sofort beenden?'|trans({},'admin') }}'))
-                            $.ajax.easySend( '{{ path('admin_users_citizen_eat_liver', { 'id': user_citizen.id }) }}', [],
-                                function () {
-                                    $.ajax.load(null, '{{ path('admin_users_citizen_view', { 'id': user.Id }) }}', true);
-                                } )
-                    });
-                {% endif %}
-
-                document.getElementById('x-pm').addEventListener('click', function() {
-                    document.getElementById("forum-content").innerHTML = "";
-                    $.ajax.no_history().load( document.getElementById('forum-content'), '{{ path('admin_pm_editor_controller', {'type': 'pm'}) }}', false )
-                });
-            {% endif %}
         {% endif %}
     </script>
 {% endblock %}

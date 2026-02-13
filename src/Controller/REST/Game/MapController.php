@@ -16,6 +16,7 @@ use App\Service\CitizenHandler;
 use App\Service\TownHandler;
 use App\Service\ZoneHandler;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -46,12 +47,25 @@ class MapController extends CustomAbstractCoreController
         return new JsonResponse([
             'zone' => $this->translator->trans('Zone', [], 'game'),
             'distance' => $this->translator->trans('Entfernung', [], 'game'),
+            'direction' => $this->translator->trans('Windrichtung', [], 'game'),
             'distanceSelf' => $this->translator->trans('Entfernung von hier', [], 'game'),
             'distanceTown' => $this->translator->trans('Entfernung zur Stadt', [], 'game'),
             'danger' => [
                 $this->translator->trans('Isolierte Zombies', [], 'game'),
                 $this->translator->trans('Die Zombies verstümmeln', [], 'game'),
                 $this->translator->trans('Horde der Zombies', [], 'game'),
+            ],
+            'directionValues' => [
+                0 => null,
+                Zone::DirectionNorthWest => $this->translator->trans('Nordwesten', [], 'game'),
+                Zone::DirectionNorth     => $this->translator->trans('Norden', [], 'game'),
+                Zone::DirectionNorthEast => $this->translator->trans('Nordosten', [], 'game'),
+                Zone::DirectionWest      => $this->translator->trans('Westen', [], 'game'),
+                Zone::DirectionCenter    => null,
+                Zone::DirectionEast      => $this->translator->trans('Osten', [], 'game'),
+                Zone::DirectionSouthWest => $this->translator->trans('Südwesten', [], 'game'),
+                Zone::DirectionSouth     => $this->translator->trans('Süden', [], 'game'),
+                Zone::DirectionSouthEast => $this->translator->trans('Südosten', [], 'game'),
             ],
             'tags' => array_values($all_tags),
             'mark' => $this->translator->trans('Mark.', [], 'game'),
@@ -163,7 +177,7 @@ class MapController extends CustomAbstractCoreController
      * @return JsonResponse
      */
     #[Route(path: '/admin/{id}/map', name: 'admin', methods: ['GET'])]
-    #[IsGranted('ROLE_CROW')]
+    #[IsGranted('spy', 'town')]
     #[GateKeeperProfile('skip')]
     public function admin(Town $town, RenderMapAction $renderer): JsonResponse {
         return new JsonResponse($renderer( town: $town, admin: true ) );
@@ -175,7 +189,7 @@ class MapController extends CustomAbstractCoreController
      * @return JsonResponse
      */
     #[Route(path: '/admin/{id}/routes', name: 'admin_routes', methods: ['GET'])]
-    #[IsGranted('ROLE_CROW')]
+    #[IsGranted('spy', 'town')]
     #[GateKeeperProfile('skip')]
     public function admin_routes(Town $town, RenderMapRouteAction $renderer): JsonResponse {
         return new JsonResponse($renderer($town));

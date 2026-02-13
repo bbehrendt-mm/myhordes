@@ -1,15 +1,15 @@
-'Good Taste Dashboard': 'Panel del Buen Gusto'
-'Zentrales Dashboard für Kuratoren des guten Geschmacks, um Spiel-Assets, Texte und UI-Tools zu durchsuchen.': 'Panel central para los Conservadores del Buen Gusto para explorar assets del juego, textos y herramientas de UI.'
-'Alle Assets anzeigen': 'Ver todos los assets'
-'Alle RP-Texte anzeigen': 'Ver todos los textos RP'
-Assets: Assets
-'Assets verfügbar': 'Assets disponibles'
-'Übersicht der Dateien unter {path}, gruppiert nach Ordnern. Klappe einen Ordner auf, um die Vorschaubilder zu sehen.': 'Vista general de los archivos bajo {path}, agrupados por carpeta. Despliega una carpeta para ver las miniaturas.'
-'Keine Assets gefunden.': 'No se encontró ningún asset.'
-'RP-Texte': 'Textos RP'
+'Good Taste Dashboard': 'Cuadro de mando del Buen Gusto'
+'Zentrales Dashboard für Kuratoren des guten Geschmacks, um Spiel-Assets, Texte und UI-Tools zu durchsuchen.': 'Cuadro de mando central para los Conservadores del Buen Gusto que permite buscar recursos, textos y herramientas.'
+'Alle Assets anzeigen': 'Todos los recursos'
+'Alle RP-Texte anzeigen': 'Mostrar todos los textos RP'
+Assets: Recursos
+'Assets verfügbar': 'Recursos disponibles'
+'Übersicht der Dateien unter {path}, gruppiert nach Ordnern. Klappe einen Ordner auf, um die Vorschaubilder zu sehen.': 'Resumen de los archivos en {path}, agrupados por carpetas. Expande una carpeta para ver las miniaturas.'
+'Keine Assets gefunden.': 'No se encontraron archivos.'
+RP-Texte: Texto RP
 'Alle RP-Texte': 'Todos los textos RP'
-'Übersicht aller verfügbaren Rollenspiel-Texte im Spiel.': 'Vista general de todos los textos de rol disponibles en el juego.'
-'Keine RP-Texte gefunden.': 'No se encontraron textos RP.'
+'Übersicht aller verfügbaren Rollenspiel-Texte im Spiel.': 'Resumen de todos los textos de rol disponibles en el juego.'
+'Keine RP-Texte gefunden.': 'Ningún RP encontrado.'
 ID: ID
 Name: Nombre
 Titel: Título
@@ -21,4 +21,4 @@ Chance: Probabilidad
 Seiten: Páginas
 Vorschau: Vista previa
 Schriften: Escritos
-'Keine Seiten vorhanden.': 'No hay páginas disponibles.'
+'Keine Seiten vorhanden.': 'Ninguna página disponible.'

@@ -37,6 +37,12 @@ class Execution extends Base
 
     private bool $escort_mode = false;
 
+    public bool $altered_map_discovery = false {
+        get => $this->altered_map_discovery;
+        set(bool $value) => $this->altered_map_discovery = $this->altered_map_discovery || $value;
+    }
+
+
     public function addPoints(PointType $type, int $value): void {
         $this->points[$type->value] = $this->getPoints($type) + $value;
     }
@@ -125,7 +131,7 @@ class Execution extends Base
         if (!empty($this->morphed_items))
             $tags[] = 'morphed';
 
-        $tags[] = $this->citizen->getZone() ? 'outside' : 'inside';
+        $tags[] = $this->zone() ? 'outside' : 'inside';
 
         $tags[] = empty($this->discovered_plans) ? 'bp_fail' : 'bp_ok';
         if (!empty( array_filter( $this->discovered_plans, fn(BuildingPrototype $b) => !!$b->getParent() ) ))
@@ -157,7 +163,7 @@ class Execution extends Base
         foreach ($this->consumed_items as $key => $data)
             $dynamic["{items_consume_$key}"] = $wrapper($data);
 
-        $zone = $this->target_zone ?? $this->citizen?->getZone() ?? null;
+        $zone = $this->target_zone ?? $this->zone() ?? null;
 
         return [
             ...$dynamic,

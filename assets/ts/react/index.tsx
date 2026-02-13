@@ -4,10 +4,11 @@ import * as React from "react";
 import {ErrorBoundary} from "react-error-boundary";
 import {HTMLAttributes, MutableRefObject, ReactHTML} from "react";
 import {randomUUIDv4} from "../shims";
+import {Fetch} from "../v2/fetch";
 
 declare var $: Global;
 
-type ReactMapBootstrapData = {
+export type ReactMapBootstrapData = {
     displayType: string,
     className: string,
     etag: number,
@@ -197,6 +198,7 @@ export abstract class Shim<ReactType extends ShimLoader> extends HTMLElement {
     private data: object = {}
     private do_mount = false;
     private lazy_observer: IntersectionObserver = null;
+    protected readonly initial_inner_html: string;
 
     protected allow_migration: boolean = false;
 
@@ -205,6 +207,7 @@ export abstract class Shim<ReactType extends ShimLoader> extends HTMLElement {
     protected static observedAttributeNames(): string[] { return []; };
 
     protected mountsLazily(): boolean { return false; }
+    protected consumesInnerHTML(): boolean { return false; }
 
     protected nestedObject(): ReactType|null {
         return this.initialized;
@@ -256,6 +259,10 @@ export abstract class Shim<ReactType extends ShimLoader> extends HTMLElement {
 
     public constructor() {
         super();
+        if (this.consumesInnerHTML()) {
+            this.initial_inner_html = this.innerHTML;
+            this.innerHTML = '';
+        } else this.initial_inner_html = '';
         this.addEventListener('x-react-degenerate', () => {
             this.selfUnmount()
         });
@@ -445,4 +452,27 @@ export abstract class ReactDialogMounter<PropDef extends object> extends BaseMou
             this.auto_div = null;
         }
     }
+}
+
+export abstract class API {
+    protected fetch: Fetch;
+
+    protected constructor(endpoint: string) {
+        this.fetch = new Fetch( endpoint );
+    }
+}
+
+export abstract class TranslatableAPI<TranslationStringType extends object> extends API{
+
+    private readonly indexEndpoint: string;
+
+    protected constructor(endpoint: string, indexEndpoint: string = '/') {
+        super(endpoint);
+        this.indexEndpoint = indexEndpoint;
+    }
+
+    public index(): Promise<TranslationStringType> {
+        return this.fetch.from(this.indexEndpoint).request().withCache().get() as Promise<TranslationStringType>;
+    }
+
 }

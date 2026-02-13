@@ -9,6 +9,7 @@ use App\Enum\DomainBlacklistType;
 use App\Response\AjaxResponse;
 use App\Service\ErrorHelper;
 use App\Service\JSONRequestParser;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -56,7 +57,7 @@ class AdminSpamController extends AdminActionController
     }
 
     #[Route(path: 'jx/admin/spam/names', name: 'admin_spam_names_view')]
-    public function name_view(): Response
+    public function name_view(JSONRequestParser $request): Response
     {
         try {
             $n = $this->entity_manager->getRepository(AntiSpamDomains::class)->createQueryBuilder('a')
@@ -65,7 +66,23 @@ class AdminSpamController extends AdminActionController
             $n = 0;
         }
 
-        return $this->render( 'ajax/admin/spam/names.html.twig', $this->addDefaultTwigArgs(null, ['n' => $n, 'tab' => 'names']));
+        if ($request->get('name')) {
+            $valid = $this->user_handler->isNameValid( $request->get('name'), custom_length: 32, debug: $debug );
+        } else {
+            $debug = null;
+            $valid = null;
+        }
+
+        return $this->render( 'ajax/admin/spam/names.html.twig', $this->addDefaultTwigArgs(null, [
+            'n' => $n,
+            'tab' => 'names',
+            'result' => [
+                'valid' => $valid,
+                'debug' => $debug,
+                'name' => $request->get('name') ?? '',
+            ],
+
+        ]));
     }
 
     /**

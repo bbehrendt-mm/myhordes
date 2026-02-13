@@ -17,8 +17,11 @@ use App\Entity\TownRankingProxy;
 use App\Entity\UserGroup;
 use App\Enum\Configuration\TownSetting;
 use App\Enum\Game\CitizenPersistentCache;
+use App\Service\Actions\Mercure\BroadcastViaMercureAction;
 use App\Structures\TownConf;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 readonly class DeathHandler
 {
@@ -35,6 +38,7 @@ readonly class DeathHandler
         private PermissionHandler      $perm,
         private GameProfilerService    $gps,
         private EventProxyService      $events,
+        private BroadcastViaMercureAction $broadcast,
     ) {
     }
 
@@ -43,6 +47,9 @@ readonly class DeathHandler
      * @param Citizen $citizen
      * @param int|CauseOfDeath $cod
      * @param array|null $remove
+     * @param int|null $gazetteDay
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     public function kill(Citizen $citizen, CauseOfDeath|int $cod, ?array &$remove = null, ?int $gazetteDay = null): void {
         $handle_em = $remove === null;
@@ -84,7 +91,7 @@ readonly class DeathHandler
 
         // If the citizen is marked to become a ghoul after the next attack, pass the mark on to another
         // citizen
-        if ($this->citizen_handler->hasStatusEffect($citizen, 'tg_air_infected') || $this->citizen_handler->hasStatusEffect($citizen, 'tg_air_ghoul'))
+        if ($citizen->hasStatus('tg_air_infected') || $citizen->hasStatus('tg_air_ghoul'))
             $this->citizen_handler->pass_airborne_ghoul_infection($citizen);
 
         $survivedDays = max(0, $citizen->getTown()->getDay() - 1);
@@ -192,7 +199,7 @@ readonly class DeathHandler
             }
 
             // Clean picto
-            if($citizen->getSurvivedDays() >= 3 && $this->citizen_handler->hasStatusEffect($citizen, "clean")) {
+            if($citizen->getSurvivedDays() >= 3 && $citizen->hasStatus("clean")) {
                 // We earn the picto for the past days
                 $pictoPrototype = $this->entity_manager->getRepository(PictoPrototype::class)->findOneByName("r_nodrug_#00");
                 $this->picto_handler->give_picto($citizen, $pictoPrototype, round(pow($citizen->getSurvivedDays(), 1.5), 0));
@@ -210,7 +217,7 @@ readonly class DeathHandler
         if (!$this->conf->getTownConfiguration($citizen->getTown())->get(TownSetting::OptFeatureGiveSoulpoints))
             $sp = 0;
         else $sp = $this->citizen_handler->getSoulpoints($citizen);
-        
+
         if($sp > 0)
             $this->picto_handler->give_validated_picto($citizen, "r_ptame_#00", $sp);
 
@@ -229,5 +236,6 @@ readonly class DeathHandler
 
         // If the souls are enabled, spawn a soul
         $this->events->citizenPostDeath($citizen);
+        ($this->broadcast)('citizenship-changed', users: $citizen->getUser());
     }
 }

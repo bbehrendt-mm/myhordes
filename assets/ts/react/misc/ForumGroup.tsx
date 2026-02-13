@@ -11,6 +11,7 @@ interface forumProps {
     description: string,
     url: string,
     icon: string,
+    srcset: string|null,
     sort: number,
     new: boolean,
 }
@@ -18,6 +19,7 @@ interface forumProps {
 interface mountProps {
     id?: string|null,
     icon: string,
+    srcset: string|null,
     title: string,
     collapse: boolean
     forums: forumProps[],
@@ -70,7 +72,7 @@ const ForumGroup = (props: mountProps) => {
 
     return <div className="forumGroup" ref={groupRef}>
         <div className={`header ${currentState ? 'open' : 'collapsed'}`} onClick={() => setShowElements(!showElements)}>
-            <img alt="" src={ props.icon }/>
+            <img alt="" src={ props.icon } srcSet={ props.srcset ?? null }/>
             <span>{ props.title }</span>
         </div>
         <div className="content">
@@ -96,7 +98,7 @@ const Forum = (props: forumProps) => {
             $.ajax.load( null, props.url, true, {}, () => {} )
         }}
     >
-        <img alt="" src={ props.icon }/>
+        <img alt="" src={ props.icon } srcSet={ props.srcset ?? null }/>
         <div>
             <div>{ props.title }</div>
             { props.description && <span>{ props.description }</span> }

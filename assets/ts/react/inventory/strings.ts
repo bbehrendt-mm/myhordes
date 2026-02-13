@@ -3,6 +3,8 @@ export type TranslationStrings = {
         abort: string,
         warning: string,
         help: string,
+        slot: string,
+        heavy_slot: string
     }
     "type": {
         rucksack: string
@@ -22,6 +24,7 @@ export type TranslationStrings = {
         weapon: string,
         "nw-weapon": string,
         "nw-weapon-v": string,
+        catapult: string,
     },
     actions: {
         more: string,

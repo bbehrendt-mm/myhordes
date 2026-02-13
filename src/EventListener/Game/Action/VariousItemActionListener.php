@@ -39,8 +39,8 @@ final class VariousItemActionListener implements ServiceSubscriberInterface
         ];
     }
 
-    
-    
+
+
     public function onCustomAction( CustomActionProcessorEvent $event ): void {
         switch ($event->type) {
             // Increase town temp defense for the watchtower
@@ -95,10 +95,10 @@ final class VariousItemActionListener implements ServiceSubscriberInterface
             case 22:
                 if ($event->townConfig->get(TownSetting::OptFeatureAllPoison)) {
 
-                    if ($this->getService(RandomGenerator::class)->chance(0.05) && !$this->getService(CitizenHandler::class)->hasStatusEffect($event->citizen, 'infection')) {
+                    if ($this->getService(RandomGenerator::class)->chance(0.05) && !$event->citizen->hasStatus('infection')) {
 
                         $inflict = true;
-                        if ($this->getService(CitizenHandler::class)->hasStatusEffect($event->citizen, "tg_infect_wtns")) {
+                        if ($event->citizen->hasStatus("tg_infect_wtns")) {
                             $inflict = $this->getService(RandomGenerator::class)->chance(0.5);
                             $this->getService(CitizenHandler::class)->removeStatus( $event->citizen, 'tg_infect_wtns' );
                             $event->cache->addMessage(

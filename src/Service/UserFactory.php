@@ -248,6 +248,8 @@ class UserFactory
             if ($base_hxp > 0)
                 $this->unlockService->setLegacyHeroDaysSpent( $user, false, $base_hxp );
 
+            $user->addRoleFlag( User::USER_ROLE_CHEATER );
+
             foreach ( $conf->get( MyHordesSetting::StagingProtoFeatures ) as $feature )
                 $this->entity_manager->persist(
                     (new FeatureUnlock())

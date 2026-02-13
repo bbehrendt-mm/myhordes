@@ -1,5 +1,6 @@
 import {TranslationStrings} from "./strings";
 import {Fetch} from "../../v2/fetch";
+import {API} from "../index";
 
 export type ResponseIndex = {
     strings: TranslationStrings
@@ -10,13 +11,9 @@ export type ResponseReport = {
 }
 
 
-export class ContentReportAPI {
+export class ContentReportAPI extends API {
 
-    private fetch: Fetch;
-
-    constructor() {
-        this.fetch = new Fetch( 'user/complaint' );
-    }
+    constructor() { super( 'user/complaint' ) }
 
     public index(type: string): Promise<ResponseIndex> {
         return this.fetch.from(`/${type}`)

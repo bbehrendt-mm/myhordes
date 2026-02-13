@@ -4,29 +4,21 @@
 namespace App\Command\Forum;
 
 
-use App\Entity\Citizen;
-use App\Entity\CitizenRole;
-use App\Entity\CitizenStatus;
 use App\Entity\Forum;
 use App\Entity\ForumUsagePermissions;
 use App\Entity\UserGroup;
-use App\Kernel;
-use App\Service\CitizenHandler;
 use App\Service\CommandHelper;
-use App\Service\InventoryHandler;
-use App\Service\ItemFactory;
-use App\Service\StatusFactory;
-use Doctrine\DBAL\Exception;
+use App\Service\ConfMaster;
+use App\Service\Media\MediaService;
 use Doctrine\ORM\EntityManagerInterface;
 use ReflectionClass;
-use Symfony\Component\Asset\Packages;
+use Exception;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -42,7 +34,9 @@ class ForumEditorCommand extends Command
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly CommandHelper $helper,
-        private readonly KernelInterface $kernel)
+        private readonly KernelInterface $kernel,
+        private readonly MediaService $mediaService,
+    )
     {
         parent::__construct();
     }
@@ -100,6 +94,11 @@ class ForumEditorCommand extends Command
                 $icons = $this->listAllIcons('- None -');
                 $str = $helper->ask($input, $output, new ChoiceQuestion('Please select the forum icon:', $icons));
                 $forum->setIcon($str !== '- None -' ? $str : null);
+
+                $icon_file = "{$this->kernel->getProjectDir()}/assets/img/forum/banner/" . $forum->getIcon();
+
+                $this->mediaService->addMediaToObjectFromFile( $forum, $icon_file, 'icon' );
+
             } else $forum->setIcon($input->getOption('icon'));
             $updated = true;
         }

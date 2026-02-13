@@ -92,9 +92,9 @@ class MessageController extends CustomAbstractController
         if ($town && $user->getActiveCitizen() && $town->getCitizens()->contains($user->getActiveCitizen()) && (!is_a( $post, Post::class) || $post->getType() === 'USER' || $post->getType() === 'GLORY')) {
             $citizen = $user->getActiveCitizen();
             $tx = $this->html->htmlDistort( $tx,
-                    ($this->citizen_handler->hasStatusEffect($citizen, 'drunk') ? HTMLService::ModulationDrunk : HTMLService::ModulationNone) |
-                    ($this->citizen_handler->hasStatusEffect($citizen, 'terror') ? HTMLService::ModulationTerror : HTMLService::ModulationNone) |
-                    ($this->citizen_handler->hasStatusEffect($citizen, 'wound1') ? HTMLService::ModulationHead : HTMLService::ModulationNone)
+                    ($citizen->hasStatus('drunk') ? HTMLService::ModulationDrunk : HTMLService::ModulationNone) |
+                    ($citizen->hasStatus('terror') ? HTMLService::ModulationTerror : HTMLService::ModulationNone) |
+                    ($citizen->hasStatus('wound1') ? HTMLService::ModulationHead : HTMLService::ModulationNone)
                 , $town->getRealLanguage( $this->generatedLangsCodes ) ?? $this->getUserLanguage(  ), $distorted );
         }
 

@@ -14,10 +14,11 @@ class ProcessLocationRequirement extends AtomRequirementProcessor
 {
     public function __invoke(Evaluation $cache, RequirementsAtom|LocationRequirement $data): bool
     {
-        if ($data->town !== null && $data->town === !!$cache->citizen->getZone())
+        $zone = $cache->zone();
+        if ($data->town !== null && $data->town === !!$zone)
             return false;
 
-        if ($data->beyond !== null && $data->beyond !== !!$cache->citizen->getZone())
+        if ($data->beyond !== null && $data->beyond !== !!$zone)
             return false;
 
         if ($data->exploring !== null && $data->exploring !== !!$cache->citizen->activeExplorerStats())
@@ -25,8 +26,10 @@ class ProcessLocationRequirement extends AtomRequirementProcessor
 
         if ($data->requiresZone()) {
 
-            $zone = $cache->citizen->getZone();
             if (!$zone) return false;
+
+            if ( $data->requiresFillrateCheck() && ($zone->getDigs() <= 0) !== $data->isEmpty )
+                return false;
 
             $cache->addTranslationKey('km_from_town', $zone->getDistance());
             $cache->addTranslationKey('ap_from_town', $zone->getApDistance());
@@ -38,7 +41,7 @@ class ProcessLocationRequirement extends AtomRequirementProcessor
             $cp = 0;
             if ($data->requiresCPCheck() && !$cache->citizen->activeExplorerStats()) {
                 $citizenHandler = $this->container->get(CitizenHandler::class);
-                foreach ($cache->citizen->getZone()->getCitizens() as $c)
+                foreach ($zone->getCitizens() as $c)
                     $cp += $citizenHandler->getCP($c);
             }
 
@@ -61,6 +64,8 @@ class ProcessLocationRequirement extends AtomRequirementProcessor
             if ($data->isControlled !== null && $data->isControlled !== ($cp >= $zombies)) return false;
             if ($data->isTempControlled !== null && $data->isTempControlled !== !!$cache->em->getRepository( EscapeTimer::class )->findActiveByCitizen( $cache->citizen )) return false;
             if ($data->isControlledOrTempControlled !== null && $data->isControlledOrTempControlled !== ($cp >= $zombies || !!$cache->em->getRepository( EscapeTimer::class )->findActiveByCitizen( $cache->citizen ))) return false;
+
+            if ($data->isForceRegenerated !== null && $data->isForceRegenerated !== $zone->isForceRegenerated()) return false;
 
         }
 

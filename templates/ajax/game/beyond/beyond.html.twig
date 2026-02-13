@@ -85,7 +85,7 @@
                                         {% else %}
                                             &nbsp;
                                         {% endif %}
-                                    
+
                                     </div>
                                     <div class="cell rw-5 right"><span class="zombies-cp">{% if zone.x != 0 or zone.y != 0 %}{% trans with {'{points}': zone_zombies} from 'game' %}{points} Punkt(e){% endtrans %}{% else %}--{% endif %}</span> <img src="{{ asset('build/images/icons/small_zombie.gif') }}" alt="ZP" /></div>
                                     <div class="tooltip help">
@@ -111,6 +111,31 @@
                                                 </div>
                                             </div>
                                         {% endif %}
+
+                                        {% if dig_level is not null and dig_level >= 0 %}
+                                            <div class="row zone-scavenger">
+                                                <div class="padded cell rw-12">
+                                                    {% if dig_level == 0 %}
+                                                        <img alt="" src="{{ asset('build/images/icons/Small_broken.gif') }}" />
+                                                        <span class="warning">{{ 'Leergesuchte Zone'|trans({},'game') }}</span>
+                                                        {{ help_btn('Diese Zone ist leergesucht. Du wirst hier keine wertvollen Gegenstände mehr finden können.'|trans({},'game')) }}
+                                                    {% elseif dig_level == 1 %}
+                                                        <img alt="" src="{{ asset('build/images/icons/collec_lv1.gif') }}" />
+                                                        <span>{{ 'Abgesuchte Zone'|trans({},'game') }}</span>
+                                                        {{ help_btn('Diese Zone sieht bereits ziemlich abgesucht aus... vermutlich wirst du hier nicht mehr viele wertvolle Gegenstände finden können.'|trans({},'game')) }}
+                                                    {% elseif dig_level == 2 %}
+                                                        <img alt="" src="{{ asset('build/images/icons/collec_lv2.gif') }}" />
+                                                        <span>{{ 'Kaum durchsuchte Zone'|trans({},'game') }}</span>
+                                                        {{ help_btn('In dieser Zone befinden sich einige Orte, an denen scheinbar noch niemand intensiv gesucht hat. Vermutlich wirst du hier noch einige wertvolle Gegenstände finden können.'|trans({},'game')) }}
+                                                    {% elseif dig_level == 3 %}
+                                                        <img alt="" src="{{ asset('build/images/icons/collec_lv3.gif') }}" />
+                                                        <span>{{ 'Reichhaltige Zone'|trans({},'game') }}</span>
+                                                        {{ help_btn('In dieser Zone befinden sich zahlreiche Orte, an denen scheinbar noch niemand gesucht hat. Ziemlich sicher wirst du hier noch einige wertvolle Gegenstände finden können.'|trans({},'game')) }}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        {% endif %}
+
                                         <div class="cell rw-12 center">
                                             {% set dir = "" %}
                                             {% if zone.getDirection == constant('App\\Entity\\Zone::DirectionNorthWest') %}
@@ -244,10 +269,6 @@
                     $.html.selectErrorMessage( data.error, null, c.errors, data );
                 }, true );
         });
-
-        {% if ruin_map_data is defined %}
-            {% embed "scripts/ruin_map.js.twig" with {'map': ruin_map_data} %}{% endembed %}
-        {% endif %}
 
         $.html.addEventListenerAll('[x-toggle-expert-mode]','click', function(e,elem) {
             e.preventDefault();

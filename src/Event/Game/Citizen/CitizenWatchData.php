@@ -19,7 +19,7 @@ class CitizenWatchData extends CitizenBaseData
 	 * @return CitizenWatchData
 	 * @noinspection PhpDocSignatureInspection
 	 */
-	public function setup( Citizen $citizen, bool $duringAttack = false, LoggerInterface $log = null): void {
+	public function setup( Citizen $citizen, bool $duringAttack = false, ?LoggerInterface $log = null): void {
 		parent::setup($citizen);
 		$this->during_attack = $duringAttack;
         $this->log = $log;

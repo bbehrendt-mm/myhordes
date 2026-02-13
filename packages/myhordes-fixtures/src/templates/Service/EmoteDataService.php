@@ -128,6 +128,7 @@ class EmoteDataService implements FixtureProcessorInterface {
             ['tag'=>':ruin:', 'path'=>'build/images/emotes/ruin.gif', 'isactive'=> true, 'requiresunlock'=> true, 'index'=> 87],
             ['tag'=>':explo:', 'path'=>'build/images/emotes/explo.gif', 'isactive'=> true, 'requiresunlock'=> true, 'index'=> 88],
             ['tag'=>':dexplo:', 'path'=>'build/images/emotes/dexplo.gif', 'isactive'=> true, 'requiresunlock'=> true, 'index'=> 89],
+            ['tag'=>':texplo:', 'path'=>'build/images/emotes/texplo.gif', 'isactive'=> true, 'requiresunlock'=> true, 'index'=> 89],
             ['tag'=>':drag:', 'path'=>'build/images/emotes/drag.gif', 'isactive'=> true, 'requiresunlock'=> true, 'index'=> 90],
             ['tag'=>':shower:', 'path'=>'build/images/emotes/shower.gif', 'isactive'=> true, 'requiresunlock'=> true, 'index'=> 91],
             ['tag'=>':cburn:', 'path'=>'build/images/emotes/cburn.gif', 'isactive'=> true, 'requiresunlock'=> true, 'index'=> 91],
@@ -167,6 +168,7 @@ class EmoteDataService implements FixtureProcessorInterface {
             ['tag'=>':eventpart:', 'path'=>'build/images/emotes/eventpart.gif', 'isactive'=> true, 'requiresunlock'=> true, 'index'=> 118],
             ['tag'=>':thermal:', 'path'=>'build/images/emotes/thermal.gif', 'isactive'=> true, 'requiresunlock'=> true, 'index'=> 80],
             ['tag'=>':decofeist:', 'path'=>'build/images/emotes/decofeist.gif', 'isactive'=> true, 'requiresunlock'=> true, 'index'=> 81],
+            ['tag'=>':texplo:', 'path'=>'build/images/emotes/explot.gif', 'isactive'=> true, 'requiresunlock'=> true, 'index'=> 120],
         ]);
     }
 }

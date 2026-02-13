@@ -68,7 +68,7 @@ class GameController extends CustomAbstractController
         $activeCitizen = $this->getActiveCitizen();
         if (!$activeCitizen->getAlive())
             return $this->redirect($this->generateUrl('soul_death'));
-        elseif ($activeCitizen->getProfession()->getName() === CitizenProfession::DEFAULT)
+        elseif ($activeCitizen->isProfession(CitizenProfession::DEFAULT))
             return $this->redirect($this->generateUrl('game_jobs'));
         elseif (!$activeCitizen->getHasSeenGazette())
             return $this->redirect($this->generateUrl('game_newspaper'));
@@ -105,7 +105,7 @@ class GameController extends CustomAbstractController
     #[Route(path: 'jx/game/raventimes', name: 'game_newspaper')]
     public function newspaper(): Response {
         $activeCitizen = $this->getActiveCitizen();
-        if ($activeCitizen->getAlive() && $activeCitizen->getProfession()->getName() === CitizenProfession::DEFAULT)
+        if ($activeCitizen->getAlive() && $activeCitizen->isProfession(CitizenProfession::DEFAULT))
             return $this->redirect($this->generateUrl('game_landing'));
 
         $in_town = $activeCitizen->getZone() === null;
@@ -130,7 +130,7 @@ class GameController extends CustomAbstractController
             if ( $this->town_handler->is_vote_needed($town, $role) )
                 $votesNeeded[$role->getName()] = $role;
 
-        $show_register = ($in_town || !$activeCitizen->getAlive()) && $activeCitizen->getProfession()->getName() !== CitizenProfession::DEFAULT;
+        $show_register = ($in_town || !$activeCitizen->getAlive()) && !$activeCitizen->isProfession(CitizenProfession::DEFAULT);
 
         $activeCitizen->setHasSeenGazette(true);
         $this->entity_manager->persist($activeCitizen);
@@ -179,13 +179,13 @@ class GameController extends CustomAbstractController
     public function job_select(ConfMaster $cf): Response
     {
         $activeCitizen = $this->getActiveCitizen();
-        if (!$activeCitizen->getAlive() || $activeCitizen->getProfession()->getName() !== CitizenProfession::DEFAULT)
+        if (!$activeCitizen->getAlive() || !$activeCitizen->isProfession(CitizenProfession::DEFAULT))
             return $this->redirect($this->generateUrl('game_landing'));
 
         $args = $this->addDefaultTwigArgs(null, [
             'town' => $activeCitizen->getTown(),
         ]);
-        
+
         return $this->render( 'ajax/game/jobs.html.twig', $args);
     }
 }

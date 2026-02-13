@@ -2,21 +2,19 @@
 
 namespace MyHordes\Fixtures\DTO\Buildings;
 
+use App\Entity\BuildingConstructionResourceSet;
 use App\Entity\BuildingPrototype;
 use App\Entity\ItemCategory;
 use App\Entity\ItemGroup;
 use App\Entity\ItemGroupEntry;
 use App\Entity\ItemPrototype;
+use App\Enum\Game\BuildingResourceSetType;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use MyHordes\Fixtures\DTO\Element;
 use MyHordes\Fixtures\DTO\LabeledIconElementInterface;
 
 /**
- * @property string $label
- * @method self label(string $v)
- * @property string $icon
- * @method self icon(string $v)
  * @property ?string $parentBuilding
  * @method self parentBuilding(string $v)
  * @property string $description
@@ -42,6 +40,9 @@ use MyHordes\Fixtures\DTO\LabeledIconElementInterface;
  * @property array $resources
  * @method self resources(array $v)
  * @method self resource(string $key, int $value)
+ * @property array resourceSets
+ * @method self resourceSets(array $v)
+ * @method self resourceSet(BuildingResourceSetType $set, int $level, int $repeat, ?int $ap, ?array $v)
  * @property array $hardResources
  * @method self hardResources(array $v)
  * @method self hardResource(string $key, int $value)
@@ -83,30 +84,56 @@ class BuildingPrototypeDataElement extends Element implements LabeledIconElement
      */
     public function toEntity(EntityManagerInterface $em, string $id, BuildingPrototype $entity): void {
         try {
+            $entity->getResourceSets()->clear();
             $entity
                 ->setLabel( $this->label )
                 ->setDescription( $this->description )
                 ->setTemp( $this->isTemporary ?? false )
-                ->setAp( $this->ap ?? 0 )
                 ->setBlueprint( $this->blueprintLevel ?? 0 )
                 ->setDefense( $this->defense ?? 0 )
                 ->setIcon( $this->icon )
                 ->setHp( $this->health ?: $this->ap ?: 0 )
                 ->setImpervious( $this->isImpervious ?? false )
                 ->setOrderBy( $this->orderBy ?? 0 )
-                ->setResources( $this->resources ? $this->createResourceGroup($em, $this->resources, $id, 'rsc') : null )
-                ->setHasHardMode( $this->hasHardMode ?? false )
-                ->setHardAp( $this->hasHardMode ? $this->hardAp : null )
-                ->setEasyAp( $this->hasHardMode ? $this->easyAp : null )
-                ->setHardResources( ($this->hasHardMode && $this->hardResources) ? $this->createResourceGroup($em, $this->hardResources, $id, 'hrsc') : null )
-                ->setEasyResources( ($this->hasHardMode && $this->easyResources) ? $this->createResourceGroup($em, $this->easyResources, $id, 'ersc') : null );
-
+                ->setHasHardMode( $this->hasHardMode ?? false );
             if ($this->voteLevel > 0)
                 $entity
                     ->setMaxLevel( $this->voteLevel )
                     ->setZeroLevelText( $this->baseVoteText ?? "")
                     ->setUpgradeTexts( array_slice( array_pad($this->upgradeTexts ?? [], $this->voteLevel, "???" ), 0, $this->voteLevel ) );
             else $entity->setMaxLevel( 0 )->setZeroLevelText( null )->setUpgradeTexts( null );
+
+            $entity->addResourceSet(
+                new BuildingConstructionResourceSet()
+                    ->setType(BuildingResourceSetType::Default)
+                    ->setAp( $this->ap ?? 0 )
+                    ->setResources( $this->resources ? $this->createResourceGroup($em, $this->resources, $id, 'rsc') : null )
+            );
+
+            if ($this->hasHardMode) {
+                $entity->addResourceSet(
+                    new BuildingConstructionResourceSet()
+                        ->setType(BuildingResourceSetType::Hard)
+                        ->setAp( $this->hardAp ?? $this->ap ?? 0 )
+                        ->setResources( ($this->resources || $this->hardResources) ? $this->createResourceGroup($em, $this->hardResources ?? $this->resources, $id, 'hrsc') : null )
+                );
+                $entity->addResourceSet(
+                    new BuildingConstructionResourceSet()
+                        ->setType(BuildingResourceSetType::Easy)
+                        ->setAp( $this->easyAp ?? $this->ap ?? 0 )
+                        ->setResources( ($this->resources || $this->easyResources) ? $this->createResourceGroup($em, $this->easyResources ?? $this->resources, $id, 'ersc') : null )
+                );
+            }
+
+            foreach (($this->resourceSets ?? []) as [$set, $level, $repeat, $ap, $v])
+                $entity->addResourceSet(
+                    new BuildingConstructionResourceSet()
+                        ->setType($set)
+                        ->setLevel($level)
+                        ->setTimes($repeat)
+                        ->setAp( $ap ?? $this->ap ?? 0 )
+                        ->setResources( ($this->resources || $v) ? $this->createResourceGroup($em, $v ?? $this->resources, $id, "{$set->value}_rsc_{$level}_{$repeat}") : null )
+                );
 
         } catch (\Throwable $t) {
             throw new Exception(
@@ -126,6 +153,20 @@ class BuildingPrototypeDataElement extends Element implements LabeledIconElement
             if ($value <= 0) unset( $r[$key] );
             else $r[$key] = $value;
             return $this->resources($r);
+        } elseif ($name === 'resourceSet' && count($arguments) === 5) {
+            [$set, $level, $repeat, $ap, $v] = $arguments;
+            if (
+                $set === BuildingResourceSetType::Default &&
+                $level === 0 && $repeat === 0
+            ) {
+                $this->resources = $v;
+                $this->ap = $ap;
+            } else {
+                $sets = $this->resourceSets;
+                $sets[] = $arguments;
+                $this->resourceSets = $sets;
+            }
+            return $this;
         } elseif ($name === 'hardResource' && count($arguments) === 2) {
             [$key, $value] = $arguments;
             $r = $this->hardResources ?? [];

@@ -45,7 +45,7 @@
         &:before{ content: '['; left: 0; } &:after{ content: ']'; right: 0; }
       }
       &>span.log-part-content, span.log-part-content>span.container {
-        &>span:not(.container) {
+        &>span:not(.container), &>strong {
           color: white; font-weight: bold; font-variant: small-caps; &>img { vertical-align: text-top }
           &.jobName {
             font-weight: normal;
@@ -62,7 +62,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
             vertical-align: text-top;
-          } 
+          }
         }
         &.log-part-entry-hidden {
           background-color: #4d5537;

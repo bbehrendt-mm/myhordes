@@ -1,14 +1,23 @@
 import {Fetch} from "../../v2/fetch";
 import {TranslationStrings} from "./strings";
+import {TranslatableAPI} from "../index";
 
 export type Item = {
+    /** Item ID */
     i: number,
+    /** Item Prototype id */
     p: number,
+    /** Item count */
     c: number,
+    /** Watch attack points (tooltip) */
     w: string|null,
+    /** is Broken */
     b: boolean,
+    /** is Hidden */
     h: boolean,
+    /** is Essential */
     e: boolean,
+    /** Sort indexes */
     s: number[],
 }
 
@@ -33,6 +42,7 @@ export type InventoryBagData = InventoryBaseData & {
     bank: false
     rsc: false
     size: number|null,
+    heavy: number|null,
     items: Item[],
 }
 
@@ -58,18 +68,8 @@ export type TransportResponse = {
     reload?: boolean,
 }
 
-export class InventoryAPI {
-
-    private fetch: Fetch;
-
-    constructor() {
-        this.fetch = new Fetch( 'game/inventory' );
-    }
-
-    public index(): Promise<TranslationStrings> {
-        return this.fetch.from('/index')
-            .request().withCache().get() as Promise<TranslationStrings>;
-    }
+export class InventoryAPI  extends TranslatableAPI<TranslationStrings> {
+    constructor() { super( 'game/inventory', '/index' ) }
 
     public inventory(id: number, rsc: number[] = []): Promise<InventoryResponse> {
         return this.fetch.from(`/${id}`, rsc.length > 0 ? {rsc: rsc.join(',')} : {})

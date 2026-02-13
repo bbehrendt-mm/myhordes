@@ -245,8 +245,9 @@ class Citizen
 
         return $this;
     }
-    public function hasStatus(string $status_name): bool
+    public function hasStatus(string|CitizenStatus $status_name): bool
     {
+        if ($status_name instanceof CitizenStatus) return $this->hasStatus( $status_name->getName() );
         foreach ($this->getStatus() as $status)
             if ($status->getName() === $status_name) return true;
         return false;
@@ -272,6 +273,12 @@ class Citizen
 
         return $this;
     }
+
+    public function isProfession(string|CitizenProfession $profession_name): bool {
+        if ($profession_name instanceof CitizenProfession) return $this->isProfession( $profession_name->getName() );
+        return $this->getProfession()?->getName() === $profession_name;
+    }
+
     /**
      * @return Collection<int, CitizenRole>
      */
@@ -302,9 +309,10 @@ class Citizen
 
         return $this;
     }
-    public function hasRole(string $name): bool {
+    public function hasRole(string|CitizenRole $role_name): bool {
+        if ($role_name instanceof CitizenRole) return $this->hasRole( $role_name->getName() );
         foreach ($this->getRoles() as $role)
-            if ($role->getName() === $name) return true;
+            if ($role->getName() === $role_name) return true;
         return false;
     }
     /**
@@ -418,8 +426,7 @@ class Citizen
 
         return
             $this->getDigTimers()->matching(
-                (new Criteria())
-                    ->where(Criteria::expr()->eq( 'zone', $this->getZone() ))
+                new Criteria()->where(Criteria::expr()->eq( 'zone', $this->getZone() ))
             )->first() ?: null;
     }
     public function getDailyUpgradeVote(): ?DailyUpgradeVote

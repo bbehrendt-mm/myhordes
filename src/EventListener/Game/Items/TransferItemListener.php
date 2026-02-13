@@ -152,6 +152,12 @@ final class TransferItemListener implements ServiceSubscriberInterface
         $opt_allow_extra_bag   = in_array( TransferItemOption::AllowExtraBag, $event->options );
         $opt_allow_multi_heavy = in_array( TransferItemOption::AllowMultiHeavy, $event->options );
 
+        /** @var Item */
+        $item = $event->item;
+
+        /** @var Inventory */
+        $to = $event->to;
+
         // Can't steal from the bank if it's not night time
         if ($event->modality === TransferItemModality::BankTheft && !$event->townConfig->isNightMode()) {
             $event->pushError(ErrorHelper::ErrorActionNotAvailable);
@@ -203,43 +209,39 @@ final class TransferItemListener implements ServiceSubscriberInterface
         }
 
         // Check exp_b items
-        if (!$opt_enforce_placement){
-            $bag_item_groups = [
-                ['bagxl_#00', 'bag_#00', 'cart_#00'],
-                ['pocket_belt_#00']
-            ];
+        if (!$opt_enforce_placement) {
+            if (
+                // When trying to pick up a bag extension
+                $type_to->isRucksack() && !$opt_allow_extra_bag && $item->getPrototype()->isCarrierItem()
+                // Check if we don't already have an extension of the same type
+                && $to->findItem(fn(Item $i) => $i->getPrototype()->getBagExtensionType() == $item->getPrototype()->getBagExtensionType())
+            ) {
+                $event->pushError(InventoryHandler::ErrorExpandBlocked);
+                return;
+            }
 
-            // Cannot carry multiple bag extensions of the same type
-            if ( $type_to->isRucksack() && !$opt_allow_extra_bag )
-                foreach ($bag_item_groups as $bag_item_group)
-                    if (in_array($event->item->getPrototype()->getName(), $bag_item_group) && $event->to->hasAnyItem( ...$bag_item_group ) ) {
-                        $event->pushError(InventoryHandler::ErrorExpandBlocked);
-                        return;
-                    }
-
-            // Cannot deposit a bag extension
-            if ( $type_to === TransferItemType::Steal )
-                foreach ($bag_item_groups as $bag_item_group)
-                    if (in_array($event->item->getPrototype()->getName(), $bag_item_group)) {
-                        $event->pushError(InventoryHandler::ErrorTransferStealDropInvalid);
-                        return;
-                    }
+            // Cannot deposit (thief) a bag extension                    
+            if ( $type_to === TransferItemType::Steal && $item->getPrototype()->isCarrierItem()) {
+                $event->pushError(InventoryHandler::ErrorTransferStealDropInvalid);
+                return;
+            }
         }
 
         // Check Heavy item limit
         if (
             !$opt_allow_multi_heavy &&
-            $event->item->getPrototype()->getHeavy() &&
-            $type_to->isRucksack() &&
-            $this->getService(InventoryHandler::class)->countHeavyItems($event->to)
+            $event->item->getPrototype()->getHeavy()
         ) {
-            $event->pushError(InventoryHandler::ErrorHeavyLimitHit);
-            return;
+            $heavy_limit = $this->getService(InventoryHandler::class)->getHeavyItemSize($event->to);
+            if ($heavy_limit > 0 && ($already = $this->getService(InventoryHandler::class)->countHeavyItems($event->to)) + 1 > $heavy_limit) {
+                $event->pushError(($heavy_limit === 1 && $already === 1) ? InventoryHandler::ErrorHeavyLimitHit : InventoryHandler::ErrorMultiHeavyLimitHit);
+                return;
+            }
         }
 
         // Check Soul limit
         $soul_names = ['soul_blue_#00', 'soul_blue_#01', 'soul_red_#00', 'soul_yellow_#00'];
-        if( $type_to->isRucksack() && $event->to->getCitizen() && in_array($event->item->getPrototype()->getName(), $soul_names) && !$event->to->getCitizen()->hasRole("shaman") && $event->to->getCitizen()->getProfession()->getName() !== "shaman"){
+        if( $type_to->isRucksack() && $event->to->getCitizen() && in_array($event->item->getPrototype()->getName(), $soul_names) && !$event->to->getCitizen()->hasRole("shaman") && !$event->to->getCitizen()->isProfession("shaman")){
             foreach($soul_names as $soul_name) {
                 if ($this->getService(InventoryHandler::class)->countSpecificItems($event->to, $soul_name) > 0) {
                     $event->pushError(InventoryHandler::ErrorTooManySouls);
@@ -369,7 +371,7 @@ final class TransferItemListener implements ServiceSubscriberInterface
             $target_citizen = $event->to->getCitizen();
 
             // We pick a read soul in the World Beyond
-            if ( $target_citizen && !$this->getService(CitizenHandler::class)->hasStatusEffect($target_citizen, "tg_shaman_immune") ) {
+            if ( $target_citizen && !$target_citizen->hasStatus("tg_shaman_immune") ) {
 
                 // Produce logs
                 if (!in_array(TransferItemOption::Silent, $event->options))
@@ -387,7 +389,7 @@ final class TransferItemListener implements ServiceSubscriberInterface
                 $event->markModified()->shouldPersist();
                 $event->stopPropagation();
 
-            } elseif ( !$target_citizen->hasRole('shaman') && $target_citizen->getProfession()->getName() !== 'shaman' && $this->getService(CitizenHandler::class)->hasStatusEffect($target_citizen, "tg_shaman_immune"))
+            } elseif ( !$target_citizen->hasRole('shaman') && !$target_citizen->isProfession('shaman') && $target_citizen->hasStatus("tg_shaman_immune"))
                 $event->pushMessage($this->getService(TranslatorInterface::class)->trans('Du nimmst diese wandernde Seele und betest, dass der Schamane weiß, wie man diesen Trank zubereitet! Und du überlebst! Was für ein Glück, du hätten keine müde Mark auf den Scharlatan gewettet.', [], "game"));
         }
     }

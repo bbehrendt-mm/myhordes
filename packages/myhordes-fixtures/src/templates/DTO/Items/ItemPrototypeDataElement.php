@@ -9,10 +9,6 @@ use MyHordes\Fixtures\DTO\Element;
 use MyHordes\Fixtures\DTO\LabeledIconElementInterface;
 
 /**
- * @property string $label
- * @method self label(string $v)
- * @property string $icon
- * @method self icon(string $v)
  * @property string $description
  * @method self description(string $v)
  * @property string $category
@@ -23,10 +19,10 @@ use MyHordes\Fixtures\DTO\LabeledIconElementInterface;
  * @method self heavy(bool $v)
  * @property int $watchpoint
  * @method self watchpoint(int $v)
- * @property bool $fragile
- * @method self fragile(bool $v)
  * @property string $deco_text
  * @method self deco_text(string $v)
+ * @property int $bagExtensionType
+ * @method self bagExtensionType(int $v)
  * @property int $sort
  * @method self sort(int $v)
  * @property bool $hideInForeignChest
@@ -62,13 +58,13 @@ class ItemPrototypeDataElement extends Element implements LabeledIconElementInte
                 ->setDeco( $this->deco ?? 0 )
                 ->setHeavy( $this->heavy ?? false )
                 ->setCategory( $category )
+                ->setBagExtensionType( $this->bagExtensionType ?? 0 )
                 ->setSort( $this->sort ?? 0 )
                 ->setDescription( $this->description )
                 ->setHideInForeignChest( $this->hideInForeignChest ?? false )
                 ->setDecoText($this->deco_text)
                 ->setIndividual( $this->unstackable ?? false )
                 ->setWatchpoint($this->watchpoint ?? 0)
-                ->setFragile( $this->fragile ?? false )
 				->setWatchimpact($this->watchimpact ?? 0)
                 ->setPersistentEssential( $this->isPersistentWhenEssential ?? false )
                 ->setEmote( $this->isEmote ?? false );

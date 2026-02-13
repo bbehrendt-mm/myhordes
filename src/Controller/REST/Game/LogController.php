@@ -31,6 +31,7 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Order;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -99,6 +100,7 @@ class LogController extends CustomAbstractCoreController
 
                 'protected' => $this->translator->trans('Dieser Registereintrag kann <strong>nicht</strong> gefälscht werden.', [], 'game'),
                 'manipulated' => $this->translator->trans('Du hast heimlich einen Eintrag im Register unkenntlich gemacht... Du kannst das noch {times} mal tun.', [], 'game'),
+                'purged' => $this->translator->trans('Du hast heimlich einen Eintrag vollständig aus dem Register entfernt... Du kannst das noch {times} mal tun.', [], 'game'),
 
                 'hiddenBy' => $this->translator->trans('Versteckt von {player}', [], 'admin'),
 
@@ -212,7 +214,7 @@ class LogController extends CustomAbstractCoreController
         } )->filter(fn($v) => $v !== null)->toArray());
     }
 
-    protected function renderCachedLogEntries( EntityManagerInterface $em, Criteria $filters, string $cache_ident, Zone $zone = null, bool $canHide = false, bool $admin = false): array {
+    protected function renderCachedLogEntries( EntityManagerInterface $em, Criteria $filters, string $cache_ident, ?Zone $zone = null, bool $canHide = false, bool $admin = false): array {
         if ($admin)
             return $this->renderLogEntries(
                 $em->getRepository(TownLogEntry::class)->matching(
@@ -384,6 +386,7 @@ class LogController extends CustomAbstractCoreController
             'total' => 1,
             'manipulations' => $manipulations - ($purge ? 0 : 1),
             'purges' => $purges - ($purge ? 1 : 0),
+            'purged' => $purge,
         ]);
     }
 
@@ -396,7 +399,7 @@ class LogController extends CustomAbstractCoreController
      */
     #[Route(path: '/admin/zone/{id<\d+>}', name: 'admin_zone', methods: ['GET'])]
     #[GateKeeperProfile('skip')]
-    #[IsGranted('ROLE_CROW')]
+    #[IsGranted('spy', new Expression('args["zone"].getTown()'))]
     public function adminZone(Zone $zone, Request $request, EntityManagerInterface $em): JsonResponse {
         $criteria = $this->applyFilters( $request, $zone, allow_inline_days: true, admin: true, identifier: $cache_ident );
         return new JsonResponse([
@@ -420,7 +423,7 @@ class LogController extends CustomAbstractCoreController
      */
     #[Route(path: '/admin/town/{id<\d+>}', name: 'admin_town', methods: ['GET'])]
     #[GateKeeperProfile('skip')]
-    #[IsGranted('ROLE_CROW')]
+    #[IsGranted('spy', 'town')]
     public function adminTown(Town $town, Request $request, EntityManagerInterface $em): JsonResponse {
 
         $filter = $request->query->get('filter', '');
@@ -463,9 +466,9 @@ class LogController extends CustomAbstractCoreController
             return new JsonResponse(['error' => BeyondController::ErrorChatMessageInvalid], Response::HTTP_NOT_ACCEPTABLE);
 
         $message = $html->htmlDistort( $message,
-                                       ($citizenHandler->hasStatusEffect($active_citizen, 'drunk') ? HTMLService::ModulationDrunk : HTMLService::ModulationNone) |
-                                       ($citizenHandler->hasStatusEffect($active_citizen, 'terror') ? HTMLService::ModulationTerror : HTMLService::ModulationNone) |
-                                       ($citizenHandler->hasStatusEffect($active_citizen, 'wound1') ? HTMLService::ModulationHead : HTMLService::ModulationNone)
+                                       ($active_citizen->hasStatus('drunk') ? HTMLService::ModulationDrunk : HTMLService::ModulationNone) |
+                                       ($active_citizen->hasStatus('terror') ? HTMLService::ModulationTerror : HTMLService::ModulationNone) |
+                                       ($active_citizen->hasStatus('wound1') ? HTMLService::ModulationHead : HTMLService::ModulationNone)
             , $active_citizen->getTown()->getRealLanguage($this->generatedLangsCodes) ?? $this->getUserLanguage(), $d );
 
 

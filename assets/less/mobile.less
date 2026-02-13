@@ -261,11 +261,20 @@
       display: block; width: 24px; height: 24px; font-size: 14px; text-align: center; box-shadow: 0 0 3px black;
     }
   }
-  #apps h1 img, #modeCommand h1 img { height: 16px; width: 16px; image-rendering: pixelated }
-  #modeCommand, #pivotSwapCommand {
-    left: 10px; margin-left: 0 !important;
-    &#pivotSwapCommand { top: 96px !important;  }
+
+  .header-directory {
+    min-height: 37px; min-width: 44px;
+    .header-directory-icon { height: 32px; width: 32px; image-rendering: pixelated }
+    .header-listing-body {
+      h4 { padding: 10px 0 11px 43px; }
+      ul { grid-template-columns: 1fr; }
+    }
   }
+
+  .mod-directory {
+      left: 64px;
+  }
+
   #wrapper > #content #apps #apps-list ul li.app-external { width: 100% !important; }
   button:not(.no-mobile-resize), .button:not(.no-mobile-resize) { padding-top: 16px; padding-bottom: 16px; margin-top: 8px; margin-bottom: 8px; }
 
@@ -303,7 +312,7 @@
     .money { margin-left: -66px; }
   }
 
-  body #wrapper #content div.game-menu-area > div.game-bar > ul.clock > li:nth-child(2) {
+  body #wrapper .game-clock > .town-day {
     font-weight: bolder;
     text-shadow: -1px 0 0 #c9c182, 1px 0 0 #c9c182, 0 -1px 0 #c9c182, 0 1px 0 #c9c182;
   }
@@ -470,7 +479,7 @@
         grid-row: 4 / span 1;
       }
 
-      #mgd-empty-zone-note {
+      #mgd-zone-note {
         grid-column: 1 / span 6;
         grid-row: 5 / span 1;
       }
@@ -526,6 +535,11 @@
         &.padded-small-@{postfix} {padding: @myhordes-grid-padsize-small;}
         &.padded-none-@{postfix}  {padding: 0}
       }
+    }
+
+    .flex {
+        &.direction-row-@{postfix} { flex-direction: row; }
+        &.column-@{postfix} { flex-direction: column; &>hr.section { width: 80% } }
     }
   }
 }

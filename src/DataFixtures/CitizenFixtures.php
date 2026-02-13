@@ -103,8 +103,6 @@ class CitizenFixtures extends Fixture implements DependentFixtureInterface
                 ->setHeroic( $entry['hero'] )
                 ->setDescription( $entry['desc'])
                 ->setPictoName( $entry['picto'] ?? null )
-                ->setNightwatchDefenseBonus($entry['nightwatch_def_bonus'] ?? 0)
-                ->setNightwatchSurvivalBonus($entry['nightwatch_surv_bonus'] ?? 0)
 				->setDigBonus( $entry['dig_bonus'] ?? 0 );
 
             foreach ( $entry['items'] as $p_item ) {
@@ -414,7 +412,7 @@ class CitizenFixtures extends Fixture implements DependentFixtureInterface
 
             if (!$reason)
                 $reason = (new ComplaintReason())->setName( $entry['name'] );
-            
+
             $reason->setText($entry['text']);
             $manager->persist($reason);
 

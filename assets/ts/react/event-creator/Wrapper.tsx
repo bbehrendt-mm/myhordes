@@ -7,6 +7,7 @@ import {TranslationStrings} from "./strings";
 import {HordesEventCreatorViewer} from "./Viewer";
 import {HordesEventCreatorWizard} from "./Creator";
 import {BaseMounter} from "../index";
+import {useTranslations} from "../utils";
 
 declare var $: Global;
 
@@ -33,26 +34,19 @@ export const Globals = React.createContext<EventCreatorGlobals>(null);
 
 const EventCreatorWrapper = ( {creator, reviewer, admin}: mountProps ) => {
 
-    const apiRef = useRef<EventCreationAPI>();
+    const apiRef = useRef<EventCreationAPI>(new EventCreationAPI());
     const [globalLoadingStack, setGlobalLoadingStack] = useState<number>(0);
     const startLoad = (n: number = 1) => setGlobalLoadingStack( globalLoadingStack + n );
     const doneLoad = (n: number = 1) => setGlobalLoadingStack( globalLoadingStack - n );
 
-    const [strings, setStrings] = useState<TranslationStrings>(null)
+    const strings = useTranslations(
+        apiRef.current,
+        [],
+        () => startLoad(),
+        () => doneLoad()
+    );
 
     const [showCreator, setShowCreator] = useState<{ uuid: string, event?: EventCore }>(null)
-
-    useEffect( () => {
-        apiRef.current = new EventCreationAPI();
-        startLoad();
-        apiRef.current.index().then( index => {
-            setStrings(index.strings);
-            doneLoad();
-        } );
-        return () => {
-            setStrings(null);
-        }
-    }, [] )
 
     const load_complete = globalLoadingStack <= 0 && strings !== null;
 

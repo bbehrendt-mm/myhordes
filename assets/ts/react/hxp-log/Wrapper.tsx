@@ -4,6 +4,7 @@ import {HxpLogAPI, LogEntry} from "./api";
 import {TranslationStrings} from "./strings";
 import {Global} from "../../defaults";
 import {BaseMounter} from "../index";
+import {useTranslations} from "../utils";
 
 declare var $: Global;
 
@@ -22,17 +23,13 @@ const HordesHxpLogWrapper = (props: mountProps) => {
 
     const api = new HxpLogAPI();
 
-    const [strings, setString] = useState<TranslationStrings>();
+    const strings = useTranslations( api );
     const [loading, setLoading] = useState<boolean>(false);
     const [logs, setLogs] = useState<LogEntry[]>([]);
     const [additional, setAdditional] = useState<boolean>(true);
 
     const parent = useRef<HTMLDivElement>();
     const loader = useRef<HTMLDivElement>();
-
-    useEffect(() => {
-        api.index().then(s => setString(s));
-    }, []);
 
     useLayoutEffect( () => {
         if (!loader.current || loading || !additional) return;

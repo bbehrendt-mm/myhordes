@@ -1,5 +1,5 @@
 when@dev: &dev
     _errors:
-        resource: '@FrameworkBundle/Resources/config/routing/errors.xml'
+        resource: '@FrameworkBundle/Resources/config/routing/errors.php'
         prefix: /_error
 when@local: *dev

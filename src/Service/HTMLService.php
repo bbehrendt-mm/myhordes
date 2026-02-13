@@ -399,11 +399,11 @@ class HTMLService {
                             if (!$c->getBanished()) return false;
                         }
                         elseif ($profession === 'shaman') {
-                            if ($c->getProfession()->getName() !== $profession && !$c->hasRole('shaman')) return false; }
+                            if (!$c->isProfession($profession) && !$c->hasRole('shaman')) return false; }
                         elseif ($profession === 'zone') {
                             if (!$c->getZone() || $user->getActiveCitizen()->getZone() !== $c->getZone()) return false;
                         }
-                        elseif ($c->getProfession()->getName() !== $profession) return false;
+                        elseif (!$c->isProfession($profession)) return false;
                     }
 
                     if ($group !== null) {
@@ -787,7 +787,7 @@ class HTMLService {
      * @param User|string|null $user User or language string
      * @return array
      */
-    public function get_emotes(bool $url_only = false, User|string $user = null): array {
+    public function get_emotes(bool $url_only = false, User|string|null $user = null): array {
         if ($this->emote_cache !== null) return $this->emote_cache;
 
         $this->emote_cache = [];
@@ -810,7 +810,7 @@ class HTMLService {
         return $this->emote_cache;
     }
 
-    public function prepareEmotes(string $str, User|string $user = null, Town $town_context = null): string {
+    public function prepareEmotes(string $str, User|string|null $user = null, ?Town $town_context = null): string {
         $emotes = $this->get_emotes(false, $user);
 
         $fixed_account_translators = [

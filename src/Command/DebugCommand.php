@@ -82,7 +82,7 @@ class DebugCommand extends LanguageCommand
     {
         $this
             ->setHelp('Debug options.')
-            
+
             ->addOption('everyone-drink', null, InputOption::VALUE_REQUIRED, 'Unset thirst status of all citizen.')
             ->addOption('add-crow', null, InputOption::VALUE_NONE, 'Creates the crow account. Also creates 80 validated users in case there are less than 66 users.')
             ->addOption('add-animactor', null, InputOption::VALUE_NONE, 'Creates the animactor account. Also creates 80 validated users in case there are less than 66 users.')
@@ -172,8 +172,8 @@ class DebugCommand extends LanguageCommand
                     return -1;
                 }
                 $this->entity_manager->persist($crow);
-                $this->entity_manager->flush();               
-                
+                $this->entity_manager->flush();
+
                 return 0;
             }
 
@@ -342,7 +342,7 @@ class DebugCommand extends LanguageCommand
 
                     /** @var Citizen $joined_citizen */
                     foreach ( $all as $joined_citizen ) {
-                        if ($citizen->getProfession()->getName() !== 'none')
+                        if ($citizen->isProfession(CitizenProfession::DEFAULT))
                             $this->gps->recordCitizenProfessionSelected( $joined_citizen );
                         if($joined_citizen !== $citizen) {
                             $output->writeln("Coalition member <comment>{$joined_citizen->getUser()->getName()}</comment> joins <comment>{$town->getName()}</comment> as a <comment>{$this->translator->trans($pro->getLabel(), [], 'game')}</comment>.");
@@ -468,7 +468,7 @@ class DebugCommand extends LanguageCommand
                 }
             }
             $this->entity_manager->flush();
-            
+
             return 0;
         }
 
@@ -505,13 +505,17 @@ class DebugCommand extends LanguageCommand
             if ($c_size <= 0) $c_size = 1;
 
             $c = 0;
-            foreach ($this->entity_manager->getRepository(Town::class)->findAll() as $town) {
+            $town_ids = array_map(fn(Town $town) => $town->getId(), $this->entity_manager->getRepository(Town::class)->findAll());
+            foreach ($town_ids as $town_id) {
+                $c++;
+                $town = $this->entity_manager->getRepository(Town::class)->find($town_id);
                 $output->write("Purging active town '<comment>{$town->getName()}</comment>' (<comment>{$town->getId()}</comment>)... ");
                 if ($purge_rankings && $town->getRankingEntry()) $this->entity_manager->remove($town->getRankingEntry());
                 $this->entity_manager->remove($town);
 
-                if (++$c >= $c_size) {
+                if ($c >= $c_size) {
                     $this->entity_manager->flush();
+                    $this->entity_manager->clear();
                     $output->writeln('<info>OK!</info>');
                     $c = 0;
                 } else $output->writeln('');

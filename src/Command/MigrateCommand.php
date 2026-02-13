@@ -389,6 +389,11 @@ class MigrateCommand extends Command
                 return 2;
             }
 
+            if (!$this->helper->capsule( 'doctrine:migrations:version "DoctrineMigrations\Version20250830134338" --add', $output )) {
+                $output->writeln("<error>Unable to create schema.</error>");
+                return 2;
+            }
+
             if (!$this->helper->capsule( 'doctrine:fixtures:load --append', $output )) {
                 $output->writeln("<error>Unable to update fixtures.</error>");
                 return 3;
@@ -536,7 +541,7 @@ class MigrateCommand extends Command
 
         if ($input->getOption('update-db')) {
 
-            if (!$this->helper->capsule( 'doctrine:migrations:diff --allow-empty-diff --formatted --no-interaction', $output )) {
+            if (!$this->helper->capsule( 'doctrine:migrations:diff --allow-empty-diff --no-interaction', $output )) {
                 $output->writeln("<error>Unable to create a migration.</error>");
                 return 1;
             }
@@ -548,16 +553,11 @@ class MigrateCommand extends Command
 
                     $source = "{$this->param->get('kernel.project_dir')}/migrations";
                     foreach (scandir( $source ) as $file)
-                        if ($file && $file[0] !== '.') {
+                        if ($file && $file[0] !== '.' && $file !== 'Version20250830134338.php') {
                             $output->write("\tDeleting \"<comment>{$file}</comment>\"... ");
                             unlink( "$source/$file" );
                             $output->writeln('<info>Ok!</info>');
                         }
-
-                    if (!$this->helper->capsule( 'doctrine:migrations:version --all --delete --no-interaction', $output )) {
-                        $output->writeln("<error>Unable to clean migrations.</error>");
-                        return 4;
-                    }
 
                     if (!$this->helper->capsule( 'doctrine:migrations:diff --allow-empty-diff --formatted --no-interaction', $output )) {
                         $output->writeln("<error>Unable to create a migration.</error>");
@@ -971,7 +971,7 @@ class MigrateCommand extends Command
                     if ($spawn_zone) {
                         $output->writeln("Spawning <info>{$spawning_ruin->getLabel()}</info> at <info>{$spawn_zone->getX()} / {$spawn_zone->getY()}</info>");
                         $spawn_zone->setPrototype($spawning_ruin);
-                        
+
                         $this->maze->setTargetZone($spawn_zone);
                         $spawn_zone->setExplorableFloors($this->conf->getTownConfiguration($town)->get(TownSetting::ERuinSpaceFloors));
                         $this->maze->createField();
@@ -1533,7 +1533,7 @@ class MigrateCommand extends Command
 
         if ($input->getOption('set-profession-prop')) {
             $this->helper->leChunk($output, Citizen::class, 10, [], true, true, function(Citizen $c) {
-                if ($c->getProfession()->getName() !== CitizenProfession::DEFAULT)
+                if ($c->isProfession(CitizenProfession::DEFAULT))
                     $c->registerPropInPersistentCache( CitizenPersistentCache::Profession, $c->getProfession()->getId() );
             }, true);
         }

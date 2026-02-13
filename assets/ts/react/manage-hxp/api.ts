@@ -1,5 +1,6 @@
 import {TranslationStrings} from "./strings";
 import {Fetch} from "../../v2/fetch";
+import {TranslatableAPI} from "../index";
 
 export type HeroSkill = {
     id: number,
@@ -20,18 +21,8 @@ export type SkillState = {
     hxp_needed: number
 }
 
-export class HxpManagementApi {
-
-    private fetch: Fetch;
-
-    constructor() {
-        this.fetch = new Fetch( 'user/soul/skills/hxp/pack' );
-    }
-
-    public index(): Promise<TranslationStrings> {
-        return this.fetch.from('/')
-            .request().withCache().get() as Promise<TranslationStrings>;
-    }
+export class HxpManagementApi extends TranslatableAPI<TranslationStrings> {
+    constructor() { super( 'user/soul/skills/hxp/pack' ) }
 
     public skills(): Promise<SkillState> {
         return this.fetch.from('/list')

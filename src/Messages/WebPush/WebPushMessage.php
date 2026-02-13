@@ -15,7 +15,7 @@ readonly class WebPushMessage implements AsyncMessageInterface
         NotificationSubscription $subscription,
         public string $title,
         public string $body,
-        public ?int $avatar = null,
+        public ?string $avatar = null,
     ) {
         $this->subscription = $subscription->getId();
         $this->timestamp = new \DateTimeImmutable('now');

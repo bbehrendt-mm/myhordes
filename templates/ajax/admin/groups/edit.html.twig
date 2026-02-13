@@ -44,7 +44,7 @@
                     <div class="cell padded rw-4 note note-lightest"><label for="group-icon">{{ 'Icon'|trans({},'admin') }}</label></div>
                     <div class="cell padded rw-4">
                         <div class="avatar {{ current_group is null ? 'hidden' : '' }}">
-                            <img id="group-icon" alt="[ {{ 'Avatar'|trans({},'admin') }} ]" src="{{ (current_group is not null) ? path('app_web_group_icon', { gid: current_group.usergroup.id, name: current_group.avatarName, ext: current_group.avatarExt }) : '' }}" />
+                            <img id="group-icon" alt="[ {{ 'Avatar'|trans({},'admin') }} ]" src="{{ current_group|singleMediaSource('icon') }}" />
                         </div>
                         <label for="group-icon-select" id="group-icon-edit" class="small inline float-right button"><img alt="" src="{{ asset('build/images/forum/edit.png') }}" /></label>
                     </div>

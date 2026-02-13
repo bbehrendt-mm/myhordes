@@ -73,12 +73,6 @@ class UserTransferHeroDaysToXPCommand extends Command
                     $changed = true;
                 }
 
-                if ($u->getBonusHeroDaysSpent() > 0) {
-                    $this->unlockableService->setLegacyHeroDaysSpent($u, null, $u->getBonusHeroDaysSpent(), true);
-                    $u->setBonusHeroDaysSpent(0);
-                    $changed = true;
-                }
-
                 if ($u->getImportedHeroDaysSpent() > 0) {
                     $this->unlockableService->setLegacyHeroDaysSpent($u, true, $u->getImportedHeroDaysSpent(), true);
                     $u->setImportedHeroDaysSpent(0);

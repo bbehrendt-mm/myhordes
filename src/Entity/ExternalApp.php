@@ -2,9 +2,15 @@
 
 namespace App\Entity;
 
+use App\Structures\Media\MediaCollection;
+use App\Structures\Media\MediaCollectionList;
+use App\Structures\Media\MediaVariant;
+use App\Traits\Entity\LinksMedia;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Table;
 use Doctrine\ORM\Mapping\UniqueConstraint;
+use Exception;
+use Intervention\Image\Interfaces\ImageInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: 'App\Repository\ExternalAppRepository')]
@@ -13,6 +19,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 #[UniqueConstraint(name: 'external_app_name_unique', columns: ['name'])]
 class ExternalApp
 {
+    use LinksMedia;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
@@ -194,5 +202,34 @@ class ExternalApp
         $this->wiki = $wiki;
 
         return $this;
+    }
+
+    protected static function defineMediaCollections(MediaCollectionList $list): void
+    {
+        $list->add( new MediaCollection('icon')
+            ->singleFile()
+            ->addVariant( new MediaVariant('default')
+                              ->coverDown( 16, 16 )
+                              ->toPng()
+            )
+            ->addVariant( new MediaVariant('default-hd')
+                              ->minResolution( width: 17 )
+                              ->coverDown( 32, 32 )
+                              ->toPng()
+            )
+            ->addVariant( new MediaVariant('default-uhd')
+                              ->minResolution( width: 33 )
+                              ->coverDown( 64, 64 )
+                              ->toWebp(quality: 100)
+            )
+        );
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getMediaBasePath(): string
+    {
+        return "app/{$this->getPrimaryKey()}";
     }
 }

@@ -13,11 +13,11 @@ import {Tooltip} from "../misc/Tooltip";
 import {Const, Global} from "../../defaults";
 import {TranslationStrings} from "./strings";
 import {useVault} from "../../v2/client-modules/Vault";
-import {VaultItemEntry} from "../../v2/typedef/vault_td";
+import {VaultItemEntry, VaultStorage} from "../../v2/typedef/vault_td";
 import {BaseMounter} from "../index";
 import {emitSignal, useBroadcastSignal, useSignal} from "../../v2/client-modules/Signal";
 import {ServerInducedSignalProps} from "../../v2/fetch";
-import {ItemTooltip, useSharedWorkerMessages} from "../utils";
+import {ItemTooltip, useTranslations, useSharedWorkerMessages} from "../utils";
 import {randomUUIDv4} from "../../shims";
 
 declare var $: Global;
@@ -34,16 +34,18 @@ interface TutorialConfig {
     restrict: "a"|"b"|null,
 }
 
+type InventoryType = keyof TranslationStrings['type'];
+
 interface mountProps {
     etag: string,
     locked: boolean|string,
 
     inventoryAId: number,
-    inventoryAType: string,
+    inventoryAType: InventoryType | 'none',
     inventoryALabel: string|null,
 
     inventoryBId: number,
-    inventoryBType: string,
+    inventoryBType: InventoryType | 'none',
     inventoryBLabel: string|null,
 
     reload: string|null,
@@ -54,7 +56,10 @@ interface mountProps {
     uncloak: boolean,
     hide: number|null,
 
-    tutorial: TutorialConfig|null,
+    tutorial?: TutorialConfig|null,
+
+    onItemClick?: (i: Item) => void,
+    filterEnabledItems?: (i: Item, v: VaultItemEntry|null) => boolean,
 }
 
 interface passiveMountProps {
@@ -75,6 +80,10 @@ interface escortMountProps {
 
 interface standaloneItemMountProps {
     item: number,
+    extra?: string|null,
+    line?: boolean,
+    inline?: boolean,
+    labelClass?: string,
 }
 
 interface InventoryBagLoadedSignalProps {
@@ -133,10 +142,42 @@ interface InventoryGlobal {
 
 export const Globals = React.createContext<InventoryGlobal>(null);
 
-function  sort(a: Item, b: Item): number {
+function sort(a: Item, b: Item): number {
     return a.s
         .map((v,i) => [v,b.s[i]])
         .reduce((carry, [a,b]) => carry === 0 ? b-a : carry, 0 );
+}
+
+function getBagSorter(vaultData?: VaultStorage<VaultItemEntry>) {
+    const BAG_ITEM_PRIORITY = [
+        ['essential', (a: Item) => a.e],
+        ['carrier+heavy', (a: Item) => vaultData?.[a.p]?.heavy && vaultData?.[a.p]?.extension],
+        ['heavy', (a: Item) => vaultData?.[a.p]?.heavy],
+        // ['empty-heavy'],
+        ['carrier', (a: Item) => vaultData?.[a.p]?.extension],
+        ['regular', (a: Item) => !!vaultData?.[a.p]],
+        ['loading', (a: Item) => !vaultData?.[a.p]],
+        // ['empty-regular'],
+    ] as const satisfies [string, (a: Item) => boolean][];
+
+    return {
+        BAG_ITEM_PRIORITY,
+        bagSort: (a: Item, b: Item) => {
+            const va = vaultData?.[a.p];
+            const vb = vaultData?.[b.p];
+
+            // Loaded items first
+            if (!va || !vb) return a ? 1 : 0;
+
+            for (const [, check] of BAG_ITEM_PRIORITY) {
+                if (check(a) && !check(b)) return -1;
+                if (check(b) && !check(a)) return 1;
+            }
+
+            // Default
+            return sort(a, b);
+        }
+    }
 }
 
 const extractAllItems = (data: InventoryBankData | InventoryBagData) => {
@@ -180,23 +221,53 @@ const commonInventoryResponseHandler = (s: TransportResponse, d: string, t: Tuto
     }
 }
 
-const HordesInventoryWrapper = (props: mountProps &
+type SingleInventoryProps = {
+    id: number,
+    label?: string,
+    type?: InventoryType,
+    locked?: boolean,
+    parent: HTMLElement,
+    onItemClick?: (i: Item) => void,
+    filterEnabledItems?: (i: Item, v: VaultItemEntry|null) => boolean,
+}
+
+export const SingleInventory = (props: SingleInventoryProps) => {
+
+    const item_cache = useRef<{[key:number]: InventoryBagData}>({});
+    const etag = useRef<string>(randomUUIDv4());
+
+    return <HordesInventoryWrapper
+        className="display-plain"
+
+        inventoryAId={props.id}
+        inventoryAType={props.type ?? 'rucksack'}
+        etag={etag.current}
+        locked={props.locked ?? false}
+        inventoryALabel={props.label ?? null}
+        inventoryBId={null} inventoryBType={'none'} inventoryBLabel={''}
+
+        reload={null} reset={false} steal={false} log={false} uncloak={false}
+        hide={0} setCache={(id: number, items: InventoryBagData|null): void => { item_cache.current[id] = items; } }
+        parent={props.parent}
+        onItemClick={props.onItemClick}
+        filterEnabledItems={props.filterEnabledItems}
+    />
+
+}
+
+const HordesInventoryWrapper = (props: mountProps & {className?: string} &
     {setCache: (i:number,items:InventoryBagData|null) => void} &
     {parent: HTMLElement}
 ) => {
+    const api = useRef( new InventoryAPI() );
 
     const [internalETag, setInternalETag] = useState(0);
+    const [internalETagB, setInternalETagB] = useState(0);
 
-    const [strings, setStrings] = useState<TranslationStrings>( null );
+    const strings = useTranslations( api.current );
     const [loading, setLoading] = useState<boolean>( false );
 
     const [theftMode, setTheftMode] = useState<boolean>( false );
-
-    const api = useRef( new InventoryAPI() )
-
-    useEffect(() => {
-        api.current.index().then(s => setStrings(s));
-    }, []);
 
     const [inventoryA, setInventoryA] = useState<InventoryResponse>(null);
     const [inventoryB, setInventoryB] = useState<InventoryResponse>(null);
@@ -215,11 +286,16 @@ const HordesInventoryWrapper = (props: mountProps &
             setInventoryB(r);
             setCache(props.inventoryBId, r)
         });
-    }, [props.inventoryBId, props.inventoryBType, props.etag, internalETag]);
+    }, [props.inventoryBId, props.inventoryBType, props.etag, internalETag, internalETagB]);
 
     useSignal<ServerInducedSignalProps>(
         'inventory-changed',
         () => setInternalETag(e => e+1)
+    )
+
+    useSignal<ServerInducedSignalProps>(
+        'inventory-changed-b',
+        () => setInternalETagB(e => e+1)
     )
 
     useSignal<InventoryBagLoadedSignalProps>(
@@ -269,8 +345,12 @@ const HordesInventoryWrapper = (props: mountProps &
         }).catch(() => setLoading(false))
     }
 
-    const handleTransfer = (from: number, to: number, direction: string) => {
-        return (i:Item) => manageTransfer(i.i, from, to, direction);
+    const handleTransfer = (from: number|null|undefined, to: number|null|undefined, direction: string) => {
+        if (props.onItemClick)
+            return props.onItemClick;
+        else if (from && to)
+            return (i:Item) => manageTransfer(i.i, from, to, direction);
+        else return () => {};
     }
 
     const lock_a = props.locked === true || props.locked === 'a';
@@ -278,12 +358,12 @@ const HordesInventoryWrapper = (props: mountProps &
 
     return <Globals.Provider value={{api: api.current, strings}}>
         { props.inventoryAType !== 'none' && <>
-            <SwitchInventory id={props.inventoryAId} type={props.inventoryAType} label={props.inventoryALabel} inventory={inventoryA} locked={lock_a || loading || theftMode} onItemClick={handleTransfer( props.inventoryAId, props.inventoryBId, 'down' )} />
+            <SwitchInventory id={props.inventoryAId} type={props.inventoryAType} label={props.inventoryALabel} inventory={inventoryA} locked={lock_a || loading || theftMode} className={props.className} enableItemCallback={props.filterEnabledItems} onItemClick={handleTransfer( props.inventoryAId, props.inventoryBId, 'down' )} />
         </> }
 
         { props.inventoryAType !== 'none' && props.uncloak && strings && !props.locked && <div className="note"><b>{strings.global.warning}</b>:&nbsp;{strings.actions["uncloak-warn"]}</div>}
 
-        { props.inventoryAType === 'rucksack' && !lock_a && <>
+        { props.inventoryAType === 'rucksack' && !lock_a && props.inventoryBType !== 'none' && <>
             <button onClick={() => manageTransfer(null, props.inventoryAId, props.inventoryBId, 'down-all')}>
                 <img src={strings?.actions["down-all-icon"] ?? ''} alt={strings?.actions[`down-all-${props.inventoryBType}`] ?? strings?.actions['down-all-any'] ?? ''}/>
                 &nbsp;
@@ -331,7 +411,10 @@ const HordesInventoryWrapper = (props: mountProps &
                 id={props.inventoryBId} type={props.inventoryBType} inventory={inventoryB}
                 label={props.inventoryBLabel}
                 locked={lock_b || loading} theft={theftMode}
-                onItemClick={handleTransfer( props.inventoryBId, props.inventoryAId, 'up' )} />
+                onItemClick={handleTransfer( props.inventoryBId, props.inventoryAId, 'up' )}
+                enableItemCallback={props.filterEnabledItems}
+                className={props.className}
+            />
         </>}
 
         { props.inventoryBType === 'desert' && strings && inventoryB && !inventoryB.bank && (inventoryB as InventoryBagData).items.filter(i => i.h).length > 0 &&
@@ -348,12 +431,14 @@ const HordesInventoryWrapper = (props: mountProps &
 
 interface InventoryProps {
     id: number,
-    "type": string,
+    "type": InventoryType,
     label?: string|null,
     locked: boolean,
     inventory: InventoryResponse,
     onItemClick: (i: Item) => void,
     theft?: boolean,
+    className?: string,
+    enableItemCallback?: (i: Item, v: VaultItemEntry|null) => boolean,
 }
 
 interface InventoryPropsBag extends InventoryProps {
@@ -369,7 +454,7 @@ const SwitchInventory = (props: InventoryProps) => {
     const loaded = props.inventory && globals.strings;
 
     return <>
-        { !loaded && <ul className={`inventory inventory-react ${props.type}`}>
+        { !loaded && <ul className={`inventory inventory-react ${props.type} ${props.className ?? ''}`}>
             <li className="placeholder">
                 <div className="loading"/>
             </li>
@@ -377,6 +462,66 @@ const SwitchInventory = (props: InventoryProps) => {
         { loaded && props.inventory.bank && <BankInventory {...(props as InventoryPropsBank)} /> }
         { loaded && !props.inventory.bank && <BagInventory {...(props as InventoryPropsBag)} /> }
     </>
+}
+
+interface SlotProps {
+    free: boolean,
+    itemInfo?: {
+        item: Item,
+        vault?: VaultItemEntry,
+    },
+    heavy?: boolean,
+    over?: boolean,
+}
+
+interface BagInventorySlotProps extends SlotProps {
+    bag: InventoryPropsBag,
+    vaultData: VaultStorage<VaultItemEntry>,
+}
+
+const BagInventorySlot = (props: BagInventorySlotProps) => {
+    const globals = useContext(Globals);
+
+    const className = React.useMemo(() => {
+        const classes = new Set();
+
+        if (!props.itemInfo) {
+            classes.add('free');
+        }
+
+        if (props.itemInfo && props.itemInfo.item.e) {
+            classes.add('bg-locked');
+        }
+
+        if (props.over) {
+            classes.add('bg-over');
+        }
+
+        if (props.heavy || props.itemInfo?.vault?.heavy) {
+            classes.add('bg-heavy');
+        } else if (props.itemInfo) {
+            classes.add('bg-light');
+        }
+
+        return Array.from(classes.values()).join(' ');
+    }, [props.itemInfo, props.over, props.heavy]);
+
+    if (props.itemInfo) {
+        return <React.Fragment>
+            <SingleItem
+                item={props.itemInfo.item}
+                disabled={props.bag.enableItemCallback && !props.bag.enableItemCallback(props.itemInfo.item, props.itemInfo.vault ?? null)}
+                blur={null}
+                className={className}
+                mods={props.bag.inventory.mods}
+                data={props.itemInfo.vault ?? null}
+                locked={props.bag.locked || props.itemInfo.item.e} onClick={props.bag.onItemClick}
+            />
+        </React.Fragment>;
+    }
+    return <li className={className}>
+        {props.heavy && <Tooltip additionalClasses="help" html={ globals.strings?.global.heavy_slot } />}
+    </li>
 }
 
 const BagInventory = (props: InventoryPropsBag) => {
@@ -387,21 +532,129 @@ const BagInventory = (props: InventoryPropsBag) => {
         'items', props.inventory?.items?.map(v => v.p)
     )
 
-    const label = props.label ?? globals.strings.type[props.type] ?? '';
+    const label = props.label ?? globals.strings?.type[props.type] ?? '';
 
-    return <ul className={`inventory inventory-react ${props.type}`}>
-        {label !== null && label !== '' && <li className="title">{label}</li> }
-        {props.inventory.items.sort(sort).map(i => <React.Fragment key={i.i}><SingleItem
-            blur={null}
-            item={i} mods={props.inventory.mods} data={(vaultData ?? {})[i.p] ?? null}
-            locked={props.locked || i.e} onClick={props.onItemClick}
-        /></React.Fragment>)}
-        {props.type === 'desert' && !props.inventory.size && props.inventory.items.length === 0 && <li className="category label">
-            <em className="small">{ globals.strings.props.nothing }</em>
-        </li>}
-        {props.inventory.size > 0 && props.inventory.size > props.inventory.items.length && Array.from(Array(props.inventory.size - props.inventory.items.length).keys()).map(i =>
-            <li key={i} className="free"/>)
+    const slots: SlotProps[] = React.useMemo(() => {
+        const inventorySize = props.inventory.size ?? 0;
+        const inventoryHeavySlots = props.inventory.heavy ?? 0;
+        const isBag = props.type === 'rucksack';
+        const items = [...props.inventory.items].sort(sort);
+        const slots: SlotProps[] = [];
+
+        if (!isBag) {
+            // Not a player bag : Display items / free slots normally
+            let free = inventorySize;
+            for(const item of items) {
+                free--;
+                slots.push({
+                    free: false,
+                    itemInfo: {
+                        item,
+                        vault: vaultData?.[item.p],
+                    },
+                });
+            }
+
+            for (let i = 0; i < free; i++) {
+                slots.push({
+                    free: true,
+                });
+            }
+
+            return slots;
         }
+
+        const {BAG_ITEM_PRIORITY, bagSort} = getBagSorter(vaultData);
+        items.sort(bagSort);
+
+        const getItemStep = (a: Item) => BAG_ITEM_PRIORITY.find(([, check]) => check(a))?.[0] ?? 'loading';
+
+        let heavyUsed = 0;
+        let currentStep = BAG_ITEM_PRIORITY[0][0];
+
+        const lightItems = items.reduce((total, item) => total + (!vaultData?.[item.p]?.heavy ? 1 : 0), 0);
+
+        // Light items can use heavy item slots
+        let heavyUsedByLight = 0;
+        if (lightItems > (inventorySize - inventoryHeavySlots)) {
+            heavyUsedByLight = lightItems - (inventorySize - inventoryHeavySlots);
+            heavyUsed += heavyUsedByLight;
+        }
+
+        for (let i = 0; (i < inventorySize) || items.length > 0; i++) {
+            const item = items.shift();
+            const vault = item ? vaultData?.[item.p] : undefined;
+            const step = item ? getItemStep(item) : currentStep;
+
+            let heavy = false;
+            switch(step) {
+                case 'carrier+heavy':
+                case 'heavy':
+                    heavyUsed++;
+                    heavy = true;
+                    break;
+                case 'carrier':
+                case 'regular':
+                case 'loading':
+                    // Heavy items are finished : Flush out extra empty heavy slots
+                    while(heavyUsed < inventoryHeavySlots) {
+                        heavyUsed++;
+                        i++;
+                        slots.push({
+                            free: true,
+                            heavy: true,
+                        });
+                    }
+                    break;
+            }
+
+            const data: SlotProps = {
+                free: !item,
+                heavy: (heavy && (!vault || vault.heavy)) || (item && !item.e && (heavyUsedByLight && heavyUsedByLight-- > 0)),
+                over: heavy && (heavyUsed > inventoryHeavySlots),
+            };
+
+            if (item) {
+                data.itemInfo = {
+                    item,
+                    vault
+                };
+            }
+
+            if (!item && !items.length) {
+                // Flush out extra empty slots (don't forget we also have a final push)
+                while(i < (inventorySize - 1)) {
+                    i++;
+                    slots.push({
+                        free: true,
+                        heavy: heavyUsed < inventoryHeavySlots,
+                    });
+                    if (heavyUsed < inventoryHeavySlots) {
+                        heavyUsed++;
+                    }
+                }
+            }
+
+            slots.push(data);
+        }
+
+        return slots;
+    }, [vaultData, props.type, props.inventory.items, props.inventory.size]);
+
+    return <ul className={`inventory inventory-react ${props.type} ${props.className ?? ''}`}>
+        {label !== null && label !== '' && <li className="title">{label}</li> }
+        {props.type === 'desert' && !props.inventory.size && props.inventory.items.length === 0 && <li className="category label">
+            <em className="small">{ globals.strings?.props.nothing ?? '' }</em>
+        </li>}
+        {slots.map((slot, i) => <BagInventorySlot
+            key={i}
+            free={slot.free}
+            itemInfo={slot.itemInfo}
+            heavy={slot.heavy}
+            over={slot.over}
+            bag={props}
+            vaultData={vaultData}
+        />)}
     </ul>
 }
 
@@ -432,11 +685,12 @@ const BankInventory = (props: InventoryPropsBank) => {
                 { Object.values( vaultData ?? {} ).map(v => <option key={v.id} value={v.name}/>) }
             </datalist>
         </p>
-        <ul className={`inventory inventory-react ${props.type} ${props.theft ? 'theft' : ''}`}>
+        <ul className={`inventory inventory-react ${props.type} ${props.theft ? 'theft' : ''} ${props.className ?? ''}`}>
             {props.inventory.categories.sort((c1, c2) => category_map[c1.id][1] - category_map[c2.id][1] || c1.id - c2.id).map(c => <React.Fragment key={c.id}>
                 { showCategories && <li className="category">{category_map[c.id][0]}</li> }
                 { c.items.sort(sort).map(i => <React.Fragment key={i.i}>
                     <SingleItem
+                        disabled={props.enableItemCallback && !props.enableItemCallback(i, (vaultData ?? {})[i.p])}
                         blur={ searchString === '' ? null : !(vaultData ?? {})[i.p]?.name?.normalize("NFD").replace(/[\u0300-\u036f]/g, "")?.toLowerCase()?.includes( normalizedSearchString ) }
                         item={i} mods={props.inventory.mods} data={(vaultData ?? {})[i.p] ?? null}
                         locked={props.locked || i.e} onClick={props.onItemClick} highlightDefense={true}
@@ -455,13 +709,13 @@ const BankInventory = (props: InventoryPropsBank) => {
     </>
 }
 
-const SingleItem = (props: { item: Item, data: VaultItemEntry | null, mods: InventoryMods, locked: boolean, onClick?: (i:Item) => void, blur: null|boolean, className?: string, highlightDefense?: boolean })=> {
+const SingleItem = (props: { item: Item, data: VaultItemEntry | null, mods: InventoryMods, disabled?: boolean, locked: boolean, onClick?: (i:Item) => void, blur: null|boolean, className?: string, highlightDefense?: boolean })=> {
     const globals = useContext(Globals);
 
-    return props.data !== null
+    return (globals.strings && props.data)
         ? <li
-            className={`item ${props.className ?? ''} ${(props.blur === true && 'blur') || ''} ${(props.blur === false && 'focus') || ''} ${(props.locked && 'locked') || ''} ${(props.item.b && 'broken') || ''} ${(props.item.h && 'banished_hidden') || ''} ${(props.item.c > 1 && 'counted') || ''} ${(props.item.c >= 100 && 'excessive') || ''} ${(props.highlightDefense && props.data.props.includes('defence') && 'defense') || ''}`}
-            onClick={ props.locked ? null : i => props.onClick(props.item) }
+            className={`item ${props.className ?? ''} ${(props.blur === true && 'blur') || ''} ${(props.blur === false && 'focus') || ''} ${(props.disabled && 'disabled') || ''} ${(props.locked && 'locked') || ''} ${(props.item.b && 'broken') || ''} ${(props.item.h && 'banished_hidden') || ''} ${(props.item.c > 1 && 'counted') || ''} ${(props.item.c >= 100 && 'excessive') || ''} ${(props.highlightDefense && props.data.props.includes('defence') && 'defense') || ''}`}
+            onClick={ props.locked ? () => undefined : () => props.onClick?.(props.item) }
         >
             <span className="item-icon"><img src={ props.data?.icon ?? '' } alt={ props.data?.name ?? '...' }/></span>
             {props.item.c > 1 && <span>{props.item.c}</span>}
@@ -470,13 +724,14 @@ const SingleItem = (props: { item: Item, data: VaultItemEntry | null, mods: Inve
                 { props.item.e && <div className="item-tag item-tag-essential">{ globals.strings.props.essential }</div> }
                 { props.data.props.includes('single_use') && <div className="item-tag item-tag-use-1">{ globals.strings.props.single_use }</div> }
                 { props.data.heavy && <div className="item-tag item-tag-heavy">{ globals.strings.props.heavy }</div> }
-                { (props.data.deco > 0 || props.data.props.includes('deco')) && <div className="item-tag item-tag-deco">{ globals.strings.props.deco }</div> }
+                { ((props.data.deco ?? 0) > 0 || props.data.props.includes('deco')) && <div className="item-tag item-tag-deco">{ globals.strings.props.deco }</div> }
                 { props.data.props.includes('defence') && <div className="item-tag item-tag-defense">{ globals.strings.props.defence }</div> }
                 { props.data.props.includes('weapon') && <div className="item-tag item-tag-weapon">{ globals.strings.props.weapon }</div> }
                 { props.data.watch != 0 && <div className="item-tag item-tag-weapon">
                     { globals.strings.props["nw-weapon"] }
                     {props.item.w && <>&nbsp;<em>{ props.item.w }</em></> }
                 </div> }
+                { props.data.cata && <div className="item-tag item-tag-catapult">{ globals.strings.props.catapult }</div> }
             </ItemTooltip>
         </li>
         :
@@ -487,17 +742,13 @@ const HordesPassiveInventoryWrapper = (props: passiveMountProps) => {
 
     const api = useRef( new InventoryAPI() )
 
-    const [strings, setStrings] = useState<TranslationStrings>( null );
+    const strings = useTranslations( api.current );
     const [bag, setBag] = useState<InventoryBagData>(null);
     const [mayBeOutdated, setMayBeOutdated] = useState<boolean>(false);
 
     const vaultData = useVault<VaultItemEntry>(
         'items', bag ? extractAllItems( bag ).map(i => i.p) : null
     )
-
-    useEffect(() => {
-        api.current.index().then(s => setStrings(s));
-    }, []);
 
     useBroadcastSignal(
         ['inventory-bag-loaded', 'inventory-changed'],
@@ -605,10 +856,12 @@ const HordesPassiveInventoryWrapper = (props: passiveMountProps) => {
         props.parent.addEventListener('click', handler);
         return () => props.parent.removeEventListener('click', handler);
     }, [props.link])
+    
+    const {bagSort} = getBagSorter(vaultData);
 
     return <Globals.Provider value={{api: api.current, strings}}>
         {strings && bag && <>
-            {bag?.items?.sort(sort).map((item,index) => <React.Fragment key={item.i}><SingleItem
+            {bag?.items?.sort(bagSort).map((item,index) => <React.Fragment key={item.i}><SingleItem
                 item={item} data={(vaultData ?? {})[item.p] ?? null} mods={bag.mods} locked={true}
                 blur={null} className={(props.max > 0 && index >= props.max) ? 'over' : ''}/>
             </React.Fragment>)}
@@ -624,6 +877,16 @@ const HordesPassiveInventoryWrapper = (props: passiveMountProps) => {
 }
 
 const HordesStandaloneItemWrapper = (props: standaloneItemMountProps) => {
+    return <StandaloneItem {...props} />
+}
+
+export const StandaloneItem = (props: {
+    item: number,
+    extra?: string,
+    line?: boolean
+    inline?: boolean,
+    labelClass?: string,
+}) => {
 
     const vaultData = useVault<VaultItemEntry>(
         'items', [props.item]
@@ -631,15 +894,22 @@ const HordesStandaloneItemWrapper = (props: standaloneItemMountProps) => {
 
     const item = (vaultData ?? {})[props.item] ?? null;
 
-    return <div className="inline">
+    return <div className={props.line ? (props.inline ? 'inline-block' : '') : 'inline'}>
         { item && <>
-            <img alt={item.name} src={item.icon}/>
-            <ItemTooltip data={item}/>
+            { props.line && <div className={`item-line ${props.inline ? 'inline' : ''}`}>
+                <img alt={item.name} src={item.icon}/>
+                <span className={props.labelClass}>{item.name}</span>
+            </div> }
+            { !props.line && <img alt={item.name} src={item.icon}/> }
+            <ItemTooltip data={item}>
+                { props.extra?.length > 0 && <>
+                    <hr/>
+                    <div dangerouslySetInnerHTML={{__html: props.extra}}/>
+                </> }
+            </ItemTooltip>
         </> }
     </div>
-
 }
-
 
 const HordesEscortInventoryWrapper = (props: escortMountProps) => {
 
@@ -648,7 +918,7 @@ const HordesEscortInventoryWrapper = (props: escortMountProps) => {
     const [open, setOpen] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
 
-    const [strings, setStrings] = useState<TranslationStrings>( null );
+    const strings = useTranslations( api.current );
 
     const [bag, setBag] = useState<InventoryBagData>(null);
     const [floor, setFloor] = useState<InventoryBagData>(null);
@@ -660,10 +930,6 @@ const HordesEscortInventoryWrapper = (props: escortMountProps) => {
     const floorVaultData = useVault<VaultItemEntry>(
         'items', floor ? extractAllItems( floor ).map(i => i.p) : null
     )
-
-    useEffect(() => {
-        api.current.index().then(s => setStrings(s));
-    }, []);
 
     useEffect(() => {
         if (!props.rucksackId) return;
@@ -719,16 +985,37 @@ const HordesEscortInventoryWrapper = (props: escortMountProps) => {
 
     const loaded = bag && strings;
 
+    const itemList = bag?.items?.sort(sort);
+    const lightItems = itemList?.filter(i => bag.heavy === 0 || !(bagVaultData ?? {})[i.p]?.heavy);
+    const heavyItems = itemList?.filter(i => bag.heavy > 0 && (bagVaultData ?? {})[i.p]?.heavy);
+
     return <Globals.Provider value={{api: api.current, strings}}>
         { !loaded && <div className="loading"/> }
         { loaded && <ul className="inventory rucksack-escort">
-            {bag?.items?.sort(sort).map((item,index) => <React.Fragment key={item.i}><SingleItem
+            {lightItems.map((item,index) => <React.Fragment key={item.i}><SingleItem
+                className={bag.size > 0 && bag.heavy > 0 ? (item.e
+                    ? "bg-locked"
+                    : (index < (bag.size - bag.heavy) ? "bg-light" : (
+                            index < bag.size
+                                ? "bg-heavy"
+                                : "bg-over"
+                        ))
+                ) : ''}
                 item={item} data={(bagVaultData ?? {})[item.p] ?? null} mods={bag.mods} locked={item.e || loading}
                 onClick={handleTransfer(props.rucksackId, props.floorId, 'down')}
                 blur={null}/>
             </React.Fragment>)}
-            {bag.size > 0 && bag.items.length < bag.size && Array.from(Array(bag.size - bag.items.length).keys()).map(i =>
+            {bag.size > 0 && Array.from(Array(Math.max(0, bag.size - lightItems.length - bag.heavy)).keys()).map(i =>
                 <li key={i} className="free"/>)
+            }
+            {heavyItems.map((item,index) => <React.Fragment key={item.i}><SingleItem
+                className={index >= bag.heavy ? "bg-over" : "bg-heavy"}
+                item={item} data={(bagVaultData ?? {})[item.p] ?? null} mods={bag.mods} locked={item.e || loading}
+                onClick={handleTransfer(props.rucksackId, props.floorId, 'down')}
+                blur={null}/>
+            </React.Fragment>)}
+            {bag.heavy > 0 && Array.from(Array(Math.max(0, bag.heavy - heavyItems.length - Math.max(0, lightItems.length - (bag.size - Math.max(bag.heavy,heavyItems.length))))).keys()).map(i =>
+                <li key={i} className="free bg-heavy"/>)
             }
             { loaded && props.floorId > 0  && <li className="item plus" onClick={() => setOpen(!open)}>
                 <img alt="+" src={strings.actions["more-btn"]}/>
@@ -747,5 +1034,4 @@ const HordesEscortInventoryWrapper = (props: escortMountProps) => {
         </ul></div>}
 
     </Globals.Provider>
-
 }

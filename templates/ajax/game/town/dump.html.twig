@@ -4,28 +4,42 @@
     <h1 class="page-head">{{'Müllhalde'|trans({}, 'buildings')}}</h1>
 
     <div class="help">
-        {% trans from 'game' %}
-            Auf der Müllhalde kannst du Gegenstände aus der Bank verwenden, um temporär die Verteidigung der Stadt zu verbessern.
-        {% endtrans %}
+        {{ 'Auf der Müllhalde kannst du Gegenstände aus der Bank verwenden, um temporär die Verteidigung der Stadt zu verbessern.'|trans({},'game') }}
         <br />
-        {% trans from 'game'%}
-            Dieser Abwehrbonus verschwindet um Mitternacht, nach dem Angriff.
-        {% endtrans %}
+        {{ 'Zusätzlich kannst du Gegenstände aus deinem Rucksack verwenden, um temporär die Verteidigung deiner Behausung zu verbessern. Pro Stufe deines Hauses kannst du 2 Gegenstände für die Verbesserung deines Hauses verwenden.'|trans({},'game') }}
+        <br/>
+        {{ 'Dieser Abwehrbonus verschwindet um Mitternacht, nach dem Angriff.'|trans({},'game') }}
     </div>
-
-    {{ hook('dumpDisplayCost', ap_cost) }}
+    <div class="help warning">
+        {{ 'Du kannst jedes Mal höchstens 20 identische Gegenstände zerstören oder wiederherstellen'|trans({}, 'game') }}<br />
+        <b>{{ 'Achtung'|trans({},'global')}} :</b>
+        {{ 'Jede Aktion kostet dich {ap}.'|trans({'{ap}': '<div class="ap">' ~ ap_cost ~ '</div>'}, 'game')|raw }}
+        {% if not improved_dump_built and ap_cost > 0 %}
+            {{ help_btn('Diese Kosten können durch den Aufbau der <strong>Müll für Alle</strong>.'|trans({},'global'))}}
+        {% endif %}
+    </div>
 
     {% if banished %}
         <div class="note note-warning">
             {% trans from 'game' %}
-                Du wurdest verbannt und kannst die Müllhalde daher nicht länger nutzen.
+                Du wurdest verbannt und kannst die Müllhalde daher nicht länger nutzen, um die Verteidigung der Stadt zu verbessern.
             {% endtrans %}
         </div>
     {% endif %}
 
-    <div class="row">
-        <div class="cell rw-4 ro-4 rw-lg-6 ro-lg-3 rw-md-8 ro-md-2 rw-sm-10 ro-sm-1">
+    <div class="row-flex h-center gap">
+        {% if home_dump_max > 0 %}
+            <div class="cell rw-4 rw-lg-6">
+                <div class="badge">
+                    <div class="center"><div class="small">{{ 'Mein Haus'|trans({},'game') }} ({{ home_dump_current }} / {{ home_dump_max }})</div></div>
+                    <div class="center"><div class="defense"><strong>+ {{ home_dump_def }}</strong></div></div>
+                    <div class="center"><div class="defense"><span>{{ 'Gesamt: {def}'|trans({'{def}': home_def_total},'game') }}</span></div></div>
+                </div>
+            </div>
+        {% endif %}
+        <div class="cell rw-4 rw-lg-6">
             <div class="badge">
+                <div class="center"><div class="small">{{ 'Stadt'|trans({},'game') }}</div></div>
                 <div class="center"><div class="defense"><strong>+ {{ dump_def }}</strong></div></div>
                 <div class="center"><div class="defense"><span>{{ 'Gesamt: {def}'|trans({'{def}': total_def},'game') }}</span></div></div>
             </div>
@@ -45,8 +59,66 @@
             </div>
         </div>
         {% for item in items %}
-            <div class="row">
-                {{ hook('dumpDisplayItems', item, banished) }}
+            <div class="row-flex v-center">
+                <div class="padded cell rw-4 rw-lg-6 rw-md-12">
+                    <hordes-standalone-item data-item="{{ item[0] }}" data-line="1"></hordes-standalone-item>
+                </div>
+                <div class="padded cell rw-2 rw-md-4 rw-sm-6 center">
+                    <div class='small'>{{'Bank'|trans({},  'game')}}: {{ item[1] }}</div>
+                    <div class="small">{{'Müllhalde'|trans({},  'game')}}: {{ item[3] }}</div>
+                    {% if item[4] > 0 and home_dump_max > 0 %}
+                        <div class="small">{{'Rucksack'|trans({},  'game')}}: {{ item[4] }}</div>
+                    {% endif %}
+                </div>
+                <div class="padded cell rw-2 rw-md-4 rw-sm-6 center">
+                    <div class='defense'>+{{ item[2] }}</div>
+                </div>
+                <div class="padded cell rw-4 rw-lg-2 rw-md-4 rw-sm-12 right">
+                    {% if item[4] > 0 and home_dump_max > 0 %}
+                        <button
+                            {% if home_dump_max > home_dump_current %}
+                                data-fetch="{{ path('rest_town_facilities_dump_insert_home', {id: item[0]}) }}"
+                                data-fetch-method="post"
+                                data-fetch-load="{{ path('town_dump') }}"
+                                data-fetch-payload-query="{{ 'Wie viele Gegenstände möchtest du auf den Müll werfen?'|trans({}, 'game') }}"
+                                data-fetch-payload-query-field="ap"
+                                data-fetch-payload-query-default="1"
+                            {% else %}
+                                disabled="disabled"
+                            {% endif %}
+                        >
+                            <img alt="" src="{{ asset('build/images/icons/small_home_up.gif') }}" />
+                            <span class="hide-lg hide-md">{{'Haus verstärken'|trans({},  'game')}}</span>
+                        </button>
+                    {% endif %}
+                    {% if not banished %}
+                        {% if item[1] > 0 %}
+                            <button
+                                data-fetch="{{ path('rest_town_facilities_dump_insert', {id: item[0]}) }}"
+                                data-fetch-method="put"
+                                data-fetch-load="{{ path('town_dump') }}"
+                                data-fetch-payload-query="{{ 'Wie viele Gegenstände möchtest du auf den Müll werfen?'|trans({}, 'game') }}"
+                                data-fetch-payload-query-field="ap"
+                                data-fetch-payload-query-default="1"
+                            >
+                                <img alt="" src="{{ asset('build/images/icons/small_def.gif') }}" />
+                                <span class="hide-lg hide-md">{{'Installieren'|trans({},  'game')}}</span>
+                            </button>
+                        {% endif %}
+                        {% if item[3] > 0 %}
+                            <button data-fetch="{{ path('rest_town_facilities_dump_retrieve', {id: item[0]}) }}"
+                                    data-fetch-method="patch"
+                                    data-fetch-load="{{ path('town_dump') }}"
+                                    data-fetch-payload-query="{{ 'Wie viele Gegenstände möchtest du auf den Müll wiederherstellen?'|trans({}, 'game') }}"
+                                    data-fetch-payload-query-field="ap"
+                                    data-fetch-payload-query-default="1"
+                            >
+                                <img alt="" src="{{ asset('build/images/icons/small_def_broken.gif') }}" />
+                                <span class="hide-lg hide-md">{{'Wiederherstellen'|trans({}, 'game')}}</span>
+                            </button>
+                        {% endif %}
+                    {% endif %}
+                </div>
             </div>
         {% endfor %}
     </div>
@@ -58,10 +130,4 @@
 
         </div>
     </div>
-{% endblock %}
-{% block js %}
-    {{ parent() }}
-    <script>
-        {{ hook('dumpDisplayActionsJs') }}
-    </script>
 {% endblock %}

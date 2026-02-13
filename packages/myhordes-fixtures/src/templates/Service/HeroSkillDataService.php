@@ -122,8 +122,10 @@ class HeroSkillDataService implements FixtureProcessorInterface {
                           '2% Bonus-Überlebenschance auf der Nachtwache',
                           'Unbegrenzt anonyme Nachrichten verfassen',
                           'Kamera aus Vorkriegstagen (4 Ladungen)',
-                          'Diebstahl von Bürgern in der Stadt möglich'
+                          'Diebstahl von Bürgern in der Stadt möglich',
+                          'Durchgang in Kraft'
                       ])
+            ->unlocksAction('hero_armag')
             ->addCitizenProperty( CitizenProperties::WatchSurvivalBonus, 0.02 )
             ->addCitizenProperty( CitizenProperties::AnonymousMessageLimit, -1 )
             ->addItemGrant('photo_4_#00', 'apag', true)
@@ -136,12 +138,12 @@ class HeroSkillDataService implements FixtureProcessorInterface {
             ->bullets([
                           'Rettung eines anderen Bürgers (Distanz: 1km)',
                           'Den Tod besiegen (Dehydration & Infektion)',
-                          'Manipulieren von Registereinträgen (max. 1)',
+                          'Fund',
                       ])
             ->unlocksAction('hero_generic_rescue')
             ->unlocksAction('hero_generic_immune')
+            ->unlocksAction('hero_generic_find', 'find')
             ->addCitizenProperty(CitizenProperties::HeroRescueRange, 1)
-            ->addCitizenProperty(CitizenProperties::LogManipulationLimit, 1)
             ->addCitizenProperty(CitizenProperties::HeroImmuneStatusList, ['thirst','infection'])
             ->addCitizenProperty(CitizenProperties::StatusOverrideMap, ['hsurvive2' => 'hsurvive2_l0'])
             ->level(0)->unlockAt(0)->commit();
@@ -150,10 +152,10 @@ class HeroSkillDataService implements FixtureProcessorInterface {
             ->bullets([
                           'Rettung eines anderen Bürgers (Distanz: 2km)',
                           'Den Tod besiegen (zusätzlicher Schutz vor Drogenentzug)',
-                          'Manipulieren von Registereinträgen (max. 2)',
+                          'Schönes Fundstück (ersetzt Fund)',
                       ])
+            ->unlocksAction('hero_generic_find_lucky', 'find')
             ->addCitizenProperty(CitizenProperties::HeroRescueRange, 2)
-            ->addCitizenProperty(CitizenProperties::LogManipulationLimit, 2)
             ->addCitizenProperty(CitizenProperties::HeroImmuneStatusList, ['thirst','infection','addiction'])
             ->addCitizenProperty(CitizenProperties::StatusOverrideMap, ['hsurvive2' => 'hsurvive2_l1'])
             ->level(1)->unlockAt(0)->commit();
@@ -162,11 +164,11 @@ class HeroSkillDataService implements FixtureProcessorInterface {
             ->bullets([
                           'Rettung eines anderen Bürgers (Distanz: 3km)',
                           'Den Tod besiegen (zusätzlicher Schutz vor Hungertod als Ghul)',
-                          'Manipulieren von Registereinträgen (max. 3)',
                           'Ein zusätzlicher Platz in der Truhe',
+                          'Beeindruckendes Fundstück (ersetzt Schönes Fundstück)',
                       ])
+            ->unlocksAction('hero_generic_find_lucky2', 'find')
             ->addCitizenProperty(CitizenProperties::HeroRescueRange, 3)
-            ->addCitizenProperty(CitizenProperties::LogManipulationLimit, 3)
             ->addCitizenProperty(CitizenProperties::ChestSpaceBonus, 1)
             ->addCitizenProperty(CitizenProperties::HeroImmuneStatusList, ['thirst','infection','addiction','hunger'])
             ->addCitizenProperty(CitizenProperties::StatusOverrideMap, ['hsurvive2' => 'hsurvive2_l2'])
@@ -176,10 +178,10 @@ class HeroSkillDataService implements FixtureProcessorInterface {
             ->bullets([
                           'Den Tod besiegen (heilt Kater, Bandagiert und Angst)',
                           'Rudimentäre Pflege',
-                          'Löschen von Registereinträgen (max. 1)',
+                          'Erstaunliches Fundstück (ersetzt Beeindruckendes Fundstück)',
                       ])
+            ->unlocksAction('hero_generic_find_lucky3', 'find')
             ->addCitizenProperty(CitizenProperties::HeroImmuneHeals, true)
-            ->addCitizenProperty(CitizenProperties::LogPurgeLimit, 1)
             ->addCitizenProperty(CitizenProperties::StatusOverrideMap, ['hsurvive2' => 'hsurvive2_l3'])
             ->unlocksAction('hero_generic_immune2')
             ->level(3)->unlockAt(80)->commit();
@@ -239,12 +241,12 @@ class HeroSkillDataService implements FixtureProcessorInterface {
                           'Ein zusätzlicher Platz im Rucksack',
                           'Ein zusätzlicher Platz in der Truhe',
                           'Wildstyle Uppercut',
-                          'Zweite Lunge (2 AP, 2 EP)',
+                          'Zweite Lunge (3 AP, 1 EP)',
                       ])
             ->addCitizenProperty(CitizenProperties::InventorySpaceBonus, 1)
             ->addCitizenProperty(CitizenProperties::ChestSpaceBonus, 1)
-            ->addCitizenProperty(CitizenProperties::HeroSecondWindBonusAP, 2)
-            ->addCitizenProperty(CitizenProperties::HeroSecondWindBaseSP, 2)
+            ->addCitizenProperty(CitizenProperties::HeroSecondWindBonusAP, 3)
+            ->addCitizenProperty(CitizenProperties::HeroSecondWindBaseSP, 1)
             ->unlocksAction('hero_generic_punch')
             ->unlocksAction('hero_generic_ap')
             ->level(0)->unlockAt(0)->commit();
@@ -254,12 +256,13 @@ class HeroSkillDataService implements FixtureProcessorInterface {
                           'Ein weiterer zusätzlicher Platz im Rucksack',
                           'Ein weiterer zusätzlicher Platz in der Truhe',
                           'Verbesserung Wildstyle Uppercut (3 Zombies)',
-                          'Verbesserung Zweite Lunge (2 AP, 4 EP)',
+                          'Verbesserung Zweite Lunge (3 AP, 3 EP)',
                       ])
             ->addCitizenProperty(CitizenProperties::InventorySpaceBonus, 2)
             ->addCitizenProperty(CitizenProperties::ChestSpaceBonus, 2)
             ->addCitizenProperty( CitizenProperties::HeroPunchKills, 3 )
-            ->addCitizenProperty(CitizenProperties::HeroSecondWindBaseSP, 4)
+            ->addCitizenProperty(CitizenProperties::HeroSecondWindBonusAP, 3)
+            ->addCitizenProperty(CitizenProperties::HeroSecondWindBaseSP, 3)
             ->level(1)->unlockAt(0)->commit();
         $container->clone('super_enduring_1')
             ->icon('super_e2')->name('super_enduring_2')
@@ -273,18 +276,19 @@ class HeroSkillDataService implements FixtureProcessorInterface {
             ->addCitizenProperty( CitizenProperties::HeroPunchKills, 4 )
             ->addCitizenProperty( CitizenProperties::OxygenTimeBonus, 45 )
             ->addCitizenProperty(CitizenProperties::HeroSecondWindBonusAP, 4)
+            ->addCitizenProperty(CitizenProperties::HeroSecondWindBaseSP, 4)
             ->level(2)->unlockAt(40)->commit();
         $container->clone('super_enduring_2')
             ->icon('super_e3')->name('super_enduring_3')
             ->bullets([
                           'Ein weiterer zusätzlicher Platz im Rucksack',
-                          '30 Sekunden temporäre Zonencontrolle durch Wildstyle Uppercut',
                           'Verbesserung Zweite Lunge (4 AP, 6 EP)',
-                          '30 Extra-O² in begehbaren Ruinen',
+                          '30 Extra-O² in begehbaren Ruinen'
                       ])
             ->addCitizenProperty(CitizenProperties::InventorySpaceBonus, 3)
-            ->addCitizenProperty(CitizenProperties::HeroPunchEscapeTime, 30)
+            // ->addCitizenProperty(CitizenProperties::HeroPunchEscapeTime, 30) // [S19] Removal of the 30-second control gain at the Enduring Master level.
             ->addCitizenProperty(CitizenProperties::OxygenTimeBonus, 90)
+            ->addCitizenProperty(CitizenProperties::HeroSecondWindBonusAP, 4)
             ->addCitizenProperty(CitizenProperties::HeroSecondWindBaseSP, 6)
             ->level(3)->unlockAt(80)->commit();
 
@@ -294,49 +298,49 @@ class HeroSkillDataService implements FixtureProcessorInterface {
             ->bullets([
                           'Rückkehr des Helden (9km)',
                           'Proficamper (auf 6 Campings begrenzt)',
-                          'Fund',
+                          'Manipulieren von Registereinträgen (max. 1)',
                       ])
             ->unlocksAction('hero_generic_return')
-            ->unlocksAction('hero_generic_find', 'find')
             ->addCitizenProperty( CitizenProperties::EnableProCamper, true )
             ->addCitizenProperty( CitizenProperties::ProCamperUsageLimit, 6 )
+            ->addCitizenProperty(CitizenProperties::LogManipulationLimit, 1)
             ->level(0)->unlockAt(0)->commit();
         $container->clone('super_recluse0')
             ->icon('super_r1')->name('super_recluse1')
             ->bullets([
                           'Rückkehr des Helden (11km)',
                           'Proficamper (auf 8 Campings begrenzt)',
-                          'Schönes Fundstück (ersetzt Fund)',
                           'Solltest du am dritten Tag oder an einem späteren Zeitpunkt verbannt werden, bekommst du automatisch etwas Gift geschenkt, das du nach Belieben einsetzen kannst... Tja, man hätte dich besser nicht ärgern sollen!',
+                          'Manipulieren von Registereinträgen (max. 2)',
                       ])
-            ->unlocksAction('hero_generic_find_lucky', 'find')
             ->addCitizenProperty(CitizenProperties::HeroReturnRange, 11)
             ->addCitizenProperty( CitizenProperties::RevengeItems, ['poison_#00','poison_#00'] )
             ->addCitizenProperty( CitizenProperties::ProCamperUsageLimit, 8 )
+            ->addCitizenProperty(CitizenProperties::LogManipulationLimit, 2)
             ->level(1)->unlockAt(0)->commit();
         $container->clone('super_recluse1')
             ->icon('super_r2')->name('super_recluse2')
             ->bullets([
                           'Rückkehr des Helden (13km)',
-                          'Beeindruckendes Fundstück (ersetzt Schönes Fundstück)',
                           'Solltest du am dritten Tag oder an einem späteren Zeitpunkt verbannt werden, bekommst du automatisch etwas Toxin geschenkt, das du nach Belieben einsetzen kannst... Tja, man hätte dich besser nicht ärgern sollen!',
                           '1 zusätzliche Mülldurchwühlung pro Tag',
+                          'Manipulieren von Registereinträgen (max. 3)',
                       ])
             ->addCitizenProperty(CitizenProperties::HeroReturnRange, 13)
             ->addCitizenProperty( CitizenProperties::RevengeItems, ['poison_#00','poison_#00', 'infect_poison_#00'] )
             ->addCitizenProperty( CitizenProperties::TrashSearchLimit, 4 )
-            ->unlocksAction('hero_generic_find_lcky2', 'find')
+            ->addCitizenProperty(CitizenProperties::LogManipulationLimit, 3)
             ->level(2)->unlockAt(40)->commit();
         $container->clone('super_recluse2')
             ->icon('super_r3')->name('super_recluse3')
             ->bullets([
                           'Rückkehr des Helden (15km)',
                           'Ermöglicht Überlebenschance beim Camping von bis zu 99%',
-                          'Erstaunliches Fundstück (ersetzt Beeindruckendes Fundstück)',
+                          'Löschen von Registereinträgen (max. 1)',
                       ])
             ->addCitizenProperty(CitizenProperties::HeroReturnRange, 15)
             ->addCitizenProperty(CitizenProperties::CampingChanceCap, 0.99)
-            ->unlocksAction('hero_generic_find_lcky3', 'find')
+            ->addCitizenProperty(CitizenProperties::LogPurgeLimit, 1)
             ->level(3)->unlockAt(80)->commit();
 
         $data = $container->toArray();

@@ -4,38 +4,18 @@
 namespace App\Twig;
 
 
-use App\Entity\Avatar;
-use App\Entity\Award;
-use App\Entity\AwardPrototype;
-use App\Entity\Hook;
 use App\Entity\Item;
-use App\Entity\Town;
-use App\Entity\TownSlotReservation;
-use App\Entity\ItemProperty;
 use App\Entity\ItemPrototype;
 use App\Entity\User;
-use App\Enum\UserSetting;
-use App\Service\ConfMaster;
 use App\Service\EventProxyService;
-use App\Service\GameFactory;
-use App\Service\LogTemplateHandler;
-use App\Service\UserHandler;
-use App\Structures\MyHordesConf;
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
-use Psr\Container\ContainerExceptionInterface;
-use Psr\Container\NotFoundExceptionInterface;
 use Symfony\Component\Asset\Packages;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\Cache\TagAwareCacheInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\Extension\GlobalsInterface;
 use Twig\TwigFilter;
-use Twig\TwigFunction;
 
 class ObjectCacheExtension extends AbstractExtension implements GlobalsInterface
 {
@@ -44,7 +24,7 @@ class ObjectCacheExtension extends AbstractExtension implements GlobalsInterface
         private readonly TagAwareCacheInterface $gameCachePool,
         private readonly RouterInterface        $router,
         private readonly Packages               $asset,
-        private readonly EventProxyService      $events,
+        private readonly EventProxyService      $events
     ) { }
 
     public function getFilters(): array

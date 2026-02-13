@@ -21,6 +21,8 @@ use App\Entity\ZonePrototype;
 use App\Interfaces\NamedEntity;
 use App\Structures\IdentifierSemantic;
 use DirectoryIterator;
+use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\Order;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
 use ReflectionProperty;
@@ -62,7 +64,7 @@ class CommandHelper
         OutputInterface $output,
         string $repository,
         int $chunkSize,
-        array $filter,
+        array|Criteria $filter,
         bool $manualChain,
         bool $alwaysPersist,
         callable $handler,
@@ -72,18 +74,50 @@ class CommandHelper
     ) {
         if ($revitalize !== null) $revitalize();
 
-        $tc = min($limit ?? PHP_INT_MAX, $this->entity_manager->getRepository($repository)->count($filter));
+        if (is_a($filter, Criteria::class))
+            $tc = min($limit ?? PHP_INT_MAX, $this->entity_manager->getRepository($repository)->matching($filter)->count());
+        else $tc = min($limit ?? PHP_INT_MAX, $this->entity_manager->getRepository($repository)->count($filter));
 
         $tc_chunk = 0;
 
         $output->writeln("Processing <info>$tc</info> <comment>$repository</comment> entities...");
         $progress = new ProgressBar( $output->section() );
+        $progress->setRedrawFrequency( $chunkSize );
+        $progress->setMessage('-', 'item');
+        $progress->setMessage('', 'note');
+
+        $baseFormat = sprintf(($chunkSize === 1)
+                                  ? '%s | ID: <info>%%item%%</info>'
+                                  : '%s',
+                              $progress->getFormatDefinition('debug')
+        );
+
+        $progress->setFormat($baseFormat);
         $progress->start($tc);
 
+        $setMessageFunction = function(string|null $s) use ($progress, $baseFormat) {
+            $progress->setMessage($s ?? '', 'note');
+            $progress->setFormat( empty($s) ? $baseFormat : "$baseFormat | <fg=gray>%note%</>" );
+            $progress->display();
+        };
+
         while ($tc_chunk < $tc) {
-            $entities = $this->entity_manager->getRepository($repository)->findBy($filter,['id' => 'ASC'], min($chunkSize, $tc - $tc_chunk), $manualChain ? $tc_chunk : 0);
+            if (is_a($filter, Criteria::class)) {
+                $paginated = clone $filter;
+                $paginated
+                    ->orderBy(['id' => Order::Ascending])
+                    ->setMaxResults( min($chunkSize, $tc - $tc_chunk) )
+                    ->setFirstResult( $manualChain ? $tc_chunk : 0 );
+                $entities = $this->entity_manager->getRepository($repository)->matching($paginated)->toArray();
+            } else $entities = $this->entity_manager->getRepository($repository)->findBy($filter,['id' => 'ASC'], min($chunkSize, $tc - $tc_chunk), $manualChain ? $tc_chunk : 0);
             foreach ($entities as $entity) {
-                if ($handler($entity) or $alwaysPersist) $this->entity_manager->persist($entity);
+                $progress->setMessage('', 'note');
+                $progress->setFormat($baseFormat);
+                if ($chunkSize === 1) {
+                    $progress->setMessage($entity->getId(), 'item');
+                    $progress->display();
+                }
+                if ($handler($entity, $this->entity_manager, $setMessageFunction) or $alwaysPersist) $this->entity_manager->persist($entity);
                 $tc_chunk++;
             }
             $this->entity_manager->flush();

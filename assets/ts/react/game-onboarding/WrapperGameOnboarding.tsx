@@ -7,7 +7,7 @@ import {
 import {GameTranslationStrings, TranslationStrings} from "./strings";
 import {BaseMounter} from "../index";
 import {Tooltip} from "../misc/Tooltip";
-import {useStickyToggle} from "../utils";
+import {useStickyToggle, useTranslations} from "../utils";
 import Username from "../components/username";
 import Dialog from "../components/dialog";
 
@@ -35,11 +35,10 @@ export const Globals = React.createContext<GameOnboardingGlobals>(null);
 const HordesGameOnboardingWrapper = (props: Props) => {
     const api = useRef<GameOnboardingAPI>( new GameOnboardingAPI());
 
+    const strings = useTranslations( api.current );
     const [towns, setTowns] = useState<Town[]>(null);
-    const [strings, setStrings] = useState<GameTranslationStrings>(null);
 
     useEffect(() => {
-        api.current.index().then(s => setStrings(s));
         api.current.list().then(s => setTowns(s.towns));
     }, []);
 
@@ -92,7 +91,7 @@ const TownTableRow = (props: {lang: string, town: Town, locked: boolean}) => {
     const [showCitizenList, enableCitizenList, setCitizenList] = useStickyToggle(false);
     const [showDetails, setShowDetails] = useState(false);
 
-    return <div className="row-flex wrap town-row v-center" data-town-id={props.town.id}>
+    return <div className={`row-flex wrap town-row v-center ${props.town.mayor && 'town-row-mayor'}`} data-town-id={props.town.id}>
         <div className="padded cell rw-1 rw-sm-2">
             <span className="language relative">
                 <img src={globals.strings.flags[props.town.language] ?? globals.strings.flags['multi']}

@@ -279,18 +279,13 @@
                 <div {{ {'mdg': app.user.setting( constant("\\App\\Enum\\UserSetting::ReorderActionButtonsBeyond") ) and app.user.expert}|classes }}>
                     {% if not zone.townZone %}
                         <h5>{% trans from 'game' %}Meine Aktionen{% endtrans %}</h5>
-                        {% if zone.digs <= 0 %}
-                            <div class="note note-important" id="mgd-empty-zone-note">
+                        {% if dig_level is not null and (dig_level == 0 or dig_level == -1) %}
+                            <div class="note note-important" id="mgd-zone-note">
                                 <img alt="" src="{{ asset('build/images/icons/Small_broken.gif') }}" />
-                                {% trans from 'game' %}
-                                    Diese Zone ist leergesucht. Du wirst hier keine wertvollen Gegenstände mehr finden können.
-                                {% endtrans %}
+                                {{ 'Diese Zone ist leergesucht. Du wirst hier keine wertvollen Gegenstände mehr finden können.'|trans({},'game') }}
                                 <a class="help-button">
                                     <div class="tooltip help">
-                                        {% trans from 'global' %}
-                                            Die große Anzahl an Erdhaufen und an herumliegenden Müll sind ein Indiz dafür, dass hier wahrscheinlich nichts mehr zu finden ist.
-                                            <p><em>Wenn du möchtest, kannst du allerdings weitergraben und ein paar minderwertige Materialien für die verschiedenen Baustellen der Stadt zu Tage fördern..</em></p>
-                                        {% endtrans %}
+                                        {{ 'Die große Anzahl an Erdhaufen und an herumliegenden Müll sind ein Indiz dafür, dass hier wahrscheinlich nichts mehr zu finden ist.<p><em>Wenn du möchtest, kannst du allerdings weitergraben und ein paar minderwertige Materialien für die verschiedenen Baustellen der Stadt zu Tage fördern..</em></p>'|trans({}, 'global')|raw }}
                                     </div>
                                     {{ 'Hilfe'|trans({},'global') }}
                                 </a>

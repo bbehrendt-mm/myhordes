@@ -90,7 +90,7 @@ class MessageForumController extends MessageController
         // Set the activity status
         if ($forum->getTown() && $user->getActiveCitizen() && $user->getActiveCitizen()->getTown() === $forum->getTown()) {
             $c = $user->getActiveCitizen();
-            $paranoid = $c && $ch->hasStatusEffect($c, 'tg_paranoid');
+            $paranoid = $c && $c->hasStatus('tg_paranoid');
 
             if ($lock = $locksmith->getAcquiredLock("form_read_state_{$user->getId()}")) {
                 if ($c) {
@@ -161,7 +161,7 @@ class MessageForumController extends MessageController
             if (($thread->lastPost( $show_hidden_threads )?->getId() ?? 0) > max( $global_marker?->getPost()->getId() ?? 0, $marker?->getPost()->getId() ?? 0))
                 $thread->setNew();
         }
-        
+
         return $this->render( 'ajax/forum/view.html.twig', $this->addDefaultTwigArgs(null, [
             'forum' => $forum,
             'threads' => $threads,
@@ -397,9 +397,9 @@ class MessageForumController extends MessageController
 
         if ($town_citizen)
             $title = $this->html->htmlDistort( $title,
-                                            ($this->citizen_handler->hasStatusEffect($town_citizen, 'drunk') ? HTMLService::ModulationDrunk : HTMLService::ModulationNone) |
-                                            ($this->citizen_handler->hasStatusEffect($town_citizen, 'terror') ? HTMLService::ModulationTerror : HTMLService::ModulationNone) |
-                                            ($this->citizen_handler->hasStatusEffect($town_citizen, 'wound1') ? HTMLService::ModulationHead : HTMLService::ModulationNone)
+                                            ($town_citizen->hasStatus('drunk') ? HTMLService::ModulationDrunk : HTMLService::ModulationNone) |
+                                            ($town_citizen->hasStatus('terror') ? HTMLService::ModulationTerror : HTMLService::ModulationNone) |
+                                            ($town_citizen->hasStatus('wound1') ? HTMLService::ModulationHead : HTMLService::ModulationNone)
                 , $town_citizen->getTown()->getRealLanguage($this->generatedLangsCodes) ?? $this->getUserLanguage(), $d );
 
         if ( !$this->isGranted('ROLE_ELEVATED') && !$rateLimiter->forumThreadCreation->create( $user->getId() )->consume( $forum->getTown() ? 1 : 2 )->isAccepted())
@@ -799,9 +799,9 @@ class MessageForumController extends MessageController
             if (mb_strlen($title) >= 3 && mb_strlen($title) <= 64) {
                 if ($town_citizen)
                     $title = $this->html->htmlDistort( $title,
-                                                       ($this->citizen_handler->hasStatusEffect($town_citizen, 'drunk') ? HTMLService::ModulationDrunk : HTMLService::ModulationNone) |
-                                                       ($this->citizen_handler->hasStatusEffect($town_citizen, 'terror') ? HTMLService::ModulationTerror : HTMLService::ModulationNone) |
-                                                       ($this->citizen_handler->hasStatusEffect($town_citizen, 'wound1') ? HTMLService::ModulationHead : HTMLService::ModulationNone)
+                                                       ($town_citizen->hasStatus('drunk') ? HTMLService::ModulationDrunk : HTMLService::ModulationNone) |
+                                                       ($town_citizen->hasStatus('terror') ? HTMLService::ModulationTerror : HTMLService::ModulationNone) |
+                                                       ($town_citizen->hasStatus('wound1') ? HTMLService::ModulationHead : HTMLService::ModulationNone)
                         , $town_citizen->getTown()->getRealLanguage($this->generatedLangsCodes) ?? $this->getUserLanguage(), $d );
 
                 $thread->setTitle($title)->setTag($tag);
@@ -877,7 +877,7 @@ class MessageForumController extends MessageController
 
         // Check for paranoia
         if ($forum->getTown() && $user->getActiveCitizen() && $user->getActiveCitizen()->getTown() === $forum->getTown())
-            $paranoid = $ch->hasStatusEffect($user->getActiveCitizen(),'tg_paranoid');
+            $paranoid = $user->getActiveCitizen()->hasStatus('tg_paranoid');
         else $paranoid = false;
 
         foreach ($posts as $post)
@@ -1020,7 +1020,7 @@ class MessageForumController extends MessageController
 
         // Check for paranoia
         if ($forum->getTown() && $user->getActiveCitizen() && $user->getActiveCitizen()->getTown() === $forum->getTown())
-            $paranoid = $ch->hasStatusEffect($user->getActiveCitizen(),'tg_paranoid');
+            $paranoid = $user->getActiveCitizen()->hasStatus('tg_paranoid');
         else $paranoid = false;
 
         $other_forums_raw = $this->perm->isPermitted( $permissions, ForumUsagePermissions::PermissionModerate ) ? array_filter($this->perm->getForumsWithPermission($this->getUser(), ForumUsagePermissions::PermissionModerate), fn(Forum $f) => $f !== $forum ) : [];

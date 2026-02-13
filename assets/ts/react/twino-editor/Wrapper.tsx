@@ -9,6 +9,7 @@ import {TwinoEditorControls, TwinoEditorControlsTabList} from "./Controls";
 import {EmoteListResponse, EmoteResponse, TwinoEditorAPI} from "./api";
 import {Fetch} from "../../v2/fetch";
 import {BaseMounter} from "../index";
+import {useTranslations} from "../utils";
 
 declare var $: Global;
 declare var c: Const;
@@ -163,11 +164,12 @@ const deproxify = (s: string): string => {
 
 export const TwinoEditorWrapper = ( props: HTMLConfig & { onFieldChanged: FieldChangeEventTrigger, onSubmit?: SubmitEventTrigger, connectImport?: (any)=>void } ) => {
 
+    const apiRef = useRef<TwinoEditorAPI>(new TwinoEditorAPI());
     const cache = $.client.config.scopedEditorCache.get() ?? ['',''];
     const cache_value = (cache[0] ?? '_') === props.context ? cache[1] : null;
 
     const uuid = useRef(props.id ?? uuidv4());
-    const [strings, setStrings] = useState<TranslationStrings>(null);
+    const strings = useTranslations( apiRef.current );
     const [fields, setFields] = useState<{[index:string]: string|number}>({
         ...props.defaultFields ?? {},
     });
@@ -181,8 +183,6 @@ export const TwinoEditorWrapper = ( props: HTMLConfig & { onFieldChanged: FieldC
         end: 0,
         update: (s,e) => {}
     });
-
-    const apiRef = useRef<TwinoEditorAPI>(new TwinoEditorAPI());
 
     const me = useRef<HTMLDivElement>(null);
 
@@ -316,7 +316,6 @@ export const TwinoEditorWrapper = ( props: HTMLConfig & { onFieldChanged: FieldC
 
             } );
 
-        apiRef.current.index().then(data => setStrings(data.strings));
         if (controlAllowed('emote') || controlAllowed('snippet'))
             apiRef.current.emotes(props.user,props.context).then(data => {
                 setEmotes({...emoteRef.current = data});

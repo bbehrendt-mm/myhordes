@@ -8,7 +8,6 @@ use App\Entity\Town;
 use App\Enum\Configuration\TownSetting;
 use App\Enum\EventStages\BuildingValueQuery;
 use App\Event\Game\Town\Basic\Buildings\BuildingAddonProviderEvent;
-use App\Event\Game\Town\Basic\Buildings\BuildingCatapultItemTransformEvent;
 use App\Event\Game\Town\Basic\Buildings\BuildingQueryNightwatchDefenseBonusEvent;
 use App\Event\Game\Town\Basic\Buildings\BuildingQueryTownParameterEvent;
 use App\Event\Game\Town\Basic\Buildings\BuildingQueryTownRoleEnabledEvent;
@@ -31,7 +30,6 @@ use Symfony\Contracts\Service\ServiceSubscriberInterface;
 #[AsEventListener(event: BuildingQueryNightwatchDefenseBonusEvent::class, method: 'onQueryNightwatchDefenseBonusFinish', priority: -115)]
 #[AsEventListener(event: BuildingQueryTownParameterEvent::class, method: 'onQueryTownParameter', priority: 0)]
 #[AsEventListener(event: BuildingQueryTownRoleEnabledEvent::class, method: 'onQueryTownRoleEnabled', priority: 0)]
-#[AsEventListener(event: BuildingCatapultItemTransformEvent::class, method: 'onQueryCatapultItemTransformation', priority: 0)]
 #[AsEventListener(event: BuildingAddonProviderEvent::class, method: 'onCollectAddons', priority: 0)]
 final class BuildingQueryListener implements ServiceSubscriberInterface
 {
@@ -52,7 +50,10 @@ final class BuildingQueryListener implements ServiceSubscriberInterface
     }
 
     public function onCheckItemsAllowed( BuildingQueryNightwatchDefenseBonusEvent $event ): void {
-        if ($this->getService(EventProxyService::class)->queryTownParameter( $event->town, BuildingValueQuery::NightWatcherWeaponsAllowed ) == 0)
+        if (
+            !$event->item->getEssential() &&
+            $this->getService(EventProxyService::class)->queryTownParameter( $event->town, BuildingValueQuery::NightWatcherWeaponsAllowed ) == 0
+        )
             $event->skipPropagationTo( BuildingQueryListener::class, 'onQueryNightwatchDefenseBonusInitial' );
     }
 
@@ -180,15 +181,15 @@ final class BuildingQueryListener implements ServiceSubscriberInterface
                 3 => 1.15,
                 default => 1.0
             },
-            BuildingValueQuery::NightlyZoneDiscoveryRadius => match ($this->getService(TownHandler::class)->getBuilding($event->town, 'item_scope_#00', true )?->getLevel() ?? 0) {
-                1 => 3,
-                2 => 6,
-                3, 4, 5 => 10,
+            BuildingValueQuery::NightlyZoneDiscoveryRadius => match ($this->getService(TownHandler::class)->getBuilding($event->town, 'item_scope_#00', true )?->getLevel() ?? -1) {
+                0 => 3,
+                1 => 6,
+                2, 3, 4, 5 => 10,
                 default => 0
             },
             BuildingValueQuery::BeyondTeleportRadius => match ($this->getService(TownHandler::class)->getBuilding($event->town, 'item_scope_#00', true )?->getLevel() ?? 0) {
-                4 => 1,
-                5 => 2,
+                3 => 1,
+                4 => 2,
                 default => 0
             },
             BuildingValueQuery::NightlyRecordWindDirection => $this->getService(TownHandler::class)->getBuilding($event->town, 'small_gather_#02', true ) ? 1 : 0,
@@ -216,16 +217,10 @@ final class BuildingQueryListener implements ServiceSubscriberInterface
     public function onQueryTownRoleEnabled( BuildingQueryTownRoleEnabledEvent $event ): void {
         $event->enabled = match ($event->role->getName()) {
             'guide'     => $this->getService(TownHandler::class)->getBuilding($event->town, 'item_scope_#00' ) !== null,
-            'shaman'    => $this->getService(TownHandler::class)->getBuilding($event->town, 'small_spa4souls_#01' ) !== null,
+            'shaman'    => $this->getService(TownHandler::class)->getBuilding($event->town, 'item_soul_blue_static_#00' ) !== null,
             'cata'      => $this->getService(TownHandler::class)->getBuilding($event->town, 'item_courroie_#00' ) !== null,
             default => true
         };
-    }
-
-    public function onQueryCatapultItemTransformation( BuildingCatapultItemTransformEvent $event ): void {
-        $event->out = ($event->in->getFragile() && (!$event->in->hasProperty('pet') || !$this->getService(TownHandler::class)->getBuilding($event->town, 'small_catapult3_#00' ))) ? (
-            $this->getService(EntityManagerInterface::class)->getRepository( ItemPrototype::class )->findOneByName( $event->in->hasProperty('pet') ? 'undef_#00' : 'broken_#00' )
-        ) : null;
     }
 
     public function onCollectAddons( BuildingAddonProviderEvent $event ): void {

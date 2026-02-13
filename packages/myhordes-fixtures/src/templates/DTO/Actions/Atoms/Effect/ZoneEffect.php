@@ -12,8 +12,9 @@ use MyHordes\Fixtures\DTO\Actions\EffectAtom;
  * @property-read ?int cleanMax
  * @property-read ?int zombieMin
  * @property-read ?int zombieMax
- * @method self escape(int|CitizenProperties|null $v)
+ * @property-read ?int zombieKillRange
  * @property ?int escape
+ * @property ?int escapeRange
  * @method self escapeTag(?string $v)
  * @property ?string escapeTag
  * @method self improveLevel(?float $v)
@@ -43,9 +44,16 @@ class ZoneEffect extends EffectAtom {
         return $this->cleanMin !== 0 || $this->cleanMax !== 0;
     }
 
-    public function kills(int|CitizenProperties $min, int|CitizenProperties|null $max = null): self {
+    public function escape(int|CitizenProperties|null $duration, int $escape_ranke = 0): self {
+        $this->escape = $duration;
+        $this->escapeRange = max(0, $escape_ranke);
+        return $this;
+    }
+
+    public function kills(int|CitizenProperties $min, int|CitizenProperties|null $max = null, int $kill_range = 0): self {
         $this->zombieMin = $min;
         $this->zombieMax = $max ?? $min;
+        $this->zombieKillRange = max(0, $kill_range);
         return $this;
     }
 
@@ -55,7 +63,7 @@ class ZoneEffect extends EffectAtom {
 
     protected function default(string $name): mixed {
         return match($name) {
-            'uncover', 'cleanMin', 'cleanMax', 'zombieMin', 'zombieMax', 'escape', 'chatSilence' => 0,
+            'uncover', 'cleanMin', 'cleanMax', 'zombieMin', 'zombieMax', 'zombieKillRange', 'escape', 'chatSilence' => 0,
             'improveLevel' => 0.0,
             default => null
         };

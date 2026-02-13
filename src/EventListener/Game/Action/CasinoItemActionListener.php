@@ -138,9 +138,7 @@ final class CasinoItemActionListener implements ServiceSubscriberInterface
             $event->cache->addPoints( PointType::AP, 1 );
         }
 
-        $prevent_terror = $terror && $this->getService(InventoryHandler::class)->countSpecificItems([$event->citizen->getInventory(), $event->citizen->getHome()->getChest()], 'prevent_terror', true) > 0;
-
-        if ($terror && !$prevent_terror)
+        if ($terror)
             $this->getService(CitizenHandler::class)->inflictStatus( $event->citizen, 'terror' );
     }
 

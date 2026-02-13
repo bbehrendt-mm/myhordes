@@ -1,4 +1,3 @@
----
 'Du hast folgendes gewürfelt: {dc1}, {dc2} und {dc3}.': 'You roll the dice, you get a {dc1}, a {dc2} and a {dc3}.'
 'Wow, du hast einen Trippel geworfen. Das hat so viel Spaß gemacht, dass du 1AP gewinnst!': 'Nicely done, you got three of a kind! This is a great game!<hr />You''re enjoying it so much that you have gained <strong>1AP</strong>!'
 'Wow, du hast eine Straße geworfen. Das hat so viel Spaß gemacht, dass du 1AP gewinnst!': 'You have rolled a straight! That always raises the spirits.<hr />You''re enjoying it so much that you have gained <strong>1AP</strong>!'
@@ -6,8 +5,8 @@
 'Nicht schlecht, du hast einen Pasch geworfen.': 'You rolled a double! Check you out!'
 'Was für ein Spaß!': 'What fun!'
 'Du ziehst eine Karte... und stellst fest, dass dein Name darauf mit Blut geschrieben steht! Du erstarrst vor Schreck!': 'You have drawn the... You scream, discovering that your name is written on the card in blood! You don''t know who is behind this sick joke... You are now terrorized!'
-'Du ziehst eine Karte... und stellst fest, dass du die Karte mit den Spielregeln gezogen hast! Das erheitert dich so sehr, dass du 1AP gewinnst.': 'You draw a card ... and find that you have drawn the card with the rules of the game! This amuses you so much that you win 1AP.'
-'Das muss ein Zeichen sein! In dieser Welt ist kein Platz für Moral... du erhälst 1AP.': 'It''s a sign ! It just goes to show that there is no place for morals in this world... You have won 1AP.'
+'Du ziehst eine Karte... und stellst fest, dass du die Karte mit den Spielregeln gezogen hast! Das erheitert dich so sehr, dass du 1AP gewinnst.': 'You draw a card... and find that you have drawn the card with the rules of the game! This amuses you so much that you win <strong>1 AP</strong>.'
+'Das muss ein Zeichen sein! In dieser Welt ist kein Platz für Moral... du erhälst 1AP.': 'It''s a sign! It just goes to show that there is no place for morals in this world... You have won 1AP.'
 'Das Symbol der Liebe... dein Herz schmilzt dahin und du erhälst 1AP.': 'The Queen of Hearts... The symbol of love... *sigh*... You have won 1AP as compensation for your disillusionment.'
 'Mit deiner Gitarre hast du die Stadt gerockt! Die Bürger haben {ap} AP erhalten.': 'A little live music can seduce the ladies and restores the spirit... but you''ll have to be content with the 2nd effect. Your playing has generated {ap} action points which will be shared amongst the townsfolk.'
 'Ration Wasser': 'Water Ration'
@@ -378,7 +377,7 @@ Dopen: Dope
 'Essen suchen': Food
 Tarnen: Camouflage
 'Du bist nun getarnt.': 'You are now camouflaged.'
-'Du ziehst eine Karte... es ist: {color} {value}.': 'You draw a card ... it is the: {value} of {color}.'
+'Du ziehst eine Karte... es ist: {color} {value}.': 'You draw a card... it is the: {value} of {color}.'
 'Äußerst erfrischend, und sogar mit einer leichten Note von Cholera.': 'Extremely refreshing, and even with a slight touch of cholera.'
 'Immer noch besser als das Zeug, was die Köche in der Stadt zubereiten....': 'Still better than what the cooks are preparing in town...'
 'Die Rückkehr des Helden': 'Heroic Return'
@@ -508,7 +507,7 @@ Rettung: Rescue
 'Trotz all der Jahre, die sie wahrscheinlich schon in dieser Wüste liegen, haben diese Nudeln ihr Aussehen und ihren Geschmack behalten. Erstaunlich.': 'Despite years spent in the desert, these chinese noodles still look and taste exactly the same.'
 'Ein Säckchen mit starken Gewürzen ...': 'A small sachet of mixed spices...'
 "Richtig gut gewürzte chinesische Nudeln! Das ist mal'ne Abwechslung von dem sonstigen verschimmelten Fraß.": "Heavily seasoned chinese noodles! This makes a pleasant change from eating things that are decomposing."
-'Ein Kartenset mit 54 abgegriffenen Karten, die ein paar Eselsohren haben... Du solltest gleich mal eine Runde zocken, denn oft wirst du hier nicht zum Spielen kommen.': 'What should be a 54 card deck is, well, not. The missing cards don''t stop you playing with them though, because every moment of enjoyment is to be treasured in this hellhole... Go big or go broke !'
+'Ein Kartenset mit 54 abgegriffenen Karten, die ein paar Eselsohren haben... Du solltest gleich mal eine Runde zocken, denn oft wirst du hier nicht zum Spielen kommen.': 'What should be a 54 card deck is, well, not. The missing cards don''t stop you playing with them though, because every moment of enjoyment is to be treasured in this hellhole... Go big or go broke!'
 'Ein altes Spiel welches du noch nicht kennst. Wow!': 'The box contains a game... probably !'
 'Eine furchterregende Waffe, der nur ein paar Teile fehlen...': 'A formidable weapon, but it needs a few more parts to get it working...'
 'Er vibriert und kitzelt dich am ganzen Körper und lässt dich für einen Augenblick all deine Sorgen vergessen (benötigt 1 Batterie).': 'It vibrates, tickles, and titillates, making you forget all your worries for a little while (requires 1 battery).'
@@ -592,7 +591,7 @@ Rettung: Rescue
 'Dieser blutdurchtränkte Verband wurde vormals von einem infizierten Bürger getragen...': 'This blood-soaked bandage belonged to an infected citizen...'
 'Das alleinige Ansehen des Teddys macht dich verrückt.Vielleicht solltest du ihn aus dem Fenster werfen? Immerhin befindest du dich in einem verlassenen Hotel...': 'A small plush teddy bear which would have been a child''s pride and joy... or not...'
 'Man nehme eine Scheibe Fleisch, paniere das Ganze mit Sägemehl und streue anschließend einige Holzstücke darüber... et Voilà! Im Holz scheinen auch einige Holzwürmer gewesen zu sein, denn das Ding hört nicht auf sich zu bewegen.': 'A slice of meat, covered in sawdust and wood chippings... Only they''re not chips, but rather woodworm, which is logical enough seeing as the thing won''t stop moving.'
-'Ein wenig zu gross für dich. Sieht so aus als waren seine Vorbesitzer ein wenig beleibter und hatten schlechten Geschmack...was man ohne Zweifel erkennen kann.': 'It''s a bit big for you: it seems to have been previously owned by someone with a big belly and bad taste, as can clearly be seen from the white for on the collar and cuffs...'
+'Ein wenig zu gross für dich. Sieht so aus als waren seine Vorbesitzer ein wenig beleibter und hatten schlechten Geschmack...was man ohne Zweifel erkennen kann.': 'It''s a bit big for you: it seems to have been previously owned by someone with a big belly and bad taste, as can clearly be seen from the white fur on the collar and cuffs...'
 'Diese alten Fetzen riechen nach Urin und wurden mehrmals geflickt. Besser aussehen würden sie....ohh, sie passt Dir perfekt.': 'These old strides reek of urine, and have been repaired regularly. They probably look better on... (ON FIRE!) They''ll suit you perfectly!'
 'Viele seltsame Gestalten haben diese stinkende Mütze schon getragen, und trotzdem geht dein Herz auf, als du sie aufsetzt.': 'A hat which have been used as a nest by several generations of pigeons and other malodorous wildlife. The interior lining of dried droppings gives it a strange texture... and makes your head itch when you put it on.'
 'Als du diesen Anzug anziehst, verspürst du den Drang, deinen Nachbarn eine Freude zu machen und seltsame Eintrittswege zu wählen. Nutze die Chance und bestehle deine Nachbarn nach Herzenslust.': 'This outfit suits you down to the ground (some say that it even smells like you). You suddenly feel like you should be bringing joy to your neighbours by sliding discretely down their chimney with your arms full of gifts. You can use this tactic to burgle, pillage and loot your way to happiness at your neighbours'' expense. Ah, the magic of Cristmas...'
@@ -675,6 +674,7 @@ Berufsgegenstand: Professional tool (cannot be dropped)
 Einrichtungsgegenstand: Home decoration
 Verteidigungsgegenstand: Defense Object
 Waffe: Weapon
+Katapultierbar: Catapultable
 Super-Flaum-Pulver: Super-Fuzz Powder
 'Je nach Epoche wurde dieses Pulver nacheinander als Zünder für verschiedene Artilleriegeschütze, dann als billige Droge für bedürftige Bürger und schließlich als Hauptbestandteil von Feuerwerkskörpern verwendet. In allen drei Fällen haben viele Menschen nicht überlebt.': 'Depending on the era, this powder was used sequentially as a detonator for various artillery pieces, then as a cheap drug for needy citizens and finally as the main component of fireworks. In all three cases, many people have not survived.'
 Flush-Abschussrohr: Firework Launch Tube
@@ -1079,17 +1079,17 @@ Flagge: Flag
 Füttern: Feed
 'Du gibst deinem {tamer_dog} {items_consume}, das er gierig hinunterschlingt.{hr}Es vergeht keine Minute bis diese Belohnung Wirkung zeigt: Dein Fifi hat nun leuchtende Augen, ein glänzendes Fell und einen wedelnden Schwanz.': 'You give a {items_consume} to {tamer_dog}, which he greedily gobbles down.{hr}Not a minute passes before this reward takes effect: Your dog now has shining eyes, a shiny coat and a wagging tail.'
 'Gut gefüttertes Malteser Hündchen': 'Well fed Labradoodle'
-Fußball: Soccer ball
+Fußball: Football
 'Nun, da du dein Hündchen mit einem Leckerli ausreichend gestärkt hast, kann es selbst schwere und sperrige Gegenstände schleppen. Dir fällt auf, dass es ohne Ende sabbert. Es sieht aus, als würde es dich jeden Augenblick anspringen.': 'Now that you’ve given your Labradoodle a tasty treat to boost his strength, he can carry even the heaviest and bulkiest objects. You can’t help but notice the incessant drooling, and he seems poised to jump at you at any moment...'
-'Für den kleinen Kick zwischendurch.': 'For a little kick in between.'
+'Für den kleinen Kick zwischendurch.': 'There have been wars fought over the name of this godforsaken thing. Bouncy ball, spotted kicking balloon, and poorly drawn zebra circle. Some weirdo even called it a "soccer ball", which is a dead giveaway that he was using too much twinoid. So to settle it, we just called it a football because we use the foot on the ball.'
 'Nichts entgeht deinem geschulten Blick! All die gesammelten Informationen werden dir morgen helfen, die geschickt und mit maximaler Effizienz durch die Außenwelt zu bewegen.': 'Nothing escapes your trained eye! All the information you have gathered will help you move through the World Beyond skilfully and with maximum efficiency tomorrow.'
 'Frenetisch schreibst du alles auf was du in der Umgebung entdeckst. Dieses Wissen wird dir morgen sicherlich helfen, dich noch effektiver in der Außenwelt zu bewegen.': 'You frantically write down everything you discover in your surroundings. This knowledge will certainly help you move around the World Beyond even more effectively tomorrow.'
 'Du schluckst die {item} hinunter. Nach ein paar Minuten schmerzt deine Leber und deine Sicht wird verschwommen. Du bist jetzt <strong>betrunken</strong>!': 'You swallow the {item}. After a few minutes, your liver hurts and your vision becomes blurry. You are now <strong>drunk</strong>!'
 'Du schluckst die {item} hinunter. Nach ein paar Minuten entspannt sich dein Körper und du fühlst dich ein wenig besser... Nur ein bisschen.': 'You swallow the {item}. After a few minutes, your body relaxes and you feel a little better... Just a little.'
 'Du jonglierst mit dem Ball, aber leider fliegt er immer wieder in alle Richtungen. Das frustriert dich, daher gibst du den Gedanken auf, weiter mit dem Ball zu spielen.': 'You juggle with the ball, but unfortunately it keeps flying in all directions at each try. This annoys you, and you give up the idea of playing with it.'
-'Du jonglierst mit dem Ball und schaffst es sehr gut, den Ball in der Luft zu halten. Man könnte dich fast für einen professionellen Fußballspieler halten!<hr />Du hattest viel Spaß und erhältst <strong>1 Aktionspunkt</strong>.': 'You juggle with the ball and manage rebounds very well, you could almost be mistaken for a professional player!<hr />You’ve had a lot of fun and received <strong>1 Action Point</strong>.'
+'Du jonglierst mit dem Ball und schaffst es sehr gut, den Ball in der Luft zu halten. Man könnte dich fast für einen professionellen Fußballspieler halten!<hr />Du hattest viel Spaß und erhältst <strong>1 Aktionspunkt</strong>.': 'You juggle with the ball and manage rebounds very well, you could almost be mistaken for a professional player!<hr />You’ve had a lot of fun and received <strong>1 Exploration Point</strong>.'
 'Du jonglieren mit dem Ball, aber beim ersten Aufprall fliegt er direkt auf einen spitzen Gegenstand. Als du dich dem Ball näherst, hörst du ein Pfeifen der Luft und stellst mit Enttäuschung fest, <strong>dass er nun durchstochen ist</strong>!': 'You start juggling the ball, but on the very first kick it shoots straight into a sharp object. As you approach, a faint whistling escapes, and you realize with disappointment that <strong>the ball has burst!</strong>'
-'Geplatzter Fußball': 'Burst Soccer ball'
+'Geplatzter Fußball': 'Burst Football'
 'Ein Ball, mit dem wir einiges an Spaß haben könnten. Wenn er nur nicht schon geplatzt wäre...': 'A ball to have fun with, if only it wasn''t burst...'
 'Du trinkst die Flasche aus; es schmeckt sehr süß und hat ein leichtes Granatapfel-Armoa. Du fühlst dich für den Moment erfrischt.<br />Du erhälst <strong>Erkundungspunkte</strong> !': 'You drink the bottle, it tastes sweet with an overwhelming pomegranate aroma. You are now refreshed, and you feel very good at the moment.<br />You obtain <strong>Exploration Points</strong> !'
 'Nach wenigen Sekunden bereust du, aus dieser Flasche getrunken zu haben. Das Zeug ist viel zu süß, du bist jetzt <strong>durstig</strong>!': 'However, after a few seconds you regret your decision. The drink is way too sweet, you are now <strong>thirsty</strong>!'
@@ -1164,3 +1164,23 @@ Larven-Marmelade: Larvae Jam
 Erschrecken: Scare
 'Schaurige Maske': 'Creepy Mask'
 'Irgendwie erinnert diese Maske dich an jemanden...': 'Somehow this mask reminds you of someone...'
+Besinnen: Reflect
+'Du nimmst dir einen Moment Zeit, um zur Ruhe zu kommen und dich auf das wesentliche zu besinnen.': 'You take a moment to calm down and reflect on what is important.'
+'Zone ausheben': 'Excavate zone'
+'Du hast diese Zone erfolgreich ausgehoben und zahlreiche neue Buddelmöglichkeiten entdeckt.': 'You have successfully excavated this area and discovered numerous new digging opportunities.'
+'Es schmeckt wirklich komisch... aber wenigstens ist dein Hunger ein wenig gestillt. Glaub aber nicht, dass du dadurch zusätzliche APs erhältst...': 'This has a truly bizarre taste, it''s difficult to define. At least it does the job: fills your stomach partially. On the other hand, it doesn''t give you any extra energy...'
+'Es sieht wirklich nicht so aus, als würdest du hier noch neue Buddelmöglichkeiten finden können...': 'It really doesn''t look like you''ll be able to find any new digging spots here...'
+'Nach neuen Buddelmöglichkeiten zu suchen macht nur Sinn, wenn es keine offensichtlichen Buddelmöglichkeiten mehr gibt.': 'Looking for new digging opportunities only makes sense if there are no obvious digging opportunities left.'
+Senken: Strap
+'Du senkst deinen Schild. Zwar kannst du dich jetzt nicht mehr so gut verteidigen, dafür kannst du aber einen weiteren, schweren Gegenstand mit dir führen.': 'You strap your shield onto your back. Although you can no longer defend yourself as well, you can now carry another heavy item with you. How strong!'
+'Schutzschild (abgelegt)': 'Riot Shield (strapped)'
+'Ein großer Schutzschild. Wenn du ihn vor dich halten würdest, könntest du damit 2 zusätzliche Zombies auf Distanz zu halten. Aktuell fungiert er nur als kleidsames Accessoire.': 'It''s big and it''s zombie-proof. Or it would be, if you didn''t strap it on your back. Normally, it allows you to face 2 additional zombies in the desert. Currently, it serves only as a stylish accessory.'
+'Du tötest 1 Zombie in der Zone und erhältst du die Kontrolle über die Zone für 5 Minuten.': 'You kill a zombie in a given zone and gain control of the zone for 5 minutes.'
+' Ein großer Schutzschild, der keine Wünsche offen lässt, ermöglicht es dir, in der Wüste bis zu 2 zusätzliche Zombies auf Distanz zu halten. Dabei ist er aber ganz schön schwer... vielleicht könntest du mehr schwere Dinge bei dir tragen, wenn du den Schild senken würdest?': 'It''s big and it''s zombie-proof. In this world who could ask for more... It allows you to face 2 additional zombies in the desert, but it''s also heavy... Maybe if you carried it some other way you could grab more things?'
+'Es ist hier einfach zu staubig, um diesen Gegenstand zusammenbauen zu können...': 'There is far too much dust and potential dangers here for you to assemble this object effectively.'
+'Du jonglierst mit dem Ball und schaffst es sehr gut, den Ball in der Luft zu halten. Man könnte dich fast für einen professionellen Fußballspieler halten!<hr />Du hattest viel Spaß und erhältst <strong>1 Erkundungspunkt</strong>.': 'You juggle with the ball and manage rebounds very well, you could almost be mistaken for a professional player!<hr />You’ve had a lot of fun and received <strong>1 Exploration Point</strong>.'
+'Du hast die/den {item} repariert.': 'You''ve repaired the {item}.'
+Trümmerkugel: Ball of debris
+'Ein kugelförmiges Etwas, das aus zufälligen Trümmerstücken zusammengeklebt wurde. Viel kann man damit nicht anfangen... außer vielleicht, es mit hoher Geschwindigkeit in eine Zombiemeute zu katapultieren!': 'A spherical object cobbled together from random pieces of debris. Not much use... except perhaps to catapult it at high speed into a horde of zombies!'
+'Du hast heute bereits eine Zone ausgehoben...': 'You''ve already excavated a zone today...'
+'Es sieht so aus, als könntest du mit deiner Schaufel an dieser Stelle tiefer graben als sonst... Möglicherweise kannst du dieser Zone neues Leben einhauchen, sodass du und andere Bürger hier wieder wertvolle Gegenstände finden können? Du kannst diese Aktion nur einmal pro Tag verwenden. Außerdem kann jede Zone nur einmalig durch diese Aktion erneuert werden.': 'It looks like you can dig deeper than usual with your shovel in this spot... Maybe you can breathe new life into this zone so that you and other citizens can find valuable items here again? You can only use this action once per day. In addition, each zone can only be excavated once with this action.'

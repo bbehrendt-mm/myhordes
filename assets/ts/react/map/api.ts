@@ -1,9 +1,12 @@
 import {Fetch} from "../../v2/fetch";
 import {MapData, MapRoute} from "./typedef";
+import {TranslatableAPI} from "../index";
 
 export type RuntimeMapStrings = {
     zone: string,
     distance: string,
+    direction: string,
+    directionValues: string[],
     distanceTown: string,
     distanceSelf: string,
     danger: string[],
@@ -17,18 +20,8 @@ export type RuntimeMapStrings = {
     horror: string[],
 }
 
-export class BeyondMapAPI {
-
-    private fetch: Fetch;
-
-    constructor() {
-        this.fetch = new Fetch( 'game/map' );
-    }
-
-    public index(): Promise<RuntimeMapStrings> {
-        return this.fetch.from('/index')
-            .request().withCache().get() as Promise<RuntimeMapStrings>;
-    }
+export class BeyondMapAPI extends TranslatableAPI<RuntimeMapStrings> {
+    constructor() { super( 'game/map', '/index' ) }
 
     public map(endpoint: string): Promise<MapData> {
         return this.fetch.from(`/${endpoint}/map`)

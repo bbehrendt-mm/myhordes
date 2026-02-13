@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Event\Game\GameInteractionEvent;
 use App\Response\AjaxResponse;
 use App\Service\EventFactory;
+use App\Service\Globals\ResponseGlobal;
 use App\Traits\Controller\EventChainProcessor;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Container\ContainerExceptionInterface;
@@ -23,6 +24,7 @@ class CustomAbstractCoreEventController extends AbstractController {
     use EventChainProcessor;
 
     public function __construct(
+        protected readonly ResponseGlobal $response,
         protected readonly EntityManagerInterface $em,
         protected readonly EventDispatcherInterface $ed,
         protected readonly EventFactory $ef,
@@ -36,7 +38,7 @@ class CustomAbstractCoreEventController extends AbstractController {
      * @throws NotFoundExceptionInterface
      */
     public function processEventChain(string|GameInteractionEvent $firstEvent, array|string|GameInteractionEvent $subsequentEvents ): JsonResponse {
-        $error_code = $this->processEventChainUsing( $this->ef, $this->ed, $this->em, $firstEvent, $subsequentEvents, true, $error_messages );
+        $error_code = $this->processEventChainUsing( $this->ef, $this->ed, $this->em, $this->response, $firstEvent, $subsequentEvents, true, $error_messages );
 
         if ($error_code !== null)
             return AjaxResponse::error(empty($error_messages) ? $error_code : 'message', [

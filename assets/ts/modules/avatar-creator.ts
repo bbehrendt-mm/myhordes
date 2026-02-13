@@ -4,11 +4,11 @@
 // It's purpose is to map a react node to a custom web component
 
 // Import the actual react code
-import {HordesAvatarCreator} from "../react/avatar-creator/Wrapper";
 import {Shim} from "../react";
+import {HordesAvatarCreator2} from "../react/avatar-creator/WrapperV2";
 
-// Define web component <hordes-avatar-creator />
-customElements.define('hordes-avatar-creator', class HordesAvatarCreatorElement extends Shim<HordesAvatarCreator> {
+// Define web component <hordes-avatar-creator-2 />
+customElements.define('hordes-avatar-creator-2', class HordesAvatarCreator2Element extends Shim<HordesAvatarCreator2> {
 
     protected mountsLazily(): boolean { return true; }
 
@@ -18,8 +18,8 @@ customElements.define('hordes-avatar-creator', class HordesAvatarCreatorElement 
         };
     }
 
-    protected generateInstance(): HordesAvatarCreator {
-        return new HordesAvatarCreator();
+    protected generateInstance(): HordesAvatarCreator2 {
+        return new HordesAvatarCreator2();
     }
 
 }, {  });

@@ -18,7 +18,7 @@ class HookDataCollector extends AbstractDataCollector {
 		$this->registry = $registry;
 	}
 
-	public function collect(Request $request, Response $response, \Throwable $exception = null): void {
+	public function collect(Request $request, Response $response, ?\Throwable $exception = null): void {
 		$hooks = $this->registry->getHooks();
 		$calledHooks = $this->registry->getCalledHooks();
 		$notCalledHooks = $this->registry->getNotCalledHooks();
