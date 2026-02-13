@@ -254,7 +254,6 @@ class ActionCatapultProvider
         ]);
         self::write( $data, 'cata_wpn_remains_1_rid', [
             'dfhifi_#01',
-            'hifiev_#00',
             'metal_beam_#00',
             'rlaunc_#00',
             'taser_#00',
@@ -266,6 +265,7 @@ class ActionCatapultProvider
             'chair_basic_#00',
             'concrete_#00',
             'dfhifi_#00',
+            'hifiev_#00',
             'home_def_#00',
             'music_#00',
             'music_part_#00',
