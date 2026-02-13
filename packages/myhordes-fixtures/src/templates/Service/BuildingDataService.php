@@ -514,17 +514,17 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->isTemporary(0)->defense(10)->ap(15)->health(15)->blueprintLevel(0)->resources(["wood2_#00" => 3,"wood_beam_#00" => 1,"metal_#00" => 1,])->orderBy(3)->commit($item_tagger);
 
         $container->add()->parentBuilding($item_tagger)
-            ->icon('small_catapult1')->label('Katapult')->description('Das Katapult ist ein äußerst mächtiges Werkzeug, mit dem die Stadt jede Art von Gegenstand in die Wüste schießen kann. Das ist sehr nützlich, wenn man weit entfernte Bürger versorgen möchte (Lebensmittel, Wasser, Waffen etc...).')
+            ->icon('small_catapult1')->identifier('item_courroie')->label('Katapult')->description('Das Katapult ist ein äußerst mächtiges Werkzeug, mit dem die Stadt jede Art von Gegenstand in die Wüste schießen kann. Das ist sehr nützlich, wenn man weit entfernte Bürger versorgen möchte (Lebensmittel, Wasser, Waffen etc...).')
             ->isTemporary(0)->defense(0)
             ->ap(40)->health(40)->resources(["wood2_#00" => 2,"metal_#00" => 1,"wood_beam_#00" => 1,"metal_beam_#00" => 1,])
             ->adjustForHardMode(
                 null, ["wood2_#00" => 8,"metal_#00" => 8, "tube_#00" => 4, "courroie_#00" => 2, "lens_#00" => 3, "electro_#00" => 3, "wood_beam_#00" => 0,"metal_beam_#00" => 0,],
                 null, ["wood2_#00" => 1,"metal_#00" => 1, "tube_#00" => 1, "courroie_#00" => 1, "lens_#00" => 1, "electro_#00" => 1, "wood_beam_#00" => 0,"metal_beam_#00" => 0,],
             )
-            ->blueprintLevel(1)->orderBy(4)->commit($small_catapult1);
+            ->blueprintLevel(1)->orderBy(4)->commit($item_courroie);
 
-        $container->add()->parentBuilding($small_catapult1)
-            ->icon('small_catapult2')->label('Verbesserter Katapult')->description('Dieses erheblich verbesserte Katapult ist einfacher zu bedienen und benötigt weniger AP, um mit einem Gegenstand beladen zu werden!')
+        $container->add()->parentBuilding($item_courroie)
+            ->icon('small_catapult2')->identifier('item_courroie')->label('Verbesserter Katapult')->description('Dieses erheblich verbesserte Katapult ist einfacher zu bedienen und benötigt weniger AP, um mit einem Gegenstand beladen zu werden!')
             ->isTemporary(0)->defense(0)->ap(30)->health(30)->blueprintLevel(1)->resources(["tube_#00" => 1,"courroie_#00" => 1,"wood2_#00" => 2,"metal_#00" => 2,"electro_#00" => 1,"lens_#00" => 1,])->orderBy(0)->commit();
 
         $container->add()->parentBuilding($item_tagger)
@@ -651,7 +651,7 @@ class BuildingDataService implements FixtureProcessorInterface {
         $container->add()->parentBuilding($small_water)
             ->icon('small_tourello')->label('Schießstand')->description('Ein Geschützturm, der Wasserbomben abfeuert. Unhandlich, aber mit gutem Flächenschaden, jeder wird ihn von der Stadtmauer abreißen wollen!')
             ->isTemporary(0)->defense(60)->ap(30)->health(30)->blueprintLevel(1)->resources(["water_#00" => 20,"tube_#00" => 1,"wood_beam_#00" => 2,"metal_beam_#00" => 2,"meca_parts_#00" => 1,"rustine_#00" => 2,"deto_#00" => 1,])->orderBy(7)->commit();
-        $container->add()->parentBuilding($small_catapult1)
+        $container->add()->parentBuilding($item_courroie)
             ->icon('small_catapult3')->label('Kleiner Tribok')->description('Ein paar spezielle Riemen für deine tierischen Freunde, und es ist an der Zeit, sie zu den Zombies zu schicken. Du wirst sehen, es macht wirklich Spaß, ihnen zuzusehen.')
             ->isTemporary(0)->defense(60)->ap(30)->health(30)->blueprintLevel(2)->resources(["metal_#00" => 2,"wood_beam_#00" => 3,"meca_parts_#00" => 1,"ryebag_#00" => 1,"pet_pig_#00" => 1,])->orderBy(1)->commit();
         $container->add()->parentBuilding($small_round_path)
@@ -911,7 +911,7 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->blueprintLevel(3)->orderBy(4)->commit();
 
         $container->add()->parentBuilding($item_bgrenade)
-            ->icon('small_grenadelauncher')->label('Granatwerfer')->description('Ein Mini-Katapult auf der Stadtmauer, garniert mit explosiven Pampelmusen. Alles, was ihr tun müsst, ist warten und schießen! Mit ein wenig extra Arbeit können wir ihn sogar automatisieren und seine Leistung verbessern.')
+            ->icon('small_grenadelauncher')->identifier('item_boomfruit')->label('Granatwerfer')->description('Ein Mini-Katapult auf der Stadtmauer, garniert mit explosiven Pampelmusen. Alles, was ihr tun müsst, ist warten und schießen! Mit ein wenig extra Arbeit können wir ihn sogar automatisieren und seine Leistung verbessern.')
             ->isTemporary(0)->defense(40)->ap(60)->health(60)->blueprintLevel(3)->resources(["wood_beam_#00" => 7,"metal_beam_#00" => 2,"meca_parts_#00" => 2,"rustine_#00" => 2,"wire_#00" => 2,"lens_#00" => 1,"boomfruit_#00" => 4,])->orderBy(0)
             ->voteLevel(5)->baseVoteText('Der Granatwerfer gibt 40 zusätzliche Verteidigungspunkte.')
             ->upgradeTexts([
@@ -924,7 +924,7 @@ class BuildingDataService implements FixtureProcessorInterface {
 
 
         $container->add()->parentBuilding($item_bgrenade)
-            ->icon('small_vitamines')->label('Vitaminen')->description('Wenn wir ein paar explosive Pampelmusen in der Nähe der Stadtmauer in den Boden stecken, sollten wir heute Abend ein schönes Leichenfeuerwerk sehen. Aber morgen müssen wir wieder ganz von vorne anfangen...')
+            ->icon('small_vitamines')->identifier('item_boomfruit')->label('Vitaminen')->description('Wenn wir ein paar explosive Pampelmusen in der Nähe der Stadtmauer in den Boden stecken, sollten wir heute Abend ein schönes Leichenfeuerwerk sehen. Aber morgen müssen wir wieder ganz von vorne anfangen...')
             ->isTemporary(1)->defense(100)
             ->ap(40)->resources(["metal_beam_#00" => 2,"wire_#00" => 1,"deto_#00" => 1,"boomfruit_#00" => 5,])
             ->adjustForHardMode(

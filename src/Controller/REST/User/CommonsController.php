@@ -182,8 +182,8 @@ class CommonsController extends CustomAbstractCoreController
         return [
             'id' => $app->getId(),
             'name' => $app->getName(),
-            'icon' => $media?->getSource(16),
-            'iconSet' => $media?->getSourceSetDPI(16),
+            'icon' => $media?->getSource(16, true),
+            'iconSet' => $media?->getSourceSetDPI(16, true),
             'wiki' => $app->isWiki(),
             'testing' => $app->getTesting(),
             'auth' => ($app->getSecret() && !$app->getLinkOnly()),
