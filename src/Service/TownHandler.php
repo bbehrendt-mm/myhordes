@@ -56,6 +56,9 @@ class TownHandler
 
     private EstimateZombieAttackAction $estimateZombieAttacks;
 
+    private ?TownWaterConsumptionSummary $waterConsumptionSummaryPreDay = null;
+    private ?TownWaterConsumptionSummary $waterConsumptionSummaryPostDay = null;
+
     public function __construct(
         EntityManagerInterface $em, InventoryHandler $ih, LogTemplateHandler $lh,
         TimeKeeperService $tk, CitizenHandler $ch, ConfMaster $conf, RandomGenerator $rand,
@@ -316,8 +319,8 @@ class TownHandler
         return $summary->sum();
     }
 
-    public function bonus_defense_blocked(Town $town, Building $building): bool {
-        $waterItem = $this->calculate_town_water_consumption($town)->getBuilding($building->getPrototype()->getName());
+    public function bonus_defense_blocked(Town $town, Building $building, bool $postDayChange = false): bool {
+        $waterItem = $this->calculate_town_water_consumption($town, $postDayChange)->getBuilding($building->getPrototype()->getName());
         if ($waterItem != null && $waterItem->active == false) {
             return true;
         }
@@ -332,7 +335,7 @@ class TownHandler
         }
     }
 
-    public function calculate_building_def( Town $town, Building $building, ?int &$base = 0, ?int &$bonus = 0 ): int {
+    public function calculate_building_def( Town $town, Building $building, ?int &$base = 0, ?int &$bonus = 0, bool $postDayChange = false ): int {
         $d = 0;
 
         $base = $building->getDefense();
@@ -353,13 +356,13 @@ class TownHandler
             $bonus += $ratio * $c;
         }
 
-        if ($this->bonus_defense_blocked($town, $building))
+        if ($this->bonus_defense_blocked($town, $building, $postDayChange))
             $bonus = 0;
 
         return $base + $bonus;
     }
 
-    public function calculate_town_def( Town $town, ?TownDefenseSummary &$summary = null ): int {
+    public function calculate_town_def( Town $town, ?TownDefenseSummary &$summary = null, bool $postDayChange = false ): int {
         $summary = new TownDefenseSummary();
         $summary->base_defense = $town->getBaseDefense();
         $summary->base_defense += $town->getStrangerPower();
@@ -398,7 +401,7 @@ class TownHandler
         foreach ($town->getBuildings() as $building)
             if ($building->getComplete()) {
 
-                $summary->building_defense += $this->calculate_building_def( $town, $building, $base, $bonus);
+                $summary->building_defense += $this->calculate_building_def( $town, $building, $base, $bonus, $postDayChange);
                 $summary->building_def_base += $base;
                 $summary->building_def_vote += $bonus;
                 $summary->temp_defense += $building->getTempDefenseBonus();
@@ -431,22 +434,50 @@ class TownHandler
         return $summary->sum();
     }
 
-    public function calculate_town_water_consumption(Town $town): TownWaterConsumptionSummary {
+    /**
+     * @param Town $town
+     * @param bool $postDayChange Set to true if calculating after the day change during the attack
+     */
+    public function calculate_town_water_consumption(Town $town, bool $postDayChange = false): TownWaterConsumptionSummary {
+        if ($postDayChange && $this->waterConsumptionSummaryPostDay !== null) return $this->waterConsumptionSummaryPostDay;
+        if (!$postDayChange && $this->waterConsumptionSummaryPreDay !== null) return $this->waterConsumptionSummaryPreDay;
+
         $summary = new TownWaterConsumptionSummary();
 
         $buildings = array_filter(
             array_map(
-                function(string $name) use ($town) {
+                function(string $name) use ($town, $postDayChange) {
                     $b = $this->getBuilding($town, $name, true);
-                    return [$b, $b ? $b->getWaterConsumption($town->getDay()) : 0];
+                    return [$b, $b ? $b->getWaterConsumption($town->getDay() - ($postDayChange ? 1 : 0)) : 0];
                 },
                 $this->getCachedBuildingList($town, true)
             ),
             fn(array $info) => $info[1] > 0
         );
 
-        // Sort by water consumption, TODO: sort by defense / other
-        usort($buildings, fn(array $a, array $b) => $a[1] <=> $b[1]);
+        // Sort by type (ASC), defense (DESC), then by water consumption (ASC)
+        usort($buildings, function (array $a, array $b) {
+            /** @var Building $ba */
+            $ba = $a[0];
+            /** @var Building $bb */
+            $bb = $b[0];
+
+            $typea = $ba->getWaterConsumptionType();
+            $typeb = $bb->getWaterConsumptionType();
+
+            if ($typea !== $typeb) {
+                return $typea <=> $typeb;
+            }
+
+            $defa = $ba->getPrototype()->getDefense() ?? 0;
+            $defb = $bb->getPrototype()->getDefense() ?? 0;
+
+            if ($defa || $defb) {
+                return $defb <=> $defa;
+            }
+
+            return $a[1] <=> $b[1];
+        });
 
         $summary->total_required = array_reduce($buildings, fn(int $t, array $info) => $t + $info[1], 0);
 
@@ -463,6 +494,9 @@ class TownHandler
 
             $summary->addBuilding($building->getPrototype(), $water, $active);
         }
+
+        if ($postDayChange) $this->waterConsumptionSummaryPostDay = $summary;
+        else $this->waterConsumptionSummaryPreDay = $summary;
 
         return $summary;
     }
