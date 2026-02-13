@@ -30,6 +30,7 @@ use App\Enum\ExternalAPIError;
 use App\Enum\ExternalAPIInterface;
 use App\Service\ActionHandler;
 use App\Service\AdminHandler;
+use App\Service\Asset\Assets;
 use App\Service\CitizenHandler;
 use App\Service\ConfMaster;
 use App\Service\CrowService;
@@ -82,7 +83,8 @@ class JSONv1Controller extends CoreController {
 
     public function __construct(
         EntityManagerInterface $em, InventoryHandler $ih, CitizenHandler $ch, ActionHandler $ah, TimeKeeperService $tk, DeathHandler $dh, PictoHandler $ph, TranslatorInterface $translator, RandomGenerator $rg, LogTemplateHandler $lh, ConfMaster $conf, ZoneHandler $zh, UserHandler $uh, CrowService $armbrust, Packages $a, TownHandler $th, GazetteService $gs, AdminHandler $adminHandler, UrlGeneratorInterface $urlGenerator, DoctrineCacheService $doctrineCache, EventProxyService $events, HookExecutor $hookExecutor, PictoService $pictoService, UserUnlockableService $u, VersionManagerInterface $version,
-        private readonly MediaService $mediaService
+        private readonly MediaService $mediaService,
+        private readonly Assets $assetService,
     )
     {
         parent::__construct($em, $ih, $ch, $ah, $tk, $dh, $ph, $translator, $rg, $lh, $conf, $zh, $uh, $armbrust, $a, $th, $gs, $adminHandler, $urlGenerator, $doctrineCache, $events, $hookExecutor, $pictoService, $u, $version);
@@ -2178,7 +2180,10 @@ class JSONv1Controller extends CoreController {
                     break;
                 case "img":
                     $data[$field] =
-                        $this->getIconPath($this->asset->getUrl("build/images/ruin/{$prototype->getIcon()}.gif"));
+                        $this->getIconPath($this->assetService->getAvailableAsset(
+                            "build/images/ruin/{$prototype->getIcon()}.gif",
+                            "build/images/ruin/{$prototype->getIcon()}.png",
+                        ));
                     break;
                 case "name":
                     $data[$field] = $this->getTranslate($prototype->getLabel(), 'game');
