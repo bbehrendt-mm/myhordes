@@ -33,7 +33,7 @@ final class Version20250830134338 extends AbstractMigration
     public function up(Schema $schema): void
     {
         foreach ( $this->affectedTables as $table => $column ) {
-            $rows = $this->connection->fetchAllAssociative("SELECT id, $column FROM $table");
+            $rows = $this->connection->iterateAssociative("SELECT id, $column FROM $table");
             foreach ($rows as $row) {
                 if ($row[$column] === null) continue;
                 $data = @unserialize($row[$column]);
@@ -49,7 +49,7 @@ final class Version20250830134338 extends AbstractMigration
     public function down(Schema $schema): void
     {
         foreach ( $this->affectedTables as $table => $column ) {
-            $rows = $this->connection->fetchAllAssociative("SELECT id, $column FROM $table");
+            $rows = $this->connection->iterateAssociative("SELECT id, $column FROM $table");
             foreach ($rows as $row) {
                 if ($row[$column] === null) continue;
                 $this->connection->executeQuery("UPDATE $table SET $column = :data WHERE id = :id", [

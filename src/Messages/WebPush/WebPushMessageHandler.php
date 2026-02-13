@@ -9,6 +9,7 @@ use App\Enum\NotificationSubscriptionType;
 use App\Service\Media\MediaService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Asset\Packages;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use WebPush\Message;
@@ -19,6 +20,7 @@ use WebPush\WebPush;
 readonly class WebPushMessageHandler
 {
     public function __construct(
+        private KernelInterface $kernel,
         private WebPush $sender,
         private EntityManagerInterface $em,
         private Packages $asset,
@@ -45,6 +47,9 @@ readonly class WebPushMessageHandler
      */
     public function __invoke(WebPushMessage $message): void
     {
+        // Do not attempt sending notifications in local environment
+        if ($this->kernel->getEnvironment() === 'local') return;
+
         // Get the subscription
         $subscription = $this->em->getRepository(NotificationSubscription::class)->find( $message->subscription );
 

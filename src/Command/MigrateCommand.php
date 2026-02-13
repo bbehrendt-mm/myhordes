@@ -541,7 +541,7 @@ class MigrateCommand extends Command
 
         if ($input->getOption('update-db')) {
 
-            if (!$this->helper->capsule( 'doctrine:migrations:diff --allow-empty-diff --formatted --no-interaction', $output )) {
+            if (!$this->helper->capsule( 'doctrine:migrations:diff --allow-empty-diff --no-interaction', $output )) {
                 $output->writeln("<error>Unable to create a migration.</error>");
                 return 1;
             }
