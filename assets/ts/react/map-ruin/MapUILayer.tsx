@@ -77,7 +77,7 @@ const MovementArrow = (props: MovementArrowProps) => {
 
     }, [props.visible]);
 
-    return <Group ref={elementRef} rotation={props.rotation} onClick={props.onClick} {...(visible ? oncreenProps : offscreenProps)}>
+    return <Group ref={elementRef} rotation={props.rotation} onPointerClick={props.onClick} {...(visible ? oncreenProps : offscreenProps)}>
         <ScaleHelper.Provider value={{scaler: subScaler.current, ref: subScaler}}>
             <MovementChevron/>
         </ScaleHelper.Provider>

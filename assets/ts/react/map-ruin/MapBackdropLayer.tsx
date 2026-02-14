@@ -154,7 +154,7 @@ const MapTile = (props: { shifted: boolean, data: ExplorationTileset, onDoorClic
             <Image
                 image={ assets.images[ door.i ] } { ...scaler.d(door) }
                 onMouseEnter={() => setDoorHovering(true)} onMouseLeave={() => setDoorHovering(false)}
-                onClick={ props.onDoorClick ? () => props.onDoorClick() : ()=> null }
+                onPointerClick={ props.onDoorClick ? () => props.onDoorClick() : ()=> null }
             />
         </> }
     </Group>
