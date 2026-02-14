@@ -856,7 +856,7 @@ const HordesPassiveInventoryWrapper = (props: passiveMountProps) => {
         props.parent.addEventListener('click', handler);
         return () => props.parent.removeEventListener('click', handler);
     }, [props.link])
-    
+
     const {bagSort} = getBagSorter(vaultData);
 
     return <Globals.Provider value={{api: api.current, strings}}>
