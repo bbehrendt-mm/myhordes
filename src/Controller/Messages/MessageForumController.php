@@ -1607,30 +1607,25 @@ class MessageForumController extends MessageController
                 $post = $this->entity_manager->getRepository(Post::class)->find((int)$parser->get('postId'));
                 if (!$post || !$post->getHidden() || $post->getThread() !== $thread) return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
 
-                try {
-                    $post->setHidden(false);
-                    if ($ad = $this->entity_manager->getRepository(AdminDeletion::class)->findOneBy(['post' => $post])) {
-                        $post->setAdminDeletion(null);
-                        $this->entity_manager->remove($ad);
-                    }
-
-                    if ($post === $thread->firstPost(true)) {
-                        $thread->setHidden(false)->setLocked(false);
-                        $this->entity_manager->persist($thread);
-
-                    }
-
-                    $this->entity_manager->persist( $post );
-                    $this->entity_manager->flush();
-
-                    $this->entity_manager->persist( $thread->setLastPost( $thread->lastPost(false)?->getDate() ?? $thread->lastPost(true)?->getDate() ?? new DateTime() ) );
-                    $this->entity_manager->flush();
-
-                    return AjaxResponse::success();
+                $post->setHidden(false);
+                if ($ad = $this->entity_manager->getRepository(AdminDeletion::class)->findOneBy(['post' => $post])) {
+                    $post->setAdminDeletion(null);
+                    $this->entity_manager->remove($ad);
                 }
-                catch (Exception $e) {
-                    return AjaxResponse::error( ErrorHelper::ErrorDatabaseException );
+
+                if ($post === $thread->firstPost(true)) {
+                    $thread->setHidden(false)->setLocked(false);
+                    $this->entity_manager->persist($thread);
                 }
+
+                $this->entity_manager->persist( $post );
+                $this->entity_manager->flush();
+                $this->entity_manager->refresh($post);
+
+                $this->entity_manager->persist( $thread->setLastPost( $thread->lastPost(false)?->getDate() ?? $thread->lastPost(true)?->getDate() ?? new DateTime() ) );
+                $this->entity_manager->flush();
+
+                return AjaxResponse::success();
 
             case 'seen':
 

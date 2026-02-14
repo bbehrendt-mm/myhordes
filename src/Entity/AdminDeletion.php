@@ -10,17 +10,17 @@ class AdminDeletion
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
-    #[ORM\ManyToOne(targetEntity: 'App\Entity\User')]
+    private ?int $id;
+    #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: false)]
-    private $sourceUser;
+    private ?User $sourceUser = null;
     #[ORM\Column(type: 'datetime')]
-    private $timestamp;
+    private ?\DateTimeInterface $timestamp = null;
     #[ORM\Column(type: 'string', length: 255)]
-    private $reason;
-    #[ORM\OneToOne(targetEntity: 'App\Entity\Post', inversedBy: 'adminDeletion', cascade: ['persist'])]
+    private ?string $reason = null;
+    #[ORM\OneToOne(targetEntity: Post::class, inversedBy: 'adminDeletion', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
-    private $post;
+    private ?Post $post = null;
     public function getId(): ?int
     {
         return $this->id;
@@ -59,7 +59,7 @@ class AdminDeletion
     {
         return $this->post;
     }
-    public function setPost(Post $post): self
+    public function setPost(?Post $post): self
     {
         $this->post = $post;
 
