@@ -45,17 +45,11 @@ class ProcessStatusEffect extends AtomEffectProcessor
         }
 
         if ($data->stopDigTimers && $target->getZone() && !$target->getZone()->isTownZone()) {
-
             $dig_timer = $target->getCurrentDigTimer();
             if ($dig_timer) {
                 $dig_timer->setPassive(true);
                 $cache->em->persist( $dig_timer );
-            } else
-                $cache->em->persist(
-                    new DigTimer()
-                        ->setZone( $target->getZone() )->setCitizen( $target )->setPassive( true )
-                        ->setNonAutomatic(true)->setTimestamp( new \DateTime() )
-                );
+            }
         }
 
         $p = $data->statusProbability;
