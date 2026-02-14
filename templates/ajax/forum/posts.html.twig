@@ -288,7 +288,7 @@
                                 <span class="small">
                                     {% if post.owner.activeIcon %}
                                         <img alt=""
-                                             src="{{ post.owner.activeIcon|singleMediaSource('icon', 16, false, asset('build/images/icons/title/' ~ post.owner.activeIcon.prototype.icon ~ '.gif')) }}"
+                                             src="{{ post.owner.activeIcon|singleMediaSource('icon', 16, false, asset('build/images/icons/title/' ~ post.owner.activeIcon.prototype.icon ~ '.gif'), true) }}"
                                              srcset="{{ post.owner.activeIcon|singleMediaSource('icon', 16, true) }}" />
                                     {% endif %}
                                     {% if post.owner.activeTitle %}<i>{{ post.owner.activeTitle.customTitle ?? post.owner|translated_title(app.user)|raw }}</i>{% endif %}

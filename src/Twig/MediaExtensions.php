@@ -115,7 +115,7 @@ class MediaExtensions extends AbstractExtension implements GlobalsInterface
      * @return string
      * @throws InvalidArgumentException
      */
-    public function singleMediaSource(?object $data, string $collection, ?int $expected_size = null, bool $sourceSet = false, string $fallback = '') : string {
+    public function singleMediaSource(?object $data, string $collection, ?int $expected_size = null, bool $sourceSet = false, string $fallback = '', bool $include_original = false) : string {
         if ($data === null) return '';
 
         $class = md5($this->entityManager->getClassMetadata($data::class)->getName());
@@ -133,9 +133,11 @@ class MediaExtensions extends AbstractExtension implements GlobalsInterface
             ($sourceSet ? 'set' : 'single') . '_' .
             ($expected_size === null ? 'max' : $expected_size);
 
+        if ($include_original) $key .= '_with_original';
+
         $tags = explode('|', $tags);
 
-        $result = $this->gameCachePool->get($key, function (ItemInterface $item) use ($sourceSet, $class, $identifier, $collection, $tags, $data, $expected_size, $fallback) {
+        $result = $this->gameCachePool->get($key, function (ItemInterface $item) use ($sourceSet, $class, $identifier, $collection, $tags, $data, $expected_size, $fallback, $include_original) {
             $item->expiresAfter(604800)->tag([
                 'media', "media_$class", "media_{$class}_{$identifier}",
                 "media_{$class}_{$identifier}!{$collection}",
@@ -148,8 +150,8 @@ class MediaExtensions extends AbstractExtension implements GlobalsInterface
             foreach ($tags as $tag) {
                 $result = match(true) {
                     $sourceSet && $expected_size !== null => $media->getSourceSetDPI( $expected_size, tag: $tag ),
-                    $sourceSet => $media->getSourceSet(tag: $tag),
-                    !$sourceSet => $media->getSource( $expected_size, tag: $tag )
+                    $sourceSet => $media->getSourceSet($include_original, tag: $tag),
+                    !$sourceSet => $media->getSource( $expected_size, $include_original, tag: $tag )
                 };
 
                 if (!empty($result)) return $result;

@@ -344,7 +344,7 @@ class CommonsController extends CustomAbstractCoreController
 
     public static function getCommunityActions(): array {
         return [
-            ['sort' =>    0, 'name' => T::__('Dashboard', 'admin'),  'route' => 'admin_dashboard'],
+            //['sort' =>    0, 'name' => T::__('Dashboard', 'admin'),  'route' => 'admin_dashboard'],
             ['sort' =>  400, 'name' => T::__('Kampagnen', 'admin'),  'route' => 'admin_campaigns'],
             ['sort' =>  500, 'name' => T::__('Zukunft', 'admin'),    'route' => 'admin_changelogs'],
             ['sort' =>  600, 'name' => T::__('Kurztexte', 'admin'),  'route' => 'admin_reports_snippets'],

@@ -22,7 +22,7 @@
     {% if user is defined and user|instance_of('App\\Entity\\OfficialGroup') %}
         {% set mediaCollection = 'icon' %}
         {% set mediaHost = user %}
-        {% set url   = mediaHost|singleMediaSource('icon') %}
+        {% set url   = mediaHost|singleMediaSource('icon', null, false, '', true) %}
         {% set user  = {
             id: user.usergroup.id + 100, name: user.usergroup.name,
             avatar: null

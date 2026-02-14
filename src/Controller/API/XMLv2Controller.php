@@ -771,8 +771,8 @@ class XMLv2Controller extends CoreController {
     protected function getAvatarInfo(User $user): ?array {
         $data = null;
         $media = $this->mediaService->getSingleMediaForObject( $user, 'avatar' );
-        $classic = $media->getLargestConversionByTag( 'classic');
-        $default = $media->getLargestConversionByTag( 'default');
+        $classic = $media?->getLargestConversionByTag( 'classic');
+        $default = $media?->getLargestConversionByTag( 'default');
         if ($default) {
             $data = ["attributes" => [
                 'url' => $default->url,
