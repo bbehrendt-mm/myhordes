@@ -69,13 +69,13 @@ parameters:
           rare: -1
           epic: -1
           lists:
-            hotel_lv2: ['item_pumpkin_raw_#00', 'small_urban_#00', 'item_shield_#00', 'small_canon_#01', 'small_wallimprove_#02', 'small_wallimprove_#01']
+            hotel_lv2: ['item_pumpkin_raw_#00', 'small_urban_#00', 'item_shield_#00', 'small_canon_#01', 'small_wallimprove_#02', 'small_eden_#00']
             hotel_lv3: ['small_valve_#00', 'small_appletree_#00', 'small_scarecrow_#00', 'small_ikea_#00', 'small_moving_#00', 'small_labyrinth_#00', 'small_pet_#00', 'item_plate_#05', 'small_gallery_#00', 'small_coffin_#00']
             hotel_lv4: ['small_waterdetect_#00', 'small_thermal_#00', 'small_wheel_#00', 'small_cinema_#00', 'small_pool_#00']
             bunker_lv2: ['small_rocketperf_#00', 'small_watercanon_#00', 'item_bgrenade_#01', 'small_catapult3_#00', 'item_hmeat_#00', 'small_city_up_#00']
             bunker_lv3: ['item_tube_#00', 'item_boomfruit_#00', 'item_pet_pig_#00', 'small_watchmen_#00', 'small_grinder2_#00', 'small_underground_#00', 'small_rocket_#00', 'small_techtable_#00', 'item_home_def_#00', 'small_coffin_#00']
             bunker_lv4: ['small_pool_#00', 'small_castle_#00', 'small_arma_#00', 'small_slave_#00', 'small_pmvbig_#00']
-            hospital_lv2: ['item_plate_#04', 'small_eden_#00', 'small_chicken_#00', 'small_armor_#00', 'small_spa4souls_#00', 'small_saw_#00']
+            hospital_lv2: ['item_plate_#04', 'small_eden_#00', 'small_chicken_#00', 'item_shield_#00', 'small_spa4souls_#00', 'small_saw_#00']
             hospital_lv3: ['item_digger_#00', 'item_boomfruit_#01', 'small_watchmen_#01', 'small_sewers_#00', 'small_falsecity_#00', 'small_trashclean_#00', 'small_infirmary_#00', 'small_survarea_#00', 'small_sprinkler_#00', 'small_coffin_#00']
             hospital_lv4: ['small_derrick_#01', 'small_crow_#00', 'small_pmvbig_#00', 'small_trash_#06', 'small_balloon_#00']
 
