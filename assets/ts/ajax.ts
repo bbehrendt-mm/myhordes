@@ -152,6 +152,8 @@ export default class Ajax {
         if (push_history) history.pushState( url, '', url );
         if (replace_history) history.replaceState( url, '', url );
 
+        if (!result_document) return;
+
         // If there is a CLEAR target, remove content from the targeted elements
         let fragment = null;
         while (fragment = result_document.querySelector<HTMLElement>('[x-clear-target]')) {

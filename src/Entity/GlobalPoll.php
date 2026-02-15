@@ -80,9 +80,9 @@ class GlobalPoll
 
         return $this;
     }
-    public function getTitleByLang(string $lang): ?string
+    public function getTitleByLang(?string $lang): ?string
     {
-        return $this->getTitle()[$lang] ?? null;
+        return $this->getTitle()[$lang ?? 'de'] ?? null;
     }
     public function setTitleByLang(string $lang, string $title): self
     {
@@ -90,9 +90,9 @@ class GlobalPoll
         $d[$lang] = $title;
         return $this->setTitle( $d );
     }
-    public function getDescriptionByLang(string $lang): ?string
+    public function getDescriptionByLang(?string $lang): ?string
     {
-        return $this->getDescription()[$lang] ?? null;
+        return $this->getDescription()[$lang ?? 'de'] ?? null;
     }
     public function setDescriptionByLang(string $lang, string $description): self
     {
@@ -100,9 +100,9 @@ class GlobalPoll
         $d[$lang] = $description;
         return $this->setDescription( $d );
     }
-    public function getShortDescriptionByLang(string $lang): ?string
+    public function getShortDescriptionByLang(?string $lang): ?string
     {
-        return $this->getShortDescription()[$lang] ?? null;
+        return $this->getShortDescription()[$lang ?? 'de'] ?? null;
     }
     public function setShortDescriptionByLang(string $lang, string $shortDescription): self
     {
@@ -110,9 +110,9 @@ class GlobalPoll
         $d[$lang] = $shortDescription;
         return $this->setShortDescription( $d );
     }
-    public function getAnswerTitleByLang(ForumPollAnswer|int $answer, string $lang): ?string
+    public function getAnswerTitleByLang(ForumPollAnswer|int $answer, ?string $lang): ?string
     {
-        return (($this->getAnswers()[is_object( $answer ) ? $answer->getId() : $answer] ?? [])[$lang] ?? [])['title'] ?? null;
+        return (($this->getAnswers()[is_object( $answer ) ? $answer->getId() : $answer] ?? [])[$lang ?? 'de'] ?? [])['title'] ?? null;
     }
     public function setAnswerTitleByLang(ForumPollAnswer|int $answer, string $lang, string $title): self
     {
@@ -123,9 +123,9 @@ class GlobalPoll
         else $data[$id][$lang]['title'] = $title;
         return $this->setAnswers($data);
     }
-    public function getAnswerDescriptionByLang(ForumPollAnswer|int $answer, string $lang): ?string
+    public function getAnswerDescriptionByLang(ForumPollAnswer|int $answer, ?string $lang): ?string
     {
-        return (($this->getAnswers()[is_object( $answer ) ? $answer->getId() : $answer] ?? [])[$lang] ?? [])['description'] ?? null;
+        return (($this->getAnswers()[is_object( $answer ) ? $answer->getId() : $answer] ?? [])[$lang ?? 'de'] ?? [])['description'] ?? null;
     }
     public function setAnswerDescriptionByLang(ForumPollAnswer|int $answer, string $lang, string $description): self
     {
