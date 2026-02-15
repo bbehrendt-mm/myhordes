@@ -111,6 +111,7 @@ const TownTableRow = (props: {lang: string, town: Town, locked: boolean}) => {
                 <Tooltip additionalClasses="help">
                     <div><b>{globals.strings.table.mayor}</b></div>
                     {globals.strings.table.mayor_lines.map((l, i) => <div key={i}>{l}</div>)}
+                    { globals.strings.types.find(t => t.id === props.town.type)?.type !== 'small' && globals.strings.table.mayor_lines_delay.map((l, i) => <div key={i}>{l}</div>)}
                 </Tooltip>
             </div>}
             {Object.values(props.town.protection).reduce((carry: boolean, value: boolean) => carry || value, false) && <div>
@@ -254,6 +255,9 @@ const TownDetailsDialog = (props: { town: Town, locked: boolean, open: boolean, 
                     { town.mayor && <div>
                         <b>{globals.strings.table.mayor}</b>
                         <div>{ globals.strings.table.mayor_lines.join(' ') }</div>
+                        { globals.strings.types.find(t => t.id === town.type)?.type !== 'small' && <div>
+                            { globals.strings.table.mayor_lines_delay.join(' ') }
+                        </div> }
                     </div> }
 
                     { town.event && <div>
