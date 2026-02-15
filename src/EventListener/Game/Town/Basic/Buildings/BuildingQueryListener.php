@@ -177,8 +177,8 @@ final class BuildingQueryListener implements ServiceSubscriberInterface
             BuildingValueQuery::OverallTownDefenseScale => match ($this->getService(TownHandler::class)->getBuilding($event->town, 'item_shield_#00', true )?->getLevel() ?? -1) {
                 0 => 1.10,
                 1 => 1.11,
-                2 => 1.13,
-                3 => 1.15,
+                2 => 1.12,
+                3 => 1.13,
                 default => 1.0
             },
             BuildingValueQuery::NightlyZoneDiscoveryRadius => match ($this->getService(TownHandler::class)->getBuilding($event->town, 'item_scope_#00', true )?->getLevel() ?? -1) {
