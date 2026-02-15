@@ -51,12 +51,12 @@ class TimeKeeperService
      * Returns the DateTime for the next attack that has not been completed yet. This will return the DateTime of the
      * next attack (i.e. a DateTime in the future, just like getNextAttackTime()), except during an attack, where it
      * will return the starting point of the currently running attack (i.e. a DateTime in the past).
-     * @return DateTimeInterface
+     * @return DateTime
      */
-    public function getCurrentAttackTime( ): DateTimeInterface {
+    public function getCurrentAttackTime( ): DateTime {
         /** @var AttackSchedule|null $s */
         $s = $this->entity_manager->getRepository( AttackSchedule::class )->findNextUncompleted( );
-        return $s ? $s->getTimestamp() : ((new DateTime('now'))->modify( 'tomorrow' ));
+        return $s ? new DateTime($s->getTimestamp()->format(DateTime::ATOM)) : ((new DateTime('now'))->modify( 'tomorrow' ));
         //return $this->isDuringAttack( $time ) ? $this->getLastAttackTime( $time ) : $this->getNextAttackTime( $time );
     }
 
