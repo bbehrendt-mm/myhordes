@@ -722,3 +722,6 @@ animiert: crwdns252736:0crwdne252736:0
 'hohe Auflösung': 'crwdns252738:0crwdne252738:0'
 'reduzierte Auflösung': 'crwdns252740:0crwdne252740:0'
 importiert: crwdns252742:0crwdne252742:0
+'Unschärfeeffekte verringern': 'crwdns253210:0crwdne253210:0'
+'Diese Option deaktiviert verschiedene optische Unschäfteeffekte, beispielsweise auf der Spielkarte.': 'crwdns253212:0crwdne253212:0'
+'Die Auflösung des gewählten Bildes ist nicht ausreichend, um es als Avatar verwenden zu können. Bitte lade ein Bild mit einer Auflösung von mindestens {x} × {y} Pixeln hoch.': 'crwdns253214:0{x}crwdnd253214:0{y}crwdne253214:0'
