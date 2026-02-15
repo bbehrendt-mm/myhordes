@@ -1364,10 +1364,9 @@ hordes-twino-editor {
           }
         }
 
-        &.new:not(.own) div.pm-avatar::after, &.new:not(.own) div.pm-avatar-crow::after {
+        &.new:not(.own)::after {
           content: " "; position: absolute; width: 20px; height: 20px; border: 1px solid #fe7d00; border-radius: 10px;
-          background: url("../../img/forum/new.png") top center no-repeat, #bd3d00; bottom: -10px; right: -10px;
-        }
+          background: url("../../img/forum/new.png") top center no-repeat, #bd3d00; top: 30px;left: -10px; }
       }
     }
   }
