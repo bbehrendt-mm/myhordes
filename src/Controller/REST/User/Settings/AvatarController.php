@@ -373,6 +373,7 @@ class AvatarController extends AbstractController
         ConfMaster $conf,
         EntityManagerInterface $em,
         MediaService $mediaService,
+        TranslatorInterface $trans,
     ): JsonResponse {
         $payload = $parser->get_base64('data');
         $pending = $parser->get('pending', true);
@@ -398,7 +399,10 @@ class AvatarController extends AbstractController
         $media = $mediaService->addMediaToObjectFromBinaryString( $user, $payload, null, $pending ? 'avatar-pending' : 'avatar', Uuid::v7() );
 
         if ($media->transientImage->width() < 30 || $media->transientImage->height() < 30)
-            return new JsonResponse(['error' => UserHandler::ErrorAvatarResolutionUnacceptable]);
+            return new JsonResponse([
+                'error' => 'message',
+                'message' => $trans->trans('Die Auflösung des gewählten Bildes ist nicht ausreichend, um es als Avatar verwenden zu können. Bitte lade ein Bild mit einer Auflösung von mindestens {x} × {y} Pixeln hoch.', ['x' => 30, 'y' => 30], 'soul')
+        ]);
 
         $this->handleCreatedMedia( $user, $media, $mediaService, $format, $parser->get_array( 'crop.small'), $parser->get_array( 'crop.default'), $parser->get_array( 'crop.round' ) );
         $em->persist( $media->setDeleteAt( Carbon::now()->addDay()->toDateTimeImmutable() ) );

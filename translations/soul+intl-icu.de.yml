@@ -724,3 +724,4 @@ animiert: animiert
 importiert: importiert
 'Unschärfeeffekte verringern': 'Unschärfeeffekte verringern'
 'Diese Option deaktiviert verschiedene optische Unschäfteeffekte, beispielsweise auf der Spielkarte.': 'Diese Option deaktiviert verschiedene optische Unschäfteeffekte, beispielsweise auf der Spielkarte.'
+'Die Auflösung des gewählten Bildes ist nicht ausreichend, um es als Avatar verwenden zu können. Bitte lade ein Bild mit einer Auflösung von mindestens {x} × {y} Pixeln hoch.': 'Die Auflösung des gewählten Bildes ist nicht ausreichend, um es als Avatar verwenden zu können. Bitte lade ein Bild mit einer Auflösung von mindestens {x} × {y} Pixeln hoch.'
