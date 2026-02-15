@@ -49,7 +49,7 @@ const HordesHeaderUIWrapper = (props: {}) => {
         <HordesHeaderClockWidget/>
         { strings && <div className="game-logout">
             <Tooltip additionalClasses="help" textContent={strings.logout.title}/>
-            <a href={ strings.logout.url }/>
+            <a href={ strings.logout.url } target="_self"/>
         </div> }
     </Globals.Provider>
 };
