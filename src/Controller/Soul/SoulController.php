@@ -1171,6 +1171,7 @@ class SoulController extends CustomAbstractController
 
         $user->setPreferSmallAvatars( (bool)$parser->get('sma', false) );
         $user->setDisableFx( (bool)$parser->get('disablefx', false) );
+        $user->setSetting( UserSetting::DisableBlur, (bool)$parser->get('disableblur', false) );
         $user->setUseICU( (bool)$parser->get('useicu', false) );
         $user->setNoAutoFollowThreads( !$parser->get('autofollow', true) );
         $user->setClassicBankSort( (bool)$parser->get('clasort', false) );

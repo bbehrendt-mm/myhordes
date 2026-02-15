@@ -14,6 +14,7 @@ export type ReactMapBootstrapData = {
     etag: number,
     endpoint: string,
     fx: boolean,
+    blur: boolean,
 }
 
 export interface ReactData {

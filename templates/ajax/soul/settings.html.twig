@@ -634,6 +634,11 @@
                             </div>
                             <div class="padded cell rw-12">
                                 <div class="note note-lightest">
+                                    <input x-setting {% if app.user.setting( constant("\\App\\Enum\\UserSetting::DisableBlur") ) %}checked{% endif%} data-full-reload="1" type="checkbox" id="setting_disable_blur">&nbsp;<label for="setting_disable_blur">{{ 'Unschärfeeffekte verringern'|trans({}, 'soul') }}</label> <a class="help-button"><div class="tooltip help">{{ 'Diese Option deaktiviert verschiedene optische Unschäfteeffekte, beispielsweise auf der Spielkarte.'|trans({},'soul')|raw }}</div>{{ 'Hilfe'|trans({},'global') }}</a>
+                                </div>
+                            </div>
+                            <div class="padded cell rw-12">
+                                <div class="note note-lightest">
                                     <input x-setting {% if app.user.useICU %}checked{% endif%} type="checkbox" id="setting_use_icu">&nbsp;<label for="setting_use_icu">{{'Neue Übersetzungen verwenden'|trans({}, 'soul')}}</label>
                                     {{help_btn("Mit dem neuen Übersetzungssystem werden Texte akkurater in deiner Sprache dargestellt (zum Beispiel die passende Verwendung von Singular und Plural-Formen). Deaktiviere diese Option, um die originalen Texte aus Die Verdammten zu sehen."|trans({}, 'soul'))}}
                                 </div>
@@ -1020,6 +1025,7 @@
             $.ajax.easySend( '{{ path('api_soul_common') }}', {
                     sma: document.getElementById('setting_prefer_classic_avatars').checked,
                     disablefx: document.getElementById('setting_disable_fx').checked,
+                    disableblur: document.getElementById('setting_disable_blur').checked,
                     useicu: document.getElementById('setting_use_icu').checked,
                     autofollow: document.getElementById('setting_auto_follow').checked,
                     clasort: document.getElementById('setting_classic_bank_sort').checked,

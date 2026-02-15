@@ -27,6 +27,7 @@ use App\Entity\ZoneActivityMarker;
 use App\Enum\Configuration\CitizenProperties;
 use App\Enum\Configuration\TownSetting;
 use App\Enum\EventStages\BuildingValueQuery;
+use App\Enum\UserSetting;
 use App\Enum\ZoneActivityMarkerType;
 use App\Service\Actions\Game\EstimateZombieAttackAction;
 use App\Structures\EventConf;
@@ -798,7 +799,8 @@ class TownHandler
 			'className' => $class,
 			'etag'  => time(),
             'endpoint' => $endpoint,
-			'fx' => !$admin && !$activeCitizen->getUser()->getDisableFx(),
+			'fx'   => !$admin && !$activeCitizen->getUser()->getDisableFx(),
+			'blur' => !$admin && !$activeCitizen->getUser()->getDisableFx() && !$activeCitizen->getUser()->getSetting(UserSetting::DisableBlur),
 		];
 	}
 

@@ -12,6 +12,7 @@ enum UserSetting: string {
     case UseICU                         = 'use-icu';
     case UseExpertMode                  = 'use-expert-mode';
     case DisableEffects                 = 'disable-fx';
+    case DisableBlur                    = 'disable-blur';
     case PostAs                         = 'mod-post-as';
     case PreferSmallAvatars             = 'prefer-small-avatars';
     case LimitTownListSize              = 'limit-town-lists';
@@ -53,6 +54,7 @@ enum UserSetting: string {
             UserSetting::UseICU,
             UserSetting::UseExpertMode,
             UserSetting::DisableEffects,
+            UserSetting::DisableBlur,
             UserSetting::PreferSmallAvatars,
             UserSetting::LimitTownListSize,
             UserSetting::NotifyMeOnFriendRequest,
@@ -87,6 +89,7 @@ enum UserSetting: string {
             UserSetting::UseICU,
             UserSetting::UseExpertMode,
             UserSetting::DisableEffects,
+            UserSetting::DisableBlur,
             UserSetting::PreferSmallAvatars,
             UserSetting::LimitTownListSize,
             UserSetting::NotifyMeOnFriendRequest,
@@ -124,6 +127,7 @@ enum UserSetting: string {
             UserSetting::UseICU                        => false,
             UserSetting::UseExpertMode                 => false,
             UserSetting::DisableEffects                => false,
+            UserSetting::DisableBlur                   => false,
             UserSetting::PostAs                        => null,
             UserSetting::PreferSmallAvatars            => false,
             UserSetting::LimitTownListSize             => true,

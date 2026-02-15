@@ -62,7 +62,8 @@
 <body {{ (theme??{})|data }} onclick {{ {
     'online_body': is_granted('ROLE_USER'),
     'offline_body': not is_granted('ROLE_USER'),
-    'no-fx': app.user and app.user.disableFx
+    'no-fx': app.user and app.user.disableFx,
+    'no-blur': app.user and (app.user.disableFx or app.user.setting(constant("\\App\\Enum\\UserSetting::DisableBlur"))),
 }|classes }}>
 <div id="partial-proxy" class="hidden"></div>
 <div id="notifications"></div>
