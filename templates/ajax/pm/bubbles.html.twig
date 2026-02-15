@@ -98,14 +98,14 @@
                 {% elseif entry.users|length > 1 or entry.official is not null %}
                     {% set i = 0 %}
                     {% for message_partner in entry.users %}
-                        {% if i < 4 and message_partner != app.user and message_partner != entry.owner and message_partner.avatar %}
+                        {% if i < 4 and message_partner != app.user and message_partner != entry.owner and message_partner|singleMedia('avatar') %}
                             {% include "ajax/soul/playeravatar.html.twig" with {user: message_partner, gpm: true} only %}
                             {% set i = i+1 %}
                         {% endif %}
                     {% endfor %}
                     {% if i < 4 %}
                         {% for message_partner in entry.users %}
-                            {% if i < 4 and message_partner != app.user and message_partner != entry.owner and message_partner.avatar is empty %}
+                            {% if i < 4 and message_partner != app.user and message_partner != entry.owner and message_partner|singleMedia('avatar') is empty %}
                                 {% include "ajax/soul/playeravatar.html.twig" with {user: message_partner, gpm: true} only %}
                                 {% set i = i+1 %}
                             {% endif %}

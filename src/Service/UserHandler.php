@@ -134,11 +134,7 @@ class UserHandler
 
 
         $media = $this->mediaService->getMediaForObject( $user, 'avatar' );
-        if ($user->getAvatar() || !$media->isEmpty()) {
-            if ($user->getAvatar()) {
-                $this->entity_manager->remove($user->getAvatar());
-                $user->setAvatar(null);
-            }
+        if (!$media->isEmpty()) {
             $this->mediaService->clearMediaFromObject( $user, 'avatar' );
             ($this->clearCache)("user_avatar_{$user->getId()}");
         }

@@ -2,8 +2,6 @@
 
 namespace App\Command\User;
 
-
-use App\Entity\Avatar;
 use App\Entity\Award;
 use App\Entity\Citizen;
 use App\Entity\FoundRolePlayText;
@@ -285,15 +283,8 @@ class UserInfoCommand extends Command
                 $this->entityManager->persist($user);
                 $this->entityManager->flush();
             } elseif ($input->getOption('remove-avatar')) {
-
-                $a = $user->getAvatar();
                 $media = $this->mediaService->getMediaForObject($user, 'avatar');
-                if ($a !== null || !$media->isEmpty()) {
-
-                    if ($a !== null) {
-                        $user->setAvatar(null);
-                        $this->entityManager->remove($a);
-                    }
+                if (!$media->isEmpty()) {
                     $this->mediaService->clearMediaFromObject( $user, 'avatar' );
 
                     ($this->clearCache)("user_avatar_{$user->getId()}");
@@ -304,7 +295,7 @@ class UserInfoCommand extends Command
             }
 
             if ($title = $input->getOption('add-custom-award')) {
-                $this->entityManager->persist( (new Award())
+                $this->entityManager->persist( new Award()
                     ->setUser($user)
                     ->setCustomTitle($title)
                 );
@@ -333,11 +324,6 @@ class UserInfoCommand extends Command
                         $table->addRow([
                                            $award->getId(),
                                            $award->getCustomTitle()
-                                       ]);
-                    if ($award->getCustomIcon() !== null)
-                        $table->addRow([
-                                           $award->getId(),
-                                           $this->router->generate('app_web_customicon', ['uid' => $user->getId(), 'aid' => $award->getId(), 'name' => $award->getCustomIconName(), 'ext' => $award->getCustomIconFormat()])
                                        ]);
                 }
 

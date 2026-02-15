@@ -10,8 +10,8 @@
                     <div class="cell"><div class="pm-userbox">
                         {% include "ajax/soul/playeravatar.html.twig" with {
                             user: user, background: true, whitespace: false,
-                            gpm: user.avatar is not empty, no_distortion: true,
-                            classes: { empty: user.avatar is empty }
+                            gpm: user|singleMedia('avatar') is not empty, no_distortion: true,
+                            classes: { empty: user|singleMedia('avatar') is empty }
                         } only %}
                         {% if user == owning_user %}
                             <div class="pm-userbox-name"><i class="fa fa-crown"></i> <b>{{ user.name }}</b></div>

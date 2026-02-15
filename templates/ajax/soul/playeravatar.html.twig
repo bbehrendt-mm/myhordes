@@ -62,7 +62,7 @@
             {% else %}
                 {% set mediaCollection = 'avatar' ~ (gpm ? '@circular|default' : (small ? '@classic|default' : '')) %}
                 {% set mediaHost = user %}
-                {% set url = mediaHost|singleMediaSource(mediaCollection, null, false, user|avatar(small)) %}
+                {% set url = mediaHost|singleMediaSource(mediaCollection, null, false) %}
             {% endif %}
         {% endif %}
 
@@ -75,7 +75,7 @@
             {% endif %}
         {% endif %}
 
-        {% if user.id == 66 or url or mediaCollection or ((fallback is not defined or fallback) and not gpm) %}
+        {% if user.id == 66 or url is not empty or ((fallback is not defined or fallback) and not gpm) %}
 
             {% if wrapper is not defined or wrapper %}
                 <div {{ additional_attributes|attributes }} {{ {
@@ -89,9 +89,9 @@
                     {% else %}
                         {% set attrs = {} %}
                     {% endif %}
-                    {% if mediaHost is defined %}
+                    {% if mediaHost is defined and mediaHost|singleMediaSource(mediaCollection, w, false, url) is not empty %}
                         <img {{ attrs|attributes }} alt="" src="{{ mediaHost|singleMediaSource(mediaCollection, w, false, url) }}" srcset="{{ mediaHost|singleMediaSource(mediaCollection, w, true) }}"/>
-                    {% else %}
+                    {% elseif url is not empty %}
                         <img {{ attrs|attributes }} alt="" src="{{ url }}"/>
                     {% endif %}
                     {% if background is not defined or not background %}

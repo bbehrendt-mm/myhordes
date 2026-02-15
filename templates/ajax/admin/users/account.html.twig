@@ -78,7 +78,7 @@
                                         {% if is_granted("ROLE_ADMIN") %}
                                             <option value="{{ url('admin_users_account_manage', {action: 'link', id: user.id}) }}" data-confirm="LINK" data-query="{{ 'Spieler-ID'|trans({},'admin') }}">{{ 'Sekundäraccount verknüpfen'|trans({},'admin') }}</option>
                                         {% endif %}
-                                        {% if user.avatar is not null %}
+                                        {% if user|singleMedia('avatar') is not null %}
                                             <option value="{{ url('admin_users_account_manage', {action: 'clear_avatar', id: user.id}) }}" data-confirm="CLEAR AVATAR">{{ 'Avatar entfernen'|trans({},'admin') }}</option>
                                         {% endif %}
                                         {% if user_desc %}
@@ -206,12 +206,10 @@
                             <label>{{ 'Avatar'|trans({}, 'admin') }}</label>
                         </div>
                         <div class="cell padded rw-3 rw-sm-12">
-                            {% if user.avatar is not null %}
+                            {% if user|singleMedia('avatar') is not null %}
                                 {% include "ajax/soul/playeravatar.html.twig" with {user: user, no_distortion: true, small: false} only %}
-                                {% if not user.avatar.classic %}
-                                    <br/><br />
-                                    {% include "ajax/soul/playeravatar.html.twig" with {user: user, no_distortion: true, small: true} only %}
-                                {% endif %}
+                                <br/><br />
+                                {% include "ajax/soul/playeravatar.html.twig" with {user: user, no_distortion: true, small: true} only %}
                             {% else %}
                                 ---
                             {% endif %}
@@ -236,7 +234,7 @@
                             {% endif %}
                         </div>
                         {% if user_desc %}
-                            <div class="cell padded {% if user.avatar is null %}ro-6 ro-sm-0{% endif%} rw-6 rw-sm-12">
+                            <div class="cell padded {% if user|singleMedia('avatar') is null %}ro-6 ro-sm-0{% endif%} rw-6 rw-sm-12">
                                 <div class="personal_desc"><div>{{ 'Persönliche Beschreibung'|trans({},'game') }}</div><div>« {{ user_desc|raw }} »</div></div>
                             </div>
                         {% endif %}

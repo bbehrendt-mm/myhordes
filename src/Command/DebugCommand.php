@@ -3,14 +3,13 @@
 
 namespace App\Command;
 
-
-use App\Entity\Avatar;
 use App\Entity\Citizen;
 use App\Entity\CitizenProfession;
 use App\Entity\CitizenRankingProxy;
 use App\Entity\CitizenRole;
 use App\Entity\CitizenStatus;
 use App\Entity\ItemPrototype;
+use App\Entity\Media;
 use App\Entity\Picto;
 use App\Entity\SpecialActionPrototype;
 use App\Entity\Town;
@@ -30,6 +29,7 @@ use App\Service\GameFactory;
 use App\Service\GameProfilerService;
 use App\Service\InventoryHandler;
 use App\Service\ItemFactory;
+use App\Service\Media\MediaService;
 use App\Service\RandomGenerator;
 use App\Service\TownHandler;
 use App\Service\TwinoidHandler;
@@ -40,6 +40,8 @@ use DateTime;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Intervention\Image\Drivers\Imagick\Driver;
+use Intervention\Image\ImageManager;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -73,6 +75,7 @@ class DebugCommand extends LanguageCommand
         private readonly GameProfilerService         $gps,
         private readonly EventProxyService           $events,
         private readonly GenerateTownNameAction      $townNameAction,
+        private readonly MediaService                $mediaService,
     )
     {
         parent::__construct();
@@ -147,23 +150,10 @@ class DebugCommand extends LanguageCommand
                     return -1;
                 }
 
-                $avatar_data = file_get_contents("{$this->kernel->getProjectDir()}/assets/img/forum/crow/crow.png");
-                $avatar_small_data = file_get_contents("{$this->kernel->getProjectDir()}/assets/img/forum/crow/crow.small.png");
-
                 $crow
                     ->setName("Der Rabe")
                     ->setEmail("crow")
-                    ->setRightsElevation(User::USER_LEVEL_CROW)
-                    ->setAvatar( (new Avatar())
-                        ->setChanged(new \DateTime())
-                        ->setFilename( md5( $avatar_data ) )
-                        ->setSmallName( md5( $avatar_small_data ) )
-                        ->setFormat( 'png' )
-                        ->setImage( $avatar_data )
-                        ->setSmallImage( $avatar_small_data )
-                        ->setX( 100 )
-                        ->setY( 100 )
-                    );
+                    ->setRightsElevation(User::USER_LEVEL_CROW);
 
                 try {
                     $crow->setPassword($this->encoder->hashPassword($crow, bin2hex(random_bytes(16))));
@@ -172,6 +162,13 @@ class DebugCommand extends LanguageCommand
                     return -1;
                 }
                 $this->entity_manager->persist($crow);
+                $this->entity_manager->flush();
+                $this->entity_manager->persist( $this->mediaService->addLegacyAvatarFromFilesToUser(
+                    $crow,
+                    "{$this->kernel->getProjectDir()}/assets/img/forum/crow/crow.png",
+                    "{$this->kernel->getProjectDir()}/assets/img/forum/crow/crow.small.png",
+                    false
+                ) );
                 $this->entity_manager->flush();
 
                 return 0;
@@ -205,23 +202,10 @@ class DebugCommand extends LanguageCommand
                     return -1;
                 }
 
-                $avatar_data = file_get_contents("{$this->kernel->getProjectDir()}/assets/img/forum/crow/anim.gif");
-                $avatar_small_data = file_get_contents("{$this->kernel->getProjectDir()}/assets/img/forum/crow/anim.small.gif");
-
                 $animacteur
                     ->setName("Animateur-Team")
                     ->setEmail("anim")
-                    ->addRoleFlag( User::USER_ROLE_ANIMAC )
-                    ->setAvatar( (new Avatar())
-                        ->setChanged(new \DateTime())
-                        ->setFilename( md5( $avatar_data ) )
-                        ->setSmallName( md5( $avatar_small_data ) )
-                        ->setFormat( 'gif' )
-                        ->setImage( $avatar_data )
-                        ->setSmallImage( $avatar_small_data )
-                        ->setX( 100 )
-                        ->setY( 100 )
-                    );
+                    ->addRoleFlag( User::USER_ROLE_ANIMAC );
 
                 try {
                     $animacteur->setPassword($this->encoder->hashPassword($animacteur, bin2hex(random_bytes(16))));
@@ -230,6 +214,13 @@ class DebugCommand extends LanguageCommand
                     return -1;
                 }
                 $this->entity_manager->persist($animacteur);
+                $this->entity_manager->flush();
+                $this->entity_manager->persist( $this->mediaService->addLegacyAvatarFromFilesToUser(
+                    $animacteur,
+                    "{$this->kernel->getProjectDir()}/assets/img/forum/crow/anim.gif",
+                    "{$this->kernel->getProjectDir()}/assets/img/forum/crow/anim.small.gif",
+                    true
+                ) );
                 $this->entity_manager->flush();
 
                 return 0;

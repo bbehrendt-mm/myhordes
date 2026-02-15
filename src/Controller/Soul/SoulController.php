@@ -896,7 +896,7 @@ class SoulController extends CustomAbstractController
             $user->setActiveIcon(null);
         else {
             $award = $this->entity_manager->getRepository(Award::class)->find( $icon );
-            if ($award === null || $award->getUser() !== $user || ($award->getPrototype() === null && $award->getCustomIcon() === null) || ($award->getPrototype() !== null && $award->getPrototype()->getIcon() === null))
+            if ($award === null || $award->getUser() !== $user || ($award->getPrototype() !== null && $award->getPrototype()->getIcon() === null))
                 return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
 
             if ($this->user_handler->isRestricted($user, AccountRestriction::RestrictionProfileTitle) && $user->getActiveIcon() !== $award)
@@ -1029,7 +1029,7 @@ class SoulController extends CustomAbstractController
         if(count($matches) > 0) {
             $pageContent->setContent(preg_replace("={$matches[0]}=", "<img src='" . $this->asset->getUrl($matches[1]) . "' alt='' />", $pageContent->getContent()));
         }
-        
+
         $this->entity_manager->flush();
 
         return $this->render( 'ajax/soul/view_rp.html.twig', $this->addDefaultTwigArgs("soul_rps", array(
@@ -1205,7 +1205,7 @@ class SoulController extends CustomAbstractController
 
         if (!$parser->has('lang', true))
             return AjaxResponse::error(ErrorHelper::ErrorDatabaseException);
-        
+
         $lang = $parser->get('lang', 'de');
         if (!in_array($lang, $this->allLangsCodes))
             return AjaxResponse::error(ErrorHelper::ErrorDatabaseException);
@@ -1427,7 +1427,7 @@ class SoulController extends CustomAbstractController
 
         /** @var User $user */
         $user = $this->entity_manager->getRepository(User::class)->find($id);
-        if($user === null || $user === $current_user) 
+        if($user === null || $user === $current_user)
             return $this->redirect($this->generateUrl('soul_me'));
 
         $returnUrl = null; // TODO: get the referer, it can be empty!
@@ -1439,7 +1439,7 @@ class SoulController extends CustomAbstractController
         $citizen_id = ($cac && $uac && $cac->getAlive() && !$cac->getZone() && $cac->getTown() === $uac->getTown()) ? $uac->getId() : null;
 
         $desc = $this->entity_manager->getRepository(UserDescription::class)->findOneBy(['user' => $user]);
-        
+
         $seasons_data = $this->getSeasonsData($user);
 
         return $this->render( 'ajax/soul/visit.html.twig', $this->addDefaultTwigArgs("soul_visit", [

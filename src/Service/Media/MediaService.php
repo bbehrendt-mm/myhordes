@@ -2,6 +2,7 @@
 namespace App\Service\Media;
 
 use App\Entity\Media;
+use App\Entity\User;
 use App\Structures\Media\MediaCollection;
 use App\Structures\Media\MediaVariant;
 use App\Structures\Media\MediaVariantInterface;
@@ -395,5 +396,18 @@ readonly class MediaService
                 $totalSize += $file->getSize();
 
         return $totalSize;
+    }
+
+    public function addLegacyAvatarFromFilesToUser(User $user, string $square, string $classic, bool $animated): Media {
+        $media = $this->addMediaToObjectFromFile($user,$square,'avatar');
+        $media->unregisterConversion( $media->findConversions(includeTags: ['classic', 'square']) );
+        $media->registerConversion('legacy-default', ['default', 'square', ...($animated ? ['animated'] : [])]);
+        $media->registerConversion('legacy-classic', ['classic', ...($animated ? ['animated'] : [])]);
+
+        $this->storePreConvertedImageAsConversion( $media, $media->transientImage, $media->transientImage->encode(), 'legacy-default' );
+
+        $image_small = new ImageManager( Driver::class, strip: true )->read( $classic );
+        $this->storePreConvertedImageAsConversion( $media, $image_small, $image_small->encode(), 'legacy-classic' );
+        return $media;
     }
 }

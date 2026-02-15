@@ -99,9 +99,6 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
     #[ORM\Column(type: 'string', length: 32)]
     private string $externalId = '';
 
-    #[ORM\OneToOne(targetEntity: 'App\Entity\Avatar', cascade: ['persist', 'remove'])]
-    private ?Avatar $avatar = null;
-
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $language = null;
 
@@ -520,16 +517,6 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
         )->first() ?: null;
     }
 
-    public function getAvatar(): ?Avatar
-    {
-        return $this->avatar;
-    }
-    public function setAvatar(?Avatar $avatar): self
-    {
-        $this->avatar = $avatar;
-
-        return $this;
-    }
     public function getPreferSmallAvatars(): ?bool
     {
         return $this->getSetting( UserSetting::PreferSmallAvatars );

@@ -100,7 +100,7 @@
 
     <div class="lightbox">
         <div class="row">
-            {% if (owner.user.avatar) %}
+            {% if (owner.user|singleMedia('avatar')) %}
                 <div class="cell rw-12 hide-desktop hide-lg center">
                     {% include "ajax/soul/playeravatar.html.twig" with {user: owner.user, small: true} only %}
                 </div>
@@ -110,7 +110,7 @@
                 </div>
             {% endif %}
 
-            <div class="cell {% if owner.user.avatar %}rw-9 rw-lg-8 rw-md-12{% else %}rw-12{% endif %}">
+            <div class="cell {% if owner.user|singleMedia('avatar') %}rw-9 rw-lg-8 rw-md-12{% else %}rw-12{% endif %}">
                 <div class="row">
                     <div class="cell rw-5 rw-lg-6"><span class="highlight">{{ 'Haus'|trans({},'game') }} :</span></div>
                     <div class="cell rw-7 rw-lg-6">

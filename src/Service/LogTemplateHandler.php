@@ -317,7 +317,6 @@ class LogTemplateHandler
                         $a = $e ? $this->entity_manager->getRepository(Award::class)->find($e) : null;
                         if (!$a) return '???';
                         elseif ($a->getCustomTitle()) return $this->wrap( $a->getCustomTitle() );
-                        elseif ($a->getCustomIcon()) return "<img alt='$e' src='{$this->url->generate('app_web_customicon', ['uid' => $a->getUser()->getId(), 'aid' => $a->getId(), 'name' => $a->getCustomIconName(), 'ext' => $a->getCustomIconFormat()])}' />";
                         else return '????';
                     }, $variables[$typeEntry['name']] ?? [] ));
                     $transParams['{'.$typeEntry['name'].'}'] .= "</div>";
@@ -328,7 +327,6 @@ class LogTemplateHandler
                     $official_titles = array_filter( $prototypes, fn(AwardPrototype $p) => $p->getTitle() !== null );
                     $official_icons  = array_filter( $prototypes, fn(AwardPrototype $p) => $p->getIcon() !== null );
                     $unique_titles   = array_filter( $customs, fn(Award $a) => $a->getCustomTitle() !== null );
-                    $unique_icons    = array_filter( $customs, fn(Award $a) => $a->getCustomIcon() !== null );
 
                     $transParams['{'.$typeEntry['name'].'}'] = '';
                     if (!empty($official_titles)) $transParams['{'.$typeEntry['name'].'}'] .= '<p><h5>' . $this->trans->trans('Titel', [], 'global') . '</h5><div class="list">' .
@@ -350,10 +348,6 @@ class LogTemplateHandler
 
                     if (!empty($unique_titles)) $transParams['{'.$typeEntry['name'].'}'] .= '<p><h5>' . $this->trans->trans('Einzigartige Titel', [], 'global') . '</h5><div class="list">' .
                         implode('', array_map( fn(Award $e) => $this->wrap( $e->getCustomTitle() ), $unique_titles )) .
-                        '</div></p>';
-
-                    if (!empty($unique_icons)) $transParams['{'.$typeEntry['name'].'}'] .= '<p><h5>' . $this->trans->trans('Einzigartige Icons', [], 'global') . '</h5><div class="list">' .
-                        implode('', array_map( fn(Award $e) => "<img alt='' src='{$this->url->generate('app_web_customicon', ['uid' => $e->getUser()->getId(), 'aid' => $e->getId(), 'name' => $e->getCustomIconName(), 'ext' => $e->getCustomIconFormat()])}' />", $unique_icons )) .
                         '</div></p>';
                 }
 

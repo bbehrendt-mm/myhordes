@@ -389,10 +389,12 @@ class MigrateCommand extends Command
                 return 2;
             }
 
-            if (!$this->helper->capsule( 'doctrine:migrations:version "DoctrineMigrations\Version20250830134338" --add', $output )) {
-                $output->writeln("<error>Unable to create schema.</error>");
-                return 2;
-            }
+            $fixed_migrations = ['Version20250830134338', 'Version20260215154040'];
+            foreach ($fixed_migrations as $migration)
+                if (!$this->helper->capsule( "doctrine:migrations:version \"DoctrineMigrations\\{$migration}\" --add", $output )) {
+                    $output->writeln("<error>Unable to create schema.</error>");
+                    return 2;
+                }
 
             if (!$this->helper->capsule( 'doctrine:fixtures:load --append', $output )) {
                 $output->writeln("<error>Unable to update fixtures.</error>");
@@ -541,6 +543,11 @@ class MigrateCommand extends Command
 
         if ($input->getOption('update-db')) {
 
+            if (!$this->helper->capsule( 'doctrine:migrations:migrate --all-or-nothing --allow-no-migration --no-interaction', $output )) {
+                $output->writeln("<error>Unable to migrate pre-existing migration files.</error>");
+                return 1;
+            }
+
             if (!$this->helper->capsule( 'doctrine:migrations:diff --allow-empty-diff --no-interaction', $output )) {
                 $output->writeln("<error>Unable to create a migration.</error>");
                 return 1;
@@ -553,13 +560,13 @@ class MigrateCommand extends Command
 
                     $source = "{$this->param->get('kernel.project_dir')}/migrations";
                     foreach (scandir( $source ) as $file)
-                        if ($file && $file[0] !== '.' && $file !== 'Version20250830134338.php') {
+                        if ($file && $file[0] !== '.' && $file !== 'Version20250830134338.php' && $file !== 'Version20260215154040.php') {
                             $output->write("\tDeleting \"<comment>{$file}</comment>\"... ");
                             unlink( "$source/$file" );
                             $output->writeln('<info>Ok!</info>');
                         }
 
-                    if (!$this->helper->capsule( 'doctrine:migrations:diff --allow-empty-diff --formatted --no-interaction', $output )) {
+                    if (!$this->helper->capsule( 'doctrine:migrations:diff --allow-empty-diff --no-interaction', $output )) {
                         $output->writeln("<error>Unable to create a migration.</error>");
                         return 1;
                     }

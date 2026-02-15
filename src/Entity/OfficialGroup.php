@@ -25,17 +25,11 @@ class OfficialGroup
     private string $lang;
     #[ORM\Column(type: 'text')]
     private string $description;
-    #[ORM\Column(type: 'blob', nullable: true)]
-    private $icon;
     #[ORM\Column(type: 'boolean')]
     private ?bool $anon;
     #[ORM\OneToOne(targetEntity: UserGroup::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private UserGroup $usergroup;
-    #[ORM\Column(type: 'string', length: 32, nullable: true)]
-    private ?string $avatarName;
-    #[ORM\Column(type: 'string', length: 9, nullable: true)]
-    private ?string $avatarExt;
     #[ORM\Column(type: 'integer', enumType: OfficialGroupSemantic::class)]
     private OfficialGroupSemantic $semantic = OfficialGroupSemantic::None;
 
@@ -65,16 +59,6 @@ class OfficialGroup
 
         return $this;
     }
-    public function getIcon()
-    {
-        return $this->icon;
-    }
-    public function setIcon($icon): self
-    {
-        $this->icon = $icon;
-
-        return $this;
-    }
     public function getAnon(): ?bool
     {
         return $this->anon;
@@ -92,26 +76,6 @@ class OfficialGroup
     public function setUsergroup(UserGroup $usergroup): self
     {
         $this->usergroup = $usergroup;
-
-        return $this;
-    }
-    public function getAvatarName(): ?string
-    {
-        return $this->avatarName;
-    }
-    public function setAvatarName(?string $avatarName): self
-    {
-        $this->avatarName = $avatarName;
-
-        return $this;
-    }
-    public function getAvatarExt(): ?string
-    {
-        return $this->avatarExt;
-    }
-    public function setAvatarExt(?string $avatarExt): self
-    {
-        $this->avatarExt = $avatarExt;
 
         return $this;
     }

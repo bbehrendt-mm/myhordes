@@ -2,16 +2,13 @@
 
 namespace App\Messages\WebPush;
 
-use App\Entity\Avatar;
 use App\Entity\Media;
 use App\Entity\NotificationSubscription;
 use App\Enum\NotificationSubscriptionType;
-use App\Service\Media\MediaService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use WebPush\Message;
 use WebPush\Notification;
 use WebPush\WebPush;

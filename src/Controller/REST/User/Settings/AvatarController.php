@@ -219,9 +219,6 @@ class AvatarController extends AbstractController
      */
     #[Route(path: '/media', name: 'delete', methods: ['DELETE'])]
     public function deleteMedia(EntityManagerInterface $em, InvalidateTagsInAllPoolsAction $clearCache, MediaService $mediaService, RecalculateMediaExpirationAction $expirationAction): JsonResponse {
-
-        $avatar = $this->getUser()->getAvatar();
-
         $collection = 'avatar-pending';
         $media =  $mediaService->getMediaForObject( $this->getUser(), $collection );
         if ($media->isEmpty()) {
@@ -230,12 +227,7 @@ class AvatarController extends AbstractController
         }
         if ($media->isEmpty()) $collection = null;
 
-        if ($avatar || !$media->isEmpty()) {
-            if ($avatar) {
-                $em->remove($this->getUser()->getAvatar());
-                $this->getUser()->setAvatar(null);
-            }
-
+        if (!$media->isEmpty()) {
             if ($collection !== null)
                 $mediaService->clearMediaFromObject( $this->getUser(), $collection);
 

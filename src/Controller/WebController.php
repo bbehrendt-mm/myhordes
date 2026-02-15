@@ -3,11 +3,8 @@
 namespace App\Controller;
 
 use App\Annotations\GateKeeperProfile;
-use App\Entity\Avatar;
-use App\Entity\Award;
 use App\Entity\MarketingCampaign;
 use App\Entity\OfficialGroup;
-use App\Entity\User;
 use App\Enum\Configuration\MyHordesSetting;
 use App\Enum\OfficialGroupSemantic;
 use App\Response\AjaxResponse;
@@ -25,15 +22,12 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Translation\T;
 use Shivas\VersioningBundle\Service\VersionManagerInterface as VersionManager;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
-use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\ErrorHandler\Exception\FlattenException;
-use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\HttpKernel\EventListener\AbstractSessionListener;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\HttpKernel\Log\DebugLoggerInterface;
 use Symfony\Component\Routing\Attribute\Route;
@@ -433,6 +427,7 @@ class WebController extends CustomAbstractController
     /**
      * @param string $ajax
      * @param Request $q
+     * @param GenerateMercureToken $mercure
      * @return Response
      */
     #[Route(path: '/jx/{ajax}', requirements: ['ajax' => '.+'], condition: '!request.isXmlHttpRequest()')]
@@ -464,54 +459,6 @@ class WebController extends CustomAbstractController
         return $this->handleDomainRedirection() ?? $this->render_web_framework($q, $mercure, $q->getBasePath() . "/jx/{$ajax}{$bag}", $whitelisted( $ajax ));
     }
 
-    private function check_cache(string $name): ?Response {
-        $request = Request::createFromGlobals();
-        if (!$request->headers->has('If-None-Match')) return null;
-
-        return $request->headers->get('If-None-Match') === $name ? new Response("",304) : null;
-    }
-
-    private function image_output($data, string $name, string $ext, ?string $identifier = null): Response {
-        // HEIC images should be referred to as AVIF towards the browser
-        if ($ext === 'heic') $ext = 'avif';
-
-        $response = new Response(stream_get_contents( $data ));
-        $disposition = HeaderUtils::makeDisposition(
-            HeaderUtils::DISPOSITION_INLINE,
-            "{$name}.{$ext}"
-        );
-        $response->headers->set('Content-Disposition', $disposition);
-        $response->headers->set('Content-Type', "image/{$ext}");
-        $response
-            ->setPrivate()->setMaxAge(157680000)->setImmutable()
-            ->headers->set(AbstractSessionListener::NO_AUTO_CACHE_CONTROL_HEADER, 'true');
-        return $response;
-    }
-
-    /**
-     * @param int $uid
-     * @param string $name
-     * @param string $ext
-     * @return Response
-     */
-    #[Route(path: '/cdn/avatars/{uid<\d+>}/{name}.{ext<[\w\d]+>}', name: 'app_web_avatar', requirements: ['name' => '[0123456789abcdef]{32}'], condition: '!request.isXmlHttpRequest()')]
-    #[GateKeeperProfile('skip')]
-    public function avatar(int $uid, string $name, string $ext): Response
-    {
-        if ($r = $this->check_cache($name)) return $r;
-
-        $avatar = $this->entity_manager->getRepository(User::class)->find( $uid )?->getAvatar();
-        if (!$avatar) return $this->cdn_fallback( "avatar/{$uid}/{$name}.{$ext}" );
-
-        if (($avatar->getFilename() !== $name && $avatar->getSmallName() !== $name))
-            return $this->cdn_fallback( "avatar/{$uid}/{$name}.{$ext}" );
-        if ($avatar->getFormat() !== $ext)
-            return $this->redirectToRoute( 'app_web_avatar', ['uid' => $uid, 'name' => $name, 'ext' => $avatar->getFormat()] );
-
-        $target = ($avatar->getFilename() === $name || !$avatar->getSmallImage()) ? $avatar->getImage() : $avatar->getSmallImage();
-        return $this->image_output($target, $name, $ext, "{$uid}-{$name}-{$ext}");
-    }
-
     /**
      * @param string $url
      * @return Response
@@ -528,6 +475,9 @@ class WebController extends CustomAbstractController
 
 
     /**
+     * @param MarketingCampaign|null $campaign
+     * @param SessionInterface $session
+     * @param EntityManagerInterface $em
      * @return Response
      */
     #[Route(path: '/c/{campaign_slug}', name: 'campaign_redirect', methods: ['GET'], condition: '!request.isXmlHttpRequest()')]
@@ -535,7 +485,7 @@ class WebController extends CustomAbstractController
         #[MapEntity(mapping: ['campaign_slug' => 'slug'])] ?MarketingCampaign $campaign,
         SessionInterface $session,
         EntityManagerInterface $em
-    ) {
+    ): Response {
         if ($campaign && !$this->getUser()) {
             $session->set('campaign', $campaign->registerClick()->getId());
             try {

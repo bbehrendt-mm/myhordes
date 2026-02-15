@@ -852,11 +852,6 @@ class AdminUserController extends AdminActionController
                 if ($desc) $this->entity_manager->remove($desc);
                 break;
             case 'clear_avatar':
-                if ($user->getAvatar()) {
-                    $this->entity_manager->remove($user->getAvatar());
-                    $user->setAvatar(null);
-                }
-
                 $this->mediaService->clearMediaFromObject( $user, 'avatar' );
                 $clearCache("user_avatar_{$user->getId()}");
                 break;
@@ -1597,7 +1592,6 @@ class AdminUserController extends AdminActionController
             return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
 
         if ($parser->has('title', true)) {
-            if ($award->getCustomIcon() !== null) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
             $this->entity_manager->persist($award->setUser($user)->setCustomTitle($parser->get('title')));
         } else {
             if ($award->getCustomTitle() !== null) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);

@@ -20,17 +20,12 @@ use Twig\TwigFilter;
 class ObjectCacheExtension extends AbstractExtension implements GlobalsInterface
 {
     public function __construct(
-        private readonly EntityManagerInterface $em,
-        private readonly TagAwareCacheInterface $gameCachePool,
-        private readonly RouterInterface        $router,
-        private readonly Packages               $asset,
-        private readonly EventProxyService      $events
+        private readonly EventProxyService $events
     ) { }
 
     public function getFilters(): array
     {
         return [
-            new TwigFilter('avatar', [$this, 'get_cached_avatar']),
             new TwigFilter('itemCacheKey', [$this, 'get_item_cache_key']),
         ];
     }
@@ -43,30 +38,6 @@ class ObjectCacheExtension extends AbstractExtension implements GlobalsInterface
     public function getGlobals(): array
     {
         return [];
-    }
-
-    public function get_cached_avatar(int|User $user, bool $small = false): string {
-        $id = is_int($user) ? $user : $user->getId();
-        $flag = $small ? 's' : 'q';
-        $key = "twig_cache_user_avatar_{$id}_{$flag}";
-        return $this->gameCachePool->get($key, function (ItemInterface $item) use ($small, $id, $user): string {
-            $item->expiresAfter(604800)->tag(['user_avatars', "user_avatar_$id"]);
-
-            $avatar = is_int($user)
-                ? $this->em->getRepository(User::class)->find($user)?->getAvatar()
-                : $user->getAvatar();
-
-            // path('app_web_avatar', {'uid': user.id, 'name': small ? user.avatar.smallName : user.avatar.filename, 'ext': user.avatar.format})
-
-            return $avatar
-                ? $this->router->generate( 'app_web_avatar', [
-                    'uid' => $id,
-                    'name' => $small ? $avatar->getSmallName() : $avatar->getFilename(),
-                    'ext' => $avatar->getFormat()
-                ] )
-                : $this->asset->getUrl('build/images/forum/empty_avatar.gif');
-
-        }/*, INF*/);
     }
 
     public function get_item_cache_key(Item|ItemPrototype $item, int $count = 1, bool $devMode = false): string {
