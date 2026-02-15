@@ -477,8 +477,8 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->voteLevel(3)->baseVoteText('Die Verteidigung der Stadt wird um 10% erhöht.')
             ->upgradeTexts([
                                'Die Verteidigung der Stadt wird um 11% erhöht.',
-                               'Die Verteidigung der Stadt wird um 13% erhöht.',
-                               'Die Verteidigung der Stadt wird um 15% erhöht.'
+                               'Die Verteidigung der Stadt wird um 12% erhöht.',
+                               'Die Verteidigung der Stadt wird um 13% erhöht.'
                            ])
             ->commit();
         $container->add()->parentBuilding($small_refine)
