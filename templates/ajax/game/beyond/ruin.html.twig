@@ -75,7 +75,7 @@
                     {% endif %}
                     <br />
 
-                    <button {% if (zone_zombies > 0 and not escaping) or zone.locked %}disabled{% endif %} data-emit="eruin-map-shift">
+                    <button id='enter_button' {% if (zone_zombies > 0 and not escaping) or zone.locked %}data-disabled="true" disabled{% endif %} data-emit="eruin-map-shift">
                         {% if ((zone_zombies <= 0 or escaping) and not zone.locked) or shifted %}
                             <img class="icon left" alt="" src="{{ asset('build/images/icons/small_enter.gif') }}" />
                         {% else %}

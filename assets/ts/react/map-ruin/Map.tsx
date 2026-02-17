@@ -35,6 +35,7 @@ export const MapCore = (props: {setup: MapSetup, properties: MapProperties}) => 
 
     const moveLock = useRef(false);
     const progressing = useRef(false);
+    const enterButton = useRef<HTMLButtonElement>();
     const stages = useRef<HTMLDivElement>();
 
     const scaler = useRef<MapScaler>( new MapScaler(props.setup.w, props.setup.h) );
@@ -152,29 +153,58 @@ export const MapCore = (props: {setup: MapSetup, properties: MapProperties}) => 
         progressing.current = false;
     }, [props.properties.etag]);
 
-    const updateZone = (r: ZoneResponse, dx: number = 0, dy: number = 0, dz: number = 0, chain = true) => {
-        setNextZone( { r, s: { dx, dy, dz, tileset: r.tileset, shifted: r.status.shifted } } )
-        if (!chain) return;
-        if (
-            r.status.zombies.active > 0 || r.tileset.door || r.tileset.tile < 0 ||
-            currentZone.status.zombies.active > 0 || currentZone.tileset.door || currentZone.tileset.tile < 0
-        ) {
-            progressing.current = true;
-            $.ajax.load(null, props.properties.reload, false);
+    useEffect(() => {
+        enterButton.current = document.querySelector<HTMLButtonElement>('#enter_button');
+        if (enterButton.current && enterButton.current.disabled && !enterButton.current.dataset.disabled) {
+            enterButton.current.removeAttribute('disabled');
         }
-        else document
-            .querySelectorAll('hordes-inventory[data-inventory-b-type="desert"]')
-            .forEach( e => (e as HTMLElement).dataset.inventoryBId = `${r.status.floor}` )
+    }, [currentZone]);
+
+    const updateZone = (r: ZoneResponse, dx: number = 0, dy: number = 0, dz: number = 0, chain = true) => {
+        return new Promise<void>( (resolve) => {
+            setNextZone( { r, s: { dx, dy, dz, tileset: r.tileset, shifted: r.status.shifted } } )
+            if (!chain) return resolve();
+            if (
+                r.status.zombies.active > 0 || r.tileset.door || r.tileset.tile < 0 ||
+                currentZone.status.zombies.active > 0 || currentZone.tileset.door || currentZone.tileset.tile < 0
+            ) {
+                progressing.current = true;
+                $.ajax.load(null, props.properties.reload, false, undefined, () => resolve() );
+            }
+            else {
+                document
+                    .querySelectorAll('hordes-inventory[data-inventory-b-type="desert"]')
+                    .forEach( e => (e as HTMLElement).dataset.inventoryBId = `${r.status.floor}` );
+                resolve();
+            }
+        });
     }
 
     const shift = () => {
         if (progressing.current|| !currentZone.tileset.door || (!currentZone.status.shifted && currentZone.status.move === null)) return;
         progressing.current = true;
 
-        if (currentZone.tileset.door.l != 0)
+        if (currentZone.tileset.door.l != 0) {
+            enterButton.current = document.querySelector<HTMLButtonElement>('#enter_button');
+            enterButton.current?.setAttribute('disabled', 'true');
             globals.api.move(0, 0, currentZone.tileset.door.l)
-                .then( (r) => updateZone(r, 0, 0, currentZone.tileset.door.l));
-        else globals.api.shift( !currentZone.status.shifted ).then( (r) => updateZone(r) );
+                .then( (r) => {
+                    updateZone(r, 0, 0, currentZone.tileset.door.l)
+                        .then(() => {
+                            enterButton.current = document.querySelector<HTMLButtonElement>('#enter_button');
+                            enterButton.current?.setAttribute('disabled', 'true');
+                        });
+                })
+                .catch((e) => {
+                    console.error(e);
+                    progressing.current = false;
+                });
+        }
+        else globals.api.shift( !currentZone.status.shifted ).then( (r) => updateZone(r) )
+            .catch((e) => {
+                console.error(e);
+                progressing.current = false;
+            });
     }
 
     useSignal( 'eruin-map-shift', shift, [currentZone] );
