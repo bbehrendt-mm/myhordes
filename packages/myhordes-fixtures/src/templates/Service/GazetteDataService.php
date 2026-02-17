@@ -1675,11 +1675,12 @@ class GazetteDataService implements FixtureProcessorInterface {
             ['text'=>'„Wandernde Seelen sind wie {danger}: Wenn man sich nicht sicher ist, <strong>sollte man sie besser nicht mitnehmen</strong>“, erklärte {citizen1}, als er vom Tod von <i class="dagger">†</i> {cadaver1} erfuhr, der von einer gequälten Seele besessen war.',
                 'name'=>'gazetteTownRedSoul_004',
                 'type'=>GazetteEntryTemplate::TypeGazetteRedSoul,
-                'requirement'=>GazetteEntryTemplate::RequiresOneCadaver,
+                'requirement'=>GazetteEntryTemplate::RequiresOneOfEach,
                 'fot' => GazetteEntryTemplate::FollowUpTypeDoubt,
                 'variableTypes'=>[
                     ['type'=>"citizen",'name'=>'cadaver1']
                     ['type'=>"transString",'from'=>'gazette','name'=>'danger'],
+                    ['type'=>"citizen",'name'=>'citizen1'],
                 ],
             ],
             ['text'=>'Wir erfahren vom tragischen Tod von <i class="dagger">†</i> {cadaver1}, <strong>der durch das rachsüchtige Feuer eines Wesens verbrannt wurde, das direkt aus der Hölle zurückgekehrt war, um die Wüste heimzusuchen</strong>. Er hätte seinen Trank trinken sollen.',
@@ -1705,7 +1706,7 @@ class GazetteDataService implements FixtureProcessorInterface {
             ['text'=>'„Wandernde Seelen sind wie {danger}: Wenn man sich nicht sicher ist, <strong>sollte man sie besser nicht aufnehmen</strong>“, erklärte {citizen1}, als er vom Tod von {cadavers} Bürgern erfuhr, die von gequälten Seelen besessen waren.',
                 'name'=>'gazetteTownMultiRedSoul_002',
                 'type'=>GazetteEntryTemplate::TypeGazetteMultiRedSoul,
-                'requirement'=>GazetteEntryTemplate::RequiresMultipleRedSouls,
+                'requirement'=>GazetteEntryTemplate::RequiresMultipleRedSoulsC1,
                 'fot' => GazetteEntryTemplate::FollowUpTypeBad,
                 'variableTypes'=>[
                     ['type'=>"citizen",'name'=>'citizen1'],
@@ -2041,7 +2042,7 @@ class GazetteDataService implements FixtureProcessorInterface {
             ['text'=>'Haben Zombies Tischmanieren gelernt? {cadavers} Ihrer Mitbürger wurden von {citizen1} als nichts anderes als <strong>Skelette</strong> gefunden, deren Knochen von der Wüstensonne versengt waren. Wir alle haben schon gesehen, wie Bürger verschlungen wurden, aber diese sind nicht wie die anderen ... <strong>Zombies sind niemals so gründlich ...</strong>',
                 'name'=>'gazetteTownMultiGhulEaten_002',
                 'type'=>GazetteEntryTemplate::TypeGazetteMultiGhulEaten,
-                'requirement'=>GazetteEntryTemplate::RequiresMultipleGhulEaten,
+                'requirement'=>GazetteEntryTemplate::RequiresMultipleGhulEatenC1,
                 'fot' => GazetteEntryTemplate::FollowUpTypeBad,
                 'variableTypes'=>[
                     ['type'=>"num",'name'=>'cadavers'],
@@ -2152,7 +2153,7 @@ class GazetteDataService implements FixtureProcessorInterface {
             ['text'=>'Das ganze Dorf fand die Idee von {citizen1} großartig, der in dieser Nacht zwischen Mitternacht und ein Uhr morgens sein Radio auf volle Lautstärke gestellt hatte. Man muss sagen, dass das Geschrei der <strong>{cadavers} Bürger, die im Fleischkäfig eingesperrt waren</strong>, langsam unerträglich wurde. ',
                 'name'=>'gazetteTownMultiFleshCage_002',
                 'type'=>GazetteEntryTemplate::TypeGazetteMultiFleshCage,
-                'requirement'=>GazetteEntryTemplate::RequiresMultipleFleshCage,
+                'requirement'=>GazetteEntryTemplate::RequiresMultipleFleshCageC1,
                 'fot' => GazetteEntryTemplate::FollowUpTypeBad,
                 'variableTypes'=>[ 
                     ['type'=>"num",'name'=>'cadavers'], 
@@ -2181,12 +2182,13 @@ class GazetteDataService implements FixtureProcessorInterface {
             ['text'=>'Heute Morgen wurde ein großes Rätsel gelöst! Alle waren neugierig, wie {citizen1} {location} {bodyPart} an den Kopf bekommen hatte. Die Antwort: <strong>ein „kleines Geschenk für Diebe”</strong>, das unter einer Fußmatte versteckt war und von <i class="dagger">†</i> {cadaver1} eingeweiht wurde. ',
                 'name'=>'gazetteTownExplosiveDoormat_002',
                 'type'=>GazetteEntryTemplate::TypeGazetteExplosiveDoormat,
-                'requirement'=>GazetteEntryTemplate::RequiresOneCadaver,
+                'requirement'=>GazetteEntryTemplate::RequiresOneOfEach,
                 'fot' => GazetteEntryTemplate::FollowUpTypeDoubt,
                 'variableTypes'=>[
                     ['type'=>"citizen",'name'=>'cadaver1'],
                     ['type'=>"transString",'from'=>'gazette','name'=>'location'],
                     ['type'=>"transString",'from'=>'gazette','name'=>'bodypart'], 
+                    ['type'=>"citizen", 'name'=>'citizen1'],
                 ],
             ],
             ['text'=>'Eine ganz normale Fußmatte... oder auch nicht. <i class="dagger">†</i>{cadaver1} musste auf die harte Tour lernen, dass die Willkommensmatte manchmal nicht nur eine Begrüßung ist, sondern manchmal auch <strong>eine Einbahnfahrkarte ins Jenseits</strong>.',
