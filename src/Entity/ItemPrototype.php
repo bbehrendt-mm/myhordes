@@ -24,6 +24,8 @@ class ItemPrototype implements NamedEntity
     private string $label;
     #[ORM\Column(type: 'string', length: 32)]
     private string $icon;
+    #[ORM\Column(type: 'string', length: 32)]
+    private string $brokenIcon;
     #[ORM\Column(type: 'integer')]
     private int $deco = 0;
     #[ORM\ManyToOne(targetEntity: 'App\Entity\ItemCategory', inversedBy: 'itemPrototypes')]
@@ -91,6 +93,16 @@ class ItemPrototype implements NamedEntity
     public function setIcon(string $icon): self
     {
         $this->icon = $icon;
+
+        return $this;
+    }
+    public function getBrokenIcon(): ?string
+    {
+        return $this->brokenIcon;
+    }
+    public function setBrokenIcon(string $brokenIcon): self
+    {
+        $this->brokenIcon = $brokenIcon;
 
         return $this;
     }

@@ -754,7 +754,7 @@ const SingleItem = (props: { item: Item, data: VaultItemEntry | null, mods: Inve
             className={`item ${props.className ?? ''} ${(props.blur === true && 'blur') || ''} ${(props.blur === false && 'focus') || ''} ${(props.disabled && 'disabled') || ''} ${(props.locked && 'locked') || ''} ${(props.item.b && 'broken') || ''} ${(props.item.h && 'banished_hidden') || ''} ${(props.item.c > 1 && 'counted') || ''} ${(props.item.c >= 100 && 'excessive') || ''} ${(props.highlightDefense && props.data.props.includes('defence') && 'defense') || ''}`}
             onClick={ props.locked ? () => undefined : () => props.onClick?.(props.item) }
         >
-            <span className="item-icon"><img src={ props.data?.icon ?? '' } alt={ props.data?.name ?? '...' }/></span>
+            <span className="item-icon"><img src={ (props.item.b ? props.data?.brokenIcon : props.data?.icon) ?? '' } alt={ props.data?.name ?? '...' }/></span>
             {props.item.c > 1 && <span>{props.item.c}</span>}
             <ItemTooltip data={props.data} addendum={props.item.b && {className: 'broken', text: globals.strings.props.broken}}>
                 { props.mods.has_drunk && props.data.props.includes('is_water') && <div className="item-addendum">{ globals.strings.props["drink-done"] }</div> }

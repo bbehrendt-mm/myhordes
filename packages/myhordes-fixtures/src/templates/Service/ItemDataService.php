@@ -42,7 +42,7 @@ class ItemDataService implements FixtureProcessorInterface {
         $container->add()->label('MagLite Kinderlampe (aus)')->icon('maglite_off')->category('Furniture')->deco(5)->heavy(false)->watchpoint(0)->commit();
         $container->add()->label('MagLite Kinderlampe (1 Ladung)')->icon('maglite_1')->category('Furniture')->deco(5)->heavy(false)->watchpoint(0)->commit();
         $container->add()->label('MagLite Kinderlampe (2 Ladungen)')->icon('maglite_2')->category('Furniture')->deco(5)->heavy(false)->watchpoint(0)->commit();
-        $container->add()->label('Krebserregender Ofen')->icon('machine_2')->category('Furniture')->deco(2)->heavy(true)->watchpoint(15)->isEmote(true)->commit();
+        $container->add()->label('Krebserregender Ofen')->icon('machine_2')->brokenIcon('machine_2.b')->category('Furniture')->deco(2)->heavy(true)->watchpoint(15)->isEmote(true)->commit();
         $container->add()->label('Alte Waschmaschine')->icon('machine_1')->category('Furniture')->deco(2)->heavy(true)->watchpoint(15)->isEmote(true)->commit();
         $container->add()->label('Wütende Mieze (halb verdaut)')->icon('angryc')->category('Furniture')->deco(1)->heavy(false)->watchpoint(18)->deco_text('Sie ist beängstigend.')->isEmote(true)->commit();         // --
         $container->add()->label('Kassettenradio')->icon('radio_on')->category('Furniture')->deco(2)->heavy(false)->watchpoint(-15)->isEmote(true)->commit();
@@ -101,7 +101,7 @@ class ItemDataService implements FixtureProcessorInterface {
 		$container->add()->label('Taser (ohne Strom)')->icon('taser_empty')->category('Weapon')->deco(0)->heavy(false)->watchpoint(0)->commit();
 		$container->add()->label('Zerstörer (entladen)')->icon('big_pgun_empty')->category('Weapon')->deco(0)->heavy(false)->watchpoint(0)->commit();
 		$container->add()->label('Batteriewerfer Mark II (leer)')->icon('pilegun_up_empty')->category('Weapon')->deco(0)->heavy(false)->watchpoint(0)->commit();
-		$container->add()->label('Große rostige Kette')->icon('chain')->category('Weapon')->deco(0)->heavy(false)->watchpoint(7)->isEmote(true)->commit();
+		$container->add()->label('Große rostige Kette')->icon('chain')->brokenIcon('chain.b')->category('Weapon')->deco(0)->heavy(false)->watchpoint(7)->isEmote(true)->commit();
 		$container->add()->label('Rostiges Abzeichen')->icon('badge')->category('Weapon')->deco(0)->heavy(false)->watchpoint(14)->commit();
 		$container->add()->label('Batteriewerfer 1-PDTG (geladen)')->icon('pilegun')->category('Weapon')->deco(0)->heavy(false)->watchpoint(8)->commit();
 		$container->add()->label('Starker Laserpointer (4 Schuss)')->icon('lpoint4')->category('Weapon')->deco(0)->heavy(false)->watchpoint(20)->commit();
