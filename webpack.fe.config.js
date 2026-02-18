@@ -90,7 +90,7 @@ Encore
 
     .addEntry('module-ruffle', './assets/js/modules/ruffle.js')
 
-    .addEntry('module-game', ['./assets/ts/modules/common-game-modules.ts', 'gifler/gifler.js', 'konva/konva.min.js'])
+    .addEntry('module-game', ['./assets/ts/modules/common-game-modules.ts', 'gifler/gifler.js'])
     .addEntry('module-game-ext-catapult', ['./assets/ts/modules/ext-game-catapult.ts'])
     .addEntry('module-town-creator', './assets/ts/modules/town-creator.ts')
     .addEntry('module-event-creator', './assets/ts/modules/event-creator.ts')

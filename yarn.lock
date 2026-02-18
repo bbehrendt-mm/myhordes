@@ -5894,10 +5894,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"konva@npm:^8.0":
-  version: 8.4.3
-  resolution: "konva@npm:8.4.3"
-  checksum: 10c0/fb2353daa06c8af0baf4d8314e12d8fcdc481d3a99225403872d7aab5717d598767d3a67a61cd635065c79d7bcd6841d54aa84f0412c49ff904ae478aed49bd2
+"konva@npm:^10.2.0":
+  version: 10.2.0
+  resolution: "konva@npm:10.2.0"
+  checksum: 10c0/afbb59a8a83c41c75f6e3103aa7f2ddb7f4f2132dab612d54e7dcefcd50f9b28b6b02fb88ce1387fe2b33905e67dc73ba2dba2cd1cb01abfc47250798f61c88f
   languageName: node
   linkType: hard
 
@@ -7879,7 +7879,7 @@ __metadata:
     gifler: "npm:^0.1.0"
     idb-keyval: "npm:^6.2.1"
     js-md5: "npm:^0.8.3"
-    konva: "npm:^8.0"
+    konva: "npm:^10.2.0"
     latest-createjs: "npm:1.0.24"
     less: "npm:4.2.0"
     less-loader: "npm:11.1.4"
