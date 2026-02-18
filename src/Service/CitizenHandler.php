@@ -148,8 +148,16 @@ class CitizenHandler
             $status = $this->entity_manager->getRepository(CitizenStatus::class)->findOneByName('infection');
 
         // Prevent terror when owning a terror counter item
-        if ( !$force && $status->getName() === 'terror' && $this->inventory_handler->countSpecificItems([$citizen->getInventory(), $citizen->getHome()->getChest()], 'prevent_terror', true) > 0
-        ) return $citizen->hasStatus('terror');
+        if ( !$force && $status->getName() === 'terror') {
+            $inventories = [$citizen->getInventory()];
+
+            // If the citizen is in town, also check his chest
+            if (!$citizen->getZone())
+                $inventories[] = $citizen->getHome()->getChest();
+
+            if ($this->inventory_handler->countSpecificItems($inventories, 'prevent_terror', true) > 0)
+                return $citizen->hasStatus('terror');
+        }
 
         if (in_array($status->getName(), ['drugged','addict']))
             $this->removeStatus($citizen, 'clean');
