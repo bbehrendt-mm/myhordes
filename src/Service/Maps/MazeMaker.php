@@ -144,46 +144,7 @@ class MazeMaker
     }
 
     // -----------------------------------------------------------------------------------------
-    // graphyfy
-    // -----------------------------------------------------------------------------------------
-
-    private function graphyfy(array $use_binary, ?array &$nodes, ?array &$flat_nodes): Graph {
-        $graph = new Graph();
-        /** @var Vertex[][] $nodes */
-        $nodes = $flat_nodes = [];
-
-        // Returns true if the given coordinates point to an existing zone
-        $exists = function(int $x, int $y) use (&$use_binary): bool {
-            return (isset($use_binary[$x]) && isset($use_binary[$x][$y]));
-        };
-
-        // Returns true if the given coordinates point to an existing zone and the zone is already marked as a corridor
-        $corridor = function(int $x, int $y) use (&$use_binary,&$exists): bool {
-            return $exists($x,$y) && $use_binary[$x][$y];
-        };
-
-        foreach ($use_binary as $x => $bin_line)
-            foreach ($bin_line as $y => $active)
-                if ($active) {
-                    if (!isset($nodes[$x])) $nodes[$x] = [];
-                    if (!isset($nodes[$x][$y])) $nodes[$x][$y] = $graph->createVertex("$x/$y");
-                    $nodes[$x][$y]->setAttribute('pos', [$x,$y]);
-                    $flat_nodes[] = $nodes[$x][$y];
-                }
-
-            foreach ($nodes as $x => $nodes_line)
-                foreach ($nodes_line as $y => $node) {
-                    if ($corridor($x+1,$y)) $node->createEdgeTo( $nodes[$x+1][$y] );
-                    if ($corridor($x-1,$y)) $node->createEdgeTo( $nodes[$x-1][$y] );
-                    if ($corridor($x,$y+1)) $node->createEdgeTo( $nodes[$x][$y+1] );
-                    if ($corridor($x,$y-1)) $node->createEdgeTo( $nodes[$x][$y-1] );
-                }
-
-        return $graph;
-    }
-
-    // -----------------------------------------------------------------------------------------
-    // dykstra(Did you mean Dijkstra ?)
+    // Dijkstra
     // -----------------------------------------------------------------------------------------
 
     /**
@@ -191,7 +152,7 @@ class MazeMaker
      * @param callable $get_dist
      * @param callable $set_dist
      */
-    private function dykstra( array &$cache, callable $get_dist, callable $set_dist) {
+    private function dijkstra( array &$cache, callable $get_dist, callable $set_dist) {
 
         /**
          * @param array $c
@@ -430,7 +391,7 @@ class MazeMaker
 
         // Calculate distances
         $cache[$origin[0]][$origin[1]]->setDistance($offset_distance);
-        $this->dykstra($cache,
+        $this->dijkstra($cache,
             function (RuinZone $r): int { return $r->getDistance(); },
             function (RuinZone $r, int $i): void { $r->setDistance( $i ); }
         );
@@ -553,7 +514,7 @@ class MazeMaker
                 ->setRoomFloor( (new Inventory())->setRuinZoneRoom( $room_corridor ) )
                 ->setLocked( $far );
 
-            $this->dykstra($cache,
+            $this->dijkstra($cache,
                 function (RuinZone $r): int { return $r->getRoomDistance(); },
                 function (RuinZone $r, int $i): void { $r->setRoomDistance( $i ); }
             );
