@@ -22,6 +22,7 @@ use App\Entity\Picto;
 use App\Entity\PictoPrototype;
 use App\Entity\Post;
 use App\Entity\RolePlayText;
+use App\Entity\RuinZone;
 use App\Entity\Season;
 use App\Entity\SoulResetMarker;
 use App\Entity\Thread;
@@ -38,6 +39,7 @@ use App\Entity\Zone;
 use App\Entity\ZonePrototype;
 use App\Enum\Configuration\TownSetting;
 use App\Enum\Game\CitizenPersistentCache;
+use App\Enum\Game\ExplorableRuinSkin;
 use App\Enum\UserSetting;
 use App\Service\CommandHelper;
 use App\Service\ConfMaster;
@@ -269,6 +271,7 @@ class MigrateCommand extends Command
             ->addOption('set-snippet-role', null, InputOption::VALUE_NONE, 'Sets empty snippet roles to CROW')
 			->addOption('fix-top3', null, InputOption::VALUE_NONE, 'Check TOP3 settings and fix any issues with them.')
 			->addOption('set-profession-prop', null, InputOption::VALUE_NONE, 'Writes profession info to the ranking proxy')
+			->addOption('fix-bunker-level', null, InputOption::VALUE_NONE, 'Changes the floor level of the bunker from 1 to -1 in order to match the stairs direction')
         ;
     }
 
@@ -1543,6 +1546,37 @@ class MigrateCommand extends Command
                 if ($c->isProfession(CitizenProfession::DEFAULT))
                     $c->registerPropInPersistentCache( CitizenPersistentCache::Profession, $c->getProfession()->getId() );
             }, true);
+        }
+
+        if ($input->getOption('fix-bunker-level')) {
+            $rzMeta = $this->entity_manager->getClassMetadata(RuinZone::class);
+            $zMeta  = $this->entity_manager->getClassMetadata(Zone::class);
+            $pMeta  = $this->entity_manager->getClassMetadata(ZonePrototype::class);
+            $tMeta  = $this->entity_manager->getClassMetadata(Town::class);
+            $sMeta  = $this->entity_manager->getClassMetadata(Season::class);
+
+            $affected = $this->entity_manager->getConnection()->executeStatement(sprintf('
+                UPDATE %s rz
+                INNER JOIN %s z ON rz.%s = z.%s
+                INNER JOIN %s p ON z.%s = p.%s
+                INNER JOIN %s t ON z.%s = t.%s
+                INNER JOIN %s s ON t.%s = s.%s
+                SET rz.%s = -1
+                WHERE rz.%s = 1
+                  AND p.%s = :skin
+                  AND s.%s = :season
+                ',
+                $rzMeta->getTableName(),
+                $zMeta->getTableName(), $rzMeta->getSingleAssociationJoinColumnName('zone'),     $zMeta->getSingleIdentifierColumnName(),
+                $pMeta->getTableName(), $zMeta->getSingleAssociationJoinColumnName('prototype'), $pMeta->getSingleIdentifierColumnName(),
+                $tMeta->getTableName(), $zMeta->getSingleAssociationJoinColumnName('town'),      $tMeta->getSingleIdentifierColumnName(),
+                $sMeta->getTableName(), $tMeta->getSingleAssociationJoinColumnName('season'),    $sMeta->getSingleIdentifierColumnName(),
+                $rzMeta->getColumnName('z'),
+                $rzMeta->getColumnName('z'),
+                $pMeta->getColumnName('explorableSkin'),
+                $sMeta->getSingleIdentifierColumnName(),
+            ), ['skin' => ExplorableRuinSkin::Bunker->value, 'season' => 21]);
+            $output->writeln("Updated <info>$affected</info> RuinZone entities.");
         }
 
         return 99;
