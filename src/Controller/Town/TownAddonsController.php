@@ -463,7 +463,7 @@ class TownAddonsController extends TownController
         ]) );
     }
 
-    #[Route(path: 'jx/town/clinic', name: 'town_tamer_clinic')]
+    #[Route(path: 'jx/town/trap', name: 'town_tamer_trap')]
     public function townTamerClinic(): Response {
         if (!$this->getActiveCitizen()->getHasSeenGazette())
             return $this->redirect($this->generateUrl('game_newspaper'));
@@ -496,7 +496,7 @@ class TownAddonsController extends TownController
         ]) );
     }
 
-    #[Route(path: 'api/town/clinic/lure', name: 'town_tamer_clinic_lure_controller')]
+    #[Route(path: 'api/town/trap/lure', name: 'town_tamer_trap_lure_controller')]
     public function api_clinic_lure(KernelInterface $kernel, JSONRequestParser $parser, ItemFactory $if, LogTemplateHandler $log): Response
     {
         $town = $this->getActiveCitizen()->getTown();
