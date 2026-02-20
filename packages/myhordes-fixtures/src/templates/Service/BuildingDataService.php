@@ -1173,7 +1173,7 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->modify('item_meca_parts_#00')->parentBuilding($small_building)->commit()
             // Baumarkt
             ->modify('small_strategy_#01')->parentBuilding($small_refine_1)->commit()
-            // Tamer clinic
+            // Tamer trap system
             ->modify('small_pet_#00')->icon('tamer_trap')->commit();
 
         // Delete stubs

@@ -2410,7 +2410,7 @@ class LogTemplateHandler
             ->setCitizen( $citizen );
     }
 
-    public function clinicConvert( Citizen $citizen, array $items_in, array $items_out, array $items_return = [], bool $failed_attempt = false ): TownLogEntry {
+    public function trapConvert( Citizen $citizen, array $items_in, array $items_out, array $items_return = [], bool $failed_attempt = false ): TownLogEntry {
         $variables = array('citizen' => $citizen->getId(),
             'list1' => array_map( function($e) { if(array_key_exists('count', $e)) {return array('id' => $e['item']->getId(),'count' => $e['count']);}
             else { return array('id' => $e[0]->getId()); } }, $items_in )
@@ -2423,9 +2423,9 @@ class LogTemplateHandler
         else { return array('id' => $e[0]->getId()); } }, $items_return );
 
         $template = match (true) {
-            empty($items_out) => $this->entity_manager->getRepository(LogEntryTemplate::class)->findOneBy(['name' => 'clinicConvertFail']),
-            $failed_attempt => $this->entity_manager->getRepository(LogEntryTemplate::class)->findOneBy(['name' => 'clinicConvertMiss']),
-            default => $this->entity_manager->getRepository(LogEntryTemplate::class)->findOneBy(['name' => 'clinicConvert']),
+            empty($items_out) => $this->entity_manager->getRepository(LogEntryTemplate::class)->findOneBy(['name' => 'trapConvertFail']),
+            $failed_attempt => $this->entity_manager->getRepository(LogEntryTemplate::class)->findOneBy(['name' => 'trapConvertMiss']),
+            default => $this->entity_manager->getRepository(LogEntryTemplate::class)->findOneBy(['name' => 'trapConvert']),
         };
 
         return (new TownLogEntry())

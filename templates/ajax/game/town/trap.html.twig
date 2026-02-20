@@ -1,7 +1,10 @@
 {% extends "ajax/game/town/town.html.twig" %}
+{% block title %}{{ 'Experimentelle Klinik der Dompteure'|trans({}, 'buildings') }}{% endblock %}
 {% block content %}
-
-    <h1 class="page-head">{{'Experimentelle Klinik der Dompteure'|trans({}, 'buildings')}}</h1>
+    {% set hour = "now"|date("G") %}
+    <div class="row">
+        <div class="cell rw-12 town-banner town-banner-well time-{{ hour }} {% if conf.isNightTime %}night{% endif %}"></div>
+    </div>
 
     <div class="help">
         {{ 'Die Experimentelle Klinik der Dompteure verfügt über ein komplexes System zur Domestizierung von Wildtieren - bestehend im wesentlichen aus einem verschließbaren Käfig mit einer Futterschale darin.'|trans({},'game') }}
@@ -24,16 +27,16 @@
             <h5>{{ 'Inhalt der Futterschale'|trans({},'game') }}</h5>
             <br/>
 
-            <div class="tamer-clinic">
-                <div class="tamer-clinic-tile" data-selected="">
+            <div class="tamer-trap">
+                <div class="tamer-trap-tile" data-selected="">
                     <img class="pointer" data-action="purge" alt="X" src="{{ asset('build/images/icons/small_remove.gif') }}" />
                     <div></div>
                 </div>
-                <div class="tamer-clinic-tile" data-selected="">
+                <div class="tamer-trap-tile" data-selected="">
                     <img class="pointer" data-action="purge" alt="X" src="{{ asset('build/images/icons/small_remove.gif') }}" />
                     <div></div>
                 </div>
-                <div class="tamer-clinic-tile" data-selected="">
+                <div class="tamer-trap-tile" data-selected="">
                     <img class="pointer" data-action="purge" alt="X" src="{{ asset('build/images/icons/small_remove.gif') }}" />
                     <div></div>
                 </div>
@@ -91,7 +94,7 @@
     <div class="row">
         <h5>{{ 'Klinikregister'|trans({},'game') }} <a class="float-right link" x-ajax-href="{{ path("game_newspaper") }}">{{ 'Das Gesamtregister ansehen'|trans({}, 'game') }}<div class="tooltip normal">{{ 'Dieser Link bringt dich zum <strong>Großen Register</strong>. Darin werden alle wichtigen Handlungen und Aktionen der Stadtbürger gespeichert...'|trans({}, 'game')|raw }}</div></a></h5>
         <div class="cell rw-12">
-            <hordes-log id="clinic-log" data-react-mount="clinic-log" data-day="{{ day }}" data-etag="{{ date().timestamp }}" data-category="101" data-domain="town"></hordes-log>
+            <hordes-log id="trap-log" data-react-mount="trap-log" data-day="{{ day }}" data-etag="{{ date().timestamp }}" data-category="101" data-domain="town"></hordes-log>
         </div>
     </div>
 
@@ -147,9 +150,9 @@
         document.querySelector('[data-action="lure"]')?.addEventListener('click', function() {
             let items = [];
             document.querySelectorAll('[data-selected]').forEach( e => items.push( parseInt( e.dataset.selected ) ) );
-            $.ajax.easySend( '{{ path('town_tamer_clinic_lure_controller') }}', {items},
+            $.ajax.easySend( '{{ path('town_tamer_trap_lure_controller') }}', {items},
                 function () {
-                    $.ajax.load(null, '{{ path('town_tamer_clinic') }}', true);
+                    $.ajax.load(null, '{{ path('town_tamer_trap') }}', true);
                 } );
         });
     </script>
