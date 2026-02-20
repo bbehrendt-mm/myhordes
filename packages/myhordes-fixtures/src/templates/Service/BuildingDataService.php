@@ -986,7 +986,7 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->isTemporary(0)->defense(0)->ap(35)->blueprintLevel(3)->resources(["wood2_#00" => 10,"metal_beam_#00" => 3,"tube_#00" => 3,"concrete_wall_#00" => 1,"plate_#00" => 1,"oilcan_#00" => 1,])->orderBy(4)->commit();
 
         $container->add()->parentBuilding($item_meat)
-            ->icon('small_pet')->label("Tamer's Fallensystem")->description('Manche nennen es unschuldig eine "Tierklinik". Aber jeden Abend wecken die Schreie der Tiere das gesamte Südviertel auf. Auf jeden Fall funktioniert es: Unsere Haustiere sind verspielt, sauber, fröhlich und stürzen sich durch ihr Training routiniert auf Zombies, die dreißigmal so schwer sind wie sie.')
+            ->icon('small_pet')->label("Tamer's Fallensystem")->description('Niemand glaubte Japhy, als er sagte, er würde mit Kaugummi eine Großkatze fangen. Und doch ist das Tier da und leistet uns gute Dienste: Der morgige Ausflug dürfte mit einem solchen Köder an eurer Seite ruhiger verlaufen. Dieses Gebäude lockt Tiere mit Nahrung in die Stadtfalle und bietet euch einen Platz, um sie zu trainieren, wodurch sie im Kampf wirksamer werden.')
             ->isTemporary(0)->defense(0)
             ->ap(40)->resources(["wood2_#00" => 4,"water_#00" => 10,"meca_parts_#00" => 1,"drug_#00" => 1,])
             ->adjustForHardMode(

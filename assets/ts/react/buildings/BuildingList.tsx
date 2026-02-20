@@ -134,7 +134,10 @@ const BuildingListLine = (props: { building: Building, data?: VaultBuildingEntry
                     </div>}
                 </Tooltip>
             </div>}
-            <Tooltip additionalClasses="normal" html={props.data.desc}/>
+            <Tooltip additionalClasses="normal" html={(props.data.desc ?? '')
+                .replace(/\\n/g, '<br/>')
+                .replace(/\n/g, '<br/>')
+            }/>
         </div> }
     </li>
 
