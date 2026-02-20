@@ -1174,7 +1174,7 @@ class BuildingDataService implements FixtureProcessorInterface {
             // Baumarkt
             ->modify('small_strategy_#01')->parentBuilding($small_refine_1)->commit()
             // Tamer clinic
-            ->modify('small_pet_#00')->icon('caged_animal')->commit();
+            ->modify('small_pet_#00')->icon('tamer_trap')->commit();
 
         // Delete stubs
         // Previous sub-constructions, their effects will be included into Müllhalde evolutions
