@@ -248,7 +248,7 @@ final class BuildingQueryListener implements ServiceSubscriberInterface
                 $event->addAddon( T::__('Katapult', 'game'), 'catapult', 'town_catapult', 5 );
 
             if ($b->getPrototype()->getName() === 'small_pet_#00')
-                $event->addAddon( T::__("Tamer's Fallensystem", 'game'), 'tamers', 'town_tamer_trap', 6 );
+                $event->addAddon( T::__('Fallen', 'game'), 'tamers', 'town_tamer_trap', 6 );
         }
     }
 
