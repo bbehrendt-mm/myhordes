@@ -103,9 +103,9 @@ const HordesEventMetaEditor = ( {lang, uuid, meta, replace}: {
     const globals = useContext(Globals)
     const editorGlobals = useContext(EditorGlobals)
 
-    const editorTitle = useRef<HTMLInputElement>();
-    const editorDescription = useRef<HTMLTextAreaElement>();
-    const editorShort = useRef<HTMLTextAreaElement>();
+    const editorTitle = useRef<HTMLInputElement>(null);
+    const editorDescription = useRef<HTMLTextAreaElement>(null);
+    const editorShort = useRef<HTMLTextAreaElement>(null);
 
     let [editing, setEditing] = useState<boolean>(false);
 

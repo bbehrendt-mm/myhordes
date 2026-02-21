@@ -1,16 +1,16 @@
-import {MutableRefObject} from "react";
+import {RefObject} from "react";
 import {Decal} from "./api";
 
 export class MapScaler {
     private w: number;
     private h: number;
-    private parent: MutableRefObject<MapScaler>;
+    private parent: RefObject<MapScaler>;
 
-    constructor(w: number, h: number, parent: MutableRefObject<MapScaler> = null) {
+    constructor(w: number, h: number, parent: RefObject<MapScaler> = null) {
         this.update(w,h,parent);
     }
 
-    update(w: number, h: number, parent: MutableRefObject<MapScaler> = null) {
+    update(w: number, h: number, parent: RefObject<MapScaler> = null) {
         this.w = w;
         this.h = h;
         this.parent = parent;

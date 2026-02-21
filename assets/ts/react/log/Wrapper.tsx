@@ -262,7 +262,7 @@ const HordesLogContentContainer = (props: logContainerProps) => {
     const globals = useContext(Globals);
 
     const [inHiding, setInHiding] = useState<number>(-1);
-    const parent = useRef<HTMLDivElement>()
+    const parent = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
         setInHiding(-1)
@@ -351,7 +351,7 @@ const HordesChatContainer = ({refresh, zone}: {refresh: ()=>void, zone: number})
 
     const [loading, setLoading] = useState<boolean>(false);
     const currentText = useRef<string>('');
-    const currentImport = useRef<(any)=>void>();
+    const currentImport = useRef<(any)=>void>(null);
 
     const sendMessage = () => {
         setLoading(true);

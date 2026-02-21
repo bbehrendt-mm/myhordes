@@ -14,8 +14,8 @@ export const HordesHeaderModLinksWidget = () => {
 
     const globals = useContext(Globals)
 
-    const root = useRef<HTMLDivElement>();
-    const animation = useRef<Animation>()
+    const root = useRef<HTMLDivElement>(null);
+    const animation = useRef<Animation>(null)
 
     const [show, render, setRender] = useStickyToggle(false);
 

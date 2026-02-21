@@ -131,7 +131,7 @@ export const TownCreatorSectionMods = () => {
                                 globals.setOption('rules.modifiers.daytime.range', range);
                             }}
                     >
-                        { [...Array(24).keys()].filter(v => v <= globals.getOption( 'rules.modifiers.daytime.range' )[1] ?? 18).map( v => <React.Fragment key={v}>
+                        { [...Array(24).keys()].filter(v => v <= (globals.getOption( 'rules.modifiers.daytime.range' )[1] || 18)).map( v => <React.Fragment key={v}>
                             <option value={v}>{ `${v}:00` }</option>
                         </React.Fragment> ) }
                     </select>
@@ -145,7 +145,7 @@ export const TownCreatorSectionMods = () => {
                                 globals.setOption('rules.modifiers.daytime.range', range);
                             }}
                     >
-                        { [...Array(24).keys()].map(v=>v+1).filter(v => v >= globals.getOption( 'rules.modifiers.daytime.range' )[0] ?? 7).map( v => <React.Fragment key={v}>
+                        { [...Array(24).keys()].map(v=>v+1).filter(v => v >= (globals.getOption( 'rules.modifiers.daytime.range' )[0] || 7)).map( v => <React.Fragment key={v}>
                             <option value={v}>{ `${v}:00` }</option>
                         </React.Fragment> ) }
                     </select>

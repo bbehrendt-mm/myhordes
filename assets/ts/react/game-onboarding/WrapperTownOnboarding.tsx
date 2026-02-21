@@ -70,7 +70,7 @@ export const Globals = React.createContext<TownOnboardingGlobals>(null);
 const HordesTownOnboardingWrapper = (props: Props) => {
 
     const [page, setPage] = useState(0);
-    const head = useRef<HTMLDivElement>();
+    const head = useRef<HTMLDivElement>(null);
 
     const apiRef = useRef(new TownOnboardingAPI());
     const [payload, setPayload] = useState<OnboardingPayload>({
@@ -335,7 +335,7 @@ const ConfirmationDialog = (props: ConfirmationDialogProps) => {
 const IdentitySelection = (props: OnboardingIdentityPayloadProps) => {
     const globals = useContext(Globals);
 
-    const inputRef = useRef<HTMLInputElement>()
+    const inputRef = useRef<HTMLInputElement>(null)
 
     useEffect(() => {
         props.setPayload(false);
@@ -370,7 +370,7 @@ const JobSelection = (props: OnboardingProfessionPayloadProps) => {
     const [citizens, setCitizens] = useState<CitizenCount[]>();
     const [token, setToken] = useState<object>();
 
-    const jobContainer = useRef<HTMLDivElement>();
+    const jobContainer = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         globals.api.jobs(globals.town).then(i => {
@@ -486,7 +486,7 @@ const SkillSelection = (props: OnboardingSkillPayloadProps) => {
     const [levels, setLevels] = useState<{ [key: string]: number; }>();
     const [current, setCurrent] = useState(0);
 
-    const skillContainer = useRef<HTMLDivElement>()
+    const skillContainer = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
         globals.api.skills(globals.town).then(i => {

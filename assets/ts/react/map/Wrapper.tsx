@@ -299,7 +299,7 @@ const MapWrapper = ( props: ReactDataMapCore ) => {
         } )
     }, [props.data.etag])
 
-    const reactRef = useRef<HTMLDivElement>();
+    const reactRef = useRef<HTMLDivElement>(null);
 
     let node = null, revert = false, x = 0, y = 0;
 

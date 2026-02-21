@@ -2,11 +2,19 @@ import {Global} from "../defaults";
 import {createRoot, Root} from "react-dom/client";
 import * as React from "react";
 import {ErrorBoundary} from "react-error-boundary";
-import {HTMLAttributes, MutableRefObject, ReactHTML} from "react";
+import {HTMLAttributes, RefObject} from "react";
 import {randomUUIDv4} from "../shims";
 import {Fetch} from "../v2/fetch";
 
 declare var $: Global;
+
+declare module "react" {
+    namespace JSX {
+        interface IntrinsicElements {
+            "hordes-town-creator": {};
+        }
+    }
+}
 
 export type ReactMapBootstrapData = {
     displayType: string,
@@ -371,7 +379,7 @@ export const classNames = (classes: string|{[p: string]: boolean}): string => {
         : classes;
 }
 
-export const Tag = (props: React.DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement> & {tagName?: string, classNames?: string|{[p: string]: boolean}, elementRef?: MutableRefObject<HTMLElement>}) => {
+export const Tag = (props: React.DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement> & {tagName?: string, classNames?: string|{[p: string]: boolean}, elementRef?: RefObject<HTMLElement>}) => {
     const TagName = (props.tagName ?? 'div') as keyof JSX.IntrinsicElements;
 
     const htmlProps = {...props};
@@ -379,6 +387,7 @@ export const Tag = (props: React.DetailedHTMLProps<HTMLAttributes<HTMLElement>, 
     delete htmlProps.tagName;
     delete htmlProps.elementRef;
 
+    // @ts-ignore
     return <TagName ref={props.elementRef} {...htmlProps} {...(props.classNames ? {
         className: [classNames(props.classNames), props.className]
             .filter((s: string|null) => s?.length > 0)

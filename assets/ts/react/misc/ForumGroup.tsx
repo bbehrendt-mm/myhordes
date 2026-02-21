@@ -38,7 +38,7 @@ export class HordesForum extends BaseMounter<forumProps> {
 }
 
 const ForumGroup = (props: mountProps) => {
-    const groupRef = useRef<HTMLDivElement>();
+    const groupRef = useRef<HTMLDivElement>(null);
 
     const default_collapse = props.id
         ? ($.client.config.forumSectionState.get()[props.id] ?? props.collapse)

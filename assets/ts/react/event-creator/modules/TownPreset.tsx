@@ -6,8 +6,6 @@ import {TownPreset, TownPresetData} from "../api";
 import {Flag} from "../Common";
 import {EditorGlobals} from "../Creator";
 import {Tooltip} from "../../misc/Tooltip";
-import {Simulate} from "react-dom/test-utils";
-import cancel = Simulate.cancel;
 
 declare global {
     namespace JSX {
@@ -191,7 +189,7 @@ const HordesEventTownPresetEditor = ( {uuid, town, update}: {
 
     const globals = useContext(Globals)
 
-    let wrapper = useRef<HTMLDivElement>();
+    let wrapper = useRef<HTMLDivElement>(null);
     useLayoutEffect( () => {
         Components.vitalize( wrapper.current )
         const listener = event => {

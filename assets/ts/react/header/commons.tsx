@@ -1,6 +1,6 @@
-import {MutableRefObject, useLayoutEffect} from "react";
+import {RefObject, useLayoutEffect} from "react";
 
-export function useSlidingAnimation(show: boolean, render: boolean, animation: MutableRefObject<Animation>, root: MutableRefObject<HTMLDivElement>) {
+export function useSlidingAnimation(show: boolean, render: boolean, animation: RefObject<Animation>, root: RefObject<HTMLDivElement>) {
 
     useLayoutEffect(() => {
         if (!render || (animation.current && animation.current.playState !== "finished")) return;

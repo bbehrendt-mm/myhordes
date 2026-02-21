@@ -78,11 +78,11 @@ export const UserSearchBar = (
 
     const apiRef = useRef<Fetch>( new Fetch('user/search') )
 
-    const wrapper = useRef<HTMLDivElement>();
-    const input = useRef<HTMLInputElement>();
+    const wrapper = useRef<HTMLDivElement>(null);
+    const input = useRef<HTMLInputElement>(null);
 
-    const container = useRef<HTMLDivElement>();
-    const overlay = useRef<HTMLDivElement>();
+    const container = useRef<HTMLDivElement>(null);
+    const overlay = useRef<HTMLDivElement>(null);
 
     const observer = useRef<ResizeObserver>(new ResizeObserver( entries => {
         for (const entry of entries)
@@ -93,8 +93,8 @@ export const UserSearchBar = (
     let [focus, setFocusState] = useState<boolean>(false);
     let [searching, setSearching] = useState<boolean>(false);
 
-    let searchTimeout = useRef<number>();
-    let focusTimeout = useRef<number>();
+    let searchTimeout = useRef<number>(null);
+    let focusTimeout = useRef<number>(null);
 
     const execCallback = d => {
         if (clearOnCallback) {

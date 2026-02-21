@@ -58,7 +58,7 @@ export const TabbedSection = ( {defaultTab, children, mountOnlyActive, keepInact
         }
     })
 
-    const me = useRef<HTMLUListElement>();
+    const me = useRef<HTMLUListElement>(null);
     const prevGroup = useRef<string>(null);
     const hideGroupAnimation = ((s:string) => {
         const affected = me.current.querySelectorAll(`li.tab[data-group="${s}"]`);

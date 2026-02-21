@@ -135,7 +135,7 @@ const AvatarModeEmpty = () => {
 
 const AvatarModeNew = ({maxSize, hasMedia}: {maxSize: number, hasMedia: boolean}) => {
     const globals = useContext(Globals)
-    const uploadRef = useRef<HTMLInputElement>();
+    const uploadRef = useRef<HTMLInputElement>(null);
 
     const handleFileSelectionCancel = () => globals.setMode(hasMedia ? 'view' : 'empty');
 

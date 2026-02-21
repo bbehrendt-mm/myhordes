@@ -537,7 +537,7 @@ const TwinoEditorPreview = ({html}: {html:string}) => {
 
     const [displayPreview, setDisplayPreview] = useState(true);
 
-    const preview = useRef<HTMLDivElement>();
+    const preview = useRef<HTMLDivElement>(null);
 
     useLayoutEffect( () => {
         preview.current.querySelectorAll('.username[x-user-id]').forEach( e => $.html.handleUserPopup(e as HTMLElement) );

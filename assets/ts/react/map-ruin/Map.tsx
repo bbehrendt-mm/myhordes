@@ -1,6 +1,6 @@
 import * as React from "react";
 import {Layer, Rect, Stage, Image} from "react-konva";
-import {createContext, MutableRefObject, useContext, useEffect, useLayoutEffect, useRef, useState} from "react";
+import {createContext, RefObject, useContext, useEffect, useRef, useState} from "react";
 import {AssetResponse, ExplorationTileset, ZoneResponse} from "./api";
 import {Globals} from "./Wrapper";
 import {LayerUI} from "./MapUILayer";
@@ -26,7 +26,7 @@ interface MapProperties {
     reload: string
 }
 
-export const ScaleHelper = createContext<{ scaler: MapScaler, ref: MutableRefObject<MapScaler> }>(null);
+export const ScaleHelper = createContext<{ scaler: MapScaler, ref: RefObject<MapScaler> }>(null);
 
 export const AssetHelper = createContext<{ theme: AssetResponse, images: {[key: string]: HTMLImageElement}}>(null)
 
@@ -35,8 +35,8 @@ export const MapCore = (props: {setup: MapSetup, properties: MapProperties}) => 
 
     const moveLock = useRef(false);
     const progressing = useRef(false);
-    const enterButton = useRef<HTMLButtonElement>();
-    const stages = useRef<HTMLDivElement>();
+    const enterButton = useRef<HTMLButtonElement>(null);
+    const stages = useRef<HTMLDivElement>(null);
 
     const scaler = useRef<MapScaler>( new MapScaler(props.setup.w, props.setup.h) );
     const [etag, setEtag] = useState<number>(0);
