@@ -140,7 +140,7 @@ const UIFrame = (props: LayerUIFrameProps) => {
     const elementRef = useRef<Konva.Image>(null);
     const elementRefRotation = useRef<Konva.Image>(null);
 
-    const statics = useRef<Konva.Group>();
+    const statics = useRef<Konva.Group>(null);
 
     useLayoutEffect(() => {
         statics.current.cache();

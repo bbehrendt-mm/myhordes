@@ -23,14 +23,14 @@ const Distinctions = (
 
     const apiRef = useRef<SoulDistinctionAPI>( new SoulDistinctionAPI() );
 
-    const wrapper = useRef<HTMLDivElement>();
+    const wrapper = useRef<HTMLDivElement>(null);
 
     const strings = useTranslations( apiRef.current );
     const [data, setData] = useState<ResponseDistinctions>(null)
     const [showingAwards, setShowingAwards] = useState<boolean>(false);
     const [dragging, setDragging] = useState<{ id: number }>(null);
 
-    const currentNode = useRef<HTMLDivElement>();
+    const currentNode = useRef<HTMLDivElement>(null);
     const currentDrag = useRef<{ cur: { x: number, y: number }, orig: {x: number, y: number}, handled: boolean }>( { cur: { x: 0, y: 0 }, orig: {x: 0, y: 0}, handled: false } );
 
     const allTargets = useRef<HTMLDivElement>(null);

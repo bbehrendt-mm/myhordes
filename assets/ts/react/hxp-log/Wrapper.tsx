@@ -28,8 +28,8 @@ const HordesHxpLogWrapper = (props: mountProps) => {
     const [logs, setLogs] = useState<LogEntry[]>([]);
     const [additional, setAdditional] = useState<boolean>(true);
 
-    const parent = useRef<HTMLDivElement>();
-    const loader = useRef<HTMLDivElement>();
+    const parent = useRef<HTMLDivElement>(null);
+    const loader = useRef<HTMLDivElement>(null);
 
     useLayoutEffect( () => {
         if (!loader.current || loading || !additional) return;

@@ -8,7 +8,7 @@ import {
     Children,
     Fragment,
     ReactNode,
-    MutableRefObject, forwardRef, ForwardedRef
+    forwardRef, ForwardedRef
 } from "react";
 import {ExternalApp, HeaderAPI} from "./api";
 import {Global} from "../../defaults";
@@ -76,7 +76,7 @@ export const App = ({app, onClose, signalUpdate}: {app: ExternalApp|null, onClos
     const globals = useContext(Globals)
 
     const uuid = useRef(randomUUIDv4())
-    const devForm = useRef<HTMLDivElement>()
+    const devForm = useRef<HTMLDivElement>(null)
 
     const [sk, setSK] = useState<string|null>(null);
     const [loading, setLoading] = useState(false);
@@ -260,9 +260,9 @@ export const HordesHeaderAPIWidget = () => {
 
     const globals = useContext(Globals)
 
-    const root = useRef<HTMLDivElement>();
-    const animation = useRef<Animation>();
-    const instantForm = useRef<HTMLFormElement>();
+    const root = useRef<HTMLDivElement>(null);
+    const animation = useRef<Animation>(null);
+    const instantForm = useRef<HTMLFormElement>(null);
 
     const [show, render, setRender] = useStickyToggle(false);
 

@@ -126,7 +126,7 @@ class PayloadPing extends payload {
     public constructor(args: object) {
         super(args);
         this.newMessages = args['new'] ?? 0;
-        this.connected = !!args['connected'] ?? false;
+        this.connected = !!args['connected'];
         this.delay = Math.max(5000, args['connected'] ? args['connected'] : 60000 );
         this.authoritative = args['authoritative'] ?? true;
     }
@@ -156,7 +156,7 @@ class PayloadFetch extends payload {
 
     public constructor(args: object) {
         super(args);
-        this.connected = !!args['connected'] ?? false;
+        this.connected = !!args['connected'];
         this.delay = Math.max(5000, args['connected'] ? args['connected'] : 60000 );
 
         this.index_list = new PayloadFetchHTMLStack(args['index'] ?? null);

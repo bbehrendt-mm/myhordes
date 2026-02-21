@@ -45,7 +45,7 @@ const HordesRuinExplorationMapWrapper = (props: mountProps) => {
     const [size, setSize] = useState<{width: number, height: number}>(null)
 
     const debounce = useRef<number>(null);
-    const map = useRef<HTMLDivElement>();
+    const map = useRef<HTMLDivElement>(null);
     const observer = useRef<ResizeObserver>(new ResizeObserver(([entry]) => {
         const {width, height} = entry.contentRect;
 

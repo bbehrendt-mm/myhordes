@@ -166,9 +166,9 @@ const TwinoEditorControlsTabListOverlay = ({emotes,ressources,show,current,mount
 const ControlButton = ({fa = null, img = null, label = null, control = null, handler, dialogHandler = null, children = null, dialogTitle = null, manualConfirm = true, preConfirmHandler = null}: ControlButtonDefinition & {handler: ()=>void|boolean, dialogHandler?: (boolean)=>void|boolean, dialogTitle?: string|null, manualConfirm?: boolean, preConfirmHandler?: (HTMLFormElement)=>void}) => {
     const globals = useContext(Globals);
 
-    const button = useRef<HTMLDivElement>();
-    const dialog = useRef<HTMLDialogElement>()
-    const form = useRef<HTMLFormElement>()
+    const button = useRef<HTMLDivElement>(null);
+    const dialog = useRef<HTMLDialogElement>(null)
+    const form = useRef<HTMLFormElement>(null)
 
     const wrapped_handler = () => {
         if (!dialog.current) handler();
@@ -346,8 +346,8 @@ const ControlButtonInsertPlayer = () => {
 
     const globals = useContext(Globals);
 
-    const parent = useRef<HTMLDivElement>()
-    const selected = useRef<{id: number, name: string}>();
+    const parent = useRef<HTMLDivElement>(null)
+    const selected = useRef<{id: number, name: string}>(null);
 
     return <ControlButton fa="user" label={globals.strings.controls["@"]} dialogTitle={globals.strings.controls["@-dialog"]} manualConfirm={false} handler={() => {
         if (!selected.current) return;
@@ -387,11 +387,11 @@ const ControlButtonInsertCollapse = () => {
 
     const globals = useContext(Globals);
 
-    const parent = useRef<HTMLDivElement>()
-    const selected = useRef<{id: number, name: string}>();
+    const parent = useRef<HTMLDivElement>(null)
+    const selected = useRef<{id: number, name: string}>(null);
 
-    const title = useRef<HTMLInputElement>()
-    const language = useRef<HTMLSelectElement>()
+    const title = useRef<HTMLInputElement>(null)
+    const language = useRef<HTMLSelectElement>(null)
 
     return <ControlButton fa="square-caret-down" label={globals.strings.controls.collapse} dialogTitle={globals.strings.controls["collapse-dialog"]} manualConfirm={true} handler={() => {
         const body = `${globals.getField('body') ?? ''}`;
@@ -451,8 +451,8 @@ const ControlButtonInsertCollapse = () => {
 const ControlButtonInsertQuote = () => {
     const globals = useContext(Globals);
 
-    const parent = useRef<HTMLDivElement>()
-    const selected = useRef<{id: number, name: string}>();
+    const parent = useRef<HTMLDivElement>(null)
+    const selected = useRef<{id: number, name: string}>(null);
 
     return <ControlButton fa="quote-left" label={globals.strings.controls.quote} dialogTitle={globals.strings.controls['quote-dialog']} manualConfirm={true} handler={() => {
         const body = `${globals.getField('body') ?? ''}`;
@@ -524,8 +524,8 @@ const ControlButtonInsertURL = ({
 
     const globals = useContext(Globals);
 
-    const text = useRef<HTMLInputElement>()
-    const link = useRef<HTMLInputElement>()
+    const text = useRef<HTMLInputElement>(null)
+    const link = useRef<HTMLInputElement>(null)
 
     const fixLink = (link: string): string => {
         return link.replaceAll('[', '%5B').replaceAll(']', '%5D')

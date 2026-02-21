@@ -1,4 +1,4 @@
-import {DependencyList, MutableRefObject, useEffect, useLayoutEffect, useRef, useState} from "react";
+import {DependencyList, RefObject, useEffect, useLayoutEffect, useRef, useState} from "react";
 import * as React from "react";
 
 import {ImageConfig} from "konva/lib/shapes/Image";
@@ -7,7 +7,7 @@ import Konva from "konva";
 
 declare var gifler: any;
 
-export const GifImage = (props: Omit<ImageConfig, 'image'> & {src: string, imageRef?: MutableRefObject<Konva.Image>}) => {
+export const GifImage = (props: Omit<ImageConfig, 'image'> & {src: string, imageRef?: RefObject<Konva.Image>}) => {
     const imageRef = props.imageRef ?? React.useRef(null);
     const canvasRef = React.useRef(document.createElement('canvas'));
 

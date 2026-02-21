@@ -52,7 +52,7 @@ const TownCreatorWrapper = ( {elevation, eventMode, presetHead, presetRules}: {e
 
     const apiRef = useRef<TownCreatorAPI>( new TownCreatorAPI() );
 
-    const wrapper = useRef<HTMLDivElement>();
+    const wrapper = useRef<HTMLDivElement>(null);
 
     const index = useTranslations( apiRef.current );
     const [townTownTypeList, setTownTypeList] = useState<ResponseTownList>()

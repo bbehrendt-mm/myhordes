@@ -1,4 +1,4 @@
-import {DependencyList, MutableRefObject, useEffect, useLayoutEffect, useRef, useState} from "react";
+import {DependencyList, RefObject, useEffect, useLayoutEffect, useRef, useState} from "react";
 import {Tooltip} from "./misc/Tooltip";
 import * as React from "react";
 import {VaultItemEntry} from "../v2/typedef/vault_td";
@@ -36,7 +36,7 @@ export function useStickyToggle(init: boolean): [boolean, boolean, (v: boolean) 
  */
 export function useSlider(
     init: boolean,
-    groupRef: MutableRefObject<HTMLElement>,
+    groupRef: RefObject<HTMLElement>,
     elementQuerySelector: string,
     options:  KeyframeAnimationOptions|number,
     onBeginAnimation?: (show: boolean, index: number, element: HTMLElement) => void,
@@ -65,7 +65,7 @@ export function useSlider(
     const [show, setShow] = useState(init);
     const [render, setRender] = useState(init);
 
-    const animation = useRef<Animation>()
+    const animation = useRef<Animation>(null)
 
     useLayoutEffect(() => {
         if (!render || initial) return;
