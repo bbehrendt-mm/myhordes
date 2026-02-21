@@ -928,6 +928,7 @@ class GazetteDataService implements FixtureProcessorInterface {
                 'requirement'=>GazetteEntryTemplate::RequiresOneCadaver,
                 'variableTypes'=>[
                     ['type'=>"citizen",'name'=>'cadaver1'],
+                    ],
             ],
 
             // Shaman & Guide death
@@ -943,12 +944,13 @@ class GazetteDataService implements FixtureProcessorInterface {
                 'requirement'=>GazetteEntryTemplate::RequiresNothing,
                 'variableTypes'=>[],
             ],
-                        ['text'=>'Eine echte Revolution in der Stadt! Der Schamane UND der Reiseleiter sind heute Nacht gestorben... „Da bekommt man richtig Lust, ihre Nachfolge anzutreten“, kommentierte {citizen1}. ',
+            ['text'=>'Eine echte Revolution in der Stadt! Der Schamane UND der Reiseleiter sind heute Nacht gestorben... „Da bekommt man richtig Lust, ihre Nachfolge anzutreten“, kommentierte {citizen1}. ',
                 'name'=>'gazetteTownDeadShamanGuide_003',
                 'type'=>GazetteEntryTemplate::TypeGazetteGuideShamanDeath,
                 'requirement'=>GazetteEntryTemplate::RequiresOneCitizen,
                 'variableTypes'=>[
                     ['type'=>"citizen", 'name'=>'citizen1'],
+                ],
             ],
 
             // Suicide Death
@@ -1635,14 +1637,13 @@ class GazetteDataService implements FixtureProcessorInterface {
                 'type'=>GazetteEntryTemplate::TypeGazetteReactor,
                 'requirement'=>GazetteEntryTemplate::RequiresNothing,
                 'variableTypes'=>[],
-                ],
             ],
             ['text'=> 'Mehrere Brände brachen im Herzen unseres <strong>Reaktors</strong> aus, bevor dieser vollständig in Flammen aufging. Dann überzog ein großer grüner Blitz die gesamte Region und vergiftete sie. Die wenigen Überlebenden konnten den schönen Atompilz bewundern, während sie mehrere schreckliche Minuten lang <strong>an Strahlenvergiftung starben</strong>. Ein schönes Finale!',
                 'name'=>'gazetteTownReactor_004',
                 'type'=>GazetteEntryTemplate::TypeGazetteReactor,
                 'requirement'=>GazetteEntryTemplate::RequiresNothing,
                 'variableTypes'=>[],
-            ],                        
+            ],
 
             // Red soul death
             ['text'=>'Wenn du wissen willst, was euer Schamane wert ist, frag <i class="dagger">†</i> {cadaver1}. Er würde wahrscheinlich etwas in der Art von "dieser verf#/}M@$ Scharlatan!!" sagen.',
@@ -1678,7 +1679,7 @@ class GazetteDataService implements FixtureProcessorInterface {
                 'requirement'=>GazetteEntryTemplate::RequiresOneOfEach,
                 'fot' => GazetteEntryTemplate::FollowUpTypeDoubt,
                 'variableTypes'=>[
-                    ['type'=>"citizen",'name'=>'cadaver1']
+                    ['type'=>"citizen",'name'=>'cadaver1'],
                     ['type'=>"transString",'from'=>'gazette','name'=>'danger'],
                     ['type'=>"citizen",'name'=>'citizen1'],
                 ],
@@ -1714,7 +1715,7 @@ class GazetteDataService implements FixtureProcessorInterface {
                     ['type'=>"transString",'from'=>'gazette','name'=>'danger'],
                 ],
             ],
-                        ['text'=>'Gestern waren <strong>glühende Lichter</strong> und <strong>unmenschliche Schreie</strong>  aus der Wüste weit hinter dem kleinen Berg zu hören. Seltsamerweise fällt dies mit dem Verschwinden von {cadavers} Bürgern in diesem Gebiet zusammen...',
+            ['text'=>'Gestern waren <strong>glühende Lichter</strong> und <strong>unmenschliche Schreie</strong>  aus der Wüste weit hinter dem kleinen Berg zu hören. Seltsamerweise fällt dies mit dem Verschwinden von {cadavers} Bürgern in diesem Gebiet zusammen...',
                 'name'=>'gazetteTownMultiRedSoul_003',
                 'type'=>GazetteEntryTemplate::TypeGazetteMultiRedSoul,
                 'requirement'=>GazetteEntryTemplate::RequiresMultipleRedSouls,
@@ -1723,7 +1724,7 @@ class GazetteDataService implements FixtureProcessorInterface {
                     ['type'=>"num",'name'=>'cadavers'],
                 ],
             ],
-                        ['text'=>'Gestern waren <strong>glühende Lichter</strong> und <strong>unmenschliche Schreie</strong>  aus der Wüste weit hinter dem kleinen Berg zu hören. Seltsamerweise fällt dies mit dem Verschwinden von {cadavers} Bürgern in diesem Gebiet zusammen...',
+            ['text'=>'Gestern waren <strong>glühende Lichter</strong> und <strong>unmenschliche Schreie</strong>  aus der Wüste weit hinter dem kleinen Berg zu hören. Seltsamerweise fällt dies mit dem Verschwinden von {cadavers} Bürgern in diesem Gebiet zusammen...',
                 'name'=>'gazetteTownMultiRedSoul_004',
                 'type'=>GazetteEntryTemplate::TypeGazetteMultiRedSoul,
                 'requirement'=>GazetteEntryTemplate::RequiresMultipleRedSouls,
@@ -2026,7 +2027,7 @@ class GazetteDataService implements FixtureProcessorInterface {
                 'fot' => GazetteEntryTemplate::FollowUpTypeDoubt,
                 'variableTypes'=>[
                     ['type'=>"citizen",'name'=>'cadaver1'],
-                    ['type'=>"transString",'from'=>'gazette','name'=>'bodypart',
+                    ['type'=>"transString",'from'=>'gazette','name'=>'bodypart'],
                 ],
             ],
             // Multi Eaten by Ghul
@@ -2046,7 +2047,7 @@ class GazetteDataService implements FixtureProcessorInterface {
                 'fot' => GazetteEntryTemplate::FollowUpTypeBad,
                 'variableTypes'=>[
                     ['type'=>"num",'name'=>'cadavers'],
-                    ['type'=>"citizen", 'name'=>'citizen1'],                    
+                    ['type'=>"citizen", 'name'=>'citizen1'],
                 ],
             ],
             ['text'=>'Vorsicht! Unter uns verstecken sich Mörder! Gestern wurden mehrere Leichen von Bürgern gefunden, die auf grausame Weise verstümmelt wurden. Glaubt einem Experten: Die Mörder werden in den nächsten Tagen erneut zuschlagen...',
@@ -2082,7 +2083,7 @@ class GazetteDataService implements FixtureProcessorInterface {
                 'requirement'=>GazetteEntryTemplate::RequiresNothing,
                 'fot' => GazetteEntryTemplate::FollowUpTypeBad,
                 'variableTypes'=>[ ],
-            ],            
+            ],
            // GhulBeaten
             ['text'=>'Ein einsamer Ghul <i class="dagger">†</i>{cadaver1} wurde gestern <strong>erschlagen</strong>, bevor er überhaupt ans Abendessen denken konnte. Die Straßen sind  vorerst „sicher“.',
                 'name'=>'gazetteTownGhulBeaten_001',
@@ -2117,8 +2118,8 @@ class GazetteDataService implements FixtureProcessorInterface {
                 'type'=>GazetteEntryTemplate::TypeGazetteMultiGhulBeaten,
                 'requirement'=>GazetteEntryTemplate::RequiresMultipleGhulBeaten,
                 'fot' => GazetteEntryTemplate::FollowUpTypeBad,
-                'variableTypes'=>[ 
-                    ['type'=>"num",'name'=>'cadavers'],    
+                'variableTypes'=>[
+                    ['type'=>"num",'name'=>'cadavers'],
                 ],
             ],
             ['text'=>'Gestern gab es in der Stadt einen schönen Fang, mit der <strong>Erlegung</strong> von {cadavers} Ghulen. Eine raffiniert durchgeführte Ermittlung, die in einem Blutbad endete – große Kunst.',
@@ -2126,8 +2127,8 @@ class GazetteDataService implements FixtureProcessorInterface {
                 'type'=>GazetteEntryTemplate::TypeGazetteMultiGhulBeaten,
                 'requirement'=>GazetteEntryTemplate::RequiresMultipleGhulBeaten,
                 'fot' => GazetteEntryTemplate::FollowUpTypeBad,
-                'variableTypes'=>[ 
-                    ['type'=>"num",'name'=>'cadavers'],    
+                'variableTypes'=>[
+                    ['type'=>"num",'name'=>'cadavers'],
                 ],
             ],
            // FleshCage
@@ -2146,29 +2147,29 @@ class GazetteDataService implements FixtureProcessorInterface {
                 'type'=>GazetteEntryTemplate::TypeGazetteMultiFleshCage,
                 'requirement'=>GazetteEntryTemplate::RequiresMultipleFleshCage,
                 'fot' => GazetteEntryTemplate::FollowUpTypeBad,
-                'variableTypes'=>[ 
-                    ['type'=>"num",'name'=>'cadavers'],    
+                'variableTypes'=>[
+                    ['type'=>"num",'name'=>'cadavers'],
                 ],
-            ],           
+            ],
             ['text'=>'Das ganze Dorf fand die Idee von {citizen1} großartig, der in dieser Nacht zwischen Mitternacht und ein Uhr morgens sein Radio auf volle Lautstärke gestellt hatte. Man muss sagen, dass das Geschrei der <strong>{cadavers} Bürger, die im Fleischkäfig eingesperrt waren</strong>, langsam unerträglich wurde. ',
                 'name'=>'gazetteTownMultiFleshCage_002',
                 'type'=>GazetteEntryTemplate::TypeGazetteMultiFleshCage,
                 'requirement'=>GazetteEntryTemplate::RequiresMultipleFleshCageC1,
                 'fot' => GazetteEntryTemplate::FollowUpTypeBad,
-                'variableTypes'=>[ 
-                    ['type'=>"num",'name'=>'cadavers'], 
-                    ['type'=>"citizen", 'name'=>'citizen1'],    
+                'variableTypes'=>[
+                    ['type'=>"num",'name'=>'cadavers'],
+                    ['type'=>"citizen", 'name'=>'citizen1'],
                 ],
-            ], 
+            ],
             ['text'=>'Ein schöner Fang in der Stadt und ein schönes Festmahl für die Horden gestern, mit der <strong>Opferung im Fleischkäfig</strong> von {cadavers} Bürgern. Heute Morgen ist der Käfig völlig leer und gereinigt...',
                 'name'=>'gazetteTownMultiFleshCage_003',
                 'type'=>GazetteEntryTemplate::TypeGazetteMultiFleshCage,
                 'requirement'=>GazetteEntryTemplate::RequiresMultipleFleshCage,
                 'fot' => GazetteEntryTemplate::FollowUpTypeBad,
-                'variableTypes'=>[ 
-                    ['type'=>"num",'name'=>'cadavers'],    
+                'variableTypes'=>[
+                    ['type'=>"num",'name'=>'cadavers'],
                 ],
-            ], 
+            ],
            // Explosive doormate
             ['text'=>'Habt ihr gestern den lauten <strong>„Knall”</strong> gehört?  Anscheinend war es <i class="dagger">†</i> {cadaver1}, der sich dorthin gewagt hat, wo er nicht hätte hingehen sollen...',
                 'name'=>'gazetteTownExplosiveDoormat_001',
@@ -2187,7 +2188,7 @@ class GazetteDataService implements FixtureProcessorInterface {
                 'variableTypes'=>[
                     ['type'=>"citizen",'name'=>'cadaver1'],
                     ['type'=>"transString",'from'=>'gazette','name'=>'location'],
-                    ['type'=>"transString",'from'=>'gazette','name'=>'bodypart'], 
+                    ['type'=>"transString",'from'=>'gazette','name'=>'bodypart'],
                     ['type'=>"citizen", 'name'=>'citizen1'],
                 ],
             ],

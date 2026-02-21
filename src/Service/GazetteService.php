@@ -464,7 +464,7 @@ class GazetteService
                 case CauseOfDeath::ChocolateCross:
                     $type = GazetteEntryTemplate::TypeGazetteMultiChocolateCross; break;
                 case CauseOfDeath::Haunted:
-                    $type = GazetteEntryTemplate::TypeGazetteMultiRedSouls; break;
+                    $type = GazetteEntryTemplate::RequiresMultipleRedSouls; break;
                 case CauseOfDeath::GhulEaten:
                     $type = GazetteEntryTemplate::TypeGazetteMultiGhulEaten; break;
                 case CauseOfDeath::GhulBeaten:
@@ -550,7 +550,7 @@ class GazetteService
                     case CauseOfDeath::ExplosiveDoormat:
                         $type = GazetteEntryTemplate::TypeGazetteExplosiveDoormat;
                         break;
-                    
+
                 }
             }
 
