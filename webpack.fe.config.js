@@ -145,6 +145,8 @@ Encore
     // uncomment if you use API Platform Admin (composer req api-admin)
     //.enableReactPreset()
     //.addEntry('admin', './assets/js/admin.js')
+
+    .enablePostCssLoader()
 ;
 
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
@@ -188,5 +190,4 @@ config.plugins = [
         }
     })
 ]
-
 module.exports = config;

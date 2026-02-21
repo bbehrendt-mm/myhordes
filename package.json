@@ -7,12 +7,16 @@
         "@symfony/webpack-encore": "^5.0.0",
         "@types/sortablejs": "^1",
         "@types/uuid": "^9",
+        "autoprefixer": "^10.4.24",
+        "browserslist": "latest",
         "core-js": "^3.38.0",
+        "cssnano": "^7.1.2",
         "favicons": "^7.0.2",
         "favicons-webpack-plugin": "^6.0.0",
         "file-loader": "6.2.0",
         "less": "4.2.0",
         "less-loader": "11.1.4",
+        "postcss-loader": "^8.2.1",
         "regenerator-runtime": "^0.14.1",
         "ts-loader": "9.5.1",
         "typescript": "^5.9.3",
@@ -53,9 +57,12 @@
         "stream": "0.0.2",
         "stream-browserify": "3.0.0",
         "string.prototype.matchall": "4.0.11",
-        "swagger-ui": "5.21.0",
+        "swagger-ui": "^5.31.2",
         "ua-parser-js": "1.0.37",
         "uuid": "9.0.1"
     },
-    "packageManager": "yarn@4.9.4"
+    "packageManager": "yarn@4.12.0",
+    "browserslist": [
+        "defaults"
+    ]
 }
