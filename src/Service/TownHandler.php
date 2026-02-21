@@ -342,21 +342,6 @@ class TownHandler
         $base = $building->getDefense();
         $bonus = $building->getDefenseBonus();
 
-        if ($building->getPrototype()->getName() === 'small_cemetery_#00') {
-
-            $c = 0;
-            foreach ($town->getCitizens() as $citizen) if (!$citizen->getAlive()) $c++;
-            $ratio = match($building->getLevel()) {
-                0 => 3,
-                1 => 7,
-                default => 14,
-            };
-            if ($this->getBuilding($town, 'small_coffin_#00'))
-                $ratio += 10;
-
-            $bonus += $ratio * $c;
-        }
-
         if ($this->bonus_defense_blocked($town, $building, $postDayChange))
             $bonus = 0;
 
