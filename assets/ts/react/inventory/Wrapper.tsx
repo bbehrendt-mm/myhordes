@@ -150,7 +150,8 @@ function sort(a: Item, b: Item): number {
 
 function getBagSorter(vaultData?: VaultStorage<VaultItemEntry>) {
     const BAG_ITEM_PRIORITY = [
-        ['essential', (a: Item) => a.e],
+        ['essential', (a: Item) => a.e && !vaultData?.[a.p]?.heavy],
+        ['essential+heavy', (a: Item) => a.e && vaultData?.[a.p]?.heavy],
         ['carrier+heavy', (a: Item) => vaultData?.[a.p]?.heavy && vaultData?.[a.p]?.extension],
         ['heavy', (a: Item) => vaultData?.[a.p]?.heavy],
         // ['empty-heavy'],
@@ -178,6 +179,103 @@ function getBagSorter(vaultData?: VaultStorage<VaultItemEntry>) {
             return sort(a, b);
         }
     }
+}
+
+function processSlots(items: Item[], vaultData?: VaultStorage<VaultItemEntry>, inventorySize: number = 0, inventoryHeavySlots: number = 0): SlotProps[] {
+    const slots: SlotProps[] = [];
+
+    const {BAG_ITEM_PRIORITY, bagSort} = getBagSorter(vaultData);
+    items.sort(bagSort);
+
+    const getItemStep = (a: Item) => BAG_ITEM_PRIORITY.find(([, check]) => check(a))?.[0] ?? 'loading';
+
+    let heavyUsed = 0;
+    let currentStep: typeof BAG_ITEM_PRIORITY[number][0] = BAG_ITEM_PRIORITY[0][0];
+
+    const lightItems = items.reduce((total, item) => total + (!vaultData?.[item.p]?.heavy ? 1 : 0), 0);
+    const inventoryOverflow = Math.max(0, items.length - inventorySize);
+    const lightItemsRoom = (inventorySize + inventoryOverflow) - inventoryHeavySlots;
+
+    // Light items can use heavy item slots
+    let heavyUsedByLight = 0;
+    if (lightItems > lightItemsRoom) {
+        heavyUsedByLight = lightItems - lightItemsRoom;
+        heavyUsed += heavyUsedByLight;
+    }
+
+    for (let i = 0; (i < inventorySize) || items.length > 0; i++) {
+        let currentItem = items.shift();
+        let vault = currentItem ? vaultData?.[currentItem.p] : undefined;
+        const step = currentItem ? getItemStep(currentItem) : currentStep;
+        currentStep = step;
+
+        let heavy = false;
+        switch(step) {
+            case 'essential':
+                break;
+            case 'essential+heavy':
+                heavyUsed++;
+                break;
+            case 'carrier+heavy':
+            case 'heavy':
+                heavyUsed++;
+                heavy = true;
+                break;
+            case 'carrier':
+            case 'regular':
+            case 'loading':
+                // Heavy items are finished : Flush out extra empty heavy slots
+                while(heavyUsed < inventoryHeavySlots) {
+                    heavyUsed++;
+                    i++;
+                    slots.push({
+                        free: true,
+                        heavy: true,
+                    });
+                }
+                break;
+        }
+
+        const isHeavySlot = (heavy && !(currentItem && currentItem.e) && (!vault || vault.heavy)) || (currentItem && !currentItem.e && (heavyUsedByLight && heavyUsedByLight-- > 0));
+
+        if (currentItem && isHeavySlot && !heavy) {
+            // Rotate the light items to have the "last" items use the heavy slots (and not the first ones)
+            items.unshift(currentItem);
+            currentItem = items.pop();
+            vault = currentItem ? vaultData?.[currentItem.p] : undefined;
+        }
+
+        const data: SlotProps = {
+            free: !currentItem,
+            heavy: isHeavySlot,
+            over: heavy && (heavyUsed > inventoryHeavySlots),
+        };
+
+        if (currentItem) {
+            data.itemInfo = {
+                item: currentItem,
+                vault
+            };
+        }
+
+        if (!currentItem && !items.length) {
+            // Flush out extra empty slots (don't forget we also have a final push)
+            while(i < (inventorySize - 1)) {
+                i++;
+                slots.push({
+                    free: true,
+                    heavy: heavyUsed < inventoryHeavySlots,
+                });
+                if (heavyUsed < inventoryHeavySlots) {
+                    heavyUsed++;
+                }
+            }
+        }
+
+        slots.push(data);
+    }
+
+    return slots;
 }
 
 const extractAllItems = (data: InventoryBankData | InventoryBagData) => {
@@ -497,7 +595,7 @@ const BagInventorySlot = (props: BagInventorySlotProps) => {
             classes.add('bg-over');
         }
 
-        if (props.heavy || props.itemInfo?.vault?.heavy) {
+        if (props.heavy) {
             classes.add('bg-heavy');
         } else if (props.itemInfo) {
             classes.add('bg-light');
@@ -539,10 +637,9 @@ const BagInventory = (props: InventoryPropsBag) => {
         const inventoryHeavySlots = props.inventory.heavy ?? 0;
         const isBag = props.type === 'rucksack';
         const items = [...props.inventory.items].sort(sort);
-        const slots: SlotProps[] = [];
-
         if (!isBag) {
             // Not a player bag : Display items / free slots normally
+            const slots: SlotProps[] = [];
             let free = inventorySize;
             for(const item of items) {
                 free--;
@@ -564,81 +661,7 @@ const BagInventory = (props: InventoryPropsBag) => {
             return slots;
         }
 
-        const {BAG_ITEM_PRIORITY, bagSort} = getBagSorter(vaultData);
-        items.sort(bagSort);
-
-        const getItemStep = (a: Item) => BAG_ITEM_PRIORITY.find(([, check]) => check(a))?.[0] ?? 'loading';
-
-        let heavyUsed = 0;
-        let currentStep = BAG_ITEM_PRIORITY[0][0];
-
-        const lightItems = items.reduce((total, item) => total + (!vaultData?.[item.p]?.heavy ? 1 : 0), 0);
-
-        // Light items can use heavy item slots
-        let heavyUsedByLight = 0;
-        if (lightItems > (inventorySize - inventoryHeavySlots)) {
-            heavyUsedByLight = lightItems - (inventorySize - inventoryHeavySlots);
-            heavyUsed += heavyUsedByLight;
-        }
-
-        for (let i = 0; (i < inventorySize) || items.length > 0; i++) {
-            const item = items.shift();
-            const vault = item ? vaultData?.[item.p] : undefined;
-            const step = item ? getItemStep(item) : currentStep;
-
-            let heavy = false;
-            switch(step) {
-                case 'carrier+heavy':
-                case 'heavy':
-                    heavyUsed++;
-                    heavy = true;
-                    break;
-                case 'carrier':
-                case 'regular':
-                case 'loading':
-                    // Heavy items are finished : Flush out extra empty heavy slots
-                    while(heavyUsed < inventoryHeavySlots) {
-                        heavyUsed++;
-                        i++;
-                        slots.push({
-                            free: true,
-                            heavy: true,
-                        });
-                    }
-                    break;
-            }
-
-            const data: SlotProps = {
-                free: !item,
-                heavy: (heavy && (!vault || vault.heavy)) || (item && !item.e && (heavyUsedByLight && heavyUsedByLight-- > 0)),
-                over: heavy && (heavyUsed > inventoryHeavySlots),
-            };
-
-            if (item) {
-                data.itemInfo = {
-                    item,
-                    vault
-                };
-            }
-
-            if (!item && !items.length) {
-                // Flush out extra empty slots (don't forget we also have a final push)
-                while(i < (inventorySize - 1)) {
-                    i++;
-                    slots.push({
-                        free: true,
-                        heavy: heavyUsed < inventoryHeavySlots,
-                    });
-                    if (heavyUsed < inventoryHeavySlots) {
-                        heavyUsed++;
-                    }
-                }
-            }
-
-            slots.push(data);
-        }
-
-        return slots;
+        return processSlots(items, vaultData, inventorySize, inventoryHeavySlots);
     }, [vaultData, props.type, props.inventory.items, props.inventory.size]);
 
     return <ul className={`inventory inventory-react ${props.type} ${props.className ?? ''}`}>
@@ -857,16 +880,18 @@ const HordesPassiveInventoryWrapper = (props: passiveMountProps) => {
         return () => props.parent.removeEventListener('click', handler);
     }, [props.link])
 
-    const {bagSort} = getBagSorter(vaultData);
+    const slots = React.useMemo(() => {
+        return processSlots(bag?.items ? [...bag.items] : [], vaultData, bag?.size ?? 0, bag?.heavy ?? 0);
+    }, [bag, vaultData]);
 
     return <Globals.Provider value={{api: api.current, strings}}>
         {strings && bag && <>
-            {bag?.items?.sort(bagSort).map((item,index) => <React.Fragment key={item.i}><SingleItem
-                item={item} data={(vaultData ?? {})[item.p] ?? null} mods={bag.mods} locked={true}
+            {slots.filter(slot => slot.itemInfo).map((slot,index) => <React.Fragment key={slot.itemInfo.item.i}><SingleItem
+                item={slot.itemInfo.item} data={(vaultData ?? {})[slot.itemInfo.item.p] ?? null} mods={bag.mods} locked={true}
                 blur={null} className={(props.max > 0 && index >= props.max) ? 'over' : ''}/>
             </React.Fragment>)}
-            {bag.size > 0 && bag.items.length < bag.size && Array.from(Array(bag.size - bag.items.length).keys()).map(i =>
-                <li key={i} className={`free ${(i+1+bag.items.length > props.max) ? 'over' : ''}`}/>)
+            {slots.filter(slot => !slot.itemInfo).map((slot,index) =>
+                <li key={index} className={`free ${(index+1+bag.items.length > props.max) ? 'over' : ''}`}/>)
             }
             <li className="more">
                 <img src={strings.actions.more} alt="+"/>
