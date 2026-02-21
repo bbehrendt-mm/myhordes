@@ -1549,34 +1549,24 @@ class MigrateCommand extends Command
         }
 
         if ($input->getOption('fix-bunker-level')) {
-            $rzMeta = $this->entity_manager->getClassMetadata(RuinZone::class);
-            $zMeta  = $this->entity_manager->getClassMetadata(Zone::class);
-            $pMeta  = $this->entity_manager->getClassMetadata(ZonePrototype::class);
-            $tMeta  = $this->entity_manager->getClassMetadata(Town::class);
-            $sMeta  = $this->entity_manager->getClassMetadata(Season::class);
 
-            $affected = $this->entity_manager->getConnection()->executeStatement(sprintf('
-                UPDATE %s rz
-                INNER JOIN %s z ON rz.%s = z.%s
-                INNER JOIN %s p ON z.%s = p.%s
-                INNER JOIN %s t ON z.%s = t.%s
-                INNER JOIN %s s ON t.%s = s.%s
-                SET rz.%s = -1
-                WHERE rz.%s = 1
-                  AND p.%s = :skin
-                  AND s.%s = :season
-                ',
-                $rzMeta->getTableName(),
-                $zMeta->getTableName(), $rzMeta->getSingleAssociationJoinColumnName('zone'),     $zMeta->getSingleIdentifierColumnName(),
-                $pMeta->getTableName(), $zMeta->getSingleAssociationJoinColumnName('prototype'), $pMeta->getSingleIdentifierColumnName(),
-                $tMeta->getTableName(), $zMeta->getSingleAssociationJoinColumnName('town'),      $tMeta->getSingleIdentifierColumnName(),
-                $sMeta->getTableName(), $tMeta->getSingleAssociationJoinColumnName('season'),    $sMeta->getSingleIdentifierColumnName(),
-                $rzMeta->getColumnName('z'),
-                $rzMeta->getColumnName('z'),
-                $pMeta->getColumnName('explorableSkin'),
-                $sMeta->getSingleIdentifierColumnName(),
-            ), ['skin' => ExplorableRuinSkin::Bunker->value, 'season' => 21]);
-            $output->writeln("Updated <info>$affected</info> RuinZone entities.");
+            $bunker_id = $this->entity_manager->getRepository(ZonePrototype::class)->findOneBy(['icon' => 'deserted_bunker'])->getId();
+            $this->helper->leChunk($output, Zone::class, 1, ['prototype' => $bunker_id], true, false, function(Zone $zone) {
+
+                $found = false;
+                foreach ($this->entity_manager->getRepository(RuinZone::class)->matching(Criteria::create()
+                    ->andWhere(Criteria::expr()->eq('zone', $zone))
+                    ->andWhere(Criteria::expr()->gt('z', 0))
+                ) as $ruinZone) {
+                    $found = true;
+                    $this->entity_manager->persist( $ruinZone->setZ( $ruinZone->getZ() * -1 ) );
+                }
+
+                return $found;
+
+            }, true);
+
+            return 0;
         }
 
         return 99;

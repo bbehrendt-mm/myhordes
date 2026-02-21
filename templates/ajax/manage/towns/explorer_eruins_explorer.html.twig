@@ -29,7 +29,7 @@
 				{% for floornum, floor in exploration.rz %}
 					<div class="adm-exploration" x-tab-group="admin-town-explorable-{{ exploration.z.id }}" x-tab-id="f-{{ exploration.z.id }}-{{ floornum }}" x-tab-target style="height: {{ 20 * (1 + town_conf.get(constant('App\\Enum\\Configuration\\TownSetting::ERuinSpaceMaxSizeY'))) }}px">
 						{% for rz in floor %}
-							<div class="rz {% if rz.prototype and rz.connect == 0 %}rz-{{ rz.locked ? 'locked' : 'unlocked' }}{% endif%} {% if rz.prototype and rz.connect != 0 %}rz-{{ rz.connect > 0 ? 'up' : 'down' }}{% endif%} rz-{{ rz.distance > town_conf.get(constant('App\\Enum\\Configuration\\TownSetting::ERuinRoomLockDistance')) ? 'far' : 'close' }} rz-{{ rz.corridor }} {% if rz.zombies > 0 %}rz-zeds{% endif %}" style="top:{{ rz.y * 20 }}px;left:{{ (rz.x + town_conf.get(constant('App\\Enum\\Configuration\\TownSetting::ERuinSpaceMaxSizeX'))/2) * 20 }}px;">
+							<div class="rz {% if rz.prototype and rz.prototype.level == 0 %}rz-{{ rz.locked ? 'locked' : 'unlocked' }}{% endif%} {% if rz.prototype and rz.prototype.level != 0 %}rz-{{ rz.prototype.level > 0 ? 'up' : 'down' }}{% endif%} rz-{{ rz.distance > town_conf.get(constant('App\\Enum\\Configuration\\TownSetting::ERuinRoomLockDistance')) ? 'far' : 'close' }} rz-{{ rz.corridor }} {% if rz.zombies > 0 %}rz-zeds{% endif %}" style="top:{{ rz.y * 20 }}px;left:{{ (rz.x + town_conf.get(constant('App\\Enum\\Configuration\\TownSetting::ERuinSpaceMaxSizeX'))/2) * 20 }}px;">
 								{% if rz.corridor != 0 %}
 									<div class="tooltip ndynamic">
 										{{ _self.valuelist('ID'|trans({},'admin'), rz.id) }}
@@ -37,7 +37,7 @@
 										{{ _self.valuelist('Stockwerk'|trans({},'admin'), rz.z) }}
 										{{ _self.valuelist('Distanz'|trans({},'admin'), rz.distance) }}
 										{{ _self.valuelist('Zombies'|trans({},'admin'), rz.zombies) }}
-										{% if rz.prototype and rz.connect == 0 %}
+										{% if rz.prototype and rz.prototype.level == 0 %}
 											{% if rz.locked %}
 												{{ _self.valuelist('Abdruck'|trans({},'admin'), rz.prototype.keyImprint.label|trans({},'items')) }}
 												{{ _self.valuelist('Schlüssel'|trans({},'admin'), rz.prototype.keyItem.label|trans({},'items')) }}
@@ -45,8 +45,8 @@
 												{{ _self.valuelist('Durchsucht'|trans({},'admin'), rz.digs) }}
 											{% endif %}
 										{% endif %}
-										{% if rz.prototype and rz.connect != 0 %}
-											{{ _self.valuelist('Treppe'|trans({},'admin'), rz.connect) }}
+										{% if rz.prototype and rz.prototype.level != 0 %}
+											{{ _self.valuelist('Treppe'|trans({},'admin'), rz.prototype.level) }}
 										{% endif %}
 									</div>
 								{% endif %}

@@ -19,7 +19,7 @@ class MazeMaker
 {
 
     // -----------------------------------------------------------------------------------------
-    // 
+    //
     // -----------------------------------------------------------------------------------------
 
     private float $skipMazeDirectionProbability = 0;
@@ -29,7 +29,7 @@ class MazeMaker
     private Zone $targetZone;
 
     const minStepDirection = 3;
-    
+
     // --------
 
     public function __construct(
@@ -59,7 +59,7 @@ class MazeMaker
                 ->setZombies(0)
                 ->setFloor(new Inventory()));
     }
-    
+
     // --------
 
     private function resetOneRuinZone(RuinZone $ruinZone)
@@ -93,7 +93,7 @@ class MazeMaker
             $this->resetOneRuinZone($ruinZone);
         }
     }
-    
+
     // --------
 
     public function createField() {
@@ -102,7 +102,7 @@ class MazeMaker
             return;
         }
 
-        // Create a cache. The idea is if we regenerate the maze, we don't destroy existing case, we just create the missing one. 
+        // Create a cache. The idea is if we regenerate the maze, we don't destroy existing case, we just create the missing one.
         // So we check the one that already exist
         $cache = [];
         foreach ($this->targetZone->getRuinZones() as $ruinZone) {
@@ -261,7 +261,7 @@ class MazeMaker
     protected function generateMaze( int $level = 0, array $origin = [0,0], int $offset_distance = 0 ) {
 
         /** @var RuinZone[][] $cache */
-        $cache = []; $binary = []; 
+        $cache = []; $binary = [];
         foreach ($this->targetZone->getRuinZonesOnLevel($level) as $ruinZone) {
             if (!isset($cache[$ruinZone->getX()])) $cache[$ruinZone->getX()] = [];
             if (!isset($cache[$ruinZone->getX()][$ruinZone->getY()])) {
@@ -293,7 +293,7 @@ class MazeMaker
 
         $countcorridor = 0;
         // Just to be clear : This algorithm isn't intuitive and is kinda hard to wrap his head around, but it make sense once you understand it.
-        // Clearly not the way I would do it, but the way the MT chose to do it. 
+        // Clearly not the way I would do it, but the way the MT chose to do it.
         // A good a way to see it is that either the algorithm is building a continuous path, or it go back on the cell created to check if you can
         // create a new path.
 
@@ -354,10 +354,10 @@ class MazeMaker
                                 //we break path, so we need to update distance of nodes ! => No we don't, just do it at the end...
                                 //updateDistance(next);
                             }
-                            // End of the current path. 
+                            // End of the current path.
                             $next = null;
 
-                            // NOTE : This seems to be a great place to flag corridor that could "collapse", without breaking the maze. 
+                            // NOTE : This seems to be a great place to flag corridor that could "collapse", without breaking the maze.
                         }
                     } else {
                         // End of the current path
@@ -375,13 +375,13 @@ class MazeMaker
 				$head = array_pop($walker);
 				$dTime = 0;
 			} else {
-                // We continue the path we are doing. 
+                // We continue the path we are doing.
                 $binary[$next->getX()][$next->getY()] = true;
                 $countcorridor++;
 				//next.distance = head.distance + 1;
 				array_push($walker, $next);
 				$head = $next;
-			}	
+			}
         }
 
         // Build the actual map
@@ -435,7 +435,7 @@ class MazeMaker
         };
 
         $conf =  $this->conf->getTownConfiguration( $this->targetZone->getTown() );
-        
+
         // Let's add some rooms!
         $room_distance = $conf->get(TownSetting::ERuinRoomDistance) + $offset_distance;
         $lock_distance = $conf->get(TownSetting::ERuinRoomLockDistance);
@@ -520,21 +520,17 @@ class MazeMaker
 
             if ($needs_origin) {
                 if ($origin_direction < 0) $room_corridor
-                    ->setPrototype( $this->random->pick( $up_room_types ) )
-                    ->setConnect( 1 );
+                    ->setPrototype( $this->random->pick( $up_room_types ) );
                 else $room_corridor
-                    ->setPrototype( $this->random->pick( $down_room_types ) )
-                    ->setConnect( -1 );
+                    ->setPrototype( $this->random->pick( $down_room_types ) );
             } else
                 if ($place_down) $room_corridor
-                    ->setPrototype( $this->random->pick( $down_room_types ) )
-                    ->setConnect(-1 );
+                    ->setPrototype( $this->random->pick( $down_room_types ) );
                 elseif ($place_up) $room_corridor
-                    ->setPrototype( $this->random->pick( $up_room_types ) )
-                    ->setConnect( 1 );
+                    ->setPrototype( $this->random->pick( $up_room_types ) );
                 else $room_corridor
                     ->setPrototype( $this->random->pick( $far ? $locked_room_types : $unlocked_room_types ) )
-                    ->setRoomFloor( (new Inventory())->setRuinZoneRoom( $room_corridor ) )
+                    ->setRoomFloor( new Inventory()->setRuinZoneRoom($room_corridor ) )
                     ->setLocked( $far );
 
             $this->dijkstra($cache,
@@ -549,7 +545,7 @@ class MazeMaker
             if (!$needs_origin && $place_down) $down_count--;
             elseif (!$needs_origin && $place_up) $up_count--;
             else $room_count--;
-            
+
             $needs_origin = false;
         }
 

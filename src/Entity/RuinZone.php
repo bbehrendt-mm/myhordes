@@ -72,9 +72,6 @@ class RuinZone
     #[ORM\Column(type: 'integer')]
     private $killedZombies = 0;
 
-    #[ORM\Column]
-    private int $connect = 0;
-
     public function __construct()
     {
     }
