@@ -22,6 +22,7 @@ use App\Entity\Picto;
 use App\Entity\PictoPrototype;
 use App\Entity\Post;
 use App\Entity\RolePlayText;
+use App\Entity\RuinZone;
 use App\Entity\Season;
 use App\Entity\SoulResetMarker;
 use App\Entity\Thread;
@@ -38,6 +39,7 @@ use App\Entity\Zone;
 use App\Entity\ZonePrototype;
 use App\Enum\Configuration\TownSetting;
 use App\Enum\Game\CitizenPersistentCache;
+use App\Enum\Game\ExplorableRuinSkin;
 use App\Enum\UserSetting;
 use App\Service\CommandHelper;
 use App\Service\ConfMaster;
@@ -269,6 +271,7 @@ class MigrateCommand extends Command
             ->addOption('set-snippet-role', null, InputOption::VALUE_NONE, 'Sets empty snippet roles to CROW')
 			->addOption('fix-top3', null, InputOption::VALUE_NONE, 'Check TOP3 settings and fix any issues with them.')
 			->addOption('set-profession-prop', null, InputOption::VALUE_NONE, 'Writes profession info to the ranking proxy')
+			->addOption('fix-bunker-level', null, InputOption::VALUE_NONE, 'Changes the floor level of the bunker from 1 to -1 in order to match the stairs direction')
         ;
     }
 
@@ -1543,6 +1546,27 @@ class MigrateCommand extends Command
                 if ($c->isProfession(CitizenProfession::DEFAULT))
                     $c->registerPropInPersistentCache( CitizenPersistentCache::Profession, $c->getProfession()->getId() );
             }, true);
+        }
+
+        if ($input->getOption('fix-bunker-level')) {
+
+            $bunker_id = $this->entity_manager->getRepository(ZonePrototype::class)->findOneBy(['icon' => 'deserted_bunker'])->getId();
+            $this->helper->leChunk($output, Zone::class, 1, ['prototype' => $bunker_id], true, false, function(Zone $zone) {
+
+                $found = false;
+                foreach ($this->entity_manager->getRepository(RuinZone::class)->matching(Criteria::create()
+                    ->andWhere(Criteria::expr()->eq('zone', $zone))
+                    ->andWhere(Criteria::expr()->gt('z', 0))
+                ) as $ruinZone) {
+                    $found = true;
+                    $this->entity_manager->persist( $ruinZone->setZ( $ruinZone->getZ() * -1 ) );
+                }
+
+                return $found;
+
+            }, true);
+
+            return 0;
         }
 
         return 99;

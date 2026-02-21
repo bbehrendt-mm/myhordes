@@ -196,6 +196,10 @@ class ZonePrototype implements RandomEntry
 
         return $this;
     }
+    public function getStairsDirection(): ?int
+    {
+        return $this->getExplorableSkin() === 'bunker' ? -1 : 1;
+    }
     public function getExplorableDescription(): ?string
     {
         return $this->explorableDescription;

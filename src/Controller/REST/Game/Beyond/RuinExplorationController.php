@@ -7,6 +7,7 @@ use App\Controller\BeyondController;
 use App\Controller\HookedInterfaceController;
 use App\Entity\RuinExplorerStats;
 use App\Entity\RuinZone;
+use App\Entity\RuinZonePrototype;
 use App\Entity\User;
 use App\Enum\Game\ExplorableRuinSkin;
 use App\Service\ConfMaster;
@@ -23,6 +24,7 @@ use App\Traits\Controller\ActiveCitizen;
 use Carbon\Carbon;
 use DateInterval;
 use DateTime;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -128,12 +130,19 @@ class RuinExplorationController extends AbstractController implements HookedInte
 
     protected function renderStatus(RuinZone $zone, RuinExplorerStats $stats): array {
         $guide = $stats->getCitizen()->hasRole('guide');
-        $exitZone =
-            $stats->getCitizen()->isProfession('tamer')
-                ? ($stats->getZ() === 0
-                    ? $this->entityManager->getRepository(RuinZone::class)->findOneBy(['zone' => $zone->getZone(), 'x' => 0, 'y' => 0, 'z' => 0])
-                    : $this->entityManager->getRepository(RuinZone::class)->findOneBy(['zone' => $zone->getZone(), 'z' => $stats->getZ(), 'connect' => -1])
-                ) : null;
+        $exitZone = null;
+        $is_tamer = $stats->getCitizen()->isProfession('tamer');
+
+        if ($is_tamer && $stats->getZ() === 0)
+            $exitZone = $this->entityManager->getRepository(RuinZone::class)->findOneBy(['zone' => $zone->getZone(), 'x' => 0, 'y' => 0, 'z' => 0]);
+        elseif ($is_tamer) {
+            $doors = $this->entityManager->getRepository(RuinZonePrototype::class)->findBy(['level' => $stats->getZ() > 0 ? -1 : 1]);
+            $exitZone = $this->entityManager->getRepository(RuinZone::class)->matching(Criteria::create()
+                ->where(Criteria::expr()->in('prototype', $doors))
+                ->andWhere(Criteria::expr()->eq('z', $stats->getZ()))
+                ->andWhere(Criteria::expr()->eq('zone', $zone->getZone()))
+            )->first();
+        }
 
         $in_grace = $stats->isGrace() && $stats->getStarted() !== null && (new DateTime())->modify('-30sec') < $stats->getStarted();
 
