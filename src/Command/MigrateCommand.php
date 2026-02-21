@@ -156,6 +156,7 @@ class MigrateCommand extends Command
         '286934ec84ef95e818ac5d5ce25af06b161d01ac' => [ ['app:utils:hpx-outdate', ['--outdate-resets' => true] ] ],
         '5e9950daeb4e32d1974174ddc6b84fcf41fde228' => [ ['app:user:convert-skill-points', ['--days 50'] ] ],
         'dedcb658109deff692d1316fdd44ceaec53ce195' => [ ['app:migrate', ['--reassign-thread-tags' => true] ] ],
+        '3e7e9b6c92f5ad5db70cf04075f140c1ae6e309f' => [ ['app:migrate', ['--fix-bunker-level' => true] ] ],
     ];
 
     public function __construct(KernelInterface $kernel, GameFactory $gf, EntityManagerInterface $em,
