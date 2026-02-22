@@ -63,7 +63,8 @@ class TownCreateCommand extends Command
             ->addArgument('lang', InputArgument::REQUIRED, 'Town language')
             ->addArgument('name', InputArgument::OPTIONAL, 'Town name')
 
-            ->addOption('simulate', null, InputOption::VALUE_NONE, 'Only simulates town creation.');
+            ->addOption('simulate', null, InputOption::VALUE_NONE, 'Only simulates town creation.')
+            ->addOption('by', null, InputOption::VALUE_REQUIRED, 'What to store in GPS', 'cli');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -99,7 +100,7 @@ class TownCreateCommand extends Command
             try {
                 $this->entityManager->persist( $town );
                 $this->entityManager->flush();
-                $this->gps->recordTownCreated( $town, null, 'cli' );
+                $this->gps->recordTownCreated( $town, null, $input->getOption('by') ?? 'cli' );
                 $this->entityManager->flush();
             } catch (Exception $e) {
                 $output->writeln('<error>Failed!</error>');

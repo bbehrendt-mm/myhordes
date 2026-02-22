@@ -44,6 +44,8 @@ class PrepareEndCommand extends Command
     protected function configure(): void
     {
         $this->addOption('yes', 'y', InputOption::VALUE_NONE, 'Auto-confirm');
+        $this->addOption('no-exclude', null, InputOption::VALUE_NONE, 'Do not exclude towns from the ranking');
+        $this->addOption('no-delete', null, InputOption::VALUE_NONE, 'Do not delete towns');
     }
 
     /**
@@ -71,11 +73,18 @@ class PrepareEndCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $delete = !$input->getOption('no-delete');
+        $exclude = !$input->getOption('no-exclude');
+
         $currentSeason = $this->entityManager->getRepository(Season::class)->findOneBy(['current' => true]);
         $currentTowns = $this->entityManager->getRepository(Town::class)->findBy(['season' => $currentSeason]);
 
-        $townsToClear = array_filter( $currentTowns, fn( Town $town ) => $town->getDay() < 2 );
-        $townsToUnrank = array_filter( $currentTowns, fn( Town $town ) => $town->getDay() >= 2 && !$town->getRankingEntry()->getDisabled() && !$town->getRankingEntry()->hasDisableFlag(TownRankingProxy::DISABLE_RANKING) );
+        $townsToClear = $delete
+            ? array_filter( $currentTowns, fn( Town $town ) => $town->getDay() < 2 )
+            : [];
+        $townsToUnrank = $exclude
+            ? array_filter( $currentTowns, fn( Town $town ) => $town->getDay() >= 2 && !$town->getRankingEntry()->getDisabled() && !$town->getRankingEntry()->hasDisableFlag(TownRankingProxy::DISABLE_RANKING) )
+            : [];
 
         $output->writeln("<fg=red>The following towns will be deleted:</>");
         $this->printTownList( $townsToClear, $output );
