@@ -695,3 +695,34 @@ Phablet-Layout: Diseño para tableta grande (o gran smartphone)
 Tablet-Layout: Diseño para tablet
 'Desktop-Layout (Vollbild)': 'Diseño para escritorio (pantalla completa)'
 'Desktop-Layout (Normal)': 'Diseño para escritorio (normal)'
+'Aktuelles Profilbild': "Imagen de perfil actual\n"
+'Vorschau des neuen Profilbilds': 'Previsualización de la nueva imagen de perfil'
+'Frühere Profilbilder': 'Antiguas imágenes de perfil'
+'MyHordes verwendet drei unterschiedliche Bildformate für dein Profilbild. Standartmäßig werden diese automatisch aus deinem ausgewählten Bild ermittelt. Du kannst die Bildausschnitte aber auch selbst wählen, wenn du möchtest. Klicke dazu einfach bei dem entsprechenden Bildformat auf "Bearbeiten".': "MyHordes utiliza tres formatos de imagen diferentes para tu imagen de perfil. Por defecto, estos se generan automáticamente a partir de la imagen que seleccionaste. Sin embargo, también puedes elegir los recortes de la imagen tú mismo si lo deseas. Para ello, simplemente haz clic en \"Editar\" en el formato de imagen correspondiente.\n"
+'Bist du fertig, klicke auf "Profilbild speichern" um deinen Avatar hochzuladen. Dein Bild wird dann vom System automatisch komprimiert und zugeschnitten.': 'Cuando hayas terminado, haz clic en "Guardar imagen de perfil" para subir tu avatar. Tu imagen será entonces comprimida y recortada automáticamente por el sistema.'
+'Das automatische Komprimieren und Zuschneiden kann einige Sekunden dauern. Sobald dein Bild fertig verarbeitet wurde, siehst du noch einmal eine Vorschau und kannst das Bild dann final als deinen neuen Avatar festlegen.': 'La compresión y el recorte automáticos pueden tardar unos segundos. Una vez que tu imagen haya sido procesada, verás una vista previa y podrás establecerla finalmente como tu nuevo avatar.'
+Seitenverhältnis: Formato de la imagen (altura/ancho)
+Beliebig: Cualquiera
+'Wie Originalbild': 'Igual que la imagen original'
+'Sieht alles gut aus?': '¿Todo correcto?'
+'Dein neues Profilbild ist noch nicht aktiviert.': 'Tu nueva imagen de perfil aún no está activada.'
+'Klicke unten auf "Profilbild aktivieren", um zu deinem neuen Avatar zu wechseln.': 'Haz clic abajo en "Activar imagen de perfil" para cambiar a tu nuevo avatar.'
+'Dein altes Profilbilds wird noch für eine Weile gespeichert, sodass du für eine begrenzte Zeit einfach zurückwechseln kannst, ohne dein altes Profilbild erneut hochladen zu müssen.': 'Tu antigua imagen de perfil se conservará durante un tiempo, para que puedas volver a ella fácilmente sin tener que subirla de nuevo.'
+'Dein neues Profilbild wird gerade verarbeitet. Bitte hab einen Augenblick Geduld...': 'Tu nueva imagen de perfil se está procesando. Por favor, espera un momento...'
+'Originales Bild': 'Imagen original'
+'Wird berechnet...': 'Calculando…'
+'Format konnte nicht berechnet werden': 'No se pudo procesar el formato'
+Verwerfen: Descartar
+'Profilbild aktivieren': 'Activar la imagen de perfil'
+'Dieses Profilbild verwenden': 'Usar este avatar'
+'Dieses Profilbild wird in ungefähr {days} Tagen automatisch gelöscht.': 'Esta imagen de perfil se eliminará automáticamente en aproximadamente {days} días.'
+'Dieses Profilbild wird in Kürze automatisch gelöscht.': 'Esta imagen de perfil se eliminará automáticamente pronto.'
+'Anderes Bild auswählen': 'Seleccionar otra imagen'
+Fertig: Finalizado
+animiert: animado
+'hohe Auflösung': 'alta resolución'
+'reduzierte Auflösung': 'resolución reducida'
+importiert: importada
+'Unschärfeeffekte verringern': 'Reducir los efectos de desenfoque'
+'Diese Option deaktiviert verschiedene optische Unschäfteeffekte, beispielsweise auf der Spielkarte.': 'Esta opción desactiva varios efectos ópticos no deseados, por ejemplo, en el mapa.'
+'Die Auflösung des gewählten Bildes ist nicht ausreichend, um es als Avatar verwenden zu können. Bitte lade ein Bild mit einer Auflösung von mindestens {x} × {y} Pixeln hoch.': 'La resolución de la imagen seleccionada no es suficiente para poder utilizarla como avatar. Sube una imagen con una resolución mínima de {x} × {y} píxeles.'
