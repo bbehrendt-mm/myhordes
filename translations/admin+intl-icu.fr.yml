@@ -702,3 +702,16 @@ Billig+: Pas cher+
 'Klicken, um Baustelle sofort zu entsperren.': 'Cliquez pour débloquer'
 Notizen: Notes
 'Notiz hinzufügen': 'Ajouter une note'
+'Wenn du deinen Schlüssel änderst, musst du diesen in deiner Anwendung austauschen. Bitte bestätige, dass du den Schlüssel jetzt austauschen möchtest, indem du die Zahl {num} eingibst.': 'Si vous modifiez votre clé, vous devrez la remplacer dans votre application. Veuillez confirmer que vous souhaitez remplacer la clé maintenant en saisissant le numéro {num}.'
+Koppeln: Associer
+'Namen testen': 'Tester le nom'
+'Name ist gültig': 'Le nom est valide'
+'Name ist länger als 32 Zeichen': 'Le nom comporte plus de 32 caractères'
+'Name enthält ungültige Zeichen': 'Le nom contient des caractères invalides'
+'Name ist ähnlich zu verbotenen Begriffen': 'Le nom contient ou est similaire à un mot interdit'
+Cheater: Tricheur
+'Öffentliche Events': 'Événements publics'
+'Interne Events': 'Événements internes'
+'Bonus-Heldenerfahrung setzen': 'Définir l''expérience bonus des héros'
+'Gebäude anlegen:': 'Créer un bâtiment :'
+'Karte aufdecken': 'Révéler la carte'
