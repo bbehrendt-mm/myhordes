@@ -236,6 +236,7 @@ export const MapCore = (props: {setup: MapSetup, properties: MapProperties}) => 
 
                             <LayerUI
                                 timeout={ (nextZone?.r ?? currentZone).status.timeout }
+                                grace={ (nextZone?.r ?? currentZone).status.grace }
                                 activity={ (nextZone?.r ?? currentZone).status.activity }
                                 direction={ (nextZone?.r ?? currentZone).status.exit }
                                 controls={{

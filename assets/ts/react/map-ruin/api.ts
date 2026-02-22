@@ -79,6 +79,7 @@ export type ZombieCount = {
 export type ExplorationStatus = {
     rid: string
     paused: boolean,
+    grace: number,
     exit: number,
     shifted: boolean | null,
     activity: number,

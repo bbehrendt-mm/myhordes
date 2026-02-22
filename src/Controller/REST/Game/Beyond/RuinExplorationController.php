@@ -144,7 +144,8 @@ class RuinExplorationController extends AbstractController implements HookedInte
             )->first();
         }
 
-        $in_grace = $stats->isGrace() && $stats->getStarted() !== null && (new DateTime())->modify('-30sec') < $stats->getStarted();
+        $in_grace = $stats->isGrace() && $stats->getStarted() !== null && new DateTime()->modify('-30sec') < $stats->getStarted();
+        $grace_offset = $in_grace ? (30 - max(0, min(30, Carbon::now()->diffInSeconds( $stats->getStarted(), true )))) : 0;
 
         $exit_angle = null;
         if ($exitZone) {
@@ -165,8 +166,9 @@ class RuinExplorationController extends AbstractController implements HookedInte
 
         return [
             'rid' => "{$stats->getId()}/{$zone->getId()}",
-            'timeout' => max(0, $stats->getTimeout()->getTimestamp() - time()),
+            'timeout' => max(0, $stats->getTimeout()->getTimestamp() - time() - $grace_offset),
             'paused' => $in_grace,
+            'grace' => $grace_offset,
             'exit' => $exit_angle,
             'shifted' => $stats->getInRoom(),
             'activity' => $guide ? (0.1 + 0.9 * (4-min(4, $zone->getRoomDistance()))/4) : 1,

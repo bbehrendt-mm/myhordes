@@ -122,6 +122,7 @@ const MovementChevron = () => {
 
 type LayerUIFrameProps = {
     timeout: number,
+    grace: number,
     activity: number,
     direction: number|null,
 }
@@ -191,15 +192,17 @@ const UIFrame = (props: LayerUIFrameProps) => {
 
     }, [props.direction]);
 
+    const p = (props.timeout + props.grace) * 1000;
+
     useCountdown(
-        props.timeout * 1000,
-        ms => `${Math.floor(ms/3000)}`,
+        p,
+        ms => `${Math.floor(Math.min(ms, props.timeout * 1000)/3000)}`,
         (ms, s) => {
             if (ms <= 0) $.ajax.load(null, globals.reload, false);
             else setTimeout(s)
         },
         250,
-        [props.timeout],
+        [props.timeout, props.grace],
         true
     )
 
@@ -223,6 +226,7 @@ const UIFrame = (props: LayerUIFrameProps) => {
 
 type LayerUIProps = {
     timeout: number,
+    grace: number,
     activity: number,
     direction: number|null,
     onMove: (dx: number, dy: number) => void,
@@ -235,6 +239,6 @@ export const LayerUI = (props: LayerUIProps) => {
         <MovementArrow onClick={() => props.onMove(1, 0)} visible={props.controls?.e} rotation={90}/>
         <MovementArrow onClick={() => props.onMove(0,-1)} visible={props.controls?.s} rotation={180}/>
         <MovementArrow onClick={() => props.onMove(-1,0)} visible={props.controls?.w} rotation={270}/>
-        <UIFrame timeout={ props.timeout } activity={ props.activity } direction={ props.direction } />
+        <UIFrame timeout={ props.timeout } grace={ props.grace } activity={ props.activity } direction={ props.direction } />
     </Layer>
 }
