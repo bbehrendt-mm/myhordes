@@ -675,6 +675,7 @@ Berufsgegenstand: crwdns71306:0crwdne71306:0
 Einrichtungsgegenstand: crwdns71310:0crwdne71310:0
 Verteidigungsgegenstand: crwdns71312:0crwdne71312:0
 Waffe: crwdns71314:0crwdne71314:0
+Katapultierbar: crwdns253850:0crwdne253850:0
 Super-Flaum-Pulver: crwdns71316:0crwdne71316:0
 'Je nach Epoche wurde dieses Pulver nacheinander als Zünder für verschiedene Artilleriegeschütze, dann als billige Droge für bedürftige Bürger und schließlich als Hauptbestandteil von Feuerwerkskörpern verwendet. In allen drei Fällen haben viele Menschen nicht überlebt.': 'crwdns71318:0crwdne71318:0'
 Flush-Abschussrohr: crwdns71320:0crwdne71320:0
@@ -1164,3 +1165,23 @@ Larven-Marmelade: crwdns213096:0crwdne213096:0
 Erschrecken: crwdns252518:0crwdne252518:0
 'Schaurige Maske': 'crwdns252520:0crwdne252520:0'
 'Irgendwie erinnert diese Maske dich an jemanden...': 'crwdns252522:0crwdne252522:0'
+Besinnen: crwdns253852:0crwdne253852:0
+'Du nimmst dir einen Moment Zeit, um zur Ruhe zu kommen und dich auf das wesentliche zu besinnen.': 'crwdns253854:0crwdne253854:0'
+'Zone ausheben': 'crwdns253856:0crwdne253856:0'
+'Du hast diese Zone erfolgreich ausgehoben und zahlreiche neue Buddelmöglichkeiten entdeckt.': 'crwdns253858:0crwdne253858:0'
+'Es schmeckt wirklich komisch... aber wenigstens ist dein Hunger ein wenig gestillt. Glaub aber nicht, dass du dadurch zusätzliche APs erhältst...': 'crwdns253860:0crwdne253860:0'
+'Es sieht wirklich nicht so aus, als würdest du hier noch neue Buddelmöglichkeiten finden können...': 'crwdns253862:0crwdne253862:0'
+'Nach neuen Buddelmöglichkeiten zu suchen macht nur Sinn, wenn es keine offensichtlichen Buddelmöglichkeiten mehr gibt.': 'crwdns253864:0crwdne253864:0'
+Senken: crwdns253866:0crwdne253866:0
+'Du senkst deinen Schild. Zwar kannst du dich jetzt nicht mehr so gut verteidigen, dafür kannst du aber einen weiteren, schweren Gegenstand mit dir führen.': 'crwdns253868:0crwdne253868:0'
+'Schutzschild (abgelegt)': 'crwdns253870:0crwdne253870:0'
+'Ein großer Schutzschild. Wenn du ihn vor dich halten würdest, könntest du damit 2 zusätzliche Zombies auf Distanz zu halten. Aktuell fungiert er nur als kleidsames Accessoire.': 'crwdns253872:0crwdne253872:0'
+'Du tötest 1 Zombie in der Zone und erhältst du die Kontrolle über die Zone für 5 Minuten.': 'crwdns253874:0crwdne253874:0'
+' Ein großer Schutzschild, der keine Wünsche offen lässt, ermöglicht es dir, in der Wüste bis zu 2 zusätzliche Zombies auf Distanz zu halten. Dabei ist er aber ganz schön schwer... vielleicht könntest du mehr schwere Dinge bei dir tragen, wenn du den Schild senken würdest?': 'crwdns253876:0crwdne253876:0'
+'Es ist hier einfach zu staubig, um diesen Gegenstand zusammenbauen zu können...': 'crwdns253878:0crwdne253878:0'
+'Du jonglierst mit dem Ball und schaffst es sehr gut, den Ball in der Luft zu halten. Man könnte dich fast für einen professionellen Fußballspieler halten!<hr />Du hattest viel Spaß und erhältst <strong>1 Erkundungspunkt</strong>.': 'crwdns253880:0crwdne253880:0'
+'Du hast die/den {item} repariert.': 'crwdns253882:0{item}crwdne253882:0'
+Trümmerkugel: crwdns253884:0crwdne253884:0
+'Ein kugelförmiges Etwas, das aus zufälligen Trümmerstücken zusammengeklebt wurde. Viel kann man damit nicht anfangen... außer vielleicht, es mit hoher Geschwindigkeit in eine Zombiemeute zu katapultieren!': 'crwdns253886:0crwdne253886:0'
+'Du hast heute bereits eine Zone ausgehoben...': 'crwdns253888:0crwdne253888:0'
+'Es sieht so aus, als könntest du mit deiner Schaufel an dieser Stelle tiefer graben als sonst... Möglicherweise kannst du dieser Zone neues Leben einhauchen, sodass du und andere Bürger hier wieder wertvolle Gegenstände finden können? Du kannst diese Aktion nur einmal pro Tag verwenden. Außerdem kann jede Zone nur einmalig durch diese Aktion erneuert werden.': 'crwdns253890:0crwdne253890:0'
