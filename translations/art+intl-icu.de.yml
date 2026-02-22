@@ -1,7 +1,24 @@
 'Good Taste Dashboard': 'Dashboard des Guten Geschmacks'
 'Zentrales Dashboard für Kuratoren des guten Geschmacks, um Spiel-Assets, Texte und UI-Tools zu durchsuchen.': 'Zentrales Dashboard für Kuratoren des Guten Geschmacks, um Spiel-Assets, Texte und UI-Tools zu durchsuchen.'
 'Alle Assets anzeigen': 'Alle Assets anzeigen'
+'Alle RP-Texte anzeigen': 'Alle RP-Texte anzeigen'
 Assets: Assets
 'Assets verfügbar': 'Assets verfügbar'
 'Übersicht der Dateien unter {path}, gruppiert nach Ordnern. Klappe einen Ordner auf, um die Vorschaubilder zu sehen.': 'Übersicht der Dateien unter {path}, gruppiert nach Ordnern. Klappe einen Ordner auf, um die Vorschaubilder zu sehen.'
 'Keine Assets gefunden.': 'Keine Assets gefunden.'
+RP-Texte: RP-Texte
+'Alle RP-Texte': 'Alle RP-Texte'
+'Übersicht aller verfügbaren Rollenspiel-Texte im Spiel.': 'Übersicht aller verfügbaren Rollenspiel-Texte im Spiel.'
+'Keine RP-Texte gefunden.': 'Keine RP-Texte gefunden.'
+ID: ID
+Name: Name
+Titel: Titel
+Autor: Autor
+Sprache: Sprache
+Design: Design
+Hintergrund: Hintergrund
+Chance: Chance
+Seiten: Seiten
+Vorschau: Vorschau
+Schriften: Schriften
+'Keine Seiten vorhanden.': 'Keine Seiten vorhanden.'
