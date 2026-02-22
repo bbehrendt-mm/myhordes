@@ -3156,10 +3156,10 @@ Fund: Trouvaille
 'Das Tamer''s Fallensystem ermöglicht unter anderem, Tiere mit einem Köder in die Stadt zu locken. Lege Nahrung aus, um ein wildes Tier aus der Umgebung anzulocken. Je verlockender der Köder ist, desto besser stehen deine Chancen ... doch mit jedem Versuch wird die Umgebung misstrauischer.': 'Le Système de Pièges des Apprivoiseurs permet, entre autres, d''attirer des animaux en ville grâce à un appât. Déposez de la nourriture pour tenter d''appâter un animal sauvage des environs. Plus l''appât est tentant, plus vos chances sont bonnes... mais à force d''essais, les alentours se méfient.'
 '<b>Einmal pro Tag</b> kann jeder Bürger sein Glück versuchen.': '<b>Une fois par jour</b>, chaque citoyen peut tenter sa chance.'
 'Du wurdest verbannt und kannst daher keine Tiere anlocken.': 'Vous avez été banni et ne pouvez donc pas attirer les animaux.'
-'Inhalt der Futterschale': 'Contenu du bol alimentaire'
+'Fallenköder': 'Appâts du piège'
 'Du hast die Tierklinik heute bereits verwendet.': 'Vous avez déjà utilisé la clinique vétérinaire aujourd''hui.'
 'Tiere anlocken': 'Attirer les animaux'
-'Verfügbare Lockmittel': 'Attractifs disponibles'
+'Verfügbare Köder': 'Appâts disponibles'
 Hinzufügen: Ajouter
 'Nicht schlecht. Mit deinem Köder hast du es geschafft, {item} anzulocken!<hr/>Du hast es zur sicheren Aufbewahrung in die Bank gebracht.': 'Pas mal. Vous avez réussi à attirer {item} avec votre appât !<hr/>Vous l''avez apporté à la banque pour le garder en lieu sûr.'
 'Es ist dir nicht gelungen, ein Tier anzulocken. Was für eine Verschwendung...': 'Vous n''avez pas réussi à attirer un animal. Quel gâchis...'
@@ -3175,10 +3175,10 @@ Hinzufügen: Ajouter
 'Den Tod besiegen (heilt Kater, Bandagiert und Angst)': 'Vaincre la mort (soigne la terreur, gueule de bois et convalescence)'
 '{dogname}, der stinkende Köter von {citizen}, hat sich folgendes aus der Bank geschnappt und ist damit aus der Stadt gerannt: {item}': '{dogname}, le cabot puant de {citizen}, a récupéré {item} à la banque et s’est enfui de la ville avec.'
 'Die ersten 5 Tage in der Pandämonium-Stadt "{town}" überlebt.': 'A survécu aux 5 premiers jours dans la ville du Pandémonium « {town} ».'
-Klinikregister: Centre d'essai
+Klinikregister: Système de Pièges
 '{citizen} hat {list2} in die Stadt gelockt und dabei folgendes Futter eingesetzt: {list1}.': '{citizen} a attiré {list2} dans la ville en utilisant la nourriture suivante : {list1}.'
 '{citizen} hat vergeblich versucht Tiere in die Stadt zu locken und dabei folgendes Futter verschwendet: {list1}.': '{citizen} a essayé en vain d''attirer des animaux dans la ville et a gaspillé la nourriture suivante : {list1}.'
-Tierklinik: Centre d'essai
+Tierklinik: Système de Pièges
 'Die folgenden Bürger sind der Stadt bereits beigetreten:': 'Les citoyens suivants sont déjà entrés dans cette ville :'
 'Du kannst dieser Stadt nicht beitreten, da du nicht auf der Teilnehmerliste stehst.': 'Vous ne pouvez pas entrer dans cette ville, car vous n''êtes pas sur sa liste d''invités.'
 'Du kannst dieser Stadt nicht beitreten, da du noch nicht die erforderliche Menge an Seelenpunkten gesammelt hast.': 'Vous ne pouvez pas rejoindre cette ville car vous n''avez pas suffisamment de points d''âme.'

@@ -3156,10 +3156,10 @@ Fund: Fund
 'Das Tamer''s Fallensystem ermöglicht unter anderem, Tiere mit einem Köder in die Stadt zu locken. Lege Nahrung aus, um ein wildes Tier aus der Umgebung anzulocken. Je verlockender der Köder ist, desto besser stehen deine Chancen ... doch mit jedem Versuch wird die Umgebung misstrauischer.': 'Das Tamer''s Fallensystem ermöglicht unter anderem, Tiere mit einem Köder in die Stadt zu locken. Lege Nahrung aus, um ein wildes Tier aus der Umgebung anzulocken. Je verlockender der Köder ist, desto besser stehen deine Chancen ... doch mit jedem Versuch wird die Umgebung misstrauischer.'
 '<b>Einmal pro Tag</b> kann jeder Bürger sein Glück versuchen.': '<b>Einmal pro Tag</b> kann jeder Bürger sein Glück versuchen.'
 'Du wurdest verbannt und kannst daher keine Tiere anlocken.': 'Du wurdest verbannt und kannst daher keine Tiere anlocken.'
-'Inhalt der Futterschale': 'Inhalt der Futterschale'
+'Fallenköder': 'Fallenköder'
 'Du hast die Tierklinik heute bereits verwendet.': 'Du hast die Tierklinik heute bereits verwendet.'
 'Tiere anlocken': 'Tiere anlocken'
-'Verfügbare Lockmittel': 'Verfügbare Lockmittel'
+'Verfügbare Köder': 'Verfügbare Köder'
 Hinzufügen: Hinzufügen
 'Nicht schlecht. Mit deinem Köder hast du es geschafft, {item} anzulocken!<hr/>Du hast es zur sicheren Aufbewahrung in die Bank gebracht.': 'Nicht schlecht. Mit deinem Köder hast du es geschafft, {item} anzulocken!<hr/>Du hast es zur sicheren Aufbewahrung in die Bank gebracht.'
 'Es ist dir nicht gelungen, ein Tier anzulocken. Was für eine Verschwendung...': 'Es ist dir nicht gelungen, ein Tier anzulocken. Was für eine Verschwendung...'
@@ -3175,10 +3175,10 @@ Hinzufügen: Hinzufügen
 'Den Tod besiegen (heilt Kater, Bandagiert und Angst)': 'Den Tod besiegen (heilt Kater, Bandagiert und Angst)'
 '{dogname}, der stinkende Köter von {citizen}, hat sich folgendes aus der Bank geschnappt und ist damit aus der Stadt gerannt: {item}': '{dogname}, der stinkende Köter von {citizen}, hat sich folgendes aus der Bank geschnappt und ist damit aus der Stadt gerannt: {item}'
 'Die ersten 5 Tage in der Pandämonium-Stadt "{town}" überlebt.': 'Die ersten 5 Tage in der Pandämonium-Stadt "{town}" überlebt.'
-Klinikregister: Klinikregister
+Klinikregister: Fallensystem
 '{citizen} hat {list2} in die Stadt gelockt und dabei folgendes Futter eingesetzt: {list1}.': '{citizen} hat {list2} in die Stadt gelockt und dabei folgendes Futter eingesetzt: {list1}.'
 '{citizen} hat vergeblich versucht Tiere in die Stadt zu locken und dabei folgendes Futter verschwendet: {list1}.': '{citizen} hat vergeblich versucht Tiere in die Stadt zu locken und dabei folgendes Futter verschwendet: {list1}.'
-Tierklinik: Tierklinik
+Tierklinik: Fallensystem
 'Die folgenden Bürger sind der Stadt bereits beigetreten:': 'Die folgenden Bürger sind der Stadt bereits beigetreten:'
 'Du kannst dieser Stadt nicht beitreten, da du nicht auf der Teilnehmerliste stehst.': 'Du kannst dieser Stadt nicht beitreten, da du nicht auf der Teilnehmerliste stehst.'
 'Du kannst dieser Stadt nicht beitreten, da du noch nicht die erforderliche Menge an Seelenpunkten gesammelt hast.': 'Du kannst dieser Stadt nicht beitreten, da du noch nicht die erforderliche Menge an Seelenpunkten gesammelt hast.'

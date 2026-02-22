@@ -3156,10 +3156,10 @@ Fund: Seeker
 'Das Tamer''s Fallensystem ermöglicht unter anderem, Tiere mit einem Köder in die Stadt zu locken. Lege Nahrung aus, um ein wildes Tier aus der Umgebung anzulocken. Je verlockender der Köder ist, desto besser stehen deine Chancen ... doch mit jedem Versuch wird die Umgebung misstrauischer.': 'The Tamer''s Trap System allows you, among other things, to lure animals into town with bait. Place food to try luring a wild animal from the surrounding area. The more tempting the bait, the better your chances... but with repeated attempts, nearby wildlife grows wary.'
 '<b>Einmal pro Tag</b> kann jeder Bürger sein Glück versuchen.': '<b>Once per day</b>, each citizen can try their luck.'
 'Du wurdest verbannt und kannst daher keine Tiere anlocken.': 'You have been shunned and therefore cannot attract animals.'
-'Inhalt der Futterschale': 'Contents of the feeding bowl'
+'Fallenköder': 'Trap Bait'
 'Du hast die Tierklinik heute bereits verwendet.': 'You have already used the veterinary clinic today.'
 'Tiere anlocken': 'Attract animals'
-'Verfügbare Lockmittel': 'Available lures'
+'Verfügbare Köder': 'Available baits'
 Hinzufügen: Add
 'Nicht schlecht. Mit deinem Köder hast du es geschafft, {item} anzulocken!<hr/>Du hast es zur sicheren Aufbewahrung in die Bank gebracht.': 'Not bad. With your bait, you managed to attract {item}!<hr/>You took it to the bank for safekeeping.'
 'Es ist dir nicht gelungen, ein Tier anzulocken. Was für eine Verschwendung...': 'You failed to attract an animal. What a waste...'
@@ -3175,10 +3175,10 @@ Hinzufügen: Add
 'Den Tod besiegen (heilt Kater, Bandagiert und Angst)': 'Cheat Death (Heals Hungover, Healed and Terror)'
 '{dogname}, der stinkende Köter von {citizen}, hat sich folgendes aus der Bank geschnappt und ist damit aus der Stadt gerannt: {item}': '{dogname}, {citizen}''s foul-smelling dog has taken an {item} from the bank and ran out of town with it!'
 'Die ersten 5 Tage in der Pandämonium-Stadt "{town}" überlebt.': 'Survived the first 5 days in the Hardcore town "{town}".'
-Klinikregister: Experiment Center
+Klinikregister: Trap System
 '{citizen} hat {list2} in die Stadt gelockt und dabei folgendes Futter eingesetzt: {list1}.': '{citizen} has successfully lured {list2} into town using {list1} as bait.'
 '{citizen} hat vergeblich versucht Tiere in die Stadt zu locken und dabei folgendes Futter verschwendet: {list1}.': '{citizen} has tried in vain to lure animals into town while wasting the following bait: {list1}.'
-Tierklinik: Experiment Center
+Tierklinik: Trap System
 'Die folgenden Bürger sind der Stadt bereits beigetreten:': 'The following citizens have already entered this town:'
 'Du kannst dieser Stadt nicht beitreten, da du nicht auf der Teilnehmerliste stehst.': 'You cannot enter this town, since you''re not on its invite list.'
 'Du kannst dieser Stadt nicht beitreten, da du noch nicht die erforderliche Menge an Seelenpunkten gesammelt hast.': 'You cannot join this town as you do not have a sufficient amount of soul points.'
