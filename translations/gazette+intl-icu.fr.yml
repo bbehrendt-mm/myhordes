@@ -208,10 +208,10 @@ Wasserschwein: le ragondin
 Sumpfschildkröte: le furet
 Kätzchen: le chaton
 'blaue Frettchen': 'le furet bleu'
-'Dachs': 'le blaireau'
-'Lerche': 'l'alouette'
-'Taube': 'le pigeon'
-'Henne': 'le poulet'
+Dachs: le blaireau
+Lerche: l'alouette
+Taube: le pigeon
+Henne: le poulet
 'einen Haufen Gerümpel': 'un amas de déchets'
 'einen Holzstapel': 'un tas de bois'
 'einen Abfallberg': 'une pile de détritus'
@@ -319,7 +319,10 @@ Kätzchen: le chaton
 'Unser geliebter Reiseleiter in der Außenwelt ist gestern verstorben.': 'Notre cher Guide de l''Outre-Monde est mort cette nuit.'
 'Tolle Leistung gestern Abend, der Schamane und der Reiseleiter in der Außenwelt sind beide tot, daher könnte der heutige Tag etwas eintönig werden.': 'Jolie performance la nuit dernière, le Chaman et le Guide de l''Outre-Monde sont tous deux morts, la journée d''aujourd''hui risque de paraître monotone.'
 'Letzte Nacht war die Stadt von Zombies {attack} umzingelt! Einige schafften es, die Mauern zu durchbrechen, ein Zustrom, der uns {deaths} gute Leute kostete.': 'Les zombies étaient environ {attack} autour de notre ville hier soir ! Certains ont franchi les murs, un débordement qui nous a coûté {deaths} bons éléments.'
+'Heute Morgen hätte es in der Stadt fast ein <strong>Erbschaftsproblem</strong> gegeben: Auf dem Zettel, der im Haus von † {cadaver1} gefunden wurde, stand „Ich hinterlasse meinen gesamten Besitz meinem Nachbarn † {cadaver2}“. Dieser Nachbar hatte jedoch genau das Gleiche angekündigt. Wir hielten es für sicherer, alle ihre Sachen der Stadt zur freien Verfügung zu stellen. Bedient euch!': 'On a failli avoir un <strong>problème de succession</strong> en ville ce matin : la note trouvée dans la maison de <i class="dagger">†</i> {cadaver1} disait "je laisse toutes mes possessions à mon voisin <i class="dagger">†</i> {cadaver2}". Lequel voisin avait annoncé exactement l''inverse. Il nous a semblé plus sûr de mettre toutes leurs affaires en libre-service pour la ville, servez-vous.'
+'Die Bürger hatten gestern die Wahl zwischen zwei Beerdigungen. Einstimmig gingen sie zu der, bei der Snacks serviert wurden.': 'Les citoyens avaient le choix entre deux enterrements ce matin. Unanimement, ils sont allé à celui où des chips étaient offertes.'
 'Es gibt eindeutige Hinweise darauf, dass unser Schamane die Grenzen des Wahnsinns überschritten hat. Und die des Lebens. Denn er ist gestorben.': 'Des traces on ne peut plus évidentes portent à croire que notre chaman aurait franchi les limites de la démence. Et de la vie. Puisqu''il est mort.'
+'Eine echte Revolution in der Stadt! Der Schamane UND der Reiseleiter sind heute Nacht gestorben... „Da bekommt man richtig Lust, ihre Nachfolge anzutreten“, kommentierte {citizen1}. ': 'Une vraie révolution en ville ! Le chaman ET le guide de l''Outre-Monde morts cette nuit..."Ça donne vachement envie de prendre leur suite" a commenté {citizen1}. '
 'Anscheinend hatte {citizen1} Recht, letztendlich waren alle Reden und Versprechen des Schamanen nur das: Reden und Versprechen.': 'Apparemment, {citizen1} avait raison, au final, tous les mots et discours du chaman n''étaient que cela : des mots et des discours.'
 'Der Wind flüsterte einen letzten Abschiedsgruß an †{cadaver1}, den Schamanen, dessen Verbindung zu den spirituellen Welten unterbrochen worden war.': 'Les vents murmurent un dernier adieu à <i class="dagger">†</i>{cadavre}, le chaman dont le lien avec les royaumes invisibles a été rompu.'
 'Und gerade sah es so aus, als würdet ihr euch gut schlagen... {cadavers} Bürger scheinen das Gegenteil zu glauben. <strong>Selbstmord</strong>, wie es aussieht. Und alle am selben Tag? Was für ein Zufall... Ich frage mich, ob sie es getan haben, um dem Leben zu entfliehen... oder  <strong>denen von euch, die noch übrig sind?</strong>': 'Et moi qui trouvais que vous vous en sortiez si bien... {cadavers} citoyens semblent penser le contraire. <strong>Suicide</strong> à première vue. Et tous le même jour ? Quelle coïncidence... Je me demande s''ils l''ont fait pour échapper à la vie... ou <strong>au reste d''entre vous ?</strong>'
@@ -360,15 +363,15 @@ Kätzchen: le chaton
 'Gestern waren <strong>glühende Lichter</strong> und <strong>unmenschliche Schreie</strong>  aus der Wüste weit hinter dem kleinen Berg zu hören. Seltsamerweise fällt dies mit dem Verschwinden von {cadavers} Bürgern in diesem Gebiet zusammen...': 'Hier, des <strong>lueurs rougeoyantes</strong> et des <strong>cris inhumains</strong> ont été entendus en provenance du désert, loin derrière le petit erg. Étrangement, cela coïncidence avec la disparition de {cadavers} citoyens dans ce secteur...'
 'Wir hatten gestern alle viel Spaß in der Stadt, als wir <i class="dagger">†</i> {cadaver1} an ein Schokoladenkreuz genagelt haben. Wir mussten die Arbeit mit Klebeband beenden, weil wir alle Nägel aufgebraucht hatten, aber es war eine schöne Osterverpackung!': 'On a tous bien rigolé en ville, hier, quand on a cloué <i class="dagger">†</i> {cadaver1} sur une croix en chocolat. Il a fallu finir le travail avec une bande adhésive parce qu''on avait épuisé tous les clous, ça faisait un bel emballage de Pâques !'
 'Wir hatten gestern alle viel Spaß in der Stadt, als wir {cadavers} Bürger an Schokoladenkreuze genagelt haben. Wir mussten sogar <i class="dagger">†</i> {cadaver1} mit Klebeband befestigen, weil wir keine Nägel mehr hatten. Das war eine schöne Osterveranstaltung!': 'On a tous bien rigolé en ville, hier, quand on a cloué {cadavers} citoyens sur des croix en chocolat. Il a même fallu scotcher <i class="dagger">†</i> {cadaver1} à la rustine parce qu''on avait épuisé tous les clous, ça faisait un bel emballage de Pâques !'
-'Pilze': 'les champignons'
-'Seeigel': 'les oursins'
+Pilze: les champignons
+Seeigel: les oursins
 'eine Granate ohne Sicherungsstift': 'une grenade dégoupillée'
 'Oma Zombies Pudding': 'la crème renversée de mamy Zombie'
 'ein Diamant inmitten von Glasscherben': 'un diamant au milieu des tessons de verre'
-'Klapperschlangen': 'les serpents à sonnette'
+Klapperschlangen: les serpents à sonnette
 'einen Daumen': 'un pouce'
 'einen Augapfel': 'un globe oculaire'
 'zwei Backenzähne': 'deux molaires'
 'eine halbe Niere': 'un demirein'
-'Gehirnstückchen': 'des filets de cervelle'
+Gehirnstückchen: des filets de cervelle
 'einen Wirbel': 'une vertèbre'

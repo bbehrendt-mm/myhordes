@@ -208,10 +208,10 @@ Wasserschwein: loro
 Sumpfschildkröte: el hurón
 Kätzchen: el gato
 'blaue Frettchen': 'el hurón azul'
-'Dachs': 'el tejón'
-'Lerche': 'la alondra'
-'Taube': 'la paloma'
-Henne: Henne
+Dachs: el tejón
+Lerche: la alondra
+Taube: la paloma
+Henne: el pollo
 'einen Haufen Gerümpel': 'un montículo de basura'
 'einen Holzstapel': 'un montículo de madera'
 'einen Abfallberg': 'un montón de chatarra'
@@ -319,7 +319,7 @@ Henne: Henne
 'Unser geliebter Reiseleiter in der Außenwelt ist gestern verstorben.': 'Nuestro amado guía del Ultramundo falleció ayer.'
 'Tolle Leistung gestern Abend, der Schamane und der Reiseleiter in der Außenwelt sind beide tot, daher könnte der heutige Tag etwas eintönig werden.': 'Buen trabajo anoche, ambo el chamán y el guía del Ultramundo están muertos, por lo que hoy puede ser un poco monótono.'
 'Letzte Nacht war die Stadt von Zombies {attack} umzingelt! Einige schafften es, die Mauern zu durchbrechen, ein Zustrom, der uns {deaths} gute Leute kostete.': '¡Contamos alrededor de {attack} zombies asaltando nuestro pueblo anoche! Algunos traspasaron los muros, un desbordamiento que nos costó {deaths} buenos elementos.'
-'Heute Morgen hätte es in der Stadt fast ein <strong>Erbschaftsproblem</strong> gegeben: Auf dem Zettel, der im Haus von <i class="dagger">†</i> {cadaver1} gefunden wurde, stand „Ich hinterlasse meinen gesamten Besitz meinem Nachbarn † {cadaver2}“. Dieser Nachbar hatte jedoch genau das Gleiche angekündigt. Wir hielten es für sicherer, alle ihre Sachen der Stadt zur freien Verfügung zu stellen. Bedient euch!': 'Esta mañana casi tuvimos un <strong>problema de sucesión</strong> en el pueblo: la nota encontrada en la casa de <i class="dagger">†</i> {cadaver1} decía «dejo todas mis posesiones a mi vecino <i class="dagger">†</i> {cadaver2}». El vecino había anunciado exactamente lo contrario. Nos pareció más seguro poner todas sus pertenencias a disposición del pueblo, sírvanse ustedes mismos.'
+'Heute Morgen hätte es in der Stadt fast ein <strong>Erbschaftsproblem</strong> gegeben: Auf dem Zettel, der im Haus von † {cadaver1} gefunden wurde, stand „Ich hinterlasse meinen gesamten Besitz meinem Nachbarn † {cadaver2}“. Dieser Nachbar hatte jedoch genau das Gleiche angekündigt. Wir hielten es für sicherer, alle ihre Sachen der Stadt zur freien Verfügung zu stellen. Bedient euch!': 'Esta mañana casi tuvimos un <strong>problema de sucesión</strong> en el pueblo: la nota encontrada en la casa de <i class="dagger">†</i> {cadaver1} decía «dejo todas mis posesiones a mi vecino <i class="dagger">†</i> {cadaver2}». El vecino había anunciado exactamente lo contrario. Nos pareció más seguro poner todas sus pertenencias a disposición del pueblo, sírvanse ustedes mismos.'
 'Die Bürger hatten gestern die Wahl zwischen zwei Beerdigungen. Einstimmig gingen sie zu der, bei der Snacks serviert wurden.': 'Los ciudadanos podían elegir entre dos funerales esta mañana. Por unanimidad, acudieron al que ofrecía patatas fritas.'
 'Es gibt eindeutige Hinweise darauf, dass unser Schamane die Grenzen des Wahnsinns überschritten hat. Und die des Lebens. Denn er ist gestorben.': 'Hay indicios más que evidentes que llevan a pensar que nuestro chamán habría traspasado los límites de la locura... y de la vida. Está muerto.'
 'Eine echte Revolution in der Stadt! Der Schamane UND der Reiseleiter sind heute Nacht gestorben... „Da bekommt man richtig Lust, ihre Nachfolge anzutreten“, kommentierte {citizen1}. ': '¡Una auténtica revolución en el pueblo! El chamán Y el guía del Más Allá han muerto esta noche... «Dan muchas ganas de seguir sus pasos», comentó {citizen1}. '
@@ -363,15 +363,15 @@ Henne: Henne
 'Gestern waren <strong>glühende Lichter</strong> und <strong>unmenschliche Schreie</strong>  aus der Wüste weit hinter dem kleinen Berg zu hören. Seltsamerweise fällt dies mit dem Verschwinden von {cadavers} Bürgern in diesem Gebiet zusammen...': 'Ayer se vieron <strong>luces rojizas</strong> y se oyeron <strong>gritos inhumanos</strong> procedentes del desierto, lejos, detrás del pequeño erg. Curiosamente, esto coincide con la desaparición de {cadavers} ciudadanos en esa zona...'
 'Wir hatten gestern alle viel Spaß in der Stadt, als wir <i class="dagger">†</i> {cadaver1} an ein Schokoladenkreuz genagelt haben. Wir mussten die Arbeit mit Klebeband beenden, weil wir alle Nägel aufgebraucht hatten, aber es war eine schöne Osterverpackung!': 'Ayer nos reímos mucho en la ciudad cuando clavamos a <i class="dagger">†</i> {cadáver1} en una cruz de chocolate. Tuvimos que terminar el trabajo con cinta adhesiva porque se nos acabaron los clavos, ¡quedó un bonito envoltorio de Pascua!'
 'Wir hatten gestern alle viel Spaß in der Stadt, als wir {cadavers} Bürger an Schokoladenkreuze genagelt haben. Wir mussten sogar <i class="dagger">†</i> {cadaver1} mit Klebeband befestigen, weil wir keine Nägel mehr hatten. Das war eine schöne Osterveranstaltung!': 'Ayer nos lo pasamos muy bien en el pueblo, cuando crucificamos {cadavers} habitantes en cruces de chocolate. Incluso tuvimos que usar cinta adhesiva con <i class="dagger">†</i> {cadaver1} porque se nos habían acabado los clavos. ¡Quedó un bonito envoltorio de Pascua!'
-'Pilze': 'las setas'
-'Seeigel': 'los erizos de mar'
+Pilze: las setas
+Seeigel: los erizos de mar
 'eine Granate ohne Sicherungsstift': 'una granada sin espoleta'
 'Oma Zombies Pudding': 'la crema pastelera de la abuela Zombi'
 'ein Diamant inmitten von Glasscherben': 'un diamante entre cristales rotos '
-'Klapperschlangen': 'serpientes de cascabel'
+Klapperschlangen: serpientes de cascabel
 'einen Daumen': 'un pulgar'
 'einen Augapfel': 'un globo ocular'
 'zwei Backenzähne': 'dos molares'
 'eine halbe Niere': 'medio riñón'
-'Gehirnstückchen': 'filetes de sesos'
+Gehirnstückchen: filetes de sesos
 'einen Wirbel': 'una vértebra'
