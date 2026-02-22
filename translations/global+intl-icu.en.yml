@@ -666,3 +666,11 @@ Warnung: Warning
 'Wenn du bei der Übersetzung von MyHordes mithelfen willst, kannst du dies auf {crowdin} tun!': 'If you want to help translate MyHordes, you can do so on {crowdin}!'
 'My Brute': 'My Brute'
 Spielhilfe: Help
+'SK: {sk}': 'SK: {sk}'
+'Weiter zu {app}': 'Continue to {app}'
+'Die große Anzahl an Erdhaufen und an herumliegenden Müll sind ein Indiz dafür, dass hier wahrscheinlich nichts mehr zu finden ist.<p><em>Wenn du möchtest, kannst du allerdings weitergraben und ein paar minderwertige Materialien für die verschiedenen Baustellen der Stadt zu Tage fördern..</em></p>': 'The number of mounds of earth and debris show that there is doubtless not much left here to find. <p><em>You can continue searching for poor quality resources for construction sites though...</em></p>'
+'Dies ist ein einfacher leerer Platz in deinem Rucksack. Hier kannst du einen leichten Gegenstand verstauen.': 'This is a simple empty space in your rucksack. You can store a lightweight item here.'
+'Dies ist ein leerer Platz für schwere Gegenstände in deinem Rucksack. Hier kannst du einen leichten oder einen schweren Gegenstand verstauen.': 'This is an empty space for heavy items in your rucksack. You can store a light or heavy item there.'
+'Du bist zu schwer beladen, um diese Aktion durchführen zu können!': 'You are too weighted down to perform this action!'
+'Dein Profilbild wurde erfolgreich aktualisiert.': 'Your avatar was successfully updated.'
+'Das gewählte Profilbild wurde erfolgreich gelöscht.': 'The selected avatar has been deleted successfully.'
