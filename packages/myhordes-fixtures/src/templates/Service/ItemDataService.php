@@ -83,7 +83,7 @@ class ItemDataService implements FixtureProcessorInterface {
         $container->add()->label('Bissiger Hund')->icon('pet_dog')->category('Armor')->deco(0)->heavy(false)->watchpoint(25)->deco_text('Verbessert die Verteidigung und verhindert Diebstähle')->isEmote(true)->commit();         // -- Out
         $container->add()->label('Blechplatte')->icon('plate')->category('Armor')->deco(0)->heavy(true)->watchpoint(0)->deco_text('Verbessert die Verteidigung')->isEmote(true)->commit();
 		$container->add()->label('Alte Tür')->icon('door')->category('Armor')->deco(0)->heavy(true)->watchpoint(15)->deco_text('Verbessert die Verteidigung')->commit();
-		$container->add()->label('Unförmige Zementblöcke')->icon('concrete_wall')->category('Armor')->deco(0)->heavy(true)->watchpoint(17)->deco_text('Verbessert die Verteidigung')->isEmote(true)->commit();
+		$container->add()->label('Unförmige Zementblöcke')->icon('concrete_wall')->brokenIcon('concrete_wall.b')->category('Armor')->deco(0)->heavy(true)->watchpoint(17)->deco_text('Verbessert die Verteidigung')->isEmote(true)->commit();
 		$container->add()->label('Holzbock')->icon('trestle')->category('Armor')->deco(1)->heavy(true)->watchpoint(15)->deco_text('Verbessert die Verteidigung')->isEmote(true)->commit();
 		$container->add()->label('Järpen-Tisch')->icon('table')->category('Armor')->deco(3)->heavy(true)->watchpoint(15)->deco_text('Verbessert die Verteidigung')->isEmote(true)->commit();
 		$container->add()->label('Solide Holzplatte')->icon('wood_plate')->category('Armor')->deco(0)->heavy(true)->watchpoint(0)->deco_text('Verbessert die Verteidigung')->commit();
@@ -117,11 +117,11 @@ class ItemDataService implements FixtureProcessorInterface {
 		$container->add()->label('Schraubenzieher')->icon('screw')->category('Weapon')->deco(0)->heavy(false)->watchpoint(5)->commit();
 		$container->add()->label('Großer trockener Stock')->icon('staff')->category('Weapon')->deco(0)->heavy(false)->watchpoint(5)->commit();
 		$container->add()->label('Jagdmesser')->icon('knife')->brokenIcon('knife.b')->category('Weapon')->deco(0)->heavy(false)->watchpoint(10)->commit();
-		$container->add()->label('Machete')->icon('cutcut')->category('Weapon')->deco(0)->heavy(false)->watchpoint(15)->isEmote(true)->commit();
+		$container->add()->label('Machete')->icon('cutcut')->brokenIcon('cutcut.b')->category('Weapon')->deco(0)->heavy(false)->watchpoint(15)->isEmote(true)->commit();
 		$container->add()->label('Lächerliches Taschenmesser')->icon('small_knife')->brokenIcon('small_knife.b')->category('Weapon')->deco(0)->heavy(false)->watchpoint(5)->isEmote(true)->commit();
-		$container->add()->label('Schweizer Taschenmesser')->icon('swiss_knife')->category('Weapon')->deco(0)->heavy(false)->watchpoint(5)->commit();
+		$container->add()->label('Schweizer Taschenmesser')->icon('swiss_knife')->brokenIcon('swiss_knife.b')->category('Weapon')->deco(0)->heavy(false)->watchpoint(5)->commit();
 		$container->add()->label('Teppichmesser')->icon('cutter')->category('Weapon')->deco(0)->heavy(false)->watchpoint(7)->commit();
-		$container->add()->label('Dosenöffner')->icon('can_opener')->category('Weapon')->deco(0)->heavy(false)->watchpoint(5)->commit();
+		$container->add()->label('Dosenöffner')->icon('can_opener')->brokenIcon('can_opener.b')->category('Weapon')->deco(0)->heavy(false)->watchpoint(5)->commit();
         $container->add()->label('Wasserbombe')->icon('grenade')->category('Weapon')->deco(0)->heavy(false)->watchpoint(8)->isEmote(true)->commit();
         $container->add()->label('Explodierende Wasserbombe')->icon('bgrenade')->category('Weapon')->deco(0)->heavy(false)->watchpoint(20)->commit();
 		$container->add()->label('Aqua-Splash (3 Ladungen)')->icon('watergun_opt_3')->category('Weapon')->deco(0)->heavy(false)->watchpoint(6)->commit();
@@ -129,7 +129,7 @@ class ItemDataService implements FixtureProcessorInterface {
 		$container->add()->label('Aqua-Splash (1 Ladung)')->icon('watergun_opt_1')->category('Weapon')->deco(0)->heavy(false)->watchpoint(2)->commit();
 		$container->add()->label('Zerstörer (geladen)')->icon('big_pgun')->category('Weapon')->deco(0)->heavy(false)->watchpoint(11)->commit();
 		$container->add()->label('Kanisterpumpe (einsatzbereit)')->icon('jerrygun')->category('Weapon')->deco(0)->heavy(false)->watchpoint(20)->commit();
-		$container->add()->label('Angeknackster menschlicher Knochen')->icon('bone')->category('Weapon')->deco(0)->heavy(false)->watchpoint(5)->isEmote(true)->commit();
+		$container->add()->label('Angeknackster menschlicher Knochen')->icon('bone')->brokenIcon('bone.b')->category('Weapon')->deco(0)->heavy(false)->watchpoint(5)->isEmote(true)->commit();
 		$container->add()->label('Wasserpistole (3 Ladungen)')->icon('watergun_3')->category('Weapon')->deco(0)->heavy(false)->watchpoint(6)->commit();
 		$container->add()->label('Wasserpistole (2 Ladungen)')->icon('watergun_2')->category('Weapon')->deco(0)->heavy(false)->watchpoint(4)->commit();
 		$container->add()->label('Wasserpistole (1 Ladung)')->icon('watergun_1')->category('Weapon')->deco(0)->heavy(false)->watchpoint(2)->commit();
