@@ -414,7 +414,7 @@ class CommonsController extends CustomAbstractCoreController
             'type'      => $town?->getType()?->getName() ?? null,
             'desc'      => $town?->getName() ?? $this->translator->trans('Worauf warten Sie noch?', [], 'ghost'),
             'day'       => $during_attack ? -1 : ($town?->getDay() ?? -1),
-            'timestamp' => (new DateTime('now'))->getTimestamp(),
+            'timestamp' => new DateTime('now')->getTimestamp(),
             'attack'    => $timeKeeper->secondsUntilNextAttack(null, true),
             'offset'    => timezone_offset_get( timezone_open( date_default_timezone_get ( ) ), new DateTime() ),
             'show'      =>

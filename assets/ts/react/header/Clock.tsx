@@ -1,12 +1,11 @@
 import * as React from "react";
-import {useContext, useEffect, useLayoutEffect, useRef, useState} from "react";
-import {ExternalApp, HeaderAPI, ModLink, TownClock} from "./api";
+import {useContext, useEffect, useState} from "react";
+import {TownClock} from "./api";
 import {Global} from "../../defaults";
-import {useCountdown, useSharedWorkerMessages, useStickyToggle, useTranslations} from "../utils";
-import {Tooltip} from "../misc/Tooltip";;
-import Dialog from "../components/dialog";
-import {randomUUIDv4} from "../../shims";
-import {Globals, mountProps} from "./Wrapper";
+import {useCountdown, useSharedWorkerMessages} from "../utils";
+import {Tooltip} from "../misc/Tooltip";
+import {Globals} from "./Wrapper";
+import {useSignal} from "../../v2/client-modules/Signal";
 
 declare var $: Global;
 
@@ -19,6 +18,7 @@ export const HordesHeaderClockWidget = () => {
     const [duringAttack, setDuringAttack] = useState(false);
     const [clockData, setClockData] = useState<TownClock>(null);
     const [timerString, setTimerString] = useState<string>(null);
+    const [timerMs, setTimerMs] = useState<number>(null);
     const [gameTime, setGameTime] = useState<string>(null);
 
     const refreshGameTime = (timestamp: number) => {
@@ -56,6 +56,13 @@ export const HordesHeaderClockWidget = () => {
         refreshClock();
     }, 'live', [])
 
+    useSignal(
+        'web-navigation',
+        () => {
+            if (!duringAttack && timerMs !== null && timerMs <= 0) refreshClock();
+        }, [timerMs !== null && timerMs <= 0, duringAttack]
+    );
+
     useEffect(() => {
         refreshClock();
     }, []);
@@ -63,13 +70,15 @@ export const HordesHeaderClockWidget = () => {
     useCountdown(
         (clockData?.attack ?? 0) * 1000,
         ms => {
+            setTimerMs(ms);
             if (duringAttack) return '';
             if (ms <= 0) return "~0:00";
             return `~${Math.floor(ms / 3600000)}:${`${Math.round((ms % 3600000) / 60000)}`.padStart(2, '0')}`
         },
         (_, s) => setTimerString(s),
         1000,
-        [clockData?.attack, duringAttack]
+        [clockData, duringAttack],
+        true
     )
 
     if (!globals.strings || !clockData) return;
