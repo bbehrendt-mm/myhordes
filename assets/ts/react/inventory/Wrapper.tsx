@@ -208,9 +208,23 @@ function processSlots(items: Item[], vaultData?: VaultStorage<VaultItemEntry>, i
         let vault = currentItem ? vaultData?.[currentItem.p] : undefined;
         const step = currentItem ? getItemStep(currentItem) : currentStep;
         currentStep = step;
+        
+        // Exit essential step if we don't have any more items
+        if (step === 'essential' && !currentItem) {
+            if (heavyUsed < inventoryHeavySlots) {
+                currentStep = 'carrier+heavy';
+            } else {
+                currentStep = 'carrier';
+            }
+        }
+
+        // Exit heavy steps if we don't have any more items and heavy slots
+        if ((step === 'carrier+heavy' || step === 'heavy') && !currentItem && heavyUsed >= inventoryHeavySlots) {
+            currentStep = 'carrier';
+        }
 
         let heavy = false;
-        switch(step) {
+        switch(currentStep) {
             case 'essential':
                 break;
             case 'essential+heavy':
@@ -258,8 +272,10 @@ function processSlots(items: Item[], vaultData?: VaultStorage<VaultItemEntry>, i
             };
         }
 
+        slots.push(data);
+
         if (!currentItem && !items.length) {
-            // Flush out extra empty slots (don't forget we also have a final push)
+            // Flush out extra empty slots
             while(i < (inventorySize - 1)) {
                 i++;
                 slots.push({
@@ -271,8 +287,6 @@ function processSlots(items: Item[], vaultData?: VaultStorage<VaultItemEntry>, i
                 }
             }
         }
-
-        slots.push(data);
     }
 
     return slots;
