@@ -675,6 +675,7 @@ Berufsgegenstand: Professional tool (cannot be dropped)
 Einrichtungsgegenstand: Home decoration
 Verteidigungsgegenstand: Defense Object
 Waffe: Weapon
+Katapultierbar: Catapultable
 Super-Flaum-Pulver: Super-Fuzz Powder
 'Je nach Epoche wurde dieses Pulver nacheinander als Zünder für verschiedene Artilleriegeschütze, dann als billige Droge für bedürftige Bürger und schließlich als Hauptbestandteil von Feuerwerkskörpern verwendet. In allen drei Fällen haben viele Menschen nicht überlebt.': 'Depending on the era, this powder was used sequentially as a detonator for various artillery pieces, then as a cheap drug for needy citizens and finally as the main component of fireworks. In all three cases, many people have not survived.'
 Flush-Abschussrohr: Firework Launch Tube
@@ -1164,3 +1165,23 @@ Larven-Marmelade: Larvae Jam
 Erschrecken: Scare
 'Schaurige Maske': 'Creepy Mask'
 'Irgendwie erinnert diese Maske dich an jemanden...': 'Somehow this mask reminds you of someone...'
+Besinnen: Reflect
+'Du nimmst dir einen Moment Zeit, um zur Ruhe zu kommen und dich auf das wesentliche zu besinnen.': 'You take a moment to calm down and reflect on what is important.'
+'Zone ausheben': 'Excavate zone'
+'Du hast diese Zone erfolgreich ausgehoben und zahlreiche neue Buddelmöglichkeiten entdeckt.': 'You have successfully excavated this area and discovered numerous new digging opportunities.'
+'Es schmeckt wirklich komisch... aber wenigstens ist dein Hunger ein wenig gestillt. Glaub aber nicht, dass du dadurch zusätzliche APs erhältst...': 'This has a truly bizarre taste, it''s difficult to define. At least it does the job: fills your stomach partially. On the other hand, it doesn''t give you any extra energy...'
+'Es sieht wirklich nicht so aus, als würdest du hier noch neue Buddelmöglichkeiten finden können...': 'It really doesn''t look like you''ll be able to find any new digging spots here...'
+'Nach neuen Buddelmöglichkeiten zu suchen macht nur Sinn, wenn es keine offensichtlichen Buddelmöglichkeiten mehr gibt.': 'Looking for new digging opportunities only makes sense if there are no obvious digging opportunities left.'
+Senken: Strap
+'Du senkst deinen Schild. Zwar kannst du dich jetzt nicht mehr so gut verteidigen, dafür kannst du aber einen weiteren, schweren Gegenstand mit dir führen.': 'You strap your shield onto your back. Although you can no longer defend yourself as well, you can now carry another heavy item with you. How strong!'
+'Schutzschild (abgelegt)': 'Riot Shield (strapped)'
+'Ein großer Schutzschild. Wenn du ihn vor dich halten würdest, könntest du damit 2 zusätzliche Zombies auf Distanz zu halten. Aktuell fungiert er nur als kleidsames Accessoire.': 'It''s big and it''s zombie-proof. Or it would be, if you didn''t strap it on your back. Normally, it allows you to face 2 additional zombies in the desert. Currently, it serves only as a stylish accessory.'
+'Du tötest 1 Zombie in der Zone und erhältst du die Kontrolle über die Zone für 5 Minuten.': 'You kill a zombie in a given zone and gain control of the zone for 5 minutes.'
+' Ein großer Schutzschild, der keine Wünsche offen lässt, ermöglicht es dir, in der Wüste bis zu 2 zusätzliche Zombies auf Distanz zu halten. Dabei ist er aber ganz schön schwer... vielleicht könntest du mehr schwere Dinge bei dir tragen, wenn du den Schild senken würdest?': 'It''s big and it''s zombie-proof. In this world who could ask for more... It allows you to face 2 additional zombies in the desert, but it''s also heavy... Maybe if you carried it some other way you could grab more things?'
+'Es ist hier einfach zu staubig, um diesen Gegenstand zusammenbauen zu können...': 'There is far too much dust and potential dangers here for you to assemble this object effectively.'
+'Du jonglierst mit dem Ball und schaffst es sehr gut, den Ball in der Luft zu halten. Man könnte dich fast für einen professionellen Fußballspieler halten!<hr />Du hattest viel Spaß und erhältst <strong>1 Erkundungspunkt</strong>.': 'You juggle with the ball and manage rebounds very well, you could almost be mistaken for a professional player!<hr />You’ve had a lot of fun and received <strong>1 Exploration Point</strong>.'
+'Du hast die/den {item} repariert.': 'You''ve repaired the {item}.'
+Trümmerkugel: Ball of debris
+'Ein kugelförmiges Etwas, das aus zufälligen Trümmerstücken zusammengeklebt wurde. Viel kann man damit nicht anfangen... außer vielleicht, es mit hoher Geschwindigkeit in eine Zombiemeute zu katapultieren!': 'A spherical object cobbled together from random pieces of debris. Not much use... except perhaps to catapult it at high speed into a horde of zombies!'
+'Du hast heute bereits eine Zone ausgehoben...': 'You''ve already excavated a zone today...'
+'Es sieht so aus, als könntest du mit deiner Schaufel an dieser Stelle tiefer graben als sonst... Möglicherweise kannst du dieser Zone neues Leben einhauchen, sodass du und andere Bürger hier wieder wertvolle Gegenstände finden können? Du kannst diese Aktion nur einmal pro Tag verwenden. Außerdem kann jede Zone nur einmalig durch diese Aktion erneuert werden.': 'It looks like you can dig deeper than usual with your shovel in this spot... Maybe you can breathe new life into this zone so that you and other citizens can find valuable items here again? You can only use this action once per day. In addition, each zone can only be excavated once with this action.'
