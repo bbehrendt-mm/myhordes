@@ -62,7 +62,7 @@
             {% else %}
                 {% set mediaCollection = 'avatar' ~ (gpm ? '@circular|default' : (small ? '@classic|default' : '')) %}
                 {% set mediaHost = user %}
-                {% set url = mediaHost|singleMediaSource(mediaCollection, null, false) %}
+                {% set url = mediaHost|singleMediaSource(mediaCollection, null, false, asset('build/images/forum/empty_avatar.gif')) %}
             {% endif %}
         {% endif %}
 
@@ -105,7 +105,7 @@
             {% else %}
                 {% if mediaHost is defined %}
                     <img {{ additional_attributes|attributes }} {{ additional_classes|classes }} alt="" src="{{ mediaHost|singleMediaSource(mediaCollection, w, false, url) }}" srcset="{{ mediaHost|singleMediaSource(mediaCollection, w, true) }}"/>
-                {% else %}
+                {% elseif url is not empty %}
                     <img {{ additional_attributes|attributes }} {{ additional_classes|classes }} alt="" src="{{ url }}"/>
                 {% endif %}
             {% endif %}
