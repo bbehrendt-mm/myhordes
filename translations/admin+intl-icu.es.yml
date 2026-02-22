@@ -702,3 +702,16 @@ Billig+: Barato+
 'Klicken, um Baustelle sofort zu entsperren.': 'Haga clic para desbloquear'
 Notizen: Notas
 'Notiz hinzufügen': 'Añadir nota'
+'Wenn du deinen Schlüssel änderst, musst du diesen in deiner Anwendung austauschen. Bitte bestätige, dass du den Schlüssel jetzt austauschen möchtest, indem du die Zahl {num} eingibst.': 'Si modificas tu clave, tendrás que reemplazarla en tu aplicación. Por favor, confirma que deseas reemplazar la clave ahora ingresando el número {num}.'
+Koppeln: Asociar
+'Namen testen': 'Testear el nombre'
+'Name ist gültig': 'Nombre válido'
+'Name ist länger als 32 Zeichen': 'El nombre tiene más de 32 caracteres.'
+'Name enthält ungültige Zeichen': 'El nombre contiene caracteres invalidos'
+'Name ist ähnlich zu verbotenen Begriffen': 'El nombre contiene o es muy similar a palabras prohibidas.'
+Cheater: Tramposo
+'Öffentliche Events': 'Eventos públicos'
+'Interne Events': 'Eventos internos'
+'Bonus-Heldenerfahrung setzen': 'Establecer experiencia de héroe adicional'
+'Gebäude anlegen:': 'Crear una ruina:'
+'Karte aufdecken': 'Revelar el mapa'
