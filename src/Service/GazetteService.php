@@ -181,6 +181,10 @@ class GazetteService
                 GazetteEntryTemplate::RequiresMultipleVanished      => count($survivors) >= $arg && count(array_filter($death_outside, fn(Citizen $c) => $c->getCauseOfDeath()->getRef() === CauseOfDeath::Vanished)) >= 2,
                 GazetteEntryTemplate::RequiresMultipleHangings      => count($survivors) >= $arg && count(array_filter($death_outside, fn(Citizen $c) => $c->getCauseOfDeath()->getRef() === CauseOfDeath::Hanging)) >= 2,
                 GazetteEntryTemplate::RequiresMultipleCrosses       => count($survivors) >= $arg && count(array_filter($death_outside, fn(Citizen $c) => $c->getCauseOfDeath()->getRef() === CauseOfDeath::ChocolateCross)) >= 2,
+                GazetteEntryTemplate::RequiresMultipleGhulEaten     => count($survivors) >= $arg && count(array_filter($death_outside, fn(Citizen $c) => $c->getCauseOfDeath()->getRef() === CauseOfDeath::GhulEaten)) >= 2,
+                GazetteEntryTemplate::RequiresMultipleGhulBeaten    => count($survivors) >= $arg && count(array_filter($death_outside, fn(Citizen $c) => $c->getCauseOfDeath()->getRef() === CauseOfDeath::GhulBeaten)) >= 2,
+                GazetteEntryTemplate::RequiresMultipleGhulStarved      => count($survivors) >= $arg && count(array_filter($death_outside, fn(Citizen $c) => $c->getCauseOfDeath()->getRef() === CauseOfDeath::GhulStarved)) >= 2,
+                GazetteEntryTemplate::RequiresMultipleFleshCage      => count($survivors) >= $arg && count(array_filter($death_outside, fn(Citizen $c) => $c->getCauseOfDeath()->getRef() === CauseOfDeath::FleshCage)) >= 2,
                 GazetteEntryTemplate::RequiresMultipleRedSouls      => count($survivors) >= $arg && count(array_filter($death_outside, fn(Citizen $c) => $c->getCauseOfDeath()->getRef() === CauseOfDeath::Haunted)) >= 2,
                 GazetteEntryTemplate::RequiresInvasion              => $gazette->getInvasion() > 0,
                 GazetteEntryTemplate::RequiresAttackDeaths          => count($survivors) >= $arg && $gazette->getDeaths() > 0,
@@ -248,7 +252,21 @@ class GazetteService
                         T::__('Ratte','gazette'),T::__('Ziege','gazette'),T::__('Pudel','gazette'),
                         T::__('Hamster','gazette'),T::__('Köter','gazette'),T::__('Schwein','gazette'),
                         T::__('Erdmännchen','gazette'),T::__('Wasserschwein','gazette'),T::__('Sumpfschildkröte','gazette'),
-                        T::__('Kätzchen','gazette'),
+                        T::__('Kätzchen','gazette'),T::__('blaue Frettchen','gazette'),T::__('Henne','gazette'),
+                        T::__('Taube','gazette'),T::__('Lerche','gazette'),T::__('Dachs','gazette'),
+                    ] );
+                    break;
+                case 'bodypart':
+                    $variables['bodypart'] = $this->rand->pick( [
+                        T::__('einen Wirbel','gazette'),T::__('Gehirnstückchen','gazette'),T::__('eine halbe Niere','gazette'),
+                        T::__('zwei Backenzähne','gazette'),T::__('einen Augapfel','gazette'),T::__('einen Daumen','gazette'),
+                    ] );
+                    break;
+                 case 'danger':
+                    $variables['danger'] = $this->rand->pick( [
+                        T::__('Klapperschlangen','gazette'),T::__('ein Diamant inmitten von Glasscherben','gazette'),
+                        T::__('Oma Zombies Pudding','gazette'),T::__('eine Granate ohne Sicherungsstift','gazette'),
+                        T::__('Seeigel','gazette'),T::__('Pilze','gazette'),
                     ] );
                     break;
                 case 'item':
@@ -345,6 +363,26 @@ class GazetteService
                 if ($arg > 0) $_add_elements( 'citizen', $survivors, $featured !== null && $featured->getAlive() ? $featured : null, $arg, $variables );
                 break;
 
+            case GazetteEntryTemplate::RequiresMultipleGhulEaten:
+                $_add_elements('cadaver', array_filter( $death_outside, fn(Citizen $c) => $c->getCauseOfDeath()->getRef() === CauseOfDeath::GhulEaten ), null, 0, $variables);
+                if ($arg > 0) $_add_elements( 'citizen', $survivors, $featured !== null && $featured->getAlive() ? $featured : null, $arg, $variables );
+                break;
+
+            case GazetteEntryTemplate::RequiresMultipleGhulBeaten:
+                $_add_elements('cadaver', array_filter( $death_outside, fn(Citizen $c) => $c->getCauseOfDeath()->getRef() === CauseOfDeath::GhulBeaten ), null, 0, $variables);
+                if ($arg > 0) $_add_elements( 'citizen', $survivors, $featured !== null && $featured->getAlive() ? $featured : null, $arg, $variables );
+                break;
+
+            case GazetteEntryTemplate::RequiresMultipleGhulStarved:
+                $_add_elements('cadaver', array_filter( $death_outside, fn(Citizen $c) => $c->getCauseOfDeath()->getRef() === CauseOfDeath::GhulStarved ), null, 0, $variables);
+                if ($arg > 0) $_add_elements( 'citizen', $survivors, $featured !== null && $featured->getAlive() ? $featured : null, $arg, $variables );
+                break;
+
+            case GazetteEntryTemplate::RequiresMultipleFleshCage:
+                $_add_elements('cadaver', array_filter( $death_outside, fn(Citizen $c) => $c->getCauseOfDeath()->getRef() === CauseOfDeath::FleshCage ), null, 0, $variables);
+                if ($arg > 0) $_add_elements( 'citizen', $survivors, $featured !== null && $featured->getAlive() ? $featured : null, $arg, $variables );
+                break;
+
             case GazetteEntryTemplate::BaseRequirementCitizenInTown:
                 $citizens = array_filter( $survivors, fn(Citizen $c) => $c->getZone() === null && $c !== $featured );
                 shuffle($citizens);
@@ -409,7 +447,7 @@ class GazetteService
                 if ($citizen->getCauseOfDeath() && !isset($d_list[$citizen->getCauseOfDeath()->getRef()])) $d_list[$citizen->getCauseOfDeath()->getRef()] = 1;
                 else $d_list[$citizen->getCauseOfDeath()->getRef()]++;
 
-            $d_list = array_filter( $d_list, fn($v,$k) => $v >= 2 && in_array($k,[CauseOfDeath::Cyanide,CauseOfDeath::Dehydration,CauseOfDeath::Infection,CauseOfDeath::Vanished,CauseOfDeath::Hanging,CauseOfDeath::ChocolateCross,CauseOfDeath::Haunted]), ARRAY_FILTER_USE_BOTH );
+            $d_list = array_filter( $d_list, fn($v,$k) => $v >= 2 && in_array($k,[CauseOfDeath::Cyanide,CauseOfDeath::Dehydration,CauseOfDeath::Infection,CauseOfDeath::Vanished,CauseOfDeath::Hanging,CauseOfDeath::ChocolateCross,CauseOfDeath::Haunted,CauseOfDeath::GhulEaten,CauseOfDeath::GhulBeaten,CauseOfDeath::GhulStarved,CauseOfDeath::FleshCage]), ARRAY_FILTER_USE_BOTH );
             $focus = $this->rand->pick( array_keys($d_list) );
 
             if ($focus !== null) switch ($focus) {
@@ -427,6 +465,14 @@ class GazetteService
                     $type = GazetteEntryTemplate::TypeGazetteMultiChocolateCross; break;
                 case CauseOfDeath::Haunted:
                     $type = GazetteEntryTemplate::RequiresMultipleRedSouls; break;
+                case CauseOfDeath::GhulEaten:
+                    $type = GazetteEntryTemplate::TypeGazetteMultiGhulEaten; break;
+                case CauseOfDeath::GhulBeaten:
+                    $type = GazetteEntryTemplate::TypeGazetteMultiGhulBeaten; break;
+                case CauseOfDeath::GhulStarved:
+                    $type = GazetteEntryTemplate::TypeGazetteMultiGhulStarved; break;
+                case CauseOfDeath::FleshCage:
+                    $type = GazetteEntryTemplate::TypeGazetteMultiFleshCage; break;
             }
 
             // Check for individual deaths
@@ -441,7 +487,12 @@ class GazetteService
                     CauseOfDeath::Infection,
                     CauseOfDeath::Vanished,
                     CauseOfDeath::Hanging,
-                    CauseOfDeath::ChocolateCross
+                    CauseOfDeath::ChocolateCross,
+                    CauseOfDeath::GhulEaten,
+                    CauseOfDeath::GhulBeaten,
+                    CauseOfDeath::GhulStarved,
+                    CauseOfDeath::FleshCage,
+                    CauseOfDeath::ExplosiveDoormat
                 ]) ) );
 
                 if ($featured_cadaver === null)
@@ -482,6 +533,24 @@ class GazetteService
                     case CauseOfDeath::ChocolateCross:
                         $type = GazetteEntryTemplate::TypeGazetteChocolateCross;
                         break;
+                    case CauseOfDeath::GhulEaten:
+                        $type = GazetteEntryTemplate::TypeGazetteGhulEaten;
+                        break;
+
+                    case CauseOfDeath::GhulBeaten:
+                        $type = GazetteEntryTemplate::TypeGazetteGhulBeaten;
+                        break;
+
+                    case CauseOfDeath::GhulStarved:
+                        $type = GazetteEntryTemplate::TypeGazetteGhulStarved;
+                        break;
+                    case CauseOfDeath::FleshCage:
+                        $type = GazetteEntryTemplate::TypeGazetteFleshCage;
+                        break;
+                    case CauseOfDeath::ExplosiveDoormat:
+                        $type = GazetteEntryTemplate::TypeGazetteExplosiveDoormat;
+                        break;
+
                 }
             }
 
