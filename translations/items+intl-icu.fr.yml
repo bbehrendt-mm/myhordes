@@ -675,6 +675,7 @@ Berufsgegenstand: Objet de métier (ne peut être posé)
 Einrichtungsgegenstand: Aménagement de maison
 Verteidigungsgegenstand: Objet de défense
 Waffe: Arme
+Katapultierbar: Catapultable
 Super-Flaum-Pulver: Poudre Super-Fuzz
 'Je nach Epoche wurde dieses Pulver nacheinander als Zünder für verschiedene Artilleriegeschütze, dann als billige Droge für bedürftige Bürger und schließlich als Hauptbestandteil von Feuerwerkskörpern verwendet. In allen drei Fällen haben viele Menschen nicht überlebt.': 'Selon les époques, cette poudre a tour à tour servi de détonateur pour diverses pièces d’artillerie, puis comme drogue bas de gamme pour citoyens en manque, avant d’être utilisée comme ingrédient principal dans les feux d’artifice. Dans les 3 cas, beaucoup de gens n’y ont pas survécu.'
 Flush-Abschussrohr: Tube de lancement Floush
@@ -1164,3 +1165,23 @@ Larven-Marmelade: Marmelarve
 Erschrecken: Utiliser
 'Schaurige Maske': 'Masque effrayant'
 'Irgendwie erinnert diese Maske dich an jemanden...': 'D''une certaine manière, ce masque vous rappelle quelqu''un...'
+Besinnen: Se recueillir
+'Du nimmst dir einen Moment Zeit, um zur Ruhe zu kommen und dich auf das wesentliche zu besinnen.': 'Vous prenez un moment pour vous calmer et vous concentrer sur l''essentiel.'
+'Zone ausheben': 'Excaver la zone avec'
+'Du hast diese Zone erfolgreich ausgehoben und zahlreiche neue Buddelmöglichkeiten entdeckt.': 'Vous avez réussi à creuser dans cette zone et à découvrir de nouveaux endroits où fouiller.'
+'Es schmeckt wirklich komisch... aber wenigstens ist dein Hunger ein wenig gestillt. Glaub aber nicht, dass du dadurch zusätzliche APs erhältst...': 'Ça a un goût vraiment bizarre, difficile à définir. Mais ça remplit son rôle : remplir votre estomac. Par contre, ça ne vous donne pas de bonus d''énergie pour agir...'
+'Es sieht wirklich nicht so aus, als würdest du hier noch neue Buddelmöglichkeiten finden können...': 'Il semble vraiment impossible de trouver de nouveaux endroits où creuser ici...'
+'Nach neuen Buddelmöglichkeiten zu suchen macht nur Sinn, wenn es keine offensichtlichen Buddelmöglichkeiten mehr gibt.': 'Voyons, rechercher de nouvelles opportunités de fouilles n''a de sens que s''il n''y a plus de possibilités restantes...'
+Senken: Sangler
+'Du senkst deinen Schild. Zwar kannst du dich jetzt nicht mehr so gut verteidigen, dafür kannst du aber einen weiteren, schweren Gegenstand mit dir führen.': 'Vous sanglez fermement le bouclier dans votre dos. Bien que vous ne puissiez plus vous défendre avec celui-ci, vous pouvez désormais transporter un autre objet encombrant avec vous.'
+'Schutzschild (abgelegt)': 'Bouclier Anti-émeutes (sanglé)'
+'Ein großer Schutzschild. Wenn du ihn vor dich halten würdest, könntest du damit 2 zusätzliche Zombies auf Distanz zu halten. Aktuell fungiert er nur als kleidsames Accessoire.': 'Il est grand et à l''épreuve des zombies. Ou du moins, il le serait si vous ne l''aviez pas sanglé aussi fort. Porté à la main, il vous permettrait d''affronter 2 zombies supplémentaires dans le désert. Actuellement, il ne sert que d''accessoire stylé.'
+'Du tötest 1 Zombie in der Zone und erhältst du die Kontrolle über die Zone für 5 Minuten.': 'Vous tuez 1 zombie dans une zone et prenez le contrôle de cette zone pendant 5 minutes.'
+' Ein großer Schutzschild, der keine Wünsche offen lässt, ermöglicht es dir, in der Wüste bis zu 2 zusätzliche Zombies auf Distanz zu halten. Dabei ist er aber ganz schön schwer... vielleicht könntest du mehr schwere Dinge bei dir tragen, wenn du den Schild senken würdest?': 'Dans le désert, il retient 4 zombies au lieu de 2 (pour un citoyen normal). Mais il est assez lourd... Peut-être seriez-vous moins encombré en trouvant un moyen plus pratique pour le transporter ?'
+'Es ist hier einfach zu staubig, um diesen Gegenstand zusammenbauen zu können...': 'Il y a bien trop de poussière ici pour que vous puissiez assembler cet objet efficacement...'
+'Du jonglierst mit dem Ball und schaffst es sehr gut, den Ball in der Luft zu halten. Man könnte dich fast für einen professionellen Fußballspieler halten!<hr />Du hattest viel Spaß und erhältst <strong>1 Erkundungspunkt</strong>.': 'Vous jonglez avec le ballon et gérez très bien les rebonds, vous pourriez presque passer pour un footballeur professionnel !<hr />Vous vous êtes bien amusé et avez reçu <strong>1 point d''exploration</strong>.'
+'Du hast die/den {item} repariert.': 'Vous avez réparé {item}.'
+Trümmerkugel: Boule de débris
+'Ein kugelförmiges Etwas, das aus zufälligen Trümmerstücken zusammengeklebt wurde. Viel kann man damit nicht anfangen... außer vielleicht, es mit hoher Geschwindigkeit in eine Zombiemeute zu katapultieren!': 'Une sorte d''objet sphérique assemblé à partir de débris aléatoires. Il ne sert pas à grand-chose... sauf peut-être à être catapulté à grande vitesse sur une horde de zombies !'
+'Du hast heute bereits eine Zone ausgehoben...': 'Vous avez déjà excavé une zone aujourd''hui...'
+'Es sieht so aus, als könntest du mit deiner Schaufel an dieser Stelle tiefer graben als sonst... Möglicherweise kannst du dieser Zone neues Leben einhauchen, sodass du und andere Bürger hier wieder wertvolle Gegenstände finden können? Du kannst diese Aktion nur einmal pro Tag verwenden. Außerdem kann jede Zone nur einmalig durch diese Aktion erneuert werden.': "Il semblerait que vous puissiez creuser plus profondément que d'habitude à cet endroit avec votre pelle... \nPeut-être pourriez-vous redonner vie à cette zone afin qu'on puisse à nouveau y trouver des objets de valeur ? \nVous ne pouvez utiliser cette action qu'une seule fois par jour. De plus, chaque zone ne peut être renouvelée qu'une seule fois grâce à cette action."
