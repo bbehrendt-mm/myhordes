@@ -284,8 +284,10 @@ class CommonsController extends CustomAbstractCoreController
                     new Email( ['message' => 'v'])
                 ])
             ],
-            'sk' => [  ],
-            'key' => [  ],
+            ...($app->getLinkOnly() ? [] : [
+                'sk' => [  ],
+                'key' => [  ],
+            ])
         ]) );
 
         if ($violations->count() > 0) return new JsonResponse([], Response::HTTP_BAD_REQUEST);
