@@ -313,7 +313,7 @@ Henne: crwdns253220:0crwdne253220:0
 'Mal was anderes:': 'crwdns217974:0crwdne217974:0'
 'Das neueste Geschwätz:': 'crwdns217976:0crwdne217976:0'
 'Unsere Späher berichten, dass sie einen Mysteriösen Fremden in der Umgebung der Stadt gesichtet haben...': 'crwdns217978:0crwdne217978:0'
-'<strong>{citizen1}</strong> soll heute Morgen die Leiche von <strong>† {cadaver1}</strong> inmitten einer Baustelle gefunden haben. Laut diesem Bürger handelte es sich um einen Selbstmord.... Nur konnte <strong>{citizen1}</strong> uns das Messer, das im Rücken der Leiche steckte, nicht erklären...': 'crwdns217980:0{citizen1}crwdnd217980:0{cadaver1}crwdnd217980:0{citizen1}crwdne217980:0'
+'<strong>{citizen1}</strong> soll heute Morgen die Leiche von <strong><i class="dagger">†</i> {cadaver1}</strong> inmitten einer Baustelle gefunden haben. Laut diesem Bürger handelte es sich um einen Selbstmord.... Nur konnte <strong>{citizen1}</strong> uns das Messer, das im Rücken der Leiche steckte, nicht erklären...': 'crwdns254086:0{citizen1}crwdnd254086:0{cadaver1}crwdnd254086:0{citizen1}crwdne254086:0'
 'Außerdem wäre es gut, daran zu denken, dass der Schamane der Stadt letzte Nacht gestorben ist.': 'crwdns217982:0crwdne217982:0'
 'Halten wir kurz inne und gedenken unserem verlorenen Schamanen. Auf Wiedersehen, nutzloser Scharlatan!': 'crwdns217984:0crwdne217984:0'
 'Unser geliebter Reiseleiter in der Außenwelt ist gestern verstorben.': 'crwdns217986:0crwdne217986:0'
