@@ -702,3 +702,16 @@ Billig+: crwdns211918:0crwdne211918:0
 'Klicken, um Baustelle sofort zu entsperren.': 'crwdns213178:0crwdne213178:0'
 Notizen: crwdns252620:0crwdne252620:0
 'Notiz hinzufügen': 'crwdns252622:0crwdne252622:0'
+'Wenn du deinen Schlüssel änderst, musst du diesen in deiner Anwendung austauschen. Bitte bestätige, dass du den Schlüssel jetzt austauschen möchtest, indem du die Zahl {num} eingibst.': 'crwdns254052:0{num}crwdne254052:0'
+Koppeln: crwdns254054:0crwdne254054:0
+'Namen testen': 'crwdns254056:0crwdne254056:0'
+'Name ist gültig': 'crwdns254058:0crwdne254058:0'
+'Name ist länger als 32 Zeichen': 'crwdns254060:0crwdne254060:0'
+'Name enthält ungültige Zeichen': 'crwdns254062:0crwdne254062:0'
+'Name ist ähnlich zu verbotenen Begriffen': 'crwdns254064:0crwdne254064:0'
+Cheater: crwdns254066:0crwdne254066:0
+'Öffentliche Events': 'crwdns254068:0crwdne254068:0'
+'Interne Events': 'crwdns254070:0crwdne254070:0'
+'Bonus-Heldenerfahrung setzen': 'crwdns254072:0crwdne254072:0'
+'Gebäude anlegen:': 'crwdns254074:0crwdne254074:0'
+'Karte aufdecken': 'crwdns254076:0crwdne254076:0'
