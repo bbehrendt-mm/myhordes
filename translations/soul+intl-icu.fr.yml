@@ -695,3 +695,34 @@ Phablet-Layout: Affichage pour petite tablette (ou gros téléphone mobile)
 Tablet-Layout: Affichage pour tablette
 'Desktop-Layout (Vollbild)': 'Affichage du bureau (plein écran)'
 'Desktop-Layout (Normal)': 'Affichage du bureau (normal)'
+'Aktuelles Profilbild': 'Image de profil actuelle'
+'Vorschau des neuen Profilbilds': 'Aperçu de la nouvelle image de profil'
+'Frühere Profilbilder': 'Anciennes images de profil'
+'MyHordes verwendet drei unterschiedliche Bildformate für dein Profilbild. Standartmäßig werden diese automatisch aus deinem ausgewählten Bild ermittelt. Du kannst die Bildausschnitte aber auch selbst wählen, wenn du möchtest. Klicke dazu einfach bei dem entsprechenden Bildformat auf "Bearbeiten".': 'MyHordes utilise trois formats d''image différents pour l''image de profil. Par défaut, ceux-ci sont automatiquement déterminés à partir de l''image que vous avez sélectionnée, mais vous pouvez également choisir vous-même les extraits d''image si vous le souhaitez. Pour cela, il vous suffit de cliquer sur « Modifier » pour le format d''image correspondant.'
+'Bist du fertig, klicke auf "Profilbild speichern" um deinen Avatar hochzuladen. Dein Bild wird dann vom System automatisch komprimiert und zugeschnitten.': 'Une fois que vous avez terminé, cliquez sur « Enregistrer l''image de profil » pour télécharger votre avatar. Votre image sera alors automatiquement compressée et recadrée par le système.'
+'Das automatische Komprimieren und Zuschneiden kann einige Sekunden dauern. Sobald dein Bild fertig verarbeitet wurde, siehst du noch einmal eine Vorschau und kannst das Bild dann final als deinen neuen Avatar festlegen.': 'La compression et le recadrage automatiques peuvent prendre quelques secondes. Une fois le traitement de votre image terminé, vous verrez à nouveau un aperçu et vous pourrez alors définir définitivement l''image comme votre nouvel avatar.'
+Seitenverhältnis: Format de l'image (largeur/hauteur)
+Beliebig: N'importe lequel
+'Wie Originalbild': 'Comme l''image originale'
+'Sieht alles gut aus?': 'Tout semble en ordre ?'
+'Dein neues Profilbild ist noch nicht aktiviert.': 'Votre nouvelle image de profil n''est pas encore active.'
+'Klicke unten auf "Profilbild aktivieren", um zu deinem neuen Avatar zu wechseln.': 'Cliquez sur "Activer l''image de profil" pour passer sur votre nouvel avatar.'
+'Dein altes Profilbilds wird noch für eine Weile gespeichert, sodass du für eine begrenzte Zeit einfach zurückwechseln kannst, ohne dein altes Profilbild erneut hochladen zu müssen.': 'Votre ancienne image de profil sera conservée pendant un certain temps, ce qui vous permettra de revenir facilement à l''ancienne version pendant une période limitée sans avoir à la télécharger à nouveau.'
+'Dein neues Profilbild wird gerade verarbeitet. Bitte hab einen Augenblick Geduld...': 'Votre nouvelle image de profil est en cours de traitement. Veuillez patienter un instant...'
+'Originales Bild': 'Image originale'
+'Wird berechnet...': 'Calcul en cours...'
+'Format konnte nicht berechnet werden': 'Format impossible à calculer'
+Verwerfen: Abandonner
+'Profilbild aktivieren': 'Activer l''image de profil'
+'Dieses Profilbild verwenden': 'Utiliser cette image de profil'
+'Dieses Profilbild wird in ungefähr {days} Tagen automatisch gelöscht.': 'Cette image de profil sera automatiquement supprimée dans environ {days} jours.'
+'Dieses Profilbild wird in Kürze automatisch gelöscht.': 'Cette image de profil sera bientôt supprimée automatiquement.'
+'Anderes Bild auswählen': 'Choisir une autre image'
+Fertig: Terminé
+animiert: animé
+'hohe Auflösung': 'haute résolution'
+'reduzierte Auflösung': 'résolution réduite'
+importiert: importée
+'Unschärfeeffekte verringern': 'Réduire les effets de flou'
+'Diese Option deaktiviert verschiedene optische Unschäfteeffekte, beispielsweise auf der Spielkarte.': ' Cette option désactive divers effets visuels indésirables, par exemple sur la carte.'
+'Die Auflösung des gewählten Bildes ist nicht ausreichend, um es als Avatar verwenden zu können. Bitte lade ein Bild mit einer Auflösung von mindestens {x} × {y} Pixeln hoch.': 'La résolution de l''image sélectionnée n''est pas suffisante pour pouvoir l''utiliser comme avatar. Veuillez télécharger une image avec une résolution d''au moins {x} × {y} pixels.'
