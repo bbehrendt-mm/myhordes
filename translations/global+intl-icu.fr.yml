@@ -666,3 +666,11 @@ Warnung: Attention
 'Wenn du bei der Übersetzung von MyHordes mithelfen willst, kannst du dies auf {crowdin} tun!': 'Si vous souhaitez aider à traduire MyHordes, vous pouvez le faire sur {crowdin} !'
 'My Brute': 'La Brute'
 Spielhilfe: Guide
+'SK: {sk}': 'SK: {sk}'
+'Weiter zu {app}': 'Continuer sur {app}'
+'Die große Anzahl an Erdhaufen und an herumliegenden Müll sind ein Indiz dafür, dass hier wahrscheinlich nichts mehr zu finden ist.<p><em>Wenn du möchtest, kannst du allerdings weitergraben und ein paar minderwertige Materialien für die verschiedenen Baustellen der Stadt zu Tage fördern..</em></p>': 'Le nombre de monticules de terre et de déchets vous indique qu''il n''y a sans doute plus grand chose à trouver ici. <p><em>Vous pouvez toutefois continuer à creuser pour trouver des ressources de mauvaise qualité pour les chantiers en ville.</em></p>'
+'Dies ist ein einfacher leerer Platz in deinem Rucksack. Hier kannst du einen leichten Gegenstand verstauen.': 'Il s''agit simplement d''un espace vide dans votre sac à dos. Vous pouvez y ranger un objet léger.'
+'Dies ist ein leerer Platz für schwere Gegenstände in deinem Rucksack. Hier kannst du einen leichten oder einen schweren Gegenstand verstauen.': 'Il s''agit d''un espace vide destiné à accueillir des objets lourds dans votre sac à dos. Vous pouvez y ranger un objet léger ou lourd.'
+'Du bist zu schwer beladen, um diese Aktion durchführen zu können!': 'Vous êtes trop chargé pour faire cela !'
+'Dein Profilbild wurde erfolgreich aktualisiert.': 'Votre image de profil a été mise à jour avec succès.'
+'Das gewählte Profilbild wurde erfolgreich gelöscht.': 'L''image de profil sélectionnée a été supprimée avec succès.'
