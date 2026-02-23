@@ -28,17 +28,16 @@
             <br/>
 
             <div class="tamer-trap">
-                <div class="tamer-trap-tile" data-selected="">
-                    <img class="pointer" data-action="purge" alt="X" src="{{ asset('build/images/icons/small_remove.gif') }}" />
-                    <div></div>
-                </div>
-                <div class="tamer-trap-tile" data-selected="">
-                    <img class="pointer" data-action="purge" alt="X" src="{{ asset('build/images/icons/small_remove.gif') }}" />
-                    <div></div>
-                </div>
-                <div class="tamer-trap-tile" data-selected="">
-                    <img class="pointer" data-action="purge" alt="X" src="{{ asset('build/images/icons/small_remove.gif') }}" />
-                    <div></div>
+                <div class="tamer-trap-stack">
+                    <div class="tamer-trap-slot" data-slot="0" data-selected="">
+                        <div></div>
+                    </div>
+                    <div class="tamer-trap-slot" data-slot="1" data-selected="">
+                        <div></div>
+                    </div>
+                    <div class="tamer-trap-slot" data-slot="2" data-selected="">
+                        <div></div>
+                    </div>
                 </div>
             </div>
 
@@ -84,7 +83,22 @@
                 </div>
                 <div class="padded cell rw-3 rw-md-5 rw-sm-6 right">
                     {% if not banished %}
-                        <button data-action="add" data-add="{{ item[0].id }}" data-icon="{{ asset('build/images/item/item_' ~ item[0].icon ~ '.gif')}}">{{'Hinzufügen'|trans({},  'game')}}</button>
+                        <span class="tamer-trap-controls">
+                            <button
+                                class="small inline map_button map_button_icon map_button_right map_button_zoom_in"
+                                data-action="add"
+                                data-add="{{ item[0].id }}"
+                                data-icon="{{ asset('build/images/item/item_' ~ item[0].icon ~ '.gif')}}"
+                                title="+"
+                                aria-label="+"></button>
+                            <button
+                                class="small inline map_button map_button_icon map_button_right map_button_zoom_out"
+                                data-action="remove"
+                                data-remove="{{ item[0].id }}"
+                                title="-"
+                                aria-label="-"
+                                disabled="disabled"></button>
+                        </span>
                     {% endif %}
                 </div>
             </div>
@@ -103,8 +117,37 @@
     {{ parent() }}
     <script>
 
+        const trapSlotLayout = [
+            {x: 0, y: 6, r: 0, z: 2},
+            {x: -24, y: -10, r: -11, z: 3},
+            {x: 24, y: -8, r: 10, z: 4},
+        ];
+
+        const setSlotVisual = (slot, selected) => {
+            if (!slot) return;
+
+            if (!selected) {
+                slot.style.setProperty('--x', '0px');
+                slot.style.setProperty('--y', '6px');
+                slot.style.setProperty('--r', '0deg');
+                slot.style.setProperty('--z', '1');
+                return;
+            }
+
+            const index = Number.parseInt(slot.dataset.slot ?? '0', 10);
+            const base = trapSlotLayout[index] ?? trapSlotLayout[0];
+            const jitter = (max) => Math.round((Math.random() * 2 - 1) * max);
+
+            slot.style.setProperty('--x', `${base.x + jitter(3)}px`);
+            slot.style.setProperty('--y', `${base.y + jitter(2)}px`);
+            slot.style.setProperty('--r', `${base.r + jitter(3)}deg`);
+            slot.style.setProperty('--z', `${base.z}`);
+        };
+
+        document.querySelectorAll('[data-slot][data-selected]').forEach(slot => setSlotVisual(slot, slot.dataset.selected !== ''));
+
         const restate = () => {
-            const has_empty = document.querySelectorAll('[data-selected=""]').length > 0;
+            const has_empty = document.querySelectorAll('[data-slot][data-selected=""]').length > 0;
 
             if (has_empty)
                 document.querySelector('[data-action="lure"]')?.setAttribute('disabled','disabled');
@@ -117,8 +160,11 @@
                 else e.removeAttribute('disabled');
             });
 
-            document.querySelectorAll('[data-selected]').forEach(e => {
-                e.querySelector('[data-action="purge"]').classList.toggle('hidden', e.dataset.selected === '');
+            document.querySelectorAll('[data-action="remove"][data-remove]').forEach(e => {
+                const exists = document.querySelectorAll('[data-selected="' + e.dataset.remove + '"]').length > 0;
+
+                if (exists) e.removeAttribute('disabled');
+                else e.setAttribute('disabled','disabled');
             });
         }
 
@@ -126,22 +172,29 @@
 
         document.querySelectorAll('[data-action="add"][data-add][data-icon]').forEach( e => {
             e.addEventListener('click', () => {
+                if (e.hasAttribute('disabled')) return;
 
-                const target = document.querySelector('[data-selected=""]');
+                const target = document.querySelector('[data-slot][data-selected=""]');
+                if (!target) return;
+
                 target.dataset.selected = e.dataset.add;
                 target.querySelector('div').innerHTML = '<img alt="" src="' + e.dataset.icon + '" />'
+                setSlotVisual(target, true);
 
                 restate();
             })
         })
 
-        document.querySelectorAll('[data-action="purge"]').forEach( e => {
+        document.querySelectorAll('[data-action="remove"][data-remove]').forEach( e => {
             e.addEventListener('click', () => {
+                if (e.hasAttribute('disabled')) return;
 
-                const target = e.closest('[data-selected]')
+                const target = document.querySelector('[data-slot][data-selected="' + e.dataset.remove + '"]');
+                if (!target) return;
 
                 target.dataset.selected = '';
                 target.querySelector('div').innerHTML = ''
+                setSlotVisual(target, false);
 
                 restate();
             })
@@ -149,7 +202,10 @@
 
         document.querySelector('[data-action="lure"]')?.addEventListener('click', function() {
             let items = [];
-            document.querySelectorAll('[data-selected]').forEach( e => items.push( parseInt( e.dataset.selected ) ) );
+            document.querySelectorAll('[data-slot][data-selected]').forEach( e => {
+                const id = parseInt( e.dataset.selected );
+                if (!Number.isNaN(id)) items.push(id);
+            } );
             $.ajax.easySend( '{{ path('town_tamer_trap_lure_controller') }}', {items},
                 function () {
                     $.ajax.load(null, '{{ path('town_tamer_trap') }}', true);
