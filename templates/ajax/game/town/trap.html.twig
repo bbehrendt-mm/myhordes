@@ -45,7 +45,7 @@
         </div>
         {% else %}
             <div class="padded cell rw-12">
-                <div class="note note-warning">{{ 'Du hast die Tierklinik heute bereits verwendet.'|trans({},'game') }}</div>
+                <div class="note note-warning">{{ 'Du hast das Fallensystem heute bereits verwendet.'|trans({},'game') }}</div>
             </div>
         {% endif %}
     </div>
@@ -53,7 +53,7 @@
     <div class="row">
         <div class="padded cell rw-12 center">
             {% if not used %}
-                <button class="inline" data-action="lure">{{ 'Tiere anlocken'|trans({},'game') }}</button>
+                <button class="inline" data-action="lure">{{ 'Fangversuch starten'|trans({},'game') }}</button>
             {% endif %}
         </div>
         <div class="padded cell rw-12">
@@ -92,7 +92,7 @@
     </div>
 
     <div class="row">
-        <h5>{{ 'Klinikregister'|trans({},'game') }} <a class="float-right link" x-ajax-href="{{ path("game_newspaper") }}">{{ 'Das Gesamtregister ansehen'|trans({}, 'game') }}<div class="tooltip normal">{{ 'Dieser Link bringt dich zum <strong>Großen Register</strong>. Darin werden alle wichtigen Handlungen und Aktionen der Stadtbürger gespeichert...'|trans({}, 'game')|raw }}</div></a></h5>
+        <h5>{{ 'Fallensystem'|trans({},'game') }} <a class="float-right link" x-ajax-href="{{ path("game_newspaper") }}">{{ 'Das Gesamtregister ansehen'|trans({}, 'game') }}<div class="tooltip normal">{{ 'Dieser Link bringt dich zum <strong>Großen Register</strong>. Darin werden alle wichtigen Handlungen und Aktionen der Stadtbürger gespeichert...'|trans({}, 'game')|raw }}</div></a></h5>
         <div class="cell rw-12">
             <hordes-log id="trap-log" data-react-mount="trap-log" data-day="{{ day }}" data-etag="{{ date().timestamp }}" data-category="101" data-domain="town"></hordes-log>
         </div>
