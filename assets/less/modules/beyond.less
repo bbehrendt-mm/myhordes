@@ -39,7 +39,7 @@ div.zone-camp {
   border: 1px solid #e2d89075;
   overflow: hidden;
 
-  transition: background-color 200ms, border-color 200ms;
+  transition: opacity 200ms, background-color 200ms, border-color 200ms;
 
   &.inspect {
     padding: 0;
@@ -47,7 +47,8 @@ div.zone-camp {
     border-color: #26263a;
 
     .zone-camp-inspect.enable {
-      display: none;
+      height: 0px;
+      opacity: 0;
     }
 
     .zone-camp-info {
@@ -67,6 +68,12 @@ div.zone-camp {
   .zone-camp-inspect {
 	  margin-left: 2px;
 
+    &.enable {
+      height: 16px;
+      opacity: 1;
+      transition: height 100ms, opacity 100ms;
+    }
+
   	span {
       cursor: pointer; text-decoration: underline;
       &:hover { color: white; }
@@ -78,7 +85,7 @@ div.zone-camp {
     flex-direction: column;
     max-height: 0;
     opacity: 0;
-    transition: max-height 200ms, opacity 200ms;
+    transition: max-height 200ms, opacity 700ms;
     overflow: hidden;
   }
 
