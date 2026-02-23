@@ -3161,7 +3161,7 @@ Fund: Seeker
 'Fangversuch starten': 'Attempt a capture'
 'Verfügbare Köder': 'Available baits'
 Hinzufügen: Add
-'Nicht schlecht. Mit deinem Köder hast du es geschafft, {item} anzulocken!<hr/>Du hast es zur sicheren Aufbewahrung in die Bank gebracht.': 'Not bad. With your bait, you managed to attract {item}!<hr/>You took it to the bank for safekeeping.'
+'Nicht schlecht. Mit deinem Köder hast du es geschafft, {item} anzulocken!<hr/>Du hast es zur sicheren Aufbewahrung in die Bank gebracht.': 'The trap worked: {item} was lured in.<hr/>You brought it to the bank for safekeeping.'
 'Es ist dir nicht gelungen, ein Tier anzulocken. Was für eine Verschwendung...': 'What a waste... The bait is gone, but the trap did not work.'
 'Fallen': 'Traps'
 'Tamer''s Fallensystem': 'Tamer''s Trap System'

@@ -3161,7 +3161,7 @@ Fund: Trouvaille
 'Fangversuch starten': 'Tenter une capture'
 'Verfügbare Köder': 'Appâts disponibles'
 Hinzufügen: Ajouter
-'Nicht schlecht. Mit deinem Köder hast du es geschafft, {item} anzulocken!<hr/>Du hast es zur sicheren Aufbewahrung in die Bank gebracht.': 'Pas mal. Vous avez réussi à attirer {item} avec votre appât !<hr/>Vous l''avez apporté à la banque pour le garder en lieu sûr.'
+'Nicht schlecht. Mit deinem Köder hast du es geschafft, {item} anzulocken!<hr/>Du hast es zur sicheren Aufbewahrung in die Bank gebracht.': 'Le piège a fonctionné : {item} a été appâté.<hr/>Vous l''avez déposé en banque pour le mettre en sécurité.'
 'Es ist dir nicht gelungen, ein Tier anzulocken. Was für eine Verschwendung...': 'Quel gâchis... L''appât a disparu, mais le piège n''a pas fonctionné.'
 'Fallen': 'Pièges'
 'Tamer''s Fallensystem': 'Système de Pièges des Apprivoiseurs'
