@@ -167,34 +167,48 @@
     {% else %}
         {% if (zone.x != 0 or zone.y != 0) and conf.get(constant('App\\Enum\\Configuration\\TownSetting::OptFeatureCamping')) %}
             <div class="row">
-                <div class="cell rw-12 zone-camp">
-                    <input type="checkbox" name="zone-camp" id="zone-camp"{% if citizen_hidden or sect == 'ca' %} checked="checked"{% endif %} /><label for="zone-camp">{% trans from 'game' %}Die Zone untersuchen{% endtrans %}</label>
+                <div id="zone-camp" class="cell rw-12 zone-camp{% if citizen_hidden or sect == 'ca' %} inspect{% endif %}">
+                    <div class="zone-camp-inspect enable">
+						<img alt="" src="{{ asset('build/images/icons/small_view.gif') }}" />
+						<span>{% trans from 'game' %}Die Zone untersuchen{% endtrans %}</span>
+					</div>
                     <div class="zone-camp-info">
-                        <p>{% trans from 'game' %}Du schaust dir die Gegend etwas genauer an...{% endtrans %}</p>
-                        {% if camping_capacity != "" %}
-                            <p>{{ camping_capacity|trans({}, 'game') }}</p>
-                        {% endif %}
-                        {% if camping_zone != "" %}
-                            <p>{{ camping_zone|trans({}, 'game') }}</p>
-                        {% endif %}
-                        {% if camping_zombies != "" %}
-                            <p>{{ camping_zombies|trans({}, 'game') }}</p>
-                        {% endif %}
-                        {% if camping_chance != "" %}
-                            <p class="emphasis">{{ camping_chance|trans({}, 'game') }}</p>
-                        {% endif %}
-                        {% if camping_improvable != "" %}
-                            <p>{{ camping_improvable }}</p>
-                        {% endif %}
-                        {% if camping_blueprint != "" %}
-                            <p{% if not blueprintFound %} class="emphasis"{% endif %}><b>{{ camping_blueprint|trans({}, 'game') }}</b></p>
-                        {% endif %}
-                        {% if camping_debug != "" %}
-                            <pre>{{ camping_debug }}</pre>
-                        {% endif %}
-                        {% embed "ajax/game/camping.html.twig" with {'list': camping, 'hidden': citizen_hidden} %}
-                        {% endembed %}
-                        {{ help_lnk('Wildes Campen'|trans({}, 'help'), 'help', {'name': 'extreme_camping'}) }}
+						<div class="zone-camp-lore">
+							<img alt="" src="{{ asset('build/images/beyond/camping.png') }}" />
+							<div>
+								<div class="zone-camp-inspect disable">
+									<img alt="" src="{{ asset('build/images/icons/small_view_remove.png') }}" />
+									<span>Quitter</span>
+								</div>
+								<p>{% trans from 'game' %}Du schaust dir die Gegend etwas genauer an...{% endtrans %}</p>
+								{% if camping_capacity != "" %}
+									<p>{{ camping_capacity|trans({}, 'game') }}</p>
+								{% endif %}
+								{% if camping_zone != "" %}
+									<p>{{ camping_zone|trans({}, 'game') }}</p>
+								{% endif %}
+								{% if camping_zombies != "" %}
+									<p>{{ camping_zombies|trans({}, 'game') }}</p>
+								{% endif %}
+								{% if camping_chance != "" %}
+									<p class="emphasis">{{ camping_chance|trans({}, 'game') }}</p>
+								{% endif %}
+								{% if camping_improvable != "" %}
+									<p>{{ camping_improvable }}</p>
+								{% endif %}
+								{% if camping_blueprint != "" %}
+									<p{% if not blueprintFound %} class="emphasis"{% endif %}><b>{{ camping_blueprint|trans({}, 'game') }}</b></p>
+								{% endif %}
+								{% if camping_debug != "" %}
+									<pre>{{ camping_debug }}</pre>
+								{% endif %}
+							</div>
+						</div>
+						<div class="zone-camp-actions">
+							{% embed "ajax/game/camping.html.twig" with {'list': camping, 'hidden': citizen_hidden} %}
+							{% endembed %}
+							{{ help_lnk('Wildes Campen'|trans({}, 'help'), 'help', {'name': 'extreme_camping'}) }}
+						</div>
                     </div>
                 </div>
             </div>
@@ -862,6 +876,11 @@
                     $.ajax.no_history().load(document.getElementById('beyond_desert_content'), '{{ path('beyond_dashboard') }}');
                 } );
         });
+
+		$.html.addEventListenerAll( '.zone-camp-inspect', 'click', function(e,elem) {
+			var enable = elem.classList.contains('enable');
+			document.querySelector('#zone-camp').classList.toggle('inspect', enable);
+		});
 
         let dig_button = document.getElementById('dig_button');
         if (dig_button)

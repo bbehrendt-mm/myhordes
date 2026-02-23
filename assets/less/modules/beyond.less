@@ -29,40 +29,66 @@ div.zone-beyond {
 body.christmas div.zone-beyond.night-outerworld, body.christmas div.zone-beyond.nightlight-outerworld { background: url("../../img/background/beyond/night_outerworld_xmas.jpg") center/cover no-repeat; }
 
 div.zone-camp {
-  padding: 5px 5px 0 5px;
+  padding: 4px 4px 3px;
   margin-top: 7px;
   margin-bottom: 7px;
   text-align: justify;
   color: #e2d890;
   font-size: 1rem;
   background-color: #996739;
+  border: 1px solid #e2d89075;
   overflow: hidden;
 
-  & > input {
-    display: none;
+  transition: background-color 200ms, border-color 200ms;
 
-    & + label {
-      cursor: pointer; text-decoration: underline;
-      &:hover { color: white; }
+  &.inspect {
+    padding: 0;
+    background-color: #30303e;
+    border-color: #26263a;
+
+    .zone-camp-inspect.enable {
+      display: none;
     }
 
-    & + label + .zone-camp-info {
-      max-height: 0;
-      opacity: 0;
-      transition: 200ms;
-      overflow: hidden;
-      p {
-
-      }
-    }
-    &:checked + label + .zone-camp-info {
+    .zone-camp-info {
       max-height: 500px;
       opacity: 1;
+
+      .zone-camp-lore > div {
+        padding: 4px 4px 3px;
+      }
 
       pre {
         .box();
       }
     }
+  }
+
+  .zone-camp-inspect {
+	  margin-left: 2px;
+
+  	span {
+      cursor: pointer; text-decoration: underline;
+      &:hover { color: white; }
+    }
+  }
+  
+  .zone-camp-info {
+    display: flex;
+    flex-direction: column;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 200ms, opacity 200ms;
+    overflow: hidden;
+  }
+
+  .zone-camp-lore {
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .zone-camp-actions {
+    padding: 0px 4px 3px;
   }
 
   & .emphasis {
