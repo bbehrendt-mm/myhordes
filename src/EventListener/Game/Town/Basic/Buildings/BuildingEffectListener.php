@@ -63,6 +63,38 @@ final class BuildingEffectListener implements ServiceSubscriberInterface
         ];
     }
 
+    /**
+     * @param BuildingEffectEvent $event
+     * @param bool $postDayChange Set to true if the effect is processed after the day change (to check water consumption based on the previous day). Note: All building effects are currently processed after the day change.
+     * @return bool Returns false if the effect application should be aborted (e.g. due to water consumption and building being disabled)
+     */
+    private function processWaterConsumption( BuildingEffectEvent $event, bool $postDayChange = true ): bool {
+        /** @var TownHandler $th */
+        $th = $this->getService(TownHandler::class);
+        $day = $event->town->getDay() - ($postDayChange ? 1 : 0);
+
+        if ($event->building->getWaterConsumption($day)) {
+            $waterItem = $th->calculate_town_water_consumption($event->town, $postDayChange)
+                ->getBuilding($event->building->getPrototype()->getName());
+
+            if ($waterItem->active) {
+                switch($event->building->getWaterConsumptionType()) {
+                    case 1:
+                        $event->waterDeducted += $waterItem->water_consumed;
+                        break;
+                    case 2:
+                        $event->waterConsumed += $waterItem->water_consumed;
+                        break;
+                }
+                $event->markModified();
+            } else {
+                // Building is disabled : Abort effect
+                return false;
+            }
+        }
+        return true;
+    }
+
     public function onProcessPreUpgradeEffect( BuildingEffectEvent $event ): void {
 
         switch ($event->building->getPrototype()->getName()) {
@@ -77,17 +109,34 @@ final class BuildingEffectListener implements ServiceSubscriberInterface
 
     public function onProcessPreAttackEffect( BuildingEffectEvent $event ): void {
 
+    }
+
+    public function onProcessPreDefaultEffect( BuildingEffectEvent $event ): void {
+
         switch ($event->building->getPrototype()->getName()) {
-            case 'item_tube_#00':
-                if ($event->building->getLevel() <= 0) break;
-
-                // Attempt to deduct water from the well, reduce building defense to 0 if it fails
-                $water_needed = [0,2,4,6,9,12][ $event->building->getLevel() ] ?? 12;
-                if ($event->town->getWell() >= $water_needed)
-                    $event->waterDeducted += $water_needed;
-                else $event->building->setTempDefenseBonus(0 - $event->building->getDefense() - $event->building->getDefenseBonus());
-
+            case 'small_fireworks_#00':
+                $event->buildingDamage = 20;
+                $event->markModified();
                 break;
+            default:
+                break;
+        }
+    }
+
+    public function onProcessPostAttackEffect( BuildingEffectEvent $event ): void {
+        if ($event->building->getWaterConsumptionType() == 1) {
+            if (!$this->processWaterConsumption($event)) return;
+        }
+
+        if ( $event->building->getPrototype()->getName() === 'small_refine_#01' && ( $event->upgradedBuilding !== $event->building || $event->building->getLevel() === 1 ) ) {
+            $event->produceDailyBlueprint = array_merge($event->produceDailyBlueprint, ['bplan_c_#00']);
+            $event->markModified();
+        }
+
+        $maximizeProd = false;
+        $inventoryHandler = $this->getService(InventoryHandler::class);
+
+        switch ($event->building->getPrototype()->getName()) {
 
             case 'item_boomfruit_#00':
                 if ($event->building->getLevel() <= 0) break;
@@ -109,37 +158,9 @@ final class BuildingEffectListener implements ServiceSubscriberInterface
 
                     $event->addConsumedItem( 'boomfruit_#00', $grapefruits_needed );
 
-                } else $event->building->setTempDefenseBonus(0 - $event->building->getDefenseBonus());
+                }
 
                 break;
-
-            default:
-                break;
-        }
-    }
-
-    public function onProcessPreDefaultEffect( BuildingEffectEvent $event ): void {
-
-        switch ($event->building->getPrototype()->getName()) {
-            case 'small_fireworks_#00':
-                $event->buildingDamage = 20;
-                $event->markModified();
-                break;
-            default:
-                break;
-        }
-    }
-
-    public function onProcessPostAttackEffect( BuildingEffectEvent $event ): void {
-        if ( $event->building->getPrototype()->getName() === 'small_refine_#01' && ( $event->upgradedBuilding !== $event->building || $event->building->getLevel() === 1 ) ) {
-            $event->produceDailyBlueprint = array_merge($event->produceDailyBlueprint, ['bplan_c_#00']);
-            $event->markModified();
-        }
-
-        $maximizeProd = false;
-        $inventoryHandler = $this->getService(InventoryHandler::class);
-
-        switch ($event->building->getPrototype()->getName()) {
 
             case 'small_strategy_#01':
                 /** @var RandomGenerator $random */
@@ -221,7 +242,24 @@ final class BuildingEffectListener implements ServiceSubscriberInterface
     }
 
     public function onProcessPostDayChangeEffect( BuildingEffectEvent $event ): void {
+        if ($event->building->getWaterConsumptionType() == 2) {
+            if (!$this->processWaterConsumption($event)) return;
+        }
+
         switch ($event->building->getPrototype()->getName()) {
+
+            case 'small_pool_#00':
+                $em = $this->getService(EntityManagerInterface::class);
+                $pool_filled_status = $em->getRepository(CitizenStatus::class)->findOneByName('tg_pool_filled');
+                $citizenHandler = $this->getService(CitizenHandler::class);
+                foreach ($event->town->getCitizens() as $citizen) {
+                    if ($citizen->getAlive()) {
+                        $citizenHandler->inflictStatus($citizen, $pool_filled_status);
+                        $em->persist($citizen);
+                    }
+                }
+
+                break;
 
             case 'small_novlamps_#00':
                 $bats = $event->building->getLevel()*2;
@@ -260,6 +298,15 @@ final class BuildingEffectListener implements ServiceSubscriberInterface
             $gazette->setWaterlost($gazette->getWaterlost() + $event->waterDeducted );
             $this->getService(EntityManagerInterface::class)->persist($gazette);
             $this->getService(EntityManagerInterface::class)->persist( $this->getService(LogTemplateHandler::class)->nightlyAttackBuildingDefenseWater( $event->building, $event->waterDeducted ) );
+            $event->markModified();
+        }
+
+        if ($event->waterConsumed > 0) {
+            $event->town->setWell( $event->town->getWell() - $event->waterConsumed );
+            $gazette = $event->town->findGazette( $event->town->getDay(), true );
+            $gazette->setWaterlost($gazette->getWaterlost() + $event->waterConsumed );
+            $this->getService(EntityManagerInterface::class)->persist($gazette);
+            $this->getService(EntityManagerInterface::class)->persist( $this->getService(LogTemplateHandler::class)->nightlyAttackBuildingWater( $event->building, $event->waterConsumed ) );
             $event->markModified();
         }
 

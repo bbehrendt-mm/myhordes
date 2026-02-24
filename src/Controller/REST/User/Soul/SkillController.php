@@ -333,7 +333,7 @@ class SkillController extends CustomAbstractCoreController
 
         $lock->release();
 
-        $this->addFlash('notice', $this->translator->trans( 'Du hast einen zusätzlichen Fähigkeitenpunkt erhalten!', [], 'game'));
+        $this->addFlash('notice', $this->translator->trans( 'Du hast einen zusätzlichen Fähigkeitenpunkt erhalten und deine bereits vollbrachten Taten wurden zurückgesetzt. Hurra!', [], 'game'));
         return new JsonResponse(['success' => true]);
     }
 }

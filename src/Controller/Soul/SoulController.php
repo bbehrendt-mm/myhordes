@@ -12,7 +12,6 @@ use App\Entity\Award;
 use App\Entity\CauseOfDeath;
 use App\Entity\Changelog;
 use App\Entity\CitizenRankingProxy;
-use App\Entity\ExternalApp;
 use App\Entity\FeatureUnlock;
 use App\Entity\FeatureUnlockPrototype;
 use App\Entity\ForumPollAnswer;
@@ -80,8 +79,6 @@ use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Symfony\Component\Validator\Constraints;
-use Symfony\Component\Validator\Validation;
 
 /**
  * @method User getUser
@@ -899,7 +896,7 @@ class SoulController extends CustomAbstractController
             $user->setActiveIcon(null);
         else {
             $award = $this->entity_manager->getRepository(Award::class)->find( $icon );
-            if ($award === null || $award->getUser() !== $user || ($award->getPrototype() === null && $award->getCustomIcon() === null) || ($award->getPrototype() !== null && $award->getPrototype()->getIcon() === null))
+            if ($award === null || $award->getUser() !== $user || ($award->getPrototype() !== null && $award->getPrototype()->getIcon() === null))
                 return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
 
             if ($this->user_handler->isRestricted($user, AccountRestriction::RestrictionProfileTitle) && $user->getActiveIcon() !== $award)
@@ -1032,7 +1029,7 @@ class SoulController extends CustomAbstractController
         if(count($matches) > 0) {
             $pageContent->setContent(preg_replace("={$matches[0]}=", "<img src='" . $this->asset->getUrl($matches[1]) . "' alt='' />", $pageContent->getContent()));
         }
-        
+
         $this->entity_manager->flush();
 
         return $this->render( 'ajax/soul/view_rp.html.twig', $this->addDefaultTwigArgs("soul_rps", array(
@@ -1174,6 +1171,7 @@ class SoulController extends CustomAbstractController
 
         $user->setPreferSmallAvatars( (bool)$parser->get('sma', false) );
         $user->setDisableFx( (bool)$parser->get('disablefx', false) );
+        $user->setSetting( UserSetting::DisableBlur, (bool)$parser->get('disableblur', false) );
         $user->setUseICU( (bool)$parser->get('useicu', false) );
         $user->setNoAutoFollowThreads( !$parser->get('autofollow', true) );
         $user->setClassicBankSort( (bool)$parser->get('clasort', false) );
@@ -1208,7 +1206,7 @@ class SoulController extends CustomAbstractController
 
         if (!$parser->has('lang', true))
             return AjaxResponse::error(ErrorHelper::ErrorDatabaseException);
-        
+
         $lang = $parser->get('lang', 'de');
         if (!in_array($lang, $this->allLangsCodes))
             return AjaxResponse::error(ErrorHelper::ErrorDatabaseException);
@@ -1430,7 +1428,7 @@ class SoulController extends CustomAbstractController
 
         /** @var User $user */
         $user = $this->entity_manager->getRepository(User::class)->find($id);
-        if($user === null || $user === $current_user) 
+        if($user === null || $user === $current_user)
             return $this->redirect($this->generateUrl('soul_me'));
 
         $returnUrl = null; // TODO: get the referer, it can be empty!
@@ -1442,7 +1440,7 @@ class SoulController extends CustomAbstractController
         $citizen_id = ($cac && $uac && $cac->getAlive() && !$cac->getZone() && $cac->getTown() === $uac->getTown()) ? $uac->getId() : null;
 
         $desc = $this->entity_manager->getRepository(UserDescription::class)->findOneBy(['user' => $user]);
-        
+
         $seasons_data = $this->getSeasonsData($user);
 
         return $this->render( 'ajax/soul/visit.html.twig', $this->addDefaultTwigArgs("soul_visit", [
@@ -1618,61 +1616,6 @@ class SoulController extends CustomAbstractController
         return $this->render( 'ajax/help/shell.html.twig', [
             'support' => count($support_groups) === 1 ? $support_groups[0] : null
         ]);
-    }
-
-    /**
-     * @param int $id
-     * @param JSONRequestParser $parser
-     * @param RandomGenerator $rand
-     * @return Response
-     */
-    #[Route(path: 'api/soul/app/{id<\d+>}', name: 'soul_own_app_update')]
-    public function api_update_own_app(int $id, JSONRequestParser $parser, RandomGenerator $rand) {
-        /** @var ExternalApp $app */
-        $app = $this->entity_manager->getRepository(ExternalApp::class)->find($id);
-
-        if ($app === null) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
-        if ($app->getOwner() === null || $app->getOwner() !== $this->getUser()) return AjaxResponse::error(ErrorHelper::ErrorPermissionError);
-
-        if (!$parser->has_all( ['contact','url'], true )) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
-
-        $violations = Validation::createValidator()->validate( array_merge($parser->all( true ), [
-            'url' => preg_replace('/\{.*?\}/', 'SYMBOL', $parser->get('url')),
-            'devurl' => preg_replace('/\{.*?\}/', 'SYMBOL', $parser->get('devurl', '')),
-        ]), new Constraints\Collection([
-            'url' => [ new Constraints\Url( ['relativeProtocol' => false, 'protocols' => ['http', 'https'], 'message' => 'a' ] ) ],
-            'devurl' => [
-                new Constraints\AtLeastOneOf([
-                    new Constraints\Url( ['relativeProtocol' => false, 'protocols' => ['http', 'https'], 'message' => 'a' ] ),
-                    new Constraints\Blank( ['message' => 'a' ] )
-                ])
-            ],
-            'contact' => [
-                new Constraints\AtLeastOneOf([
-                    new Constraints\Url( ['relativeProtocol' => false, 'protocols' => ['http', 'https'], 'message' => 'a' ] ),
-                    new Constraints\Email( ['message' => 'v'])
-                ])
-            ],
-            'sk' => [  ]
-        ]) );
-
-        if ($violations->count() > 0) return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
-
-        $app->setUrl( $parser->trimmed('url') )->setContact( $parser->trimmed('contact') )->setDevurl( $parser->trimmed('devurl') ?: null );
-        if ( !$app->getLinkOnly() && $parser->get('sk', null) ) {
-            $s = '';
-            for ($i = 0; $i < 32; $i++) $s .= $rand->pick(['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f']);
-            $app->setSecret( $s );
-        }
-
-        $this->entity_manager->persist($app);
-        try {
-            $this->entity_manager->flush();
-        } catch (\Exception $e) {
-            AjaxResponse::error( ErrorHelper::ErrorDatabaseException );
-        }
-
-        return AjaxResponse::success();
     }
 
     /**

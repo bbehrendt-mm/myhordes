@@ -23,7 +23,7 @@ class PrivateMessageThreadRepository extends ServiceEntityRepository
     /**
      * @return PrivateMessageThread[]
      */
-    public function findNonArchived(Citizen $citizen)
+    public function findNonArchived(Citizen $citizen): array
     {
         return $this->createQueryBuilder('pmt')
             ->innerJoin('pmt.messages', 'm')
@@ -39,7 +39,7 @@ class PrivateMessageThreadRepository extends ServiceEntityRepository
     /**
      * @return PrivateMessageThread[]
      */
-    public function findArchived(Citizen $citizen)
+    public function findArchived(Citizen $citizen): array
     {
         return $this->createQueryBuilder('pmt')
             ->innerJoin('pmt.messages', 'm')

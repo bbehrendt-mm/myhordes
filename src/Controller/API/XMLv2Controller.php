@@ -7,6 +7,7 @@ use App\Entity\AwardPrototype;
 use App\Entity\Building;
 use App\Entity\BuildingPrototype;
 use App\Entity\Citizen;
+use App\Entity\CitizenProfession;
 use App\Entity\CitizenRankingProxy;
 use App\Entity\CitizenRole;
 use App\Entity\ExpeditionRoute;
@@ -25,14 +26,38 @@ use App\Entity\ZoneTag;
 use App\Enum\Configuration\TownSetting;
 use App\Enum\ExternalAPIError;
 use App\Enum\ExternalAPIInterface;
+use App\Service\ActionHandler;
+use App\Service\AdminHandler;
+use App\Service\CitizenHandler;
+use App\Service\ConfMaster;
+use App\Service\CrowService;
+use App\Service\DeathHandler;
+use App\Service\DoctrineCacheService;
+use App\Service\EventProxyService;
+use App\Service\GazetteService;
+use App\Service\HookExecutor;
+use App\Service\InventoryHandler;
+use App\Service\LogTemplateHandler;
+use App\Service\Media\MediaService;
+use App\Service\PictoHandler;
+use App\Service\RandomGenerator;
+use App\Service\TimeKeeperService;
+use App\Service\TownHandler;
+use App\Service\User\PictoService;
+use App\Service\User\UserUnlockableService;
+use App\Service\UserHandler;
+use App\Service\ZoneHandler;
 use App\Structures\SimpleXMLExtended;
 use App\Structures\TownConf;
 use App\Structures\TownDefenseSummary;
 use DateTime;
 use DateTimeZone;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Psr\Cache\InvalidArgumentException;
+use Shivas\VersioningBundle\Service\VersionManagerInterface;
+use Symfony\Component\Asset\Packages;
 use Symfony\Component\Config\Util\Exception\InvalidXmlException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -41,6 +66,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\Cache\TagAwareCacheInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class XMLv2Controller
@@ -48,6 +74,14 @@ use Symfony\Contracts\Cache\TagAwareCacheInterface;
  */
 #[GateKeeperProfile(allow_during_attack: true, record_user_activity: false)]
 class XMLv2Controller extends CoreController {
+
+    public function __construct(
+        EntityManagerInterface $em, InventoryHandler $ih, CitizenHandler $ch, ActionHandler $ah, TimeKeeperService $tk, DeathHandler $dh, PictoHandler $ph, TranslatorInterface $translator, RandomGenerator $rg, LogTemplateHandler $lh, ConfMaster $conf, ZoneHandler $zh, UserHandler $uh, CrowService $armbrust, Packages $a, TownHandler $th, GazetteService $gs, AdminHandler $adminHandler, UrlGeneratorInterface $urlGenerator, DoctrineCacheService $doctrineCache, EventProxyService $events, HookExecutor $hookExecutor, PictoService $pictoService, UserUnlockableService $u, VersionManagerInterface $version,
+        private readonly MediaService $mediaService
+    )
+    {
+        parent::__construct($em, $ih, $ch, $ah, $tk, $dh, $ph, $translator, $rg, $lh, $conf, $zh, $uh, $armbrust, $a, $th, $gs, $adminHandler, $urlGenerator, $doctrineCache, $events, $hookExecutor, $pictoService, $u, $version);
+    }
 
     public function on_error(ExternalAPIError $message, string $language): Response {
         $data = $this->getHeaders(null, $language);
@@ -131,13 +165,13 @@ class XMLv2Controller extends CoreController {
             ],
             'rewards' => [
                 'list' => [
-                    'name' => 'r', 
+                    'name' => 'r',
                     'items' => []
                 ]
             ],
             'maps' => [
                 'list' => [
-                    'name' => 'm', 
+                    'name' => 'm',
                     'items' => []
                 ]
             ],
@@ -182,7 +216,7 @@ class XMLv2Controller extends CoreController {
                     $node['attributes']["desc-$lang"] = $this->translator->trans($picto->getPrototype()->getDescription(), [], 'game', $lang);
                 }
             }
-            
+
             $criteria = new Criteria();
             $criteria->andWhere($criteria->expr()->lte('unlockQuantity', $picto->getCount()));
             $criteria->andWhere($criteria->expr()->eq('associatedPicto', $picto->getPrototype()));
@@ -735,20 +769,21 @@ class XMLv2Controller extends CoreController {
     }
 
     protected function getAvatarInfo(User $user): ?array {
-        // $user->getAvatar() !== null ? $user->getId() . "/" . $user->getAvatar()->getFilename() . "." . $user->getAvatar()->getFormat() : "",
-
         $data = null;
-        if ($user->getAvatar() !== null) {
+        $media = $this->mediaService->getSingleMediaForObject( $user, 'avatar' );
+        $classic = $media?->getLargestConversionByTag( 'classic');
+        $default = $media?->getLargestConversionByTag( 'default');
+        if ($default) {
             $data = ["attributes" => [
-                'url' => "{$user->getId()}/{$user->getAvatar()->getFilename()}.{$user->getAvatar()->getFormat()}",
-                'x' => $user->getAvatar()->getX(),
-                'y' => $user->getAvatar()->getY(),
-                'classic' => $user->getAvatar()->isClassic() ? 1 : 0,
-                'format' => $user->getAvatar()->getFormat(),
+                'url' => $default->url,
+                'x' => $default->width,
+                'y' => $default->height,
+                'classic' => $default->isTaggedAs('classic'),
+                'format' => MediaService::mimeTypeToExtension( $default->mime ),
             ]];
 
-            if (!$user->getAvatar()->isClassic() && $user->getAvatar()->getSmallName())
-                $data['attributes']['compressed'] = "{$user->getId()}/{$user->getAvatar()->getSmallName()}.{$user->getAvatar()->getFormat()}";
+            if ($classic && !$classic->isTaggedAs('default'))
+                $data['attributes']['compressed'] = $classic->url;
         }
 
         return $data;
@@ -763,7 +798,7 @@ class XMLv2Controller extends CoreController {
                 'attributes' => [
                     'link' => "//" . $base_url . Request::createFromGlobals()->getPathInfo(),
                     'iconurl' => "//" . $icon_path,
-                    'avatarurl' => "//" . $base_url . '/cdn/avatar/',
+                    'avatarurl' => "//" . $base_url,
                     'secure' => intval($secure),
                     'author' => 'MyHordes',
                     'language' => $language,
@@ -793,7 +828,7 @@ class XMLv2Controller extends CoreController {
                             'dead' => intval(!$citizen->getAlive()),
                             'hero' => $citizen->getProfession()->getHeroic(),
                             'name' => $user->getName(),
-                            'avatar' => $user->getAvatar() !== null ? $user->getId() . "/" . $user->getAvatar()->getFilename() . "." . $user->getAvatar()->getFormat() : "",
+                            'avatar' => $this->mediaService->getSingleMediaForObject($user, 'avatar')?->getSource(200) ?? '',
                             'id' => $user->getId(),
                             'ban' => intval($citizen->getBanished()),
                             'job' => $citizen->getProfession()->getName(),
@@ -873,7 +908,7 @@ class XMLv2Controller extends CoreController {
                             'dead' => 1,
                             'hero' => 1,
                             'name' => $user->getName(),
-                            'avatar' => $user->getAvatar() !== null ? $user->getId() . "/" . $user->getAvatar()->getFilename() . "." . $user->getAvatar()->getFormat() : "",
+                            'avatar' => $this->mediaService->getSingleMediaForObject($user, 'avatar')?->getSource(200) ?? '',
                             'id' => $user->getId(),
                         ],
                         "cdata_value" => ""
@@ -1155,10 +1190,10 @@ class XMLv2Controller extends CoreController {
                         'dead' => (int)!$citizen->getAlive(),
                         'hero' => intval($citizen->getProfession()->getHeroic()),
                         'name' => $citizen->getUser()->getName(),
-                        'avatar' => $citizen->getUser()->getAvatar() !== null ? $citizen->getUser()->getId() . "/" . $citizen->getUser()->getAvatar()->getFilename() . "." . $citizen->getUser()->getAvatar()->getFormat() : '',
+                        'avatar' => $this->mediaService->getSingleMediaForObject($citizen->getUser(), 'avatar')?->getSource(200) ?? '',
                         'id' => $citizen->getUser()->getId(),
                         'ban' => intval($citizen->getBanished()),
-                        'job' => $citizen->getProfession()->getName() !== 'none' ? $citizen->getProfession()->getName() : '',
+                        'job' => $citizen->isProfession(CitizenProfession::DEFAULT) ? '' : $citizen->getProfession()->getName(),
                         'out' => intval($citizen->getZone() !== null),
                         'baseDef' => $citizen->getAlive() ? $citizen->getHome()->getPrototype()->getDefense() : 0,
                     ],
@@ -1234,7 +1269,8 @@ class XMLv2Controller extends CoreController {
                 'attributes' => [
                     'x' => $offset['x'] + $zone->getX(),
                     'y' => $offset['y'] - $zone->getY(),
-                    'nvt' => intval($zone->getDiscoveryStatus() != Zone::DiscoveryStateCurrent)
+                    'nvt' => intval($zone->getDiscoveryStatus() != Zone::DiscoveryStateCurrent),
+                    'exc' => $zone->isForceRegenerated() ? 1 : 0,
                 ]
             ];
 

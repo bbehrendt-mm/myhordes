@@ -158,7 +158,10 @@
                     </div>
 
                     {% if (not locked or permission.create_post_on_closed_thread) and not app.user|restricted(constant('App\\Entity\\AccountRestriction::RestrictionForum')) and (permission.create_post or permission.moderate) %}
-                        <div x-forum-action="answer" class="forum-button"><span>{{ 'Antworten'|trans({},'global') }}</span></div>
+                        <div x-forum-action="answer" class="forum-button">
+                            <img alt="" src="{{ asset('build/images/forum/edit.png') }}" />
+                            <span>{{ 'Antworten'|trans({},'global') }}</span>
+                        </div>
                     {% else %}
                         <div class="forum-button-disabled"><img alt="" src="{{ asset('build/images/icons/lock.gif') }}" /><span>{{ 'Antworten'|trans({},'global') }}</span></div>
                     {% endif %}
@@ -283,7 +286,11 @@
                                 <span class="small"><i>{{ 'Ich beobachte euch...'|trans({},'game') }}</i></span>
                             {% elseif post.owner.activeTitle or post.owner.activeIcon %}
                                 <span class="small">
-                                    {% if post.owner.activeIcon %}<img alt="" src="{{ post.owner.activeIcon.customIcon ? url('app_web_customicon', {uid: post.owner.id, aid: post.owner.activeIcon.id, name: post.owner.activeIcon.customIconName, ext: post.owner.activeIcon.customIconFormat}) : asset('build/images/icons/title/' ~ post.owner.activeIcon.prototype.icon ~ '.gif') }}" />{% endif %}
+                                    {% if post.owner.activeIcon %}
+                                        <img alt=""
+                                             src="{{ post.owner.activeIcon|singleMediaSource('icon', 16, false, post.owner.activeIcon.prototype ? asset('build/images/icons/title/' ~ post.owner.activeIcon.prototype.icon ~ '.gif') : '', true) }}"
+                                             srcset="{{ post.owner.activeIcon|singleMediaSource('icon', 16, true) }}" />
+                                    {% endif %}
                                     {% if post.owner.activeTitle %}<i>{{ post.owner.activeTitle.customTitle ?? post.owner|translated_title(app.user)|raw }}</i>{% endif %}
                                 </span>
                             {% endif %}

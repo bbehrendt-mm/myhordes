@@ -80,9 +80,16 @@ class SearchController extends CustomAbstractCoreController
 
         $limit = $parser->get_int('limit', -1);
         if ($limit === 0) return new JsonResponse([], Response::HTTP_UNPROCESSABLE_ENTITY);
-        elseif ($limit < 0) $limit = 100;
+        elseif ($limit < 0) $limit = -100;
 
-        $users = $em->getRepository(User::class)->findBySoulSearchQuery($searchName, $limit, $searchSkip, $filters);
+        $users = null;
+        if (str_contains( $searchName, ':' )) {
+            $searchId = explode(':', $searchName, 2)[1];
+            $foundById = $em->getRepository(User::class)->find($searchId);
+            if ($foundById) $users = [$foundById];
+        }
+
+        $users ??= $em->getRepository(User::class)->findBySoulSearchQuery($searchName, $limit, $searchSkip, $filters);
 
         $aliased_users = [];
         if ($parser->get_int('alias', false) && $town = $this->getUser()->getActiveCitizen()?->getTown())

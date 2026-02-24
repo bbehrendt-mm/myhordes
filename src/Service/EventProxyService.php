@@ -58,7 +58,6 @@ use App\Event\Game\GameInteractionEvent;
 use App\Event\Game\Items\ForceTransferItemEvent;
 use App\Event\Game\Items\TransferItemEvent;
 use App\Event\Game\Town\Basic\Buildings\BuildingAddonProviderEvent;
-use App\Event\Game\Town\Basic\Buildings\BuildingCatapultItemTransformEvent;
 use App\Event\Game\Town\Basic\Buildings\BuildingConstructionEvent;
 use App\Event\Game\Town\Basic\Buildings\BuildingDestroyedDuringAttackPostEvent;
 use App\Event\Game\Town\Basic\Buildings\BuildingDestructionEvent;
@@ -72,6 +71,7 @@ use App\Event\Game\Town\Basic\Core\BeforeJoinTownData;
 use App\Event\Game\Town\Basic\Core\BeforeJoinTownEvent;
 use App\Event\Game\Town\Basic\Core\JoinTownEvent;
 use App\Structures\ActionHandler\Execution;
+use App\Structures\CatapultActionTarget;
 use App\Structures\FriendshipActionTarget;
 use App\Structures\HTMLParserInsight;
 use Doctrine\ORM\EntityManagerInterface;
@@ -95,7 +95,7 @@ readonly class EventProxyService
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    public function buildingConstruction( Building $building, string|Citizen $method = null ): void {
+    public function buildingConstruction( Building $building, string|Citizen|null $method = null ): void {
         $this->ed->dispatch( $this->ef->gameEvent( BuildingConstructionEvent::class, $building->getTown() )->setup( $building, $method ) );
     }
 
@@ -178,12 +178,12 @@ readonly class EventProxyService
         return $event->data;
     }
 
-	public function citizenQueryNightwatchDefense(Citizen $citizen, LoggerInterface $log = null): int {
+	public function citizenQueryNightwatchDefense(Citizen $citizen, ?LoggerInterface $log = null): int {
 		$this->ed->dispatch($event = $this->ef->gameEvent(CitizenQueryNightwatchDefenseEvent::class, $citizen->getTown())->setup($citizen, log: $log));
 		return $event->nightwatchDefense;
 	}
 
-	public function citizenQueryNightwatchDeathChance(Citizen $citizen, LoggerInterface $log = null, bool $duringAttack = false): array {
+	public function citizenQueryNightwatchDeathChance(Citizen $citizen, ?LoggerInterface $log = null, bool $duringAttack = false): array {
 		$this->ed->dispatch($event = $this->ef->gameEvent(CitizenQueryNightwatchDeathChancesEvent::class, $citizen->getTown())->setup($citizen, duringAttack: $duringAttack, log: $log));
 		return [
 			'death' => $event->deathChance,
@@ -213,11 +213,6 @@ readonly class EventProxyService
         return $event->enabled;
     }
 
-    public function queryCatapultItemTransformation( Town $town, ItemPrototype $in ): ItemPrototype {
-        $this->ed->dispatch( $event = $this->ef->gameEvent( BuildingCatapultItemTransformEvent::class, $town )->setup( $in ) );
-        return $event->out ?? $in;
-    }
-
     public function queryTownAddons( Town $town ): array {
         $this->ed->dispatch( $event = $this->ef->gameEvent( BuildingAddonProviderEvent::class, $town )->setup( ) );
         $data = $event->list ?? [];
@@ -226,7 +221,7 @@ readonly class EventProxyService
     }
 
 
-    public function executeCustomAction( int $type, Citizen $citizen, ?Item $item, Citizen|Item|ItemPrototype|FriendshipActionTarget|null $target, ItemAction $action, ?string &$message, ?array &$remove, Execution $cache ): void {
+    public function executeCustomAction( int $type, Citizen $citizen, ?Item $item, Citizen|Item|ItemPrototype|FriendshipActionTarget|CatapultActionTarget|null $target, ItemAction $action, ?string &$message, ?array &$remove, Execution $cache ): void {
         $this->ed->dispatch( $event = $this->ef->gameEvent( CustomActionProcessorEvent::class, $citizen->getTown() )->setup( $type, $citizen, $item, $target, $action, $message, $remove, $cache ) );
         $message = $event->message;
         $remove = $event->remove;
@@ -237,11 +232,11 @@ readonly class EventProxyService
     }
 
     public function newAnnounceEvent( Announcement $announcement ): void {
-        $this->ed->dispatch( (new NewAnnouncementEvent())->setup( $announcement ) );
+        $this->ed->dispatch( new NewAnnouncementEvent()->setup($announcement ) );
     }
 
     public function newCommunityEventEvent( CommunityEvent $event ): void {
-        $this->ed->dispatch( (new NewEventAnnouncementEvent())->setup( $event ) );
+        $this->ed->dispatch( new NewEventAnnouncementEvent()->setup($event ) );
     }
 
     public function globalPrivateMessageNewPostEvent( GlobalPrivateMessage $post, ?HTMLParserInsight $insight, bool $new_thread = false ): void {
@@ -249,11 +244,11 @@ readonly class EventProxyService
     }
 
     public function globalPrivateDirectMessageNewPostEvent( GlobalPrivateMessage $post ): void {
-        $this->ed->dispatch( (new GPDirectMessageNewPostEvent())->setup( $post ) );
+        $this->ed->dispatch( new GPDirectMessageNewPostEvent()->setup($post ) );
     }
 
     public function friendListUpdatedEvent( User $actor, User $subject, bool $added ): void {
-        $this->ed->dispatch( (new FriendEvent())->setup( $added, $actor, $subject ) );
+        $this->ed->dispatch( new FriendEvent()->setup($added, $actor, $subject ) );
     }
 
     public function beforeTownJoinEvent( Town $town, User $subject, bool $auto ): BeforeJoinTownData {
@@ -271,7 +266,7 @@ readonly class EventProxyService
     }
 
     public function pictosPersisted( User $user, ?Season $season = null, ?bool $old = null, ?bool $imported = null ): void {
-        $this->ed->dispatch( (new PictoPersistedEvent())->setup( $user, $season, $old, $imported ) );
+        $this->ed->dispatch( new PictoPersistedEvent()->setup($user, $season, $old, $imported ) );
     }
 
     public function deathConfirmed( CitizenRankingProxy $death, string &$lastWords, bool $prePersist ): void {
@@ -333,12 +328,12 @@ readonly class EventProxyService
         int $count = 1
     ): void {
         $this->ed->dispatch( match ($this->em->getClassMetadata( get_class($subject) )->getName()) {
-            Post::class => (new PostContentReportEvent())->setup( $reporter, $report, $subject, $count ),
-            GlobalPrivateMessage::class => (new GlobalPrivateMessageContentReportEvent())->setup( $reporter, $report, $subject, $count ),
-            PrivateMessage::class => (new PrivateMessageContentReportEvent())->setup( $reporter, $report, $subject, $count ),
-            BlackboardEdit::class => (new BlackboardEditContentReportEvent())->setup( $reporter, $report, $subject, $count ),
-            CitizenRankingProxy::class => (new CitizenRankingProxyContentReportEvent())->setup( $reporter, $report, $subject, $count ),
-            User::class => (new UserContentReportEvent())->setup( $reporter, $report, $subject, $count ),
+            Post::class => new PostContentReportEvent()->setup($reporter, $report, $subject, $count ),
+            GlobalPrivateMessage::class => new GlobalPrivateMessageContentReportEvent()->setup($reporter, $report, $subject, $count ),
+            PrivateMessage::class => new PrivateMessageContentReportEvent()->setup($reporter, $report, $subject, $count ),
+            BlackboardEdit::class => new BlackboardEditContentReportEvent()->setup($reporter, $report, $subject, $count ),
+            CitizenRankingProxy::class => new CitizenRankingProxyContentReportEvent()->setup($reporter, $report, $subject, $count ),
+            User::class => new UserContentReportEvent()->setup($reporter, $report, $subject, $count ),
         });
     }
 }

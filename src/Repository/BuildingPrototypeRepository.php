@@ -70,6 +70,7 @@ class BuildingPrototypeRepository extends ServiceEntityRepository
 
     /**
      * @param Town $town
+     * @param TownConf|null $conf
      * @param int|null $bp_class
      * @return BuildingPrototype[]
      */

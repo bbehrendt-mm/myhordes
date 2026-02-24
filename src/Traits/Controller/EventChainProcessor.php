@@ -4,14 +4,13 @@ namespace App\Traits\Controller;
 
 
 use App\Event\Game\GameInteractionEvent;
-use App\Response\AjaxResponse;
 use App\Service\ErrorHelper;
 use App\Service\EventFactory;
+use App\Service\Globals\ResponseGlobal;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
 trait EventChainProcessor
 {
@@ -21,14 +20,18 @@ trait EventChainProcessor
      * @param EventFactory $ef
      * @param EventDispatcherInterface $ed
      * @param EntityManagerInterface $em
+     * @param ResponseGlobal $response
      * @param string|GameInteractionEvent $firstEvent
      * @param string|GameInteractionEvent|string[]|GameInteractionEvent[] $subsequentEvents
+     * @param bool $autoFlush
+     * @param array|null $error_messages
+     * @param GameInteractionEvent|null $lastEvent
      * @return int|null
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
     protected function processEventChainUsing(
-        EventFactory $ef, EventDispatcherInterface $ed, EntityManagerInterface $em,
+        EventFactory $ef, EventDispatcherInterface $ed, EntityManagerInterface $em, ResponseGlobal $response,
         string|GameInteractionEvent $firstEvent, array|string|GameInteractionEvent $subsequentEvents = [],
         bool $autoFlush = true, ?array &$error_messages = [], ?GameInteractionEvent &$lastEvent = null
     ): ?int {
@@ -62,12 +65,15 @@ trait EventChainProcessor
         $lastEvent = end($processedEvents);
 
         // Extract error codes and flash messages from the processed event chain
-        list($hasError, $error, $messages) = array_reduce( $processedEvents,
+        list($hasError, $error, $messages, $signals) = array_reduce( $processedEvents,
             fn(array $carry, GameInteractionEvent $e) => [
                 $carry[0] || $e->hasError(),
                 $carry[1] ?? $e->getErrorCode(),
-                array_merge( $carry[2], $e->getMessages() )
-            ], [false,null,[]] );
+                array_merge( $carry[2], $e->getMessages() ),
+                array_merge( $carry[3], $e->getSignals() )
+            ], [false,null,[],[]] );
+
+        $response->withSignal(...$signals);
 
         $error_messages = [];
         if ($hasError) {

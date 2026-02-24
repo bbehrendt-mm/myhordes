@@ -11,8 +11,8 @@ use App\Service\CitizenHandler;
 use App\Service\EventProxyService;
 use App\Service\TownHandler;
 use App\Service\ZoneHandler;
+use App\Service\Asset\Assets;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Asset\Packages;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 readonly class RenderMapAction
@@ -22,8 +22,7 @@ readonly class RenderMapAction
         private TranslatorInterface    $translator,
         private TownHandler            $town_handler,
         private ZoneHandler            $zone_handler,
-        private CitizenHandler         $citizen_handler,
-        private Packages               $asset,
+        private Assets                 $asset,
         private EventProxyService      $proxy,
     ) { }
 
@@ -42,8 +41,8 @@ readonly class RenderMapAction
      * @return array
      */
     public function __invoke(
-        Town $town = null,
-        Citizen $activeCitizen = null,
+        ?Town $town = null,
+        ?Citizen $activeCitizen = null,
         bool $admin = false
     ): array
     {
@@ -58,9 +57,9 @@ readonly class RenderMapAction
             $range_y = [ min($range_y[0], $y), max($range_y[1], $y) ];
         }
 
-        $citizen_is_shaman = $admin ||
-            ($this->citizen_handler->hasRole($activeCitizen, 'shaman')
-                || $activeCitizen->getProfession()->getName() == 'shaman');
+        $citizen_is_shaman = $admin
+            || ($activeCitizen->hasRole('shaman')
+            || $activeCitizen->isProfession('shaman'));
 
         $soul_zones_ids = $citizen_is_shaman
             ? array_map(function(Zone $z) use ($range_x, $range_y) {
@@ -75,12 +74,14 @@ readonly class RenderMapAction
         $local_zones = [];
         $citizen_zone = $activeCitizen?->getZone();
 
-        $scavenger_sense = $activeCitizen !== null ? $activeCitizen->getProfession()->getName() === 'collec'  : $admin;
-        $scout_sense     = $activeCitizen !== null ? $activeCitizen->getProfession()->getName() === 'hunter'  : $admin;
+        $scavenger_sense = $activeCitizen !== null ? $activeCitizen->isProfession('collec')  : $admin;
+        $scout_sense     = $activeCitizen !== null ? $activeCitizen->isProfession('hunter')  : $admin;
 
         $scout_markings = $admin || $this->proxy->queryTownParameter( $town, BuildingValueQuery::ScoutMarkingsEnabled );
         $scout_markings_own = $scout_markings && $scout_sense;
         $scout_markings_global = $admin || ($scout_markings && ($scout_markings_own || $activeCitizen->hasRole('guide')));
+
+        $wind = $upgraded_map || $admin;
 
         $citizen_zone_cache = [];
         foreach ($town->getCitizens() as $citizen)
@@ -142,6 +143,7 @@ readonly class RenderMapAction
                 }
             }
 
+            if ($wind) $current_zone['wd'] = $zone->getDirection();
 
             if ($zone->isTownZone()) {
                 $current_zone['td'] = $town->getDevastated();
@@ -155,7 +157,9 @@ readonly class RenderMapAction
                     $current_zone['r'] = [
                         'n' => $this->translator->trans( $zone->getPrototype()->getLabel(), [], 'game' ) . ($zone->getBuryCount() > 0 ? " (" . $this->translator->trans('Verschüttet', [], 'admin') . ")" : ""),
                         'b' => $zone->getBuryCount() > 0,
-                        'e'=> $zone->getPrototype()->getExplorable()
+                        'e' => $zone->getPrototype()->getExplorable(),
+                        'm' => $zone->isModifiedFromDefault(),
+                        's' => $zone->isScavenged(),
                     ];
                 } else {
                     $current_zone['r'] = [
@@ -163,7 +167,8 @@ readonly class RenderMapAction
                             ? $this->translator->trans( 'Verschüttete Ruine', [], 'game' )
                             : $this->translator->trans( $zone->getPrototype()->getLabel(), [], 'game' ),
                         'b' => $zone->getBuryCount() > 0,
-                        'e' => $zone->getPrototype()->getExplorable()
+                        'e' => $zone->getPrototype()->getExplorable(),
+                        'm' => $zone->isModifiedFromDefault(),
                     ];
                 }
             }
@@ -172,6 +177,9 @@ readonly class RenderMapAction
 
             if (!$zone->isTownZone() && ($admin || !$activeCitizen->getVisitedZones()->contains( $zone )))
                 $current_zone['g'] = true;
+
+            if (!$zone->isTownZone() && ($admin || $scavenger_sense))
+                $current_zone['xc'] = $zone->isForceRegenerated();
 
             if (!$zone->isTownZone() && $zone->getTag()) $current_zone['tg'] = $zone->getTag()->getRef();
             if (!$zone->isTownZone() && $activeCitizen?->getZone() === null
@@ -191,7 +199,9 @@ readonly class RenderMapAction
             'zones' => $zones,
             'lid' => $citizen_zone?->getId() ?? 0,
             'conf' => [
-                'scout' => ($admin || $scout_markings_global || $scout_markings_own)
+                'scav' => ($admin || $scavenger_sense),
+                'scout' => ($admin || $scout_markings_global || $scout_markings_own),
+                'wind' => $wind,
             ],
             'local' => array_map( function(Zone $z) use ($activeCitizen, $town, $citizen_zone, $scavenger_sense, $scout_sense, $admin, $scout_markings_own, $scout_markings_global) {
                 $local = $citizen_zone === $z;
@@ -215,8 +225,17 @@ readonly class RenderMapAction
                     $obj['r'] = $this->asset->getUrl('build/images/ruin/burried.gif');
                     if ($local) $obj['n'] = $this->translator->trans( 'Verschüttete Ruine', [], 'game' );
                 } elseif ($z->getPrototype() && $obj['v']) {
-                    $obj['r'] = $this->asset->getUrl("build/images/ruin/{$z->getPrototype()->getIcon()}.gif");
+                    $obj['r'] = $this->asset->getAvailableAsset(
+                        "build/images/ruin/{$z->getPrototype()->getIcon()}.gif",
+                        "build/images/ruin/{$z->getPrototype()->getIcon()}.png"
+                    );
                     if ($local) $obj['n'] = $this->translator->trans( $z->getPrototype()->getLabel(), [], 'game' );
+
+                    $night_icon = $this->asset->getAvailableAsset(
+                        "build/images/ruin/{$z->getPrototype()->getIcon()}.night.gif",
+                        "build/images/ruin/{$z->getPrototype()->getIcon()}.night.png"
+                    );
+                    if ($night_icon) $obj['rn'] = $night_icon;
                 }
 
                 if (!$local && $adjacent && !$z->isTownZone()) {

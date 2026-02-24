@@ -17,6 +17,7 @@ use MyHordes\Fixtures\DTO\Actions\EffectAtom;
  * @property-read ?string morphSourceType
  * @property-read ?bool breakSource
  * @property-read ?bool equipSource
+ * @property-read ?bool dropSource
  * @property-read ?ItemPoisonType poisonSource
  * @property-read bool spawnTarget
  * @property-read bool consumeTarget
@@ -97,7 +98,7 @@ class ItemEffect extends EffectAtom {
         return $this;
     }
 
-    public function morphSource(?string $prototype = null, ?bool $break = null, ItemPoisonType|bool|null $poison = null, ?bool $equip = null): self {
+    public function morphSource(?string $prototype = null, ?bool $break = null, ItemPoisonType|bool|null $poison = null, ?bool $equip = null, bool $drop = false): self {
         $this->consumeSource = false;
         $this->morphSource = true;
         $this->morphSourceType = $prototype;
@@ -108,6 +109,7 @@ class ItemEffect extends EffectAtom {
         };
         $this->breakSource = $break;
         $this->equipSource = $equip;
+        $this->dropSource = $drop;
         return $this;
     }
 

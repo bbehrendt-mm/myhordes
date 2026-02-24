@@ -60,16 +60,17 @@ readonly class ZoneHandler
     public function updateRuinZone(?RuinExplorerStats $ex): ?string {
         if ($ex === null || !$ex->getActive()) return false;
 
-        $eject = $ex->getTimeout()->getTimestamp() < time()/* || $this->citizen_handler->isWounded( $ex->getCitizen() ) || $this->citizen_handler->hasStatusEffect($ex->getCitizen(), 'terror')*/;
+        $eject = $ex->getTimeout()->getTimestamp() < time()/* || $this->citizen_handler->isWounded( $ex->getCitizen() ) || $ex->getCitizen()->hasStatus('terror')*/;
         $wound = $ex->getTimeout()->getTimestamp() < time();
 
         if ($eject) {
             $citizen = $ex->getCitizen();
             $ruinZone = $this->entity_manager->getRepository(RuinZone::class)->findOneByPosition($citizen->getZone(), $ex->getX(), $ex->getY(), $ex->getZ());
 
-            foreach ($citizen->getInventory()->getItems() as $item)
-                if (!$item->getEssential())
-                    $this->inventory_handler->forceMoveItem( $ruinZone->getFloor(), $item );
+            if ($ruinZone)
+                foreach ($citizen->getInventory()->getItems() as $item)
+                    if (!$item->getEssential())
+                        $this->inventory_handler->forceMoveItem( $ruinZone->getFloor(), $item );
 
             if ($wound) $this->citizen_handler->inflictWound( $citizen );
 
@@ -77,7 +78,7 @@ readonly class ZoneHandler
 
             $this->entity_manager->persist( $citizen );
             $this->entity_manager->persist( $ex );
-            $this->entity_manager->persist( $ruinZone );
+            if ($ruinZone) $this->entity_manager->persist( $ruinZone );
 
             return $this->trans->trans('Die Atmosphäre wird unerträglich... Du kannst so nicht weitermachen; ohne zu wissen wie, du findest den Ausgang, aber du verletzt dich bei der Flucht.', [], 'game');
         } else return null;
@@ -205,7 +206,7 @@ readonly class ZoneHandler
                             (new DateTime())->setTimestamp(
                                 $timer->getTimestamp()->getTimestamp()
                             )->add(DateInterval::createFromDateString(
-                                $conf->get( $timer->getCitizen()->getProfession()->getName() === 'collec'
+                                $conf->get( $timer->getCitizen()->isProfession('collec')
                                                 ? TownSetting::TimingDiggingCollector
                                                 : TownSetting::TimingDiggingDefault
                                 ))) );
@@ -296,9 +297,9 @@ readonly class ZoneHandler
 
         if ($chances_by_player > 0) {
             if (empty($found_by_player)){
-                if ($this->citizen_handler->hasStatusEffect( $active, 'wound5' ))
+                if ($active->hasStatus( 'wound5' ))
                     array_unshift($ret_str, $this->trans->trans( 'Deine Verletzung am Auge macht dir die Suche nicht gerade leichter.', [], 'game'));
-                if ($this->citizen_handler->hasStatusEffect( $active, 'drunk' ))
+                if ($active->hasStatus( 'drunk' ))
                     array_unshift($ret_str, $this->trans->trans( 'Dein <strong>Trunkenheitszustand</strong> hilft dir wirklich nicht weiter. Das ist nicht gerade einfach, wenn sich alles dreht und du nicht mehr klar siehst.', [], 'game'));
                 array_unshift($ret_str, $this->trans->trans( 'Trotz all deiner Anstrengungen hast du hier leider nichts gefunden ...', [], 'game' ));
             }
@@ -320,7 +321,7 @@ readonly class ZoneHandler
             $ret_str[] = $this->trans->trans("Diese Zone ist leergesucht. Du wirst hier keine wertvollen Gegenstände mehr finden können.", [], "game");
         }
 
-        if ($active && $active->getProfession()->getName() === 'collec')
+        if ($active && $active->isProfession('collec'))
             foreach ([[1,0],[-1,0],[0,1],[0,-1]] as $n) {
                 $nzone = $this->entity_manager->getRepository(Zone::class)->findOneByPosition($zone->getTown(),$zone->getX() + $n[0], $zone->getY() + $n[1]);
                 if ($nzone && !$nzone->getCitizens()->isEmpty()) $this->updateZone($nzone,$up_to,null);
@@ -397,9 +398,12 @@ readonly class ZoneHandler
         }
     }
 
-    public function getSoulZones( Town $town ) {
+    public function getSoulZones( Town $town, bool $blue = true, bool $red = true ): array
+    {
         // Get all soul items within these inventories
-        $soul_items = $this->inventory_handler->getAllItems($town, ['soul_blue_#00','soul_blue_#01','soul_red_#00'], false, false, false, true, true, false);
+        $souls = $blue ? ['soul_blue_#00', 'soul_blue_#01'] : [];
+        if ($red) $souls[] = 'soul_red_#00';
+        $soul_items = $this->inventory_handler->getAllItems($town, $souls, false, false, false, true, true, false);
 
         $cache = []; $found_zone_ids = [];
         foreach ($soul_items as $item)
@@ -495,7 +499,7 @@ readonly class ZoneHandler
         } else {
             if (!$admin && $zone->getDiscoveryStatus() === Zone::DiscoveryStatePast) {
                 $attributes[] = 'past';
-            } 
+            }
             if(!$admin && $citizen && !($zone->getX() == 0 && $zone->getY() == 0) && !$citizen->getVisitedZones()->contains($zone)) {
                 $attributes[] = 'global';
             }

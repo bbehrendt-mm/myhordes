@@ -13,7 +13,7 @@ import {BuildingListGlobal, mountPageProps} from "./Wrapper";
 import {Tag} from "../index";
 import {InventoryAPI, InventoryResourceData} from "../inventory/api";
 import {Tab, TabbedSection} from "../tab-list/TabList";
-import {ItemTooltip} from "../utils";
+import {ItemTooltip, useTranslations} from "../utils";
 
 declare var $: Global;
 declare var c: Const;
@@ -37,14 +37,14 @@ const Globals = React.createContext<BuildingListGlobal & BuildingPageGlobal & mo
 
 export const HordesBuildingPageWrapper = (props: mountPageProps) => {
 
-    const [strings, setStrings] = useState<TranslationStrings>( null );
+    const api = useRef( new BuildingAPI() )
+    const inventoryApi = useRef( new InventoryAPI() )
+
+    const strings = useTranslations( api.current );
 
     const [buildings, setBuildings] = useState<BuildingListResponse>( null );
     const [observedItems, setObservedItems] = useState<number[]>( null );
     const [itemCount, setItemCount] = useState<{[p: number]: number}>( {} );
-
-    const api = useRef( new BuildingAPI() )
-    const inventoryApi = useRef( new InventoryAPI() )
 
     const [currentBuilding, setCurrentBuilding] = useState<Building>( null );
     const [currentViewMode, setCurrentViewMode] = useState<"normal"|"needed">( $.client.config.showShortConstrList.get() ? 'needed' : 'normal' );
@@ -85,10 +85,6 @@ export const HordesBuildingPageWrapper = (props: mountPageProps) => {
         if (!buildings || !vaultData) return;
         setObservedItems( getItemPrototypeIDs(buildings.buildings) )
     }, [vaultData]);
-
-    useEffect(() => {
-        api.current.index().then(s => setStrings(s));
-    }, []);
 
     useEffect(() => {
         //setLoading(true);
@@ -323,7 +319,7 @@ const BuildingResources = (props: BuildingCompleteProps) => {
         {((!props.building.c && props.building.a[0] > 0) || needs_repair) && <>
             <div className="ap-bar">
                 <div className="bar"
-                     style={{width: `${100 * props.building.a[0] / (Math.ceil(props.building.a[1] * ratio))}%`}}></div>
+                     style={{width: `${Math.min(100, 100 * props.building.a[0] / (Math.ceil(props.building.a[1] * ratio)))}%`}}></div>
             </div>
             <img alt="" className="ap-bar-start"
                  src={props.building.c ? globals.strings.page.hp_bar : globals.strings.page.ap_bar}/>
@@ -344,11 +340,11 @@ const BuildingResources = (props: BuildingCompleteProps) => {
 
         { (!props.building.c || props.building.a[0] < props.building.a[1]) && <>
             <div className="build-req">
-                {props.building.c && <div className="ap">{props.missing_ap}</div>}
+                {props.building.c && <div className="ap">{Math.max(0,props.missing_ap)}</div>}
                 {!props.building.c && <div className="ap-cost">
-                    <div className="ap">{props.missing_ap}</div>
+                    <div className="ap">{Math.max(0,props.missing_ap)}</div>
                     {!props.building.c && <Tooltip additionalClasses="help"
-                                                   html={globals.strings.page.ap_ratio_help.replace('{ap}', `${props.missing_ap}`)}/>}
+                                                   html={globals.strings.page.ap_ratio_help.replace('{ap}', `${Math.max(0,props.missing_ap)}`)}/>}
                 </div>}
 
             </div>
@@ -366,14 +362,15 @@ const BuildingActions= (props: BuildingCompleteProps) => {
     const globals = useContext(Globals);
     const res_ok = props.building.c || (props.building.r ?? props.prototype.rsc).reduce((carry,{p,c}) => carry && (globals.itemCount[p] ?? 0) >= c, true)
 
-    const input = useRef<HTMLInputElement>();
+    const input = useRef<HTMLInputElement>(null);
     const [loading, setLoading] = useState<boolean>(false);
 
     const [inputValid, setInputValid] = useState<boolean>(true);
 
     const confirm = () => {
         setLoading(true);
-        globals.api.build(props.building.i, parseInt(input.current.value))
+        const v = input.current ? parseInt(input.current.value) : 0;
+        globals.api.build(props.building.i, v)
             .then(m => {
                 if (m.message) $.html.message( m.success ? 'notice' : 'error', m.message );
                 if (m.success) {
@@ -398,21 +395,24 @@ const BuildingActions= (props: BuildingCompleteProps) => {
                 { props.building.c && <Tooltip additionalClasses="help" html={globals.strings.page.hp_ratio_help.replace('{remaining}', `${props.missing_ap}`)} /> }
             </button>
             { res_ok && globals.selectedBuilding.value?.i === props.building.i && <div className="ap-prompt" data-disabled={loading ? "disabled" : ""}>
-                <input
-                    ref={input}
-                    type="number"
-                    defaultValue={Math.min(1, props.missing_ap)}
-                    style={{marginBottom: "3px"}} min={Math.min(1, props.missing_ap)} max={Math.min(14, props.missing_ap)}
-                    onChange={() => {
-                        if (input.current.value.match(/^\d+$/) === null) setInputValid(false);
-                        else if (parseInt( input.current.value ) < Math.min(1, props.missing_ap)) setInputValid(false);
-                        else setInputValid(true);
-                    }}
-                    onKeyDown={e => {
-                        if (e.key === "Enter") confirm();
-                        else if (e.key === "Escape") globals.selectedBuilding.setValue(null);
-                    }}
-                />
+                { props.missing_ap > 0 && <div className="flex gap middle">
+                    <input
+                        ref={input}
+                        type="number"
+                        defaultValue={Math.min(1, props.missing_ap)}
+                        style={{marginBottom: "3px"}} min={Math.min(1, props.missing_ap)} max={Math.min(14, props.missing_ap)}
+                        onChange={() => {
+                            if (input.current.value.match(/^\d+$/) === null) setInputValid(false);
+                            else if (parseInt( input.current.value ) < Math.min(1, props.missing_ap)) setInputValid(false);
+                            else setInputValid(true);
+                        }}
+                        onKeyDown={e => {
+                            if (e.key === "Enter") confirm();
+                            else if (e.key === "Escape") globals.selectedBuilding.setValue(null);
+                        }}
+                    />
+                    <div className="ap"/>
+                </div> }
                 <button
                     disabled={!inputValid}
                     className="button center"

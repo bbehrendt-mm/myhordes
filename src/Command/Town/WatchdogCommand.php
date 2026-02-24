@@ -5,6 +5,7 @@ namespace App\Command\Town;
 
 use App\Entity\Town;
 use App\Enum\Configuration\MyHordesSetting;
+use App\Service\CommandHelper;
 use App\Service\ConfMaster;
 use App\Service\GameFactory;
 use App\Service\GameProfilerService;
@@ -32,6 +33,7 @@ class WatchdogCommand extends Command implements SelfSchedulingCommand
         protected GameFactory $gameFactory,
         protected GameProfilerService $gps,
         protected TownHandler $townHandler,
+        protected CommandHelper $helper
     )
     {
         parent::__construct();
@@ -70,30 +72,7 @@ class WatchdogCommand extends Command implements SelfSchedulingCommand
             foreach ($minOpenTown as $type => $min) {
                 $current = $count[$lang][$type] ?? 0;
                 while ($current < $min) {
-
-                    $current_events = $this->confMaster->getCurrentEvents();
-                    $name_changers = array_values(
-                        array_map( fn(EventConf $e) => $e->get( EventConf::EVENT_MUTATE_NAME ), array_filter($current_events,fn(EventConf $e) => $e->active() && $e->get( EventConf::EVENT_MUTATE_NAME )))
-                    );
-
-                    $this->em->persist($newTown = $this->gameFactory->createTown(
-                        new TownSetup( $type, language: $lang, nameMutator: $name_changers[0] ?? null )
-                    ));
-                    $this->em->flush();
-
-                    $this->gps->recordTownCreated( $newTown, null, 'cron' );
-                    $this->em->flush();
-
-
-                    if (!empty(array_filter($current_events,fn(EventConf $e) => $e->active()))) {
-                        if (!$this->townHandler->updateCurrentEvents($newTown, $current_events))
-                            $this->em->clear();
-                        else {
-                            $this->em->persist($newTown);
-                            $this->em->flush();
-                        }
-                    }
-
+                    $this->helper->capsule("app:town:create $type 40 $lang --by cron", $output, "Creating town of type $type ($lang)... ");
                     $current++;
                 }
             }

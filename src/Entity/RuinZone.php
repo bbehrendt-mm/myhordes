@@ -72,9 +72,6 @@ class RuinZone
     #[ORM\Column(type: 'integer')]
     private $killedZombies = 0;
 
-    #[ORM\Column]
-    private int $connect = 0;
-
     public function __construct()
     {
     }
@@ -112,6 +109,11 @@ class RuinZone
 
         return $this;
     }
+
+    public function isEntry(): bool {
+        return $this->x === 0 && $this->y === 0 && $this->z === 0;
+    }
+
     public function getCorridor(): ?int
     {
         return $this->corridor;

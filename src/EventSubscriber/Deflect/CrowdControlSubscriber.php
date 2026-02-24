@@ -45,7 +45,7 @@ class CrowdControlSubscriber extends DeflectorCore
                 return;
             }
 
-            if ($gateKeeperProfile->onlyWithProfession() && $citizen->getProfession()->getName() === CitizenProfession::DEFAULT) {
+            if ($gateKeeperProfile->onlyWithProfession() && $citizen->isProfession(CitizenProfession::DEFAULT)) {
                 // This is a game profession controller; it is not available to players who have not chosen a profession
                 // yet.
                 $this->ajaxReset();

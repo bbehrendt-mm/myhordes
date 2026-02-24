@@ -22,7 +22,7 @@ class ThreadTag
     private $name;
     #[ORM\Column(type: 'string', length: 16)]
     private $label;
-    #[ORM\Column(type: 'binary')]
+    #[ORM\Column(type: 'binary', length: 16)]
     private $color;
     #[ORM\Column(type: 'integer', nullable: true)]
     private $permissionMap;

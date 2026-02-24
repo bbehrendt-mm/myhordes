@@ -54,6 +54,18 @@ class ZonePrototype implements RandomEntry
     #[ORM\Column(type: 'boolean')]
     private bool $explorable = false;
 
+    /**
+     * Ruins of this type can be revealed upon exploring from the air
+     */
+    #[ORM\Column(type: 'boolean')]
+    private bool $air_reveal = false;
+
+    /**
+     * This ruin can only be revealed from the air
+     */
+    #[ORM\Column(type: 'boolean')]
+    private bool $air_only = false;
+
     #[ORM\Column(type: 'string', length: 32, nullable: true)]
     private ?string $explorableSkin;
 
@@ -184,6 +196,10 @@ class ZonePrototype implements RandomEntry
 
         return $this;
     }
+    public function getStairsDirection(): ?int
+    {
+        return $this->getExplorableSkin() === 'bunker' ? -1 : 1;
+    }
     public function getExplorableDescription(): ?string
     {
         return $this->explorableDescription;
@@ -245,6 +261,30 @@ class ZonePrototype implements RandomEntry
     public function setEmptyDropChance(float $emptyDropChance): self
     {
         $this->emptyDropChance = $emptyDropChance;
+
+        return $this;
+    }
+
+    public function isAirReveal(): bool
+    {
+        return $this->air_reveal;
+    }
+
+    public function setAirReveal(bool $air_reveal): self
+    {
+        $this->air_reveal = $air_reveal;
+
+        return $this;
+    }
+
+    public function isAirOnly(): bool
+    {
+        return $this->air_only;
+    }
+
+    public function setAirOnly(bool $air_only): self
+    {
+        $this->air_only = $air_only;
 
         return $this;
     }

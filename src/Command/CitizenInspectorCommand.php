@@ -125,7 +125,7 @@ class CitizenInspectorCommand extends LanguageCommand
         }
 
         $set_cp = $input->getOption('set-cp');
-        if ($set_cp >= 0 && $citizen->getProfession()->getName() == "tech") {
+        if ($set_cp >= 0 && $citizen->isProfession("tech")) {
             $citizen->setBp( $set_cp );
             $updated = true;
         }

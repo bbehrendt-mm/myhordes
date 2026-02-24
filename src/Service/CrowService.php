@@ -66,7 +66,7 @@ class CrowService {
      * @param int|array $semantic
      * @param Thread|null $thread
      */
-    public function postToForum( Forum $forum, string|array $text, bool $pinned, bool $translatable, string|array $title = null, int|array $semantic = 0, ?Thread $thread = null ): void
+    public function postToForum( Forum $forum, string|array $text, bool $pinned, bool $translatable, string|array|null $title = null, int|array $semantic = 0, ?Thread $thread = null ): void
     {
 
         if (is_array( $text )) {
@@ -106,7 +106,7 @@ class CrowService {
     }
 
 
-    public function postAsPM( Citizen $receiver, string $title, string $text, int $template = 0, ?int $foreign = null, $data = null ): void
+    public function postAsPM( Citizen $receiver, string $title, string $text, int $template = 0, ?int $foreign = null, ?array $data = null ): void
     {
 
         $thread = new PrivateMessageThread();
@@ -139,7 +139,7 @@ class CrowService {
     protected function createMessage(
         LogEntryTemplate|string|null $template = null,
         ?array                       $data = null,
-        User                         $receiver = null,
+        ?User                        $receiver = null,
         ?DateTimeInterface           $timestamp = null,
         ?string                      $message = null,
     ): ?GlobalPrivateMessage {

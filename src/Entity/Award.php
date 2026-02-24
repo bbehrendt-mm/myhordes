@@ -3,10 +3,13 @@
 
 namespace App\Entity;
 
+use App\Structures\Media\MediaCollection;
+use App\Structures\Media\MediaCollectionList;
+use App\Structures\Media\MediaVariant;
+use App\Traits\Entity\LinksMedia;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\Table;
-use Doctrine\ORM\Mapping\UniqueConstraint;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Exception;
+use Intervention\Image\Interfaces\ImageInterface;
 
 /**
  * @package App\Entity
@@ -14,6 +17,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 #[ORM\Entity(repositoryClass: 'App\Repository\AwardRepository')]
 class Award
 {
+    use LinksMedia;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
@@ -26,12 +31,6 @@ class Award
     private $prototype;
     #[ORM\Column(type: 'string', length: 190, nullable: true)]
     private $customTitle;
-    #[ORM\Column(type: 'blob', nullable: true)]
-    private $customIcon;
-    #[ORM\Column(type: 'string', length: 32, nullable: true)]
-    private $customIconName;
-    #[ORM\Column(type: 'string', length: 9, nullable: true)]
-    private $customIconFormat;
     public function getUser(): ?User {
         return  $this->user;
     }
@@ -59,34 +58,53 @@ class Award
 
         return $this;
     }
-    public function getCustomIcon()
-    {
-        return $this->customIcon;
-    }
-    public function setCustomIcon($customIcon): self
-    {
-        $this->customIcon = $customIcon;
 
-        return $this;
-    }
-    public function getCustomIconName(): ?string
+    protected static function defineMediaCollections(MediaCollectionList $list): void
     {
-        return $this->customIconName;
+        $list->add( new MediaCollection('icon')
+            ->singleFile()
+            ->addVariant( new MediaVariant('default-still')
+                ->conditional( fn(ImageInterface $image) => !$image->isAnimated() )
+                ->coverDown( 16, 16 )
+                ->toPng()
+            )
+            ->addVariant( new MediaVariant('default-animated')
+                ->conditional( fn(ImageInterface $image) => $image->isAnimated() )
+                ->coverDown( 16, 16 )
+                ->toGif()
+            )
+            ->addVariant( new MediaVariant('default-hd-still')
+                ->minResolution( width: 17 )
+                ->conditional( fn( ImageInterface $image ) => !$image->isAnimated() )
+                ->coverDown( 32, 32 )
+                ->toPng()
+            )
+            ->addVariant( new MediaVariant('default-hd-animated')
+                ->minResolution( width: 17 )
+                ->conditional( fn( ImageInterface $image ) => $image->isAnimated() )
+                ->coverDown( 32, 32 )
+                ->toWebp(quality: 90)
+            )
+            ->addVariant( new MediaVariant('default-uhd-still')
+                ->minResolution( width: 33 )
+                ->conditional( fn( ImageInterface $image ) => !$image->isAnimated() )
+                ->coverDown( 64, 64 )
+                ->toWebp(quality: 100)
+            )
+            ->addVariant( new MediaVariant('default-uhd-animated')
+                ->minResolution( width: 33 )
+                ->conditional( fn( ImageInterface $image ) => $image->isAnimated() )
+                ->coverDown( 64, 64 )
+                ->toWebp(quality: 90)
+            )
+        );
     }
-    public function setCustomIconName(?string $customIconName): self
-    {
-        $this->customIconName = $customIconName;
 
-        return $this;
-    }
-    public function getCustomIconFormat(): ?string
+    /**
+     * @throws Exception
+     */
+    public function getMediaBasePath(): string
     {
-        return $this->customIconFormat;
-    }
-    public function setCustomIconFormat(?string $customIconFormat): self
-    {
-        $this->customIconFormat = $customIconFormat;
-
-        return $this;
+        return "user/{$this->getUser()->getId()}/award/{$this->getPrimaryKey()}";
     }
 }

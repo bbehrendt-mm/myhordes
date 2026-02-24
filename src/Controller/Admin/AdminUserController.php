@@ -9,15 +9,10 @@ use App\Entity\ActivityCluster;
 use App\Entity\AntiSpamDomains;
 use App\Entity\Award;
 use App\Entity\Citizen;
-use App\Entity\CitizenHomeUpgradePrototype;
-use App\Entity\CitizenProfession;
 use App\Entity\CitizenRankingProxy;
-use App\Entity\CitizenRole;
-use App\Entity\CitizenStatus;
 use App\Entity\ConnectionWhitelist;
 use App\Entity\FeatureUnlock;
 use App\Entity\FeatureUnlockPrototype;
-use App\Entity\ItemPrototype;
 use App\Entity\Picto;
 use App\Entity\PictoComment;
 use App\Entity\PictoPrototype;
@@ -32,12 +27,12 @@ use App\Entity\TwinoidImportPreview;
 use App\Entity\User;
 use App\Entity\UserDescription;
 use App\Entity\UserGroup;
+use App\Entity\UserModerationNote;
 use App\Entity\UserPendingValidation;
 use App\Entity\UserReferLink;
 use App\Entity\UserSponsorship;
 use App\Entity\UserSwapPivot;
 use App\Enum\Configuration\MyHordesSetting;
-use App\Enum\Configuration\TownSetting;
 use App\Enum\DomainBlacklistType;
 use App\Enum\ServerSetting;
 use App\Response\AjaxResponse;
@@ -50,15 +45,15 @@ use App\Service\ErrorHelper;
 use App\Service\EventProxyService;
 use App\Service\HTMLService;
 use App\Service\JSONRequestParser;
-use App\Service\Media\ImageService;
+use App\Service\Media\MediaService;
 use App\Service\PermissionHandler;
 use App\Service\TwinoidHandler;
 use App\Service\User\UserUnlockableService;
 use App\Service\User\UserAccountService;
 use App\Service\UserFactory;
 use App\Service\UserHandler;
-use App\Structures\TownConf;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\Order;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\Expr\Join;
 use Exception;
@@ -259,14 +254,11 @@ class AdminUserController extends AdminActionController
     /**
      * @param int $id
      * @return Response
+     * @throws Exception
      */
     #[Route(path: 'jx/admin/users/{id}/account/view', name: 'admin_users_account_view', requirements: ['id' => '\d+'])]
-    public function users_account_view(int $id, HTMLService $html, UserUnlockableService $unlockable): Response
+    public function users_account_view(User $user, HTMLService $html, UserUnlockableService $unlockable, KernelInterface $kernel): Response
     {
-        /** @var User $user */
-        $user = $this->entity_manager->getRepository(User::class)->find($id);
-        if (!$user) return $this->redirect( $this->generateUrl('admin_users') );
-
         $validations = $this->isGranted('ROLE_SUB_ADMIN') ? $this->entity_manager->getRepository(UserPendingValidation::class)->findByUser($user) : [];
         $desc = $this->entity_manager->getRepository(UserDescription::class)->findOneBy(['user' => $user]);
 
@@ -284,10 +276,12 @@ class AdminUserController extends AdminActionController
             'swap_pivots' => $this->entity_manager->getRepository(UserSwapPivot::class)->findBy(['principal' => $user]),
             'xp' => [
                 'season' => $unlockable->getHeroicExperience( $user, true ),
+                'bonus' => $user->getBonusHeroicXP(),
                 'total' => $unlockable->getHeroicExperience( $user, null ),
                 'legacy_mh' => $unlockable->getLegacyHeroDaysSpent( $user, false ),
                 'legacy_twin' => $unlockable->getLegacyHeroDaysSpent( $user, true ),
-            ]
+            ],
+            'staging' => $this->conf->getGlobalConf()->get( MyHordesSetting::StagingSettingsEnabled ) || $kernel->getEnvironment() === 'dev' || $kernel->getEnvironment() === 'local',
         ]));
     }
 
@@ -467,7 +461,7 @@ class AdminUserController extends AdminActionController
     }
 
     /**
-     * @param int $id
+     * @param User $user
      * @param string $action
      * @param JSONRequestParser $parser
      * @param UserFactory $uf
@@ -477,26 +471,25 @@ class AdminUserController extends AdminActionController
      * @param CrowService $crow
      * @param KernelInterface $kernel
      * @param InvalidateTagsInAllPoolsAction $clearCache
+     * @param EventProxyService $proxy
+     * @param UserUnlockableService $unlockService
      * @param string $param
      * @return Response
+     * @throws Exception
      */
     #[Route(path: 'api/admin/users/{id}/account/do/{action}/{param}', name: 'admin_users_account_manage', requirements: ['id' => '\d+'])]
     #[AdminLogProfile(enabled: true)]
-    public function user_account_manager(int $id, string $action, JSONRequestParser $parser, UserFactory $uf,
+    public function user_account_manager(User $user, string $action, JSONRequestParser $parser, UserFactory $uf,
                                          TwinoidHandler $twin, UserHandler $userHandler, PermissionHandler $perm,
                                          CrowService $crow, KernelInterface $kernel, InvalidateTagsInAllPoolsAction $clearCache,
                                          EventProxyService $proxy, UserUnlockableService $unlockService, InvalidateLogCacheAction $logCacheAction,
                                          string $param = ''): Response
     {
-        /** @var User $user */
-        $user = $this->entity_manager->getRepository(User::class)->find($id);
-        if (!$user) return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
-
         if (empty($param)) $param = $parser->get('param', '');
 
         if (in_array($action, [
                 'delete_token', 'invalidate', 'validate', 'twin_full_reset', 'twin_main_reset', 'twin_main_full_import', 'delete', 'rename',
-                'shadow', 'whitelist', 'unwhitelist', 'etwin_reset', 'herodays',
+                'shadow', 'whitelist', 'unwhitelist', 'etwin_reset', 'herodays', 'bonusxp',
                 'team', 'change_mail', 'ref_rename', 'ref_disable', 'ref_enable', 'set_sponsor', 'mh_unreset', 'forget_name_history',
             ]) && !$this->isGranted('ROLE_SUB_ADMIN'))
             return AjaxResponse::error( ErrorHelper::ErrorPermissionError );
@@ -583,7 +576,7 @@ class AdminUserController extends AdminActionController
                 /** @var $pv UserPendingValidation */
                 if (!$parser->has('tid') || ($pv = $this->entity_manager->getRepository(UserPendingValidation::class)->find((int)$parser->get('tid'))) === null)
                     return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
-                if ($pv->getUser()->getId() !== $id)
+                if ($pv->getUser()->getId() !== $user->getId())
                     return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
                 $this->entity_manager->remove($pv);
                 break;
@@ -859,11 +852,8 @@ class AdminUserController extends AdminActionController
                 if ($desc) $this->entity_manager->remove($desc);
                 break;
             case 'clear_avatar':
-                if ($user->getAvatar()) {
-                    $this->entity_manager->remove($user->getAvatar());
-                    $user->setAvatar(null);
-                    $clearCache("user_avatar_{$user->getId()}");
-                }
+                $this->mediaService->clearMediaFromObject( $user, 'avatar' );
+                $clearCache("user_avatar_{$user->getId()}");
                 break;
 
             case 'grant':
@@ -953,9 +943,22 @@ class AdminUserController extends AdminActionController
                         $perm->associate( $user, $perm->getDefaultGroup( UserGroup::GroupTypeDefaultArtisticGroup));
                         break;
 
+                    case 'FLAG_CHEATER':
+                        if (!$this->conf->getGlobalConf()->get( MyHordesSetting::StagingSettingsEnabled ) && $kernel->getEnvironment() !== 'dev' && $kernel->getEnvironment() !== 'local')
+                            return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
+
+                        if ( $user->getRightsElevation() === User::USER_LEVEL_CROW )
+                            return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
+                        else $user->addRoleFlag( User::USER_ROLE_CHEATER );
+                        break;
+
                     case '!FLAG_ART':
                         $user->removeRoleFlag( User::USER_ROLE_ART );
                         $perm->disassociate( $user, $perm->getDefaultGroup( UserGroup::GroupTypeDefaultArtisticGroup));
+                        break;
+
+                    case '!FLAG_CHEATER':
+                        $user->removeRoleFlag( User::USER_ROLE_CHEATER );
                         break;
 
                     case 'FLAG_DEV':
@@ -978,6 +981,14 @@ class AdminUserController extends AdminActionController
                 $unlockService->setLegacyHeroDaysSpent( $user, null, (int)$param );
                 $this->entity_manager->persist($user);
                 break;
+
+            case 'bonusxp':
+                if (!is_numeric($param)) return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
+                $user->setBonusHeroicXP( $param );
+                $this->entity_manager->persist($user);
+                $clearCache("user-{$user->getId()}-hxp");
+                break;
+
             case "dbg_soulpoints":
                 if (empty($param) || !is_numeric($param)) return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
                 $user->setSoulPoints( max(0,$param) );
@@ -1016,6 +1027,7 @@ class AdminUserController extends AdminActionController
 
         return $this->render( 'ajax/admin/users/ban.html.twig', $this->addDefaultTwigArgs("admin_users_ban", [
             'user' => $user,
+            'notes' => $this->entity_manager->getRepository(UserModerationNote::class)->findBy(['user' => $user], ['created_at' => Order::Ascending->value]),
 
             'known_ips' => count($known_ips),
             'blocked_ips' => count($blocked_ips),
@@ -1269,7 +1281,7 @@ class AdminUserController extends AdminActionController
     #[Route(path: 'api/admin/users/{id}/ban/lift', name: 'admin_users_ban_lift', requirements: ['id' => '\d+'])]
     #[AdminLogProfile(enabled: true)]
     public function users_ban_lift(int $id): Response
-    {                
+    {
         if ($this->adminHandler->liftAllBans($this->getUser()->getId(), $id))
             return AjaxResponse::success();
 
@@ -1327,53 +1339,11 @@ class AdminUserController extends AdminActionController
 
         /** @var Citizen $citizen */
         $citizen = $user->getActiveCitizen();
-        if ($citizen) {
-            $active = true;
-            $town = $citizen->getTown();
-            $alive = $citizen->getAlive();
-        }                    
-        else {
-            $active = false;
-            $alive = false;
-            $town = null;
-        }
-
-        $pictoProtos = $this->entity_manager->getRepository(PictoPrototype::class)->findAll();
-        usort($pictoProtos, function ($a, $b) {
-            return strcmp($this->translator->trans($a->getLabel(), [], 'game'), $this->translator->trans($b->getLabel(), [], 'game'));
-        });
-
-        $itemPrototypes = $this->entity_manager->getRepository(ItemPrototype::class)->findAll();
-        usort($itemPrototypes, function ($a, $b) {
-            return strcmp($this->translator->trans($a->getLabel(), [], 'items'), $this->translator->trans($b->getLabel(), [], 'items'));
-        });
-
-        $citizenStati = $this->entity_manager->getRepository(CitizenStatus::class)->findAll();
-        usort($citizenStati, function ($a, $b) {
-            return strcmp($this->translator->trans($a->getLabel(), [], 'game'), $this->translator->trans($b->getLabel(), [], 'game'));
-        });
-
-        $disabled_profs = $town ? $this->conf->getTownConfiguration($town)->get(TownSetting::DisabledJobs) : [];
-        $professions = array_filter($this->entity_manager->getRepository( CitizenProfession::class )->findSelectable(),
-            fn(CitizenProfession $p) => !in_array($p->getName(),$disabled_profs)
-        );
-
-        $citizenRoles = $this->entity_manager->getRepository(CitizenRole::class)->findAll();
 
         return $this->render( 'ajax/admin/users/citizen.html.twig', $this->addDefaultTwigArgs("admin_users_citizen", [
-            'town' => $town,
-            'active' => $active,
-            'alive' => $alive,
             'user' => $user,
             'user_citizen' => $citizen,
-            'home_upgrades' => $this->entity_manager->getRepository(CitizenHomeUpgradePrototype::class)->findAll(),
-            'itemPrototypes' => $itemPrototypes,
-            'pictoPrototypes' => $pictoProtos,
-            'citizenStati' => $citizenStati,
-            'citizenRoles' => $citizenRoles,
-            'citizenProfessions' => $professions,
-            'citizen_id' => $citizen ? $citizen->getId() : -1,
-        ]));        
+        ]));
     }
 
     /**
@@ -1434,17 +1404,18 @@ class AdminUserController extends AdminActionController
             'reverse_friends' => $this->entity_manager->getRepository(User::class)->findInverseFriends($user, true),
         ]));
     }
+
     /**
-     * @param int $id
+     * @param Citizen $citizen
      * @param AdminHandler $admh
      * @return Response
      */
-    #[Route(path: 'api/admin/users/{id}/citizen/headshot', name: 'admin_users_citizen_headshot', requirements: ['id' => '\d+'])]
+    #[Route(path: 'api/manage/town/{town:citizen<\d+>}/citizen/{id:citizen<\d+>}/headshot', name: 'admin_users_citizen_headshot')]
     #[AdminLogProfile(enabled: true)]
-    public function users_citizen_headshot(int $id, AdminHandler $admh): Response
+    public function users_citizen_headshot(Citizen $citizen, AdminHandler $admh): Response
     {
-        if ($admh->headshot($this->getUser()->getId(), $id))
-            return AjaxResponse::success();
+        if ($m = $admh->headshot($this->getUser()->getId(), $citizen->getId()))
+            return AjaxResponse::success(['message' => $m]);
 
         return AjaxResponse::error(ErrorHelper::ErrorDatabaseException);
     }
@@ -1462,32 +1433,6 @@ class AdminUserController extends AdminActionController
             return AjaxResponse::success();
 
         return AjaxResponse::error(ErrorHelper::ErrorDatabaseException);
-    }
-
-    /**
-     * @param int $id
-     * @param int $cid
-     * @return Response
-     */
-    #[Route(path: 'api/admin/users/{id}/citizen/engagement/{cid}', name: 'admin_users_citizen_engage', requirements: ['id' => '\d+', 'cid' => '\d+'])]
-    #[AdminLogProfile(enabled: true)]
-    public function users_update_engagement(int $id, int $cid): Response
-    {
-        /** @var User $user */
-        $user = $this->entity_manager->getRepository(User::class)->find($id);
-        if (!$user) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
-
-        if ($user->getActiveCitizen()) $this->entity_manager->persist($user->getActiveCitizen()->setActive(false));
-
-        if ($cid !== 0) {
-            $citizen = $this->entity_manager->getRepository(Citizen::class)->find($cid);
-            if (!$citizen || $citizen->getUser() !== $user || (!$citizen->getAlive() && $citizen->getProfession()->getName() !== CitizenProfession::DEFAULT))
-                return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
-            $this->entity_manager->persist($citizen->setActive(true));
-        }
-
-        $this->entity_manager->flush();
-        return AjaxResponse::success();
     }
 
     /**
@@ -1614,7 +1559,7 @@ class AdminUserController extends AdminActionController
     #[Route(path: 'api/admin/users/{id}/unique_award/manage', name: 'admin_user_manage_unique_award', requirements: ['id' => '\d+'])]
     #[IsGranted('ROLE_SUB_ADMIN')]
     #[AdminLogProfile(enabled: true)]
-    public function user_manage_unique_award(int $id, JSONRequestParser $parser, CrowService $crow): Response {
+    public function user_manage_unique_award(int $id, JSONRequestParser $parser, CrowService $crow, MediaService $mediaService): Response {
         $user = $this->entity_manager->getRepository(User::class)->find($id);
         if (!$user) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
 
@@ -1642,11 +1587,11 @@ class AdminUserController extends AdminActionController
             return AjaxResponse::success();
         }
 
+        $payload = null;
         if ($parser->has('title', true) === $parser->has('icon', true))
             return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
 
         if ($parser->has('title', true)) {
-            if ($award->getCustomIcon() !== null) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
             $this->entity_manager->persist($award->setUser($user)->setCustomTitle($parser->get('title')));
         } else {
             if ($award->getCustomTitle() !== null) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
@@ -1655,16 +1600,7 @@ class AdminUserController extends AdminActionController
             if (strlen( $payload ) > $this->conf->getGlobalConf()->get(MyHordesSetting::AvatarMaxSizeUpload))
                 return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
 
-            $image = ImageService::createImageFromData( $payload );
-            ImageService::resize( $image, 16, 16, bestFit: true );
-            $payload = ImageService::save( $image );
-
-            $this->entity_manager->persist( $award
-                ->setUser($user)
-                ->setCustomIcon($payload)
-                ->setCustomIconName(md5($payload))
-                ->setCustomIconFormat(strtolower( $image->format ))
-            );
+            $this->entity_manager->persist( $award->setUser($user) );
         }
 
         try {
@@ -1675,6 +1611,12 @@ class AdminUserController extends AdminActionController
             }
         } catch (Exception $e) {
             return AjaxResponse::error(ErrorHelper::ErrorDatabaseException);
+        }
+
+        if ($payload !== null) {
+            $media = $mediaService->addMediaToObjectFromBinaryString( $award, $payload, null, 'icon' );
+            $this->entity_manager->persist($media);
+            $this->entity_manager->flush();
         }
 
         return AjaxResponse::success();

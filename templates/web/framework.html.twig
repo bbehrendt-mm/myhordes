@@ -62,7 +62,8 @@
 <body {{ (theme??{})|data }} onclick {{ {
     'online_body': is_granted('ROLE_USER'),
     'offline_body': not is_granted('ROLE_USER'),
-    'no-fx': app.user and app.user.disableFx
+    'no-fx': app.user and app.user.disableFx,
+    'no-blur': app.user and (app.user.disableFx or app.user.setting(constant("\\App\\Enum\\UserSetting::DisableBlur"))),
 }|classes }}>
 <div id="partial-proxy" class="hidden"></div>
 <div id="notifications"></div>
@@ -77,11 +78,12 @@
 <div id="wrapper">
     <div id="header">
         <div id="header-reload-area"></div>
-        <div id="postbox" {{ {'hidden': true, 'show-larger': app.user and app.user.setting( constant("\\App\\Enum\\UserSetting::LargerPMIcon") )}|classes }}>
+        <div id="postbox" {{ {'hidden': true, 'show-larger': app.user and app.user.setting( constant("\\App\\Enum\\UserSetting::LargerPMIcon") ), 'header-icon': true, 'mail': true }|classes }}>
             <div><img src="{{ asset('build/images/icons/small_mail.gif') }}" alt=""></div>
             <div><img src="{{ asset('build/images/icons/anim_icon_mail.gif') }}" alt=""></div>
             <div id="postbox-new-msg-counter">0</div>
         </div>
+        <hordes-header-ui></hordes-header-ui>
         {% block header %}{% endblock %}
     </div>
 
@@ -187,6 +189,12 @@
                 }
             });
             $.html.forEach('#postbox', e => e.dataset.handled = "1");
+
+            $.html.addEventListenerAll('#art-dashboard:not([data-handled])','click', function(e) {
+                e.preventDefault();
+                $.ajax.load(null, '{{ path('art_dashboard')|e('js') }}', true);
+            });
+            $.html.forEach('#art-dashboard', e => e.dataset.handled = "1");
 
             {% if theme is defined and theme.themeName == 'arma' %}
                 const y = (new Date()).getFullYear();

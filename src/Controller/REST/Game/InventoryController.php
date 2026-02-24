@@ -79,6 +79,8 @@ class InventoryController extends CustomAbstractCoreController
                 'abort' => $this->translator->trans('Abbrechen', [], 'global'),
                 'warning' => $this->translator->trans('Achtung', [], 'global'),
                 'help' => $this->translator->trans('Hilfe', [], 'global'),
+                'slot' => $this->translator->trans('Dies ist ein einfacher leerer Platz in deinem Rucksack. Hier kannst du einen leichten Gegenstand verstauen.', [], 'global'),
+                'heavy_slot' => $this->translator->trans('Dies ist ein leerer Platz für schwere Gegenstände in deinem Rucksack. Hier kannst du einen leichten oder einen schweren Gegenstand verstauen.', [], 'global'),
             ],
             'type' => [
                 'rucksack' => $this->translator->trans('Rucksack', [], 'game'),
@@ -98,7 +100,8 @@ class InventoryController extends CustomAbstractCoreController
                 'deco' => $this->translator->trans('Einrichtungsgegenstand', [], 'items'),
                 'defence' => $this->translator->trans('Verteidigungsgegenstand', [], 'items'),
                 'weapon' => $this->translator->trans('Waffe', [], 'items'),
-                'nw-weapon' => $this->translator->trans('Nachtwache-Waffen', [], 'items')
+                'nw-weapon' => $this->translator->trans('Nachtwache-Waffen', [], 'items'),
+                'catapult' => $this->translator->trans('Katapultierbar', [], 'items')
             ],
             'actions' => [
                 'more' => $asset->getUrl('build/images/icons/small_more2.gif'),
@@ -175,7 +178,8 @@ class InventoryController extends CustomAbstractCoreController
         return [
             'bank' => false,
             'rsc' => false,
-            'size' => $foreign_chest ? 0 : $handler->getSize( $inventory ),
+            'size'  => $foreign_chest ? 0 : $handler->getSize( $inventory ),
+            'heavy' => $foreign_chest ? 0 : $handler->getHeavyItemSize( $inventory ),
             'mods' => [
                 'has_drunk' => $citizen->hasStatus('hasdrunk')
             ],
@@ -397,25 +401,24 @@ class InventoryController extends CustomAbstractCoreController
             return new JsonResponse([], Response::HTTP_BAD_REQUEST);
 
         $reload = false;
-        $carrier_items = ['bag_#00','bagxl_#00','cart_#00','pocket_belt_#00'];
 
         $drop_all = !$restrictive && ($direction === 'down-all' || (
                 // dropping item ...
                 $direction === 'down' &&
                 // item is carrier...
-                in_array($item->getPrototype()->getName(), $carrier_items) &&
+                $item->getPrototype()->isCarrierItem() &&
                 // item is single...
                 $item->getCount() === 1 &&
                 // no other carriers or full inventory...
                 (
-                    $inventory->getItems()->filter(fn(Item $i) => $i->getId() !== $item->getId() && in_array($i->getPrototype()->getName(), $carrier_items))->isEmpty() ||
+                    $inventory->getItems()->filter(fn(Item $i) => $i->getId() !== $item->getId() && $item->getPrototype()->isCarrierItem())->isEmpty() ||
                     $ih->getFreeSize( $inventory ) < 2
                 )
             ));
 
         $items = match(true) {
             $mod === 'hide' => $inventory->getItems()->filter(fn(Item $i) => !$i->getEssential())->getValues(),
-            $drop_all && $direction === 'down-all' => $inventory->getItems()->filter(fn(Item $i) => !$i->getEssential() && !in_array($i->getPrototype()->getName(), $carrier_items))->getValues(),
+            $drop_all && $direction === 'down-all' => $inventory->getItems()->filter(fn(Item $i) => !$i->getEssential() && !$i->getPrototype()->isCarrierItem())->getValues(),
             $drop_all => $inventory->getItems()->filter(fn(Item $i) => !$i->getEssential())->getValues(),
             $item !== null => [$item],
             default => [],
@@ -441,7 +444,7 @@ class InventoryController extends CustomAbstractCoreController
         $errors = [];
         foreach ($items as $current_item) if ($citizen->getAlive() && $target_citizen->getAlive()) {
 
-            if (($error = $this->processEventChainUsing( $ef, $ed, $em,
+            if (($error = $this->processEventChainUsing( $ef, $ed, $em, $response,
                                                          $ef->gameInteractionEvent( TransferItemEvent::class )->setup($current_item, $citizen, $inventory, $target_inventory, match (true) {
                                                              $mod === 'theft' => TransferItemModality::BankTheft,
                                                              ($mod === 'hide' && $hide_should_succeed) => TransferItemModality::HideItem,

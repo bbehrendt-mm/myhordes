@@ -152,11 +152,13 @@ class CronCommand extends Command implements SelfSchedulingCommand
         $s = $this->entityManager->getRepository(AttackSchedule::class)->findNextUncompleted();
         if ($s && $s->getTimestamp() < new DateTime('now')) {
 
-            if ($s->getStartedAt() === null)
+            $schedule_id = $s->getId();
+            if ($s->getStartedAt() === null) {
+                $this->helper->capsule("app:utils:prepare-attack $schedule_id", $output, "Starting attack script... ", true);
                 $this->helper->capsule('app:cron backup nightly', $output, 'Creating database backup before the attack... ', true);
+            }
 
             $try_limit = $this->conf->get(MyHordesSetting::NightlyAttackRetries);
-            $schedule_id = $s->getId();
 
             $this->entityManager->persist(
                 $s->setStartedAt( $s->getStartedAt() ?? new DateTimeImmutable('now') )

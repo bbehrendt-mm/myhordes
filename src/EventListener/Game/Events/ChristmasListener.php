@@ -42,7 +42,7 @@ final class ChristmasListener implements ServiceSubscriberInterface
         $item_factory      = $this->getService(ItemFactory::class);
 
         foreach ($event->town->getCitizens() as $citizen) {
-            if (!$citizen->getAlive() || $citizen_handler->hasStatusEffect($citizen, $status)) continue;
+            if (!$citizen->getAlive() || $citizen->hasStatus($status)) continue;
 
             $citizen_handler->inflictStatus( $citizen, $status );
             foreach ( $items as $item )

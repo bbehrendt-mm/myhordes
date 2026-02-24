@@ -4,6 +4,10 @@ namespace App\Entity;
 
 use App\Enum\NotificationSubscriptionType;
 use App\Enum\UserSetting;
+use App\Structures\Media\MediaCollection;
+use App\Structures\Media\MediaCollectionList;
+use App\Structures\Media\MediaVariant;
+use App\Traits\Entity\LinksMedia;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -16,6 +20,8 @@ use Doctrine\ORM\Mapping\JoinTable;
 use Doctrine\ORM\Mapping\Table;
 use Doctrine\ORM\Mapping\UniqueConstraint;
 use Doctrine\ORM\PersistentCollection;
+use Exception;
+use Intervention\Image\Interfaces\ImageInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -31,23 +37,27 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[UniqueConstraint(name: 'user_etwin_unique', columns: ['eternal_id'])]
 class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUserInterface
 {
-    const USER_LEVEL_BASIC  =  0;
-    const USER_LEVEL_CROW   =  3;
-    const USER_LEVEL_ADMIN  =  4;
-    const USER_LEVEL_SUPER  =  5;
+    use LinksMedia;
 
-    const USER_ROLE_ORACLE = 1 << 0;
-    const USER_ROLE_ANIMAC = 1 << 1;
-    const USER_ROLE_TEAM   = 1 << 2;
-    const USER_ROLE_DEV    = 1 << 3;
-    const USER_ROLE_ADMIN_SUB = 1 << 4;
-    const USER_ROLE_ART = 1 << 5;
+    const int USER_LEVEL_BASIC  =  0;
+    const int USER_LEVEL_CROW   =  3;
+    const int USER_LEVEL_ADMIN  =  4;
+    const int USER_LEVEL_SUPER  =  5;
 
-    const USER_ROLE_LIMIT_MODERATION = 1 << 10;
+    const int USER_ROLE_ORACLE = 1 << 0;
+    const int USER_ROLE_ANIMAC = 1 << 1;
+    const int USER_ROLE_TEAM   = 1 << 2;
+    const int USER_ROLE_DEV    = 1 << 3;
+    const int USER_ROLE_ADMIN_SUB = 1 << 4;
+    const int USER_ROLE_ART = 1 << 5;
+    const int USER_ROLE_CHEATER = 1 << 6;
 
-    const PRONOUN_NONE = 0;
-    const PRONOUN_MALE = 1;
-    const PRONOUN_FEMALE = 2;
+    const int USER_ROLE_LIMIT_MODERATION = 1 << 10;
+
+    const int PRONOUN_NONE = 0;
+    const int PRONOUN_MALE = 1;
+    const int PRONOUN_FEMALE = 2;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
@@ -88,9 +98,6 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
 
     #[ORM\Column(type: 'string', length: 32)]
     private string $externalId = '';
-
-    #[ORM\OneToOne(targetEntity: 'App\Entity\Avatar', cascade: ['persist', 'remove'])]
-    private ?Avatar $avatar = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $language = null;
@@ -149,7 +156,7 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     private ?Award $activeIcon = null;
 
-    #[ORM\Column(type: 'array', nullable: true)]
+    #[ORM\Column(type: 'json', nullable: true)]
     private ?array $nameHistory = [];
 
     #[ORM\Column(type: 'date', nullable: true)]
@@ -178,7 +185,7 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
     private ?RegistrationToken $registrationToken = null;
 
     #[ORM\Column]
-    private int $bonusHeroDaysSpent = 0;
+    private int $bonusHeroicXP = 0;
 
     #[ORM\Column]
     private int $tosver = 0;
@@ -293,11 +300,12 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
         elseif ($this->rightsElevation === self::USER_LEVEL_ADMIN && $this->hasRoleFlag(self::USER_ROLE_ADMIN_SUB))  $roles[] = 'ROLE_SUB_ADMIN';
         elseif ($this->rightsElevation === self::USER_LEVEL_CROW)   $roles[] = 'ROLE_CROW';
 
-        if ($this->hasRoleFlag( self::USER_ROLE_ORACLE )) $roles[] = 'ROLE_ORACLE';
-        if ($this->hasRoleFlag( self::USER_ROLE_ANIMAC )) $roles[] = 'ROLE_ANIMAC';
-        if ($this->hasRoleFlag( self::USER_ROLE_TEAM ))   $roles[] = 'ROLE_TEAM';
-        if ($this->hasRoleFlag( self::USER_ROLE_DEV ))   $roles[] = 'ROLE_DEV';
-        if ($this->hasRoleFlag( self::USER_ROLE_ART ))   $roles[] = 'ROLE_ART';
+        if ($this->hasRoleFlag( self::USER_ROLE_ORACLE ))   $roles[] = 'ROLE_ORACLE';
+        if ($this->hasRoleFlag( self::USER_ROLE_ANIMAC ))   $roles[] = 'ROLE_ANIMAC';
+        if ($this->hasRoleFlag( self::USER_ROLE_TEAM ))     $roles[] = 'ROLE_TEAM';
+        if ($this->hasRoleFlag( self::USER_ROLE_DEV ))      $roles[] = 'ROLE_DEV';
+        if ($this->hasRoleFlag( self::USER_ROLE_ART ))      $roles[] = 'ROLE_ART';
+        if ($this->hasRoleFlag( self::USER_ROLE_CHEATER ))  $roles[] = 'ROLE_CHEATER';
 
         if (strstr($this->email, "@localhost") === "@localhost") $roles[] = 'ROLE_DUMMY';
         else $roles[] = 'ROLE_NATURAL';
@@ -509,16 +517,6 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
         )->first() ?: null;
     }
 
-    public function getAvatar(): ?Avatar
-    {
-        return $this->avatar;
-    }
-    public function setAvatar(?Avatar $avatar): self
-    {
-        $this->avatar = $avatar;
-
-        return $this;
-    }
     public function getPreferSmallAvatars(): ?bool
     {
         return $this->getSetting( UserSetting::PreferSmallAvatars );
@@ -582,10 +580,6 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
         }
 
         return $this;
-    }
-    public function getAllHeroDaysSpent(): int
-    {
-        return ($this->getHeroDaysSpent() ?? 0) + ($this->getImportedHeroDaysSpent() ?? 0) + ($this->getBonusHeroDaysSpent() ?? 0);
     }
     public function getHeroDaysSpent(): ?int
     {
@@ -882,10 +876,18 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
         $this->setRoleFlag( $this->getRoleFlag() | $roleFlag );
         return $this;
     }
+
     public function removeRoleFlag(int $roleFlag): self {
         $this->setRoleFlag( $this->getRoleFlag() & ~$roleFlag );
         return $this;
     }
+
+    public function toggleRoleFlag(int $roleFlag, bool $enabled): self {
+        if ($enabled) $this->addRoleFlag( $roleFlag );
+        else $this->removeRoleFlag( $roleFlag );
+        return $this;
+    }
+
     public function hasRoleFlag(int $roleFlag): bool {
         return ($this->getRoleFlag() & $roleFlag) === $roleFlag;
     }
@@ -1023,14 +1025,14 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
         return $this;
     }
 
-    public function getBonusHeroDaysSpent(): ?int
+    public function getBonusHeroicXP(): ?int
     {
-        return $this->bonusHeroDaysSpent;
+        return $this->bonusHeroicXP;
     }
 
-    public function setBonusHeroDaysSpent(int $bonusHeroDaysSpent): self
+    public function setBonusHeroicXP(int $bonusHeroicXP): self
     {
-        $this->bonusHeroDaysSpent = $bonusHeroDaysSpent;
+        $this->bonusHeroicXP = $bonusHeroicXP;
 
         return $this;
     }
@@ -1208,5 +1210,102 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
         $this->lastSkillPointDeductedAt = $lastSkillPointDeductedAt;
 
         return $this;
+    }
+
+    protected static function defineMediaCollections(MediaCollectionList $list): void
+    {
+        $define = fn(MediaCollection $m) => $m
+            ->addVariant( new MediaVariant('default-still', ['square'])
+                              ->conditional( fn(ImageInterface $image) => !$image->isAnimated() )
+                              ->scaleDown( 100, 100 )
+                              ->toAvif(quality: 90)
+            )
+            ->addVariant( new MediaVariant('default-animated', ['square', 'animated'])
+                              ->conditional( fn(ImageInterface $image) => $image->isAnimated() )
+                              ->scaleDown( 100, 100 )
+                              ->toWebp(quality: 90)
+            )
+            ->addVariant( new MediaVariant('default-hd-still', ['square'])
+                              ->minResolution( width: 101 )
+                              ->conditional( fn(ImageInterface $image) => !$image->isAnimated() )
+                              ->scaleDown( 200, 200 )
+                              ->toAvif(quality: 75)
+            )
+            ->addVariant( new MediaVariant('default-hd-animated', ['square', 'animated'])
+                              ->minResolution( width: 101 )
+                              ->conditional( fn(ImageInterface $image) => $image->isAnimated() )
+                              ->scaleDown( 200, 200 )
+                              ->toWebp(quality: 75)
+            )
+
+            ->addVariant( new MediaVariant('bubble-small-still', ['circular'] )
+                              ->conditional( fn(ImageInterface $image) => !$image->isAnimated() )
+                              ->coverDown( 18, 18 )
+                              ->toAvif(quality: 100)
+            )
+            ->addVariant( new MediaVariant('bubble-small-animated', ['circular', 'animated'] )
+                              ->conditional( fn(ImageInterface $image) => $image->isAnimated() )
+                              ->coverDown( 18, 18 )
+                              ->toWebp(quality: 100)
+            )
+            ->addVariant( new MediaVariant('bubble-still', ['circular'] )
+                              ->minResolution( width: 19 )
+                              ->conditional( fn(ImageInterface $image) => !$image->isAnimated() )
+                              ->coverDown( 40, 40 )
+                              ->toAvif(quality: 100)
+            )
+            ->addVariant( new MediaVariant('bubble-animated', ['circular', 'animated'] )
+                              ->minResolution( width: 19 )
+                              ->conditional( fn(ImageInterface $image) => $image->isAnimated() )
+                              ->coverDown( 40, 40 )
+                              ->toWebp(quality: 100)
+            )
+            ->addVariant( new MediaVariant('bubble-hd-still', ['circular'] )
+                              ->minResolution( width: 41 )
+                              ->conditional( fn( ImageInterface $image ) => !$image->isAnimated() )
+                              ->coverDown( 80, 80 )
+                              ->toAvif(quality: 75)
+            )
+            ->addVariant( new MediaVariant('bubble-hd-animated', ['circular', 'animated'] )
+                              ->minResolution( width: 41 )
+                              ->conditional( fn(ImageInterface $image) => $image->isAnimated() )
+                              ->coverDown( 80, 80 )
+                              ->toWebp(quality: 75)
+            )
+
+            ->addVariant( new MediaVariant('letterbox-still', ['classic'] )
+                              ->conditional( fn(ImageInterface $image) => !$image->isAnimated() )
+                              ->coverDown( 90, 30 )
+                              ->toAvif(quality: 100)
+            )
+            ->addVariant( new MediaVariant('letterbox-animated', ['classic', 'animated'] )
+                              ->conditional( fn(ImageInterface $image) => $image->isAnimated() )
+                              ->coverDown( 90, 30 )
+                              ->toWebp(quality: 100)
+            )
+            ->addVariant( new MediaVariant('letterbox-hd-still', ['classic'] )
+                              ->minResolution( width: 91 )
+                              ->conditional( fn(ImageInterface $image) => !$image->isAnimated() )
+                              ->coverDown( 180, 60 )
+                              ->toAvif(quality: 100)
+            )
+            ->addVariant( new MediaVariant('letterbox-hd-animated', ['classic', 'animated'] )
+                              ->minResolution( width: 91 )
+                              ->conditional( fn(ImageInterface $image) => $image->isAnimated() )
+                              ->coverDown( 180, 60 )
+                              ->toWebp(quality: 100)
+            );
+
+        $list->add( $define( new MediaCollection('avatar')->singleFile() ) );
+        $list->add( $define( new MediaCollection('avatar-pending', 'avatar')->singleFile() ) );
+        $list->add( $define( new MediaCollection('avatar-history', 'avatar')->archiveCollection() ) );
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getMediaBasePath(): string
+    {
+        return "user/{$this->getPrimaryKey()}/avatar";
     }
 }

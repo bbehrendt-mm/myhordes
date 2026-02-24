@@ -15,7 +15,7 @@ use ArrayHelpers\Arr;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 
-#[AsEventListener(event: TownContentMigrationEvent::class, method: 'handle', priority: 800 - 17)]
+#[AsEventListener(event: TownContentMigrationEvent::class, method: 'handle', priority: 800 - 18)]
 class TownContentMigrateFrom17To18 extends TownContentMigrateBuildingTreeListener
 {
     use PrimeInfo;

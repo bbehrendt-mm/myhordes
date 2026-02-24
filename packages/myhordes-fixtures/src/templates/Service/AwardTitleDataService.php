@@ -262,6 +262,10 @@ class AwardTitleDataService implements FixtureProcessorInterface {
         # $container->add()->title('Neil Armstrong der Außenwelt')->unlockquantity(100)->associatedtag(':dexplo:')->associatedpicto('r_explo2_#00')->commit(); #
         $container->add()->title('Bis zur Unendlichkeit... und noch viel weiter!')->unlockquantity(150)->associatedtag(':dexplo:')->associatedpicto('r_explo2_#00')->commit();
         $container->add()->title('Indiana Jones und die Ruinen der Aussenwelt')->unlockquantity(300)->associatedtag(':dexplo:')->associatedpicto('r_explo2_#00')->commit();
+        $container->add()->title('Leidenschaftlicher Entdecker')->unlockquantity(5)->associatedtag(':texplo:')->associatedpicto('r_explot_#00')->commit();
+        $container->add()->title('Kartograph')->unlockquantity(10)->associatedtag(':texplo:')->associatedpicto('r_explot_#00')->commit();
+        // $container->add()->title('100%')->unlockquantity(15)->associatedtag(':texplo:')->associatedpicto('r_explot_#00')->commit();
+        // $container->add()->title('TBD')->unlockquantity(20)->associatedtag(':texplo:')->associatedpicto('r_explot_#00')->commit();
         $container->add()->title('Wenn ich das nur vorher gewusst hätte...')->unlockquantity(5)->associatedtag(':ruin:')->associatedpicto('r_ruine_#00')->commit();
         $container->add()->title('Verwegener Wanderer')->unlockquantity(10)->associatedtag(':ruin:')->associatedpicto('r_ruine_#00')->commit();
         $container->add()->title('Tunnelblicker')->unlockquantity(20)->associatedtag(':ruin:')->associatedpicto('r_ruine_#00')->commit();
@@ -498,6 +502,7 @@ class AwardTitleDataService implements FixtureProcessorInterface {
         $container->add()->title('DdA Beste Buddler')->unlockquantity(1)->associatedtag(':scaddh:')->associatedpicto('r_scaddh_#00')->commit();
         $container->add()->title('Tarnexperte')->unlockquantity(1)->associatedtag(':rangwin:')->associatedpicto('r_rangwin_#00')->commit();
         $container->add()->title('Meisteringenieur')->unlockquantity(1)->associatedtag(':techwin:')->associatedpicto('r_techwin_#00')->commit();
+        // $container->add()->title('Total Exploration')->unlockquantity(1)->associatedtag(':explot:')->associatedpicto('r_explot_#01')->commit(); // TODO: add titles for Total Exploration
 
         $data = $container->toArray();
     }

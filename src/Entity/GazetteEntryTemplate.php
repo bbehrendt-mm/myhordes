@@ -40,6 +40,15 @@ class GazetteEntryTemplate
     const TypeGazetteShamanDeathChaos   = 30;
     const TypeGazetteGuideDeathChaos    = 31;
     const TypeGazetteGuideShamanDeathChaos = 32;
+    const TypeGazetteGhulEaten          =33;
+    const TypeGazetteGhulBeaten         =34;
+    const TypeGazetteGhulStarved        =35;
+    const TypeGazetteFleshCage          =36;
+    const TypeGazetteExplosiveDoormat   =37;
+    const TypeGazetteMultiGhulEaten     =38;
+    const TypeGazetteMultiFleshCage     =39;
+    const TypeGazetteMultiGhulStarved   =40;
+    const TypeGazetteMultiGhulBeaten    =41;    
 
     const RequiresNothing       =  0;
     const BaseRequirementCitizen = 10;
@@ -66,10 +75,17 @@ class GazetteEntryTemplate
     const RequiresTwoCitizensInTown = 52;
     const RequiresMultipleCrosses       = 60;
     const RequiresMultipleRedSouls      = 61;
+    const RequiresMultipleGhulEaten     =62;
+    const RequiresMultipleGhulBeaten    =63;
+    const RequiresMultipleGhulStarved   =64;
+    const RequiresMultipleFleshCage     =65;
     const RequiresAttackDeathsC1        = 441;
     const RequiresMultipleInfectionsC1  = 471;
     const RequiresMultipleVanishedC1    = 481;
     const RequiresMultipleHangingsC1    = 491;
+    const RequiresMultipleRedSoulsC1    = 611;
+    const RequiresMultipleGhulEatenC1   =621; 
+    const RequiresMultipleFleshCageC1   =651;   
     const FollowUpTypeNone  = 0;
     const FollowUpTypeDoubt = 1;
     const FollowUpTypeBad   = 2;
@@ -85,8 +101,8 @@ class GazetteEntryTemplate
     private $type;
     #[ORM\Column(type: 'integer', nullable: true)]
     private $requirement;
-    #[ORM\Column(type: 'array', nullable: true)]
-    private $variableTypes = [];
+    #[ORM\Column(type: 'json', nullable: true)]
+    private array $variableTypes = [];
     #[ORM\Column(type: 'integer')]
     private $followUpType;
     public function getId(): ?int

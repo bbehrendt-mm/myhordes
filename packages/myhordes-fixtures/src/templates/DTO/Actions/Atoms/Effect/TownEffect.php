@@ -9,6 +9,7 @@ use MyHordes\Fixtures\DTO\Actions\EffectAtom;
  * @property-read ?int wellMin
  * @property-read ?int wellMax
  * @property-read ?int unlockBlueprintType
+ * @property-read ?string unlockBlueprintNamedList
  * @property-read ?array unlockBlueprintList
  * @method self soulDefense(?int $v)
  * @property ?int soulDefense
@@ -26,9 +27,10 @@ class TownEffect extends EffectAtom {
         return $this;
     }
 
-    public function unlockBlueprint(int|array $type): self {
-        $this->unlockBlueprintType = is_array( $type ) ? null : $type;
-        $this->unlockBlueprintList = is_array( $type ) ? $type : null;
+    public function unlockBlueprint(int|array|string $type): self {
+        $this->unlockBlueprintType      = is_int( $type )    ? $type : null;
+        $this->unlockBlueprintNamedList = is_string( $type ) ? $type : null;
+        $this->unlockBlueprintList      = is_array( $type )  ? $type : null;
         return $this;
     }
 
@@ -37,7 +39,7 @@ class TownEffect extends EffectAtom {
     }
 
     public function unlocksBlueprint(): bool {
-        return $this->unlockBlueprintType !== null || $this->unlockBlueprintList !== null;
+        return $this->unlockBlueprintType !== null || $this->unlockBlueprintList !== null || $this->unlockBlueprintNamedList !== null;
     }
 
     protected function default(string $name): mixed {

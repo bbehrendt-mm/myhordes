@@ -22,6 +22,7 @@ use App\Entity\Picto;
 use App\Entity\PictoPrototype;
 use App\Entity\Post;
 use App\Entity\RolePlayText;
+use App\Entity\RuinZone;
 use App\Entity\Season;
 use App\Entity\SoulResetMarker;
 use App\Entity\Thread;
@@ -38,6 +39,7 @@ use App\Entity\Zone;
 use App\Entity\ZonePrototype;
 use App\Enum\Configuration\TownSetting;
 use App\Enum\Game\CitizenPersistentCache;
+use App\Enum\Game\ExplorableRuinSkin;
 use App\Enum\UserSetting;
 use App\Service\CommandHelper;
 use App\Service\ConfMaster;
@@ -154,6 +156,7 @@ class MigrateCommand extends Command
         '286934ec84ef95e818ac5d5ce25af06b161d01ac' => [ ['app:utils:hpx-outdate', ['--outdate-resets' => true] ] ],
         '5e9950daeb4e32d1974174ddc6b84fcf41fde228' => [ ['app:user:convert-skill-points', ['--days 50'] ] ],
         'dedcb658109deff692d1316fdd44ceaec53ce195' => [ ['app:migrate', ['--reassign-thread-tags' => true] ] ],
+        '3e7e9b6c92f5ad5db70cf04075f140c1ae6e309f' => [ ['app:migrate', ['--fix-bunker-level' => true] ] ],
     ];
 
     public function __construct(KernelInterface $kernel, GameFactory $gf, EntityManagerInterface $em,
@@ -269,6 +272,7 @@ class MigrateCommand extends Command
             ->addOption('set-snippet-role', null, InputOption::VALUE_NONE, 'Sets empty snippet roles to CROW')
 			->addOption('fix-top3', null, InputOption::VALUE_NONE, 'Check TOP3 settings and fix any issues with them.')
 			->addOption('set-profession-prop', null, InputOption::VALUE_NONE, 'Writes profession info to the ranking proxy')
+			->addOption('fix-bunker-level', null, InputOption::VALUE_NONE, 'Changes the floor level of the bunker from 1 to -1 in order to match the stairs direction')
         ;
     }
 
@@ -388,6 +392,13 @@ class MigrateCommand extends Command
                 $output->writeln("<error>Unable to create schema.</error>");
                 return 2;
             }
+
+            $fixed_migrations = ['Version20250830134338', 'Version20260215154040'];
+            foreach ($fixed_migrations as $migration)
+                if (!$this->helper->capsule( "doctrine:migrations:version \"DoctrineMigrations\\{$migration}\" --add", $output )) {
+                    $output->writeln("<error>Unable to create schema.</error>");
+                    return 2;
+                }
 
             if (!$this->helper->capsule( 'doctrine:fixtures:load --append', $output )) {
                 $output->writeln("<error>Unable to update fixtures.</error>");
@@ -536,7 +547,12 @@ class MigrateCommand extends Command
 
         if ($input->getOption('update-db')) {
 
-            if (!$this->helper->capsule( 'doctrine:migrations:diff --allow-empty-diff --formatted --no-interaction', $output )) {
+            if (!$this->helper->capsule( 'doctrine:migrations:migrate --all-or-nothing --allow-no-migration --no-interaction', $output )) {
+                $output->writeln("<error>Unable to migrate pre-existing migration files.</error>");
+                return 1;
+            }
+
+            if (!$this->helper->capsule( 'doctrine:migrations:diff --allow-empty-diff --no-interaction', $output )) {
                 $output->writeln("<error>Unable to create a migration.</error>");
                 return 1;
             }
@@ -548,18 +564,13 @@ class MigrateCommand extends Command
 
                     $source = "{$this->param->get('kernel.project_dir')}/migrations";
                     foreach (scandir( $source ) as $file)
-                        if ($file && $file[0] !== '.') {
+                        if ($file && $file[0] !== '.' && $file !== 'Version20250830134338.php' && $file !== 'Version20260215154040.php') {
                             $output->write("\tDeleting \"<comment>{$file}</comment>\"... ");
                             unlink( "$source/$file" );
                             $output->writeln('<info>Ok!</info>');
                         }
 
-                    if (!$this->helper->capsule( 'doctrine:migrations:version --all --delete --no-interaction', $output )) {
-                        $output->writeln("<error>Unable to clean migrations.</error>");
-                        return 4;
-                    }
-
-                    if (!$this->helper->capsule( 'doctrine:migrations:diff --allow-empty-diff --formatted --no-interaction', $output )) {
+                    if (!$this->helper->capsule( 'doctrine:migrations:diff --allow-empty-diff --no-interaction', $output )) {
                         $output->writeln("<error>Unable to create a migration.</error>");
                         return 1;
                     }
@@ -971,7 +982,7 @@ class MigrateCommand extends Command
                     if ($spawn_zone) {
                         $output->writeln("Spawning <info>{$spawning_ruin->getLabel()}</info> at <info>{$spawn_zone->getX()} / {$spawn_zone->getY()}</info>");
                         $spawn_zone->setPrototype($spawning_ruin);
-                        
+
                         $this->maze->setTargetZone($spawn_zone);
                         $spawn_zone->setExplorableFloors($this->conf->getTownConfiguration($town)->get(TownSetting::ERuinSpaceFloors));
                         $this->maze->createField();
@@ -1533,9 +1544,30 @@ class MigrateCommand extends Command
 
         if ($input->getOption('set-profession-prop')) {
             $this->helper->leChunk($output, Citizen::class, 10, [], true, true, function(Citizen $c) {
-                if ($c->getProfession()->getName() !== CitizenProfession::DEFAULT)
+                if ($c->isProfession(CitizenProfession::DEFAULT))
                     $c->registerPropInPersistentCache( CitizenPersistentCache::Profession, $c->getProfession()->getId() );
             }, true);
+        }
+
+        if ($input->getOption('fix-bunker-level')) {
+
+            $bunker_id = $this->entity_manager->getRepository(ZonePrototype::class)->findOneBy(['icon' => 'deserted_bunker'])->getId();
+            $this->helper->leChunk($output, Zone::class, 1, ['prototype' => $bunker_id], true, false, function(Zone $zone) {
+
+                $found = false;
+                foreach ($this->entity_manager->getRepository(RuinZone::class)->matching(Criteria::create()
+                    ->andWhere(Criteria::expr()->eq('zone', $zone))
+                    ->andWhere(Criteria::expr()->gt('z', 0))
+                ) as $ruinZone) {
+                    $found = true;
+                    $this->entity_manager->persist( $ruinZone->setZ( $ruinZone->getZ() * -1 ) );
+                }
+
+                return $found;
+
+            }, true);
+
+            return 0;
         }
 
         return 99;

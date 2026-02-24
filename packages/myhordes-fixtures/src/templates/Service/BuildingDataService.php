@@ -2,6 +2,7 @@
 
 namespace MyHordes\Fixtures\Service;
 
+use App\Enum\Game\BuildingResourceSetType;
 use MyHordes\Fixtures\DTO\Buildings\BuildingPrototypeDataContainer;
 use MyHordes\Plugins\Interfaces\FixtureProcessorInterface;
 
@@ -212,7 +213,7 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->isTemporary(0)->defense(0)
             ->ap(25)->health(25)->resources(["wood2_#00" => 6,"wood_beam_#00" => 2,"metal_beam_#00" => 2,"meca_parts_#00" => 1,])
             ->adjustForHardMode(
-                null, ["wood2_#00" => 24,"wood_beam_#00" => 6,"metal_beam_#00" => 6,"meca_parts_#00" => 3,],
+                null, ["wood2_#00" => 20,"wood_beam_#00" => 5,"metal_beam_#00" => 5,"meca_parts_#00" => 2,],
                 null, ["wood2_#00" => 5,"wood_beam_#00" => 1,"metal_beam_#00" => 1,"meca_parts_#00" => 1,],
             )
             ->blueprintLevel(0)->orderBy(3)
@@ -382,7 +383,10 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->icon('item_meat')->label('Metzgerei')->description('In der Metzgerei könnt ihr eure kleinen treuen Begleiter (Hunde, Katzen, Schlangen ...) in Lebensmittel verwandeln. Da gibt es doch tatsächlich noch Leute, die Vegetarier sind...')
             ->isTemporary(0)->defense(0)
             ->ap(40)->health(40)->resources(["wood2_#00" => 9,"metal_#00" => 4,])
-            ->adjustForHardMode(null, ["wood2_#00" => 36,"metal_#00" => 16,])->autoEasyMode()
+            ->adjustForHardMode(
+                null, ["wood2_#00" => 25,"metal_#00" => 12,],
+                null, ["wood2_#00" => 7,"metal_#00" => 3,],
+            )
             ->blueprintLevel(0)->orderBy(2)->commit($item_meat);
 
         $container->add()->parentBuilding($item_meat)
@@ -473,8 +477,8 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->voteLevel(3)->baseVoteText('Die Verteidigung der Stadt wird um 10% erhöht.')
             ->upgradeTexts([
                                'Die Verteidigung der Stadt wird um 11% erhöht.',
-                               'Die Verteidigung der Stadt wird um 13% erhöht.',
-                               'Die Verteidigung der Stadt wird um 15% erhöht.'
+                               'Die Verteidigung der Stadt wird um 12% erhöht.',
+                               'Die Verteidigung der Stadt wird um 13% erhöht.'
                            ])
             ->commit();
         $container->add()->parentBuilding($small_refine)
@@ -510,7 +514,7 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->isTemporary(0)->defense(10)->ap(15)->health(15)->blueprintLevel(0)->resources(["wood2_#00" => 3,"wood_beam_#00" => 1,"metal_#00" => 1,])->orderBy(3)->commit($item_tagger);
 
         $container->add()->parentBuilding($item_tagger)
-            ->icon('item_courroie')->label('Katapult')->description('Das Katapult ist ein äußerst mächtiges Werkzeug, mit dem die Stadt jede Art von Gegenstand in die Wüste schießen kann. Das ist sehr nützlich, wenn man weit entfernte Bürger versorgen möchte (Lebensmittel, Wasser, Waffen etc...).')
+            ->icon('small_catapult1')->identifier('item_courroie')->label('Katapult')->description('Das Katapult ist ein äußerst mächtiges Werkzeug, mit dem die Stadt jede Art von Gegenstand in die Wüste schießen kann. Das ist sehr nützlich, wenn man weit entfernte Bürger versorgen möchte (Lebensmittel, Wasser, Waffen etc...).')
             ->isTemporary(0)->defense(0)
             ->ap(40)->health(40)->resources(["wood2_#00" => 2,"metal_#00" => 1,"wood_beam_#00" => 1,"metal_beam_#00" => 1,])
             ->adjustForHardMode(
@@ -520,7 +524,7 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->blueprintLevel(1)->orderBy(4)->commit($item_courroie);
 
         $container->add()->parentBuilding($item_courroie)
-            ->icon('item_courroie')->label('Verbesserter Katapult')->description('Dieses erheblich verbesserte Katapult ist einfacher zu bedienen und benötigt weniger AP, um mit einem Gegenstand beladen zu werden!')
+            ->icon('small_catapult2')->identifier('item_courroie')->label('Verbesserter Katapult')->description('Dieses erheblich verbesserte Katapult ist einfacher zu bedienen und benötigt weniger AP, um mit einem Gegenstand beladen zu werden!')
             ->isTemporary(0)->defense(0)->ap(30)->health(30)->blueprintLevel(1)->resources(["tube_#00" => 1,"courroie_#00" => 1,"wood2_#00" => 2,"metal_#00" => 2,"electro_#00" => 1,"lens_#00" => 1,])->orderBy(0)->commit();
 
         $container->add()->parentBuilding($item_tagger)
@@ -655,7 +659,7 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->isTemporary(0)->defense(0)
             ->ap(40)->health(40)->resources(["meca_parts_#00" => 1,"wood2_#00" => 10,"metal_#00" => 8,"plate_#00" => 2,"rustine_#00" => 2,])
             ->adjustForHardMode(
-                null, ["meca_parts_#00" => 3,"wood2_#00" => 40,"metal_#00" => 32,"plate_#00" => 6,"rustine_#00" => 12,],
+                null, ["meca_parts_#00" => 2,"wood2_#00" => 35,"metal_#00" => 27,"plate_#00" => 5,"rustine_#00" => 8,],
                 null, ["meca_parts_#00" => 1,"wood2_#00" => 8,"metal_#00" => 6,"plate_#00" => 1,"rustine_#00" => 2,],
             )
             ->blueprintLevel(0)->orderBy(2)->commit($small_armor);
@@ -664,7 +668,7 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->isTemporary(0)->defense(0)->ap(50)->health(50)->blueprintLevel(3)->resources(["meca_parts_#00" => 2,"wood2_#00" => 10,"metal_#00" => 10,"plate_#00" => 2,"concrete_wall_#00" => 3,"wood_beam_#00" => 5,"radio_on_#00" => 1,])->orderBy(0)->commit();
 
         $container->add()->parentBuilding($item_tagger)
-            ->icon('small_watchmen')->label('Rückzugsort für Aufklärer')->description('Die Aufklärer haben dich schon immer fasziniert und nie verraten, was sie unter ihrer Haube verbergen... Aber vielleicht ist es das Beste, sie in Ruhe zu lassen. Mit diesem speziellen Rückzugsort können sie sich endlich an die Arbeit machen, ohne die Stadt verlassen zu müssen.')
+            ->identifier('small_watchmen')->icon('small_lair')->label('Rückzugsort für Aufklärer')->description('Die Aufklärer haben dich schon immer fasziniert und nie verraten, was sie unter ihrer Haube verbergen... Aber vielleicht ist es das Beste, sie in Ruhe zu lassen. Mit diesem speziellen Rückzugsort können sie sich endlich an die Arbeit machen, ohne die Stadt verlassen zu müssen.')
             ->isTemporary(0)->defense(0)
             ->ap(25)->health(25)->resources(["tube_#00" => 1,"scope_#00" => 1,"metal_beam_#00" => 3,"wood2_#00" => 2,"plate_#00" => 1,"tagger_#00" => 2,"pile_#00" => 1,])
             ->adjustForHardMode(
@@ -717,7 +721,7 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->defense(15)->ap(40)->health(40)->blueprintLevel(3)->resources(["wood2_#00" => 5,"wood_beam_#00" => 3,"rustine_#00" => 3,])->orderBy(0)->commit();
         $container->add()->parentBuilding($small_building)
             ->icon('small_trash')->label('Müllhalde')->description('Der Eckpfeiler einer jeden großen Stadt: eine riesige, stinkende Müllhalde, die die ganze Stadt umgibt. Zugegeben, das ist nicht gerade ästhetisch, aber immerhin könnt ihr so Alltagsgegenstände in eine effektive Verteidigung verwandeln (nur eine Nacht haltbar).')
-            ->isTemporary(0)->defense(0)->ap(80)->health(80)->blueprintLevel(1)->resources(["wood2_#00" => 5,"wood_beam_#00" => 15,"metal_#00" => 10,"metal_beam_#00" => 15,"meca_parts_#00" => 1,"concrete_wall_#00" => 3,])->orderBy(4)
+            ->isTemporary(0)->defense(0)->ap(50)->health(50)->blueprintLevel(1)->resources(["wood2_#00" => 3,"wood_beam_#00" => 10,"metal_#00" => 5,"metal_beam_#00" => 10,"meca_parts_#00" => 1,"concrete_wall_#00" => 2,])->orderBy(4)
             ->voteLevel(2)->baseVoteText('Ermöglicht das Zerstören von Gegenständen für 1 Verteidigungspunkt.')
             ->upgradeTexts([
                                'Ermöglicht die fachgerechte Entsorgung von Waffen und Nahrung auf der Müllhalde.',
@@ -747,7 +751,7 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->isTemporary(0)->defense(0)
             ->ap(30)->health(30)->resources(["electro_#00" => 2,"wood_beam_#00" => 5,"metal_beam_#00" => 5,"pile_#00" => 1,"diode_#00" => 1,])
             ->adjustForHardMode(
-                null, ["electro_#00" => 6,"wood_beam_#00" => 15,"metal_beam_#00" => 15,"pile_#00" => 4,"diode_#00" => 3,],
+                null, ["electro_#00" => 2,"wood_beam_#00" => 15,"metal_beam_#00" => 15,"pile_#00" => 4,"diode_#00" => 1,],
                 null, ["electro_#00" => 1,"wood_beam_#00" => 4,"metal_beam_#00" => 4,"pile_#00" => 1,"diode_#00" => 1,],
             )
             ->blueprintLevel(3)->orderBy(2)->commit();
@@ -765,7 +769,7 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->isTemporary(1)->defense(30)->ap(15)->health(15)->blueprintLevel(2)->resources(["lights_#00" => 1,"wood2_#00" => 5,])->orderBy(11)->commit();
         $container->add()->parentBuilding($item_rp_book2)
             ->icon('small_court')->label('Bürgergericht')->description('Wie jeder weiß, haben Helden immer recht. Um diesen Fakt weiter zu zementieren, zählen alle von Helden gegen andere Bürger ausgesprochenen Beschwerden doppelt.')
-            ->isTemporary(0)->defense(0)->ap(12)->health(12)->blueprintLevel(3)->resources(["wood2_#00" => 10,"metal_#00" => 10,"table_#00" => 1,"wire_#00" => 1,"radio_on_#00" => 2,])->orderBy(1)->commit();
+            ->isTemporary(0)->defense(0)->ap(12)->health(12)->blueprintLevel(3)->resources(["wood2_#00" => 10,"metal_#00" => 10,"wire_#00" => 1,"radio_on_#00" => 2,])->orderBy(1)->commit();
         $container->add()->parentBuilding($item_rp_book2)
             ->icon('small_slave')->label('Ministerium für Sklaverei')->description('Das Ministerium für Sklaverei hat beschlossen, dass Verbannte auf den Baustellen arbeiten dürfen. Außerdem erhält jeder von ihnen in ein Bauprojekt investierte AP einen 50%-Bonus (z.B. aus 6 AP werden so 9 AP, die in das Bauprojekt fließen).')
             ->isTemporary(0)->defense(0)->ap(15)->health(15)->blueprintLevel(4)->resources(["wood_beam_#00" => 10,"metal_beam_#00" => 5,"chain_#00" => 2,'table_#00' => 1])->orderBy(3)->commit();
@@ -777,7 +781,13 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->isTemporary(0)->defense(0)->ap(75)->health(75)->blueprintLevel(4)->resources(["electro_#00" => 3,"wood_beam_#00" => 10,"metal_beam_#00" => 5,"lens_#00" => 1,"cinema_#00" => 1,])->orderBy(8)->commit();
         $container->add()->parentBuilding($small_building)
             ->icon('small_balloon')->label('Heißluftballon')->description('Ein großer, runder Ballon steigt hinauf in den Himmel. Aber nur solange, wie der "Freiwillige" in der Gondel braucht, um alles rund um die Stadt zu erfassen. Das Bauwerk ermöglicht es Dir, die gesamte Außenwelt zu entdecken.')
-            ->isTemporary(0)->defense(0)->ap(80)->health(80)->blueprintLevel(4)->resources(["wood2_#00" => 2,"meca_parts_#00" => 1,"lights_#00" => 1,"sheet_#00" => 2,"wood_beam_#00" => 5,"metal_beam_#00" => 5,])->orderBy(12)->commit();
+            ->isTemporary(0)->isImpervious(true)->defense(0)->ap(80)->health(80)->blueprintLevel(4)
+            ->resources(["wood2_#00" => 2,"meca_parts_#00" => 1,"lights_#00" => 1,"sheet_#00" => 2,"wood_beam_#00" => 5,"metal_beam_#00" => 5,])
+            ->adjustForHardMode(
+                null, ["wood2_#00" => 8,"meca_parts_#00" => 3,"lights_#00" => 4,"sheet_#00" => 4,"wood_beam_#00" => 15,"metal_beam_#00" => 15,],
+                null, ["wood2_#00" => 1,"meca_parts_#00" => 1,"lights_#00" => 1,"sheet_#00" => 1,"wood_beam_#00" => 4,"metal_beam_#00" => 4,],
+            )
+            ->orderBy(12)->commit();
         $container->add()->parentBuilding($small_building)
             ->icon('small_labyrinth')->label('Labyrinth')->description('Zombies sind bekanntermaßen einfach gestrickt. Warum ihnen dann nicht einfach ein kleines Labyrinth vor die Nase (das Stadttor) setzen und dabei zusehen, wie ihr Angriff an Schwung verliert. Das Ganze ist äußerst effektiv. Doch jeder Bürger, der die Stadt betreten will, muss dann 1 AP aufbringen.')
             ->isTemporary(0)->defense(150)
@@ -901,7 +911,7 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->blueprintLevel(3)->orderBy(4)->commit();
 
         $container->add()->parentBuilding($item_bgrenade)
-            ->icon('item_boomfruit')->label('Granatwerfer')->description('Ein Mini-Katapult auf der Stadtmauer, garniert mit explosiven Pampelmusen. Alles, was ihr tun müsst, ist warten und schießen! Mit ein wenig extra Arbeit können wir ihn sogar automatisieren und seine Leistung verbessern.')
+            ->icon('small_grenadelauncher')->identifier('item_boomfruit')->label('Granatwerfer')->description('Ein Mini-Katapult auf der Stadtmauer, garniert mit explosiven Pampelmusen. Alles, was ihr tun müsst, ist warten und schießen! Mit ein wenig extra Arbeit können wir ihn sogar automatisieren und seine Leistung verbessern.')
             ->isTemporary(0)->defense(40)->ap(60)->health(60)->blueprintLevel(3)->resources(["wood_beam_#00" => 7,"metal_beam_#00" => 2,"meca_parts_#00" => 2,"rustine_#00" => 2,"wire_#00" => 2,"lens_#00" => 1,"boomfruit_#00" => 4,])->orderBy(0)
             ->voteLevel(5)->baseVoteText('Der Granatwerfer gibt 40 zusätzliche Verteidigungspunkte.')
             ->upgradeTexts([
@@ -914,7 +924,7 @@ class BuildingDataService implements FixtureProcessorInterface {
 
 
         $container->add()->parentBuilding($item_bgrenade)
-            ->icon('item_boomfruit')->label('Vitaminen')->description('Wenn wir ein paar explosive Pampelmusen in der Nähe der Stadtmauer in den Boden stecken, sollten wir heute Abend ein schönes Leichenfeuerwerk sehen. Aber morgen müssen wir wieder ganz von vorne anfangen...')
+            ->icon('small_vitamines')->identifier('item_boomfruit')->label('Vitaminen')->description('Wenn wir ein paar explosive Pampelmusen in der Nähe der Stadtmauer in den Boden stecken, sollten wir heute Abend ein schönes Leichenfeuerwerk sehen. Aber morgen müssen wir wieder ganz von vorne anfangen...')
             ->isTemporary(1)->defense(100)
             ->ap(40)->resources(["metal_beam_#00" => 2,"wire_#00" => 1,"deto_#00" => 1,"boomfruit_#00" => 5,])
             ->adjustForHardMode(
@@ -943,10 +953,9 @@ class BuildingDataService implements FixtureProcessorInterface {
 
         $container->add()->parentBuilding($item_tagger)
             ->icon('item_scope')->label('Aussichtsplattform')->description( 'Wenn wir den Wachturm noch ein wenig vergrößern, hält die Außenwelt keine Geheimnisse mehr für uns. Dank seines soliden Fundaments können wir sogar noch ein paar Stockwerke hinzufügen, um noch weiter sehen zu können.')
-            ->isTemporary(0)->defense(0)->ap(30)->blueprintLevel(0)->resources(["wood2_#00" => 5,"scope_#00" => 1,"lens_#00" => 1,])->orderBy(0)
-            ->voteLevel(5)->baseVoteText('Die Aussichtsplattform ermöglicht es, den Bürger zu wählen, der am besten bei Expeditionen führen kann.')
+            ->isTemporary(0)->defense(0)->ap(30)->blueprintLevel(0)->resources(["wood2_#00" => 5,"scope_#00" => 1,"metal_beam_#00" => 1,])->orderBy(0)
+            ->voteLevel(4)->baseVoteText('Die Aussichtsplattform ermöglicht es, den Bürger zu wählen, der am besten bei Expeditionen führen kann. Erspäht jeden Morgen alle Zombies, die sich im Umkreis von 3km um die Stadt aufhalten.')
             ->upgradeTexts([
-                               'Erspäht jeden Morgen alle Zombies, die sich im Umkreis von 3km um die Stadt aufhalten.',
                                'Erspäht jeden Morgen alle Zombies, die sich im Umkreis von 6km um die Stadt aufhalten.',
                                'Erspäht jeden Morgen alle Zombies, die sich im Umkreis von 10km um die Stadt aufhalten.',
                                'Erspäht jeden Morgen alle Zombies, die sich im Umkreis von 10km um die Stadt aufhalten. Bürger im Umkreis von 1km um die Stadt können ohne AP-Verbrauch die Stadt betreten.',
@@ -955,7 +964,7 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->commit($item_scope);
 
         $container->add()->parentBuilding($small_round_path)
-            ->icon('small_watchmen')->label('Wachstube')->description('Ein alter Raum, der nach Kaffee und Tabak riecht, in dem man sich aber viel besser auf die langen Nächte vorbereiten kann, die die Bürger auf der Stadtmauer erwarten.')
+            ->identifier('small_watchmen')->icon('small_guardroom')->label('Wachstube')->description('Ein alter Raum, der nach Kaffee und Tabak riecht, in dem man sich aber viel besser auf die langen Nächte vorbereiten kann, die die Bürger auf der Stadtmauer erwarten.')
             ->isTemporary(0)->defense(0)
             ->ap(50)->resources(["wood_beam_#00" => 6,"metal_#00" => 10,"meca_parts_#00" => 2,"metal_beam_#00" => 5,"ryebag_#00" => 2,"lights_#00" => 1,"coffee_machine_#00" => 1,"cigs_#00" => 1,"trestle_#00" => 1,"chair_basic_#00" => 2,])
             ->adjustForHardMode(
@@ -995,19 +1004,52 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->isTemporary(0)->defense(0)->ap(20)->health(20)->blueprintLevel(2)->resources(["meca_parts_#00" => 1,"wood_beam_#00" => 1,"wood2_#00" => 5,"rustine_#00" => 3,"wire_#00" => 5,"diode_#00" => 4,])->orderBy(1)->commit();
 
         $container->add()
+            ->icon('item_soul_blue_static')->label('Seelenreinigungsquelle')->description('Ein Ort der Entspannung, der sich hervorragend für die Überführung von Seelen in die ewige Ruhe eignet.')
+            ->isTemporary(0)->defense(20)->ap(30)->health(30)->blueprintLevel(0)->resources(["metal_#00" => 1,"rustine_#00" => 1,"ryebag_#00" => 2,"oilcan_#00" => 1,])->orderBy(5)
+            ->voteLevel(3)->baseVoteText('Du kannst jetzt die Seelen deiner verstorbenen Mitbürger reinigen, um ein wenig zusätzliche Verteidigung zu erhalten.')
+            ->upgradeTexts([
+                               'Jede gereinigte Seele bringt der Stadt etwas mehr Verteidigung.',
+                               'Zusätzlich zum vorherigen Effekt sinkt der Einfluss gequälter Seelen auf den Angriff leicht ab.',
+                               'Zusätzlich zum vorherigen Effekt wird der Verteidigungsbonus gereinigter Seelen weiter erhöht, und jede gereinigte Seele bringt zwei zusätzliche Ranking-Punkte für die Stadt ein.',
+                           ])
+            ->commit($item_soul_blue_static);
+
+        $container->add()->parentBuilding($item_soul_blue_static)
             ->icon('small_spa4souls')->label('Sanktuarium')->description('Auch wenn dir das Spirituelle ein wenig über den Kopf wächst - ein Raum, der dem Wohlbefinden und der Entspannung gewidmet ist, hilft dir, dich weniger um die kommenden Tage zu sorgen. Nun... wenn du denn Zeit hättest, es zu besuchen.')
-            ->isTemporary(0)->defense(0)->ap(20)->health(20)->blueprintLevel(0)->resources(["wood2_#00" => 2,"wood_beam_#00" => 3,"ryebag_#00" => 1,])->orderBy(5)
+            ->isTemporary(0)->defense(0)->ap(20)->health(20)->blueprintLevel(0)->resources(["wood2_#00" => 2,"wood_beam_#00" => 3,"ryebag_#00" => 1,])->orderBy(0)
             ->commit($small_spa4souls);
 
-        $container->add()->parentBuilding($small_spa4souls)
-            ->icon('small_cemetery')->label('Kleiner Friedhof')->description('Bringt eure Toten! Denn diesmal werden sie sich noch als nützlich erweisen. Macht das beste aus ihnen und verbessert damit gemeinsam eure Verteidigung. Jeder zum Friedhof gebrachte tote Mitbürger bringt +10 Verteidigungspunkte für die Gesamtverteidigung der Stadt. Hinweis: Es spielt keine Rolle, wo und woran ein Mitbürger verstarb.')
-            ->isTemporary(0)->defense(0)->ap(42)->health(42)->blueprintLevel(2)->resources(["meca_parts_#00" => 1,"wood2_#00" => 10,])->orderBy(2)->commit($small_cemetery);
+        $container->add()->parentBuilding($item_soul_blue_static)
+            ->icon('small_pyre')->label('Opferfeuer')->description('Dieses zeremonielle Feuer verteilt neben einer ganzen Menge Rauch auch eine mystische Kraft über der Stadt - wenn es brennt, kann die Stadt zwei Verbesserungen des Tages ausführen.')
+            ->isTemporary(1)->defense(0)->health(20)->blueprintLevel(0)
+            ->resourceSet(BuildingResourceSetType::Default, 0, 0, 20, ["soul_red_#00" =>  1,"trestle_#00" => 1,"wood2_#00" => 3,'torch_#00' =>  1])
+            ->resourceSet(BuildingResourceSetType::Default, 0, 1, 20, ["soul_red_#00" =>  2,"trestle_#00" => 1,"wood2_#00" => 3,'torch_#00' =>  2])
+            ->resourceSet(BuildingResourceSetType::Default, 0, 2, 20, ["soul_red_#00" =>  3,"trestle_#00" => 1,"wood2_#00" => 3,'torch_#00' =>  3])
+            ->resourceSet(BuildingResourceSetType::Default, 0, 3, 20, ["soul_red_#00" =>  4,"trestle_#00" => 1,"wood2_#00" => 3,'torch_#00' =>  4])
+            ->resourceSet(BuildingResourceSetType::Default, 0, 4, 20, ["soul_red_#00" =>  5,"trestle_#00" => 1,"wood2_#00" => 3,'torch_#00' =>  5])
+            ->resourceSet(BuildingResourceSetType::Default, 0, 5, 20, ["soul_red_#00" =>  6,"trestle_#00" => 1,"wood2_#00" => 3,'torch_#00' =>  6])
+            ->resourceSet(BuildingResourceSetType::Default, 0, 6, 20, ["soul_red_#00" =>  7,"trestle_#00" => 1,"wood2_#00" => 3,'torch_#00' =>  7])
+            ->resourceSet(BuildingResourceSetType::Default, 0, 7, 20, ["soul_red_#00" =>  8,"trestle_#00" => 1,"wood2_#00" => 3,'torch_#00' =>  8])
+            ->resourceSet(BuildingResourceSetType::Default, 0, 8, 20, ["soul_red_#00" =>  9,"trestle_#00" => 1,"wood2_#00" => 3,'torch_#00' =>  9])
+            ->resourceSet(BuildingResourceSetType::Default, 0, 9, 20, ["soul_red_#00" => 10,"trestle_#00" => 1,"wood2_#00" => 3,'torch_#00' => 10])
+            ->orderBy(1)
+            ->commit();
+
+        $container->add()->parentBuilding($item_soul_blue_static)
+            ->icon('small_cemetery')->label('Kleiner Friedhof')->description('Bringt eure Toten! Denn diesmal werden sie sich noch als nützlich erweisen. Macht das beste aus ihnen und verbessert damit gemeinsam eure Verteidigung. Hinweis: Es spielt keine Rolle, wo und woran ein Mitbürger verstarb.')
+            ->isTemporary(0)->defense(0)->ap(42)->health(42)->blueprintLevel(0)->resources(["meca_parts_#00" => 1,"wood2_#00" => 10,])->orderBy(2)
+            ->voteLevel(2)->baseVoteText('Jeder zum Friedhof gebrachte tote Mitbürger bringt insgesamt +3 Verteidigungspunkt für die Gesamtverteidigung der Stadt')
+            ->upgradeTexts([
+                'Jeder zum Friedhof gebrachte tote Mitbürger bringt insgesamt +7 Verteidigungspunkte für die Gesamtverteidigung der Stadt',
+                'Jeder zum Friedhof gebrachte tote Mitbürger bringt insgesamt +14 Verteidigungspunkte für die Gesamtverteidigung der Stadt',
+            ])
+            ->commit($small_cemetery);
 
         $container->add()->parentBuilding($small_cemetery)
             ->icon('small_coffin')->label('Sarg-Katapult')->description('Von 2 Toten hat derjenige, der sich bewegt, die besten Chancen, dich zu verspeisen. Trickst eure Feinde aus, indem ihr eure Leichen in die herankommende Zombiehorde schleudert. Jeder Tote bringt +20 anstelle von +10 Verteidigungspunkten.')
             ->isTemporary(0)->defense(0)->ap(85)->health(85)->blueprintLevel(3)->resources(["courroie_#00" => 1,"concrete_wall_#00" => 2,"wire_#00" => 2,"meca_parts_#00" => 3,"wood2_#00" => 5,"metal_#00" => 15,])->orderBy(0)->commit();
 
-        $container->add()->parentBuilding($small_spa4souls)
+        $container->add()->parentBuilding($item_soul_blue_static)
             ->icon('small_infirmary')->label('Krankenstation')->description('Egal ob kleines Wehwehchen oder irreparables Trauma - die Krankenstation empfängt dich mit offenen Armen. Zumindst solange du noch imstande bist, dich selbst zu verarzten, denn diese Einrichtung kommt ganz ohne medizinisches Personal daher.')
             ->isTemporary(0)->defense(0)
             ->ap(40)->health(40)->resources(["pharma_#00" => 6,"disinfect_#00" => 1,"wood_beam_#00" => 5,"metal_beam_#00" => 5,])
@@ -1017,24 +1059,12 @@ class BuildingDataService implements FixtureProcessorInterface {
             )
             ->blueprintLevel(3)->orderBy(3)->commit();
 
-
-        $container->add()->parentBuilding($small_spa4souls)
-            ->icon('item_soul_blue_static')->label('Seelenreinigungsquelle')->description('Ein Ort der Entspannung, der sich hervorragend für die Überführung von Seelen in die ewige Ruhe eignet.')
-            ->isTemporary(0)->defense(20)->ap(30)->health(30)->blueprintLevel(0)->resources(["metal_#00" => 1,"rustine_#00" => 1,"ryebag_#00" => 2,"lens_#00" => 1,"oilcan_#00" => 1,])->orderBy(0)
-            ->voteLevel(3)->baseVoteText('Du kannst jetzt die Seelen deiner verstorbenen Mitbürger reinigen, um ein wenig zusätzliche Verteidigung zu erhalten.')
-            ->upgradeTexts([
-                               'Jede gereinigte Seele bringt der Stadt etwas mehr Verteidigung.',
-                               'Zusätzlich zum vorherigen Effekt sinkt der Einfluss gequälter Seelen auf den Angriff leicht ab.',
-                               'Zusätzlich zum vorherigen Effekt wird der Verteidigungsbonus gereinigter Seelen weiter erhöht, und jede gereinigte Seele bringt zwei zusätzliche Ranking-Punkte für die Stadt ein.',
-                           ])
-            ->commit($item_soul_blue_static);
-
-        $container->add()->parentBuilding($small_spa4souls)
+        $container->add()->parentBuilding($item_soul_blue_static)
             ->icon('small_pool')->label('Pool')->description('Ein großer Pool, der nur für euer Wohlbefinden eingerichtet ist. Wenn man nicht auf seine Mitbürger achtet, die panisch um einen herumlaufen, könnte man den Angriff heute Abend glatt vergessen.')
-            ->isTemporary(0)->defense(0)->ap(150)->blueprintLevel(4)->resources(["wood2_#00" => 18,"plate_#00" => 2,"metal_beam_#00" => 1,"water_#00" => 20,"meca_parts_#00" => 2,"tube_#00" => 1,"ryebag_#00" => 2,])->orderBy(1)
+            ->isTemporary(0)->defense(0)->ap(150)->blueprintLevel(4)->resources(["wood2_#00" => 10,"plate_#00" => 2,"metal_beam_#00" => 1,"water_#00" => 5,"meca_parts_#00" => 2,"tube_#00" => 1,"ryebag_#00" => 2,])->orderBy(1)
             ->commit();
 
-        $container->add()->parentBuilding($small_spa4souls)
+        $container->add()->parentBuilding($item_soul_blue_static)
             ->icon('small_thermal')->label('Blaugoldige Thermalbäder')->description('Die kolossale Menge an Wasser, die für den Bau dieses Gebäudes verbraucht wurde, kann nicht mehr konsumiert oder gegen Zombies eingesetzt werden. Während du dich fragst, was dich dazu gebracht hat, eine so kostbare Ressource zu verschwenden, bemerkst du die in goldenen Buchstaben eingravierte Inschrift auf dem Eingangsbogen: "Non est certamen". Dieses Wunderwerk strahlt im Glanze seiner Nutzlosigkeit: Seine Errichtung bringt allen Bürgern der Stadt eine seltene Auszeichnung ein.')
             ->isImpervious(true)->isTemporary(0)->defense(0)
             ->ap(300)->health(300)->resources(["water_#00" => 100,"metal_beam_#00" => 8,"tube_#00" => 6,"wood_beam_#00" => 6,"concrete_wall_#00" => 2,"fence_#00" => 1,"water_cleaner_#00" => 4,])
@@ -1044,7 +1074,7 @@ class BuildingDataService implements FixtureProcessorInterface {
             )
             ->blueprintLevel(4)->orderBy(6)->commit();
 
-        $container->add()->parentBuilding($small_spa4souls)
+        $container->add()->parentBuilding($item_soul_blue_static)
             ->icon('small_crow')->label('Krähenstatue')->description('Huldigt den Raben! Gelobt sei deine Milde und deine erhabene Austrahlung! Befreie uns vom Spam und vergib uns unsere Trollenbeiträge so wie auch wir vergeben anderen Trollen. Dieses Wunderwerk strahlt im Glanze seiner Nutzlosigkeit: Seine Errichtung bringt allen Bürgern der Stadt eine seltene Auszeichnung ein.')
             ->isImpervious(true)->isTemporary(0)->defense(0)
             ->ap(300)->health(0)->resources(["hmeat_#00" => 3,"wood_beam_#00" => 35,])
@@ -1054,24 +1084,24 @@ class BuildingDataService implements FixtureProcessorInterface {
             )
             ->blueprintLevel(4)->orderBy(5)->commit();
 
-        $container->add()->parentBuilding($small_spa4souls)
+        $container->add()->parentBuilding($item_soul_blue_static)
             ->icon('small_vaudoudoll')->label('Voodoo-Puppe')->description('Ein über 2 Meter hoher, schimmliger Wollballen, über und über mit Stricken und Nadeln bedeckt. In den mächtigen Händen des Schamanen wird dieses *Ding* zu einem XXL-Püppchen, das etliche Zombies niederstreckt, ehe es wieder eine unförmige, unbewegliche Masse wird.')
             ->isTemporary(0)->defense(65)->ap(40)->health(40)->blueprintLevel(0)->resources(["water_#00" => 2,"meca_parts_#00" => 3,"metal_#00" => 2,"plate_#00" => 2,"soul_yellow_#00" => 2,])->orderBy(7)->commit();
 
-        $container->add()->parentBuilding($small_spa4souls)
+        $container->add()->parentBuilding($item_soul_blue_static)
             ->icon('small_bokorsword')->label('Bokors Guillotine')->description('Mit Hilfe einer teuflischen Guillotine und einer provisorischen Schaufensterpuppe, kann der Schamane aus der Entfernung den Kopf eines Zombierudel-Führers abschlagen. Die Zombies die ihm folgen, werden daraufhin abdrehen und wieder in die Wüste wandern.')
             ->isTemporary(0)->defense(100)->ap(60)->health(60)->blueprintLevel(0)->resources(["plate_#00" => 3,"wood_beam_#00" => 8,"metal_beam_#00" => 5,"soul_yellow_#00" => 3,])->orderBy(8)->commit();
-        $container->add()->parentBuilding($small_spa4souls)
+        $container->add()->parentBuilding($item_soul_blue_static)
             ->icon('small_spiritmirage')->label('Spirituelles Wunder')->description('Dieser Zauber des Schamanen erschafft ein Trugbild der Stadt. Als Folge verliert sich eine beträchtliche Anzahl Zombies heillos in der Wüste.')
             ->isTemporary(0)->defense(80)->ap(30)->health(30)->blueprintLevel(0)->resources(["wood2_#00" => 6,"plate_#00" => 2,"wood_beam_#00" => 6,"soul_yellow_#00" => 2,])->orderBy(9)->commit();
-        $container->add()->parentBuilding($small_spa4souls)
+        $container->add()->parentBuilding($item_soul_blue_static)
             ->icon('small_holyrain')->label('Heiliger Regen')->description('Nur der Schamane kennt das Geheimnis dieses rituellen Feuertanzes. Richtig ausgeführt, steigt eine kleine Wolke in den Himmel und bewirkt, dass ein Schauer heiligen Wassers auf die Zombiehorde niedergeht.')
             ->isTemporary(1)->defense(200)->ap(40)->health(0)->blueprintLevel(0)->resources(["water_#00" => 5,"wood2_#00" => 5,"wood_beam_#00" => 9,"soul_yellow_#00" => 4,])->orderBy(10)->commit();
 
 
         $container
             // Bauhaus
-            ->modify('small_refine_#01')->parentBuilding($small_spa4souls)->commit()
+            ->modify('small_refine_#01')->parentBuilding($item_soul_blue_static)->commit()
             //Weiterentwickelte Stadtmauer
             ->modify('small_wallimprove_#01')->icon('small_devwall')->commit()
             // Vogelscheuche
@@ -1080,10 +1110,8 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->modify('item_tagger_#01')->parentBuilding($item_scope)->commit()
             // Verbesserte Karte
             ->modify('item_electro_#00')->parentBuilding($item_scope)->commit()
-            //Rückzugsort für Aufklärer
-            ->modify('small_watchmen_#01')->parentBuilding($item_scope)->icon('small_lair')->commit()
             // Hammam
-            ->modify('small_spa4souls_#00')->parentBuilding($item_soul_blue_static)->commit()
+            ->modify('small_spa4souls_#00')->parentBuilding($small_spa4souls)->commit()
             //Zackenmauer
             ->modify('item_plate_#02')->icon('small_spikedwall')->commit()
             // Holzzaun

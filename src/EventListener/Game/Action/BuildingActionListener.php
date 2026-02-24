@@ -163,7 +163,7 @@ final class BuildingActionListener implements ServiceSubscriberInterface
                     $em->persist($zone);
                 }
 
-                $markings_visible = $event->citizen->getProfession()->getName() === 'hunter' || $event->citizen->hasRole('guide');
+                $markings_visible = $event->citizen->isProfession('hunter') || $event->citizen->hasRole('guide');
                 if (count($zones) === 0) $event->cache->addMessage(T::__( 'Leider ist es dir trotz größter Anstrengungen nicht gelungen, etwas neues in der Umgebung zu entdecken.', 'game' ));
                 elseif ($markings_visible)
                     $event->cache->addMessage(T::__( 'Nichts entgeht deinem geschulten Blick! Du hast neue Informationen über {casino} Zonen gesammelt!', 'game' ));

@@ -32,7 +32,10 @@ use MyHordes\Fixtures\DTO\Actions\EffectAtom;
  * @property ?int kill
  * @method self enableIf(bool|CitizenProperties $v)
  * @property ?bool enableIf
+ * @method self stopDigTimers(bool $v)
+ * @property ?bool stopDigTimers
  * @property-read  ?bool appliesToTarget
+ *
  */
 class StatusEffect extends EffectAtom {
 

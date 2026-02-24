@@ -11,6 +11,8 @@ type MapZoneRuin = {
     n: string,      // Translated name
     b: boolean,     // Buried?
     e: boolean,     // Explorable?
+    s?: boolean,     // Scavenged?
+    m: boolean,     // Prototype modified (flag)
 }
 
 export type MapCoordinate = {
@@ -31,8 +33,10 @@ export interface MapZone extends MapCoordinate {
     g?: boolean,        // Global view
     s?: boolean,        // Contains a soul
     tg?: number,        // Tag Ref
+    xc?: boolean,       // Excavated?
     scoutLevel?: number  // Scout level
     fractional?: boolean // Show scout level when at 0
+    wd?: number          // Wind direction
 }
 
 export interface LocalZone {
@@ -46,6 +50,7 @@ export interface LocalZone {
     z?: number,     // Exact number of zombies
     zc?: number,    // Exact number of killed zombies
     r?: string,     // URL to ruin icon
+    rn?: string,     // URL to ruin icon (night version)
     n?: string,     // Name of the local ruin
 
     vv?: boolean    // Player has been here already
@@ -63,7 +68,9 @@ export type MapRoute = {
 }
 
 export type MapConfig = {
-    scout: boolean
+    scout: boolean,
+    scav: boolean,
+    wind: boolean,
 }
 
 export type MapData = {
@@ -85,6 +92,7 @@ export type MapCoreProps = {
 
 export type RuntimeMapSettings = {
     enableZoneMarking: boolean,
+    enableZoneMarkingStorage: boolean,
     enableGlobalButton: boolean,
     enableZoneRouting: boolean,
 
@@ -101,6 +109,8 @@ export type RuntimeMapState = {
     markEnabled: boolean,
     globalEnabled: boolean,
     scoutEnabled: boolean,
+    scavEnabled: boolean,
+    windEnabled: boolean,
     activeRoute: number | undefined;
     activeZone: MapCoordinate | undefined;
     routeEditor: MapCoordinate[];
@@ -115,6 +125,8 @@ export type RuntimeMapStateAction = {
     markEnabled?: boolean,
     globalEnabled?: boolean,
     scoutEnabled?: boolean,
+    scavEnabled?: boolean,
+    windEnabled?: boolean,
     activeRoute?: number | boolean,
     activeZone?: MapCoordinate | boolean,
     routeEditorPush?: MapCoordinate,
@@ -131,8 +143,10 @@ export type MapOverviewParentProps = {
     routeEditor: MapCoordinate[],
     routeViewer: MapCoordinate[],
     etag: number,
+    localEtag: number,
     zoom: number, zoomChanged: boolean,
     scrollAreaRef:  {current: HTMLDivElement}
+    eventGateway?: (event: string, data: object)=>void,
 }
 
 export interface MapOverviewGridProps extends MapOverviewParentProps {
@@ -156,7 +170,11 @@ export type MapControlProps = {
     markEnabled: boolean,
     globalEnabled: boolean,
     scoutEnabled: boolean,
+    scavEnabled: boolean,
+    windEnabled: boolean,
     showScoutButton: boolean,
+    showScavButton: boolean,
+    showWindButton: boolean,
     showRoutes: boolean,
     showRoutesPanel: boolean,
     showGlobalButton: boolean,
@@ -192,6 +210,7 @@ export type LocalZoneProps = {
     movement: boolean,
     blocked: boolean
     activeRoute: MapRoute | null,
+    nightMode: boolean,
     wrapDispatcher: (RuntimeMapStateAction)=>void,
     dx: number,
     dy: number,

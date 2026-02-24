@@ -186,8 +186,14 @@ class PictoDataService implements FixtureProcessorInterface {
                 'rare' => true
             ],
             [
+                'label' => 'Vollständige Erkundung',
+                'description' => 'Anzahl der Karten, die du vollständig aufgedeckt erlebt hast und auf der sämtliche initialen Ruinen und begehbaren Ruinen zumindest einmal besucht oder betreten worden.',
+                'icon' => 'r_explot',
+                'rare' => true
+            ],
+            [
                 'label' => 'Großzügigkeit',
-                'description' => 'Anzahl der Heldentage, die du einem anderem Bürger in Not geschenkt hast.',
+                'description' => 'Anzahl deiner Akte von Selbstlosigkeit gegenüber anderen Bürgern in Not.',
                 'icon' => 'r_share',
                 'rare' => false
             ],

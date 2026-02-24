@@ -12,6 +12,7 @@ use App\Service\ActionHandler;
 use App\Service\EventProxyService;
 use App\Service\InventoryHandler;
 use App\Service\ItemFactory;
+use App\Service\LogTemplateHandler;
 use App\Service\RandomGenerator;
 use App\Structures\ActionHandler\Execution;
 use App\Structures\ItemRequest;
@@ -35,24 +36,27 @@ class ProcessItemEffect extends AtomEffectProcessor
         $rg = $this->container->get(RandomGenerator::class);
         /** @var EventProxyService $proxy */
         $proxy = $this->container->get(EventProxyService::class);
+        /** @var LogTemplateHandler $log */
+        $log = $this->container->get(LogTemplateHandler::class);
 
-        if (!$cache->citizen->getZone())
+        $zone = $cache->zone();
+        if (!$zone)
             $floor_inventory = $cache->citizen->getHome()->getChest();
-        elseif ($cache->citizen->getZone()->getX() === 0 && $cache->citizen->getZone()->getY() === 0)
+        elseif ($zone->getX() === 0 && $zone->getY() === 0)
             $floor_inventory = $cache->citizen->getTown()->getBank();
         elseif (!$cache->getTargetRuinZone())
-            $floor_inventory = $cache->citizen->getZone()->getFloor();
+            $floor_inventory = $zone->getFloor();
         else
             $floor_inventory = $cache->getTargetRuinZone()->getFloor();
 
         if ($data->consumeItem !== null && $data->consumeItemCount > 0) {
-            $source = $cache->citizen->getZone() ? [$cache->citizen->getInventory()] : [$cache->citizen->getInventory(), $cache->citizen->getHome()->getChest()];
+            $source = $zone ? [$cache->citizen->getInventory()] : [$cache->citizen->getInventory(), $cache->citizen->getHome()->getChest()];
             $requirements = $cache->getAction()?->getRequirements() ?? [];
 
             $item_req = null;
             foreach ($requirements as $requirement)
                 if ($requirement->getAtoms()) {
-                    $container = (new RequirementsDataContainer())->fromArray([['atomList' => $requirement->getAtoms()]]);
+                    $container = new RequirementsDataContainer()->fromArray([['atomList' => $requirement->getAtoms()]]);
                     foreach ( $container->findRequirements( ItemRequirement::class ) as $item_requirement ) {
                         /** @var ItemRequirement|null $item_requirement */
                         if ($item_requirement->item !== $data->consumeItem) continue;
@@ -108,7 +112,7 @@ class ProcessItemEffect extends AtomEffectProcessor
                         break;
                     case ItemDropTarget::DropTargetDefault:
                     default:
-                        $targetInv = [$cache->originalInventory ?? null, $cache->citizen->getInventory(), $floor_inventory, $cache->citizen->getZone() ? null : $cache->citizen->getTown()->getBank() ];
+                        $targetInv = [$cache->originalInventory ?? null, $cache->citizen->getInventory(), $floor_inventory, $zone ? null : $cache->citizen->getTown()->getBank() ];
                         break;
                 }
 
@@ -149,6 +153,12 @@ class ProcessItemEffect extends AtomEffectProcessor
                     $cache->item->setHidden(false);
                     $ih->forceMoveItem($cache->citizen->getInventory(), $cache->item);
                 }
+            }
+            if ($data->dropSource && $data->equipSource === null) {
+                $ih->forceMoveItem($zone->getFloor(), $cache->item);
+                if ($cache->citizen->getZone()?->getId() === $zone->getId())
+                    $cache->em->persist( $log->beyondItemLog( $cache->citizen, $cache->item->getPrototype(), true, $cache->item->getBroken() ) );
+                else $cache->em->persist( $log->catapultImpact( $cache->item, $zone ) );
             }
         }
 

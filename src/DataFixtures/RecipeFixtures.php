@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\BuildingConstructionResourceSet;
 use App\Entity\Recipe;
 use App\Entity\BuildingPrototype;
 use App\Entity\ItemGroup;
@@ -45,6 +46,11 @@ class RecipeFixtures extends Fixture implements DependentFixtureInterface
         /** @var BuildingPrototype[] $available_parents */
         $available_parents = [];
 
+        foreach ($manager->getRepository(BuildingConstructionResourceSet::class)->findAll() as $crs)
+            $manager->remove($crs);
+
+        $manager->flush();
+
         $cache = [];
         while (!empty($building_data)) {
             foreach ($building_data as $id => $building)
@@ -56,7 +62,7 @@ class RecipeFixtures extends Fixture implements DependentFixtureInterface
 
                     $object =
                         $this->entityManager->getRepository(BuildingPrototype::class)->findOneByName($id, false) ??
-                        (new BuildingPrototype())->setName($id);
+                        new BuildingPrototype()->setName($id);
 
                     $building->toEntity($this->entityManager, $id, $object);
                     $object->getChildren()->clear();
@@ -113,12 +119,14 @@ class RecipeFixtures extends Fixture implements DependentFixtureInterface
         $cache = [];
         foreach ($recipe_fixture_data as $name => $recipe_data) {
             $recipe = $manager->getRepository(Recipe::class)->findOneBy( ['name' => $name] );
-            if ($recipe === null) $recipe = (new Recipe())->setName( $name );
-
-            if ($recipe->getSource()) { $manager->remove( $recipe->getSource() ); $recipe->setSource( null ); }
-            if ($recipe->getResult()) { $manager->remove( $recipe->getResult() ); $recipe->setResult( null ); }
-            $recipe->getProvoking()->clear();
-            $recipe->getKeep()->clear();
+            if ($recipe === null) {
+                $recipe = new Recipe()->setName($name);
+            } else {
+                if ($recipe->getSource()) { $manager->remove( $recipe->getSource() ); $recipe->setSource( null ); }
+                if ($recipe->getResult()) { $manager->remove( $recipe->getResult() ); $recipe->setResult( null ); }
+                $recipe->getProvoking()->clear();
+                $recipe->getKeep()->clear();
+            }
 
             $unpack = function( $data ): array {
                 if (!is_array($data)) return [ $data => 1 ];
@@ -147,15 +155,15 @@ class RecipeFixtures extends Fixture implements DependentFixtureInterface
             if ($provoking === null || empty($out_rc) || empty($in))
                 throw new Exception("Entry '$name' is incomplete!");
 
-            $in_group = (new ItemGroup())->setName("rc_{$name}_in");
+            $in_group = new ItemGroup()->setName("rc_{$name}_in");
             foreach ( $in as $id => $count ) {
                 $proto = $manager->getRepository(ItemPrototype::class)->findOneBy( ['name' => $id] );
                 if (!$proto) throw new Exception("Item prototype not found: '$id'");
-                $in_group->addEntry( (new ItemGroupEntry())->setChance( $count )->setPrototype( $proto ) );
+                $in_group->addEntry( new ItemGroupEntry()->setChance($count )->setPrototype($proto ) );
             }
             $recipe->setSource($in_group);
 
-            $out_group = (new ItemGroup())->setName("rc_{$name}_out");
+            $out_group = new ItemGroup()->setName("rc_{$name}_out");
             foreach ( $out_rc as $id => $count ) {
                 $proto = $manager->getRepository(ItemPrototype::class)->findOneBy( ['name' => $id] );
                 if (!$proto) throw new Exception("Item prototype not found: '$id'");
@@ -166,7 +174,11 @@ class RecipeFixtures extends Fixture implements DependentFixtureInterface
             foreach ($provoking as $item)
                 $recipe->addProvoking( $manager->getRepository(ItemPrototype::class)->findOneBy( ['name' => $item] ) );
 
-            $recipe->setType( $recipe_data['type'] )->setStealthy( $recipe_data['stealthy'] ?? false );
+            $recipe
+                ->setType( $recipe_data['type'] )
+                ->setStealthy( $recipe_data['stealthy'] ?? false )
+                ->setForcedErrorMessage( $recipe_data['error'] ?? null );
+
             if (array_key_exists('action', $recipe_data)) {
               $recipe->setAction($recipe_data['action']);
             }
@@ -181,6 +193,7 @@ class RecipeFixtures extends Fixture implements DependentFixtureInterface
             }
             $recipe->setTooltipString($recipe_data['tooltip'] ?? null);
             $recipe->setMultiOut($recipe_data['multi_out'] ?? false);
+            $recipe->setAdditionalAP($recipe_data['ap'] ?? 0);
             $manager->persist($recipe);
 
             $progress->advance();

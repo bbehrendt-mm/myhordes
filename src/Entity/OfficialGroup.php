@@ -4,11 +4,19 @@ namespace App\Entity;
 
 use App\Enum\OfficialGroupSemantic;
 use App\Repository\OfficialGroupRepository;
+use App\Structures\Media\MediaCollection;
+use App\Structures\Media\MediaCollectionList;
+use App\Structures\Media\MediaVariant;
+use App\Traits\Entity\LinksMedia;
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
+use Intervention\Image\Interfaces\ImageInterface;
 
 #[ORM\Entity(repositoryClass: OfficialGroupRepository::class)]
 class OfficialGroup
 {
+    use LinksMedia;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
@@ -17,17 +25,11 @@ class OfficialGroup
     private string $lang;
     #[ORM\Column(type: 'text')]
     private string $description;
-    #[ORM\Column(type: 'blob')]
-    private $icon;
     #[ORM\Column(type: 'boolean')]
-    private $anon;
+    private ?bool $anon;
     #[ORM\OneToOne(targetEntity: UserGroup::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private UserGroup $usergroup;
-    #[ORM\Column(type: 'string', length: 32)]
-    private string $avatarName;
-    #[ORM\Column(type: 'string', length: 9)]
-    private string $avatarExt;
     #[ORM\Column(type: 'integer', enumType: OfficialGroupSemantic::class)]
     private OfficialGroupSemantic $semantic = OfficialGroupSemantic::None;
 
@@ -57,16 +59,6 @@ class OfficialGroup
 
         return $this;
     }
-    public function getIcon()
-    {
-        return $this->icon;
-    }
-    public function setIcon($icon): self
-    {
-        $this->icon = $icon;
-
-        return $this;
-    }
     public function getAnon(): ?bool
     {
         return $this->anon;
@@ -84,26 +76,6 @@ class OfficialGroup
     public function setUsergroup(UserGroup $usergroup): self
     {
         $this->usergroup = $usergroup;
-
-        return $this;
-    }
-    public function getAvatarName(): ?string
-    {
-        return $this->avatarName;
-    }
-    public function setAvatarName(string $avatarName): self
-    {
-        $this->avatarName = $avatarName;
-
-        return $this;
-    }
-    public function getAvatarExt(): ?string
-    {
-        return $this->avatarExt;
-    }
-    public function setAvatarExt(string $avatarExt): self
-    {
-        $this->avatarExt = $avatarExt;
 
         return $this;
     }
@@ -128,5 +100,43 @@ class OfficialGroup
         $this->ticketStyleReadMarkers = $ticketStyleReadMarkers;
 
         return $this;
+    }
+
+    protected static function defineMediaCollections(MediaCollectionList $list): void
+    {
+        $list->add( new MediaCollection('icon')
+                        ->singleFile()
+                        ->addVariant( new MediaVariant('small')
+                            ->coverDown( 24, 24 )
+                            ->toWebp()
+                        )
+                        ->addVariant( new MediaVariant('small-hd')
+                            ->minResolution( width: 25 )
+                            ->coverDown( 48, 48 )
+                            ->toWebp()
+                        )
+                        ->addVariant( new MediaVariant('web')
+                            ->coverDown( 100, 100 )
+                            ->toWebp()
+                        )
+                        ->addVariant( new MediaVariant('web-hd')
+                            ->minResolution( width: 101 )
+                            ->coverDown( 200, 200 )
+                            ->toWebp()
+                        )
+                        ->addVariant( new MediaVariant('web-uhd')
+                            ->minResolution( width: 201 )
+                            ->coverDown( 400, 400 )
+                            ->toWebp()
+                        )
+        );
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getMediaBasePath(): string
+    {
+        return "og/{$this->getPrimaryKey()}";
     }
 }

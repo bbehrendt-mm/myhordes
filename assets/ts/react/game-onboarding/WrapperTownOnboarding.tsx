@@ -16,6 +16,7 @@ import {ServiceWorkerIndicator} from "../service-worker-state/Wrapper";
 import {BaseMounter} from "../index";
 import Dialog from "../components/dialog";
 import {html} from "../../v2/helpers";
+import {useTranslations} from "../utils";
 
 declare var c: Const;
 declare var $: Global;
@@ -69,7 +70,7 @@ export const Globals = React.createContext<TownOnboardingGlobals>(null);
 const HordesTownOnboardingWrapper = (props: Props) => {
 
     const [page, setPage] = useState(0);
-    const head = useRef<HTMLDivElement>();
+    const head = useRef<HTMLDivElement>(null);
 
     const apiRef = useRef(new TownOnboardingAPI());
     const [payload, setPayload] = useState<OnboardingPayload>({
@@ -84,18 +85,13 @@ const HordesTownOnboardingWrapper = (props: Props) => {
 
     const [submitting, setSubmitting] = useState<boolean>(false);
     const [config, setConfig] = useState<ResponseConfig>();
-    const [strings, setStrings] = useState<TranslationStrings>();
+    const strings = useTranslations( apiRef.current );
     const [hero, setHero] = useState<boolean>(false);
 
     useEffect(() => {
         apiRef.current.config( props.town ).then(i => setConfig(i));
         return () => setConfig(null);
     }, [props.town]);
-
-    useEffect(() => {
-        apiRef.current.index().then(i => setStrings(i));
-        return () => setStrings(null);
-    }, []);
 
     useLayoutEffect(() => {
         head.current?.scrollIntoView();
@@ -339,7 +335,7 @@ const ConfirmationDialog = (props: ConfirmationDialogProps) => {
 const IdentitySelection = (props: OnboardingIdentityPayloadProps) => {
     const globals = useContext(Globals);
 
-    const inputRef = useRef<HTMLInputElement>()
+    const inputRef = useRef<HTMLInputElement>(null)
 
     useEffect(() => {
         props.setPayload(false);
@@ -374,7 +370,7 @@ const JobSelection = (props: OnboardingProfessionPayloadProps) => {
     const [citizens, setCitizens] = useState<CitizenCount[]>();
     const [token, setToken] = useState<object>();
 
-    const jobContainer = useRef<HTMLDivElement>();
+    const jobContainer = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         globals.api.jobs(globals.town).then(i => {
@@ -490,7 +486,7 @@ const SkillSelection = (props: OnboardingSkillPayloadProps) => {
     const [levels, setLevels] = useState<{ [key: string]: number; }>();
     const [current, setCurrent] = useState(0);
 
-    const skillContainer = useRef<HTMLDivElement>()
+    const skillContainer = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
         globals.api.skills(globals.town).then(i => {

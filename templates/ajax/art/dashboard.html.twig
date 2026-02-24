@@ -1,0 +1,35 @@
+{% extends "ajax/ajax.html.twig" %}
+
+{% block title %}
+    {% trans from 'art' %}Good Taste Dashboard{% endtrans %}
+{% endblock %}
+
+{% block ajax %}
+    <div class="row">
+        <div class="cell padded header rw-8 ro-2 rw-lg-12 ro-lg-0">
+            <h4>
+                <img src="{{ asset('build/images/icons/deco.gif') }}" alt="deco" style="vertical-align: middle;" />
+                {% trans from 'art' %}Good Taste Dashboard{% endtrans %}
+            </h4>
+            <p class="justify">
+                {% trans from 'art' %}Zentrales Dashboard für Kuratoren des guten Geschmacks, um Spiel-Assets, Texte und UI-Tools zu durchsuchen.{% endtrans %}
+            </p>
+            <div class="row">
+                <div class="cell padded-small rw-12">
+                    <button x-ajax-href="{{ path('art_assets') }}">
+                        <img src="{{ asset('build/images/icons/title/r_ebuild.gif') }}" alt="" style="vertical-align: middle;" />
+                        {% trans from 'art' %}Alle Assets anzeigen{% endtrans %}
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="cell padded-small rw-12">
+                    <button x-ajax-href="{{ path('art_rp_texts') }}">
+                        <img src="{{ asset('build/images/icons/small_rp.gif') }}" alt="" style="vertical-align: middle;" />
+                        {% trans from 'art' %}Alle RP-Texte anzeigen{% endtrans %}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

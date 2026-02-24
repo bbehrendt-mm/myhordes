@@ -115,6 +115,12 @@ class PictoService implements ServiceSubscriberInterface
                     default                 => 3.5 + 6.5,
                 },
 
+                'r_explot_#00' => match(true) {
+                    $picto->getCount() <  1 => 0,
+                    $picto->getCount() <  5 => 3.5,
+                    default                 => 3.5 + 6.5,
+                },
+
                 'r_guide_#00' => match(true) {
                     $picto->getCount() <  300 => 0,
                     $picto->getCount() < 1000 => 3.5,
@@ -260,7 +266,7 @@ class PictoService implements ServiceSubscriberInterface
      * @param Season|null $season Set to fetch pictos from a specific season
      * @return PictoRollupInterface[]
      */
-    public function getPictoGroup( User $user, bool $imported = false, bool $old = false, Season $season = null ): array {
+    public function getPictoGroup( User $user, bool $imported = false, bool $old = false, ?Season $season = null ): array {
         return $this->sort_data(
             $this->getService(EntityManagerInterface::class)->getRepository(PictoRollup::class)
                 ->findBy(['user' => $user, 'imported' => $imported, 'total' => !( $imported || $old ), 'old' => $old, 'season' => $season])
@@ -277,7 +283,7 @@ class PictoService implements ServiceSubscriberInterface
      * @param Season|null $season Set to fetch pictos from a specific season
      * @return int
      */
-    public function getSinglePictoCount( User $user, PictoPrototype $picto, bool $imported = false, bool $old = false, Season $season = null ): int {
+    public function getSinglePictoCount( User $user, PictoPrototype $picto, bool $imported = false, bool $old = false, ?Season $season = null ): int {
         return array_reduce( $this->getService(EntityManagerInterface::class)->getRepository(PictoRollup::class)
             ->findBy(['user' => $user, 'prototype' => $picto, 'imported' => $imported, 'total' => !( $imported || $old ), 'old' => $old, 'season' => $season]),
             fn(int $carry, PictoRollup $entry) => $carry + $entry->getCount(),

@@ -14,14 +14,35 @@ use App\Service\Maps\MazeMaker;
 use App\Service\PictoHandler;
 use App\Service\TownHandler;
 use App\Structures\ActionHandler\Execution;
+use ArrayHelpers\Arr;
+use Carbon\Carbon;
+use Doctrine\Common\Collections\ArrayCollection;
 use MyHordes\Fixtures\DTO\Actions\Atoms\Effect\ZoneEffect;
 use MyHordes\Fixtures\DTO\Actions\EffectAtom;
 
 class ProcessZoneEffect extends AtomEffectProcessor
 {
+    private function getAdjacentZones(Zone $zone, int $distance): array
+    {
+        $town = $zone->getTown();
+        $data = (match (max(0,$distance)) {
+            0 => new ArrayCollection([$zone]),
+            1 => $town->getZoneCross( $zone->getX(), $zone->getY(), 1 ),
+            default => $town->getZoneRect(
+                $zone->getX() - ($distance - 1),
+                $zone->getX() + ($distance - 1),
+                $zone->getY() - ($distance - 1),
+                $zone->getY() + ($distance - 1),
+            ),
+        })->toArray();
+
+        usort( $data, fn(Zone $a, Zone $b) => ($a->getX() + $a->getY()) <=> ($b->getX() + $b->getY()) );
+        return $data;
+    }
+
     public function __invoke(Execution $cache, EffectAtom|ZoneEffect $data): void
     {
-        $base_zone = $cache->citizen->getZone();
+        $base_zone = $cache->zone();
 
         /** @var TownHandler $th */
         $th = $this->container->get(TownHandler::class);
@@ -44,6 +65,8 @@ class ProcessZoneEffect extends AtomEffectProcessor
                     }
                 }
         }
+
+        $cache->altered_map_discovery = true;
 
         if ($base_zone) {
 
@@ -74,16 +97,48 @@ class ProcessZoneEffect extends AtomEffectProcessor
                     }
                 }
                 else {
-                    $kills = min($cache->citizen->getZone()->getZombies(), mt_rand($data->zombieMin, $data->zombieMax));
+                    $is_remote_kill = $cache->citizen->getZone()?->getId() !== $base_zone->getId();
+
+                    $zones = $this->getAdjacentZones( $base_zone, $data->zombieKillRange );
+                    $total_zombies = array_reduce( $zones, fn($carry, Zone $zone) => $carry + $zone->getZombies(), 0 );
+
+                    $kills = min($total_zombies, mt_rand($data->zombieMin, $data->zombieMax));
                     if ($kills > 0) {
-                        $cache->citizen->getZone()->setZombies( $cache->citizen->getZone()->getZombies() - $kills );
-                        $cache->addToCounter( CountType::Kills, $kills );
+
+                        $left = $kills;
+                        $initial_count = count($zones);
+                        $zones_left = $zones;
+                        $zone_count_cache = [];
+                        while ($left > 0 && !empty($zones_left)) {
+                            foreach ($zones_left as $zone) if ($left > 0 && $zone->getZombies() > 0) {
+                                $kills_in_zone = count($zones_left) === 1 ? min($left, $zone->getZombies()) : mt_rand(1, max(1,
+                                    min( ceil($kills / $initial_count ), $left, $zone->getZombies())
+                                ));
+
+                                $zone->setZombies( $zone->getZombies() - $kills_in_zone );
+                                $cache->addToCounter( CountType::Kills, $kills_in_zone );
+                                $left -= $kills_in_zone;
+
+                                Arr::set($zone_count_cache, $zone->getId(), Arr::get( $zone_count_cache, $zone->getId(), 0 ) + $kills_in_zone);
+                            }
+
+                            $zones_left = array_filter($zones_left, fn(Zone $zone) => $zone->getZombies() > 0);
+                        }
+
                         if (!$cache->isFlagged('kills_silent'))
-                            $cache->em->persist( $lh->zombieKill( $cache->citizen, $cache->originalPrototype, $kills, $cache->getAction()?->getName() ) );
+                            foreach ($zones as $zone)
+                                if (($k = Arr::get( $zone_count_cache, $zone->getId(), 0 )) > 0)
+                                    if ($is_remote_kill) {
+                                        $cache->em->persist( $lh->zombieKillCatapult( $cache->citizen, $cache->originalPrototype, $k, $base_zone, $zone ) );
+                                    } else {
+                                        $cache->em->persist( $lh->zombieKill( $cache->citizen, $cache->originalPrototype, $k, $cache->getAction()?->getName(), $zone ) );
+                                    }
+
                         $ph->give_picto($cache->citizen, 'r_killz_#00', $kills);
-                        if($cache->citizen->getZone()->getZombies() <= 0)
+                        if(array_reduce( $zones, fn($carry, Zone $zone) => $carry + $zone->getZombies(), 0 ) <= 0)
                             $cache->addTag('kill-latest');
                     }
+
                 }
             }
 
@@ -101,16 +156,20 @@ class ProcessZoneEffect extends AtomEffectProcessor
                     $cache->addToCounter( CountType::Zombies, $z );
                     $cache->addTag('reverse-escape');
                 } else {
-                    $base_zone->addEscapeTimer((new EscapeTimer())->setTime(new \DateTime("+{$data->escape}sec")));
-                    switch ($data->escapeTag) {
-                        case 'armag':
-                            $cache->em->persist( $lh->zoneEscapeArmagUsed( $cache->citizen, $data->escape, 1 ) );
-                            $cache->addFlag('kills_silent');
-                            break;
-                        default:
-                            if ($cache->originalPrototype)
-                                $cache->em->persist( $lh->zoneEscapeItemUsed( $cache->citizen, $cache->originalPrototype, $data->escape ) );
-                            break;
+                    $zones = $this->getAdjacentZones( $base_zone, $data->escapeRange );
+                    foreach ($zones as $zone) {
+                        $zone->addEscapeTimer(new EscapeTimer()->setTime(new Carbon()->addSeconds( $data->escape )->toDateTime()));
+                        if ($zone->getId() === $cache->citizen->getZone()?->getId())
+                            switch ($data->escapeTag) {
+                                case 'armag':
+                                    $cache->em->persist( $lh->zoneEscapeArmagUsed( $cache->citizen, $data->escape, 1 ) );
+                                    $cache->addFlag('kills_silent');
+                                    break;
+                                default:
+                                    if ($cache->originalPrototype)
+                                        $cache->em->persist( $lh->zoneEscapeItemUsed( $cache->citizen, $cache->originalPrototype, $data->escape ) );
+                                    break;
+                            }
                     }
 
                     $cache->addTag('escape');

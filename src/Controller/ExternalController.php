@@ -53,15 +53,7 @@ class ExternalController extends CustomAbstractController {
         if (!$user || ($app->getTesting() && $app->getOwner() !== $user && !$this->isGranted('ROLE_SUB_ADMIN')))
             return $this->redirectToRoute('initial_landing');
 
-        $key = $user->getExternalId();
-
-        return $this->render('ajax/public/disclaimer.html.twig', [
-                                                                   'ex'  => $app,
-                                                                   'key' => $key,
-                                                                   'url' => $this->decodeUrl( $app->getUrl() ),
-                                                                   'devurl' => $this->decodeUrl( $app->getDevurl() )
-                                                               ]
-        );
+        return $this->render('ajax/public/disclaimer.html.twig', ['appid'  => $app->getId()]);
     }
 
     /**

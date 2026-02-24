@@ -52,6 +52,7 @@ export type TranslationStrings = {
 type TownClass = {
     id: number
     name: string
+    type: string
     order: number
     help: string,
     access: boolean,
@@ -82,6 +83,7 @@ export type GameTranslationStrings = {
         mayor: string,
         mayor_icon: string
         mayor_lines: string[],
+        mayor_lines_delay: string[],
         lang: string,
         lang_warn: string,
         show_players: string,

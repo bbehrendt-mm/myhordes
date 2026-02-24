@@ -12,6 +12,7 @@ use App\Entity\Town;
 use App\Entity\TownClass;
 use App\Entity\TownRulesTemplate;
 use App\Entity\User;
+use App\Enum\Capability\LobbyCapabilityEnum;
 use App\Enum\Configuration\MyHordesSetting;
 use App\Response\AjaxResponse;
 use App\Service\Actions\Ghost\CreateTownFromConfigAction;
@@ -25,6 +26,7 @@ use App\Service\TownHandler;
 use App\Service\UserHandler;
 use App\Structures\EventConf;
 use App\Structures\TownSetup;
+use Carbon\Carbon;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -244,7 +246,7 @@ class TownCreatorController extends CustomAbstractCoreController
                         ['value' => 'none',   'label' => $this->translator->trans('Deaktiviert', [], 'ghost'), 'help' => $this->translator->trans('Der Schamane und die Seelen werden deaktiviert.', [], 'ghost')],
                     ],
                     'shaman_buildings' => [
-                        'normal' => ['small_spa4souls_#00'],
+                        'normal' => ['item_soul_blue_static_#00'],
                         'job' => ['small_vaudoudoll_#00','small_bokorsword_#00','small_spiritmirage_#00','small_holyrain_#00'],
                     ],
 
@@ -474,7 +476,7 @@ class TownCreatorController extends CustomAbstractCoreController
      * @param SanitizeTownConfigAction $sanitizeTownConfigAction
      * @param CreateTownFromConfigAction $createTownFromConfigAction
      * @param EntityManagerInterface $em
-     * @param UserHandler $userHandler
+     * @param Locksmith $locksmith
      * @return JsonResponse
      * @throws Exception
      */
@@ -485,7 +487,7 @@ class TownCreatorController extends CustomAbstractCoreController
                                 EntityManagerInterface   $em,
                                 Locksmith $locksmith
     ): JsonResponse {
-
+        $this->denyAccessUnlessGranted('create', LobbyCapabilityEnum::Town);
         $locksmith->waitForLock('private-town', 15);
 
         $user = $this->getUser();
@@ -549,7 +551,7 @@ class TownCreatorController extends CustomAbstractCoreController
         if ($create) {
             $name = $parser->get('name');
             if (mb_strlen($name) < 3 || mb_strlen($name) > 64) return new JsonResponse([], Response::HTTP_UNPROCESSABLE_ENTITY);
-            $template = (new TownRulesTemplate())
+            $template = new TownRulesTemplate()
                 ->setOwner( $this->getUser() )
                 ->setName( $name )
                 ->setCreated( new DateTime() );
@@ -619,6 +621,7 @@ class TownCreatorController extends CustomAbstractCoreController
      */
     #[Route(path: '/create-town', name: 'create-town-mayor', methods: ['PUT'])]
     public function add_town_mayor( JSONRequestParser $parser, GameFactory $gameFactory, TownHandler $townHandler, GameProfilerService $gps, EntityManagerInterface $em, Locksmith $locksmith): Response {
+        $this->denyAccessUnlessGranted('mayor', LobbyCapabilityEnum::Town);
 
         $locksmith->waitForLock('mayor_create_town', 15);
 
@@ -641,13 +644,15 @@ class TownCreatorController extends CustomAbstractCoreController
 
         if ($town_use_time === 'now') $town_time = null;
         else try {
-            $town_time = new \DateTime($town_time);
-            if ($town_time <= new \DateTime()) $town_time = null;
+            if ($town_time !== null) {
+                $town_time = new Carbon($town_time);
+                if ($town_time->isPast()) $town_time = null;
+            }
         } catch (\Exception $e) {
             return new JsonResponse([], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        if ($town_time && $town_time > (new DateTime('today+15days')))
+        if ($town_time?->isAfter( new Carbon()->addDays(15) ))
             return new JsonResponse([], Response::HTTP_UNPROCESSABLE_ENTITY);
 
         $current_events = $this->conf->getCurrentEvents();
@@ -665,11 +670,12 @@ class TownCreatorController extends CustomAbstractCoreController
 
         try {
             $em->persist( $town );
-            $em->persist( (new MayorMark())
-                ->setUser( $this->getUser() )
-                ->setMayor( true )
-                ->setExpires( ($town_time ? (clone $town_time) : new DateTime())->modify('+30days') )
-            );
+            if (!$town->getType()->is( TownClass::EASY ))
+                $em->persist( new MayorMark()
+                    ->setUser( $this->getUser() )
+                    ->setMayor( true )
+                    ->setExpires( ( $town_time?->copy() ?? new Carbon() )->addDays(10) )
+                );
 
             $em->flush();
             $gps->recordTownCreated( $town, $this->getUser(), 'mayor' );

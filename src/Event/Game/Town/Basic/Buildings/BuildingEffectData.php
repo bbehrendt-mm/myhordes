@@ -28,6 +28,7 @@ class BuildingEffectData
 
     public int $buildingDamage = 0;
     public int $waterDeducted = 0;
+    public int $waterConsumed = 0;
     public array $dailyProduceItems = [];
     public array $consumedItems = [];
     public array $destroyed_buildings = [];

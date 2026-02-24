@@ -49,6 +49,7 @@ use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -58,10 +59,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[Semaphore('town', scope: 'town')]
 class ExplorationController extends InventoryAwareController implements HookedInterfaceController
 {
-    protected GameFactory $game_factory;
+
     protected ZoneHandler $zone_handler;
-    protected ItemFactory $item_factory;
-    protected DeathHandler $death_handler;
 
     /**
      * BeyondController constructor.
@@ -75,25 +74,28 @@ class ExplorationController extends InventoryAwareController implements HookedIn
      * @param TranslatorInterface $translator
      * @param GameFactory $gf
      * @param RandomGenerator $rg
-     * @param ItemFactory $if
      * @param ZoneHandler $zh
      * @param LogTemplateHandler $lh
      * @param ConfMaster $conf
      * @param Packages $a
-     *
+     * @param UserHandler $uh
+     * @param CrowService $armbrust
+     * @param TownHandler $th
+     * @param DoctrineCacheService $doctrineCache
+     * @param EventProxyService $events
+     * @param HookExecutor $hookExecutor
+     * @param UserUnlockableService $u
      */
     public function __construct(
         EntityManagerInterface $em, InventoryHandler $ih, CitizenHandler $ch, ActionHandler $ah, TimeKeeperService $tk,
         DeathHandler $dh, PictoHandler $ph, TranslatorInterface $translator, GameFactory $gf, RandomGenerator $rg,
-        ItemFactory $if, ZoneHandler $zh, LogTemplateHandler $lh, ConfMaster $conf, Packages $a, UserHandler $uh,
+        ZoneHandler $zh, LogTemplateHandler $lh, ConfMaster $conf, Packages $a, UserHandler $uh,
         CrowService $armbrust, TownHandler $th, DoctrineCacheService $doctrineCache, EventProxyService $events, HookExecutor $hookExecutor, UserUnlockableService $u,
 
         private readonly CalculateItemDropAction $calculateItemDropAction,
     )
     {
         parent::__construct($em, $ih, $ch, $ah, $dh, $ph, $translator, $lh, $tk, $rg, $conf, $zh, $uh, $armbrust, $th, $a, $doctrineCache, $events, $hookExecutor, $u);
-        $this->game_factory = $gf;
-        $this->item_factory = $if;
         $this->zone_handler = $zh;
     }
 
@@ -107,7 +109,7 @@ class ExplorationController extends InventoryAwareController implements HookedIn
             return false;
         } else return true;
     }
-    
+
     protected function getCurrentRuinZone(): RuinZone {
         $citizen = $this->getActiveCitizen();
         $ex = $citizen->activeExplorerStats();
@@ -124,19 +126,12 @@ class ExplorationController extends InventoryAwareController implements HookedIn
         $ex = $citizen->activeExplorerStats();
         $ruinZone = $this->getCurrentRuinZone();
 
-        $exitZone =
-            $citizen->getProfession()->getName() === 'tamer'
-                ? $ex->getZ() === 0
-                    ? $this->entity_manager->getRepository(RuinZone::class)->findOneBy(['zone' => $ruinZone->getZone(), 'x' => 0, 'y' => 0, 'z' => 0])
-                    : $this->entity_manager->getRepository(RuinZone::class)->findOneBy(['zone' => $ruinZone->getZone(), 'z' => $ex->getZ(), 'connect' => -1])
-                : null;
-
-        $in_grace = $ex->isGrace() && $ex->getStarted() !== null && (new DateTime())->modify('-30sec') < $ex->getStarted();
-        $guide = $citizen->hasRole('guide');
+        $request = Request::createFromGlobals();
+        $inline = $request->headers->get('X-Render-Target') === 'beyond_desert_content';
 
         $imprint_source = [];
         $imprint_goal = [];
-        if ($citizen->getProfession()->getName() === 'tech') {
+        if ($citizen->isProfession('tech')) {
             $imprint_source['tech'] = [];
             $imprint_goal['tech'] = $ruinZone->getPrototype()?->getKeyImprint();
         }
@@ -146,218 +141,27 @@ class ExplorationController extends InventoryAwareController implements HookedIn
            $imprint_goal['noodles'] = $ruinZone->getPrototype()?->getKeyImprintAlternative();
        }
 
-        return $this->render( 'ajax/game/beyond/ruin.html.twig', $this->addDefaultTwigArgs(null, [
-            'prototype' => $citizen->getZone()->getPrototype(),
-            'exploration' => $ex,
-            'zone' => $ruinZone,
-            'heroics' => $this->getHeroicActions(),
-            'move' => $ruinZone->getZombies() <= 0 || $ex->getEscaping(),
-            'escaping' => $ex->getEscaping(),
-            'zone_zombies' => $ruinZone->getZombies(),
-            'zone_zombies_dead' => $ruinZone->getKilledZombies(),
-            'shifted' => $ex->getInRoom(),
-            'scavenge' => !$ex->getScavengedRooms()->contains($ruinZone),
-            'can_imprint' => !empty($imprint_goal),
-            'imprint_source' => $imprint_source,
-            'imprint_goal' => $imprint_goal,
+       $args = $this->addDefaultTwigArgs(null, [
+           'prototype' => $citizen->getZone()->getPrototype(),
+           'exploration' => $ex,
+           'zone' => $ruinZone,
+           'heroics' => $this->getHeroicActions(),
+           'escaping' => $ex->getEscaping(),
+           'zone_zombies' => $ruinZone->getZombies(),
+           'shifted' => $ex->getInRoom(),
+           'scavenge' => !$ex->getScavengedRooms()->contains($ruinZone),
+           'can_imprint' => !empty($imprint_goal),
+           'imprint_source' => $imprint_source,
+           'imprint_goal' => $imprint_goal,
 
-            'ruin_map_data' => [
-                'paused' => $in_grace,
-                'show_exit_direction' => $exitZone ? [$exitZone->getX() - $ruinZone->getX(), $exitZone->getY() - $ruinZone->getY()] : null,
-                'name' => $this->generateRuinName($citizen->getZone()),
-                'timeout' => max(0, $ex->getTimeout()->getTimestamp() - time()),
-                'zone' => $ruinZone,
-                'activity' => $guide ? 0.1 + 0.9 * (4-min(4,$ruinZone->getRoomDistance()))/4 : 1,
-                'shifted' => $ex->getInRoom(),
-            ],
-        ]) );
-    }
+           'ruin_map_data' => [
+               'name' => $this->generateRuinName($citizen->getZone()),
+           ],
+       ]);
 
-    /**
-     * @return Response
-     */
-    #[Route(path: 'api/beyond/explore/exit', name: 'beyond_ruin_enter_desert_controller')]
-    public function ruin_exit_api() {
-        $citizen = $this->getActiveCitizen();
-
-        $ex = $citizen->activeExplorerStats();
-        if ($ex->getX() !== 0 || $ex->getY() !== 0 || $ex->getZ() !== 0)
-            return AjaxResponse::error( BeyondController::ErrorNotReachableFromHere );
-
-        // End the exploration!
-        $ex->setActive(false);
-        $this->entity_manager->persist($ex);
-        try {
-            $this->entity_manager->flush();
-        } catch (Exception $e) {
-            return AjaxResponse::error( ErrorHelper::ErrorDatabaseException );
-        }
-        return AjaxResponse::success();
-    }
-
-    /**
-     * @return Response
-     */
-    #[Route(path: 'api/beyond/explore/escape', name: 'beyond_ruin_escape_controller')]
-    public function ruin_escape_api() {
-        $ruinZone = $this->getCurrentRuinZone();
-        $ex = $this->getActiveCitizen()->activeExplorerStats();
-
-        if ($ex->getEscaping() || $ruinZone->getZombies() <= 0)
-            return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
-
-        $ex
-            ->setEscaping(true)
-            ->setTimeout( (new DateTime)->setTimestamp( $ex->getTimeout()->getTimestamp() )->sub(DateInterval::createFromDateString( mt_rand( 15, 24) . 'sec' ) ) );
-
-        $this->entity_manager->persist($ex);
-        try {
-            $this->entity_manager->flush();
-        } catch (Exception $e) {
-            return AjaxResponse::error( ErrorHelper::ErrorDatabaseException );
-        }
-
-        return AjaxResponse::success();
-    }
-
-    /**
-     * @param JSONRequestParser $parser
-     * @return Response
-     */
-    #[Route(path: 'api/beyond/explore/move', name: 'beyond_ruin_move_controller')]
-    public function ruin_move_api(JSONRequestParser $parser) {
-        $ruinZone = $this->getCurrentRuinZone();
-        $ex = $this->getActiveCitizen()->activeExplorerStats();
-
-        if ($ruinZone->getZombies() > 0 && !$ex->getEscaping())
-            return AjaxResponse::error( BeyondController::ErrorZoneBlocked );
-
-        if ($ex->getInRoom())
-            return AjaxResponse::error( BeyondController::ErrorNotReachableFromHere );
-
-        $dx = (int)$parser->get('x', 0);
-        $dy = (int)$parser->get('y', 0);
-
-        if (abs($dx) + abs($dy) !== 1)
-            return AjaxResponse::error( BeyondController::ErrorNotReachableFromHere );
-
-        if (
-            ($dx == 1  && !$ruinZone->hasCorridor( RuinZone::CORRIDOR_E )) ||
-            ($dx == -1 && !$ruinZone->hasCorridor( RuinZone::CORRIDOR_W )) ||
-            ($dy == 1  && !$ruinZone->hasCorridor( RuinZone::CORRIDOR_N )) ||
-            ($dy == -1 && !$ruinZone->hasCorridor( RuinZone::CORRIDOR_S ))
-        ) return AjaxResponse::error( BeyondController::ErrorNotReachableFromHere );
-
-
-        if ($ex->isGrace()) {
-            $ex->setGrace(false);
-            if ($ex->getStarted() !== null) {
-                $offset = max(0, min(30, time() - $ex->getStarted()->getTimestamp()));
-                $ex->setTimeout( (new DateTime())->setTimestamp( $ex->getTimeout()->getTimestamp() - ( 30 - $offset ) ) );
-            }
-        }
-
-        $ex
-            ->setX( $ex->getX() + $dx )
-            ->setY( $ex->getY() - $dy )
-            ->setEscaping( false );
-
-        // End the exploration!
-        $this->entity_manager->persist($ex);
-        try {
-            $this->entity_manager->flush();
-        } catch (Exception $e) {
-            return AjaxResponse::error( ErrorHelper::ErrorDatabaseException );
-        }
-
-        $new_zone = $this->getCurrentRuinZone();
-        return AjaxResponse::success(true, [
-            'next' => ($new_zone->getX() !== 0 || $new_zone->getY() !== 0) ? $new_zone->getCorridor() : 'exit',
-            'dp' => $new_zone->getDoorPosition(),
-            'l' => $new_zone->getLocked(),
-            'd' => $new_zone->getUnifiedDecals(),
-            'c' => $new_zone->getPrototype()?->getLevel() ?? 0
-        ]);
-    }
-
-    /**
-     * @return Response
-     */
-    #[Route(path: 'api/beyond/explore/shift', name: 'beyond_ruin_room_enter_controller')]
-    public function ruin_room_enter_api() {
-        $ruinZone = $this->getCurrentRuinZone();
-        $ex = $this->getActiveCitizen()->activeExplorerStats();
-
-        if ($ruinZone->getZombies() > 0 && !$ex->getEscaping())
-            return AjaxResponse::error( BeyondController::ErrorZoneBlocked );
-
-        if (!$ruinZone->getPrototype() || $ruinZone->getLocked())
-            return AjaxResponse::error( BeyondController::ErrorNotReachableFromHere );
-
-        if ($ex->getInRoom() || $ruinZone->getConnect() !== 0)
-            return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
-
-        $ex->setInRoom( true );
-        $this->entity_manager->persist($ex);
-        try {
-            $this->entity_manager->flush();
-        } catch (Exception $e) {
-            return AjaxResponse::error( ErrorHelper::ErrorDatabaseException );
-        }
-
-        return AjaxResponse::success();
-    }
-
-    /**
-     * @return Response
-     */
-    #[Route(path: 'api/beyond/explore/stairs', name: 'beyond_ruin_stairs_enter_controller')]
-    public function ruin_stairs_enter_api() {
-        $ruinZone = $this->getCurrentRuinZone();
-        $ex = $this->getActiveCitizen()->activeExplorerStats();
-
-        if ($ruinZone->getZombies() > 0 && !$ex->getEscaping())
-            return AjaxResponse::error( BeyondController::ErrorZoneBlocked );
-
-        if (!$ruinZone->getPrototype() || $ruinZone->getLocked() || $ruinZone->getConnect() === 0)
-            return AjaxResponse::error( BeyondController::ErrorNotReachableFromHere );
-
-        $targetRuinZone = $this->entity_manager->getRepository( RuinZone::class )->findOneByPosition( $ruinZone->getZone(), $ex->getX(), $ex->getY(), $ex->getZ() + $ruinZone->getConnect() );
-        if (!$targetRuinZone) return AjaxResponse::error( BeyondController::ErrorNotReachableFromHere );
-
-        $ex
-            ->setZ( $ex->getZ() + $ruinZone->getConnect() )
-            ->setTimeout( (new DateTime)->setTimestamp( $ex->getTimeout()->getTimestamp() )->sub(DateInterval::createFromDateString( mt_rand( 15, 24) . 'sec' ) ) );
-
-        $this->entity_manager->persist($ex);
-        try {
-            $this->entity_manager->flush();
-        } catch (Exception $e) {
-            return AjaxResponse::error( ErrorHelper::ErrorDatabaseException );
-        }
-
-        return AjaxResponse::success();
-    }
-
-    /**
-     * @return Response
-     */
-    #[Route(path: 'api/beyond/explore/unshift', name: 'beyond_ruin_room_leave_controller')]
-    public function ruin_room_leave_api() {
-        $ex = $this->getActiveCitizen()->activeExplorerStats();
-
-        if (!$ex->getInRoom())
-            return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
-
-        $ex->setInRoom( false );
-        $this->entity_manager->persist($ex);
-        try {
-            $this->entity_manager->flush();
-        } catch (Exception $e) {
-            return AjaxResponse::error( ErrorHelper::ErrorDatabaseException );
-        }
-
-        return AjaxResponse::success();
+        return $inline
+            ? $this->renderBlocks( 'ajax/game/beyond/ruin.html.twig', ['content','js'], [ 'ajax/game/game.html.twig' => 'gma' ], $args )
+            : $this->render( 'ajax/game/beyond/ruin.html.twig', $args );
     }
 
     /**
@@ -377,16 +181,15 @@ class ExplorationController extends InventoryAwareController implements HookedIn
             return AjaxResponse::error( BeyondController::ErrorNotDiggable );
 
         // Calculate chances
-        $d = $ruinZone->getDigs() + 1;
         $chances = $proxyService->citizenQueryDigChance( $citizen, $ruinZone, ScavengingActionType::DigExploration, $this->getTownConf()->isNightMode() );
 
         $item = $this->random_generator->chance( $chances )
             ? ($this->calculateItemDropAction)($citizen, $ruinZone, ItemDropType::ERuinDig)
             : null;
 
-        $ruinZone->setDigs( $ruinZone->getDigs() + 1 );
-
         if ($item) {
+            $ruinZone->setDigs( $ruinZone->getDigs() + 1 );
+
             $noPlaceLeftMsg = "";
             // $inventoryDest = $proxyService->placeItem($citizen, $item, [$citizen->getInventory(), $ruinZone->getRoomFloor()]);
             $inventoryDest = $proxyService->placeItem($citizen, $item, [$citizen->getInventory(), $ruinZone->getFloor()]);
@@ -403,108 +206,13 @@ class ExplorationController extends InventoryAwareController implements HookedIn
                 ], 'game' ) . "$noPlaceLeftMsg");
         } else {
             $messages = [ $this->translator->trans('Trotz all deiner Anstrengungen hast du hier leider nichts gefunden ...', [], 'game') ];
-            if ($this->citizen_handler->hasStatusEffect($citizen, "drunk"))
+            if ($citizen->hasStatus("drunk"))
                 $messages[] = $this->translator->trans('Dein <strong>Trunkenheitszustand</strong> hilft dir wirklich nicht weiter. Das ist nicht gerade einfach, wenn sich alles dreht und du nicht mehr klar siehst.', [], 'game');
             $this->addFlash('notice', implode('<hr/>', $messages) );
         }
 
         $ex->getScavengedRooms()->add( $ruinZone );
         $this->entity_manager->persist($ex);
-
-        try {
-            $this->entity_manager->flush();
-        } catch (Exception $e) {
-            return AjaxResponse::error( ErrorHelper::ErrorDatabaseException );
-        }
-
-        return AjaxResponse::success();
-    }
-
-    /**
-     * @param InventoryHandler $handler
-     * @param EventProxyService $proxy
-     * @param JSONRequestParser $parser
-     * @return Response
-     */
-    #[Route(path: 'api/beyond/explore/imprint', name: 'beyond_ruin_imprint_controller')]
-    public function imprint_explore_api(InventoryHandler $handler, EventProxyService $proxy, JSONRequestParser $parser): Response {
-        $citizen = $this->getActiveCitizen();
-        $ex = $citizen->activeExplorerStats();
-        $ruinZone = $this->getCurrentRuinZone();
-
-        $type = $parser->get('type', 'tech', ['tech','noodles']);
-
-        if (!$ruinZone->getPrototype() || !$ruinZone->getLocked() || !$ruinZone->getPrototype()->getKeyImprint())
-            return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
-
-        $alt = $type !== 'tech';
-        if ($alt && !$ruinZone->getPrototype()->getKeyImprintAlternative())
-            return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
-
-        if ($ex->getInRoom() || $ex->getScavengedRooms()->contains( $ruinZone ))
-            return AjaxResponse::error( BeyondController::ErrorNotDiggable );
-
-        if (!$alt && $handler->getFreeSize( $citizen->getInventory() ) < 1)
-            return AjaxResponse::error( InventoryHandler::ErrorInventoryFull );
-
-        $items = [];
-        if ($alt && empty($items = $handler->fetchSpecificItems( $citizen->getInventory(), ['food_noodles_#00', 'pharma_#00'] )))
-            return AjaxResponse::error( ErrorHelper::ErrorItemsMissing );
-
-        foreach ($items as $item) $handler->forceRemoveItem($item);
-
-        $item = $this->item_factory->createItem($alt ? $ruinZone->getPrototype()->getKeyImprintAlternative() : $ruinZone->getPrototype()->getKeyImprint());
-        $proxy->placeItem($citizen, $item, [$citizen->getInventory(), $ruinZone->getFloor()]);
-
-        $this->addFlash( 'notice', $this->translator->trans( 'Du nimmst einen Abdruck vom Schloss dieser Tür und erhälst {item}!', [
-                '{item}' => "<span class='tool'><img alt='' src='{$this->asset->getUrl( 'build/images/item/item_' . $item->getPrototype()->getIcon() . '.gif' )}'> {$this->translator->trans($item->getPrototype()->getLabel(), [], 'items')}</span>"
-            ], 'game' ));
-
-        $ex->getScavengedRooms()->add( $ruinZone );
-        $this->entity_manager->persist($ex);
-
-        try {
-            $this->entity_manager->flush();
-        } catch (Exception $e) {
-            return AjaxResponse::error( ErrorHelper::ErrorDatabaseException );
-        }
-
-        return AjaxResponse::success();
-    }
-
-    /**
-     * @param InventoryHandler $handler
-     * @return Response
-     */
-    #[Route(path: 'api/beyond/explore/unlock', name: 'beyond_ruin_unlock_controller')]
-    public function unlock_explore_api(InventoryHandler $handler): Response {
-        $citizen = $this->getActiveCitizen();
-        $ex = $citizen->activeExplorerStats();
-        $ruinZone = $this->getCurrentRuinZone();
-
-        if ($ex->getInRoom() || !$ruinZone->getPrototype() || !$ruinZone->getLocked() || !$ruinZone->getPrototype()->getKeyItem())
-            return AjaxResponse::error( ErrorHelper::ErrorActionNotAvailable );
-
-        $prototype = $ruinZone->getPrototype()->getKeyItem();
-        $k_str = "<span class='tool'><img alt='' src='{$this->asset->getUrl( 'build/images/item/item_' . $prototype->getIcon() . '.gif' )}'> {$this->translator->trans($prototype->getLabel(), [], 'items')}</span>";
-
-        $key = $this->inventory_handler->fetchSpecificItems( $citizen->getInventory(), [new ItemRequest( $ruinZone->getPrototype()->getKeyItem()->getName())] );
-
-        if (empty($key))
-            return AjaxResponse::errorMessage( $this->translator->trans( 'Um diese Tür zu öffnen, musst du etwas finden, was einem {item} ähnelt.', ['{item}' => $k_str], 'game' ) );
-        else $this->inventory_handler->forceRemoveItem( $key[0] );
-
-        $ruinZone->setLocked(false);
-        $this->picto_handler->give_picto($citizen, 'r_door_#00', 1);
-        $ex->getScavengedRooms()->removeElement( $ruinZone );
-
-        $this->entity_manager->persist($ruinZone);
-        $this->entity_manager->persist($citizen);
-        $this->entity_manager->persist($ex);
-
-        $this->addFlash( 'notice', $this->translator->trans( 'Du hast es geschafft, die Tür zu öffnen. Doch der {item} scheint es nicht überstanden zu haben...', [
-            '{item}' => $k_str
-        ], 'game' ));
 
         try {
             $this->entity_manager->flush();
@@ -563,7 +271,8 @@ class ExplorationController extends InventoryAwareController implements HookedIn
             'controller_action' => 'beyond_ruin_action_controller',
             'controller_recipe' => 'beyond_ruin_recipe_controller',
             'controller_dash' => 'exploration_dashboard',
-            'render_frame' => 'beyond_desert_content',
+            'render_frame' => 'exploration_dashboard',
+            'native_margins' => true,
         ];
     }
 

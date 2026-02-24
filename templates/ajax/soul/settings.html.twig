@@ -146,8 +146,8 @@
                         {% if app.user.activeIcon is not null %}
                             {% if app.user.activeIcon.prototype %}
                                 <img id="user_current_icon" alt="" src="{{ asset('build/images/icons/title/' ~ app.user.activeIcon.prototype.icon ~ '.gif') }}" />
-                            {% elseif app.user.activeIcon.customIcon is not null %}
-                                <img id="user_current_icon" alt="" src="{{ url('app_web_customicon', {uid: app.user.id, aid: app.user.activeIcon.id, name: app.user.activeIcon.customIconName, ext: app.user.activeIcon.customIconFormat}) }}" />
+                            {% elseif app.user.activeIcon|singleMedia('icon') is not null %}
+                                <img id="user_current_icon" alt="" src="{{ app.user.activeIcon|singleMediaSource('icon', 16) }}" srcset="{{ app.user.activeIcon|singleMediaSource('icon', 16, true) }}" />
                             {% endif %}
                         {% else %}
                             <img id="user_current_icon" alt="" src="" style="display: none" />
@@ -159,9 +159,9 @@
                                 {% if award.prototype is not null and award.prototype.icon is not null %}
                                     {% set has_icon = true %}
                                     <img {% if app.user|restricted(constant('App\\Entity\\AccountRestriction::RestrictionProfileTitle')) and app.user.activeIcon != award %}disabled{% endif %} class="pointer" x-title-icon="{{ award.id }}" alt="" src="{{ asset('build/images/icons/title/' ~ award.prototype.icon ~ '.gif') }}" />
-                                {% elseif award.customIcon is not null %}
+                                {% elseif award|singleMedia('icon') is not null %}
                                     {% set has_icon = true %}
-                                    <img {% if app.user|restricted(constant('App\\Entity\\AccountRestriction::RestrictionProfileTitle')) and app.user.activeIcon != award %}disabled{% endif %} class="pointer" x-title-icon="{{ award.id }}" alt="" src="{{ url('app_web_customicon', {uid: app.user.id, aid: award.id, name: award.customIconName, ext: award.customIconFormat}) }}" />
+                                    <img {% if app.user|restricted(constant('App\\Entity\\AccountRestriction::RestrictionProfileTitle')) and app.user.activeIcon != award %}disabled{% endif %} class="pointer" x-title-icon="{{ award.id }}" alt="" src="{{ award|singleMediaSource('icon',16) }}" srcset="{{ award|singleMediaSource('icon',16,true) }}" />
                                 {% endif %}
 
                             {% endfor %}
@@ -419,7 +419,7 @@
                         'Die folgenden Bildformate werden unterstützt:'|trans({},'soul') ~ ' <b>JPEG</b>, <b>GIF</b>, <b>BMP</b>, <b>PNG</b>, <b>WEBP</b>, <b>AVIF</b>'
                     ) }}
                 </h5>
-                <hordes-avatar-creator data-max-size="{{ avatar_max_size[2] }}"></hordes-avatar-creator>
+                <hordes-avatar-creator-2 data-max-size="{{ avatar_max_size[2] }}"></hordes-avatar-creator-2>
             </div>
 
             <div x-tab-target x-tab-group="user-settings-tabs" x-tab-id="security">
@@ -630,6 +630,11 @@
                             <div class="padded cell rw-12">
                                 <div class="note note-lightest">
                                     <input x-setting {% if app.user.disableFx %}checked{% endif%} data-full-reload="1" type="checkbox" id="setting_disable_fx">&nbsp;<label for="setting_disable_fx">{{ 'Animationen verringern'|trans({}, 'soul') }}</label> <a class="help-button"><div class="tooltip help">{{ 'Mache hier einen Haken, wenn die Landkarte nur sehr langsam geladen wird.<br /><em>Mit dieser Option senkst du die Qualität der Spielkartenanimationen.</em>.'|trans({},'soul')|raw }}</div>{{ 'Hilfe'|trans({},'global') }}</a>
+                                </div>
+                            </div>
+                            <div class="padded cell rw-12">
+                                <div class="note note-lightest">
+                                    <input x-setting {% if app.user.setting( constant("\\App\\Enum\\UserSetting::DisableBlur") ) %}checked{% endif%} data-full-reload="1" type="checkbox" id="setting_disable_blur">&nbsp;<label for="setting_disable_blur">{{ 'Unschärfeeffekte verringern'|trans({}, 'soul') }}</label> <a class="help-button"><div class="tooltip help">{{ 'Diese Option deaktiviert verschiedene optische Unschäfteeffekte, beispielsweise auf der Spielkarte.'|trans({},'soul')|raw }}</div>{{ 'Hilfe'|trans({},'global') }}</a>
                                 </div>
                             </div>
                             <div class="padded cell rw-12">
@@ -1020,6 +1025,7 @@
             $.ajax.easySend( '{{ path('api_soul_common') }}', {
                     sma: document.getElementById('setting_prefer_classic_avatars').checked,
                     disablefx: document.getElementById('setting_disable_fx').checked,
+                    disableblur: document.getElementById('setting_disable_blur').checked,
                     useicu: document.getElementById('setting_use_icu').checked,
                     autofollow: document.getElementById('setting_auto_follow').checked,
                     clasort: document.getElementById('setting_classic_bank_sort').checked,
@@ -1118,9 +1124,11 @@
             let target = document.getElementById('user_current_icon');
             if (id < 0) {
                 target.setAttribute('src','');
+                target.setAttribute('srcset','');
                 target.style.display = 'none';
             } else {
                 target.setAttribute('src',elem.getAttribute('src'));
+                target.setAttribute('srcset',elem.getAttribute('srcset') ?? '');
                 target.style.display = null;
             }
             document.getElementById('user_icon').value = id;

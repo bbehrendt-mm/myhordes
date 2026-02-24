@@ -3,13 +3,8 @@
 namespace App\Controller;
 
 use App\Annotations\GateKeeperProfile;
-use App\Entity\Avatar;
-use App\Entity\Award;
-use App\Entity\ExternalApp;
 use App\Entity\MarketingCampaign;
 use App\Entity\OfficialGroup;
-use App\Entity\User;
-use App\Entity\UserGroup;
 use App\Enum\Configuration\MyHordesSetting;
 use App\Enum\OfficialGroupSemantic;
 use App\Response\AjaxResponse;
@@ -27,15 +22,12 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Translation\T;
 use Shivas\VersioningBundle\Service\VersionManagerInterface as VersionManager;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
-use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\ErrorHandler\Exception\FlattenException;
-use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\HttpKernel\EventListener\AbstractSessionListener;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\HttpKernel\Log\DebugLoggerInterface;
 use Symfony\Component\Routing\Attribute\Route;
@@ -135,7 +127,7 @@ class WebController extends CustomAbstractController
         ] );
     }
 
-    public function render_error_framework(FlattenException $exception, DebugLoggerInterface $logger = null, KernelInterface $kernel): Response {
+    public function render_error_framework(FlattenException $exception, ?DebugLoggerInterface $logger = null, KernelInterface $kernel): Response {
         foreach (Request::createFromGlobals()->getAcceptableContentTypes() as $type)
             switch ($type) {
                 case 'application/json':
@@ -261,7 +253,7 @@ class WebController extends CustomAbstractController
      * @return Response
      */
     #[Route(path: '/pm/{com}', name: 'home_pm')]
-    public function standalone_pm(string $com = null): Response
+    public function standalone_pm(?string $com = null): Response
     {
         if ($r = $this->handleDomainRedirection()) return $r;
         if (!$this->isGranted('ROLE_USER'))
@@ -294,7 +286,7 @@ class WebController extends CustomAbstractController
      */
     #[Route(path: '/pm/group/{semantic}', name: 'home_pm_group_sem')]
     #[Route(path: '/pm/group/{lang}/{semantic}', name: 'home_pm_group_sem_lang')]
-    public function standalone_pm_sem(string $semantic, string $lang = null): Response
+    public function standalone_pm_sem(string $semantic, ?string $lang = null): Response
     {
         if ($r = $this->handleDomainRedirection()) return $r;
         if (!$this->isGranted('ROLE_USER'))
@@ -336,7 +328,7 @@ class WebController extends CustomAbstractController
             return $this->redirect($this->generateUrl('home'));
 
         if (!($user = $this->getUser())) return $this->redirect($this->generateUrl('home'));
-        
+
         if ($user->getLanguage() === 'ach') {
             $user->setLanguage($this->getUserLanguage(true));
 
@@ -435,6 +427,7 @@ class WebController extends CustomAbstractController
     /**
      * @param string $ajax
      * @param Request $q
+     * @param GenerateMercureToken $mercure
      * @return Response
      */
     #[Route(path: '/jx/{ajax}', requirements: ['ajax' => '.+'], condition: '!request.isXmlHttpRequest()')]
@@ -466,141 +459,6 @@ class WebController extends CustomAbstractController
         return $this->handleDomainRedirection() ?? $this->render_web_framework($q, $mercure, $q->getBasePath() . "/jx/{$ajax}{$bag}", $whitelisted( $ajax ));
     }
 
-    private function check_cache(string $name): ?Response {
-        $request = Request::createFromGlobals();
-        if (!$request->headers->has('If-None-Match')) return null;
-
-        return $request->headers->get('If-None-Match') === $name ? new Response("",304) : null;
-    }
-
-    private function image_output($data, string $name, string $ext, ?string $identifier = null): Response {
-        // HEIC images should be referred to as AVIF towards the browser
-        if ($ext === 'heic') $ext = 'avif';
-
-        // If the image is in avif format, we must convert it to webp for MS Edge users
-        if ($ext === 'avif' && !in_array('image/avif', Request::createFromGlobals()->getAcceptableContentTypes())) {
-            $ext = 'webp';
-
-            if ($identifier) {
-                $response = new Response( (new FilesystemAdapter())->get("mh_image_processor_$identifier", fn() =>
-                    ImageService::convertImageData( stream_get_contents( $data ), 'webp' )
-                ) );
-            } else $response = new Response(ImageService::convertImageData( stream_get_contents( $data ), 'webp' ));
-
-        } else $response = new Response(stream_get_contents( $data ));
-
-        $disposition = HeaderUtils::makeDisposition(
-            HeaderUtils::DISPOSITION_INLINE,
-            "{$name}.{$ext}"
-        );
-        $response->headers->set('Content-Disposition', $disposition);
-        $response->headers->set('Content-Type', "image/{$ext}");
-        $response
-            ->setPrivate()->setMaxAge(157680000)->setImmutable()
-            ->headers->set(AbstractSessionListener::NO_AUTO_CACHE_CONTROL_HEADER, 'true');
-        return $response;
-    }
-
-    /**
-     * @param int $uid
-     * @param string $name
-     * @param string $ext
-     * @param bool $wu
-     * @return Response
-     */
-    #[Route(path: '/cdn/avatar/{uid<\d+>}/{name}.{ext<[\w\d]+>}', name: 'app_web_avatar_legacy', requirements: ['name' => '[0123456789abcdef]{32}'], defaults: ['wu' => true], condition: '!request.isXmlHttpRequest()')]
-    #[Route(path: '/cdn/avatars/{uid<\d+>}/{name}.{ext<[\w\d]+>}', name: 'app_web_avatar', requirements: ['name' => '[0123456789abcdef]{32}'], defaults: ['wu' => true], condition: '!request.isXmlHttpRequest()')]
-    #[Route(path: '/cdn/avatars/notifications/{uid<\d+>}/{name}.{ext<[\w\d]+>}', name: 'app_web_avatar_for_webpush', requirements: ['name' => '[0123456789abcdef]{32}'], defaults: ['wu' => false], condition: '!request.isXmlHttpRequest()')]
-    #[GateKeeperProfile('skip')]
-    public function avatar(int $uid, string $name, string $ext, bool $wu): Response
-    {
-        if ($r = $this->check_cache($name)) return $r;
-
-        if ($wu) {
-            $avatar = $this->entity_manager->getRepository(User::class)->find( $uid )?->getAvatar();
-        } else $avatar = $this->entity_manager->getRepository(Avatar::class)->find( $uid );
-
-        if (!$avatar) return $this->cdn_fallback( "avatar/{$uid}/{$name}.{$ext}" );
-
-        if (($avatar->getFilename() !== $name && $avatar->getSmallName() !== $name))
-            return $this->cdn_fallback( "avatar/{$uid}/{$name}.{$ext}" );
-        if ($avatar->getFormat() !== $ext)
-            return $this->redirectToRoute( $wu ? 'app_web_avatar' : 'app_web_avatar_for_webpush', ['uid' => $uid, 'name' => $name, 'ext' => $avatar->getFormat()] );
-
-        $target = ($avatar->getFilename() === $name || !$avatar->getSmallImage()) ? $avatar->getImage() : $avatar->getSmallImage();
-        return $this->image_output($target, $name, $ext, "{$uid}-{$name}-{$ext}");
-    }
-
-    /**
-     * @param int $uid
-     * @param int $aid
-     * @param string $name
-     * @param string $ext
-     * @return Response
-     */
-    #[Route(path: '/cdn/icon/{uid<\d+>}/{aid<\d+>}/{name}.{ext<[\w\d]+>}', requirements: ['name' => '[0123456789abcdef]{32}'], condition: '!request.isXmlHttpRequest()')]
-    #[GateKeeperProfile('skip')]
-    public function customIcon(int $uid, int $aid, string $name, string $ext): Response
-    {
-        if ($r = $this->check_cache($name)) return $r;
-
-        /** @var Award $award */
-        $user  = $this->entity_manager->getRepository(User::class)->find( $uid );
-        $award = $this->entity_manager->getRepository(Award::class)->find( $aid );
-        if (!$user || !$award || $award->getUser() !== $user || !$award->getCustomIcon())
-            return $this->cdn_fallback( "icon/{$uid}/{$aid}/{$name}.{$ext}" );
-        if ($award->getCustomIconName() !== $name || $award->getCustomIconFormat() !== $ext)
-            return $this->cdn_fallback( "icon/{$uid}/{$aid}/{$name}.{$ext}" );
-
-        return $this->image_output($award->getCustomIcon(), $name, $ext);
-    }
-
-    /**
-     * @param int $aid
-     * @param string $name
-     * @param string $ext
-     * @return Response
-     */
-    #[Route(path: '/cdn/app/{aid<\d+>}/{name}.{ext<[\w\d]+>}', requirements: ['name' => '[0123456789abcdef]{32}'], condition: '!request.isXmlHttpRequest()')]
-    #[GateKeeperProfile('skip')]
-    public function app_icon(int $aid, string $name, string $ext): Response
-    {
-        if ($r = $this->check_cache($name)) return $r;
-
-        /** @var ExternalApp $app */
-        $app = $this->entity_manager->getRepository(ExternalApp::class)->find( $aid );
-        if (!$app || !$app->getImage()) return $this->cdn_fallback( "app/{$aid}/{$name}.{$ext}" );
-        if ($app->getImageName() !== $name || $app->getImageFormat() !== $ext)
-            return $this->cdn_fallback( "app/{$aid}/{$name}.{$ext}" );
-
-        return $this->image_output($app->getImage(), $name, $ext);
-    }
-
-    /**
-     * @param int $gid
-     * @param string $name
-     * @param string $ext
-     * @return Response
-     */
-    #[Route(path: '/cdn/group/{gid<\d+>}/{name}.{ext<[\w\d]+>}', requirements: ['name' => '[0123456789abcdef]{32}'], condition: '!request.isXmlHttpRequest()')]
-    #[GateKeeperProfile('skip')]
-    public function group_icon(int $gid, string $name, string $ext): Response
-    {
-        if ($r = $this->check_cache($name)) return $r;
-
-        /** @var UserGroup $group */
-        $group = $this->entity_manager->getRepository(UserGroup::class)->find( $gid );
-        if (!$group) return $this->cdn_fallback( "group/{$gid}/{$name}.{$ext}" );
-
-        $meta = $this->entity_manager->getRepository(OfficialGroup::class)->findOneBy(['usergroup' => $group]);
-        if (!$meta) return $this->cdn_fallback( "group/{$gid}/{$name}.{$ext}" );
-
-        if ($meta->getAvatarName() !== $name || $meta->getAvatarExt() !== $ext)
-            return $this->cdn_fallback( "group/{$gid}/{$name}.{$ext}" );
-
-        return $this->image_output($meta->getIcon(), $name, $ext);
-    }
-
     /**
      * @param string $url
      * @return Response
@@ -617,6 +475,9 @@ class WebController extends CustomAbstractController
 
 
     /**
+     * @param MarketingCampaign|null $campaign
+     * @param SessionInterface $session
+     * @param EntityManagerInterface $em
      * @return Response
      */
     #[Route(path: '/c/{campaign_slug}', name: 'campaign_redirect', methods: ['GET'], condition: '!request.isXmlHttpRequest()')]
@@ -624,7 +485,7 @@ class WebController extends CustomAbstractController
         #[MapEntity(mapping: ['campaign_slug' => 'slug'])] ?MarketingCampaign $campaign,
         SessionInterface $session,
         EntityManagerInterface $em
-    ) {
+    ): Response {
         if ($campaign && !$this->getUser()) {
             $session->set('campaign', $campaign->registerClick()->getId());
             try {

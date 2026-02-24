@@ -7,6 +7,7 @@ use App\Entity\Item;
 use App\Entity\ItemAction;
 use App\Entity\ItemPrototype;
 use App\Structures\ActionHandler\Execution;
+use App\Structures\CatapultActionTarget;
 use App\Structures\FriendshipActionTarget;
 
 class ActionData
@@ -15,7 +16,7 @@ class ActionData
     public readonly int $type;
     public readonly Citizen $citizen;
     public readonly Item|null $item;
-    public readonly Citizen|Item|ItemPrototype|FriendshipActionTarget|null $target;
+    public readonly Citizen|Item|ItemPrototype|FriendshipActionTarget|CatapultActionTarget|null $target;
     public readonly ItemAction $action;
 
     public ?string $message;
@@ -35,7 +36,7 @@ class ActionData
      * @return ActionData
      * @noinspection PhpDocSignatureInspection
      */
-	public function setup( int $type, Citizen $citizen, ?Item $item, Citizen|Item|ItemPrototype|FriendshipActionTarget|null $target, ItemAction $action, ?string $message, ?array $remove, Execution $cache ): void {
+	public function setup( int $type, Citizen $citizen, ?Item $item, Citizen|Item|ItemPrototype|FriendshipActionTarget|CatapultActionTarget|null $target, ItemAction $action, ?string $message, ?array $remove, Execution $cache ): void {
         $this->type = $type;
         $this->citizen = $citizen;
         $this->item = $item;

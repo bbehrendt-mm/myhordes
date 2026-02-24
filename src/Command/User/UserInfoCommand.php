@@ -2,8 +2,6 @@
 
 namespace App\Command\User;
 
-
-use App\Entity\Avatar;
 use App\Entity\Award;
 use App\Entity\Citizen;
 use App\Entity\FoundRolePlayText;
@@ -15,6 +13,7 @@ use App\Entity\TownRankingProxy;
 use App\Entity\User;
 use App\Service\Actions\Cache\InvalidateTagsInAllPoolsAction;
 use App\Service\CommandHelper;
+use App\Service\Media\MediaService;
 use App\Service\UserHandler;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Asset\Package;
@@ -37,22 +36,14 @@ use Symfony\Contracts\Cache\TagAwareCacheInterface;
 )]
 class UserInfoCommand extends Command
 {
-    private EntityManagerInterface $entityManager;
-    private UserHandler $user_handler;
-    private UserPasswordHasherInterface $pwenc;
-    private CommandHelper $helper;
-    private UrlGeneratorInterface $router;
-    private InvalidateTagsInAllPoolsAction $clearCache;
-
-    public function __construct(EntityManagerInterface $em, UserPasswordHasherInterface $passwordEncoder,
-                                UserHandler $uh, CommandHelper $ch, UrlGeneratorInterface $router, InvalidateTagsInAllPoolsAction $clearCache)
-    {
-        $this->entityManager = $em;
-        $this->pwenc = $passwordEncoder;
-        $this->user_handler = $uh;
-        $this->helper = $ch;
-        $this->router = $router;
-        $this->clearCache = $clearCache;
+    public function __construct(
+        private readonly EntityManagerInterface $entityManager,
+        private readonly UserPasswordHasherInterface $pwenc,
+        private readonly CommandHelper $helper,
+        private readonly UrlGeneratorInterface $router,
+        private readonly InvalidateTagsInAllPoolsAction $clearCache,
+        private readonly MediaService $mediaService
+    ) {
         parent::__construct();
     }
 
@@ -292,12 +283,10 @@ class UserInfoCommand extends Command
                 $this->entityManager->persist($user);
                 $this->entityManager->flush();
             } elseif ($input->getOption('remove-avatar')) {
+                $media = $this->mediaService->getMediaForObject($user, 'avatar');
+                if (!$media->isEmpty()) {
+                    $this->mediaService->clearMediaFromObject( $user, 'avatar' );
 
-                $a = $user->getAvatar();
-                if ($a !== null) {
-
-                    $user->setAvatar(null);
-                    $this->entityManager->remove($a);
                     ($this->clearCache)("user_avatar_{$user->getId()}");
                     $output->writeln('Avatar has been deleted.');
 
@@ -306,7 +295,7 @@ class UserInfoCommand extends Command
             }
 
             if ($title = $input->getOption('add-custom-award')) {
-                $this->entityManager->persist( (new Award())
+                $this->entityManager->persist( new Award()
                     ->setUser($user)
                     ->setCustomTitle($title)
                 );
@@ -335,11 +324,6 @@ class UserInfoCommand extends Command
                         $table->addRow([
                                            $award->getId(),
                                            $award->getCustomTitle()
-                                       ]);
-                    if ($award->getCustomIcon() !== null)
-                        $table->addRow([
-                                           $award->getId(),
-                                           $this->router->generate('app_web_customicon', ['uid' => $user->getId(), 'aid' => $award->getId(), 'name' => $award->getCustomIconName(), 'ext' => $award->getCustomIconFormat()])
                                        ]);
                 }
 

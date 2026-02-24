@@ -22,6 +22,7 @@ use App\EventListener\ContainerTypeTrait;
 use App\Service\Actions\Cache\InvalidateTagsInAllPoolsAction;
 use App\Service\ConfMaster;
 use ArrayHelpers\Arr;
+use Carbon\Carbon;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
@@ -136,7 +137,7 @@ class UserUnlockableService implements ServiceSubscriberInterface
             });
 
 
-            return max(0, $value + ($this->getService(ConfMaster::class)->getGlobalConf()->get(MyHordesSetting::StagingSettingsEnabled)
+            return max(0, $value + $user->getBonusHeroicXP() + ($this->getService(ConfMaster::class)->getGlobalConf()->get(MyHordesSetting::StagingSettingsEnabled)
                 ? $this->getService(ConfMaster::class)->getGlobalConf()->get(MyHordesSetting::StagingProtoHxp)
                 : 0
             ));
@@ -174,9 +175,8 @@ class UserUnlockableService implements ServiceSubscriberInterface
             $latest_citizen = $this->getService(EntityManagerInterface::class)->getRepository(CitizenRankingProxy::class)->createQueryBuilder('c')
                 ->where('c.user = :user')->setParameter('user', $user)
                 ->andWhere('c.end IS NOT NULL')
-                ->andWhere('c.end >= :cutoff')
-                ->setParameter('cutoff', new \DateTime('now - 7days'))
-                ->orderBy('c.end', 'ASC')
+                ->andWhere('c.end >= :cutoff')->setParameter('cutoff', (new Carbon())->subDays(7))
+                ->orderBy('c.end', Order::Descending->value)
                 ->setMaxResults(1)->getQuery()->getOneOrNullResult();
         } catch (NonUniqueResultException $t) {
             $latest_citizen = null;
@@ -265,7 +265,7 @@ class UserUnlockableService implements ServiceSubscriberInterface
         User $user,
         LogEntryTemplate|string|null $template = null,
         ?string $subject = null,
-        Season|true $season = null,
+        Season|true|null $season = null,
         ?int &$total = null,
         int|true $reset = 0,
         ?int &$count = 0,

@@ -58,7 +58,7 @@ readonly class OnboardCitizenIntoTownAction
         array $heroSkills = [],
     ): bool
     {
-        if ($citizen->getProfession()->getName() !== CitizenProfession::DEFAULT)
+        if (!$citizen->isProfession(CitizenProfession::DEFAULT))
             return false;
 
         $citizenPropConfig = [];
@@ -133,10 +133,11 @@ readonly class OnboardCitizenIntoTownAction
         }*/
 
         if ($this->userHandler->checkFeatureUnlock( $citizen->getUser(), 'f_arma', true ) ) {
-            $armag_day   = $this->entityManager->getRepository(SpecialActionPrototype::class)->findOneBy(['name' => "special_armag_d"]);
-            $armag_night = $this->entityManager->getRepository(SpecialActionPrototype::class)->findOneBy(['name' => "special_armag_n"]);
-            $citizen->addSpecialAction($armag_day);
-            $citizen->addSpecialAction($armag_night);
+            if (!$citizen->getHeroicActions()->contains( $this->entityManager->getRepository(HeroicActionPrototype::class)->findOneBy(['name' => 'hero_armag']) )) {
+                $citizen->addSpecialAction( $this->entityManager->getRepository(SpecialActionPrototype::class)->findOneBy(['name' => "special_armag_d"]) );
+                $citizen->addSpecialAction( $this->entityManager->getRepository(SpecialActionPrototype::class)->findOneBy(['name' => "special_armag_n"]) );
+            }
+
             $this->inventoryHandler->forceMoveItem($citizen->getHome()->getChest(), $this->itemFactory->createItem( 'food_armag_#00' ));
             $doggy = $this->inventoryHandler->fetchSpecificItems( $citizen->getHome()->getChest(), [new ItemRequest('food_bag_#00')] );
             if (!empty($doggy)) $this->inventoryHandler->forceRemoveItem($doggy[0]);

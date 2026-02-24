@@ -36,7 +36,9 @@ use App\Enum\Game\CitizenPersistentCache;
 use App\Structures\ItemRequest;
 use App\Structures\TownConf;
 use DateTime;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query\Expr\Join;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class CitizenHandler
@@ -73,36 +75,12 @@ class CitizenHandler
     }
 
     /**
-     * @param Citizen $citizen
-     * @param string|CitizenStatus|string[]|CitizenStatus[] $status
-     * @param bool $all
-     * @return bool
-     */
-    public function hasStatusEffect( Citizen $citizen, $status, bool $all = false ): bool {
-        $status = array_map(function($s): string {
-            /** @var $s string|CitizenStatus */
-            if (is_a($s, CitizenStatus::class)) return $s->getName();
-            elseif (is_string($s)) return $s;
-            else return '???';
-        }, is_array($status) ? $status : [$status]);
-
-        if ($all) {
-            foreach ($citizen->getStatus() as $s)
-                if (!in_array($s->getName(), $status)) return false;
-        } else {
-            foreach ($citizen->getStatus() as $s)
-                if (in_array($s->getName(), $status)) return true;
-        }
-        return $all;
-    }
-
-    /**
      * Returns true if a given citizen is wounded
      * @param Citizen $citizen
      * @return bool
      */
     public function isWounded(Citizen $citizen): bool {
-        return $this->hasStatusEffect( $citizen, ['tg_meta_wound','wound1','wound2','wound3','wound4','wound5','wound6'], false );
+        return $citizen->hasAnyStatus('tg_meta_wound','wound1','wound2','wound3','wound4','wound5','wound6' );
     }
 
     public function inflictWound( Citizen $citizen, ?CitizenStatus $forcedStatus = null ): ?CitizenStatus {
@@ -136,7 +114,7 @@ class CitizenHandler
         if (is_string( $status )) $status = $this->entity_manager->getRepository(CitizenStatus::class)->findOneByName($status);
         if (!$status) return false;
 
-        if ( $this->hasStatusEffect($citizen, 'tg_stats_locked') ) return false;
+        if ($citizen->hasStatus('tg_stats_locked') ) return false;
 
         if (in_array( $status->getName(), ['tg_meta_wound','wound1','wound2','wound3','wound4','wound5','wound6'] )) {
             $this->inflictWound($citizen, $force && $status->getName() !== 'tg_meta_wound' ? $status : null);
@@ -162,18 +140,24 @@ class CitizenHandler
             $status = $this->entity_manager->getRepository(CitizenStatus::class)->findOneByName('infection');
 
         // Prevent a normal infection when immune
-        if ( !$force && $status->getName() === 'infection' && $this->hasStatusEffect( $citizen, 'immune' ) )
+        if (!$force && $status->getName() === 'infection' && $citizen->hasStatus('immune') )
             return false;
 
         // Convert wound infection into normal infection
         if ( $status->getName() === 'tg_meta_winfect')
             $status = $this->entity_manager->getRepository(CitizenStatus::class)->findOneByName('infection');
 
-        // Prevent terror when holding a zen booklet
-        if ( !$force && $status->getName() === 'terror' && $this->inventory_handler->countSpecificItems(
-                $citizen->getInventory(),
-                $this->entity_manager->getRepository(ItemPrototype::class)->findOneByName('lilboo_#00') )
-        ) return $this->hasStatusEffect( $citizen, 'terror' );
+        // Prevent terror when owning a terror counter item
+        if ( !$force && $status->getName() === 'terror') {
+            $inventories = [$citizen->getInventory()];
+
+            // If the citizen is in town, also check his chest
+            if (!$citizen->getZone())
+                $inventories[] = $citizen->getHome()->getChest();
+
+            if ($this->inventory_handler->countSpecificItems($inventories, 'prevent_terror', true) > 0)
+                return $citizen->hasStatus('terror');
+        }
 
         if (in_array($status->getName(), ['drugged','addict']))
             $this->removeStatus($citizen, 'clean');
@@ -186,7 +170,7 @@ class CitizenHandler
         if (is_string( $status )) $status = $this->entity_manager->getRepository(CitizenStatus::class)->findOneByName($status);
         if (!$status) return false;
 
-        if ( $this->hasStatusEffect($citizen, 'tg_stats_locked') && $status->getName() !== 'tg_stats_locked' )
+        if ($citizen->hasStatus('tg_stats_locked') && $status->getName() !== 'tg_stats_locked' )
             return false;
 
         if (in_array( $status->getName(), ['tg_meta_wound','wound1','wound2','wound3','wound4','wound5','wound6'] )) {
@@ -361,7 +345,7 @@ class CitizenHandler
     public function pass_airborne_ghoul_infection(?Citizen $citizen, ?Town $town = null) {
         $cc = [];
         foreach (($citizen ? $citizen->getTown() : $town)->getCitizens() as $c)
-            if ($c !== $citizen && $c->getAlive() && !$this->hasRole($c, 'ghoul') && !$this->hasStatusEffect($c, 'tg_air_infected'))
+            if ($c !== $citizen && $c->getAlive() && !$c->hasRole('ghoul') && !$c->hasStatus('tg_air_infected'))
                 $cc[] = $c;
 
 		if (empty($cc)) return; // no citizen to infect, we leave
@@ -384,7 +368,7 @@ class CitizenHandler
 
         if (!$citizen->getRoles()->contains($role)) {
 
-            if ($role->getName() === 'ghoul' && ($this->hasStatusEffect($citizen, 'immune') || $this->conf->getTownConfiguration($citizen->getTown())->get(TownSetting::OptFeatureGhoulMode) === 'childtown'))
+            if ($role->getName() === 'ghoul' && ($citizen->hasStatus('immune') || $this->conf->getTownConfiguration($citizen->getTown())->get(TownSetting::OptFeatureGhoulMode) === 'childtown'))
                 return false;
 
             $citizen->addRole($role);
@@ -400,7 +384,7 @@ class CitizenHandler
 
                     // If the citizen is marked to become a ghoul after the next attack, pass the mark on to another
                     // citizen
-                    if ($this->hasStatusEffect($citizen, 'tg_air_infected')) {
+                    if ($citizen->hasStatus('tg_air_infected')) {
                         $this->pass_airborne_ghoul_infection($citizen);
                         $this->removeStatus($citizen, 'tg_air_infected');
                     }
@@ -464,13 +448,13 @@ class CitizenHandler
      */
     public function setAP(Citizen $citizen, bool $relative, int $num, ?int $max_bonus = null): int {
         $beforeAp = $citizen->getAp();
-        
+
         if ($max_bonus !== null) {
             $citizen->setAp( max(0, min(max($this->getMaxAP( $citizen ) + $max_bonus, $citizen->getAp()), $relative ? ($citizen->getAp() + $num) : max(0,$num) )) );
         } else {
             $citizen->setAp( max(0, $relative ? ($citizen->getAp() + $num) : max(0,$num) ) );
         }
-        
+
         $citizen->getAp() == 0 ? $this->inflictStatus( $citizen, 'tired' ) : $this->removeStatus( $citizen, 'tired' );
 
         return $citizen->getAp() - $beforeAp;
@@ -484,7 +468,7 @@ class CitizenHandler
      */
     public function getMaxBP(Citizen $citizen, bool $includeBase = true): int {
         if (!$includeBase) return 0;
-        return $citizen->getProfession()->getName() === 'tech' ? 6 : 0;
+        return $citizen->isProfession('tech') ? 6 : 0;
     }
 
     public function setBP(Citizen $citizen, bool $relative, int $num, ?int $max_bonus = null): void {
@@ -516,7 +500,7 @@ class CitizenHandler
      * @return int Number of maximum SP available for the citizen
      */
     public function getMaxSP(Citizen $citizen, bool $includeBase = true): int {
-        return (($includeBase && $citizen->getProfession()->getName() === 'hunter') ? 2 : 0) +
+        return (($includeBase && $citizen->isProfession('hunter')) ? 2 : 0) +
             $this->events->queryCitizenParameter( $citizen, CitizenValueQuery::MaxSpExtension );
     }
 
@@ -556,36 +540,37 @@ class CitizenHandler
     }
 
     public function getCP(Citizen $citizen): int {
-        if ($this->hasStatusEffect( $citizen, 'terror', false )) $base = 0;
-        else {
-            $base = ($citizen->getProfession()->getName() == 'guardian' ? 4 : 2) +
-                $citizen->property( CitizenProperties::ZoneControlBonus );
+        if ($citizen->hasStatus('terror')) return 0;
 
-            if ($citizen->hasStatus('clean'))
-                $base += $citizen->property( CitizenProperties::ZoneControlCleanBonus );
+        $base = 2 + $citizen->property( CitizenProperties::ZoneControlBonus )
+            + ($this->inventory_handler->countSpecificItems( $citizen->getInventory(), 'shield_#00', broken: false ) > 0
+                ? 2
+                : 0
+            )+ ($citizen->hasRole('guide')
+                ? ($citizen->getZone()?->getCitizens()?->count() ?? 0)
+                : 0
+            ) + ($citizen->hasStatus('clean')
+                ? $citizen->property( CitizenProperties::ZoneControlCleanBonus )
+                : 0
+            ) + ($this->inventory_handler->countSpecificItems( $citizen->getInventory(), 'car_door_#00', broken: false ) > 0
+                ? 1
+                : 0
+            );
 
-            $bonus = $citizen->property( CitizenProperties::ZoneControlHydratedBonus );
-            if (!$citizen->hasAnyStatus('thirst1', 'thirst2') && $bonus > 0) {
-                $base += $bonus;
-                $this->inflictStatus($citizen, "hydrated");
-            } elseif ($bonus > 0) {
-                $this->removeStatus($citizen, 'hydrated');
-            }
+        $bonus = $citizen->property( CitizenProperties::ZoneControlHydratedBonus );
+        if (!$citizen->hasAnyStatus('thirst1', 'thirst2') && $bonus > 0) {
+            $base += $bonus;
+            $this->inflictStatus($citizen, "hydrated");
+        } elseif ($bonus > 0) {
+            $this->removeStatus($citizen, 'hydrated');
+        }
 
-            $bonus = $citizen->property( CitizenProperties::ZoneControlSoberBonus );
-            if (!$citizen->hasAnyStatus('drunk', 'hungover') && $bonus > 0) {
-                $base += $bonus;
-                $this->inflictStatus($citizen, "sober");
-            } elseif ($bonus > 0) {
-                $this->removeStatus($citizen, 'sober');
-            }
-
-            if (!empty($this->inventory_handler->fetchSpecificItems(
-                $citizen->getInventory(), [new ItemRequest( 'car_door_#00' )]
-            ))) $base += 1;
-
-            if ($citizen->hasRole('guide'))
-                $base += $citizen->getZone() ? $citizen->getZone()->getCitizens()->count() : 0;
+        $bonus = $citizen->property( CitizenProperties::ZoneControlSoberBonus );
+        if (!$citizen->hasAnyStatus('drunk', 'hungover') && $bonus > 0) {
+            $base += $bonus;
+            $this->inflictStatus($citizen, "sober");
+        } elseif ($bonus > 0) {
+            $this->removeStatus($citizen, 'sober');
         }
 
         return $base;
@@ -681,7 +666,7 @@ class CitizenHandler
 
     public function getCampingOdds(Citizen $citizen): float {
 		$cap = max(
-            $citizen->getProfession()->getName() === 'survivalist' ? 1.0 : 0.0,
+            $citizen->isProfession('survivalist') ? 1.0 : 0.0,
             $citizen->property(CitizenProperties::CampingChanceCap),
         );
         return max(0, min(array_sum($this->getCampingValues($citizen)) / 100.0, $cap));
@@ -824,59 +809,11 @@ class CitizenHandler
         return $capacity < 0 || $previous_campers < $capacity;
     }
 
-    public function getNightwatchProfessionDefenseBonus(Citizen $citizen): int{
-        /*if ($citizen->getProfession()->getName() == "guardian") {
-            return 30;
-        } else if ($citizen->getProfession()->getName() == "tamer") {
-            return 20;
-        }*/
-
-        return $citizen->getProfession()->getNightwatchDefenseBonus();
-    }
-
-    public function getNightwatchProfessionSurvivalBonus(Citizen $citizen): float{
-        /*if ($citizen->getProfession()->getName() == "guardian") {
-            return 0.04;
-        }*/
-        return $citizen->getProfession()->getNightwatchSurvivalBonus();
-    }
-
-    public function getNightwatchBaseFatigue(Citizen $citizen): float{
-        if ($citizen->getProfession()->getName() == "guardian") {
-            return 0.01;
-        }
-        return 0.05;
-    }
-
     public function getNightWatchDefense(Citizen $citizen): int {
         return $this->events->citizenQueryNightwatchInfo( $citizen )['def'] ?? 0;
     }
 
-    /**
-     * @param Citizen $citizen
-     * @param string|CitizenRole|string[]|CitizenRole[] $role
-     * @param bool $all
-     * @return bool
-     */
-    public function hasRole( Citizen $citizen, $role, bool $all = false ): bool {
-        $role = array_map(function($r): string {
-            /** @var $r string|CitizenRole */
-            if (is_a($r, CitizenRole::class)) return $r->getName();
-            elseif (is_string($r)) return $r;
-            else return '???';
-        }, is_array($role) ? $role : [$role]);
-
-        if ($all) {
-            foreach ($citizen->getRoles() as $r)
-                if (!in_array($r->getName(), $role)) return false;
-        } else {
-            foreach ($citizen->getRoles() as $r)
-                if (in_array($r->getName(), $role)) return true;
-        }
-        return $all;
-    }
-
-    public function houseIsProtected(Citizen $c, bool $only_explicit_lock = false, Citizen $thief = null): bool
+    public function houseIsProtected(Citizen $c, bool $only_explicit_lock = false, ?Citizen $thief = null): bool
     {
         if (!$c->getAlive()) return false;
         if (!$c->getZone() && !$thief?->property( CitizenProperties::EnableAdvancedTheft ) && !$only_explicit_lock) return true;
@@ -897,26 +834,23 @@ class CitizenHandler
         return false;
     }
 
-    public function hasNewMessage(Citizen $c){
-        $threads = $this->entity_manager->getRepository(PrivateMessageThread::class)->findNonArchived($c);
-        foreach ($threads as $thread) {
-            if($thread->getArchived()) continue;
-            foreach ($thread->getMessages() as $message) {
-                if($message->getRecipient() == $c && $message->getNew())
-                    return true;
-            }
-        }
-
-        return false;
+    public function hasNewMessage(Citizen $c): bool {
+        return $this->entity_manager->getRepository(PrivateMessage::class)->createQueryBuilder('pm')
+            ->select('COUNT(pm)')
+            ->innerJoin(PrivateMessageThread::class, 'pmt', Join::WITH, 'pm.privateMessageThread = pmt.id')
+            ->where('pm.recipient = :citizen')->setParameter('citizen', $c)
+            ->andWhere('pm.new = true')
+            ->andWhere('pmt.archived = false')
+            ->getQuery()->getSingleScalarResult() > 0;
     }
 
     public function getActivityLevel(Citizen $citizen): int {
         $level = 0;
-        if($this->hasStatusEffect($citizen, 'tg_chk_forum_day')) $level++;
-        if($this->hasStatusEffect($citizen, 'tg_chk_active')) $level++;
-        if($this->hasStatusEffect($citizen, 'tg_chk_workshop')) $level++;
-        if($this->hasStatusEffect($citizen, 'tg_chk_build')) $level++;
-        if($this->hasStatusEffect($citizen, 'tg_chk_movewb')) $level++;
+        if($citizen->hasStatus('tg_chk_forum_day')) $level++;
+        if($citizen->hasStatus('tg_chk_active')) $level++;
+        if($citizen->hasStatus('tg_chk_workshop')) $level++;
+        if($citizen->hasStatus('tg_chk_build')) $level++;
+        if($citizen->hasStatus('tg_chk_movewb')) $level++;
         return $level;
     }
 

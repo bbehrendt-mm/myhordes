@@ -1,0 +1,332 @@
+{% extends 'ajax/manage/towns/explorer_shell.html.twig' %}
+
+{% block explorer_content %}
+	{% macro building_entry(building, buildable, n, dict, available, workshopBonus, hpToAp, cheat) %}
+		{% if available[building.id] is defined %}
+			{% set fromTown = available[building.id] %}
+		{% endif %}
+		{# @var building \App\Entity\BuildingPrototype #}
+		{# @var fromTown \App\Entity\Building #}
+		{% if fromTown is defined or building.blueprint < 6 %}
+		<div class="building row {% if not buildable %}locked{% endif %} {% if (fromTown is defined and fromTown.complete) %}complete{% endif %} {% if n > 0 %}lv-{{ min(n,6) }}{% else %}root{% endif %}">
+			<div class="type_indicator"></div>
+			<div class="building_row">
+				<div class="building_info cell">
+				{% for i in range(0, n) %}
+					{% if i != 0 %}
+						{% if i < n %}
+						<img alt="" class="level_indicator" src="{{ asset('build/images/building/small_parent2.gif' ) }}">
+						{% else %}
+						<img alt="" class="level_indicator" src="{{ asset('build/images/building/small_parent.gif' ) }}">
+						{% endif %}
+					{% endif %}
+				{% endfor %}
+                {% if cheat %}
+				    {% if fromTown is not defined %}
+                        <label style="">
+				    		<input type="checkbox" data-prototype-id="{{ building.id }}" data-building-admin-action="addToUnlockList" />
+				    		<div class="tooltip help">{{ 'Klicken, um Baustelle in die Liste der zu entsperrenden Baustellen aufzunehmen.'|trans({},'admin') }}</div>
+				    	</label>
+				    	<label>
+				    		<input type="checkbox" data-prototype-id="{{ building.id }}" data-building-admin-action="addToTown" />
+				    		<div class="tooltip help">{{ 'Klicken, um Baustelle sofort zu entsperren.'|trans({},'admin') }}</div>
+				    	</label>
+				    {% else %}
+				    	<div class="inline-block">
+				    		<img class="link" src="{{ asset('build/images/icons/small_remove.gif') }}" alt="[X]" data-prototype-id="{{ building.id }}" data-building-admin-action="removeFromTown" />
+				    		<div class="tooltip help">
+				    			Cliquez ici pour supprimer ce chantier de la ville.
+				    		</div>
+				    	</div>
+				    {% endif %}
+                {% endif %}
+				{% if buildable %}
+					<img alt="" src="{{ asset('build/images/building/' ~ building.icon ~ '.gif' ) }}" >
+				{% else %}
+					<img alt="" src="{{ asset('build/images/icons/lock.gif' ) }}" >
+				{% endif %}
+				{% if building.blueprint >= 6 %}
+					<span style="color: red; font-weight: bold" x-tooltip="title" title="{{ 'Dieses Gebäude ist veraltet.'|trans({},'admin') }}" class="building_name">{{ building.label|trans({},'buildings') }}</span>
+				{% else %}
+					<span class="building_name">{{ building.label|trans({},'buildings') }}</span>
+				{% endif %}
+
+					{% if building.temp %}
+					<span>
+							<img alt="(!)" src="{{ asset('build/images/icons/small_warning.gif') }}" />
+							<div class="tooltip temp-building">
+								<h1>{{ 'Temporäre Konstruktion!'|trans({}, 'buildings') }}</h1>
+								{{ 'Diese Konstruktion kann nur einmal verwendet werden. Sie wird nach dem Angriff der Zombiehorde wieder abgerissen.'|trans({}, 'buildings')|raw }}<br /><em>{{'Wenn ihr wollt, könnt irh sie morgen nochmal bauen.'|trans({}, 'buildings')}}</em>
+							</div>
+						</span>
+				{% endif %}
+					{% if fromTown is defined %}
+						{% if fromTown.complete and building.maxLevel > 0 %}
+							<span class="small" style="margin-left: 5px;" x-tooltip='x-tooltip-value' x-tooltip-value="{{ building.upgradeTexts[max(0,fromTown.level - 1)]|trans({},'buildings') }}">
+								{{ 'Level {current} / {max}'|trans({current: fromTown.level, max: building.maxLevel},'admin') }}
+							</span>
+						{% elseif building.maxLevel > 0 %}
+							<span class="small" style="margin-left: 5px;" >{{ 'Anzahl Level: {max}'|trans({max: building.maxLevel},'admin') }}</span>
+						{% endif %}
+
+						{% if (fromTown.complete and fromTown.defense > 0) or (not fromTown.complete and building.defense > 0) %}
+							<div class="defense{% if fromTown.complete and fromTown.defense != building.defense %}-broken{% endif %}">
+								{% if (fromTown.complete and fromTown.defense > 0) %}
+									{{ fromTown.defense }}
+								{% elseif not fromTown.complete%}
+									{{ building.defense }}
+								{% endif %}
+								{% if fromTown.complete and fromTown.defense != building.defense %}
+									<div class="tooltip">
+										{{"Beschädigte Verteidigung: {defense} / {max}"|trans({"{defense}": fromTown.defense, "{max}": building.defense}, 'game')}}
+									</div>
+								{% endif %}
+							</div>
+						{% endif %}
+					{% endif %}
+
+				</div>
+				{% set not_built = fromTown is defined and buildable and not fromTown.complete %}
+				{% set needs_repair = fromTown is defined and not not_built and fromTown.complete and fromTown.hp < building.hp %}
+				<div class="building_resources cell">
+					{% if fromTown is defined %}
+						{% if fromTown.ap > 0 and not fromTown.complete %}
+							<div class="ap-bar">
+								<div class="bar" style="width: {{ 100*(fromTown.ap/fromTown.prototypeAP) }}%"></div>
+							</div>
+                        	<img alt="" class="ap-bar-start" src="{{ asset('build/images/building/building_barStart.gif' ) }}"/>
+						{% elseif fromTown.complete and fromTown.hp < building.hp %}
+							<div class="ap-bar">
+								<div class="bar" style="width: {{ 100*(fromTown.hp/((building.hp)|round)) }}%;"></div>
+								<div class="tooltip"><em>{{"Zustand:"|trans({}, 'game')}}</em> {{fromTown.hp}}/{{building.hp}}</div>
+							</div>
+                        	<img alt="" class="ap-bar-start" src="{{ asset('build/images/building/building_barStartBroken.png' ) }}"/>
+						{% endif %}
+
+						{% if not_built %}
+							<div class="build-req">
+								<div class="ap-cost">
+									<div class="ap">{{ fromTown.prototypeAP - fromTown.ap }}</div>
+									<div class="tooltip help">
+										{{ 'Zum Bau dieses Bauprojekts fehlen noch {ap} AP'|trans({'{ap}':fromTown.prototypeAP - fromTown.ap },"game") }}
+									</div>
+								</div>
+							</div>
+						{% elseif needs_repair %}
+							<div class="build-req" style="color: #FF6A6A;">
+								<div class="ap">{{ ((fromTown.hp)/hpToAp)|round(0, 'ceil') }} / {{ ((building.hp)/hpToAp)|round(0, 'ceil') }}</div>
+							</div>
+						{% endif %}
+					{% endif %}
+					{% if cheat and fromTown is defined %}
+						<div class="building_action cell" style="width: fit-content; margin-left: auto; flex-grow: 0; margin-top: 2px;">
+							{% if fromTown.complete and building.maxLevel > 0 %}
+								{% if fromTown.level < building.maxLevel %}
+									<button class="inline build-btn small" data-building-id="{{ fromTown.id }}" data-level="{{ fromTown.level + 1 }}" data-building-admin-action="lv">
+										<img alt="+" src="{{ asset('build/images/icons/small_more2.gif') }}">
+										<div class="tooltip">
+											{{ building.upgradeTexts[min(building.upgradeTexts|length,fromTown.level)]|trans({},'buildings') }}
+										</div>
+									</button>
+								{% endif %}
+								{% if fromTown.level > 0 %}
+									<button class="inline build-btn small" data-building-id="{{ fromTown.id }}" data-level="{{ fromTown.level - 1 }}" data-building-admin-action="lv">
+										<img alt="-" src="{{ asset('build/images/icons/small_minus.gif') }}">
+										<div class="tooltip">
+											{{ building.upgradeTexts[max(0,fromTown.level - 2)]|trans({},'buildings') }}
+										</div>
+									</button>
+								{% endif %}
+							{% endif %}
+
+                            {% if building.hasHardMode and not fromTown.complete %}
+                                <label>
+                                    <hordes-tooltip class="help">{{ 'Ressourcen- und AP-Vorlage, welches für diese Konstruktion benötigt wird.'|trans({},'admin') }}</hordes-tooltip>
+                                    <select class="small" data-building-id="{{ fromTown.id }}" data-building-admin-action="set_difficulty">
+                                        <option {{ {'selected': fromTown.difficultyLevel == -1}|attributes }} value="-1">{{ 'Teuer'|trans({},'admin') }}</option>
+                                        <option {{ {'selected': fromTown.difficultyLevel == 0}|attributes }} value="0">{{ 'Normal'|trans({},'admin') }}</option>
+                                        <option {{ {'selected': fromTown.difficultyLevel == 1}|attributes }} value="1">{{ 'Billig'|trans({},'admin') }}</option>
+                                        <option {{ {'selected': fromTown.difficultyLevel == 2}|attributes }} value="2">{{ 'Billig+'|trans({},'admin') }}</option>
+                                    </select>
+                                </label>
+
+                            {% endif %}
+
+							<button class="inline build-btn small" data-building-id="{{ fromTown.id }}" data-building-admin-action="{% if fromTown.complete %}setHp{% else %}setAp{% endif %}"><img alt="E" src="{% if fromTown.complete %}{{ asset('build/images/icons/small_refine.gif') }}{% else %}{{ asset('build/images/forum/edit.png') }}{% endif %}" /></button>
+							{% if not fromTown.complete %}
+								<button class="inline build-btn small" data-building-id="{{ fromTown.id }}" data-building-admin-action="complete"><img alt="ok" src="{{ asset('build/images/icons/done.png') }}" /></button>
+							{% else %}
+								<button class="inline build-btn small" data-building-id="{{ fromTown.id }}" data-building-admin-action="destroy"><img alt="[x]" src="{{ asset('build/images/icons/small_remove.gif') }}" /></button>
+								<button class="inline build-btn small" data-building-id="{{ fromTown.id }}" data-building-admin-action="trigger_n" x-tooltip="title" title="{{ 'Gebäude-Effekt auslösen'|trans({},'admin') }}"><img alt="[n]" src="{{ asset('build/images/icons/small_action.gif') }}" /></button>
+							{% endif %}
+						</div>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+		{% if n < 20 and dict[building.id] is not empty %}
+			{% for sub_building in dict[building.id] %}
+				{{ _self.building_entry(sub_building, buildable and fromTown is defined and fromTown.complete , n+1, dict, available, workshopBonus, hpToAp, cheat) }}
+			{% endfor %}
+		{% endif %}
+		{% endif %}
+	{% endmacro %}
+
+	{# @var rootBuildings \App\Entity\BuildingPrototype[] #}
+	<div>
+        {% if is_granted('cheat', town) %}
+            <div class="flex gap">
+                <button data-building-admin-action="unlockCheckedBuildings" class="inline"><img alt="" src="{{ asset('build/images/pictos/r_door.gif') }}" /> {{ 'Gewählte Gebäude freischalten'|trans({},'admin') }}</button>
+                <span></span>
+                <button data-building-admin-action="resetConstructionSite" class="inline"><img alt="" src="{{ asset('build/images/emotes/trash.gif') }}" /> {{ 'Gesamten Gebäudebaum zurücksetzen'|trans({},'admin') }}</button>
+            </div>
+        {% endif %}
+
+		<ul class="buildings-tabs tabs plain" x-tab-group="buildings" x-tab-control>
+			<li class="tab" x-tab-id="all">
+				<div class="tab-link">
+					<img class="hide-desktop" alt="*" src="{{ asset( 'build/images/icons/small_new.gif' ) }}" >
+					<span class="hide-lg hide-md hide-sm">{{ 'Alle'|trans({},'game') }}</span>
+				</div>
+			</li>
+			{% for building in rootBuildings %}
+				<li class="tab" x-tab-id="type_{{ building.icon }}">
+					<div class="tab-link">
+						<img class="hide-desktop" alt="" src="{{ asset('build/images/building/' ~ building.icon ~ '.gif' ) }}" >
+						{% set label = building.label|trans({}, 'buildings') %}
+						<span class="hide-lg hide-md hide-sm">{{ label|length > 12 ? (label|slice(0,10) ~ '...') : label }}</span>
+					</div>
+				</li>
+			{% endfor %}
+		</ul>
+	</div>
+
+	{% for building in rootBuildings %}
+		<div x-tab-group="buildings" style="margin-top:31px" x-tab-id="type_{{ building.icon }}" x-tab-target class="buildings type_{{ building.icon }}">{{ _self.building_entry(building, true, 0, dictBuildings, availBuldings, workshopBonus, hpToAp, is_granted('cheat', town)) }}</div>
+	{% endfor %}
+
+{% endblock %}
+{% block js %}
+	{{ parent() }}
+    {% if is_granted('cheat', town) %}
+	    <script>
+            const manage = (action, element) => {
+                switch(action) {
+                    case "setAp":
+                        let ap = null, ap_valid = false;
+                        do {
+                            ap = window.prompt("{{ 'Baufortschritt setzen:'|trans({},'admin')|e('js') }}", "1");
+                            if (ap === null) ap_valid = true;
+                            else {
+                                ap = parseInt(ap);
+                                ap_valid = !isNaN(ap) && ap >= 0;
+                            }
+                        } while (!ap_valid);
+
+                        if (ap === null) return;
+
+                        $.ajax.easySend( '{{ path('admin_town_set_building_ap', {id: town.id }) }}', {'building': element.dataset.buildingId, 'ap': ap},
+                            function () {
+                                $.ajax.load(null, '{{ path('admin_town_buildings', {id: town.id}) }}', true);
+                            } );
+                        break;
+
+                    case "setHp":
+                        let hp = null, hp_valid = false;
+                        do {
+                            hp = window.prompt("{{ 'Integrität setzen:'|trans({},'admin')|e('js') }}", "1");
+                            if (hp === null) hp_valid = true;
+                            else {
+                                hp = parseInt(hp);
+                                hp_valid = !isNaN(hp) && hp >= 0;
+                            }
+                        } while (!hp_valid);
+
+                        if (hp === null) return;
+
+                        $.ajax.easySend( '{{ path('admin_town_set_building_hp', {id: town.id }) }}', {'building': element.dataset.buildingId, 'hp': hp},
+                            function () {
+                                $.ajax.load(null, '{{ path('admin_town_buildings', {id: town.id}) }}', true);
+                            } );
+                        break;
+
+                    case "complete":
+                        $.ajax.easySend( '{{ path('admin_town_set_building_ap', {id: town.id }) }}', {'building': element.dataset.buildingId, 'ap': 99999999},
+                            function () {
+                                $.ajax.load(null, '{{ path('admin_town_buildings', {id: town.id}) }}', true);
+                            } );
+                        break;
+                    case "destroy":
+                        $.ajax.easySend( '{{ path('admin_town_set_building_ap', {id: town.id }) }}', {'building': element.dataset.buildingId, 'ap': 0},
+                            function () {
+                                $.ajax.load(null, '{{ path('admin_town_buildings', {id: town.id}) }}', true);
+                            } );
+                        break;
+                    case "trigger_n":
+                        $.ajax.easySend( '{{ path('admin_town_trigger_building_nightly_effect', {id: town.id }) }}', {'building': element.dataset.buildingId},
+                            function () {
+                                $.ajax.load(null, '{{ path('admin_town_buildings', {id: town.id}) }}', true);
+                            } );
+                        break;
+                    case "set_difficulty":
+                        $.ajax.easySend( '{{ path('admin_town_set_building_difficulty_level', {id: town.id }) }}', {'building': element.dataset.buildingId, 'level': element.dataset.level ?? element.value ?? -1},
+                            function () {
+                                $.ajax.load(null, '{{ path('admin_town_buildings', {id: town.id}) }}', true);
+                            } );
+                        break;
+                    case "lv":
+                        $.ajax.easySend( '{{ path('admin_town_set_building_level', {id: town.id }) }}', {'building': element.dataset.buildingId, 'level': element.dataset.level ?? -1},
+                            function () {
+                                $.ajax.load(null, '{{ path('admin_town_buildings', {id: town.id}) }}', true);
+                            } );
+                        break;
+
+                    case "addToTown":
+                        $.ajax.easySend("{{ path('admin_town_add_building', {id: town.id }) }}", {
+                                'prototype_id': element.dataset.prototypeId,
+                                'act': 1
+                            },
+                            function () {
+                                $.ajax.load(null, '{{ path('admin_town_buildings', {id: town.id}) }}', true);
+                            }
+                        );
+                        break;
+                    case "removeFromTown":
+                        $.ajax.easySend("{{ path('admin_town_add_building', {id: town.id }) }}", {
+                                'prototype_id': element.dataset.prototypeId,
+                                'act': 0
+                            },
+                            function () {
+                                $.ajax.load(null, '{{ path('admin_town_buildings', {id: town.id}) }}', true);
+                            }
+                        );
+                        break;
+                    case "unlockCheckedBuildings":
+                        let protos = [];
+                        let checked = document.querySelectorAll('input[data-building-admin-action="addToUnlockList"]:checked');
+                        checked.forEach(function(c) {
+                            protos.push(c.dataset.prototypeId);
+                        })
+                        $.ajax.easySend("{{ path('admin_town_add_building', {id: town.id }) }}", {
+                                'prototype_id': protos,
+                                'act': 1
+                            },
+                            function () {
+                                $.ajax.load(null, '{{ path('admin_town_buildings', {id: town.id}) }}', true);
+                            }
+                        );
+                        break;
+                    case "resetConstructionSite":
+                        if (confirm('{{ 'Bestätigen?'|trans({},'global')|e('js') }}'))
+                            $.ajax.easySend("{{ path('admin_town_reset_buildings', {id: town.id }) }}", {},
+                                () => $.ajax.load(null, '{{ path('admin_town_buildings', {id: town.id}) }}', true)
+                            );
+                        break;
+                }
+            }
+
+            document.querySelectorAll("img[data-building-admin-action],button[data-building-admin-action],input[type=\"checkbox\"][data-building-admin-action]").forEach( e => e.addEventListener('click', () => manage( e.dataset.buildingAdminAction, e )) )
+            document.querySelectorAll("select[data-building-admin-action]").forEach( e => e.addEventListener('change', () => manage( e.dataset.buildingAdminAction, e )) )
+	    </script>
+    {% endif %}
+{% endblock %}

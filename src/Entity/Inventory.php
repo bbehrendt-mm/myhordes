@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\OrderBy;
+use Doctrine\ORM\PersistentCollection;
 
 #[ORM\Entity(repositoryClass: 'App\Repository\InventoryRepository')]
 class Inventory
@@ -13,25 +14,25 @@ class Inventory
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
-    #[ORM\OneToMany(mappedBy: 'inventory', targetEntity: 'App\Entity\Item', cascade: ['persist', 'remove'])]
+    private ?int $id = null;
+    #[ORM\OneToMany(targetEntity: Item::class, mappedBy: 'inventory', cascade: ['persist', 'remove'])]
     #[OrderBy(['essential' => 'DESC', 'prototype' => 'ASC'])]
-    private $items;
-    #[ORM\OneToOne(mappedBy: 'inventory', targetEntity: 'App\Entity\Citizen', cascade: ['persist', 'remove'])]
-    private $citizen;
-    #[ORM\OneToOne(mappedBy: 'chest', targetEntity: 'App\Entity\CitizenHome', cascade: ['persist', 'remove'])]
-    private $home;
-    #[ORM\OneToOne(mappedBy: 'bank', targetEntity: 'App\Entity\Town', cascade: ['persist'])]
-    private $town;
-    #[ORM\OneToOne(mappedBy: 'floor', targetEntity: 'App\Entity\Zone', cascade: ['persist'])]
-    private $zone;
-    #[ORM\OneToOne(mappedBy: 'floor', targetEntity: 'App\Entity\RuinZone', cascade: ['persist', 'remove'])]
-    private $ruinZone;
-    #[ORM\OneToOne(mappedBy: 'roomFloor', targetEntity: RuinZone::class, cascade: ['persist'])]
-    private $ruinZoneRoom;
-    #[ORM\OneToOne(mappedBy: 'inventory', targetEntity: Building::class, cascade: ['persist', 'remove'])]
+    private Collection $items;
+    #[ORM\OneToOne(targetEntity: Citizen::class, mappedBy: 'inventory', cascade: ['persist', 'remove'])]
+    private ?Citizen $citizen = null;
+    #[ORM\OneToOne(targetEntity: CitizenHome::class, mappedBy: 'chest', cascade: ['persist', 'remove'])]
+    private ?CitizenHome $home = null;
+    #[ORM\OneToOne(targetEntity: Town::class, mappedBy: 'bank', cascade: ['persist'])]
+    private ?Town $town = null;
+    #[ORM\OneToOne(targetEntity: Zone::class, mappedBy: 'floor', cascade: ['persist'])]
+    private ?Zone $zone = null;
+    #[ORM\OneToOne(targetEntity: RuinZone::class, mappedBy: 'floor', cascade: ['persist', 'remove'])]
+    private ?RuinZone $ruinZone = null;
+    #[ORM\OneToOne(targetEntity: RuinZone::class, mappedBy: 'roomFloor', cascade: ['persist'])]
+    private ?RuinZone $ruinZoneRoom = null;
+    #[ORM\OneToOne(targetEntity: Building::class, mappedBy: 'inventory', cascade: ['persist', 'remove'])]
     private ?Building $building = null;
-	
+
 
     public function __construct()
     {
@@ -41,10 +42,11 @@ class Inventory
     {
         return $this->id;
     }
+
     /**
-     * @return Collection|Item[]
+     * @return ArrayCollection<Item>|PersistentCollection<Item>
      */
-    public function getItems(): Collection
+    public function getItems(): ArrayCollection|PersistentCollection
     {
         return $this->items;
     }
@@ -171,6 +173,22 @@ class Inventory
         $this->building = $building;
 
         return $this;
+    }
+
+    /**
+     * Finds any item in the inventory
+     * By default, searches for a prototype name
+     * If a callable is passed, will return the first item passing the filter
+     *
+     * Ex: ...->findItem(fn(Item $i) => $i->getPrototype->getHeavy())
+     * Would return the first heavy item if one is present
+     */
+    public function findItem(string|callable $filter): ?Item
+    {
+        if (is_callable($filter)) {
+            return $this->getItems()->findFirst(fn(int $key, Item $i) => $filter($i));
+        }
+        return $this->getItems()->findFirst(fn(int $key, Item $i) => $i->getPrototype()->getName() == $filter);
     }
 
     public function hasAnyItem(string ...$item_names): bool

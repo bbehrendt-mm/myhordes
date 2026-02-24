@@ -1,4 +1,5 @@
 import {Fetch} from "../../v2/fetch";
+import {API} from "../index";
 
 export type UserSettingBase = {
     option: string,
@@ -7,13 +8,8 @@ export type UserSettingBase = {
     isConfigured: boolean
 }
 
-export class UserSettingsAPI {
-
-    private fetch: Fetch;
-
-    constructor() {
-        this.fetch = new Fetch( 'user/settings/options' );
-    }
+export class UserSettingsAPI extends API {
+    constructor() { super( 'user/settings/options' ) }
 
     public list( ): Promise<Array<UserSettingBase>> {
         return this.fetch.from('/')

@@ -52,47 +52,53 @@
                 {% if source[recipe.id] > 0 %}
                     <div class="row-flex recipe">
                         <div class="padded cell rw-2 grow-0 shrink-0">
-                            <span class="small">{{ source[recipe.id] }}</span>
+                            <div class="flex middle stretch full-height">
+                                <span class="small">{{ source[recipe.id] }}</span>
+                            </div>
                         </div>
                         <div class="padded cell rw-1 grow-0 shrink-0">
-                            {% for entry in recipe.source.entries %}
-                                {# @var entry \App\Entity\ItemGroupEntry #}
-                                <span>
+                            <div class="flex wrap middle stretch full-height">
+                                {% for entry in recipe.source.entries %}
+                                    {# @var entry \App\Entity\ItemGroupEntry #}
+                                    <span>
                                     {% for c in 1..entry.chance %}
                                         <hordes-standalone-item data-item="{{ entry.prototype.id }}"></hordes-standalone-item>
                                     {% endfor %}
                                 </span>
-                            {% endfor %}
+                                {% endfor %}
+                            </div>
+
                         </div>
                         <div class="padded cell rw-1 grow-0 shrink-0 center">
-                            {% if recipe.type == constant('\\App\\Entity\\Recipe::WorkshopTypeShamanSpecific') %}
-                                <img src="{{ asset('build/images/professions/shaman.gif') }}" alt="" />
-                            {% elseif recipe.type == constant('\\App\\Entity\\Recipe::WorkshopTypeTechSpecific') %}
-                                <img src="{{ asset('build/images/professions/tech.gif') }}" alt="" />
-                            {% endif %}
-                            <img src="{{ asset('build/images/icons/small_move.gif') }}" alt="->" />
+                            <div class="flex middle stretch full-height">
+                                {% if recipe.type == constant('\\App\\Entity\\Recipe::WorkshopTypeShamanSpecific') %}
+                                    <img src="{{ asset('build/images/professions/shaman.gif') }}" alt="" />
+                                {% elseif recipe.type == constant('\\App\\Entity\\Recipe::WorkshopTypeTechSpecific') %}
+                                    <img src="{{ asset('build/images/professions/tech.gif') }}" alt="" />
+                                {% endif %}
+                                <img src="{{ asset('build/images/icons/small_move.gif') }}" alt="->" />
+                            </div>
                         </div>
-                        <div class="padded cell rw-4 grow-0 shrink-0 left" style="overflow: hidden">
-                            {% if recipe.result.entries|length > 1 and not recipe.multiOut %}
-                                <span class="small hide-desktop hide-lg">?</span>
-                                <span class="small hide-md hide-sm" style="display: block; margin-top: 4px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden">{% trans from 'game' %}Zufälliger Gegenstand{% endtrans %}</span>
-                            {% else %}
-                                {% for entry in recipe.result.entries %}
-                                    <span class="hide-desktop hide-lg"><hordes-standalone-item data-item="{{ entry.prototype.id }}"></hordes-standalone-item></span>
-                                    <span class="icon hide-md hide-sm" style="display: block; margin-top: 4px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden">
-                                        <hordes-standalone-item data-item="{{ entry.prototype.id }}"></hordes-standalone-item>
-                                        {{ entry.prototype.label|trans({},'items') }}
-                                        {% if recipe.multiOut and entry.chance > 1 %}
-                                            &nbsp;×&nbsp;{{ entry.chance }}
-                                        {% endif %}
-                                    </span>
-                                {% endfor %}
-                            {% endif %}
+                        <div class="padded cell rw-4 grow-0 shrink-0 left">
+                            <div class="flex middle stretch full-height">
+                                {% if recipe.result.entries|length > 1 and not recipe.multiOut %}
+                                    <span class="small hide-desktop hide-lg">?</span>
+                                    <span class="small hide-md hide-sm">{% trans from 'game' %}Zufälliger Gegenstand{% endtrans %}</span>
+                                {% else %}
+                                    {% for entry in recipe.result.entries %}
+                                        <span class="hide-desktop hide-lg"><hordes-standalone-item data-item="{{ entry.prototype.id }}"></hordes-standalone-item></span>
+                                        <span class="hide-md hide-sm full-width"><hordes-standalone-item data-item="{{ entry.prototype.id }}" data-line="1"></hordes-standalone-item></span>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+
                         </div>
                         <div class="padded cell rw-1 grow-0 shrink-0">
-                            {% if recipe.result.entries|length == 1 %}
-                                <span class="small">{{ result[recipe.id] }}</span>
-                            {% endif %}
+                            <div class="flex middle stretch full-height">
+                                {% if recipe.result.entries|length == 1 %}
+                                    <span class="small">{{ result[recipe.id] }}</span>
+                                {% endif %}
+                            </div>
                         </div>
                         <div class="padded cell rw-3 hide-desktop right">
                             <button x-recipe-id="{{ recipe.id }}" class="inline small" {{ {'disabled': disabled}|attributes }}>

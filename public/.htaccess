@@ -73,4 +73,8 @@ DirectoryIndex index.php
     <FilesMatch "^service(\.\w+)?\.js$">
         Header set Service-Worker-Allowed "/"
     </FilesMatch>
+    <If "%{REQUEST_URI} =~ m#^/(build|service|shared|shared-shim|storage)/#">
+        # Set cache to public, max-age of 1 year (31556952 seconds)
+        Header set Cache-Control "public, max-age=31556952, immutable"
+    </If>
 </IfModule>

@@ -67,6 +67,8 @@ class BeyondFixtures extends Fixture implements DependentFixtureInterface
                 ->setExplorableDescription( $entry['explorable_desc'] ?? $entry['desc'] ?? null )
                 ->setEmptyDropChance( $entry['empty'] ?? 0.25 )
                 ->setCapacity( $entry['capacity'] ?? -1 )
+                ->setAirOnly( $entry['air_only'] ?? false )
+                ->setAirReveal( $entry['air_reveal'] ?? false )
             ;
 
             foreach ($entity->getNamedDrops() as $existing_drop)

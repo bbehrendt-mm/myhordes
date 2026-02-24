@@ -28,17 +28,43 @@ use App\Entity\ZoneTag;
 use App\Enum\Configuration\TownSetting;
 use App\Enum\ExternalAPIError;
 use App\Enum\ExternalAPIInterface;
+use App\Service\ActionHandler;
+use App\Service\AdminHandler;
+use App\Service\Asset\Assets;
+use App\Service\CitizenHandler;
+use App\Service\ConfMaster;
+use App\Service\CrowService;
+use App\Service\DeathHandler;
+use App\Service\DoctrineCacheService;
+use App\Service\EventProxyService;
+use App\Service\GazetteService;
+use App\Service\HookExecutor;
+use App\Service\InventoryHandler;
+use App\Service\LogTemplateHandler;
+use App\Service\Media\MediaService;
+use App\Service\PictoHandler;
+use App\Service\RandomGenerator;
+use App\Service\TimeKeeperService;
+use App\Service\TownHandler;
+use App\Service\User\PictoService;
+use App\Service\User\UserUnlockableService;
+use App\Service\UserHandler;
+use App\Service\ZoneHandler;
 use App\Structures\TownConf;
 use App\Structures\TownDefenseSummary;
 use DateTime;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Shivas\VersioningBundle\Service\VersionManagerInterface;
+use Symfony\Component\Asset\Packages;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class ExternalController
@@ -54,6 +80,15 @@ class JSONv1Controller extends CoreController {
     private User                     $user;
     private int                      $xTown           = 0;
     private int                      $yTown           = 0;
+
+    public function __construct(
+        EntityManagerInterface $em, InventoryHandler $ih, CitizenHandler $ch, ActionHandler $ah, TimeKeeperService $tk, DeathHandler $dh, PictoHandler $ph, TranslatorInterface $translator, RandomGenerator $rg, LogTemplateHandler $lh, ConfMaster $conf, ZoneHandler $zh, UserHandler $uh, CrowService $armbrust, Packages $a, TownHandler $th, GazetteService $gs, AdminHandler $adminHandler, UrlGeneratorInterface $urlGenerator, DoctrineCacheService $doctrineCache, EventProxyService $events, HookExecutor $hookExecutor, PictoService $pictoService, UserUnlockableService $u, VersionManagerInterface $version,
+        private readonly MediaService $mediaService,
+        private readonly Assets $assetService,
+    )
+    {
+        parent::__construct($em, $ih, $ch, $ah, $tk, $dh, $ph, $translator, $rg, $lh, $conf, $zh, $uh, $armbrust, $a, $th, $gs, $adminHandler, $urlGenerator, $doctrineCache, $events, $hookExecutor, $pictoService, $u, $version);
+    }
 
     public function on_error( ExternalAPIError $message, string $language ): Response {
         return match ($message) {
@@ -545,7 +580,7 @@ class JSONv1Controller extends CoreController {
                                 $data_building[$field] = $this->getTranslate($building->getPrototype()->getDescription(), 'buildings');
                                 break;
                             case "pa":
-                                $data_building[$field] = $building->getPrototype()->getAp();
+                                $data_building[$field] = $building->getPrototype()->getResourceSet()->getAp();
                                 break;
                             case "paCurrent":
                                 $data_building[$field] = $building->getPrototypeAP( $this->conf->getTownConfiguration($building->getTown())->getBuildingRarity( $building->getPrototype() ) );
@@ -594,7 +629,7 @@ class JSONv1Controller extends CoreController {
                                 $data_building[$field] = $this->getResources($building);
                                 break;
                             case "actions":
-                                $data_building[$field] = $building->getPrototype()->getAp() - $building->getAp();
+                                $data_building[$field] = $building->getPrototypeAP( $this->conf->getTownConfiguration($building->getTown())->getBuildingRarity( $building->getPrototype() ) ) - $building->getAp();
                                 break;
                             case "hasLevels":
                                 $data_building[$field] = $building->getLevel();
@@ -638,7 +673,7 @@ class JSONv1Controller extends CoreController {
                         $data[$field] = $this->getTranslate($prototype->getDescription(), 'buildings');
                         break;
                     case "pa": case "paCurrent":
-                        $data[$field] = $prototype->getAp();
+                        $data[$field] = $prototype->getResourceSet()->getAp();
                         break;
                     case "maxLife":
                         $data[$field] = $prototype->getHp();
@@ -1449,7 +1484,7 @@ class JSONv1Controller extends CoreController {
     private function getResources(Building|BuildingPrototype $building, array $fields = []): array {
         $data = [];
 
-        $resources = is_a($building,Building::class) ? $building->getPrototypeResources() : $building->getResources();
+        $resources = is_a($building,Building::class) ? $building->getPrototypeResources() : $building->getResourceSet()->getResources();
 
         if (empty($fields)) {
             $fields = ['amount', 'rsc'];
@@ -1551,25 +1586,19 @@ class JSONv1Controller extends CoreController {
                     $user_data[$field] = $user->getLanguage();
                     break;
                 case "avatar": case "avatarData":
-                    $has_avatar = $user->getAvatar();
-                    if ($has_avatar && $field === "avatar") {
-                        $user_data[$field] = $this->generateUrl('app_web_avatar', ['uid' => $user->getId(), 'name' => $has_avatar->getFilename(),
-                            'ext' => $has_avatar->getFormat()
-                        ],                                      UrlGeneratorInterface::ABSOLUTE_URL);
-                    } elseif ($has_avatar && $field === "avatarData") {
-                        $user_data[$field] = [
-                            'url' => $this->generateUrl('app_web_avatar', ['uid' => $user->getId(), 'name' => $has_avatar->getFilename(),
-                                'ext' => $has_avatar->getFormat()
-                            ], UrlGeneratorInterface::ABSOLUTE_URL),
-                            'x' => $user->getAvatar()->getX(),
-                            'y' => $user->getAvatar()->getY(),
-                            'classic' => $user->getAvatar()->isClassic(),
-                            'format' => $user->getAvatar()->getFormat(),
-                        ];
-                        if (!$user->getAvatar()->isClassic() && $user->getAvatar()->getSmallName())
-                            $user_data[$field]['compressed'] = $this->generateUrl('app_web_avatar', ['uid' => $user->getId(), 'name' => $has_avatar->getSmallName(),
-                                'ext' => $has_avatar->getFormat()
-                            ], UrlGeneratorInterface::ABSOLUTE_URL);
+                    if ($media = $this->mediaService->getSingleMediaForObject( $user, 'avatar' )) {
+                        $conversion = $media->getLargestConversionByTag('default', 200);
+                        if ($field === "avatar")
+                            $user_data[$field] = $conversion?->url;
+                        elseif ($field === "avatarData" && $conversion) {
+                            $user_data[$field] = [
+                                'url' => $conversion->url,
+                                'x' => $conversion->width,
+                                'y' => $conversion->height,
+                                'classic' => $conversion->isTaggedAs('classic'),
+                                'format' => MediaService::mimeTypeToExtension($conversion->mime, false),
+                            ];
+                        } else $user_data[$field] = null;
                     } else {
                         $user_data[$field] = null;
                     }
@@ -1677,7 +1706,7 @@ class JSONv1Controller extends CoreController {
         return $user_data;
     }
 
-    private function getRewardsData(User $user = null, array $fields = []): array {
+    private function getRewardsData(?User $user = null, array $fields = []): array {
         $data = [];
 
         if(empty($fields)) {
@@ -1751,7 +1780,7 @@ class JSONv1Controller extends CoreController {
         $data = [];
 
         if (empty($fields)) {
-            $fields = ['x', 'y', 'nvt', 'tag', 'danger'];
+            $fields = ['x', 'y', 'nvt', 'exc', 'tag', 'danger'];
         }
 
         if (!in_array("x", $fields)) {
@@ -1821,6 +1850,9 @@ class JSONv1Controller extends CoreController {
                         case "nvt":
                             $data_zone[$field] = intval($zone->getDiscoveryStatus() != Zone::DiscoveryStateCurrent);
                             break;
+                        case "exc":
+                            $data_zone[$field] = intval($zone->isForceRegenerated());
+                            break;
                         case "tag":
                             if ($zone->getTag() !== null && $zone->getTag()->getRef() !== ZoneTag::TagNone) {
                                 $data_zone[$field] = $zone->getTag()->getRef();
@@ -1867,12 +1899,8 @@ class JSONv1Controller extends CoreController {
         $data['id'] = $expedition->getOwner()->getUser()->getId();
         $data['name'] = $expedition->getOwner()->getName();
 
-        $has_avatar = $expedition->getOwner()->getUser()->getAvatar();
-        if ($has_avatar) {
-            $data['avatar'] = $this->generateUrl('app_web_avatar', ['uid'  => $expedition->getOwner()->getUser()->getId(),
-                                                                    'name' => $has_avatar->getFilename(),
-                                                                    'ext'  => $has_avatar->getFormat()
-            ], UrlGenerator::ABSOLUTE_URL);
+        if ($media = $this->mediaService->getSingleMediaForObject( $expedition->getOwner()->getUser(), 'avatar' )) {
+            $data['avatar'] = $media->getSource(200) ?: false;
         } else {
             $data['avatar'] = false;
         }
@@ -1991,12 +2019,8 @@ class JSONv1Controller extends CoreController {
                         $data[$field] = $citizen->getTown()->getType()->getName() === 'panda';
                         break;
                     case "avatar":
-                        $has_avatar = $citizen->getUser()->getAvatar();
-                        if ($has_avatar) {
-                            $data[$field] = $this->generateUrl('app_web_avatar', ['uid'  => $citizen->getUser()->getId(),
-                                'name' => $has_avatar->getFilename(),
-                                'ext'  => $has_avatar->getFormat()
-                            ], UrlGeneratorInterface::ABSOLUTE_URL);
+                        if ($media = $this->mediaService->getSingleMediaForObject( $citizen->getUser(), 'avatar' )) {
+                            $data[$field] = $media->getSource(200) ?: false;
                         } else {
                             $data[$field] = null;
                         }
@@ -2156,7 +2180,10 @@ class JSONv1Controller extends CoreController {
                     break;
                 case "img":
                     $data[$field] =
-                        $this->getIconPath($this->asset->getUrl("build/images/ruin/{$prototype->getIcon()}.gif"));
+                        $this->getIconPath($this->assetService->getAvailableAsset(
+                            "build/images/ruin/{$prototype->getIcon()}.gif",
+                            "build/images/ruin/{$prototype->getIcon()}.png",
+                        ));
                     break;
                 case "name":
                     $data[$field] = $this->getTranslate($prototype->getLabel(), 'game');
@@ -2300,5 +2327,5 @@ class JSONv1Controller extends CoreController {
             return $val;
         }
     }
-    
+
 }

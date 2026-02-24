@@ -4,7 +4,6 @@ import TwinoAlikeParser from "./twino"
 import HordesTwinoEditorElement from "./modules/twino-editor";
 import {GroupResponse, HordesUserSearchBar} from "./react/user-search/Wrapper";
 import {HordesUserSearchElement} from "./modules/common-modules";
-import {LocalZoneSurroundings, MapCoordinate, MapRoute} from "./react/map/typedef";
 import {html} from "./v2/helpers";
 
 declare var $: Global;

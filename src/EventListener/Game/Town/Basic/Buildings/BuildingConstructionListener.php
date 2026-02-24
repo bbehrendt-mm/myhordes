@@ -8,6 +8,7 @@ use App\Entity\Complaint;
 use App\Entity\ItemPrototype;
 use App\Entity\PictoPrototype;
 use App\Entity\Zone;
+use App\Entity\ZonePrototype;
 use App\Enum\Configuration\TownSetting;
 use App\Event\Game\Town\Basic\Buildings\BuildingConstructionEvent;
 use App\EventListener\ContainerTypeTrait;
@@ -20,6 +21,7 @@ use App\Service\LogTemplateHandler;
 use App\Service\PictoHandler;
 use App\Service\RandomGenerator;
 use App\Service\TownHandler;
+use App\Service\Maps\MapMaker;
 use App\Structures\TownConf;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Container\ContainerInterface;
@@ -58,13 +60,15 @@ final readonly class BuildingConstructionListener implements ServiceSubscriberIn
             ItemFactory::class,
             CitizenHandler::class,
             RandomGenerator::class,
+            MapMaker::class,
         ];
     }
 
     public function onSetUpBuildingInstance( BuildingConstructionEvent $event ): void {
         $event->building->setComplete(true);
         $event->building->setConstructionDate(new \DateTime());
-        $event->building->setAp($event->building->getPrototype()->getAp());
+        $event->building->setCompletedTimes( $event->building->getCompletedTimes() + 1 );
+        $event->building->setAp($event->building->getPrototypeAP());
         $event->building->setHp($event->building->getPrototype()->getHp());
         $event->building->setDefense($event->building->getPrototype()->getDefense());
         $event->markModified();
@@ -146,21 +150,55 @@ final readonly class BuildingConstructionListener implements ServiceSubscriberIn
     public function onExecuteSpecialEffect( BuildingConstructionEvent $event ): void {
         switch ($event->building->getPrototype()->getName()) {
             case 'small_balloon_#00':
-                $all = $event->building->getPrototype()->getName() === 'small_balloon_#00';
                 /** @var TownHandler $townHandler */
                 $townHandler = $this->getService(TownHandler::class);
+                /** @var EntityManagerInterface $em */
+                $em = $this->getService(EntityManagerInterface::class);
+                /** @var MapMaker $mapMaker */
+                $mapMaker = $this->getService(MapMaker::class);
 
                 $state = $townHandler->getBuilding($event->town, 'item_electro_#00', true) ? Zone::ZombieStateExact : Zone::ZombieStateEstimate;
-                foreach ($event->town->getZones() as $zone)
-                    if ($all || $zone->getPrototype()) {
-                        $zone->setDiscoveryStatus( Zone::DiscoveryStateCurrent );
-                        $zone->setZombieStatus( max( $zone->getZombieStatus(), $state ) );
-                    }
+                foreach ($event->town->getZones() as $zone) {
+                    $zone->setDiscoveryStatus( Zone::DiscoveryStateCurrent );
+                    $zone->setZombieStatus( max( $zone->getZombieStatus(), $state ) );
+                }
+
+                $spawnedSpecial = $mapMaker->spawnRuins(
+                    $event->town,
+                    1,
+                    fn (ZonePrototype $ruin): bool => $ruin->isAirOnly(),
+                    uncovered: true,
+                    lenient_distances: true,
+                    scavenged: true,
+                    setModFlag: true,
+                );
+
+                $spawnedRevealed = $mapMaker->spawnRuins(
+                    $event->town,
+                    3,
+                    fn (ZonePrototype $ruin): bool => $ruin->isAirReveal(),
+                    uncovered: true,
+                    lenient_distances: true,
+                    scavenged: true,
+                    setModFlag: true,
+                );
+
+                $newRuins = array_map(fn(Zone $z) => $z->getPrototype(), array_merge($spawnedSpecial, $spawnedRevealed));
+                shuffle( $newRuins );
+
+                if (!empty($newRuins)) {
+                    $em->persist( $this->getService(LogTemplateHandler::class)->constructionsBuildingCompleteHotAirBalloon(
+                        $event->building,
+                        $newRuins
+                    ) );
+                }
+
+                $townHandler->checkFullyExploredMap($event->town, minDiscoveryStatus: Zone::DiscoveryStateNone);
                 break;
             case 'small_rocket_#00':
                 /** @var EntityManagerInterface $em */
                 $em = $this->getService(EntityManagerInterface::class);
-                
+
                 foreach ($event->town->getZones() as $zone)
                     if ($zone->getX() === 0 || $zone->getY() === 0) {
                         $zone->setZombies(0)->setInitialZombies(0);
@@ -251,7 +289,24 @@ final readonly class BuildingConstructionListener implements ServiceSubscriberIn
                 // If the novelty lamps are built, it's effect must be applied immediately
                 $novlamp_status = $em->getRepository(CitizenStatus::class)->findOneBy(['name' => 'tg_novlamps']);
                 foreach ($event->town->getCitizens() as $citizen) {
-                    if ($citizen->getAlive()) $citizenHandler->inflictStatus($citizen, $novlamp_status);
+                    if ($citizen->getAlive()) {
+                        $citizenHandler->inflictStatus($citizen, $novlamp_status);
+                        $em->persist($citizen);
+                    }
+                }
+
+                break;
+
+            case 'small_pool_#00':
+                /** @var CitizenHandler $citizenHandler */
+                $citizenHandler = $this->getService(CitizenHandler::class);
+                /** @var EntityManagerInterface $em */
+                $em = $this->getService(EntityManagerInterface::class);
+
+                // If the pool is built, it's effect must be applied immediately
+                $pool_filled_status = $em->getRepository(CitizenStatus::class)->findOneBy(['name' => 'tg_pool_filled']);
+                foreach ($event->town->getCitizens() as $citizen) {
+                    if ($citizen->getAlive()) $citizenHandler->inflictStatus($citizen, $pool_filled_status);
                     $em->persist($citizen);
                 }
 

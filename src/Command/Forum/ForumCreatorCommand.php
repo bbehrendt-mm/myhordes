@@ -17,6 +17,7 @@ use App\Service\CitizenHandler;
 use App\Service\CommandHelper;
 use App\Service\InventoryHandler;
 use App\Service\ItemFactory;
+use App\Service\Media\MediaService;
 use App\Service\StatusFactory;
 use Doctrine\ORM\EntityManagerInterface;
 use ReflectionClass;
@@ -43,7 +44,8 @@ class ForumCreatorCommand extends Command
 
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
-        private readonly KernelInterface $kernel
+        private readonly KernelInterface $kernel,
+        private readonly MediaService $mediaService,
     ) {
         parent::__construct();
     }
@@ -177,6 +179,14 @@ class ForumCreatorCommand extends Command
         $output->writeln( "Created forum '<info>{$newForum->getTitle()}</info>' (<info>{$newForum->getId()}</info>)." );
         /** @var $p ForumUsagePermissions|null */
         if ($p) $output->writeln( "Created forum permission object for group '<info>{$p->getPrincipalGroup()->getName()}</info>' (<info>{$p->getPrincipalGroup()->getId()}</info>) granting <info>{$p->getPermissionsGranted()}</info> and denying <info>{$p->getPermissionsDenied()}</info>." );
+
+        if ($newForum->getIcon() !== null) {
+            $icon_file = "{$this->kernel->getProjectDir()}/assets/img/forum/banner/" . $newForum->getIcon();
+            $this->mediaService->addMediaToObjectFromFile( $newForum, $icon_file, 'icon' );
+            $this->entityManager->flush();
+        }
+
+
 
         return 0;
 

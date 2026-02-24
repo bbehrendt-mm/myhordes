@@ -14,6 +14,7 @@ import {HordesServiceWorkerIndicator} from "../react/service-worker-state/Wrappe
 import {HordesProgressBar} from "../react/progress-bar/Wrapper";
 import {HordesHxpLog} from "../react/hxp-log/Wrapper";
 import {HordesForum, HordesForumGroup} from "../react/misc/ForumGroup";
+import {HordesHeaderUI, HordesSingularAppUI} from "../react/header/Wrapper";
 
 // Define web component <hordes-user-search />
 export class HordesUserSearchElement extends Shim<HordesUserSearchBar> {
@@ -213,6 +214,7 @@ customElements.define('hordes-forum-group', class HordesForumGroupElement extend
         return {
             id: this.dataset.id ?? null,
             icon: this.dataset.icon,
+            srcset: this.dataset.srcset,
             title: this.dataset.title,
             collapse: parseInt(this.dataset.collapse ?? '0') != 0,
             forums: data
@@ -220,7 +222,7 @@ customElements.define('hordes-forum-group', class HordesForumGroupElement extend
     }
 
     protected static observedAttributeNames() {
-        return ['data-icon', 'data-title', 'data-forums', 'data-collapse', 'data-id'];
+        return ['data-icon', 'data-title', 'data-srcset', 'data-forums', 'data-collapse', 'data-id'];
     }
 
 }, {  });
@@ -235,6 +237,7 @@ customElements.define('hordes-forum', class HordesForumElement extends Shim<Hord
             icon: this.dataset.icon,
             title: this.dataset.title,
             url: this.dataset.url,
+            srcset: this.dataset.srcset,
             sort: parseInt(this.dataset.sort ?? '0'),
             new: parseInt(this.dataset.new ?? '0') != 0,
             description: this.dataset.description
@@ -242,7 +245,48 @@ customElements.define('hordes-forum', class HordesForumElement extends Shim<Hord
     }
 
     protected static observedAttributeNames() {
-        return ['data-icon', 'data-title', 'data-url', 'data-sort', 'data-new', 'data-description'];
+        return ['data-icon', 'data-title', 'data-url', 'data-srcset', 'data-sort', 'data-new', 'data-description'];
+    }
+
+}, {  });
+
+customElements.define('hordes-header-ui', class HordesHeaderUIElement extends Shim<HordesHeaderUI> {
+
+    protected generateInstance(): HordesHeaderUI {
+        return new HordesHeaderUI();
+    }
+
+    protected generateProps(): object | null {
+        return {
+            //focus: parseInt( this.dataset.focus ?? '0' ),
+        }
+    }
+
+    protected static observedAttributeNames() {
+        return [
+            //'data-focus'
+        ];
+    }
+
+}, {  });
+
+customElements.define('hordes-singular-ext-app', class HordesSingularAppUIElement extends Shim<HordesSingularAppUI> {
+
+    protected generateInstance(): HordesSingularAppUI {
+        return new HordesSingularAppUI();
+    }
+
+    protected generateProps(): object | null {
+        return {
+            appId: parseInt( this.dataset.appId ?? '0' ),
+            home: this.dataset.home ?? '',
+        }
+    }
+
+    protected static observedAttributeNames() {
+        return [
+            'data-app-id', 'data-home'
+        ];
     }
 
 }, {  });

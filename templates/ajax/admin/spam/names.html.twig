@@ -33,6 +33,66 @@
             <div class="float-right">
                 <button id="name_add">{{ 'Hinzufügen'|trans({},'admin') }}</button>
             </div>
+            <div class="clear"></div>
+            <hr />
+            <div class="row-flex">
+                <div class="padded cell grow-1">
+                    <label><input type="text" value="{{ result.name }}" id="name_test" placeholder="{{ 'Name'|trans({},'admin') }}" /></label>
+                </div>
+                <div class="padded cell">
+                    <button id="name_test_execute">{{ 'Namen testen'|trans({},'admin') }}</button>
+                </div>
+            </div>
+            {% if result.name is not empty %}
+                <div class="row">
+                    <div class="padded cell rw-12">
+                        <div class="row">
+                            <div class="padded cell rw-4 note note-lightest">{{ 'Name ist gültig'|trans({},'admin') }}</div>
+                            <div class="padded cell rw-8">
+                                {% if result.valid  %}
+                                    <span class="bold" style="color: #00ff00">{{ 'Ja'|trans({},'global') }}</span>
+                                {% else %}
+                                    <span class="bold" style="color: #ff0000">{{ 'Nein'|trans({},'global') }}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% if result.debug['rule:length'] is defined and result.debug['rule:length'] %}
+                    <div class="row">
+                        <div class="padded cell ro-4 rw-8">
+                            <span class="small">{{ 'Name ist länger als 32 Zeichen'|trans({},'admin') }}</span>
+                        </div>
+                    </div>
+                {% endif %}
+                {% if result.debug['rule:preg'] is defined and result.debug['rule:preg'] is not empty %}
+                    <div class="row">
+                        <div class="padded cell ro-4 rw-8">
+                            <span class="small">
+                                {{ 'Name enthält ungültige Zeichen'|trans({},'admin') }}
+                            </span>
+                            <div class="flex wrap gap">
+                                {% for char in result.debug['rule:preg'] %}<code>{{ char }}</code>{% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                {% if result.debug['rule:matches'] is defined and result.debug['rule:matches'] is not empty %}
+                    <div class="row">
+                        <div class="padded cell ro-4 rw-8">
+                            <span class="small">
+                                {{ 'Name ist ähnlich zu verbotenen Begriffen'|trans({},'admin') }}
+                            </span>
+                            {% for result in result.debug['rule:matches'] %}
+                                <div class="flex gap middle">
+                                    <code>{{ result[1] }}</code>
+                                    <span class="small">{{ result[0] }}</span>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+            {% endif %}
         </div>
 
     </div>
@@ -84,5 +144,7 @@
 
         searchBox.addEventListener('keyup', nameSearchHandlerUp);
         searchBox.addEventListener('keydown', nameSearchHandlerDown);
+
+        document.querySelector('#name_test_execute').addEventListener('click', () => $.ajax.load(null, '{{ path('admin_spam_names_view') }}', false, {name: document.getElementById('name_test').value}));
     </script>
 {% endblock %}

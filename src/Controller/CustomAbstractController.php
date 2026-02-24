@@ -57,17 +57,9 @@ class CustomAbstractController extends CustomAbstractCoreController {
     protected function addDefaultTwigArgs( ?string $section = null, ?array $data = null ): array {
         $data = $data ?? [];
         $data['menu_section'] = $section;
+        $data['during_attack'] = $this->time_keeper->secondsUntilNextAttack(null, true) === 0;
 
         $activeCitizen = $this->getActiveCitizen();
-        $data['clock'] = [
-            'id'        => $activeCitizen?->getTown()?->getId() ?? null,
-            'desc'      => $activeCitizen?->getTown()->getName() ?? $this->translator->trans('Worauf warten Sie noch?', [], 'ghost'),
-            'day'       => $activeCitizen?->getTown()->getDay() ?? '',
-            'timestamp' => new DateTime('now'),
-            'attack'    => $this->time_keeper->secondsUntilNextAttack(null, true),
-            'towntype'  => $activeCitizen?->getTown()->getType()->getName() ?? '',
-            'offset'    => timezone_offset_get( timezone_open( date_default_timezone_get ( ) ), new DateTime() )
-        ];
 
         $locale = $this->container->get('request_stack')->getCurrentRequest()->getLocale();
         if ($locale) $locale = explode('_', $locale)[0];
@@ -84,10 +76,6 @@ class CustomAbstractController extends CustomAbstractCoreController {
         $data["allLangs"] = $allLangs;
         $data['quote'] = $quotes[0];
 
-        $data['apps'] = $this->entity_manager->getRepository(ExternalApp::class)->findBy(['active' => true]);
-
-        $data['adminActions'] = AdminActionController::getAdminActions();
-        $data['comActions']   = AdminActionController::getCommunityActions();
         $data['swapPivots']   = $this->getUser() ? $this->entity_manager->getRepository(UserSwapPivot::class)->findBy( ['principal' => $this->getUser()] ) : [];
 
         $data["poll"] = array_values(array_filter(
@@ -96,7 +84,7 @@ class CustomAbstractController extends CustomAbstractCoreController {
             ))[0] ?? null;
 
         if ( $activeCitizen?->getAlive() ){
-            $is_shaman = $this->citizen_handler->hasRole($activeCitizen, 'shaman') || $activeCitizen->getProfession()->getName() == 'shaman';
+            $is_shaman = $activeCitizen->hasRole('shaman') || $activeCitizen->isProfession('shaman');
             $data['citizen'] = $activeCitizen;
             $data['conf'] = $this->getTownConf();
             $data['ap'] = $activeCitizen->getAp();
@@ -108,13 +96,13 @@ class CustomAbstractController extends CustomAbstractCoreController {
             $data['max_bp'] = $this->citizen_handler->getMaxBP($activeCitizen);
             $data['status'] = $activeCitizen->getStatus();
             $data['roles'] = $activeCitizen->getVisibleRoles();
-            $data['rucksack_id'] = $activeCitizen->getProfession()->getName() !== CitizenProfession::DEFAULT ? $activeCitizen->getInventory()->getId() : null;
+            $data['rucksack_id'] = $activeCitizen->isProfession(CitizenProfession::DEFAULT) ? null : $activeCitizen->getInventory()->getId();
             $data['pm'] = $activeCitizen->getPm();
             $data['max_pm'] = $this->citizen_handler->getMaxPM($activeCitizen);
             $data['username'] = $this->getUser()->getName();
             $data['is_shaman'] = $is_shaman;
-            $data['is_shaman_job'] = $activeCitizen->getProfession()->getName() == 'shaman';
-            $data['is_shaman_role'] = $this->citizen_handler->hasRole($activeCitizen, 'shaman');
+            $data['is_shaman_job'] = $activeCitizen->isProfession('shaman');
+            $data['is_shaman_role'] = $activeCitizen->hasRole('shaman');
             $data['hunger'] = $activeCitizen->getGhulHunger();
             $data['is_night'] = $this->getTownConf()->isNightTime();
             $data['sp'] = $activeCitizen->getSp();
@@ -158,13 +146,13 @@ class CustomAbstractController extends CustomAbstractCoreController {
     /**
      * @inheritDoc
      */
-    protected function render(string $view, array $parameters = [], Response $response = null): Response
+    protected function render(string $view, array $parameters = [], ?Response $response = null): Response
     {
         $this->enrichParameter($parameters);
         return parent::render($view, $parameters, $response);
     }
 
-    protected function renderBlocks(string $view, array $blocks, array $externals = [], array $parameters = [], $include_flash = true, Response $response = null, bool $wrap = false): Response
+    protected function renderBlocks(string $view, array $blocks, array $externals = [], array $parameters = [], $include_flash = true, ?Response $response = null, bool $wrap = false): Response
     {
         $this->enrichParameter($parameters);
 

@@ -28,6 +28,7 @@ export type TranslationStrings = {
         warning: string
         'protected': string
         manipulated: string
+        purged: string
         falsify: string
         purgify: string
         more: string

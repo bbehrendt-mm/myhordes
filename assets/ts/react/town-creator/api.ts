@@ -1,5 +1,6 @@
 import {TranslationStrings} from "./strings";
 import {AjaxV1Response, Fetch} from "../../v2/fetch";
+import {TranslatableAPI} from "../index";
 
 export type ResponseIndex = {
     strings: TranslationStrings,
@@ -127,18 +128,8 @@ interface TemplateListResponse extends Array<Template> {}
 interface TemplateContentResponse {
     rules: TownRules
 }
-export class TownCreatorAPI {
-
-    private fetch: Fetch;
-
-    constructor() {
-        this.fetch = new Fetch( 'town-creator' );
-    }
-
-    public index(): Promise<ResponseIndex> {
-        return this.fetch.from('/')
-            .request().withCache().get() as Promise<ResponseIndex>;
-    }
+export class TownCreatorAPI extends TranslatableAPI<ResponseIndex> {
+    constructor() { super( 'town-creator' ) }
 
     public townList(): Promise<ResponseTownList> {
         return this.fetch.from('town-types')

@@ -25,8 +25,8 @@ class DigTimer
     private $timestamp;
     #[ORM\Column(type: 'boolean')]
     private $passive = false;
-    #[ORM\Column(type: 'array', nullable: true)]
-    private $digCache = [];
+    #[ORM\Column(type: 'json', nullable: true)]
+    private array $digCache = [];
 
     #[ORM\Column]
     private bool $nonAutomatic = false;
@@ -81,7 +81,7 @@ class DigTimer
     }
     public function setDigCache(?array $digCache): self
     {
-        $this->digCache = $digCache;
+        $this->digCache = $digCache ?? [];
 
         return $this;
     }

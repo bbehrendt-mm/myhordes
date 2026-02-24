@@ -3,6 +3,7 @@
 namespace App\Service\Actions\Game\AtomProcessors\Effect;
 
 use App\Entity\Citizen;
+use App\Entity\DigTimer;
 use App\Enum\ActionHandler\RelativeMaxPoint;
 use App\Enum\Configuration\TownSetting;
 use App\Service\CitizenHandler;
@@ -43,12 +44,20 @@ class ProcessStatusEffect extends AtomEffectProcessor
             return;
         }
 
+        if ($data->stopDigTimers && $target->getZone() && !$target->getZone()->isTownZone()) {
+            $dig_timer = $target->getCurrentDigTimer();
+            if ($dig_timer) {
+                $dig_timer->setPassive(true);
+                $cache->em->persist( $dig_timer );
+            }
+        }
+
         $p = $data->statusProbability;
         if ($p !== null && $data->statusProbabilityModifiable) {
 
             if ($data->role === 'ghoul') {
                 if ($target->getTown()->getType()->getName() === 'panda') $p += 3;
-                if ($ch->hasStatusEffect($target, 'tg_home_clean')) $p -= 3;
+                if ($target->hasStatus('tg_home_clean')) $p -= 3;
             }
 
         }
@@ -100,7 +109,7 @@ class ProcessStatusEffect extends AtomEffectProcessor
             elseif ($data->statusTo) {
                 $inflict = true;
 
-                if ($data->statusTo === "infect" && $ch->hasStatusEffect($target, "tg_infect_wtns")) {
+                if ($data->statusTo === "infect" && $target->hasStatus("tg_infect_wtns")) {
                     $inflict = $rg->chance(0.5);
                     $ch->removeStatus( $target, 'tg_infect_wtns' );
 

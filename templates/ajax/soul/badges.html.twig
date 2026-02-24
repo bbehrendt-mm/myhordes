@@ -2,7 +2,11 @@
 <div class="cell rw-12 center night">
     {% if badger.activeTitle or badger.activeIcon %}
         <div class="badge-title">
-            {% if badger.activeIcon %}<img alt="" src="{{ badger.activeIcon.customIcon ? url('app_web_customicon', {uid: badger.id, aid: badger.activeIcon.id, name: badger.activeIcon.customIconName, ext: badger.activeIcon.customIconFormat}) : asset('build/images/icons/title/' ~ badger.activeIcon.prototype.icon ~ '.gif') }}" />{% endif %}
+            {% if badger.activeIcon %}
+                <img alt=""
+                     src="{{ badger.activeIcon|singleMediaSource('icon', 16, false, asset('build/images/icons/title/' ~ badger.activeIcon.prototype.icon ~ '.gif'), true) }}"
+                     srcset="{{ badger.activeIcon|singleMediaSource('icon', 16, true) }}" />
+            {% endif %}
             {% if badger.activeTitle %}<span>{{ badger.activeTitle.customTitle ?? badger|translated_title(app.user)|raw }}</span>{% endif %}
         </div><br />
     {% endif %}

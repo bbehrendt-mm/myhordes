@@ -1,0 +1,23 @@
+<div class="tooltip help water-summary">
+	{% if summary.total_required == 0 %}
+		{{'Diese Nacht werden keine Gebäude Wasser aus dem Brunnen verbrauchen.'|trans({}, 'game')|raw}}
+	{% else %}
+		{{'Diese Gebäude verbrauchen jede Nacht Wasser aus dem Brunnen. Wenn die Stadt nicht genug Wasser hat, können sie nicht ordnungsgemäß funktionieren.'|trans({}, 'game')|raw}}
+		<table>
+			{% for info in summary.buildings %}
+			<tr class="{{ info.active ? 'active' : 'inactive' }}">
+				<td><img alt="" src="{{ asset('build/images/building/' ~ info.icon ~ '.gif') }}" /></td>
+				<td>{{ info.label|trans({}, 'buildings') }}</td>
+				<td style="display: flex;justify-content: flex-end;">{{ info.water_consumed }} <img src="{{ asset('build/images/status/status_thirst1.gif') }}" /></td>
+				<td>
+					{% if info.active %}
+						<img alt="" src="{{ asset('build/images/icons/done.png') }}" />
+					{% else %}
+						<img alt="" src="{{ asset('build/images/icons/warning_anim.gif') }}" />
+					{% endif %}
+				</td>
+			</tr>
+			{% endfor %}
+		</table>
+	{% endif %}
+</div>

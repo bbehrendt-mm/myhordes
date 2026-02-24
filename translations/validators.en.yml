@@ -1,4 +1,3 @@
----
 'This value should be false.': 'This value should be false.'
 'This value should be true.': 'This value should be true.'
 'This value should be of type {{ type }}.': 'This value should be of type {{ type }}.'
@@ -115,7 +114,7 @@ Error: Error
 'This value is not a valid week.': 'This value is not a valid week.'
 'This value should not be before week "{{ min }}".': 'This value should not be before week "{{ min }}".'
 'This value should not be after week "{{ max }}".': 'This value should not be after week "{{ max }}".'
-'This value is not a valid slug.': 'This value is not a valid slug.'
+'This value is not a valid Twig template.': 'This value is not a valid Twig template.'
 'This form should not contain extra fields.': 'This form should not contain extra fields.'
 'The uploaded file was too large. Please try to upload a smaller file.': 'The uploaded file was too large. Please try to upload a smaller file.'
 'The CSRF token is invalid. Please try to resubmit the form.': 'The CSRF token is invalid. Please try to resubmit the form.'
@@ -149,5 +148,6 @@ Error: Error
 'Please select a valid option.': 'Please select a valid option.'
 'Please select a valid range.': 'Please select a valid range.'
 'Please enter a valid week.': 'Please enter a valid week.'
+'This value is not a valid slug.': 'This value is not a valid slug.'
 v: v
 a: a

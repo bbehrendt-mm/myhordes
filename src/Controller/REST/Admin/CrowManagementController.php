@@ -4,7 +4,6 @@ namespace App\Controller\REST\Admin;
 
 use App\Annotations\GateKeeperProfile;
 use App\Controller\CustomAbstractCoreController;
-use App\Entity\Avatar;
 use App\Entity\OfficialGroup;
 use App\Entity\OfficialGroupMessageLink;
 use App\Entity\User;
@@ -12,8 +11,10 @@ use App\Entity\UserGroupAssociation;
 use App\Entity\UserSwapPivot;
 use App\Enum\OfficialGroupSemantic;
 use App\Service\JSONRequestParser;
+use App\Service\Media\MediaService;
 use App\Service\PermissionHandler;
 use Doctrine\ORM\EntityManagerInterface;
+use Random\RandomException;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -30,8 +31,13 @@ class CrowManagementController extends CustomAbstractCoreController
     /**
      * @param EntityManagerInterface $em
      * @param JSONRequestParser $parser
+     * @param UserPasswordHasherInterface $passwordEncoder
+     * @param KernelInterface $kernel
+     * @param PermissionHandler $perm
+     * @param RouterInterface $router
+     * @param MediaService $mediaService
      * @return JsonResponse
-     * @throws \Exception
+     * @throws RandomException
      */
     #[Route(path: '', name: 'put', methods: ['PUT'])]
     public function create(
@@ -40,7 +46,8 @@ class CrowManagementController extends CustomAbstractCoreController
         UserPasswordHasherInterface $passwordEncoder,
         KernelInterface $kernel,
         PermissionHandler $perm,
-        RouterInterface $router
+        RouterInterface $router,
+        MediaService $mediaService
     ): JsonResponse {
         if (!$parser->has_all(['prefix','name'], not_empty: true))
             return new JsonResponse([], Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -73,9 +80,6 @@ class CrowManagementController extends CustomAbstractCoreController
         while (in_array( $mail = 'p' . str_pad( "$i", 2, "0", STR_PAD_LEFT ) . '.crow@localhost', $all_crows_mails ))
             $i++;
 
-        $avatar_data = file_get_contents("{$kernel->getProjectDir()}/assets/img/forum/crow/crow.png");
-        $avatar_small_data = file_get_contents("{$kernel->getProjectDir()}/assets/img/forum/crow/crow.small.png");
-
         $name = "$prefix $name";
 
         // Create crow user
@@ -85,24 +89,13 @@ class CrowManagementController extends CustomAbstractCoreController
             ->setEmail($mail)
             ->setTosver(1)
             ->setValidated(true)
-            ->setRightsElevation(User::USER_LEVEL_CROW)
-            ->setAvatar( (new Avatar())
-                ->setChanged(new \DateTime())
-                ->setFilename( md5( $avatar_data ) )
-                ->setSmallName( md5( $avatar_small_data ) )
-                ->setFormat( 'png' )
-                ->setImage( $avatar_data )
-                ->setSmallImage( $avatar_small_data )
-                ->setX( 100 )
-                ->setY( 100 )
-            );
+            ->setRightsElevation(User::USER_LEVEL_CROW);
 
         $crow->setPassword($passwordEncoder->hashPassword($crow, bin2hex(random_bytes(16))));
         $em->persist($crow);
 
         // Assign crow as alt account to user
-        if ($user)
-            $em->persist( (new UserSwapPivot())->setPrincipal( $user )->setSecondary( $crow ));
+        if ($user) $em->persist( new UserSwapPivot()->setPrincipal($user )->setSecondary($crow ));
 
         // Add crow to their nests
         foreach ($langs as $lang) {
@@ -127,6 +120,14 @@ class CrowManagementController extends CustomAbstractCoreController
 
         }
 
+        $em->flush();
+
+        $em->persist( $mediaService->addLegacyAvatarFromFilesToUser(
+            $crow,
+            "{$kernel->getProjectDir()}/assets/img/forum/crow/crow.png",
+            "{$kernel->getProjectDir()}/assets/img/forum/crow/crow.small.png",
+            false
+        ) );
         $em->flush();
 
         return new JsonResponse([

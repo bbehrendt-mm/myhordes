@@ -2,9 +2,13 @@
 
 namespace App\Entity;
 
+use App\Enum\Game\BuildingResourceSetType;
 use App\Interfaces\NamedEntity;
+use ArrayHelpers\Arr;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\Order;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Table;
 use Doctrine\ORM\Mapping\UniqueConstraint;
@@ -33,11 +37,7 @@ class BuildingPrototype implements NamedEntity
     #[ORM\Column(type: 'integer')]
     private ?int $blueprint;
     #[ORM\Column(type: 'integer')]
-    private ?int $ap;
-    #[ORM\Column(type: 'integer')]
     private ?int $defense;
-    #[ORM\ManyToOne(targetEntity: 'App\Entity\ItemGroup', cascade: ['persist'])]
-    private ?ItemGroup $resources;
     #[ORM\ManyToOne(targetEntity: 'App\Entity\BuildingPrototype', inversedBy: 'children')]
     private ?BuildingPrototype $parent;
     #[ORM\OneToMany(mappedBy: 'parent', targetEntity: 'App\Entity\BuildingPrototype')]
@@ -58,20 +58,18 @@ class BuildingPrototype implements NamedEntity
     #[ORM\Column]
     private ?bool $hasHardMode = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $hardAp = null;
+    private ?ArrayCollection $allParents = null;
 
-    #[ORM\ManyToOne(cascade: ['persist'])]
-    private ?ItemGroup $hardResources = null;
+    /**
+     * @var Collection<int, BuildingConstructionResourceSet>
+     */
+    #[ORM\OneToMany(targetEntity: BuildingConstructionResourceSet::class, mappedBy: 'building', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    private Collection $resourceSets;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $easyAp = null;
-
-    #[ORM\ManyToOne(cascade: ['persist'])]
-    private ?ItemGroup $easyResources = null;
     public function __construct()
     {
         $this->children = new ArrayCollection();
+        $this->resourceSets = new ArrayCollection();
     }
     public function getId(): ?int
     {
@@ -137,16 +135,6 @@ class BuildingPrototype implements NamedEntity
 
         return $this;
     }
-    public function getAp(): ?int
-    {
-        return $this->ap;
-    }
-    public function setAp(int $ap): self
-    {
-        $this->ap = $ap;
-
-        return $this;
-    }
     public function getDefense(): ?int
     {
         return $this->defense;
@@ -157,28 +145,33 @@ class BuildingPrototype implements NamedEntity
 
         return $this;
     }
-    public function getResources(): ?ItemGroup
-    {
-        return $this->resources;
-    }
-    public function setResources(?ItemGroup $ressources): self
-    {
-        $this->resources = $ressources;
 
-        return $this;
-    }
     public function getParent(): ?self
     {
         return $this->parent;
     }
+
+    /**
+     * Returns a list of all parent constructions
+     * @return Collection<self>
+     */
+    public function getAllParents(): Collection
+    {
+        return clone ($this->allParents ??= new ArrayCollection([
+            ...( $this->getParent() ? [$this->getParent()] : [] ),
+            ...( $this->getParent()?->getAllParents()->toArray() ?? [] )
+        ]));
+    }
+
     public function setParent(?self $parent): self
     {
         $this->parent = $parent;
 
         return $this;
     }
+
     /**
-     * @return Collection|self[]
+     * @return Collection<self>>
      */
     public function getChildren(): Collection
     {
@@ -282,51 +275,60 @@ class BuildingPrototype implements NamedEntity
         return $this;
     }
 
-    public function getHardAp(): ?int
+    /**
+     * @return Collection<int, BuildingConstructionResourceSet>|ArrayCollection<int, BuildingConstructionResourceSet>
+     */
+    public function getResourceSets(): Collection|ArrayCollection
     {
-        return $this->hardAp;
+        return $this->resourceSets;
     }
 
-    public function setHardAp(?int $hardAp): static
+    public function addResourceSet(BuildingConstructionResourceSet $resourceSet): static
     {
-        $this->hardAp = $hardAp;
+        if (!$this->resourceSets->contains($resourceSet)) {
+            $this->resourceSets->add($resourceSet);
+            $resourceSet->setBuilding($this);
+        }
 
         return $this;
     }
 
-    public function getHardResources(): ?ItemGroup
+    public function removeResourceSet(BuildingConstructionResourceSet $resourceSet): static
     {
-        return $this->hardResources;
-    }
-
-    public function setHardResources(?ItemGroup $hardResources): static
-    {
-        $this->hardResources = $hardResources;
+        if ($this->resourceSets->removeElement($resourceSet)) {
+            // set the owning side to null (unless already changed)
+            if ($resourceSet->getBuilding() === $this) {
+                $resourceSet->setBuilding(null);
+            }
+        }
 
         return $this;
     }
 
-    public function getEasyAp(): ?int
+    public function getResourceSet(
+        BuildingResourceSetType $type = BuildingResourceSetType::Default,
+        int $level = 0,
+        int $repeat = 0,
+    ): BuildingConstructionResourceSet
     {
-        return $this->easyAp;
-    }
+        $set = $this->getResourceSets()
+            ->matching(
+                Criteria::create()
+                    ->where( Criteria::expr()->eq('type', $type) )
+                    ->andWhere( Criteria::expr()->lte('level', $level) )
+                    ->andWhere( Criteria::expr()->lte('times', $repeat) )
+                    ->orderBy([
+                        'level' => Order::Descending,
+                        'times' => Order::Descending,
+                    ])
+            )->first() ?: null;
 
-    public function setEasyAp(?int $easyAp): static
-    {
-        $this->easyAp = $easyAp;
+        if ($type !== BuildingResourceSetType::Default)
+            $set ??= $this->getResourceSet( level: $level, repeat: $repeat );
 
-        return $this;
-    }
 
-    public function getEasyResources(): ?ItemGroup
-    {
-        return $this->easyResources;
-    }
+        if ($level !== 0 || $repeat !== 0) $set ??= $this->getResourceSet();
 
-    public function setEasyResources(?ItemGroup $easyResources): static
-    {
-        $this->easyResources = $easyResources;
-
-        return $this;
+        return $set ?? new BuildingConstructionResourceSet();
     }
 }

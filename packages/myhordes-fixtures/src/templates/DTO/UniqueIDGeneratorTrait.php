@@ -13,8 +13,9 @@ trait UniqueIDGeneratorTrait
         $key = $context;
         if ($key === null) {
             // Generate unique ID
+            $prop = $child->identifier ?? $child->icon;
             $i = 0; do {
-                $key = "{$child->icon}_#" . str_pad("$i",2, '0',STR_PAD_LEFT);
+                $key = "{$prop}_#" . str_pad("$i",2, '0',STR_PAD_LEFT);
                 $i++;
             } while ( $this->has($key) );
         }

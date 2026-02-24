@@ -30,7 +30,10 @@ enum ActionCounterType: int {
     case LastAutoghoulAt 	= 24;
     case ReceiveXP 	        = 25;
     case IntrusionFrom 	    = 26;
+    case Contemplate 	    = 27;
+    case SpecialActionScav  = 28;
     case ScaryIntrusionFrom = 29;
+    case HomeDump = 30;
 
     /**
      * @return ActionCounterType[]

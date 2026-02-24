@@ -137,3 +137,10 @@ div.inline { display: inline-block }
   99% { pointer-events: none; }
   100% { pointer-events: all; }
 }
+
+.break-word { word-wrap: break-word }
+
+.scroll-anchor {
+  &>*:not(.scroll-anchor-element) { overflow-anchor: none; }
+  &>*.scroll-anchor-element { overflow-anchor: auto; height: 1px;}
+}

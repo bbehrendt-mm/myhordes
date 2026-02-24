@@ -15,6 +15,7 @@ import {
 } from "../react/inventory/Wrapper";
 import {InventoryBagData, Item} from "../react/inventory/api";
 import {HordesBuildingList, HordesBuildingPage} from "../react/buildings/Wrapper";
+import {HordesRuinExplorationMap} from "../react/map-ruin/Wrapper";
 
 customElements.define('hordes-map', class HordesMapElement extends PersistentShim<HordesMap> {
     protected generateInstance(): HordesMap {
@@ -30,6 +31,28 @@ customElements.define('hordes-map', class HordesMapElement extends PersistentShi
     }
 
 }, {  });
+
+customElements.define('hordes-map-e-ruin', class HordesMapERuinElement extends PersistentShim<HordesRuinExplorationMap> {
+    protected generateInstance(): HordesRuinExplorationMap {
+        return new HordesRuinExplorationMap();
+    }
+
+    protected generateProps(): object | null {
+        return {
+            origin: parseInt(this.dataset.origin ?? '0'),
+            theme: this.dataset.skin,
+            name: this.dataset.name ?? this.dataset.skin ?? '',
+            etag: this.dataset.etag ?? '',
+            reload: this.dataset.reload
+        }
+    }
+
+    protected static observedAttributeNames() {
+        return ['data-etag', 'data-origin', 'data-theme', 'data-name','data-reload'];
+    }
+
+}, {  });
+
 
 customElements.define('hordes-log', class HordesLogElement extends PersistentShim<HordesLog> {
     protected generateInstance(): HordesLog {
@@ -139,15 +162,23 @@ customElements.define('hordes-standalone-item', class HordesStandaloneItemElemen
         return new HordesStandaloneItem();
     }
 
+    protected consumesInnerHTML(): boolean {
+        return true;
+    }
+
     protected generateProps(): object | null {
         return {
             item: parseInt(this.dataset.item ?? '0'),
+            line: parseInt(this.dataset.line ?? '0') != 0,
+            inline: parseInt(this.dataset.inline ?? '0') != 0,
+            labelClass: this.dataset.labelClass,
+            extra: this.initial_inner_html
         }
     }
 
     protected static observedAttributeNames() {
         return [
-            'data-item'
+            'data-item', 'data-line', 'data-inline', 'data-label-class'
         ];
     }
 }, {  });

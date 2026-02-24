@@ -184,6 +184,9 @@ class TownAttackCommand extends Command
                 } elseif ($town->isOpen() && $town->getCitizenCount() > 0 && $town->getAliveCitizenCount() == 0) {
                     $last_op = 'delc';
                     $this->gameFactory->nullifyTown($town, true);
+                } elseif ($town->isOpen() && $town->isMayor() && $town->getCitizens()->isEmpty() ) {
+                    $last_op = 'delc';
+                    $this->gameFactory->nullifyTown($town, true);
                 } elseif ((!$town->isOpen()) && $town->getAliveCitizenCount() == 0) {
                     $last_op = 'com';
                     $town->setAttackFails(0);

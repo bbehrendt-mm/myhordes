@@ -7,22 +7,19 @@
 <h1>{{ 'Das Katapult'|trans({},'help')|raw }}</h1>
 <p>
 {{ '<strong>Das Katapult ist ein äußerst mächtiges Werkzeug, mit dem die Stadt jede Art von Gegenstand in die Wüste schießen kann.</strong> Das ist sehr nützlich, wenn man weit entfernte Bürger versorgen möchte (Lebensmittel, Wasser, Waffen etc...).'|trans({},'help')|raw }}
+{{ 'Zudem können mithilfe des Katapults auch Zombies auf einer Zone aus sicherer Entfernung beseitigt werden, wenn ein entsprechend "gefährlicher" Gegenstand katapultiert wird.'|trans({},'help')|raw }}
 </p>
 <p>
-{{ 'Es ist allerdings zu beachten, dass das Katapult <i>manchmal</i> sein Ziel verfehlt und der verschossene Gegenstand in der benachbarten Zone landet. 
+{{ 'Es ist allerdings zu beachten, dass das Katapult <i>manchmal</i> sein Ziel verfehlt und der verschossene Gegenstand in der benachbarten Zone landet.
 Darüber hinaus besteht die Gefahr, dass manche, <i>seltene</i> Gegenstände den Aufprall nicht unbeschadet überstehen.'|trans({},'help')|raw }}
 </p>
 <p>
 {{ 'Die Aktivierung des Katapults kostet {img_ap}. Diese Kosten können gesenkt werden, wenn das Katapult verbessert wird,'|trans({'{img_ap}' : '<span class="ap"></span>'},'help')|raw }}
 </p>
 <h2>{{ 'Wer ist für das Katapult verantwortlich?'|trans({},'help')|raw }}</h2>
-<p>{{ 'Es wird nach dem Zufallsprinzip ein Bürger bestimmt, der sich um das Katapult kümmert. Der Katapultverantwortliche wird nach folgendem Schema ausgewählt:'|trans({},'help')|raw }}</p>
-<ul>
-<li>{{ 'Es werden zunächst die am gegebenen Tag aktiven Helden der Stadt für diese Aufgabe eingeteilt.'|trans({},'help')|raw }}</li>
-<li>{{ 'Wenn kein Bürger gefunden wurde, werden erneut die Helden der Stadt herangezogen.'|trans({},'help')|raw }}</li>
-<li>{{ 'Wenn danach immer noch kein Verantwortlicher gefunden wurde, übernehmen die aktivsten Spieler des jeweiligen Tages diese Aufgabe.'|trans({},'help')|raw }}</li>
-<li>{{ 'Sollten sich schließlich alle um diese Aufgabe drücken, trifft es einen zufällig ausgewählten Bürger.'|trans({},'help')|raw }}</li>
-</ul>
+<p>
+    {{ '<strong>Natürlich nur jemand, der ausreichend qualifiziert ist!</strong> Sobald das Katapult errichtet wurde (und jedes mal wenn der vorherige Katapultverantwortliche stirbt), wird eine Stadtversammlung einberufen, um einen neuen Verantworlichen zu wählen. Während dieses Treffens wird demokratisch derjenige Bürger bestimmt, der <s>nicht schnell genug fliehen konnte</s> die bestmögliche Qualifizierung als Katapultverantwortlicher innehat!'|trans({},'help')|raw }}
+</p>
 <div class="clear"></div>
 {% endblock %}
 {% block helpContentPost %}

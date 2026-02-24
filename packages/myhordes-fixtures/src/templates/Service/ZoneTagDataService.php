@@ -75,6 +75,11 @@ class ZoneTagDataService implements FixtureProcessorInterface {
                 'icon' => 'tag_12',
                 'ref' => ZoneTag::TagLostSoul,
                 'temp' => false],
+            'exc' => [
+                'label' => 'Zone ausgehoben',
+                'icon' => 'tag_13',
+                'ref' => ZoneTag::TagExcavated,
+                'temp' => false],
         ]);
     }
 }

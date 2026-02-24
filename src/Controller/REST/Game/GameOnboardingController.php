@@ -28,6 +28,7 @@ use App\Service\TownHandler;
 use App\Service\UserHandler;
 use App\Structures\EventConf;
 use App\Structures\MyHordesConf;
+use Carbon\Carbon;
 use DateTime;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
@@ -105,6 +106,7 @@ class GameOnboardingController extends AbstractController
             ], $em->getRepository(CitizenProfession::class)->findAll()),
             'types' => array_map(fn(TownClass $c) => [
                 'id' => $c->getId(),
+                'type' => $c->getName(),
                 'name' => $trans->trans($c->getLabel(), [], 'game'),
                 'order' => $c->getOrderBy(),
                 'help' => $trans->trans($c->getHelp(), ['splimit' => $this->getTownClassAccessLimit( $c, $conf->getGlobalConf() )], 'game'),
@@ -122,7 +124,9 @@ class GameOnboardingController extends AbstractController
                 'mayor_icon' => $asset->getUrl( 'build/images/icons/small_user.gif' ),
                 'mayor_lines' => [
                     $trans->trans('Sie folgt den normalen Spielregeln und wird an ihrem Ende ins Ranking aufgenommen.', [], 'ghost'),
-                    $trans->trans('Wenn du dieser Stadt beitrittst, kannst du {block} Tage danach keiner anderen von einem Spieler gegründeten Stadt beitreten.', ['block' => 15], 'ghost'),
+                ],
+                'mayor_lines_delay' => [
+                    $trans->trans('Wenn du dieser Stadt beitrittst, kannst du {block} Tage danach keiner anderen von einem Spieler gegründeten Stadt beitreten.', ['block' => 10], 'ghost'),
                 ],
                 'lang' => $trans->trans('Die Sprache dieser Stadt stimmt nicht mit deiner Spracheinstellung überein. Wenn du dieser Stadt beitrittst, musst du im Stadtforum die Sprache der Stadt verwenden.', [], 'ghost'),
                 'lang_warn' => $trans->trans('Die Verwendung einer anderen Sprache im Stadtforum kann zu Sanktionen seitens der Moderation führen!', [], 'ghost'),
@@ -201,7 +205,7 @@ class GameOnboardingController extends AbstractController
             ->where(Criteria::expr()->eq('day', 1))
             ->andWhere(Criteria::expr()->orX(
                 Criteria::expr()->isNull('scheduledFor'),
-                Criteria::expr()->lte('scheduledFor', now()),
+                Criteria::expr()->lte('scheduledFor', new DateTime()),
             ))
         )->filter(fn(Town $town) => $town->getPopulation() > $town->getCitizenCount());
 
@@ -329,11 +333,11 @@ class GameOnboardingController extends AbstractController
         try {
             $em->persist($town);
             $em->persist($citizen);
-            if ($town->isMayor() && $town->getCreator()?->getId() !== $user->getId())
-                $em->persist( (new MayorMark())
+            if ($town->isMayor() && $town->getCreator()?->getId() !== $user->getId() && !$town->getType()->is( TownClass::EASY ))
+                $em->persist( new MayorMark()
                     ->setUser( $this->getUser() )
                     ->setCitizen( true )
-                    ->setExpires( (new DateTime())->modify('+15days') )
+                    ->setExpires( new Carbon()->addDays(10) )
                 );
             $em->flush();
         } catch (Exception $e) {

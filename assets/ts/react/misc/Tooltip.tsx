@@ -73,12 +73,12 @@ const TooltipImplementation = (
         additionalClasses?: string|string[],
         forParent?: HTMLElement|null,
         html?: string,
-        onShowTooltip?: (HTMLDivElement)=>void,
-        onHideTooltip?: (HTMLDivElement)=>void,
+        onShowTooltip?: (arg0: HTMLDivElement)=>void,
+        onHideTooltip?: (arg0: HTMLDivElement)=>void,
     }) => {
 
     const key = useRef<number>( ++TooltipGlobal.counter );
-    const tooltip = useRef<HTMLDivElement>();
+    const tooltip = useRef<HTMLDivElement>(null);
 
     const getOffset = (obj: HTMLDivElement) => {
         let found = false;

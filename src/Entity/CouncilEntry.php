@@ -29,8 +29,8 @@ class CouncilEntry
     #[ORM\ManyToOne(targetEntity: Citizen::class)]
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     private $citizen;
-    #[ORM\Column(type: 'array', nullable: true)]
-    private $variables = [];
+    #[ORM\Column(type: 'json', nullable: true)]
+    private array  $variables = [];
     public function getId(): ?int
     {
         return $this->id;

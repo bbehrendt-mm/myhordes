@@ -5892,7 +5892,7 @@ class RolePlayTextDataService implements FixtureProcessorInterface {
                 "content" => [
                     '<p>Lo acabo de ver, uno de los habitantes mordió un trozo de carne y algo que sucedió, no se que fue pero de repente me miró de una manera que solo haría un zombie, seguía teniendo la misma apariencia de siempre pero era un zombie con conciencia.</p>
                 <p>Me intentó morder, logré escapar y llegué hasta una casa abandonada me encerré y bloqueé la única entrada.</p>',
-                    '<p>Abandono toda esperanza de sobrevivir, mi corazón late muy fuerte, antes de que entre quiero avisarles que el "hombre zombie" está más cerca de lo que creen y no es nada más ni menos qu__<s>.</s></p><s>'
+                    '<p>Abandono toda esperanza de sobrevivir, mi corazón late muy fuerte, antes de que entre quiero avisarles que el "hombre zombie" está más cerca de lo que creen y no es nada más ni menos qu__.</p>'
                 ],
                 "lang" => "es",
                 "background" => "postit",
@@ -6470,8 +6470,7 @@ class RolePlayTextDataService implements FixtureProcessorInterface {
                 <p>MsIHlvdXIgdXNlcm5hbWUgYW5kIHRvd24gbmFtZS4g</p>
                 <p>WW91IHdpbGwgd2luIGEgZGF5IHRvIHBsYXkgYXMgYSBIZXJvLi4uIEFyaXNlIFNpciBDaHVtcCE=</p>
                 <p><small>[End of Transmission]</small></p>
-                <p><small>ETR: 07/03 12h58 - An error has occurred: corrupt data - status : <s>IGNORED</s>Base<s></s></small></p><s>
-                </s>'
+                <p><small>ETR: 07/03 12h58 - An error has occurred: corrupt data - status : <s>IGNORED</s>Base</small></p>'
                 ],
                 "lang" => "en",
                 "background" => "printer",
@@ -7327,10 +7326,9 @@ class RolePlayTextDataService implements FixtureProcessorInterface {
                 <li>"Citadel" ? What is this ??</li>
                 </ul>
                 <p>Need to find the <strong>I-40</strong>...<s>that IS</s>the way.</p>
-                <p>the r<s>av</s>en???!? Who is the ra<s>ve</s>n ? <s>find out who they are</s>MUST KILL<s></s></p><s>
+                <p>the r<s>av</s>en???!? Who is the ra<s>ve</s>n ? <s>find out who they are</s>MUST KILL</p>
                 <blockquote>Meeting @ 16h !!!</blockquote>
-                <p>find <strong>CITADEL</strong></p>
-                </s>'
+                <p>find <strong>CITADEL</strong></p>'
                 ],
                 "lang" => "en",
                 "background" => "secret",
@@ -7961,6 +7959,18 @@ class RolePlayTextDataService implements FixtureProcessorInterface {
                 "background" => "blood",
                 "design" => "typed",
                 "chance" => "3",
+            ],
+            "embrasement_recette_fr" => [
+                "title" => "La recette du poulet pâtes de Dina",
+                "author" => "SilAfyen",
+                "content" => [
+                    '>
+                {asset}build/images/fanart/event-embrasement-la-recette-du-poulet.png{endasset}'
+                ],
+                "lang" => "fr",
+                "background" => "letter",
+                "design" => "written",
+                "chance" => "2",
             ],
         ]);
     }

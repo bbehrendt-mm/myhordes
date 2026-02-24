@@ -51,7 +51,7 @@ const HordesEventCreatorEventListing = ( {event,editEvent,deleteEvent}: {
 }) => {
     const globals = useContext(Globals)
 
-    const description = useRef<HTMLDivElement>();
+    const description = useRef<HTMLDivElement>(null);
     const [showDetails, setShowDetails] = useState<boolean>(false);
 
     useLayoutEffect(() => {

@@ -2,9 +2,15 @@
 
 namespace App\Entity;
 
+use App\Structures\Media\MediaCollection;
+use App\Structures\Media\MediaCollectionList;
+use App\Structures\Media\MediaVariant;
+use App\Traits\Entity\LinksMedia;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Table;
 use Doctrine\ORM\Mapping\UniqueConstraint;
+use Exception;
+use Intervention\Image\Interfaces\ImageInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: 'App\Repository\ExternalAppRepository')]
@@ -13,6 +19,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 #[UniqueConstraint(name: 'external_app_name_unique', columns: ['name'])]
 class ExternalApp
 {
+    use LinksMedia;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
@@ -36,12 +44,6 @@ class ExternalApp
     private $testing = false;
     #[ORM\Column(type: 'boolean', nullable: true)]
     private $linkOnly = false;
-    #[ORM\Column(type: 'blob', nullable: true)]
-    private $image;
-    #[ORM\Column(type: 'string', length: 32, nullable: true)]
-    private $image_name;
-    #[ORM\Column(type: 'string', length: 9, nullable: true)]
-    private $image_format;
 
     #[ORM\Column(length: 190, nullable: true)]
     private ?string $devurl = null;
@@ -141,36 +143,6 @@ class ExternalApp
 
         return $this;
     }
-    public function getImage()
-    {
-        return $this->image;
-    }
-    public function setImage($image): self
-    {
-        $this->image = $image;
-
-        return $this;
-    }
-    public function getImageName(): ?string
-    {
-        return $this->image_name;
-    }
-    public function setImageName(?string $image_name): self
-    {
-        $this->image_name = $image_name;
-
-        return $this;
-    }
-    public function getImageFormat(): ?string
-    {
-        return $this->image_format;
-    }
-    public function setImageFormat(?string $image_format): self
-    {
-        $this->image_format = $image_format;
-
-        return $this;
-    }
 
     public function getDevurl(): ?string
     {
@@ -194,5 +166,34 @@ class ExternalApp
         $this->wiki = $wiki;
 
         return $this;
+    }
+
+    protected static function defineMediaCollections(MediaCollectionList $list): void
+    {
+        $list->add( new MediaCollection('icon')
+            ->singleFile()
+            ->addVariant( new MediaVariant('default')
+                              ->coverDown( 16, 16 )
+                              ->toPng()
+            )
+            ->addVariant( new MediaVariant('default-hd')
+                              ->minResolution( width: 17 )
+                              ->coverDown( 32, 32 )
+                              ->toPng()
+            )
+            ->addVariant( new MediaVariant('default-uhd')
+                              ->minResolution( width: 33 )
+                              ->coverDown( 64, 64 )
+                              ->toWebp(quality: 100)
+            )
+        );
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getMediaBasePath(): string
+    {
+        return "app/{$this->getPrimaryKey()}";
     }
 }

@@ -153,7 +153,7 @@ class MessageTownMessageController extends MessageController
             $recipient = $global_recipient ?? $em->getRepository(Citizen::class)->find($recipient);
 
             if (count($linked_items) > 0) {
-                if ($recipient->getBanished() != $sender->getBanished() && !$this->citizen_handler->hasStatusEffect($sender,'drunk'))
+                if ($recipient->getBanished() != $sender->getBanished() && !$sender->hasStatus('drunk'))
                     return AjaxResponse::error(ErrorHelper::ErrorActionNotAvailable);
                 if ($sender->getTown()->getChaos()){
                     if($recipient->getZone())
@@ -177,7 +177,7 @@ class MessageTownMessageController extends MessageController
             }
 
             // Special drunk handler
-            if ($recipient && $this->citizen_handler->hasStatusEffect($sender,'drunk')) {
+            if ($recipient && $sender->hasStatus('drunk')) {
 
                 // Filter possible recipients. A sender can only send to someone who has the same banishment status.
                 $list = $sender->getTown()
@@ -441,6 +441,10 @@ class MessageTownMessageController extends MessageController
                 case PrivateMessage::TEMPLATE_CROW_HALLOWEEN_TERROR:
                     $thread->setTitle( $this->translator->trans('Eine schaurige Nacht!', [], 'game') );
                     $post->setText( $this->html->prepareEmotes($post->getText(), $this->getUser(), $citizen->getTown()) . $this->translator->trans( 'Du hast die gesamte Nacht keine Sekunde geschlafen. Jedes mal, wenn du die Augen schließt, hörst du Schritte oder ein leises Lachen. Diese Nacht hat dich völlig verängstigt zurückgelassen. Es ist beinahe so, als wollte irgend etwas in deiner Behausung dich um den Verstand bringen...', ['citizen' => $citizen], 'game' ) );
+                    break;
+                case PrivateMessage::TEMPLATE_CROW_SANCTUARY:
+                    $thread->setTitle( $this->translator->trans('Du hast die Präsenz einer Seele gespürt.', [], 'game') );
+                    $post->setText( $this->html->prepareEmotes($post->getText(), $this->getUser(), $citizen->getTown()) . $this->translator->trans( 'Im Rahmen einer intensiven Meditation ist es dir gelungen, die Seele eines Mitbürgers in der Außenwelt zu lokalisieren. Deinen Berechnungen zufolge sollte sie sich bei {x}/{y} befinden!', ['citizen' => $citizen, 'x' => $post->getAdditionalData()[0] ?? '??', 'y' => $post->getAdditionalData()[1] ?? '??'], 'game' ) );
                     break;
                 default:
                     $post->setText($this->html->prepareEmotes($post->getText(), $this->getUser(), $citizen->getTown()));

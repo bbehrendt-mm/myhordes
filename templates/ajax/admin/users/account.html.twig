@@ -51,59 +51,60 @@
                                     </optgroup>
                                     <optgroup label="{{ 'Profil'|trans({},'admin') }}">
                                         {% if is_granted("ROLE_SUB_ADMIN") %}
-                                            <option value="{{ url('admin_users_account_manage', {action: 'rename', id: user.id}) }}" x-confirm="RENAME" x-query="{{ 'Neuen Namen eingeben.'|trans({},'admin') }}">{{ 'Umbenennen'|trans({},'admin') }}</option>
+                                            <option value="{{ url('admin_users_account_manage', {action: 'rename', id: user.id}) }}" data-confirm="RENAME" data-query="{{ 'Neuen Namen eingeben.'|trans({},'admin') }}">{{ 'Umbenennen'|trans({},'admin') }}</option>
                                         {% endif %}
                                         {% if user.eternalID is not null and not user.noAutomaticNameManagement %}
-                                            <option value="{{ url('admin_users_account_manage', {action: 'name_manual', id: user.id}) }}" x-confirm="MANUAL_NAME">{{ 'Spielernamen nicht von EternalTwin übernehmen'|trans({},'admin') }}</option>
+                                            <option value="{{ url('admin_users_account_manage', {action: 'name_manual', id: user.id}) }}" data-confirm="MANUAL_NAME">{{ 'Spielernamen nicht von EternalTwin übernehmen'|trans({},'admin') }}</option>
                                         {% endif %}
                                         {% if user.noAutomaticNameManagement %}
-                                            <option value="{{ url('admin_users_account_manage', {action: 'name_auto', id: user.id}) }}" x-confirm="AUTO_NAME">{{ 'Automatische Verwaltung des Spielernamens wiederherstellen'|trans({},'admin') }}</option>
+                                            <option value="{{ url('admin_users_account_manage', {action: 'name_auto', id: user.id}) }}" data-confirm="AUTO_NAME">{{ 'Automatische Verwaltung des Spielernamens wiederherstellen'|trans({},'admin') }}</option>
                                         {% endif %}
                                         {% if is_granted("ROLE_SUB_ADMIN") %}
-                                            <option value="{{ url('admin_users_account_manage', {action: 'forget_name_history', id: user.id}) }}" x-confirm="FORGET NAME HISTORY">{{ 'Liste vergangener Namen löschen'|trans({},'admin') }}</option>
+                                            <option value="{{ url('admin_users_account_manage', {action: 'forget_name_history', id: user.id}) }}" data-confirm="FORGET NAME HISTORY">{{ 'Liste vergangener Namen löschen'|trans({},'admin') }}</option>
                                         {% endif %}
-                                        <option value="{{ url('admin_users_account_manage', {action: 'rename_pseudo', id: user.id}) }}" x-confirm="RENAME PSEUDO" x-query="{{ 'Neuen Namen eingeben.'|trans({},'admin') }}">{{ 'Anzeigenamen ändern'|trans({},'admin') }}</option>
+                                        <option value="{{ url('admin_users_account_manage', {action: 'rename_pseudo', id: user.id}) }}" data-confirm="RENAME PSEUDO" data-query="{{ 'Neuen Namen eingeben.'|trans({},'admin') }}">{{ 'Anzeigenamen ändern'|trans({},'admin') }}</option>
                                         {% if user.displayName %}
-                                            <option value="{{ url('admin_users_account_manage', {action: 'rename_pseudo', id: user.id}) }}" x-confirm="REMOVE PSEUDO">{{ 'Anzeigenamen entfernen'|trans({},'admin') }}</option>
+                                            <option value="{{ url('admin_users_account_manage', {action: 'rename_pseudo', id: user.id}) }}" data-confirm="REMOVE PSEUDO">{{ 'Anzeigenamen entfernen'|trans({},'admin') }}</option>
                                         {% endif %}
                                         {% if is_granted("ROLE_ADMIN") %}
-                                            <option value="{{ url('admin_users_account_manage', {action: 'delete', id: user.id}) }}" x-confirm="DELETE">{{ 'Löschen'|trans({},'admin') }}</option>
+                                            <option value="{{ url('admin_users_account_manage', {action: 'delete', id: user.id}) }}" data-confirm="DELETE">{{ 'Löschen'|trans({},'admin') }}</option>
                                         {% endif %}
                                         {% if is_granted("ROLE_SUB_ADMIN") %}
                                             {% if user.eternalID is null %}
-                                                <option value="{{ url('admin_users_account_manage', {action: 'change_mail', id: user.id}) }}" x-query="{{ 'E-Mail eingeben.'|trans({},'admin') }}">{{ 'E-Mail ändern'|trans({},'admin') }}</option>
+                                                <option value="{{ url('admin_users_account_manage', {action: 'change_mail', id: user.id}) }}" data-query="{{ 'E-Mail eingeben.'|trans({},'admin') }}">{{ 'E-Mail ändern'|trans({},'admin') }}</option>
                                             {% endif %}
-                                            <option value="{{ url('admin_users_account_manage', {action: 'whitelist', id: user.id}) }}" x-confirm="WHITELIST" x-query="{{ 'Spieler-ID'|trans({},'admin') }}">{{ 'Multi-Account Whitelist-Eintrag hinzufügen'|trans({},'admin') }}</option>
+                                            <option value="{{ url('admin_users_account_manage', {action: 'whitelist', id: user.id}) }}" data-confirm="WHITELIST" data-query="{{ 'Spieler-ID'|trans({},'admin') }}">{{ 'Multi-Account Whitelist-Eintrag hinzufügen'|trans({},'admin') }}</option>
                                         {% endif %}
                                         {% if is_granted("ROLE_ADMIN") %}
-                                            <option value="{{ url('admin_users_account_manage', {action: 'link', id: user.id}) }}" x-confirm="LINK" x-query="{{ 'Spieler-ID'|trans({},'admin') }}">{{ 'Sekundäraccount verknüpfen'|trans({},'admin') }}</option>
+                                            <option value="{{ url('admin_users_account_manage', {action: 'link', id: user.id}) }}" data-confirm="LINK" data-query="{{ 'Spieler-ID'|trans({},'admin') }}">{{ 'Sekundäraccount verknüpfen'|trans({},'admin') }}</option>
                                         {% endif %}
-                                        {% if user.avatar is not null %}
-                                            <option value="{{ url('admin_users_account_manage', {action: 'clear_avatar', id: user.id}) }}" x-confirm="CLEAR AVATAR">{{ 'Avatar entfernen'|trans({},'admin') }}</option>
+                                        {% if user|singleMedia('avatar') is not null %}
+                                            <option value="{{ url('admin_users_account_manage', {action: 'clear_avatar', id: user.id}) }}" data-confirm="CLEAR AVATAR">{{ 'Avatar entfernen'|trans({},'admin') }}</option>
                                         {% endif %}
                                         {% if user_desc %}
-                                            <option value="{{ url('admin_users_account_manage', {action: 'clear_desc', id: user.id}) }}" x-confirm="CLEAR DESCRIPTION">{{ 'Profilbeschreibung entfernen'|trans({},'admin') }}</option>
+                                            <option value="{{ url('admin_users_account_manage', {action: 'clear_desc', id: user.id}) }}" data-confirm="CLEAR DESCRIPTION">{{ 'Profilbeschreibung entfernen'|trans({},'admin') }}</option>
                                         {% endif %}
                                         {% if user.activeTitle or user.activeIcon %}
-                                            <option value="{{ url('admin_users_account_manage', {action: 'clear_title', id: user.id}) }}" x-confirm="CLEAR TITLE">{{ 'Titel & Icon entfernen'|trans({},'admin') }}</option>
+                                            <option value="{{ url('admin_users_account_manage', {action: 'clear_title', id: user.id}) }}" data-confirm="CLEAR TITLE">{{ 'Titel & Icon entfernen'|trans({},'admin') }}</option>
                                         {% endif %}
                                         {% if is_granted("ROLE_SUB_ADMIN") %}
-                                            <option value="{{ url('admin_users_account_manage', {action: 'herodays', id: user.id}) }}" x-query="{{ 'Neue Anzahl:'|trans({},'admin') }}">{{ 'Heldentage setzen'|trans({},'admin') }}</option>
-                                            <option value="{{ url('admin_users_account_manage', {action: 'team', id: user.id}) }}" x-query="{{ 'Team'|trans({},'admin') }}">{{ 'Team setzen'|trans({},'admin') }}</option>
+                                            <option value="{{ url('admin_users_account_manage', {action: 'herodays', id: user.id}) }}" data-query="{{ 'Neue Anzahl:'|trans({},'admin') }}">{{ 'Heldentage setzen'|trans({},'admin') }}</option>
+                                            <option value="{{ url('admin_users_account_manage', {action: 'bonusxp', id: user.id}) }}" data-query-default="{{ user.bonusHeroicXP }}" data-query="{{ 'Neue Anzahl:'|trans({},'admin') }}">{{ 'Bonus-Heldenerfahrung setzen'|trans({},'admin') }}</option>
+                                            <option value="{{ url('admin_users_account_manage', {action: 'team', id: user.id}) }}" data-query="{{ 'Team'|trans({},'admin') }}">{{ 'Team setzen'|trans({},'admin') }}</option>
                                         {% endif %}
                                     </optgroup>
                                     {% if user|is_granted('ROLE_ANIMAC') or user|is_granted('ROLE_ORACLE') %}
                                         <optgroup label="{{ 'Funktionen für Spezialrollen'|trans({},'admin') }}">
                                             {% if user|is_granted('ROLE_ANIMAC') %}
-                                                <option value="{{ url('admin_users_account_manage', {action: 'permit_town_forum_access', id: user.id}) }}" x-query="{{ 'Stadt-ID eingeben.'|trans({},'admin') }}">{{ 'Zugang zu Stadtforum gewähren'|trans({},'admin') }}</option>
-                                                <option value="{{ url('admin_users_account_manage', {action: 'unpermit_town_forum_access', id: user.id}) }}" x-query="{{ 'Stadt-ID eingeben.'|trans({},'admin') }}">{{ 'Zugang zu Stadtforum entziehen'|trans({},'admin') }}</option>
+                                                <option value="{{ url('admin_users_account_manage', {action: 'permit_town_forum_access', id: user.id}) }}" data-query="{{ 'Stadt-ID eingeben.'|trans({},'admin') }}">{{ 'Zugang zu Stadtforum gewähren'|trans({},'admin') }}</option>
+                                                <option value="{{ url('admin_users_account_manage', {action: 'unpermit_town_forum_access', id: user.id}) }}" data-query="{{ 'Stadt-ID eingeben.'|trans({},'admin') }}">{{ 'Zugang zu Stadtforum entziehen'|trans({},'admin') }}</option>
                                             {% endif %}
                                         </optgroup>
                                     {% endif %}
                                     {% if is_granted("ROLE_SUB_ADMIN") %}
                                         <optgroup label="{{ 'Freundschaftswerbung'|trans({},'admin') }}">
                                             {% if ref is null or ref.active %}
-                                                <option value="{{ url('admin_users_account_manage', {action: 'ref_rename', id: user.id}) }}" x-confirm="MOD_REF" x-query="{{ 'Neuen Namen eingeben.'|trans({},'admin') }}">{{ 'Ref-Namen ändern'|trans({},'admin') }}</option>
+                                                <option value="{{ url('admin_users_account_manage', {action: 'ref_rename', id: user.id}) }}" data-confirm="MOD_REF" data-query="{{ 'Neuen Namen eingeben.'|trans({},'admin') }}">{{ 'Ref-Namen ändern'|trans({},'admin') }}</option>
                                             {% endif %}
                                             {% if ref is not null and ref.active %}
                                                 <option value="{{ url('admin_users_account_manage', {action: 'ref_disable', id: user.id}) }}">{{ 'Ref-Namen sperren'|trans({},'admin') }}</option>
@@ -111,14 +112,14 @@
                                                 <option value="{{ url('admin_users_account_manage', {action: 'ref_enable', id: user.id}) }}">{{ 'Ref-Namen entsprerren'|trans({},'admin') }}</option>
                                             {% endif %}
                                             {% if spon is null %}
-                                                <option value="{{ url('admin_users_account_manage', {action: 'set_sponsor', id: user.id}) }}" x-confirm="LINK_REF" x-query="{{ 'Spieler-ID'|trans({},'admin') }}">{{ 'Sponsor setzen'|trans({},'admin') }}</option>
+                                                <option value="{{ url('admin_users_account_manage', {action: 'set_sponsor', id: user.id}) }}" data-confirm="LINK_REF" data-query="{{ 'Spieler-ID'|trans({},'admin') }}">{{ 'Sponsor setzen'|trans({},'admin') }}</option>
                                             {% endif %}
                                         </optgroup>
                                         {% if is_granted("ROLE_ADMIN") %}
                                             <optgroup label="{{ 'Sicherheit'|trans({},'admin') }}">
                                                 <option value="{{ url('admin_users_account_manage', {action: 'initiate_pw_reset', id: user.id}) }}">{{ 'Passwort-Reset auslösen'|trans({},'admin') }}</option>
                                                 <option value="{{ url('admin_users_account_manage', {action: 'enforce_pw_reset', id: user.id}) }}">{{ 'Passwort-Reset erzwingen'|trans({},'admin') }}</option>
-                                                <option value="{{ url('admin_users_account_manage', {action: 'overwrite_pw', id: user.id}) }}" x-query="{{ 'Neues Passwort eingeben.'|trans({},'admin') }}">{{ 'Neues Passwort setzen'|trans({},'admin') }}</option>
+                                                <option value="{{ url('admin_users_account_manage', {action: 'overwrite_pw', id: user.id}) }}" data-query="{{ 'Neues Passwort eingeben.'|trans({},'admin') }}">{{ 'Neues Passwort setzen'|trans({},'admin') }}</option>
                                             </optgroup>
                                         {% endif %}
                                         <optgroup label="{{ 'Berechtigungen'|trans({},'admin') }}">
@@ -145,12 +146,12 @@
                                         {% endif %}
                                         {% if user.eternalID is not null %}
                                             <optgroup label="{{ 'EternalTwin-Integration'|trans({},'admin') }}">
-                                                <option value="{{ url('admin_users_account_manage', {action: 'etwin_reset', id: user.id}) }}" x-query="{{ 'E-Mail eingeben.'|trans({},'admin') }}">{{ 'In lokalen Account umwandeln'|trans({},'admin') }}</option>
+                                                <option value="{{ url('admin_users_account_manage', {action: 'etwin_reset', id: user.id}) }}" data-query="{{ 'E-Mail eingeben.'|trans({},'admin') }}">{{ 'In lokalen Account umwandeln'|trans({},'admin') }}</option>
                                             </optgroup>
                                         {% endif %}
                                         {% if app.environment == 'dev' or app.environment == 'local' %}
                                             <optgroup label="Debug">
-                                                <option value="{{ url('admin_users_account_manage', {action: 'dbg_soulpoints', id: user.id}) }}" x-query="{{ 'Neue Anzahl:'|trans({},'admin') }}">{{ 'Seelenpunkte setzen'|trans({},'admin') }}</option>
+                                                <option value="{{ url('admin_users_account_manage', {action: 'dbg_soulpoints', id: user.id}) }}" data-query="{{ 'Neue Anzahl:'|trans({},'admin') }}">{{ 'Seelenpunkte setzen'|trans({},'admin') }}</option>
                                                 <option value="{{ url('admin_users_account_manage', {action: 'dbg_confirm_deaths', id: user.id}) }}">{{ 'Alle Tode bestätigen'|trans({},'admin') }}</option>
                                             </optgroup>
                                         {% endif %}
@@ -189,9 +190,12 @@
                             <label>{{ 'Heldenerfahrung'|trans({}, 'admin') }}</label>
                         </div>
                         <div class="cell padded rw-3 rw-sm-12">
-                            {{ xp.season }}
+                            {{ xp.total }}
                             <div class="small">
-                                Total: {{ xp.total }}<br/>
+                                {% if xp.bonus != 0 %}
+                                    BONUS: {{ xp.bonus }}<br/>
+                                {% endif %}
+                                Season: {{ xp.total }}<br/>
                                 Legacy MH: {{ xp.legacy_mh }}<br/>
                                 Legacy Twin: {{ xp.legacy_twin }}<br/>
                             </div>
@@ -202,12 +206,10 @@
                             <label>{{ 'Avatar'|trans({}, 'admin') }}</label>
                         </div>
                         <div class="cell padded rw-3 rw-sm-12">
-                            {% if user.avatar is not null %}
+                            {% if user|singleMedia('avatar') is not null %}
                                 {% include "ajax/soul/playeravatar.html.twig" with {user: user, no_distortion: true, small: false} only %}
-                                {% if not user.avatar.classic %}
-                                    <br/><br />
-                                    {% include "ajax/soul/playeravatar.html.twig" with {user: user, no_distortion: true, small: true} only %}
-                                {% endif %}
+                                <br/><br />
+                                {% include "ajax/soul/playeravatar.html.twig" with {user: user, no_distortion: true, small: true} only %}
                             {% else %}
                                 ---
                             {% endif %}
@@ -220,7 +222,11 @@
                         <div class="cell padded rw-3 rw-sm-12">
                             {% if user.activeTitle or user.activeIcon %}
                                 <div>
-                                    {% if user.activeIcon %}<img alt="" src="{{ user.activeIcon.customIcon ? url('app_web_customicon', {uid: user.id, aid: user.activeIcon.id, name: user.activeIcon.customIconName, ext: user.activeIcon.customIconFormat}) : asset('build/images/icons/title/' ~ user.activeIcon.prototype.icon ~ '.gif') }}" />{% endif %}
+                                    {% if user.activeIcon %}
+                                        <img alt=""
+                                             src="{{ user.activeIcon|singleMediaSource('icon', 16, false, asset('build/images/icons/title/' ~ user.activeIcon.prototype.icon ~ '.gif'), true) }}"
+                                             srcset="{{ user.activeIcon|singleMediaSource('icon', 16, true) }}" />
+                                    {% endif %}
                                     {% if user.activeTitle %} {{ user.activeTitle.customTitle ?? user|translated_title(app.user)|raw }}{% endif %}
                                 </div>
                             {% else %}
@@ -228,7 +234,7 @@
                             {% endif %}
                         </div>
                         {% if user_desc %}
-                            <div class="cell padded {% if user.avatar is null %}ro-6 ro-sm-0{% endif%} rw-6 rw-sm-12">
+                            <div class="cell padded {% if user|singleMedia('avatar') is null %}ro-6 ro-sm-0{% endif%} rw-6 rw-sm-12">
                                 <div class="personal_desc"><div>{{ 'Persönliche Beschreibung'|trans({},'game') }}</div><div>« {{ user_desc|raw }} »</div></div>
                             </div>
                         {% endif %}
@@ -322,6 +328,9 @@
                             <div><label><input {% if user|is_granted('ROLE_ORACLE') %}checked{% endif %} {% if user.rightsElevation >= 3 %}disabled{% endif%} type="checkbox" x-trigger-flag="FLAG_ORACLE" /> {{ 'Orakel'|trans({}, 'admin') }}</label></div>
                             <div><label><input {% if user|is_granted('ROLE_ANIMAC') %}checked{% endif %} {% if user.rightsElevation >= 3 %}disabled{% endif%} type="checkbox" x-trigger-flag="FLAG_ANIMAC" /> {{ 'Animateur'|trans({}, 'admin') }}</label></div>
                             <div><label><input {% if user|is_granted('ROLE_ART') %}checked{% endif %} {% if user.rightsElevation >= 3 %}disabled{% endif%} type="checkbox" x-trigger-flag="FLAG_ART" /> {{ 'Künstler'|trans({}, 'admin') }}</label></div>
+                            {% if staging %}
+                                <div><label><input {% if user|is_granted('ROLE_CHEATER') %}checked{% endif %} {% if user.rightsElevation >= 3 %}disabled{% endif%} type="checkbox" x-trigger-flag="FLAG_CHEATER" /> {{ 'Cheater'|trans({}, 'admin') }}</label></div>
+                            {% endif %}
                             <div><label><input {% if user|is_granted('ROLE_DEV') %}checked{% endif %} type="checkbox" x-trigger-flag="FLAG_DEV" /> {{ 'Entwickler'|trans({}, 'admin') }}</label></div>
                         </div>
                         <div class="cell padded rw-3 rw-sm-12 note note-lightest">
@@ -503,17 +512,18 @@
     {{ parent() }}
     <script>
         {% if (user_handler.admin_canAdminister(app.user,user)) %}
-            document.getElementById('execute_button').addEventListener('click', function() {
+            document.getElementById('execute_button')?.addEventListener('click', function() {
                 const dropdown = document.getElementById('administer-user');
                 const option = dropdown.querySelector('option:checked');
                 if (!dropdown.value) return;
 
-                const confirmation = option.getAttribute('x-confirm');
-                const query        = option.getAttribute('x-query');
+                const confirmation = option.dataset.confirm;
+                const query        = option.dataset.query;
+                const query_default = option.dataset.queryDefault ?? '';
 
                 let q_param = null;
                 if (query) {
-                    q_param = prompt(query, '');
+                    q_param = prompt(query, query_default);
                     if (q_param === null) return;
                 }
 
@@ -532,7 +542,7 @@
                     } );
             });
 
-            document.getElementById("impersonate_user").addEventListener('click', function() {
+            document.getElementById("impersonate_user")?.addEventListener('click', function() {
                 $.ajax.load(null, '{{ url('initial_landing') }}?_switch_user={{ user.username }}', true);
             })
 

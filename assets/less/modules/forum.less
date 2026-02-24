@@ -200,6 +200,7 @@
     background-position: 4px 1px !important;
 
     &:not(:hover) {
+      a { pointer-events: none;}
       background-color: #4d5537 !important;
       color: transparent !important;
       text-shadow: 0 0 0 #4d5537 !important;
@@ -1138,7 +1139,7 @@ hordes-twino-editor {
     background: #65382e; box-shadow: 0 0 4px rgba(0,0,0,0.3); margin: 5px; height: 24px; cursor: default;
     overflow: hidden;
     &>.pm-avatar {
-      height: 24px; display: inline-block;
+      height: 24px; display: inline-block; position: relative;
       &:not(.empty) {width: 24px; }
     }
     &>.pm-userbox-name {
@@ -1363,10 +1364,9 @@ hordes-twino-editor {
           }
         }
 
-        &.new:not(.own) div.pm-avatar::after, &.new:not(.own) div.pm-avatar-crow::after {
+        &.new:not(.own)::after {
           content: " "; position: absolute; width: 20px; height: 20px; border: 1px solid #fe7d00; border-radius: 10px;
-          background: url("../../img/forum/new.png") top center no-repeat, #bd3d00; bottom: -10px; right: -10px;
-        }
+          background: url("../../img/forum/new.png") top center no-repeat, #bd3d00; top: 30px;left: -10px; }
       }
     }
   }

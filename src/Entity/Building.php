@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\Game\BuildingResourceSetType;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -42,6 +43,8 @@ class Building
     private int $hp = 0;
     #[ORM\Column(type: 'integer')]
     private int $defense = 0;
+    #[ORM\Column(type: 'integer')]
+    private int $completedTimes = 0;
     #[ORM\OneToMany(mappedBy: 'building', targetEntity: BuildingVote::class, cascade: ['persist', 'remove'], fetch: 'EXTRA_LAZY', orphanRemoval: true)]
     private Collection $buildingVotes;
     #[ORM\OneToOne(inversedBy: 'building', targetEntity: Inventory::class, cascade: ['persist', 'remove'])]
@@ -79,6 +82,16 @@ class Building
     public function setComplete(bool $complete): self
     {
         $this->complete = $complete;
+
+        return $this;
+    }
+    public function getCompletedTimes(): int
+    {
+        return $this->completedTimes;
+    }
+    public function setCompletedTimes(int $completedTimes): self
+    {
+        $this->completedTimes = $completedTimes;
 
         return $this;
     }
@@ -257,11 +270,14 @@ class Building
 
     public function getPrototypeAP(?int $override_rarity = null): int {
         $rarity = $override_rarity ?? $this->prototype->getBlueprint();
-        $baseAp = match (true) {
-            $this->difficultyLevel < 0 => $this->prototype->getHardAp(),
-            $this->difficultyLevel > 0 => $this->prototype->getEasyAp(),
-            default => null
-        } ?? $this->prototype->getAp();
+        $baseAp = $this->prototype->getResourceSet(
+            type: match(true) {
+                $this->difficultyLevel < 0 => BuildingResourceSetType::Hard,
+                $this->difficultyLevel > 0 => BuildingResourceSetType::Easy,
+                default => BuildingResourceSetType::Default
+            },
+            repeat: $this->getCompletedTimes()
+        )->getAp();
 
         if ($this->difficultyLevel >= 2)
             return floor( $baseAp * pow( match ( $rarity ) {
@@ -276,10 +292,48 @@ class Building
     }
 
     public function getPrototypeResources(): ?ItemGroup {
-        return match (true) {
-            $this->difficultyLevel < 0 => $this->prototype->getHardResources(),
-            $this->difficultyLevel > 0 => $this->prototype->getEasyResources(),
-            default => null
-        } ?? $this->prototype->getResources();
+        return $this->prototype->getResourceSet(
+            type: match(true) {
+                $this->difficultyLevel < 0 => BuildingResourceSetType::Hard,
+                $this->difficultyLevel > 0 => BuildingResourceSetType::Easy,
+                default => BuildingResourceSetType::Default
+            },
+            repeat: $this->getCompletedTimes()
+        )->getResources();
+    }
+    
+    /**
+     * Get the water consumption of the building at a given day.
+     * During the night from day N to N+1, the param is N.
+     */
+    public function getWaterConsumption(int $day): int {
+        switch ($this->getPrototype()->getName()) {
+            case 'item_tube_#00':
+                return [0,2,4,6,9,12][ $this->getLevel() ] ?? 12;
+            case 'small_pool_#00':
+                if ($day >= 30) return 18;
+                elseif ($day >= 26) return 12;
+                elseif ($day >= 21) return 6;
+                elseif ($day >= 11) return 3;
+                else return 1;
+            default:
+                return 0;
+        }
+    }
+
+    /**
+     * Get the water consumption category.
+     */
+    public function getWaterConsumptionType(): int {
+        switch ($this->getPrototype()->getName()) {
+            /** Defense buildings (post day change, pre attack) */
+            case 'item_tube_#00':
+                return 1;
+            /** Effect Buildings (post attack, post status change) */
+            case 'small_pool_#00':
+                return 2;
+            default:
+                return 0;
+        }
     }
 }

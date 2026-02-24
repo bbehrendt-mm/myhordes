@@ -31,6 +31,7 @@ class AwardIconDataService implements FixtureProcessorInterface {
         $container->add()->icon('r_ruine')->unlockquantity(5)->associatedpicto('r_ruine_#00')->commit();
         $container->add()->icon('r_explor')->unlockquantity(15)->associatedpicto('r_explor_#00')->commit();
         $container->add()->icon('r_explo2')->unlockquantity(5)->associatedpicto('r_explo2_#00')->commit();
+        $container->add()->icon('r_explot')->unlockquantity(5)->associatedpicto('r_explot_#00')->commit(); // TODO: determine unlock threshold
         $container->add()->icon('r_share')->unlockquantity(10)->associatedpicto('r_share_#00')->commit();
         $container->add()->icon('r_guide')->unlockquantity(300)->associatedpicto('r_guide_#00')->commit();
         $container->add()->icon('r_drgmkr')->unlockquantity(10)->associatedpicto('r_drgmkr_#00')->commit();

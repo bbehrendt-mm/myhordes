@@ -84,16 +84,18 @@
                         {{'Öffentliche Städte folgen den normalen Regeln von MyHordes. Falls du mit einer größeren Gruppe von Spielern unterwegs bist, kannst du hier für eine öffentliche Stadt für einen bestimmten Zeitpunkt vormerken.'|trans({}, 'ghost')}}
                         {{'Ist eine solche Stadt erstellt, kann jeder Spieler ihr beitreten.'|trans({}, 'ghost')}}
                         <b>{{'Öffentliche Städte sind im Gegensatz zu Privaten Städten NICHT vom Ranking ausgeschlossen.'|trans({}, 'ghost')}}</b>
+                        <strong>{{ 'Öffentliche Städte, in denen sich zum Zeitpunkt des Angriffs kein einziger Spieler befindet, werden gelöscht!'|trans({}, 'ghost') }}</strong>
                         <br/><br/>
                         <b>{{ 'Wichtig:'|trans({}, 'ghost') }}</b>
                         <ul>
-                            <li>{{ 'Wenn du eine öffentliche Stadt anlegst, kannst du für bis zu {days} Tage nach dem Stadtstart keiner öffentlichen Stadt beitreten, die von einem anderen Spieler angelegt wurde.'|trans({days: 30}, 'ghost') }}</li>
-                            <li>{{ 'Wenn du einer von einem anderen Spieler angelegten öffentlichen Stadt beitrittst, kannst du bis zu {days} Tage keine eigene Stadt eröffnen oder einer Stadt eines anderen Spielers beitreten.'|trans({days: 15}, 'ghost') }}</li>
+                            <li>{{ 'Wenn du eine öffentliche Stadt anlegst, kannst du für bis zu {days} Tage nach dem Stadtstart keiner öffentlichen Stadt beitreten, die von einem anderen Spieler angelegt wurde.'|trans({days: 10}, 'ghost') }}</li>
+                            <li>{{ 'Wenn du einer von einem anderen Spieler angelegten öffentlichen Stadt beitrittst, kannst du bis zu {days} Tage keine eigene Stadt eröffnen oder einer Stadt eines anderen Spielers beitreten.'|trans({days: 10}, 'ghost') }}</li>
+                            <li><strong>{{ 'Diese Beschränkungen gelten NICHT für Kleine Städte!'|trans({},'ghost') }}</strong></li>
                         </ul>
                     </div>
                 </div>
 
-                {% if mayorTowns is empty and canMayorTowns and not tooMany and mayorBlocked is null %}
+                {% if mayorTowns is empty and canMayorTowns and not tooMany is null %}
                     <div class="cell padded rw-12">
                     <h5>{{ 'Grundlegende Einstellungen'|trans({},'ghost') }}</h5>
 
@@ -113,14 +115,24 @@
                         </div>
 
                         <div class="row">
+
+                            {% if (mayorBlocked is not null) %}
+                                <div class="cell padded rw-12">
+                                    <div class="note note-warning">
+                                        {{ 'Du kannst aktuell keine öffentlichen Städte erstellen (Missbrauchsschutz). Bitte warte ein paar Tage und versuche es dann erneut.'|trans({},'soul') }}
+                                        {{ 'Diese Sperre endet am {date} um {time}.'|trans({ date: mayorBlocked.expires|format_datetime('medium', 'none'), time: mayorBlocked.expires|format_datetime('none', 'short') },'ghost')|raw }}
+                                    </div>
+                                </div>
+                            {% endif %}
+
                             <div class="cell padded rw-3 rw-md-6 rw-sm-12 note note-lightest">
                                 <label for="pTownType" style="display: inline-flex; column-gap: 6px; align-items: center;">{{ 'Stadttyp'|trans({},'ghost') }}</label>
                             </div>
                             <div class="cell padded rw-6 rw-sm-12">
                                 <select name="pTownType" id="pTownType">
-                                    <option value="small">{{ 'Kleine Stadt'|trans({},'game') }}</option>
-                                    <option selected value="remote">{{ 'Entfernte Regionen'|trans({},'game') }}</option>
-                                    <option value="panda">{{ 'Pandämonium'|trans({},'game') }}</option>
+                                    <option {% if (mayorBlocked is not null) %}selected{% endif%} value="small">{{ 'Kleine Stadt'|trans({},'game') }}</option>
+                                    <option {% if (mayorBlocked is not null) %}disabled{% else %}selected{% endif%} value="remote">{{ 'Entfernte Regionen'|trans({},'game') }}</option>
+                                    <option {% if (mayorBlocked is not null) %}disabled{% endif%} value="panda">{{ 'Pandämonium'|trans({},'game') }}</option>
                                 </select>
                             </div>
                         </div>
@@ -188,13 +200,6 @@
                             {% endfor %}
                         </div>
 
-                    </div>
-                {% elseif (mayorBlocked is not null) %}
-                    <div class="cell padded rw-12">
-                        <div class="note note-warning">
-                            {{ 'Du kannst aktuell keine öffentlichen Städte erstellen (Missbrauchsschutz). Bitte warte ein paar Tage und versuche es dann erneut.'|trans({},'soul') }}
-                            {{ 'Diese Sperre endet am {date} um {time}.'|trans({ date: mayorBlocked.expires|format_datetime('medium', 'none'), time: mayorBlocked.expires|format_datetime('none', 'short') },'ghost')|raw }}
-                        </div>
                     </div>
                 {% elseif (tooMany) %}
                     <div class="cell padded rw-12">

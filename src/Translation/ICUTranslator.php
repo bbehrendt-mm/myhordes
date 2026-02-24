@@ -29,7 +29,7 @@ class ICUTranslator implements TranslatorInterface, TranslatorBagInterface, Loca
 
     static array $gender_map = [ 0 => 'none', 1 => 'male', 2 => 'female' ];
 
-    public function trans(?string $id, array $parameters = [], string $domain = null, string $locale = null): string
+    public function trans(?string $id, array $parameters = [], ?string $domain = null, ?string $locale = null): string
     {
         /** @var User $u */
         $u = $this->_security->getUser();
@@ -106,7 +106,7 @@ class ICUTranslator implements TranslatorInterface, TranslatorBagInterface, Loca
         return trim($string);
     }
 
-    public function getCatalogue(string $locale = null): MessageCatalogueInterface
+    public function getCatalogue(?string $locale = null): MessageCatalogueInterface
     {
         return $this->_decorated->getCatalogue($locale);
     }

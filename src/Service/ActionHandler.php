@@ -35,6 +35,7 @@ use App\Service\Actions\Game\WrapObjectsForOutputAction;
 use App\Service\Globals\ResponseGlobal;
 use App\Structures\ActionHandler\Evaluation;
 use App\Structures\ActionHandler\Execution;
+use App\Structures\CatapultActionTarget;
 use App\Structures\EscortItemActionSet;
 use App\Structures\FriendshipActionTarget;
 use App\Structures\TownConf;
@@ -43,6 +44,8 @@ use ArrayHelpers\Arr;
 use Doctrine\ORM\EntityManagerInterface;
 use MyHordes\Fixtures\DTO\Actions\EffectsDataContainer;
 use MyHordes\Fixtures\DTO\Actions\RequirementsDataContainer;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -70,7 +73,15 @@ class ActionHandler
         private readonly ResponseGlobal $response,
     ) {}
 
-    protected function evaluate( Citizen $citizen, ?Item $item, $target, ItemAction $action, ?string &$message, ?Evaluation &$cache = null, ?Citizen $contextCitizen = null ): ActionValidity {
+    protected function evaluate(
+        Citizen $citizen,
+        ?Item $item,
+        Item|ItemPrototype|Citizen|FriendshipActionTarget|CatapultActionTarget|null $target,
+        ItemAction $action,
+        ?string &$message,
+        ?Evaluation &$cache = null,
+        ?Citizen $contextCitizen = null
+    ): ActionValidity {
 
         if ($item && !$item->getPrototype()->getActions()->contains( $action )) return ActionValidity::None;
         if ($target && (!$action->getTarget() || !$this->targetDefinitionApplies($target, $action->getTarget(), reference: $citizen)))
@@ -127,6 +138,7 @@ class ActionHandler
      * @param ItemAction[] $available
      * @param ItemAction[] $crossed
      * @param array|null $messages
+     * @param bool $ignore_broken_flag
      */
     public function getAvailableItemActions(Citizen $citizen, Item $item, ?array &$available, ?array &$crossed, ?array &$messages = null, bool $ignore_broken_flag = false ) {
 
@@ -178,7 +190,8 @@ class ActionHandler
      * @param ItemAction[] $available
      * @param ItemAction[] $crossed
      */
-    public function getAvailableCampingActions(Citizen $citizen, ?array &$available, ?array &$crossed ) {
+    public function getAvailableCampingActions(Citizen $citizen, ?array &$available, ?array &$crossed ): void
+    {
 
       $available = $crossed = [];
       $campingActions = $this->entity_manager->getRepository(CampingActionPrototype::class)->findAll();
@@ -196,7 +209,8 @@ class ActionHandler
      * @param ItemAction[] $available
      * @param ItemAction[] $crossed
      */
-    public function getAvailableHomeActions(Citizen $citizen, ?array &$available, ?array &$crossed ) {
+    public function getAvailableHomeActions(Citizen $citizen, ?array &$available, ?array &$crossed ): void
+    {
 
         $available = $crossed = [];
         $home_actions = $this->entity_manager->getRepository(HomeActionPrototype::class)->findAll();
@@ -229,7 +243,8 @@ class ActionHandler
      * @param HeroicActionPrototype[] $crossed
      * @param HeroicActionPrototype[] $used
      */
-    public function getAvailableIHeroicActions(Citizen $citizen, ?array &$available, ?array &$crossed, ?array &$used ) {
+    public function getAvailableIHeroicActions(Citizen $citizen, ?array &$available, ?array &$crossed, ?array &$used ): void
+    {
         $available = $crossed = $used = [];
 
         if (!$citizen->getProfession()->getHeroic()) return;
@@ -255,7 +270,8 @@ class ActionHandler
      * @param ItemAction[] $available
      * @param ItemAction[] $crossed
      */
-    public function getAvailableISpecialActions(Citizen $citizen, ?array &$available, ?array &$crossed ) {
+    public function getAvailableISpecialActions(Citizen $citizen, ?array &$available, ?array &$crossed ): void
+    {
         $available = $crossed = [];
 
         foreach ($citizen->getSpecialActions() as $special) {
@@ -267,12 +283,14 @@ class ActionHandler
     }
 
     /**
-     * @param Citizen|FriendshipActionTarget|Item|ItemPrototype $target
+     * @param Item|ItemPrototype|Citizen|FriendshipActionTarget|CatapultActionTarget $target
      * @param ItemTargetDefinition $definition
+     * @param bool $forSelection
+     * @param Citizen|null $reference
      * @return bool
      */
     public function targetDefinitionApplies(
-        Citizen|ItemPrototype|FriendshipActionTarget|Item $target,
+        Item|ItemPrototype|Citizen|FriendshipActionTarget|CatapultActionTarget $target,
         ItemTargetDefinition $definition,
         bool $forSelection = false,
         ?Citizen $reference = null
@@ -303,7 +321,11 @@ class ActionHandler
                 break;
             case ItemTargetDefinition::ItemFriendshipType:
                 if (!is_a( $target, FriendshipActionTarget::class )) return false;
-                if (!$target->citizen()->getAlive() || $target->action()->getName() === 'hero_generic_friendship' || $this->citizen_handler->hasStatusEffect( $target->citizen(), 'tg_rec_heroic' )) return false;
+                if (!$target->citizen()->getAlive() || $target->action()->getName() === 'hero_generic_friendship' || $target->citizen()->hasStatus('tg_rec_heroic' )) return false;
+                break;
+            case ItemTargetDefinition::CatapultType:
+                if (!is_a( $target, CatapultActionTarget::class )) return false;
+                if ($reference && $target->zone()->getTown()->getId() !== $reference->getTown()->getId()) return false;
                 break;
             default: return false;
         }
@@ -360,15 +382,32 @@ class ActionHandler
     /**
      * @param Citizen $citizen
      * @param Item|null $item
-     * @param Item|ItemPrototype|Citizen|FriendshipActionTarget|null $target
+     * @param Item|ItemPrototype|Citizen|FriendshipActionTarget|CatapultActionTarget|null $target
      * @param ItemAction $action
      * @param string|null $message
      * @param array|null $remove
      * @param bool $force Do not check if the action is valid
      * @param bool $escort_mode
+     * @param Citizen|null $contextCitizen
+     * @param bool|null $map_updated
      * @return int
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
-    public function execute( Citizen &$citizen, ?Item &$item, &$target, ItemAction $action, ?string &$message, ?array &$remove, bool $force = false, bool $escort_mode = false, ?Citizen $contextCitizen = null ): int {
+    public function execute(
+        Citizen $citizen,
+        ?Item $item,
+        Item|ItemPrototype|Citizen|FriendshipActionTarget|CatapultActionTarget|null $target,
+        ItemAction $action,
+        ?string &$message,
+        ?array &$remove,
+        bool $force = false,
+        bool $escort_mode = false,
+        ?Citizen $contextCitizen = null,
+        ?bool &$map_updated = false,
+        ?Evaluation &$evaluation = null,
+        ?Execution &$execution = null,
+    ): int {
 
         $remove = [];
 
@@ -376,9 +415,6 @@ class ActionHandler
         $infect_by_poison = $item && ($item->getPoison() === ItemPoisonType::Infectious) && ($action->getPoisonHandler() & ItemAction::PoisonHandlerConsume);
         $random_by_poison = $item && ($item->getPoison() === ItemPoisonType::Strange) && ($action->getPoisonHandler() & ItemAction::PoisonHandlerConsume);
         $spread_poison = ItemPoisonType::None;
-
-        /** @var ?Evaluation $evaluation */
-        $evaluation = null;
 
         if (!$force) {
             $mode = $this->evaluate( $citizen, $item, $target, $action, $tx, $evaluation, $contextCitizen );
@@ -398,18 +434,18 @@ class ActionHandler
             if ($mode != ActionValidity::Full) return self::ErrorActionUnregistered;
         }
 
-        $cache = new Execution($this->entity_manager, $citizen, $item, $target, $this->conf->getTownConfiguration( $citizen->getTown() ), $this->conf->getGlobalConf());
+        $execution = new Execution($this->entity_manager, $citizen, $item, $target, $this->conf->getTownConfiguration( $citizen->getTown() ), $this->conf->getGlobalConf());
         $default_message = $escort_mode ? $action->getEscortMessage() : $action->getMessage();
-        $cache->setEscortMode($escort_mode);
-        $cache->setAction($action);
+        $execution->setEscortMode($escort_mode);
+        $execution->setAction($action);
 
-        if ($default_message) $cache->addMessage($default_message, translationDomain: 'items');
-        foreach ($evaluation?->getProcessedItems('item_tool') ?? [] as $tool) $cache->addToolItem( $tool );
+        if ($default_message) $execution->addMessage($default_message, translationDomain: 'items');
+        foreach ($evaluation?->getProcessedItems('item_tool') ?? [] as $tool) $execution->addToolItem( $tool );
 
-        $cache->addTranslationKey('tamer_dog', LogTemplateHandler::generateDogName($citizen->getId(), $this->translator));
+        $execution->addTranslationKey('tamer_dog', LogTemplateHandler::generateDogName($citizen->getId(), $this->translator));
 
         if ($citizen->activeExplorerStats())
-            $cache->setTargetRuinZone($ruinZone = $this->entity_manager->getRepository(RuinZone::class)->findOneByExplorerStats($citizen->activeExplorerStats()));
+            $execution->setTargetRuinZone($ruinZone = $this->entity_manager->getRepository(RuinZone::class)->findOneByExplorerStats($citizen->activeExplorerStats()));
 
         $all_atoms = [];
 
@@ -430,20 +466,20 @@ class ActionHandler
         if (!empty($all_atoms)) {
             $container = (new EffectsDataContainer())->fromArray([['atomList' => $all_atoms]]);
             foreach ( $container->all() as $effectsDataElement ) {
-                AtomEffectProcessor::process($this->container, $cache, $effectsDataElement->atomList, $contextCitizen);
-                if ($cache->getRegisteredError()) return $cache->getRegisteredError();
+                AtomEffectProcessor::process($this->container, $execution, $effectsDataElement->atomList, $contextCitizen);
+                if ($execution->getRegisteredError()) return $execution->getRegisteredError();
             }
         }
 
         foreach (ItemPoisonType::cases() as $pt)
-            if ($pt->poisoned() && $cache->isFlagged("transgress_poison_{$pt->value}"))
+            if ($pt->poisoned() && $execution->isFlagged("transgress_poison_{$pt->value}"))
                 $item?->setPoison($spread_poison = $spread_poison->mix( $pt ));
 
-        if (($kill_by_poison || $cache->isFlagged('kill_by_poison')) && $citizen->getAlive()) {
+        if (($kill_by_poison || $execution->isFlagged('kill_by_poison')) && $citizen->getAlive()) {
             $this->death_handler->kill( $citizen, CauseOfDeath::Poison, $r );
             $this->entity_manager->persist( $this->log->citizenDeath( $citizen ) );
-            $cache->clearMessages();
-        } elseif ($infect_by_poison || ($cache->isFlagged('infect_by_poison')) && $citizen->getAlive()) {
+            $execution->clearMessages();
+        } elseif ($infect_by_poison || ($execution->isFlagged('infect_by_poison')) && $citizen->getAlive()) {
             $this->citizen_handler->inflictStatus( $citizen, 'infection' );
         } elseif ($random_by_poison && $citizen->getAlive() && $this->random_generator->chance(0.5)) {
 
@@ -451,12 +487,12 @@ class ActionHandler
                 // Add drugged status
                 case 1:
                     $this->picto_handler->award_picto_to($citizen, 'r_drug_#00');
-                    if (!$this->citizen_handler->hasStatusEffect($citizen, 'drugged')) {
+                    if (!$citizen->hasStatus('drugged')) {
                         $this->citizen_handler->inflictStatus($citizen, 'drugged');
-                        $cache->addMessage(T::__('Aber eine Frage bleibt: Waren diese fliegenden grünen Mäuse schon immer da?','items'), translationDomain: 'items');
-                    } elseif (!$this->citizen_handler->hasStatusEffect($citizen, 'addict')) {
+                        $execution->addMessage(T::__('Aber eine Frage bleibt: Waren diese fliegenden grünen Mäuse schon immer da?','items'), translationDomain: 'items');
+                    } elseif (!$citizen->hasStatus('addict')) {
                         $this->citizen_handler->inflictStatus($citizen, 'addict');
-                        $cache->addMessage(T::__('Sofort nach dem herunterschlucken verspürst du das Verlangen nach mehr... du bist nun <b>drogenabhängig</b>!','items'), translationDomain: 'items');
+                        $execution->addMessage(T::__('Sofort nach dem herunterschlucken verspürst du das Verlangen nach mehr... du bist nun <b>drogenabhängig</b>!','items'), translationDomain: 'items');
                     }
                     break;
 
@@ -465,17 +501,19 @@ class ActionHandler
                     $this->picto_handler->award_picto_to($citizen, 'r_alcool_#00');
                     $this->citizen_handler->removeStatus($citizen, 'hungover');
                     $this->citizen_handler->removeStatus($citizen, 'tg_no_hangover');
-                    if (!$this->citizen_handler->hasStatusEffect($citizen, 'drunk')) {
+                    if (!$citizen->hasStatus('drunk')) {
                         $this->citizen_handler->inflictStatus($citizen, 'drunk');
-                        $cache->addMessage(T::__('Plötzlich fängt alles um dich herum an, sich zu drehen ...','items'), translationDomain: 'items');
+                        $execution->addMessage(T::__('Plötzlich fängt alles um dich herum an, sich zu drehen ...','items'), translationDomain: 'items');
                     }
                     break;
             }
 
         }
 
-        if($cache->hasMessages())
-            $message = implode('<hr />', $cache->getMessages( $this->translator, $this->wrapObjectsForOutputAction, $this->messageDecoder, ($contextCitizen ?? $citizen)->fullPropertySet()));
+        if($execution->hasMessages())
+            $message = implode('<hr />', $execution->getMessages( $this->translator, $this->wrapObjectsForOutputAction, $this->messageDecoder, ($contextCitizen ?? $citizen)->fullPropertySet()));
+
+        $map_updated = $execution->altered_map_discovery;
 
         return self::ErrorNone;
     }
@@ -512,9 +550,9 @@ class ActionHandler
                 $break_item = $breakable_saw;
             }
 
-            $ap = $penalty + (3 - (($have_saw || $breakable_saw) ? 1 : 0) - ($have_manu ? 1 : 0));
+            $ap = $penalty + (3 - (($have_saw || $breakable_saw) ? 1 : 0) - ($have_manu ? 1 : 0)) + $recipe->getAdditionalAP();
             $silent = true;
-        } else $ap = $penalty;
+        } else $ap = $penalty + $recipe->getAdditionalAP();
 
         if ( in_array($recipe->getType(), $workshop_types) && (($citizen->getAp() + $citizen->getBp()) < $ap || $this->citizen_handler->isTired( $citizen )) )
             return ErrorHelper::ErrorNoAP;

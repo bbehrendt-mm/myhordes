@@ -19,6 +19,7 @@ use App\Entity\Town;
 use App\Enum\Configuration\CitizenProperties;
 use App\Enum\ItemPoisonType;
 use App\Structures\ItemRequest;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
@@ -36,27 +37,31 @@ class InventoryHandler
         private readonly EventProxyService $events,
     ) {}
 
+    /**
+     * Returns the maximum number of slots in an inventory, considering the number of essential items and the size of
+     * the inventory. Returns 0 if the inventory has no slot limit.
+     * @param Inventory $inventory
+     * @return int
+     */
     public function getSize( Inventory $inventory ): int {
         if ($inventory->getCitizen()) {
-            $hero = $inventory->getCitizen()->getProfession() && $inventory->getCitizen()->getProfession()->getHeroic();
             $base = 4 + $this->countEssentialItems($inventory) + $inventory->getCitizen()->property( CitizenProperties::InventorySpaceBonus );
 
             if (
-                !empty($this->fetchSpecificItems( $inventory, [ new ItemRequest( 'bagxl_#00' ) ] )) ||
-                !empty($this->fetchSpecificItems( $inventory, [ new ItemRequest( 'cart_#00' ) ] ))
+                $this->countSpecificItems( $inventory, 'bagxl_#00') > 0 ||
+                $this->countSpecificItems( $inventory, 'cart_#00') > 0
             )
                 $base += 3;
-            else if (!empty($this->fetchSpecificItems( $inventory, [ new ItemRequest( 'bag_#00' ) ] )))
+            else if ($this->countSpecificItems( $inventory, 'bag_#00' ) > 0)
                 $base += 2;
 
-            if (!empty($this->fetchSpecificItems( $inventory, [ new ItemRequest( 'pocket_belt_#00' ) ] )))
+            if ($this->countSpecificItems( $inventory, 'pocket_belt_#00' ) > 0)
                 $base += 2;
 
             return $base;
         }
 
         if ($inventory->getHome()) {
-            $hero = $inventory->getHome()->getCitizen()->getProfession()->getHeroic();
             $base = 4 + ($inventory->getHome()->getCitizen()->property( CitizenProperties::ChestSpaceBonus ) ?? 0);
 
             // Check upgrades
@@ -68,6 +73,24 @@ class InventoryHandler
             if ($upgrade) $base += $upgrade->getLevel();
 
             $base += $inventory->getHome()->getAdditionalStorage();
+
+            return $base;
+        }
+
+        return 0;
+    }
+
+    /**
+     * Returns the maximum number of heavy item slots in an inventory. Returns 0 if the inventory has no slot limit.
+     * @param Inventory $inventory
+     * @return int
+     */
+    public function getHeavyItemSize( Inventory $inventory ): int {
+        if ($inventory->getCitizen()) {
+            $base = 1;
+
+            if ($this->countSpecificItems( $inventory, 'shield_off_#00' ) > 0)
+                $base += 1;
 
             return $base;
         }
@@ -94,18 +117,13 @@ class InventoryHandler
     public function findStackPrototype( Inventory $inv, Item $item ): ?Item {
         // Items with the <individual> tag cannot stack
         if ($item->getPrototype()->getIndividual()) return null;
-            $items = $inv->getItems();
-            foreach($items as $compareItem){
-                if($item->getPrototype() === $compareItem->getPrototype()
-                    && $item->getId() != $compareItem->getId()
-                    && $item->getPoison() == $compareItem->getPoison()
-                    && $item->getBroken() == $compareItem->getBroken()
-                    && $item->getEssential() == $compareItem->getEssential()
-                ){
-                    return $compareItem;
-                }
-            }
-        return null;
+        return $inv->getItems()->matching( new Criteria()
+            ->where( Criteria::expr()->eq('prototype', $item->getPrototype()) )
+            ->andWhere( Criteria::expr()->neq('id', $item->getId()) )
+            ->andWhere( Criteria::expr()->eq('poison', $item->getPoison()) )
+            ->andWhere( Criteria::expr()->eq('broken', $item->getBroken()) )
+            ->andWhere( Criteria::expr()->eq('essential', $item->getEssential()) )
+        )->first() ?: null;
     }
 
     /**
@@ -128,13 +146,13 @@ class InventoryHandler
 
     /**
      * @param Inventory|Inventory[] $inventory Inventory(ies) to search into
-     * @param ItemPrototype|ItemPrototype[]|string $prototype The item prototype or property we're looking for
+     * @param string|ItemPrototype|ItemPrototype[] $prototype The item prototype or property we're looking for
      * @param bool $is_property Is the prototype string an item property or an item prototype
      * @param bool|null $broken Filter for broken (true) or unbroken (false) items; disable by setting to null (default)
      * @param bool|null $poison Filter for poisoned (true) or normal (false) items; disable by setting to null (default)
      * @return int Number of item matching the filters
      */
-    public function countSpecificItems($inventory, $prototype, bool $is_property = false, ?bool $broken = null, ?bool $poison = null): int {
+    public function countSpecificItems(Inventory|array $inventory, ItemPrototype|array|string $prototype, bool $is_property = false, ?bool $broken = null, ?bool $poison = null): int {
         if (is_string( $prototype )) $prototype = $is_property
             ? $this->doctrineCache->getEntityByIdentifier(ItemProperty::class, $prototype)->getItemPrototypes()->getValues()
             : $this->doctrineCache->getEntityByIdentifier(ItemPrototype::class, $prototype);
@@ -227,11 +245,23 @@ class InventoryHandler
      * @return int
      */
     public function countHeavyItems(Inventory $inventory, array $ignore = []): int {
-        $c = 0;
-        foreach ($inventory->getItems() as $item)
-            if ($item->getPrototype()->getHeavy() && !in_array( $item, $ignore ))
-                $c += $item->getCount();
-        return $c;
+        return $inventory->getItems()->reduce(
+            fn(int $c, Item $i) => $c + ( $i->getPrototype()->getHeavy() && !in_array( $i, $ignore ) ? $i->getCount() : 0 ),
+            0
+        );
+    }
+
+    /**
+     * @param Inventory $inventory
+     * @return bool
+     */
+    public function isOverEncumbered(Inventory $inventory): bool {
+        $inv_size = $this->getSize( $inventory );
+        $heavy_size = $this->getHeavyItemSize( $inventory );
+
+        return
+            ($inv_size > 0 && $inventory->getItems()->reduce( fn(int $c, Item $i) => $c + $i->getCount(), 0 ) > $inv_size) ||
+            ($heavy_size > 0 && $this->countHeavyItems( $inventory ) > $heavy_size);
     }
 
     public function countEssentialItems(Inventory $inventory): int {
@@ -241,24 +271,25 @@ class InventoryHandler
         return $c;
     }
 
-    const ErrorNone = 0;
-    const ErrorInvalidTransfer      = ErrorHelper::BaseInventoryErrors + 1;
-    const ErrorInventoryFull        = ErrorHelper::BaseInventoryErrors + 2;
-    const ErrorHeavyLimitHit        = ErrorHelper::BaseInventoryErrors + 3;
-    const ErrorBankLimitHit         = ErrorHelper::BaseInventoryErrors + 4;
-    const ErrorStealLimitHit        = ErrorHelper::BaseInventoryErrors + 5;
-    const ErrorStealBlocked         = ErrorHelper::BaseInventoryErrors + 6;
-    const ErrorBankBlocked          = ErrorHelper::BaseInventoryErrors + 7;
-    const ErrorExpandBlocked        = ErrorHelper::BaseInventoryErrors + 8;
-    const ErrorTransferBlocked      = ErrorHelper::BaseInventoryErrors + 9;
-    const ErrorUnstealableItem      = ErrorHelper::BaseInventoryErrors + 10;
-    const ErrorEscortDropForbidden  = ErrorHelper::BaseInventoryErrors + 11;
-    const ErrorEssentialItemBlocked = ErrorHelper::BaseInventoryErrors + 12;
-    const ErrorTooManySouls         = ErrorHelper::BaseInventoryErrors + 13;
-    const ErrorBankTheftFailed      = ErrorHelper::BaseInventoryErrors + 14;
-    const ErrorTargetChestFull      = ErrorHelper::BaseInventoryErrors + 15;
-    const ErrorTransferStealPMBlock = ErrorHelper::BaseInventoryErrors + 16;
-    const ErrorTransferStealDropInvalid = ErrorHelper::BaseInventoryErrors + 17;
+    const int ErrorNone = 0;
+    const int ErrorInvalidTransfer      = ErrorHelper::BaseInventoryErrors + 1;
+    const int ErrorInventoryFull        = ErrorHelper::BaseInventoryErrors + 2;
+    const int ErrorHeavyLimitHit        = ErrorHelper::BaseInventoryErrors + 3;
+    const int ErrorBankLimitHit         = ErrorHelper::BaseInventoryErrors + 4;
+    const int ErrorStealLimitHit        = ErrorHelper::BaseInventoryErrors + 5;
+    const int ErrorStealBlocked         = ErrorHelper::BaseInventoryErrors + 6;
+    const int ErrorBankBlocked          = ErrorHelper::BaseInventoryErrors + 7;
+    const int ErrorExpandBlocked        = ErrorHelper::BaseInventoryErrors + 8;
+    const int ErrorTransferBlocked      = ErrorHelper::BaseInventoryErrors + 9;
+    const int ErrorUnstealableItem      = ErrorHelper::BaseInventoryErrors + 10;
+    const int ErrorEscortDropForbidden  = ErrorHelper::BaseInventoryErrors + 11;
+    const int ErrorEssentialItemBlocked = ErrorHelper::BaseInventoryErrors + 12;
+    const int ErrorTooManySouls         = ErrorHelper::BaseInventoryErrors + 13;
+    const int ErrorBankTheftFailed      = ErrorHelper::BaseInventoryErrors + 14;
+    const int ErrorTargetChestFull      = ErrorHelper::BaseInventoryErrors + 15;
+    const int ErrorTransferStealPMBlock = ErrorHelper::BaseInventoryErrors + 16;
+    const int ErrorTransferStealDropInvalid = ErrorHelper::BaseInventoryErrors + 17;
+    const int ErrorMultiHeavyLimitHit   = ErrorHelper::BaseInventoryErrors + 18;
 
 
     public function forceMoveItem( Inventory $to, Item $item, int $count = 1 ): Item {
@@ -293,14 +324,34 @@ class InventoryHandler
         return $item;
     }
 
-    public function forceRemoveItem( Item $item, int $count = 1 ): void {
-        if ($item->getCount() > $count) {
-            $item->setCount($item->getCount() - $count);
-            $this->entity_manager->persist($item);
-        } else {
-            if ($item->getInventory()) $item->getInventory()->removeItem($item);
-            $this->entity_manager->remove( $item );
-        }
+    public function forceRemoveItem( Item $item, int $count = 1, bool $allStacks = false ): void {
+        // Initialize the stack and cache the inventory
+        $stack = $item;
+        $inventory = $item->getInventory();
+
+        do {
+            if ($stack->getCount() > $count) {
+                // The current item stack is larger than the requested count, so we simply reduce the count
+                $stack->setCount($stack->getCount() - $count);
+                $this->entity_manager->persist($stack);
+                $count = 0;
+            } else {
+                // The current item stack is smaller than the requested count, so we remove it entirely
+                $count -= $stack->getCount();
+                $inventory?->removeItem($stack);
+                $this->entity_manager->remove($stack);
+
+                // If the allStacks flag is set, we need to check if there's a possible stack to remove
+                // This is only needed when the requested count is larger than the current stack count and only possible
+                // if we have an inventory
+                $stack = ($allStacks && $count > 0 && $inventory)
+                    ? $this->findStackPrototype($inventory, $stack)
+                    : null;
+            }
+        // Continue as long as we have a stack to remove and the requested count is still larger than 0
+        } while ($count > 0 && $stack );
+
+
     }
 
     public function getAllInventoryIDs( Town $town, bool $bank = true, bool $homes = true, bool $rucksack = true, bool $floor = true, bool $ruinFloor = true, bool $buildings = true ): array {

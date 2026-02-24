@@ -17,7 +17,7 @@ class ProcessItemRequirement extends AtomRequirementProcessor
     {
 
         $item_str = $data->property ?? $data->item;
-        $source = $cache->citizen->getZone() ? [$cache->citizen->getInventory()] : [$cache->citizen->getInventory(), $cache->citizen->getHome()->getChest()];
+        $source = $cache->zone() ? [$cache->citizen->getInventory()] : [$cache->citizen->getInventory(), $cache->citizen->getHome()->getChest()];
 
         $inventoryHandler = $this->container->get(InventoryHandler::class);
 

@@ -35,8 +35,7 @@ const MapControls = ( props: MapControlProps ) => {
                     <div className="float-left">
                         { props.showZoneViewerButtons && globals.strings?.close && (
                             <button onClick={()=>props.wrapDispatcher({showViewer: true, showPanel: false})}
-                                className="small inline map_button map_button_left">
-                                <div>{ globals.strings?.close }</div>
+                                className="small inline map_button map_button_left map_button_close">
                             </button>
                         ) }
                         <button
@@ -55,10 +54,26 @@ const MapControls = ( props: MapControlProps ) => {
                         ) }
                     </div>
                     <div className="float-right">
+                        { props.showWindButton &&
+                            <button
+                                className={`small inline ${props.windEnabled ? 'show-tags' : 'hide-tags'} map_button map_button_icon map_button_right map_button_wind`}
+                                onClick={()=>props.wrapDispatcher({scavEnabled: !props.windEnabled ? false : props.scavEnabled, scoutEnabled: !props.windEnabled ? false : props.scoutEnabled, windEnabled: !props.windEnabled})}
+                            >
+                                &nbsp;
+                            </button>
+                        }
+                        { props.showScavButton &&
+                            <button
+                                className={`small inline ${props.scavEnabled ? 'show-tags' : 'hide-tags'} map_button map_button_icon map_button_right map_button_scav`}
+                                onClick={()=>props.wrapDispatcher({scavEnabled: !props.scavEnabled, scoutEnabled: !props.scavEnabled ? false : props.scoutEnabled, windEnabled: !props.scavEnabled ? false : props.windEnabled})}
+                            >
+                                &nbsp;
+                            </button>
+                        }
                         { props.showScoutButton &&
                             <button
                                 className={`small inline ${props.scoutEnabled ? 'show-tags' : 'hide-tags'} map_button map_button_icon map_button_right map_button_scout`}
-                                onClick={()=>props.wrapDispatcher({scoutEnabled: !props.scoutEnabled})}
+                                onClick={()=>props.wrapDispatcher({scoutEnabled: !props.scoutEnabled, scavEnabled: !props.scoutEnabled ? false : props.scavEnabled, windEnabled: !props.scoutEnabled ? false : props.windEnabled})}
                             >
                                 &nbsp;
                             </button>

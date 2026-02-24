@@ -31,7 +31,8 @@
         <div class="padded cell rw-8 ellipsis row-detail">{{ def.sum }} <img src="{{ asset('build/images/icons/small_def.gif') }}"  alt=""/>
             {{ help_btn(
                 'Behausung'|trans({},'game') ~ ': <strong>' ~ '+{def} Punkt(e)'|trans({'{def}': def.house_defense},'game') ~ '</strong><br />' ~
-                'Bauarbeiten'|trans({},'game') ~ ': <strong>' ~ '+{def} Punkt(e)'|trans({'{def}': def.upgrades_defense},'game') ~ '</strong><br />' ~
+                'Bauarbeiten'|trans({},'game') ~ ': <strong>' ~ '+{def} Punkt(e)'|trans({'{def}': def.upgrades_defense_base},'game') ~ '</strong><br />' ~
+                (def.upgrades_defense_dump > 0 ? ('Müllhalde'|trans({},'game') ~ ': <strong>' ~ '+{def} Punkt(e)'|trans({'{def}': def.upgrades_defense_dump},'game') ~ '</strong><br />') : '') ~
                 'Verteidigungsgegenstände'|trans({},'game') ~ ': <strong>' ~ '+{def} Punkt(e)'|trans({'{def}': def.item_defense},'game') ~ '</strong><br />' ~
                 (def.job_guard_defense > 0 ? ('Wächterbonus'|trans({},'game') ~ ': <strong>' ~ '+{def} Punkt(e)'|trans({'{def}': def.job_guard_defense},'game') ~ '</strong><br />') : '') ~
                 'Heldenbonus'|trans({},'game') ~ ': <strong>' ~ '+{def} Punkt(e)'|trans({'{def}': def.job_defense},'game') ~ '</strong><br />' ~

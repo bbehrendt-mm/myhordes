@@ -104,9 +104,9 @@ final class BuildingDestructionListener implements ServiceSubscriberInterface
                 $est = $this->getService(EntityManagerInterface::class)->getRepository(ZombieEstimation::class)->findOneByTown($event->town,$event->town->getDay());
 
                 $zombie_diff = $est->getZombies() - ($est->getZombies() * $ratio);
-                $est->setZombies($est->getZombies() * $ratio);
-                $est->setTargetMin($est->getTargetMin() - $zombie_diff);
-                $est->setTargetMax($est->getTargetMax() - $zombie_diff);
+                $est->setZombies(floor($est->getZombies() * $ratio));
+                $est->setTargetMin(floor($est->getTargetMin() - $zombie_diff));
+                $est->setTargetMax(floor($est->getTargetMax() - $zombie_diff));
                 $this->getService(EntityManagerInterface::class)->persist($est);
                 break;
 

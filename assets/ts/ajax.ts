@@ -152,6 +152,8 @@ export default class Ajax {
         if (push_history) history.pushState( url, '', url );
         if (replace_history) history.replaceState( url, '', url );
 
+        if (!result_document) return;
+
         // If there is a CLEAR target, remove content from the targeted elements
         let fragment = null;
         while (fragment = result_document.querySelector<HTMLElement>('[x-clear-target]')) {
@@ -234,7 +236,18 @@ export default class Ajax {
                         { // @ts-ignore
                             c.dataset[key] = value;
                         }
-                react_mounts[c.id].parentElement.insertBefore( c, react_mounts[c.id] );
+
+                let parent_node: Node = react_mounts[c.id].parentNode;
+                let child_node: Node = react_mounts[c.id];
+                do {
+                    if (parent_node.nodeType === Node.ELEMENT_NODE)
+                        parent_node.insertBefore( c, child_node );
+                    else {
+                        child_node = parent_node;
+                        parent_node = parent_node.parentNode;
+                    }
+                } while (parent_node.nodeType !== Node.ELEMENT_NODE);
+
                 react_mounts[c.id].remove();
                 react_mounts[c.id] = c;
             } else c.dispatchEvent(new Event("x-react-degenerate", { bubbles: true, cancelable: false }));
@@ -346,7 +359,7 @@ export default class Ajax {
 
             content_source[i].querySelectorAll('*[x-current-time]').forEach( elem => $.html.handleCurrentTime( <HTMLElement>elem, parseInt(elem.getAttribute('x-current-time')) ))
             content_source[i].querySelectorAll('div.tooltip')      .forEach( elem => $.html.handleTooltip( <HTMLElement>elem ))
-            content_source[i].querySelectorAll('*[x-tooltip]')     .forEach( elem => $.html.createTooltip( <HTMLElement>elem ))
+            content_source[i].querySelectorAll('*[x-tooltip],*[data-tooltip]')     .forEach( elem => $.html.createTooltip( <HTMLElement>elem ))
             content_source[i].querySelectorAll('.username')        .forEach( elem => $.html.handleUserPopup( <HTMLElement>elem ))
             target.appendChild( content_source[i] );
         }

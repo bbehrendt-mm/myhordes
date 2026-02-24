@@ -13,6 +13,7 @@ use App\Messages\WebPush\WebPushMessage;
 use App\Service\Actions\Mercure\BroadcastAnnouncementUpdateViaMercureAction;
 use App\Service\Actions\User\GetAudienceAction;
 use App\Service\HTMLService;
+use App\Service\Media\MediaService;
 use App\Service\UserHandler;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Cache\InvalidArgumentException;
@@ -41,7 +42,8 @@ final class AudienceMessageEventListener implements ServiceSubscriberInterface
             HTMLService::class,
             TranslatorInterface::class,
             GetAudienceAction::class,
-            BroadcastAnnouncementUpdateViaMercureAction::class
+            BroadcastAnnouncementUpdateViaMercureAction::class,
+            MediaService::class,
         ];
     }
 
@@ -70,7 +72,7 @@ final class AudienceMessageEventListener implements ServiceSubscriberInterface
                     new WebPushMessage($subscription,
                         title:         "$prefix: {$event->announcement->getTitle()}",
                         body:          $prepared_post,
-                        avatar:        $event->announcement->getSender()->getAvatar()?->getId()
+                        avatar:        $this->getService(MediaService::class)->getSingleMediaForObject( $event->announcement->getSender(), 'avatar' )?->getId()
                     )
                 );
     }
@@ -93,7 +95,7 @@ final class AudienceMessageEventListener implements ServiceSubscriberInterface
                         new WebPushMessage($subscription,
                             title:         "$prefix: {$meta->getName()}",
                             body:          $meta->getShort() ?? $meta->getDescription(),
-                            avatar:        $event->communityEvent->getOwner()?->getAvatar()?->getId()
+                            avatar:        $this->getService(MediaService::class)->getSingleMediaForObject( $event->communityEvent->getOwner(), 'avatar' )?->getId()
                         )
                     );
         }

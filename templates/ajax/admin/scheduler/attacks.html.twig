@@ -52,6 +52,8 @@
                                     data-fetch="{{ path('rest_admin_schedule_attack_find') }}"
                                     data-fetch-method="patch"
                                     data-fetch-payload="{{ {method: 'delay'}|json_encode }}"
+                                    data-fetch-payload-shift-field="forward"
+                                    data-fetch-payload-shift-value="1"
                                     data-fetch-load="{{ path('admin_schedule_attacks') }}"
                                     data-fetch-confirm="{{ 'Bestätigen?'|trans({},'global') }}">
                                 {{ 'Nächsten Angriff verschieben'|trans({},'admin') }}</button>

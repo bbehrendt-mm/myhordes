@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\RuinExplorerStatsRepository;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -50,10 +51,10 @@ class RuinExplorerStats
     private $escaping = false;
 
     #[ORM\Column(type: 'datetime')]
-    private $timeout;
+    private DateTime $timeout;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $started = null;
+    private ?DateTime $started = null;
 
     #[ORM\Column]
     private bool $grace = false;
@@ -207,6 +208,10 @@ class RuinExplorerStats
 
     public function isAt(RuinZone $ruinZone): bool {
         return $this->active && $ruinZone->getZone() === $this->zone && $ruinZone->getX() === $this->x && $ruinZone->getY() === $this->y && $ruinZone->getZ() === $this->z;
+    }
+
+    public function isAtEntry(): bool {
+        return $this->getX() === 0 && $this->getY() === 0 && $this->getZ() === 0;
     }
 
 }
