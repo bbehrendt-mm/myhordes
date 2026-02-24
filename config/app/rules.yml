@@ -475,7 +475,4 @@ parameters:
       open_town_grace: 40
       lock_door_until_full: true
       features:
-        give_all_pictos: false
-        picto_classic_cull_mode: true
-        give_soulpoints: false
         free_from_teams: true
