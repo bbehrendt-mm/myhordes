@@ -13,7 +13,7 @@ import {BuildingListGlobal, mountPageProps} from "./Wrapper";
 import {Tag} from "../index";
 import {InventoryAPI, InventoryResourceData} from "../inventory/api";
 import {Tab, TabbedSection} from "../tab-list/TabList";
-import {ItemTooltip, useTranslations} from "../utils";
+import {ItemTooltip, renderMultilineText, useTranslations} from "../utils";
 
 declare var $: Global;
 declare var c: Const;
@@ -262,11 +262,7 @@ const BuildingInfos= (props: BuildingCompleteProps & {level: number}) => {
                 <em>{globals.strings.common.defense_broken.replace('{defense}', `${props.building.d0}`).replace('{max}', `${props.prototype.defense}`)}</em>
                 <hr/>
             </>}
-            <span dangerouslySetInnerHTML={{
-                __html: (props.prototype.desc ?? '')
-                    .replace(/\\n/g, '<br/>')
-                    .replace(/\n/g, '<br/>')
-            }} />
+            <span>{renderMultilineText(props.prototype.desc)}</span>
         </Tooltip>
         {props.level > 1 && Array.from(Array(props.level - 1).keys()).map(i => <img key={i} alt=""
                                                                                     src={globals.strings.page.g2}/>)}

@@ -9,7 +9,7 @@ import {Const, Global} from "../../defaults";
 import {useVault} from "../../v2/client-modules/Vault";
 import {VaultBuildingEntry} from "../../v2/typedef/vault_td";
 import {Globals} from "./Wrapper";
-import {useTranslations} from "../utils";
+import {renderMultilineText, useTranslations} from "../utils";
 
 declare var $: Global;
 declare var c: Const;
@@ -134,10 +134,7 @@ const BuildingListLine = (props: { building: Building, data?: VaultBuildingEntry
                     </div>}
                 </Tooltip>
             </div>}
-            <Tooltip additionalClasses="normal" html={(props.data.desc ?? '')
-                .replace(/\\n/g, '<br/>')
-                .replace(/\n/g, '<br/>')
-            }/>
+            <Tooltip additionalClasses="normal">{renderMultilineText(props.data.desc)}</Tooltip>
         </div> }
     </li>
 

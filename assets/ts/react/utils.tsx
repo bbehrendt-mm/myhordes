@@ -166,6 +166,16 @@ export function ItemTooltip(props: {
     </Tooltip>
 }
 
+export function renderMultilineText(value?: string|null): React.ReactNode {
+    const lines = (value ?? '').replace(/\\n/g, '\n').split('\n');
+    return lines.map((line, i) => (
+        <React.Fragment key={i}>
+            {line}
+            {i < lines.length - 1 && <br/>}
+        </React.Fragment>
+    ));
+}
+
 export function useSharedWorkerMessages<T>(
     message: string|string[],
     callback: (data: T) => void,
