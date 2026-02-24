@@ -73,11 +73,13 @@ final class CitizenChanceQueryListener implements ServiceSubscriberInterface
             ($is_pro = $citizen->property( CitizenProperties::EnableProWatchman ));
 
         $chances = 0;
-        if ($citizen->isProfession("guardian"))
-            $log_info['death base [guardian]'] = ($chances = 0.03);
+        // if ($citizen->isProfession("guardian"))
+        //     $log_info['death base [guardian]'] = ($chances = 0.03);
         //else if ($citizen->isProfession("tamer") && $town_handler->getBuilding($citizen->getTown(), "small_pet_#00"))
         //    $log_info['death base [tamer & small_pet_#00]'] = ($chances = 0.05);
-        else $log_info['death base'] = ($chances = 0.08);
+        // else $log_info['death base'] = ($chances = 0.08);
+
+        $log_info['death base'] = ($chances = 0.08);
 
         $minChances = $chances;
 
