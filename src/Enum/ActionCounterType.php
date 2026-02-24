@@ -17,16 +17,16 @@ enum ActionCounterType: int {
     case Shower      		= 11;
     case ReceiveHeroic 		= 12;
     case Pool      			= 13;
-    case SpecialDigScavenger = 14;
+    case SpecialDigScavenger= 14;
     case DumpInsertion 		= 15;
     case SpecialActionTech	= 16;
     case SpecialActionSurv	= 17;
-    case SpecialActionHunter	= 18;
-    case SpecialActionAPLoan	= 19;
+    case SpecialActionHunter= 18;
+    case SpecialActionAPLoan= 19;
     case AnonMessage     	= 20;
     case AnonPost         	= 21;
     case PurgeLog   		= 22;
-    case TamerClinicUsed 	= 23;
+    case TamerTrapUsed 	    = 23;
     case LastAutoghoulAt 	= 24;
     case ReceiveXP 	        = 25;
     case IntrusionFrom 	    = 26;
@@ -45,7 +45,7 @@ enum ActionCounterType: int {
             self::Pool,
             self::AnonMessage,
             self::AnonPost,
-            self::TamerClinicUsed,
+            self::TamerTrapUsed,
             self::LastAutoghoulAt,
             self::ReceiveHeroic,
             self::ScaryIntrusionFrom,

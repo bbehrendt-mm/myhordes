@@ -561,7 +561,7 @@ class TownAddonsController extends TownController
 
         if ($prototype !== null) $prototype = $this->entity_manager->getRepository( ItemPrototype::class )->findOneByName( $prototype );
 
-        $previous_uses = $town->getSpecificActionCounterValue( ActionCounterType::TamerClinicUsed );
+        $previous_uses = $town->getSpecificActionCounterValue( ActionCounterType::TamerTrapUsed );
         $failure_rate = match(true) {
             $previous_uses < 100 => 0.00,        // 0% failure rate for the first 100 uses
             $previous_uses < 200 => 0.13,        // 13% failure rate for uses 101 - 200
@@ -583,7 +583,7 @@ class TownAddonsController extends TownController
                 ], 'game' ));
 
                 $spawn = $if->createItem($prototype)->setCount($count);
-                $this->entity_manager->persist( $town->getSpecificActionCounter( ActionCounterType::TamerClinicUsed )->increment() );
+                $this->entity_manager->persist( $town->getSpecificActionCounter( ActionCounterType::TamerTrapUsed )->increment() );
 
             } else {
                 $spawn = $if->createItem('moldy_food_subpart_#00')->setCount(1);
