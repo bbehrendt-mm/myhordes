@@ -3161,7 +3161,7 @@ Fund: Fund
 'Fangversuch starten': 'Fangversuch starten'
 'Verfügbare Köder': 'Verfügbare Köder'
 Hinzufügen: Hinzufügen
-'Nicht schlecht. Mit deinem Köder hast du es geschafft, {item} anzulocken!<hr/>Du hast es zur sicheren Aufbewahrung in die Bank gebracht.': 'Die Falle hat funktioniert: {item} wurde angelockt.<hr/>Du hast es zur sicheren Aufbewahrung in die Bank gebracht.'
+'Nicht schlecht. Mit deinem Köder hast du es geschafft, {item} anzulocken!<hr/>Du hast es zur sicheren Aufbewahrung in die Bank gebracht.': 'Die Falle hat funktioniert: Du hast {item} angelockt.<hr/>Stolz bringst du deine Beute in die Bank.'
 'Es ist dir nicht gelungen, ein Tier anzulocken. Was für eine Verschwendung...': 'Was für eine Verschwendung... Der Köder ist verschwunden, aber die Falle hat nicht funktioniert.'
 'Fallen': 'Fallen'
 'Tamer''s Fallensystem': 'Tamer''s Fallensystem'

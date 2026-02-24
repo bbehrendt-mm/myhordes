@@ -3161,7 +3161,7 @@ Fund: Hallazgo
 'Fangversuch starten': 'Intentar una captura'
 'Verfügbare Köder': 'Cebos disponibles'
 Hinzufügen: Añadir
-'Nicht schlecht. Mit deinem Köder hast du es geschafft, {item} anzulocken!<hr/>Du hast es zur sicheren Aufbewahrung in die Bank gebracht.': 'La trampa funcionó: {item} fue atraído con cebo.<hr/>Lo has llevado al banco para mantenerlo a salvo.'
+'Nicht schlecht. Mit deinem Köder hast du es geschafft, {item} anzulocken!<hr/>Du hast es zur sicheren Aufbewahrung in die Bank gebracht.': 'La trampa funcionó: has atraído a {item}.<hr/>Depositas orgullosamente tu presa en el banco.'
 'Es ist dir nicht gelungen, ein Tier anzulocken. Was für eine Verschwendung...': 'Qué desperdicio... El cebo desapareció, pero la trampa no funcionó.'
 'Fallen': Trampas
 '1 Gegenstand in der Truhe ist versteckt': '1 objeto oculto en tu baúl'
