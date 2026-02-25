@@ -563,12 +563,41 @@
 
             document.getElementById('pm-conversation-list').addEventListener('scroll', fun_conv_loader_control);
 
-            const answer = ( action, id, quote, quoteName ) => {
-
+            const answer = ( action, id, quote, quoteName) => {
                 const fun_apply_action = (editor) => {
                     if (!action || !id) return;
 
-                    const content = document.querySelector('.pm-message [data-message-id="' + id + '"]')?.innerHTML;
+                    const messageElement = document.querySelector('.pm-message [data-message-id="' + id + '"]')
+
+                    if (!messageElement) return;
+
+
+                    let content
+
+                    const selection = document.getSelection() // Getting user selection
+
+                    // Checking if user selected only one range and if the message element is in this range
+                    if (selection?.rangeCount === 1 && selection.getRangeAt(0).intersectsNode(messageElement)) {
+                        const selectionRange = selection?.getRangeAt(0)
+
+                        /* Correcting fat fingers effect => if the user selected more elements than the text from the message
+                        we adjust the start and/or end to the content of the message only */
+                        if (selectionRange.startContainer !== messageElement && selectionRange.startContainer.parentNode !== messageElement) {
+                            selectionRange.setStart(messageElement, 0)
+                        }
+
+                        if (selectionRange.endContainer !== messageElement && selectionRange.endContainer.parentNode !== messageElement) {
+                            selectionRange.setEnd(messageElement, messageElement.childNodes.length)
+                        }
+
+                        // Parsing html entities from the selected text (without relying on old dinosaur named jquery) to keep compatibility with twinoParser
+                        const tempNode = document.createElement('textarea')
+                        tempNode.innerText = selection.toString() 
+                        content = tempNode.innerHTML
+                    } else {
+                        content = messageElement?.innerHTML;
+                    }
+
                     if (content)
                         editor.dispatchEvent(new CustomEvent('import', {
                             bubbles: false,
@@ -625,7 +654,9 @@
                     document.querySelector('[x-domain="m-d"][x-identifier="' + elem.getAttribute('x-unveil') + '"]').classList.remove('collapsed');
                 });
 
-                $.html.addEventListenerAll('[data-action="copy"][data-post-id],[data-action="cite"][data-post-id]', 'click', (e,elem) => answer( elem.dataset.action, elem.dataset.postId, elem.dataset.citeFrom, elem.dataset.citeName ));
+                // Using preventDefault on copy and quote buttons' mousedown events to avoid focus switch so we can detect text selection.
+                $.html.addEventListenerAll('[data-action="copy"][data-post-id],[data-action="cite"][data-post-id]', 'mousedown', (e, elem) => e.preventDefault()) 
+                $.html.addEventListenerAll('[data-action="copy"][data-post-id],[data-action="cite"][data-post-id]', 'click', (e,elem) => answer(elem.dataset.action, elem.dataset.postId, elem.dataset.citeFrom, elem.dataset.citeName)); 
 
                 $.html.addEventListenerAll('ul.group-conversation>li .pm-button[x-pin-url]', 'click', function(e,elem) {
                     if (confirm('{{ 'Bestätigen?'|trans({},'global')|e('js') }}'))
