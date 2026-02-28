@@ -3153,17 +3153,18 @@ Fund: Fund
 'Ermöglicht Überlebenschance beim Camping von bis zu 99%': 'Ermöglicht Überlebenschance beim Camping von bis zu 99%'
 'Erstaunliches Fundstück (ersetzt Beeindruckendes Fundstück)': 'Erstaunliches Fundstück (ersetzt Beeindruckendes Fundstück)'
 'Löschen von Registereinträgen (max. 1)': 'Löschen von Registereinträgen (max. 1)'
-'Die Experimentelle Klinik der Dompteure verfügt über ein komplexes System zur Domestizierung von Wildtieren - bestehend im wesentlichen aus einem verschließbaren Käfig mit einer Futterschale darin.': 'Die Experimentelle Klinik der Dompteure verfügt über ein komplexes System zur Domestizierung von Wildtieren - bestehend im wesentlichen aus einem verschließbaren Käfig mit einer Futterschale darin.'
-'Einmal pro Tag kann jeder Bürger damit wilde Tiere aus der Umgebung der Stadt anlocken.': 'Einmal pro Tag kann jeder Bürger damit wilde Tiere aus der Umgebung der Stadt anlocken.'
-'Du wurdest verbannt und kannst daher keine Tiere anlocken.': 'Du wurdest verbannt und kannst daher keine Tiere anlocken.'
-'Inhalt der Futterschale': 'Inhalt der Futterschale'
-'Du hast die Tierklinik heute bereits verwendet.': 'Du hast die Tierklinik heute bereits verwendet.'
-'Tiere anlocken': 'Tiere anlocken'
-'Verfügbare Lockmittel': 'Verfügbare Lockmittel'
+'Das Fallensystem der Dompteuere ermöglicht unter anderem, Tiere mit einem Köder in die Stadt zu locken. Lege Nahrung aus, um ein wildes Tier aus der Umgebung anzulocken. Je verlockender der Köder ist, desto besser stehen deine Chancen ... doch mit jedem Versuch wird die Umgebung misstrauischer.': "Das Fallensystem der Dompteuere ermöglicht unter anderem, Tiere mit einem Köder in die Stadt zu locken. Lege Nahrung aus, um ein wildes Tier aus der Umgebung anzulocken. Je verlockender der Köder ist, desto besser stehen deine Chancen ... doch mit jedem Versuch wird die Umgebung misstrauischer."
+'<b>Einmal pro Tag</b> kann jeder Bürger sein Glück versuchen.': '<b>Einmal pro Tag</b> kann jeder Bürger sein Glück versuchen.'
+'Du wurdest verbannt und kannst daher keine Tiere anlocken.': 'Du wurdest verbannt. Es ist dir nicht möglich, Tiere anzulocken.'
+Fallenköder: Fallenköder
+'Du hast das Fallensystem heute bereits verwendet.': 'Du hast das Fallensystem heute bereits verwendet.'
+'Fangversuch starten': 'Fangversuch starten'
+'Verfügbare Köder': 'Verfügbare Köder'
 Hinzufügen: Hinzufügen
-'Nicht schlecht. Mit deinem Köder hast du es geschafft, {item} anzulocken!<hr/>Du hast es zur sicheren Aufbewahrung in die Bank gebracht.': 'Nicht schlecht. Mit deinem Köder hast du es geschafft, {item} anzulocken!<hr/>Du hast es zur sicheren Aufbewahrung in die Bank gebracht.'
-'Es ist dir nicht gelungen, ein Tier anzulocken. Was für eine Verschwendung...': 'Es ist dir nicht gelungen, ein Tier anzulocken. Was für eine Verschwendung...'
-Dompteurklinik: Dompteurklinik
+'Nicht schlecht. Mit deinem Köder hast du es geschafft, {item} anzulocken!<hr/>Du hast es zur sicheren Aufbewahrung in die Bank gebracht.': 'Die Falle hat funktioniert: Du hast {item} angelockt.<hr/>Stolz bringst du deine Beute in die Bank.'
+'Es ist dir nicht gelungen, ein Tier anzulocken. Was für eine Verschwendung...': 'Was für eine Verschwendung... Der Köder ist verschwunden, aber die Falle hat nicht funktioniert.'
+Fallen: Fallen
+'Fallensystem der Dompteuere': "Fallensystem der Dompteuere"
 '1 Gegenstand in der Truhe ist versteckt': '1 Gegenstand in der Truhe ist versteckt'
 'Solltest du am dritten Tag oder an einem späteren Zeitpunkt verbannt werden, bekommst du automatisch etwas Toxin geschenkt, das du nach Belieben einsetzen kannst... Tja, man hätte dich besser nicht ärgern sollen!': 'Solltest du am dritten Tag oder an einem späteren Zeitpunkt verbannt werden, bekommst du automatisch etwas Toxin geschenkt, das du nach Belieben einsetzen kannst... Tja, man hätte dich besser nicht ärgern sollen!'
 'Abgenutzte Kuriertasche (statt Bauplan) beim Start der Stadt': 'Abgenutzte Kuriertasche (statt Bauplan) beim Start der Stadt'
@@ -3174,10 +3175,9 @@ Dompteurklinik: Dompteurklinik
 'Den Tod besiegen (heilt Kater, Bandagiert und Angst)': 'Den Tod besiegen (heilt Kater, Bandagiert und Angst)'
 '{dogname}, der stinkende Köter von {citizen}, hat sich folgendes aus der Bank geschnappt und ist damit aus der Stadt gerannt: {item}': '{dogname}, der stinkende Köter von {citizen}, hat sich folgendes aus der Bank geschnappt und ist damit aus der Stadt gerannt: {item}'
 'Die ersten 5 Tage in der Pandämonium-Stadt "{town}" überlebt.': 'Die ersten 5 Tage in der Pandämonium-Stadt "{town}" überlebt.'
-Klinikregister: Klinikregister
-'{citizen} hat {list2} in die Stadt gelockt und dabei folgendes Futter eingesetzt: {list1}.': '{citizen} hat {list2} in die Stadt gelockt und dabei folgendes Futter eingesetzt: {list1}.'
-'{citizen} hat vergeblich versucht Tiere in die Stadt zu locken und dabei folgendes Futter verschwendet: {list1}.': '{citizen} hat vergeblich versucht Tiere in die Stadt zu locken und dabei folgendes Futter verschwendet: {list1}.'
-Tierklinik: Tierklinik
+Fallensystem: Fallensystem
+'{citizen} hat {list2} in die Stadt gelockt und dabei folgendes Futter eingesetzt: {list1}.': '{citizen} hat {list2} mit seinen Ködern in die Stadt gelockt: {list1}.'
+'{citizen} hat vergeblich versucht Tiere in die Stadt zu locken und dabei folgendes Futter verschwendet: {list1}.': '{citizen} hat mit {list1} versucht, Tiere in die Stadt zu locken - ohne Erfolg. Was für eine Verschwendung...'
 'Die folgenden Bürger sind der Stadt bereits beigetreten:': 'Die folgenden Bürger sind der Stadt bereits beigetreten:'
 'Du kannst dieser Stadt nicht beitreten, da du nicht auf der Teilnehmerliste stehst.': 'Du kannst dieser Stadt nicht beitreten, da du nicht auf der Teilnehmerliste stehst.'
 'Du kannst dieser Stadt nicht beitreten, da du noch nicht die erforderliche Menge an Seelenpunkten gesammelt hast.': 'Du kannst dieser Stadt nicht beitreten, da du noch nicht die erforderliche Menge an Seelenpunkten gesammelt hast.'
@@ -3192,7 +3192,7 @@ Tierklinik: Tierklinik
 'Du hast es geschafft, {item} anzulocken... aber das Einfangen ist dir weniger geglückt.<hr/>Enttäuscht hebst du die Reste des verschlungenen Futters auf und legst sie als {leftovers} in die Bank.': 'Du hast es geschafft, {item} anzulocken... aber das Einfangen ist dir weniger geglückt.<hr/>Enttäuscht hebst du die Reste des verschlungenen Futters auf und legst sie als {leftovers} in die Bank.'
 'Du hast einen zusätzlichen Fähigkeitenpunkt erhalten!': 'Du hast einen zusätzlichen Kraftpunkt erhalten!'
 '{cost} Erfahrungspunkte ausgegeben, um einen zusätzlichen Fähigkeitenpunkt zu erhalten; {sold} Erfahrungspunkte durch den Verkauf freigeschalteter Fähigkeiten erhalten.': '{cost} Erfahrungspunkte ausgegeben, um einen zusätzlichen Kraftpunkt zu erhalten; {sold} Erfahrungspunkte durch den Verkauf freigeschalteter Fähigkeiten erhalten.'
-'{citizen} hat mit {list1} erfolgreich {list2} in die Stadt gelockt... und entkommen lassen. Nur etwas {list3} ist übrig geblieben...': '{citizen} hat mit {list1} erfolgreich {list2} in die Stadt gelockt... und entkommen lassen. Nur etwas {list3} ist übrig geblieben...'
+'{citizen} hat mit {list1} erfolgreich {list2} in die Stadt gelockt... und entkommen lassen. Nur etwas {list3} ist übrig geblieben...': '{citizen} hat {list2} mit seinen Ködern in die Stadt gelockt: {list1}. Doch die Falle hat nicht funktioniert. Übrig bleibt nur {list3}...'
 'Du hast {item_list} in der Werkstatt geöffnet und erhälst {item}.<hr />Du hast dafür <strong>{ap} Aktionspunkt(e)</strong> verbraucht.': 'Du hast {item_list} in der Werkstatt geöffnet und erhälst {item}.<hr />Du hast dafür <strong>{ap} Aktionspunkt(e)</strong> verbraucht.'
 'Du hast {item_list} in der Werkstatt zu {item} zerlegt.<hr />Du hast dafür <strong>{ap} Aktionspunkt(e)</strong> verbraucht.': 'Du hast {item_list} in der Werkstatt zu {item} zerlegt.<hr />Du hast dafür <strong>{ap} Aktionspunkt(e)</strong> verbraucht.'
 'Die ersten 10 Tage in der Pandämonium-Stadt "{town}" überlebt.': 'Die ersten 10 Tage in der Pandämonium-Stadt "{town}" überlebt.'
@@ -3216,7 +3216,7 @@ Tierklinik: Tierklinik
 'Heldenerfahrung von {user} in "{town}" erhalten.': 'Heldenerfahrung von {user} in "{town}" erhalten.'
 'Heldenfähigkeit freigeschaltet': 'Heldenfähigkeit freigeschaltet'
 'Du hast es geschafft, diesen Gegenstand zu verarbeiten. Aber als du fast fertig warst, ist das Klebeband gerissen. Ohne dessen Halt ist die Klinge abgerutscht und hat den Stamm zertrümmert. So ist das ganze Ding nicht mehr zu gebrauchen. Wenigstens hast du es ohne einen Splitter überstanden.': 'Du hast es geschafft, diesen Gegenstand zu verarbeiten. Aber als du fast fertig warst, ist das Klebeband gerissen. Ohne dessen Halt ist die Klinge abgerutscht und hat den Stamm zertrümmert. So ist das ganze Ding nicht mehr zu gebrauchen. Wenigstens hast du es ohne einen Splitter überstanden.'
-'Du hast es geschafft, {item} anzulocken... aber das Einfangen ist dir weniger geglückt.<hr/>Nichts von dem Futter ist übrig geblieben, abgesehen von ein paar von Insekten bedeckten Krümeln. Du legst die {leftovers} in die Bank.': 'Du hast es geschafft, {item} anzulocken... aber das Einfangen ist dir weniger geglückt.<hr/>Nichts von dem Futter ist übrig geblieben, abgesehen von ein paar von Insekten bedeckten Krümeln. Du legst die {leftovers} in die Bank.'
+'Du hast es geschafft, {item} anzulocken... aber das Einfangen ist dir weniger geglückt.<hr/>Nichts von dem Futter ist übrig geblieben, abgesehen von ein paar von Insekten bedeckten Krümeln. Du legst die {leftovers} in die Bank.': 'Du hast es geschafft, {item} anzulocken... aber die Falle hat nicht funktioniert.<hr/>Es bleibt nur {leftovers}, das du in die Bank legst. Besser als nichts, oder?'
 'Du erhälst diese Nachricht als Bestätigung, dass deine Fehlermeldung bei uns eingegangen ist. Du kannst auf diese Nachricht antworten, um deiner Fehlermeldung zusätzliche Informationen hinzuzufügen. Unsere Techniker werden dich möglicherweise über diesen Thread kontaktieren, wenn sie Rückfragen haben.<br/><br/>Deine Meldung:<br/>{body}<br/>Link zu deinem Ticket (nur für Projektmitglieder abrufbar): <a href="{link}">#{issue}</a>': '<div class="crowmsg">Du erhälst diese Nachricht als Bestätigung, dass deine Fehlermeldung bei uns eingegangen ist. Du kannst auf diese Nachricht antworten, um deiner Fehlermeldung zusätzliche Informationen hinzuzufügen. Unsere Techniker werden dich möglicherweise über diesen Thread kontaktieren, wenn sie Rückfragen haben.</div><br/>Deine Meldung:<br/><i>{body}</i><br/><br/>Link zu deinem Ticket (nur für Projektmitglieder abrufbar):<br/><a href="{link}">#{issue}</a>'
 'Dein Ticket mit der Nummer #{issue} wurde soeben geschlossen.': '<div class="crowmsg">Dein Ticket mit der Nummer #{issue} wurde soeben geschlossen.</div>'
 'Dein Ticket mit der Nummer #{issue} wurde soeben erneut geöffnet.': '<div class="crowmsg">Dein Ticket mit der Nummer #{issue} wurde soeben erneut geöffnet.</div>'

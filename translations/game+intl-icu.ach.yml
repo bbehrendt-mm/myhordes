@@ -3153,17 +3153,18 @@ Fund: crwdns225654:0crwdne225654:0
 'Ermöglicht Überlebenschance beim Camping von bis zu 99%': 'crwdns225672:0crwdne225672:0'
 'Erstaunliches Fundstück (ersetzt Beeindruckendes Fundstück)': 'crwdns225674:0crwdne225674:0'
 'Löschen von Registereinträgen (max. 1)': 'crwdns225676:0crwdne225676:0'
-'Die Experimentelle Klinik der Dompteure verfügt über ein komplexes System zur Domestizierung von Wildtieren - bestehend im wesentlichen aus einem verschließbaren Käfig mit einer Futterschale darin.': 'crwdns225678:0crwdne225678:0'
-'Einmal pro Tag kann jeder Bürger damit wilde Tiere aus der Umgebung der Stadt anlocken.': 'crwdns225680:0crwdne225680:0'
-'Du wurdest verbannt und kannst daher keine Tiere anlocken.': 'crwdns225682:0crwdne225682:0'
-'Inhalt der Futterschale': 'crwdns225684:0crwdne225684:0'
-'Du hast die Tierklinik heute bereits verwendet.': 'crwdns225686:0crwdne225686:0'
-'Tiere anlocken': 'crwdns225688:0crwdne225688:0'
-'Verfügbare Lockmittel': 'crwdns225690:0crwdne225690:0'
+'Das Fallensystem der Dompteuere ermöglicht unter anderem, Tiere mit einem Köder in die Stadt zu locken. Lege Nahrung aus, um ein wildes Tier aus der Umgebung anzulocken. Je verlockender der Köder ist, desto besser stehen deine Chancen ... doch mit jedem Versuch wird die Umgebung misstrauischer.': "crwdns254292:0crwdne254292:0"
+'<b>Einmal pro Tag</b> kann jeder Bürger sein Glück versuchen.': 'crwdns254262:0crwdne254262:0'
+'Du wurdest verbannt und kannst daher keine Tiere anlocken.': 'crwdns254264:0crwdne254264:0'
+Fallenköder: crwdns254266:0crwdne254266:0
+'Du hast das Fallensystem heute bereits verwendet.': 'crwdns254268:0crwdne254268:0'
+'Fangversuch starten': 'crwdns254270:0crwdne254270:0'
+'Verfügbare Köder': 'crwdns254272:0crwdne254272:0'
 Hinzufügen: crwdns225692:0crwdne225692:0
-'Nicht schlecht. Mit deinem Köder hast du es geschafft, {item} anzulocken!<hr/>Du hast es zur sicheren Aufbewahrung in die Bank gebracht.': 'crwdns225694:0{item}crwdne225694:0'
-'Es ist dir nicht gelungen, ein Tier anzulocken. Was für eine Verschwendung...': 'crwdns225696:0crwdne225696:0'
-Dompteurklinik: crwdns225698:0crwdne225698:0
+'Nicht schlecht. Mit deinem Köder hast du es geschafft, {item} anzulocken!<hr/>Du hast es zur sicheren Aufbewahrung in die Bank gebracht.': 'crwdns254274:0{item}crwdne254274:0'
+'Es ist dir nicht gelungen, ein Tier anzulocken. Was für eine Verschwendung...': 'crwdns254276:0crwdne254276:0'
+Fallen: crwdns254278:0crwdne254278:0
+'Fallensystem der Dompteuere': "crwdns254294:0crwdne254294:0"
 '1 Gegenstand in der Truhe ist versteckt': 'crwdns225700:0crwdne225700:0'
 'Solltest du am dritten Tag oder an einem späteren Zeitpunkt verbannt werden, bekommst du automatisch etwas Toxin geschenkt, das du nach Belieben einsetzen kannst... Tja, man hätte dich besser nicht ärgern sollen!': 'crwdns225702:0crwdne225702:0'
 'Abgenutzte Kuriertasche (statt Bauplan) beim Start der Stadt': 'crwdns225704:0crwdne225704:0'
@@ -3174,10 +3175,9 @@ Dompteurklinik: crwdns225698:0crwdne225698:0
 'Den Tod besiegen (heilt Kater, Bandagiert und Angst)': 'crwdns225714:0crwdne225714:0'
 '{dogname}, der stinkende Köter von {citizen}, hat sich folgendes aus der Bank geschnappt und ist damit aus der Stadt gerannt: {item}': 'crwdns225716:0{dogname}crwdnd225716:0{citizen}crwdnd225716:0{item}crwdne225716:0'
 'Die ersten 5 Tage in der Pandämonium-Stadt "{town}" überlebt.': 'crwdns225718:0{town}crwdne225718:0'
-Klinikregister: crwdns225720:0crwdne225720:0
-'{citizen} hat {list2} in die Stadt gelockt und dabei folgendes Futter eingesetzt: {list1}.': 'crwdns225722:0{citizen}crwdnd225722:0{list2}crwdnd225722:0{list1}crwdne225722:0'
-'{citizen} hat vergeblich versucht Tiere in die Stadt zu locken und dabei folgendes Futter verschwendet: {list1}.': 'crwdns225724:0{citizen}crwdnd225724:0{list1}crwdne225724:0'
-Tierklinik: crwdns225726:0crwdne225726:0
+Fallensystem: crwdns254282:0crwdne254282:0
+'{citizen} hat {list2} in die Stadt gelockt und dabei folgendes Futter eingesetzt: {list1}.': 'crwdns254284:0{citizen}crwdnd254284:0{list2}crwdnd254284:0{list1}crwdne254284:0'
+'{citizen} hat vergeblich versucht Tiere in die Stadt zu locken und dabei folgendes Futter verschwendet: {list1}.': 'crwdns254286:0{citizen}crwdnd254286:0{list1}crwdne254286:0'
 'Die folgenden Bürger sind der Stadt bereits beigetreten:': 'crwdns225728:0crwdne225728:0'
 'Du kannst dieser Stadt nicht beitreten, da du nicht auf der Teilnehmerliste stehst.': 'crwdns225730:0crwdne225730:0'
 'Du kannst dieser Stadt nicht beitreten, da du noch nicht die erforderliche Menge an Seelenpunkten gesammelt hast.': 'crwdns225732:0crwdne225732:0'
@@ -3192,7 +3192,7 @@ Tierklinik: crwdns225726:0crwdne225726:0
 'Du hast es geschafft, {item} anzulocken... aber das Einfangen ist dir weniger geglückt.<hr/>Enttäuscht hebst du die Reste des verschlungenen Futters auf und legst sie als {leftovers} in die Bank.': 'crwdns225750:0{item}crwdnd225750:0{leftovers}crwdne225750:0'
 'Du hast einen zusätzlichen Fähigkeitenpunkt erhalten!': 'crwdns225752:0crwdne225752:0'
 '{cost} Erfahrungspunkte ausgegeben, um einen zusätzlichen Fähigkeitenpunkt zu erhalten; {sold} Erfahrungspunkte durch den Verkauf freigeschalteter Fähigkeiten erhalten.': 'crwdns225754:0{cost}crwdnd225754:0{sold}crwdne225754:0'
-'{citizen} hat mit {list1} erfolgreich {list2} in die Stadt gelockt... und entkommen lassen. Nur etwas {list3} ist übrig geblieben...': 'crwdns225756:0{citizen}crwdnd225756:0{list1}crwdnd225756:0{list2}crwdnd225756:0{list3}crwdne225756:0'
+'{citizen} hat mit {list1} erfolgreich {list2} in die Stadt gelockt... und entkommen lassen. Nur etwas {list3} ist übrig geblieben...': 'crwdns254288:0{citizen}crwdnd254288:0{list2}crwdnd254288:0{list1}crwdnd254288:0{list3}crwdne254288:0'
 'Du hast {item_list} in der Werkstatt geöffnet und erhälst {item}.<hr />Du hast dafür <strong>{ap} Aktionspunkt(e)</strong> verbraucht.': 'crwdns225758:0{item_list}crwdnd225758:0{item}crwdnd225758:0{ap}crwdne225758:0'
 'Du hast {item_list} in der Werkstatt zu {item} zerlegt.<hr />Du hast dafür <strong>{ap} Aktionspunkt(e)</strong> verbraucht.': 'crwdns225760:0{item_list}crwdnd225760:0{item}crwdnd225760:0{ap}crwdne225760:0'
 'Die ersten 10 Tage in der Pandämonium-Stadt "{town}" überlebt.': 'crwdns225762:0{town}crwdne225762:0'
@@ -3216,7 +3216,7 @@ Tierklinik: crwdns225726:0crwdne225726:0
 'Heldenerfahrung von {user} in "{town}" erhalten.': 'crwdns225798:0{user}crwdnd225798:0{town}crwdne225798:0'
 'Heldenfähigkeit freigeschaltet': 'crwdns225800:0crwdne225800:0'
 'Du hast es geschafft, diesen Gegenstand zu verarbeiten. Aber als du fast fertig warst, ist das Klebeband gerissen. Ohne dessen Halt ist die Klinge abgerutscht und hat den Stamm zertrümmert. So ist das ganze Ding nicht mehr zu gebrauchen. Wenigstens hast du es ohne einen Splitter überstanden.': 'crwdns225802:0crwdne225802:0'
-'Du hast es geschafft, {item} anzulocken... aber das Einfangen ist dir weniger geglückt.<hr/>Nichts von dem Futter ist übrig geblieben, abgesehen von ein paar von Insekten bedeckten Krümeln. Du legst die {leftovers} in die Bank.': 'crwdns225804:0{item}crwdnd225804:0{leftovers}crwdne225804:0'
+'Du hast es geschafft, {item} anzulocken... aber das Einfangen ist dir weniger geglückt.<hr/>Nichts von dem Futter ist übrig geblieben, abgesehen von ein paar von Insekten bedeckten Krümeln. Du legst die {leftovers} in die Bank.': 'crwdns254290:0{item}crwdnd254290:0{leftovers}crwdne254290:0'
 'Du erhälst diese Nachricht als Bestätigung, dass deine Fehlermeldung bei uns eingegangen ist. Du kannst auf diese Nachricht antworten, um deiner Fehlermeldung zusätzliche Informationen hinzuzufügen. Unsere Techniker werden dich möglicherweise über diesen Thread kontaktieren, wenn sie Rückfragen haben.<br/><br/>Deine Meldung:<br/>{body}<br/>Link zu deinem Ticket (nur für Projektmitglieder abrufbar): <a href="{link}">#{issue}</a>': 'crwdns225806:0{body}crwdnd225806:0{link}crwdnd225806:0#{issue}crwdne225806:0'
 'Dein Ticket mit der Nummer #{issue} wurde soeben geschlossen.': 'crwdns225808:0#{issue}crwdne225808:0'
 'Dein Ticket mit der Nummer #{issue} wurde soeben erneut geöffnet.': 'crwdns225810:0#{issue}crwdne225810:0'

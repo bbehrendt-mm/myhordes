@@ -3153,17 +3153,18 @@ Fund: Hallazgo
 'Ermöglicht Überlebenschance beim Camping von bis zu 99%': 'Permite alcanzar un maximo de 99% de probabilidad de supervivencia al acampar'
 'Erstaunliches Fundstück (ersetzt Beeindruckendes Fundstück)': 'Hallazgo milagroso (sustituye al hallazgo perfeccionado)'
 'Löschen von Registereinträgen (max. 1)': 'Borrar entradas del registro (máx. 1)'
-'Die Experimentelle Klinik der Dompteure verfügt über ein komplexes System zur Domestizierung von Wildtieren - bestehend im wesentlichen aus einem verschließbaren Käfig mit einer Futterschale darin.': 'El centro de pruebas de domadores dispone de un muy complejo sistema de domesticación de animales salvajes, que consiste esencialmente en una jaula con cerradura que contiene un único cuenco de comida.'
-'Einmal pro Tag kann jeder Bürger damit wilde Tiere aus der Umgebung der Stadt anlocken.': 'Una vez al día, cada habitante puede utilizarlo para atraer a animales salvajes de los alrededores del pueblo.'
-'Du wurdest verbannt und kannst daher keine Tiere anlocken.': 'Está desterrado, no puede atraer animales.'
-'Inhalt der Futterschale': 'Contenido del cuenco de comida'
-'Du hast die Tierklinik heute bereits verwendet.': 'Ya has utilizado el centro de pruebas de domadores hoy.'
-'Tiere anlocken': 'Atraer animales'
-'Verfügbare Lockmittel': 'Cebo disponible'
+'Das Fallensystem der Dompteuere ermöglicht unter anderem, Tiere mit einem Köder in die Stadt zu locken. Lege Nahrung aus, um ein wildes Tier aus der Umgebung anzulocken. Je verlockender der Köder ist, desto besser stehen deine Chancen ... doch mit jedem Versuch wird die Umgebung misstrauischer.': "El Sistema de Trampas de Domadores permite, entre otras cosas, atraer animales al pueblo usando cebo. Deja comida en la trampa para intentar atraer a un animal salvaje de los alrededores. Cuanto más tentador sea el cebo, mayores serán tus probabilidades... pero, con cada intento, los alrededores se volverán mas desconfiados."
+'<b>Einmal pro Tag</b> kann jeder Bürger sein Glück versuchen.': '<b>Una vez al día</b>, cada habitante puede probar su suerte.'
+'Du wurdest verbannt und kannst daher keine Tiere anlocken.': 'Has sido desterrado. Te es imposible atraer animales.'
+Fallenköder: Cebos de la trampa
+'Du hast das Fallensystem heute bereits verwendet.': 'Ya has utilizado el sistema de trampas hoy.'
+'Fangversuch starten': 'Intentar atraer un animal'
+'Verfügbare Köder': 'Cebos disponibles'
 Hinzufügen: Añadir
-'Nicht schlecht. Mit deinem Köder hast du es geschafft, {item} anzulocken!<hr/>Du hast es zur sicheren Aufbewahrung in die Bank gebracht.': 'No está mal, ¿eh? Has conseguido atraer a {item} con tu cebo. Lo has dejado en el almacén.'
-'Es ist dir nicht gelungen, ein Tier anzulocken. Was für eine Verschwendung...': 'No has conseguido atraer a un animal. Qué desperdicio...'
-Dompteurklinik: Clínica de Domadores
+'Nicht schlecht. Mit deinem Köder hast du es geschafft, {item} anzulocken!<hr/>Du hast es zur sicheren Aufbewahrung in die Bank gebracht.': 'La trampa funcionó: has atraído a {item}.<hr/>Depositas orgullosamente tu presa en el almacén.'
+'Es ist dir nicht gelungen, ein Tier anzulocken. Was für eine Verschwendung...': 'Qué desperdicio... El cebo desapareció, pero la trampa no funcionó.'
+Fallen: Trampas
+'Fallensystem der Dompteuere': "Sistema de Trampas de Domadores"
 '1 Gegenstand in der Truhe ist versteckt': '1 objeto oculto en tu baúl'
 'Solltest du am dritten Tag oder an einem späteren Zeitpunkt verbannt werden, bekommst du automatisch etwas Toxin geschenkt, das du nach Belieben einsetzen kannst... Tja, man hätte dich besser nicht ärgern sollen!': 'Si te destierran el día 3 o posteriores, recibirás automáticamente dos frascos de veneno y una Toxina para que así tengas la oportunidad de vengarte... Y sí, ¡no deberían haberse metido contigo!'
 'Abgenutzte Kuriertasche (statt Bauplan) beim Start der Stadt': 'Maletín usado (en lugar del plano de construcción) al principio del pueblo'
@@ -3174,10 +3175,9 @@ Dompteurklinik: Clínica de Domadores
 'Den Tod besiegen (heilt Kater, Bandagiert und Angst)': 'Vencer a la muerte (cura el terror, la resaca y la convalecencia)'
 '{dogname}, der stinkende Köter von {citizen}, hat sich folgendes aus der Bank geschnappt und ist damit aus der Stadt gerannt: {item}': '{dogname}, el chucho apestoso de {citizen}, ha recuperado {item} del almacén y ha huido del pueblo con él.'
 'Die ersten 5 Tage in der Pandämonium-Stadt "{town}" überlebt.': 'Ha sobrevivido los primeros 5 días en el pueblo Pandemonio « {town} ».'
-Klinikregister: Centro de pruebas de Domadores
-'{citizen} hat {list2} in die Stadt gelockt und dabei folgendes Futter eingesetzt: {list1}.': '{citizen} atrajo a {list2} al pueblo utilizando la siguiente comida: {list1}.'
-'{citizen} hat vergeblich versucht Tiere in die Stadt zu locken und dabei folgendes Futter verschwendet: {list1}.': '{citizen} intentó sin éxito atraer animales al pueblo y desperdició la siguiente comida: {list1}.'
-Tierklinik: Centro de pruebas
+Fallensystem: Sistema de Trampas
+'{citizen} hat {list2} in die Stadt gelockt und dabei folgendes Futter eingesetzt: {list1}.': '{citizen} atrajo a {list2} al pueblo gracias a sus cebos: {list1}.'
+'{citizen} hat vergeblich versucht Tiere in die Stadt zu locken und dabei folgendes Futter verschwendet: {list1}.': '{citizen} intentó atraer animales al pueblo con {list1}, pero sin éxito. Qué desperdicio...'
 'Die folgenden Bürger sind der Stadt bereits beigetreten:': 'Los siguientes habitantes ya han entrado al pueblo:'
 'Du kannst dieser Stadt nicht beitreten, da du nicht auf der Teilnehmerliste stehst.': 'No puedes entrar a este pueblo ya que no estás en la lista de invitados.'
 'Du kannst dieser Stadt nicht beitreten, da du noch nicht die erforderliche Menge an Seelenpunkten gesammelt hast.': 'No puedes acceder a este pueblo ya que no cuentas con los suficientes puntos de alma.'
@@ -3192,7 +3192,7 @@ Tierklinik: Centro de pruebas
 'Du hast es geschafft, {item} anzulocken... aber das Einfangen ist dir weniger geglückt.<hr/>Enttäuscht hebst du die Reste des verschlungenen Futters auf und legst sie als {leftovers} in die Bank.': 'Lograste atraer a {item}... pero tuviste menos éxito al atraparlo.<hr/>Decepcionado, recoges los restos de la comida devorada y los colocas en el almacén como {leftovers}.'
 'Du hast einen zusätzlichen Fähigkeitenpunkt erhalten!': '¡Has recibido un punto de habilidad adicional!'
 '{cost} Erfahrungspunkte ausgegeben, um einen zusätzlichen Fähigkeitenpunkt zu erhalten; {sold} Erfahrungspunkte durch den Verkauf freigeschalteter Fähigkeiten erhalten.': 'Gasté {cost} puntos de experiencia para obtener un punto de habilidad adicional; obtuve {sold} puntos de experiencia al vender habilidades desbloqueadas previamente.'
-'{citizen} hat mit {list1} erfolgreich {list2} in die Stadt gelockt... und entkommen lassen. Nur etwas {list3} ist übrig geblieben...': '{citizen} logró atraer a {list2} al pueblo con {list1}... y los dejó escapar. Sólo quedan unos pocos {list3}...'
+'{citizen} hat mit {list1} erfolgreich {list2} in die Stadt gelockt... und entkommen lassen. Nur etwas {list3} ist übrig geblieben...': '{citizen} atrajo a {list2} al pueblo gracias a sus cebos: {list1}. Pero la trampa no funcionó. Lo único que queda es {list3}...'
 'Du hast {item_list} in der Werkstatt geöffnet und erhälst {item}.<hr />Du hast dafür <strong>{ap} Aktionspunkt(e)</strong> verbraucht.': 'Has obtenido {item} en el taller (abriendo {item_list}).<hr />Para ello has utilizado <strong>{ap} puntos de acción</strong>.'
 'Du hast {item_list} in der Werkstatt zu {item} zerlegt.<hr />Du hast dafür <strong>{ap} Aktionspunkt(e)</strong> verbraucht.': 'Has producido {item} en el taller (usando {item_list}).<hr />Para ello has utilizado <strong>{ap} puntos de acción</strong>.'
 'Die ersten 10 Tage in der Pandämonium-Stadt "{town}" überlebt.': 'Ha sobrevivido los primeros 10 días en el pueblo Pandemonio « {town} ».'
@@ -3216,7 +3216,7 @@ Tierklinik: Centro de pruebas
 'Heldenerfahrung von {user} in "{town}" erhalten.': 'Experiencia heroica recibida de {user} en "{town}".'
 'Heldenfähigkeit freigeschaltet': 'habilidad de héroe'
 'Du hast es geschafft, diesen Gegenstand zu verarbeiten. Aber als du fast fertig warst, ist das Klebeband gerissen. Ohne dessen Halt ist die Klinge abgerutscht und hat den Stamm zertrümmert. So ist das ganze Ding nicht mehr zu gebrauchen. Wenigstens hast du es ohne einen Splitter überstanden.': 'Has transformado tu objeto exitosamente. Pero el final de la operación rompió el parche. Sin apoyo, la hoja resbaló y luego rompió el tronco. Nada de lo que queda es utilizable. Al menos saliste ileso de esto.'
-'Du hast es geschafft, {item} anzulocken... aber das Einfangen ist dir weniger geglückt.<hr/>Nichts von dem Futter ist übrig geblieben, abgesehen von ein paar von Insekten bedeckten Krümeln. Du legst die {leftovers} in die Bank.': 'Lograste atraer a {item}... pero tuviste menos éxito al atraparlo.<hr/>De la comida no queda nada más que unas cuantas migas húmedas cubiertas de insectos. Pones los {leftovers} en el banco. Mejor que nada, ¿no?'
+'Du hast es geschafft, {item} anzulocken... aber das Einfangen ist dir weniger geglückt.<hr/>Nichts von dem Futter ist übrig geblieben, abgesehen von ein paar von Insekten bedeckten Krümeln. Du legst die {leftovers} in die Bank.': 'Lograste atraer a {item}... pero la trampa no funcionó.<hr/>Solo quedan {leftovers}, que depositas en el almacén. Mejor que nada, ¿no?'
 'Du erhälst diese Nachricht als Bestätigung, dass deine Fehlermeldung bei uns eingegangen ist. Du kannst auf diese Nachricht antworten, um deiner Fehlermeldung zusätzliche Informationen hinzuzufügen. Unsere Techniker werden dich möglicherweise über diesen Thread kontaktieren, wenn sie Rückfragen haben.<br/><br/>Deine Meldung:<br/>{body}<br/>Link zu deinem Ticket (nur für Projektmitglieder abrufbar): <a href="{link}">#{issue}</a>': '<div class="crowmsg">Recibirá este mensaje como confirmación de que hemos recibido su informe de error. Puede responder a este mensaje para agregar información adicional a tu informe de error. Nuestros técnicos pueden contactarte a través de este hilo si tienen alguna pregunta.</div><br/>Tu mensaje:<br/><i>{body}</i><br/><br/>Enlace a tu ticket (disponible solo para miembros del proyecto):<br/><a href="{link}">#{issue}</a>'
 'Dein Ticket mit der Nummer #{issue} wurde soeben geschlossen.': '<div class="crowmsg">Tu ticket con el número #{issue} acaba de ser cerrado.</div>'
 'Dein Ticket mit der Nummer #{issue} wurde soeben erneut geöffnet.': '<div class="crowmsg">Tu ticket con el número #{issue} acaba de ser reabierto.</div>'

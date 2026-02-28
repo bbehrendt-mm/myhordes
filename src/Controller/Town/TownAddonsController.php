@@ -463,8 +463,8 @@ class TownAddonsController extends TownController
         ]) );
     }
 
-    #[Route(path: 'jx/town/clinic', name: 'town_tamer_clinic')]
-    public function townTamerClinic(): Response {
+    #[Route(path: 'jx/town/trap', name: 'town_tamer_trap')]
+    public function townTamerTrap(): Response {
         if (!$this->getActiveCitizen()->getHasSeenGazette())
             return $this->redirect($this->generateUrl('game_newspaper'));
 
@@ -488,7 +488,7 @@ class TownAddonsController extends TownController
 
         ksort($items_accum);
 
-        return $this->render( 'ajax/game/town/clinic.html.twig', $this->addDefaultTwigArgs('tamers', [
+        return $this->render( 'ajax/game/town/trap.html.twig', $this->addDefaultTwigArgs('tamers', [
             'day' => $town->getDay(),
             'used' => $this->getActiveCitizen()->hasStatus('tg_tamer_lure'),
             'banished' => $this->getActiveCitizen()->getBanished(),
@@ -496,8 +496,8 @@ class TownAddonsController extends TownController
         ]) );
     }
 
-    #[Route(path: 'api/town/clinic/lure', name: 'town_tamer_clinic_lure_controller')]
-    public function api_clinic_lure(KernelInterface $kernel, JSONRequestParser $parser, ItemFactory $if, LogTemplateHandler $log): Response
+    #[Route(path: 'api/town/trap/lure', name: 'town_tamer_trap_lure_controller')]
+    public function api_trap_lure(KernelInterface $kernel, JSONRequestParser $parser, ItemFactory $if, LogTemplateHandler $log): Response
     {
         $town = $this->getActiveCitizen()->getTown();
         if (!$this->town_handler->getBuilding($town, 'small_pet_#00', true))
@@ -525,9 +525,9 @@ class TownAddonsController extends TownController
         if (empty($items))
             return AjaxResponse::error(ErrorHelper::ErrorItemsMissing);
 
-        $configPath = $kernel->getBundle('MyHordesFixturesBundle')->getPath() . '/content/myhordes/config/clinic.yaml';
+        $configPath = $kernel->getBundle('MyHordesFixturesBundle')->getPath() . '/content/myhordes/config/trap.yaml';
         if (!file_exists($configPath))
-            $configPath = $kernel->getBundle('MyHordesFixturesBundle')->getPath() . '/content/myhordes/config/clinic.default.yaml';
+            $configPath = $kernel->getBundle('MyHordesFixturesBundle')->getPath() . '/content/myhordes/config/trap.default.yaml';
 
         try {
             $config = file_exists( $configPath ) ? Yaml::parseFile( $configPath ) : [];
@@ -561,7 +561,7 @@ class TownAddonsController extends TownController
 
         if ($prototype !== null) $prototype = $this->entity_manager->getRepository( ItemPrototype::class )->findOneByName( $prototype );
 
-        $previous_uses = $town->getSpecificActionCounterValue( ActionCounterType::TamerClinicUsed );
+        $previous_uses = $town->getSpecificActionCounterValue( ActionCounterType::TamerTrapUsed );
         $failure_rate = match(true) {
             $previous_uses < 100 => 0.00,        // 0% failure rate for the first 100 uses
             $previous_uses < 200 => 0.13,        // 13% failure rate for uses 101 - 200
@@ -583,7 +583,7 @@ class TownAddonsController extends TownController
                 ], 'game' ));
 
                 $spawn = $if->createItem($prototype)->setCount($count);
-                $this->entity_manager->persist( $town->getSpecificActionCounter( ActionCounterType::TamerClinicUsed )->increment() );
+                $this->entity_manager->persist( $town->getSpecificActionCounter( ActionCounterType::TamerTrapUsed )->increment() );
 
             } else {
                 $spawn = $if->createItem('moldy_food_subpart_#00')->setCount(1);
@@ -595,7 +595,7 @@ class TownAddonsController extends TownController
             }
 
             $this->inventory_handler->forceMoveItem( $this->getActiveCitizen()->getTown()->getBank(), $spawn );
-            $this->entity_manager->persist($log->clinicConvert( $this->getActiveCitizen(),
+            $this->entity_manager->persist($log->trapConvert( $this->getActiveCitizen(),
                                                                 $list1,
                                                                 [['count' => $count, 'item' => $prototype]],
                                                                 $fail ? [['count' => 1, 'item' => $spawn->getPrototype()]] : [],
@@ -603,7 +603,7 @@ class TownAddonsController extends TownController
             ));
         } else {
             $this->addFlash('notice', $this->translator->trans('Es ist dir nicht gelungen, ein Tier anzulocken. Was für eine Verschwendung...', [], 'game'));
-            $this->entity_manager->persist($log->clinicConvert( $this->getActiveCitizen(), $list1, [] ));
+            $this->entity_manager->persist($log->trapConvert( $this->getActiveCitizen(), $list1, [] ));
         }
 
         if (!($kernel->getEnvironment() === 'dev' || $kernel->getEnvironment() === 'local' || $this->conf->getGlobalConf()->get(MyHordesSetting::StagingSettingsEnabled)))

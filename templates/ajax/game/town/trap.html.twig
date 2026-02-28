@@ -1,0 +1,215 @@
+{% extends "ajax/game/town/town.html.twig" %}
+{% block title %}{{ "Fallensystem der Dompteuere"|trans({}, 'buildings') }}{% endblock %}
+{% block content %}
+    {% set hour = "now"|date("G") %}
+    <div class="row">
+        <div class="cell rw-12 town-banner town-banner-trap time-{{ hour }} {% if conf.isNightTime %}night{% endif %}"></div>
+    </div>
+
+    <div class="help">
+        {{ "Das Fallensystem der Dompteuere ermöglicht unter anderem, Tiere mit einem Köder in die Stadt zu locken. Lege Nahrung aus, um ein wildes Tier aus der Umgebung anzulocken. Je verlockender der Köder ist, desto besser stehen deine Chancen ... doch mit jedem Versuch wird die Umgebung misstrauischer."|trans({},'game') }}
+        <br />
+        {{ '<b>Einmal pro Tag</b> kann jeder Bürger sein Glück versuchen.'|trans({},'game')|raw }}
+    </div>
+
+    {% if banished %}
+        <div class="note note-warning">
+            {% trans from 'game' %}
+                Du wurdest verbannt und kannst daher keine Tiere anlocken.
+            {% endtrans %}
+        </div>
+    {% endif %}
+
+    <div class="row">
+        {% if not used %}
+            <div class="padded cell rw-12">
+
+            <h5>{{ 'Fallenköder'|trans({},'game') }}</h5>
+            <br/>
+
+            <div class="tamer-trap">
+                <div class="tamer-trap-stack">
+                    <div class="tamer-trap-slot" data-slot="0" data-selected="">
+                        <div></div>
+                    </div>
+                    <div class="tamer-trap-slot" data-slot="1" data-selected="">
+                        <div></div>
+                    </div>
+                    <div class="tamer-trap-slot" data-slot="2" data-selected="">
+                        <div></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        {% else %}
+            <div class="padded cell rw-12">
+                <div class="note note-warning">{{ 'Du hast das Fallensystem heute bereits verwendet.'|trans({},'game') }}</div>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="row">
+        <div class="padded cell rw-12 center">
+            {% if not used %}
+                <button class="inline" data-action="lure">{{ 'Fangversuch starten'|trans({},'game') }}</button>
+            {% endif %}
+        </div>
+        <div class="padded cell rw-12">
+            <h5>{{ 'Verfügbare Köder'|trans({},'game') }}</h5>
+        </div>
+    </div>
+
+    <div class="row-table">
+        <div class="row header">
+            <div class="padded cell rw-7">
+                <span class="hide-md hide-sm">{{ 'Gegenstand'|trans({},'game') }}</span>
+            </div>
+            <div class="padded cell rw-2 center">
+                <span class="hide-md hide-sm">{{ 'Vorrat'|trans({},'game') }}</span>
+            </div>
+        </div>
+        {% for item in items %}
+            <div class="row">
+                <div class="padded cell rw-7 rw-md-4 rw-sm-3">
+	                <span class="icon hide-md hide-sm">
+			        <img src='{{asset('build/images/item/item_' ~ item[0].icon ~ '.gif')}}'  alt='{{ item[0].label|trans({}, 'items')}}' />
+			            {{ item[0].label|trans({}, 'items')}}
+			        </span>
+                    <img class='hide-lg hide-desktop' src='{{ asset('build/images/item/item_' ~ item[0].icon ~ '.gif')}}' alt='{{ item[0].label|trans({},'items') }}' />
+                </div>
+                <div class="padded cell rw-2 center">
+                    <span class='small'>{{ item[1] }}
+                </div>
+                <div class="padded cell rw-3 rw-md-5 rw-sm-6 right">
+                    {% if not banished %}
+                        <span class="tamer-trap-controls">
+                            <button
+                                class="small inline map_button map_button_icon map_button_right map_button_zoom_in"
+                                data-action="add"
+                                data-add="{{ item[0].id }}"
+                                data-icon="{{ asset('build/images/item/item_' ~ item[0].icon ~ '.gif')}}"
+                                title="+"
+                                aria-label="+"></button>
+                            <button
+                                class="small inline map_button map_button_icon map_button_right map_button_zoom_out"
+                                data-action="remove"
+                                data-remove="{{ item[0].id }}"
+                                title="-"
+                                aria-label="-"
+                                disabled="disabled"></button>
+                        </span>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="row">
+        <h5>{{ 'Fallensystem'|trans({},'game') }} <a class="float-right link" x-ajax-href="{{ path("game_newspaper") }}">{{ 'Das Gesamtregister ansehen'|trans({}, 'game') }}<div class="tooltip normal">{{ 'Dieser Link bringt dich zum <strong>Großen Register</strong>. Darin werden alle wichtigen Handlungen und Aktionen der Stadtbürger gespeichert...'|trans({}, 'game')|raw }}</div></a></h5>
+        <div class="cell rw-12">
+            <hordes-log id="trap-log" data-react-mount="trap-log" data-day="{{ day }}" data-etag="{{ date().timestamp }}" data-category="101" data-domain="town"></hordes-log>
+        </div>
+    </div>
+
+{% endblock %}
+{% block js %}
+    {{ parent() }}
+    <script>
+
+        const trapSlotLayout = [
+            {x: 0, y: 6, r: 0, z: 2},
+            {x: -24, y: -10, r: -11, z: 3},
+            {x: 24, y: -8, r: 10, z: 4},
+        ];
+
+        const setSlotVisual = (slot, selected) => {
+            if (!slot) return;
+
+            if (!selected) {
+                slot.style.setProperty('--x', '0px');
+                slot.style.setProperty('--y', '6px');
+                slot.style.setProperty('--r', '0deg');
+                slot.style.setProperty('--z', '1');
+                return;
+            }
+
+            const index = Number.parseInt(slot.dataset.slot ?? '0', 10);
+            const base = trapSlotLayout[index] ?? trapSlotLayout[0];
+            const jitter = (max) => Math.round((Math.random() * 2 - 1) * max);
+
+            slot.style.setProperty('--x', `${base.x + jitter(3)}px`);
+            slot.style.setProperty('--y', `${base.y + jitter(2)}px`);
+            slot.style.setProperty('--r', `${base.r + jitter(3)}deg`);
+            slot.style.setProperty('--z', `${base.z}`);
+        };
+
+        document.querySelectorAll('[data-slot][data-selected]').forEach(slot => setSlotVisual(slot, slot.dataset.selected !== ''));
+
+        const restate = () => {
+            const has_empty = document.querySelectorAll('[data-slot][data-selected=""]').length > 0;
+
+            if (has_empty)
+                document.querySelector('[data-action="lure"]')?.setAttribute('disabled','disabled');
+            else document.querySelector('[data-action="lure"]')?.removeAttribute('disabled');
+
+            document.querySelectorAll('[data-action="add"][data-add][data-icon]').forEach(e => {
+                const exists = document.querySelectorAll('[data-selected="' + e.dataset.add + '"]').length > 0;
+
+                if (!has_empty || exists) e.setAttribute('disabled','disabled')
+                else e.removeAttribute('disabled');
+            });
+
+            document.querySelectorAll('[data-action="remove"][data-remove]').forEach(e => {
+                const exists = document.querySelectorAll('[data-selected="' + e.dataset.remove + '"]').length > 0;
+
+                if (exists) e.removeAttribute('disabled');
+                else e.setAttribute('disabled','disabled');
+            });
+        }
+
+        restate();
+
+        document.querySelectorAll('[data-action="add"][data-add][data-icon]').forEach( e => {
+            e.addEventListener('click', () => {
+                if (e.hasAttribute('disabled')) return;
+
+                const target = document.querySelector('[data-slot][data-selected=""]');
+                if (!target) return;
+
+                target.dataset.selected = e.dataset.add;
+                target.querySelector('div').innerHTML = '<img alt="" src="' + e.dataset.icon + '" />'
+                setSlotVisual(target, true);
+
+                restate();
+            })
+        })
+
+        document.querySelectorAll('[data-action="remove"][data-remove]').forEach( e => {
+            e.addEventListener('click', () => {
+                if (e.hasAttribute('disabled')) return;
+
+                const target = document.querySelector('[data-slot][data-selected="' + e.dataset.remove + '"]');
+                if (!target) return;
+
+                target.dataset.selected = '';
+                target.querySelector('div').innerHTML = ''
+                setSlotVisual(target, false);
+
+                restate();
+            })
+        })
+
+        document.querySelector('[data-action="lure"]')?.addEventListener('click', function() {
+            let items = [];
+            document.querySelectorAll('[data-slot][data-selected]').forEach( e => {
+                const id = parseInt( e.dataset.selected );
+                if (!Number.isNaN(id)) items.push(id);
+            } );
+            $.ajax.easySend( '{{ path('town_tamer_trap_lure_controller') }}', {items},
+                function () {
+                    $.ajax.load(null, '{{ path('town_tamer_trap') }}', true);
+                } );
+        });
+    </script>
+{% endblock %}
