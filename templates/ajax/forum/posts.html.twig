@@ -516,20 +516,55 @@
             return editor;
         }
 
+        // Using preventDefault on copy and quote buttons' mousedown events to avoid focus switch so we can detect text selection.
+        $.html.addEventListenerAll('[x-forum-action="quote-post"],[x-forum-action="copy-post"]', 'mousedown', function(e,elem) {
+            e.preventDefault()
+        })
         $.html.addEventListenerAll('[x-forum-action="quote-post"],[x-forum-action="copy-post"]', 'click', function(e,elem) {
             let editor = get_forum_editor();
 
             let fun_quote = function() {
-                let content = document.querySelector('[x-post-content-id="' + elem.getAttribute('x-post-id') + '"]');
-                let author = content.getAttribute('x-post-content-author');
-                let author_id = parseInt(content.getAttribute('x-post-content-author-id'));
+                const messageElement = document.querySelector('[x-post-content-id="' + elem.getAttribute('x-post-id') + '"]')
+
+                if (!messageElement) return;
+
+                let content
+
+                const selection = document.getSelection() // Getting user selection
+
+                // Checking if user selected only one range and if the message element is in this range
+                if (selection?.rangeCount === 1 && selection.getRangeAt(0).intersectsNode(messageElement)) {
+                    const selectionRange = selection?.getRangeAt(0)
+
+                    /* Correcting fat fingers effect => if the user selected more elements than the text from the message
+                    we adjust the start and/or end to the content of the message only */
+                    if (selectionRange.startContainer !== messageElement && selectionRange.startContainer.parentNode !== messageElement) {
+                        console.log('selection start nogud')
+                        selectionRange.setStart(messageElement, 0)
+                    }
+
+                    if (selectionRange.endContainer !== messageElement && selectionRange.endContainer.parentNode !== messageElement) {
+                        console.log('selection end nogud')
+                        selectionRange.setEnd(messageElement, messageElement.childNodes.length)
+                    }
+
+                    // Getting the html entities from the text (without relying on old dinosaur named jquery) to keep compatibility with twinoParser
+                    const tempNode = document.createElement('textarea')
+                    tempNode.innerText = selection.toString() 
+                    content = tempNode.innerHTML
+                } else {
+                    content = messageElement?.innerHTML;
+                }
+
+                let author = messageElement.getAttribute('x-post-content-author');
+                let author_id = parseInt(messageElement.getAttribute('x-post-content-author-id'));
                 const quote = elem.getAttribute('x-forum-action') === 'quote-post';
 
                 document.querySelector("#forum-forum-editor hordes-twino-editor")?.dispatchEvent(new CustomEvent('import', {
                     bubbles: false,
                     cancelable: false,
                     detail: {
-                        html: content?.innerHTML ?? '',
+                        html: content ?? '',
                         insert: true,
                         wrap: [
                             (quote ? (author ? ('[quote=@' + (author_id > 0 ? author.replace(/[^\p{L}\d_-]/gu, '') : author) + (author_id > 0 ? (':' + author_id) : '') + ']') : '[quote]') : ''),
