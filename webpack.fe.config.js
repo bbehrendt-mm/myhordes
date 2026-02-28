@@ -86,7 +86,7 @@ Encore
     .addEntry('app', './assets/js/app.js')
     .addEntry('fa', './assets/js/fa.js')
 
-    .addEntry('swagger', './assets/js/swagger.js')
+    .addEntry('api-doc', './assets/js/modules/api-doc.js')
 
     .addEntry('module-ruffle', './assets/js/modules/ruffle.js')
 
@@ -159,8 +159,10 @@ config.name = "myhordes-fe";
 config.resolve.fallback = { ...config.resolve?.fallback ?? {}, buffer: require.resolve('buffer/'), stream: require.resolve("stream-browserify") }
 config.plugins = [
     ...config.plugins ?? [],
-    new webpack.ProvidePlugin({ Buffer: ['buffer', 'Buffer'] }),
-    new webpack.ProvidePlugin({ process: 'process/browser' }),
+    new webpack.ProvidePlugin({
+        Buffer: ['buffer', 'Buffer'],
+        process: 'process/browser.js'
+    }),
     new FaviconsWebpackPlugin({
         logo: local?.favicon?.image ?? './assets/img/favicon.png',
         prefix: 'favicon/',

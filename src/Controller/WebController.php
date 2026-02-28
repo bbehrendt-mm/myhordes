@@ -191,8 +191,14 @@ class WebController extends CustomAbstractController
     /**
      * @return Response
      */
-    #[Route(path: '/swagger', name: 'swagger')]
+    #[Route(path: '/swagger', name: 'swagger_legacy')]
     public function swagger(): Response
+    {
+        return $this->redirectToRoute('swagger', status: 301);
+    }
+
+    #[Route(path: '/docs', name: 'swagger')]
+    public function docs(): Response
     {
         return $this->render('web/swagger.html.twig');
     }
