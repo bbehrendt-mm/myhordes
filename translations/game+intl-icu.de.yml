@@ -3153,18 +3153,18 @@ Fund: Fund
 'Ermöglicht Überlebenschance beim Camping von bis zu 99%': 'Ermöglicht Überlebenschance beim Camping von bis zu 99%'
 'Erstaunliches Fundstück (ersetzt Beeindruckendes Fundstück)': 'Erstaunliches Fundstück (ersetzt Beeindruckendes Fundstück)'
 'Löschen von Registereinträgen (max. 1)': 'Löschen von Registereinträgen (max. 1)'
-'Das Tamer''s Fallensystem ermöglicht unter anderem, Tiere mit einem Köder in die Stadt zu locken. Lege Nahrung aus, um ein wildes Tier aus der Umgebung anzulocken. Je verlockender der Köder ist, desto besser stehen deine Chancen ... doch mit jedem Versuch wird die Umgebung misstrauischer.': 'Das Tamer''s Fallensystem ermöglicht unter anderem, Tiere mit einem Köder in die Stadt zu locken. Lege Nahrung aus, um ein wildes Tier aus der Umgebung anzulocken. Je verlockender der Köder ist, desto besser stehen deine Chancen ... doch mit jedem Versuch wird die Umgebung misstrauischer.'
+'Das Fallensystem der Dompteuere ermöglicht unter anderem, Tiere mit einem Köder in die Stadt zu locken. Lege Nahrung aus, um ein wildes Tier aus der Umgebung anzulocken. Je verlockender der Köder ist, desto besser stehen deine Chancen ... doch mit jedem Versuch wird die Umgebung misstrauischer.': "Das Fallensystem der Dompteuere ermöglicht unter anderem, Tiere mit einem Köder in die Stadt zu locken. Lege Nahrung aus, um ein wildes Tier aus der Umgebung anzulocken. Je verlockender der Köder ist, desto besser stehen deine Chancen ... doch mit jedem Versuch wird die Umgebung misstrauischer."
 '<b>Einmal pro Tag</b> kann jeder Bürger sein Glück versuchen.': '<b>Einmal pro Tag</b> kann jeder Bürger sein Glück versuchen.'
 'Du wurdest verbannt und kannst daher keine Tiere anlocken.': 'Du wurdest verbannt. Es ist dir nicht möglich, Tiere anzulocken.'
-'Fallenköder': 'Fallenköder'
+Fallenköder: Fallenköder
 'Du hast das Fallensystem heute bereits verwendet.': 'Du hast das Fallensystem heute bereits verwendet.'
 'Fangversuch starten': 'Fangversuch starten'
 'Verfügbare Köder': 'Verfügbare Köder'
 Hinzufügen: Hinzufügen
 'Nicht schlecht. Mit deinem Köder hast du es geschafft, {item} anzulocken!<hr/>Du hast es zur sicheren Aufbewahrung in die Bank gebracht.': 'Die Falle hat funktioniert: Du hast {item} angelockt.<hr/>Stolz bringst du deine Beute in die Bank.'
 'Es ist dir nicht gelungen, ein Tier anzulocken. Was für eine Verschwendung...': 'Was für eine Verschwendung... Der Köder ist verschwunden, aber die Falle hat nicht funktioniert.'
-'Fallen': 'Fallen'
-'Tamer''s Fallensystem': 'Tamer''s Fallensystem'
+Fallen: Fallen
+'Fallensystem der Dompteuere': "Fallensystem der Dompteuere"
 '1 Gegenstand in der Truhe ist versteckt': '1 Gegenstand in der Truhe ist versteckt'
 'Solltest du am dritten Tag oder an einem späteren Zeitpunkt verbannt werden, bekommst du automatisch etwas Toxin geschenkt, das du nach Belieben einsetzen kannst... Tja, man hätte dich besser nicht ärgern sollen!': 'Solltest du am dritten Tag oder an einem späteren Zeitpunkt verbannt werden, bekommst du automatisch etwas Toxin geschenkt, das du nach Belieben einsetzen kannst... Tja, man hätte dich besser nicht ärgern sollen!'
 'Abgenutzte Kuriertasche (statt Bauplan) beim Start der Stadt': 'Abgenutzte Kuriertasche (statt Bauplan) beim Start der Stadt'

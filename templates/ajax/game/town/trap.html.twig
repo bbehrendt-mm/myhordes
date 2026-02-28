@@ -1,5 +1,5 @@
 {% extends "ajax/game/town/town.html.twig" %}
-{% block title %}{{ "Tamer's Fallensystem"|trans({}, 'buildings') }}{% endblock %}
+{% block title %}{{ "Fallensystem der Dompteuere"|trans({}, 'buildings') }}{% endblock %}
 {% block content %}
     {% set hour = "now"|date("G") %}
     <div class="row">
@@ -7,7 +7,7 @@
     </div>
 
     <div class="help">
-        {{ "Das Tamer's Fallensystem ermöglicht unter anderem, Tiere mit einem Köder in die Stadt zu locken. Lege Nahrung aus, um ein wildes Tier aus der Umgebung anzulocken. Je verlockender der Köder ist, desto besser stehen deine Chancen ... doch mit jedem Versuch wird die Umgebung misstrauischer."|trans({},'game') }}
+        {{ "Das Fallensystem der Dompteuere ermöglicht unter anderem, Tiere mit einem Köder in die Stadt zu locken. Lege Nahrung aus, um ein wildes Tier aus der Umgebung anzulocken. Je verlockender der Köder ist, desto besser stehen deine Chancen ... doch mit jedem Versuch wird die Umgebung misstrauischer."|trans({},'game') }}
         <br />
         {{ '<b>Einmal pro Tag</b> kann jeder Bürger sein Glück versuchen.'|trans({},'game')|raw }}
     </div>
