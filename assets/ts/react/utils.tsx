@@ -166,11 +166,16 @@ export function ItemTooltip(props: {
     </Tooltip>
 }
 
-export function renderMultilineText(value?: string|null): React.ReactNode {
-    const lines = (value ?? '').replace(/\\n/g, '\n').split('\n');
+export function renderMultilineText(value?: string|string[]|null): React.ReactNode {
+    if (!value) return null;
+
+    const lines = (typeof value === 'string')
+        ? (value ?? '').replace(/\\n/g, '\n').split('\n')
+        : value;
+
     return lines.map((line, i) => (
         <React.Fragment key={i}>
-            {line}
+            <span dangerouslySetInnerHTML={{__html: line}}/>
             {i < lines.length - 1 && <br/>}
         </React.Fragment>
     ));
