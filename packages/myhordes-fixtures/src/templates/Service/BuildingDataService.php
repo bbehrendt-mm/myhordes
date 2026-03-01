@@ -1046,7 +1046,7 @@ class BuildingDataService implements FixtureProcessorInterface {
             ->commit($small_cemetery);
 
         $container->add()->parentBuilding($small_cemetery)
-            ->icon('small_coffin')->label('Sarg-Katapult')->description('Von 2 Toten hat derjenige, der sich bewegt, die besten Chancen, dich zu verspeisen. Trickst eure Feinde aus, indem ihr eure Leichen in die herankommende Zombiehorde schleudert. Jeder Tote bringt +20 anstelle von +10 Verteidigungspunkten.')
+            ->icon('small_coffin')->label('Sarg-Katapult')->description('Von 2 Toten hat derjenige, der sich bewegt, die besten Chancen, dich zu verspeisen. Trickst eure Feinde aus, indem ihr eure Leichen in die herankommende Zombiehorde schleudert. Jeder Tote bringt +10 Verteidigungspunkte zusätzlich.')
             ->isTemporary(0)->defense(0)->ap(85)->health(85)->blueprintLevel(3)->resources(["courroie_#00" => 1,"concrete_wall_#00" => 2,"wire_#00" => 2,"meca_parts_#00" => 3,"wood2_#00" => 5,"metal_#00" => 15,])->orderBy(0)->commit();
 
         $container->add()->parentBuilding($item_soul_blue_static)
