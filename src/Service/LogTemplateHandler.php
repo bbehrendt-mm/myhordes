@@ -21,6 +21,7 @@ use App\Entity\ItemGroupEntry;
 use App\Entity\ItemPrototype;
 use App\Entity\LogEntryTemplate;
 use App\Entity\PictoPrototype;
+use App\Entity\Post;
 use App\Entity\Town;
 use App\Entity\TownLogEntry;
 use App\Entity\User;
@@ -400,6 +401,18 @@ class LogTemplateHandler
             catch (Exception|\Error $e) {
                 $transParams['{'.$typeEntry['name'].'}'] = "_error_";
             }
+        }
+
+        foreach ($variableTypes as $typeEntry) {
+            try {
+                if ($typeEntry['type'] === 'link_post') {
+                    $post = $this->entity_manager->getRepository(Post::class)->find($variables[$typeEntry['name']] ?? 0);
+                    $title = $post?->getThread()?->getForum()?->getLocalizedTitle( $this->trans->getLocale() );
+                    if ($title)
+                        $transParams['{forumname}'] = $title;
+                }
+            }
+            catch (Exception|\Error $e) {}
         }
 
         return $transParams;
