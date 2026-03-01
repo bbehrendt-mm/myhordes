@@ -207,13 +207,13 @@ class ActionDataService implements FixtureProcessorInterface {
                     [ ['death_poison'], 2 ],
                 ]] ] ],
 
-                'play_soccer_1'  => [ 'label' => 'Benutzen', 'at00' => true, 'meta' => [ 'not_tired', 'not_yet_soccer', 'no_bonus_ap', 'not_drunk_hide', 'is_not_wounded_foot' ], 'result' => [ 'status_soccer_today', 'chances' => ['group' => [
+                'play_soccer_1'  => [ 'label' => 'Benutzen', 'at00' => true, 'meta' => [ 'not_tired', 'not_yet_soccer', 'no_bonus_sp', 'not_drunk_hide', 'is_not_wounded_foot' ], 'result' => [ 'status_soccer_today', 'chances' => ['group' => [
                     [ ['do_nothing', 'msg_soccer_fail'], 80 ],
                     [ ['plus_1sp_e', 'msg_soccer_success'], 15 ],
                     [ ['morph_soccer_part', 'msg_soccer_bigfail'], 5 ],
 
                 ] ] ] ],
-                'play_soccer_2'  => [ 'label' => 'Benutzen', 'at00' => true, 'meta' => [ 'not_tired', 'not_yet_soccer', 'no_bonus_ap', 'must_be_drunk', 'is_not_wounded_foot' ], 'result' => [ 'status_soccer_today', 'chances' => ['group' => [
+                'play_soccer_2'  => [ 'label' => 'Benutzen', 'at00' => true, 'meta' => [ 'not_tired', 'not_yet_soccer', 'no_bonus_sp', 'must_be_drunk', 'is_not_wounded_foot' ], 'result' => [ 'status_soccer_today', 'chances' => ['group' => [
                     [ ['morph_soccer_part', 'msg_soccer_bigfail'], 80 ],
                     [ ['do_nothing', 'msg_soccer_fail'], 15 ],
                     [ ['plus_1sp_e', 'msg_soccer_success'], 5 ],
@@ -1238,6 +1238,7 @@ class ActionDataService implements FixtureProcessorInterface {
                 'water_purification_impossible' => 'Um dieses Wasser trinkbar zu machen, brauchst du <strong>irgendein Reinigungsmittel</strong> oder deine Stadt muss über einen <strong>Wasserreiniger</strong> verfügen. Die zweite Variante ist nicht verfügbar, wenn Du verbannt bist.',
                 'once_a_day'                    => 'Du kannst diesen Gegenstand nur <strong>einmal am Tag</strong> verwenden...',
                 'already_full_ap'               => 'Du hast bereits volle AP.',
+                'already_full_sp'               => 'Du hast bereits volle EP.',
                 'already_full_ap_drink'         => 'Du brauchst im Moment <strong>nichts trinken</strong>, da du nicht müde bist und noch alle deine Aktionspunkte hast.',
 
                 'pt_required' => 'Hierfür brauchst du mindestens {pt_min} {pt_name}.',

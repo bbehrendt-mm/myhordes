@@ -3153,7 +3153,7 @@ Fund: Hallazgo
 'Ermöglicht Überlebenschance beim Camping von bis zu 99%': 'Permite alcanzar un maximo de 99% de probabilidad de supervivencia al acampar'
 'Erstaunliches Fundstück (ersetzt Beeindruckendes Fundstück)': 'Hallazgo milagroso (sustituye al hallazgo perfeccionado)'
 'Löschen von Registereinträgen (max. 1)': 'Borrar entradas del registro (máx. 1)'
-'Das Fallensystem der Dompteuere ermöglicht unter anderem, Tiere mit einem Köder in die Stadt zu locken. Lege Nahrung aus, um ein wildes Tier aus der Umgebung anzulocken. Je verlockender der Köder ist, desto besser stehen deine Chancen ... doch mit jedem Versuch wird die Umgebung misstrauischer.': "El Sistema de Trampas de Domadores permite, entre otras cosas, atraer animales al pueblo usando cebo. Deja comida en la trampa para intentar atraer a un animal salvaje de los alrededores. Cuanto más tentador sea el cebo, mayores serán tus probabilidades... pero, con cada intento, los alrededores se volverán mas desconfiados."
+'Das Fallensystem der Dompteuere ermöglicht unter anderem, Tiere mit einem Köder in die Stadt zu locken. Lege Nahrung aus, um ein wildes Tier aus der Umgebung anzulocken. Je verlockender der Köder ist, desto besser stehen deine Chancen ... doch mit jedem Versuch wird die Umgebung misstrauischer.': 'El Sistema de Trampas de Domadores permite, entre otras cosas, atraer animales al pueblo usando cebo. Deja comida en la trampa para intentar atraer a un animal salvaje de los alrededores. Cuanto más tentador sea el cebo, mayores serán tus probabilidades... pero, con cada intento, los alrededores se volverán mas desconfiados.'
 '<b>Einmal pro Tag</b> kann jeder Bürger sein Glück versuchen.': '<b>Una vez al día</b>, cada habitante puede probar su suerte.'
 'Du wurdest verbannt und kannst daher keine Tiere anlocken.': 'Has sido desterrado. Te es imposible atraer animales.'
 Fallenköder: Cebos de la trampa
@@ -3164,7 +3164,7 @@ Hinzufügen: Añadir
 'Nicht schlecht. Mit deinem Köder hast du es geschafft, {item} anzulocken!<hr/>Du hast es zur sicheren Aufbewahrung in die Bank gebracht.': 'La trampa funcionó: has atraído a {item}.<hr/>Depositas orgullosamente tu presa en el almacén.'
 'Es ist dir nicht gelungen, ein Tier anzulocken. Was für eine Verschwendung...': 'Qué desperdicio... El cebo desapareció, pero la trampa no funcionó.'
 Fallen: Trampas
-'Fallensystem der Dompteuere': "Sistema de Trampas de Domadores"
+'Fallensystem der Dompteuere': 'Sistema de Trampas de Domadores'
 '1 Gegenstand in der Truhe ist versteckt': '1 objeto oculto en tu baúl'
 'Solltest du am dritten Tag oder an einem späteren Zeitpunkt verbannt werden, bekommst du automatisch etwas Toxin geschenkt, das du nach Belieben einsetzen kannst... Tja, man hätte dich besser nicht ärgern sollen!': 'Si te destierran el día 3 o posteriores, recibirás automáticamente dos frascos de veneno y una Toxina para que así tengas la oportunidad de vengarte... Y sí, ¡no deberían haberse metido contigo!'
 'Abgenutzte Kuriertasche (statt Bauplan) beim Start der Stadt': 'Maletín usado (en lugar del plano de construcción) al principio del pueblo'

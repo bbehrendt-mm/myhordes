@@ -168,6 +168,7 @@ class ActionRequirementProvider
 
         //<editor-fold desc="PointRequirements">
         $requirement_container->add()->identifier('no_bonus_ap')->type( Requirement::CrossOnFail )->add( new PointRequirement()->require(PointType::AP)->max(0)->fromLimit() )->text_key('already_full_ap')->commit();
+        $requirement_container->add()->identifier('no_bonus_sp')->type( Requirement::CrossOnFail )->add( new PointRequirement()->require(PointType::SP)->max(0)->fromLimit() )->text_key('already_full_sp')->commit();
         $requirement_container->add()->identifier('no_full_ap')->type( Requirement::CrossOnFail )->add( new PointRequirement()->require(PointType::AP)->max(-1)->fromLimit() )->text_key('already_full_ap')->commit();
         $requirement_container->clone('no_full_ap')->identifier('not_thirsty')->type( Requirement::MessageOnFail )->text_key('already_full_ap_drink')->commit();
         $requirement_container->clone('no_full_ap')->identifier('no_full_ap_msg')->type( Requirement::MessageOnFail )->text('Das brauchst du gerade nicht ...')->commit();

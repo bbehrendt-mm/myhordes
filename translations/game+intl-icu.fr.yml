@@ -3153,7 +3153,7 @@ Fund: Trouvaille
 'Ermöglicht Überlebenschance beim Camping von bis zu 99%': 'Permet jusqu''à 99 % de chances de survie en camping'
 'Erstaunliches Fundstück (ersetzt Beeindruckendes Fundstück)': 'Incroyable trouvaille (remplace Impressionnante trouvaille)'
 'Löschen von Registereinträgen (max. 1)': 'Supprimer des entrées de registre (max. 1)'
-'Das Fallensystem der Dompteuere ermöglicht unter anderem, Tiere mit einem Köder in die Stadt zu locken. Lege Nahrung aus, um ein wildes Tier aus der Umgebung anzulocken. Je verlockender der Köder ist, desto besser stehen deine Chancen ... doch mit jedem Versuch wird die Umgebung misstrauischer.': "Le Système de Pièges des Apprivoiseurs permet, entre autres, d'attirer des animaux en ville grâce à un appât. Déposez de la nourriture pour tenter d'appâter un animal sauvage des environs. Plus l'appât est tentant, plus vos chances sont bonnes... mais à force d'essais, les alentours se méfient."
+'Das Fallensystem der Dompteuere ermöglicht unter anderem, Tiere mit einem Köder in die Stadt zu locken. Lege Nahrung aus, um ein wildes Tier aus der Umgebung anzulocken. Je verlockender der Köder ist, desto besser stehen deine Chancen ... doch mit jedem Versuch wird die Umgebung misstrauischer.': 'Le Système de Pièges des Apprivoiseurs permet, entre autres, d''attirer des animaux en ville grâce à un appât. Déposez de la nourriture pour tenter d''appâter un animal sauvage des environs. Plus l''appât est tentant, plus vos chances sont bonnes... mais à force d''essais, les alentours se méfient.'
 '<b>Einmal pro Tag</b> kann jeder Bürger sein Glück versuchen.': '<b>Une fois par jour</b>, chaque citoyen peut tenter sa chance.'
 'Du wurdest verbannt und kannst daher keine Tiere anlocken.': 'Vous avez été banni. Impossible pour vous d''attirer des animaux.'
 Fallenköder: Appâts du piège
@@ -3164,7 +3164,7 @@ Hinzufügen: Ajouter
 'Nicht schlecht. Mit deinem Köder hast du es geschafft, {item} anzulocken!<hr/>Du hast es zur sicheren Aufbewahrung in die Bank gebracht.': 'Le piège a fonctionné : vous avez attiré {item}.<hr/>Vous déposez fièrement votre prise en banque.'
 'Es ist dir nicht gelungen, ein Tier anzulocken. Was für eine Verschwendung...': 'Quel gâchis... L''appât a disparu, mais le piège n''a pas fonctionné.'
 Fallen: Pièges
-'Fallensystem der Dompteuere': "Système de Pièges des Apprivoiseurs"
+'Fallensystem der Dompteuere': 'Système de Pièges des Apprivoiseurs'
 '1 Gegenstand in der Truhe ist versteckt': '1 objet dans votre coffre est caché'
 'Solltest du am dritten Tag oder an einem späteren Zeitpunkt verbannt werden, bekommst du automatisch etwas Toxin geschenkt, das du nach Belieben einsetzen kannst... Tja, man hätte dich besser nicht ärgern sollen!': 'Si vous êtes banni(e) au jour 3 ou après, vous recevez automatiquement 2 fioles de poison ainsi qu''une Toxine pour vous donner l''opportunité de vous venger... Et oui, il ne fallait pas vous embêter !'
 'Abgenutzte Kuriertasche (statt Bauplan) beim Start der Stadt': 'Sacoche usée (au lieu d''un plan) au début de la ville'

@@ -3153,7 +3153,7 @@ Fund: crwdns225654:0crwdne225654:0
 'Ermöglicht Überlebenschance beim Camping von bis zu 99%': 'crwdns225672:0crwdne225672:0'
 'Erstaunliches Fundstück (ersetzt Beeindruckendes Fundstück)': 'crwdns225674:0crwdne225674:0'
 'Löschen von Registereinträgen (max. 1)': 'crwdns225676:0crwdne225676:0'
-'Das Fallensystem der Dompteuere ermöglicht unter anderem, Tiere mit einem Köder in die Stadt zu locken. Lege Nahrung aus, um ein wildes Tier aus der Umgebung anzulocken. Je verlockender der Köder ist, desto besser stehen deine Chancen ... doch mit jedem Versuch wird die Umgebung misstrauischer.': "crwdns254292:0crwdne254292:0"
+'Das Fallensystem der Dompteuere ermöglicht unter anderem, Tiere mit einem Köder in die Stadt zu locken. Lege Nahrung aus, um ein wildes Tier aus der Umgebung anzulocken. Je verlockender der Köder ist, desto besser stehen deine Chancen ... doch mit jedem Versuch wird die Umgebung misstrauischer.': 'crwdns254292:0crwdne254292:0'
 '<b>Einmal pro Tag</b> kann jeder Bürger sein Glück versuchen.': 'crwdns254262:0crwdne254262:0'
 'Du wurdest verbannt und kannst daher keine Tiere anlocken.': 'crwdns254264:0crwdne254264:0'
 Fallenköder: crwdns254266:0crwdne254266:0
@@ -3164,7 +3164,7 @@ Hinzufügen: crwdns225692:0crwdne225692:0
 'Nicht schlecht. Mit deinem Köder hast du es geschafft, {item} anzulocken!<hr/>Du hast es zur sicheren Aufbewahrung in die Bank gebracht.': 'crwdns254274:0{item}crwdne254274:0'
 'Es ist dir nicht gelungen, ein Tier anzulocken. Was für eine Verschwendung...': 'crwdns254276:0crwdne254276:0'
 Fallen: crwdns254278:0crwdne254278:0
-'Fallensystem der Dompteuere': "crwdns254294:0crwdne254294:0"
+'Fallensystem der Dompteuere': 'crwdns254294:0crwdne254294:0'
 '1 Gegenstand in der Truhe ist versteckt': 'crwdns225700:0crwdne225700:0'
 'Solltest du am dritten Tag oder an einem späteren Zeitpunkt verbannt werden, bekommst du automatisch etwas Toxin geschenkt, das du nach Belieben einsetzen kannst... Tja, man hätte dich besser nicht ärgern sollen!': 'crwdns225702:0crwdne225702:0'
 'Abgenutzte Kuriertasche (statt Bauplan) beim Start der Stadt': 'crwdns225704:0crwdne225704:0'

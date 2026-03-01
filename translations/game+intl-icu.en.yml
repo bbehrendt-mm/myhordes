@@ -3153,7 +3153,7 @@ Fund: Seeker
 'Ermöglicht Überlebenschance beim Camping von bis zu 99%': 'Allows survival chance to be up to 99% when camping'
 'Erstaunliches Fundstück (ersetzt Beeindruckendes Fundstück)': 'Incredible Find (replaces Impressive Find)'
 'Löschen von Registereinträgen (max. 1)': 'Deleting register entries (max. 1)'
-'Das Fallensystem der Dompteuere ermöglicht unter anderem, Tiere mit einem Köder in die Stadt zu locken. Lege Nahrung aus, um ein wildes Tier aus der Umgebung anzulocken. Je verlockender der Köder ist, desto besser stehen deine Chancen ... doch mit jedem Versuch wird die Umgebung misstrauischer.': "The Tamer's Trap System allows you, among other things, to lure animals into town with bait. Place food to try luring a wild animal from the surrounding area. The more tempting the bait, the better your chances... but with repeated attempts, nearby wildlife grows wary."
+'Das Fallensystem der Dompteuere ermöglicht unter anderem, Tiere mit einem Köder in die Stadt zu locken. Lege Nahrung aus, um ein wildes Tier aus der Umgebung anzulocken. Je verlockender der Köder ist, desto besser stehen deine Chancen ... doch mit jedem Versuch wird die Umgebung misstrauischer.': 'The Tamer''s Trap System allows you, among other things, to lure animals into town with bait. Place food to try luring a wild animal from the surrounding area. The more tempting the bait, the better your chances... but with repeated attempts, nearby wildlife grows wary.'
 '<b>Einmal pro Tag</b> kann jeder Bürger sein Glück versuchen.': '<b>Once per day</b>, each citizen can try their luck.'
 'Du wurdest verbannt und kannst daher keine Tiere anlocken.': 'You have been shunned. You cannot attract animals.'
 Fallenköder: Trap baits
@@ -3164,7 +3164,7 @@ Hinzufügen: Add
 'Nicht schlecht. Mit deinem Köder hast du es geschafft, {item} anzulocken!<hr/>Du hast es zur sicheren Aufbewahrung in die Bank gebracht.': 'The trap worked: you lured {item}.<hr/>You proudly deposit your catch in the bank.'
 'Es ist dir nicht gelungen, ein Tier anzulocken. Was für eine Verschwendung...': 'What a waste... The bait is gone, but the trap did not work.'
 Fallen: Traps
-'Fallensystem der Dompteuere': "Tamer's Trap System"
+'Fallensystem der Dompteuere': 'Tamer''s Trap System'
 '1 Gegenstand in der Truhe ist versteckt': '1 item in your chest is hidden'
 'Solltest du am dritten Tag oder an einem späteren Zeitpunkt verbannt werden, bekommst du automatisch etwas Toxin geschenkt, das du nach Belieben einsetzen kannst... Tja, man hätte dich besser nicht ärgern sollen!': 'If you are shunned on day 3 or later, you will automatically receive 2 vials of poison and one Toxin with which to exact your revenge... Yeah, they''d better not **** with you now!'
 'Abgenutzte Kuriertasche (statt Bauplan) beim Start der Stadt': 'Worn Leather Bag (instead of blueprint) at the start of the town'
