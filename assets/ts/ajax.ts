@@ -163,7 +163,10 @@ export default class Ajax {
 
         // First move content with a specific TARGET selector
         while (fragment = result_document.querySelector<HTMLElement>('[x-render-target]')) {
-            let frag_target = document.querySelector<HTMLElement>( fragment.getAttribute('x-render-target') );
+            let frag_target =
+                result_document.querySelector<HTMLElement>( fragment.getAttribute('x-render-target') ) ??
+                document.querySelector<HTMLElement>( fragment.getAttribute('x-render-target') )
+
             if (!frag_target) console.warn('Rendered HTML contains an invalid fragment target: ', frag_target, ' Discarding.')
             else {
                 (fragment.dataset.renderTargetClassesToggle?.split(';') || []).forEach(opt => {
