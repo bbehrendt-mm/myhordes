@@ -618,3 +618,58 @@ Testbenachrichtiung: Testbenachrichtiung
 'Der Stadtkommentar eines Bürgers wurde gemeldet.': 'Der Stadtkommentar eines Bürgers wurde gemeldet.'
 'Ein Spieleraccount wurde gemeldet.': 'Ein Spieleraccount wurde gemeldet.'
 'Dies ist Meldung #{num}.': 'Dies ist Meldung #{num}.'
+Community-Event: Community-Event
+'Die erhälst die gekennzeichneten Benachrichtigungen nur, wenn sie deiner gewählten Sprache entsprechen. Wenn du die entsprechenden Einstellungen änderst oder deine Sprache wechselst, kann es bis zu 24 Stunden dauern, bis die Änderungen für Benachrichtigungen übernommen werden.': 'Die erhälst die gekennzeichneten Benachrichtigungen nur, wenn sie deiner gewählten Sprache entsprechen. Wenn du die entsprechenden Einstellungen änderst oder deine Sprache wechselst, kann es bis zu 24 Stunden dauern, bis die Änderungen für Benachrichtigungen übernommen werden.'
+'Alternativ zu einer E-Mail Adresse kannst du hier auch eine URL eintragen, auf der Spieler eine Kontaktmöglichkeit zu dir finden.': 'Alternativ zu einer E-Mail Adresse kannst du hier auch eine URL eintragen, auf der Spieler eine Kontaktmöglichkeit zu dir finden.'
+'Dein Gerät konnte sich nicht beim Benachrichtigungsdienst anmelden. Dies kann durch einen kurzzeitigen Verbindungsausfall passieren. Möglicherweise musst du den Benachrichtigungsdienst auch zunächst in den Privatsphäre-Einstellungen deines Browsers aktivieren.': 'Dein Gerät konnte sich nicht beim Benachrichtigungsdienst anmelden. Dies kann durch einen kurzzeitigen Verbindungsausfall passieren. Möglicherweise musst du den Benachrichtigungsdienst auch zunächst in den Privatsphäre-Einstellungen deines Browsers aktivieren.'
+'Leider scheint dein Gerät oder Browser diese Funktion nicht zu unterstützen.': 'Leider scheint dein Gerät oder Browser diese Funktion nicht zu unterstützen.'
+'Dieser Text ist zu lang. Bitte kürze deinen Text oder zerlege ihn in mehrere Posts.': 'Dieser Text ist zu lang. Bitte kürze deinen Text oder zerlege ihn in mehrere Posts.'
+'Dieser Indikator zeigt an, ob du aktuell mit dem Live-Dienst von MyHordes verbunden bist.': 'Dieser Indikator zeigt an, ob du aktuell mit dem Live-Dienst von MyHordes verbunden bist.'
+'Mithilfe des Live-Dienstes erhälst dein System Benachrichtigungen vom MyHordes-Server in Echtzeit, beispielsweise über neue Forenposts oder PNs.': 'Mithilfe des Live-Dienstes erhälst dein System Benachrichtigungen vom MyHordes-Server in Echtzeit, beispielsweise über neue Forenposts oder PNs.'
+'Aktuell besteht keine Verbindung zum Live-Dienst. Du kannst dennoch wie gewohnt weiter spielen, da alle wichtigen Funktionen auch ohne den Live-Dienst arbeiten können.': 'Aktuell besteht keine Verbindung zum Live-Dienst. Du kannst dennoch wie gewohnt weiter spielen, da alle wichtigen Funktionen auch ohne den Live-Dienst arbeiten können.'
+'Nicht verbunden': 'Nicht verbunden'
+'Verbindung wird hergestellt': 'Verbindung wird hergestellt'
+'Verbunden, Verbindungsupdate angefordert': 'Verbunden, Verbindungsupdate angefordert'
+Verbunden: Verbunden
+'Die Taube': 'Die Taube'
+'Normaler Post': 'Normaler Post'
+'Diesen Bonus gibt es nur dann, wenn sich die Bürger während eines Angriffs in der Stadt befinden.': 'Diesen Bonus gibt es nur dann, wenn sich die Bürger während eines Angriffs in der Stadt befinden.'
+'Anonymer Post': 'Anonymer Post'
+'Bist du sicher, dass du deine Fähigkeiten zurücksetzen möchtest? Du wirst all deine Heldenerfahrung und Fähigkeiten verlieren. Diese Aktion kann nicht rückgängig gemacht werden!': 'Bist du sicher, dass du deine Fähigkeiten zurücksetzen möchtest? Du wirst all deine Heldenerfahrung und Fähigkeiten verlieren. Diese Aktion kann nicht rückgängig gemacht werden!'
+'Dieser Spieler ist ein Mitglied der Künstlergilde auf MyHordes.': 'Dieser Spieler ist ein Mitglied des Komitee des Guten Geschmacks auf MyHordes.'
+'Die Stadt verfügt über eine <strong>Techniker-Werkbank</strong>.': 'Die Stadt verfügt über eine <strong>Techniker-Werkbank</strong>.'
+Angepinnt: Angepinnt
+'Dieses Thema wird nicht länger in der Tab-Leiste angezeigt.': 'Dieses Thema wird nicht länger in der Tab-Leiste angezeigt.'
+'Dieses Thema wird in der Tab-Leiste im oberen Bereich der Forenansicht angeheftet, damit du schneller darauf zugreifen kannst. Du kannst maximal 6 Foren oder Themen anpinnen.': 'Dieses Thema wird in der Tab-Leiste im oberen Bereich der Forenansicht angeheftet, damit du schneller darauf zugreifen kannst. Du kannst maximal 6 Foren oder Themen anpinnen.'
+'Spiel  (forum)': Spiel
+'Spam  (forum)': Spam
+'Themen filtern': 'Themen filtern'
+Zurücksetzen: Zurücksetzen
+'Wähle hier eine Sprache aus, um diese Sektion für Spieler mit dieser Sprache automatisch auszuklappen.': 'Wähle hier eine Sprache aus, um diese Sektion für Spieler mit dieser Sprache automatisch auszuklappen.'
+'Keine Sprache': 'Keine Sprache'
+Support: Support
+Animation: Animation
+Orakel: Orakel
+Sonstiges: Sonstiges
+'Diese Anwendung befindet sich im Wartungsmodus.': 'Diese Anwendung befindet sich im Wartungsmodus.'
+'Sei vorsichtig, das Betreten geschieht auf eigene Gefahr...': 'Sei vorsichtig, das Betreten geschieht auf eigene Gefahr...'
+'Aufgrund technischer Probleme ist der Funktionsumfang dieser externen Anwendung aktuell eingeschränkt.': 'Aufgrund technischer Probleme ist der Funktionsumfang dieser externen Anwendung aktuell eingeschränkt.'
+'Fehler beim Laden der Logeinträge ({error}).': 'Fehler beim Laden der Logeinträge ({error}).'
+'Log-Einträge können nicht abgerufen werden, bitte versuche, die Seite neu zu laden.': 'Log-Einträge können nicht abgerufen werden, bitte versuche, die Seite neu zu laden.'
+'Vertraulichkeit des Fehlerberichts': 'Vertraulichkeit des Fehlerberichts'
+'Dieser Fehlerbericht enthält Informationen, die ich nicht öffentlich teilen möchte; er sollte nur vertrauenswürdigen Entwicklern zugänglich sein.': 'Dieser Fehlerbericht enthält Informationen, die ich nicht öffentlich teilen möchte; er sollte nur vertrauenswürdigen Entwicklern zugänglich sein.'
+'Dieser Fehlerbericht wird öffentlich zugänglich sein': 'Dieser Fehlerbericht wird öffentlich zugänglich sein'
+'Dieser Fehlerbericht wird nur für vertrauenswürdige Entwickler zugänglich sein': 'Dieser Fehlerbericht wird nur für vertrauenswürdige Entwickler zugänglich sein'
+Warnung: Warnung
+'Andere Spiele auf Eternaltwin': 'Andere Spiele auf Eternaltwin'
+'Wenn du bei der Übersetzung von MyHordes mithelfen willst, kannst du dies auf {crowdin} tun!': 'Wenn du bei der Übersetzung von MyHordes mithelfen willst, kannst du dies auf {crowdin} tun!'
+'My Brute': 'Mein Brutalo'
+Spielhilfe: Spielhilfe
+'SK: {sk}': 'SK: {sk}'
+'Weiter zu {app}': 'Weiter zu {app}'
+'Die große Anzahl an Erdhaufen und an herumliegenden Müll sind ein Indiz dafür, dass hier wahrscheinlich nichts mehr zu finden ist.<p><em>Wenn du möchtest, kannst du allerdings weitergraben und ein paar minderwertige Materialien für die verschiedenen Baustellen der Stadt zu Tage fördern..</em></p>': 'Die große Anzahl an Erdhaufen und an herumliegenden Müll sind ein Indiz dafür, dass hier wahrscheinlich nichts mehr zu finden ist.<p><em>Wenn du möchtest, kannst du allerdings weitergraben und ein paar minderwertige Materialien für die verschiedenen Baustellen der Stadt zu Tage fördern..</em></p>'
+'Dies ist ein einfacher leerer Platz in deinem Rucksack. Hier kannst du einen leichten Gegenstand verstauen.': 'Dies ist ein einfacher leerer Platz in deinem Rucksack. Hier kannst du einen leichten Gegenstand verstauen.'
+'Dies ist ein leerer Platz für schwere Gegenstände in deinem Rucksack. Hier kannst du einen leichten oder einen schweren Gegenstand verstauen.': 'Dies ist ein leerer Platz für schwere Gegenstände in deinem Rucksack. Hier kannst du einen leichten oder einen schweren Gegenstand verstauen.'
+'Du bist zu schwer beladen, um diese Aktion durchführen zu können!': 'Du bist zu schwer beladen, um diese Aktion durchführen zu können!'
+'Dein Profilbild wurde erfolgreich aktualisiert.': 'Dein Profilbild wurde erfolgreich aktualisiert.'
+'Das gewählte Profilbild wurde erfolgreich gelöscht.': 'Das gewählte Profilbild wurde erfolgreich gelöscht.'
