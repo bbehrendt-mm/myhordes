@@ -23,6 +23,7 @@ export type Item = {
 
 export type InventoryMods = {
     has_drunk?: boolean,
+    cata?: boolean,
 }
 
 export type InventoryCategory = {

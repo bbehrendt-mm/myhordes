@@ -157,7 +157,7 @@ class InventoryController extends CustomAbstractCoreController
             ($inventory->getRuinZoneRoom() && $citizen->getExplorerStats()->findFirst(fn(int $k, RuinExplorerStats $a) => $a->getActive())?->isAt($inventory->getRuinZoneRoom()));
     }
 
-    protected function renderBagInventory(Citizen $citizen, Inventory $inventory, InventoryHandler $handler, EventProxyService $proxy): array {
+    protected function renderBagInventory(Citizen $citizen, Inventory $inventory, InventoryHandler $handler, EventProxyService $proxy, TownHandler $townHandler): array {
         $foreign_chest = false;
         $own_chest = false;
 
@@ -181,7 +181,8 @@ class InventoryController extends CustomAbstractCoreController
             'size'  => $foreign_chest ? 0 : $handler->getSize( $inventory ),
             'heavy' => $foreign_chest ? 0 : $handler->getHeavyItemSize( $inventory ),
             'mods' => [
-                'has_drunk' => $citizen->hasStatus('hasdrunk')
+                'has_drunk' => $citizen->hasStatus('hasdrunk'),
+                'cata' => $townHandler->getBuilding($citizen->getTown(), 'item_courroie_#00', true)
             ],
             'items' => $inventory->getItems()
                 ->filter( fn(Item $i) => $show_hidden || !$i->getHidden() )
@@ -241,7 +242,7 @@ class InventoryController extends CustomAbstractCoreController
     }
 
 
-    protected function renderBankInventory(Citizen $citizen, Inventory $inventory, InventoryHandler $handler, EventProxyService $proxy, TranslatorInterface $trans, EntityManagerInterface $em): array {
+    protected function renderBankInventory(Citizen $citizen, Inventory $inventory, InventoryHandler $handler, EventProxyService $proxy, TownHandler $townHandler, TranslatorInterface $trans, EntityManagerInterface $em): array {
         $qb = $em->createQueryBuilder();
 
         // Select fields - item ID, item count, category IDs and orderings
@@ -288,7 +289,8 @@ class InventoryController extends CustomAbstractCoreController
             'bank' => true,
             'rsc' => false,
             'mods' => [
-                'has_drunk' => $citizen->hasStatus('hasdrunk')
+                'has_drunk' => $citizen->hasStatus('hasdrunk'),
+                'cata' => $townHandler->getBuilding($citizen->getTown(), 'item_courroie_#00', true)
             ],
             'categories' => array_map( fn($entry, $id) => [
                 'id' => $id,
@@ -306,18 +308,18 @@ class InventoryController extends CustomAbstractCoreController
         ];
     }
 
-    protected function renderInventory(Citizen $citizen, Inventory $inventory, InventoryHandler $handler, EventProxyService $proxy, TranslatorInterface $trans, EntityManagerInterface $em, ?array $rsc = []): array {
+    protected function renderInventory(Citizen $citizen, Inventory $inventory, InventoryHandler $handler, EventProxyService $proxy, TownHandler $townHandler, TranslatorInterface $trans, EntityManagerInterface $em, ?array $rsc = []): array {
         return $inventory->getTown()
             ? (
                 empty($rsc)
-                    ? $this->renderBankInventory( $citizen, $inventory, $handler, $proxy, $trans, $em )
+                    ? $this->renderBankInventory( $citizen, $inventory, $handler, $proxy, $townHandler, $trans, $em )
                     : $this->renderResourceInventory( $citizen, $inventory, $handler, $proxy, $trans, $em, $rsc )
             )
-            : $this->renderBagInventory( $citizen, $inventory, $handler, $proxy, $trans );
+            : $this->renderBagInventory( $citizen, $inventory, $handler, $proxy, $townHandler, $trans );
     }
 
     #[Route(path: '/{id}', name: 'inventory_get', methods: ['GET'])]
-    public function inventory(Request $request, Inventory $inventory, EntityManagerInterface $em, InventoryHandler $handler, EventProxyService $proxy): JsonResponse {
+    public function inventory(Request $request, Inventory $inventory, EntityManagerInterface $em, InventoryHandler $handler, EventProxyService $proxy, TownHandler $th): JsonResponse {
         $citizen = $this->getUser()->getActiveCitizen();
 
         if (!self::canEnumerate($citizen, $inventory))
@@ -337,7 +339,7 @@ class InventoryController extends CustomAbstractCoreController
             fn(string $e) => !empty($e) && is_numeric($e)
         ));
 
-        $data = $this->renderInventory( $citizen, $inventory, $handler, $proxy, $this->translator, $em, $rsc );
+        $data = $this->renderInventory( $citizen, $inventory, $handler, $proxy, $th, $this->translator, $em, $rsc );
 
         return new JsonResponse($data);
     }

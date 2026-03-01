@@ -208,7 +208,7 @@ function processSlots(items: Item[], vaultData?: VaultStorage<VaultItemEntry>, i
         let vault = currentItem ? vaultData?.[currentItem.p] : undefined;
         const step = currentItem ? getItemStep(currentItem) : currentStep;
         currentStep = step;
-        
+
         // Exit essential step if we don't have any more items
         if (step === 'essential' && !currentItem) {
             if (heavyUsed < inventoryHeavySlots) {
@@ -768,7 +768,7 @@ const SingleItem = (props: { item: Item, data: VaultItemEntry | null, mods: Inve
                     { globals.strings.props["nw-weapon"] }
                     {props.item.w && <>&nbsp;<em>{ props.item.w }</em></> }
                 </div> }
-                { props.data.cata && <div className="item-tag item-tag-catapult">{ globals.strings.props.catapult }</div> }
+                { props.mods.cata && props.data.cata && <div className="item-tag item-tag-catapult">{ globals.strings.props.catapult }</div> }
             </ItemTooltip>
         </li>
         :
