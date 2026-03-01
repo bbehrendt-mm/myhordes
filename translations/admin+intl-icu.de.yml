@@ -646,3 +646,71 @@ Raben: Raben
 Fehlerberichte: Fehlerberichte
 'Verfassen von Fehlerberichten für Gitlab verbieten': 'Verfassen von Fehlerberichten für Gitlab verbieten'
 'Zusätzliche Beschreibung:': 'Zusätzliche Beschreibung:'
+'Nachricht an den Verfasser?': 'Nachricht an den Verfasser?'
+'Letztes Update': 'Letztes Update'
+Erstellt: Erstellt
+'Reports, die mit "v4" gekennzeichnet sind, neigen dazu Spieler als Multi-Accounts zu kennzeichnen, die sich einen Internetanschluss teilen (z.B. innerhalb derselben Wohnung, Schule, Arbeitsplatz, ...). Mit "v6" gekennzeichnete Reports sind wesentlich besser in der Lage, solche Spieler von echten Multi-Accounts zu trennen.': 'Reports, die mit "v4" gekennzeichnet sind, neigen dazu Spieler als Multi-Accounts zu kennzeichnen, die sich einen Internetanschluss teilen (z.B. innerhalb derselben Wohnung, Schule, Arbeitsplatz, ...). Mit "v6" gekennzeichnete Reports sind wesentlich besser in der Lage, solche Spieler von echten Multi-Accounts zu trennen.'
+'{prc}%': '{prc}%'
+'{hrs} Std. ({prc}%)': '{hrs} Std. ({prc}%)'
+'Letzte Woche': 'Letzte Woche'
+'Letzte 3 Tage': 'Letzte 3 Tage'
+'Letzter Tag': 'Letzter Tag'
+'Diese Zeile enthält belastende Informationen über den Spieler.': 'Diese Zeile enthält belastende Informationen über den Spieler.'
+'Erster Wert:': 'Erster Wert:'
+'Dauer und Gesamtanteil der aktiven Phasen, die sich mit min. einem anderen Spieler dieser Gruppe überschneiden.': 'Dauer und Gesamtanteil der aktiven Phasen, die sich mit min. einem anderen Spieler dieser Gruppe überschneiden.'
+'Zweiter Wert:': 'Zweiter Wert:'
+'Durchschnittliche Dauer und Gesamtanteil der gemeinsamen aktiven Phasen über alle Spieler der Gruppe.': 'Durchschnittliche Dauer und Gesamtanteil der gemeinsamen aktiven Phasen über alle Spieler der Gruppe.'
+'Dritter Wert:': 'Dritter Wert:'
+'Übereinstimmung der von dem Spieler genutzen Endgeräte mit denen des Rests der Gruppe.': 'Übereinstimmung der von dem Spieler genutzen Endgeräte mit denen des Rests der Gruppe.'
+'Diese Zeile enthält entlastende Informationen über den Spieler.': 'Diese Zeile enthält entlastende Informationen über den Spieler.'
+'Dauer und Verhältnis der aktiven Phasen dieses Spielers in anderen Gruppen, die keinerlei überschneidung mit den anderen Spielern dieser Gruppe haben.': 'Dauer und Verhältnis der aktiven Phasen dieses Spielers in anderen Gruppen, die keinerlei überschneidung mit den anderen Spielern dieser Gruppe haben.'
+'Keine Daten': 'Keine Daten'
+'Multi-Account Report V2': 'Multi-Account Report V2'
+'Letzte {n} Tage': 'Letzte {n} Tage'
+Veraltet!: Veraltet!
+Klicks: Klicks
+'{number} Auszeichnungen konnten nicht entfernt werden. Möglicherweise sind sie dem Spieler über Städte zugewiesen. In diesem Fall müssen sie über die Städteverwaltung entfernt werden.': '{number} Auszeichnungen konnten nicht entfernt werden. Möglicherweise sind sie dem Spieler über Städte zugewiesen. In diesem Fall müssen sie über die Städteverwaltung entfernt werden.'
+'Eingehende Nachrichten als Tickets behandeln': 'Eingehende Nachrichten als Tickets behandeln'
+'Ist diese Option aktiviert, so wird eine eingehende Konversation für alle Gruppenmitglieder als "Gelesen" markiert, sobald ein Gruppenmitglied antwortet.': 'Ist diese Option aktiviert, so wird eine eingehende Konversation für alle Gruppenmitglieder als "Gelesen" markiert, sobald ein Gruppenmitglied antwortet.'
+SP: SP
+'Es wurden {n} Posts gelöscht.': 'Es wurden {n} Posts gelöscht.'
+'Weitere Aktionen': 'Weitere Aktionen'
+'Bekannte IP-Adressen': 'Bekannte IP-Adressen'
+'{n} (davon {n2} bereits blockiert)': '{n} (davon {n2} bereits blockiert)'
+Foren-Posts: Foren-Posts
+'{n} (davon {n2} gelöscht)': '{n} (davon {n2} gelöscht)'
+Heldenerfahrung: Heldenerfahrung
+Zurücksetzen: Zurücksetzen
+Künstler: 'Kurator des Guten Geschmacks'
+'Anzahl der gelisteten Namen: {number}': 'Anzahl der gelisteten Namen: {number}'
+Namen-Suche: Namen-Suche
+'Namen hinzufügen': 'Namen hinzufügen'
+'Namen können als glob-Muster eingegeben werden. Beispielsweise würde *test* alle Namen verhindern, in denen "test" vorkommt. Für eine Übersicht über glob-Syntax, siehe folgenden Link:': 'Namen können als glob-Muster eingegeben werden. Beispielsweise würde *test* alle Namen verhindern, in denen "test" vorkommt. Für eine Übersicht über glob-Syntax, siehe folgenden Link:'
+'Gesperrte Namen': 'Gesperrte Namen'
+'Es existiert bereits ein Changelog für diese Version in der angegebenen Sprache.': 'Es existiert bereits ein Changelog für diese Version in der angegebenen Sprache.'
+'Temporär für Neuregistrierungen sperren': 'Temporär für Neuregistrierungen sperren'
+'Alle Posts löschen': 'Alle Posts löschen'
+'Ressourcen- und AP-Vorlage, welches für diese Konstruktion benötigt wird.': 'Ressourcen- und AP-Vorlage, welches für diese Konstruktion benötigt wird.'
+Teuer: Teuer
+Normal: Normal
+Billig: Billig
+Billig+: Billig+
+'Gewählte Gebäude freischalten': 'Gewählte Gebäude freischalten'
+'Gesamten Gebäudebaum zurücksetzen': 'Gesamten Gebäudebaum zurücksetzen'
+'Klicken, um Baustelle in die Liste der zu entsperrenden Baustellen aufzunehmen.': 'Klicken, um Baustelle in die Liste der zu entsperrenden Baustellen aufzunehmen.'
+'Klicken, um Baustelle sofort zu entsperren.': 'Klicken, um Baustelle sofort zu entsperren.'
+Notizen: Notizen
+'Notiz hinzufügen': 'Notiz hinzufügen'
+'Wenn du deinen Schlüssel änderst, musst du diesen in deiner Anwendung austauschen. Bitte bestätige, dass du den Schlüssel jetzt austauschen möchtest, indem du die Zahl {num} eingibst.': 'Wenn du deinen Schlüssel änderst, musst du diesen in deiner Anwendung austauschen. Bitte bestätige, dass du den Schlüssel jetzt austauschen möchtest, indem du die Zahl {num} eingibst.'
+Koppeln: Koppeln
+'Namen testen': 'Namen testen'
+'Name ist gültig': 'Name ist gültig'
+'Name ist länger als 32 Zeichen': 'Name ist länger als 32 Zeichen'
+'Name enthält ungültige Zeichen': 'Name enthält ungültige Zeichen'
+'Name ist ähnlich zu verbotenen Begriffen': 'Name ist ähnlich zu verbotenen Begriffen'
+Cheater: Cheater
+'Öffentliche Events': 'Öffentliche Events'
+'Interne Events': 'Interne Events'
+'Bonus-Heldenerfahrung setzen': 'Bonus-Heldenerfahrung setzen'
+'Gebäude anlegen:': 'Gebäude anlegen:'
+'Karte aufdecken': 'Karte aufdecken'
