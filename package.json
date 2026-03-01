@@ -36,7 +36,7 @@
         "build": "encore production --progress"
     },
     "dependencies": {
-        "@ruffle-rs/ruffle": "0.1.0-nightly.2024.5.10",
+        "@ruffle-rs/ruffle": "0.2.0-nightly.2026.3.1",
         "@types/react": "^19.2.14",
         "@types/react-dom": "19.2.3",
         "buffer": "6.0.3",

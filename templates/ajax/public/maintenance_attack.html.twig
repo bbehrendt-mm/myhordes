@@ -59,6 +59,7 @@
     </div>
 {% endblock %}
 {% block js %}
+    {{ parent() }}
     <script>
         let btns = document.querySelectorAll('button[x-action="refresh"]');
         for(let i = 0 ; i < btns.length; i++) {
