@@ -2009,6 +2009,7 @@ class GazetteDataService implements FixtureProcessorInterface {
                 'fot' => GazetteEntryTemplate::FollowUpTypeDoubt,
                 'variableTypes'=>[
                     ['type'=>"citizen",'name'=>'cadaver1'],
+                    ['type'=>"num", 'name'=>'attack']
                 ],
             ],
             ['text'=>'Mord! <strong>Jemand hat † {cadaver1} ermordet und verspeist</strong>! Und diesmal war es nichtmal ich (obwohl es mir in den Federn gejuckt hatte). Wer ist der kleine Kannibale, der die Drecksarbeit für mich erledigt?',

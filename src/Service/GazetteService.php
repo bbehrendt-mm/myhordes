@@ -262,7 +262,7 @@ class GazetteService
                         T::__('zwei Backenzähne','gazette'),T::__('einen Augapfel','gazette'),T::__('einen Daumen','gazette'),
                     ] );
                     break;
-                 case 'danger':
+                case 'danger':
                     $variables['danger'] = $this->rand->pick( [
                         T::__('Klapperschlangen','gazette'),T::__('ein Diamant inmitten von Glasscherben','gazette'),
                         T::__('Oma Zombies Pudding','gazette'),T::__('eine Granate ohne Sicherungsstift','gazette'),
@@ -285,6 +285,11 @@ class GazetteService
                 case 'randomHour':
                     $variables['randomHour'] = mt_rand(0,12);
                     break;
+
+                case 'attack':
+                    $attack = $gazette->getAttack() ?: 1;
+                    $variables['attack'] = $attack < 2000 ? 10 * (round($attack / 10)) : 100 * (round($attack / 100));
+                    break;
             }
 
         switch ($class) {
@@ -302,19 +307,13 @@ class GazetteService
                 break;
 
             case GazetteEntryTemplate::RequiresAttack:
-                $attack = $gazette->getAttack();
-                $variables['attack'] = $attack < 2000 ? 10 * (round($attack / 10)) : 100 * (round($attack / 100));
                 break;
 
             case GazetteEntryTemplate::RequiresInvasion:
-                $attack = $gazette->getAttack();
-                $variables['attack'] = $attack < 2000 ? 10 * (round($attack / 10)) : 100 * (round($attack / 100));
                 $variables['invasion'] = $gazette->getInvasion();
                 break;
 
             case GazetteEntryTemplate::RequiresAttackDeaths:
-                $attack = $gazette->getAttack();
-                $variables['attack'] = $attack < 2000 ? 10 * (round($attack / 10)) : 100 * (round($attack / 100));
                 $variables['deaths'] = $variables['cadavers'] = $gazette->getDeaths();
                 if ($arg > 0) $_add_elements( 'citizen', $survivors, $featured !== null && $featured->getAlive() ? $featured : null, $arg, $variables );
                 break;
