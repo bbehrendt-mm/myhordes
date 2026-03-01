@@ -7,6 +7,7 @@ import {Buffer} from "buffer";
 import {Globals} from "./WrapperV2";
 import {PixelCrop} from "./api";
 import {Global} from "../../defaults";
+import {Tooltip} from "../misc/Tooltip";
 
 declare var $: Global;
 
@@ -89,6 +90,7 @@ export const AvatarModeEdit = (props: AvatarEditorProps) => {
     const [dataString, setDataString] = useState<string>(null);
 
     const [fixedAspect, setFixedAspect] = useState<number>(null);
+    const [format, setFormat] = useState<'avif'|'webp'|'lossless'>('avif');
 
     const [edit, setEdit] = useState<null|'square'|'circle'|'classic'>(null);
     const [meta, setMeta] = useState<AvatarImageMeta>(null);
@@ -273,6 +275,23 @@ export const AvatarModeEdit = (props: AvatarEditorProps) => {
                 <p>{ globals.strings.common.edit_help2 }</p>
             </div>
 
+            <div className="flex-none flex large-gap">
+                <div className="note note-lightest flex gap">
+                    { globals.strings.common.compression }
+                    <a className="help-button">
+                        { globals.strings.common.help }
+                        <Tooltip additionalClasses="help">{ globals.strings.common.compression_help }</Tooltip>
+                    </a>
+                </div>
+                <div className="flex-1">
+                    <select value={format} onChange={(e)=> setFormat(e.target.value as 'avif'|'webp'|'lossless')}>
+                        <option value="avif">{ globals.strings.common.compression_avif }</option>
+                        <option value="webp">{ globals.strings.common.compression_webp }</option>
+                        <option value="lossless">{ globals.strings.common.compression_noloss }</option>
+                    </select>
+                </div>
+            </div>
+
             <div className="note note-critical">
                 { globals.strings.common.edit_help3 }
             </div>
@@ -300,7 +319,7 @@ export const AvatarModeEdit = (props: AvatarEditorProps) => {
                                 importCrop(squareCrop, meta.width, meta.height),
                                 importCrop(classicCrop, meta.width, meta.height),
                                 importCrop(circularCrop, meta.width, meta.height),
-                                null, true
+                                format, true
                             ).then( () => {
                                 $.html.notice( globals.strings.common.success_create );
                                 $.html.removeLoadStack();

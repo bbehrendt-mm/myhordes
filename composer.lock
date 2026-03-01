@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7f320c16ac637a706ceaf6826b82d366",
+    "content-hash": "24a87eda722eccd8cf1309a3a1f24c59",
     "packages": [
         {
             "name": "adbario/php-dot-notation",
@@ -2244,16 +2244,16 @@
         },
         {
             "name": "intervention/image",
-            "version": "3.11.5",
+            "version": "3.11.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Intervention/image.git",
-                "reference": "76e96d3809d53dd8d597005634a733d4b2f6c2c3"
+                "reference": "2159bcccff18f09d2a392679b81a82c5a003f9bb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Intervention/image/zipball/76e96d3809d53dd8d597005634a733d4b2f6c2c3",
-                "reference": "76e96d3809d53dd8d597005634a733d4b2f6c2c3",
+                "url": "https://api.github.com/repos/Intervention/image/zipball/2159bcccff18f09d2a392679b81a82c5a003f9bb",
+                "reference": "2159bcccff18f09d2a392679b81a82c5a003f9bb",
                 "shasum": ""
             },
             "require": {
@@ -2300,7 +2300,7 @@
             ],
             "support": {
                 "issues": "https://github.com/Intervention/image/issues",
-                "source": "https://github.com/Intervention/image/tree/3.11.5"
+                "source": "https://github.com/Intervention/image/tree/3.11.7"
             },
             "funding": [
                 {
@@ -2316,7 +2316,7 @@
                     "type": "ko_fi"
                 }
             ],
-            "time": "2025-11-29T11:18:34+00:00"
+            "time": "2026-02-19T13:11:17+00:00"
         },
         {
             "name": "jawira/case-converter",
@@ -3006,7 +3006,7 @@
         },
         {
             "name": "myhordes/fixtures",
-            "version": "dev-v5/ml",
+            "version": "dev-master",
             "dist": {
                 "type": "path",
                 "url": "packages/myhordes-fixtures",
@@ -3044,7 +3044,7 @@
         },
         {
             "name": "myhordes/plugins",
-            "version": "dev-v5/ml",
+            "version": "dev-master",
             "dist": {
                 "type": "path",
                 "url": "packages/myhordes-plugins",

@@ -83,7 +83,7 @@
     "whichbrowser/parser": "2.1.8",
     "wikimedia/composer-merge-plugin": "2.1.0",
     "zenstruck/schedule-bundle": "1.8.1",
-    "intervention/image": "3.11.5"
+    "intervention/image": "3.11.7"
   },
   "require-dev": {
     "ext-sqlite3": "*",
