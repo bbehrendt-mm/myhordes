@@ -511,8 +511,8 @@ class InventoryController extends CustomAbstractCoreController
                 ...($this->renderIncidentals($target_inventory, $ch, $th, $ih)),
             ],
             'messages' => implode('<hr/>', [...($error_messages ?? []), ...$this->renderAllFlashMessages(false)]),
-            'source' => $reload ? null : $this->renderInventory( $citizen, $inventory, $handler, $proxy, $this->translator, $em ),
-            'target' => $reload ? null : $this->renderInventory( $citizen, $target_inventory, $handler, $proxy, $this->translator, $em ),
+            'source' => $reload ? null : $this->renderInventory( $citizen, $inventory, $handler, $proxy, $th, $this->translator, $em ),
+            'target' => $reload ? null : $this->renderInventory( $citizen, $target_inventory, $handler, $proxy, $th, $this->translator, $em ),
         ]);
     }
 }
