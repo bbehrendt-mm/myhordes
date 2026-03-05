@@ -134,7 +134,7 @@ class MazeMaker
             for ($y = $mazeOffsetY; $y < $mazeOffsetY + $mapSizeY; $y++) {
                 for ($z = 0; $z < $this->targetZone->getExplorableFloors(); $z++) {
                     $realZ = $z * $this->targetZone->getPrototype()->getStairsDirection();
-                    if (!isset($cache[$z][$x][$y]))
+                    if (!isset($cache[$realZ][$x][$y]))
                     {
                         $this->createAndAddRuinZone($x, $y, $realZ);
                     }
@@ -238,8 +238,8 @@ class MazeMaker
 
         foreach ($levels as $i => $level) {
             $this->generateMaze($level, $origin, $originOffset);
-            $has_floor_above = ($level + 1) < max(0, $explorableFloors * $direction);
-            $has_floor_below = ($level - 1) > min(0, $explorableFloors * $direction);
+            $has_floor_above = $direction > 0 && ($level + 1) < max(0, $explorableFloors * $direction);
+            $has_floor_below = $direction < 0 && ($level - 1) > min(0, $explorableFloors * $direction);
             $originZone = $this->generateRoom($level, $origin, $originOffset, $direction, $has_floor_above, $has_floor_below, $rooms_level[ $i ]);
             if (!$originZone) break;
             $origin = [ $originZone->getX(), $originZone->getY() ];
@@ -542,9 +542,11 @@ class MazeMaker
                 $next_origin = $room_corridor;
             }
 
+            dump(['t' => $room_corridor->getPrototype()->getLabel(), 'p' => "{$room_corridor->getX()}/{$room_corridor->getY()}/{$room_corridor->getZ()}", 'origin' => $needs_origin, 'down' => $place_down, 'up' => $place_up, 'dc' => $down_count, 'uc' => $up_count, 'rooms' => $room_count]);
+
             if (!$needs_origin && $place_down) $down_count--;
             elseif (!$needs_origin && $place_up) $up_count--;
-            else $room_count--;
+            elseif (!$needs_origin) $room_count--;
 
             $needs_origin = false;
         }
