@@ -542,8 +542,6 @@ class MazeMaker
                 $next_origin = $room_corridor;
             }
 
-            dump(['t' => $room_corridor->getPrototype()->getLabel(), 'p' => "{$room_corridor->getX()}/{$room_corridor->getY()}/{$room_corridor->getZ()}", 'origin' => $needs_origin, 'down' => $place_down, 'up' => $place_up, 'dc' => $down_count, 'uc' => $up_count, 'rooms' => $room_count]);
-
             if (!$needs_origin && $place_down) $down_count--;
             elseif (!$needs_origin && $place_up) $up_count--;
             elseif (!$needs_origin) $room_count--;
