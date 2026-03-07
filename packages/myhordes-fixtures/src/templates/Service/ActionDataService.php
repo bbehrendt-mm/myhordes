@@ -197,7 +197,7 @@ class ActionDataService implements FixtureProcessorInterface {
                 'drug_beta_bad_2'  => [ 'label' => 'Einnehmen', 'cover' => true, 'at00' => true, 'poison' => ItemAction::PoisonHandlerConsume, 'meta' => [ 'drug_2' ], 'result' => [ 'contaminated_zone_infect', 'consume_item', 'picto_drug_exp', 'chances' => ['group' => [
                     [ ['drug_addict', 'just_ap6', 'msg_drug_normal_ap'], 1 ],
                     [ ['drug_addict', 'unterrorize', 'msg_drug_relax'], 1 ],
-                    [ ['drug_addict', 'plus_4ap', 'msg_drug_normal_ap'], 1 ],
+                    [ ['drug_addict', 'plus_4ap', 'msg_drug_partial_ap'], 1 ],
                     [ ['drug_addict', 'drunk', 'msg_drug_drunk'], 1 ],
                 ]] ] ] ,
                 'drug_rand_xmas' => [ 'label' => 'Essen', 'cover' => true, 'at00' => true, 'poison' => ItemAction::PoisonHandlerConsume, 'meta' => [ 'eat_ap' ], 'result' => [ 'contaminated_zone_infect', 'consume_item', 'picto_drug_exp', ['group' => [
