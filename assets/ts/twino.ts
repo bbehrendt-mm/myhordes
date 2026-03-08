@@ -1,3 +1,5 @@
+import {html} from "./v2/helpers";
+
 interface emoteResolver { (name: string): [string|null,string] }
 
 import {Const, Global} from "./defaults";
@@ -33,6 +35,7 @@ class TwinoInterimBlock {
     isPlainText(): boolean { return this.nodeName === null }
 
     hasClass(cls: string): boolean { return this.nodeClasses.indexOf( cls ) !== -1; }
+    firstMatchingClass(cls: string[], fallback: string|null = null): string|null { return cls.find( v => this.nodeClasses?.indexOf( v ) !== -1 ) ?? fallback }
     getAttribute(attrib: string): string|null {
         let a = this.nodeAttribs.find( e => e[0] === attrib );
         return a ? a[1] : null;
@@ -553,29 +556,9 @@ class HTMLConverterFromBlocks {
                         if (peek && peek.nodeName === 'div' && peek.hasClass('rpText')) {
                             ret += HTMLConverterFromBlocks.wrapBlock( nextBlock(), 'rp', block.nodeText )
                         }
-                    } else if ( // Allow some insets as html so they can be quoted, `removeForbiddenElements` method is used beforehand to avoid forgery.
-                        block.nodeClasses.some(
-                            c => [
-                                'dice-4',
-                                'dice-6',
-                                'dice-8',
-                                'dice-10',
-                                'dice-12',
-                                'dice-20',
-                                'dice-100',
-                                'card',
-                                'letter-a',
-                                'letter-c',
-                                'letter-v',
-                                'rps',
-                                'coin',
-                                'card',
-                                'coords',
-                                'town',
-                                'citizen',
-                            ])
-                    ) {
-                        ret += HTMLConverterFromBlocks.rangeBlock(block.rawText, 'html')
+                    } else if (block.firstMatchingClass(['coin', 'rps'])) {
+                        const language = html().getAttribute('lang') ?? 'de';
+                        ret += (block.getAttribute(`data-value-${language}`) ?? block.getAttribute('data-value-default') ?? block.rawText);
                     }
                     else ret += raw_fallback ? HTMLConverterFromBlocks.rangeBlock( block.rawText, 'html' ) : block.nodeText;
                     break;
@@ -599,6 +582,12 @@ class HTMLConverterFromBlocks {
                     ret += raw_fallback ? HTMLConverterFromBlocks.rangeBlock( block.rawText, 'html' ) : block.nodeText;
                     break;
             }
+
+            if (peek?.firstMatchingClass([
+                'dice-4', 'dice-6', 'dice-8', 'dice-10', 'dice-12', 'dice-20', 'dice-100',
+                'card', 'rps', 'coin', 'coords', 'town', 'citizen',
+                'letter-a', 'letter-c', 'letter-v'
+            ]) && ret.slice(-1) !== ' ') ret += ' ';
 
             prev = block;
         }
@@ -624,6 +613,7 @@ export default class TwinoAlikeParser {
                 let build = document.createElement( 'div' );
                 build.classList.add( 'html' );
                 build.innerHTML = blocks[i].nodeText;
+                TwinoAlikeParser.removeForbiddenElements(build);
                 nodes.push( build );
             }
             else {
@@ -1050,7 +1040,6 @@ export default class TwinoAlikeParser {
     parseToString( text: string, resolver: emoteResolver, options: TwinoClientOptions = {}, targetCallback = (s:string)=>{} ): string {
         let proxy = document.createElement( 'div' );
         this.parseTo( text, proxy, resolver, options, targetCallback );
-        TwinoAlikeParser.removeForbiddenElements(proxy) // Removing dangerous xss elements and forgeable insets
         return proxy.innerHTML;
     }
 
@@ -1109,9 +1098,9 @@ export default class TwinoAlikeParser {
     /**
      * Removes dangerous (xss) html elements and html insets if they're not quoted from `elemToScan`.
      * Useful for message/forum validation when `[html]` is used.
-     * 
+     *
      * /!\ Not exhaustive and shouldn't replace backend sanitizing/validation /!\
-     * @param elemToScan 
+     * @param elemToScan
      */
     static removeForbiddenElements(elemToScan: HTMLElement): void {
         const forbidden = [
@@ -1210,8 +1199,15 @@ export default class TwinoAlikeParser {
             '*[ontimeupdate]',
             '*[onvolumechange]',
             '*[onwaiting]',
-            '*[ontoggle]'
+            '*[ontoggle]',
+
+            // Custom elements
+            // @ts-ignore
+            ...Object.keys(window.c?.modules ?? {}),
+            ':not(:defined)'
         ]
+
+
 
         const forbiddenDetected = elemToScan.querySelectorAll(
             forbidden.join(',')
