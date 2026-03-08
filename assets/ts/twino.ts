@@ -553,6 +553,29 @@ class HTMLConverterFromBlocks {
                         if (peek && peek.nodeName === 'div' && peek.hasClass('rpText')) {
                             ret += HTMLConverterFromBlocks.wrapBlock( nextBlock(), 'rp', block.nodeText )
                         }
+                    } else if ( // Allow some insets as html so they can be quoted, `removeForbiddenElements` method is used beforehand to avoid forgery.
+                        block.nodeClasses.some(
+                            c => [
+                                'dice-4',
+                                'dice-6',
+                                'dice-8',
+                                'dice-10',
+                                'dice-12',
+                                'dice-20',
+                                'dice-100',
+                                'card',
+                                'letter-a',
+                                'letter-c',
+                                'letter-v',
+                                'rps',
+                                'coin',
+                                'card',
+                                'coords',
+                                'town',
+                                'citizen',
+                            ])
+                    ) {
+                        ret += HTMLConverterFromBlocks.rangeBlock(block.rawText, 'html')
                     }
                     else ret += raw_fallback ? HTMLConverterFromBlocks.rangeBlock( block.rawText, 'html' ) : block.nodeText;
                     break;
@@ -1027,6 +1050,7 @@ export default class TwinoAlikeParser {
     parseToString( text: string, resolver: emoteResolver, options: TwinoClientOptions = {}, targetCallback = (s:string)=>{} ): string {
         let proxy = document.createElement( 'div' );
         this.parseTo( text, proxy, resolver, options, targetCallback );
+        TwinoAlikeParser.removeForbiddenElements(proxy) // Removing dangerous xss elements and forgeable insets
         return proxy.innerHTML;
     }
 
@@ -1051,7 +1075,6 @@ export default class TwinoAlikeParser {
     }
 
     private static buildInterimBlockTree( elem: HTMLElement ): TwinoInterimBlock {
-
         if (elem.nodeType === Node.TEXT_NODE)
             return new TwinoInterimBlock(elem.textContent);
 
@@ -1083,8 +1106,121 @@ export default class TwinoAlikeParser {
 
     }
 
-    parseFrom( htmlText: string, opmode: number ): string {
+    /**
+     * Removes dangerous (xss) html elements and html insets if they're not quoted from `elemToScan`.
+     * Useful for message/forum validation when `[html]` is used.
+     * 
+     * /!\ Not exhaustive and shouldn't replace backend sanitizing/validation /!\
+     * @param elemToScan 
+     */
+    static removeForbiddenElements(elemToScan: HTMLElement): void {
+        const forbidden = [
+            // Removing some interactives or dangerous elements
+            'button',
+            'input',
+            'textarea',
+            'script',
+            'style',
+            'link',
+            'meta',
+            'form',
+            'iframe',
+            // Removing all random insets from [html] tag usage if not quoted
+            '.html div[class^=dice-]:not(blockquote div[class^=dice-])',
+            '.html div[class^=letter-]:not(blockquote div[class^=letter-])',
+            '.html div[class=coin]:not(blockquote div[class=coin])',
+            '.html div[class=rps]:not(blockquote div[class=rps])',
+            '.html div[class=card]:not(blockquote div[class=card])',
+            '.html div[class=town]:not(blockquote div[class=town])',
+            '.html div[class=town]:not(blockquote div[class=town])',
+            '.html div[class=citizen]:not(blockquote div[class=citizen])',
+            // Removing anything with href that is not a link
+            '*:not(a)[href]',
+            // Removing anything with src that is not an image
+            '*:not(img)[src]',
+            // Removing all inline event handlers
+            '*[onclick]',
+            '*[onafterprint]',
+            '*[onbeforeprint]',
+            '*[onbeforeunload]',
+            '*[onerror]',
+            '*[onhashchange]',
+            '*[onload]',
+            '*[onmessage]',
+            '*[onoffline]',
+            '*[ononline]',
+            '*[onpagehide]',
+            '*[onpageshow]',
+            '*[onpopstate]',
+            '*[onresize]',
+            '*[onstorage]',
+            '*[onunload]',
+            '*[onblur]',
+            '*[onchange]',
+            '*[oncontextmenu]',
+            '*[onfocus]',
+            '*[oninput]',
+            '*[oninvalid]',
+            '*[onreset]',
+            '*[onsearch]',
+            '*[onselect]',
+            '*[onsubmit]',
+            '*[onkeydown]',
+            '*[onkeypress]',
+            '*[onkeyup]',
+            '*[onclick]',
+            '*[ondblclick]',
+            '*[onmousedown]',
+            '*[onmousemove]',
+            '*[onmouseout]',
+            '*[onmouseover]',
+            '*[onmouseup]',
+            '*[onmousewheel]',
+            '*[onwheel]',
+            '*[ondrag]',
+            '*[ondragend]',
+            '*[ondragenter]',
+            '*[ondragleave]',
+            '*[ondragover]',
+            '*[ondragstart]',
+            '*[ondrop]',
+            '*[onscroll]',
+            '*[oncopy]',
+            '*[oncut]',
+            '*[onpaste]',
+            '*[onabort]',
+            '*[oncanplay]',
+            '*[oncanplaythrough]',
+            '*[oncuechange]',
+            '*[ondurationchange]',
+            '*[onemptied]',
+            '*[onended]',
+            '*[onloadeddata]',
+            '*[onloadedmetadata]',
+            '*[onloadstart]',
+            '*[onpause]',
+            '*[onplay]',
+            '*[onplaying]',
+            '*[onprogress]',
+            '*[onratechange]',
+            '*[onseeked]',
+            '*[onseeking]',
+            '*[onstalled]',
+            '*[onsuspend]',
+            '*[ontimeupdate]',
+            '*[onvolumechange]',
+            '*[onwaiting]',
+            '*[ontoggle]'
+        ]
 
+        const forbiddenDetected = elemToScan.querySelectorAll(
+            forbidden.join(',')
+        )
+
+        forbiddenDetected.forEach(el => el.remove())
+    }
+
+    parseFrom( htmlText: string, opmode: number ): string {
         let container_node = document.createElement('p');
         if (opmode & this.OpModeQuote) container_node.classList.add('no-quote', 'no-announce');
         if (opmode & this.OpModeRaw)   container_node.classList.add('raw-fallback');

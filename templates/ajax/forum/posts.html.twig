@@ -531,29 +531,33 @@
                 let content
 
                 const selection = document.getSelection() // Getting user selection
-
-                // Checking if user selected only one range and if the message element is in this range
-                if (selection?.rangeCount === 1 && selection.getRangeAt(0).intersectsNode(messageElement)) {
-                    const selectionRange = selection?.getRangeAt(0)
-
+                const selectionRange = selection?.rangeCount === 1 ? selection?.getRangeAt(0) : null // We are allowing only one selection otherwise we quote the whole message.
+                const selectionContent = selectionRange?.cloneContents() 
+                // Checking if the message element is in this range + if the selection contains anything + if the selected content is in the message element.
+                if (
+                    selectionRange?.intersectsNode(messageElement) && 
+                    selectionContent?.childNodes?.length > 0 && 
+                    (
+                        selectionRange?.commonAncestorContainer === messageElement ||
+                        messageElement.contains(selectionRange?.commonAncestorContainer)
+                    )
+                ) {
                     /* Correcting fat fingers effect => if the user selected more elements than the text from the message
                     we adjust the start and/or end to the content of the message only */
-                    if (selectionRange.startContainer !== messageElement && selectionRange.startContainer.parentNode !== messageElement) {
-                        console.log('selection start nogud')
+                    if (!messageElement.contains(selection.anchorNode)) {
                         selectionRange.setStart(messageElement, 0)
                     }
 
-                    if (selectionRange.endContainer !== messageElement && selectionRange.endContainer.parentNode !== messageElement) {
-                        console.log('selection end nogud')
+                    if (!messageElement.contains(selection.focusNode)) {
                         selectionRange.setEnd(messageElement, messageElement.childNodes.length)
                     }
 
-                    // Getting the html entities from the text (without relying on old dinosaur named jquery) to keep compatibility with twinoParser
-                    const tempNode = document.createElement('textarea')
-                    tempNode.innerText = selection.toString() 
+                    // Getting the html content from the selected data to keep compatibility with twinoParser
+                    const tempNode = messageElement.cloneNode()
+                    tempNode.appendChild(selectionRange.cloneContents())
                     content = tempNode.innerHTML
                 } else {
-                    content = messageElement?.innerHTML;
+                    content = messageElement?.innerHTML
                 }
 
                 let author = messageElement.getAttribute('x-post-content-author');

@@ -201,7 +201,6 @@ export const TwinoEditorWrapper = ( props: HTMLConfig & { onFieldChanged: FieldC
         const r = resourceEmotes ?? resourceEmoteRef.current ?? null;
         if (e === null && r === null) return [null,s];
         s = e?.mock[s] ?? s;
-        console.log(s, e?.result, r?.result, [e?.result[s]?.url ?? r?.result[s]?.url ?? null, s]);
         return [e?.result[s]?.url ?? r?.result[s]?.url ?? null, s];
     }
 
