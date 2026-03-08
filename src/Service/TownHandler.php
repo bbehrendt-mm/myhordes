@@ -834,7 +834,7 @@ class TownHandler
 
         foreach ($town->getCitizens() as $citizen) {
             if (!$citizen->getAlive()) continue;
-            $this->picto_handler->give_validated_picto($citizen, $pictoPrototype);
+            $this->picto_handler->give_picto($citizen, $pictoPrototype);
         }
 
         $town->setFullyExploredAwarded(true);
