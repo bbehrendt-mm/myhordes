@@ -86,7 +86,8 @@ class MessageController extends CustomAbstractController
         $is_announcement = is_a($post, Announcement::class) || is_a($post, Changelog::class);
 
         $tx = $post->getText();
-        $this->html->htmlPrepare($user, $p, true, $tx, $town, $insight, allow_all_emotes: $is_announcement);
+        if (!$this->html->htmlPrepare($user, $p, true, $tx, $town, $insight, allow_all_emotes: $is_announcement))
+            return false;
 
         $distorted = false;
         if ($town && $user->getActiveCitizen() && $town->getCitizens()->contains($user->getActiveCitizen()) && (!is_a( $post, Post::class) || $post->getType() === 'USER' || $post->getType() === 'GLORY')) {
