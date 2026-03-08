@@ -191,13 +191,13 @@ class ActionDataService implements FixtureProcessorInterface {
                 'drug_beta_bad_1'  => [ 'label' => 'Einnehmen', 'cover' => true, 'at00' => true, 'poison' => ItemAction::PoisonHandlerConsume, 'meta' => [ 'drug_1' ], 'result' => [ 'contaminated_zone_infect', 'consume_item', 'picto_drug_exp', 'chances' => ['group' => [
                     [ ['drug_any', 'just_ap6', 'msg_drug_normal_ap'], 1 ],
                     [ ['drug_any', 'unterrorize', 'msg_drug_relax'], 1 ],
-                    [ ['drug_any', 'plus_4ap', 'msg_drug_normal_ap'], 1 ],
+                    [ ['drug_any', 'plus_4ap', 'msg_drug_partial_ap'], 1 ],
                     [ ['drug_any', 'drunk', 'msg_drug_drunk'], 1 ],
                 ]] ] ] ,
                 'drug_beta_bad_2'  => [ 'label' => 'Einnehmen', 'cover' => true, 'at00' => true, 'poison' => ItemAction::PoisonHandlerConsume, 'meta' => [ 'drug_2' ], 'result' => [ 'contaminated_zone_infect', 'consume_item', 'picto_drug_exp', 'chances' => ['group' => [
                     [ ['drug_addict', 'just_ap6', 'msg_drug_normal_ap'], 1 ],
                     [ ['drug_addict', 'unterrorize', 'msg_drug_relax'], 1 ],
-                    [ ['drug_addict', 'plus_4ap', 'msg_drug_normal_ap'], 1 ],
+                    [ ['drug_addict', 'plus_4ap', 'msg_drug_partial_ap'], 1 ],
                     [ ['drug_addict', 'drunk', 'msg_drug_drunk'], 1 ],
                 ]] ] ] ,
                 'drug_rand_xmas' => [ 'label' => 'Essen', 'cover' => true, 'at00' => true, 'poison' => ItemAction::PoisonHandlerConsume, 'meta' => [ 'eat_ap' ], 'result' => [ 'contaminated_zone_infect', 'consume_item', 'picto_drug_exp', ['group' => [
@@ -1196,7 +1196,8 @@ class ActionDataService implements FixtureProcessorInterface {
                 'drug_no_use_3'             => 'Merkwürdig... anscheinend ist der erwartete Effekt ausgeblieben. Du sagst dir selbst, das dies eine unglaubliche Chance ist...',
                 'drug_xanax'                => 'Die Droge zeigt sofort Wirkung: Du bist auf einmal ganz <strong>ruhig</strong> geworden, so ausgeglichen... Die schrecklichen Ereignisse der letzten Tage erscheinen dir plötzlich bedeutungslos und ganz weit weg... Es geht dir schon viel besser.',
                 'drug_para'                 => 'Das {item} beginnt rasch zu wirken. Das Fieber klingt ab, dein Herz beginnt wieder in einem halbwegs normalen Takt zu schlagen... Du warst nicht weit von einem schrecklichen Tod entfernt.',
-                'drug_normal_ap'            => 'Die Nebenwirkungen der Droge lassen nicht lange auf sich warten: Übelkeit, Zittern, Schweißausbrüche, das ganze Programm... Gleichzeitig spürst du jedoch einen <strong>unglaublichen Kraftschub</strong>. Übertreibe es aber nicht!',
+                'drug_normal_ap'            => 'Du schluckst die {item} hinunter. Die Nebenwirkungen der Droge lassen nicht lange auf sich warten: Übelkeit, Zittern, Schweißausbrüche, das ganze Programm... Gleichzeitig spürst du jedoch einen <strong>unglaublichen Kraftschub</strong>. Übertreibe es aber nicht!',
+                'drug_partial_ap'            => 'Du schluckst die {item} hinunter. Die Droge scheint gepanscht zu sein, aber ihre Wirkung macht sich langsam bemerkbar: Schwindel, Übelkeit, Nasenbluten... Sie gibt dir dennoch einen <strong>kleinen</strong> Energieschub... Übertreibe es aber nicht!',
                 'drug_twin_ap'              => 'So \'ne Quali bekommt man nicht jeden Tag in die Finger! Sicher, Übelkeit, Zittern und Schweißausbrüche hast du auch damit bekommen, aber die Wirkung ist weitaus stärker als bei \'ner normalen Droge (Du hast einen <strong>AP Bonus</strong> erhalten)... Übertreibe es aber nicht!',
                 'drug_hyd'                  => 'Kaum hast du deine Pille geschluckt, da verschwindet auch schon dein Durst. Hoffen wir mal, das alles gut geht...',
                 'drug_no_effect'            => 'Du schluckst die {item} hinunter. Nach einigen Minuten beginnt dein Kopf zu pochen und deine Nase beginnt zu bluten. Der Schmerz ist nicht unerträglich, aber er ist ziemlich unangenehm...',

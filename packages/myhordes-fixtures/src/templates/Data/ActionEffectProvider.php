@@ -39,6 +39,7 @@ class ActionEffectProvider
         $effects_container->add()->identifier('msg_heroic_arma_fail')->add(new MessageEffect()->text(Arr::get($data, 'message_keys.heroic_arma_fail')))->commit();
         $effects_container->add()->identifier('msg_heroic_arma_success')->add(new MessageEffect()->text(Arr::get($data, 'message_keys.heroic_arma_success')))->commit();
         $effects_container->add()->identifier('msg_drug_normal_ap')->add(new MessageEffect()->text(Arr::get($data, 'message_keys.drug_normal_ap')))->commit();
+        $effects_container->add()->identifier('msg_drug_partial_ap')->add(new MessageEffect()->text(Arr::get($data, 'message_keys.drug_partial_ap')))->commit();
         $effects_container->add()->identifier('msg_drug_terror')->add(new MessageEffect()->text(Arr::get($data, 'message_keys.drug_terror')))->commit();
         $effects_container->add()->identifier('msg_drug_addict_ap')->add(new MessageEffect()->text(Arr::get($data, 'message_keys.drug_addict_ap')))->commit();
         $effects_container->add()->identifier('msg_drug_no_effect')->add(new MessageEffect()->text(Arr::get($data, 'message_keys.drug_no_effect')))->commit();
