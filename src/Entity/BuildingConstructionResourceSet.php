@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 class BuildingConstructionResourceSet
 {
     #[ORM\ManyToOne(inversedBy: 'resourceSets')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn()]
     #[ORM\Id]
     private ?BuildingPrototype $building = null;
 
