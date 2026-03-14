@@ -14,6 +14,7 @@ use App\Entity\EventActivationMarker;
 use App\Entity\ItemPrototype;
 use App\Entity\RuinExplorerStats;
 use App\Entity\Town;
+use App\Entity\TownAdminUser;
 use App\Entity\TownRankingProxy;
 use App\Entity\User;
 use App\Entity\ZombieEstimation;
@@ -33,6 +34,7 @@ use App\Service\Maps\MapMaker;
 use App\Service\NightlyHandler;
 use App\Service\RandomGenerator;
 use App\Service\TownHandler;
+use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -48,13 +50,14 @@ class AdminTownDashboardController extends AdminActionController
      * @param Town $town
      * @param TownHandler $townHandler
      * @param KernelInterface $kernel
+     * @param EntityManagerInterface $entityManager
      * @param Request $request
      * @return Response
      * @throws Exception
      */
     #[Route(path: 'jx/manage/town/{id<\d+>}/dash', name: 'admin_town_dashboard')]
     #[IsGranted('spy', 'town')]
-    public function town_explorer_dash(Town $town, TownHandler $townHandler, KernelInterface $kernel, Request $request): Response {
+    public function town_explorer_dash(Town $town, TownHandler $townHandler, KernelInterface $kernel, EntityManagerInterface $entityManager, Request $request): Response {
 		return $this->render('ajax/manage/towns/explorer_dash.html.twig', $this->addDefaultTwigArgs(null, array_merge([
 			'town' => $town,
 			'day' => $town->getDay(),
@@ -63,6 +66,7 @@ class AdminTownDashboardController extends AdminActionController
             'zonePrototypes' => $this->entity_manager->getRepository(ZonePrototype::class)->findAll(),
 			'tab' => "dash",
 			'events' => $this->conf->getAllEvents(),
+            'admins' => $entityManager->getRepository(TownAdminUser::class)->findBy(['town' => $town]),
 			'current_event' => $this->conf->getCurrentEvents($town),
 			'langs' => array_merge($this->generatedLangsCodes, ['multi']),
 			'map_public_json' => json_encode($townHandler->get_public_map_blob($town, null, 'door-planner', 'day', "admin/{$town->getId()}", true)),

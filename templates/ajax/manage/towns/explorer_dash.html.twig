@@ -52,6 +52,25 @@
 			{{ _self.valuelist('Ranking-Ausschluss'|trans({},'game'),  town.rankingEntry.disabled) }}
 			{{ _self.valuelist('Event-Stadt'|trans({},'ghost'),         town.rankingEntry.event) }}
 
+            {% if admins is not empty %}
+                <div class="row">
+                    <div class="padded cell rw-4 note note-lightest"><label>{{ 'Administratoren'|trans({},'admin') }}</label></div>
+                    <div class="padded cell rw-8">
+                        {% for admin in admins %}
+                            <div class="flex large-gap middle">
+                                <div class="flex-none">
+                                    {% include "ajax/soul/playeravatar.html.twig" with {user: admin.user, small: true} only %}
+                                </div>
+                                <div class="flex-1 flex middle">
+                                    <div style="color: {{ admin.fullAccess ? 'red' : 'inherit' }}">{{ admin.user.name }}</div>
+                                    <i class="small">[ #{{ admin.user.id }} ]</i>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+
             {% if is_granted('edit', town) %}
 			    <div class="row">
 			    	<div class="padded cell rw-4 note note-lightest"><label for="administer-town">{{ 'Stadt administrieren'|trans({},'admin') }}</label></div>

@@ -21,6 +21,7 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 use Exception;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/', condition: 'request.isXmlHttpRequest()')]
 #[GateKeeperProfile(allow_during_attack: true)]
@@ -50,6 +51,7 @@ class AdminTownCommonsController extends AdminActionController
      * @return Response
      */
     #[Route(path: 'jx/manage/towns/old/{page}', name: 'admin_old_town_list', requirements: ['page' => '\d+'])]
+    #[IsGranted('ROLE_CROW')]
     public function old_town_list(int $page = 1): Response
     {
         $this->denyAccessUnlessGranted('list', Town::class);

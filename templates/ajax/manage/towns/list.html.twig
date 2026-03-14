@@ -5,26 +5,32 @@
     <li class="back-dash" x-ajax-href="{{ url('game_landing') }}">{{ 'Zum Spiel'|trans({},'global') }}</li>
 {% endblock %}
 {% block ajax %}
-    {% embed "ajax/manage/towns/header.html.twig" with {'search_controller': 'admin_towns_fuzzyfind'} %}{% endembed %}
+    {% if is_granted('ROLE_CROW') %}
+        {% embed "ajax/manage/towns/header.html.twig" with {'search_controller': 'admin_towns_fuzzyfind'} %}{% endembed %}
+    {% endif %}
     <div class="row">
         <div class="cell padded rw-12">
             <ul class="tabs plain">
                 <li class="tab {% if admin_tab =='towns' %}selected{% endif %}">
                     <div class="tab-link" x-ajax-href="{{ path('admin_town_list') }}"><span>{{ 'Aktuelle Städte'|trans({}, 'admin') }}</span></div>
                 </li>
-                <li class="tab {% if admin_tab =='old_towns' %}selected{% endif %}">
-                    <div class="tab-link" x-ajax-href="{{ path('admin_old_town_list') }}"><span>{{ 'Fertige Städte'|trans({}, 'admin') }}</span></div>
-                </li>
+                {% if is_granted('ROLE_CROW') %}
+                    <li class="tab {% if admin_tab =='old_towns' %}selected{% endif %}">
+                        <div class="tab-link" x-ajax-href="{{ path('admin_old_town_list') }}"><span>{{ 'Fertige Städte'|trans({}, 'admin') }}</span></div>
+                    </li>
+                {% endif %}
             </ul>
-            <h5>{{ 'Bürger nach Sprache'|trans({}, 'admin') }}</h5>
-            <div class="row">
-                {% for stat in citizen_stats %}
-                <div class="cell rw-2 rw-sm-3 center">
-                        <img src="{{ asset("build/images/lang/" ~ stat.language ~".png") }}" alt="{{ stat.language }}" /><br />
-                        {{ stat.count }}
+            {% if is_granted('ROLE_CROW') %}
+                <h5>{{ 'Bürger nach Sprache'|trans({}, 'admin') }}</h5>
+                <div class="row">
+                    {% for stat in citizen_stats %}
+                    <div class="cell rw-2 rw-sm-3 center">
+                            <img src="{{ asset("build/images/lang/" ~ stat.language ~".png") }}" alt="{{ stat.language }}" /><br />
+                            {{ stat.count }}
+                    </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
-            </div>
+            {% endif %}
             <h5>{{ 'Liste aller Städte'|trans({},'admin') }}</h5>
             <div class="row-table">
                 <div class="row header">

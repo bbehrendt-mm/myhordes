@@ -243,7 +243,7 @@ const TownCreatorWrapper = ( {elevation, eventMode, presetHead, presetRules}: {e
             if ( fun(obj, dot_p, value, defaultValue) !== value) {
                 setOptions(obj);
                 if (eventMode) fun_announce(obj);
-            };
+            }
         }
     }
 

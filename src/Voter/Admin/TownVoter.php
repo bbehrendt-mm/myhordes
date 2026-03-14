@@ -3,13 +3,17 @@
 namespace App\Voter\Admin;
 
 use App\Entity\Town;
+use App\Entity\TownAdminUser;
 use App\Entity\User;
 use App\Enum\Configuration\MyHordesSetting;
 use App\Service\ConfMaster;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
+use Symfony\Contracts\Cache\ItemInterface;
+use Symfony\Contracts\Cache\TagAwareCacheInterface;
 
 class TownVoter extends Voter
 {
@@ -18,6 +22,8 @@ class TownVoter extends Voter
         private readonly ConfMaster $confMaster,
         private readonly KernelInterface $kernel,
         private readonly AccessDecisionManagerInterface $accessDecisionManager,
+        private readonly TagAwareCacheInterface $gameCachePool,
+        private readonly EntityManagerInterface $em,
     ) {
 
     }
@@ -35,6 +41,27 @@ class TownVoter extends Voter
         return
             $subjectType === 'string' ||
             is_a($subjectType, Town::class, true);
+    }
+
+    protected function attributesByTownSettings(User $user, Town $town): array {
+        $key = "town_admin_list_{$user->getId()}_{$town->getId()}";
+
+        return $this->gameCachePool->get($key, function (ItemInterface $item) use ($town, $user) {
+            $item->expiresAfter(86400)
+                ->tag([
+                    'town_al',
+                    "town_al_user_{$user->getId()}", "town_al_town_{$town->getId()}",
+                    "town_al_{$user->getId()}_{$town->getId()}"
+                ]);
+
+            $adminSetting = $this->em->getRepository(TownAdminUser::class)->findOneBy( ['town' => $town, 'user' => $user ]);
+            if (!$adminSetting) return [];
+            return $adminSetting->isFullAccess() ? ['spy', 'edit', 'cheat'] : ['spy'];
+        });
+    }
+
+    protected function allowedByTownSettings(User $user, Town $town, string $attribute): bool {
+        return in_array($attribute, $this->attributesByTownSettings( $user, $town ));
     }
 
     protected function supports(string $attribute, mixed $subject): bool
@@ -56,14 +83,14 @@ class TownVoter extends Voter
 
         return match ($attribute) {
             'create' => $this->canCreate( $token, $lax ),
-            'list' => $this->canList( $token, $lax ),
+            'list' => $this->canList( $token, $lax ) || $this->em->getRepository(TownAdminUser::class)->count( ['user' => $user ] ) > 0,
             'spy' => $this->canSpy( $token, $lax ),
             'cheat' => $this->canCheat( $subject, $token, $user, $lax ),
             'edit' => $this->canEdit( $subject, $token, $user, $lax ),
             'administrate' => $this->canAdministrate( $token ),
             'sudo' => $this->canDoEverything( $token ),
             default => false,
-        };
+        } || (is_a($subject, Town::class) && $this->allowedByTownSettings( $user, $subject, $attribute ));
     }
 
     private function canCreate(TokenInterface $token, bool $lax): bool {

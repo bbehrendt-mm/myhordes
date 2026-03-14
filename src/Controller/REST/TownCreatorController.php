@@ -135,6 +135,15 @@ class TownCreatorController extends CustomAbstractCoreController
                         'event_tag_help' => $this->translator->trans('Event-Städte werden nicht ins Ranking aufgenommen und erhalten eine spezielle Markierung in der Stadtliste.', [], 'ghost'),
                     ],
 
+                    'organization' => [
+                        'section' => $this->translator->trans('Organisation und Rollen', [], 'ghost'),
+
+                        'others' => $this->translator->trans('Beteiligte Personen', [], 'ghost'),
+                        'others_help' => $this->translator->trans('Wähle Personen aus, die an der Organisation dieser Stadt beteiligt sind. Die ausgewählten Personen erhalten Zugriff auf die Administrationsoberfläche der Stadt (entweder Lese- oder Vollzugriff). Achte darauf, hier nur vertrauenswürdige Personen auszuwählen! Du kannst dich auch selbst hinzufügen, wenn du Zugriff auf die Administrationsoberfläche benötigst.', [], 'ghost'),
+                        'others_ro' => $this->translator->trans('Lesender Zugriff', [], 'ghost'),
+                        'others_rw' => $this->translator->trans('Vollzugriff', [], 'ghost'),
+                    ],
+
                 ],
 
                 'template' => [
