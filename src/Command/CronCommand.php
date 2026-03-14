@@ -89,7 +89,7 @@ class CronCommand extends Command implements SelfSchedulingCommand
         foreach (StatisticType::playerStatTypes() as $playerStatType) {
 
             $missing_stat |= $needed = $this->entityManager->getRepository(Statistic::class)->matching(
-                (new Criteria())->where(
+                new Criteria(accessRawFieldValues: true)->where(
                     Criteria::expr()->gte( 'created', new DateTime('today') )
                 )->andWhere(
                     Criteria::expr()->eq( 'type', $playerStatType )

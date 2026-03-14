@@ -143,7 +143,7 @@ class Season
      */
     public function getRankingRange(TownClass $class): ?SeasonRankingRange
     {
-        return $this->getRankingRanges()->matching( (new Criteria())
+        return $this->getRankingRanges()->matching( new Criteria(accessRawFieldValues: true)
             ->where( new Comparison( 'type', Comparison::EQ, $class )  )
         )->first() ?: null;
     }

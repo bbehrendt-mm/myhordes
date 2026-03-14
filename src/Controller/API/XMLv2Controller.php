@@ -217,7 +217,7 @@ class XMLv2Controller extends CoreController {
                 }
             }
 
-            $criteria = new Criteria();
+            $criteria = new Criteria(accessRawFieldValues: true);
             $criteria->andWhere($criteria->expr()->lte('unlockQuantity', $picto->getCount()));
             $criteria->andWhere($criteria->expr()->eq('associatedPicto', $picto->getPrototype()));
 

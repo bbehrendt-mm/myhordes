@@ -75,7 +75,7 @@ class GhostController extends CustomAbstractController
         $tickets = $user->getTeamTicketsFor( $season, '!' )->count();
         $cap_left = ($cap >= 0) ? max(0, $cap - $tickets) : -1;
 
-        $mayor_block = $em->getRepository(MayorMark::class)->matching( new Criteria()
+        $mayor_block = $em->getRepository(MayorMark::class)->matching( new Criteria(accessRawFieldValues: true)
             ->where( new Comparison( 'user', Comparison::EQ, $user )  )
             ->andWhere( new Comparison( 'expires', Comparison::GT, new \DateTime() ) )
             ->orderBy( ['expires' => Order::Descending] )
@@ -114,7 +114,7 @@ class GhostController extends CustomAbstractController
     public function postgame_screen(Request $request): Response
     {
         $last_game_sp = $this->entity_manager->getRepository( CitizenRankingProxy::class )->matching(
-            (new Criteria())
+            new Criteria(accessRawFieldValues: true)
                 ->andWhere( Criteria::expr()->gt('points', 0) )
                 ->andWhere( Criteria::expr()->neq('points', null) )
                 ->andWhere( Criteria::expr()->eq('disabled', false) )
@@ -172,7 +172,7 @@ class GhostController extends CustomAbstractController
             'langs' => $this->generatedLangs,
             'mayorTowns' => $open_town,
             'canMayorTowns' => $this->isGranted( 'mayor', LobbyCapabilityEnum::Town ),
-            'mayorBlocked' => $em->getRepository(MayorMark::class)->matching( new Criteria()
+            'mayorBlocked' => $em->getRepository(MayorMark::class)->matching( new Criteria(accessRawFieldValues: true)
                 ->where( new Comparison( 'user', Comparison::EQ, $user )  )
                 ->andWhere( new Comparison( 'expires', Comparison::GT, new \DateTime() ) )
                 ->orderBy( ['expires' => Order::Descending] )

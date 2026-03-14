@@ -61,7 +61,7 @@ class TownAddonsController extends TownController
         $buildings = [];
         $vote_list = [0,0];
         foreach ($town->getBuildings()->matching(
-            new Criteria()->where(Criteria::expr()->eq('complete', true))
+            new Criteria(accessRawFieldValues: true)->where(Criteria::expr()->eq('complete', true))
         ) as $b) {
             if ($b->getPrototype()->getMaxLevel() > 0)
                 $buildings[] = $b;

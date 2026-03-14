@@ -137,7 +137,7 @@ class RuinExplorationController extends AbstractController implements HookedInte
             $exitZone = $this->entityManager->getRepository(RuinZone::class)->findOneBy(['zone' => $zone->getZone(), 'x' => 0, 'y' => 0, 'z' => 0]);
         elseif ($is_tamer) {
             $doors = $this->entityManager->getRepository(RuinZonePrototype::class)->findBy(['level' => $stats->getZ() > 0 ? -1 : 1]);
-            $exitZone = $this->entityManager->getRepository(RuinZone::class)->matching(Criteria::create()
+            $exitZone = $this->entityManager->getRepository(RuinZone::class)->matching(Criteria::create(true)
                 ->where(Criteria::expr()->in('prototype', $doors))
                 ->andWhere(Criteria::expr()->eq('z', $stats->getZ()))
                 ->andWhere(Criteria::expr()->eq('zone', $zone->getZone()))

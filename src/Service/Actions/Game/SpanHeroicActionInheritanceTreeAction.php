@@ -19,7 +19,7 @@ readonly class SpanHeroicActionInheritanceTreeAction
 
         do {
             // Fetch all actions replacing an action within our focus that has not been fetched before
-            $level = $this->entityManager->getRepository(HeroicActionPrototype::class)->matching((new Criteria())
+            $level = $this->entityManager->getRepository(HeroicActionPrototype::class)->matching(new Criteria(accessRawFieldValues: true)
                 ->andWhere( Criteria::expr()->in('replaced_action', $current_names) )
                 ->andWhere( Criteria::expr()->notIn('id', array_map( fn(HeroicActionPrototype $p) => $p->getId(), $action_cache )) )
             )->toArray();
@@ -42,7 +42,7 @@ readonly class SpanHeroicActionInheritanceTreeAction
         // We're including the already found action IDs in the query to prevent circular references
         while (
             ($current->getReplacedAction() !== null) &&
-            ($proto = $this->entityManager->getRepository(HeroicActionPrototype::class)->matching((new Criteria())
+            ($proto = $this->entityManager->getRepository(HeroicActionPrototype::class)->matching(new Criteria(accessRawFieldValues: true)
                 ->andWhere(Criteria::expr()->eq('name', $current->getReplacedAction()))
                 ->andWhere( Criteria::expr()->notIn('id', array_map( fn(HeroicActionPrototype $p) => $p->getId(), $action_cache )) )
             )->first())

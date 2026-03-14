@@ -72,7 +72,7 @@ final class ForumEventListener implements ServiceSubscriberInterface
 	public function queueSubscriptions(ForumMessageNewPostEvent $event): void {
         /** @var ForumThreadSubscription[] $subscriptions */
         $subscriptions = $this->getService(EntityManagerInterface::class)->getRepository(ForumThreadSubscription::class)->matching(
-            (new Criteria())
+            new Criteria(accessRawFieldValues: true)
                 ->andWhere( Criteria::expr()->neq('user', $event->post->getOwner()) )
                 ->andWhere( Criteria::expr()->eq('thread', $event->post->getThread()) )
                 ->andWhere( Criteria::expr()->lt('num', 10) )

@@ -831,7 +831,7 @@ class MigrateCommand extends Command
         if ($input->getOption('assign-official-tag')) {
             $tag = $this->entity_manager->getRepository(ThreadTag::class)->findOneBy(['name' => 'official']);
             $crow = $this->entity_manager->getRepository(User::class)->find(66);
-            $criteria = new Criteria();
+            $criteria = new Criteria(accessRawFieldValues: true);
             $criteria->andWhere($criteria->expr()->neq('town', $null));
             $townForums = $this->entity_manager->getRepository(Forum::class)->matching($criteria);
             /** @var Forum $townForum */
@@ -1448,7 +1448,7 @@ class MigrateCommand extends Command
                 if (!$oldRp) continue;
 
                 // We search the RP that has the same title and a name starting with the one we'll remove
-                $crit = new Criteria();
+                $crit = new Criteria(accessRawFieldValues: true);
                 $crit->andWhere($crit->expr()->startsWith('name', $oldRp->getName()));
                 $crit->andWhere($crit->expr()->eq('title', $oldRp->getTitle()));
                 $crit->andWhere($crit->expr()->neq('name', $oldRp->getName()));

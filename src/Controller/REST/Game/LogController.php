@@ -119,7 +119,7 @@ class LogController extends CustomAbstractCoreController
     /**
      * @throws Exception
      */
-    protected function applyFilters(Request $request, Citizen|Zone|Town $context, ?Criteria $criteria = null, bool $limits = true, bool $allow_inline_days = false, bool $admin = false, string &$identifier = null ): Criteria {
+    protected function applyFilters(Request $request, Citizen|Zone|Town $context, ?Criteria $criteria = null, bool $limits = true, bool $allow_inline_days = false, bool $admin = false, ?string &$identifier = null ): Criteria {
         $day = $request->query->get('day', 0);
         $limit = min((int)$request->query->get('limit', -1), 1500);
         $threshold_top = $request->query->get('below', PHP_INT_MAX);
@@ -135,7 +135,7 @@ class LogController extends CustomAbstractCoreController
             default => null
         };
 
-        $criteria = ($criteria ?? Criteria::create())
+        $criteria = ($criteria ?? Criteria::create(true))
             ->andWhere( Criteria::expr()->eq('town', $town) )
             ->andWhere( Criteria::expr()->gt('id', $threshold_bottom) )
             ->andWhere( Criteria::expr()->lt('id', $threshold_top) )

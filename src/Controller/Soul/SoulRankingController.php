@@ -57,7 +57,7 @@ class SoulRankingController extends SoulController
         if ($this->entity_manager->getRepository(CitizenRankingProxy::class)->findNextUnconfirmedDeath($user))
             return $this->redirect($this->generateUrl( 'soul_death' ));
 
-        $seasons = $this->entity_manager->getRepository(Season::class)->matching((Criteria::create())
+        $seasons = $this->entity_manager->getRepository(Season::class)->matching((Criteria::create(true))
             ->orWhere(Criteria::expr()->gt('number', 0))
             ->orWhere(Criteria::expr()->gt('subNumber', 14))
         );
@@ -130,7 +130,7 @@ class SoulRankingController extends SoulController
         if ($this->entity_manager->getRepository(CitizenRankingProxy::class)->findNextUnconfirmedDeath($user))
             return $this->redirect($this->generateUrl( 'soul_death' ));
 
-        $seasons = $this->entity_manager->getRepository(Season::class)->matching((Criteria::create())
+        $seasons = $this->entity_manager->getRepository(Season::class)->matching((Criteria::create(true))
             ->orWhere(Criteria::expr()->gt('number', 0))
             ->orWhere(Criteria::expr()->gt('subNumber', 14))
         );
@@ -184,7 +184,7 @@ class SoulRankingController extends SoulController
         if (($currentSeason = $this->resolveSeasonIdentifier( $seasonId )) === false)
             return $this->redirect($this->generateUrl( 'soul_season_solo', ['season' => 'c'] ));
 
-        $seasons = $this->entity_manager->getRepository(Season::class)->matching((Criteria::create())
+        $seasons = $this->entity_manager->getRepository(Season::class)->matching((Criteria::create(true))
             ->orWhere(Criteria::expr()->gt('number', 0))
             ->orWhere(Criteria::expr()->gt('subNumber', 14))
         );
@@ -290,7 +290,7 @@ class SoulRankingController extends SoulController
         if (($currentSeason = $this->resolveSeasonIdentifier( $seasonId )) === false)
             return $this->redirect($this->generateUrl( 'soul_season_solo', ['season' => 'c'] ));
 
-        $seasons = $this->entity_manager->getRepository(Season::class)->matching((Criteria::create())
+        $seasons = $this->entity_manager->getRepository(Season::class)->matching((Criteria::create(true))
                                                                                      ->orWhere(Criteria::expr()->gt('number', 0))
                                                                                      ->orWhere(Criteria::expr()->gt('subNumber', 14))
         );
@@ -311,7 +311,7 @@ class SoulRankingController extends SoulController
         try {
             $ranking = $gameCachePool->get("mh_app_distinction_ranking_{$seasonId}_{$prototype->getId()}", function (ItemInterface $item) use ($currentSeason, $prototype) {
                 $item->expiresAfter(43200)->tag(['daily','ranking','distinction_ranking']);
-                
+
                 $add_season_filters = function (QueryBuilder $q) use ($currentSeason): QueryBuilder {
                     if ($currentSeason === 'myh')
                         $q->andWhere('t.imported = false')->andWhere('p.old = false');

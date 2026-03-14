@@ -173,7 +173,7 @@ class ConfMaster
         if ($this->event_conf !== null && $query_date === null) return $this->event_conf;
 
         $curDate = $query_date ?? new DateTime();
-        $conf = array_map( fn(AutomaticEventForecast $a) => $this->getEvent($a->getEvent()), $this->entityManager->getRepository( AutomaticEventForecast::class )->matching((new Criteria())
+        $conf = array_map( fn(AutomaticEventForecast $a) => $this->getEvent($a->getEvent()), $this->entityManager->getRepository( AutomaticEventForecast::class )->matching(new Criteria(accessRawFieldValues: true)
             ->andWhere(Criteria::expr()->lte('start', DateTimeImmutable::createFromMutable( $curDate )))
             ->andWhere(Criteria::expr()->gte('end', DateTimeImmutable::createFromMutable( $curDate )))
         )->toArray() );

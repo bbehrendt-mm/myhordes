@@ -201,7 +201,7 @@ class GameOnboardingController extends AbstractController
     #[Route(path: '/list', name: 'list_towns', methods: ['GET'])]
     public function list(EntityManagerInterface $em): JsonResponse
     {
-        $towns = $em->getRepository(Town::class)->matching((new Criteria())
+        $towns = $em->getRepository(Town::class)->matching(new Criteria(accessRawFieldValues: true)
             ->where(Criteria::expr()->eq('day', 1))
             ->andWhere(Criteria::expr()->orX(
                 Criteria::expr()->isNull('scheduledFor'),

@@ -103,7 +103,7 @@ class ImportTokenCommand extends Command
             ->setActive( true )
         );
         $this->entityManager->getRepository( ExternalAccessTokens::class )
-            ->matching( Criteria::create()
+            ->matching( Criteria::create(true)
                 ->where( Criteria::expr()->eq( 'env', $env ) )
                 ->andWhere( Criteria::expr()->eq( 'type', $type ) )
                 ->andWhere( Criteria::expr()->eq( 'active', true ) )

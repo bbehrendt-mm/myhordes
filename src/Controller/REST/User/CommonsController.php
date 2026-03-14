@@ -213,7 +213,7 @@ class CommonsController extends CustomAbstractCoreController
             return new JsonResponse([]);
         $isSubAdmin = $capability->hasRole( $this->getUser(), 'ROLE_SUB_ADMIN' );
 
-        $criteria = (new Criteria())
+        $criteria = new Criteria(accessRawFieldValues: true)
             ->where( Criteria::expr()->eq('active', true) );
 
         if (!$isSubAdmin)

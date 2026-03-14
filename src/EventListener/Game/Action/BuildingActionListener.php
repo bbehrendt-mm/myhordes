@@ -58,7 +58,7 @@ final class BuildingActionListener implements ServiceSubscriberInterface
             // Pool
             case 100:
                 $counter = $event->citizen->getSpecificActionCounter( ActionCounterType::Pool );
-                $previousWatches = $this->getService(EntityManagerInterface::class)->getRepository(CitizenWatch::class)->matching((new Criteria())
+                $previousWatches = $this->getService(EntityManagerInterface::class)->getRepository(CitizenWatch::class)->matching(new Criteria(accessRawFieldValues: true)
                     ->andWhere(Criteria::expr()->eq('citizen', $event->citizen))
                     ->andWhere(Criteria::expr()->lt('day', $event->town->getDay()))
                 )->count();

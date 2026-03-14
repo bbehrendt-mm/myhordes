@@ -133,8 +133,8 @@ class CommunityEvent
                 'fr' => ['fr','en','de','es'],
                 'es' => ['es','en','fr','de'],
                 default => ['de','en','fr','es'],
-            }, fn($c, $lang) => $c ?? ($this->getMetas()->matching( (new Criteria())->where( Criteria::expr()->eq( 'lang', $lang ) ) )->first() ?: null), null )
-            : ($this->getMetas()->matching( (new Criteria())->where( Criteria::expr()->eq( 'lang', $name ) ) )->first() ?: null);
+            }, fn($c, $lang) => $c ?? ($this->getMetas()->matching( new Criteria(accessRawFieldValues: true)->where(Criteria::expr()->eq('lang', $lang ) ) )->first() ?: null), null )
+            : ($this->getMetas()->matching( new Criteria(accessRawFieldValues: true)->where(Criteria::expr()->eq('lang', $name ) ) )->first() ?: null);
     }
 
     /**

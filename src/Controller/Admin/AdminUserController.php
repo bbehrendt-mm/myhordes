@@ -230,7 +230,7 @@ class AdminUserController extends AdminActionController
     public function users_multi_ac(): Response
     {
         $clusters = $this->entity_manager->getRepository(ActivityCluster::class)
-            ->matching( Criteria::create()->andWhere(Criteria::expr()->gt( 'lastSeen', (new \DateTime())->modify('-7days today') )) )
+            ->matching( Criteria::create(true)->andWhere(Criteria::expr()->gt( 'lastSeen', new \DateTime()->modify('-7days today') )) )
             ->getValues();
 
         usort($clusters, fn(ActivityCluster $a, ActivityCluster $b) => $b->getUsers()->count() <=> $a->getUsers()->count() );

@@ -199,7 +199,7 @@ class Thread
     }
     public function hasReportedPosts($unseen = true): bool
     {
-        $criteria = Criteria::create();
+        $criteria = Criteria::create(true);
         $criteria->where(Criteria::expr()->gt('reported', 0));
         return $this->posts->matching($criteria)->filter(fn(Post $p) => !$p->getAdminReports($unseen)->isEmpty())->count() > 0;
         //foreach ($this->posts as $post) if (count($post->getAdminReports(true)) > 0) return true;
@@ -210,7 +210,7 @@ class Thread
      */
     public function getUnseenReportedPosts(): Collection
     {
-        $criteria = Criteria::create();
+        $criteria = Criteria::create(true);
         $criteria->where(Criteria::expr()->gt('reported', 0));
         return $this->posts->matching($criteria)->filter(fn(Post $p) => !$p->getAdminReports(true)->isEmpty());
     }
@@ -222,12 +222,12 @@ class Thread
         return $this;
     }
     public function hasAdminAnnounce(): bool {
-        $criteria = Criteria::create();
+        $criteria = Criteria::create(true);
         $criteria->where(Criteria::expr()->contains('text', '<div class="adminAnnounce">'));
         return $this->posts->matching($criteria)->count() > 0;
     }
     public function hasOracleAnnounce(): bool {
-        $criteria = Criteria::create();
+        $criteria = Criteria::create(true);
         $criteria->where(Criteria::expr()->contains('text', '<div class="oracleAnnounce">'));
         return $this->posts->matching($criteria)->count() > 0;
     }

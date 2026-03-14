@@ -51,7 +51,7 @@ class HookFixtures extends Fixture
         }
 
         $removed_hooks = $this->entityManager->getRepository(Hook::class)->matching(
-            Criteria::create()->where( Criteria::expr()->notIn('name', array_keys( $hooks )) )
+            Criteria::create(true)->where( Criteria::expr()->notIn('name', array_keys( $hooks )) )
         );
 
         foreach ($removed_hooks as $hook)

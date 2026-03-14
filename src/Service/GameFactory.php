@@ -181,7 +181,7 @@ class GameFactory
         }
 
         if (!$internal && $town->isMayor() && !$town->getType()->is( TownClass::EASY ) && $town->getCreator()?->getId() !== $user->getId()) {
-            $mark = !$this->entity_manager->getRepository(MayorMark::class)->matching( new Criteria()
+            $mark = !$this->entity_manager->getRepository(MayorMark::class)->matching( new Criteria(accessRawFieldValues: true)
                 ->where( new Comparison( 'user', Comparison::EQ, $user )  )
                 ->andWhere( new Comparison( 'expires', Comparison::GT, new \DateTime() ) )
             )->isEmpty();

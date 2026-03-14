@@ -81,7 +81,7 @@ class ConcludeAttackCommand extends Command
         $this->entityManager->flush();
 
         try {
-            $criteria = new Criteria();
+            $criteria = new Criteria(accessRawFieldValues: true);
             $criteria->andWhere($criteria->expr()->neq('end', null));
             $criteria->orWhere($criteria->expr()->neq('importID', 0));
             $deadCitizenCount = $this->entityManager->getRepository(CitizenRankingProxy::class)->matching($criteria)->count() + $this->entityManager->getRepository(Citizen::class)->count(['alive' => 0]);

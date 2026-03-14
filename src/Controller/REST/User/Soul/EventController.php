@@ -184,7 +184,7 @@ class EventController extends CustomAbstractCoreController
         $is_proposed = Criteria::expr()->eq('proposed', true );
 
         $events = $em->getRepository(CommunityEvent::class)->matching(
-            (Criteria::create())
+            (Criteria::create(true))
                 // Is owner or event is public
                 ->andWhere( !$can_view_proposals
                     ? Criteria::expr()->orX(

@@ -643,7 +643,7 @@ class SoulController extends CustomAbstractController
         $cutoff = new DateTimeImmutable('today+400days');
 
         $all_events = $this->entity_manager->getRepository(AutomaticEventForecast::class)->matching(
-            (new Criteria())
+            new Criteria(accessRawFieldValues: true)
                 ->where( Criteria::expr()->gte( 'end', $now ) )
                 ->andWhere( Criteria::expr()->lt( 'start', $cutoff ) )
                 ->orderBy(['start' => Criteria::ASC])

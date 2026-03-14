@@ -85,7 +85,7 @@ class Forum
     }
 
     public function getLocalizedTitle(string $lang): ?string {
-        $entity = $this->getTitles()->matching( (new Criteria())
+        $entity = $this->getTitles()->matching( new Criteria(accessRawFieldValues: true)
             ->where( new Comparison( 'language', Comparison::EQ, $lang )  )
         )->first();
         return $entity ? $entity->getTitle() : $this->getTitle();
@@ -104,7 +104,7 @@ class Forum
     }
 
     public function getLocalizedDescription(string $lang): ?string {
-        $entity = $this->getTitles()->matching( (new Criteria())
+        $entity = $this->getTitles()->matching( new Criteria(accessRawFieldValues: true)
             ->where( new Comparison( 'language', Comparison::EQ, $lang )  )
         )->first();
         return $entity ? $entity->getDescription() : $this->getDescription();

@@ -55,9 +55,9 @@ class WatchdogCommand extends Command
         /** @var CommunityEvent[] $pending_events */
         $pending_events = $this->em->getRepository(CommunityEvent::class)->matching(
             $urgent
-                ? (Criteria::create())
+                ? (Criteria::create(true))
                     ->andWhere(Criteria::expr()->eq('urgent', true))
-                : (Criteria::create())
+                : (Criteria::create(true))
                     ->where(Criteria::expr()->neq( 'starts', null ))
                     ->andWhere(Criteria::expr()->lte( 'starts', (new DateTime())->modify('+48hour') ))
                     ->andWhere(Criteria::expr()->eq('ended', false))
@@ -124,7 +124,7 @@ class WatchdogCommand extends Command
     protected function auto_end_events(OutputInterface $output): void {
         /** @var CommunityEvent[] $pending_events */
         $pending_events = $this->em->getRepository(CommunityEvent::class)->matching(
-            (Criteria::create())
+            (Criteria::create(true))
                 ->where(Criteria::expr()->neq( 'starts', null ))
                 ->andWhere(Criteria::expr()->lte( 'starts', (new DateTime())->modify('+48hour') ))
                 ->andWhere(Criteria::expr()->eq('ended', false))

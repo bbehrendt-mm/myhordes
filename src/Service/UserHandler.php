@@ -296,7 +296,7 @@ class UserHandler
 
     public function getConsecutiveDeathLock(User $user, ?bool &$warning = null): ?ConsecutiveDeathMarker {
         /** @var ConsecutiveDeathMarker $cdm */
-        $cdm = $this->entity_manager->getRepository(ConsecutiveDeathMarker::class)->matching((new Criteria())
+        $cdm = $this->entity_manager->getRepository(ConsecutiveDeathMarker::class)->matching(new Criteria(accessRawFieldValues: true)
             ->where(Criteria::expr()->eq('user', $user))
             ->andWhere(Criteria::expr()->gte('number', 2))
             ->andWhere(Criteria::expr()->gte('timestamp', (new \DateTime('today - 2week'))))

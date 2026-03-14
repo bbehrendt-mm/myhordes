@@ -97,7 +97,7 @@ class CreateActivityClusterScanEntry extends Command
             ->where('a.user IN (:others)')->setParameter('others', $foreign_users)
             ->andWhere('a.ip != :ip')->setParameter('ip', $ip)->getQuery()->getSingleColumnResult();
 
-        $criteria = new Criteria();
+        $criteria = new Criteria(accessRawFieldValues: true);
         $criteria->andWhere($criteria->expr()->eq('user', $user));
         $criteria->andWhere($criteria->expr()->notIn('ip', [$ip, ...$blacklist_ips]));
         $out_of_cluster_entries = $this->entityManager->getRepository(Activity::class)->matching($criteria)->toArray();
@@ -105,7 +105,7 @@ class CreateActivityClusterScanEntry extends Command
         $output->writeln(sprintf( "Found <fg=green>%d</> owning activities in and <fg=green>%d</> outside the cluster, as well as <fg=red>%d</> foreign activities from <fg=red>%d</> other users.", count($owner_entries), count($out_of_cluster_entries), count($foreign_entries), count($foreign_users)) );
 
         // Partitioning
-        $cutoff = (new DateTime())->modify("-{$days}days today");
+        $cutoff = new DateTime()->modify("-{$days}days today");
         $own_partition = $this->partition( $owner_entries, $cutoff );
         $ooc_partition = $this->partition( $out_of_cluster_entries, $cutoff );
         $foreign_partition = $this->partition( $foreign_entries, $cutoff );

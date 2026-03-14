@@ -134,6 +134,6 @@ class ActivityCluster
         foreach ($map as $u)
             if (!$users->contains($u)) $users->add($u);
 
-        return $users->matching( Criteria::create()->orderBy(['id' => Order::Ascending]) );
+        return $users->matching( Criteria::create(true)->orderBy(['id' => Order::Ascending]) );
     }
 }

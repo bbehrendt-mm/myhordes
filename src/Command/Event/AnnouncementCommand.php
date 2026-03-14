@@ -48,7 +48,7 @@ class AnnouncementCommand extends Command
 
         /** @var ArrayCollection<AutomaticEventForecast> $all_events */
         $all_events = $this->em->getRepository(AutomaticEventForecast::class)->matching(
-            (new Criteria())
+            new Criteria(accessRawFieldValues: true)
                 ->where( Criteria::expr()->gte( 'start', $now ) )
                 ->andWhere( Criteria::expr()->lte( 'start', $cutoff ) )
                 ->andWhere( Criteria::expr()->eq( 'announced', false ) )

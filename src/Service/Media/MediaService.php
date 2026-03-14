@@ -37,7 +37,7 @@ readonly class MediaService
     }
 
     private function getMediaCriteria(string $type, string $id, string $collection): Criteria {
-        return Criteria::create()->orderBy([
+        return Criteria::create(true)->orderBy([
                 'inCollectionSince' => Order::Descending,
                 'createdAt' => Order::Descending
             ])

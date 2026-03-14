@@ -117,7 +117,7 @@ class InventoryHandler
     public function findStackPrototype( Inventory $inv, Item $item ): ?Item {
         // Items with the <individual> tag cannot stack
         if ($item->getPrototype()->getIndividual()) return null;
-        return $inv->getItems()->matching( new Criteria()
+        return $inv->getItems()->matching( new Criteria(accessRawFieldValues: true)
             ->where( Criteria::expr()->eq('prototype', $item->getPrototype()) )
             ->andWhere( Criteria::expr()->neq('id', $item->getId()) )
             ->andWhere( Criteria::expr()->eq('poison', $item->getPoison()) )

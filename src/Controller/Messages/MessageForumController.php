@@ -993,7 +993,7 @@ class MessageForumController extends MessageController
 
             /** @var ForumThreadSubscription[] $subscriptions */
             $subscriptions = $em->getRepository(ForumThreadSubscription::class)->matching(
-                (new Criteria())
+                new Criteria(accessRawFieldValues: true)
                     ->andWhere( Criteria::expr()->eq('user', $user) )
                     ->andWhere( Criteria::expr()->eq('thread', $thread) )
                     ->andWhere( Criteria::expr()->gt('num', 0))

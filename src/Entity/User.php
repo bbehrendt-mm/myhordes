@@ -357,19 +357,19 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
     }
 
     public function getActiveCitizen(): ?Citizen {
-        return $this->getCitizens()->matching( (new Criteria())
+        return $this->getCitizens()->matching( new Criteria(accessRawFieldValues: true)
                ->where( new Comparison( 'active', Comparison::EQ, true )  )
         )->first() ?: null;
     }
 
     public function getCitizenFor(Town $town): ?Citizen {
-        return $this->getCitizens()->matching( (new Criteria())
+        return $this->getCitizens()->matching( new Criteria(accessRawFieldValues: true)
             ->where( new Comparison( 'town', Comparison::EQ, $town )  )
         )->first() ?: null;
     }
 
     public function getAliveCitizen(): ?Citizen {
-        return $this->getCitizens()->matching( (new Criteria())
+        return $this->getCitizens()->matching( new Criteria(accessRawFieldValues: true)
                                                    ->where( new Comparison( 'alive', Comparison::EQ, true )  )
         )->first() ?: null;
     }
@@ -510,7 +510,7 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
      * @return Picto|null
      */
     public function findPicto( int $persisted, PictoPrototype $prototype, Town|TownRankingProxy $town ): ?Picto {
-        return $this->getPictos()->matching( (new Criteria())
+        return $this->getPictos()->matching( new Criteria(accessRawFieldValues: true)
             ->where( new Comparison( 'persisted', Comparison::EQ, $persisted )  )
             ->andWhere( new Comparison( 'prototype', Comparison::EQ, $prototype )  )
             ->andWhere( new Comparison( is_a( $town, Town::class ) ? 'town' : 'townEntry', Comparison::EQ, $town )  )
@@ -1100,7 +1100,7 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
      */
     public function getTeamTicketsFor(?Season $season, ?string $team = null): Collection
     {
-        $criteria = (new Criteria())->andWhere( new Comparison( 'season', Comparison::EQ, $season ) );
+        $criteria = new Criteria(accessRawFieldValues: true)->andWhere(new Comparison('season', Comparison::EQ, $season ) );
         if ($team === '!' && $this->getTeam() !== null) $criteria->andWhere( new Comparison('team', Comparison::NEQ, $this->team ) );
         elseif ($team === '' && $this->getTeam() !== null) $criteria->andWhere( new Comparison('team', Comparison::EQ, $this->team ) );
         elseif ($team === '' && $this->getTeam() === null) return new ArrayCollection();
@@ -1153,7 +1153,7 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
 
     public function getNotificationSubscriptionsFor(NotificationSubscriptionType $type, bool $include_expired = false): Collection
     {
-        $criteria = (new Criteria())->andWhere( new Comparison( 'type', Comparison::EQ, $type ) );
+        $criteria = new Criteria(accessRawFieldValues: true)->andWhere(new Comparison('type', Comparison::EQ, $type ) );
         if (!$include_expired) $criteria->andWhere( new Comparison( 'expired', Comparison::EQ, false ) );
         return $this->notificationSubscriptions->matching( $criteria );
     }
@@ -1180,7 +1180,7 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
     public function getPinnedForums(): Collection
     {
         return $this->pinnedForums->matching(
-            Criteria::create()->orderBy(['position' => Order::Ascending])
+            Criteria::create(true)->orderBy(['position' => Order::Ascending])
         );
     }
 

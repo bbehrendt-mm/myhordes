@@ -143,7 +143,7 @@ class BuildingController extends CustomAbstractCoreController
         $completed = $request->query->get('completed', '0') === '1';
 
         $buildings = $completed
-            ? $town->getBuildings()->matching((new Criteria())->where(Criteria::expr()->eq('complete', true)))
+            ? $town->getBuildings()->matching(new Criteria(accessRawFieldValues: true)->where(Criteria::expr()->eq('complete', true)))
             : $town->getBuildings();
 
         $voted_building = self::getVotedBuildingID($town);

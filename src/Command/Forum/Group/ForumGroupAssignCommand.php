@@ -44,7 +44,7 @@ class ForumGroupAssignCommand extends ForumGroupEditCommand
         if (empty($input->getArgument('Forum'))) {
             $assign = !$input->getOption('disassign');
             $forums = $this->entityManager->getRepository(Forum::class)->matching(
-                Criteria::create()->where( $assign
+                Criteria::create(true)->where( $assign
                     ? Criteria::expr()->isNull( 'forumGroup' )
                     : Criteria::expr()->eq( 'forumGroup', $this->getForumGroup($input, $output) )
                 )->andWhere( Criteria::expr()->isNull( 'town') )
