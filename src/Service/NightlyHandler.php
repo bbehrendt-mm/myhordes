@@ -193,8 +193,8 @@ class NightlyHandler
 
             // Get all resources needed for this building
             $res = [];
-            if (!$building->getComplete() && $building->getPrototype()->getResources())
-                foreach ($building->getPrototype()->getResources()->getEntries() as $entry)
+            if (!$building->getComplete() && $building->getPrototype()->getResourceSet()->getResources())
+                foreach ($building->getPrototype()->getResourceSet()->getResources()->getEntries() as $entry)
                     if (!isset($res[ $entry->getPrototype()->getName() ]))
                         $res[ $entry->getPrototype()->getName() ] = new ItemRequest( $entry->getPrototype()->getName(), $entry->getChance(), false, false, false );
                     else $res[ $entry->getPrototype()->getName() ]->addCount( $entry->getChance() );
