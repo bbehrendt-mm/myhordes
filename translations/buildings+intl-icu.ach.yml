@@ -522,14 +522,13 @@ Handschleifer: crwdns212766:0crwdne212766:0
 'Zusätzlich zum vorherigen Effekt sinkt der Einfluss gequälter Seelen auf den Angriff leicht ab.': 'crwdns212772:0crwdne212772:0'
 'Zusätzlich zum vorherigen Effekt wird der Verteidigungsbonus gereinigter Seelen weiter erhöht, und jede gereinigte Seele bringt zwei zusätzliche Ranking-Punkte für die Stadt ein.': 'crwdns212774:0crwdne212774:0'
 'Filtrierende Rinnen': 'crwdns212776:0crwdne212776:0'
-'Experimentelle Klinik der Dompteure': 'crwdns212778:0crwdne212778:0'
+'Fallensystem der Dompteuere': 'crwdns255740:0crwdne255740:0'
 'Wenn die Bürger die Nacht auf der Spitze des Wachturms tanzen, sollte dies die Aufmerksamkeit einiger Zombies auf sich ziehen. Wir wünschen den Freiwilligen viel Glück.': 'crwdns212780:0crwdne212780:0'
 'Um die Einsiedler nicht zu verwirren, die zwischen all diesen Baustellen festsitzen, haben wir ein kleines Paradies für sie gebaut! Der Vorteil ist, dass sie ihre Talente nutzen können, um eine trinkbare Flüssigkeit zu gewinnen. Ist es heutzutage wirklich noch wichtig, was es ist?': 'crwdns212782:0crwdne212782:0'
 'Ein ausgeklügeltes System zur Rückgewinnung der unvermeidlichen Spritzer reinen Wassers während der Wacht. Es filtert auch Gehirnspritzer. Wasserwaffen sind während der Wacht 30% effektiver.': 'crwdns212784:0crwdne212784:0'
-'Manche nennen es unschuldig eine "Tierklinik". Aber jeden Abend vor der Wacht weckt das schreckliche Gebell das gesamte Südviertel auf. Auf jeden Fall funktioniert es: Auf den Wällen sind die Labradore verspielt, sauber, fröhlich und stürzen sich wie wild auf Zombies, die dreißigmal so schwer sind wie sie.': 'crwdns212786:0crwdne212786:0'
 'Die kolossale Menge an Wasser, die für den Bau dieses Gebäudes verbraucht wurde, kann nicht mehr konsumiert oder gegen Zombies eingesetzt werden. Während du dich fragst, was dich dazu gebracht hat, eine so kostbare Ressource zu verschwenden, bemerkst du die in goldenen Buchstaben eingravierte Inschrift auf dem Eingangsbogen: "Non est certamen". Dieses Wunderwerk strahlt im Glanze seiner Nutzlosigkeit: Seine Errichtung bringt allen Bürgern der Stadt eine seltene Auszeichnung ein.': 'crwdns212788:0crwdne212788:0'
 'Die Verringerung der Fundchancen bei Nacht wird im Umkreis von 6km um die Stadt negiert.': 'crwdns212790:0crwdne212790:0'
-'Manche nennen es unschuldig eine "Tierklinik". Aber jeden Abend wecken die Schreie der Tiere das gesamte Südviertel auf. Auf jeden Fall funktioniert es: Unsere Haustiere sind verspielt, sauber, fröhlich und stürzen sich durch ihr Training routiniert auf Zombies, die dreißigmal so schwer sind wie sie.': 'crwdns212792:0crwdne212792:0'
+'Niemand glaubte Japhy, als er sagte, er würde mit Kaugummi eine Großkatze fangen. Und doch ist das Tier da und leistet uns gute Dienste: Der morgige Ausflug dürfte mit einem solchen Köder an eurer Seite ruhiger verlaufen. Dieses Gebäude lockt Tiere mit Nahrung in die Stadtfalle und bietet euch einen Platz, um sie zu trainieren, wodurch sie im Kampf wirksamer werden.': 'crwdns255742:0crwdne255742:0'
 'Produziert täglich zusätzlich zu seiner ursprünglichen Produktion Stufe Mutterkorn und Trockene Kräuter.': 'crwdns212794:0crwdne212794:0'
 Basisverteidigung: crwdns212796:0crwdne212796:0
 Bonusverteidigung: crwdns212798:0crwdne212798:0
@@ -545,3 +544,4 @@ Opferfeuer: crwdns253584:0crwdne253584:0
 'Jeder zum Friedhof gebrachte tote Mitbürger bringt insgesamt +3 Verteidigungspunkt für die Gesamtverteidigung der Stadt': 'crwdns253598:0crwdne253598:0'
 'Jeder zum Friedhof gebrachte tote Mitbürger bringt insgesamt +7 Verteidigungspunkte für die Gesamtverteidigung der Stadt': 'crwdns253600:0crwdne253600:0'
 'Jeder zum Friedhof gebrachte tote Mitbürger bringt insgesamt +14 Verteidigungspunkte für die Gesamtverteidigung der Stadt': 'crwdns253602:0crwdne253602:0'
+'Von 2 Toten hat derjenige, der sich bewegt, die besten Chancen, dich zu verspeisen. Trickst eure Feinde aus, indem ihr eure Leichen in die herankommende Zombiehorde schleudert. Jeder Tote bringt +10 Verteidigungspunkte zusätzlich.': 'crwdns255744:0crwdne255744:0'
