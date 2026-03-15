@@ -384,7 +384,7 @@ Stadtstart: Départ de la ville
 'Diese Sperre endet am {date} um {time}.': 'Cette interdiction prend fin le {date} à {time}.'
 'Diese Stadt wurde von einem Spieler gegründet.': 'Cette ville a été créée par un joueur.'
 'Sie folgt den normalen Spielregeln und wird an ihrem Ende ins Ranking aufgenommen.': 'Elle suit les règles normales du jeu et est incluse dans le classement des villes.'
-'Wenn du dieser Stadt beitrittst, kannst du {block} Tage danach keiner anderen von einem Spieler gegründeten Stadt beitreten.': 'Si vous rejoignez cette ville, vous ne pourrez rejoindre aucune autre ville créée par un joueur pendant {block} jours après.'
+'Wenn du dieser Stadt beitrittst, kannst du {block} Tage danach keiner anderen von einem Spieler gegründeten Stadt beitreten.': 'Si vous rejoignez cette ville, vous ne pourrez rejoindre aucune autre ville créée par un joueur pendant {block} jours après son démarrage.'
 'Klicke auf den Namen der Stadt, um weitere Informationen zu erhalten.': 'Cliquez sur le nom d''une ville pour voir des informations complémentaires.'
 'Dieser Stadt beitreten': 'Rejoindre cette ville'
 Koalition: Coalition
