@@ -688,41 +688,41 @@ Verkaufswert: Sell value
 'Icon-Zoom auch auf Desktop-Geräten verwenden': 'Use icon zoom on desktop devices'
 'Ist diese Option aktiviert, wird die oben eingestellte Zoom-Größe für Icons nicht nur auf mobilen, sondern auch auf Desktop-Geräten angewendet.': 'When enabled, the icon zoom configured in the setting above also applies to desktop devices in addition to mobile ones.'
 'Layout des Spiels': 'Game layout'
-'Diese Einstellung funktioniert nur auf mobilen Geräten. Üblicherweise wird das Layout des Spiels durch die Bildschirmgröße deines Geräts gesteuert. Falls du ein bestimmtes Layout bevorzugst, welches nicht der Bildschirmgröße deines Gerätes entspricht, kannst du dieses hier erzwingen.': 'Diese Einstellung funktioniert nur auf mobilen Geräten. Üblicherweise wird das Layout des Spiels durch die Bildschirmgröße deines Geräts gesteuert. Falls du ein bestimmtes Layout bevorzugst, welches nicht der Bildschirmgröße deines Gerätes entspricht, kannst du dieses hier erzwingen.'
-'Automatisch (empfohlen)': 'Automatisch (empfohlen)'
-Smartphone-Layout: Smartphone-Layout
-Phablet-Layout: Phablet-Layout
-Tablet-Layout: Tablet-Layout
-'Desktop-Layout (Vollbild)': 'Desktop-Layout (Vollbild)'
-'Desktop-Layout (Normal)': 'Desktop-Layout (Normal)'
-'Aktuelles Profilbild': 'Aktuelles Profilbild'
-'Vorschau des neuen Profilbilds': 'Vorschau des neuen Profilbilds'
-'Frühere Profilbilder': 'Frühere Profilbilder'
-'MyHordes verwendet drei unterschiedliche Bildformate für dein Profilbild. Standartmäßig werden diese automatisch aus deinem ausgewählten Bild ermittelt. Du kannst die Bildausschnitte aber auch selbst wählen, wenn du möchtest. Klicke dazu einfach bei dem entsprechenden Bildformat auf "Bearbeiten".': 'MyHordes verwendet drei unterschiedliche Bildformate für dein Profilbild. Standartmäßig werden diese automatisch aus deinem ausgewählten Bild ermittelt. Du kannst die Bildausschnitte aber auch selbst wählen, wenn du möchtest. Klicke dazu einfach bei dem entsprechenden Bildformat auf "Bearbeiten".'
-'Bist du fertig, klicke auf "Profilbild speichern" um deinen Avatar hochzuladen. Dein Bild wird dann vom System automatisch komprimiert und zugeschnitten.': 'Bist du fertig, klicke auf "Profilbild speichern" um deinen Avatar hochzuladen. Dein Bild wird dann vom System automatisch komprimiert und zugeschnitten.'
-'Das automatische Komprimieren und Zuschneiden kann einige Sekunden dauern. Sobald dein Bild fertig verarbeitet wurde, siehst du noch einmal eine Vorschau und kannst das Bild dann final als deinen neuen Avatar festlegen.': 'Das automatische Komprimieren und Zuschneiden kann einige Sekunden dauern. Sobald dein Bild fertig verarbeitet wurde, siehst du noch einmal eine Vorschau und kannst das Bild dann final als deinen neuen Avatar festlegen.'
-Seitenverhältnis: Seitenverhältnis
-Beliebig: Beliebig
-'Wie Originalbild': 'Wie Originalbild'
-'Sieht alles gut aus?': 'Sieht alles gut aus?'
-'Dein neues Profilbild ist noch nicht aktiviert.': 'Dein neues Profilbild ist noch nicht aktiviert.'
-'Klicke unten auf "Profilbild aktivieren", um zu deinem neuen Avatar zu wechseln.': 'Klicke unten auf "Profilbild aktivieren", um zu deinem neuen Avatar zu wechseln.'
-'Dein altes Profilbilds wird noch für eine Weile gespeichert, sodass du für eine begrenzte Zeit einfach zurückwechseln kannst, ohne dein altes Profilbild erneut hochladen zu müssen.': 'Dein altes Profilbilds wird noch für eine Weile gespeichert, sodass du für eine begrenzte Zeit einfach zurückwechseln kannst, ohne dein altes Profilbild erneut hochladen zu müssen.'
-'Dein neues Profilbild wird gerade verarbeitet. Bitte hab einen Augenblick Geduld...': 'Dein neues Profilbild wird gerade verarbeitet. Bitte hab einen Augenblick Geduld...'
-'Originales Bild': 'Originales Bild'
-'Wird berechnet...': 'Wird berechnet...'
-'Format konnte nicht berechnet werden': 'Format konnte nicht berechnet werden'
-Verwerfen: Verwerfen
-'Profilbild aktivieren': 'Profilbild aktivieren'
-'Dieses Profilbild verwenden': 'Dieses Profilbild verwenden'
-'Dieses Profilbild wird in ungefähr {days} Tagen automatisch gelöscht.': 'Dieses Profilbild wird in ungefähr {days} Tagen automatisch gelöscht.'
-'Dieses Profilbild wird in Kürze automatisch gelöscht.': 'Dieses Profilbild wird in Kürze automatisch gelöscht.'
-'Anderes Bild auswählen': 'Anderes Bild auswählen'
-Fertig: Fertig
-animiert: animiert
-'hohe Auflösung': 'hohe Auflösung'
-'reduzierte Auflösung': 'reduzierte Auflösung'
-importiert: importiert
-'Unschärfeeffekte verringern': 'Unschärfeeffekte verringern'
-'Diese Option deaktiviert verschiedene optische Unschäfteeffekte, beispielsweise auf der Spielkarte.': 'Diese Option deaktiviert verschiedene optische Unschäfteeffekte, beispielsweise auf der Spielkarte.'
-'Die Auflösung des gewählten Bildes ist nicht ausreichend, um es als Avatar verwenden zu können. Bitte lade ein Bild mit einer Auflösung von mindestens {x} × {y} Pixeln hoch.': 'Die Auflösung des gewählten Bildes ist nicht ausreichend, um es als Avatar verwenden zu können. Bitte lade ein Bild mit einer Auflösung von mindestens {x} × {y} Pixeln hoch.'
+'Diese Einstellung funktioniert nur auf mobilen Geräten. Üblicherweise wird das Layout des Spiels durch die Bildschirmgröße deines Geräts gesteuert. Falls du ein bestimmtes Layout bevorzugst, welches nicht der Bildschirmgröße deines Gerätes entspricht, kannst du dieses hier erzwingen.': 'This setting only works on mobile devices. Usually, the layout of the game is controlled by the screen size of your device. If you prefer a specific layout that does not correspond to the screen size of your device, you can force it here.'
+'Automatisch (empfohlen)': 'Auto (recommended)'
+Smartphone-Layout: Smartphone layout
+Phablet-Layout: Phablet layout
+Tablet-Layout: Tablet layout
+'Desktop-Layout (Vollbild)': 'Desktop layout (full screen)'
+'Desktop-Layout (Normal)': 'Desktop layout (normal)'
+'Aktuelles Profilbild': 'Current avatar'
+'Vorschau des neuen Profilbilds': 'Avatar preview'
+'Frühere Profilbilder': 'Previous avatars'
+'MyHordes verwendet drei unterschiedliche Bildformate für dein Profilbild. Standartmäßig werden diese automatisch aus deinem ausgewählten Bild ermittelt. Du kannst die Bildausschnitte aber auch selbst wählen, wenn du möchtest. Klicke dazu einfach bei dem entsprechenden Bildformat auf "Bearbeiten".': 'MyHordes uses three different image formats for your profile picture. By default, these are automatically created from your selected image. However, you can also choose the image sections yourself if you wish. To do so, simply click on "Edit" for the corresponding image format.'
+'Bist du fertig, klicke auf "Profilbild speichern" um deinen Avatar hochzuladen. Dein Bild wird dann vom System automatisch komprimiert und zugeschnitten.': 'If you''re finished, click "Save" to upload the avatar. The system will then crop and compress your avatar automatically.'
+'Das automatische Komprimieren und Zuschneiden kann einige Sekunden dauern. Sobald dein Bild fertig verarbeitet wurde, siehst du noch einmal eine Vorschau und kannst das Bild dann final als deinen neuen Avatar festlegen.': 'Automatic compression and cropping may take a few seconds. Once your image has been processed, you will see a preview and can then set the image as your new avatar.'
+Seitenverhältnis: Aspect Ratio
+Beliebig: Any
+'Wie Originalbild': 'Same as image'
+'Sieht alles gut aus?': 'Looking good?'
+'Dein neues Profilbild ist noch nicht aktiviert.': 'Your new avatar is not active yet.'
+'Klicke unten auf "Profilbild aktivieren", um zu deinem neuen Avatar zu wechseln.': 'Click "Activate" to switch to your new avatar.'
+'Dein altes Profilbilds wird noch für eine Weile gespeichert, sodass du für eine begrenzte Zeit einfach zurückwechseln kannst, ohne dein altes Profilbild erneut hochladen zu müssen.': 'Your old profile avatar will be saved for a while, so you can easily switch back for a limited time without having to upload your old avatar again.'
+'Dein neues Profilbild wird gerade verarbeitet. Bitte hab einen Augenblick Geduld...': 'Your new avatar is currently being processed. Please stand by...'
+'Originales Bild': 'Original image'
+'Wird berechnet...': 'Calculating...'
+'Format konnte nicht berechnet werden': 'Unable to create this format'
+Verwerfen: Discard
+'Profilbild aktivieren': 'Activate avatar'
+'Dieses Profilbild verwenden': 'Use this avatar'
+'Dieses Profilbild wird in ungefähr {days} Tagen automatisch gelöscht.': 'This avatar will be deleted in approximately {days} days.'
+'Dieses Profilbild wird in Kürze automatisch gelöscht.': 'This avatar will be deleted shortly.'
+'Anderes Bild auswählen': 'Use different image'
+Fertig: Done
+animiert: animated
+'hohe Auflösung': 'high resolution'
+'reduzierte Auflösung': 'reduced resolution'
+importiert: imported
+'Unschärfeeffekte verringern': 'Reduce blur effects'
+'Diese Option deaktiviert verschiedene optische Unschäfteeffekte, beispielsweise auf der Spielkarte.': 'This option disables various optical blurring effects, for example on the game map.'
+'Die Auflösung des gewählten Bildes ist nicht ausreichend, um es als Avatar verwenden zu können. Bitte lade ein Bild mit einer Auflösung von mindestens {x} × {y} Pixeln hoch.': 'The resolution of the selected image is not large enough to use it as an avatar. Please upload an image with a resolution of at least {x} × {y} pixels.'
