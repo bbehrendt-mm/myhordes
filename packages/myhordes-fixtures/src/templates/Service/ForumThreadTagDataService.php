@@ -21,7 +21,7 @@ class ForumThreadTagDataService implements FixtureProcessorInterface {
             'dsc_post'   => [ 'color' => null, 'label' => 'Post' ],
             'dsc_disc'   => [ 'color' => null, 'label' => 'Disk.' ],
             'dsc_guide'  => [ 'color' => null, 'label' => 'Guide' ],
-            'dsc_orga'   => [ 'color' => null, 'label' => 'Orga.' ],
+            'dsc_orga'   => [ 'color' => 'aa0000', 'label' => 'Orga.' ],
             'dsc_sugg'   => [ 'color' => null, 'label' => 'Vorschlag' ],
             'dsc_salc'   => [ 'color' => null, 'label' => 'SALC' ],
             'dsc_proj'   => [ 'color' => null, 'label' => 'Projekt' ],
