@@ -43,17 +43,16 @@
                 <div class="padded cell rw-12">
                     <div class="tab-floater">
                         <ul class="tabs plain" x-tab-group="private-type" x-tab-default="{{ tab }}" x-tab-control>
-
-                            <li class="tab" x-tab-id="private">
-                                <div class="tab-link">
-                                    <img alt="" src="{{ asset('build/images/item/item_chair.gif') }}" />
-                                    {{ 'Private Stadt'|trans({},'soul') }}
-                                </div>
-                            </li>
                             <li class="tab" x-tab-id="public">
                                 <div class="tab-link">
                                     <img src="{{ asset('build/images/icons/small_world.gif') }}" alt="" />
                                     {{ 'Öffentliche Stadt'|trans({},'soul') }}
+                                </div>
+                            </li>
+                            <li class="tab" x-tab-id="private">
+                                <div class="tab-link">
+                                    <img alt="" src="{{ asset('build/images/item/item_chair.gif') }}" />
+                                    {{ 'Private Stadt'|trans({},'soul') }}
                                 </div>
                             </li>
                         </ul>

@@ -143,7 +143,7 @@ class GhostController extends CustomAbstractController
      * @return Response
      * @throws Exception
      */
-    #[Route(path: 'jx/ghost/create_town', name: 'ghost_create_town', defaults: ['tab' => 'private'])]
+    #[Route(path: 'jx/ghost/create_town', name: 'ghost_create_town', defaults: ['tab' => 'public'])]
     #[Route(path: 'jx/ghost/create/private', name: 'ghost_create_private_town', defaults: ['tab' => 'private'])]
     #[Route(path: 'jx/ghost/create/public', name: 'ghost_create_public_town', defaults: ['tab' => 'public'])]
     public function create_town(EntityManagerInterface $em, string $tab): Response
