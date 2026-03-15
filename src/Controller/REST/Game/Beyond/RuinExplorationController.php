@@ -244,7 +244,7 @@ class RuinExplorationController extends AbstractController implements HookedInte
             ->setY( $ex->getY() - $dy )
             ->setZ( $ex->getZ() + $dz )
             ->setInRoom( $shift === 1 )
-            ->setEscaping( false );
+            ->setEscaping( ($dx === 0 && $dy === 0 && $dz === 0 && $shift !== -1) ? $ex->getEscaping() : false );
 
         if ($dz !== 0)
             $ex->setTimeout( Carbon::createFromInterface( $ex->getTimeout() )->subSeconds( mt_rand( 15, 24) ) );
