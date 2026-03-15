@@ -7,7 +7,7 @@
                      src="{{ badger.activeIcon|singleMediaSource('icon', 16, false, asset('build/images/icons/title/' ~ badger.activeIcon.prototype.icon ~ '.gif'), true) }}"
                      srcset="{{ badger.activeIcon|singleMediaSource('icon', 16, true) }}" />
             {% endif %}
-            {% if badger.activeTitle %}<span>{{ badger.activeTitle.customTitle ?? badger|translated_title(app.user)|raw }}</span>{% endif %}
+            {% if badger.activeTitle %}<span>{{ (badger.activeTitle.customTitle ?? (badger|translated_title(app.user)|raw)) }}</span>{% endif %}
         </div><br />
     {% endif %}
 

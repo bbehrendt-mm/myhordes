@@ -227,7 +227,7 @@
                                              src="{{ user.activeIcon|singleMediaSource('icon', 16, false, asset('build/images/icons/title/' ~ user.activeIcon.prototype.icon ~ '.gif'), true) }}"
                                              srcset="{{ user.activeIcon|singleMediaSource('icon', 16, true) }}" />
                                     {% endif %}
-                                    {% if user.activeTitle %} {{ user.activeTitle.customTitle ?? user|translated_title(app.user)|raw }}{% endif %}
+                                    {% if user.activeTitle %} {{ (user.activeTitle.customTitle ?? user|translated_title(app.user)|raw) }}{% endif %}
                                 </div>
                             {% else %}
                                 <div>---</div>
@@ -276,7 +276,7 @@
                             {{ 'Anzeigename'|trans({}, 'admin') }}
                         </div>
                         <div class="cell padded rw-3 rw-sm-12">
-                            {{ user.displayName ?? '-' }}
+                            {{ (user.displayName ?? '-') }}
                             {% if user.eternalID and user.noAutomaticNameManagement %}
                                 <br/><i>{{ 'Nicht von ET verwaltet.'|trans({},'admin') }}</i>
                             {% endif %}

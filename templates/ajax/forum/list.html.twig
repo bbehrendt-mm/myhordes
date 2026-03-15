@@ -18,7 +18,7 @@
             data-icon="{{ forum|singleMediaSource('icon', null, false, (forum.icon is empty)
                 ? (forum.town ? asset('build/images/forum/banner/bannerForumVille.gif') : asset('build/images/forum/banner/bannerForumVoid.gif'))
                 : asset('build/images/forum/banner/' ~ forum.icon)) }}"
-            data-sort="{{ forum.worldForumSorting ?? 0 }}"
+            data-sort="{{ (forum.worldForumSorting ?? 0) }}"
             data-new="{{ has_new_posts ? '1' : '0' }}"
     ></hordes-forum>
 {% endmacro %}
@@ -26,7 +26,7 @@
 {% macro drawPrivateForums(forums, groups, forums_new) %}
     {% if forums is not empty or groups is not empty %}
         <h5>{{ 'Private Foren'|trans({},'global') }}</h5>
-        {% for group in groups|sort((a,b) => a.sort <=> b.sort ?? a.id <=> b.id) %}
+        {% for group in groups|sort((a,b) => (a.sort <=> b.sort ?? a.id <=> b.id)) %}
             {{ _self.drawForumGroup(group, forums_new) }}
         {% endfor %}
         {% for forum in forums %}
