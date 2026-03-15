@@ -331,10 +331,10 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
         $this->pass = $pass;
         return $this;
     }
-    /**
-     * @inheritDoc
-     */
+
+    #[\Deprecated]
     public function eraseCredentials(): void {}
+
     /**
      * @inheritDoc
      */
