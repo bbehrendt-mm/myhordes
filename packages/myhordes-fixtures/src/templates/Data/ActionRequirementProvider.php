@@ -263,17 +263,14 @@ class ActionRequirementProvider
         $requirement_container->add()->identifier('have_can_opener')->type( Requirement::MessageOnFail )->add( new ItemRequirement()->property('can_opener')->store('item_tool') )->text('Du hast nichts, mit dem du dieses Ding aufbekommen könntest..')->commit();
         $requirement_container->add()->identifier('have_box_opener')->type( Requirement::MessageOnFail )->add( new ItemRequirement()->property('box_opener')->store('item_tool') )->text('Du hast nichts, mit dem du dieses Ding aufbekommen könntest..')->commit();
         $requirement_container->add()->identifier('have_parcel_opener')->type( Requirement::MessageOnFail )->add( new ItemRequirement()->property('parcel_opener')->store('item_tool') )->text('Du hast nichts, mit dem du dieses Ding aufbekommen könntest..')->commit();
-        $requirement_container->add()->identifier('have_parcel_opener_home')->type( Requirement::MessageOnFail )->add( new ItemRequirement()->property('parcel_opener_h')->store('item_tool') )->text('Du hast nichts, mit dem du dieses Ding aufbekommen könntest..')->commit();
 
         $requirement_container->add()->identifier('have_can_opener_hd')->type( Requirement::HideOnFail )->add( new ItemRequirement()->property('can_opener')->store('item_tool') )->commit();
         $requirement_container->add()->identifier('have_box_opener_hd')->type( Requirement::HideOnFail )->add( new ItemRequirement()->property('box_opener')->store('item_tool') )->commit();
         $requirement_container->add()->identifier('have_parcel_opener_hd')->type( Requirement::HideOnFail )->add( new ItemRequirement()->property('parcel_opener')->store('item_tool') )->commit();
-        $requirement_container->add()->identifier('have_parcel_opener_home_hd')->type( Requirement::HideOnFail )->add( new ItemRequirement()->property('parcel_opener_h')->store('item_tool') )->commit();
 
         $requirement_container->add()->identifier('not_have_can_opener_hd')->type( Requirement::HideOnFail )->add( new ItemRequirement()->property('can_opener')->count(0) )->commit();
         $requirement_container->add()->identifier('not_have_box_opener_hd')->type( Requirement::HideOnFail )->add( new ItemRequirement()->property('box_opener')->count(0) )->commit();
         $requirement_container->add()->identifier('not_have_parcel_opener_hd')->type( Requirement::HideOnFail )->add( new ItemRequirement()->property('parcel_opener')->count(0) )->commit();
-        $requirement_container->add()->identifier('not_have_parcel_opener_home_hd')->type( Requirement::HideOnFail )->add( new ItemRequirement()->property('parcel_opener_h')->count(0) )->commit();
 
         $requirement_container->add()->identifier('have_water_shaman')->type( Requirement::MessageOnFail )->add( new ItemRequirement()->item('water_#00') )->text('Du musst etwas Wasser zum Umwandeln haben, um den Trank vorzubereiten.')->commit();
         $requirement_container->add()->identifier('have_water')->type( Requirement::MessageOnFail )->add( new ItemRequirement()->item('water_#00') )->text_key('item_needed_generic')->commit();
