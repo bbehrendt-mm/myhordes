@@ -552,7 +552,7 @@ class CitizenHandler
             ) + ($citizen->hasStatus('clean')
                 ? $citizen->property( CitizenProperties::ZoneControlCleanBonus )
                 : 0
-            ) + ($this->inventory_handler->countSpecificItems( $citizen->getInventory(), 'car_door_#00', broken: false ) > 0
+            ) + ($this->inventory_handler->countSpecificItems( $citizen->getInventory(), 'defence_cp', is_property: true, broken: false ) > 0
                 ? 1
                 : 0
             );

@@ -480,8 +480,8 @@ class InventoryController extends CustomAbstractCoreController
                 $reload = true;
             }
 
-            // Reload page if camping item has been moved outside
-            if ($citizen->getZone() && array_reduce( $items, fn(bool $carry, ?Item $i) => $carry || $i?->getPrototype()?->hasProperty('camp_bonus'), false ))
+            // Reload page if camping / cp item has been moved outside
+            if ($citizen->getZone() && array_reduce( $items, fn(bool $carry, ?Item $i) => $carry || $i?->getPrototype()?->hasAnyProperty('camp_bonus', 'defence_cp'), false ))
                 $reload = true;
 
             if ($target_citizen->getId() !== $citizen->getId())

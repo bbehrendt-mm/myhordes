@@ -138,10 +138,17 @@ class ItemPrototype implements NamedEntity
         return $this;
     }
     public function hasProperty(string $prop): bool {
-        foreach ($this->getProperties() as $p)
-            if ($p->getName() === $prop) return true;
-        return false;
+        return $this->getProperties()->findFirst(fn($_, $p) => $p->getName() === $prop) !== null;
     }
+
+    public function hasAnyProperty(string ...$prop): bool {
+        return match(true) {
+            count($prop) === 0 => false,
+            count($prop) === 1 => $this->hasProperty( array_first( $prop ) ),
+            default => $this->getProperties()->findFirst(fn($_, $p) => in_array($p->getName(), $prop)) !== null
+        };
+    }
+
     public function getName(): ?string
     {
         return $this->name;
