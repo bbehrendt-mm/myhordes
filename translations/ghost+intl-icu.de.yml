@@ -393,3 +393,8 @@ Koalition: Koalition
 'Da du in mehreren deiner letzten Städte frühzeitig gestorben bist ({death_type}), bist du bis {end_date} vom Spiel ausgeschlossen. Du kannst aktuell keine neue Stadt betreten.': 'Da du in mehreren deiner letzten Städte frühzeitig gestorben bist ({death_type}), bist du bis {end_date} vom Spiel ausgeschlossen. Du kannst aktuell keine neue Stadt betreten.'
 'Öffentliche Städte, in denen sich zum Zeitpunkt des Angriffs kein einziger Spieler befindet, werden gelöscht!': 'Öffentliche Städte, in denen sich zum Zeitpunkt des Angriffs kein einziger Spieler befindet, werden gelöscht!'
 'Diese Beschränkungen gelten NICHT für Kleine Städte!': 'Diese Beschränkungen gelten NICHT für Kleine Städte!'
+'Organisation und Rollen': 'Organisation und Rollen'
+'Beteiligte Personen': 'Beteiligte Personen'
+'Wähle Personen aus, die an der Organisation dieser Stadt beteiligt sind. Die ausgewählten Personen erhalten Zugriff auf die Administrationsoberfläche der Stadt (entweder Lese- oder Vollzugriff). Achte darauf, hier nur vertrauenswürdige Personen auszuwählen! Du kannst dich auch selbst hinzufügen, wenn du Zugriff auf die Administrationsoberfläche benötigst.': 'Wähle Personen aus, die an der Organisation dieser Stadt beteiligt sind. Die ausgewählten Personen erhalten Zugriff auf die Administrationsoberfläche der Stadt (entweder Lese- oder Vollzugriff). Achte darauf, hier nur vertrauenswürdige Personen auszuwählen! Du kannst dich auch selbst hinzufügen, wenn du Zugriff auf die Administrationsoberfläche benötigst.'
+'Lesender Zugriff': 'Lesender Zugriff'
+Vollzugriff: Vollzugriff
