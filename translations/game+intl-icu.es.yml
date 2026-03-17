@@ -2090,7 +2090,7 @@ Global: Global
 'Das Stadttor ist <span class="critical">geöffnet</span>! Achtung: Wenn das Tor geschlossen wird, können alle Spieler, die sich außerhalb der Stadt befinden, nicht mehr rein.': '¡El Portal está <span class="critical">abierto</span>! Cuidado, si lo cierras mientras aún haya jugadores afuera, ellos no podrán entrar...'
 '<strong>Du bist erschöpft</strong>, du kannst deshalb weder <strong>in die Außenwelt gehen</strong>, noch <strong>das Stadttor öffnen</strong>, noch <strong>es schließen</strong>.': '<strong>Estás cansado</strong>. No tienes fuerzas para <strong>salir al Ultramundo</strong> ni para <strong>abrir El Portal</strong>, y mucho menos para <strong>cerrarlo</strong>.'
 'Trinke oder nimm einen Happen zu dir, aber unternimm etwas, um wieder in Schuss zu kommen!': '¡Bebe, come, haz algo si deseas recuperar energías!'
-'Klick hier, wenn du mit deiner Heldenfähigkeit <strong>diesen Registereintrag fälschen</strong> möchtest...': 'Clic para utilizar tu capacidad de héroe y <strong>adulterar esta información en el Registro</strong>...'
+'Klick hier, wenn du mit deiner Heldenfähigkeit <strong>diesen Registereintrag fälschen</strong> möchtest...': 'Haz clic aquí para utilizar tu capacidad de héroe y <strong>falsificar esta entrada del Registro</strong>...'
 Ranking-Ausschluss: Exclusión de clasificación
 'Dieses Leben wird aus den Annalen der Geschichte getilgt. Du erhälst weder Seelenpunkte noch Auszeichnungen.': 'Esta vida se borra de los anales de la historia. No recibe puntos de alma ni Distinciones.'
 'Das wird dir in Zukunft schlaflose Nächte bereiten!': '¡Esto le provocará noches de insomnio en el futuro!'
@@ -2947,7 +2947,7 @@ Sandkasten-Scharfschütze_f: Francotiradora aislada
 '{player} ist der Stadt "{town}" beigetreten. Dort ist noch Platz für dich, du könntest ihm also folgen...': '{ref__gender, select,female {{player} se ha unido a "{town}". Aún hay sitio disponible para ti ahí, la podrías seguir...} other {{player} se ha unido a "{town}". Aún hay sitio disponible para ti ahí, lo podrías seguir...} }'
 '{player} sind der Stadt "{town}" beigetreten. Dort ist noch Platz für dich, du könntest ihnen also folgen...': '{player} se ha unido al pueblo "{town}". Aún hay sitio disponible para ti ahí, podrías seguirle...'
 'Tief durchatmen!': '¡Tomar una respiración profunda!'
-'Du kannst den Bürgern der Stadt die Errichtung eines bestimmten Gebäudes empfehlen. Klicke dafür auf den Namen des Bauprojektes, das du empfehlen willst.': 'Puedes recomendar la construcción de una obra específica al resto de habitantes del pueblo. Para hacer esto, haz click en el nombre de la obra deseas recomendar.'
+'Du kannst den Bürgern der Stadt die Errichtung eines bestimmten Gebäudes empfehlen. Klicke dafür auf den Namen des Bauprojektes, das du empfehlen willst.': 'Puedes recomendar la construcción de una obra específica al resto de habitantes del pueblo. Para hacer esto, haz click en el nombre de la obra que deseas recomendar.'
 'Klicke hier, um deinen Mitbürgern die Errichtung dieses Bauwerks zu empfehlen.': 'Haz clic aquí para recomendar la construcción de este proyecto al resto de habitantes.'
 'Es konnten nicht alle Einträge geladen werden, da dieses Register zu viele Einträge enthält.': 'Todas las entradas de registro no han podido cargarse porque el registro contiene demasiadas entradas.'
 'Huch! Scheint, als würde dein Mitbürger nicht wollen, dass jemand seine Sachen durchstöbert. Sein Hund hat dich angefallen und dir einige tiefe Bisswunden zugefügt!': '¡Guau! Parece que tu conciudadano no quiere que nadie revise sus cosas. ¡Su perro te atacó y te mordió profundamente!'
@@ -2989,7 +2989,7 @@ Anfänger: Novato
 Lehrling: Aprendiz
 Experte: Experto
 Meister: Maestro
-'Klick hier, wenn du mit deiner Heldenfähigkeit <strong>diesen Registereintrag löschen</strong> möchtest...': 'Haz clic aquí si quieres <strong>eliminar esta entrada de registro</strong> con tu habilidad heroica...'
+'Klick hier, wenn du mit deiner Heldenfähigkeit <strong>diesen Registereintrag löschen</strong> möchtest...': 'Haz clic aquí para <strong>eliminar esta entrada del Registro</strong> con tu habilidad heroica...'
 Sofort: Inmediatamente
 'Angegebener Zeitpunkt': 'Hora especificada'
 'Gut hydriert': 'Hidratado'
