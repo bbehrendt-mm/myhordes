@@ -221,7 +221,8 @@ class RuinExplorationController extends AbstractController implements HookedInte
             ($dy === 1  && !$ruinZone->hasCorridor( RuinZone::CORRIDOR_N )) ||
             ($dy === -1 && !$ruinZone->hasCorridor( RuinZone::CORRIDOR_S )) ||
             ($dz !== 0 && $ruinZone->getPrototype()->getLevel() !== $dz) ||
-            ($shift !== 0 && !$ruinZone->getPrototype())
+            ($shift !== 0 && !$ruinZone->getPrototype()) ||
+            ($shift !== 0 && $ruinZone->getLocked())
         ) return new JsonResponse([], Response::HTTP_NOT_FOUND);
 
         $new_zone = $this->entityManager->getRepository(RuinZone::class)->findOneByPosition(
