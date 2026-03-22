@@ -20,7 +20,7 @@
                         <div class="padded cell-small rw-1 rw-sm-3"><img alt="" class="pointer" x-app-control="{{ path('admin_toggle_ext_app', {id: current_app.id}) }}" x-toggle-app="{{ current_app.active ? 0 : 1 }}" src="{{ current_app.active ? asset('build/images/icons/player_online.gif') : asset('build/images/icons/player_offline.gif') }}" /></div>
                         <div class="padded cell-small rw-1 rw-sm-3"><img alt="" class="pointer" x-app-control="{{ path('admin_toggle_ext_app_maintenance', {id: current_app.id}) }}" x-toggle-app="{{ current_app.maintenance ? 0 : 1 }}" src="{{ current_app.maintenance ? asset('build/images/icons/lock.gif') : asset('build/images/icons/done.png') }}" /></div>
                         <div class="padded cell-small rw-1 rw-sm-9">
-                            <img height="16" width="16" alt="" src="{{ current_app|singleMediaSource('icon', 16) }}" srcset="{{ current_app|singleMediaSource('icon', 16, true) }}" />
+                            <img height="16" width="16" alt="" src="{{ current_app|singleMediaSource('icon', 16, false, '', true) }}" srcset="{{ current_app|singleMediaSource('icon', 16, true, '', true) }}" />
                         </div>
                         <div class="padded cell rw-3 rw-sm-6">{{ current_app.name }}</div>
                         <div class="padded cell rw-3 rw-sm-6">{{ current_app.owner ? current_app.owner.name : '--' }}</div>

@@ -216,6 +216,7 @@ export const App = ({app, onClose, signalUpdate}: {app: ExternalApp|null, onClos
                                     { app.dev?.url && <AppForm app={app} dev={true}>
                                         <button type="submit" className="inline small float-right" disabled={loading}>{ globals.strings.apps.details.confirm.replace('{app}', app.name) }</button>
                                     </AppForm> }
+                                    { !app.dev?.url && <input type="hidden" name="key" value={ app.pk } /> }
                                 </div>
                             </div>
 

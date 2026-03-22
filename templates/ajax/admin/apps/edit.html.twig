@@ -69,7 +69,7 @@
                     <div class="cell padded rw-4 rw-md-6">
                         <img id="app_icon" style="height: 16px; width: 16px;" alt="-" src="{{ current_app|singleMediaSource('icon', 16) }}" />
                         <label for="app_icon_select" id="app_icon_edit" class="small inline float-right button"><img alt="" src="{{ asset('build/images/forum/edit.png') }}" /></label>
-                        <button id="app_icon_clear" class="small inline float-right {% if current_app is null or current_app.imageName is null %}hidden{% endif %}"><img alt="" src="{{ asset('build/images/icons/small_trash_red.png') }}" /></button>
+                        <button id="app_icon_clear" class="small inline float-right {% if current_app is null %}hidden{% endif %}"><img alt="" src="{{ asset('build/images/icons/small_trash_red.png') }}" /></button>
                     </div>
                 </div>
                 <div class="row">
