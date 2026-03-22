@@ -1,13 +1,16 @@
 {# @var \App\Entity\TownRankingProxy town #}
 <div class="view-town" data-town-id="{{ town.baseID }}">
-    <h5 class="relative">
-        <div style="padding-right: 5px;" class="right"> {{town.town.aliveCitizenCount}} <img width="auto" height="16px" src="{{ asset("build/images/icons/small_human.gif")}}" alt="alive"> 
-        {{town.town.citizenCount - town.town.aliveCitizenCount}} <img width="auto" height="16px" src="{{ asset("build/images/icons/death.gif")}}" alt="dead"> </div>
-        
+    <h5 class="relative flex middle large-gap" style="padding: 0 5px;">
         {% if town.language is not null %}
             <img src="{{ asset("build/images/lang/" ~ town.language ~".png") }}" alt="{{ town.language }}" />
         {% endif %}
-        {{town.name}}
+        <div class="flex-1">{{town.name}}</div>
+        {% if town.town %}
+            <div class="flex large-gap">
+                <div>{{town.town.aliveCitizenCount}} <img src="{{ asset("build/images/icons/small_human.gif")}}" alt=""></div>
+                <div>{{town.town.citizenCount - town.town.aliveCitizenCount}} <img src="{{ asset("build/images/icons/death.gif")}}" alt=""></div>
+            </div>
+        {% endif %}
     </h5>
 
     {{ help_lnk('Der Tod und die Berechnung der Seelepunkte'|trans({}, 'help'), 'help', {'name': 'death_and_soul_points'}) }}
