@@ -278,7 +278,7 @@ class TwinoConverterToBlocks {
             case '--': blocks.push( new TwinoInterimBlock(nodeContent, 's') ); changed = true; break;
             case 'spoiler':
                 if (nested) blocks.push( new TwinoInterimBlock('[.]' + nodeContent + '[/.]') )
-                else blocks.push( new TwinoInterimBlock('[.]' + nodeContent + '[/.]', 'div', match.nodeType(), [['x-nested','1']]) );
+                else blocks.push( new TwinoInterimBlock('[.]' + nodeContent + '[/.]', 'span', match.nodeType(), [['x-nested','1']]) );
                 changed = true; break;
             case 'code': blocks.push( new TwinoInterimBlock(nodeContent, 'pre', [], [ ['x-raw','1'] ]) ); changed = true; break;
             case 'quote':case 'cite':
@@ -524,6 +524,8 @@ class HTMLConverterFromBlocks {
                         ret += HTMLConverterFromBlocks.wrapBlock( block, 'big' );
                     else if (block.hasClass('inline-code'))
                         ret += HTMLConverterFromBlocks.wrapBlock( block, 'c' );
+                    else if (block.hasClass('spoiler'))
+                        ret += HTMLConverterFromBlocks.wrapBlock( block, 'spoiler' )
                     else ret += block.nodeText;
                     break;
                 case 'div':
