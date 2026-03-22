@@ -126,7 +126,7 @@ class HTMLService {
                     'collapsor', 'collapsed'
                 ],
                 'span.class' => [
-                    'quoteauthor','bad','big','rpauthor','inline-code','.'
+                    'quoteauthor','bad','big','rpauthor','inline-code','.','spoiler'
                 ]
             ],
             'oracle' => [
