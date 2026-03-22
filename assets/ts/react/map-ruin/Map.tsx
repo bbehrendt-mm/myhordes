@@ -244,15 +244,15 @@ export const MapCore = (props: {setup: MapSetup, properties: MapProperties}) => 
                                     s: ((nextZone?.r ?? currentZone)?.status?.move ?? {})?.s || (nextZone?.r ?? currentZone).status.shifted
                                 }}
                                 onMove={ (dx, dy) => {
-                                    if (currentZone.status.shifted)
-                                        globals.api.shift(false).then(r => updateZone(r));
-                                    else {
-                                        if (moveLock.current || nextZone) return;
-                                        moveLock.current = true;
-                                        globals.api.move(dx, dy)
-                                            .then(r => updateZone(r, dx, dy))
-                                            .finally( () => moveLock.current = false );
-                                    }
+                                    if (moveLock.current || nextZone) return;
+                                    moveLock.current = true;
+
+                                    if (currentZone.status.shifted) globals.api.shift(false)
+                                        .then(r => updateZone(r))
+                                        .finally( () => moveLock.current = false );
+                                    else globals.api.move(dx, dy)
+                                        .then(r => updateZone(r, dx, dy))
+                                        .finally( () => moveLock.current = false );
                                 } }
                             />
 
