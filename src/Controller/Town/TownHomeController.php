@@ -122,6 +122,7 @@ class TownHomeController extends TownController
                     $thread->setTitle( $this->translator->trans("Alarm (Bürger {citizen})", ['citizen' =>  $intruder ?? '???'], 'game') );
                     break;
                 case PrivateMessage::TEMPLATE_CROW_BANISHMENT:
+                case PrivateMessage::TEMPLATE_CROW_BANISHMENT_INSURRECT:
                     $thread->setTitle( $this->translator->trans('Du wurdest verbannt', [], 'game') );
                     break;
                 case PrivateMessage::TEMPLATE_CROW_REDUCED_AP_REGEN:

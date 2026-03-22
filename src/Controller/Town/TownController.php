@@ -1703,7 +1703,7 @@ class TownController extends InventoryAwareController
                     $this->citizen_handler->inflictStatus($foreignCitizen, 'tg_revolutionist');
                 } else {
                     $null = null;
-                    $this->citizen_handler->updateBanishment($foreignCitizen, null, null, $null, true);
+                    $this->citizen_handler->updateBanishment($foreignCitizen, null, null, $null, true, true);
                 }
 
                 $this->entity_manager->persist($foreignCitizen);
