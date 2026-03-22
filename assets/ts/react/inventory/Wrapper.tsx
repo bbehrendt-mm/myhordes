@@ -1024,38 +1024,28 @@ const HordesEscortInventoryWrapper = (props: escortMountProps) => {
 
     const loaded = bag && strings;
 
-    const itemList = bag?.items?.sort(sort);
-    const lightItems = itemList?.filter(i => bag.heavy === 0 || !(bagVaultData ?? {})[i.p]?.heavy);
-    const heavyItems = itemList?.filter(i => bag.heavy > 0 && (bagVaultData ?? {})[i.p]?.heavy);
+    const slots: SlotProps[] = React.useMemo(() => {
+        const inventorySize = bag?.size ?? 0;
+        const inventoryHeavySlots = bag?.heavy ?? 0;
+        const items = [...bag?.items ?? []].sort(sort);
+
+        return processSlots(items, bagVaultData, inventorySize, inventoryHeavySlots);
+    }, [bagVaultData, bag?.items, bag?.size, bag?.heavy]);
 
     return <Globals.Provider value={{api: api.current, strings}}>
         { !loaded && <div className="loading"/> }
         { loaded && <ul className="inventory rucksack-escort">
-            {lightItems.map((item,index) => <React.Fragment key={item.i}><SingleItem
-                className={bag.size > 0 && bag.heavy > 0 ? (item.e
-                    ? "bg-locked"
-                    : (index < (bag.size - bag.heavy) ? "bg-light" : (
-                            index < bag.size
-                                ? "bg-heavy"
-                                : "bg-over"
-                        ))
-                ) : ''}
-                item={item} data={(bagVaultData ?? {})[item.p] ?? null} mods={bag.mods} locked={item.e || loading}
-                onClick={handleTransfer(props.rucksackId, props.floorId, 'down')}
-                blur={null}/>
-            </React.Fragment>)}
-            {bag.size > 0 && Array.from(Array(Math.max(0, bag.size - lightItems.length - bag.heavy)).keys()).map(i =>
-                <li key={i} className="free"/>)
-            }
-            {heavyItems.map((item,index) => <React.Fragment key={item.i}><SingleItem
-                className={index >= bag.heavy ? "bg-over" : "bg-heavy"}
-                item={item} data={(bagVaultData ?? {})[item.p] ?? null} mods={bag.mods} locked={item.e || loading}
-                onClick={handleTransfer(props.rucksackId, props.floorId, 'down')}
-                blur={null}/>
-            </React.Fragment>)}
-            {bag.heavy > 0 && Array.from(Array(Math.max(0, bag.heavy - heavyItems.length - Math.max(0, lightItems.length - (bag.size - Math.max(bag.heavy,heavyItems.length))))).keys()).map(i =>
-                <li key={i} className="free bg-heavy"/>)
-            }
+            {slots.map((slot, i) => <BagInventorySlot
+                key={i}
+                free={slot.free}
+                itemInfo={slot.itemInfo}
+                heavy={slot.heavy}
+                over={slot.over}
+                bag={{id: props.rucksackId, type: "rucksack", inventory: bag, locked: false,
+                    onItemClick: handleTransfer(props.rucksackId, props.floorId, 'down')
+                }}
+                vaultData={bagVaultData}
+            />)}
             { loaded && props.floorId > 0  && <li className="item plus" onClick={() => setOpen(!open)}>
                 <img alt="+" src={strings.actions["more-btn"]}/>
                 <Tooltip html={ strings.actions.pickup.replace('{citizen}', props.name) } />
