@@ -199,7 +199,7 @@ class CitizenHandler
 
     }
 
-    public function updateBanishment( Citizen &$citizen, ?Building $gallows, ?Building $cage, ?Building &$active = null, bool $forceBan = false ): bool {
+    public function updateBanishment( Citizen &$citizen, ?Building $gallows, ?Building $cage, ?Building &$active = null, bool $forceBan = false, bool $byInsurrection = false ): bool {
 
         $active = null;
         if (!$citizen->getAlive() || $citizen->getTown()->getChaos()) return false;
@@ -254,7 +254,7 @@ class CitizenHandler
                 $itemlist = [];
                 foreach ($itemsForLog as $id => ['count' => $count]) for ($i = 0; $i < $count; $i++)
                     $itemlist[] = $id;
-                $this->crow->postAsPM( $citizen, '', '', PrivateMessage::TEMPLATE_CROW_BANISHMENT, null, $itemlist );
+                $this->crow->postAsPM( $citizen, '', '', $byInsurrection ? PrivateMessage::TEMPLATE_CROW_BANISHMENT_INSURRECT : PrivateMessage::TEMPLATE_CROW_BANISHMENT, null, $itemlist );
             }
 
             // As he is shunned, we remove all the complaints

@@ -410,6 +410,7 @@ class MessageTownMessageController extends MessageController
                     $post->setText( $this->translator->trans( '{citizen} hat bei dir daheim den Alarm ausgelöst, als er (sie) um {time} versuchte bei dir einzubrechen!', ['citizen' => $intruder ?? '???', 'time' => date('H:i', $time)], 'game' ) );
                     break;
                 case PrivateMessage::TEMPLATE_CROW_BANISHMENT:
+                case PrivateMessage::TEMPLATE_CROW_BANISHMENT_INSURRECT:
                     /** @var ItemPrototype $item */
                     $items = [];
                     foreach ( $post->getAdditionalData() as $item_id) {
@@ -421,7 +422,9 @@ class MessageTownMessageController extends MessageController
                     $thread->setTitle( $this->translator->trans('Du wurdest verbannt', [], 'game') );
                     $item_list = implode( ', ', array_map( fn( $entry ) => "<span class=\"tool\"><img src='{$this->asset->getUrl('build/images/item/item_' . ($entry[1]?->getIcon() ?? 'none') . '.gif')}' alt='' /> <strong>{$this->translator->trans( $entry[1]?->getLabel() ?? '', [], 'items' )}</strong> x {$entry[0]}</span>", $items ) );
 
-                    $messages = [ $this->translator->trans( 'Da sich zu viele Beschwerden gegen dich angesammelt haben, wurdest du aus der Gemeinschaft verbannt.', [], 'game' ) ];
+                    $messages = $post->getTemplate() === PrivateMessage::TEMPLATE_CROW_BANISHMENT_INSURRECT
+                        ? [ $this->translator->trans( 'Infolge einer Revolution in deiner Stadt wurdest du aus der Gemeinschaft verbannt.', [], 'game' ) ]
+                        : [ $this->translator->trans( 'Da sich zu viele Beschwerden gegen dich angesammelt haben, wurdest du aus der Gemeinschaft verbannt.', [], 'game' ) ];
                     if (!empty($item_list)) $messages[] = $this->translator->trans( 'Die folgenden Gegenstände wurden aus deinem Inventar entfernt: {item_list}', ['item_list' => $item_list], 'game' );
 
                     $post->setText( $this->html->prepareEmotes($post->getText(), $this->getUser(), $citizen->getTown()) . implode(' ', $messages) );
