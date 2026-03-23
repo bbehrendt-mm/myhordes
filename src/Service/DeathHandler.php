@@ -204,11 +204,11 @@ readonly class DeathHandler
                 $pictoPrototype = $this->entity_manager->getRepository(PictoPrototype::class)->findOneByName("r_nodrug_#00");
                 $this->picto_handler->give_picto($citizen, $pictoPrototype, round(pow($citizen->getSurvivedDays(), 1.5), 0));
             }
-
-            // Decoration picto
-            if($deco > 0)
-	           $this->picto_handler->give_validated_picto($citizen, "r_deco_#00", $deco);
         }
+
+        // Decoration picto
+        if($deco > 0)
+            $this->picto_handler->give_validated_picto($citizen, "r_deco_#00", $deco);
 
         foreach ($cod->getPictos() as $pictoDeath) {
             $this->picto_handler->give_validated_picto($citizen, $pictoDeath);
