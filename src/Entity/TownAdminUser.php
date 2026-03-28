@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\UniqueConstraint;
 
 #[ORM\Entity(repositoryClass: TownAdminUserRepository::class)]
-#[UniqueConstraint(name: 'town_admin_unique', columns: ['town', 'user'])]
+#[UniqueConstraint(name: 'town_admin_unique', columns: ['town_id', 'user_id'])]
 class TownAdminUser
 {
     #[ORM\Id]
