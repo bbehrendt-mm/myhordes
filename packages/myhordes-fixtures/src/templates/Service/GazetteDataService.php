@@ -1012,7 +1012,7 @@ class GazetteDataService implements FixtureProcessorInterface {
                 ],
             ],
             ['text'=>'<strong><i class="dagger">†</i> {cadaver1}</strong> hat gestern endlich mal eine gute Entscheidung getroffen: Selbstmord zu begehen. "Besser spät als nie", kommentierte <strong>{citizen1}</strong>...',
-                'name'=>'gazetteTownSuicide_007',
+                'name'=>'gazetteTownSuicide_008',
                 'type'=>GazetteEntryTemplate::TypeGazetteSuicide,
                 'requirement'=>GazetteEntryTemplate::RequiresOneOfEach,
                 'variableTypes'=>[
@@ -1021,7 +1021,7 @@ class GazetteDataService implements FixtureProcessorInterface {
                 ],
             ],
             ['text'=>'Gestern hat <strong><i class="dagger">†</i> {cadaver1}</strong> zum ersten Mal etwas richtig gemacht - allerdings auch zum letzten mal... Er beendete sein Leben auf eine... ziemlich gewaltsame Weise.',
-                'name'=>'gazetteTownSuicide_008',
+                'name'=>'gazetteTownSuicide_009',
                 'type'=>GazetteEntryTemplate::TypeGazetteSuicide,
                 'requirement'=>GazetteEntryTemplate::RequiresOneCadaver,
                 'variableTypes'=>[
