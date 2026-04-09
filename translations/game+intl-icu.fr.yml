@@ -356,9 +356,9 @@ Dompteur: "Apprivoiseur"
 Techniker: "\n            {ref__icu, select,\n                on {\n                    {ref__gender, select,\n                        female {Technicienne}\n                        other {Technicien}\n                    }\n                }\n            other {Technicien}\n            }\n        "
 Schamane: "Chaman"
 Einsiedler: "Ermite"
-'Verbesserung des Tages': 'Les évolutions du jour'
+'Verbesserung des Tages': 'Évolutions du jour'
 Wachturm: Tour
-Werkstatt: L’atelier
+Werkstatt: Atelier
 'Jemand hat eine anonyme Anzeige gegen {citizen} vorgebracht!': 'Une plainte anonyme a été déposée contre {citizen} !'
 'Jemand hat seine anonyme Anzeige gegen {citizen} zurückgezogen.': 'Quelqu’un a retiré sa plainte contre {citizen}.'
 'Wir haben noch nicht die Technologie, um den morgigen Angriff zu beurteilen.': 'Nous ne disposons pas de la technologie suffisante pour évaluer l’attaque du lendemain.'
