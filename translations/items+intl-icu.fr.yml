@@ -300,7 +300,7 @@ LSD: LSD
 'Starker Laserpointer (2 Schuss)': 'Pointeur laser brûlant (2 charges)'
 'Starker Laserpointer (1 Schuss)': 'Pointeur laser brûlant (1 charge)'
 'Starker Laserpointer (Leer)': 'Pointeur laser brûlant déchargé'
-Teleskop: Téléscope
+Teleskop: Télescope
 'Unpersönliche Explodierende Fußmatte': 'Paillasson piégé'
 Chuck-Figur: Figurine de Chuck
 'Kleine Zen-Fibel': 'Livre zen miniature'
@@ -1092,7 +1092,7 @@ Fußball: Ballon de foot
 'Du jonglieren mit dem Ball, aber beim ersten Aufprall fliegt er direkt auf einen spitzen Gegenstand. Als du dich dem Ball näherst, hörst du ein Pfeifen der Luft und stellst mit Enttäuschung fest, <strong>dass er nun durchstochen ist</strong>!': 'Vous jonglez avec le ballon, mais au premier impact, il heurte directement un objet pointu. En vous approchant du ballon, vous entendez un sifflement et êtes déçu de découvrir <strong>qu''il est désormais crevé</strong> !'
 'Geplatzter Fußball': 'Ballon crevé'
 'Ein Ball, mit dem wir einiges an Spaß haben könnten. Wenn er nur nicht schon geplatzt wäre...': 'Un ballon avec lequel on pourrait s''amuser. Si seulement il n''était pas crevé...'
-'Du trinkst die Flasche aus; es schmeckt sehr süß und hat ein leichtes Granatapfel-Armoa. Du fühlst dich für den Moment erfrischt.<br />Du erhälst <strong>Erkundungspunkte</strong> !': 'Vous buvez la bouteille, elle a un goût très sucré et un arôme de grenade. Cela vous rafraîchit et vous fait vous sentir bien sur le moment.<br />Vous obtenez des <strong>Points d''Exploration</strong> !'
+'Du trinkst die Flasche aus; es schmeckt sehr süß und hat ein leichtes Granatapfel-Armoa. Du fühlst dich für den Moment erfrischt.<br />Du erhälst <strong>Erkundungspunkte</strong> !': 'Vous buvez la bouteille d''une traite. Le liquide a un goût très sucré et un arôme de grenade. Cela vous rafraîchit et vous fait vous sentir bien sur le moment.<br />Vous obtenez des <strong>Points d''Exploration</strong> !'
 'Nach wenigen Sekunden bereust du, aus dieser Flasche getrunken zu haben. Das Zeug ist viel zu süß, du bist jetzt <strong>durstig</strong>!': 'Cependant, au bout de quelques secondes, vous regrettez votre choix. La boisson est vraiment trop sucrée, vous avez désormais <strong>soif</strong> !'
 'Nach wenigen Sekunden bereust du, aus dieser Flasche getrunken zu haben. Das Zeug ist viel zu süß, du bist jetzt <strong>dehydriert</strong>!': 'Cependant, au bout de quelques secondes, vous regrettez votre choix. La boisson est vraiment trop sucrée, vous êtes désormais <strong>déshydraté</strong> !'
 'Quantum Energy': 'Quantum Energy'
