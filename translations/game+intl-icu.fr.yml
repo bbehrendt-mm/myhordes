@@ -999,7 +999,7 @@ Basisverteidigung: Défense de base
 'Nicht ganz ekelfrei hat {disposing_citizen} den leblosen Körper von {citizen} entsorgt.': 'C''est non sans dégoût que {disposing_citizen} s''est débarrassé(e) du corps inanimé de {citizen}.'
 'Dank {disposing_citizen} hat sich der Körper von {citizen} in verfaultes Wasser verwandelt.': 'Grâce aux efforts de {disposing_citizen}, le corps de {citizen} a été réduit en liquide putride.'
 'Behausung wiederverwerten': 'Recycler la maison'
-'{z} Zombies blockieren den Weg!': '{z} zombies bloquent le chemin !'
+'{z} Zombies blockieren den Weg!': '{raw_z, plural, one {**Un** zombie bloque le chemin !} other {**#**zombies bloquent le chemin !}} '
 'Du wurdest überrascht und bist jetzt von den Zombies umzingelt! Du kannst flüchten, allerdings wirst du dadurch zusätzlichen Sauerstoff verbrauchen ...': 'Vous avez été surpris et êtes maintenant entouré de zombies ! Vous pouvez vous échapper, mais vous utiliserez de l''oxygène supplémentaire...'
 Flüchten: S'enfuir
 'Gebäude verlassen': 'Quitter le bâtiment'
@@ -2976,7 +2976,7 @@ Schritt-Punkte: Point d'Exploration
 Benötigt: Nécessaire
 Freischalten: Déverrouiller
 'Einwohner in der Stadt': 'Citoyens de la ville'
-'{days} Tage überlebt in "{town}"': '{raw_days, plural, =0 {**#** jours survécus} one {**Une** journée survécue} other {**#** jours survécus}} dans "{town}"'
+'{days} Tage überlebt in "{town}"': '{raw_days, plural, =0 {**#** jours survécus} one {**Une** journée survécue} other {**#** jours survécus}} dans « {town} »'
 'Fähigkeit erworben': 'Compétence acquise'
 'Rudimentärer Schutz': 'Protection rudimentaire'
 'Dank der Hilfe eines anderen Bürgers wirst du diese Nacht keine Durst- oder Krankheitssymptome verspüren.': 'Grâce à l''aide d''un autre citoyen, vous ne ressentirez aucun symptôme de soif ou de maladie cette nuit.'
