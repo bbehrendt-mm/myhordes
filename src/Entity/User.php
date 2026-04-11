@@ -85,7 +85,7 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
     #[ORM\OneToMany(targetEntity: AdminBan::class, mappedBy: 'user')]
     private Collection $bannings;
 
-    #[ORM\OneToMany(targetEntity: RolePlayText::class, mappedBy: 'user', cascade: ['persist', 'remove'], fetch: 'EXTRA_LAZY')]
+    #[ORM\OneToMany(targetEntity: FoundRolePlayText::class, mappedBy: 'user', cascade: ['persist', 'remove'], fetch: 'EXTRA_LAZY')]
     private Collection $foundTexts;
 
     #[ORM\Column(type: 'integer')]

@@ -7,6 +7,7 @@ use App\Annotations\GateKeeperProfile;
 use App\Entity\AccountRestriction;
 use App\Entity\ActivityCluster;
 use App\Entity\AntiSpamDomains;
+use App\Entity\AutomaticAccountMarker;
 use App\Entity\Award;
 use App\Entity\Citizen;
 use App\Entity\CitizenRankingProxy;
@@ -32,6 +33,7 @@ use App\Entity\UserPendingValidation;
 use App\Entity\UserReferLink;
 use App\Entity\UserSponsorship;
 use App\Entity\UserSwapPivot;
+use App\Enum\AutomaticAccountMarkerType;
 use App\Enum\Configuration\MyHordesSetting;
 use App\Enum\DomainBlacklistType;
 use App\Enum\ServerSetting;
@@ -52,7 +54,10 @@ use App\Service\User\UserUnlockableService;
 use App\Service\User\UserAccountService;
 use App\Service\UserFactory;
 use App\Service\UserHandler;
+use Carbon\Carbon;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\Expr\Comparison;
 use Doctrine\Common\Collections\Order;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\Expr\Join;
@@ -1025,6 +1030,17 @@ class AdminUserController extends AdminActionController
         $open_posts = $this->entity_manager->getRepository(Post::class)->count(['owner' => $user, 'hidden' => false]);
         $closed_posts = $this->entity_manager->getRepository(Post::class)->count(['owner' => $user, 'hidden' => true]);
 
+        [$active_account_marks, $inactive_account_marks] = new ArrayCollection(AutomaticAccountMarkerType::cases())
+            ->partition(fn(int $k, AutomaticAccountMarkerType $type) => $user->isActiveAutomaticAccountMarkersLimitReachedFor( $type ));
+
+        $active_account_marks = $active_account_marks
+            ->map( fn(AutomaticAccountMarkerType $type) => $user->getDecidingActiveAutomaticAccountMarkersFor( $type ) )
+            ->filter( fn(?AutomaticAccountMarker $marker) => $marker !== null );
+
+        $inactive_account_marks = $inactive_account_marks->map(
+            fn(AutomaticAccountMarkerType $type) => [$type, $user->getActiveAutomaticAccountMarkersFor($type)->count()]
+        );
+
         return $this->render( 'ajax/admin/users/ban.html.twig', $this->addDefaultTwigArgs("admin_users_ban", [
             'user' => $user,
             'notes' => $this->entity_manager->getRepository(UserModerationNote::class)->findBy(['user' => $user], ['created_at' => Order::Ascending->value]),
@@ -1034,6 +1050,14 @@ class AdminUserController extends AdminActionController
 
             'open_posts' => $open_posts,
             'closed_posts' => $closed_posts,
+
+            'nonblocking_account_marks' => $inactive_account_marks,
+            'blocking_account_marks' => $active_account_marks,
+            'all_account_marks' => $user->getAutomaticAccountMarkers()->matching(
+                Criteria::create()
+                    ->where( new Comparison('created_at', Comparison::GTE, Carbon::now()->subYear()->toDateTimeImmutable()) )
+                    ->orderBy(['created_at' => Order::Descending->value])
+            ),
 
             'existing' => $this->entity_manager->getRepository(AccountRestriction::class)->findBy(['user' => $user], ['active' => 'ASC', 'confirmed' => 'ASC', 'created' => 'ASC'])
         ]));
