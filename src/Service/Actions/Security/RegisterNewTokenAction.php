@@ -20,7 +20,7 @@ class RegisterNewTokenAction
         if ($request->headers->has('Sec-Fetch-Dest') && $request->headers->get('Sec-Fetch-Dest') !== 'document')
             return ($this->keygen)(16);
 
-        $lock = $this->locksmith->waitForLock("ticketing_{$request->getSession()->getId()}");
+        $lock = $this->locksmith->waitForLock("ticketing_{$request->getSession()->getId()}", 5);
         if (!$request->getSession()->has('token')) $request->getSession()->set('token', ($this->keygen)(16));
 
         $ticket = ($this->keygen)(16);
