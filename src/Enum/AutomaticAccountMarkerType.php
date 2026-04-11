@@ -40,4 +40,17 @@ enum AutomaticAccountMarkerType: string {
         };
     }
 
+    public function isRelatedToTown(): bool {
+        return match($this) {
+            self::SuspiciousDeath, self::Mayor => true,
+        };
+    }
+
+    public function isRelatedToDeath(): bool {
+        return match($this) {
+            self::SuspiciousDeath => true,
+            self::Mayor => false,
+        };
+    }
+
 }

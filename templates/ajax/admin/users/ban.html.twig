@@ -330,8 +330,9 @@
                     <div class="shoutbox">
                         <div class="shout-content">
                             {% for mark in all_account_marks %}
-                                <div class="shout-entry flex middle" {{ {'disabled': mark.expiresAt <= 'now'|to_date}|attributes }}>
-                                    {% if mark.expiresAt > 'now'|to_date %}
+                                {% set expired = mark.expiresAt <= 'now'|to_date %}
+                                <div class="shout-entry flex middle" {{ {'disabled': expired}|attributes }}>
+                                    {% if not expired %}
                                         {% if mark.enabled %}
                                             <img
                                                 src="{{ asset('build/images/icons/player_online.gif') }}"
@@ -346,9 +347,31 @@
                                             />
                                         {% endif %}
                                     {% endif %}
-                                    <b class="flex-1">{{ mark.type.label|trans({},'admin') }}</b>
+                                    <div class="flex-1">
+                                        <b>{{ mark.type.label|trans({},'admin') }}</b>
+                                        {% if not expired and mark.type.relatedToTown and mark.town is not null %}
+                                            <div class="flex middle small">
+                                                {% if mark.town.town is not null %}
+                                                    <a target="_blank" href="{{ path('admin_town_citizens', {id: mark.town.town.id}) }}">{{ 'Stadt'|trans({},'admin') }}</a>
+                                                {% else %}
+                                                    <a target="_blank" href="{{ path('admin_town_citizen_view', {id: mark.town.id, tab: 'citizens'}) }}">{{ 'Stadt'|trans({},'admin') }}</a>
+                                                {% endif %}
+
+                                                {% if mark.type.relatedToDeath %}
+                                                    {% set citizen = mark.town.citizenForUser( user ) %}
+                                                    {% if citizen is not null and citizen.cod is not null %}
+                                                        <span class="small"><img alt="{{ 'Tot!'|trans({},'game') }}" src="{{ asset('build/images/professions/death.gif') }}" /> {{ citizen.cod.label|trans({}, 'game') }}</span>
+                                                    {% else %}
+                                                        <span class="small"><img alt="{{ 'Tot!'|trans({},'game') }}" src="{{ asset('build/images/professions/death.gif') }}" /> ???</span>
+                                                    {% endif %}
+                                                {% endif %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
                                     <div class="flex-none flex column">
-                                        <span class="small">{{ mark.createdAt|format_datetime('short', 'short') }}</span>
+                                        {% if not expired %}
+                                            <span class="small">{{ mark.createdAt|format_datetime('short', 'short') }}</span>
+                                        {% endif %}
                                         <span class="small">{{ mark.expiresAt|format_datetime('short', 'short') }}</span>
                                     </div>
                                 </div>

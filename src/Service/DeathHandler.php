@@ -21,6 +21,7 @@ use App\Enum\Game\CitizenPersistentCache;
 use App\Service\Actions\Mercure\BroadcastViaMercureAction;
 use App\Structures\TownConf;
 use Carbon\Carbon;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -154,7 +155,14 @@ readonly class DeathHandler
         $citizen->setAlive(false);
         $this->gps->recordCitizenDied($citizen);
 
-        if ($citizen->getTown()->getDay() <= 3)
+        if ( Carbon::createFromInterface($citizen->getRankingEntry()?->getBegin() ?? new DateTime())->isCurrentDay() )
+            // Add suspicious death marker for dying on the same day as joining
+            $citizen->getUser()->addAutomaticAccountMarkerByType(
+                         AutomaticAccountMarkerType::SuspiciousDeath,
+                forTown: $citizen->getTown()->getRankingEntry()
+            );
+        elseif ($citizen->getTown()->getDay() <= 3 && $cod->isMarker())
+            // Add suspicious death marker for dying before D3 by a suspicious cause (i.e. dehydration)
             $citizen->getUser()->addAutomaticAccountMarkerByType(
                 AutomaticAccountMarkerType::SuspiciousDeath,
                 forTown: $citizen->getTown()->getRankingEntry()

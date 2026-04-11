@@ -6,6 +6,7 @@ use App\Enum\GameProfileEntryType;
 use App\Repository\TownRankingProxyRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Table;
 use Doctrine\ORM\Mapping\UniqueConstraint;
@@ -149,8 +150,9 @@ class TownRankingProxy
 
         return $this;
     }
+
     /**
-     * @return Collection|CitizenRankingProxy[]
+     * @return Collection<int, CitizenRankingProxy>
      */
     public function getCitizens(): Collection
     {
@@ -177,6 +179,13 @@ class TownRankingProxy
 
         return $this;
     }
+
+    public function getCitizenForUser( User $user ): ?CitizenRankingProxy {
+        return $this->getCitizens()->matching(
+            Criteria::create()->where( Criteria::expr()->eq( 'user', $user ) )
+        )->first() ?: null;
+    }
+
     public function getTown(): ?Town
     {
         return $this->town;
