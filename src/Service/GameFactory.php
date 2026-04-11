@@ -10,7 +10,6 @@ use App\Entity\CitizenRankingProxy;
 use App\Entity\Forum;
 use App\Entity\Gazette;
 use App\Entity\Inventory;
-use App\Entity\MayorMark;
 use App\Entity\Season;
 use App\Entity\Thread;
 use App\Entity\ThreadTag;
@@ -19,6 +18,7 @@ use App\Entity\TownClass;
 use App\Entity\TownRankingProxy;
 use App\Entity\TownSlotReservation;
 use App\Entity\User;
+use App\Enum\AutomaticAccountMarkerType;
 use App\Enum\Configuration\MyHordesSetting;
 use App\Enum\Configuration\TownSetting;
 use App\Service\Actions\Game\GenerateTownNameAction;
@@ -175,13 +175,13 @@ class GameFactory
             return false;
         }
 
-        if (!$internal && $town->isMayor() && !$town->getType()->is( TownClass::EASY ) && $town->getCreator()?->getId() !== $user->getId()) {
-            $mark = !$this->entity_manager->getRepository(MayorMark::class)->matching( new Criteria(accessRawFieldValues: true)
-                ->where( new Comparison( 'user', Comparison::EQ, $user )  )
-                ->andWhere( new Comparison( 'expires', Comparison::GT, new \DateTime() ) )
-            )->isEmpty();
+        if (!$internal && $user->isActiveAutomaticAccountMarkersLimitReachedFor( AutomaticAccountMarkerType::SuspiciousDeath )) {
+            $error = ErrorHelper::ErrorPermissionError;
+            return false;
+        }
 
-            if ($mark) {
+        if (!$internal && $town->isMayor() && !$town->getType()->is( TownClass::EASY ) && $town->getCreator()?->getId() !== $user->getId()) {
+            if ($user->isActiveAutomaticAccountMarkersLimitReachedFor( AutomaticAccountMarkerType::Mayor )) {
                 $error = ErrorHelper::ErrorPermissionError;
                 return false;
             }

@@ -7,11 +7,12 @@ use App\Controller\CustomAbstractCoreController;
 use App\Entity\BuildingPrototype;
 use App\Entity\CitizenProfession;
 use App\Entity\CitizenRankingProxy;
-use App\Entity\MayorMark;
 use App\Entity\Town;
 use App\Entity\TownClass;
+use App\Entity\TownRankingProxy;
 use App\Entity\TownRulesTemplate;
 use App\Entity\User;
+use App\Enum\AutomaticAccountMarkerType;
 use App\Enum\Capability\LobbyCapabilityEnum;
 use App\Enum\Configuration\MyHordesSetting;
 use App\Response\AjaxResponse;
@@ -23,7 +24,6 @@ use App\Service\GameProfilerService;
 use App\Service\JSONRequestParser;
 use App\Service\Locksmith;
 use App\Service\TownHandler;
-use App\Service\UserHandler;
 use App\Structures\EventConf;
 use App\Structures\TownSetup;
 use Carbon\Carbon;
@@ -679,19 +679,18 @@ class TownCreatorController extends CustomAbstractCoreController
 
         try {
             $em->persist( $town );
-            if (!$town->getType()->is( TownClass::EASY ))
-                $em->persist( new MayorMark()
-                    ->setUser( $this->getUser() )
-                    ->setMayor( true )
-                    ->setExpires( ( $town_time?->copy() ?? new Carbon() )->addDays(10) )
-                );
-
             $em->flush();
             $gps->recordTownCreated( $town, $this->getUser(), 'mayor' );
             $em->flush();
 
         } catch (Exception $e) {
             return new JsonResponse([], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        if (!$town->getType()->is( TownClass::EASY )) {
+            $this->getUser()->addAutomaticAccountMarkerByType(AutomaticAccountMarkerType::Mayor, TownRankingProxy::fromTown($town));
+            $em->persist( $this->getUser() );
+            $em->flush();
         }
 
         $current_event_names = array_map(fn(EventConf $e) => $e->name(), array_filter($current_events, fn(EventConf $e) => $e->active()));

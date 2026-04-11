@@ -112,7 +112,7 @@
                    <div class="row">
                         <div class="cell rw-12 padded">
                             <div class="note note-critical">
-                                {{ 'Du kannst aktuell keinen von Spielern erstellten Städten beitreten.'|trans({},'ghost') }} {{ 'Diese Sperre endet am {date} um {time}.'|trans({ date: mayorBlock.expires|format_datetime('medium', 'none'), time: mayorBlock.expires|format_datetime('none', 'short') },'ghost')|raw }}
+                                {{ 'Du kannst aktuell keinen von Spielern erstellten Städten beitreten.'|trans({},'ghost') }} {{ 'Diese Sperre endet am {date} um {time}.'|trans({ date: mayorBlock.expiresAt|format_datetime('medium', 'none'), time: mayorBlock.expiresAt|format_datetime('none', 'short') },'ghost')|raw }}
                             </div>
                         </div>
                    </div>
@@ -125,17 +125,14 @@
                         <div class="cell rw-12">
                             {% if cdm %}
                                 <div class="note note-warning">
-                                    {{ 'Da du in mehreren deiner letzten Städte frühzeitig gestorben bist ({death_type}), bist du bis {end_date} vom Spiel ausgeschlossen. Du kannst aktuell keine neue Stadt betreten.'|trans({
-                                        death_type: cdm.death.label|trans({},'game'),
-                                        end_date: cdm.timestamp|date_modify('tomorrow + 2week')|format_datetime('short', 'none')
+                                    {{ 'Da du in mehreren deiner letzten Städte frühzeitig gestorben bist, bist du bis {end_date} vom Spiel ausgeschlossen. Du kannst aktuell keine neue Stadt betreten.'|trans({
+                                        end_date: cdm.expiresAt|format_datetime('short', 'none')
                                     },'ghost') }}
                                 </div>
                             {% else %}
                                 {% if cdm_warn %}
                                     <div class="note note-warning">
-                                        {% trans from 'ghost' %}
-                                            Du bist in mehreren deiner letzten Städte frühzeitig durch Verdursten gestorben. Sollte dies in deiner nächsten Stadt erneut geschehen, wirst du für einige Wochen vom Spiel ausgeschlossen.
-                                        {% endtrans %}
+                                        {{ 'Du bist in mehreren deiner letzten Städte frühzeitig gestorben. Sollte dies in deiner nächsten Stadt erneut geschehen, wirst du für einige Wochen vom Spiel ausgeschlossen.'|trans({},'ghost') }}
                                     </div>
                                 {% endif %}
                             {% endif %}

@@ -8,12 +8,12 @@ use App\Entity\BuildingPrototype;
 use App\Entity\CitizenProfession;
 use App\Entity\CitizenRankingProxy;
 use App\Entity\HeroSkillPrototype;
-use App\Entity\MayorMark;
 use App\Entity\Season;
 use App\Entity\TeamTicket;
 use App\Entity\Town;
 use App\Entity\TownClass;
 use App\Entity\User;
+use App\Enum\AutomaticAccountMarkerType;
 use App\Enum\Capability\LobbyCapabilityEnum;
 use App\Enum\Configuration\MyHordesSetting;
 use App\Service\CitizenHandler;
@@ -24,14 +24,12 @@ use App\Service\InventoryHandler;
 use App\Service\TimeKeeperService;
 use App\Service\UserHandler;
 use Doctrine\Common\Collections\Criteria;
-use Doctrine\Common\Collections\Expr\Comparison;
 use Doctrine\Common\Collections\Order;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -68,18 +66,13 @@ class GhostController extends CustomAbstractController
             return $this->redirect($this->generateUrl( 'soul_death' ));
 
         $coa_members = $this->user_handler->getAvailableCoalitionMembers($user, $count, $active);
+        $aam_locked = $user->isActiveAutomaticAccountMarkersLimitReachedFor( AutomaticAccountMarkerType::SuspiciousDeath, $aam_count );
+        $aam_warn = !$aam_locked && ($aam_count === AutomaticAccountMarkerType::SuspiciousDeath->limit() - 1);
 
         $season = $this->entity_manager->getRepository(Season::class)->findOneBy(['current' => true]);
         $cap = $this->conf->getGlobalConf()->get(MyHordesSetting::AntiGriefForeignCap);
         $tickets = $user->getTeamTicketsFor( $season, '!' )->count();
         $cap_left = ($cap >= 0) ? max(0, $cap - $tickets) : -1;
-
-        $mayor_block = $em->getRepository(MayorMark::class)->matching( new Criteria(accessRawFieldValues: true)
-            ->where( new Comparison( 'user', Comparison::EQ, $user )  )
-            ->andWhere( new Comparison( 'expires', Comparison::GT, new \DateTime() ) )
-            ->orderBy( ['expires' => Order::Descending] )
-            ->setMaxResults(1)
-        )->first();
 
         return $this->render( 'ajax/ghost/intro.html.twig', $this->addDefaultTwigArgs(null, [
             'cap_left'           => $cap_left,
@@ -89,10 +82,10 @@ class GhostController extends CustomAbstractController
             'warnCoaNotComplete' => $count > 0 && (count($coa_members) + 1) < $count,
             'warnCoaEmpty'       => $count > 1 && empty($coa_members),
             'coa'                => $coa_members,
-            'cdm_warn'           => false,
-            'cdm'                => false,
+            'cdm_warn'           => $aam_warn,
+            'cdm'                => $user->getDecidingActiveAutomaticAccountMarkersFor( AutomaticAccountMarkerType::SuspiciousDeath ),
             'canCreateTown'      => $this->isGranted('create', LobbyCapabilityEnum::Town),
-            'mayorBlock'         => $mayor_block,
+            'mayorBlock'         => $user->getDecidingActiveAutomaticAccountMarkersFor( AutomaticAccountMarkerType::Mayor ),
         ] ));
     }
 
@@ -171,12 +164,7 @@ class GhostController extends CustomAbstractController
             'langs' => $this->generatedLangs,
             'mayorTowns' => $open_town,
             'canMayorTowns' => $this->isGranted( 'mayor', LobbyCapabilityEnum::Town ),
-            'mayorBlocked' => $em->getRepository(MayorMark::class)->matching( new Criteria(accessRawFieldValues: true)
-                ->where( new Comparison( 'user', Comparison::EQ, $user )  )
-                ->andWhere( new Comparison( 'expires', Comparison::GT, new \DateTime() ) )
-                ->orderBy( ['expires' => Order::Descending] )
-                ->setMaxResults( 1 )
-            )->first() ?: null,
+            'mayorBlocked' => $user->getDecidingActiveAutomaticAccountMarkersFor( AutomaticAccountMarkerType::Mayor ),
             'tooMany' => $em->getRepository(Town::class)->count(['mayor' => true]) > 14,
         ]));
     }

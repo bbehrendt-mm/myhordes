@@ -10,14 +10,14 @@ use App\Entity\Citizen;
 use App\Entity\CitizenProfession;
 use App\Entity\CitizenRankingProxy;
 use App\Entity\CitizenRole;
-use App\Entity\MayorMark;
 use App\Entity\SpecialActionPrototype;
 use App\Entity\Town;
 use App\Entity\TownClass;
+use App\Entity\TownRankingProxy;
 use App\Entity\TownSlotReservation;
 use App\Entity\User;
+use App\Enum\AutomaticAccountMarkerType;
 use App\Enum\Configuration\MyHordesSetting;
-use App\Response\AjaxResponse;
 use App\Service\Actions\Ghost\ExplainTownConfigAction;
 use App\Service\Actions\Security\GenerateMercureToken;
 use App\Service\ConfMaster;
@@ -28,7 +28,6 @@ use App\Service\TownHandler;
 use App\Service\UserHandler;
 use App\Structures\EventConf;
 use App\Structures\MyHordesConf;
-use Carbon\Carbon;
 use DateTime;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
@@ -255,6 +254,10 @@ class GameOnboardingController extends AbstractController
 
         $coa_members = [];
         if (empty($lock_reasons)) {
+            $aam_locked = $this->getUser()->isActiveAutomaticAccountMarkersLimitReachedFor( AutomaticAccountMarkerType::SuspiciousDeath, $aam_count );
+            if (!$aam_locked && ($aam_count === AutomaticAccountMarkerType::SuspiciousDeath->limit() - 1)) $warnings[] =
+                $translator->trans('Du bist in mehreren deiner letzten Städte frühzeitig gestorben. Sollte dies in deiner nächsten Stadt erneut geschehen, wirst du für einige Wochen vom Spiel ausgeschlossen.', [], 'ghost' );
+
             $coa_members = $this->userHandler->getAvailableCoalitionMembers( $this->getUser() , $count, $active);
             $warnings[] = match (true) {
                 $count > 1 && ($whitelist || $town->getPassword()) => $translator->trans('Diese Stadt verfügt über eine Zugangsbeschränkung. Die Mitglieder deiner Koalition können dir nicht automatisch folgen, wenn du diese Stadt betrittst. Fortfahren?', [], 'ghost'),
@@ -330,12 +333,11 @@ class GameOnboardingController extends AbstractController
         try {
             $em->persist($town);
             $em->persist($citizen);
-            if ($town->isMayor() && $town->getCreator()?->getId() !== $user->getId() && !$town->getType()->is( TownClass::EASY ))
-                $em->persist( new MayorMark()
-                    ->setUser( $this->getUser() )
-                    ->setCitizen( true )
-                    ->setExpires( new Carbon()->addDays(10) )
-                );
+            if ($town->isMayor() && $town->getCreator()?->getId() !== $user->getId() && !$town->getType()->is( TownClass::EASY )) {
+                $this->getUser()->addAutomaticAccountMarkerByType(AutomaticAccountMarkerType::Mayor, TownRankingProxy::fromTown($town));
+                $em->persist($this->getUser());
+            }
+
             $em->flush();
         } catch (Exception $e) {
             return new JsonResponse(

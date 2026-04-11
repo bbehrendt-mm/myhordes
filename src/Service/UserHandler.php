@@ -18,6 +18,7 @@ use App\Entity\User;
 use App\Entity\UserGroup;
 use App\Entity\UserGroupAssociation;
 use App\Entity\UserSwapPivot;
+use App\Enum\AutomaticAccountMarkerType;
 use App\Enum\Configuration\MyHordesSetting;
 use App\Enum\DomainBlacklistType;
 use App\Service\Actions\Cache\InvalidateTagsInAllPoolsAction;
@@ -324,6 +325,7 @@ class UserHandler
                 $member->getUser()->getLastActionTimestamp() !== null &&
                 ($timeout <= 0 || $member->getUser()->getLastActionTimestamp()->getTimestamp() > (time() - $timeout)) &&
                 $member->getUser()->getActiveCitizen() === null &&
+                $member->getUser()->isActiveAutomaticAccountMarkersLimitReachedFor( AutomaticAccountMarkerType::SuspiciousDeath ) &&
                 !$this->permissions->checkRestriction( $member->getUser(), AccountRestriction::RestrictionGameplay ) &&
                 !$this->entity_manager->getRepository(CitizenRankingProxy::class)->findNextUnconfirmedDeath($member->getUser())
             ) {

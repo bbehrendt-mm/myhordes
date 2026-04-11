@@ -4,6 +4,7 @@
 namespace App\Service;
 
 
+use App\Entity\AutomaticAccountMarker;
 use App\Entity\CauseOfDeath;
 use App\Entity\Citizen;
 use App\Entity\CitizenRankingProxy;
@@ -14,10 +15,12 @@ use App\Entity\PictoPrototype;
 use App\Entity\RuinZone;
 use App\Entity\TownRankingProxy;
 use App\Entity\UserGroup;
+use App\Enum\AutomaticAccountMarkerType;
 use App\Enum\Configuration\TownSetting;
 use App\Enum\Game\CitizenPersistentCache;
 use App\Service\Actions\Mercure\BroadcastViaMercureAction;
 use App\Structures\TownConf;
+use Carbon\Carbon;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -150,6 +153,12 @@ readonly class DeathHandler
         $citizen->setCauseOfDeath($cod);
         $citizen->setAlive(false);
         $this->gps->recordCitizenDied($citizen);
+
+        if ($citizen->getTown()->getDay() <= 3)
+            $citizen->getUser()->addAutomaticAccountMarkerByType(
+                AutomaticAccountMarkerType::SuspiciousDeath,
+                forTown: $citizen->getTown()->getRankingEntry()
+            );
 
         $gazetteDay ??= $citizen->getTown()->getDay() + (in_array($cod->getRef(), [CauseOfDeath::NightlyAttack,CauseOfDeath::Radiations]) ? 0 : 1);
         $gazette = $citizen->getTown()->findGazette( $gazetteDay, true );
