@@ -68,7 +68,6 @@ class GhostController extends CustomAbstractController
             return $this->redirect($this->generateUrl( 'soul_death' ));
 
         $coa_members = $this->user_handler->getAvailableCoalitionMembers($user, $count, $active);
-        $cdm_lock = $this->user_handler->getConsecutiveDeathLock( $user, $cdm_warn );
 
         $season = $this->entity_manager->getRepository(Season::class)->findOneBy(['current' => true]);
         $cap = $this->conf->getGlobalConf()->get(MyHordesSetting::AntiGriefForeignCap);
@@ -90,8 +89,8 @@ class GhostController extends CustomAbstractController
             'warnCoaNotComplete' => $count > 0 && (count($coa_members) + 1) < $count,
             'warnCoaEmpty'       => $count > 1 && empty($coa_members),
             'coa'                => $coa_members,
-            'cdm_warn'           => $cdm_warn,
-            'cdm'                => $cdm_lock,
+            'cdm_warn'           => false,
+            'cdm'                => false,
             'canCreateTown'      => $this->isGranted('create', LobbyCapabilityEnum::Town),
             'mayorBlock'         => $mayor_block,
         ] ));

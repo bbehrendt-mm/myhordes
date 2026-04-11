@@ -211,6 +211,12 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
     #[ORM\ManyToOne]
     private ?AttackSchedule $lastSkillPointDeductedAt = null;
 
+    /**
+     * @var Collection<int, AutomaticAccountMarker>
+     */
+    #[ORM\OneToMany(targetEntity: AutomaticAccountMarker::class, mappedBy: 'user', orphanRemoval: true)]
+    private Collection $automaticAccountMarkers;
+
     public function __construct()
     {
         $this->citizens = new ArrayCollection();
@@ -226,6 +232,7 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
         $this->teamTickets = new ArrayCollection();
         $this->notificationSubscriptions = new ArrayCollection();
         $this->pinnedForums = new ArrayCollection();
+        $this->automaticAccountMarkers = new ArrayCollection();
     }
     public function getId(): ?int
     {
@@ -1307,5 +1314,35 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
     public function getMediaBasePath(): string
     {
         return "user/{$this->getPrimaryKey()}/avatar";
+    }
+
+    /**
+     * @return Collection<int, AutomaticAccountMarker>
+     */
+    public function getAutomaticAccountMarkers(): Collection
+    {
+        return $this->automaticAccountMarkers;
+    }
+
+    public function addAutomaticAccountMarker(AutomaticAccountMarker $automaticAccountMarker): static
+    {
+        if (!$this->automaticAccountMarkers->contains($automaticAccountMarker)) {
+            $this->automaticAccountMarkers->add($automaticAccountMarker);
+            $automaticAccountMarker->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAutomaticAccountMarker(AutomaticAccountMarker $automaticAccountMarker): static
+    {
+        if ($this->automaticAccountMarkers->removeElement($automaticAccountMarker)) {
+            // set the owning side to null (unless already changed)
+            if ($automaticAccountMarker->getUser() === $this) {
+                $automaticAccountMarker->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }

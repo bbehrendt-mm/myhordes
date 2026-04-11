@@ -255,9 +255,6 @@ class GameOnboardingController extends AbstractController
 
         $coa_members = [];
         if (empty($lock_reasons)) {
-            $this->userHandler->getConsecutiveDeathLock( $this->getUser(), $cdm_warn );
-            if ($cdm_warn) $warnings[] = $translator->trans('Du bist in mehreren deiner letzten Städte frühzeitig durch Verdursten gestorben. Sollte dies in deiner nächsten Stadt erneut geschehen, wirst du für einige Wochen vom Spiel ausgeschlossen.', [], 'ghost' );
-
             $coa_members = $this->userHandler->getAvailableCoalitionMembers( $this->getUser() , $count, $active);
             $warnings[] = match (true) {
                 $count > 1 && ($whitelist || $town->getPassword()) => $translator->trans('Diese Stadt verfügt über eine Zugangsbeschränkung. Die Mitglieder deiner Koalition können dir nicht automatisch folgen, wenn du diese Stadt betrittst. Fortfahren?', [], 'ghost'),

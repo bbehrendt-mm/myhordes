@@ -7,7 +7,6 @@ namespace App\Service;
 use App\Entity\CauseOfDeath;
 use App\Entity\Citizen;
 use App\Entity\CitizenRankingProxy;
-use App\Entity\ConsecutiveDeathMarker;
 use App\Entity\EscapeTimer;
 use App\Entity\Gazette;
 use App\Entity\HomeIntrusion;
@@ -151,17 +150,6 @@ readonly class DeathHandler
         $citizen->setCauseOfDeath($cod);
         $citizen->setAlive(false);
         $this->gps->recordCitizenDied($citizen);
-
-        if ($citizen->getTown()->getDay() <= 3) {
-            $cdm = $this->entity_manager->getRepository(ConsecutiveDeathMarker::class)->findOneBy( ['user' => $citizen->getUser()] )
-                ?? (new ConsecutiveDeathMarker)->setUser($citizen->getUser())->setDeath( $cod )->setNumber(0);
-            if ($cdm->getDeath() === $cod) $cdm->setNumber($cdm->getNumber()+1);
-            else $cdm->setNumber(1)->setDeath($cod);
-
-            $this->entity_manager->persist($cdm->setTimestamp(new \DateTime()));
-        } elseif ($cdm = $this->entity_manager->getRepository(ConsecutiveDeathMarker::class)->findOneBy( ['user' => $citizen->getUser()] )) {
-            $this->entity_manager->persist($cdm->setNumber(0)->setDeath($cod));
-        }
 
         $gazetteDay ??= $citizen->getTown()->getDay() + (in_array($cod->getRef(), [CauseOfDeath::NightlyAttack,CauseOfDeath::Radiations]) ? 0 : 1);
         $gazette = $citizen->getTown()->findGazette( $gazetteDay, true );
