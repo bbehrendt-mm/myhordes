@@ -744,7 +744,7 @@ class InventoryAwareController extends CustomAbstractController
                 return true;
             case ItemTargetDefinition::ItemHeroicRescueType:
                 $return = $this->entity_manager->getRepository(Citizen::class)->find( (int)$id );
-                if ($return?->getTown()?->getId() !== $this->getActiveCitizen()->getTown()->getId()) {
+                if (($return?->getTown()?->getId() !== $this->getActiveCitizen()->getTown()->getId()) || !$return->getZone()) {
                     $return = null;
                     return false;
                 }
