@@ -901,7 +901,7 @@ Ruhm: crwdns71748:0crwdne71748:0
 'Die Waffe hat <strong>keine Batterie mehr</strong>.': 'crwdns71760:0crwdne71760:0'
 '<nt-stat-up-infection><nt-role-up-ghoul>Nach ein paar Sekunden spürst du den furchtbaren Nachgeschmack...</nt-role-up-ghoul></nt-stat-up-infection>': 'crwdns71762:0crwdne71762:0'
 'Dieses Gefühl des Wohlbefindens, das dieser kleine Kaffee hervorruft, bringt dich sofort wieder auf die Beine. Aah!': 'crwdns71764:0crwdne71764:0'
-'{watchpoint} pkt attacke': "crwdns71766:0{# Pkt. Angriff}crwdnd71766:0{# Pkt. Angriff}crwdnd71766:0{# Pkt. Angriff}crwdnd71766:0{# Pkte. Angriff}crwdnd71766:0{watchpoint__copy}crwdne71766:0"
+'{watchpoint} pkt attacke': "crwdns71766:0{watchpoint__copy}crwdne71766:0"
 'Vorsicht, zu viel Musik ist schädlich, und einer deiner Mitbürger hat dieses Instrument heute bereits benutzt. Deine Ohren würden das nicht überleben.': 'crwdns71768:0crwdne71768:0'
 '<t-fail>Du hast <strong>keine Wasserwaffen zum Befüllen</strong> in deinem Rucksack oder deiner Truhe.</t-fail><nt-fail>Du hast {items_spawn} dank des Wasserhahns kostenlos auffüllen können.</nt-fail>': 'crwdns71770:0{items_spawn}crwdne71770:0'
 'Diese Aktion wurde in dieser Partie schon ausgeführt.': 'crwdns71772:0crwdne71772:0'
@@ -1010,6 +1010,7 @@ Freundschaft: crwdns136825:0crwdne136825:0
 'Du versucht nochmal alle deine Kräfte für heute Abend zu mobilisieren. Die Anspannung steht dir ins Gesicht geschrieben. Du schwitzt und deine Hände zittern.{hr}Beim heutigen Angriff wirst du weder <c-HeroImmuneStatusList op="map" thirst="Durst" hunger="Hunger" infection="Krankheitssymptome (Infektion)"  addiction="Entzugserscheinungen" glue=", noch "></c-HeroImmuneStatusList> verspüren.<t-stat-down-terror>{hr}Du fühlst einen neuen Schub an Selbstsicherheit und verlierst deine Panik vor den Zombies.</t-stat-down-terror><t-stat-down-hungover>{hr}Dank deiner frisch geschöpften Hoffnung hast du nun wieder einen klaren Kopf.</t-stat-down-hungover><t-stat-down-healed>{hr}Du atmest einmal tief ein und spürst, wie die Wunde unter deinen Bandagen heilt.</t-stat-down-healed>': 'crwdns210450:0{hr}crwdnd210450:0{hr}crwdnd210450:0{hr}crwdnd210450:0{hr}crwdne210450:0'
 'Hierfür brauchst du mindestens 2 CP.': 'crwdns212806:0crwdne212806:0'
 'Hierfür brauchst du mindestens 3 CP.': 'crwdns212808:0crwdne212808:0'
+'Reparieren (1AP)': 'crwdns275868:0crwdne275868:0'
 'Reparieren (3CP)': 'crwdns212810:0crwdne212810:0'
 'Du hast dein Handwerkstalent gebraucht, um damit {target} zu reparieren. Dabei hast du {minus_cp} CP eingesetzt.': 'crwdns212812:0{target}crwdnd212812:0{minus_cp}crwdne212812:0'
 'Abgestandenes Bier': 'crwdns212814:0crwdne212814:0'
