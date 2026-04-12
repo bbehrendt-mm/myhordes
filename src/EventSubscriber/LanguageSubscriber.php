@@ -18,6 +18,15 @@ class LanguageSubscriber implements EventSubscriberInterface
         private readonly ConfMaster $conf,
         private readonly Security $security
     ){ }
+
+    private function setLocale(RequestEvent $event, ?string $locale) {
+        $locale ??= 'en';
+        $locale = substr($locale, 0, 2);
+        if (!in_array($locale, ['de','en','fr','es'], true))
+            $locale = 'en';
+        $event->getRequest()->setLocale($locale);
+    }
+
     public function onKernelRequest(RequestEvent $event) {
         if (!$event->getRequest()->isXmlHttpRequest()) {
             $pathInfos = explode( '/', $event->getRequest()->getPathInfo());
@@ -30,7 +39,7 @@ class LanguageSubscriber implements EventSubscriberInterface
                 }));
 
                 if (in_array($first_path_segment, $allLangsCodes)) {
-                    $event->getRequest()->setLocale($first_path_segment);
+                    $this->setLocale($event, $first_path_segment);
                     $event->getRequest()->getSession()->set('_user_lang', $first_path_segment);
                     return;
                 }
@@ -41,18 +50,18 @@ class LanguageSubscriber implements EventSubscriberInterface
         if ($locale = $event->getRequest()->attributes->get('_locale')) {
             $event->getRequest()->getSession()->set('_locale', $locale);
         } elseif ($event->getRequest()->getSession()->has('_user_lang')) {
-            $event->getRequest()->setLocale($event->getRequest()->getSession()->get('_user_lang', null));
+            $this->setLocale($event, $event->getRequest()->getSession()->get('_user_lang', null));
         } elseif ($event->getRequest()->getSession()->has('_town_lang')) {
-            $event->getRequest()->setLocale($event->getRequest()->getSession()->get('_town_lang', null));
+            $this->setLocale($event, $event->getRequest()->getSession()->get('_town_lang', null));
         } elseif ($event->getRequest()->getSession()->has('_locale')) {
-            $event->getRequest()->setLocale($event->getRequest()->getSession()->get('_locale', null));
+            $this->setLocale($event, $event->getRequest()->getSession()->get('_locale', null));
         } elseif ($langs = $event->getRequest()->getLanguages()) {
-            $event->getRequest()->setLocale( $langs[0] );
+            $this->setLocale($event,  $langs[0] );
         }
 
         $path = $event->getRequest()->getPathInfo();
         if (strstr($path, 'admin') && $event->getRequest()->getSession()->has('_admin_lang')) {
-            $event->getRequest()->setLocale($event->getRequest()->getSession()->get('_admin_lang', null));
+            $this->setLocale($event, $event->getRequest()->getSession()->get('_admin_lang', null));
         }
     }
 

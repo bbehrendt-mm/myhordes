@@ -49,7 +49,7 @@ class SecurityController extends CustomAbstractCoreController
      */
     #[Route(path: '/token/exchange/{ticket}', name: 'token_exchange', methods: ['GET'])]
     public function find(string $ticket, Request $request, GenerateKeyAction $keygen, Locksmith $locksmith, TagAwareCacheInterface $gameCachePool): JsonResponse {
-        $lock = $locksmith->waitForLock("ticketing_{$request->getSession()->getId()}");
+        $lock = $locksmith->waitForLock("ticketing_lock_{$request->getSession()->getId()}", 5);
 
         $valid = $gameCachePool->get( "ticketing_{$ticket}", function (ItemInterface $item) use ($ticket, $request, $keygen) {
             $item->expiresAfter(0);

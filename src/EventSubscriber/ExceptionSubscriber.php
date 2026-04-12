@@ -72,6 +72,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
                               "*{$event->getThrowable()->getFile()}*\nLine *{$event->getThrowable()->getLine()}*\n\n"
                     )
             ) );
+            file_put_contents( $discord_file, "".time() );
 
         }
 

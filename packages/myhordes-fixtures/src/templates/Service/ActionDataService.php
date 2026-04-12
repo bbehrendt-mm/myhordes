@@ -218,6 +218,8 @@ class ActionDataService implements FixtureProcessorInterface {
                     [ ['do_nothing', 'msg_soccer_fail'], 15 ],
                     [ ['plus_1sp_e', 'msg_soccer_success'], 5 ],
                 ] ] ] ],
+				
+				'repair_soccer' => [ 'label' => 'Reparieren (1AP)', 'at00' => true, 'meta' => [ 'min_1_ap', 'not_tired', 'is_not_wounded_hands_repair' ], 'result' => [ 'morph_soccer', 'minus_1ap' ], 'message' => 'Du hast die/den {item} repariert.' ],
 
                 'open_doggybag'  => [ 'label' => 'Öffnen', 'at00' => true, 'meta' => ['is_not_wounded_hands'], 'result' => [ 'consume_item', 'spawn_doggy' ], 'message' => 'Du hast dein <span class="tool">{item}</span> ausgepackt und <span class="tool">{items_spawn}</span> erhalten!' ],
                 'open_lunchbag'  => [ 'label' => 'Öffnen', 'at00' => true, 'meta' => ['is_not_wounded_hands'], 'result' => [ 'consume_item', 'spawn_lunch' ], 'message_key' => 'container_open' ],
@@ -1050,6 +1052,7 @@ class ActionDataService implements FixtureProcessorInterface {
                 'tamed_pet_off_#00' => [ 'pet_doggo' ],
                 'shield_#00'  => [ 'hero_guard' ],
                 'soccer_#00'  => [ 'play_soccer_1', 'play_soccer_2'],
+				'soccer_part_#00' => [ 'repair_soccer' ],
                 'quantum_#00'  => [ 'drink_quantum_1', 'drink_quantum_2', 'drink_quantum_3'],
 
                 'photo_4_#00' => [ 'flash_photo_4', 'flash_photo_4_ruin_no_bp', 'flash_photo_4_ruin_bp', 'flash_photo_4_ruin_bp_free' ],

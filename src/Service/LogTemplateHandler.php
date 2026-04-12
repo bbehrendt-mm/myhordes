@@ -180,7 +180,7 @@ class LogTemplateHandler
         $reference_citizen = null;
         foreach ($variableTypes as $typeEntry)
             if (isset($typeEntry['type']) && $typeEntry['type'] === 'citizen' && $reference_citizen === null)
-                $reference_citizen = $this->fetchVariableObject( $typeEntry['type'], $variables[$typeEntry['name']] );
+                $reference_citizen = $this->fetchVariableObject( $typeEntry['type'], $variables[$typeEntry['name']] ?? null );
 
         foreach ($variableTypes as $typeEntry) {
             try {
@@ -190,9 +190,9 @@ class LogTemplateHandler
 
                 // ICU-aware
                 if ($typeEntry['type'] === 'citizen') {
-                    if ( $variables[$typeEntry['name']] === -141089 )
+                    if ( ($variables[$typeEntry['name']] ?? null) === -141089 )
                         $transParams[$typeEntry['name']] = $this->trans->trans( 'Mysteriöser Fremder', [], 'game' );
-                    else $transParams[$typeEntry['name']] = $this->fetchVariableObject( $typeEntry['type'], $variables[$typeEntry['name']] );
+                    else $transParams[$typeEntry['name']] = $this->fetchVariableObject( $typeEntry['type'], $variables[$typeEntry['name']] ?? null );
                     $transParams["{$typeEntry['name']}__tag"] = 'span';
                 } elseif ($typeEntry['type'] === 'profession' || $typeEntry['type'] === 'professionFull') {
                     if ( $variables[$typeEntry['name']] === -141089 )

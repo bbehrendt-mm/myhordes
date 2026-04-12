@@ -214,9 +214,9 @@ class GazetteService
             if ($n > 0) shuffle($elems);
             if ($featured !== null) array_unshift( $elems, $featured );
 
-            for ($i = 1; $i <= $n; $i++)
-                $var["$name$i"] = (array_shift($elems))->getId();
             $var["{$name}s"] = count($elems);
+            for ($i = 1; $i <= $n; $i++)
+                $var["$name$i"] = (array_shift($elems))?->getId();
         };
 
         foreach ($g->getVariableTypes() as ['name' => $name])
@@ -328,57 +328,57 @@ class GazetteService
                 break;
 
             case GazetteEntryTemplate::RequiresMultipleDehydrations:
-                $_add_elements('cadaver', array_filter( $death_outside, fn(Citizen $c) => $c->getCauseOfDeath()->getRef() === CauseOfDeath::Dehydration ), null, 0, $variables);
+                $_add_elements('cadaver', array_filter( $death_outside, fn(Citizen $c) => $c->getCauseOfDeath()->getRef() === CauseOfDeath::Dehydration ), null, 2, $variables);
                 if ($arg > 0) $_add_elements( 'citizen', $survivors, $featured !== null && $featured->getAlive() ? $featured : null, $arg, $variables );
                 break;
 
             case GazetteEntryTemplate::RequiresMultipleSuicides:
-                $_add_elements('cadaver', array_filter( $death_outside, fn(Citizen $c) => $c->getCauseOfDeath()->getRef() === CauseOfDeath::Cyanide ), null, 0, $variables);
+                $_add_elements('cadaver', array_filter( $death_outside, fn(Citizen $c) => $c->getCauseOfDeath()->getRef() === CauseOfDeath::Cyanide ), null, 2, $variables);
                 if ($arg > 0) $_add_elements( 'citizen', $survivors, $featured !== null && $featured->getAlive() ? $featured : null, $arg, $variables );
                 break;
 
             case GazetteEntryTemplate::RequiresMultipleInfections:
-                $_add_elements('cadaver', array_filter( $death_outside, fn(Citizen $c) => $c->getCauseOfDeath()->getRef() === CauseOfDeath::Infection ), null, 0, $variables);
+                $_add_elements('cadaver', array_filter( $death_outside, fn(Citizen $c) => $c->getCauseOfDeath()->getRef() === CauseOfDeath::Infection ), null, 2, $variables);
                 if ($arg > 0) $_add_elements( 'citizen', $survivors, $featured !== null && $featured->getAlive() ? $featured : null, $arg, $variables );
                 break;
 
             case GazetteEntryTemplate::RequiresMultipleVanished:
-                $_add_elements('cadaver', array_filter( $death_outside, fn(Citizen $c) => $c->getCauseOfDeath()->getRef() === CauseOfDeath::Vanished ), null, 0, $variables);
+                $_add_elements('cadaver', array_filter( $death_outside, fn(Citizen $c) => $c->getCauseOfDeath()->getRef() === CauseOfDeath::Vanished ), null, 2, $variables);
                 if ($arg > 0) $_add_elements( 'citizen', $survivors, $featured !== null && $featured->getAlive() ? $featured : null, $arg, $variables );
                 break;
 
             case GazetteEntryTemplate::RequiresMultipleHangings:
-                $_add_elements('cadaver', array_filter( $death_outside, fn(Citizen $c) => $c->getCauseOfDeath()->getRef() === CauseOfDeath::Hanging ), null, 0, $variables);
+                $_add_elements('cadaver', array_filter( $death_outside, fn(Citizen $c) => $c->getCauseOfDeath()->getRef() === CauseOfDeath::Hanging ), null, 2, $variables);
                 if ($arg > 0) $_add_elements( 'citizen', $survivors, $featured !== null && $featured->getAlive() ? $featured : null, $arg, $variables );
                 break;
 
             case GazetteEntryTemplate::RequiresMultipleCrosses:
-                $_add_elements('cadaver', array_filter( $death_outside, fn(Citizen $c) => $c->getCauseOfDeath()->getRef() === CauseOfDeath::ChocolateCross ), null, 0, $variables);
+                $_add_elements('cadaver', array_filter( $death_outside, fn(Citizen $c) => $c->getCauseOfDeath()->getRef() === CauseOfDeath::ChocolateCross ), null, 2, $variables);
                 if ($arg > 0) $_add_elements( 'citizen', $survivors, $featured !== null && $featured->getAlive() ? $featured : null, $arg, $variables );
                 break;
 
             case GazetteEntryTemplate::RequiresMultipleRedSouls:
-                $_add_elements('cadaver', array_filter( $death_outside, fn(Citizen $c) => $c->getCauseOfDeath()->getRef() === CauseOfDeath::Haunted ), null, 0, $variables);
+                $_add_elements('cadaver', array_filter( $death_outside, fn(Citizen $c) => $c->getCauseOfDeath()->getRef() === CauseOfDeath::Haunted ), null, 2, $variables);
                 if ($arg > 0) $_add_elements( 'citizen', $survivors, $featured !== null && $featured->getAlive() ? $featured : null, $arg, $variables );
                 break;
 
             case GazetteEntryTemplate::RequiresMultipleGhulEaten:
-                $_add_elements('cadaver', array_filter( $death_outside, fn(Citizen $c) => $c->getCauseOfDeath()->getRef() === CauseOfDeath::GhulEaten ), null, 0, $variables);
+                $_add_elements('cadaver', array_filter( $death_outside, fn(Citizen $c) => $c->getCauseOfDeath()->getRef() === CauseOfDeath::GhulEaten ), null, 2, $variables);
                 if ($arg > 0) $_add_elements( 'citizen', $survivors, $featured !== null && $featured->getAlive() ? $featured : null, $arg, $variables );
                 break;
 
             case GazetteEntryTemplate::RequiresMultipleGhulBeaten:
-                $_add_elements('cadaver', array_filter( $death_outside, fn(Citizen $c) => $c->getCauseOfDeath()->getRef() === CauseOfDeath::GhulBeaten ), null, 0, $variables);
+                $_add_elements('cadaver', array_filter( $death_outside, fn(Citizen $c) => $c->getCauseOfDeath()->getRef() === CauseOfDeath::GhulBeaten ), null, 2, $variables);
                 if ($arg > 0) $_add_elements( 'citizen', $survivors, $featured !== null && $featured->getAlive() ? $featured : null, $arg, $variables );
                 break;
 
             case GazetteEntryTemplate::RequiresMultipleGhulStarved:
-                $_add_elements('cadaver', array_filter( $death_outside, fn(Citizen $c) => $c->getCauseOfDeath()->getRef() === CauseOfDeath::GhulStarved ), null, 0, $variables);
+                $_add_elements('cadaver', array_filter( $death_outside, fn(Citizen $c) => $c->getCauseOfDeath()->getRef() === CauseOfDeath::GhulStarved ), null, 2, $variables);
                 if ($arg > 0) $_add_elements( 'citizen', $survivors, $featured !== null && $featured->getAlive() ? $featured : null, $arg, $variables );
                 break;
 
             case GazetteEntryTemplate::RequiresMultipleFleshCage:
-                $_add_elements('cadaver', array_filter( $death_outside, fn(Citizen $c) => $c->getCauseOfDeath()->getRef() === CauseOfDeath::FleshCage ), null, 0, $variables);
+                $_add_elements('cadaver', array_filter( $death_outside, fn(Citizen $c) => $c->getCauseOfDeath()->getRef() === CauseOfDeath::FleshCage ), null, 2, $variables);
                 if ($arg > 0) $_add_elements( 'citizen', $survivors, $featured !== null && $featured->getAlive() ? $featured : null, $arg, $variables );
                 break;
 
