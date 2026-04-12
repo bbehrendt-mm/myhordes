@@ -1,4 +1,3 @@
----
 'Diesen Bürger töten?': 'Kill this citizen?'
 Status: Status
 Dauer: Duration
@@ -715,3 +714,14 @@ Cheater: Cheater
 'Bonus-Heldenerfahrung setzen': 'Set bonus hero xp'
 'Gebäude anlegen:': 'Create ruin:'
 'Karte aufdecken': 'Unveil map'
+Administratoren: Admins
+'Verdächtiger Tod': 'Suspicious death'
+'Teilnehmer einer Spieler-erzeugten öffentlichen Stadt': 'Participant in a user-created public town'
+'Wird gesetzt, wenn der Spieler eine öffentliche Stadt erstellt oder dieser beitritt. Blockiert das Erstellen oder Betreten fremder Spieler-erstellten öffentlichen Städte wenn aktiv.': 'Set if the player creates a new public town or joins one. When active, the player can no longer create or join public towns that others have created.'
+'Automatische Sperren und Sanktionen': 'Automatic locks and sanctions'
+'Aktive Marker': 'Active markers'
+'Aktiv bis': 'Active until'
+'Alle deaktivieren': 'Disable all'
+'Einzelnen deaktivieren': 'Disable oldest'
+Deaktivieren: Disable
+'Wird für Dehydration an Tag 3 oder früher gesetzt, oder wenn der Spieler an dem selben IRL-Tag stirbt, an dem er der Stadt beigetreten ist. Blockiert den Beitritt zu neuen Städten wenn aktiv.': 'Wird für Dehydration an Tag 3 oder früher gesetzt, oder wenn der Spieler an dem selben IRL-Tag stirbt, an dem er der Stadt beigetreten ist. Blockiert den Beitritt zu neuen Städten wenn aktiv.'

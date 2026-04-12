@@ -1,4 +1,3 @@
----
 'Diesen Bürger töten?': 'Tuer ce citoyen ?'
 Status: États
 Dauer: Durée
@@ -715,3 +714,14 @@ Cheater: Tricheur
 'Bonus-Heldenerfahrung setzen': 'Définir l''expérience bonus des héros'
 'Gebäude anlegen:': 'Créer un bâtiment :'
 'Karte aufdecken': 'Révéler la carte'
+Administratoren: Administrateur
+'Verdächtiger Tod': 'Verdächtiger Tod'
+'Teilnehmer einer Spieler-erzeugten öffentlichen Stadt': 'Teilnehmer einer Spieler-erzeugten öffentlichen Stadt'
+'Wird gesetzt, wenn der Spieler eine öffentliche Stadt erstellt oder dieser beitritt. Blockiert das Erstellen oder Betreten fremder Spieler-erstellten öffentlichen Städte wenn aktiv.': 'Wird gesetzt, wenn der Spieler eine öffentliche Stadt erstellt oder dieser beitritt. Blockiert das Erstellen oder Betreten fremder Spieler-erstellten öffentlichen Städte wenn aktiv.'
+'Automatische Sperren und Sanktionen': 'Automatische Sperren und Sanktionen'
+'Aktive Marker': 'Aktive Marker'
+'Aktiv bis': 'Aktiv bis'
+'Alle deaktivieren': 'Alle deaktivieren'
+'Einzelnen deaktivieren': 'Einzelnen deaktivieren'
+Deaktivieren: Deaktivieren
+'Wird für Dehydration an Tag 3 oder früher gesetzt, oder wenn der Spieler an dem selben IRL-Tag stirbt, an dem er der Stadt beigetreten ist. Blockiert den Beitritt zu neuen Städten wenn aktiv.': 'Wird für Dehydration an Tag 3 oder früher gesetzt, oder wenn der Spieler an dem selben IRL-Tag stirbt, an dem er der Stadt beigetreten ist. Blockiert den Beitritt zu neuen Städten wenn aktiv.'

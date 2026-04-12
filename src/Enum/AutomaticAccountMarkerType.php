@@ -35,7 +35,7 @@ enum AutomaticAccountMarkerType: string {
 
     public function help(): string {
         return match($this) {
-            self::SuspiciousDeath => T::__('Wird für Tode an Tag 3 oder früher gesetzt. Blockiert den Beitritt zu neuen Städten wenn aktiv.', 'admin'),
+            self::SuspiciousDeath => T::__('Wird für Dehydration an Tag 3 oder früher gesetzt, oder wenn der Spieler an dem selben IRL-Tag stirbt, an dem er der Stadt beigetreten ist. Blockiert den Beitritt zu neuen Städten wenn aktiv.', 'admin'),
             self::Mayor => T::__('Wird gesetzt, wenn der Spieler eine öffentliche Stadt erstellt oder dieser beitritt. Blockiert das Erstellen oder Betreten fremder Spieler-erstellten öffentlichen Städte wenn aktiv.', 'admin'),
         };
     }
