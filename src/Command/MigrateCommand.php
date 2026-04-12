@@ -1555,7 +1555,7 @@ class MigrateCommand extends Command
             $this->helper->leChunk($output, Zone::class, 1, ['prototype' => $bunker_id], true, false, function(Zone $zone) {
 
                 $found = false;
-                foreach ($this->entity_manager->getRepository(RuinZone::class)->matching(Criteria::create()
+                foreach ($this->entity_manager->getRepository(RuinZone::class)->matching(Criteria::create(true)
                     ->andWhere(Criteria::expr()->eq('zone', $zone))
                     ->andWhere(Criteria::expr()->gt('z', 0))
                 ) as $ruinZone) {

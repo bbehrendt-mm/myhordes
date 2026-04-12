@@ -1054,7 +1054,7 @@ class AdminUserController extends AdminActionController
             'nonblocking_account_marks' => $inactive_account_marks,
             'blocking_account_marks' => $active_account_marks,
             'all_account_marks' => $user->getAutomaticAccountMarkers()->matching(
-                Criteria::create()
+                Criteria::create(true)
                     ->where( new Comparison('created_at', Comparison::GTE, Carbon::now()->subYear()->toDateTimeImmutable()) )
                     ->orderBy(['created_at' => Order::Descending->value])
             ),

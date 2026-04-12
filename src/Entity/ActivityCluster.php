@@ -109,7 +109,7 @@ class ActivityCluster
     public function getEntriesBy(?User $user = null, ?int $cutoff = null): Collection {
         if ($user === null && $cutoff === null) return $this->getEntries();
 
-        $criteria = Criteria::create();
+        $criteria = Criteria::create(true);
         if ($user !== null) $criteria->andWhere( Criteria::expr()->eq('user', $user) );
         if ($user !== null) $criteria->andWhere( Criteria::expr()->eq('cutoff', $cutoff) );
         return $this->entries->matching($criteria);

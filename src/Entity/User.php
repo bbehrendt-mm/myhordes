@@ -1331,7 +1331,7 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
     public function getActiveAutomaticAccountMarkersFor(AutomaticAccountMarkerType $type): Collection
     {
         return $this->getAutomaticAccountMarkers()->matching(
-            Criteria::create()
+            Criteria::create(true)
                 ->andWhere( new Comparison('type', Comparison::EQ, $type ) )
                 ->andWhere( new Comparison('expires_at', Comparison::GT, new \DateTimeImmutable() ) )
                 ->andWhere( new Comparison('enabled', Comparison::EQ, true ) )
@@ -1370,7 +1370,7 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
         if (!$active) return null;
 
         return $this->getActiveAutomaticAccountMarkersFor( $type )
-            ->matching( Criteria::create()
+            ->matching( Criteria::create(true)
                             ->orderBy( ['expires_at' => Order::Ascending] )
                             ->setMaxResults( max(1, 1 + ($count - $type->limit()) ) )
             )->last() ?: null;

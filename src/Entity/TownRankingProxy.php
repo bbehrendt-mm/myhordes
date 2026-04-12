@@ -182,7 +182,7 @@ class TownRankingProxy
 
     public function getCitizenForUser( User $user ): ?CitizenRankingProxy {
         return $this->getCitizens()->matching(
-            Criteria::create()->where( Criteria::expr()->eq( 'user', $user ) )
+            Criteria::create(true)->where( Criteria::expr()->eq( 'user', $user ) )
         )->first() ?: null;
     }
 
