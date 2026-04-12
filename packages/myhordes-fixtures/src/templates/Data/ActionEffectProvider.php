@@ -250,6 +250,7 @@ class ActionEffectProvider
         $effects_container->add()->identifier('morph_music_part')->add(new ItemEffect()->morphSource('music_part_#00'))->commit();
         $effects_container->add()->identifier('morph_radio_off')->add(new ItemEffect()->morphSource('radio_off_#00'))->commit();
         $effects_container->add()->identifier('morph_xmas_gift')->add(new ItemEffect()->morphSource('xmas_gift_#00'))->commit();
+        $effects_container->add()->identifier('morph_soccer')->add(new ItemEffect()->morphSource('soccer_#00'))->commit();
         $effects_container->add()->identifier('morph_soccer_part')->add(new ItemEffect()->morphSource('soccer_part_#00'))->commit();
 
         $effects_container->add()->identifier('consume_steak')->add(new ItemEffect()->consume('meat_#00'))->commit();
