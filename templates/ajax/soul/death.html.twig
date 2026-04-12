@@ -167,11 +167,11 @@
     {{parent()}}
     <script>
         document.getElementById('rebirth_btn')?.addEventListener('click', function() {
-            if (confirm('{{ 'Bist du sicher?'|trans({},'global') }}')) {
+            if (confirm('{{ 'Bist du sicher?'|trans({},'global')|e('js') }}')) {
                 var lastWords = "";
                 if(document.getElementById("last_words") !== null)
                     lastWords = document.getElementById("last_words").value;
-                
+
                 $.ajax.easySend( '{{ path('api_unsubscribe') }}', {lastwords: lastWords},
                     function () {
                         $.ajax.load(null, '{{ path('postgame', {t: dead_citizen.town.id}) }}', true);
