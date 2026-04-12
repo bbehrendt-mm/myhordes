@@ -4,8 +4,10 @@ namespace App\Entity;
 
 use App\Repository\GazetteEntryTemplateRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\UniqueConstraint;
 
 #[ORM\Entity(repositoryClass: GazetteEntryTemplateRepository::class)]
+#[UniqueConstraint(name: 'gaz_template_name_unique', columns: ['name'])]
 class GazetteEntryTemplate
 {
     const TypeGazetteNews               = 1;
@@ -48,7 +50,7 @@ class GazetteEntryTemplate
     const TypeGazetteMultiGhulEaten     =38;
     const TypeGazetteMultiFleshCage     =39;
     const TypeGazetteMultiGhulStarved   =40;
-    const TypeGazetteMultiGhulBeaten    =41;    
+    const TypeGazetteMultiGhulBeaten    =41;
 
     const RequiresNothing       =  0;
     const BaseRequirementCitizen = 10;
@@ -84,8 +86,8 @@ class GazetteEntryTemplate
     const RequiresMultipleVanishedC1    = 481;
     const RequiresMultipleHangingsC1    = 491;
     const RequiresMultipleRedSoulsC1    = 611;
-    const RequiresMultipleGhulEatenC1   =621; 
-    const RequiresMultipleFleshCageC1   =651;   
+    const RequiresMultipleGhulEatenC1   =621;
+    const RequiresMultipleFleshCageC1   =651;
     const FollowUpTypeNone  = 0;
     const FollowUpTypeDoubt = 1;
     const FollowUpTypeBad   = 2;
