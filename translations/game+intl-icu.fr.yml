@@ -174,7 +174,7 @@ Konstruktionen: Chantiers
 Punkt(e): points
 'Am Boden': 'Par terre'
 'Temporäre Zonenkontrolle': 'Contrôle temporaire'
-'{z} Zombies kontrollieren diese Zone!': '{raw_z, plural, one {**Un** zombie contrôle } other {**z**zombies contrôlent}} cette zone !'
+'{z} Zombies kontrollieren diese Zone!': '{z, plural, one {**Un** zombie contrôle } other {**#** zombies contrôlent}} cette zone !'
 'Du wurdest überrascht und bist jetzt von den Zombies umzingelt! Wenn du nichts unternimmst und dir niemand zu Hilfe eilt, wirst du ohne Zweifel heute Abend hier verrecken ...': 'Vous avez été submergé(e) et vous êtes maintenant bloqué(e) par les hordes de zombies qui vous entourent ! Si vous ne faites rien ou si personne ne vient vous secourir, vous mourrez sans aucun doute ce soir !'
 'Hilfe rufen!': 'Appeler à l’aide !'
 'Die Flucht wagen!': 'Tenter de fuir !'
@@ -999,7 +999,7 @@ Basisverteidigung: Défense de base
 'Nicht ganz ekelfrei hat {disposing_citizen} den leblosen Körper von {citizen} entsorgt.': 'C''est non sans dégoût que {disposing_citizen} s''est débarrassé(e) du corps inanimé de {citizen}.'
 'Dank {disposing_citizen} hat sich der Körper von {citizen} in verfaultes Wasser verwandelt.': 'Grâce aux efforts de {disposing_citizen}, le corps de {citizen} a été réduit en liquide putride.'
 'Behausung wiederverwerten': 'Recycler la maison'
-'{z} Zombies blockieren den Weg!': '{raw_z, plural, one {**Un** zombie bloque le chemin !} other {**#**zombies bloquent le chemin !}} '
+'{z} Zombies blockieren den Weg!': '{z, plural, one {**Un** zombie bloque le chemin !} other {**#** zombies bloquent le chemin !}} '
 'Du wurdest überrascht und bist jetzt von den Zombies umzingelt! Du kannst flüchten, allerdings wirst du dadurch zusätzlichen Sauerstoff verbrauchen ...': 'Vous avez été surpris et êtes maintenant entouré de zombies ! Vous pouvez vous échapper, mais vous utiliserez de l''oxygène supplémentaire...'
 Flüchten: S'enfuir
 'Gebäude verlassen': 'Quitter le bâtiment'
