@@ -111,7 +111,7 @@ export class TownOnboardingAPI extends TranslatableAPI<TranslationStrings> {
     }
 
     public skills(town: number): Promise<ResponseSkills> {
-        return this.fetch.from(`/${town}/skills`)
+        return this.fetch.from(`/${town}/skills`, {t: new Date().getTime()})
             .request().get() as Promise<ResponseSkills>;
     }
 

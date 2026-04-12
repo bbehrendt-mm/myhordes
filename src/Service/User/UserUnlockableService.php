@@ -411,7 +411,7 @@ class UserUnlockableService implements ServiceSubscriberInterface
 
         // Get skills unlocked by default
         $defaultSkills = $this->getService(EntityManagerInterface::class)->getRepository(HeroSkillPrototype::class)->matching(
-            (new Criteria())
+            new Criteria()
                 ->andWhere( new Comparison( 'enabled', Comparison::EQ, true )  )
                 ->andWhere( new Comparison( 'legacy', Comparison::EQ, false )  )
                 ->andWhere( new Comparison( 'daysNeeded', Comparison::EQ, 0 )  )
@@ -419,7 +419,7 @@ class UserUnlockableService implements ServiceSubscriberInterface
 
         // Unlocked skills
         $unlockedSkills = $this->getService(EntityManagerInterface::class)->getRepository(HeroSkillUnlock::class)->matching(
-            (new Criteria())
+            new Criteria()
                 ->andWhere( new Comparison( 'user', Comparison::EQ, $user )  )
         )->map( fn(HeroSkillUnlock $skill) => $skill->getSkill() );
 
