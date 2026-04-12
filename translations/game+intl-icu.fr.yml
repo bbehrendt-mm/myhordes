@@ -16,7 +16,7 @@ verlassen: 'a quitté la ville'
 '{citizen} hat seine neue Berufung als {profession} gefunden.': '{citizen} a choisi le métier {profession}.'
 '{citizen} hat seine Behausung in ein(e,n) {home} verwandelt...': '{citizen} a décidé d’améliorer sa maison en {home}…'
 '{zombie} ist von den Toten auferstanden und hat die Baustelle für {building} verwüstet!': '{zombie} s’est relevé et le bâtiment {building} a été détruit !'
-'{num} Zombies attackieren die Stadtbewohner!': '{num} zombies ont attaqué les citoyens !'
+'{num} Zombies attackieren die Stadtbewohner!': '{raw_num, plural, one {**Un** zombie a} other {**#** zombies ont}} attaqué les citoyens !'
 'Der Einsatz von {building} für die Verteidigung der Stadt hat uns {num} Rationen Wasser gekostet.': 'L’utilisation de {building} pour défendre la ville nous a coûté {num} ration(s) d’eau.'
 'Durch die Verbesserung von {building} wurdem dem Brunnen {num} Rationen Wasser hinzugefügt.': 'En améliorant le chantier {building}, {num} rations d’eau ont été ajoutées au puits.'
 'Durch die Verbesserung von {building} hat die Stadt folgende Gegenstände erhalten: {items}': 'En améliorant le chantier {building}, la ville a reçu : {items}'
@@ -174,7 +174,7 @@ Konstruktionen: Chantiers
 Punkt(e): points
 'Am Boden': 'Par terre'
 'Temporäre Zonenkontrolle': 'Contrôle temporaire'
-'{z} Zombies kontrollieren diese Zone!': '{z} zombies contrôlent cette zone !'
+'{z} Zombies kontrollieren diese Zone!': '{z, plural, one {**Un** zombie contrôle } other {**#** zombies contrôlent}} cette zone !'
 'Du wurdest überrascht und bist jetzt von den Zombies umzingelt! Wenn du nichts unternimmst und dir niemand zu Hilfe eilt, wirst du ohne Zweifel heute Abend hier verrecken ...': 'Vous avez été submergé(e) et vous êtes maintenant bloqué(e) par les hordes de zombies qui vous entourent ! Si vous ne faites rien ou si personne ne vient vous secourir, vous mourrez sans aucun doute ce soir !'
 'Hilfe rufen!': 'Appeler à l’aide !'
 'Die Flucht wagen!': 'Tenter de fuir !'
@@ -356,9 +356,9 @@ Dompteur: "Apprivoiseur"
 Techniker: "\n            {ref__icu, select,\n                on {\n                    {ref__gender, select,\n                        female {Technicienne}\n                        other {Technicien}\n                    }\n                }\n            other {Technicien}\n            }\n        "
 Schamane: "Chaman"
 Einsiedler: "Ermite"
-'Verbesserung des Tages': 'Les évolutions du jour'
+'Verbesserung des Tages': 'Évolutions du jour'
 Wachturm: Tour
-Werkstatt: L’atelier
+Werkstatt: Atelier
 'Jemand hat eine anonyme Anzeige gegen {citizen} vorgebracht!': 'Une plainte anonyme a été déposée contre {citizen} !'
 'Jemand hat seine anonyme Anzeige gegen {citizen} zurückgezogen.': 'Quelqu’un a retiré sa plainte contre {citizen}.'
 'Wir haben noch nicht die Technologie, um den morgigen Angriff zu beurteilen.': 'Nous ne disposons pas de la technologie suffisante pour évaluer l’attaque du lendemain.'
@@ -999,7 +999,7 @@ Basisverteidigung: Défense de base
 'Nicht ganz ekelfrei hat {disposing_citizen} den leblosen Körper von {citizen} entsorgt.': 'C''est non sans dégoût que {disposing_citizen} s''est débarrassé(e) du corps inanimé de {citizen}.'
 'Dank {disposing_citizen} hat sich der Körper von {citizen} in verfaultes Wasser verwandelt.': 'Grâce aux efforts de {disposing_citizen}, le corps de {citizen} a été réduit en liquide putride.'
 'Behausung wiederverwerten': 'Recycler la maison'
-'{z} Zombies blockieren den Weg!': '{z} zombies bloquent le chemin !'
+'{z} Zombies blockieren den Weg!': '{z, plural, one {**Un** zombie bloque le chemin !} other {**#** zombies bloquent le chemin !}} '
 'Du wurdest überrascht und bist jetzt von den Zombies umzingelt! Du kannst flüchten, allerdings wirst du dadurch zusätzlichen Sauerstoff verbrauchen ...': 'Vous avez été surpris et êtes maintenant entouré de zombies ! Vous pouvez vous échapper, mais vous utiliserez de l''oxygène supplémentaire...'
 Flüchten: S'enfuir
 'Gebäude verlassen': 'Quitter le bâtiment'
@@ -1577,7 +1577,7 @@ Wählen: Sélectionner
 '{attacker} hat {defender} mit einem üblen Sandballwurf verwundet. Autsch, das hat sicher weh getan...!': '{attacker} a blessé {defender} avec sa sale boule de sable. Aïe ça fait mal... !'
 '{attacker} hat {defender} einen Sandball direkt ins Gesicht geworfen!': '{attacker} a jeté une boule de sable directement dans le visage de {defender} !'
 'Hurra! Folgendes Gebäude wurde fertiggestellt: {plan}!': 'Hourra ! La construction du chantier {plan} est terminée !'
-'Du hast dafür {count} Aktionspunkt(e) verbraucht.': "{ref__icu, select,\n                on {\n                    {raw_count, plural,\n                        one {Vous avez utilisé {count} point d'action.}\n                        other {Vous avez utilisé {count} points d'action.}\n                    }\n                }\n                other {Vous avez utilisé {count} point(s) d'action.}\n            }"
+'Du hast dafür {count} Aktionspunkt(e) verbraucht.': "{ref__icu, select,\n                on {\n                    {raw_count, plural,\n                        one {Vous avez utilisé {count} point d’action.}\n                        other {Vous avez utilisé {count} points d’action.}\n                    }\n                }\n                other {Vous avez utilisé {count} point(s) d’action.}\n            }"
 'Was für eine schreckliche Nacht!': 'Une nuit effroyable !'
 'Heute Nacht ist dir der Arsch so richtig auf Grundeis gegangen! Als du ihr Grunzen und Stöhnen gehört hattest, war dir klar: Sie würden bei dir daheim eindringen. So kam es dann auch: Deine Haustür splitterte unter der Last ihrer Angriffe. Panisch bist du ins Schlafzimmer gerannt, um dich unter deinem Bett zu verstecken. Sie blieben ein paar Minuten, die dir wie eine Ewigkeit vorkamen, und schnüffelten sich durch alle Zimmer. Innerlich zitternd, hast du zu Gott gebetet, dass sie dich verschonen mögen. Dann war plötzlich wieder alles still. Hechelnd und schnaufend bist du aus deinem Versteck hervorgekrochen und heulend auf deinem Bett zusammengesunken.': 'Vous avez vraiment eu très très chaud aux fesses cette nuit ! Vous les avez entendu grogner, frapper voire hurler dehors. Votre porte a fini par céder et vous vous êtes réfugié(e) sous votre lit, serrant contre vous vos bibelots, pour ne plus penser à rien. Puis ils sont repartis... Tremblant(e) de peur, vous avez finalement quitté votre cachette, bien heureux(se) d''avoir survécu.'
 'Du wurdest verbannt!': 'Vous avez été banni(e) !'
@@ -2976,7 +2976,7 @@ Schritt-Punkte: Point d'Exploration
 Benötigt: Nécessaire
 Freischalten: Déverrouiller
 'Einwohner in der Stadt': 'Citoyens de la ville'
-'{days} Tage überlebt in "{town}"': '{raw_days, plural, =0 {**#** jours survécus} one {**Une** journée survécue} other {**#** jours survécus}} dans "{town}"'
+'{days} Tage überlebt in "{town}"': '{raw_days, plural, =0 {**#** jours survécus} one {**Une** journée survécue} other {**#** jours survécus}} dans « {town} »'
 'Fähigkeit erworben': 'Compétence acquise'
 'Rudimentärer Schutz': 'Protection rudimentaire'
 'Dank der Hilfe eines anderen Bürgers wirst du diese Nacht keine Durst- oder Krankheitssymptome verspüren.': 'Grâce à l''aide d''un autre citoyen, vous ne ressentirez aucun symptôme de soif ou de maladie cette nuit.'
