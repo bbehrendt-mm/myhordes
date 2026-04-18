@@ -61,39 +61,41 @@ readonly class AntiCheatService {
             return "{$device} | {$agent_parser->os->toString()} | {$agent_parser->browser->getName()}";
         });
 
-        $prev_segment = $this->blockTime( new DateTime(), false );
-        $next_segment = $this->blockTime( new DateTime(), true );
+        $prev_segment = $this->blockTime(new DateTime(), false);
+        $next_segment = $this->blockTime(new DateTime(), true);
 
-        if ($lock = $this->locksmith->getAcquiredLock("activity_record_{$user->getId()}_{$client_ip}")) {
-            $count = $this->em->getRepository(Activity::class)->createQueryBuilder('a')
-                ->update()
-                ->set('a.blockEnd', ':end')->setParameter('end', $next_segment)
-                ->set('a.dateTimeEnd', ':now')->setParameter('now', new DateTime())
-                ->set('a.requests', 'a.requests + 1')
-                ->andWhere('a.user = :user')->setParameter('user', $user)
-                ->andWhere('a.ip = :ip')->setParameter('ip', $client_ip)
-                ->andWhere('a.agent = :agent')->setParameter('agent', $agent_string)
-                ->andWhere('a.domain = :host')->setParameter('host', $request->getHost())
-                ->andWhere('a.blockEnd >= :block')->setParameter('block', $prev_segment)
-                ->getQuery()->execute();
+        try {
+            if ($lock = $this->locksmith->getAcquiredLock("activity_record_{$user->getId()}_{$client_ip}")) {
+                $count = $this->em->getRepository(Activity::class)->createQueryBuilder('a')
+                    ->update()
+                    ->set('a.blockEnd', ':end')->setParameter('end', $next_segment)
+                    ->set('a.dateTimeEnd', ':now')->setParameter('now', new DateTime())
+                    ->set('a.requests', 'a.requests + 1')
+                    ->andWhere('a.user = :user')->setParameter('user', $user)
+                    ->andWhere('a.ip = :ip')->setParameter('ip', $client_ip)
+                    ->andWhere('a.agent = :agent')->setParameter('agent', $agent_string)
+                    ->andWhere('a.domain = :host')->setParameter('host', $request->getHost())
+                    ->andWhere('a.blockEnd >= :block')->setParameter('block', $prev_segment)
+                    ->getQuery()->execute();
 
-            if ($count === 0) {
-                $this->em->persist(new Activity()
-                    ->setUser($user)
-                    ->setIp($client_ip)
-                    ->setAgent($agent_string)
-                    ->setDomain($request->getHost())
-                    ->setBlockBegin($prev_segment)
-                    ->setDateTimeBegin(new DateTime())
-                    ->setRequests(0)
-                    ->setBlockEnd($next_segment)->setDateTimeEnd(new DateTime())
-                    ->setRequests(1)
-                );
-                $this->em->flush();
+                if ($count === 0) {
+                    $this->em->persist(new Activity()
+                                           ->setUser($user)
+                                           ->setIp($client_ip)
+                                           ->setAgent($agent_string)
+                                           ->setDomain($request->getHost())
+                                           ->setBlockBegin($prev_segment)
+                                           ->setDateTimeBegin(new DateTime())
+                                           ->setRequests(0)
+                                           ->setBlockEnd($next_segment)->setDateTimeEnd(new DateTime())
+                                           ->setRequests(1)
+                    );
+                    $this->em->flush();
+                }
+
+                $lock->release();
             }
-
-            $lock->release();
-        }
+        } catch (\Exception $e) { }
     }
 
     /**
