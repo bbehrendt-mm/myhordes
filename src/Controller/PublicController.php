@@ -532,7 +532,7 @@ class PublicController extends CustomAbstractController
 
             // Update user name
             if ($potential_user !== null && $myhordes_user === null) {
-                $etu = substr($user->getDisplayName(),0,32);
+                $etu = mb_substr($user->getDisplayName(),0,32);
 
                 if (!$potential_user->getNoAutomaticNameManagement() && $etu !== $potential_user->getName() && $userHandler->isNameValid($etu)) {
                     $history = $potential_user->getNameHistory() ?? [];

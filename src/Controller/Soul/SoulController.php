@@ -742,7 +742,7 @@ class SoulController extends CustomAbstractController
                 $etwin->setAuthorizationCode( $code );
                 $et_user = $etwin->requestAuthSelf($e);
 
-                $etu = substr($et_user->getDisplayName(),0,32);
+                $etu = mb_substr($et_user->getDisplayName(),0,32);
 
                 if ($etu === $user->getName()) {
                     $this->addFlash('notice', $this->translator->trans('Dein aktueller Name auf MyHordes stimmt mit deinem Anzeigenamen auf Eternaltwin überein.', [], 'login'));
