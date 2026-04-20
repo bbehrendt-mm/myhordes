@@ -16,7 +16,7 @@ verlassen: 'a quitté la ville'
 '{citizen} hat seine neue Berufung als {profession} gefunden.': '{citizen} a choisi le métier {profession}.'
 '{citizen} hat seine Behausung in ein(e,n) {home} verwandelt...': '{citizen} a décidé d’améliorer sa maison en {home}…'
 '{zombie} ist von den Toten auferstanden und hat die Baustelle für {building} verwüstet!': '{zombie} s’est relevé et le bâtiment {building} a été détruit !'
-'{num} Zombies attackieren die Stadtbewohner!': '{raw_num, plural, one {**Un** zombie a} other {**#** zombies ont}} attaqué les citoyens !'
+'{num} Zombies attackieren die Stadtbewohner!': '{num, plural, one {Un zombie a} other {# zombies ont}} attaqué les citoyens !'
 'Der Einsatz von {building} für die Verteidigung der Stadt hat uns {num} Rationen Wasser gekostet.': 'L’utilisation de {building} pour défendre la ville nous a coûté {num} ration(s) d’eau.'
 'Durch die Verbesserung von {building} wurdem dem Brunnen {num} Rationen Wasser hinzugefügt.': 'En améliorant le chantier {building}, {num} rations d’eau ont été ajoutées au puits.'
 'Durch die Verbesserung von {building} hat die Stadt folgende Gegenstände erhalten: {items}': 'En améliorant le chantier {building}, la ville a reçu : {items}'
@@ -174,7 +174,7 @@ Konstruktionen: Chantiers
 Punkt(e): points
 'Am Boden': 'Par terre'
 'Temporäre Zonenkontrolle': 'Contrôle temporaire'
-'{z} Zombies kontrollieren diese Zone!': '{z, plural, one {**Un** zombie contrôle } other {**#** zombies contrôlent}} cette zone !'
+'{z} Zombies kontrollieren diese Zone!': '{z, plural, one {Un zombie contrôle } other {# zombies contrôlent}} cette zone !'
 'Du wurdest überrascht und bist jetzt von den Zombies umzingelt! Wenn du nichts unternimmst und dir niemand zu Hilfe eilt, wirst du ohne Zweifel heute Abend hier verrecken ...': 'Vous avez été submergé(e) et vous êtes maintenant bloqué(e) par les hordes de zombies qui vous entourent ! Si vous ne faites rien ou si personne ne vient vous secourir, vous mourrez sans aucun doute ce soir !'
 'Hilfe rufen!': 'Appeler à l’aide !'
 'Die Flucht wagen!': 'Tenter de fuir !'
@@ -690,7 +690,7 @@ Sekunde(n): seconde(s)
 'Mein Rucksack': 'Mon sac à dos'
 'Dieser Bürger wurde noch nie gesehen...': 'n’a jamais été vu…'
 'Der Bürger wurde zuletzt {time} gesehen.': 'a été aperçu pour la dernière fois <strong>{time}</strong>.'
-'Dieser Bürger hat {ration} Wasserration(en) aus dem Brunnen genommen.': "a été vu au puits prenant <strong>{ration} ration(s) d'eau</strong> aujourd'hui."
+'Dieser Bürger hat {ration} Wasserration(en) aus dem Brunnen genommen.': "\n          {ref__icu, select,\n            on {\n              {ration, plural,\n                =1 {a été vu au puits prenant <strong>{ration} ration d’eau</strong> aujourd’hui.}\n                other {a été vu au puits prenant <strong>{ration} rations d’eau</strong> aujourd’hui.}\n              }\n            }\n            other {a été vu au puits prenant <strong>{ration__copy} ration(s) d’eau</strong> aujourd’hui.}\n          }\n        "
 'Dieser Bürger ist ernsthaft verletzt.': 'a été gravement blessé.'
 'Dieser Bürger hat eventuell schon seit einer Weile Blut gehustet... Einige reden von einer Infektion.': 'cracherait du sang depuis un petit moment déjà… Certains parlent d’une infection.'
 'Dieser Bürger hat eventuell heute Morgen überall nach Wasser gebettelt haben... Ob er durstig ist?': "aurait mendié pour de l'eau dans tout le village ce matin… Une petite soif ?"
@@ -999,7 +999,7 @@ Basisverteidigung: Défense de base
 'Nicht ganz ekelfrei hat {disposing_citizen} den leblosen Körper von {citizen} entsorgt.': 'C''est non sans dégoût que {disposing_citizen} s''est débarrassé(e) du corps inanimé de {citizen}.'
 'Dank {disposing_citizen} hat sich der Körper von {citizen} in verfaultes Wasser verwandelt.': 'Grâce aux efforts de {disposing_citizen}, le corps de {citizen} a été réduit en liquide putride.'
 'Behausung wiederverwerten': 'Recycler la maison'
-'{z} Zombies blockieren den Weg!': '{z, plural, one {**Un** zombie bloque le chemin !} other {**#** zombies bloquent le chemin !}} '
+'{z} Zombies blockieren den Weg!': '{z, plural, one {Un zombie bloque le chemin !} other {# zombies bloquent le chemin !}} '
 'Du wurdest überrascht und bist jetzt von den Zombies umzingelt! Du kannst flüchten, allerdings wirst du dadurch zusätzlichen Sauerstoff verbrauchen ...': 'Vous avez été surpris et êtes maintenant entouré de zombies ! Vous pouvez vous échapper, mais vous utiliserez de l''oxygène supplémentaire...'
 Flüchten: S'enfuir
 'Gebäude verlassen': 'Quitter le bâtiment'
@@ -2058,7 +2058,7 @@ Deko-Punkte: points déco
 'Die gesamte Region wurde durch die <strong>Explosion des {plan}</strong> verstrahlt!': 'Toute la région a été irradiée par la <strong>destruction de {plan}</strong> !'
 'Immerhin wurden alle Bürger aus der Stadt geschleudert...': 'Après tout, tous les citoyens de la ville ont été vaporisés...'
 'Du kannst nicht <strong>mehr als {max} Rationen Wasser pro Tag</strong> entnehmen.': 'Vous ne pouvez pas prendre <strong>plus de {max} rations d’eau par jour</strong>.'
-'In der Horde der Zombies wurden {num} ehemalige Bürger gesichtet, die in der Aussenwelt gestorben sind und sich der Stadt nun zähnefletschend und mit düsterem Blick nähern...': "\n            {ref__icu, select,\n                on {\n                    {num, plural,\n                    one {En plus de cette horde, <span>#</span> ancien citoyen mort dans l'Outre-Monde est revenu, les dents en avant et le regard morne...}\n                    other {En plus de cette horde, <span>#</span> anciens citoyens morts dans l'Outre-Monde sont revenus, les dents en avant et le regard morne...}\n                    }\n                }\n                other {En plus de cette horde, <span>{num__copy}</span> anciens citoyens morts dans l'Outre-Monde sont revenus, les dents en avant et le regard morne...}\n            }\n        "
+'In der Horde der Zombies wurden {num} ehemalige Bürger gesichtet, die in der Aussenwelt gestorben sind und sich der Stadt nun zähnefletschend und mit düsterem Blick nähern...': "\n            {ref__icu, select,\n                on {\n                    {num, plural,\n                    one {En plus de cette horde, <span>#</span> ancien citoyen mort dans l’Outre-Monde est revenu, les dents en avant et le regard morne…}\n                    other {En plus de cette horde, <span>#</span> anciens citoyens morts dans l’Outre-Monde sont revenus, les dents en avant et le regard morne…}\n                    }\n                }\n                other {En plus de cette horde, <span>{num__copy}</span> anciens citoyens morts dans l’Outre-Monde sont revenus, les dents en avant et le regard morne…}\n            }\n        "
 'Von den Verteidigungsanlagen der Stadt aufgehalten, gingen eure ehemaligen Mitbürger mit leeren Händen und mampften stattdessen die Überreste ihrer eigenen verrottenden Gliedmaßen.': 'Arrêtés par les défenses de la ville, vos anciens concitoyens sont repartis bredouilles en grignotant les restes de leurs propres membres en putréfaction.'
 '{points} Punkt(e)': "{ref__icu, select,\n            on { {points, select, one {# point} other {{points} points}} }\n            other {{points} point(s)}\n            }"
 Schließen: Fermer
@@ -2119,7 +2119,7 @@ Ranking-Ausschluss: Exclusion du classement
 'Diese Aktion wird durch ein Gebäude in der Stadt ermöglicht (nur Helden können sie verwenden).': 'Cette action est permise par un bâtiment de votre ville (seuls les héros peuvent en profiter).'
 'Durch die Lüftungsschächte klettern (in)': 'Entrer par l''aération'
 'Durch die Lüftungsschächte klettern (out)': 'Sortir par l''aération'
-'Höchstens {nw_defense}': "\n              {nw_defense, plural,\n                =0 {Aucun !!}\n                other {Au maximum #}\n              }\n          "
+'Höchstens {nw_defense}': "\n              {nw_defense, plural,\n                =0 {Aucun !!}\n                other {Au maximum #}\n              }\n          "
 'Dieser Bürger': "Selon les rumeurs, le citoyen {citizen} :"
 'Dieser Bürger ist nicht in der Stadt sei und hat <strong>sein Haus nicht gegen Einbrecher geschützt</strong>...': "n'est pas en ville et <strong>n'a pas protégé sa maison contre les voleurs</strong>..."
 'In der (<strong>leeren</strong>) Zone graben': 'Fouiller (<strong>zone épuisée</strong>)'
@@ -2183,7 +2183,7 @@ Fortfahren...: Continuer...
 'Die Bürger haben entschieden, {citizen} in den <strong>Fleischkäfig</strong> zu zerren und dort zum Vergnügen aller zu steinigen... Die Stadt hat <strong>+{def} temporäre Stadtverteidigung</strong> erhalten!': 'Les citoyens ont décidé de traîner {citizen} à la <strong>Cage à Viande</strong>, puis de le lapider pour le spectacle... La ville a reçu <strong>+{def} pts de défense temporaire</strong> !'
 'Anonyme Beschwerde ({num} insgesamt)': 'Plainte anonyme ({num} au total)'
 'Beschwerde zurückgezogen (es bleiben noch {num} Stück)': 'Plainte retirée (reste {num})'
-'{deaths} Bürger sind beim heutigen Angriff gestorben!': "{ref__icu, select,\n            on {\n                {raw_deaths, plural,\n                    =1 {{deaths} citoyen est mort pendant cette attaque !}\n                    other {{deaths} citoyens sont morts pendant cette attaque !}\n                }\n            }\n            other { {deaths} citoyens sont morts pendant cette attaque ! }\n        }"
+'{deaths} Bürger sind beim heutigen Angriff gestorben!': "{ref__icu, select,\n            on {\n                {raw_deaths, plural,\n                    =1 {{deaths} citoyen est mort pendant cette attaque !}\n                    other {{deaths} citoyens sont morts pendant cette attaque !}\n                }\n            }\n            other {{deaths} citoyens sont morts pendant cette attaque !}\n        }"
 'Doch leider ist der letzte Bürger tot, bevor die Horde die Stadttore erreicht... Seine Zunge hängt zwischen den Zähnen seines ehemaligen Freundes...': 'Hélas, le dernier citoyen est mort avant même que la horde n''arrive aux portes de la ville... Sa langue pend entre les dents de son ancien ami...'
 '<strong>Herzlichen Glückwunsch</strong>, du hast folgende Titel freigeschaltet: {list_c} {list_i} {list_t}': '<strong>Félicitations</strong>, vous avez déverrouillé les titres suivants : {list_c} {list_i} {list_t}'
 'Jeder Mensch zählt 2 Punkte, Zombies zählen je 1 Punkt.': 'Chaque humain vaut 2 points, chaque zombie vaut 1 point.'
