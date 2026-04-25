@@ -54,8 +54,8 @@
                     	<img src="{{ asset('build/images/status/status_' ~ app.user.activeCitizen.mapStatusName(stat.name) ~ '.gif') }}" alt="{{ stat.label|trans({},'game') }}">
                     	{% if stat.description %}
                     	<div class="tooltip item">
-                            <h1>{{ stat.label|trans({}, 'game') }}</h1>
-                            {{ stat.description|trans({}, 'game')|raw }}
+                            <h1>{{ stat.label|trans({user: app.user}, 'game') }}</h1>
+                            {{ stat.description|trans({user: app.user}, 'game')|raw }}
                     	</div>
                     	{% endif %}
                     </li>
