@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Enum\NotificationSubscriptionType;
 use App\Enum\UserSetting;
 use App\Service\JSONRequestParser;
+use App\Service\Media\MediaService;
 use App\Service\User\UserCapabilityService;
 use ArrayHelpers\Arr;
 use Doctrine\ORM\EntityManagerInterface;
@@ -261,18 +262,21 @@ class NotificationManagerController extends AbstractController
     }
 
     #[Route(path: '/webpush/{id}/test', name: 'test_webpush', defaults: ['type' => NotificationSubscriptionType::WebPush->value], methods: ['POST'])]
-    public function test(NotificationSubscriptionType $type, NotificationSubscription $subscription, WebPush $sender, TranslatorInterface $trans): JsonResponse {
+    public function test(NotificationSubscriptionType $type, NotificationSubscription $subscription, WebPush $sender, TranslatorInterface $trans, Packages $asset, MediaService $media): JsonResponse {
 
         if ($subscription->getType() !== $type || $subscription->getUser() !== $this->getUser())
             return new JsonResponse(status: Response::HTTP_NOT_FOUND);
 
+        $payload = Message::create($trans->trans('Testbenachrichtiung', [], 'global'))
+            ->withBadge( $asset->getUrl('build/favicon/android-chrome-72x72.png') )
+            ->withBody( $trans->trans('Hallo! Ich bin eine Testbenachrichtigung von MyHordes.', [], 'global') );
+
+        if ($avatar = $media->getSingleMediaForObject( $this->getUser(), 'avatar' )?->getLargestConversionByTag('default', 200))
+            $payload->withIcon( $avatar->url );
+
         $notification = Notification::create()
             ->withTTL(2419200)
-            ->withPayload(
-                Message::create($trans->trans('Testbenachrichtiung', [], 'global'))
-                    ->withBody( $trans->trans('Hallo! Ich bin eine Testbenachrichtigung von MyHordes.', [], 'global') )
-                    ->toString()
-            );
+            ->withPayload($payload->toString());
 
         $response = $sender->send( $notification, $subscription );
 

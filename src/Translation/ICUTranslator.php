@@ -35,7 +35,7 @@ class ICUTranslator implements TranslatorInterface, TranslatorBagInterface, Loca
         $u = $this->_security->getUser();
         $pass_trough = [
             'ref__icu' => $u !== null ? ($u->getUseICU() ? 'on' : 'off') : 'off',
-            'ref__gender' => 'none'
+            'ref__gender' => null
         ];
 
         $no_md = false;
@@ -64,6 +64,7 @@ class ICUTranslator implements TranslatorInterface, TranslatorBagInterface, Loca
                 /** @var Citizen $value */
                 $pass_trough["{$key}__gender"] ??= static::$gender_map[(int)$value->getUser()->getPreferredPronoun()];
                 $pass_trough["ref__gender"] ??= $pass_trough["{$key}__gender"];
+                dump($pass_trough);
                 if (!$raw) $pass_trough[$key] = $value->getName();
             } elseif (!is_array( $value ) && !$raw) {
                 $pass_trough[$key] = $value;
@@ -80,6 +81,7 @@ class ICUTranslator implements TranslatorInterface, TranslatorBagInterface, Loca
             }
         }
 
+        $pass_trough['ref__gender'] ??= static::$gender_map[(int)$u?->getPreferredPronoun() ?? 0];
         $string = $this->_decorated->trans($id,$pass_trough,$domain,$locale);
 
         if (!$no_md) {

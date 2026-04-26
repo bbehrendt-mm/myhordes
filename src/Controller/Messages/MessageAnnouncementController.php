@@ -21,6 +21,8 @@ use DateTime;
 use DiscordWebhooks\Client;
 use DiscordWebhooks\Embed;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Messenger\Exception\ExceptionInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -241,10 +243,14 @@ class MessageAnnouncementController extends MessageController
      * @param JSONRequestParser $parser
      * @param UrlGeneratorInterface $urlGenerator
      * @param MessageBusInterface $bus
+     * @param EventProxyService $proxy
+     * @param MediaService $mediaService
+     * @param Request $request
      * @return Response
+     * @throws ExceptionInterface
      */
     #[Route(path: 'api/admin/com/changelogs/new_announcement', name: 'admin_changelog_new_announcement')]
-    public function create_announcement_api(EntityManagerInterface $em, JSONRequestParser $parser, UrlGeneratorInterface $urlGenerator, MessageBusInterface $bus, EventProxyService $proxy, MediaService $mediaService): Response {
+    public function create_announcement_api(EntityManagerInterface $em, JSONRequestParser $parser, UrlGeneratorInterface $urlGenerator, MessageBusInterface $bus, EventProxyService $proxy, MediaService $mediaService, Request $request): Response {
         $title     = $parser->get('title', '');
         $content   = $parser->get('content', '');
         $lang      = $parser->get('lang', 'de');
@@ -253,7 +259,7 @@ class MessageAnnouncementController extends MessageController
 
         if(empty($title) || empty($content)) return AjaxResponse::error( ErrorHelper::ErrorInvalidRequest );
 
-        $announcement = (new Announcement())
+        $announcement = new Announcement()
             ->setTitle($title)->setText($content)->setLang($lang)->setSender($author)->setTimestamp(new DateTime())
             ->setValidated( $this->isGranted( 'ROLE_CROW' ) || $this->isGranted( 'ROLE_SUB_ADMIN' ) );
 
@@ -269,10 +275,10 @@ class MessageAnnouncementController extends MessageController
         $em->flush();
 
         if (!$announcement->isValidated() && $endpoint = $this->conf->getGlobalConf()->get( MyHordesSetting::HookAnimDiscord )) {
-            $discord = (new Client($endpoint))
+            $discord = new Client($endpoint)
                 ->message(":black_joker: **Please validate my announcement.**");
 
-            $discord->embed( (new Embed())
+            $discord->embed( new Embed()
                                  ->color('B434EB')
                                  ->title($announcement->getTitle())
                                  ->description(mb_substr(strip_tags(
@@ -286,7 +292,7 @@ class MessageAnnouncementController extends MessageController
                                  ->author(
                                      $this->getUser()->getName(),
                                      $urlGenerator->generate( 'admin_users_account_view', ['id' => $this->getUser()->getId()], UrlGeneratorInterface::ABSOLUTE_URL ),
-                                     $mediaService->getSingleMediaForObject( $this->getUser(), 'avatar' )?->getLargestConversionByTag('default', 200)?->url
+                                     $mediaService->getSingleMediaForObject( $this->getUser(), 'avatar' )?->getLargestConversionByTag('default', 200)?->getUrl($request->getBaseUrl())
                                  )
             );
 

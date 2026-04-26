@@ -7,6 +7,7 @@ use App\Annotations\GateKeeperProfile;
 use App\Entity\LogEntryTemplate;
 use App\Entity\Town;
 use App\Entity\TownLogEntry;
+use App\Enum\Game\LogHiddenType;
 use App\Response\AjaxResponse;
 use App\Service\ErrorHelper;
 use SplFileInfo;
@@ -113,7 +114,8 @@ class AdminFileSystemController extends AdminActionController
                 $entityVariables = $entity->getVariables();
                 $data = [
                     'timestamp' => $entity->getTimestamp(),
-                    'hidden'    => $entity->getHidden(),
+                    'hidden'    => $entity->getHidden()?->hidden(),
+                    'deleted'   => $entity->getHidden() === LogHiddenType::Deleted,
                     'citizen'   => $entity->getCitizen(),
                     'zone'      => $entity->getZone()
                 ];
@@ -146,6 +148,7 @@ class AdminFileSystemController extends AdminActionController
                     ( !in_array( $type, ['register', 'zones'] ) ? ('[ ' . ($data['zone'] ? "{$data['zone']->getX()} / {$data['zone']->getY()}" : 'TOWN') . ' ] ') : '' ) .
                     ( ($type !== 'citizens' && $data['citizen']) ? "[ {$data['citizen']->getId()} | {$data['citizen']->getName()} ] " : '' ) .
                     ( $data['hidden'] ? "[ HIDDEN ] " : '' ) .
+                    ( $data['deleted'] ? "[ D ] " : '' ) .
                     "{$data['text']}\r\n";
 
                 if (($i % $batch) === 0) {

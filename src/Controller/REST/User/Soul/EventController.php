@@ -23,6 +23,7 @@ use DiscordWebhooks\Embed;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Messenger\Exception\ExceptionInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
@@ -302,6 +303,7 @@ class EventController extends CustomAbstractCoreController
         UrlGeneratorInterface $urlGenerator,
         MessageBusInterface $bus,
         MediaService $mediaService,
+        Request $request,
     ): JsonResponse {
         if (!$this->eventIsEditable( $event, $option === false ))
             return new JsonResponse([], Response::HTTP_FORBIDDEN);
@@ -315,7 +317,7 @@ class EventController extends CustomAbstractCoreController
                     return new JsonResponse(['error' => 'message','message' => $this->translator->trans('Du musst ein Startdatum für dein Event festlegen.', [], 'global')], Response::HTTP_NOT_ACCEPTABLE);
 
                 $minDate = new \DateTime();
-                $maxDate = (new \DateTime())->add( \DateInterval::createFromDateString('194days') );
+                $maxDate = new \DateTime()->add(\DateInterval::createFromDateString('194days') );
 
                 if ($event->getConfiguredStartDate() < $minDate || $event->getConfiguredStartDate() > $maxDate)
                     return new JsonResponse(['error' => 'message', 'message' => $this->translator->trans('Das Startdatum deines Events muss mindestens {minDays} Tage und maximal {maxDays} Tage in der Zukunft liegen', ['minDays' => 14, 'maxDays' => 194], 'global')], Response::HTTP_NOT_ACCEPTABLE);
@@ -331,14 +333,14 @@ class EventController extends CustomAbstractCoreController
             }
 
             if ($endpoint = $this->conf->getGlobalConf()->get( MyHordesSetting::HookAnimDiscord )) {
-                $discord = (new Client($endpoint))
+                $discord = new Client($endpoint)
                     ->message(
                         $option
                             ? ":black_joker: **Please validate my community event.**"
                             : ':x: I\'m retracting my previous event validation request.'
                     );
 
-                $discord->embed( (new Embed())
+                $discord->embed( new Embed()
                     ->color('B434EB')
                     ->title('Event configuration')
                     ->field('Start date', $event->getConfiguredStartDate()->format( "D, d M Y" ), true)
@@ -347,7 +349,7 @@ class EventController extends CustomAbstractCoreController
                     ->author(
                         $event->getOwner()->getName(),
                         $urlGenerator->generate( 'admin_users_account_view', ['id' => $event->getOwner()->getId()], UrlGeneratorInterface::ABSOLUTE_URL ),
-                        $mediaService->getSingleMediaForObject( $event->getOwner(), 'avatar' )?->getSource(200) ?? ''
+                        $mediaService->getSingleMediaForObject( $event->getOwner(), 'avatar' )?->getLargestConversionByTag('default', 200)?->getUrl($request->getBaseUrl()) ?? ''
                     )
                 );
 
@@ -360,7 +362,7 @@ class EventController extends CustomAbstractCoreController
 
                 if ($option)
                     foreach ($event->getMetas() as $meta)
-                        $discord->embed( (new Embed())
+                        $discord->embed( new Embed()
                             ->color('6BF2F0')
                             ->title("{$flag_lang($meta->getLang())} Event information")
                             ->field('Name', $meta->getName(), true)
