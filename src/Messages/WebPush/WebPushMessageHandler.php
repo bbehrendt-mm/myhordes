@@ -24,16 +24,27 @@ readonly class WebPushMessageHandler
         private string $uri,
     ) {}
 
-    private function buildPayload( WebPushMessage $message, bool $html_supported = false ): Message {
+    private function buildPayload( WebPushMessage $message, int $stripPayloadBy = -1 ): Message {
+
+        $plain = html_entity_decode( strip_tags( $message->body ), ENT_QUOTES );
+        if ($stripPayloadBy > 0) {
+            $target_length = floor((mb_strlen( $plain, '8bit' ) - $stripPayloadBy - 4) / 128) * 128;
+            $plain = mb_strcut( $plain, 0, $target_length ) . '…';
+        }
 
         $payload = Message::create("MyHordes: {$message->title}")
-            ->withBody( $html_supported ? $message->body : html_entity_decode( strip_tags( $message->body ), ENT_QUOTES ) )
+            ->withBody( $plain )
             ->withTimestamp( $message->timestamp->getTimestamp() * 1000 )
             ->withBadge( $this->uri . $this->asset->getUrl('build/favicon/android-chrome-72x72.png') );
 
         if ($message->avatar) {
-            $avatar = $this->em->getRepository(Media::class)->find( $message->avatar )?->getLargestConversionByTag('default', 200);
+            $avatar = $this->em->getRepository(Media::class)->find( $message->avatar )?->getLargestConversionByTag('circular', 200);
             if ($avatar) $payload->withIcon( $avatar->url );
+        }
+
+        if ($stripPayloadBy < 0) {
+            $length = mb_strlen( $payload->toString(), '8bit' );
+            if ($length > 3072) return $this->buildPayload( $message, $length - 3072 );
         }
 
         return $payload;
@@ -68,7 +79,7 @@ readonly class WebPushMessageHandler
         $response = $this->sender->send( Notification::create()
             ->withTTL(2419200)
             ->withPayload(
-                $this->buildPayload( $message, false )->toString()
+                $this->buildPayload( $message )->toString()
             ),
             $subscription
         );
