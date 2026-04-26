@@ -38,7 +38,7 @@ readonly class WebPushMessageHandler
             ->withBadge( $this->uri . $this->asset->getUrl('build/favicon/android-chrome-72x72.png') );
 
         if ($message->avatar) {
-            $avatar = $this->em->getRepository(Media::class)->find( $message->avatar )?->getLargestConversionByTag('circular', 200);
+            $avatar = $this->em->getRepository(Media::class)->find( $message->avatar )?->getLargestConversionByTag('default', 200);
             if ($avatar) $payload->withIcon( $avatar->url );
         }
 

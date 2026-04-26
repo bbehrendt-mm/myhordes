@@ -26,9 +26,9 @@ readonly class MediaConversion
         public array $tags,
     ) {}
 
-    private function getUrl(): ?string {
+    public function getUrl(string $base = ''): ?string {
         $url = $this->media->getConversionUrl($this->conversion);
-        return empty($url) ? null : "/storage/$url";
+        return empty($url) ? null : "$base/storage/$url";
     }
 
     private function getInitialCrop(): ?array {

@@ -271,7 +271,7 @@ class NotificationManagerController extends AbstractController
             ->withBadge( $asset->getUrl('build/favicon/android-chrome-72x72.png') )
             ->withBody( $trans->trans('Hallo! Ich bin eine Testbenachrichtigung von MyHordes.', [], 'global') );
 
-        if ($avatar = $media->getSingleMediaForObject( $this->getUser(), 'avatar' )?->getLargestConversionByTag('circular', 200))
+        if ($avatar = $media->getSingleMediaForObject( $this->getUser(), 'avatar' )?->getLargestConversionByTag('default', 200))
             $payload->withIcon( $avatar->url );
 
         $notification = Notification::create()

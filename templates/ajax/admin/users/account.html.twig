@@ -224,7 +224,7 @@
                                 <div>
                                     {% if user.activeIcon %}
                                         <img alt=""
-                                             src="{{ user.activeIcon|singleMediaSource('icon', 16, false, asset('build/images/icons/title/' ~ user.activeIcon.prototype.icon ~ '.gif'), true) }}"
+                                             src="{{ user.activeIcon|singleMediaSource('icon', 16, false, user.activeIcon.prototype ? asset('build/images/icons/title/' ~ user.activeIcon.prototype.icon ~ '.gif') : '', true) }}"
                                              srcset="{{ user.activeIcon|singleMediaSource('icon', 16, true) }}" />
                                     {% endif %}
                                     {% if user.activeTitle %} {{ user.activeTitle.customTitle ?? user|translated_title(app.user)|raw }}{% endif %}

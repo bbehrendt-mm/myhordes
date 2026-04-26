@@ -174,11 +174,13 @@ final class ContentReportEventListener implements ServiceSubscriberInterface
         $endpoint = $this->getService(ConfMaster::class)->getGlobalConf()->get( MyHordesSetting::HookModDiscord );
         $class = $this->getService(EntityManagerInterface::class)->getClassMetadata( get_class($event->subject) )->getName();
 
+        $baseUrl = $this->getService(UrlGeneratorInterface::class)->generate( 'home', [],  UrlGeneratorInterface::ABSOLUTE_URL );
+
         if ($endpoint) {
             $user = $this->getReportedContentUser( $class, $event );
 
             $discord = new Client($endpoint);
-            $message_embed = (new Embed())
+            $message_embed = new Embed()
                 ->color('FF5500')
                 ->title( $this->getReportedTitle( $class, $event, 'en' ) )
                 ->description( $this->getReportedContent( $class, $event, 'en' ) )
@@ -188,10 +190,10 @@ final class ContentReportEventListener implements ServiceSubscriberInterface
             if ($user) $message_embed->author(
                 $user->getName(),
                 $this->getService(UrlGeneratorInterface::class)->generate( 'admin_users_account_view', ['id' => $user->getId()], UrlGeneratorInterface::ABSOLUTE_URL ),
-                $this->getService(MediaService::class)->getSingleMediaForObject( $user, 'avatar' )?->getSource(200) ?? '',
+                $this->getService(MediaService::class)->getSingleMediaForObject( $user, 'avatar' )?->getLargestConversionByTag('default', 200)?->getUrl($baseUrl) ?? '',
             );
 
-            $report_embed = (new Embed())
+            $report_embed = new Embed()
                 ->color('	6A00FF')
                 ->title($this->getComplaintCategory( $event, 'en' ))
                 ->description($event->report->getDetails() ?? '---');
@@ -199,7 +201,7 @@ final class ContentReportEventListener implements ServiceSubscriberInterface
             $report_embed->author(
                 $event->reporter->getName(),
                 $this->getService(UrlGeneratorInterface::class)->generate( 'admin_users_account_view', ['id' => $event->reporter->getId()], UrlGeneratorInterface::ABSOLUTE_URL ),
-                $this->getService(MediaService::class)->getSingleMediaForObject( $event->reporter, 'avatar' )?->getSource(200) ?? '',
+                $this->getService(MediaService::class)->getSingleMediaForObject( $event->reporter, 'avatar' )?->getLargestConversionByTag('default', 200)?->getUrl($baseUrl) ?? '',
             );
 
             $discord
