@@ -3,23 +3,24 @@
 
 namespace App\Service;
 
+use Redis;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Lock\LockInterface;
-use Symfony\Component\Lock\Store\FlockStore;
+use Symfony\Component\Lock\Store\RedisStore;
 
 readonly class Locksmith {
 
     private LockFactory $lock_factory;
 
-    public function __construct(ParameterBagInterface $params) {
+    public function __construct(Redis $redis) {
         $this->lock_factory = new LockFactory(
-            new FlockStore( "{$params->get('kernel.project_dir')}/var/tmp/flock" )
+            new RedisStore($redis)
         );
     }
 
     public function getLock( string $name, ?float $ttl = null ): LockInterface {
-        return $this->lock_factory->createLock( $name, $ttl );
+        return $this->lock_factory->createLock( $name, $ttl ?? 300.0 );
     }
 
     public function getAcquiredLock( string $name, ?float $ttl = null ): ?LockInterface {

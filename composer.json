@@ -15,6 +15,7 @@
     "ext-mbstring": "*",
     "ext-simplexml": "*",
     "ext-fileinfo": "*",
+    "ext-redis": "*",
     "adbario/php-dot-notation": "^3.3",
     "brainbox-et/etwin-api-client": "@dev",
     "clue/graph": "^0.9.3",

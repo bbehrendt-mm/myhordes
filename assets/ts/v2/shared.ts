@@ -43,7 +43,7 @@ scope.addEventListener('connect', client => {
         p.start();
         p.postMessage({request: 'worker.id', id: `${id}`});
         p.addEventListener('message', e => {
-            Console.log('From client', e.data, e.source);
+            Console.debug('From client', e.data, e.source);
 
             const request = (e.data?.request ?? '_none').split('.');
             if (request[0] === 'worker') {
