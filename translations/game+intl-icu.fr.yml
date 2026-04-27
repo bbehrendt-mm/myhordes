@@ -58,9 +58,9 @@ Stadttor: Grande Porte
 Karte: Carte
 'Bitte wähle einen Gegenstand:': 'Choisissez un objet :'
 'Du verfügst über keine geeigneten Gegenstände': 'Vous n’avez pas d’objet pour cette action.'
-Herstellen: Assembler 
+Herstellen: Assembler
 aus: Nécessite
-Kombinieren: Combiner 
+Kombinieren: Combiner
 'Du kannst von hier aus die Stadt verlassen und die Außenwelt erkunden. Vergiss aber nicht, um Mitternacht das Tor zu schließen!': 'Vous pouvez sortir de la ville et explorer l’Outre-Monde depuis ici. N’oubliez pas de garder la <strong>Grande Porte</strong> fermée lors de l’attaque à minuit !'
 'Du wurdest verbannt und kannst daher das Stadttor weder öffnen noch schließen.': 'Vous avez été banni et ne pouvez donc ni ouvrir ni fermer la porte de la ville.'
 'Meine Aktionen': 'Mes Actions'
@@ -690,7 +690,7 @@ Sekunde(n): seconde(s)
 'Mein Rucksack': 'Mon sac à dos'
 'Dieser Bürger wurde noch nie gesehen...': 'n’a jamais été vu…'
 'Der Bürger wurde zuletzt {time} gesehen.': 'a été aperçu pour la dernière fois <strong>{time}</strong>.'
-'Dieser Bürger hat {ration} Wasserration(en) aus dem Brunnen genommen.': "\n          {ref__icu, select,\n            on {\n              {ration, plural,\n                =1 {a été vu au puits prenant <strong>{ration} ration d’eau</strong> aujourd’hui.}\n                other {a été vu au puits prenant <strong>{ration} rations d’eau</strong> aujourd’hui.}\n              }\n            }\n            other {a été vu au puits prenant <strong>{ration__copy} ration(s) d’eau</strong> aujourd’hui.}\n          }\n        "
+'Dieser Bürger hat {ration} Wasserration(en) aus dem Brunnen genommen.': "a été vu au puits prenant <strong>{ration} ration(s) d'eau</strong> aujourd'hui."
 'Dieser Bürger ist ernsthaft verletzt.': 'a été gravement blessé.'
 'Dieser Bürger hat eventuell schon seit einer Weile Blut gehustet... Einige reden von einer Infektion.': 'cracherait du sang depuis un petit moment déjà… Certains parlent d’une infection.'
 'Dieser Bürger hat eventuell heute Morgen überall nach Wasser gebettelt haben... Ob er durstig ist?': "aurait mendié pour de l'eau dans tout le village ce matin… Une petite soif ?"
