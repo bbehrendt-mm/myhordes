@@ -80,7 +80,12 @@ class CommandHelper
 
         $tc_chunk = 0;
 
-        $output->writeln("Processing <info>$tc</info> <comment>$repository</comment> entities...");
+        if ($tc > 0)
+            $output->writeln("Processing <info>$tc</info> <comment>$repository</comment> entities...");
+        else {
+            $output->writeln("No <comment>$repository</comment> entities to process. Skipping.");
+            return;
+        }
         $progress = new ProgressBar( $output->section() );
         $progress->setRedrawFrequency( $chunkSize );
         $progress->setMessage('-', 'item');

@@ -64,7 +64,7 @@ class ICUTranslator implements TranslatorInterface, TranslatorBagInterface, Loca
                 /** @var Citizen $value */
                 $pass_trough["{$key}__gender"] ??= static::$gender_map[(int)$value->getUser()->getPreferredPronoun()];
                 $pass_trough["ref__gender"] ??= $pass_trough["{$key}__gender"];
-                dump($pass_trough);
+
                 if (!$raw) $pass_trough[$key] = $value->getName();
             } elseif (!is_array( $value ) && !$raw) {
                 $pass_trough[$key] = $value;
