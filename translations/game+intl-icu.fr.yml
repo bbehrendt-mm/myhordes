@@ -3279,7 +3279,7 @@ Windrichtung: Direction du vent
 'Du wurdest verbannt und kannst die Müllhalde daher nicht länger nutzen, um die Verteidigung der Stadt zu verbessern.': 'Etant donné que vous êtes banni, vous ne pouvez plus utiliser la Décharge pour augmenter la défense de la ville.'
 'Haus verstärken': 'Renforcer votre habitation'
 'Leidenschaftlicher Entdecker': 'Explorateur totalement impétueux'
-'Leidenschaftlicher Entdecker_f': 'Explorateur totalement impétueux'
+'Leidenschaftlicher Entdecker_f': 'Exploratrice totalement impétueuse'
 Kartograph: Cartographe
 Kartograph_f: Cartographe
 '{citizen} hat {items} in der Müllhalde zerstört, um sein Haus zu verbessern (+{def} Verteidigung)!': '{citizen} a jeté {items} dans la décharge pour améliorer {citizen__gender, select, female {sa} other {sa}} maison (+{def} def)!'
