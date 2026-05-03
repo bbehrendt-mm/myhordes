@@ -79,6 +79,10 @@ class CitizenRankingProxy
 
     #[ORM\Column(nullable: true)]
     private ?array $data = null;
+
+    #[ORM\Column]
+    private bool $fixedScore = false;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -206,7 +210,7 @@ class CitizenRankingProxy
         if (!$obj->getCommentLocked())
             $obj->setComment( $citizen->getComment() );
 
-        if ($obj->getEnd() === null)
+        if ($obj->getEnd() === null && !$obj->isFixedScore())
             $obj->setPoints( $citizen->getSurvivedDays() * ( $citizen->getSurvivedDays() + 1 ) / 2 );
 
         if ($obj->getBegin() === null) $obj->setBegin( new \DateTime('now') );
@@ -422,6 +426,18 @@ class CitizenRankingProxy
             Arr::set( $data, is_string($cache) ? $cache : $cache->value, $this->getProperty( $cache ) + $value );
         else Arr::set( $data, is_string($cache) ? $cache : $cache->value, $value );
         $this->setData( $data );
+        return $this;
+    }
+
+    public function isFixedScore(): ?bool
+    {
+        return $this->fixedScore;
+    }
+
+    public function setFixedScore(bool $fixedScore): static
+    {
+        $this->fixedScore = $fixedScore;
+
         return $this;
     }
 }

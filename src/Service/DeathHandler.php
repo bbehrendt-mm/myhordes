@@ -180,7 +180,7 @@ readonly class DeathHandler
 
         // Give soul point
         if (!$this->conf->getTownConfiguration($citizen->getTown())->get(TownSetting::OptFeatureGiveSoulpoints))
-            $citizen->getRankingEntry()->setPoints(0);
+            $citizen->getRankingEntry()->setPoints(0)->setFixedScore(true);
 
         // Give special picto
         if(($picto = $this->conf->getTownConfiguration($citizen->getTown())->get(TownSetting::OptFeatureSurvivalPicto))) {
