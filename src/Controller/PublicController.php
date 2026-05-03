@@ -26,6 +26,7 @@ use App\Service\ErrorHelper;
 use App\Service\EternalTwinHandler;
 use App\Service\HTMLService;
 use App\Service\JSONRequestParser;
+use App\Service\EventProxyService;
 use App\Service\UserFactory;
 use App\Response\AjaxResponse;
 use App\Service\UserHandler;
@@ -332,6 +333,7 @@ class PublicController extends CustomAbstractController
         EternalTwinHandler $etwin,
         UserHandler $userHandler,
         SessionInterface $session,
+        EventProxyService $eventProxy,
     ): Response
     {
         if ($this->isGranted( 'ROLE_REGISTERED' ) || $etwin->isReady())
@@ -449,13 +451,15 @@ class PublicController extends CustomAbstractController
                                 );
                         }
 
-                        if ($referred_player)
+                        if ($referred_player) {
                             $entityManager->persist( (new UserSponsorship())
                                 ->setSponsor( $referred_player )
                                 ->setUser( $user )
                                 ->setCountedHeroExp(0)->setCountedSoulPoints(0)
                                 ->setTimestamp(new DateTime())
                             );
+                            $eventProxy->sponsorshipRegisteredEvent( $referred_player, $user );
+                        }
 
                         if ($this->conf->getGlobalConf()->get(MyHordesSetting::StagingRegistrationTokenNeeded) && $regToken) {
                             $user->setRegistrationToken($regToken);
@@ -579,7 +583,8 @@ class PublicController extends CustomAbstractController
     #[Route(path: 'api/public/etwin/confirm', name: 'api_etwin_confirm')]
     public function etwin_confirm_api(Request $request, JSONRequestParser $parser, SessionInterface $session, UserFactory $userFactory,
                                       UserPasswordHasherInterface $pass, TranslatorInterface $trans, ConfMaster $conf,
-                                      TranslatorInterface $translator, UserHandler $userHandler, InvalidateLogCacheAction $logCacheAction
+                                      TranslatorInterface $translator, UserHandler $userHandler, InvalidateLogCacheAction $logCacheAction,
+                                      EventProxyService $eventProxy
     ): Response {
 
         $myhordes_user = $this->getUser();
@@ -698,14 +703,15 @@ class PublicController extends CustomAbstractController
                                 );
                         }
 
-                        if ($referred_player)
+                        if ($referred_player) {
                             $this->entity_manager->persist( (new UserSponsorship())
-                                                                ->setSponsor( $referred_player )
-                                                                ->setUser( $new_user )
-                                                                ->setCountedHeroExp(0)->setCountedSoulPoints(0)
-                                                                ->setTimestamp(new DateTime())
+                                ->setSponsor( $referred_player )
+                                ->setUser( $new_user )
+                                ->setCountedHeroExp(0)->setCountedSoulPoints(0)
+                                ->setTimestamp(new DateTime())
                             );
-
+                            $eventProxy->sponsorshipRegisteredEvent( $referred_player, $new_user );
+                        }
 
                         $this->entity_manager->flush();
                     } catch (Exception $e) {

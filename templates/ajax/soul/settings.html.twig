@@ -711,6 +711,16 @@
                             </div>
                             <div class="padded cell rw-12">
                                 <div class="note note-lightest">
+                                    <input x-setting {% if app.user.setting( constant("\\App\\Enum\\UserSetting::NotifyMeOnSponsorRegistration") ) %}checked{% endif%} type="checkbox" id="setting_notify_on_sponsorship">&nbsp;<label for="setting_notify_on_sponsorship">{{'Benachrichrichtigung erhalten, wenn sich jemand über meinen Einladungslink registriert'|trans({}, 'soul')}}</label>
+                                </div>
+                            </div>
+                            <div class="padded cell rw-12">
+                                <div class="note note-lightest">
+                                    <input x-setting {% if app.user.setting( constant("\\App\\Enum\\UserSetting::NotifyMeOnSponsorRegistration") ) %}checked{% endif%} type="checkbox" id="setting_notify_on_sponsorship">&nbsp;<label for="setting_notify_on_sponsorship">{{'Benachrichrichtigung erhalten, wenn sich jemand über meinen Einladungslink registriert'|trans({}, 'soul')}}</label>
+                                </div>
+                            </div>
+                            <div class="padded cell rw-12">
+                                <div class="note note-lightest">
                                     <label for="setting_notify_on_mention">{{'Benachrichrichtigung erhalten, wenn ich in einem Forenpost markiert werde'|trans({}, 'soul')}}</label>&nbsp;
                                     <select class="small" x-setting id="setting_notify_on_mention">
                                         <option value="0" {% if app.user.setting( constant("\\App\\Enum\\UserSetting::NotifyMeWhenMentioned") ) == 0 %}selected{% endif%}>{{ 'Deaktiviert'|trans({}, 'soul') }}</option>
@@ -1032,6 +1042,7 @@
                     town10: document.getElementById('setting_limit_town_size').checked,
                     notify: document.getElementById('setting_notify_on_mention').value,
                     notifyFriend: document.getElementById('setting_notify_on_friend').checked,
+                    notifySponsorship: document.getElementById('setting_notify_on_sponsorship').checked,
                     beyondAltLayout: document.getElementById('setting_reorder-action-buttons-beyond').checked,
                     townAltLayout: document.getElementById('setting_reorder-location-buttons-town').checked,
                     privateForumsOnTop: document.getElementById('setting_private-forums-on-top').checked,

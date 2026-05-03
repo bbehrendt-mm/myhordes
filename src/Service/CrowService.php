@@ -242,9 +242,8 @@ class CrowService {
     }
 
     /**
-     * @param User $receiver
-     * @param User $sender
-     * @param bool $revert
+     * @param User $receiver The sponsor (existing player) to notify.
+     * @param User $newcomer The newly registered player who used the sponsor link.
      * @return GlobalPrivateMessage
      */
     public function createPM_friendNotification(User $receiver, User $sender, bool $revert = false): GlobalPrivateMessage
@@ -252,6 +251,20 @@ class CrowService {
         return $this->createMessage(
             $revert ? 'gpm_friend_reverse_notification' : 'gpm_friend_notification',
             ['player' => $sender->getId() ],
+            $receiver
+        );
+    }
+
+    /**
+     * @param User $receiver The sponsor (existing player) to notify.
+     * @param User $newcomer The newly registered player who used the sponsor link.
+     * @return GlobalPrivateMessage
+     */
+    public function createPM_sponsorshipNotification(User $receiver, User $newcomer): GlobalPrivateMessage
+    {
+        return $this->createMessage(
+            'gpm_sponsorship_notification',
+            ['player' => $newcomer->getId()],
             $receiver
         );
     }
