@@ -727,3 +727,5 @@ importiert: imported
 'Diese Option deaktiviert verschiedene optische Unschäfteeffekte, beispielsweise auf der Spielkarte.': 'This option disables various optical blurring effects, for example on the game map.'
 'Die Auflösung des gewählten Bildes ist nicht ausreichend, um es als Avatar verwenden zu können. Bitte lade ein Bild mit einer Auflösung von mindestens {x} × {y} Pixeln hoch.': 'The resolution of the selected image is not large enough to use it as an avatar. Please upload an image with a resolution of at least {x} × {y} pixels.'
 'Benachrichrichtigung erhalten, wenn sich jemand über meinen Einladungslink registriert': 'Notify me when someone registers using my invitation link.'
+'E-Mail Adresse ändern': 'Change e-mail adress'
+'Änderung der E-Mail Adresse bestätigen': 'Confirm e-mail adress change'

@@ -727,3 +727,5 @@ importiert: importada
 'Diese Option deaktiviert verschiedene optische Unschäfteeffekte, beispielsweise auf der Spielkarte.': 'Esta opción desactiva varios efectos ópticos no deseados, por ejemplo, en el mapa.'
 'Die Auflösung des gewählten Bildes ist nicht ausreichend, um es als Avatar verwenden zu können. Bitte lade ein Bild mit einer Auflösung von mindestens {x} × {y} Pixeln hoch.': 'La resolución de la imagen seleccionada no es suficiente para poder utilizarla como avatar. Sube una imagen con una resolución mínima de {x} × {y} píxeles.'
 'Benachrichrichtigung erhalten, wenn sich jemand über meinen Einladungslink registriert': 'Notifícame cuando alguien se registre a través de mi enlace de invitación'
+'E-Mail Adresse ändern': 'Cambiar la dirección de correo electrónico'
+'Änderung der E-Mail Adresse bestätigen': 'Confirmar el cambio de dirección de correo electrónico'
