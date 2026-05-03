@@ -77,7 +77,7 @@ final class SponsorshipEventListener implements ServiceSubscriberInterface
                     title: $translator->trans('Du hast einen neuen geworbenen Spieler!', [], 'global', $lang),
                     body:  $translator->trans(
                         '{player} hat sich über deinen Einladungslink registriert.',
-                        ['player' => $newcomer->getName()],
+                        ['player' => $newcomer],
                         'game',
                         $lang
                     ),
