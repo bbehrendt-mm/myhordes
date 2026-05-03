@@ -451,16 +451,6 @@ class PublicController extends CustomAbstractController
                                 );
                         }
 
-                        if ($referred_player) {
-                            $entityManager->persist( (new UserSponsorship())
-                                ->setSponsor( $referred_player )
-                                ->setUser( $user )
-                                ->setCountedHeroExp(0)->setCountedSoulPoints(0)
-                                ->setTimestamp(new DateTime())
-                            );
-                            $eventProxy->sponsorshipRegisteredEvent( $referred_player, $user );
-                        }
-
                         if ($this->conf->getGlobalConf()->get(MyHordesSetting::StagingRegistrationTokenNeeded) && $regToken) {
                             $user->setRegistrationToken($regToken);
                             $regToken->setUser($user);
@@ -469,6 +459,18 @@ class PublicController extends CustomAbstractController
 
                         $entityManager->persist( $user );
                         $entityManager->flush();
+
+                        if ($referred_player) {
+                            $entityManager->persist( new UserSponsorship()
+                                ->setSponsor( $referred_player )
+                                ->setUser( $user )
+                                ->setCountedHeroExp(0)->setCountedSoulPoints(0)
+                                ->setTimestamp(new DateTime())
+                            );
+                            $eventProxy->sponsorshipRegisteredEvent( $referred_player, $user );
+                            $entityManager->flush();
+                        }
+
                     } catch (Exception $e) {
                         return AjaxResponse::error(ErrorHelper::ErrorDatabaseException);
                     }
@@ -703,17 +705,19 @@ class PublicController extends CustomAbstractController
                                 );
                         }
 
+                        $this->entity_manager->flush();
+
                         if ($referred_player) {
-                            $this->entity_manager->persist( (new UserSponsorship())
+                            $this->entity_manager->persist( new UserSponsorship()
                                 ->setSponsor( $referred_player )
                                 ->setUser( $new_user )
                                 ->setCountedHeroExp(0)->setCountedSoulPoints(0)
                                 ->setTimestamp(new DateTime())
                             );
                             $eventProxy->sponsorshipRegisteredEvent( $referred_player, $new_user );
+                            $this->entity_manager->flush();
                         }
 
-                        $this->entity_manager->flush();
                     } catch (Exception $e) {
                         return AjaxResponse::error( ErrorHelper::ErrorDatabaseException );
                     }
