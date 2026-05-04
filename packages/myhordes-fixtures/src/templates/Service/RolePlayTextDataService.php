@@ -342,7 +342,7 @@ class RolePlayTextDataService implements FixtureProcessorInterface {
                 'content' => [
                     '<p>Hallo Cordo,</p>
                 <p>Wir haben dich zu den wenigen Auserwählten der Generation der Depressiven erkoren.</p>
-                <p>Es steht ein kleiner Ausflug in den Westen der Stadt steht an. Dieser Renegatenbande, die sich um Nobbius geschart hat, wird heute ein blaues Wunder erleben. In der Generation der
+                <p>Es steht ein kleiner Ausflug in den Westen der Stadt steht an. Dieser Renegatenbande, die sich um Nobbius geschart hat, wird heute ein blaues Wunder erleben. In der Generation der 
                 Depressiven dulden wir keine Faulpelze.</p>
                 <p>Der Ausbau der Stadtmauer muss so schnell wie möglich fertig gestellt werden! Eine Stadt ohne entwicklungsfähiger Mauer ist unser sicherer Tod.</p>
                 <p>Bring dein Werkzeug mit und halte dich um 23.45 am Forschungsturm bereit.</p>',
@@ -420,14 +420,14 @@ class RolePlayTextDataService implements FixtureProcessorInterface {
                 'title' => 'Ich liebe sie',
                 'author' => 'Kouta',
                 'content' => [
-                    '<p>Ich liebe sie. Seitdem ich ihren Arm das erste Mal berührte, will ich sie nicht mehr loslassen. Ich liebe sie so sehr. Ich will sie auf ewig umarmen, hier, neben mir, unter unserem kleinen Felsen. Sie lächelt mich immerzu an. Manchmal frage ich
-                sie, wie lange sie schon hier ist. Doch sie antwortet mir nie. Manchmal frage ich sie, wann wir eine Stadt suchen wollen. Doch nie sagt sie ein Wort. Aber das ist mir nicht wichtig. Auch, wenn sie mir noch nie ihre Liebe gestanden hat, so weiß ich es
-                doch. Ihr friedliches Lächeln sagt es mir. Sie wacht immer, auch wenn ich tief schlafe passt sie auf mich auf. Ich frage mich, wie lang unsere Vorräte noch reichen. Ich habe ihr gesagt, dass wir eine Stadt suchen müssen. Doch sie reagiert nie, sie
+                    '<p>Ich liebe sie. Seitdem ich ihren Arm das erste Mal berührte, will ich sie nicht mehr loslassen. Ich liebe sie so sehr. Ich will sie auf ewig umarmen, hier, neben mir, unter unserem kleinen Felsen. Sie lächelt mich immerzu an. Manchmal frage ich 
+                sie, wie lange sie schon hier ist. Doch sie antwortet mir nie. Manchmal frage ich sie, wann wir eine Stadt suchen wollen. Doch nie sagt sie ein Wort. Aber das ist mir nicht wichtig. Auch, wenn sie mir noch nie ihre Liebe gestanden hat, so weiß ich es 
+                doch. Ihr friedliches Lächeln sagt es mir. Sie wacht immer, auch wenn ich tief schlafe passt sie auf mich auf. Ich frage mich, wie lang unsere Vorräte noch reichen. Ich habe ihr gesagt, dass wir eine Stadt suchen müssen. Doch sie reagiert nie, sie 
                 lächelt mich immerzu an. Ich weiß, dass sie mir damit Mut machen will. Ich lasse mir nichts anmerken und lege mich einfach hin, esse einen Krumen Brot und trinke ein Schlückchen Wasser. Doch sie isst nie. Jeden Morgen ist ihre Ration unangetastet. </p>',
-                    '<p>Ich frage sie manchmal, warum sie nicht isst und nicht trinkt. Doch sie lächelt nur. Sie erzählt mir von ihrem Leben. Von ihren Freundinnen und schönen Spielen in ihrer Stadt. Obwohl sie nichts sagt, kann ich ihre Stimme hören. Manchmal höre ich
-                auch andere Leute. Ganz dumpf sagen sie mir, ich soll auf sie aufpassen, bis sie kommen. Ich habe sie einmal nach ihrem Namen gefragt. Doch sie lächelte mich nur an. Sie macht ein Geheimnis daraus. Sie kommen sicher bald, habe ich ihr gesagt. Sie hat
-                nicht geantwortet, doch ich weiß, dass sie glücklich ist. Ich habe ihr einmal meine Liebe gestanden. Es war mir sehr peinlich, denn ich dachte, sie lacht mich vielleicht aus. Doch sie lag friedlich da und hat mich angelächelt. Ich weiß, dass sie sich
-                sehr gefreut hat. Bald sind sie da. Ich höre sie ganz deutlich. Meine Eltern und Bewohner meines Dorfes. Nicht nur nachts, auch am Tag sprechen sie mir Mut zu. Ich sehe sie nicht, aber sie sind bei uns. Sie werden uns retten. Und dann werde ich mit
+                    '<p>Ich frage sie manchmal, warum sie nicht isst und nicht trinkt. Doch sie lächelt nur. Sie erzählt mir von ihrem Leben. Von ihren Freundinnen und schönen Spielen in ihrer Stadt. Obwohl sie nichts sagt, kann ich ihre Stimme hören. Manchmal höre ich 
+                auch andere Leute. Ganz dumpf sagen sie mir, ich soll auf sie aufpassen, bis sie kommen. Ich habe sie einmal nach ihrem Namen gefragt. Doch sie lächelte mich nur an. Sie macht ein Geheimnis daraus. Sie kommen sicher bald, habe ich ihr gesagt. Sie hat 
+                nicht geantwortet, doch ich weiß, dass sie glücklich ist. Ich habe ihr einmal meine Liebe gestanden. Es war mir sehr peinlich, denn ich dachte, sie lacht mich vielleicht aus. Doch sie lag friedlich da und hat mich angelächelt. Ich weiß, dass sie sich 
+                sehr gefreut hat. Bald sind sie da. Ich höre sie ganz deutlich. Meine Eltern und Bewohner meines Dorfes. Nicht nur nachts, auch am Tag sprechen sie mir Mut zu. Ich sehe sie nicht, aber sie sind bei uns. Sie werden uns retten. Und dann werde ich mit 
                 ihr Spielen, wie ich es ihr versprochen habe. Ich liebe sie. In ihrem weißen Kleid ist wunderschön. Ich liebe sie so sehr.</p>'
                 ],
                 'lang' => 'de',
@@ -449,7 +449,7 @@ class RolePlayTextDataService implements FixtureProcessorInterface {
                 <li>1 Flasche Bier</li>
                 <li>1 Ration Wasser</li>
                 </ul>',
-                    '<p>Das verdächtige Gemüse schälen und in Stücke schneiden. Die küchenfertige Ratte je nach Geschmack mit den scharfen Gewürzen einreiben und in einem heißen Topf von allen Seiten gut anbraten. Das Gemüse zugeben und ebenfalls für ein paar Minuten
+                    '<p>Das verdächtige Gemüse schälen und in Stücke schneiden. Die küchenfertige Ratte je nach Geschmack mit den scharfen Gewürzen einreiben und in einem heißen Topf von allen Seiten gut anbraten. Das Gemüse zugeben und ebenfalls für ein paar Minuten 
                 mitbraten. Mit Wasser und Bier ablöschen und alles zum Kochen bringen. Den Topf abdecken und bei geringer Hitze fünf Stunden lang sanft köcheln lassen. Durch die lange Garzeit wird das Fleisch einfach butterzart.</p>'
                 ],
                 'lang' => 'de',
@@ -497,14 +497,14 @@ class RolePlayTextDataService implements FixtureProcessorInterface {
                 'content' => [
                     '<p>Liebes Tagebuch</p>
                 <p>Heute ist der 2. Februar 2010, genau, mein Geburtstag! Die Kollegen haben mir deswegen eine feine Flasche Marinostov auf die Seite gelegt.</p>
-                <p>Dennoch ist es ein düsterer Tag für mich, mein bester Freund "KevKev" ist heute Nacht gestorben. Das Tor war bereits geschlossen und ich war am Ende meiner Kräfte. Deswegen habe ich dann 500mg Twionid geschluckt, doch der Riegel war bereits fest
-                verkeilt. Ich hörte ihn schreien und weinen, es war schrecklich. Auf seinen Willen habe ich ihm unseren Batteriewerfer mit der letzten Batterie rausgeworfen. Die Batterie war nicht für die Zombies gedacht. Das Geräusch werde ich nie Vergessen...
+                <p>Dennoch ist es ein düsterer Tag für mich, mein bester Freund "KevKev" ist heute Nacht gestorben. Das Tor war bereits geschlossen und ich war am Ende meiner Kräfte. Deswegen habe ich dann 500mg Twionid geschluckt, doch der Riegel war bereits fest 
+                verkeilt. Ich hörte ihn schreien und weinen, es war schrecklich. Auf seinen Willen habe ich ihm unseren Batteriewerfer mit der letzten Batterie rausgeworfen. Die Batterie war nicht für die Zombies gedacht. Das Geräusch werde ich nie Vergessen... 
                 <strong>pflogg</strong>!</p>',
-                    '<p>Heute Morgen lag nur noch der Batteriewerfer vor dem Tor. Ich vermisse ihn so sehr! Die Angst, das Leid und die Umstände sind unerträglich, deswegen habe ich mich entschlossen das ganze mit meinem Vodka und einer Zyanidkapsel zu beenden. Es ist
+                    '<p>Heute Morgen lag nur noch der Batteriewerfer vor dem Tor. Ich vermisse ihn so sehr! Die Angst, das Leid und die Umstände sind unerträglich, deswegen habe ich mich entschlossen das ganze mit meinem Vodka und einer Zyanidkapsel zu beenden. Es ist 
                 das beste für mich.</p>
                 <p>Den einzige Grund hier zu bleiben gab es heute zu Mittag, armer Flauschi! Ich mach mich jetzt auf den Weg in das verlassene Haus 5km von hier, da werde ich niemandem zur Last fallen.
                 KevKev ich komme!</p>
-                <p>Machs gut liebes Tagebuch,</p>
+                <p>Machs gut liebes Tagebuch,</p> 
                 <p>Dein Rayalistic</p>'
                 ],
                 'lang' => 'de',
@@ -624,7 +624,7 @@ class RolePlayTextDataService implements FixtureProcessorInterface {
                 <p>Bürgermeister Merkal verkündete den Baubeginn eines neuen Projekts, welches das Überleben aller Stadtbürger garantieren würde:</p>
                 <blockquote>"Zugegeben, es handelt sich um eine wahnsinnige Unternehmung, die nur geringe Erfolgschancen verspricht, aber wir müssen es versuchen. <p>Wenn es klappt, könnte dieses neue Gebäude uns allen das Leben retten. Wir haben in den letzten Tagen das Optimum aus dieser Stadt herausgeholt: Ein Katapult wurde gebaut, ein Graben wurde angelegt, Zombiefallen wurde innerhalb und außerhalb der Stadt aufgestellt [...]</p>
                 </blockquote>',
-                    '<p>- jede einzelne Maßnahme war ein gewaltiger Kraftakt, doch jetzt ist der Zeitpunkt gekommen, an dem wir uns etwas Neues einfallen lassen mussten.
+                    '<p>- jede einzelne Maßnahme war ein gewaltiger Kraftakt, doch jetzt ist der Zeitpunkt gekommen, an dem wir uns etwas Neues einfallen lassen mussten. 
                 </p><p>Ich habe mit unseren Helden gestern Nacht schon darüber gesprochen und wir sind einstimmig zur Überzeugung gelangt, dass wir eine "Falsche Stadt" bauen müssen.</p>
                 <p>Es hört sich verrückt an, aber wir denken, dass die Zombies den Unterschied nicht merken werden. Wenn es uns gelingt eine möglichst originalgetreue Stadt nachzubauen, könnten wir die Angriffslast von dieser Stadt nehmen und so langfristig unser Überleben sichern."</p>',
                     '<p>Die Versammlung reagierte skeptisch: </p>
@@ -692,23 +692,23 @@ class RolePlayTextDataService implements FixtureProcessorInterface {
                     '<h1>Schmerzengels Überlebensregeln</h1>
                 <p>Punkt 1.
                 <br>
-                Stehle niemandem sein Wasser, außer Du hast keines.
+                Stehle niemandem sein Wasser, außer Du hast keines.	
                 </p>
                 <p>Punkt 2.
                 <br>
-                Gehe nur mit Waffen und Proviant in die Außenwelt. Solltest Du beides nicht haben. Nimm jemanden mit, der langsamer läuft als DU.
+                Gehe nur mit Waffen und Proviant in die Außenwelt. Solltest Du beides nicht haben. Nimm jemanden mit, der langsamer läuft als DU.	
                 </p>
                 <p>Punkt 3.
                 <br>
-                Wenn Du Nahrung findest, laß erst Deinen Kameraden davon essen. Er ist bestimmt genau so hungrig wie Du.
+                Wenn Du Nahrung findest, laß erst Deinen Kameraden davon essen. Er ist bestimmt genau so hungrig wie Du.	
                 </p>',
                     '<p>Punkt 4.
                 <br>
-                Mit einer Fackel in der Hand ist der Verdammte gleich entbrannt.
+                Mit einer Fackel in der Hand ist der Verdammte gleich entbrannt.	
                 </p>
                 <p>Punkt 5.
                 <br>
-                Wenn Du meinst es geht nichts mehr kommt von irgendwo ....ach was soll´s. Ich bin ehrlich zu Dir. Du hast verschissen. Punkt.
+                Wenn Du meinst es geht nichts mehr kommt von irgendwo ....ach was soll´s. Ich bin ehrlich zu Dir. Du hast verschissen. Punkt.	
                 </p>'
                 ],
                 'lang' => 'de',
@@ -880,18 +880,18 @@ class RolePlayTextDataService implements FixtureProcessorInterface {
                 <center>Prof. Dr. Edgar Neubauer</center>
                 <h1>Sie nennen sie Zombies - Politisch korrekter Umgang mit vermindert Lebenden</h1>',
                     '<p>Sie nennen Sie Zombies, Leichenfresser, wandelnde Tote – schon immer wurden infizierte Menschen von der scheinbar normalen und gesunden Bevölkerung diffamiert, ausgestoßen, verfolgt, in Lager gesperrt und systematisch getötet.</p>
-                <p>Wer glaubt die Menschheit habe die asozialen Zustände eines pestverseuchten Frankfurts im 14. Jahrhundert oder eines von Cholera heimgesuchten Londons um 1854 überwunden, irrt. Was in der aufgeklärten Moderne, insbesondere in den westlichen
+                <p>Wer glaubt die Menschheit habe die asozialen Zustände eines pestverseuchten Frankfurts im 14. Jahrhundert oder eines von Cholera heimgesuchten Londons um 1854 überwunden, irrt. Was in der aufgeklärten Moderne, insbesondere in den westlichen 
                 Industrieländern als undenkbar galt ist heute schreckliche Realität.</p>
-                <p>Einzelne Individuen, Bevölkerungsgruppen, ja ganze Ethnien werden in diesem Moment mit den negativsten Attributen besetzt, die sich ein Mensch nur ausdenken kann: die vermindert Lebenden. Ihnen wird der Status Mensch entzogen und damit jedes
+                <p>Einzelne Individuen, Bevölkerungsgruppen, ja ganze Ethnien werden in diesem Moment mit den negativsten Attributen besetzt, die sich ein Mensch nur ausdenken kann: die vermindert Lebenden. Ihnen wird der Status Mensch entzogen und damit jedes 
                 Menschenrecht. Ein Genozid in noch nie da gewesener Form.</p>',
                     '<p>Der medial geschürten Massenpanik, dem der Lynchmob mit Fackeln und Kettensäge in den Händen folgt, gilt es mit wissenschaftlicher Methode zu begegnen.</p>
-                <p>Zu allererst sollten wir uns daher von dem Gedanken befreien, es handele sich bei den vermindert Lebenden um Leichen, die sich aus ihren Gräbern erhoben haben um die Menschheit heimzusuchen. Zombies, oder taxonomisch korrekt Corpse Cadarve,
-                gehören ins Reich der Fantasie – kreolische Taschenspielertricks, die den westlichen Hypnoseshows in nichts nachstehen. Vielmehr sind sie der Subspezies Ghul zuzuschreiben, dem mit einem immer noch nicht näher untersuchten Retrovirus infizierten Homo
-                sapiens sapiens. Bereits hier wird deutlich, dass die beim Ghul angewandte ursprüngliche Taxonomie Manesphagus horridus nicht nur ungenau ist, sondern völlig an der Gattung vorbei gewählt wurde. Selbst die Bezeichnung Homo sapiens wichtus trifft hier
+                <p>Zu allererst sollten wir uns daher von dem Gedanken befreien, es handele sich bei den vermindert Lebenden um Leichen, die sich aus ihren Gräbern erhoben haben um die Menschheit heimzusuchen. Zombies, oder taxonomisch korrekt Corpse Cadarve, 
+                gehören ins Reich der Fantasie – kreolische Taschenspielertricks, die den westlichen Hypnoseshows in nichts nachstehen. Vielmehr sind sie der Subspezies Ghul zuzuschreiben, dem mit einem immer noch nicht näher untersuchten Retrovirus infizierten Homo 
+                sapiens sapiens. Bereits hier wird deutlich, dass die beim Ghul angewandte ursprüngliche Taxonomie Manesphagus horridus nicht nur ungenau ist, sondern völlig an der Gattung vorbei gewählt wurde. Selbst die Bezeichnung Homo sapiens wichtus trifft hier 
                 allenfalls nur bedingt zu.</p>',
-                    '<p>Auch wenn der Ursprung bislang ungeklärt bleibt, so weisen aktuelle Untersuchungen der verschiedenen Ausprägungen der Krankheit auf eine Vielzahl von Virenstämmen hin und damit folglich einer Vielzahl von im Entstehen begriffener Subspezies: Homo
+                    '<p>Auch wenn der Ursprung bislang ungeklärt bleibt, so weisen aktuelle Untersuchungen der verschiedenen Ausprägungen der Krankheit auf eine Vielzahl von Virenstämmen hin und damit folglich einer Vielzahl von im Entstehen begriffener Subspezies: Homo 
                 sapiens ingentis monerus, Homo sapiens ingentis vrykolkas, Homo sapiens nobilis vrykolkas, oder Homo sapiens sapiens sanguisuga um nur einige zu nennen.</p>
-                <p>Das Problem, das es nun zu lösen gilt ist, wie wir zukünftig ethisch vertretbar auf das Vorhandensein weiterer dominanter Spezies auf unserem Planeten reagieren und wie ein gemeinsames Miteinander gewährleistet werden kann. Die Integrationspolitik
+                <p>Das Problem, das es nun zu lösen gilt ist, wie wir zukünftig ethisch vertretbar auf das Vorhandensein weiterer dominanter Spezies auf unserem Planeten reagieren und wie ein gemeinsames Miteinander gewährleistet werden kann. Die Integrationspolitik 
                 ist im neuen Jahrtausend angekommen.</p>'
                 ],
                 'lang' => 'de',
@@ -1000,7 +1000,7 @@ class RolePlayTextDataService implements FixtureProcessorInterface {
                 <p>Ich bin verrückt geworden - sie haben recht.</p>
                 <p>Spielt das denn noch eine Rolle?</p>
                 <p>Mein Blick richtete sich erneut auf die torkelnde Masse...</p>',
-                    '<p>Ein nicht zu bändigendes Rauschgefühl durchströmte meinen Körper.</p>
+                    '<p>Ein nicht zu bändigendes Rauschgefühl durchströmte meinen Körper.</p>	
                 <p>Ich sah, wie sie die Stadtmauer überwanden!</p>
                 <p>Ich begrüßte sie mit einem Freudenschrei.</p>
                 <p>Und bekam ein tiefes, kehliges Gebrüll als Antwort!</p>
@@ -1075,7 +1075,7 @@ class RolePlayTextDataService implements FixtureProcessorInterface {
                 'author' => "Dayan",
                 'content' => [
                     '<p><strong>--EILMELDUNG--EILMELDUNG--EILMELDUNG--EILMELDUNG--</strong></p>
-                <p>Unbestätigten Gerüchten zufolge hätte das französische Entwicklerstudio Motion Twin eine Lösung für
+                <p>Unbestätigten Gerüchten zufolge hätte das französische Entwicklerstudio Motion Twin eine Lösung für 
                 (fast) alle Probleme unserer postapokalyptischen Welt gefunden, darunter:</p>
                 <p>
                 <ul>
@@ -1838,7 +1838,7 @@ class RolePlayTextDataService implements FixtureProcessorInterface {
                     '<p>Ni Enfer, ni Paradis... Ci-gît ma dernière pensée articulée.</p>
                 <p>Le délire est trop puissant, le soleil trop accablant... Qu\'avons nous fait pour mériter tel châtiment ? Comment le destin peut-il faire montre d\'une telle cruauté ? Condamnés à nous réincarner dans un monde de mort et de désolation ou, y finir en zombies... Errance astrale ou matérielle... J\'ai vu !</p>
                 <p>J\'ai vu dans les méandres sirupeux de mon infection, les grandes et les petites choses... Nous ne sommes rien d\'autre que de l\'expérience pour la Mère. Nous avons été des enfants indignes... Nous sommes les seuls responsables ! Nous nous sommes pris pour des Dieux... Qu\'elle ironie ! Nous aurions dû apprendre à marcher avant de vouloir courir; désormais, nous rampons !!!</p>
-                <p>Quelle ironie. Quelle fin pleine de panache ! Toi qui lis ces divagations, saches que la richesse est l\'Expérience...  </p>'
+                <p>Quelle ironie. Qu\'elle fin pleine de panache ! Toi qui lis ces divagations, saches que la richesse est l\'Expérience...  </p>'
                 ],
                 "lang" => "fr",
                 "background" => "carton",
@@ -3029,7 +3029,7 @@ class RolePlayTextDataService implements FixtureProcessorInterface {
                 </p>
                 <p>
                 Sauf que le-dit cochon, après s\'être échappé, est allé tout droit vers le site de construction du grogro mur. <br>
-                Il a tapé dans les fondations et le mur s\'est écroulé sur la tour de guet qui elle-même s\'est effondrée sur l\'atelier.<br>
+                Il a tapé dans les fondations et le mur s\'est écroulé sur la tour de guet qui elle-même s\'est effondrée sur l\'atelier.<br> 
                 Bon ça aurait pu s\'arrêter là mais manque de chance le feux de joie se trouvait à proximité et une buche s\'est retrouvé projetée dans la banque, ce qui brûlé la moitié de nos ressources. <br>
                 Enfin quand même, est-ce que ça justifie vraiment la cage à viande ?<br>
                 </p>'
@@ -4262,10 +4262,10 @@ class RolePlayTextDataService implements FixtureProcessorInterface {
                 "title" => "Récit d'un habitant",
                 "author" => "coctail",
                 "content" => [
-                    '<p>J\'ai alors tailladé la jambe à Ervin. Il m\'a regardé sans comprendre. Je lui ai dit : « Tu vois les zombies là, en haut de la colline ?
-                Toi, tu es jeune, moi, je suis vieux. Tu courrais plus vite que moi, mais plus maintenant. Merci de m\'avoir attendu.
-                Et n\'oublie pas mon garçon : quand la horde arrive, il ne faut pas courir vite, il ne faut juste pas être celui qu\'ils vont rattraper.
-                Maintenant, menotte-toi à la poutre, je ne voudrais pas te tirer dans la jambe, les munitions sont si rares...
+                    '<p>J\'ai alors tailladé la jambe à Ervin. Il m\'a regardé sans comprendre. Je lui ai dit : « Tu vois les zombies là, en haut de la colline ? 
+                Toi, tu es jeune, moi, je suis vieux. Tu courrais plus vite que moi, mais plus maintenant. Merci de m\'avoir attendu.  
+                Et n\'oublie pas mon garçon : quand la horde arrive, il ne faut pas courir vite, il ne faut juste pas être celui qu\'ils vont rattraper. 
+                Maintenant, menotte-toi à la poutre, je ne voudrais pas te tirer dans la jambe, les munitions sont si rares... 
                 Bonne chance, je les entends arriver... Et merci de m\'avoir passé ton fusil.</p>'
                 ],
                 "lang" => "fr",
@@ -5273,21 +5273,21 @@ class RolePlayTextDataService implements FixtureProcessorInterface {
                     '>
                 <p>
                 Ca pue la merde.<br>
-                Littéralement.<br>
+                Littéralement.<br> 
                 J\'ai du prendre le dernier lit de camp en ville, celui à côté de la fosse communautaire. <br>
-                Des mecs jouent les chefs.<br>
+                Des mecs jouent les chefs.<br> 
                 Tranquille. <br>
                 Un peu trop. <br>
                 </p>
                 <p>
-                Quelque part, cette solidarité soudaine entre des gens paumés, ça me débecte...<br>
+                Quelque part, cette solidarité soudaine entre des gens paumés, ça me débecte...<br> 
                 C\'est que du flan, du vent, une fumée sans feu ! <br>
                 Dès que ça sentira le roussi, y aura plus un rat. <br>
                 Et ceux qui donnent des ordres, des directives, ils espèrent quoi, hein ? <br>
                 De la reconnaissance ? Vivre ? Réchauffer les cœurs à la chandelle de l\'amitié ? <br>
                 </p>
                 <p>
-                Conneries. On va tous crever. Ils chient de peur, dans la fosse, là, ils y mettent toutes leurs peurs intestinales.<br>
+                Conneries. On va tous crever. Ils chient de peur, dans la fosse, là, ils y mettent toutes leurs peurs intestinales.<br> 
                 Je vois, leurs grimaces de douleur, le bruit de leurs intestins... Je vais les faire cramer de l\'intérieur... Leur donner une raison d\'avoir mal au bide...<br>
                 </p>'
                 ],
@@ -6155,16 +6155,16 @@ class RolePlayTextDataService implements FixtureProcessorInterface {
                 in the wasteland though he looked like a tasty dish.</p>
                 <p>After several hours of exploring and searching the long day caught up with Dragnauv who stopped focusing on the task at hand,
                 only for one moment, but one moment was all it took, Dragnauv was surrounded by zombies.</p>',
-                    '<p></p>
-                <p>\'Taste the pain\' Dragnauv yelled, as in one long swinging arc he bought the chain down on a zombies head.
+                    '<p></p>    
+                <p>\'Taste the pain\' Dragnauv yelled, as in one long swinging arc he bought the chain down on a zombies head. 
                 Stunned he watched as more rust than chain it disintegrated on impact.</p>
-                <p>Luckily for Dragnauv a small group of scavengers appeared from nearby, drawn by his premature battle cry,
+                <p>Luckily for Dragnauv a small group of scavengers appeared from nearby, drawn by his premature battle cry, 
                 their arrival giving Dragnauv just enough of a distraction to make a break for it. </p>
                 <p>Dragnauv slowly backed away from the zombies and just as he was about to make his move for town he heard a light mewling coming
                 from the direction of a pile of rubbish, an upturned trash bin specifically, flipping the bin over he is both surprised and delighted
                 to see a young kitty looking slightly worse for wear and covered in all sorts of stains from its time in the upturned bin.</p>',
-                    '<p></p>
-                <p>Kneeling down to pick the poor defenceless kitty up, Dragnauv is in awe as the cat runs over towards the nearest zombie and in a flurry of hisses,
+                    '<p></p>    
+                <p>Kneeling down to pick the poor defenceless kitty up, Dragnauv is in awe as the cat runs over towards the nearest zombie and in a flurry of hisses, 
                 bites and scratches rips its head off, turns and saunters back claiming Dragnauv as a new master.</p>
                 <p>By R3DD3R</p>
                 <br>
@@ -6891,7 +6891,7 @@ class RolePlayTextDataService implements FixtureProcessorInterface {
                 "author" => "Various",
                 "content" => [
                     '<br><br>
-                <p>Drink is the curse of the land. It makes you fight with your neighbor. It makes you shoot at your landlord, and it makes you miss him.</p><br>
+                <p>Drink is the curse of the land. It makes you fight with your neighbor. It makes you shoot at your landlord, and it makes you miss him.</p><br>	
                 <p>Your feet will bring you where your heart is.</p><br>
                 <p>An Irishman is never drunk as long as he can hold onto one blade of grass and not fall off the face of the earth. </p><br>
                 <p>God is good, but never dance in a small boat.</p><br>',
@@ -7060,7 +7060,7 @@ class RolePlayTextDataService implements FixtureProcessorInterface {
                 <p>Crying cockles and mussels alive a-live O!</p>
                 <br>
                 <p>A-live a-live O! A-live a-live O!</p>
-                <p>Crying cockles and mussels alive a-live O!</p>
+                <p>Crying cockles and mussels alive a-live O!</p>   
                 <p>A-live a-live O! A-live a-live O!</p>
                 <p>Crying cockles and mussels alive a-live O!</p>'
                 ],
@@ -7255,9 +7255,9 @@ class RolePlayTextDataService implements FixtureProcessorInterface {
                     '<h1>Polycarbonate Riot Shield</h1>
                 <h2>Series #0418SP, Model MT</h2>
                 <ul>
-                <li>Lightweight protection device</li>
-                <li>Reinforced central area</li>
-                <li>Ideal for all your desert security needs.</li>
+                <li>Lightweight protection device</li> 
+                <li>Reinforced central area</li> 
+                <li>Ideal for all your desert security needs.</li> 
                 <li>Cup holder optional.</li>
                 <li>Easily washable - no blood on your hands!</li>
                 <li>6 months warranty (extendable).</li>
