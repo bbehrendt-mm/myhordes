@@ -36,12 +36,12 @@
 </head>
 <body onclick class="offline_body">
 <div id="wrapper">
-    <div id="header">
-        <div id="header-reload-area"></div>
-    </div>
+    <header id="header">
+        <div id="header-reload-area" role="none"></div>
+    </header>
 
-    <div id="content">
-        <div class="row-flex">
+    <main id="content">
+        <article class="row-flex">
             {% if toc %}
                 <div class="padded cell rw-4 rw-lg-5 rw-md-0 background">
                     <div class="toc">
@@ -65,8 +65,8 @@
                     </ul></div>
                 {% endif %}
             </div>
-        </div>
-    </div>
+        </article>
+    </main>
 
     <div id="footer"></div>
 </div>

@@ -59,14 +59,14 @@
         {% endif %}
     {% endblock %}
 </head>
-<body {{ (theme??{})|data }} onclick {{ {
+<body aria-label="{{ block('title') is defined ? block('title') : 'MyHordes' }}" {{ (theme??{})|data }} onclick {{ {
     'online_body': is_granted('ROLE_USER'),
     'offline_body': not is_granted('ROLE_USER'),
     'no-fx': app.user and app.user.disableFx,
     'no-blur': app.user and (app.user.disableFx or app.user.setting(constant("\\App\\Enum\\UserSetting::DisableBlur"))),
 }|classes }}>
 <div id="partial-proxy" class="hidden"></div>
-<div id="notifications"></div>
+<div id="notifications" aria-live="assertive" aria-relevant="additions" role="log"></div>
 <div id="post-office">
     <div id="post-office-box">
         <div id="post-office-content"></div>
@@ -76,8 +76,8 @@
     </div>
 </div>
 <div id="wrapper">
-    <div id="header">
-        <div id="header-reload-area"></div>
+    <header id="header">
+        <div id="header-reload-area" role="none"></div>
         <div id="postbox" {{ {'hidden': true, 'show-larger': app.user and app.user.setting( constant("\\App\\Enum\\UserSetting::LargerPMIcon") ), 'header-icon': true, 'mail': true }|classes }}>
             <div><img src="{{ asset('build/images/icons/small_mail.gif') }}" alt=""></div>
             <div><img src="{{ asset('build/images/icons/anim_icon_mail.gif') }}" alt=""></div>
@@ -85,9 +85,9 @@
         </div>
         <hordes-header-ui></hordes-header-ui>
         {% block header %}{% endblock %}
-    </div>
+    </header>
 
-    <div id="content">
+    <main id="content">
         <noscript>
             <div class="row">
                 <div class="cell padded rw-12">
@@ -97,7 +97,7 @@
                 </div>
             </div>
         </noscript>
-    </div>
+    </main>
 
     <div style="font-size: 0.6em; margin-right: 12px; margin-left: inherit; width: max-content;" class="note note-warning">
         <hordes-issue-report data-pass="{{ {'Button': 'Page Bottom'}|json_encode }}" data-selector="a" data-title="{{ 'Fehler melden'|trans({}, 'global') }}"><a href="#">{{ 'Fehler melden'|trans({}, 'global') }}</a></hordes-issue-report>

@@ -3292,3 +3292,7 @@ Kartograph_f: Cartógrafa
 'Diese Nacht werden keine Gebäude Wasser aus dem Brunnen verbrauchen.': 'Esta noche, ninguna construcción consumirá agua del pozo.'
 'Infolge einer Revolution in deiner Stadt wurdest du aus der Gemeinschaft verbannt.': 'A raíz de una revolución en tu ciudad, te han expulsado de la comunidad.'
 '{player} hat sich über deinen Einladungslink registriert.': '{player} se ha registrado a través de tu enlace de invitación.'
+'Richtung Osten bewegen': 'Desplazarse hacia el este'
+'Richtung Westen bewegen': 'Desplazarse hacia el oeste'
+'Richtung Norden bewegen': 'Desplazarse hacia el norte'
+'Richtung Süden bewegen': 'Dirigirse hacia el sur'

@@ -159,7 +159,7 @@ const LocalZoneView = React.memo( ( props: LocalZoneProps ) => {
 
     return (
         <>
-            <div className="zone-plane-parent">
+            <div className="zone-plane-parent" aria-hidden={true}>
                 <div className={`zone-plane ${props.fx ? 'retro' : ''} ox-${ox < 0 ? or + ox : ox} oy-${oy < 0 ? or + oy : oy} `} ref={plane} style={style}>
                     { (props.fx ? [0,1,2,3,4] : []).map(i => <div key={i} className="retro-effect hide-lg hide-md hide-sm"/>) }
                     <LocalZoneGrid nightMode={props.nightMode} cache={cache}/>

@@ -67,6 +67,12 @@ class MapController extends CustomAbstractCoreController
                 Zone::DirectionSouth     => $this->translator->trans('Süden', [], 'game'),
                 Zone::DirectionSouthEast => $this->translator->trans('Südosten', [], 'game'),
             ],
+            'directionActions' => [
+                'east' => $this->translator->trans('Richtung Osten bewegen', [], 'game'),
+                'west' => $this->translator->trans('Richtung Westen bewegen', [], 'game'),
+                'north' => $this->translator->trans('Richtung Norden bewegen', [], 'game'),
+                'south' => $this->translator->trans('Richtung Süden bewegen', [], 'game'),
+            ],
             'tags' => array_values($all_tags),
             'mark' => $this->translator->trans('Mark.', [], 'game'),
             'global' => $this->translator->trans('Global', [], 'game'),

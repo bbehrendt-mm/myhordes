@@ -7,6 +7,7 @@ export type RuntimeMapStrings = {
     distance: string,
     direction: string,
     directionValues: string[],
+    directionActions: {[key: string]: string},
     distanceTown: string,
     distanceSelf: string,
     danger: string[],

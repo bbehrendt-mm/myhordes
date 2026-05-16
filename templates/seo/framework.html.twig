@@ -49,14 +49,14 @@
 </head>
 <body class="offline_body">
 <div id="wrapper">
-    <div id="header">
-        <div id="header-reload-area"></div>
+    <header id="header">
+        <div id="header-reload-area" role="none"></div>
         {% block header %}{% endblock %}
-    </div>
+    </header>
 
-    <div id="content">
+    <main id="content">
         {% block content %}{% endblock %}
-    </div>
+    </main>
 
     <div id="footer"></div>
 </div>

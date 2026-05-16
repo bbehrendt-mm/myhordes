@@ -47,7 +47,7 @@
     {% endblock %}
 </head>
 <body {{ (theme ?? {})|data }} onclick class="{% if is_granted('ROLE_USER') %}online_body{% else %}offline_body{% endif %}">
-<div id="notifications"></div>
+<div id="notifications" aria-live="assertive" aria-relevant="additions" role="log"></div>
 <div id="post-office">
     <div id="post-office-box">
         <div id="post-office-content"></div>
@@ -57,7 +57,7 @@
     </div>
 </div>
 <div id="wrapper">
-    <div id="header">
+    <header id="header">
         <div id="header-reload-area"></div>
         <div id="postbox" class="hidden">
             <div><img src="{{ asset('build/images/icons/small_mail.gif') }}" alt=""></div>
@@ -65,9 +65,9 @@
             <div id="postbox-new-msg-counter">0</div>
         </div>
         {% block header %}{% endblock %}
-    </div>
+    </header>
 
-    <div id="content">
+    <main id="content">
         <div class="row">
             <div class="cell padded rw-10 ro-1 rw-lg-12 ro-lg-0">
                 <h1 class="page-head">{{'Ein Fehler ist aufgetreten'|trans({}, 'errors')}}</h1>
@@ -103,7 +103,7 @@
                 </div>
             </div>
         </noscript>
-    </div>
+    </main>
 
     <div id="footer"></div>
 </div>

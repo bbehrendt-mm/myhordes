@@ -739,16 +739,22 @@ export default class HTML {
             this.finishTutorialStage( complete );
     }
 
-    private updateTitle(alt: boolean = false): void {
+    private updateTitle(alt: boolean = false,  timer: boolean = false): void {
         const msg_char =
             (alt ? [null,'❶۬','❷۬','❸۬','❹۬','❺۬','❻۬','❼۬','❽۬','❾۬','⬤۬'] : [null,'❶','❷','❸','❹','❺','❻','❼','❽','❾','⬤'])
                 [Math.max(0,Math.min(this.title_segments[0], 10))];
         window.document.title = (msg_char === null) ? this.title_segments[1] : (msg_char + ' ' + this.title_segments[1]);
         if (this.title_segments[2] !== null) window.document.title += ' | ' + this.title_segments[2];
+
+        if (!timer) {
+            const main = document.querySelector('main');
+            if (main) main.ariaLabel = this.title_segments[2] ?? this.title_segments[1];
+        }
+
     }
 
     private titleTimer(): void {
-        this.updateTitle(this.title_alt);
+        this.updateTitle(this.title_alt, true);
         this.title_alt = !this.title_alt;
         this.title_timer = window.setTimeout(() => this.titleTimer(), this.title_alt ? 900 : 100);
     }

@@ -18,9 +18,11 @@ type ZoneControlArrowProps = {
 }
 
 const ZoneControlMovementArrow = ( props: ZoneControlArrowProps ) => {
+    const globals = useContext(Globals)
+
     return (props.zone === null) ? <></> : (
         <>
-            <div onClick={props.onClick}
+            <div onClick={props.onClick} role="button" aria-label={globals.strings.directionActions[props.direction]}
                  className={`action-move action-move-danger-${props.zone.se ?? 0} action-move-${props.direction} ${props.onRoute ? 'on-route' : ''}`}
             />
             { typeof props.zone.ss !== "undefined" && (
@@ -59,7 +61,7 @@ const ZoneControlParent = ( props: LocalControlProps ) => {
         if (a.x===b.x&&a.y>b.y) for (let y = a.y; y >= b.y; --y) f({x:a.x,y});
         if (a.x===b.x&&a.y===b.y) f({x:a.x,y:a.y});
     }
-    
+
     if (typeof props.planes["0"].x !== "undefined" && typeof props.planes["0"].y !== "undefined" && (props.activeRoute?.stops ?? []).length > 0) {
         const zone = props.planes["0"] as MapCoordinate;
         const stops = props.activeRoute.stops;
@@ -84,7 +86,7 @@ const ZoneControlParent = ( props: LocalControlProps ) => {
         if (stops[stops.length - 1].x === zone.x && stops[stops.length - 1].y === zone.y) {
             onLastRouteStop = true;
         }
-        
+
         // We're not on route and it's not the last stop. Try to find the way back
         if (!m && !onLastRouteStop) {
 
