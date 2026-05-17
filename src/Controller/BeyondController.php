@@ -641,7 +641,7 @@ class BeyondController extends InventoryAwareController
 
             // Disable the escort
             if ($mover->getEscortSettings()) {
-                $remove[] = $mover->getEscortSettings();
+                $this->entity_manager->remove($mover->getEscortSettings());
                 $mover->setEscortSettings(null);
             }
 
