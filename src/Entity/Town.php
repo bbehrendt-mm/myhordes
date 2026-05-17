@@ -301,7 +301,7 @@ class Town
     }
     public function setWell(int $well): self
     {
-        $this->well = $well;
+        $this->well = max(0, $well);
 
         return $this;
     }
