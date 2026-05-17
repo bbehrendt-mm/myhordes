@@ -186,7 +186,7 @@ export const App = ({app, onClose, signalUpdate}: {app: ExternalApp|null, onClos
                                             {globals.strings.apps.details.dev.help}
                                             <Tooltip additionalClasses="help">
                                                 {globals.strings.apps.details.dev.fields.url.help.map((s,i) => <React.Fragment key={i}>
-                                                    <span>{s}</span><br/>
+                                                    <div dangerouslySetInnerHTML={{__html: s}}/>
                                                 </React.Fragment>)}
                                             </Tooltip>
                                         </a>

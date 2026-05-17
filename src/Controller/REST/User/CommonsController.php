@@ -104,6 +104,9 @@ class CommonsController extends CustomAbstractCoreController
                                 'title' => $this->translator->trans('URL', [], 'admin'),
                                 'help' => [
                                     $this->translator->trans('Dies ist die URL, zu der Spieler weitergeleitet werden, wenn sie auf den Link klicken.', [], 'global'),
+                                    $this->translator->trans('Wenn Du Spieler basierend auf ihrer Spracheinstellung zu unterschiedlichen URLs leiten möchtest, kannst du folgende Syntax verwenden: {example}', [
+                                        'example' => '<code>https://example.com/{lang:en;die2nite|fr;hordes|de:die-verdammten|es:zombinoia}</code>'
+                                    ], 'global')
                                 ],
                             ],
                             'dev_url' => [
