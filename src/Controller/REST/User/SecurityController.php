@@ -126,6 +126,8 @@ class SecurityController extends CustomAbstractCoreController
         Environment $twig
     ): JsonResponse {
         $user = $this->getUser();
+
+        if (!$user) return new JsonResponse([], Response::HTTP_UNAUTHORIZED);
         if ($user->getPassword() !== null) return new JsonResponse([], Response::HTTP_CONFLICT);
 
         $new_password = $keygen(8) . '-' . $keygen(8);
