@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useContext, useEffect, useState} from "react";
+import {useContext, useEffect, useRef, useState} from "react";
 import {TownClock} from "./api";
 import {Global} from "../../defaults";
 import {useCountdown, useSharedWorkerMessages} from "../utils";
@@ -20,6 +20,7 @@ export const HordesHeaderClockWidget = () => {
     const [timerString, setTimerString] = useState<string>(null);
     const [timerMs, setTimerMs] = useState<number>(null);
     const [gameTime, setGameTime] = useState<string>(null);
+    const lastRefreshAt = useRef<number>(null);
 
     const refreshGameTime = (timestamp: number) => {
         if (!clockData) return;
@@ -33,6 +34,7 @@ export const HordesHeaderClockWidget = () => {
             setClockData(c);
             setDuringAttack(c.attack <= 0);
             refreshGameTime( (c.timestamp + c.offset) * 1000 )
+            lastRefreshAt.current = (new Date()).getTime();
         });
     }
 
@@ -60,6 +62,10 @@ export const HordesHeaderClockWidget = () => {
         'web-navigation',
         () => {
             if (!duringAttack && timerMs !== null && timerMs <= 0) refreshClock();
+            else if ( lastRefreshAt.current && ((new Date()).getTime() - lastRefreshAt.current) > 3600000 ) {
+                lastRefreshAt.current = null;
+                refreshClock();
+            }
         }, [timerMs !== null && timerMs <= 0, duringAttack]
     );
 
