@@ -6,9 +6,12 @@ use App\Enum\GameProfileEntryType;
 use App\Repository\TownRankingProxyRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\Order;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Table;
 use Doctrine\ORM\Mapping\UniqueConstraint;
+use Doctrine\ORM\PersistentCollection;
 
 #[ORM\Entity(repositoryClass: TownRankingProxyRepository::class)]
 #[Table]
@@ -133,6 +136,18 @@ class TownRankingProxy
     {
         return $this->days;
     }
+
+    public function getCalculatedDays(): int {
+        /**
+         * @var CitizenRankingProxy|null $c
+         */
+        $c = $this->getCitizens()
+            ->matching( new Criteria()->orderBy( [ 'day' => Order::Descending ] ) )
+            ->first() ?: null;
+
+        return $c?->getDay() ?? $this->days ?? 0;
+    }
+
     public function setDays(int $days): self
     {
         $this->days = $days;
@@ -149,13 +164,21 @@ class TownRankingProxy
 
         return $this;
     }
+
     /**
-     * @return Collection|CitizenRankingProxy[]
+     * @return ArrayCollection<CitizenRankingProxy>|PersistentCollection<CitizenRankingProxy>
      */
-    public function getCitizens(): Collection
+    public function getCitizens(): ArrayCollection|PersistentCollection
     {
         return $this->citizens;
     }
+
+    public function getCitizenForUser(User $user): ?CitizenRankingProxy {
+        return $this->getCitizens()->matching(
+            new Criteria()->where(Criteria::expr()->eq('user', $user) )
+        )->first() ?: null;
+    }
+
     public function addCitizen(CitizenRankingProxy $citizen): self
     {
         if (!$this->citizens->contains($citizen)) {

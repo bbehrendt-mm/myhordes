@@ -24,6 +24,7 @@
             <div class="town-container">
                 {% set pos = 1 %}
                 {% for town in towns %}
+                    {% set survived = town.calculatedDays %}
                     <div class="row-flex stretch season_entry {% if pos is not odd %}even{% endif %} {% if played[town.id] is defined %}played{% endif %}">
                         {# @var town \src\Entity\TownRankingProxy #}
                         <div class="cell rw-1 season_entry_td center">
@@ -39,7 +40,7 @@
                         <div class="cell rw-6 season_entry_td left">
                             <img style="max-height: 16px;" src="{{ asset("build/images/lang/" ~ town.language ~".png") }}" alt="{{ town.language }}" /> {{ town.name }}
                         </div>
-                        <div class="cell rw-2 season_entry_td center" style="color: #f0d79e">{{ town.days }}</div>
+                        <div class="cell rw-2 season_entry_td center" style="color: #f0d79e">{{ survived }}</div>
                         <div class="cell rw-2 season_entry_td center"><strong>{{ town.score }}</strong></div>
                         <div class="cell rw-1 season_entry_td center"><div class="inline-block"><img x-town-details="{{ town.id }}" x-town-toggle="{{ town.id }}" class="pointer" alt="+" src="{{ asset('build/images/icons/small_more.gif') }}" data-alt-src="{{ asset('build/images/icons/small_less.gif') }}" /><div class="tooltip help">{{ 'Die Liste der eingeschriebenen Spieler ansehen.'|trans({},'game') }}</div></div></div>
                     </div>
@@ -47,12 +48,12 @@
                         <div class="row-flex stretch season_entry_container" x-town-latest="">
                             <div class="cell rw-1 center" style="border-right: 1px solid #7e4d2a;"></div>
                             <div class="cell rw-7 ro-1">
-                                {% for denizen in town.citizens|filter(a => a.day == town.days)|sort((a,b) => a.user.name|sortable <=> b.user.name|sortable) %}
+                                {% for denizen in town.citizens|filter(a => a.day == survived)|sort((a,b) => a.user.name|sortable <=> b.user.name|sortable) %}
                                     <span class="small">
                                     {% include 'ajax/soul/playername.html.twig' with {user: denizen.user, additional_classes: ['undecorated'], globalSpace: true} only %} <span style="color: #f0d79e">({{ denizen.day }})</span>
                                     </span>{% if not loop.last %},{% endif %}
                                 {% endfor %}
-                                {% if town.citizens|filter(a => a.day == town.days)|length >4 %}
+                                {% if town.citizens|filter(a => a.day == survived)|length >4 %}
                                     <img x-town-details="{{ town.id }}" x-town-toggle="{{ town.id }}" class="pointer" alt="+" src="{{ asset('build/images/icons/small_more.gif') }}" data-alt-src="{{ asset('build/images/icons/small_less.gif') }}" />
                                 {% endif %}
                             </div>

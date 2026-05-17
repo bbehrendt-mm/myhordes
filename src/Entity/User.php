@@ -357,20 +357,20 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
     }
 
     public function getActiveCitizen(): ?Citizen {
-        return $this->getCitizens()->matching( (new Criteria())
+        return $this->getCitizens()->matching( new Criteria()
                ->where( new Comparison( 'active', Comparison::EQ, true )  )
         )->first() ?: null;
     }
 
     public function getCitizenFor(Town $town): ?Citizen {
-        return $this->getCitizens()->matching( (new Criteria())
+        return $this->getCitizens()->matching( new Criteria()
             ->where( new Comparison( 'town', Comparison::EQ, $town )  )
         )->first() ?: null;
     }
 
     public function getAliveCitizen(): ?Citizen {
-        return $this->getCitizens()->matching( (new Criteria())
-                                                   ->where( new Comparison( 'alive', Comparison::EQ, true )  )
+        return $this->getCitizens()->matching( new Criteria()
+            ->where( new Comparison( 'alive', Comparison::EQ, true )  )
         )->first() ?: null;
     }
 

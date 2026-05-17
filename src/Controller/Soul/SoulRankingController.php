@@ -84,13 +84,8 @@ class SoulRankingController extends SoulController
         $played = [];
         foreach ($towns as $town) {
             /* @var TownRankingProxy $town */
-            foreach ($town->getCitizens() as $citizen) {
-                /* @var CitizenRankingProxy $citizen */
-                if($citizen->getUser() === $user) {
-                    $played[$town->getId()] = true;
-                    break;
-                }
-            }
+            if ($town->getCitizenForUser( $user ))
+                $played[$town->getId()] = true;
         }
 
 
@@ -311,7 +306,7 @@ class SoulRankingController extends SoulController
         try {
             $ranking = $gameCachePool->get("mh_app_distinction_ranking_{$seasonId}_{$prototype->getId()}", function (ItemInterface $item) use ($currentSeason, $prototype) {
                 $item->expiresAfter(43200)->tag(['daily','ranking','distinction_ranking']);
-                
+
                 $add_season_filters = function (QueryBuilder $q) use ($currentSeason): QueryBuilder {
                     if ($currentSeason === 'myh')
                         $q->andWhere('t.imported = false')->andWhere('p.old = false');
