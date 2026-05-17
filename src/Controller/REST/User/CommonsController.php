@@ -148,8 +148,9 @@ class CommonsController extends CustomAbstractCoreController
         ]);
     }
 
-    protected function decodeUrl(?string $url): ?string {
-        if ($url === null) return $url;
+    protected function decodeLanguageString(?string $url): ?string {
+        if ($url === null) return null;
+
         while (($a = strpos( $url, '{' )) !== false && ($b = strpos( $url, '}' )) && $a < $b) {
 
             [$word, $options] = array_merge(explode(':', substr( $url, $a+1, $b - $a - 1 ), 2), [null]);
@@ -181,7 +182,7 @@ class CommonsController extends CustomAbstractCoreController
 
         return [
             'id' => $app->getId(),
-            'name' => $app->getName(),
+            'name' => $this->decodeLanguageString( $app->getName() ),
             'icon' => $media?->getSource(16, true),
             'iconSet' => $media?->getSourceSetDPI(16, true),
             'wiki' => $app->isWiki(),
@@ -189,14 +190,14 @@ class CommonsController extends CustomAbstractCoreController
             'auth' => ($app->getSecret() && !$app->getLinkOnly()),
             'pk' => ($app->getSecret() && !$app->getLinkOnly()) ? $this->getUser()->getExternalId() : null,
             'maintenance' => $app->getMaintenance() <> 0,
-            'url' => $this->decodeUrl( $app->getUrl() ),
+            'url' => $this->decodeLanguageString( $app->getUrl() ),
             'contact' => [
                 'label' => $app->getContact() ?: null,
                 'uri' => empty($app->getContact()) ? null : ( str_contains( $app->getContact(), '@' ) ? "mailto:{$app->getContact()}" : $app->getContact() ),
             ],
             'dev' => $app->getOwner()?->getId() === $this->getUser()->getId() ? [
                 'sk' => $app->getSecret(),
-                'url' => $this->decodeUrl( $app->getDevurl() ),
+                'url' => $this->decodeLanguageString( $app->getDevurl() ),
             ] : null,
         ];
     }
