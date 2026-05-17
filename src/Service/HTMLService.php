@@ -720,9 +720,9 @@ class HTMLService {
                     $segment = chr($o) . '...' . strtolower(chr($o)) . '...' . $segment;
                 else {
                     $ri = mt_rand(0, mb_strlen($segment));
-                    $o = ord(strtoupper(substr($segment, $ri)));
+                    $o = ord(strtoupper(mb_substr($segment, $ri)));
                     if ($o >= 65 && $o <= 90 && $this->rand->chance($chance))
-                        $segment = substr($segment, 0, $ri) . '...' . strtolower(chr($o)) . '...' . substr($segment, $ri);
+                        $segment = mb_substr($segment, 0, $ri) . '...' . strtolower(chr($o)) . '...' . mb_substr($segment, $ri);
                 }
             }
         };
@@ -741,7 +741,7 @@ class HTMLService {
                 case HTMLService::ModulationHead:
                     // Head modulation: Insert distortion in any word
                     $ri = mt_rand(0, mb_strlen($segments[$r]));
-                    $segments[$r] = substr($segments[$r], 0, $ri) . $this->rand->pick($mod_list[$mod]) . substr($segments[$r], $ri);
+                    $segments[$r] = mb_substr($segments[$r], 0, $ri) . $this->rand->pick($mod_list[$mod]) . mb_substr($segments[$r], $ri);
                     break;
                 case HTMLService::ModulationTerror:
                     $mod_double_letters($segments, 0.075 * $factor);
