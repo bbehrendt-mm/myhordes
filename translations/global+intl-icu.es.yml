@@ -675,3 +675,4 @@ Spielhilfe: Guía del juego
 'Dein Profilbild wurde erfolgreich aktualisiert.': 'Tu imagen de perfil se ha actualizado correctamente.'
 'Das gewählte Profilbild wurde erfolgreich gelöscht.': 'La imagen de perfil seleccionada se ha eliminado correctamente.'
 'Du hast einen neuen geworbenen Spieler!': '¡Has invitado a un nuevo jugador al juego!'
+'Wenn Du Spieler basierend auf ihrer Spracheinstellung zu unterschiedlichen URLs leiten möchtest, kannst du folgende Syntax verwenden: {example}': 'Si quieres redirigir a los jugadores a diferentes URL en función de su configuración de idioma, puedes utilizar la siguiente sintaxis: {example}'
