@@ -8,6 +8,7 @@ use App\Enum\UserSetting;
 use App\Structures\Media\MediaCollection;
 use App\Structures\Media\MediaCollectionList;
 use App\Structures\Media\MediaVariant;
+use App\Traits\Entity\DoctrineExtensions;
 use App\Traits\Entity\LinksMedia;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -38,7 +39,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[UniqueConstraint(name: 'user_etwin_unique', columns: ['eternal_id'])]
 class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUserInterface
 {
-    use LinksMedia;
+    use DoctrineExtensions, LinksMedia;
 
     const int USER_LEVEL_BASIC  =  0;
     const int USER_LEVEL_CROW   =  3;
