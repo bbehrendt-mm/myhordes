@@ -1009,6 +1009,7 @@ Freundschaft: crwdns270686:0crwdne270686:0
 'Du versucht nochmal alle deine Kräfte für heute Abend zu mobilisieren. Die Anspannung steht dir ins Gesicht geschrieben. Du schwitzt und deine Hände zittern.{hr}Beim heutigen Angriff wirst du weder <c-HeroImmuneStatusList op="map" thirst="Durst" hunger="Hunger" infection="Krankheitssymptome (Infektion)"  addiction="Entzugserscheinungen" glue=", noch "></c-HeroImmuneStatusList> verspüren.<t-stat-down-terror>{hr}Du fühlst einen neuen Schub an Selbstsicherheit und verlierst deine Panik vor den Zombies.</t-stat-down-terror><t-stat-down-hungover>{hr}Dank deiner frisch geschöpften Hoffnung hast du nun wieder einen klaren Kopf.</t-stat-down-hungover><t-stat-down-healed>{hr}Du atmest einmal tief ein und spürst, wie die Wunde unter deinen Bandagen heilt.</t-stat-down-healed>': 'crwdns270792:0{hr}crwdnd270792:0{hr}crwdnd270792:0{hr}crwdnd270792:0{hr}crwdne270792:0'
 'Hierfür brauchst du mindestens 2 CP.': 'crwdns270794:0crwdne270794:0'
 'Hierfür brauchst du mindestens 3 CP.': 'crwdns270796:0crwdne270796:0'
+'Reparieren (1AP)': 'crwdns275935:0crwdne275935:0'
 'Reparieren (3CP)': 'crwdns270798:0crwdne270798:0'
 'Du hast dein Handwerkstalent gebraucht, um damit {target} zu reparieren. Dabei hast du {minus_cp} CP eingesetzt.': 'crwdns270800:0{target}crwdnd270800:0{minus_cp}crwdne270800:0'
 'Abgestandenes Bier': 'crwdns270802:0crwdne270802:0'

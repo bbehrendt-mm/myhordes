@@ -724,4 +724,4 @@ Administratoren: Admins
 'Alle deaktivieren': 'Disable all'
 'Einzelnen deaktivieren': 'Disable oldest'
 Deaktivieren: Disable
-'Wird für Dehydration an Tag 3 oder früher gesetzt, oder wenn der Spieler an dem selben IRL-Tag stirbt, an dem er der Stadt beigetreten ist. Blockiert den Beitritt zu neuen Städten wenn aktiv.': 'Wird für Dehydration an Tag 3 oder früher gesetzt, oder wenn der Spieler an dem selben IRL-Tag stirbt, an dem er der Stadt beigetreten ist. Blockiert den Beitritt zu neuen Städten wenn aktiv.'
+'Wird für Dehydration an Tag 3 oder früher gesetzt, oder wenn der Spieler an dem selben IRL-Tag stirbt, an dem er der Stadt beigetreten ist. Blockiert den Beitritt zu neuen Städten wenn aktiv.': 'Set on a maximum of 3 days of dehydration, or if the player dies the very IRL day they joined the city. Blocks accessing new cities when active.'
