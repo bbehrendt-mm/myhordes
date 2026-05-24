@@ -3,41 +3,14 @@
 namespace App\Controller\REST\User;
 
 use App\Annotations\GateKeeperProfile;
-use App\Controller\Admin\AdminActionController;
 use App\Controller\CustomAbstractCoreController;
-use App\Entity\AdminReport;
-use App\Entity\BlackboardEdit;
-use App\Entity\Citizen;
-use App\Entity\CitizenRankingProxy;
 use App\Entity\Emotes;
-use App\Entity\ExternalApp;
-use App\Entity\ForumUsagePermissions;
-use App\Entity\GlobalPrivateMessage;
-use App\Entity\Post;
-use App\Entity\PrivateMessage;
 use App\Entity\Reaction;
 use App\Entity\ReactionSet;
-use App\Entity\Town;
-use App\Entity\TownAdminUser;
 use App\Entity\User;
-use App\Entity\UserGroup;
-use App\Entity\UserGroupAssociation;
-use App\Enum\AdminReportSpecification;
-use App\Service\Actions\Mercure\BroadcastViaMercureAction;
-use App\Service\CrowService;
-use App\Service\EventProxyService;
-use App\Service\JSONRequestParser;
 use App\Service\Locksmith;
-use App\Service\Media\MediaService;
-use App\Service\PermissionHandler;
-use App\Service\RandomGenerator;
-use App\Service\RateLimitingFactoryProvider;
-use App\Service\TimeKeeperService;
 use App\Service\User\UserCapabilityService;
-use App\Translation\T;
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
@@ -45,19 +18,9 @@ use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mercure\HubInterface;
-use Symfony\Component\Mercure\Update;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Validator\Constraints\AtLeastOneOf;
-use Symfony\Component\Validator\Constraints\Blank;
-use Symfony\Component\Validator\Constraints\Collection;
-use Symfony\Component\Validator\Constraints\Email;
-use Symfony\Component\Validator\Constraints\Url;
-use Symfony\Component\Validator\Validation;
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\Cache\TagAwareCacheInterface;
-use Throwable;
 
 #[Route(path: '/rest/v1/user/reactions', name: 'rest_user_reactions_', condition: "request.headers.get('Accept') === 'application/json'")]
 #[GateKeeperProfile('skip')]
@@ -75,6 +38,17 @@ class ReactionsController extends CustomAbstractCoreController
             'agree'  => $this->translator->trans('Diese Reaktion hinzufügen', [], 'global'),
             'remove' => $this->translator->trans('Meine Reaktion entfernen', [], 'global'),
             'close'  => $this->translator->trans('Menü schließen', [], 'global'),
+
+            'emote_groups' => [
+                'emotes' => [
+                    'order' => 1,
+                    'title' => $this->translator->trans('Emotionen', [], 'global'),
+                ],
+                'default' => [
+                    'order' => 2,
+                    'title' => $this->translator->trans('Sonstige', [], 'global'),
+                ],
+            ]
         ]);
     }
 

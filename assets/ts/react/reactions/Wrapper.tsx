@@ -162,7 +162,7 @@ const AddReactionButton = () => {
 }
 
 const EmoteSelector = (props: {close: ()=>void}) => {
-    const {reactionSet, updateReactionSet, api, twinoApi} = useContext(Globals);
+    const {reactionSet, updateReactionSet, api, twinoApi, strings} = useContext(Globals);
 
     const [emotes, setEmotes] = useState<EmoteResponse>(null)
     const [saving, setSaving] = useState<boolean>(false);
@@ -171,18 +171,31 @@ const EmoteSelector = (props: {close: ()=>void}) => {
         twinoApi.emotes(reactionSet.me, 'reactions').then(r => setEmotes(r));
     }, []);
 
+    const groups = [...new Set(Object.entries(emotes?.result ?? {})
+        .map( ([,v]) => v.groups )
+        .reduce( (a,b) => [...a, ...b], [] ))];
+
     return <div className="emote-popup">
         {!emotes && <div className="loading" />}
-        { emotes && <div className={`flex wrap ${saving ? 'disabled' : ''}`}>
-            { Object.values( emotes.result )
-                .sort( (a,b) => a.orderIndex - b.orderIndex )
-                .map( emote => <img key={ emote.id } className="pointer" alt={ emote.tag } src={ emote.url } onClick={() => {
-                    setSaving(true);
-                    api.put( reactionSet.id, emote.id )
-                        .then( r => updateReactionSet(r))
-                        .finally(() => props.close())
-                }}/>)
-            }
+        { emotes && <div className={`flex column element-gap ${saving && 'disabled'}`}>
+
+            { groups
+                .sort( (a,b) => (strings.emote_groups[a]?.order ?? 99) - (strings.emote_groups[b]?.order ?? 99) )
+                .map( group => <div key={ group } className="emote-group">
+                <div className="emote-group-header">{ strings.emote_groups[group]?.title ?? group }</div>
+                <div className="flex wrap">
+                    { Object.values( emotes.result )
+                        .filter( emote => emote.groups[0] === group )
+                        .sort( (a,b) => a.orderIndex - b.orderIndex )
+                        .map( emote => <img key={ emote.id } className="pointer" alt={ emote.tag } src={ emote.url } onClick={() => {
+                            setSaving(true);
+                            api.put( reactionSet.id, emote.id )
+                                .then( r => updateReactionSet(r))
+                                .finally(() => props.close())
+                        }}/>)
+                    }
+                </div>
+            </div> ) }
         </div> }
     </div>
 }
