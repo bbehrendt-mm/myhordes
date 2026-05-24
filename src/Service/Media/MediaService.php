@@ -3,7 +3,6 @@ namespace App\Service\Media;
 
 use App\Entity\Media;
 use App\Entity\User;
-use App\Structures\ImageSource;
 use App\Structures\Media\MediaCollection;
 use App\Structures\Media\MediaVariant;
 use App\Structures\Media\MediaVariantInterface;

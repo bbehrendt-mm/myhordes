@@ -193,6 +193,7 @@
                     {% endif %}</span>
             </div>
         </div>
+        {% if announcement|reactionUUID %}<hordes-reactions data-uuid="{{ announcement|reactionUUID }}"></hordes-reactions>{% endif %}
     </li>
 {% endmacro %}
 {% macro bubble_dm(message, last) %}

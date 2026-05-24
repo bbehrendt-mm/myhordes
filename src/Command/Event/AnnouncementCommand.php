@@ -86,7 +86,7 @@ class AnnouncementCommand extends Command
 
             foreach ($lang_mapping as $lang => $mapping) {
                 $template = $this->twig->load("event/{$entry->getEvent()}/$mapping.html.twig");
-                $announcements[] = $announcement = (new Announcement())
+                $announcements[] = $announcement = new Announcement()
                     ->setTitle(strip_tags($template->renderBlock('title', $vars)))
                     ->setText($template->renderBlock('content', $vars))
                     ->setTimestamp(new DateTime())

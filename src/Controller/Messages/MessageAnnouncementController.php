@@ -8,6 +8,7 @@ use App\Entity\ForumPoll;
 use App\Entity\ForumPollAnswer;
 use App\Entity\ForumUsagePermissions;
 use App\Entity\GlobalPoll;
+use App\Entity\ReactionSet;
 use App\Entity\User;
 use App\Enum\Configuration\MyHordesSetting;
 use App\Messages\Discord\DiscordMessage;
@@ -17,6 +18,7 @@ use App\Service\EventProxyService;
 use App\Service\HTMLService;
 use App\Service\JSONRequestParser;
 use App\Service\Media\MediaService;
+use App\Service\Morph\MorphService;
 use DateTime;
 use DiscordWebhooks\Client;
 use DiscordWebhooks\Embed;
@@ -250,7 +252,16 @@ class MessageAnnouncementController extends MessageController
      * @throws ExceptionInterface
      */
     #[Route(path: 'api/admin/com/changelogs/new_announcement', name: 'admin_changelog_new_announcement')]
-    public function create_announcement_api(EntityManagerInterface $em, JSONRequestParser $parser, UrlGeneratorInterface $urlGenerator, MessageBusInterface $bus, EventProxyService $proxy, MediaService $mediaService, Request $request): Response {
+    public function create_announcement_api(
+        EntityManagerInterface $em,
+        JSONRequestParser $parser,
+        UrlGeneratorInterface $urlGenerator,
+        MessageBusInterface $bus,
+        EventProxyService $proxy,
+        MediaService $mediaService,
+        MorphService $morphService,
+        Request $request
+    ): Response {
         $title     = $parser->get('title', '');
         $content   = $parser->get('content', '');
         $lang      = $parser->get('lang', 'de');
@@ -269,6 +280,7 @@ class MessageAnnouncementController extends MessageController
         $em->persist($announcement);
         $em->flush();
 
+        $em->persist( $morphService->firstOrCreateMorph( ReactionSet::class, $announcement ) );
         if ($announcement->isValidated())
             $proxy->newAnnounceEvent( $announcement );
 

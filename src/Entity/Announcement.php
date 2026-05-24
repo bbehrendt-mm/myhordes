@@ -3,36 +3,47 @@
 namespace App\Entity;
 
 use App\Repository\AnnouncementRepository;
+use App\Traits\Entity\DoctrineExtensions;
+use App\Traits\Entity\LinksMorph;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 
 #[ORM\Entity(repositoryClass: AnnouncementRepository::class)]
 class Announcement
 {
+    use LinksMorph, DoctrineExtensions;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private ?int $id = null;
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: false)]
-    private $sender;
+    private ?User $sender = null;
     #[ORM\Column(type: 'datetime')]
-    private $timestamp;
+    private ?DateTimeInterface $timestamp = null;
     #[ORM\Column(type: 'text')]
-    private $text;
+    private ?string $text = null;
     #[ORM\ManyToMany(targetEntity: User::class, fetch: 'EXTRA_LAZY')]
-    private $readBy;
+    private Collection $readBy;
     #[ORM\Column(type: 'string', length: 190)]
-    private $title;
+    private ?string $title = null;
     #[ORM\Column(type: 'string', length: 8)]
-    private $lang;
+    private ?string $lang = null;
 
     #[ORM\Column(options: ['default' => true])]
     private bool $validated = true;
 
     #[ORM\ManyToOne]
     private ?User $validatedBy = null;
+
+    protected static array $morphsTo = [
+        ReactionSet::class,
+    ];
+
     public function __construct()
     {
         $this->readBy = new ArrayCollection();
@@ -72,9 +83,9 @@ class Announcement
         return $this;
     }
     /**
-     * @return Collection|User[]
+     * @return ArrayCollection<int,User>|PersistentCollection<int,User>
      */
-    public function getReadBy(): Collection
+    public function getReadBy(): ArrayCollection|PersistentCollection
     {
         return $this->readBy;
     }

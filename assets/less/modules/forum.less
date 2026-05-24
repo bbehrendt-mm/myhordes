@@ -1393,3 +1393,39 @@ hordes-twino-editor {
 .thread-tag {
   padding: 0 4px; border-radius: 4px; margin: 0 4px; font-size: 0.95rem; font-weight: bold; box-shadow: 0 0 3px rgba(0,0,0,0.3);
 }
+
+.reactions {
+
+    .reaction {
+        height: 24px; min-width: 32px; border: 1px solid #ddab76; box-shadow: 0 0 4px rgba(0,0,0,0.5); background: #5c2b20;
+        transition: background 0.2s ease-in-out; border-radius: 2px;
+        font-size: 1rem; color: #ddab76; font-weight: bold; padding: 0 4px;
+        gap: 6px;
+
+        &:hover { background: rgba(221, 171, 118, 0.5); }
+        &.mine {
+            border: 1px solid white;
+            img { filter: drop-shadow(0 0 2px rgba(255,255,255,0.5)); }
+        }
+
+        &.pending { pointer-events: none }
+        &:not(.pending) { cursor: pointer; }
+
+        &.add-reaction {
+            background-image: url(../../img/icons/small_more2.gif); background-position: center; background-repeat: no-repeat;
+            background-color: rgba(221, 171, 118, 0.25);
+            &:hover { background-color: rgba(221, 171, 118, 0.75); }
+        }
+    }
+
+    .add-reaction-parent {
+        position: relative; overflow: visible;
+
+        .emote-popup {
+            width: 250px; position: absolute; top: calc(100% + 8px); left: calc(50% - 125px); height: 200px; overflow: auto;
+            background-color: #5c2b20;
+            border: 1px solid #ecb98a;
+            color: white;
+        }
+    }
+}

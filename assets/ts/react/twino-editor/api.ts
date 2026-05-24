@@ -16,6 +16,7 @@ export type EmoteResponse = EmoteListResponse & {
 }
 
 export type Emote = {
+    id: number,
     tag: string,
     path: string,
     orderIndex: number,

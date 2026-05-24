@@ -151,7 +151,7 @@ class EditorController extends CustomAbstractCoreController
         elseif ($user !== $this->getUser()) return new JsonResponse([], Response::HTTP_FORBIDDEN);
 
         $unlock_all = in_array($context, [
-            'announcement', 'changelog'
+            'announcement', 'changelog', 'reaction'
         ]) && $this->isGranted('ROLE_ELEVATED');
         $unlock_s = $unlock_all ? 'all' : 'default';
 
@@ -178,6 +178,7 @@ class EditorController extends CustomAbstractCoreController
                 /** @var $entry Emotes */
                 if ($entry === null) continue;
                 $data[$entry->getTag()] = [
+                    'id' => $entry->getId(),
                     'tag' => $entry->getTag(),
                     'path' => $entry->getI18n() ? str_replace('{lang}', $user->getLanguage() ?? 'de', $entry->getPath()) : $entry->getPath(),
                     'orderIndex' => $entry->getOrderIndex(),

@@ -112,6 +112,8 @@ class MediaExtensions extends AbstractExtension implements GlobalsInterface
      * @param string $collection
      * @param int|null $expected_size
      * @param bool $sourceSet
+     * @param string $fallback
+     * @param bool $include_original
      * @return string
      * @throws InvalidArgumentException
      */
