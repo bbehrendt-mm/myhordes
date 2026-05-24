@@ -53,6 +53,8 @@ class ForumEditorCommand extends Command
             ->addOption('description', 'd', InputOption::VALUE_OPTIONAL, 'The Forum Description', false)
             ->addOption('icon', 'i', InputOption::VALUE_OPTIONAL, 'The Forum Icon', false)
             ->addOption('no-permissions', null, InputOption::VALUE_NONE, 'If set, no permissions will be updated when changing the forum type. If --type is not set or CUSTOM forum type is selected, this option has no effect.')
+
+            ->addOption('use-reactions', null, InputOption::VALUE_REQUIRED, 'Set to 1 or 0 to enable/disable the use of reaction emotes.', false)
         ;
     }
 
@@ -126,6 +128,12 @@ class ForumEditorCommand extends Command
                 $reset_perms = true;
             }
 
+            $updated = true;
+        }
+
+        if ($input->getOption('use-reactions') !== false) {
+            $enable_reactions = (int)$input->getOption('use-reactions') !== 0;
+            $forum->setUsingEmoteReactions( $enable_reactions );
             $updated = true;
         }
 

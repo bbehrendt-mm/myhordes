@@ -13,7 +13,7 @@ enum ForumType: int {
 
     public function isInternal(): bool {
         return match($this) {
-            self::Default, self::Elevated, self::Mods, self::Admins, self::Animac, self::Dev => true,
+            self::Elevated, self::Mods, self::Admins, self::Animac, self::Dev => true,
             default => false
         };
     }
