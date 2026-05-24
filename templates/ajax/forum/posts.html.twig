@@ -397,6 +397,11 @@
                                             <li><a class="action-button" x-forum-moderator-action="delete-post" x-post-id={{ post.id }} x-to-page={{ current_page }}>{{ 'Löschen'|trans({},'global') }}</a></li>
                                             <li><a class="action-button" x-forum-moderator-action="edit-post"   x-post-id={{ post.id }} x-to-page={{ current_page }}>{{ 'Bearbeiten'|trans({},'global') }}</a></li>
                                         {% endif %}
+                                        {% if post|reactionUUID %}
+                                            <li><a class="action-button" x-forum-moderator-action="disable-reactions" x-post-id={{ post.id }} x-to-page={{ current_page }}>{{ 'Reaktionen löschen'|trans({},'global') }}</a></li>
+                                        {% else %}
+                                            <li><a class="action-button" x-forum-moderator-action="enable-reactions" x-post-id={{ post.id }} x-to-page={{ current_page }}>{{ 'Reaktionen erlauben'|trans({},'global') }}</a></li>
+                                        {% endif %}
                                     </ul>
                                 </label>
                             {% elseif (post.thread.tag and post.thread.tag.name == 'event' and post == thread.firstPost(true) and permission.post_as_animacteur()) %}
@@ -503,6 +508,16 @@
                     }] ] ],
                     [ '{{ 'Abbrechen'|trans({},'global')|e('js') }}', [ ['click', (e_sub, elem_sub) => $.html.triggerPopupPop(elem_sub)] ] ]
                 ] );
+            });
+
+            $.html.addEventListenerAll('[x-forum-moderator-action="enable-reactions"]', 'click', function(e,elem) {
+                if (confirm('{{ 'Bist du sicher?'|trans({},'global')|e('js') }}'))
+                    $.ajax.easySend('{{ path('forum_thread_mod_controller', {fid: fid, tid: tid, mod: 'enable-reactions'}) }}', {postId: parseInt( elem.getAttribute('x-post-id'))}, reloadPage);
+            });
+
+            $.html.addEventListenerAll('[x-forum-moderator-action="disable-reactions"]', 'click', function(e,elem) {
+                if (confirm('{{ 'Bist du sicher?'|trans({},'global')|e('js') }}'))
+                    $.ajax.easySend('{{ path('forum_thread_mod_controller', {fid: fid, tid: tid, mod: 'disable-reactions'}) }}', {postId: parseInt( elem.getAttribute('x-post-id'))}, reloadPage);
             });
         {% endif %}
 

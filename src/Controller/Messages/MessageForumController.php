@@ -17,6 +17,7 @@ use App\Entity\LogEntryTemplate;
 use App\Entity\OfficialGroup;
 use App\Entity\PinnedForum;
 use App\Entity\Post;
+use App\Entity\ReactionSet;
 use App\Entity\Thread;
 use App\Entity\ThreadReadMarker;
 use App\Entity\ThreadTag;
@@ -34,12 +35,14 @@ use App\Service\Forum\PostService;
 use App\Service\HTMLService;
 use App\Service\JSONRequestParser;
 use App\Service\Locksmith;
+use App\Service\Morph\MorphService;
 use App\Service\PictoHandler;
 use App\Service\RateLimitingFactoryProvider;
 use App\Structures\HTMLParserInsight;
 use DateTime;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\QueryBuilder;
 use Exception;
 use Psr\Cache\InvalidArgumentException;
@@ -1485,10 +1488,13 @@ class MessageForumController extends MessageController
      * @param string $mod
      * @param JSONRequestParser $parser
      * @param CrowService $crow
+     * @param PostService $postService
+     * @param MorphService $morphService
      * @return Response
+     * @throws ORMException
      */
     #[Route(path: 'api/forum/{fid<\d+>}/{tid<\d+>}/moderate/{mod}', name: 'forum_thread_mod_controller')]
-    public function mod_thread_api(int $fid, int $tid, string $mod, JSONRequestParser $parser, CrowService $crow, PostService $postService): Response {
+    public function mod_thread_api(int $fid, int $tid, string $mod, JSONRequestParser $parser, CrowService $crow, PostService $postService, MorphService $morphService): Response {
         $success = false;
 
         /** @var Forum $forum */
@@ -1673,6 +1679,30 @@ class MessageForumController extends MessageController
                     $this->entity_manager->persist($forum);
                     $this->entity_manager->persist($new_forum);
                     $this->entity_manager->persist($thread);
+                    $this->entity_manager->flush();
+                    return AjaxResponse::success();
+                } catch (Exception $e) {
+                    return AjaxResponse::error( ErrorHelper::ErrorDatabaseException );
+                }
+
+            case 'enable-reactions':
+                $post = $this->entity_manager->getRepository(Post::class)->find((int)$parser->get('postId'));
+
+                try {
+                    $this->entity_manager->persist( $d = $morphService->firstOrCreateMorph( ReactionSet::class, $post) );
+                    $this->entity_manager->flush();
+                    return AjaxResponse::success();
+                } catch (Exception $e) {
+                    return AjaxResponse::error( ErrorHelper::ErrorDatabaseException );
+                }
+
+            case 'disable-reactions':
+                $post = $this->entity_manager->getRepository(Post::class)->find((int)$parser->get('postId'));
+                $reactions = $morphService->getMorphCollection( ReactionSet::class, $post );
+
+                try {
+                    foreach ($reactions as $reaction)
+                        $this->entity_manager->remove($reaction);
                     $this->entity_manager->flush();
                     return AjaxResponse::success();
                 } catch (Exception $e) {
