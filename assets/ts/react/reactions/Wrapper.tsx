@@ -46,7 +46,21 @@ const HordesReactionsUIWrapper = (props: mountProps) => {
 
     return <Globals.Provider value={{
         api: api.current, twinoApi: twinoApi.current, strings, reactionSet: reaction,
-        updateReactionSet: r => setReaction(r)
+        updateReactionSet: r => setReaction(ro => {
+            const new_reactions_map = Object.fromEntries( r.reactions.map( v => [`${v.id}`, v.count] ) );
+            const existing_reactions = ro.reactions.map( v => v.id );
+
+            const modified = [...ro.reactions]
+                .map(v => {return {...v, count: new_reactions_map[`${v.id}`] ?? 0}})
+                .filter(v => v.count > 0);
+
+            const added = r.reactions
+                .filter( v => !existing_reactions.includes( v.id ) )
+                .map( v => {return {...v}});
+
+            r.reactions = [...modified, ...added];
+            return r;
+        })
     }}>
         <div className="reactions flex wrap">
             { !ready && <>

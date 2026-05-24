@@ -1416,6 +1416,8 @@ hordes-twino-editor {
             background-color: rgba(221, 171, 118, 0.25);
             &:hover { background-color: rgba(221, 171, 118, 0.75); }
         }
+
+        img { height: 19px; width: 19px; object-fit: scale-down; object-position: center }
     }
 
     .add-reaction-parent {
@@ -1423,9 +1425,9 @@ hordes-twino-editor {
 
         .emote-popup {
             width: 250px; position: absolute; top: calc(100% + 8px); left: calc(50% - 125px); height: 200px; overflow: auto;
-            background-color: #5c2b20;
-            border: 1px solid #ecb98a;
-            color: white;
+            background-color: #5c2b20; border: 1px solid #ecb98a; color: white; padding: 4px;
+
+            img { height: 19px; width: 19px; object-fit: scale-down; object-position: center }
         }
     }
 }
