@@ -124,7 +124,7 @@ class ComplaintController extends CustomAbstractCoreController
      * @return JsonResponse
      */
     #[Route(path: '/forum-post/{id}', name: 'forum_post', defaults: ['type' => 'forum-post'], methods: ['PUT'])]
-    public function report_forum_post(Post $post, string $type, JSONRequestParser $parser, EntityManagerInterface $em, PermissionHandler $perm, RateLimitingFactoryProvider $rateLimiter, EventProxyService $proxy): JsonResponse {
+    public function report_forum_post(#[MapEntity(id: 'id')] Post $post, string $type, JSONRequestParser $parser, EntityManagerInterface $em, PermissionHandler $perm, RateLimitingFactoryProvider $rateLimiter, EventProxyService $proxy): JsonResponse {
         $user = $this->getUser();
 
         $reason = $parser->get_int('report_reason', 0);
@@ -196,7 +196,7 @@ class ComplaintController extends CustomAbstractCoreController
      * @return JsonResponse
      */
     #[Route(path: '/blackboard/{id}', name: 'blackboard', defaults: ['type' => 'blackboard'], methods: ['PUT'])]
-    public function report_blackboard(BlackboardEdit $blackBoardEdit, string $type, JSONRequestParser $parser, EntityManagerInterface $em, PermissionHandler $perm, RateLimitingFactoryProvider $rateLimiter, EventProxyService $proxy): JsonResponse {
+    public function report_blackboard(#[MapEntity(id: 'id')] BlackboardEdit $blackBoardEdit, string $type, JSONRequestParser $parser, EntityManagerInterface $em, PermissionHandler $perm, RateLimitingFactoryProvider $rateLimiter, EventProxyService $proxy): JsonResponse {
         $user = $this->getUser();
 
         $reason = $parser->get_int('report_reason', 0);
@@ -354,7 +354,7 @@ class ComplaintController extends CustomAbstractCoreController
      * @return JsonResponse
      */
     #[Route(path: '/user/{id}', name: 'user', defaults: ['type' => 'user'], methods: ['PUT'])]
-    public function report_user(User $reportedUser, string $type, JSONRequestParser $parser, EntityManagerInterface $em, RateLimitingFactoryProvider $rateLimiter, EventProxyService $proxy): JsonResponse {
+    public function report_user(#[MapEntity(id: 'id')] User $reportedUser, string $type, JSONRequestParser $parser, EntityManagerInterface $em, RateLimitingFactoryProvider $rateLimiter, EventProxyService $proxy): JsonResponse {
         $user = $this->getUser();
 
         $reason = $parser->get_int('report_reason', 0);
@@ -414,7 +414,7 @@ class ComplaintController extends CustomAbstractCoreController
      * @return JsonResponse
      */
     #[Route(path: '/town-pm/{id}', name: 'town_pm', defaults: ['type' => 'town-pm'], methods: ['PUT'])]
-    public function report_town_pm(PrivateMessage $post, string $type, JSONRequestParser $parser, EntityManagerInterface $em, RateLimitingFactoryProvider $rateLimiter, EventProxyService $proxy): JsonResponse {
+    public function report_town_pm(#[MapEntity(id: 'id')] PrivateMessage $post, string $type, JSONRequestParser $parser, EntityManagerInterface $em, RateLimitingFactoryProvider $rateLimiter, EventProxyService $proxy): JsonResponse {
         $user = $this->getUser();
 
         /** @var Citizen $citizen */
@@ -485,7 +485,7 @@ class ComplaintController extends CustomAbstractCoreController
      * @return JsonResponse
      */
     #[Route(path: '/global-pm/{id}', name: 'global_pm', defaults: ['type' => 'global-pm'], methods: ['PUT'])]
-    public function report_global_pm(GlobalPrivateMessage $message, string $type, JSONRequestParser $parser, EntityManagerInterface $em, RateLimitingFactoryProvider $rateLimiter, EventProxyService $proxy): JsonResponse {
+    public function report_global_pm(#[MapEntity(id: 'id')] GlobalPrivateMessage $message, string $type, JSONRequestParser $parser, EntityManagerInterface $em, RateLimitingFactoryProvider $rateLimiter, EventProxyService $proxy): JsonResponse {
         $user = $this->getUser();
 
         $group = $message->getReceiverGroup();

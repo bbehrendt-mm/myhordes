@@ -84,6 +84,7 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 use Exception;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Attribute\Route;
@@ -106,7 +107,7 @@ class AdminRankingController extends AdminActionController
     #[Route(path: 'api/admin/town/proxy/{id<\d+>}/event-tag/{act}', name: 'admin_town_event_tag_control', requirements: ['act' => '\d+'])]
     #[IsGranted('ROLE_CROW')]
     #[AdminLogProfile(enabled: true)]
-    public function ranking_event_toggle_town(TownRankingProxy $town_proxy, int $act): Response
+    public function ranking_event_toggle_town(#[MapEntity(id: 'id')] TownRankingProxy $town_proxy, int $act): Response
     {
         $town_proxy->setEvent( $act !== 0 );
         $this->entity_manager->persist($town_proxy);
@@ -125,7 +126,7 @@ class AdminRankingController extends AdminActionController
     #[Route(path: 'api/admin/town/proxy/{id<\d+>}/unrank/{act}', name: 'admin_town_town_ranking_control', requirements: ['act' => '\d+'])]
     #[IsGranted('ROLE_CROW')]
     #[AdminLogProfile(enabled: true)]
-    public function ranking_toggle_town(TownRankingProxy $town_proxy, int $act, JSONRequestParser $request, InvalidateTagsInAllPoolsAction $uncache): Response
+    public function ranking_toggle_town(#[MapEntity(id: 'id')] TownRankingProxy $town_proxy, int $act, JSONRequestParser $request, InvalidateTagsInAllPoolsAction $uncache): Response
     {
         $flag = $request->get("flag") ?? TownRankingProxy::DISABLE_RANKING;
 
@@ -175,7 +176,7 @@ class AdminRankingController extends AdminActionController
     #[Route(path: 'api/admin/town/proxy/{id<\d+>}/unrank_single/{cid}/{act}', name: 'admin_town_citizen_ranking_control', requirements: ['cid' => '\d+', 'act' => '\d+'])]
     #[IsGranted('ROLE_CROW')]
     #[AdminLogProfile(enabled: true)]
-    public function ranking_toggle_citizen(TownRankingProxy $town_proxy, int $cid, int $act, JSONRequestParser $parser, InvalidateTagsInAllPoolsAction $uncache): Response
+    public function ranking_toggle_citizen(#[MapEntity(id: 'id')] TownRankingProxy $town_proxy, int $cid, int $act, JSONRequestParser $parser, InvalidateTagsInAllPoolsAction $uncache): Response
     {
         $citizen_proxy = $this->entity_manager->getRepository(CitizenRankingProxy::class)->find($cid);
         if (!$citizen_proxy) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);

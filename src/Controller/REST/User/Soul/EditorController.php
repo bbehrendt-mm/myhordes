@@ -13,6 +13,7 @@ use App\Entity\User;
 use App\Enum\UserSetting;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Cache\InvalidArgumentException;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Asset\Packages;
@@ -141,6 +142,7 @@ class EditorController extends CustomAbstractCoreController
     public function list_emotes(
         ?int $id,
         string $context,
+        #[MapEntity(id: 'id')]
         ?User $user,
         EntityManagerInterface $em,
         Packages $assets,
@@ -323,6 +325,7 @@ class EditorController extends CustomAbstractCoreController
     #[Route(path: '/{id}/unlocks/{context}/games', name: 'list_games', methods: ['GET'])]
     public function list_games(
         ?int $id,
+        #[MapEntity(id: 'id')]
         ?User $user,
         Packages $assets
     ): JsonResponse {
@@ -370,6 +373,7 @@ class EditorController extends CustomAbstractCoreController
     #[Route(path: '/{id}/unlocks/{context}/ressources', name: 'list_ressources', methods: ['GET'])]
     public function list_ressources(
         ?int $id,
+        #[MapEntity(id: 'id')]
         ?User $user,
         Packages $assets,
         EntityManagerInterface $em
@@ -404,6 +408,7 @@ class EditorController extends CustomAbstractCoreController
     public function list_rp(
         ?int $id,
         string $context,
+        #[MapEntity(id: 'id')]
         ?User $user,
         EntityManagerInterface $em,
         Packages $assets,
@@ -472,6 +477,7 @@ class EditorController extends CustomAbstractCoreController
     #[Route(path: '/{id}/unlocks/shoutbox/rp', name: 'list_coa_rp', methods: ['GET'], priority: 1)]
     public function list_rp_coa(
         ?int $id,
+        #[MapEntity(id: 'id')]
         ?User $user,
         Packages $assets,
         TranslatorInterface $trans,

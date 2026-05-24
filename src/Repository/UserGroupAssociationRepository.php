@@ -89,8 +89,8 @@ class UserGroupAssociationRepository extends ServiceEntityRepository
 
         if ($semantic !== null)
             $qb
-                ->leftJoin(OfficialGroupMessageLink::class, 'ol', 'WITH', 'g.id = ol.messageGroup')
-                ->leftJoin(OfficialGroup::class, 'og', 'WITH', 'ol.officialGroup = og.id')
+                ->leftJoin(OfficialGroupMessageLink::class, 'ol', 'ON', 'g.id = ol.messageGroup')
+                ->leftJoin(OfficialGroup::class, 'og', 'ON', 'ol.officialGroup = og.id')
                 ->andWhere('og.semantic = :semantic')->setParameter('semantic', $semantic);
 
         if ($json_payload !== null) {

@@ -100,6 +100,7 @@ class ReactionsController extends CustomAbstractCoreController
      */
     #[Route(path: '/{id}', name: 'get_reaction', methods: ['GET'])]
     public function get_reaction(
+        #[MapEntity(id: 'id')]
         ReactionSet $reactions,
         EntityManagerInterface $em,
         UserCapabilityService $capability,

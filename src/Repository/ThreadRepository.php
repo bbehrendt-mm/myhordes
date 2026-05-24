@@ -132,7 +132,7 @@ class ThreadRepository extends ServiceEntityRepository
 
         $q = $this->createQueryBuilder('t')
             ->innerJoin('t.posts', 'p')
-            ->leftJoin( 't._readMarkers', 'r', Join::WITH, 'r.thread = t.id AND r.user = :user')->setParameter('user', $user)
+            ->leftJoin( 't._readMarkers', 'r', Join::ON, 'r.thread = t.id AND r.user = :user')->setParameter('user', $user)
             ->select('MAX(p.id) AS pid', 't.id AS tid', 'IDENTITY(r.post) AS rid')
             ->groupBy('t.id')
             ->having( '(:global < pid) AND (rid IS NULL OR rid < pid)' )->setParameter('global', $global_limit)

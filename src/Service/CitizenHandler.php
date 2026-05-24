@@ -837,7 +837,7 @@ class CitizenHandler
     public function hasNewMessage(Citizen $c): bool {
         return $this->entity_manager->getRepository(PrivateMessage::class)->createQueryBuilder('pm')
             ->select('COUNT(pm)')
-            ->innerJoin(PrivateMessageThread::class, 'pmt', Join::WITH, 'pm.privateMessageThread = pmt.id')
+            ->innerJoin(PrivateMessageThread::class, 'pmt', Join::ON, 'pm.privateMessageThread = pmt.id')
             ->where('pm.recipient = :citizen')->setParameter('citizen', $c)
             ->andWhere('pm.new = true')
             ->andWhere('pmt.archived = false')

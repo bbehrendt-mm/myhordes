@@ -18,6 +18,7 @@ use App\Service\User\UserCapabilityService;
 use App\Service\UserHandler;
 use App\Structures\Entity\PictoRollupStructure;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -68,6 +69,7 @@ class DistinctionController extends CustomAbstractCoreController
      */
     #[Route(path: '/{id}/{source<old|soul|mh|imported|all>}', name: 'list', methods: ['GET'])]
     public function list(
+        #[MapEntity(id: 'id')]
         User $user,
         string $source,
         UserCapabilityService $capabilityService,
@@ -155,6 +157,7 @@ class DistinctionController extends CustomAbstractCoreController
      */
     #[Route(path: '/{id}/top3', name: 'patch_top3', methods: ['PATCH'])]
     public function patchTop3(
+        #[MapEntity(id: 'id')]
         User $user,
         UserHandler $userHandler,
         EntityManagerInterface $em,

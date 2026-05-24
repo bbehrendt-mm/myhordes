@@ -348,7 +348,7 @@ class PictoService implements ServiceSubscriberInterface
         $data = $this->getService(EntityManagerInterface::class)
             ->getRepository(PictoComment::class)->createQueryBuilder('c')
             ->select('c.text as text', 'IDENTITY(p.prototype) as proto')
-            ->innerJoin( Picto::class, 'p', Join::WITH, 'c.picto = p.id AND p.disabled = false AND p.persisted = 2 AND p.user = :user' )
+            ->innerJoin( Picto::class, 'p', Join::ON, 'c.picto = p.id AND p.disabled = false AND p.persisted = 2 AND p.user = :user' )
             ->andWhere('c.owner = :user')->setParameter('user', $user)
             ->andWhere('c.display = true')
             ->getQuery()->getArrayResult();

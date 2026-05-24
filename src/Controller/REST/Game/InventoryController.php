@@ -257,9 +257,9 @@ class InventoryController extends CustomAbstractCoreController
 
         // Join with category and prototype table
         $qb
-            ->leftJoin(ItemPrototype::class, 'p', Join::WITH, 'i.prototype = p.id')
-            ->leftJoin(ItemCategory::class, 'c', Join::WITH, 'p.category = c.id')
-            ->leftJoin(ItemCategory::class, 'cr', Join::WITH, 'c.parent = cr.id');
+            ->leftJoin(ItemPrototype::class, 'p', Join::ON, 'i.prototype = p.id')
+            ->leftJoin(ItemCategory::class, 'c', Join::ON, 'p.category = c.id')
+            ->leftJoin(ItemCategory::class, 'cr', Join::ON, 'c.parent = cr.id');
 
         // Request results as array
         $data = $qb->getQuery()->getResult(AbstractQuery::HYDRATE_ARRAY);
@@ -319,7 +319,7 @@ class InventoryController extends CustomAbstractCoreController
     }
 
     #[Route(path: '/{id}', name: 'inventory_get', methods: ['GET'])]
-    public function inventory(Request $request, Inventory $inventory, EntityManagerInterface $em, InventoryHandler $handler, EventProxyService $proxy, TownHandler $th): JsonResponse {
+    public function inventory(Request $request, #[MapEntity(id: 'id')] Inventory $inventory, EntityManagerInterface $em, InventoryHandler $handler, EventProxyService $proxy, TownHandler $th): JsonResponse {
         $citizen = $this->getUser()->getActiveCitizen();
 
         if (!self::canEnumerate($citizen, $inventory))

@@ -30,6 +30,7 @@ use Carbon\Carbon;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -466,7 +467,12 @@ class TownCreatorController extends CustomAbstractCoreController
      */
     #[Route(path: '/town-rules/{id}', name: 'town-rules', defaults: ['private' => false], methods: ['GET'])]
     #[Route(path: '/town-rules/private/{id}', name: 'private-town-rules', defaults: ['private' => true], methods: ['GET'])]
-    public function town_type_rules(TownClass $townClass, bool $private, SanitizeTownConfigAction $sanitizeTownConfigAction): JsonResponse {
+    public function town_type_rules(
+        #[MapEntity(id: 'id')]
+        TownClass $townClass,
+        bool $private,
+        SanitizeTownConfigAction $sanitizeTownConfigAction
+    ): JsonResponse {
         if ($townClass->getHasPreset()) {
 
             $preset = $this->conf->getTownConfigurationByType($townClass, $private)->getData();
@@ -548,6 +554,7 @@ class TownCreatorController extends CustomAbstractCoreController
     #[Route(path: '/template/{id}', name: 'update-template', defaults: ['create' => false], methods: ['PATCH'])]
     public function save_template(
         bool $create,
+        #[MapEntity(id: 'id')]
         ?TownRulesTemplate $template,
         EntityManagerInterface $em,
         JSONRequestParser $parser,
@@ -589,6 +596,7 @@ class TownCreatorController extends CustomAbstractCoreController
      */
     #[Route(path: '/template/{id}', name: 'delete-template', methods: ['DELETE'])]
     public function remove_template(
+        #[MapEntity(id: 'id')]
         TownRulesTemplate $template,
         EntityManagerInterface $em
     ): JsonResponse {
@@ -612,6 +620,7 @@ class TownCreatorController extends CustomAbstractCoreController
      */
     #[Route(path: '/template/{id}', name: 'load-template', methods: ['GET'])]
     public function load_template(
+        #[MapEntity(id: 'id')]
         TownRulesTemplate $template,
         SanitizeTownConfigAction $sanitizer
     ): JsonResponse {

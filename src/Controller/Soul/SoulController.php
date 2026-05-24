@@ -517,7 +517,7 @@ class SoulController extends CustomAbstractController
      * @return Response
      */
     #[Route(path: 'jx/soul/future/{id}', name: 'soul_future', defaults: ['id' => -1])]
-    public function soul_future(Request $request, UserHandler $userHandler, HTMLService $html, ?Changelog $changelog = null): Response
+    public function soul_future(Request $request, UserHandler $userHandler, HTMLService $html, #[MapEntity(id: 'id')] ?Changelog $changelog = null): Response
     {
         $user = $this->getUser();
 
@@ -1517,7 +1517,7 @@ class SoulController extends CustomAbstractController
      */
     #[Route(path: 'jx/soul/welcomeToNowhere', name: 'soul_death', defaults: ['latest' => true])]
     #[Route(path: 'jx/soul/obituary/{id}', name: 'soul_obituary', defaults: ['latest' => false])]
-    public function soul_death_page(bool $latest, ?CitizenRankingProxy $nextDeath = null): Response
+    public function soul_death_page(bool $latest, #[MapEntity(id: 'id')] ?CitizenRankingProxy $nextDeath = null): Response
     {
         $user = $this->getUser();
 

@@ -21,6 +21,7 @@ use App\Service\TownHandler;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -36,7 +37,7 @@ class AdminTownBuildingsController extends AdminActionController
      */
     #[Route(path: 'jx/manage/town/{id<\d+>}/buildings', name: 'admin_town_buildings')]
     #[IsGranted('spy', 'town')]
-    public function town_explorer_buildings(EventProxyService $events, Town $town): Response {
+    public function town_explorer_buildings(EventProxyService $events, #[MapEntity(id: 'id')] Town $town): Response {
 		$root = [];
 		$dict = [];
 		$inTown = [];
@@ -85,7 +86,7 @@ class AdminTownBuildingsController extends AdminActionController
     #[Route(path: 'api/manage/town/{id<\d+>}/buildings/add', name: 'admin_town_add_building')]
     #[IsGranted('cheat', 'town')]
     #[AdminLogProfile(enabled: true)]
-    public function town_add_building(Town $town, JSONRequestParser $parser, TownHandler $th, GameProfilerService $gps): Response
+    public function town_add_building(#[MapEntity(id: 'id')] Town $town, JSONRequestParser $parser, TownHandler $th, GameProfilerService $gps): Response
     {
         if (!$parser->has_all(['prototype_id', 'act'])) {
             return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
@@ -127,7 +128,7 @@ class AdminTownBuildingsController extends AdminActionController
     #[Route(path: 'api/manage/town/{id<\d+>}/buildings/reset', name: 'admin_town_reset_buildings')]
     #[IsGranted('cheat', 'town')]
     #[AdminLogProfile(enabled: true)]
-    public function town_reset_buildings(Town $town, EntityManagerInterface $em, ConfMaster $conf, InitializeTownBuildingsAction $action): Response
+    public function town_reset_buildings(#[MapEntity(id: 'id')] Town $town, EntityManagerInterface $em, ConfMaster $conf, InitializeTownBuildingsAction $action): Response
     {
         foreach ($town->getBuildings() as $b)
             $em->remove( $b );
@@ -155,7 +156,7 @@ class AdminTownBuildingsController extends AdminActionController
     #[Route(path: 'api/manage/town/{id<\d+>}/buildings/set-ap', name: 'admin_town_set_building_ap')]
     #[IsGranted('cheat', 'town')]
     #[AdminLogProfile(enabled: true)]
-    public function town_set_building_ap(Town $town, JSONRequestParser $parser, EventProxyService $events): Response
+    public function town_set_building_ap(#[MapEntity(id: 'id')] Town $town, JSONRequestParser $parser, EventProxyService $events): Response
     {
         if (!$parser->has_all(['building', 'ap'])) {
             return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
@@ -202,7 +203,7 @@ class AdminTownBuildingsController extends AdminActionController
     #[Route(path: 'api/manage/town/{id<\d+>}/buildings/set-hp', name: 'admin_town_set_building_hp')]
     #[IsGranted('cheat', 'town')]
     #[AdminLogProfile(enabled: true)]
-    public function town_set_building_hp(Town $town, JSONRequestParser $parser, EventProxyService $events): Response
+    public function town_set_building_hp(#[MapEntity(id: 'id')] Town $town, JSONRequestParser $parser, EventProxyService $events): Response
     {
         if (!$parser->has_all(['building', 'hp'])) {
             return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
@@ -261,7 +262,7 @@ class AdminTownBuildingsController extends AdminActionController
     #[Route(path: 'api/manage/town/{id<\d+>}/buildings/set-level', name: 'admin_town_set_building_level')]
     #[IsGranted('cheat', 'town')]
     #[AdminLogProfile(enabled: true)]
-    public function town_set_building_level(Town $town, JSONRequestParser $parser, EventProxyService $events): Response
+    public function town_set_building_level(#[MapEntity(id: 'id')] Town $town, JSONRequestParser $parser, EventProxyService $events): Response
     {
         if (!$parser->has_all(['building', 'level']))
             return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
@@ -304,7 +305,7 @@ class AdminTownBuildingsController extends AdminActionController
     #[Route(path: 'api/manage/town/{id<\d+>}/buildings/set-difficulty', name: 'admin_town_set_building_difficulty_level')]
     #[IsGranted('cheat', 'town')]
     #[AdminLogProfile(enabled: true)]
-    public function town_set_building_difficulty_level(Town $town, JSONRequestParser $parser, EventProxyService $events): Response
+    public function town_set_building_difficulty_level(#[MapEntity(id: 'id')] Town $town, JSONRequestParser $parser, EventProxyService $events): Response
     {
         if (!$parser->has_all(['building', 'level']))
             return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
@@ -345,7 +346,7 @@ class AdminTownBuildingsController extends AdminActionController
     #[Route(path: 'api/manage/town/{id<\d+>}/buildings/exec-nightly', name: 'admin_town_trigger_building_nightly_effect')]
     #[IsGranted('cheat', 'town')]
     #[AdminLogProfile(enabled: true)]
-    public function town_trigger_building_nightly_effect(Town $town, JSONRequestParser $parser, EventProxyService $events): Response
+    public function town_trigger_building_nightly_effect(#[MapEntity(id: 'id')] Town $town, JSONRequestParser $parser, EventProxyService $events): Response
     {
         if (!$parser->has_all(['building']))
             return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);

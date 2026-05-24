@@ -16,6 +16,7 @@ use App\Service\JSONRequestParser;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -32,6 +33,7 @@ class DumpController extends CustomAbstractCoreEventController
      */
     #[Route(path: '/{id}', name: 'insert', methods: ['PUT'])]
     public function insert(
+        #[MapEntity(id: 'id')]
         ItemPrototype $itemPrototype,
         EventFactory $e, JSONRequestParser $parser,
     ): JsonResponse {
@@ -47,6 +49,7 @@ class DumpController extends CustomAbstractCoreEventController
      */
     #[Route(path: '/{id}', name: 'retrieve', methods: ['PATCH'])]
     public function retrieve(
+        #[MapEntity(id: 'id')]
         ItemPrototype $itemPrototype,
         EventFactory $e, JSONRequestParser $parser
     ): JsonResponse {
@@ -58,6 +61,7 @@ class DumpController extends CustomAbstractCoreEventController
 
     #[Route(path: '/{id}', name: 'insert_home', methods: ['POST'])]
     public function insert_home(
+        #[MapEntity(id: 'id')]
         ItemPrototype $itemPrototype,
         EventFactory $e, JSONRequestParser $parser
     ): JsonResponse {

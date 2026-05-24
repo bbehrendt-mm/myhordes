@@ -11,6 +11,7 @@ use App\Service\JSONRequestParser;
 use App\Service\User\UserAccountService;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -108,7 +109,14 @@ class BlacklistController extends CustomAbstractCoreController
      * @return JsonResponse
      */
     #[Route(path: '/ips/user/{id}', name: 'add_user_ips', methods: ['PUT'])]
-    public function addUserIPs(User $user, EntityManagerInterface $em, JSONRequestParser $parser, TranslatorInterface $translator, UserAccountService $service): JsonResponse {
+    public function addUserIPs(
+        #[MapEntity(id: 'id')]
+        User $user,
+        EntityManagerInterface $em,
+        JSONRequestParser $parser,
+        TranslatorInterface $translator,
+        UserAccountService $service
+    ): JsonResponse {
 
         foreach ($service->getKnownIPsForUser($user) as $ip) {
             $goal = new DateTime('+48hours');

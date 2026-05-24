@@ -242,7 +242,7 @@ class CommonsController extends CustomAbstractCoreController
      * @return JsonResponse
      */
     #[Route(path: '/apps/{id<\d+>}', name: 'app_single', methods: ['GET'])]
-    public function app_single(ExternalApp $app, UserCapabilityService $capability, MediaService $mediaService): JsonResponse {
+    public function app_single(#[MapEntity(id: 'id')] ExternalApp $app, UserCapabilityService $capability, MediaService $mediaService): JsonResponse {
 
         if (!$this->getUser() || !$capability->hasRole( $this->getUser(), 'ROLE_USER' ))
             return new JsonResponse([]);
@@ -266,7 +266,7 @@ class CommonsController extends CustomAbstractCoreController
      * @return JsonResponse
      */
     #[Route(path: '/apps/{id<\d+>}', name: 'app_patch', methods: ['PATCH'])]
-    public function app_patch(ExternalApp $app, EntityManagerInterface $em, JSONRequestParser $parser, BroadcastViaMercureAction $broadcast): JsonResponse {
+    public function app_patch(#[MapEntity(id: 'id')] ExternalApp $app, EntityManagerInterface $em, JSONRequestParser $parser, BroadcastViaMercureAction $broadcast): JsonResponse {
 
         if ($app->getOwner() === null || $app->getOwner()->getId() !== $this->getUser()?->getId())
             return new JsonResponse([], Response::HTTP_FORBIDDEN);
@@ -321,7 +321,7 @@ class CommonsController extends CustomAbstractCoreController
      * @return JsonResponse
      */
     #[Route(path: '/apps/{id<\d+>}', name: 'app_put', methods: ['PUT'])]
-    public function app_put(ExternalApp $app, EntityManagerInterface $em, RandomGenerator $rand): JsonResponse {
+    public function app_put(#[MapEntity(id: 'id')] ExternalApp $app, EntityManagerInterface $em, RandomGenerator $rand): JsonResponse {
         if ($app->getLinkOnly() || $app->getOwner() === null || $app->getOwner()->getId() !== $this->getUser()?->getId())
             return new JsonResponse([], Response::HTTP_FORBIDDEN);
 

@@ -67,8 +67,8 @@ class UserUnlockableService implements ServiceSubscriberInterface
         $qb = $this->getService(EntityManagerInterface::class)->createQueryBuilder()
             ->from(HeroExperienceEntry::class, 'x')
             // Join ranking proxies so we can observe their DISABLED state
-            ->leftJoin(TownRankingProxy::class, 't', 'WITH', 'x.town = t.id')
-            ->leftJoin(CitizenRankingProxy::class, 'c', 'WITH', 'x.citizen = c.id')
+            ->leftJoin(TownRankingProxy::class, 't', 'ON', 'x.town = t.id')
+            ->leftJoin(CitizenRankingProxy::class, 'c', 'ON', 'x.citizen = c.id')
             // Scope to given user
             ->where('x.user = :user')->setParameter('user', $user)
             // Disregard disabled entries

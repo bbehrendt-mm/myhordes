@@ -22,6 +22,7 @@ use App\Service\ErrorHelper;
 use App\Service\HTMLService;
 use App\Service\JSONRequestParser;
 use App\Service\PermissionHandler;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
@@ -500,7 +501,7 @@ class AdminForumController extends AdminActionController
      */
     #[Route(path: 'api/admin/com/forum/reports/snippet/remove/{id<\d+>}', name: 'admin_reports_remove_snippet')]
     #[AdminLogProfile(enabled: true)]
-    public function remove_snippet(ForumModerationSnippet $snippet, RoleHierarchyInterface $roles): Response {
+    public function remove_snippet(#[MapEntity(id: 'id')] ForumModerationSnippet $snippet, RoleHierarchyInterface $roles): Response {
         if ($snippet->getRole() === '*' && !$this->isGranted('ROLE_SUB_ADMIN'))
             return AjaxResponse::error( ErrorHelper::ErrorPermissionError );
 

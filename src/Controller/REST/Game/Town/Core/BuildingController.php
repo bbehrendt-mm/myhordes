@@ -31,6 +31,7 @@ use App\Traits\Controller\EventChainProcessor;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -178,7 +179,7 @@ class BuildingController extends CustomAbstractCoreController
 
     #[Route(path: '/{id}', name: 'buildings_participate', methods: ['PATCH'])]
     public function participate(
-        Building $building, JSONRequestParser $parser, TownHandler $townHandler, EventProxyService $events,
+        #[MapEntity(id: 'id')] Building $building, JSONRequestParser $parser, TownHandler $townHandler, EventProxyService $events,
         CitizenHandler $citizenHandler, InventoryHandler $inventoryHandler, EntityManagerInterface $em,
         LogTemplateHandler $log, GameProfilerService $gps, DoctrineCacheService $doctrineCache,
         PictoHandler $pictoHandler,
@@ -374,7 +375,7 @@ class BuildingController extends CustomAbstractCoreController
 
     #[Route(path: '/{id}', name: 'buildings_vote', methods: ['POST'])]
     public function vote(
-        Building $building, CitizenHandler $citizenHandler, EntityManagerInterface $em
+        #[MapEntity(id: 'id')] Building $building, CitizenHandler $citizenHandler, EntityManagerInterface $em
     ): JsonResponse {
         // Get citizen & town
         $citizen = $this->getActiveCitizen();

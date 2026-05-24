@@ -32,6 +32,7 @@ use DateTime;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -214,7 +215,10 @@ class GameOnboardingController extends AbstractController
     }
 
     #[Route(path: '/{id}/citizens', name: 'list_town_citizens', methods: ['GET'])]
-    public function citizens(Town $town): JsonResponse
+    public function citizens(
+        #[MapEntity(id: 'id')]
+        Town $town
+    ): JsonResponse
     {
         if (!$town->isOpen() || ($town->getScheduledFor() && $town->getScheduledFor() > now()))
             return new JsonResponse(status: Response::HTTP_NOT_FOUND);
@@ -237,7 +241,7 @@ class GameOnboardingController extends AbstractController
     }
 
     #[Route(path: '/{id}', name: 'town_details', methods: ['GET'])]
-    public function details(Town $town, ExplainTownConfigAction $explainTownConfigAction,
+    public function details(#[MapEntity(id: 'id')] Town $town, ExplainTownConfigAction $explainTownConfigAction,
                             EntityManagerInterface $em, ConfMaster $conf, TranslatorInterface $translator,
                             GameFactory $gameFactory,
     ): JsonResponse
@@ -287,7 +291,7 @@ class GameOnboardingController extends AbstractController
 
     #[Route(path: '/{id}', name: 'town_join', methods: ['POST'])]
     #[Semaphore(scope: 'global')]
-    public function join(Town $town, JSONRequestParser $parser, GameFactory $factory, TranslatorInterface $translator,
+    public function join(#[MapEntity(id: 'id')] Town $town, JSONRequestParser $parser, GameFactory $factory, TranslatorInterface $translator,
                              EntityManagerInterface $em, ConfMaster $conf, TownHandler $townHandler): JsonResponse
     {
         $user = $this->getUser();

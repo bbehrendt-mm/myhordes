@@ -19,6 +19,7 @@ use App\Service\JSONRequestParser;
 use App\Service\PermissionHandler;
 use DateTime;
 use Exception;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -306,7 +307,7 @@ class SoulCoalitionController extends SoulController
      * @return Response
      */
     #[Route(path: 'api/soul/coalition/kick/{id<\d+>}', name: 'soul_kick_coalition')]
-    public function api_soul_kick_coalition(UserGroupAssociation $target_coalition): Response
+    public function api_soul_kick_coalition(#[MapEntity(id: 'id')] UserGroupAssociation $target_coalition): Response
     {
         $user = $this->getUser();
         if ($this->user_handler->isRestricted( $user, AccountRestriction::RestrictionOrganization )) return AjaxResponse::error( ErrorHelper::ErrorPermissionError );
@@ -350,7 +351,7 @@ class SoulCoalitionController extends SoulController
      * @return Response
      */
     #[Route(path: 'api/soul/coalition/promote/{id<\d+>}', name: 'soul_promote_coalition')]
-    public function api_soul_promote_coalition(UserGroupAssociation $target_coalition): Response
+    public function api_soul_promote_coalition(#[MapEntity(id: 'id')] UserGroupAssociation $target_coalition): Response
     {
         $user = $this->getUser();
         if ($this->user_handler->isRestricted( $user, AccountRestriction::RestrictionOrganization )) return AjaxResponse::error( ErrorHelper::ErrorPermissionError );

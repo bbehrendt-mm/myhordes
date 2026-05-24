@@ -33,6 +33,7 @@ use App\Structures\Entity\PictoRollupStructure;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Asset\Packages;
@@ -57,6 +58,7 @@ class SkillController extends CustomAbstractCoreController
      */
     #[Route(path: '/{id}', name: 'debit_unlock', methods: ['PATCH'])]
     public function list(
+        #[MapEntity(id: 'id')]
         HeroSkillPrototype $skill,
         UserUnlockableService $unlockableService,
         Locksmith $locksmith,
@@ -177,8 +179,8 @@ class SkillController extends CustomAbstractCoreController
             $qb = $em->createQueryBuilder()->select('x')
                 ->from(HeroExperienceEntry::class, 'x')
                 // Join ranking proxies so we can observe their DISABLED state
-                ->leftJoin(TownRankingProxy::class, 't', 'WITH', 'x.town = t.id')
-                ->leftJoin(CitizenRankingProxy::class, 'c', 'WITH', 'x.citizen = c.id')
+                ->leftJoin(TownRankingProxy::class, 't', 'ON', 'x.town = t.id')
+                ->leftJoin(CitizenRankingProxy::class, 'c', 'ON', 'x.citizen = c.id')
                 // Scope to given user
                 ->where('x.user = :user')->setParameter('user', $this->getUser())
                 // Disregard legacy

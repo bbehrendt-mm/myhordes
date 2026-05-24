@@ -204,7 +204,7 @@ class InventoryHandler
             $qb = $this->entity_manager->createQueryBuilder();
             $qb
                 ->select('i.id')->from(Item::class,'i')
-                ->leftJoin(ItemPrototype::class, 'p', Join::WITH, 'i.prototype = p.id');
+                ->leftJoin(ItemPrototype::class, 'p', Join::ON, 'i.prototype = p.id');
             if (!$request->getAll())
                 $qb->setMaxResults( $request->getCount() );
             if (is_array($inventory))

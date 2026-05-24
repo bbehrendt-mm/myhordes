@@ -1070,7 +1070,7 @@ class MessageForumController extends MessageController
      * @return Response
      */
     #[Route(path: 'jx/forum/{id<\d+>}/editor', name: 'forum_thread_editor_controller')]
-    public function editor_thread_api(Forum $forum, EntityManagerInterface $em): Response {
+    public function editor_thread_api(#[MapEntity(id: 'id')] Forum $forum, EntityManagerInterface $em): Response {
 
         $user = $this->getUser();
         $permissions = $this->perm->getEffectivePermissions( $user, $forum );

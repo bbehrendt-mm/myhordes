@@ -1416,7 +1416,7 @@ class MigrateCommand extends Command
             $data = $this->entity_manager->createQueryBuilder()
                 ->select('p.id','c.points', 'p.count')
                 ->from(CitizenRankingProxy::class, 'c')
-                ->innerJoin(Picto::class, 'p', Join::WITH, 'c.town = p.townEntry and p.user = c.user and p.prototype = :pid and p.persisted = 2')
+                ->innerJoin(Picto::class, 'p', Join::ON, 'c.town = p.townEntry and p.user = c.user and p.prototype = :pid and p.persisted = 2')
                 ->setParameter('pid', $this->entity_manager->getRepository(PictoPrototype::class)->findOneByName('r_ptame_#00'))
                 ->where('c.points != p.count')->getQuery()->execute();
 

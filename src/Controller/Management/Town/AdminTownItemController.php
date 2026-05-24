@@ -22,6 +22,7 @@ use App\Service\JSONRequestParser;
 use App\Structures\BankItem;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Query\Expr\Join;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -37,9 +38,9 @@ class AdminTownItemController extends AdminActionController
             ->select('i.id', 'c.label as l1', 'cr.label as l2', 'SUM(i.count) as n')->from(Item::class,'i')
             ->where('i.inventory = :inv')->setParameter('inv', $inventory)
             ->groupBy('i.prototype', 'i.broken', 'i.poison')
-            ->leftJoin(ItemPrototype::class, 'p', Join::WITH, 'i.prototype = p.id')
-            ->leftJoin(ItemCategory::class, 'c', Join::WITH, 'p.category = c.id')
-            ->leftJoin(ItemCategory::class, 'cr', Join::WITH, 'c.parent = cr.id')
+            ->leftJoin(ItemPrototype::class, 'p', Join::ON, 'i.prototype = p.id')
+            ->leftJoin(ItemCategory::class, 'c', Join::ON, 'p.category = c.id')
+            ->leftJoin(ItemCategory::class, 'cr', Join::ON, 'c.parent = cr.id')
             ->addOrderBy('c.ordering','ASC')
             ->addOrderBy('p.icon', 'DESC')
             ->addOrderBy('i.id', 'ASC');
@@ -69,7 +70,7 @@ class AdminTownItemController extends AdminActionController
      */
     #[Route(path: 'jx/manage/town/{id<\d+>}/bank', name: 'admin_town_bank')]
     #[IsGranted('spy', 'town')]
-    public function town_explorer_bank(Town $town): Response {
+    public function town_explorer_bank(#[MapEntity(id: 'id')] Town $town): Response {
 		return $this->render('ajax/manage/towns/explorer_bank.html.twig', $this->addDefaultTwigArgs(null, array_merge([
 			'town' => $town,
 			'day' => $town->getDay(),
@@ -89,7 +90,7 @@ class AdminTownItemController extends AdminActionController
     #[Route(path: 'api/manage/town/{id<\d+>}/item', name: 'admin_town_item')]
     #[IsGranted('cheat', 'town')]
     #[AdminLogProfile(enabled: true)]
-    public function town_item_action(Town $town, JSONRequestParser $parser, InventoryHandler $handler, ItemFactory $itemFactory): Response
+    public function town_item_action(#[MapEntity(id: 'id')] Town $town, JSONRequestParser $parser, InventoryHandler $handler, ItemFactory $itemFactory): Response
     {
         $item_id = $parser->get('item');
         $change = $parser->get('change');
@@ -123,7 +124,7 @@ class AdminTownItemController extends AdminActionController
     #[Route(path: 'api/manage/town/{id<\d+>}/spawn_item', name: 'admin_spawn_item')]
     #[IsGranted('cheat', 'town')]
     #[AdminLogProfile(enabled: true)]
-    public function spawn_item(Town $town, JSONRequestParser $parser, InventoryHandler $handler, ItemFactory $itemFactory): Response
+    public function spawn_item(#[MapEntity(id: 'id')] Town $town, JSONRequestParser $parser, InventoryHandler $handler, ItemFactory $itemFactory): Response
     {
         $prototype_id = $parser->get('prototype');
         $number = $parser->get_int('number');

@@ -12,6 +12,7 @@ use App\Entity\Town;
 use App\Enum\EventStages\BuildingValueQuery;
 use App\Service\EventProxyService;
 use App\Service\GazetteService;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -27,7 +28,7 @@ class AdminTownViewsController extends AdminActionController
      */
     #[Route(path: 'jx/manage/town/{id<\d+>}/register', name: 'admin_town_register')]
     #[IsGranted('spy', 'town')]
-    public function town_explorer_register(Town $town, GazetteService $gazetteService): Response {
+    public function town_explorer_register(#[MapEntity(id: 'id')] Town $town, GazetteService $gazetteService): Response {
 		return $this->render('ajax/manage/towns/explorer_register.html.twig', $this->addDefaultTwigArgs(null, array_merge([
 			'town' => $town,
 			'day' => $town->getDay(),
@@ -46,7 +47,7 @@ class AdminTownViewsController extends AdminActionController
      */
     #[Route(path: 'jx/manage/town/{id<\d+>}/blackboard/{highlight<\d+>}', name: 'admin_town_blackboard')]
     #[IsGranted('ROLE_CROW')]
-    public function town_explorer_blackboard(Town $town, int $highlight = 0): Response {
+    public function town_explorer_blackboard(#[MapEntity(id: 'id')] Town $town, int $highlight = 0): Response {
         $blackboards = $this->entity_manager->getRepository(BlackboardEdit::class)->findBy([ 'town' => $town ], ['time' => 'DESC'], $highlight > 0 ? 500 : 100);
         $reports_q = $this->entity_manager->getRepository(AdminReport::class)->findBy(['blackBoard' => $blackboards]);
 
@@ -71,7 +72,7 @@ class AdminTownViewsController extends AdminActionController
      */
     #[Route(path: 'jx/manage/town/{id<\d+>}/estimations', name: 'admin_town_estimations')]
     #[IsGranted('spy', 'town')]
-    public function town_explorer_estimations(Town $town, EventProxyService $proxy): Response {
+    public function town_explorer_estimations(#[MapEntity(id: 'id')] Town $town, EventProxyService $proxy): Response {
         $maxAttacks = [];
         foreach ($town->getZombieEstimations() as $estimation) {
             $day = $estimation->getDay();
@@ -94,7 +95,7 @@ class AdminTownViewsController extends AdminActionController
      */
     #[Route(path: 'jx/manage/town/{id<\d+>}/config/{conf?}', name: 'admin_town_config')]
     #[IsGranted('administrate', 'town')]
-    public function town_explorer_config(Town $town, ?string $conf): Response {
+    public function town_explorer_config(#[MapEntity(id: 'id')] Town $town, ?string $conf): Response {
 		$conf_self = $this->conf->getTownConfiguration($town);
 		$conf_compare = match($conf) {
 			'small', 'remote', 'panda', 'default' => $this->conf->getTownConfigurationByType($conf),
@@ -121,7 +122,7 @@ class AdminTownViewsController extends AdminActionController
      */
     #[Route(path: 'jx/manage/town/{id<\d+>}/gazette/{day<\d+>}', name: 'admin_town_explorer_gazette', priority: 1)]
     #[IsGranted('spy', 'town')]
-    public function api_explore_gazette(Town $town, int $day, GazetteService $gazetteService): Response {
+    public function api_explore_gazette(#[MapEntity(id: 'id')] Town $town, int $day, GazetteService $gazetteService): Response {
         return $this->render('ajax/game/gazette_widget.html.twig', [
             'soul' => true,
             'gazette' => $gazetteService->renderGazette( $town, $day, true ),

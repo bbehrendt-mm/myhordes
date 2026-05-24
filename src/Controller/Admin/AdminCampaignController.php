@@ -10,6 +10,7 @@ use App\Response\AjaxResponse;
 use App\Service\ErrorHelper;
 use App\Service\JSONRequestParser;
 use Exception;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -45,7 +46,11 @@ class AdminCampaignController extends CustomAbstractController
      */
     #[Route(path: 'jx/admin/cst/campaigns/new', name: 'admin_campaign_new', defaults: ['new' => true], priority: 1)]
     #[Route(path: 'jx/admin/cst/campaigns/{id}', name: 'admin_campaign_edit', defaults: ['new' => false], priority: 0)]
-    public function campaign_new(bool $new, ?MarketingCampaign $campaign): Response
+    public function campaign_new(
+        bool $new,
+        #[MapEntity(id: 'id')]
+        ?MarketingCampaign $campaign
+    ): Response
     {
         if (
             ($new && !$this->isGranted('ROLE_ANIMAC')) ||
@@ -65,7 +70,12 @@ class AdminCampaignController extends CustomAbstractController
      */
     #[Route(path: 'api/admin/cst/campaigns/new', name: 'admin_campaign_create', defaults: ['new' => true], priority: 1)]
     #[Route(path: 'api/admin/cst/campaigns/{id}', name: 'admin_campaign_update', defaults: ['new' => false], priority: 0)]
-    public function update_campaign(bool $new, ?MarketingCampaign $campaign, JSONRequestParser $parser): Response
+    public function update_campaign(
+        bool $new,
+        #[MapEntity(id: 'id')]
+        ?MarketingCampaign $campaign,
+        JSONRequestParser $parser
+    ): Response
     {
         if (
             ($new && !$this->isGranted('ROLE_ANIMAC')) ||
@@ -134,7 +144,10 @@ class AdminCampaignController extends CustomAbstractController
      * @return Response
      */
     #[Route(path: 'api/admin/cst/campaigns/delete/{id}', name: 'admin_campaign_delete')]
-    public function delete_campaign(MarketingCampaign $campaign): Response
+    public function delete_campaign(
+        #[MapEntity(id: 'id')]
+        MarketingCampaign $campaign
+    ): Response
     {
         if (!$this->isGranted('ROLE_ANIMAC'))
             return AjaxResponse::error( ErrorHelper::ErrorPermissionError );

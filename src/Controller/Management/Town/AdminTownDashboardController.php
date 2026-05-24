@@ -36,6 +36,7 @@ use App\Service\RandomGenerator;
 use App\Service\TownHandler;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -57,7 +58,7 @@ class AdminTownDashboardController extends AdminActionController
      */
     #[Route(path: 'jx/manage/town/{id<\d+>}/dash', name: 'admin_town_dashboard')]
     #[IsGranted('spy', 'town')]
-    public function town_explorer_dash(Town $town, TownHandler $townHandler, KernelInterface $kernel, EntityManagerInterface $entityManager, Request $request): Response {
+    public function town_explorer_dash(#[MapEntity(id: 'id')] Town $town, TownHandler $townHandler, KernelInterface $kernel, EntityManagerInterface $entityManager, Request $request): Response {
 		return $this->render('ajax/manage/towns/explorer_dash.html.twig', $this->addDefaultTwigArgs(null, array_merge([
 			'town' => $town,
 			'day' => $town->getDay(),
@@ -94,7 +95,7 @@ class AdminTownDashboardController extends AdminActionController
     #[Route(path: 'api/manage/town/{id<\d+>}/do/{action}', name: 'admin_town_manage')]
     #[isGranted('edit','town')]
     #[AdminLogProfile(enabled: true)]
-    public function town_manager(Town $town, string $action, ItemFactory $itemFactory, RandomGenerator $random,
+    public function town_manager(#[MapEntity(id: 'id')] Town $town, string $action, ItemFactory $itemFactory, RandomGenerator $random,
                                  NightlyHandler $night, GameFactory $gameFactory, CrowService $crowService,
                                  KernelInterface $kernel, JSONRequestParser $parser, TownHandler $townHandler,
                                  GameProfilerService $gps, MapMaker $mapMaker, GenerateTownNameAction $townNameAction)
@@ -524,7 +525,7 @@ class AdminTownDashboardController extends AdminActionController
     #[Route(path: 'api/manage/town/{id<\d+>}/set_event', name: 'admin_town_set_event')]
     #[isGranted('cheat', 'town')]
     #[AdminLogProfile(enabled: true)]
-    public function admin_town_set_event(Town $town, JSONRequestParser $parser, TownHandler $townHandler): Response {
+    public function admin_town_set_event(#[MapEntity(id: 'id')] Town $town, JSONRequestParser $parser, TownHandler $townHandler): Response {
         $eventName = $parser->get('param');
 
         $town->setManagedEvents($eventName !== "");
@@ -557,7 +558,7 @@ class AdminTownDashboardController extends AdminActionController
     #[Route(path: 'api/manage/town/{id<\d+>}/set_lang', name: 'admin_town_set_lang')]
     #[isGranted('edit', 'town')]
     #[AdminLogProfile(enabled: true)]
-    public function admin_town_set_lang(Town $town, JSONRequestParser $parser): Response {
+    public function admin_town_set_lang(#[MapEntity(id: 'id')] Town $town, JSONRequestParser $parser): Response {
         $newLang = $parser->get('param');
         if (!in_array( $newLang, array_merge($this->generatedLangsCodes, [ 'multi' ]) ))
             return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
@@ -581,7 +582,7 @@ class AdminTownDashboardController extends AdminActionController
     #[Route(path: 'jx/manage/town/{id<\d+>}/zone_infos', name: 'get_zone_infos')]
     #[IsGranted('spy', 'town')]
     #[AdminLogProfile(enabled: true)]
-    public function get_zone_infos(Town $town, JSONRequestParser  $parser): Response {
+    public function get_zone_infos(#[MapEntity(id: 'id')] Town $town, JSONRequestParser  $parser): Response {
         $zone_id = $parser->get('zone_id', -1);
 		/** @var Zone $zone */
         $zone = $this->entity_manager->getRepository(Zone::class)->find($zone_id);
@@ -613,7 +614,7 @@ class AdminTownDashboardController extends AdminActionController
     #[Route(path: 'api/manage/town/{id<\d+>}/set_zone_attribs', name: 'set_zone_attribs')]
     #[IsGranted('cheat', 'town')]
     #[AdminLogProfile(enabled: true)]
-    public function set_zone_attribs(Town $town, JSONRequestParser  $parser): Response{
+    public function set_zone_attribs(#[MapEntity(id: 'id')] Town $town, JSONRequestParser  $parser): Response{
         $zone_id = $parser->get('zone_id', -1);
         $zone = $this->entity_manager->getRepository(Zone::class)->find($zone_id);
 
@@ -660,7 +661,7 @@ class AdminTownDashboardController extends AdminActionController
     #[Route(path: 'api/manage/town/proxy/{id<\d+>}/relang', name: 'admin_town_town_lang_control', requirements: ['act' => '\d+'])]
     #[IsGranted('ROLE_CROW')]
     #[AdminLogProfile(enabled: true)]
-    public function switch_town_lang(TownRankingProxy $town_proxy, JSONRequestParser $parser, GameFactory $gameFactory, GenerateTownNameAction $townNameAction): Response
+    public function switch_town_lang(#[MapEntity(id: 'id')] TownRankingProxy $town_proxy, JSONRequestParser $parser, GameFactory $gameFactory, GenerateTownNameAction $townNameAction): Response
     {
         $lang = $parser->get('lang');
         $rename = $parser->get( 'rename' );

@@ -13,6 +13,7 @@ use App\Response\AjaxResponse;
 use App\Service\ErrorHelper;
 use App\Service\JSONRequestParser;
 use App\Service\Maps\MazeMaker;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -30,7 +31,7 @@ class AdminTownRuinController extends AdminActionController
     #[Route(path: 'api/manage/town/{id<\d+>}/spawn_ruin', name: 'admin_spawn_ruin')]
     #[IsGranted('cheat', 'town')]
     #[AdminLogProfile(enabled: true)]
-    public function spawn_ruin(Town $town, JSONRequestParser $parser, MazeMaker $mazeMaker): Response
+    public function spawn_ruin(#[MapEntity(id: 'id')] Town $town, JSONRequestParser $parser, MazeMaker $mazeMaker): Response
     {
         $prototype_id = $parser->get('prototype');
         $zone = $parser->get_int('zone');

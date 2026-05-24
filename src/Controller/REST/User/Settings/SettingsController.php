@@ -10,6 +10,7 @@ use App\Entity\PinnedForum;
 use App\Enum\UserSetting;
 use App\Service\PermissionHandler;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -68,7 +69,7 @@ class SettingsController extends AbstractController
 
     #[Route(path: '/forum/{id}/flags/{flag}', name: 'forum_flag_on', defaults: ['value' => true], methods: ['PUT'])]
     #[Route(path: '/forum/{id}/flags/{flag}', name: 'forum_flag_off', defaults: ['value' => false], methods: ['DELETE'])]
-    public function toggleForumFlag(Request $request, Forum $forum, string $flag, bool $value, PermissionHandler $perm, EntityManagerInterface $em): JsonResponse
+    public function toggleForumFlag(Request $request, #[MapEntity(id: 'id')] Forum $forum, string $flag, bool $value, PermissionHandler $perm, EntityManagerInterface $em): JsonResponse
     {
         $isUnpin = $flag === 'pin' && $value === false;
         $user = $this->getUser();
@@ -112,7 +113,7 @@ class SettingsController extends AbstractController
                     // if ($user->getPinnedForums()->count() >= 6) {
                     //     return new JsonResponse(status: Response::HTTP_NOT_ACCEPTABLE);
                     // }
-    
+
                     $newPinnedForum = new PinnedForum();
                     $newPinnedForum->setUser($user);
                     $newPinnedForum->setForum($forum)->setThread($thread);
