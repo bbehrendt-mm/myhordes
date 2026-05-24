@@ -420,7 +420,7 @@ class MessageForumController extends MessageController
 
         $clearCache("forum_{$forum->getId()}_unread");
 
-        $post = (new Post())
+        $post = new Post()
             ->setOwner( isset($map_type[$type]) ? $this->entity_manager->getRepository(User::class)->find($map_type[$type]) : $user )
             ->setText( $text )
             ->setDate( new DateTime('now') )
@@ -441,7 +441,7 @@ class MessageForumController extends MessageController
         if ($type === 'GLORY') $this->userHandler->checkFeatureUnlock( $user, 'f_glory_temp', true );
 
         try {
-            if (!$user->getNoAutoFollowThreads()) $em->persist((new ForumThreadSubscription())->setThread($thread)->setUser($user));
+            if (!$user->getNoAutoFollowThreads()) $em->persist(new ForumThreadSubscription()->setThread($thread)->setUser($user));
             $em->persist($thread);
             $em->persist($forum);
 
@@ -639,7 +639,7 @@ class MessageForumController extends MessageController
 
         $clearCache("forum_{$forum->getId()}_unread");
 
-        $post = (new Post())
+        $post = new Post()
             ->setOwner( isset($map_type[$type]) ? $this->entity_manager->getRepository(User::class)->find($map_type[$type]) : $user )
             ->setText( $text )
             ->setDate( new DateTime('now') )
@@ -690,14 +690,14 @@ class MessageForumController extends MessageController
 
         if (!empty($polls)) {
             foreach ($polls as $question => $answers) {
-                $em->persist($question_assoc[$question] = (new ForumPoll())
+                $em->persist($question_assoc[$question] = new ForumPoll()
                     ->setOwner($post->getOwner())
                     ->setPost($post)
                     ->setClosed(false)
                 );
                 foreach ($answers as $answer)
                     $question_assoc[$question]->addAnswer(
-                        $answer_assoc[$answer] = (new ForumPollAnswer())->setNum(0)
+                        $answer_assoc[$answer] = new ForumPollAnswer()->setNum(0)
                     );
             }
         }

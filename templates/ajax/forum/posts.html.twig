@@ -432,6 +432,7 @@
                                 </div>
                             </div>
                         </div>
+                        {% if post|reactionUUID %}<div class="clear"><hordes-reactions data-uuid="{{ post|reactionUUID }}"></hordes-reactions></div>{% endif %}
                     </div>
                 </div>
             {% endif %}

@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\UniqueConstraint;
 
 #[ORM\Entity(repositoryClass: ReactionRepository::class)]
-#[UniqueConstraint(name: 'reaction_unique', columns: ['parent', 'user_id'])]
+#[UniqueConstraint(name: 'reaction_unique', columns: ['parent_id', 'owner_id'])]
 class Reaction
 {
     #[ORM\Id]

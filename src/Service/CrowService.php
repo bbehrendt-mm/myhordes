@@ -82,7 +82,7 @@ class CrowService {
         }
 
         if ($thread === null) {
-            $thread = (new Thread())
+            $thread = new Thread()
                 ->setTitle( $title )
                 ->setTranslatable( $translatable )
                 ->setOwner( $this->getCrowAccount() )
@@ -94,7 +94,7 @@ class CrowService {
         if ($semantic !== 0) $thread->setSemantic( $semantic );
         $thread->setLastPost( new DateTime() );
 
-        $post = (new Post())
+        $post = new Post()
             ->setDate(new DateTime())
             ->setOwner( $this->getCrowAccount() )
             ->setText( $text )

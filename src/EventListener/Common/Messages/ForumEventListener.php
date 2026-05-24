@@ -6,6 +6,7 @@ namespace App\EventListener\Common\Messages;
 use App\Entity\Citizen;
 use App\Entity\ForumThreadSubscription;
 use App\Entity\ForumUsagePermissions;
+use App\Entity\ReactionSet;
 use App\Entity\SocialRelation;
 use App\Entity\Town;
 use App\Entity\User;
@@ -19,6 +20,7 @@ use App\Service\Actions\Mercure\BroadcastPMUpdateViaMercureAction;
 use App\Service\CitizenHandler;
 use App\Service\CrowService;
 use App\Service\Media\MediaService;
+use App\Service\Morph\MorphService;
 use App\Service\PermissionHandler;
 use App\Service\PictoHandler;
 use App\Service\UserHandler;
@@ -36,7 +38,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[AsEventListener(event: ForumMessageNewPostEvent::class, method: 'queueDistinctions', priority: 20)]
 #[AsEventListener(event: ForumMessageNewThreadEvent::class, method: 'queueDistinctions', priority: 20)]
 #[AsEventListener(event: ForumMessageNewThreadEvent::class, method: 'removeForumCheckmarkForTownForums', priority: -10)]
+#[AsEventListener(event: ForumMessageNewThreadEvent::class, method: 'addReactionSet', priority: -20)]
 #[AsEventListener(event: ForumMessageNewPostEvent::class, method: 'removeForumCheckmarkForTownForums', priority: -10)]
+#[AsEventListener(event: ForumMessageNewPostEvent::class, method: 'addReactionSet', priority: -20)]
 final class ForumEventListener implements ServiceSubscriberInterface
 {
     use ContainerTypeTrait;
@@ -57,6 +61,7 @@ final class ForumEventListener implements ServiceSubscriberInterface
             CitizenHandler::class,
             BroadcastPMUpdateViaMercureAction::class,
             MediaService::class,
+            MorphService::class,
         ];
     }
 
@@ -165,6 +170,15 @@ final class ForumEventListener implements ServiceSubscriberInterface
         foreach ($event->post?->getThread()?->getForum()?->getTown()?->getCitizens() ?? [] as $c)
             if ($c->getAlive() && $c->getUser() !== $event->post->getOwner() && $c->hasStatus('tg_chk_forum') && $this->getService(CitizenHandler::class)->removeStatus( $c, 'tg_chk_forum' ))
                 $this->getService(EntityManagerInterface::class)->persist($c);
+    }
+
+    public function addReactionSet(ForumMessageNewPostEvent|ForumMessageNewThreadEvent $event): void {
+        if ($event->post?->getThread()?->getForum()?->isUsingEmoteReactions()) {
+            $em = $this->getService(EntityManagerInterface::class);
+            $em->persist( $this->getService(MorphService::class)
+                ->firstOrCreateMorph( ReactionSet::class, $event->post )
+            );
+        }
     }
 
 }

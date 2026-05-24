@@ -2,15 +2,18 @@
 
 namespace App\Entity;
 
+use App\Enum\ForumType;
 use App\Structures\Media\MediaCollection;
 use App\Structures\Media\MediaCollectionList;
 use App\Structures\Media\MediaVariant;
 use App\Traits\Entity\LinksMedia;
+use ArrayHelpers\Arr;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Expr\Comparison;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 use Exception;
 
 #[ORM\Entity(repositoryClass: 'App\Repository\ForumRepository')]
@@ -35,8 +38,8 @@ class Forum
     private ?string $title;
     #[ORM\OneToMany(targetEntity: Thread::class, mappedBy: 'forum', cascade: ['persist', 'remove'])]
     private Collection $threads;
-    #[ORM\Column(type: 'integer', nullable: true)]
-    private ?int $type;
+    #[ORM\Column(type: 'integer', nullable: true, enumType: ForumType::class)]
+    private ?ForumType $type = null;
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $description;
     #[ORM\Column(type: 'string', length: 190, nullable: true)]
@@ -53,6 +56,9 @@ class Forum
 
     #[ORM\ManyToOne(inversedBy: 'forums')]
     private ?ForumGroup $forumGroup = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?array $config = null;
     public function __construct()
     {
         $this->threads = new ArrayCollection();
@@ -111,9 +117,9 @@ class Forum
     }
 
     /**
-     * @return Collection|Thread[]
+     * @return ArrayCollection<int, Thread>|PersistentCollection<int, Thread>
      */
-    public function getThreads(): Collection
+    public function getThreads(): ArrayCollection|PersistentCollection
     {
         return $this->threads;
     }
@@ -138,11 +144,11 @@ class Forum
 
         return $this;
     }
-    public function getType(): ?int
+    public function getType(): ?ForumType
     {
         return $this->type;
     }
-    public function setType(?int $type): self
+    public function setType(?ForumType $type): self
     {
         $this->type = $type;
 
@@ -169,9 +175,9 @@ class Forum
         return $this;
     }
     /**
-     * @return Collection|ThreadTag[]
+     * @return ArrayCollection<int, ThreadTag>|PersistentCollection<int, ThreadTag>
      */
-    public function getAllowedTags(): Collection
+    public function getAllowedTags(): ArrayCollection|PersistentCollection
     {
         return $this->allowedTags;
     }
@@ -274,5 +280,32 @@ class Forum
     public function getMediaBasePath(): string
     {
         return "forum/{$this->getPrimaryKey()}";
+    }
+
+    public function getConfig(): ?array
+    {
+        return $this->config;
+    }
+
+    public function setConfig(?array $config): static
+    {
+        $this->config = $config;
+
+        return $this;
+    }
+
+    private function setConfigKey(string $key, mixed $value): static
+    {
+        $config = $this->getConfig() ?? [];
+        Arr::set($config, $key, $value);
+        return $this->setConfig($config);
+    }
+
+    public function isUsingEmoteReactions(): bool {
+        return Arr::get($this->getConfig() ?? [], 'features.emoteReactions', $this->type?->isInternal() ?? false);
+    }
+
+    public function setUsingEmoteReactions(bool $value): static {
+        return $this->setConfigKey('features.emoteReactions', $value);
     }
 }

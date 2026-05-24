@@ -38,6 +38,7 @@ use App\Entity\ZombieEstimation;
 use App\Entity\Zone;
 use App\Entity\ZonePrototype;
 use App\Enum\Configuration\TownSetting;
+use App\Enum\ForumType;
 use App\Enum\Game\CitizenPersistentCache;
 use App\Enum\Game\ExplorableRuinSkin;
 use App\Enum\UserSetting;
@@ -1107,18 +1108,18 @@ class MigrateCommand extends Command
                 if ($forum->getTown())
                     $this->ensureForumPermissions($output, $forum, $this->entity_manager->getRepository(UserGroup::class)->findOneBy( ['type' => UserGroup::GroupTownInhabitants, 'ref1' => $forum->getTown()->getId()] ));
 
-                elseif ($forum->getType() === Forum::ForumTypeDefault || $forum->getType() === null) {
+                elseif ($forum->getType() === ForumType::Default || $forum->getType() === null) {
                     $this->ensureForumPermissions($output, $forum, $g_users);
                     $this->ensureForumPermissions($output, $forum, $g_oracle, ForumUsagePermissions::PermissionHelp);
                 }
-                elseif ($forum->getType() === Forum::ForumTypeElevated) $this->ensureForumPermissions($output,$forum, $g_elev);
-                elseif ($forum->getType() === Forum::ForumTypeMods) $this->ensureForumPermissions($output,$forum, $g_mods);
-                elseif ($forum->getType() === Forum::ForumTypeAdmins) $this->ensureForumPermissions($output,$forum, $g_admin);
-                elseif ($forum->getType() === Forum::ForumTypeAnimac) {
+                elseif ($forum->getType() === ForumType::Elevated) $this->ensureForumPermissions($output,$forum, $g_elev);
+                elseif ($forum->getType() === ForumType::Mods) $this->ensureForumPermissions($output,$forum, $g_mods);
+                elseif ($forum->getType() === ForumType::Admins) $this->ensureForumPermissions($output,$forum, $g_admin);
+                elseif ($forum->getType() === ForumType::Animac) {
                     $this->ensureForumPermissions($output, $forum, $g_anim);
                     $this->ensureForumPermissions($output, $forum, $g_oracle);
                     $this->ensureForumPermissions($output, $forum, $g_art);
-                } elseif ($forum->getType() === Forum::ForumTypeDev) {
+                } elseif ($forum->getType() === ForumType::Dev) {
                     $this->ensureForumPermissions($output, $forum, $g_admin);
                     $this->ensureForumPermissions($output, $forum, $g_oracle);
                 }

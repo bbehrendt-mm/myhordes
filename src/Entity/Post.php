@@ -2,66 +2,77 @@
 
 namespace App\Entity;
 
+use App\Traits\Entity\DoctrineExtensions;
+use App\Traits\Entity\LinksMorph;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 
 #[ORM\Entity(repositoryClass: 'App\Repository\PostRepository')]
 class Post
 {
-    const EditorLocked = 0;
-    const EditorTimed = 1;
-    const EditorPerpetual = 2;
+    use LinksMorph, DoctrineExtensions;
+
+    const int EditorLocked = 0;
+    const int EditorTimed = 1;
+    const int EditorPerpetual = 2;
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
-    #[ORM\ManyToOne(targetEntity: 'App\Entity\Thread', inversedBy: 'posts')]
+    private ?int $id;
+    #[ORM\ManyToOne(targetEntity: Thread::class, inversedBy: 'posts')]
     #[ORM\JoinColumn(nullable: false)]
-    private $thread;
-    #[ORM\ManyToOne(targetEntity: 'App\Entity\User')]
+    private ?Thread $thread;
+    #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: true)]
-    private $owner;
+    private ?User $owner;
     #[ORM\Column(type: 'text')]
-    private $text;
+    private ?string $text;
     #[ORM\Column(type: 'text', nullable: true)]
-    private $note;
+    private ?string $note;
     #[ORM\Column(type: 'datetime')]
-    private $date;
+    private ?DateTimeInterface $date;
     #[ORM\Column(type: 'datetime', nullable: true)]
-    private $edited;
+    private ?DateTimeInterface $edited;
     #[ORM\Column(type: 'boolean')]
-    private $hidden = false;
+    private bool $hidden = false;
     #[ORM\Column(type: 'string', length: 255)]
-    private $type = "USER";
-    #[ORM\OneToMany(targetEntity: 'App\Entity\AdminReport', mappedBy: 'post', orphanRemoval: true)]
-    private $adminReports;
-    #[ORM\OneToOne(targetEntity: 'App\Entity\AdminDeletion', mappedBy: 'post', orphanRemoval: true, cascade: ['remove'])]
-    private $adminDeletion;
-    #[ORM\OneToMany(targetEntity: 'App\Entity\ThreadReadMarker', mappedBy: 'post', cascade: ['remove'])]
-    private $_readMarkers;
+    private string $type = "USER";
+    #[ORM\OneToMany(targetEntity: AdminReport::class, mappedBy: 'post', orphanRemoval: true)]
+    private Collection $adminReports;
+    #[ORM\OneToOne(targetEntity: AdminDeletion::class, mappedBy: 'post', cascade: ['remove'], orphanRemoval: true)]
+    private ?AdminDeletion $adminDeletion = null;
+    #[ORM\OneToMany(targetEntity: ThreadReadMarker::class, mappedBy: 'post', cascade: ['remove'])]
+    private Collection $_readMarkers;
+    #[ORM\Column(type: 'boolean')]
+    private bool $translate = false;
+    #[ORM\Column(type: 'integer')]
+    private int $editingMode = 0;
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    private ?User $lastAdminActionBy = null;
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $originalText = null;
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $searchText = null;
+    #[ORM\ManyToOne(targetEntity: Forum::class)]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'CASCADE')]
+    private ?Forum $searchForum = null;
+    #[ORM\Column(type: 'boolean', nullable: true)]
+    private ?bool $reported;
+
+    protected static array $morphsTo = [
+        ReactionSet::class,
+    ];
+
+    #[ORM\Column]
+    private bool $anonymous = false;
+
     private bool $new = false;
     private bool $hydrated = false;
     private ?string $hydrated_text = null;
     private ?string $hydrated_prev = null;
-    #[ORM\Column(type: 'boolean')]
-    private $translate = false;
-    #[ORM\Column(type: 'integer')]
-    private $editingMode = 0;
-    #[ORM\ManyToOne(targetEntity: User::class)]
-    private $lastAdminActionBy;
-    #[ORM\Column(type: 'text', nullable: true)]
-    private $originalText;
-    #[ORM\Column(type: 'text', nullable: true)]
-    private $searchText = null;
-    #[ORM\ManyToOne(targetEntity: Forum::class)]
-    #[ORM\JoinColumn(nullable: true, onDelete: 'CASCADE')]
-    private $searchForum = null;
-    #[ORM\Column(type: 'boolean', nullable: true)]
-    private $reported;
-
-    #[ORM\Column]
-    private bool $anonymous = false;
 
     #[ORM\Column(nullable: true)]
     private ?array $noteIcons = null;
@@ -80,7 +91,7 @@ class Post
     public function setThread(?Thread $thread): self
     {
         $this->thread = $thread;
-        $this->setSearchForum( $thread ? $thread->getForum() : null );
+        $this->setSearchForum($thread?->getForum());
 
         return $this;
     }
@@ -114,21 +125,21 @@ class Post
 
         return $this;
     }
-    public function getDate(): ?\DateTimeInterface
+    public function getDate(): ?DateTimeInterface
     {
         return $this->date;
     }
-    public function setDate(\DateTimeInterface $date): self
+    public function setDate(DateTimeInterface $date): self
     {
         $this->date = $date;
 
         return $this;
     }
-    public function getEdited(): ?\DateTimeInterface
+    public function getEdited(): ?DateTimeInterface
     {
         return $this->edited;
     }
-    public function setEdited(?\DateTimeInterface $edited): self
+    public function setEdited(?DateTimeInterface $edited): self
     {
         $this->edited = $edited;
 
@@ -156,9 +167,9 @@ class Post
     }
     /**
      * @param bool|null $unseen
-     * @return Collection|AdminReport[]
+     * @return ArrayCollection<int, AdminReport>|PersistentCollection<int, AdminReport>
      */
-    public function getAdminReports(?bool $unseen = false): Collection
+    public function getAdminReports(?bool $unseen = false): ArrayCollection|PersistentCollection
     {
         return $unseen ? $this->adminReports->filter(fn(AdminReport $a) => !$a->getSeen()) : $this->adminReports;
     }
@@ -196,7 +207,7 @@ class Post
     }
 
     /**
-     * @param AdminDeletion $adminDeletion
+     * @param AdminDeletion|null $adminDeletion
      * @return self
      */
     public function setAdminDeletion(?AdminDeletion $adminDeletion): self
