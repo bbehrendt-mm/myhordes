@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import {ReactNode, useLayoutEffect, useRef, useState} from "react";
 import {Const, Global} from "../../defaults";
 import {BaseMounter} from "../index";
+import {randomUUIDv4} from "../../shims";
 
 declare var c: Const;
 declare var $: Global;
@@ -79,6 +80,7 @@ const TooltipImplementation = (
 
     const key = useRef<number>( ++TooltipGlobal.counter );
     const tooltip = useRef<HTMLDivElement>(null);
+    const uuid = useRef<string>(randomUUIDv4());
 
     const getOffset = (obj: HTMLDivElement) => {
         let found = false;
@@ -93,6 +95,7 @@ const TooltipImplementation = (
 
     useLayoutEffect(() => {
         if (!forParent) return () => {};
+
         const fun_tooltip_pos = function(pointer: boolean = false) {
             return function(e: PointerEvent|MouseEvent) {
 
@@ -177,6 +180,8 @@ const TooltipImplementation = (
         forParent.addEventListener('mousemove', fun_tooltip_pos_false);
         forParent.addEventListener('mouseleave',   fun_tooltip_hide);
 
+        forParent.setAttribute('aria-describedby', `tooltip-${uuid.current}`);
+
         if (!$.client.config.twoTapTooltips.get()) {
             forParent.addEventListener('pointerleave', fun_tooltip_hide);
             forParent.addEventListener('pointerup',    fun_tooltip_hide);
@@ -189,6 +194,8 @@ const TooltipImplementation = (
 
             forParent.removeEventListener('mousemove', fun_tooltip_pos_false);
             forParent.removeEventListener('mouseleave',   fun_tooltip_hide);
+
+            forParent.removeAttribute('aria-describedby');
 
             if (!$.client.config.twoTapTooltips.get()) {
                 forParent.removeEventListener('pointerleave', fun_tooltip_hide);
@@ -218,8 +225,8 @@ const TooltipImplementation = (
 
     return createPortal(
         html
-            ? <div ref={tooltip} className={classNames} dangerouslySetInnerHTML={{__html: html}}/>
-            : <div ref={tooltip} className={classNames}>
+            ? <div ref={tooltip} id={`tooltip-${uuid.current}`} className={classNames} dangerouslySetInnerHTML={{__html: html}}/>
+            : <div ref={tooltip} id={`tooltip-${uuid.current}`} className={classNames}>
                 { textContent }
                 { children }
             </div>

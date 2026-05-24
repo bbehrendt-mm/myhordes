@@ -40,15 +40,15 @@
 </head>
 <body onclick class="offline_body page-attract">
 <div id="wrapper" class="attract">
-    <div id="header">
-        <div class="deco_logo pointer"></div>
+    <header id="header">
+        <div class="deco_logo pointer" role="none"></div>
         <div class="attract_button">
             <a href="{{ url('public_login') }}" target="_self"><span>{{ 'Spielen!'|trans({},'welcome') }}</span></a>
         </div>
         <div class="back-dash hidden">{{ 'Startseite'|trans({},'welcome') }}</div>
-    </div>
+    </header>
 
-    <div id="content">
+    <main id="content">
         <noscript>
             <div class="row">
                 <div class="cell padded rw-12">
@@ -58,7 +58,7 @@
                 </div>
             </div>
         </noscript>
-    </div>
+    </main>
 
     <div id="footer"></div>
 </div>

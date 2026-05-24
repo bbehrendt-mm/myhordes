@@ -16,6 +16,7 @@ use Symfony\Component\Translation\MessageCatalogueInterface;
 use Symfony\Component\Translation\TranslatorBagInterface;
 use Symfony\Contracts\Translation\LocaleAwareInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use function Sentry\captureException;
 
 class ICUTranslator implements TranslatorInterface, TranslatorBagInterface, LocaleAwareInterface
 {
@@ -82,7 +83,14 @@ class ICUTranslator implements TranslatorInterface, TranslatorBagInterface, Loca
         }
 
         $pass_trough['ref__gender'] ??= static::$gender_map[(int)$u?->getPreferredPronoun() ?? 0];
-        $string = $this->_decorated->trans($id,$pass_trough,$domain,$locale);
+
+        try {
+            $string = $this->_decorated->trans($id,$pass_trough,$domain,$locale);
+        } catch (\Throwable $e) {
+            captureException($e);
+            $string = $id;
+        }
+
 
         if (!$no_md) {
             $config = [

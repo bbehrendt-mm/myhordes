@@ -18,6 +18,7 @@ enum UserSetting: string {
     case LimitTownListSize              = 'limit-town-lists';
     case NotifyMeWhenMentioned          = 'notify-on-mention-mode';
     case NotifyMeOnFriendRequest        = 'notify-on-friend-request';
+    case NotifyMeOnSponsorRegistration  = 'notify-on-sponsor-registration';
     case PushNotifyMeOnPM               = 'push-notify-on-pm';
     case PushNotifyOnFriendTownJoin     = 'push-notify-on-town-join';
     case PushNotifyOnOfficialGroupChat  = 'push-notify-on-og';
@@ -58,6 +59,7 @@ enum UserSetting: string {
             UserSetting::PreferSmallAvatars,
             UserSetting::LimitTownListSize,
             UserSetting::NotifyMeOnFriendRequest,
+            UserSetting::NotifyMeOnSponsorRegistration,
             UserSetting::PushNotifyMeOnPM,
             UserSetting::PushNotifyOnFriendTownJoin,
             UserSetting::ReorderActionButtonsBeyond,
@@ -93,6 +95,7 @@ enum UserSetting: string {
             UserSetting::PreferSmallAvatars,
             UserSetting::LimitTownListSize,
             UserSetting::NotifyMeOnFriendRequest,
+            UserSetting::NotifyMeOnSponsorRegistration,
             UserSetting::PushNotifyMeOnPM,
             UserSetting::PushNotifyOnFriendTownJoin,
             UserSetting::ReorderActionButtonsBeyond,
@@ -133,6 +136,7 @@ enum UserSetting: string {
             UserSetting::LimitTownListSize             => true,
             UserSetting::NotifyMeWhenMentioned         => 0, // 0 = Disabled, 1 = Towns Only, 2 = Everywhere, 3 = Global Only
             UserSetting::NotifyMeOnFriendRequest       => true,
+            UserSetting::NotifyMeOnSponsorRegistration  => true,
             UserSetting::PushNotifyMeOnPM              => true,
             UserSetting::PushNotifyOnFriendTownJoin    => true,
             UserSetting::ReorderActionButtonsBeyond    => false,

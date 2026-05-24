@@ -673,6 +673,8 @@ Spielhilfe: Spielhilfe
 'Du bist zu schwer beladen, um diese Aktion durchführen zu können!': 'Du bist zu schwer beladen, um diese Aktion durchführen zu können!'
 'Dein Profilbild wurde erfolgreich aktualisiert.': 'Dein Profilbild wurde erfolgreich aktualisiert.'
 'Das gewählte Profilbild wurde erfolgreich gelöscht.': 'Das gewählte Profilbild wurde erfolgreich gelöscht.'
+'Du hast einen neuen geworbenen Spieler!': 'Du hast einen neuen geworbenen Spieler!'
+'Wenn Du Spieler basierend auf ihrer Spracheinstellung zu unterschiedlichen URLs leiten möchtest, kannst du folgende Syntax verwenden: {example}': 'Wenn Du Spieler basierend auf ihrer Spracheinstellung zu unterschiedlichen URLs leiten möchtest, kannst du folgende Syntax verwenden: {example}'
 'Neue Reaktion hinzufügen...': 'Neue Reaktion hinzufügen...'
 'Diese Reaktion hinzufügen': 'Diese Reaktion hinzufügen'
 'Meine Reaktion entfernen': 'Meine Reaktion entfernen'

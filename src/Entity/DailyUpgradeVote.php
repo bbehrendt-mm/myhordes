@@ -12,10 +12,10 @@ class DailyUpgradeVote
     #[ORM\Column(type: 'integer')]
     private $id;
     #[ORM\ManyToOne(targetEntity: 'App\Entity\Building', inversedBy: 'dailyUpgradeVotes')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private $building;
     #[ORM\OneToOne(targetEntity: 'App\Entity\Citizen', inversedBy: 'dailyUpgradeVote', cascade: ['persist'])]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private $citizen;
     public function getId(): ?int
     {

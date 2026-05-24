@@ -423,6 +423,7 @@ class TownHandler
     /**
      * @param Town $town
      * @param bool $postDayChange Set to true if calculating after the day change during the attack
+     * @return TownWaterConsumptionSummary
      */
     public function calculate_town_water_consumption(Town $town, bool $postDayChange = false): TownWaterConsumptionSummary {
         if ($postDayChange && $this->waterConsumptionSummaryPostDay !== null) return $this->waterConsumptionSummaryPostDay;

@@ -800,11 +800,14 @@ class NightlyHandler
                 } elseif (!$this->town_handler->getBuilding($town, 'small_catapult3_#00', true)) {
                     // Terror
                     if (!$ctz->hasStatus($status_terror)) {
-                        $this->citizen_handler->inflictStatus($ctz, $status_terror);
-                        $this->log->debug("Watcher <info>{$ctz->getUser()->getUsername()}</info> now suffers from <info>{$status_terror->getLabel()}</info>");
-                        $gazette->setTerror($gazette->getTerror() + 1);
-                        $terrorized_citizens[] = $ctz;
-                        $this->crow->postAsPM($ctz, '', '', PrivateMessage::TEMPLATE_CROW_NIGHTWATCH_TERROR, $defBonus);
+
+                        if ($this->citizen_handler->inflictStatus($ctz, $status_terror)) {
+                            $this->log->debug("Watcher <info>{$ctz->getUser()->getUsername()}</info> now suffers from <info>{$status_terror->getLabel()}</info>");
+                            $gazette->setTerror($gazette->getTerror() + 1);
+                            $terrorized_citizens[] = $ctz;
+                            $this->crow->postAsPM($ctz, '', '', PrivateMessage::TEMPLATE_CROW_NIGHTWATCH_TERROR, $defBonus);
+                        }
+
                     }
                 }
             }
@@ -1087,12 +1090,16 @@ class NightlyHandler
                     $terror_chance -= $quies                                        ? 10 : 0;
 
                     if ($this->random->chance($terror_chance / 100)) {
-                        $this->citizen_handler->inflictStatus( $c, $status_terror );
-                        $this->log->debug("Citizen <info>{$c->getUser()->getUsername()}</info> now suffers from <info>{$status_terror->getLabel()}</info>");
+                        $terrorized = $this->citizen_handler->inflictStatus( $c, $status_terror );
+                        if ($terrorized) {
+                            $this->log->debug("Citizen <info>{$c->getUser()->getUsername()}</info> now suffers from <info>{$status_terror->getLabel()}</info>");
+                            $this->crow->postAsPM($c, '', '', PrivateMessage::TEMPLATE_CROW_TERROR, $force);
+                            $gazette->setTerror($gazette->getTerror() + 1);
+                        } else {
+                            $this->log->debug("Citizen <info>{$c->getUser()->getUsername()}</info> was selected for <info>{$status_terror->getLabel()}</info>, but avoided the status.");
+                            $this->crow->postAsPM($c, '', '', PrivateMessage::TEMPLATE_CROW_AVOID_TERROR, $force);
+                        }
 
-                        $this->crow->postAsPM($c, '', '', PrivateMessage::TEMPLATE_CROW_TERROR, $force);
-
-                        $gazette->setTerror($gazette->getTerror() + 1);
                     } else {
                         $this->crow->postAsPM($c, '', '', PrivateMessage::TEMPLATE_CROW_AVOID_TERROR, $force);
                     }
@@ -1305,8 +1312,8 @@ class NightlyHandler
                     $this->citizen_handler->inflictStatus($citizen, 'infection');
                     $this->crow->postAsPM($citizen, '', '', PrivateMessage::TEMPLATE_CROW_HALLOWEEN_INFECT);
                 } elseif ( $this->random->chance(0.5) && $this->inventory_handler->countSpecificItems($citizen->getHome()->getChest(), "haunting_soul", true) > 0 ) {
-                    $this->citizen_handler->inflictStatus($citizen, 'terror');
-                    $this->crow->postAsPM($citizen, '', '', PrivateMessage::TEMPLATE_CROW_HALLOWEEN_TERROR);
+                    if ($this->citizen_handler->inflictStatus($citizen, 'terror'))
+                        $this->crow->postAsPM($citizen, '', '', PrivateMessage::TEMPLATE_CROW_HALLOWEEN_TERROR);
                 }
 
             }

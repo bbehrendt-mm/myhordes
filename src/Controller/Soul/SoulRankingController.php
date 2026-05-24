@@ -84,13 +84,8 @@ class SoulRankingController extends SoulController
         $played = [];
         foreach ($towns as $town) {
             /* @var TownRankingProxy $town */
-            foreach ($town->getCitizens() as $citizen) {
-                /* @var CitizenRankingProxy $citizen */
-                if($citizen->getUser() === $user) {
-                    $played[$town->getId()] = true;
-                    break;
-                }
-            }
+            if ($town->getCitizenForUser( $user ))
+                $played[$town->getId()] = true;
         }
 
 

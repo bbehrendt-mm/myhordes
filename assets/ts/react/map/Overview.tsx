@@ -339,7 +339,7 @@ const MapOverviewParent = ( props: MapOverviewParentProps ) => {
     const up=e=>{ if (activePointer === e.pointerId) activePointer = null; e.preventDefault(); }
 
     return (
-        <div ref={props.scrollAreaRef} className={`scroll-plane ${props.zoom === 0 ? 'auto-size' : ''}`}
+        <div aria-hidden={true} ref={props.scrollAreaRef} className={`scroll-plane ${props.zoom === 0 ? 'auto-size' : ''}`}
              onPointerDown={props.zoom > 0 ? down : null} onPointerMove={props.zoom > 0 ? move : null}
              onPointerUp={props.zoom > 0 ? up : null} onPointerLeave={props.zoom > 0 ? up : null}
         >

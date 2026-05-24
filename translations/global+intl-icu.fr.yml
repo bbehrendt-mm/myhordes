@@ -673,6 +673,8 @@ Spielhilfe: Guide
 'Du bist zu schwer beladen, um diese Aktion durchführen zu können!': 'Vous êtes trop chargé pour faire cela !'
 'Dein Profilbild wurde erfolgreich aktualisiert.': 'Votre image de profil a été mise à jour avec succès.'
 'Das gewählte Profilbild wurde erfolgreich gelöscht.': 'L''image de profil sélectionnée a été supprimée avec succès.'
+'Du hast einen neuen geworbenen Spieler!': 'Tu as invité un nouveau joueur à rejoindre le jeu !'
+'Wenn Du Spieler basierend auf ihrer Spracheinstellung zu unterschiedlichen URLs leiten möchtest, kannst du folgende Syntax verwenden: {example}': 'Si tu souhaites rediriger les joueurs vers différentes URL en fonction de leurs paramètres linguistiques, tu peux utiliser la syntaxe suivante : {example}'
 'Neue Reaktion hinzufügen...': 'Ajouter une nouvelle réaction...'
 'Diese Reaktion hinzufügen': 'Ajouter cette réaction'
 'Meine Reaktion entfernen': 'Supprimer ma réaction'

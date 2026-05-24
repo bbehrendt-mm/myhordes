@@ -42,6 +42,7 @@ use App\Event\Common\Social\ContentReportEvents\PostContentReportEvent;
 use App\Event\Common\Social\ContentReportEvents\PrivateMessageContentReportEvent;
 use App\Event\Common\Social\ContentReportEvents\UserContentReportEvent;
 use App\Event\Common\Social\FriendEvent;
+use App\Event\Common\Social\SponsorshipEvent;
 use App\Event\Common\User\DeathConfirmedPostPersistEvent;
 use App\Event\Common\User\DeathConfirmedPrePersistEvent;
 use App\Event\Common\User\PictoPersistedEvent;
@@ -249,6 +250,16 @@ readonly class EventProxyService
 
     public function friendListUpdatedEvent( User $actor, User $subject, bool $added ): void {
         $this->ed->dispatch( new FriendEvent()->setup($added, $actor, $subject ) );
+    }
+
+    /**
+     * Fired after a new player registers via an existing player's referral link.
+     *
+     * @param User $sponsor  The existing player whose link was used.
+     * @param User $newcomer The newly registered player.
+     */
+    public function sponsorshipRegisteredEvent( User $sponsor, User $newcomer ): void {
+        $this->ed->dispatch( new SponsorshipEvent()->setup($sponsor, $newcomer) );
     }
 
     public function beforeTownJoinEvent( Town $town, User $subject, bool $auto ): BeforeJoinTownData {
