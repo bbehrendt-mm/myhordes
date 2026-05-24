@@ -71,6 +71,10 @@ class ReactionsController extends CustomAbstractCoreController
     public function index(Packages $asset): JsonResponse {
 
         return new JsonResponse([
+            'add'    => $this->translator->trans('Neue Reaktion hinzufügen...', [], 'global'),
+            'agree'  => $this->translator->trans('Diese Reaktion hinzufügen', [], 'global'),
+            'remove' => $this->translator->trans('Meine Reaktion entfernen', [], 'global'),
+            'close'  => $this->translator->trans('Menü schließen', [], 'global'),
         ]);
     }
 
@@ -172,7 +176,6 @@ class ReactionsController extends CustomAbstractCoreController
 
     /**
      * @param ReactionSet $reactions
-     * @param Emotes $emote
      * @param EntityManagerInterface $em
      * @param UserCapabilityService $capability
      * @param TagAwareCacheInterface $gameCachePool

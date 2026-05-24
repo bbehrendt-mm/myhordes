@@ -6,6 +6,7 @@ import {Global} from "../../defaults";
 import {BaseMounter} from "../index";
 import {useTranslations} from "../utils";
 import {EmoteResponse, TwinoEditorAPI} from "../twino-editor/api";
+import {Tooltip} from "../misc/Tooltip";
 
 declare var $: Global;
 
@@ -31,18 +32,32 @@ export class HordesReactionsUI extends BaseMounter<mountProps>{
 
 const HordesReactionsUIWrapper = (props: mountProps) => {
 
+    const [active, setActive] = useState<boolean>(false)
+
     const api = useRef(new ReactionsAPI());
     const twinoApi = useRef(new TwinoEditorAPI());
     const strings = useTranslations(api.current);
+
+    const element = useRef<HTMLDivElement>(null);
 
     const [reaction, setReaction] = useState<ReactionSet>(null);
 
     const ready = strings && reaction;
 
     useEffect(() => {
+        if (!active) return;
         api.current.get(props.uuid).then(r => setReaction(r));
         return () => setReaction(null);
-    }, [props.uuid]);
+    }, [props.uuid, active]);
+
+    useLayoutEffect(() => {
+        if (active || !element.current) return;
+        const observer = new IntersectionObserver( (e) => {
+            if (e[0].isIntersecting) setActive(true);
+        }, { rootMargin: "50px 0px 50px 0px" });
+        observer.observe(element.current);
+        return () => observer.disconnect();
+    }, [active]);
 
     return <Globals.Provider value={{
         api: api.current, twinoApi: twinoApi.current, strings, reactionSet: reaction,
@@ -62,14 +77,8 @@ const HordesReactionsUIWrapper = (props: mountProps) => {
             return r;
         })
     }}>
-        <div className="reactions flex wrap">
-            { !ready && <>
-                <Reaction count={0}/>
-                <Reaction count={200}/>
-                <Reaction count={400}/>
-                <Reaction count={600}/>
-                <Reaction count={800}/>
-            </> }
+        <div ref={element} className="reactions flex wrap">
+            { !ready && [0,200,400,600,800].map(v => <Reaction count={v} key={v}/>) }
             { ready && <>
                 { reaction.reactions.map( r => <Reaction count={r.count} path={r.path} id={r.id} key={r.id}/> ) }
                 <AddReactionButton/>
@@ -80,7 +89,7 @@ const HordesReactionsUIWrapper = (props: mountProps) => {
 
 const Reaction = ( props: {path?: string|null, count: number, id?: number} ) => {
 
-    const {updateReactionSet, reactionSet, api} = useContext(Globals);
+    const {updateReactionSet, reactionSet, api, strings} = useContext(Globals);
     const self = useRef<HTMLDivElement>(null);
     const [saving, setSaving] = useState<boolean>(false);
 
@@ -113,10 +122,13 @@ const Reaction = ( props: {path?: string|null, count: number, id?: number} ) => 
             .finally(() => setSaving(false));
     }
 
-    return <div ref={self} className={`reaction flex middle center ${ props.path ? '' : 'pending' } ${ (props.id && props.id === reactionSet?.own) ? 'mine' : '' }`} onClick={click}>
+    const mine = props.id && props.id === reactionSet?.own;
+
+    return <div ref={self} className={`reaction flex middle center ${ props.path ? '' : 'pending' } ${ mine && 'mine' }`} onClick={click}>
         { props.path && <>
             <img src={props.path} alt="" />
             <span>{props.count ?? 0}</span>
+            { !saving && <Tooltip textContent={ mine ? strings.remove : strings.agree } /> }
         </> }
     </div>
 
@@ -126,6 +138,8 @@ const AddReactionButton = () => {
 
     const self = useRef<HTMLDivElement>(null);
     const [open, setOpen] = useState<boolean>(false);
+
+    const {strings} = useContext(Globals);
 
     useLayoutEffect(() => {
         if (!open) return;
@@ -140,7 +154,9 @@ const AddReactionButton = () => {
 
 
     return <div ref={self} className="add-reaction-parent">
-        <div className="reaction add-reaction flex middle center" onClick={()=> setOpen(o => !o)}/>
+        <div className="reaction add-reaction flex middle center" onClick={()=> setOpen(o => !o)}>
+            <Tooltip textContent={ open ? strings.close : strings.add } />
+        </div>
         { open && <EmoteSelector close={() => setOpen(false) }/> }
     </div>
 }
