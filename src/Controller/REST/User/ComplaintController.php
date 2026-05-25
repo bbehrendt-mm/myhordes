@@ -56,6 +56,8 @@ class ComplaintController extends CustomAbstractCoreController
                 [11, $this->translator->trans('Unangemessene Profilbeschreibung', [], 'global')],
                 [12, $this->translator->trans('Unangemessener Avatar', [], 'global')],
                 [13, $this->translator->trans('Unangemessener Name', [], 'global')],
+                [14, $this->translator->trans('Mehrere Konten', [], 'global')],
+                [15, $this->translator->trans('Kontoteilung', [], 'global')],
             ] : [] ),
 
         ], fn($a) => $a[1] !== null));

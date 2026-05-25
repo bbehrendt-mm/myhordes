@@ -98,7 +98,7 @@ final class ContentReportEventListener implements ServiceSubscriberInterface
             'Keinen Grund angeben','Cheating','Flooding oder Spam','Verwendung einer anderen als der Stadtsprache',
             'Beleidigungen / Unangemessener Ausdruck','Pornographie','Hassrede','Verbreitung persönlicher Informationen',
             'Verletzung von Copyright','Aufruf zu Gesetzesverstößen','Ermutigung von Selbstmord oder Selbstverletzung',
-            'Unangemessene Profilbeschreibung', 'Unangemessener Avatar', 'Unangemessener Name'
+            'Unangemessene Profilbeschreibung', 'Unangemessener Avatar', 'Unangemessener Name', 'Mehrere Konten', 'Kontoteilung'
         ];
 
         if ($event->report->getReason() >= 0 && $event->report->getReason() < count($complaint_list))
