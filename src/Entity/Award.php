@@ -31,6 +31,9 @@ class Award
     private $prototype;
     #[ORM\Column(type: 'string', length: 190, nullable: true)]
     private $customTitle;
+
+    private ?User $cached_user = null;
+
     public function getUser(): ?User {
         return  $this->user;
     }
@@ -45,6 +48,8 @@ class Award
         return $this;
     }
     public function setUser(?User $value): self {
+        if ($value) $this->cached_user = $value;
+        elseif (!$this->cached_user) $this->cached_user = $this->user ?? null;
         $this->user = $value;
         return $this;
     }
@@ -105,6 +110,7 @@ class Award
      */
     public function getMediaBasePath(): string
     {
-        return "user/{$this->getUser()->getId()}/award/{$this->getPrimaryKey()}";
+        $user = $this->getUser() ?? $this->cached_user;
+        return "user/{$user->getId()}/award/{$this->getPrimaryKey()}";
     }
 }
