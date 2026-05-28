@@ -38,7 +38,7 @@ class ItemDataService implements FixtureProcessorInterface {
         $container->add()->label('Metalltrümmer')->icon('metal_bad')->category('Rsc')->deco(0)->heavy(false)->watchpoint(0)->isEmote(true)->commit();
         $container->add()->label('Verrotteter Baumstumpf')->icon('wood_bad')->category('Rsc')->deco(0)->heavy(false)->watchpoint(0)->isEmote(true)->commit();
         $container->add()->label('Gut erhaltener Holzscheit')->icon('wood_log')->category('Furniture')->deco(2)->heavy(true)->watchpoint(0)->commit();
-        $container->add()->label('Minibar')->icon('machine_3')->category('Furniture')->deco(2)->heavy(true)->watchpoint(15)->isEmote(true)->commit();
+        $container->add()->label('Minibar')->icon('machine_3')->brokenIcon('machine_3.b')->category('Furniture')->deco(2)->heavy(true)->watchpoint(15)->isEmote(true)->commit();
         $container->add()->label('MagLite Kinderlampe (aus)')->icon('maglite_off')->category('Furniture')->deco(5)->heavy(false)->watchpoint(0)->commit();
         $container->add()->label('MagLite Kinderlampe (1 Ladung)')->icon('maglite_1')->category('Furniture')->deco(5)->heavy(false)->watchpoint(0)->commit();
         $container->add()->label('MagLite Kinderlampe (2 Ladungen)')->icon('maglite_2')->category('Furniture')->deco(5)->heavy(false)->watchpoint(0)->commit();
@@ -112,9 +112,9 @@ class ItemDataService implements FixtureProcessorInterface {
 		$container->add()->label('Taser')->icon('taser')->category('Weapon')->deco(0)->heavy(false)->watchpoint(5)->watchimpact(1)->commit();
 		$container->add()->label('Handmixer (geladen)')->icon('mixergun')->category('Weapon')->deco(0)->heavy(false)->watchpoint(18)->commit();
 		$container->add()->label('Kettensäge (geladen)')->icon('chainsaw')->category('Weapon')->deco(0)->heavy(true)->watchpoint(30)->commit();
-		$container->add()->label('Rasenmäher')->icon('lawn')->category('Weapon')->deco(0)->heavy(true)->watchpoint(20)->commit();
+		$container->add()->label('Rasenmäher')->icon('lawn')->brokenIcon('lawn.b')->category('Weapon')->deco(0)->heavy(true)->watchpoint(20)->commit();
 		$container->add()->label('Verstellbarer Schraubenschlüssel')->icon('wrench')->brokenIcon('wrench.b')->category('Weapon')->deco(0)->heavy(false)->watchpoint(5)->commit();
-		$container->add()->label('Schraubenzieher')->icon('screw')->category('Weapon')->deco(0)->heavy(false)->watchpoint(5)->commit();
+		$container->add()->label('Schraubenzieher')->icon('screw')->brokenIcon('screw.b')->category('Weapon')->deco(0)->heavy(false)->watchpoint(5)->commit();
 		$container->add()->label('Großer trockener Stock')->icon('staff')->category('Weapon')->deco(0)->heavy(false)->watchpoint(5)->commit();
 		$container->add()->label('Jagdmesser')->icon('knife')->brokenIcon('knife.b')->category('Weapon')->deco(0)->heavy(false)->watchpoint(10)->commit();
 		$container->add()->label('Machete')->icon('cutcut')->brokenIcon('cutcut.b')->category('Weapon')->deco(0)->heavy(false)->watchpoint(15)->isEmote(true)->commit();
@@ -136,7 +136,7 @@ class ItemDataService implements FixtureProcessorInterface {
 		$container->add()->label('Aqua-Splash (5 Ladungen)')->icon('watergun_opt_5')->category('Weapon')->deco(0)->heavy(false)->watchpoint(12)->commit();
 		$container->add()->label('Aqua-Splash (4 Ladungen)')->icon('watergun_opt_4')->category('Weapon')->deco(0)->heavy(false)->watchpoint(9)->commit();
 		$container->add()->label('Batteriewerfer Mark II (geladen)')->icon('pilegun_up')->category('Weapon')->deco(0)->heavy(false)->watchpoint(11)->commit();
-		$container->add()->label('Verbrauchte Fackel')->icon('torch_off')->category('Weapon')->deco(0)->heavy(false)->watchpoint(5)->commit();
+		$container->add()->label('Verbrauchte Fackel')->icon('torch_off')->brokenIcon('torch_off.b')->category('Weapon')->deco(0)->heavy(false)->watchpoint(5)->commit();
 		$container->add()->label('Mobiltelefon')->icon('iphone')->category('Weapon')->deco(0)->heavy(false)->watchpoint(5)->commit();
 		$container->add()->label('Explosive Pampelmuse')->icon('boomfruit')->category('Weapon')->deco(0)->heavy(false)->watchpoint(12)->isEmote(true)->commit();
 		$container->add()->label('Pfahlwerfer')->icon('rlaunc')->category('Weapon')->deco(0)->heavy(true)->watchpoint(30)->commit();
@@ -688,7 +688,7 @@ class ItemDataService implements FixtureProcessorInterface {
 		$container->modify('angryc_#00')->description('Das Kätzchen sieht ein wenig angefressen aus. Du solltest es besser nicht noch mehr reizen, es faucht ja jetzt schon.')->commit();
 		$container->modify('claymo_#00')->description('Irgendwer hat sie mal in der Wüste vergraben, vermutlich um die Zombies aufzuhalten… Bisher haben sie sich nur als effektiv gegen unvorsichtige Mitbürger erwiesen.')->commit();
 		$container->modify('diode_#00')->description('Ein elektronisches Bauteil aus alter Zeit. Du hast nicht viel Ahnung von dem Zeug, aber es scheint noch zu funktionieren.')->commit();
-		$container->modify('guitar_#00')->description('Früher konnte man damit die Damenwelt beeindrucken... Diese Zeiten sind vorbei, doch beliebt ist die Gitarre immer noch. Sie kommt zwar nicht an eine echte Les Paul \'58 heran, aber die Stadt kann ein wenig Auflockerung gebrauchen. Wer hätte denn keinen Spaß an ein bisschen Musik?')->commit();
+		$container->modify('guitar_#00')->brokenIcon('guitar.b')->description('Früher konnte man damit die Damenwelt beeindrucken... Diese Zeiten sind vorbei, doch beliebt ist die Gitarre immer noch. Sie kommt zwar nicht an eine echte Les Paul \'58 heran, aber die Stadt kann ein wenig Auflockerung gebrauchen. Wer hätte denn keinen Spaß an ein bisschen Musik?')->commit();
 		$container->modify('lsd_#00')->description('Keine Ahnung, wo dieses kleine, pinke Stück Papier herkommt, aber wenn Du es in den Mund nimmst kribbelt dein Gehirn!')->commit();
 		$container->modify('lpoint4_#00')->description('In der alten Welt war er verboten.In den Jahren wurde er weiter verbessert und die Strahlen gebündelt. Heute eignet er sich gut, um durch verrottetes Fleisch zu schneiden.')->commit();
 		$container->modify('lpoint3_#00')->description('In der alten Welt war er verboten.In den Jahren wurde er weiter verbessert und die Strahlen gebündelt. Heute eignet er sich gut, um durch verrottetes Fleisch zu schneiden.')->commit();
