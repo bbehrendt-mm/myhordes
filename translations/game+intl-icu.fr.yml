@@ -350,11 +350,11 @@ Westen: l’ouest
 'Meine objekte': 'Objets'
 Gammler: "\n            {ref__icu, select,\n                on {\n                    {ref__gender, select,\n                        female {Indécise}\n                        other {Indécis}\n                    }\n                }\n            other {Indécis}\n            }\n        "
 Buddler: "\n            {ref__icu, select,\n                on {\n                    {ref__gender, select,\n                        female {Fouineuse}\n                        other {Fouineur}\n                    }\n                }\n            other {Fouineur}\n            }\n        "
-Wächter: "Gardien"
-Aufklärer: "Éclaireur"
-Dompteur: "Apprivoiseur"
+Wächter: "\n            {ref__icu, select,\n                on {\n                    {ref__gender, select,\n                        female {Gardienne}\n                        other {Gardien}\n                    }\n                }\n            other {Gardien}\n            }\n        "
+Aufklärer: "\n            {ref__icu, select,\n                on {\n                    {ref__gender, select,\n                        female {Éclaireuse}\n                        other {Éclaireur}\n                    }\n                }\n            other {Éclaireur}\n            }\n        "
+Dompteur: "\n            {ref__icu, select,\n                on {\n                    {ref__gender, select,\n                        female {Apprivoiseuse}\n                        other {Apprivoiseur}\n                    }\n                }\n            other {Apprivoiseur}\n            }\n        "
 Techniker: "\n            {ref__icu, select,\n                on {\n                    {ref__gender, select,\n                        female {Technicienne}\n                        other {Technicien}\n                    }\n                }\n            other {Technicien}\n            }\n        "
-Schamane: "Chaman"
+Schamane: "\n            {ref__icu, select,\n                on {\n                    {ref__gender, select,\n                        female {Chamane}\n                        other {Chaman}\n                    }\n                }\n            other {Chaman}\n            }\n        "
 Einsiedler: "Ermite"
 'Verbesserung des Tages': 'Évolutions du jour'
 Wachturm: Tour
