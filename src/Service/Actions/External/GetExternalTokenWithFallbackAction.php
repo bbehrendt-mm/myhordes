@@ -34,7 +34,7 @@ readonly class GetExternalTokenWithFallbackAction
      */
     public function __invoke(ExternalTokenType $type, ?ExternalTokenPurpose $purpose, ?MyHordesSetting $fallback ): ArrayCollection|PersistentCollection
     {
-        $criteria = Criteria::create()
+        $criteria = Criteria::create(true)
             ->andWhere( Criteria::expr()->eq( 'active', true ) )
             ->andWhere( Criteria::expr()->eq( 'type', $type ) )
             ->andWhere( Criteria::expr()->eq( 'env', $this->params->get('kernel.environment') ) );

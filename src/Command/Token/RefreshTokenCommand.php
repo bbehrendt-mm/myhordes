@@ -151,7 +151,7 @@ class RefreshTokenCommand extends Command
                                                ->setActive( true )
             );
 
-            $invalidation_criteria = Criteria::create()
+            $invalidation_criteria = Criteria::create(true)
                 ->where( Criteria::expr()->eq( 'env', $env ) )
                 ->andWhere( Criteria::expr()->eq( 'type', $token->getType() ) )
                 ->andWhere( Criteria::expr()->eq( 'active', true ) );
