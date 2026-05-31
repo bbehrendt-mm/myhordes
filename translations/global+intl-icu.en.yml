@@ -676,3 +676,5 @@ Spielhilfe: Help
 'Das gewählte Profilbild wurde erfolgreich gelöscht.': 'The selected avatar has been deleted successfully.'
 'Du hast einen neuen geworbenen Spieler!': 'You''re invited a new player to the game!'
 'Wenn Du Spieler basierend auf ihrer Spracheinstellung zu unterschiedlichen URLs leiten möchtest, kannst du folgende Syntax verwenden: {example}': 'If you want to redirect players to different URLs based on their language settings, you can use the following syntax: {example}'
+'Mehrere Konten': 'Multi-Account'
+Kontoteilung: Account sharing
