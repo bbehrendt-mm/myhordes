@@ -361,6 +361,12 @@ class CommonsController extends CustomAbstractCoreController
         ];
     }
 
+    public static function getArtActions(): array {
+        return [
+            ['sort' => 1200, 'name' => T::__('Art', 'admin'),        'route' => 'art_dashboard'],
+        ];
+    }
+
     private function permissionBasedActions(): array {
         return [
             ...($this->isGranted('list', Town::class) ? [['sort' => 200, 'name' => T::__('Städte', 'admin'),      'route' => 'admin_town_list']] : []),
@@ -378,7 +384,7 @@ class CommonsController extends CustomAbstractCoreController
             return new JsonResponse([]);
 
         $hasSingularAdminOverrides = $entityManager->getRepository(TownAdminUser::class)->count(['user' => $this->getUser()]) > 0;
-        if (!$capability->hasAnyRole( $this->getUser(), ['ROLE_CROW', 'ROLE_ELEVATED', 'ROLE_CHEATER'] ) && !$hasSingularAdminOverrides)
+        if (!$capability->hasAnyRole( $this->getUser(), ['ROLE_CROW', 'ROLE_ELEVATED', 'ROLE_CHEATER', 'ROLE_ART'] ) && !$hasSingularAdminOverrides)
             return new JsonResponse([]);
 
         return new JsonResponse([
@@ -397,6 +403,7 @@ class CommonsController extends CustomAbstractCoreController
                 ...match(true) {
                     $capability->hasRole( $this->getUser(), 'ROLE_CROW' ) => self::getAdminActions(),
                     $capability->hasRole( $this->getUser(), 'ROLE_ELEVATED' ) => self::getCommunityActions(),
+                    $capability->hasRole( $this->getUser(), 'ROLE_ART' ) => self::getArtActions(),
                     default => [],
                 },
                 ...$this->permissionBasedActions()

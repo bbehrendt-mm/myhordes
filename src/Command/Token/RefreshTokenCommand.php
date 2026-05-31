@@ -9,9 +9,11 @@ use App\Enum\Configuration\MyHordesSetting;
 use App\Service\Actions\External\GetGitlabClientAction;
 use App\Service\ConfMaster;
 use ArrayHelpers\Arr;
+use DateTime;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Exception\ORMException;
 use Exception;
 use Gitlab\HttpClient\Message\ResponseMediator;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -29,6 +31,8 @@ use Zenstruck\ScheduleBundle\Attribute\AsScheduledTask;
 #[AsScheduledTask('19 0 * * *', description: 'Auto-refresh external API tokens')]
 class RefreshTokenCommand extends Command
 {
+    use TokenManagement;
+
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly GetGitlabClientAction $gitlab,
@@ -62,7 +66,7 @@ class RefreshTokenCommand extends Command
         $data = json_decode( $client->getHttpClient()->post( "api/v4/projects/{$project_id}/access_tokens/self/rotate", headers: [
             ResponseMediator::CONTENT_TYPE_HEADER => ResponseMediator::JSON_CONTENT_TYPE
         ], body: json_encode([
-            'expires_at' => (new \DateTime('+1 year'))->format('Y-m-d'),
+            'expires_at' => new DateTime('+1 year')->format('Y-m-d'),
         ]) )->getBody()->getContents(), true );
 
         $id = Arr::get($data, 'id');
@@ -70,8 +74,8 @@ class RefreshTokenCommand extends Command
         $revoked = Arr::get($data, 'revoked');
         $active = Arr::get($data, 'active');
         $scopes = Arr::get($data, 'scopes');
-        $expires_ts = \DateTime::createFromFormat( 'Y-m-d H:i:s', Arr::get($data, 'expires_at') . ' 00:00:00', new \DateTimeZone('UTC') )->getTimestamp();
-        $expires = new \DateTime();
+        $expires_ts = DateTime::createFromFormat( 'Y-m-d H:i:s', Arr::get($data, 'expires_at') . ' 00:00:00', new \DateTimeZone('UTC') )->getTimestamp();
+        $expires = new DateTime();
         $expires->setTimestamp( $expires_ts );
 
         if (!$id || !$new_token) throw new Exception("Unable to get token.");
@@ -86,7 +90,7 @@ class RefreshTokenCommand extends Command
 
     /**
      * @throws \Http\Client\Exception
-     * @throws Exception
+     * @throws Exception|ORMException
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -101,46 +105,69 @@ class RefreshTokenCommand extends Command
                 ->andWhere( Criteria::expr()->eq( 'env', $env ) )
             );
 
-        $refreshed = [];
         foreach ($tokens as $token) {
-            if (in_array( $token->getType()->value, $refreshed )) continue;
+            $this->entityManager->refresh( $token );
+            if (!$token->isActive()) continue;
 
-            $expires_days = (int)$token->getExpires()->diff( new \DateTime() )->format('%a');
-            $output->writeln( "Token for <fg=yellow>{$token->getType()->value}</> expires in <fg=yellow>{$expires_days}</> days." );
+            $token_identifier = "<fg=yellow>[ {$token->getType()->value} ]</>" .
+                ( $token->getPurpose() ? " / <fg=blue>[ {$token->getPurpose()->value} ]</>" : '' ) .
+                ( $token->getName() !== 'default' ? " <fg=green>( {$token->getName()} )</>" : '');
+
+            if (!$token->getExpires()) {
+                $output->writeln( "Token for $token_identifier does not expire." );
+                continue;
+            }
+
+            $expires_days = (int)$token->getExpires()->diff( new DateTime() )->format('%a');
+            $output->writeln( "Token for $token_identifier expires in <fg=yellow>{$expires_days}</> days." );
             if ($expires_days > $days && !$force) continue;
 
-            try {
+            if (!$token->getType()->canRenew()) {
                 $output->writeln( "Refreshing <fg=red>{$token->getType()->value}</> token." );
+            }
+
+            try {
+                $output->writeln( "Refreshing token for $token_identifier..." );
                 [$expires, $new_token] = match ($token->getType()) {
                     ExternalTokenType::GitlabApiToken => $this->execute_gitlab( $token->getToken(), $env, $output ),
                     default => throw new Exception("No handler for token type {$token->getType()->value}")
                 };
 
-                if (!$expires || $expires < new \DateTime()) throw new Exception("Invalid expiration date.");
+                if (!$expires || $expires < new DateTime()) throw new Exception("Invalid expiration date.");
             } catch (Exception $e) {
-                $output->writeln( "Unable to refresh <fg=red>{$token->getType()->value}</> token: {$e->getMessage()}" );
+                $output->writeln( "Unable to refresh token for $token_identifier: <fg=red>{$e->getMessage()}</>" );
                 continue;
             }
 
-            $output->writeln( "The generated token is valid for <fg=yellow>{$expires->diff( new \DateTime() )->format('%a')}</> days." );
-            $output->write( "Adding <fg=yellow>{$token->getType()->value}</> token for environment <fg=yellow>{$env}</>... " );
-            $this->entityManager->persist( (new ExternalAccessTokens())
+            $output->writeln( "The generated token is valid for <fg=yellow>{$expires->diff( new DateTime() )->format('%a')}</> days." );
+            $output->write( "Adding token $token_identifier for environment <fg=yellow>{$env}</>... " );
+            $this->entityManager->persist( new ExternalAccessTokens()
                                                ->setToken( $new_token )
                                                ->setType( $token->getType() )
+                                               ->setPurpose( $token->getPurpose() )
+                                               ->setName( $token->getName() )
                                                ->setEnv( $env )
                                                ->setExpires( $expires )
                                                ->setActive( true )
             );
+
+            $invalidation_criteria = Criteria::create()
+                ->where( Criteria::expr()->eq( 'env', $env ) )
+                ->andWhere( Criteria::expr()->eq( 'type', $token->getType() ) )
+                ->andWhere( Criteria::expr()->eq( 'active', true ) );
+
+            if (!$token->getType()->isUnique() && $token->getPurpose()) {
+                $invalidation_criteria->andWhere(Criteria::expr()->eq('purpose', $token->getPurpose()));
+                if (!$token->getPurpose()->isUnique())
+                    $invalidation_criteria->andWhere(Criteria::expr()->neq('name', $token->getName()));
+            }
+
             $this->entityManager->getRepository( ExternalAccessTokens::class )
-                ->matching( Criteria::create(true)
-                    ->where( Criteria::expr()->eq( 'env', $env ) )
-                    ->andWhere( Criteria::expr()->eq( 'type', $token->getType() ) )
-                    ->andWhere( Criteria::expr()->eq( 'active', true ) )
-                )->forAll(function (int $key, ExternalAccessTokens $token) {
+                ->matching( self::generateOverlappingCriteria( $env, $token->getType(), $token->getPurpose(), $token->getName() ) )
+                ->forAll(function (int $key, ExternalAccessTokens $token) {
                     $this->entityManager->persist( $token->setActive( false ) );
                 });
             $this->entityManager->flush();
-            $refreshed = $token->getType()->value;
             $output->writeln( "<fg=green>OK</>" );
         }
 

@@ -675,6 +675,8 @@ Spielhilfe: Guide
 'Das gewählte Profilbild wurde erfolgreich gelöscht.': 'L''image de profil sélectionnée a été supprimée avec succès.'
 'Du hast einen neuen geworbenen Spieler!': 'Tu as invité un nouveau joueur à rejoindre le jeu !'
 'Wenn Du Spieler basierend auf ihrer Spracheinstellung zu unterschiedlichen URLs leiten möchtest, kannst du folgende Syntax verwenden: {example}': 'Si tu souhaites rediriger les joueurs vers différentes URL en fonction de leurs paramètres linguistiques, tu peux utiliser la syntaxe suivante : {example}'
+'Mehrere Konten': 'Gestion de plusieurs comptes'
+Kontoteilung: Partage de compte
 'Neue Reaktion hinzufügen...': 'Ajouter une nouvelle réaction...'
 'Diese Reaktion hinzufügen': 'Ajouter cette réaction'
 'Meine Reaktion entfernen': 'Supprimer ma réaction'

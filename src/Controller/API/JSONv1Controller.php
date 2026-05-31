@@ -562,6 +562,8 @@ class JSONv1Controller extends CoreController {
                         foreach ($field as $ProtoFieldName => $ProtoFieldValue) {
                             if ($ProtoFieldName == "resources") {
                                 $data_building[$ProtoFieldName] = $this->getResources($building->getPrototype(), $ProtoFieldValue['fields'] ?? []);
+                            } elseif ($ProtoFieldName == "resourcesCurrent") {
+                                $data_building[$ProtoFieldName] = $this->getResources($building, $ProtoFieldValue['fields'] ?? []);
                             }
                         }
                     } else {
@@ -653,7 +655,7 @@ class JSONv1Controller extends CoreController {
         foreach ($fields as $field) {
             if (is_array($field)) {
                 foreach ($field as $ProtoFieldName => $ProtoFieldValue) {
-                    if ($ProtoFieldName == "resources") {
+                    if ($ProtoFieldName == "resources" || $ProtoFieldName == "resourcesCurrent" ) {
                         $data[$ProtoFieldName] = $this->getResources($prototype, $ProtoFieldValue['fields'] ?? []);
                     }
                 }

@@ -11,6 +11,8 @@ use App\Entity\PrivateMessage;
 use App\Entity\User;
 use App\Entity\UserDescription;
 use App\Enum\AdminReportSpecification;
+use App\Enum\Configuration\ExternalTokenPurpose;
+use App\Enum\Configuration\ExternalTokenType;
 use App\Enum\Configuration\MyHordesSetting;
 use App\Enum\NotificationSubscriptionType;
 use App\Enum\UserSetting;
@@ -24,6 +26,7 @@ use App\Event\Common\Social\ContentReportEvents\UserContentReportEvent;
 use App\EventListener\ContainerTypeTrait;
 use App\Messages\Discord\DiscordMessage;
 use App\Messages\WebPush\WebPushMessage;
+use App\Service\Actions\External\GetExternalTokenWithFallbackAction;
 use App\Service\ConfMaster;
 use App\Service\HTMLService;
 use App\Service\Media\MediaService;
@@ -31,8 +34,11 @@ use App\Service\UserHandler;
 use DiscordWebhooks\Client;
 use DiscordWebhooks\Embed;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Psr\Container\ContainerInterface;
+use Symfony\Component\Asset\Packages;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
+use Symfony\Component\Messenger\Exception\ExceptionInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
@@ -70,6 +76,8 @@ final class ContentReportEventListener implements ServiceSubscriberInterface
             HTMLService::class,
             UserHandler::class,
             MediaService::class,
+            Packages::class,
+            GetExternalTokenWithFallbackAction::class
         ];
     }
 
@@ -98,7 +106,7 @@ final class ContentReportEventListener implements ServiceSubscriberInterface
             'Keinen Grund angeben','Cheating','Flooding oder Spam','Verwendung einer anderen als der Stadtsprache',
             'Beleidigungen / Unangemessener Ausdruck','Pornographie','Hassrede','Verbreitung persönlicher Informationen',
             'Verletzung von Copyright','Aufruf zu Gesetzesverstößen','Ermutigung von Selbstmord oder Selbstverletzung',
-            'Unangemessene Profilbeschreibung', 'Unangemessener Avatar', 'Unangemessener Name'
+            'Unangemessene Profilbeschreibung', 'Unangemessener Avatar', 'Unangemessener Name', 'Mehrere Konten', 'Kontoteilung'
         ];
 
         if ($event->report->getReason() >= 0 && $event->report->getReason() < count($complaint_list))
@@ -170,47 +178,55 @@ final class ContentReportEventListener implements ServiceSubscriberInterface
         };
     }
 
+    /**
+     * @throws Exception|ExceptionInterface
+     */
     public function handleReportDiscordNotification(ContentReportEvent $event): void {
-        $endpoint = $this->getService(ConfMaster::class)->getGlobalConf()->get( MyHordesSetting::HookModDiscord );
-        $class = $this->getService(EntityManagerInterface::class)->getClassMetadata( get_class($event->subject) )->getName();
+        $endpoints = $this->getService(GetExternalTokenWithFallbackAction::class)(
+            ExternalTokenType::DiscordWebhook,
+            ExternalTokenPurpose::ModerationReporting,
+            MyHordesSetting::HookModDiscord
+        );
 
+        $class = $this->getService(EntityManagerInterface::class)->getClassMetadata( get_class($event->subject) )->getName();
         $baseUrl = $this->getService(UrlGeneratorInterface::class)->generate( 'home', [],  UrlGeneratorInterface::ABSOLUTE_URL );
 
-        if ($endpoint) {
-            $user = $this->getReportedContentUser( $class, $event );
+        foreach ($endpoints as $endpoint) {
+            $user = $this->getReportedContentUser($class, $event);
 
             $discord = new Client($endpoint);
             $message_embed = new Embed()
                 ->color('FF5500')
-                ->title( $this->getReportedTitle( $class, $event, 'en' ) )
-                ->description( $this->getReportedContent( $class, $event, 'en' ) )
-                ->url( $this->getReportedContentURL( $class, $event, 'en' ) );
+                ->title($this->getReportedTitle($class, $event, 'en'))
+                ->description($this->getReportedContent($class, $event, 'en'))
+                ->url($this->getReportedContentURL($class, $event, 'en'));
 
 
             if ($user) $message_embed->author(
                 $user->getName(),
-                $this->getService(UrlGeneratorInterface::class)->generate( 'admin_users_account_view', ['id' => $user->getId()], UrlGeneratorInterface::ABSOLUTE_URL ),
-                $this->getService(MediaService::class)->getSingleMediaForObject( $user, 'avatar' )?->getLargestConversionByTag('default', 200)?->getUrl($baseUrl) ?? '',
+                $this->getService(UrlGeneratorInterface::class)->generate('admin_users_account_view', ['id' => $user->getId()], UrlGeneratorInterface::ABSOLUTE_URL),
+                $this->getService(MediaService::class)->getSingleMediaForObject($user, 'avatar')?->getLargestConversionByTag('default', 200)?->getUrl($baseUrl) ?? '',
             );
 
             $report_embed = new Embed()
                 ->color('	6A00FF')
-                ->title($this->getComplaintCategory( $event, 'en' ))
+                ->title($this->getComplaintCategory($event, 'en'))
                 ->description($event->report->getDetails() ?? '---');
 
             $report_embed->author(
                 $event->reporter->getName(),
-                $this->getService(UrlGeneratorInterface::class)->generate( 'admin_users_account_view', ['id' => $event->reporter->getId()], UrlGeneratorInterface::ABSOLUTE_URL ),
-                $this->getService(MediaService::class)->getSingleMediaForObject( $event->reporter, 'avatar' )?->getLargestConversionByTag('default', 200)?->getUrl($baseUrl) ?? '',
+                $this->getService(UrlGeneratorInterface::class)->generate('admin_users_account_view', ['id' => $event->reporter->getId()], UrlGeneratorInterface::ABSOLUTE_URL),
+                $this->getService(MediaService::class)->getSingleMediaForObject($event->reporter, 'avatar')?->getLargestConversionByTag('default', 200)?->getUrl($baseUrl) ?? '',
             );
 
             $discord
+                ->username('Corvus Decentia')
+                ->avatar($baseUrl . $this->getService(Packages::class)->getUrl('build/images/default/user-decentia.png'))
                 ->message(":loudspeaker: **{$this->getTitle( $class, $event, 'en' )}**\n{$this->getSubtitle( $event, 'en' )}\n\n")
-                ->embed( $message_embed )
-                ->embed( $report_embed );
+                ->embed($message_embed)
+                ->embed($report_embed);
 
-            $this->getService(MessageBusInterface::class)->dispatch( new DiscordMessage( $discord ) );
-
+            $this->getService(MessageBusInterface::class)->dispatch(new DiscordMessage($discord));
         }
     }
 

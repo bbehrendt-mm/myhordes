@@ -10,9 +10,12 @@ use App\Entity\ForumUsagePermissions;
 use App\Entity\GlobalPoll;
 use App\Entity\ReactionSet;
 use App\Entity\User;
+use App\Enum\Configuration\ExternalTokenPurpose;
+use App\Enum\Configuration\ExternalTokenType;
 use App\Enum\Configuration\MyHordesSetting;
 use App\Messages\Discord\DiscordMessage;
 use App\Response\AjaxResponse;
+use App\Service\Actions\External\GetExternalTokenWithFallbackAction;
 use App\Service\ErrorHelper;
 use App\Service\EventProxyService;
 use App\Service\HTMLService;
@@ -23,6 +26,7 @@ use DateTime;
 use DiscordWebhooks\Client;
 use DiscordWebhooks\Embed;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Messenger\Exception\ExceptionInterface;
@@ -248,9 +252,11 @@ class MessageAnnouncementController extends MessageController
      * @param MessageBusInterface $bus
      * @param EventProxyService $proxy
      * @param MediaService $mediaService
+     * @param GetExternalTokenWithFallbackAction $get_endpoints
+     * @param MorphService $morphService
      * @param Request $request
      * @return Response
-     * @throws ExceptionInterface
+     * @throws ExceptionInterface|Exception
      */
     #[Route(path: 'api/admin/com/changelogs/new_announcement', name: 'admin_changelog_new_announcement')]
     public function create_announcement_api(
@@ -260,6 +266,7 @@ class MessageAnnouncementController extends MessageController
         MessageBusInterface $bus,
         EventProxyService $proxy,
         MediaService $mediaService,
+        GetExternalTokenWithFallbackAction $get_endpoints,
         MorphService $morphService,
         Request $request
     ): Response {
@@ -287,29 +294,44 @@ class MessageAnnouncementController extends MessageController
 
         $em->flush();
 
-        if (!$announcement->isValidated() && $endpoint = $this->conf->getGlobalConf()->get( MyHordesSetting::HookAnimDiscord )) {
-            $discord = new Client($endpoint)
-                ->message(":black_joker: **Please validate my announcement.**");
+        if (!$announcement->isValidated()) {
 
-            $discord->embed( new Embed()
-                                 ->color('B434EB')
-                                 ->title($announcement->getTitle())
-                                 ->description(mb_substr(strip_tags(
-                                                   preg_replace(
-                                                       ['/(?:<br ?\/?>)+/', '/<span class="quoteauthor">([\w\d ._-]+)<\/span>/',  '/<blockquote>/', '/<\/blockquote>/', '/<a href="(.*?)">(.*?)<\/a>/'],
-                                                       ["\n", '${1}:', '[**', '**]', '[${2}](${1})'],
-                                                       $this->html->prepareEmotes( $announcement->getText())
-                                                   )
-                                               ), 0, 2000))
-                                 ->field('Language', $announcement->getLang(), true)
-                                 ->author(
-                                     $this->getUser()->getName(),
-                                     $urlGenerator->generate( 'admin_users_account_view', ['id' => $this->getUser()->getId()], UrlGeneratorInterface::ABSOLUTE_URL ),
-                                     $mediaService->getSingleMediaForObject( $this->getUser(), 'avatar' )?->getLargestConversionByTag('default', 200)?->getUrl($request->getBaseUrl())
-                                 )
+            $endpoints = $get_endpoints(
+                ExternalTokenType::DiscordWebhook,
+                ExternalTokenPurpose::EventReporting,
+                MyHordesSetting::HookAnimDiscord
             );
 
-            $bus->dispatch( new DiscordMessage( $discord ) );
+            $dc_avatar =
+                $this->generateUrl( 'home', [],  UrlGeneratorInterface::ABSOLUTE_URL ) .
+                $this->asset->getUrl('build/images/default/user-dionysia.png');
+
+            foreach ($endpoints as $endpoint) {
+                $discord = new Client($endpoint)
+                    ->username( 'Corvus Dionysia' )
+                    ->avatar( $dc_avatar )
+                    ->message(":black_joker: **Please validate my announcement.**");
+
+                $discord->embed( new Embed()
+                                     ->color('B434EB')
+                                     ->title($announcement->getTitle())
+                                     ->description(mb_substr(strip_tags(
+                                                                 preg_replace(
+                                                                     ['/(?:<br ?\/?>)+/', '/<span class="quoteauthor">([\w\d ._-]+)<\/span>/',  '/<blockquote>/', '/<\/blockquote>/', '/<a href="(.*?)">(.*?)<\/a>/'],
+                                                                     ["\n", '${1}:', '[**', '**]', '[${2}](${1})'],
+                                                                     $this->html->prepareEmotes( $announcement->getText())
+                                                                 )
+                                                             ), 0, 2000))
+                                     ->field('Language', $announcement->getLang(), true)
+                                     ->author(
+                                         $this->getUser()->getName(),
+                                         $urlGenerator->generate( 'admin_users_account_view', ['id' => $this->getUser()->getId()], UrlGeneratorInterface::ABSOLUTE_URL ),
+                                         $mediaService->getSingleMediaForObject( $this->getUser(), 'avatar' )?->getLargestConversionByTag('default', 200)?->getUrl($request->getBaseUrl())
+                                     )
+                );
+
+                $bus->dispatch( new DiscordMessage( $discord ) );
+            }
         }
 
         return AjaxResponse::success( true, ['url' => $this->generateUrl('admin_changelogs', ['tab' => 'announcement'])] );

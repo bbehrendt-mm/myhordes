@@ -129,7 +129,7 @@ class EditorController extends CustomAbstractCoreController
 
     /**
      * @param int|null $id
-     * @param User|null $user
+     * @param string $context
      * @param EntityManagerInterface $em
      * @param Packages $assets
      * @param RoleHierarchyInterface $roles
@@ -142,15 +142,15 @@ class EditorController extends CustomAbstractCoreController
     public function list_emotes(
         ?int $id,
         string $context,
-        #[MapEntity(id: 'id')]
-        ?User $user,
         EntityManagerInterface $em,
         Packages $assets,
         RoleHierarchyInterface $roles,
         TagAwareCacheInterface $gameCachePool
     ): JsonResponse {
-        if ($id === null) $user = $this->getUser();
-        elseif ($user !== $this->getUser()) return new JsonResponse([], Response::HTTP_FORBIDDEN);
+        if ($id !== null && $id !== $this->getUser()->getId())
+            return new JsonResponse([], Response::HTTP_FORBIDDEN);
+
+        $user = $this->getUser();
 
         $unlock_all = in_array($context, [
             'announcement', 'changelog', 'reaction'
@@ -317,7 +317,6 @@ class EditorController extends CustomAbstractCoreController
 
     /**
      * @param int|null $id
-     * @param User|null $user
      * @param Packages $assets
      * @return JsonResponse
      */
@@ -325,12 +324,10 @@ class EditorController extends CustomAbstractCoreController
     #[Route(path: '/{id}/unlocks/{context}/games', name: 'list_games', methods: ['GET'])]
     public function list_games(
         ?int $id,
-        #[MapEntity(id: 'id')]
-        ?User $user,
         Packages $assets
     ): JsonResponse {
-        if ($id === null) $user = $this->getUser();
-        elseif ($user !== $this->getUser()) return new JsonResponse([], Response::HTTP_FORBIDDEN);
+        if ($id !== null && $id !== $this->getUser()->getId())
+            return new JsonResponse([], Response::HTTP_FORBIDDEN);
 
         $data = [
             'd4' => 'dice4',
@@ -346,7 +343,7 @@ class EditorController extends CustomAbstractCoreController
             'rps' => 'rps',
             'coin' => 'coin',
             'card' => 'card',
-            ...($user->getActiveCitizen()?->getAlive() ? [
+            ...($this->getUser()->getActiveCitizen()?->getAlive() ? [
                 'town' => 'town',
                 'coords' => 'coords'
             ] : [])
@@ -365,21 +362,19 @@ class EditorController extends CustomAbstractCoreController
 
     /**
      * @param int|null $id
-     * @param User|null $user
      * @param Packages $assets
+     * @param EntityManagerInterface $em
      * @return JsonResponse
      */
     #[Route(path: '/me/unlocks/{context}/ressources', name: 'list_ressources_me', methods: ['GET'])]
     #[Route(path: '/{id}/unlocks/{context}/ressources', name: 'list_ressources', methods: ['GET'])]
     public function list_ressources(
         ?int $id,
-        #[MapEntity(id: 'id')]
-        ?User $user,
         Packages $assets,
         EntityManagerInterface $em
     ): JsonResponse {
-        if ($id === null) $user = $this->getUser();
-        elseif ($user !== $this->getUser()) return new JsonResponse([], Response::HTTP_FORBIDDEN);
+        if ($id !== null && $id !== $this->getUser()->getId())
+            return new JsonResponse([], Response::HTTP_FORBIDDEN);
 
         $items = $em->getRepository(ItemPrototype::class)->findBy(['emote' => true]);
 
@@ -397,7 +392,6 @@ class EditorController extends CustomAbstractCoreController
     /**
      * @param int|null $id
      * @param string $context
-     * @param User|null $user
      * @param EntityManagerInterface $em
      * @param Packages $assets
      * @param TranslatorInterface $trans
@@ -408,14 +402,12 @@ class EditorController extends CustomAbstractCoreController
     public function list_rp(
         ?int $id,
         string $context,
-        #[MapEntity(id: 'id')]
-        ?User $user,
         EntityManagerInterface $em,
         Packages $assets,
         TranslatorInterface $trans,
     ): JsonResponse {
-        if ($id === null) $user = $this->getUser();
-        elseif ($user !== $this->getUser()) return new JsonResponse([], Response::HTTP_FORBIDDEN);
+        if ($id !== null && $id !== $this->getUser()->getId())
+            return new JsonResponse([], Response::HTTP_FORBIDDEN);
 
         $professions = $em->getRepository(CitizenProfession::class)->findAll();
 
@@ -466,9 +458,6 @@ class EditorController extends CustomAbstractCoreController
 
     /**
      * @param int|null $id
-     * @param string $context
-     * @param User|null $user
-     * @param EntityManagerInterface $em
      * @param Packages $assets
      * @param TranslatorInterface $trans
      * @return JsonResponse
@@ -477,13 +466,11 @@ class EditorController extends CustomAbstractCoreController
     #[Route(path: '/{id}/unlocks/shoutbox/rp', name: 'list_coa_rp', methods: ['GET'], priority: 1)]
     public function list_rp_coa(
         ?int $id,
-        #[MapEntity(id: 'id')]
-        ?User $user,
         Packages $assets,
         TranslatorInterface $trans,
     ): JsonResponse {
-        if ($id === null) $user = $this->getUser();
-        elseif ($user !== $this->getUser()) return new JsonResponse([], Response::HTTP_FORBIDDEN);
+        if ($id !== null && $id !== $this->getUser()->getId())
+            return new JsonResponse([], Response::HTTP_FORBIDDEN);
 
         return new JsonResponse([
                                     'result' => [[

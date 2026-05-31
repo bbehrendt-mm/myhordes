@@ -405,13 +405,6 @@ dialog {
       &:not(.fact):not(.flavour-quote):not(.edge-top-left):not(.map-box) {background: @myhordes-panel-border, @myhordes-panel-bg; color: @myhordes-panel-color;}
       &:not(.fact):not(.flavour-quote).edge-top-left {background: @myhordes-panel-border-a00, @myhordes-panel-bg; color: @myhordes-panel-color;}
       &.map-box {background: @myhordes-panel-border-box, @myhordes-panel-box-bg; color: @myhordes-panel-color;}
-
-      &.fact {
-        color: white; margin-bottom: -25px; z-index: 1; min-height: 43px;
-        background: url('../img/background/footer_zombie.gif') bottom left no-repeat; text-align: right; font-size: 1.2rem;
-        text-shadow: 0 1px 1px black, 0 -1px 1px black, 1px 0 1px black, -1px 0 1px black, 1px 1px 1px black, -1px -1px 1px black, -1px 1px 1px black, 1px -1px 1px black;
-        .author { font-weight: bold; color: #fdcb70; }
-      }
     }
 
     .flavour-quote {
@@ -2368,6 +2361,25 @@ i.h-icon {
     font-size: 1.2rem;
     &>img { flex: none; align-self: center; }
     &>span { flex: 1 }
+}
+
+.twinoid-fact {
+    position: relative; margin: 0 12px -25px 35px;
+    z-index: 1;
+
+    display: flex; align-items: end; justify-content: space-between;
+
+    &>div {
+        height: 43px; width: 39px; flex: 0 auto; background: url('../img/background/footer_zombie.gif') bottom left no-repeat;
+    }
+
+    &>span {
+        flex: 1;
+        text-align: right; color: white; font-size: 1.2rem;
+        text-shadow: 0 1px 1px black, 0 -1px 1px black, 1px 0 1px black, -1px 0 1px black, 1px 1px 1px black, -1px -1px 1px black, -1px 1px 1px black, 1px -1px 1px black;
+
+        .author { font-weight: bold; color: #fdcb70; }
+    }
 }
 
 // Header

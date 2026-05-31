@@ -675,6 +675,8 @@ Spielhilfe: Guía del juego
 'Das gewählte Profilbild wurde erfolgreich gelöscht.': 'La imagen de perfil seleccionada se ha eliminado correctamente.'
 'Du hast einen neuen geworbenen Spieler!': '¡Has invitado a un nuevo jugador al juego!'
 'Wenn Du Spieler basierend auf ihrer Spracheinstellung zu unterschiedlichen URLs leiten möchtest, kannst du folgende Syntax verwenden: {example}': 'Si quieres redirigir a los jugadores a diferentes URL en función de su configuración de idioma, puedes utilizar la siguiente sintaxis: {example}'
+'Mehrere Konten': 'Múltiples cuentas'
+Kontoteilung: Compartir cuenta
 'Neue Reaktion hinzufügen...': 'Añadir una nueva reacción...'
 'Diese Reaktion hinzufügen': 'Añadir esta reacción'
 'Meine Reaktion entfernen': 'Eliminar mi reacción'
