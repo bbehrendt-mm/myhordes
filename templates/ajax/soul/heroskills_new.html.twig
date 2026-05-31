@@ -60,6 +60,22 @@
                                     </ul>
                                 </div>
                             </div>
+
+                            <div class="row-flex v-top gap unlocked">
+                                <div class="padded cell rw-3 level-indicator">
+                                    <div class="flex center middle">
+                                        <img src="{{ asset('build/images/icons/done.png') }}" alt=""/>
+                                        <b class="level">{{'Held'|trans({}, 'game')}}</b>
+                                    </div>
+                                </div>
+                                <div class="padded cell rw-9 ability-indicator">
+                                    <ul>
+                                        <li>{{ '{num} zusätzliche Hausverteidigung'|trans({num: 2},'soul') }}</li>
+                                        <li>{{ 'Komplexe Routen in der Außenwelt planen'|trans({},'soul') }}</li>
+                                        <li>{{ 'Die Heldentafel verwenden'|trans({},'soul') }}</li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
