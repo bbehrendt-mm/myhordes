@@ -132,7 +132,7 @@ export default class Ajax {
         const serverDate = new Date(date);
         const localDate = new Date();
 
-        if (c) c.ot = serverDate.getTime() - localDate.getTime();
+        if (c) c.ot = Math.min( serverDate.getTime() - localDate.getTime(), 5000);
     }
 
     public networkTimeOffset( ): number {
