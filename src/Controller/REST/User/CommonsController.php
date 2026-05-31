@@ -358,6 +358,12 @@ class CommonsController extends CustomAbstractCoreController
         ];
     }
 
+    public static function getArtActions(): array {
+        return [
+            ['sort' => 1200, 'name' => T::__('Art', 'admin'),        'route' => 'art_dashboard'],
+        ];
+    }
+
     private function permissionBasedActions(): array {
         return [
             ...($this->isGranted('list', Town::class) ? [['sort' => 200, 'name' => T::__('Städte', 'admin'),      'route' => 'admin_town_list']] : []),
@@ -371,7 +377,7 @@ class CommonsController extends CustomAbstractCoreController
     #[Route(path: '/mods', name: 'mod_list', methods: ['GET'])]
     public function mod_list(UserCapabilityService $capability): JsonResponse {
 
-        if (!$this->getUser() || !$capability->hasAnyRole( $this->getUser(), ['ROLE_CROW', 'ROLE_ELEVATED', 'ROLE_CHEATER'] ))
+        if (!$this->getUser() || !$capability->hasAnyRole( $this->getUser(), ['ROLE_CROW', 'ROLE_ELEVATED', 'ROLE_CHEATER', 'ROLE_ART'] ))
             return new JsonResponse([]);
 
         $crow = $capability->hasRole( $this->getUser(), 'ROLE_CROW' );
@@ -382,6 +388,7 @@ class CommonsController extends CustomAbstractCoreController
                 $capability->hasRole( $this->getUser(), 'ROLE_CROW' )     => $this->translator->trans('Moderation', [], 'global'),
                 $capability->hasRole( $this->getUser(), 'ROLE_ELEVATED' ) => $this->translator->trans('Community-Tools', [], 'global'),
                 $capability->hasRole( $this->getUser(), 'ROLE_CHEATER' )  => $this->translator->trans('Community-Tools', [], 'global'),
+                $capability->hasRole( $this->getUser(), 'ROLE_ART' )      => $this->translator->trans('Community-Tools', [], 'global'),
             },
             'links' => array_map( fn(array $entry) => [
                 'name' => $this->translator->trans($entry['name'], [], 'admin'),
@@ -391,6 +398,7 @@ class CommonsController extends CustomAbstractCoreController
                 ...match(true) {
                     $capability->hasRole( $this->getUser(), 'ROLE_CROW' ) => self::getAdminActions(),
                     $capability->hasRole( $this->getUser(), 'ROLE_ELEVATED' ) => self::getCommunityActions(),
+                    $capability->hasRole( $this->getUser(), 'ROLE_ART' ) => self::getArtActions(),
                     default => [],
                 },
                 ...$this->permissionBasedActions()
