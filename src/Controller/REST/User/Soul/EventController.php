@@ -9,8 +9,11 @@ use App\Entity\CommunityEventTownPreset;
 use App\Entity\ForumUsagePermissions;
 use App\Entity\TownClass;
 use App\Entity\TownRankingProxy;
+use App\Enum\Configuration\ExternalTokenPurpose;
+use App\Enum\Configuration\ExternalTokenType;
 use App\Enum\Configuration\MyHordesSetting;
 use App\Messages\Discord\DiscordMessage;
+use App\Service\Actions\External\GetExternalTokenWithFallbackAction;
 use App\Service\Actions\Ghost\SanitizeTownConfigAction;
 use App\Service\CrowService;
 use App\Service\EventProxyService;
@@ -293,6 +296,7 @@ class EventController extends CustomAbstractCoreController
      * @param MediaService $mediaService
      * @return JsonResponse
      * @throws ExceptionInterface
+     * @throws Exception
      */
     #[Route(path: '/{id}/proposal', name: 'set_proposal', defaults: ['option' => true], methods: ['PUT'])]
     #[Route(path: '/{id}/proposal', name: 'remove_proposal', defaults: ['option' => false], methods: ['DELETE'])]
@@ -303,7 +307,9 @@ class EventController extends CustomAbstractCoreController
         UrlGeneratorInterface $urlGenerator,
         MessageBusInterface $bus,
         MediaService $mediaService,
+        GetExternalTokenWithFallbackAction $getTokensAction,
         Request $request,
+        Packages $asset
     ): JsonResponse {
         if (!$this->eventIsEditable( $event, $option === false ))
             return new JsonResponse([], Response::HTTP_FORBIDDEN);
@@ -332,8 +338,20 @@ class EventController extends CustomAbstractCoreController
                 return new JsonResponse([], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
 
-            if ($endpoint = $this->conf->getGlobalConf()->get( MyHordesSetting::HookAnimDiscord )) {
+            $endpoints = $getTokensAction(
+                ExternalTokenType::DiscordWebhook,
+                ExternalTokenPurpose::EventReporting,
+                MyHordesSetting::HookAnimDiscord
+            );
+
+            $dc_avatar =
+                $this->generateUrl( 'home', [],  UrlGeneratorInterface::ABSOLUTE_URL ) .
+                $asset->getUrl('build/images/default/user-dionysia.png');
+
+            foreach ( $endpoints as $endpoint ) {
                 $discord = new Client($endpoint)
+                    ->username( 'Corvus Dionysia' )
+                    ->avatar( $dc_avatar )
                     ->message(
                         $option
                             ? ":black_joker: **Please validate my community event.**"

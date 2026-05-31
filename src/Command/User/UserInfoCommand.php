@@ -14,9 +14,7 @@ use App\Entity\User;
 use App\Service\Actions\Cache\InvalidateTagsInAllPoolsAction;
 use App\Service\CommandHelper;
 use App\Service\Media\MediaService;
-use App\Service\UserHandler;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Asset\Package;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\QuestionHelper;
@@ -27,8 +25,6 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Contracts\Cache\TagAwareCacheInterface;
 
 #[AsCommand(
     name: 'app:user:list',
@@ -40,7 +36,6 @@ class UserInfoCommand extends Command
         private readonly EntityManagerInterface $entityManager,
         private readonly UserPasswordHasherInterface $pwenc,
         private readonly CommandHelper $helper,
-        private readonly UrlGeneratorInterface $router,
         private readonly InvalidateTagsInAllPoolsAction $clearCache,
         private readonly MediaService $mediaService
     ) {

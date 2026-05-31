@@ -2,8 +2,10 @@
 
 namespace App\Entity;
 
+use App\Enum\Configuration\ExternalTokenPurpose;
 use App\Enum\Configuration\ExternalTokenType;
 use App\Repository\ExternalAccessTokensRepository;
+use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -28,11 +30,17 @@ class ExternalAccessTokens
     #[ORM\Column(length: 255)]
     private ?string $token = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $expires = null;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?DateTimeInterface $expires = null;
 
     #[ORM\Column(length: 16)]
     private ?string $env = null;
+
+    #[ORM\Column(length: 190)]
+    private string $name = 'default';
+
+    #[ORM\Column(length: 16, nullable: true, enumType: ExternalTokenPurpose::class)]
+    private ?ExternalTokenPurpose $purpose = null;
 
     public function getId(): ?int
     {
@@ -75,12 +83,12 @@ class ExternalAccessTokens
         return $this;
     }
 
-    public function getExpires(): ?\DateTimeInterface
+    public function getExpires(): ?DateTimeInterface
     {
         return $this->expires;
     }
 
-    public function setExpires(\DateTimeInterface $expires): static
+    public function setExpires(?DateTimeInterface $expires): static
     {
         $this->expires = $expires;
 
@@ -95,6 +103,30 @@ class ExternalAccessTokens
     public function setEnv(string $env): static
     {
         $this->env = $env;
+
+        return $this;
+    }
+
+    public function getName(): string
+    {
+        return $this->name ?: 'default';
+    }
+
+    public function setName(string $name): static
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getPurpose(): ?ExternalTokenPurpose
+    {
+        return $this->purpose;
+    }
+
+    public function setPurpose(?ExternalTokenPurpose $purpose): static
+    {
+        $this->purpose = $purpose;
 
         return $this;
     }
