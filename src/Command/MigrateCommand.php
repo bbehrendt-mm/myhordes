@@ -395,7 +395,7 @@ class MigrateCommand extends Command
 
             $fixed_migrations = ['Version20250830134338', 'Version20260215154040'];
             foreach ($fixed_migrations as $migration)
-                if (!$this->helper->capsule( "doctrine:migrations:version \"DoctrineMigrations\\{$migration}\" --add", $output )) {
+                if (!$this->helper->capsule( "doctrine:migrations:version \"DoctrineMigrations\\{$migration}\" --add --silent", $output )) {
                     $output->writeln("<error>Unable to create schema.</error>");
                     return 2;
                 }
