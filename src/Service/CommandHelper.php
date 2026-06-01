@@ -168,7 +168,7 @@ class CommandHelper
         return $application->run($input, $output);
     }
 
-    public function capsule( string $command, OutputInterface $output, ?string $note = null, bool $bin_console = true, ?string &$ret_str = null, $php_bin = "php", bool $enforce_verbosity = false, int $retry = 0, ?array $as = null ): bool {
+    public function capsule( string $command, OutputInterface $output, ?string $note = null, bool $bin_console = true, ?string &$ret_str = null, $php_bin = "php", bool $enforce_verbosity = false, int $retry = 0, ?array $as = null, int $code = 0 ): bool {
         $su = '';
         if ($as !== null) {
             if ($as[0] !== null && $as[1] !== null) $su = "sudo -u {$as[0]} -g {$as[1]} ";
@@ -183,7 +183,7 @@ class CommandHelper
         $output->write($note !== null ? $note : ("<info>Executing " . ($bin_console ? 'encapsulated' : '') . " command \"<comment>$command</comment>\"" . ($as ? (' as <comment>' . implode( ':', $as ) . '</comment>') : '') . "... </info>"));
         $lines = $this->bin( $run_command, $ret, false, $verbose ? $output : null );
 
-        if ($ret !== 0) {
+        if ($ret !== $code) {
             $output->writeln('');
             if ($note !== null) $output->writeln("<info>Command was \"<comment>{$run_command}</comment>\"</info>");
             if (!$verbose) foreach ($lines as $line) $output->write( "> {$line}" );
@@ -193,11 +193,11 @@ class CommandHelper
                 $output->writeln("\n<info>Retrying ($retry attempts left).</info>\n");
         } else $output->writeln("<info>Ok.</info>");
 
-        if ($ret !== 0 && $retry > 0) {
+        if ($ret !== $code && $retry > 0) {
             sleep(5);
             return $this->capsule($command, $output, $note, $bin_console, $ret_str, $php_bin, $enforce_verbosity, $retry - 1, $as);
         }
-        else return $ret === 0;
+        else return $ret === $code;
     }
 
     public function printObject(object $e): string {
