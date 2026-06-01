@@ -61,7 +61,6 @@ class ReactionsController extends CustomAbstractCoreController
             ->groupBy('e.id')
             ->orderBy('n', 'DESC')
             ->getQuery()->getArrayResult();
-        dump($data);
         return $data;
     }
 
