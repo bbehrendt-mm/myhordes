@@ -58,9 +58,9 @@ Stadttor: Grande Porte
 Karte: Carte
 'Bitte wähle einen Gegenstand:': 'Choisissez un objet :'
 'Du verfügst über keine geeigneten Gegenstände': 'Vous n’avez pas d’objet pour cette action.'
-Herstellen: Assembler 
+Herstellen: Assembler
 aus: Nécessite
-Kombinieren: Combiner 
+Kombinieren: Combiner
 'Du kannst von hier aus die Stadt verlassen und die Außenwelt erkunden. Vergiss aber nicht, um Mitternacht das Tor zu schließen!': 'Vous pouvez sortir de la ville et explorer l’Outre-Monde depuis ici. N’oubliez pas de garder la <strong>Grande Porte</strong> fermée lors de l’attaque à minuit !'
 'Du wurdest verbannt und kannst daher das Stadttor weder öffnen noch schließen.': 'Vous avez été banni et ne pouvez donc ni ouvrir ni fermer la porte de la ville.'
 'Meine Aktionen': 'Mes Actions'
@@ -3296,3 +3296,65 @@ Kartograph_f: Cartographe
 'Richtung Westen bewegen': 'Se diriger vers l''ouest'
 'Richtung Norden bewegen': 'Se diriger vers le nord'
 'Richtung Süden bewegen': 'Se diriger vers le sud'
+'PETA HASST ES!': 'PETA HASST ES!'
+'PETA HASST ES!_f': 'PETA HASST ES!'
+'Aktivist für die Vernichtung des Lebens': 'Aktivist für die Vernichtung des Lebens'
+'Aktivist für die Vernichtung des Lebens_f': 'Aktivistin für die Vernichtung des Lebens'
+'Messer geht rein, Eingeweide kommen raus!': 'Messer geht rein, Eingeweide kommen raus!'
+'Messer geht rein, Eingeweide kommen raus!_f': 'Messer geht rein, Eingeweide kommen raus!'
+'Rattenfänger der Apokalypse': 'Rattenfänger der Apokalypse'
+'Rattenfänger der Apokalypse_f': 'Rattenfängerin der Apokalypse'
+Apex-Raubtier: Apex-Raubtier
+Apex-Raubtier_f: Apex-Raubtier
+'Dinosaurier? Das war ich.': 'Dinosaurier? Das war ich.'
+'Dinosaurier? Das war ich._f': 'Dinosaurier? Das war ich.'
+Tourist: Tourist
+Tourist_f: Touristin
+'Sie ist flach!': 'Sie ist flach!'
+'Sie ist flach!_f': 'Sie ist flach!'
+'Um die Welt in... ein paar Tagen': 'Um die Welt in... ein paar Tagen'
+'Um die Welt in... ein paar Tagen_f': 'Um die Welt in... ein paar Tagen'
+'Nachfahre der Fremen.': 'Nachfahre der Fremen.'
+'Nachfahre der Fremen._f': 'Nachfahrin der Fremen.'
+'Magellan der Außenwelt': 'Magellan der Außenwelt'
+'Magellan der Außenwelt_f': 'Magellan der Außenwelt'
+'Reise, reise!': 'Reise, reise!'
+'Reise, reise!_f': 'Reise, reise!'
+'Marco? Polooo!': 'Marco? Polooo!'
+'Marco? Polooo!_f': 'Marco? Polooo!'
+'Saurons Auge': 'Saurons Auge'
+'Saurons Auge_f': 'Saurons Auge'
+'Alice im Wunderland': 'Alice im Wunderland'
+'Alice im Wunderland_f': 'Alice im Wunderland'
+'Was kann schon schiefgehen?': 'Was kann schon schiefgehen?'
+'Was kann schon schiefgehen?_f': 'Was kann schon schiefgehen?'
+'Um glücklich zu leben, lasst uns Pillen nehmen!': 'Um glücklich zu leben, lasst uns Pillen nehmen!'
+'Um glücklich zu leben, lasst uns Pillen nehmen!_f': 'Um glücklich zu leben, lasst uns Pillen nehmen!'
+'Unbekannter Spieler': 'Unbekannter Spieler'
+'Unbekannter Spieler_f': 'Unbekannte Spielerin'
+'Mikrodosierung ist für Nerds': 'Mikrodosierung ist für Nerds'
+'Mikrodosierung ist für Nerds_f': 'Mikrodosierung ist für Nerds'
+'Las Vegas Paranoiker': 'Las Vegas Paranoiker'
+'Las Vegas Paranoiker_f': 'Las Vegas Paranoikerin'
+'Morgen höre ich auf…': 'Morgen höre ich auf…'
+'Morgen höre ich auf…_f': 'Morgen höre ich auf…'
+'Mann am Kamin': 'Mann am Kamin'
+'Mann am Kamin_f': 'Frau am Kamin'
+'Alter Freund, neue Speisekarte': 'Alter Freund, neue Speisekarte'
+'Alter Freund, neue Speisekarte_f': 'Alte Freundin, neue Speisekarte'
+Leichenkoch: Leichenkoch
+Leichenkoch_f: Leichenköchin
+'50 Shades of Grease': '50 Shades of Grease'
+'50 Shades of Grease_f': '50 Shades of Grease'
+'Der große Eintopf': 'Der große Eintopf'
+'Der große Eintopf_f': 'Der große Eintopf'
+'Grillexperte unter Freunden': 'Grillexperte unter Freunden'
+'Grillexperte unter Freunden_f': 'Grillexpertin unter Freunden'
+Küchenalbtraum.: Küchenalbtraum.
+Küchenalbtraum._f: Küchenalbtraum.
+Cordon-Bleu-Koch: Cordon-Bleu-Koch
+Cordon-Bleu-Koch_f: Cordon-Bleu-Köchin
+'Ich habe Soylent Green erfunden.': 'Ich habe Soylent Green erfunden.'
+'Ich habe Soylent Green erfunden._f': 'Ich habe Soylent Green erfunden.'
+'Gott schickt Fleisch, und der Teufel schickt Köche.': 'Gott schickt Fleisch, und der Teufel schickt Köche.'
+'Gott schickt Fleisch, und der Teufel schickt Köche._f': 'Gott schickt Fleisch, und der Teufel schickt Köche.'
