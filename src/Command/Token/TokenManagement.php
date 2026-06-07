@@ -17,7 +17,7 @@ trait TokenManagement
         if (!$type->isUnique() && $purpose) {
             $criteria->andWhere(Criteria::expr()->eq('purpose', $purpose));
             if (!$purpose->isUnique())
-                $criteria->andWhere(Criteria::expr()->neq('name', $name));
+                $criteria->andWhere(Criteria::expr()->eq('name', $name));
         }
 
         return $criteria;
