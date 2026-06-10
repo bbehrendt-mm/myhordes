@@ -133,6 +133,13 @@ class AwardTitleDataService implements FixtureProcessorInterface {
         $container->add()->title('Spezialität: Hundesteaks')->unlockquantity(60)->associatedtag(':butcher:')->associatedpicto('r_animal_#00')->commit();
         $container->add()->title('Miezi? Jaaaa, komm her...')->unlockquantity(150)->associatedtag(':butcher:')->associatedpicto('r_animal_#00')->commit();
         $container->add()->title('Fleisch ist mein Gemüse')->unlockquantity(300)->associatedtag(':butcher:')->associatedpicto('r_animal_#00')->commit();
+        $container->add()->title('PETA HASST ES!')->unlockquantity(500)->associatedtag(':butcher:')->associatedpicto('r_animal_#00')->commit(); 
+       $container->add()->title('Aktivist für die Vernichtung des Lebens')->unlockquantity(750)->associatedtag(':butcher:')->associatedpicto('r_animal_#00')->commit(); 
+       $container->add()->title('Messer geht rein, Eingeweide kommen raus!')->unlockquantity(1023)->associatedtag(':butcher:')->associatedpicto('r_animal_#00')->commit();
+       $container->add()->title('Rattenfänger der Apokalypse')->unlockquantity(2000)->associatedtag(':butcher:')->associatedpicto('r_animal_#00')->commit();
+        $container->add()->title('Apex-Raubtier')->unlockquantity(4000)->associatedtag(':butcher:')->associatedpicto('r_animal_#00')->commit();
+        $container->add()->title('Dinosaurier? Das war ich')->unlockquantity(6000)->associatedtag(':butcher:')->associatedpicto('r_animal_#00')->commit();
+        # $container->add()->title('Animal Holocaust')->unlockquantity(10000)->associatedtag(':butcher:')->associatedpicto('r_animal_#00')->commit();
         # $container->add()->title('Nervensäge')->unlockquantity(10)->associatedtag(':ban:')->associatedpicto('r_ban_#00')->commit(); #
         # $container->add()->title('Sozialschmarotzer')->unlockquantity(20)->associatedtag(':ban:')->associatedpicto('r_ban_#00')->commit(); #
         # $container->add()->title('Die Wüste ist mein Zuhause')->unlockquantity(30)->associatedtag(':ban:')->associatedpicto('r_ban_#00')->commit(); #
@@ -264,6 +271,14 @@ class AwardTitleDataService implements FixtureProcessorInterface {
         $container->add()->title('Indiana Jones und die Ruinen der Aussenwelt')->unlockquantity(300)->associatedtag(':dexplo:')->associatedpicto('r_explo2_#00')->commit();
         $container->add()->title('Leidenschaftlicher Entdecker')->unlockquantity(5)->associatedtag(':texplo:')->associatedpicto('r_explot_#00')->commit();
         $container->add()->title('Kartograph')->unlockquantity(10)->associatedtag(':texplo:')->associatedpicto('r_explot_#00')->commit();
+        $container->add()->title('Tourist')->unlockquantity(15)->associatedtag(':texplo:')->associatedpicto('r_explot_#00')->commit();        
+        $container->add()->title('Sie ist flach!')->unlockquantity(20)->associatedtag(':texplo:')->associatedpicto('r_explot_#00')->commit();        
+        $container->add()->title('Um die Welt in... ein paar Tagen')->unlockquantity(25)->associatedtag(':texplo:')->associatedpicto('r_explot_#00')->commit();        
+        $container->add()->title('Nachfahre der Fremen')->unlockquantity(30)->associatedtag(':texplo:')->associatedpicto('r_explot_#00')->commit();        
+        $container->add()->title('Magellan der Außenwelt')->unlockquantity(40)->associatedtag(':texplo:')->associatedpicto('r_explot_#00')->commit();        
+        $container->add()->title('Reise, reise!')->unlockquantity(50)->associatedtag(':texplo:')->associatedpicto('r_explot_#00')->commit();        
+        $container->add()->title('Marco? Polooo!')->unlockquantity(75)->associatedtag(':texplo:')->associatedpicto('r_explot_#00')->commit();        
+        $container->add()->title('Saurons Auge')->unlockquantity(100)->associatedtag(':texplo:')->associatedpicto('r_explot_#00')->commit();        
         // $container->add()->title('100%')->unlockquantity(15)->associatedtag(':texplo:')->associatedpicto('r_explot_#00')->commit();
         // $container->add()->title('TBD')->unlockquantity(20)->associatedtag(':texplo:')->associatedpicto('r_explot_#00')->commit();
         $container->add()->title('Wenn ich das nur vorher gewusst hätte...')->unlockquantity(5)->associatedtag(':ruin:')->associatedpicto('r_ruine_#00')->commit();
@@ -339,6 +354,13 @@ class AwardTitleDataService implements FixtureProcessorInterface {
         $container->add()->title('Pille palle, 3 Tage wach!')->unlockquantity(150)->associatedtag(':experimental:')->associatedpicto('r_cobaye_#00')->commit();
         $container->add()->title('Timothy Leary')->unlockquantity(200)->associatedtag(':experimental:')->associatedpicto('r_cobaye_#00')->commit();
         $container->add()->title('Ich sehe ein Blauuuuuuues Tal')->unlockquantity(250)->associatedtag(':experimental:')->associatedpicto('r_cobaye_#00')->commit();
+        $container->add()->title('Alice im Wunderland')->unlockquantity(350)->associatedtag(':experimental:')->associatedpicto('r_cobaye_#00')->commit();
+        $container->add()->title('Was kann schon schiefgehen?')->unlockquantity(500)->associatedtag(':experimental:')->associatedpicto('r_cobaye_#00')->commit();
+        $container->add()->title('Um glücklich zu leben, lasst uns Pillen nehmen!')->unlockquantity(750)->associatedtag(':experimental:')->associatedpicto('r_cobaye_#00')->commit();
+        $container->add()->title('Unbekannter Spieler')->unlockquantity(1000)->associatedtag(':experimental:')->associatedpicto('r_cobaye_#00')->commit();  
+      $container->add()->title('Mikrodosierung ist für Nerds')->unlockquantity(1500)->associatedtag(':experimental:')->associatedpicto('r_cobaye_#00')->commit();  
+      $container->add()->title('Las Vegas Paranoiker')->unlockquantity(2000)->associatedtag(':experimental:')->associatedpicto('r_cobaye_#00')->commit();
+      $container->add()->title('Morgen höre ich auf…')->unlockquantity(3000)->associatedtag(':experimental:')->associatedpicto('r_cobaye_#00')->commit();
         $container->add()->title('Menschenfleischliebhaber')->unlockquantity(10)->associatedtag(':cannibal:')->associatedpicto('r_cannib_#00')->commit();
         $container->add()->title('Hannibalfan')->unlockquantity(40)->associatedtag(':cannibal:')->associatedpicto('r_cannib_#00')->commit();
         $container->add()->title('Totmacher')->unlockquantity(80)->associatedtag(':cannibal:')->associatedpicto('r_cannib_#00')->commit();
@@ -502,7 +524,17 @@ class AwardTitleDataService implements FixtureProcessorInterface {
         $container->add()->title('DdA Beste Buddler')->unlockquantity(1)->associatedtag(':scaddh:')->associatedpicto('r_scaddh_#00')->commit();
         $container->add()->title('Tarnexperte')->unlockquantity(1)->associatedtag(':rangwin:')->associatedpicto('r_rangwin_#00')->commit();
         $container->add()->title('Meisteringenieur')->unlockquantity(1)->associatedtag(':techwin:')->associatedpicto('r_techwin_#00')->commit();
-        // $container->add()->title('Total Exploration')->unlockquantity(1)->associatedtag(':explot:')->associatedpicto('r_explot_#01')->commit(); // TODO: add titles for Total Exploration
+        $container->add()->title('Mann am Kamin')->unlockquantity(5)->associatedtag(':cooked:')->associatedpicto('r_cooked_#00')->commit();
+        $container->add()->title('Alter Freund, neue Speisekarte')->unlockquantity(10)->associatedtag(':cooked:')->associatedpicto('r_cooked_#00')->commit();
+        $container->add()->title('Leichenkoch')->unlockquantity(25)->associatedtag(':cooked:')->associatedpicto('r_cooked_#00')->commit();
+        $container->add()->title('50 Shades of Grease')->unlockquantity(50)->associatedtag(':cooked:')->associatedpicto('r_cooked_#00')->commit();
+        $container->add()->title('Der große Eintopf')->unlockquantity(75)->associatedtag(':cooked:')->associatedpicto('r_cooked_#00')->commit();
+        $container->add()->title('Grillexperte unter Freunden')->unlockquantity(100)->associatedtag(':cooked:')->associatedpicto('r_cooked_#00')->commit();
+        $container->add()->title('Küchenalbtraum')->unlockquantity(150)->associatedtag(':cooked:')->associatedpicto('r_cooked_#00')->commit();
+        $container->add()->title('Cordon-Bleu-Koch')->unlockquantity(200)->associatedtag(':cooked:')->associatedpicto('r_cooked_#00')->commit();
+        $container->add()->title('Ich habe Soylent Green erfunden')->unlockquantity(350)->associatedtag(':cooked:')->associatedpicto('r_cooked_#00')->commit();
+        $container->add()->title('Gott schickt Fleisch, und der Teufel schickt Köche')->unlockquantity(500)->associatedtag(':cooked:')->associatedpicto('r_cooked_#00')->commit();
+
 
         $data = $container->toArray();
     }
