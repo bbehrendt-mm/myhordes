@@ -296,16 +296,4 @@ class RuinZone
 
         return $this;
     }
-
-    public function getConnect(): ?int
-    {
-        return $this->connect;
-    }
-
-    public function setConnect(int $connect): self
-    {
-        $this->connect = $connect;
-
-        return $this;
-    }
 }
