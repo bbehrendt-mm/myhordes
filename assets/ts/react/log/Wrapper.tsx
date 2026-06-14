@@ -144,7 +144,7 @@ const HordesLogWrapper = (props: mountProps) => {
                 setLoading(false);
                 setPlaceholder(false);
             })
-    }, [strings,props.domain,JSON.stringify(props.category),props.citizen,props.zone,props.inlineDays,refreshID] );
+    }, [strings,props.domain,JSON.stringify(props.category),props.citizen,props.zone,props.inlineDays,refreshID,props.day] );
 
     const applyData = (day: number, entries: LogEntry[], before: boolean, completed: boolean, without: number|null = null) => {
         const new_target = (cache.current[day] ?? null) === null ? { entries: [], completed } : {...cache.current[day]};

@@ -3303,8 +3303,8 @@ Kartograph_f: Cartographer
 'Messer geht rein, Eingeweide kommen raus!_f': 'Knife goes in, Guts come out!'
 'Rattenfänger der Apokalypse': 'Pied Piper of the Apocalypse'
 'Rattenfänger der Apokalypse_f': 'Pied Piper of the Apocalypse'
-Apex-Raubtier: 'Apex predator'
-Apex-Raubtier_f: 'Apex predator'
+Apex-Raubtier: Apex predator
+Apex-Raubtier_f: Apex predator
 'Dinosaurier? Das war ich': 'Dinosaurs? It was me'
 'Dinosaurier? Das war ich_f': 'Dinosaurs? It was me'
 Tourist: Tourist
@@ -3341,18 +3341,18 @@ Tourist_f: Tourist
 'Mann am Kamin_f': 'Woman at the fireplace'
 'Alter Freund, neue Speisekarte': 'Old friend, new menu'
 'Alter Freund, neue Speisekarte_f': 'Old friend, new menu'
-Leichenkoch: 'Corpse cook'
-Leichenkoch_f: 'Corpse cook'
+Leichenkoch: Corpse cook
+Leichenkoch_f: Corpse cook
 '50 Shades of Grease': '50 Shades of Grease'
 '50 Shades of Grease_f': '50 Shades of Grease'
 'Der große Eintopf': 'The Great Pot-au-feu'
 'Der große Eintopf_f': 'The Great Pot-au-feu'
 'Grillexperte unter Freunden': 'Barbecue expert among friends'
 'Grillexperte unter Freunden_f': 'Barbecue expert among friends'
-Küchenalbtraum: 'Kitchen Nightmare'
-Küchenalbtraum_f: 'Kitchen Nightmare'
-Cordon-Bleu-Koch: 'Kurudon Bleu Chef'
-Cordon-Bleu-Koch_f: 'Kurudon Bleu Chef'
+Küchenalbtraum: Kitchen Nightmare
+Küchenalbtraum_f: Kitchen Nightmare
+Cordon-Bleu-Koch: Kurudon Bleu Chef
+Cordon-Bleu-Koch_f: Kurudon Bleu Chef
 'Ich habe Soylent Green erfunden': 'I invented Soylent Green'
 'Ich habe Soylent Green erfunden_f': 'I invented Soylent Green'
 'Gott schickt Fleisch, und der Teufel schickt Köche': 'God sends meat, and the devil sends cooks.'

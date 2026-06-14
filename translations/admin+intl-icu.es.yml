@@ -715,13 +715,13 @@ Cheater: Tramposo
 'Gebäude anlegen:': 'Crear una ruina:'
 'Karte aufdecken': 'Revelar el mapa'
 Administratoren: Administradores
-'Verdächtiger Tod': 'Verdächtiger Tod'
-'Teilnehmer einer Spieler-erzeugten öffentlichen Stadt': 'Teilnehmer einer Spieler-erzeugten öffentlichen Stadt'
-'Wird gesetzt, wenn der Spieler eine öffentliche Stadt erstellt oder dieser beitritt. Blockiert das Erstellen oder Betreten fremder Spieler-erstellten öffentlichen Städte wenn aktiv.': 'Wird gesetzt, wenn der Spieler eine öffentliche Stadt erstellt oder dieser beitritt. Blockiert das Erstellen oder Betreten fremder Spieler-erstellten öffentlichen Städte wenn aktiv.'
-'Automatische Sperren und Sanktionen': 'Automatische Sperren und Sanktionen'
-'Aktive Marker': 'Aktive Marker'
-'Aktiv bis': 'Aktiv bis'
-'Alle deaktivieren': 'Alle deaktivieren'
-'Einzelnen deaktivieren': 'Einzelnen deaktivieren'
-Deaktivieren: Deaktivieren
-'Wird für Dehydration an Tag 3 oder früher gesetzt, oder wenn der Spieler an dem selben IRL-Tag stirbt, an dem er der Stadt beigetreten ist. Blockiert den Beitritt zu neuen Städten wenn aktiv.': 'Wird für Dehydration an Tag 3 oder früher gesetzt, oder wenn der Spieler an dem selben IRL-Tag stirbt, an dem er der Stadt beigetreten ist. Blockiert den Beitritt zu neuen Städten wenn aktiv.'
+'Verdächtiger Tod': 'Muerte sospechosa'
+'Teilnehmer einer Spieler-erzeugten öffentlichen Stadt': 'Participante en un pueblo público creado por un jugador'
+'Wird gesetzt, wenn der Spieler eine öffentliche Stadt erstellt oder dieser beitritt. Blockiert das Erstellen oder Betreten fremder Spieler-erstellten öffentlichen Städte wenn aktiv.': 'Se activa si el jugador crea un nuevo pueblo público o se une a uno. Cuando está activo, el jugador ya no puede crear ni unirse a pueblos públicos creados por otros.'
+'Automatische Sperren und Sanktionen': 'Bloqueos automáticos y sanciones'
+'Aktive Marker': 'Marcadores activos'
+'Aktiv bis': 'Activo hasta'
+'Alle deaktivieren': 'Desactivar todo'
+'Einzelnen deaktivieren': 'Desactivar individualmente'
+Deaktivieren: Desactivar
+'Wird für Dehydration an Tag 3 oder früher gesetzt, oder wenn der Spieler an dem selben IRL-Tag stirbt, an dem er der Stadt beigetreten ist. Blockiert den Beitritt zu neuen Städten wenn aktiv.': 'Se establece un máximo de 3 días de deshidratación, o si el jugador muere el mismo día real en que se unió al pueblo. Impide el acceso a nuevos pueblos mientras esté activo.'
