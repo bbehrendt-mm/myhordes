@@ -30,6 +30,7 @@ use App\Service\RateLimitingFactoryProvider;
 use App\Service\UserHandler;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -495,7 +496,7 @@ class MessageTownMessageController extends MessageController
      * @return Response
      */
     #[Route(path: 'jx/town/house/pm/{id<\d+>}/editor', name: 'home_answer_post_editor_controller')]
-    public function home_answer_editor_post_api(PrivateMessageThread $thread): Response {
+    public function home_answer_editor_post_api(#[MapEntity(id: 'id')] PrivateMessageThread $thread): Response {
         $user = $this->getUser();
 
         if ($this->userHandler->isRestricted($user, AccountRestriction::RestrictionTownCommunication))

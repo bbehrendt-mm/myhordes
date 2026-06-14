@@ -1,4 +1,3 @@
----
 'Allgemeiner Fehler.': 'Erreur générale.'
 'Das gewählte Forum existiert nicht oder dir fehlt die Zugangsberechtigung dafür.': 'Le forum sélectionné n''existe pas ou vous n''avez pas l''autorisation d''y accéder.'
 'Dein Text muss mindestens 2 Zeichen lang sein.': 'Votre texte doit contenir au moins 2 caractères.'
@@ -678,3 +677,11 @@ Spielhilfe: Guide
 'Wenn Du Spieler basierend auf ihrer Spracheinstellung zu unterschiedlichen URLs leiten möchtest, kannst du folgende Syntax verwenden: {example}': 'Si tu souhaites rediriger les joueurs vers différentes URL en fonction de leurs paramètres linguistiques, tu peux utiliser la syntaxe suivante : {example}'
 'Mehrere Konten': 'Gestion de plusieurs comptes'
 Kontoteilung: Partage de compte
+'Neue Reaktion hinzufügen...': 'Ajouter une nouvelle réaction...'
+'Diese Reaktion hinzufügen': 'Ajouter cette réaction'
+'Meine Reaktion entfernen': 'Supprimer ma réaction'
+'Menü schließen': 'Fermer le menu'
+Emotionen: Émotions
+Sonstige: Autres
+'Reaktionen löschen': 'Supprimer les réactions'
+'Reaktionen erlauben': 'Autoriser les réactions'

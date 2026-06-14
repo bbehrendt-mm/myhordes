@@ -815,7 +815,7 @@ class TownHandler
         if ($town->getFullyExploredAwarded() || $town->getType()->is(TownClass::EASY)) return false;
 
         if ($town->getZones()->matching(
-            new Criteria()
+            new Criteria(accessRawFieldValues: true)
                 // Get zones where either...
                 ->where( Criteria::expr()->orX(
                     // ...discovery status is less than the given value

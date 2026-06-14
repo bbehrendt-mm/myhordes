@@ -117,7 +117,7 @@ class InventoryHandler
     public function findStackPrototype( Inventory $inv, Item $item ): ?Item {
         // Items with the <individual> tag cannot stack
         if ($item->getPrototype()->getIndividual()) return null;
-        return $inv->getItems()->matching( new Criteria()
+        return $inv->getItems()->matching( new Criteria(accessRawFieldValues: true)
             ->where( Criteria::expr()->eq('prototype', $item->getPrototype()) )
             ->andWhere( Criteria::expr()->neq('id', $item->getId()) )
             ->andWhere( Criteria::expr()->eq('poison', $item->getPoison()) )
@@ -204,7 +204,7 @@ class InventoryHandler
             $qb = $this->entity_manager->createQueryBuilder();
             $qb
                 ->select('i.id')->from(Item::class,'i')
-                ->leftJoin(ItemPrototype::class, 'p', Join::WITH, 'i.prototype = p.id');
+                ->leftJoin(ItemPrototype::class, 'p', Join::ON, 'i.prototype = p.id');
             if (!$request->getAll())
                 $qb->setMaxResults( $request->getCount() );
             if (is_array($inventory))

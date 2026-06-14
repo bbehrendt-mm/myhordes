@@ -43,6 +43,7 @@ use App\Service\JSONRequestParser;
 use App\Service\TownHandler;
 use App\Service\ZoneHandler;
 use Exception;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -58,7 +59,7 @@ class AdminTownCitizenController extends AdminActionController
      */
     #[Route(path: 'jx/manage/town/{id<\d+>}/citizens', name: 'admin_town_citizens')]
     #[IsGranted('spy', 'town')]
-    public function town_explorer_citizens(Town $town): Response {
+    public function town_explorer_citizens(#[MapEntity(id: 'id')] Town $town): Response {
 		$disabled_profs = $this->conf->getTownConfiguration($town)->get(TownSetting::DisabledJobs);
 		$professions = array_filter($this->entity_manager->getRepository( CitizenProfession::class )->findSelectable(),
 			fn(CitizenProfession $p) => !in_array($p->getName(),$disabled_profs)
@@ -142,7 +143,7 @@ class AdminTownCitizenController extends AdminActionController
     #[Route(path: 'api/manage/town/{id<\d+>}/teleport', name: 'admin_teleport_citizen')]
     #[IsGranted('cheat', 'town')]
     #[AdminLogProfile(enabled: true)]
-    public function teleport_citizen(Town $town, JSONRequestParser $parser, ZoneHandler $handler, TownHandler $townHandler): Response
+    public function teleport_citizen(#[MapEntity(id: 'id')] Town $town, JSONRequestParser $parser, ZoneHandler $handler, TownHandler $townHandler): Response
     {
         $targets = $parser->get_array('targets');
         if (empty($targets))
@@ -232,7 +233,7 @@ class AdminTownCitizenController extends AdminActionController
     #[Route(path: 'api/manage/town/{id<\d+>}/alias', name: 'admin_alias_citizen')]
     #[IsGranted('ROLE_SUB_ADMIN')]
     #[AdminLogProfile(enabled: true)]
-    public function alias_citizen(Town $town, JSONRequestParser $parser, ConfMaster $cf): Response
+    public function alias_citizen(#[MapEntity(id: 'id')] Town $town, JSONRequestParser $parser, ConfMaster $cf): Response
     {
         $alias = $parser->trimmed('alias');
         $targets = $parser->get_array('targets');
@@ -273,7 +274,7 @@ class AdminTownCitizenController extends AdminActionController
     #[Route(path: 'jx/manage/town/{id<\d+>}/citizen_infos', name: 'get_citizen_infos')]
     #[IsGranted('spy', 'town')]
     #[AdminLogProfile(enabled: true)]
-    public function get_citizen_infos(Town $town, JSONRequestParser  $parser): Response {
+    public function get_citizen_infos(#[MapEntity(id: 'id')] Town $town, JSONRequestParser  $parser): Response {
         $citizen_id = $parser->get('citizen_id', -1);
         $citizen = $this->entity_manager->getRepository(Citizen::class)->find($citizen_id);
 
@@ -319,7 +320,7 @@ class AdminTownCitizenController extends AdminActionController
     #[Route(path: 'api/manage/town/{id<\d+>}/clear_citizen_attribs', name: 'clear_citizen_attribs')]
     #[IsGranted('ROLE_CROW')]
     #[AdminLogProfile(enabled: true)]
-    public function clear_citizen_attribs(Town $town, JSONRequestParser  $parser) {
+    public function clear_citizen_attribs(#[MapEntity(id: 'id')] Town $town, JSONRequestParser  $parser) {
         $id = $parser->get_int('id');
         $clear = $parser->get('clear');
 
@@ -351,7 +352,7 @@ class AdminTownCitizenController extends AdminActionController
     #[Route(path: 'api/manage/town/{id<\d+>}/modify_prof', name: 'admin_modify_profession')]
     #[IsGranted('cheat', 'town')]
     #[AdminLogProfile(enabled: true)]
-    public function modify_profession(Town $town, JSONRequestParser $parser, CitizenHandler $handler): Response
+    public function modify_profession(#[MapEntity(id: 'id')] Town $town, JSONRequestParser $parser, CitizenHandler $handler): Response
     {
         $pro_id = $parser->get_int('profession');
         $targets = $parser->get_array('targets');
@@ -464,7 +465,7 @@ class AdminTownCitizenController extends AdminActionController
     #[Route(path: 'api/manage/town/{id<\d+>}/home/manage', name: 'admin_town_manage_home')]
     #[IsGranted('cheat', 'town')]
     #[AdminLogProfile(enabled: true)]
-    public function town_manage_home(Town $town, JSONRequestParser $parser): Response
+    public function town_manage_home(#[MapEntity(id: 'id')] Town $town, JSONRequestParser $parser): Response
     {
         $target   = $parser->get('target');
         $citizens = $parser->get_array('citizen');
@@ -547,7 +548,7 @@ class AdminTownCitizenController extends AdminActionController
     #[Route(path: 'api/manage/town/{id<\d+>}/status/manage', name: 'admin_town_manage_status')]
     #[IsGranted('cheat', 'town')]
     #[AdminLogProfile(enabled: true)]
-    public function town_manage_status(Town $town, JSONRequestParser $parser): Response
+    public function town_manage_status(#[MapEntity(id: 'id')] Town $town, JSONRequestParser $parser): Response
     {
         $status_id = $parser->get_int('status');
         $targets = $parser->get_array('targets', []);
@@ -721,7 +722,7 @@ class AdminTownCitizenController extends AdminActionController
     #[Route(path: 'api/manage/town/{id<\d+>}/role/manage', name: 'admin_town_manage_role')]
     #[IsGranted('cheat', 'town')]
     #[AdminLogProfile(enabled: true)]
-    public function town_manage_role(Town $town, JSONRequestParser $parser, TownHandler $handler): Response
+    public function town_manage_role(#[MapEntity(id: 'id')] Town $town, JSONRequestParser $parser, TownHandler $handler): Response
     {
         if (in_array($parser->get('role'), ['_ban_','_esc_','_nw_','_sh_','_wt_','_rst_', '_dig_'] ))
             return $this->town_manage_pseudo_role($town,$parser,$handler);
@@ -759,7 +760,7 @@ class AdminTownCitizenController extends AdminActionController
     #[Route(path: 'api/manage/town/{id<\d+>}/pp/alter', name: 'admin_town_alter_pp')]
     #[IsGranted('cheat', 'town')]
     #[AdminLogProfile(enabled: true)]
-    public function town_alter_points(Town $town, JSONRequestParser $parser): Response
+    public function town_alter_points(#[MapEntity(id: 'id')] Town $town, JSONRequestParser $parser): Response
     {
         $point = $parser->get('point', '');
         if (!in_array($point, ['ap','bp','mp','sp','gh','cc','cn'])) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);

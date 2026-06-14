@@ -67,8 +67,8 @@ class UserUnlockableService implements ServiceSubscriberInterface
         $qb = $this->getService(EntityManagerInterface::class)->createQueryBuilder()
             ->from(HeroExperienceEntry::class, 'x')
             // Join ranking proxies so we can observe their DISABLED state
-            ->leftJoin(TownRankingProxy::class, 't', 'WITH', 'x.town = t.id')
-            ->leftJoin(CitizenRankingProxy::class, 'c', 'WITH', 'x.citizen = c.id')
+            ->leftJoin(TownRankingProxy::class, 't', 'ON', 'x.town = t.id')
+            ->leftJoin(CitizenRankingProxy::class, 'c', 'ON', 'x.citizen = c.id')
             // Scope to given user
             ->where('x.user = :user')->setParameter('user', $user)
             // Disregard disabled entries
@@ -156,7 +156,7 @@ class UserUnlockableService implements ServiceSubscriberInterface
     public function getResetPackPoints(User $user, ?Collection &$points = null): int {
         try {
             $points = $this->getService(EntityManagerInterface::class)->getRepository(HeroSkillPoint::class)->matching(
-                (new Criteria())
+                new Criteria(accessRawFieldValues: true)
                     ->where(Criteria::expr()->eq( 'user', $user ))
                     ->andWhere(Criteria::expr()->gt('days', 0))
                     ->orderBy(['received_at' => Order::Ascending])
@@ -376,7 +376,7 @@ class UserUnlockableService implements ServiceSubscriberInterface
         // Get skills unlocked by default
         $xp = $this->getLegacyHeroDaysSpent( $user );
         return $this->getService(EntityManagerInterface::class)->getRepository(HeroSkillPrototype::class)->matching(
-            (new Criteria())
+            new Criteria(accessRawFieldValues: true)
                 ->andWhere( new Comparison( 'enabled', Comparison::EQ, true )  )
                 ->andWhere( new Comparison( 'legacy', Comparison::EQ, true )  )
                 ->andWhere( new Comparison( 'daysNeeded', Comparison::LTE, $xp )  )
@@ -393,7 +393,7 @@ class UserUnlockableService implements ServiceSubscriberInterface
         // Get skills unlocked by default
         $xp = $this->getLegacyHeroDaysSpent( $user );
         return $this->getService(EntityManagerInterface::class)->getRepository(HeroSkillPrototype::class)->matching(
-            (new Criteria())
+            new Criteria(accessRawFieldValues: true)
                 ->andWhere( new Comparison( 'enabled', Comparison::EQ, true )  )
                 ->andWhere( new Comparison( 'legacy', Comparison::EQ, true )  )
                 ->andWhere( new Comparison( 'daysNeeded', Comparison::GT, $xp )  )
@@ -411,7 +411,7 @@ class UserUnlockableService implements ServiceSubscriberInterface
 
         // Get skills unlocked by default
         $defaultSkills = $this->getService(EntityManagerInterface::class)->getRepository(HeroSkillPrototype::class)->matching(
-            new Criteria()
+            new Criteria(accessRawFieldValues: true)
                 ->andWhere( new Comparison( 'enabled', Comparison::EQ, true )  )
                 ->andWhere( new Comparison( 'legacy', Comparison::EQ, false )  )
                 ->andWhere( new Comparison( 'daysNeeded', Comparison::EQ, 0 )  )
@@ -419,7 +419,7 @@ class UserUnlockableService implements ServiceSubscriberInterface
 
         // Unlocked skills
         $unlockedSkills = $this->getService(EntityManagerInterface::class)->getRepository(HeroSkillUnlock::class)->matching(
-            new Criteria()
+            new Criteria(accessRawFieldValues: true)
                 ->andWhere( new Comparison( 'user', Comparison::EQ, $user )  )
         )->map( fn(HeroSkillUnlock $skill) => $skill->getSkill() );
 
@@ -451,7 +451,7 @@ class UserUnlockableService implements ServiceSubscriberInterface
             Arr::set( $g, $skill->getGroupIdentifier(), max( $skill->getLevel(), Arr::get( $g, $skill->getGroupIdentifier(), 0 ) ) );
 
         $lockedSkills = $this->getService(EntityManagerInterface::class)->getRepository(HeroSkillPrototype::class)->matching(
-            (new Criteria())
+            new Criteria(accessRawFieldValues: true)
                 ->andWhere( new Comparison( 'enabled', Comparison::EQ, true )  )
                 ->andWhere( new Comparison( 'legacy', Comparison::EQ, false )  )
                 ->andWhere( new Comparison( 'id', Comparison::NIN, array_map( fn(HeroSkillPrototype $skill) => $skill->getId(), $unlockedSkills )  ) )
@@ -475,7 +475,7 @@ class UserUnlockableService implements ServiceSubscriberInterface
 
         if ($skill->isLegacy()) return false;
         try {
-            $this->getService(EntityManagerInterface::class)->persist( (new HeroSkillUnlock())
+            $this->getService(EntityManagerInterface::class)->persist( new HeroSkillUnlock()
                 ->setSkill($skill)
                 ->setUser($user)
                 ->setSeason($season)
@@ -494,11 +494,11 @@ class UserUnlockableService implements ServiceSubscriberInterface
         if ($season === true)
             $season = $this->getService(EntityManagerInterface::class)->getRepository(Season::class)->findOneBy(['current' => true]);
 
-        $entryCriteria = (new Criteria())
+        $entryCriteria = new Criteria(accessRawFieldValues: true)
             ->andWhere( new Comparison( 'user', Comparison::EQ, $user ) )
             ->andWhere( new Comparison( 'season', Comparison::EQ, $season ) );
 
-        $unlockCriteria = (new Criteria())
+        $unlockCriteria = new Criteria(accessRawFieldValues: true)
             ->andWhere( new Comparison( 'user', Comparison::EQ, $user ) );
         if ($skill_ids !== null)
             $unlockCriteria->andWhere( new Comparison( 'skill', Comparison::IN, $skill_ids ) );
@@ -509,7 +509,7 @@ class UserUnlockableService implements ServiceSubscriberInterface
         /** @var Collection<HeroSkillUnlock> $unlocks */
         $unlocks = $em->getRepository(HeroSkillUnlock::class)->matching($unlockCriteria);
 
-        $em->persist( (new HeroSkillPoint())
+        $em->persist( new HeroSkillPoint()
             ->setUser( $user )
             ->setSeason( $season )
             ->setReceivedAt( new \DateTimeImmutable() )

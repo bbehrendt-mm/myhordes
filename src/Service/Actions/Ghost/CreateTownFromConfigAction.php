@@ -2,6 +2,7 @@
 
 namespace App\Service\Actions\Ghost;
 
+use App\Entity\TownAdminUser;
 use App\Entity\TownSlotReservation;
 use App\Entity\User;
 use App\Service\ConfMaster;
@@ -18,8 +19,10 @@ use App\Traits\Actions\ActionResults\Town as RTown;
 use App\Traits\Actions\ActionResults\ErrorCode as RError;
 use App\Traits\Actions\ActionResults\TownResult;
 use App\Traits\Actions\FallibleAction;
+use ArrayHelpers\Arr;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use function Sentry\continueTrace;
 
 class CreateTownFromConfigAction
 {
@@ -40,6 +43,7 @@ class CreateTownFromConfigAction
      * @param array|null $userSlots
      * @return RTown|RCitizen|RError
      * @noinspection PhpDocSignatureInspection
+     * @throws Exception
      */
     public function __invoke(
         array $header, array $rules,
@@ -80,6 +84,17 @@ class CreateTownFromConfigAction
         if (!empty( $header['townSchedule'] )) $town->setScheduledFor( $header['townSchedule'] );
 
         try {
+            foreach (Arr::get( $header, 'organizers', [] ) as [$user_id, $fullAccess]) {
+                $user = $this->em->getRepository(User::class)->find($user_id);
+                if (!$user) continue;
+
+                $this->em->persist(new TownAdminUser()
+                                       ->setTown($town)
+                                       ->setUser($user)
+                                       ->setFullAccess($fullAccess)
+                );
+            }
+
             $this->em->flush();
             $this->profiler->recordTownCreated( $town, $creator, 'custom' );
             $this->em->flush();
@@ -119,7 +134,7 @@ class CreateTownFromConfigAction
         }
 
         /** @var TownResult|CitizenResult $result */
-        $result = (new class { use Optional, TownResult, CitizenResult; })->withTown($town);
+        $result = new class { use Optional, TownResult, CitizenResult; }->withTown($town);
         if ($incarnated) $result->withCitizen($citizen);
 
         return $result;

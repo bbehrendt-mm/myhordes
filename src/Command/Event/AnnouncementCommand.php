@@ -48,7 +48,7 @@ class AnnouncementCommand extends Command
 
         /** @var ArrayCollection<AutomaticEventForecast> $all_events */
         $all_events = $this->em->getRepository(AutomaticEventForecast::class)->matching(
-            (new Criteria())
+            new Criteria(accessRawFieldValues: true)
                 ->where( Criteria::expr()->gte( 'start', $now ) )
                 ->andWhere( Criteria::expr()->lte( 'start', $cutoff ) )
                 ->andWhere( Criteria::expr()->eq( 'announced', false ) )
@@ -86,7 +86,7 @@ class AnnouncementCommand extends Command
 
             foreach ($lang_mapping as $lang => $mapping) {
                 $template = $this->twig->load("event/{$entry->getEvent()}/$mapping.html.twig");
-                $announcements[] = $announcement = (new Announcement())
+                $announcements[] = $announcement = new Announcement()
                     ->setTitle(strip_tags($template->renderBlock('title', $vars)))
                     ->setText($template->renderBlock('content', $vars))
                     ->setTimestamp(new DateTime())

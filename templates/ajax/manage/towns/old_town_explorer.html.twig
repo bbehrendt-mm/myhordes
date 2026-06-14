@@ -56,19 +56,23 @@
                                 {% endif %}
                             </div>
                             {% for citizen in town.citizens|sort((a,b) => b.day <=> a.day) %}
-                                {# @var \App\Entity\Citizen citizen  #}
+                                {# @var \App\Entity\CitizenRankingProxy citizen  #}
                                 <div x-citizen-id="{{ citizen.id }}" class="row-flex stretch citizen-main pointer" style="max-height: 100px;">
                                     {% include 'ajax/soul/playeravatar.html.twig' with {user: citizen.user, small: true, background: true, classes: ['cell','factor-0'], attributes: {style: 'flex-basis: 92px;', ('x-ajax-href'): url('admin_users_citizen_view', {id: citizen.user.id})}} only %}
                                     <div class="cell factor-0 citizen-dead" style="flex-basis: 8px;" x-ajax-href="{{ url('admin_users_citizen_view', {id: citizen.user.id}) }}">&nbsp;</div>
-                                    
+
                                     <div class="padded cell rw-4 factor-1 small content-center-vertical citizen-box citizen-box-name">
-                                        <img alt="{{ 'Tot!'|trans({},'game') }}" src="{{ asset('build/images/professions/death.gif') }}" />
-                                        <a class="link" href="{{ url('admin_users_citizen_view', {id: citizen.user.id}) }}">
-                                            <b class="citizen-name">{{ citizen.name }}</b>
-                                            {% if citizen.alias and citizen.alias != citizen.user.name %}
-                                                <b class="citizen-name">[<i>{{ citizen.user.name }}</i>]</b>
+                                        <div class="flex column">
+                                            <a class="link" href="{{ url('admin_users_citizen_view', {id: citizen.user.id}) }}">
+                                                <b class="citizen-name">{{ citizen.name }}</b>
+                                                {% if citizen.alias and citizen.alias != citizen.user.name %}
+                                                    <b class="citizen-name">[<i>{{ citizen.user.name }}</i>]</b>
+                                                {% endif %}
+                                            </a>
+                                            {% if citizen.cod is not null %}
+                                                <span class="small"><img alt="{{ 'Tot!'|trans({},'game') }}" src="{{ asset('build/images/professions/death.gif') }}" /> {{ citizen.cod.label|trans({}, 'game') }}</span>
                                             {% endif %}
-                                        </a>&nbsp;
+                                        </div>
                                     </div>
 
                                     {% if is_granted("ROLE_SUB_ADMIN") %}

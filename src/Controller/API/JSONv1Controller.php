@@ -1745,7 +1745,7 @@ class JSONv1Controller extends CoreController {
                         $picto_data[$field] = $comments[ $picto->getPrototype()->getId() ] ?? [];
                         break;
                     case "titles": case "unlocks":
-                        $criteria = new Criteria();
+                        $criteria = new Criteria(accessRawFieldValues: true);
                         $criteria->andWhere($criteria->expr()->lte('unlockQuantity', $picto->getCount()));
                         $criteria->andWhere($criteria->expr()->eq('associatedPicto', $picto->getPrototype()));
                         /** @var AwardPrototype[] $titles */

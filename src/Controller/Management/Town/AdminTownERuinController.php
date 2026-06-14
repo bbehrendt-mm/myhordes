@@ -20,6 +20,7 @@ use App\Service\EventProxyService;
 use App\Service\GazetteService;
 use App\Service\Maps\MazeMaker;
 use Exception;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -34,7 +35,7 @@ class AdminTownERuinController extends AdminActionController
      */
     #[Route(path: 'jx/manage/town/{id<\d+>}/eruins_explorer', name: 'admin_town_eruins_explorer')]
     #[IsGranted('cheat', 'town')]
-    public function town_explorer_eruins_explorer(Town $town): Response {
+    public function town_explorer_eruins_explorer(#[MapEntity(id: 'id')] Town $town): Response {
         $conf_self = $this->conf->getTownConfiguration($town);
 
 		$explorables = [];
@@ -71,7 +72,7 @@ class AdminTownERuinController extends AdminActionController
     #[Route(path: 'api/manage/town/{id<\d+>}/admin_regenerate_ruins', name: 'admin_regenerate_ruins')]
     #[IsGranted('cheat', 'town')]
     #[AdminLogProfile(enabled: true)]
-    public function admin_regenerate_ruins(Town $town, MazeMaker $mazeMaker, AdminLog $logger): Response {
+    public function admin_regenerate_ruins(#[MapEntity(id: 'id')] Town $town, MazeMaker $mazeMaker, AdminLog $logger): Response {
         $explorables = [];
 
         foreach ($town->getZones() as $zone)

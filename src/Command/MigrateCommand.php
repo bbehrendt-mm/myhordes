@@ -38,6 +38,7 @@ use App\Entity\ZombieEstimation;
 use App\Entity\Zone;
 use App\Entity\ZonePrototype;
 use App\Enum\Configuration\TownSetting;
+use App\Enum\ForumType;
 use App\Enum\Game\CitizenPersistentCache;
 use App\Enum\Game\ExplorableRuinSkin;
 use App\Enum\UserSetting;
@@ -831,7 +832,7 @@ class MigrateCommand extends Command
         if ($input->getOption('assign-official-tag')) {
             $tag = $this->entity_manager->getRepository(ThreadTag::class)->findOneBy(['name' => 'official']);
             $crow = $this->entity_manager->getRepository(User::class)->find(66);
-            $criteria = new Criteria();
+            $criteria = new Criteria(accessRawFieldValues: true);
             $criteria->andWhere($criteria->expr()->neq('town', $null));
             $townForums = $this->entity_manager->getRepository(Forum::class)->matching($criteria);
             /** @var Forum $townForum */
@@ -1107,18 +1108,18 @@ class MigrateCommand extends Command
                 if ($forum->getTown())
                     $this->ensureForumPermissions($output, $forum, $this->entity_manager->getRepository(UserGroup::class)->findOneBy( ['type' => UserGroup::GroupTownInhabitants, 'ref1' => $forum->getTown()->getId()] ));
 
-                elseif ($forum->getType() === Forum::ForumTypeDefault || $forum->getType() === null) {
+                elseif ($forum->getType() === ForumType::Default || $forum->getType() === null) {
                     $this->ensureForumPermissions($output, $forum, $g_users);
                     $this->ensureForumPermissions($output, $forum, $g_oracle, ForumUsagePermissions::PermissionHelp);
                 }
-                elseif ($forum->getType() === Forum::ForumTypeElevated) $this->ensureForumPermissions($output,$forum, $g_elev);
-                elseif ($forum->getType() === Forum::ForumTypeMods) $this->ensureForumPermissions($output,$forum, $g_mods);
-                elseif ($forum->getType() === Forum::ForumTypeAdmins) $this->ensureForumPermissions($output,$forum, $g_admin);
-                elseif ($forum->getType() === Forum::ForumTypeAnimac) {
+                elseif ($forum->getType() === ForumType::Elevated) $this->ensureForumPermissions($output,$forum, $g_elev);
+                elseif ($forum->getType() === ForumType::Mods) $this->ensureForumPermissions($output,$forum, $g_mods);
+                elseif ($forum->getType() === ForumType::Admins) $this->ensureForumPermissions($output,$forum, $g_admin);
+                elseif ($forum->getType() === ForumType::Animac) {
                     $this->ensureForumPermissions($output, $forum, $g_anim);
                     $this->ensureForumPermissions($output, $forum, $g_oracle);
                     $this->ensureForumPermissions($output, $forum, $g_art);
-                } elseif ($forum->getType() === Forum::ForumTypeDev) {
+                } elseif ($forum->getType() === ForumType::Dev) {
                     $this->ensureForumPermissions($output, $forum, $g_admin);
                     $this->ensureForumPermissions($output, $forum, $g_oracle);
                 }
@@ -1415,7 +1416,7 @@ class MigrateCommand extends Command
             $data = $this->entity_manager->createQueryBuilder()
                 ->select('p.id','c.points', 'p.count')
                 ->from(CitizenRankingProxy::class, 'c')
-                ->innerJoin(Picto::class, 'p', Join::WITH, 'c.town = p.townEntry and p.user = c.user and p.prototype = :pid and p.persisted = 2')
+                ->innerJoin(Picto::class, 'p', Join::ON, 'c.town = p.townEntry and p.user = c.user and p.prototype = :pid and p.persisted = 2')
                 ->setParameter('pid', $this->entity_manager->getRepository(PictoPrototype::class)->findOneByName('r_ptame_#00'))
                 ->where('c.points != p.count')->getQuery()->execute();
 
@@ -1448,7 +1449,7 @@ class MigrateCommand extends Command
                 if (!$oldRp) continue;
 
                 // We search the RP that has the same title and a name starting with the one we'll remove
-                $crit = new Criteria();
+                $crit = new Criteria(accessRawFieldValues: true);
                 $crit->andWhere($crit->expr()->startsWith('name', $oldRp->getName()));
                 $crit->andWhere($crit->expr()->eq('title', $oldRp->getTitle()));
                 $crit->andWhere($crit->expr()->neq('name', $oldRp->getName()));
@@ -1555,7 +1556,7 @@ class MigrateCommand extends Command
             $this->helper->leChunk($output, Zone::class, 1, ['prototype' => $bunker_id], true, false, function(Zone $zone) {
 
                 $found = false;
-                foreach ($this->entity_manager->getRepository(RuinZone::class)->matching(Criteria::create()
+                foreach ($this->entity_manager->getRepository(RuinZone::class)->matching(Criteria::create(true)
                     ->andWhere(Criteria::expr()->eq('zone', $zone))
                     ->andWhere(Criteria::expr()->gt('z', 0))
                 ) as $ruinZone) {

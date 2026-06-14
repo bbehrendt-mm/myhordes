@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use App\Annotations\GateKeeperProfile;
 use App\Entity\ExternalApp;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -20,7 +21,7 @@ class ExternalController extends CustomAbstractController {
      * @return Response
      */
     #[Route(path: '/jx/disclaimer/{id<\d+>}', name: 'disclaimer', condition: 'request.isXmlHttpRequest()')]
-    public function disclaimer(ExternalApp $app): Response {
+    public function disclaimer(#[MapEntity(id: 'id')] ExternalApp $app): Response {
         $user = $this->getUser();
         if (!$user || ($app->getTesting() && $app->getOwner() !== $user && !$this->isGranted('ROLE_SUB_ADMIN')))
             return $this->redirectToRoute('initial_landing');

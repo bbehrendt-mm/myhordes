@@ -65,7 +65,6 @@ class MazeMaker
     private function resetOneRuinZone(RuinZone $ruinZone)
     {
         $ruinZone->setCorridor(RuinZone::CORRIDOR_NONE);
-        $ruinZone->setConnect(0);
         $ruinZone->setDistance(9999);
         $ruinZone->setRoomDistance(9999);
         $ruinZone->setDigs(0);

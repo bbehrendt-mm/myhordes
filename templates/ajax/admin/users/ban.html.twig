@@ -269,6 +269,120 @@
 
             <div class="row">
                 <div class="cell rw-12 padded">
+                    <h5>{{ 'Automatische Sperren und Sanktionen'|trans({},'admin') }}</h5>
+                </div>
+
+                <div class="cell rw-6 padded">
+                    {% for mark_info in nonblocking_account_marks %}
+                        <div class="note">
+                            <div class="flex middle">
+                                <img class="flex-none" alt="!" src="{{ asset('build/images/icons/player_offline.gif') }}" />
+                                <b class="flex-1">{{ mark_info[0].label|trans({},'admin') }}</b>
+                                <span class="small">
+                                    {{ mark_info[1] }} / {{ mark_info[0].limit }}
+                                </span>
+                                <a class="help-button flex-none">
+                                    {{ 'Hilfe'|trans({},'global') }}
+                                    <hordes-tooltip class="help">{{ mark_info[0].help|trans({},'game') }}</hordes-tooltip>
+                                </a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    {% for mark in blocking_account_marks %}
+                        {% set ma_count = user.activeAutomaticAccountMarkersFor(mark.type).count %}
+                        <div class="note">
+                            <div class="flex middle">
+                                <img class="flex-none" alt="!" src="{{ asset('build/images/icons/player_online.gif') }}" />
+                                <b class="flex-1">{{ mark.type.label|trans({},'admin') }}</b>
+                                <a class="help-button flex-none">
+                                    {{ 'Hilfe'|trans({},'global') }}
+                                    <hordes-tooltip class="help">{{ mark.type.help|trans({},'game') }}</hordes-tooltip>
+                                </a>
+                            </div>
+                            <div class="row small">
+                                <div class="cell rw-4">{{ 'Aktive Marker'|trans({},'admin') }}</div>
+                                <div class="cell rw-8"><b>{{ ma_count }} / {{ mark.type.limit }}</b></div>
+                                <div class="cell rw-4">{{ 'Aktiv bis'|trans({},'admin') }}</div>
+                                <div class="cell rw-8"><b>{{ mark.expiresAt|format_datetime('short', 'short') }}</b></div>
+                            </div>
+                            <div class="flex wrap large-gap">
+                                {% if ma_count > 1 %}
+                                    <a
+                                        href="#"
+                                        data-fetch="{{ path('rest_admin_user_marker_delete_marker_all', {user: user.id, type: mark.type.value}) }}" data-fetch-method="delete" data-fetch-load="{{ path('admin_users_ban_view', {id: user.id}) }}"
+                                    >{{ 'Alle deaktivieren'|trans({},'admin') }}</a>
+                                    <a
+                                        href="#"
+                                        data-fetch="{{ path('rest_admin_user_marker_delete_marker', {user: user.id, id: mark.id}) }}" data-fetch-method="delete" data-fetch-load="{{ path('admin_users_ban_view', {id: user.id}) }}"
+                                    >{{ 'Einzelnen deaktivieren'|trans({},'admin') }}</a>
+                                {% endif %}
+                                {% if ma_count == 1 %}
+                                    <a
+                                        href="#"
+                                        data-fetch="{{ path('rest_admin_user_marker_delete_marker', {user: user.id, id: mark.id}) }}" data-fetch-method="delete" data-fetch-load="{{ path('admin_users_ban_view', {id: user.id}) }}"
+                                    >{{ 'Deaktivieren'|trans({},'admin') }}</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="cell rw-6 padded">
+                    <div class="shoutbox">
+                        <div class="shout-content">
+                            {% for mark in all_account_marks %}
+                                {% set expired = mark.expiresAt <= 'now'|to_date %}
+                                <div class="shout-entry flex middle" {{ {'disabled': expired}|attributes }}>
+                                    {% if not expired %}
+                                        {% if mark.enabled %}
+                                            <img
+                                                src="{{ asset('build/images/icons/player_online.gif') }}"
+                                                class="flex-none pointer" alt=""
+                                                data-fetch="{{ path('rest_admin_user_marker_delete_marker', {user: user.id, id: mark.id}) }}" data-fetch-method="delete" data-fetch-load="{{ path('admin_users_ban_view', {id: user.id}) }}"
+                                            />
+                                        {% else %}
+                                            <img
+                                                src="{{ asset('build/images/icons/player_offline.gif') }}"
+                                                class="flex-none pointer" alt=""
+                                                data-fetch="{{ path('rest_admin_user_marker_restore_marker', {user: user.id, id: mark.id}) }}" data-fetch-method="put" data-fetch-load="{{ path('admin_users_ban_view', {id: user.id}) }}"
+                                            />
+                                        {% endif %}
+                                    {% endif %}
+                                    <div class="flex-1">
+                                        <b>{{ mark.type.label|trans({},'admin') }}</b>
+                                        {% if not expired and mark.type.relatedToTown and mark.town is not null %}
+                                            <div class="flex middle small">
+                                                {% if mark.town.town is not null %}
+                                                    <a target="_blank" href="{{ path('admin_town_citizens', {id: mark.town.town.id}) }}">{{ 'Stadt'|trans({},'admin') }}</a>
+                                                {% else %}
+                                                    <a target="_blank" href="{{ path('admin_town_citizen_view', {id: mark.town.id, tab: 'citizens'}) }}">{{ 'Stadt'|trans({},'admin') }}</a>
+                                                {% endif %}
+
+                                                {% if mark.type.relatedToDeath %}
+                                                    {% set citizen = mark.town.citizenForUser( user ) %}
+                                                    {% if citizen is not null and citizen.cod is not null %}
+                                                        <span class="small"><img alt="{{ 'Tot!'|trans({},'game') }}" src="{{ asset('build/images/professions/death.gif') }}" /> {{ citizen.cod.label|trans({}, 'game') }}</span>
+                                                    {% else %}
+                                                        <span class="small"><img alt="{{ 'Tot!'|trans({},'game') }}" src="{{ asset('build/images/professions/death.gif') }}" /> ???</span>
+                                                    {% endif %}
+                                                {% endif %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="flex-none flex column">
+                                        {% if not expired %}
+                                            <span class="small">{{ mark.createdAt|format_datetime('short', 'short') }}</span>
+                                        {% endif %}
+                                        <span class="small">{{ mark.expiresAt|format_datetime('short', 'short') }}</span>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="cell rw-12 padded">
                     <h5>{{ 'Weitere Aktionen'|trans({},'admin') }}</h5>
                     <div class="row">
                         <div class="cell padded rw-3 rw-sm-12 note note-lightest">

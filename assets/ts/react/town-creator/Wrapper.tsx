@@ -243,7 +243,7 @@ const TownCreatorWrapper = ( {elevation, eventMode, presetHead, presetRules}: {e
             if ( fun(obj, dot_p, value, defaultValue) !== value) {
                 setOptions(obj);
                 if (eventMode) fun_announce(obj);
-            };
+            }
         }
     }
 
@@ -310,8 +310,10 @@ const TownCreatorWrapper = ( {elevation, eventMode, presetHead, presetRules}: {e
                                                 return;
                                             }
 
+                                            $.html.addLoadStack(1);
                                             apiRef.current.createTown(options as TownOptions)
                                                 .then( r => $.ajax.load(null, r.url, true) )
+                                                .finally( () => $.html.removeLoadStack(1) );
 
                                         }}>{ index.strings.common.create }</button>
                                     </div>

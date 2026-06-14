@@ -6,6 +6,7 @@ namespace App\Entity;
 use App\Structures\Media\MediaCollection;
 use App\Structures\Media\MediaCollectionList;
 use App\Structures\Media\MediaVariant;
+use App\Traits\Entity\DoctrineExtensions;
 use App\Traits\Entity\LinksMedia;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
@@ -17,7 +18,7 @@ use Intervention\Image\Interfaces\ImageInterface;
 #[ORM\Entity(repositoryClass: 'App\Repository\AwardRepository')]
 class Award
 {
-    use LinksMedia;
+    use DoctrineExtensions, LinksMedia;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]

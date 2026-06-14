@@ -127,7 +127,7 @@ class WebController extends CustomAbstractController
         ] );
     }
 
-    public function render_error_framework(FlattenException $exception, ?DebugLoggerInterface $logger = null, KernelInterface $kernel): Response {
+    public function render_error_framework(FlattenException $exception, KernelInterface $kernel, ?DebugLoggerInterface $logger = null): Response {
         foreach (Request::createFromGlobals()->getAcceptableContentTypes() as $type)
             switch ($type) {
                 case 'application/json':

@@ -7,11 +7,12 @@ use App\Controller\CustomAbstractCoreController;
 use App\Entity\BuildingPrototype;
 use App\Entity\CitizenProfession;
 use App\Entity\CitizenRankingProxy;
-use App\Entity\MayorMark;
 use App\Entity\Town;
 use App\Entity\TownClass;
+use App\Entity\TownRankingProxy;
 use App\Entity\TownRulesTemplate;
 use App\Entity\User;
+use App\Enum\AutomaticAccountMarkerType;
 use App\Enum\Capability\LobbyCapabilityEnum;
 use App\Enum\Configuration\MyHordesSetting;
 use App\Response\AjaxResponse;
@@ -23,13 +24,13 @@ use App\Service\GameProfilerService;
 use App\Service\JSONRequestParser;
 use App\Service\Locksmith;
 use App\Service\TownHandler;
-use App\Service\UserHandler;
 use App\Structures\EventConf;
 use App\Structures\TownSetup;
 use Carbon\Carbon;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -133,6 +134,15 @@ class TownCreatorController extends CustomAbstractCoreController
 
                         'event_tag' => $this->translator->trans('Als Event-Stadt markieren', [], 'ghost'),
                         'event_tag_help' => $this->translator->trans('Event-Städte werden nicht ins Ranking aufgenommen und erhalten eine spezielle Markierung in der Stadtliste.', [], 'ghost'),
+                    ],
+
+                    'organization' => [
+                        'section' => $this->translator->trans('Organisation und Rollen', [], 'ghost'),
+
+                        'others' => $this->translator->trans('Beteiligte Personen', [], 'ghost'),
+                        'others_help' => $this->translator->trans('Wähle Personen aus, die an der Organisation dieser Stadt beteiligt sind. Die ausgewählten Personen erhalten Zugriff auf die Administrationsoberfläche der Stadt (entweder Lese- oder Vollzugriff). Achte darauf, hier nur vertrauenswürdige Personen auszuwählen! Du kannst dich auch selbst hinzufügen, wenn du Zugriff auf die Administrationsoberfläche benötigst.', [], 'ghost'),
+                        'others_ro' => $this->translator->trans('Lesender Zugriff', [], 'ghost'),
+                        'others_rw' => $this->translator->trans('Vollzugriff', [], 'ghost'),
                     ],
 
                 ],
@@ -457,7 +467,12 @@ class TownCreatorController extends CustomAbstractCoreController
      */
     #[Route(path: '/town-rules/{id}', name: 'town-rules', defaults: ['private' => false], methods: ['GET'])]
     #[Route(path: '/town-rules/private/{id}', name: 'private-town-rules', defaults: ['private' => true], methods: ['GET'])]
-    public function town_type_rules(TownClass $townClass, bool $private, SanitizeTownConfigAction $sanitizeTownConfigAction): JsonResponse {
+    public function town_type_rules(
+        #[MapEntity(id: 'id')]
+        TownClass $townClass,
+        bool $private,
+        SanitizeTownConfigAction $sanitizeTownConfigAction
+    ): JsonResponse {
         if ($townClass->getHasPreset()) {
 
             $preset = $this->conf->getTownConfigurationByType($townClass, $private)->getData();
@@ -539,6 +554,7 @@ class TownCreatorController extends CustomAbstractCoreController
     #[Route(path: '/template/{id}', name: 'update-template', defaults: ['create' => false], methods: ['PATCH'])]
     public function save_template(
         bool $create,
+        #[MapEntity(id: 'id')]
         ?TownRulesTemplate $template,
         EntityManagerInterface $em,
         JSONRequestParser $parser,
@@ -580,6 +596,7 @@ class TownCreatorController extends CustomAbstractCoreController
      */
     #[Route(path: '/template/{id}', name: 'delete-template', methods: ['DELETE'])]
     public function remove_template(
+        #[MapEntity(id: 'id')]
         TownRulesTemplate $template,
         EntityManagerInterface $em
     ): JsonResponse {
@@ -603,6 +620,7 @@ class TownCreatorController extends CustomAbstractCoreController
      */
     #[Route(path: '/template/{id}', name: 'load-template', methods: ['GET'])]
     public function load_template(
+        #[MapEntity(id: 'id')]
         TownRulesTemplate $template,
         SanitizeTownConfigAction $sanitizer
     ): JsonResponse {
@@ -670,19 +688,18 @@ class TownCreatorController extends CustomAbstractCoreController
 
         try {
             $em->persist( $town );
-            if (!$town->getType()->is( TownClass::EASY ))
-                $em->persist( new MayorMark()
-                    ->setUser( $this->getUser() )
-                    ->setMayor( true )
-                    ->setExpires( ( $town_time?->copy() ?? new Carbon() )->addDays(10) )
-                );
-
             $em->flush();
             $gps->recordTownCreated( $town, $this->getUser(), 'mayor' );
             $em->flush();
 
         } catch (Exception $e) {
             return new JsonResponse([], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        if (!$town->getType()->is( TownClass::EASY )) {
+            $this->getUser()->addAutomaticAccountMarkerByType(AutomaticAccountMarkerType::Mayor, TownRankingProxy::fromTown($town));
+            $em->persist( $this->getUser() );
+            $em->flush();
         }
 
         $current_event_names = array_map(fn(EventConf $e) => $e->name(), array_filter($current_events, fn(EventConf $e) => $e->active()));

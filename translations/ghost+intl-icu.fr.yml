@@ -1,4 +1,3 @@
----
 'Die gewählte Stadt ist bereits voll.': 'Cette ville est déjà pleine.'
 'Du kannst nicht mehr als einer Stadt gleichzeitig beitreten.': 'Vous ne pouvez pas rejoindre plus d''une ville à la fois.'
 'Du bist dieser Stadt bereits beigetreten.': 'Vous avez déjà rejoint cette ville.'
@@ -394,3 +393,10 @@ Koalition: Coalition
 'Da du in mehreren deiner letzten Städte frühzeitig gestorben bist ({death_type}), bist du bis {end_date} vom Spiel ausgeschlossen. Du kannst aktuell keine neue Stadt betreten.': 'Puisque vous êtes mort prématurément dans plusieurs de vos dernières villes ({death_type}), vous êtes exclu du jeu jusqu''au {end_date}. Vous ne pouvez pas actuellement entrer dans une nouvelle ville.'
 'Öffentliche Städte, in denen sich zum Zeitpunkt des Angriffs kein einziger Spieler befindet, werden gelöscht!': 'Les villes publiques dans lesquelles aucun joueur ne se trouve au moment de l''attaque seront automatiquement supprimées !'
 'Diese Beschränkungen gelten NICHT für Kleine Städte!': 'Ces restrictions ne s''appliquent PAS aux villes de type Région Non-Eloignée.'
+'Organisation und Rollen': 'Organisation et rôles'
+'Beteiligte Personen': 'Personnes impliquées dans l''organisation'
+'Wähle Personen aus, die an der Organisation dieser Stadt beteiligt sind. Die ausgewählten Personen erhalten Zugriff auf die Administrationsoberfläche der Stadt (entweder Lese- oder Vollzugriff). Achte darauf, hier nur vertrauenswürdige Personen auszuwählen! Du kannst dich auch selbst hinzufügen, wenn du Zugriff auf die Administrationsoberfläche benötigst.': 'Sélectionne les personnes impliquées dans l''organisation de cette ville. Les personnes sélectionnées auront accès à l''interface d''administration de la ville (avec un accès en lecture seule ou un accès complet). Veille à ne sélectionner ici que des personnes de confiance ! Tu peux également t''ajouter toi-même si tu as besoin d''accéder à l''interface d''administration.'
+'Lesender Zugriff': 'Accès en lecture seule'
+Vollzugriff: Accès complet
+'Du bist in mehreren deiner letzten Städte frühzeitig gestorben. Sollte dies in deiner nächsten Stadt erneut geschehen, wirst du für einige Wochen vom Spiel ausgeschlossen.': 'Du bist in mehreren deiner letzten Städte frühzeitig gestorben. Sollte dies in deiner nächsten Stadt erneut geschehen, wirst du für einige Wochen vom Spiel ausgeschlossen.'
+'Da du in mehreren deiner letzten Städte frühzeitig gestorben bist, bist du bis {end_date} vom Spiel ausgeschlossen. Du kannst aktuell keine neue Stadt betreten.': 'Puisque vous êtes mort prématurément dans plusieurs de vos dernières villes, vous êtes exclu du jeu jusqu''au {end_date}. Vous ne pouvez pas actuellement entrer dans une nouvelle ville.'

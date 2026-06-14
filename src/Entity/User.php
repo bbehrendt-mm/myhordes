@@ -2,11 +2,13 @@
 
 namespace App\Entity;
 
+use App\Enum\AutomaticAccountMarkerType;
 use App\Enum\NotificationSubscriptionType;
 use App\Enum\UserSetting;
 use App\Structures\Media\MediaCollection;
 use App\Structures\Media\MediaCollectionList;
 use App\Structures\Media\MediaVariant;
+use App\Traits\Entity\DoctrineExtensions;
 use App\Traits\Entity\LinksMedia;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -37,7 +39,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[UniqueConstraint(name: 'user_etwin_unique', columns: ['eternal_id'])]
 class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUserInterface
 {
-    use LinksMedia;
+    use DoctrineExtensions, LinksMedia;
 
     const int USER_LEVEL_BASIC  =  0;
     const int USER_LEVEL_CROW   =  3;
@@ -75,25 +77,25 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
     #[ORM\Column(type: 'boolean')]
     private ?bool $validated = null;
 
-    #[ORM\OneToOne(mappedBy: 'user', targetEntity: 'App\Entity\UserPendingValidation', cascade: ['persist', 'remove'], fetch: 'EXTRA_LAZY')]
+    #[ORM\OneToOne(targetEntity: 'App\Entity\UserPendingValidation', mappedBy: 'user', cascade: ['persist', 'remove'], fetch: 'EXTRA_LAZY')]
     private ?UserPendingValidation $pendingValidation = null;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: 'App\Entity\Citizen')]
+    #[ORM\OneToMany(targetEntity: Citizen::class, mappedBy: 'user')]
     private Collection $citizens;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: 'App\Entity\AdminBan')]
+    #[ORM\OneToMany(targetEntity: AdminBan::class, mappedBy: 'user')]
     private Collection $bannings;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: 'App\Entity\FoundRolePlayText', cascade: ['persist', 'remove'], fetch: 'EXTRA_LAZY')]
+    #[ORM\OneToMany(targetEntity: FoundRolePlayText::class, mappedBy: 'user', cascade: ['persist', 'remove'], fetch: 'EXTRA_LAZY')]
     private Collection $foundTexts;
 
     #[ORM\Column(type: 'integer')]
     private int $soulPoints = 0;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: 'App\Entity\Picto', cascade: ['persist', 'remove'], fetch: 'EXTRA_LAZY')]
+    #[ORM\OneToMany(targetEntity: Picto::class, mappedBy: 'user', cascade: ['persist', 'remove'], fetch: 'EXTRA_LAZY')]
     private Collection $pictos;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: 'App\Entity\Award', cascade: ['persist', 'remove'], fetch: 'EXTRA_LAZY')]
+    #[ORM\OneToMany(targetEntity: Award::class, mappedBy: 'user', cascade: ['persist', 'remove'], fetch: 'EXTRA_LAZY')]
     private Collection $awards;
 
     #[ORM\Column(type: 'string', length: 32)]
@@ -105,7 +107,7 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
     #[ORM\Column(type: 'smallint')]
     private int $rightsElevation = 0;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: CitizenRankingProxy::class, fetch: 'EXTRA_LAZY', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: CitizenRankingProxy::class, mappedBy: 'user', fetch: 'EXTRA_LAZY', orphanRemoval: true)]
     private Collection $pastLifes;
 
     #[ORM\Column(type: 'integer')]
@@ -114,7 +116,7 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
     #[ORM\Column(type: 'integer', nullable: true)]
     private ?int $twinoidID = null;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: TwinoidImport::class, cascade: ['persist', 'remove'], fetch: 'EXTRA_LAZY', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: TwinoidImport::class, mappedBy: 'user', cascade: ['persist', 'remove'], fetch: 'EXTRA_LAZY', orphanRemoval: true)]
     private Collection $twinoidImports;
 
     #[ORM\Column(type: 'integer', nullable: true)]
@@ -145,7 +147,7 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
     #[ORM\Column(type: 'integer')]
     private int $checkInt = 0;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: ForumThreadSubscription::class, fetch: 'EXTRA_LAZY', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: ForumThreadSubscription::class, mappedBy: 'user', fetch: 'EXTRA_LAZY', orphanRemoval: true)]
     private Collection $forumThreadSubscriptions;
 
     #[ORM\OneToOne(targetEntity: Award::class, cascade: ['persist'])]
@@ -196,20 +198,26 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
     #[ORM\Column]
     private int $tosgracenum = 0;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: TeamTicket::class, fetch: 'EXTRA_LAZY', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: TeamTicket::class, mappedBy: 'user', fetch: 'EXTRA_LAZY', orphanRemoval: true)]
     private Collection $teamTickets;
 
     #[ORM\Column(length: 2, nullable: true)]
     private ?string $team = null;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: NotificationSubscription::class, orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: NotificationSubscription::class, mappedBy: 'user', orphanRemoval: true)]
     private Collection $notificationSubscriptions;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: PinnedForum::class, cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(targetEntity: PinnedForum::class, mappedBy: 'user', cascade: ['persist', 'remove'])]
     private Collection $pinnedForums;
 
     #[ORM\ManyToOne]
     private ?AttackSchedule $lastSkillPointDeductedAt = null;
+
+    /**
+     * @var Collection<int, AutomaticAccountMarker>
+     */
+    #[ORM\OneToMany(targetEntity: AutomaticAccountMarker::class, mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    private Collection $automaticAccountMarkers;
 
     public function __construct()
     {
@@ -226,6 +234,7 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
         $this->teamTickets = new ArrayCollection();
         $this->notificationSubscriptions = new ArrayCollection();
         $this->pinnedForums = new ArrayCollection();
+        $this->automaticAccountMarkers = new ArrayCollection();
     }
     public function getId(): ?int
     {
@@ -331,10 +340,10 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
         $this->pass = $pass;
         return $this;
     }
-    /**
-     * @inheritDoc
-     */
+
+    #[\Deprecated]
     public function eraseCredentials(): void {}
+
     /**
      * @inheritDoc
      */
@@ -357,20 +366,20 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
     }
 
     public function getActiveCitizen(): ?Citizen {
-        return $this->getCitizens()->matching( new Criteria()
+        return $this->getCitizens()->matching( new Criteria(accessRawFieldValues: true)
                ->where( new Comparison( 'active', Comparison::EQ, true )  )
         )->first() ?: null;
     }
 
     public function getCitizenFor(Town $town): ?Citizen {
-        return $this->getCitizens()->matching( new Criteria()
+        return $this->getCitizens()->matching( new Criteria(accessRawFieldValues: true)
             ->where( new Comparison( 'town', Comparison::EQ, $town )  )
         )->first() ?: null;
     }
 
     public function getAliveCitizen(): ?Citizen {
-        return $this->getCitizens()->matching( new Criteria()
-            ->where( new Comparison( 'alive', Comparison::EQ, true )  )
+        return $this->getCitizens()->matching( new Criteria(accessRawFieldValues: true)
+                                                   ->where( new Comparison( 'alive', Comparison::EQ, true )  )
         )->first() ?: null;
     }
 
@@ -510,7 +519,7 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
      * @return Picto|null
      */
     public function findPicto( int $persisted, PictoPrototype $prototype, Town|TownRankingProxy $town ): ?Picto {
-        return $this->getPictos()->matching( (new Criteria())
+        return $this->getPictos()->matching( new Criteria(accessRawFieldValues: true)
             ->where( new Comparison( 'persisted', Comparison::EQ, $persisted )  )
             ->andWhere( new Comparison( 'prototype', Comparison::EQ, $prototype )  )
             ->andWhere( new Comparison( is_a( $town, Town::class ) ? 'town' : 'townEntry', Comparison::EQ, $town )  )
@@ -1100,7 +1109,7 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
      */
     public function getTeamTicketsFor(?Season $season, ?string $team = null): Collection
     {
-        $criteria = (new Criteria())->andWhere( new Comparison( 'season', Comparison::EQ, $season ) );
+        $criteria = new Criteria(accessRawFieldValues: true)->andWhere(new Comparison('season', Comparison::EQ, $season ) );
         if ($team === '!' && $this->getTeam() !== null) $criteria->andWhere( new Comparison('team', Comparison::NEQ, $this->team ) );
         elseif ($team === '' && $this->getTeam() !== null) $criteria->andWhere( new Comparison('team', Comparison::EQ, $this->team ) );
         elseif ($team === '' && $this->getTeam() === null) return new ArrayCollection();
@@ -1153,7 +1162,7 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
 
     public function getNotificationSubscriptionsFor(NotificationSubscriptionType $type, bool $include_expired = false): Collection
     {
-        $criteria = (new Criteria())->andWhere( new Comparison( 'type', Comparison::EQ, $type ) );
+        $criteria = new Criteria(accessRawFieldValues: true)->andWhere(new Comparison('type', Comparison::EQ, $type ) );
         if (!$include_expired) $criteria->andWhere( new Comparison( 'expired', Comparison::EQ, false ) );
         return $this->notificationSubscriptions->matching( $criteria );
     }
@@ -1180,7 +1189,7 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
     public function getPinnedForums(): Collection
     {
         return $this->pinnedForums->matching(
-            Criteria::create()->orderBy(['position' => Order::Ascending])
+            Criteria::create(true)->orderBy(['position' => Order::Ascending])
         );
     }
 
@@ -1307,5 +1316,76 @@ class User implements UserInterface, EquatableInterface, PasswordAuthenticatedUs
     public function getMediaBasePath(): string
     {
         return "user/{$this->getPrimaryKey()}/avatar";
+    }
+
+    /**
+     * @return Collection<int, AutomaticAccountMarker>
+     */
+    public function getAutomaticAccountMarkers(): Collection
+    {
+        return $this->automaticAccountMarkers;
+    }
+
+    /**
+     * @return Collection<int, AutomaticAccountMarker>
+     */
+    public function getActiveAutomaticAccountMarkersFor(AutomaticAccountMarkerType $type): Collection
+    {
+        return $this->getAutomaticAccountMarkers()->matching(
+            Criteria::create(true)
+                ->andWhere( new Comparison('type', Comparison::EQ, $type ) )
+                ->andWhere( new Comparison('expires_at', Comparison::GT, new \DateTimeImmutable() ) )
+                ->andWhere( new Comparison('enabled', Comparison::EQ, true ) )
+        );
+    }
+
+    public function isActiveAutomaticAccountMarkersLimitReachedFor(AutomaticAccountMarkerType $type, ?int &$count = null): bool
+    {
+        return ($count = $this->getActiveAutomaticAccountMarkersFor( $type )->count()) >= $type->limit();
+    }
+
+    public function addAutomaticAccountMarker(AutomaticAccountMarker $automaticAccountMarker): static
+    {
+        if (!$this->automaticAccountMarkers->contains($automaticAccountMarker)) {
+            $this->automaticAccountMarkers->add($automaticAccountMarker);
+            $automaticAccountMarker->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function addAutomaticAccountMarkerByType(
+        AutomaticAccountMarkerType $type,
+        ?TownRankingProxy $forTown = null
+    ): static
+    {
+        return $this->addAutomaticAccountMarker( new AutomaticAccountMarker()
+            ->setDefaultsFor( $type )
+            ->setTown( $forTown )
+        );
+    }
+
+    public function getDecidingActiveAutomaticAccountMarkersFor(AutomaticAccountMarkerType $type): ?AutomaticAccountMarker
+    {
+        $active = $this->isActiveAutomaticAccountMarkersLimitReachedFor( $type, $count );
+        if (!$active) return null;
+
+        return $this->getActiveAutomaticAccountMarkersFor( $type )
+            ->matching( Criteria::create(true)
+                            ->orderBy( ['expires_at' => Order::Ascending] )
+                            ->setMaxResults( max(1, 1 + ($count - $type->limit()) ) )
+            )->last() ?: null;
+    }
+
+    public function removeAutomaticAccountMarker(AutomaticAccountMarker $automaticAccountMarker): static
+    {
+        if ($this->automaticAccountMarkers->removeElement($automaticAccountMarker)) {
+            // set the owning side to null (unless already changed)
+            if ($automaticAccountMarker->getUser() === $this) {
+                $automaticAccountMarker->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }

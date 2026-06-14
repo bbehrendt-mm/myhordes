@@ -9,7 +9,7 @@ use Doctrine\Common\Collections\Criteria;
 trait TokenManagement
 {
     private static function generateOverlappingCriteria(string $env, ExternalTokenType $type, ?ExternalTokenPurpose $purpose, string $name): Criteria {
-        $criteria = Criteria::create()
+        $criteria = Criteria::create(true)
             ->where( Criteria::expr()->eq( 'env', $env ) )
             ->andWhere( Criteria::expr()->eq( 'type', $type ) )
             ->andWhere( Criteria::expr()->eq( 'active', true ) );

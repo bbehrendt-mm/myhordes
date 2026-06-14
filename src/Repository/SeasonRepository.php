@@ -90,13 +90,13 @@ class SeasonRepository extends ServiceEntityRepository
         $qb = $this->getEntityManager()->createQueryBuilder()
             ->select('s as season, COUNT(DISTINCT c.id) as citizen_count')
             ->from('App\Entity\TownRankingProxy', 't')
-            ->leftJoin('App\Entity\Season', 's', 'WITH', 't.season = s.id')
-            ->leftJoin('App\Entity\CitizenRankingProxy', 'c', 'WITH', 'c.town = t.id AND c.user = :userId')
+            ->leftJoin('App\Entity\Season', 's', 'ON', 't.season = s.id')
+            ->leftJoin('App\Entity\CitizenRankingProxy', 'c', 'ON', 'c.town = t.id AND c.user = :userId')
             ->setParameter('userId', $user->getId())
             ->groupBy('t.season, s.id')
             ->orderBy('s.number', 'DESC')
             ->addOrderBy('s.subNumber', 'DESC');
-            
+
         return $qb->getQuery()->getResult();
 	}
 

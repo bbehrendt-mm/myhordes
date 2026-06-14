@@ -15,6 +15,7 @@ use App\Entity\GlobalPrivateMessage;
 use App\Entity\Post;
 use App\Entity\PrivateMessage;
 use App\Entity\Town;
+use App\Entity\TownAdminUser;
 use App\Entity\User;
 use App\Entity\UserGroup;
 use App\Entity\UserGroupAssociation;
@@ -208,6 +209,7 @@ class CommonsController extends CustomAbstractCoreController
     /**
      * @param EntityManagerInterface $em
      * @param UserCapabilityService $capability
+     * @param MediaService $mediaService
      * @return JsonResponse
      */
     #[Route(path: '/apps', name: 'app_list', methods: ['GET'])]
@@ -217,7 +219,7 @@ class CommonsController extends CustomAbstractCoreController
             return new JsonResponse([]);
         $isSubAdmin = $capability->hasRole( $this->getUser(), 'ROLE_SUB_ADMIN' );
 
-        $criteria = (new Criteria())
+        $criteria = new Criteria(accessRawFieldValues: true)
             ->where( Criteria::expr()->eq('active', true) );
 
         if (!$isSubAdmin)
@@ -234,12 +236,13 @@ class CommonsController extends CustomAbstractCoreController
     }
 
     /**
-     * @param EntityManagerInterface $em
+     * @param ExternalApp $app
      * @param UserCapabilityService $capability
+     * @param MediaService $mediaService
      * @return JsonResponse
      */
     #[Route(path: '/apps/{id<\d+>}', name: 'app_single', methods: ['GET'])]
-    public function app_single(ExternalApp $app, UserCapabilityService $capability, MediaService $mediaService): JsonResponse {
+    public function app_single(#[MapEntity(id: 'id')] ExternalApp $app, UserCapabilityService $capability, MediaService $mediaService): JsonResponse {
 
         if (!$this->getUser() || !$capability->hasRole( $this->getUser(), 'ROLE_USER' ))
             return new JsonResponse([]);
@@ -259,11 +262,11 @@ class CommonsController extends CustomAbstractCoreController
      * @param ExternalApp $app
      * @param EntityManagerInterface $em
      * @param JSONRequestParser $parser
-     * @param HubInterface $hub
+     * @param BroadcastViaMercureAction $broadcast
      * @return JsonResponse
      */
     #[Route(path: '/apps/{id<\d+>}', name: 'app_patch', methods: ['PATCH'])]
-    public function app_patch(ExternalApp $app, EntityManagerInterface $em, JSONRequestParser $parser, BroadcastViaMercureAction $broadcast): JsonResponse {
+    public function app_patch(#[MapEntity(id: 'id')] ExternalApp $app, EntityManagerInterface $em, JSONRequestParser $parser, BroadcastViaMercureAction $broadcast): JsonResponse {
 
         if ($app->getOwner() === null || $app->getOwner()->getId() !== $this->getUser()?->getId())
             return new JsonResponse([], Response::HTTP_FORBIDDEN);
@@ -275,17 +278,17 @@ class CommonsController extends CustomAbstractCoreController
             'url' => preg_replace('/\{.*?\}/', 'SYMBOL', $parser->get('url')),
             'dev_url' => preg_replace('/\{.*?\}/', 'SYMBOL', $parser->get('dev_url', '')),
         ]), new Collection([
-            'url' => [ new Url( ['relativeProtocol' => false, 'protocols' => ['http', 'https'], 'message' => 'a' ] ) ],
+            'url' => [ new Url(message: 'a', protocols: ['http', 'https'], relativeProtocol: false) ],
             'dev_url' => [
                 new AtLeastOneOf([
-                    new Url( ['relativeProtocol' => false, 'protocols' => ['http', 'https'], 'message' => 'a' ] ),
-                    new Blank( ['message' => 'a' ] )
+                    new Url(message: 'a', protocols: ['http', 'https'], relativeProtocol: false),
+                    new Blank(message: 'a')
                 ])
             ],
             'contact' => [
                 new AtLeastOneOf([
-                    new Url( ['relativeProtocol' => false, 'protocols' => ['http', 'https'], 'message' => 'a' ] ),
-                    new Email( ['message' => 'v'])
+                    new Url(message: 'a', protocols: ['http', 'https'], relativeProtocol: false),
+                    new Email(message: 'v')
                 ])
             ],
             ...($app->getLinkOnly() ? [] : [
@@ -318,7 +321,7 @@ class CommonsController extends CustomAbstractCoreController
      * @return JsonResponse
      */
     #[Route(path: '/apps/{id<\d+>}', name: 'app_put', methods: ['PUT'])]
-    public function app_put(ExternalApp $app, EntityManagerInterface $em, RandomGenerator $rand): JsonResponse {
+    public function app_put(#[MapEntity(id: 'id')] ExternalApp $app, EntityManagerInterface $em, RandomGenerator $rand): JsonResponse {
         if ($app->getLinkOnly() || $app->getOwner() === null || $app->getOwner()->getId() !== $this->getUser()?->getId())
             return new JsonResponse([], Response::HTTP_FORBIDDEN);
 
@@ -375,12 +378,14 @@ class CommonsController extends CustomAbstractCoreController
      * @return JsonResponse
      */
     #[Route(path: '/mods', name: 'mod_list', methods: ['GET'])]
-    public function mod_list(UserCapabilityService $capability): JsonResponse {
+    public function mod_list(UserCapabilityService $capability, EntityManagerInterface $entityManager): JsonResponse {
 
-        if (!$this->getUser() || !$capability->hasAnyRole( $this->getUser(), ['ROLE_CROW', 'ROLE_ELEVATED', 'ROLE_CHEATER', 'ROLE_ART'] ))
+        if (!$this->getUser())
             return new JsonResponse([]);
 
-        $crow = $capability->hasRole( $this->getUser(), 'ROLE_CROW' );
+        $hasSingularAdminOverrides = $entityManager->getRepository(TownAdminUser::class)->count(['user' => $this->getUser()]) > 0;
+        if (!$capability->hasAnyRole( $this->getUser(), ['ROLE_CROW', 'ROLE_ELEVATED', 'ROLE_CHEATER', 'ROLE_ART'] ) && !$hasSingularAdminOverrides)
+            return new JsonResponse([]);
 
         return new JsonResponse([
             'same' => $this->getUser()->getOpenModToolsSameWindow(),
@@ -388,7 +393,7 @@ class CommonsController extends CustomAbstractCoreController
                 $capability->hasRole( $this->getUser(), 'ROLE_CROW' )     => $this->translator->trans('Moderation', [], 'global'),
                 $capability->hasRole( $this->getUser(), 'ROLE_ELEVATED' ) => $this->translator->trans('Community-Tools', [], 'global'),
                 $capability->hasRole( $this->getUser(), 'ROLE_CHEATER' )  => $this->translator->trans('Community-Tools', [], 'global'),
-                $capability->hasRole( $this->getUser(), 'ROLE_ART' )      => $this->translator->trans('Community-Tools', [], 'global'),
+                default => $this->translator->trans('Community-Tools', [], 'global'),
             },
             'links' => array_map( fn(array $entry) => [
                 'name' => $this->translator->trans($entry['name'], [], 'admin'),

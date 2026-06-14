@@ -71,7 +71,7 @@ class MessageGlobalPMController extends MessageController
 
         /** @var Collection|ForumThreadSubscription[] $subscriptions */
         $subscriptions = $em->getRepository(ForumThreadSubscription::class)->matching(
-            (new Criteria())
+            new Criteria(accessRawFieldValues: true)
                 ->andWhere( Criteria::expr()->eq('user', $user) )
                 ->andWhere( Criteria::expr()->gt('num', 0))
         );
@@ -301,7 +301,7 @@ class MessageGlobalPMController extends MessageController
 
         /** @var Collection|ForumThreadSubscription[] $subscriptions */
         $subscriptions = $this->entity_manager->getRepository(ForumThreadSubscription::class)->matching(
-            (new Criteria())
+            new Criteria(accessRawFieldValues: true)
                 ->andWhere( Criteria::expr()->eq('user', $this->getUser()) )
                 ->andWhere( Criteria::expr()->gt('num', 0))
         );
@@ -469,7 +469,7 @@ class MessageGlobalPMController extends MessageController
                 case 'forum':
                     /** @var Collection|ForumThreadSubscription[] $subscriptions */
                     $subscriptions = $em->getRepository(ForumThreadSubscription::class)->matching(
-                        (new Criteria())
+                        new Criteria(accessRawFieldValues: true)
                             ->andWhere( Criteria::expr()->eq('user', $user) )
                             ->andWhere( Criteria::expr()->gt('num', 0))
                     );

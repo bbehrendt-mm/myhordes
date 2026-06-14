@@ -313,7 +313,7 @@ class BuildingPrototype implements NamedEntity
     {
         $set = $this->getResourceSets()
             ->matching(
-                Criteria::create()
+                Criteria::create(true)
                     ->where( Criteria::expr()->eq('type', $type) )
                     ->andWhere( Criteria::expr()->lte('level', $level) )
                     ->andWhere( Criteria::expr()->lte('times', $repeat) )

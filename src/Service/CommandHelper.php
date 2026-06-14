@@ -231,7 +231,7 @@ class CommandHelper
                 /** @var Forum $e */
                 return $e->getTown()
                     ? "Town Forum #{$e->getId()} <comment>{$e->getTitle()}</comment>"
-                    : "Forum #{$e->getId()} <comment>{$e->getTitle()}</comment> (Type: <comment>{$e->getType()}</comment>)";
+                    : "Forum #{$e->getId()} <comment>{$e->getTitle()}</comment> (Type: <comment>{$e->getType()?->name}</comment>)";
             case ForumGroup::class:
                 return "Forum Group #{$e->getId()} <comment>{$e->getTitle()}</comment>";
             case UserGroup::class:

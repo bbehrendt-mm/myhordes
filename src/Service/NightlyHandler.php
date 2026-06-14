@@ -1170,7 +1170,8 @@ class NightlyHandler
 
             if ($vote = $citizen->getDailyUpgradeVote()) {
                 $this->cleanup[] = $vote;
-                $this->entity_manager->persist( $vote->getBuilding()->removeDailyUpgradeVote( $vote ) );
+                if ($vote->getBuilding())
+                    $this->entity_manager->persist( $vote->getBuilding()->removeDailyUpgradeVote( $vote ) );
                 $citizen->setDailyUpgradeVote(null);
             }
 

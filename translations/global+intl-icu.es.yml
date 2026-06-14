@@ -1,4 +1,3 @@
----
 'Allgemeiner Fehler.': 'Error común.'
 'Das gewählte Forum existiert nicht oder dir fehlt die Zugangsberechtigung dafür.': 'El foro seleccionado no existe o no tienes permiso para verlo.'
 'Dein Text muss mindestens 2 Zeichen lang sein.': 'Tu texto debe tener al menos 2 caracteres de largo.'
@@ -678,3 +677,11 @@ Spielhilfe: Guía del juego
 'Wenn Du Spieler basierend auf ihrer Spracheinstellung zu unterschiedlichen URLs leiten möchtest, kannst du folgende Syntax verwenden: {example}': 'Si quieres redirigir a los jugadores a diferentes URL en función de su configuración de idioma, puedes utilizar la siguiente sintaxis: {example}'
 'Mehrere Konten': 'Múltiples cuentas'
 Kontoteilung: Compartir cuenta
+'Neue Reaktion hinzufügen...': 'Añadir una nueva reacción...'
+'Diese Reaktion hinzufügen': 'Añadir esta reacción'
+'Meine Reaktion entfernen': 'Eliminar mi reacción'
+'Menü schließen': 'Cerrar menú'
+Emotionen: Emociones
+Sonstige: Otros
+'Reaktionen löschen': 'Eliminar reacciones'
+'Reaktionen erlauben': 'Permitir reacciones'

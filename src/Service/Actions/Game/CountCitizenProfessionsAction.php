@@ -22,7 +22,7 @@ readonly class CountCitizenProfessionsAction
         return $this->em->createQueryBuilder()
             ->select('COUNT(c.id) AS n', 'p.id AS id')
             ->from(Citizen::class, 'c')
-            ->leftJoin(CitizenProfession::class, 'p', 'WITH', 'c.profession = p.id')
+            ->leftJoin(CitizenProfession::class, 'p', 'ON', 'c.profession = p.id')
             ->where('c.town = :town')->setParameter('town', $town)
             ->groupBy('p.id')
             ->getQuery()->getArrayResult();

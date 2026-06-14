@@ -99,7 +99,7 @@ class ReapplySkillsCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
 
-        $criteria = (new Criteria())->where(Criteria::expr()->eq('alive', true));
+        $criteria = new Criteria(accessRawFieldValues: true)->where(Criteria::expr()->eq('alive', true));
         if (($town = (int)$input->getOption('town')) > 0)
             $criteria->andWhere( Criteria::expr()->eq('town', $this->entityManager->getRepository(Town::class)->find( $town ) ) );
 

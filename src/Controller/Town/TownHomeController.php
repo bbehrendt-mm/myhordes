@@ -363,7 +363,7 @@ class TownHomeController extends TownController
     protected function house_partial_complaints_args(): array {
         $citizen = $this->getActiveCitizen();
 
-        $criteria = new Criteria();
+        $criteria = new Criteria(accessRawFieldValues: true);
         $criteria->andWhere($criteria->expr()->gte('severity', Complaint::SeverityBanish));
         $criteria->andWhere($criteria->expr()->eq('culprit', $citizen));
 

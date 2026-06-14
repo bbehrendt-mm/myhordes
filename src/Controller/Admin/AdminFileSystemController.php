@@ -11,6 +11,7 @@ use App\Enum\Game\LogHiddenType;
 use App\Response\AjaxResponse;
 use App\Service\ErrorHelper;
 use SplFileInfo;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -78,7 +79,7 @@ class AdminFileSystemController extends AdminActionController
     #[Route(path: 'manage/fs/townlog/fetch/{id<\d+>}/{type}.txt', name: 'admin_townlog', condition: '!request.isXmlHttpRequest()')]
     #[IsGranted('spy', 'town')]
     #[AdminLogProfile(enabled: true)]
-    public function townlog(Town $town, string $type): Response
+    public function townlog(#[MapEntity(id: 'id')] Town $town, string $type): Response
     {
         if (!in_array($type, ['register', 'zones', 'all', 'citizens'])) return new Response('', 404);
 

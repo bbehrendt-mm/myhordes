@@ -152,6 +152,7 @@ export function useTranslations<T extends object>(
 
 export function ItemTooltip(props: {
     data: VaultItemEntry,
+    broken?: boolean,
     addendum?: {className: string, text: string}|false|null,
     children?: any
 }) {
@@ -159,7 +160,7 @@ export function ItemTooltip(props: {
         <h1 className="flex right large-gap">
             {props.data?.name ?? '???'}
             {props.addendum && <span className={props.addendum.className}>{props.addendum.text}</span>}
-            <img style={{objectFit: 'contain'}} src={props.data?.icon ?? ''} alt={props.data?.name ?? '...'}/>
+            <img style={{objectFit: 'contain'}} src={(props.broken ? props.data?.brokenIcon : props.data?.icon) ?? props.data?.icon ?? ''} alt={props.data?.name ?? '...'}/>
         </h1>
         <div dangerouslySetInnerHTML={{__html: props.data?.desc ?? '???'}}/>
         { props.children ?? null }

@@ -11,6 +11,7 @@ use App\Service\Forum\PostService;
 use App\Service\JSONRequestParser;
 use Carbon\Carbon;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
@@ -30,7 +31,13 @@ class ForumManagementController extends CustomAbstractCoreController
      * @return JsonResponse
      */
     #[Route(path: '/user/{id}', name: 'purge_user_posts', methods: ['DELETE'])]
-    public function purgeUserPosts(User $user, EntityManagerInterface $em, TranslatorInterface $translator, PostService $postService): JsonResponse {
+    public function purgeUserPosts(
+        #[MapEntity(id: 'id')]
+        User $user,
+        EntityManagerInterface $em,
+        TranslatorInterface $translator,
+        PostService $postService
+    ): JsonResponse {
 
         $success = 0;
         foreach ($em->getRepository(Post::class)->findBy(['owner' => $user, 'hidden' => false]) as $post)
@@ -52,7 +59,13 @@ class ForumManagementController extends CustomAbstractCoreController
      * @return JsonResponse
      */
     #[Route(path: '/user/{id}/notes', name: 'add_user_note', methods: ['PUT'])]
-    public function addUserNote(User $user, EntityManagerInterface $em, TranslatorInterface $translator, JSONRequestParser $request): JsonResponse {
+    public function addUserNote(
+        #[MapEntity(id: 'id')]
+        User $user,
+        EntityManagerInterface $em,
+        TranslatorInterface $translator,
+        JSONRequestParser $request
+    ): JsonResponse {
 
         if (!$request->has('text', true)) return new JsonResponse([], 400);
 

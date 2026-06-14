@@ -188,7 +188,7 @@ class EventController extends CustomAbstractCoreController
         $is_proposed = Criteria::expr()->eq('proposed', true );
 
         $events = $em->getRepository(CommunityEvent::class)->matching(
-            (Criteria::create())
+            (Criteria::create(true))
                 // Is owner or event is public
                 ->andWhere( !$can_view_proposals
                     ? Criteria::expr()->orX(
@@ -301,6 +301,7 @@ class EventController extends CustomAbstractCoreController
     #[Route(path: '/{id}/proposal', name: 'set_proposal', defaults: ['option' => true], methods: ['PUT'])]
     #[Route(path: '/{id}/proposal', name: 'remove_proposal', defaults: ['option' => false], methods: ['DELETE'])]
     public function editEventProposal(
+        #[MapEntity(id: 'id')]
         CommunityEvent $event,
         bool $option,
         EntityManagerInterface $em,
@@ -404,6 +405,7 @@ class EventController extends CustomAbstractCoreController
      */
     #[Route(path: '/{id}/publish', name: 'set_published', methods: ['PUT'])]
     public function publishEvent(
+        #[MapEntity(id: 'id')]
         CommunityEvent $event,
         EntityManagerInterface $em,
         CrowService $crow,
@@ -445,6 +447,7 @@ class EventController extends CustomAbstractCoreController
      */
     #[Route(path: '/{id}/end', name: 'set_ended', methods: ['PUT'])]
     public function endEvent(
+        #[MapEntity(id: 'id')]
         CommunityEvent $event,
         EntityManagerInterface $em
     ): JsonResponse {
@@ -470,6 +473,7 @@ class EventController extends CustomAbstractCoreController
      */
     #[Route(path: '/{id}/config', name: 'get_config', methods: ['GET'])]
     public function getEventConfig(
+        #[MapEntity(id: 'id')]
         CommunityEvent $event
     ): JsonResponse {
         if (!$this->eventIsExplorable( $event ))
@@ -486,6 +490,7 @@ class EventController extends CustomAbstractCoreController
      */
     #[Route(path: '/{id}/config', name: 'edit_config', methods: ['PATCH'])]
     public function updateEventConfig(
+        #[MapEntity(id: 'id')]
         CommunityEvent $event,
         JSONRequestParser $parser,
         EntityManagerInterface $em
@@ -522,6 +527,7 @@ class EventController extends CustomAbstractCoreController
      */
     #[Route(path: '/{id}', name: 'delete', methods: ['DELETE'])]
     public function deleteEvent(
+        #[MapEntity(id: 'id')]
         CommunityEvent $event,
         EntityManagerInterface $em,
         CrowService $crow
@@ -561,6 +567,7 @@ class EventController extends CustomAbstractCoreController
      */
     #[Route(path: '/{id}/meta', name: 'list_meta', methods: ['GET'])]
     public function listEventMeta(
+        #[MapEntity(id: 'id')]
         CommunityEvent $event
     ): JsonResponse {
         return new JsonResponse( ['meta' => array_map( function(CommunityEventMeta $meta) {
@@ -577,6 +584,7 @@ class EventController extends CustomAbstractCoreController
      */
     #[Route(path: '/{id}/meta/{lang<de|en|fr|es>}', name: 'edit_meta', methods: ['PATCH'])]
     public function editEventMeta(
+        #[MapEntity(id: 'id')]
         CommunityEvent $event,
         string $lang,
         EntityManagerInterface $em,
@@ -616,6 +624,7 @@ class EventController extends CustomAbstractCoreController
      */
     #[Route(path: '/{id}/meta/{lang<de|en|fr|es>}', name: 'delete_meta', methods: ['DELETE'])]
     public function deleteEventMeta(
+        #[MapEntity(id: 'id')]
         CommunityEvent $event,
         string $lang,
         EntityManagerInterface $em
@@ -673,6 +682,7 @@ class EventController extends CustomAbstractCoreController
      */
     #[Route(path: '/{id}/towns', name: 'list-town-presets', methods: ['GET'])]
     public function list_town_presets(
+        #[MapEntity(id: 'id')]
         CommunityEvent $event,
         EntityManagerInterface $em,
         PermissionHandler $perm,

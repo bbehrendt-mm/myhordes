@@ -17,6 +17,7 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\Cache\Adapter\FilesystemTagAwareAdapter;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -57,7 +58,7 @@ class SoulRankingController extends SoulController
         if ($this->entity_manager->getRepository(CitizenRankingProxy::class)->findNextUnconfirmedDeath($user))
             return $this->redirect($this->generateUrl( 'soul_death' ));
 
-        $seasons = $this->entity_manager->getRepository(Season::class)->matching((Criteria::create())
+        $seasons = $this->entity_manager->getRepository(Season::class)->matching((Criteria::create(true))
             ->orWhere(Criteria::expr()->gt('number', 0))
             ->orWhere(Criteria::expr()->gt('subNumber', 14))
         );
@@ -125,7 +126,7 @@ class SoulRankingController extends SoulController
         if ($this->entity_manager->getRepository(CitizenRankingProxy::class)->findNextUnconfirmedDeath($user))
             return $this->redirect($this->generateUrl( 'soul_death' ));
 
-        $seasons = $this->entity_manager->getRepository(Season::class)->matching((Criteria::create())
+        $seasons = $this->entity_manager->getRepository(Season::class)->matching((Criteria::create(true))
             ->orWhere(Criteria::expr()->gt('number', 0))
             ->orWhere(Criteria::expr()->gt('subNumber', 14))
         );
@@ -179,7 +180,7 @@ class SoulRankingController extends SoulController
         if (($currentSeason = $this->resolveSeasonIdentifier( $seasonId )) === false)
             return $this->redirect($this->generateUrl( 'soul_season_solo', ['season' => 'c'] ));
 
-        $seasons = $this->entity_manager->getRepository(Season::class)->matching((Criteria::create())
+        $seasons = $this->entity_manager->getRepository(Season::class)->matching((Criteria::create(true))
             ->orWhere(Criteria::expr()->gt('number', 0))
             ->orWhere(Criteria::expr()->gt('subNumber', 14))
         );
@@ -273,7 +274,7 @@ class SoulRankingController extends SoulController
      * @return Response
      */
     #[Route(path: '/jx/soul/ranking/distinctions/detail/{id}/{season<\d+|c|all|myh|a>}', name: 'soul_season_distinction_detail')]
-    public function soul_season_distinction_detail(PictoPrototype $prototype, JSONRequestParser $parser, TagAwareCacheInterface $gameCachePool, $season = null): Response
+    public function soul_season_distinction_detail(#[MapEntity(id: 'id')] PictoPrototype $prototype, JSONRequestParser $parser, TagAwareCacheInterface $gameCachePool, $season = null): Response
     {
         $user = $this->getUser();
 
@@ -285,7 +286,7 @@ class SoulRankingController extends SoulController
         if (($currentSeason = $this->resolveSeasonIdentifier( $seasonId )) === false)
             return $this->redirect($this->generateUrl( 'soul_season_solo', ['season' => 'c'] ));
 
-        $seasons = $this->entity_manager->getRepository(Season::class)->matching((Criteria::create())
+        $seasons = $this->entity_manager->getRepository(Season::class)->matching((Criteria::create(true))
                                                                                      ->orWhere(Criteria::expr()->gt('number', 0))
                                                                                      ->orWhere(Criteria::expr()->gt('subNumber', 14))
         );
@@ -325,8 +326,8 @@ class SoulRankingController extends SoulController
                     ->where('p.prototype = :proto')->setParameter('proto', $prototype)
                     ->andWhere('p.persisted = 2')
                     ->andWhere('p.disabled = false')
-                    ->leftJoin(User::class, 'u', Join::WITH, 'p.user = u.id')
-                    ->leftJoin(TownRankingProxy::class, 't', Join::WITH, 'p.townEntry = t.id')
+                    ->leftJoin(User::class, 'u', Join::ON, 'p.user = u.id')
+                    ->leftJoin(TownRankingProxy::class, 't', Join::ON, 'p.townEntry = t.id')
                     ->groupBy('p.user')
                     ->orderBy('count', 'DESC')
                     ->setMaxResults(35)

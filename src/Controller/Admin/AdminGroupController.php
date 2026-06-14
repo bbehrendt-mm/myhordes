@@ -16,6 +16,7 @@ use App\Service\JSONRequestParser;
 use App\Service\Media\MediaService;
 use App\Service\PermissionHandler;
 use Exception;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Attribute\Route;
@@ -68,7 +69,7 @@ class AdminGroupController extends AdminActionController
      * @throws Exception
      */
     #[Route(path: 'jx/admin/groups/{id<-?\d+>}', name: 'admin_group_edit')]
-    public function group_edit(OfficialGroup $group_meta, PermissionHandler $perm): Response
+    public function group_edit(#[MapEntity(id: 'id')] OfficialGroup $group_meta, PermissionHandler $perm): Response
     {
         if (!$this->isGranted('ROLE_SUB_ADMIN')) return $this->redirect($this->generateUrl('admin_group_view'));
         if (!$this->isGranted('ROLE_ADMIN') && $group_meta->getAnon()) return $this->redirect($this->generateUrl('admin_group_view'));

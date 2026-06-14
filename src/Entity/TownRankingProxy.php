@@ -142,7 +142,7 @@ class TownRankingProxy
          * @var CitizenRankingProxy|null $c
          */
         $c = $this->getCitizens()
-            ->matching( new Criteria()->orderBy( [ 'day' => Order::Descending ] ) )
+            ->matching( Criteria::create(true)->orderBy( [ 'day' => Order::Descending ] ) )
             ->first() ?: null;
 
         return $c?->getDay() ?? $this->days ?? 0;
@@ -173,12 +173,6 @@ class TownRankingProxy
         return $this->citizens;
     }
 
-    public function getCitizenForUser(User $user): ?CitizenRankingProxy {
-        return $this->getCitizens()->matching(
-            new Criteria()->where(Criteria::expr()->eq('user', $user) )
-        )->first() ?: null;
-    }
-
     public function addCitizen(CitizenRankingProxy $citizen): self
     {
         if (!$this->citizens->contains($citizen)) {
@@ -200,6 +194,13 @@ class TownRankingProxy
 
         return $this;
     }
+
+    public function getCitizenForUser( User $user ): ?CitizenRankingProxy {
+        return $this->getCitizens()->matching(
+            Criteria::create(true)->where( Criteria::expr()->eq( 'user', $user ) )
+        )->first() ?: null;
+    }
+
     public function getTown(): ?Town
     {
         return $this->town;

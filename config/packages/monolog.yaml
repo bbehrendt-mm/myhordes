@@ -31,7 +31,7 @@ when@dev: &dev
         type: filter
         handler: deprecation
         max_level: info
-        channels: ["php"]
+        channels: ["deprecation"]
       # uncomment to get logging in your browser
       # you may have to allow bigger header sizes in your Web server configuration
       #firephp:

@@ -70,12 +70,12 @@ class LogTemplateHandler
         }
 
         if ($obj instanceof ItemPrototype) {
-            $text = "<img alt='' src='{$this->asset->getUrl( "build/images/item/item_{$obj->getIcon()}.gif" )}' /> {$this->trans->trans($obj->getLabel(), [], 'items')}";
+            $text = "<img alt='' src='{$this->asset->getUrl( "build/images/item/item_" . ($broken ? ($obj->getBrokenIcon() ?? $obj->getIcon()) : $obj->getIcon()) . ".gif" )}' /> {$this->trans->trans($obj->getLabel(), [], 'items')}";
             if($broken)
                 $text .= " (" . $this->trans->trans("Kaputt", [], 'items') . ")";
             return $text;
         }
-        if ($obj instanceof ItemGroupEntry)       return "<img alt='' src='{$this->asset->getUrl( "build/images/item/item_{$obj->getPrototype()->getIcon()}.gif" )}' /> {$this->trans->trans($obj->getPrototype()->getLabel(), [], 'items')} <i>x {$obj->getChance()}</i>";
+        if ($obj instanceof ItemGroupEntry)       return "<img alt='' src='{$this->asset->getUrl( "build/images/item/item_" . ($broken ? ($obj->getPrototype()->getBrokenIcon() ?? $obj->getPrototype()->getIcon()) : $obj->getPrototype()->getIcon()) . ".gif" )}' /> {$this->trans->trans($obj->getPrototype()->getLabel(), [], 'items')} <i>x {$obj->getChance()}</i>";
         if ($obj instanceof BuildingPrototype)    return "<img alt='' src='{$this->asset->getUrl( "build/images/building/{$obj->getIcon()}.gif" )}' /> {$this->trans->trans($obj->getLabel(), [], 'buildings')}";
         if ($obj instanceof ZonePrototype)        return $this->trans->trans($obj->getLabel(), [], 'game');
         if ($obj instanceof Citizen)              return $obj->getName();

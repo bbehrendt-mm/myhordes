@@ -7,6 +7,7 @@ namespace App\Command\Forum;
 use App\Entity\Forum;
 use App\Entity\ForumUsagePermissions;
 use App\Entity\UserGroup;
+use App\Enum\ForumType;
 use App\Service\CommandHelper;
 use App\Service\ConfMaster;
 use App\Service\Media\MediaService;
@@ -52,6 +53,8 @@ class ForumEditorCommand extends Command
             ->addOption('description', 'd', InputOption::VALUE_OPTIONAL, 'The Forum Description', false)
             ->addOption('icon', 'i', InputOption::VALUE_OPTIONAL, 'The Forum Icon', false)
             ->addOption('no-permissions', null, InputOption::VALUE_NONE, 'If set, no permissions will be updated when changing the forum type. If --type is not set or CUSTOM forum type is selected, this option has no effect.')
+
+            ->addOption('use-reactions', null, InputOption::VALUE_REQUIRED, 'Set to 1 or 0 to enable/disable the use of reaction emotes.', false)
         ;
     }
 
@@ -121,10 +124,16 @@ class ForumEditorCommand extends Command
                     $reset_perms = true;
                 }
             } else {
-                $forum->setType((int)$input->getOption('type'));
+                $forum->setType(ForumType::from((int)$input->getOption('type')));
                 $reset_perms = true;
             }
 
+            $updated = true;
+        }
+
+        if ($input->getOption('use-reactions') !== false) {
+            $enable_reactions = (int)$input->getOption('use-reactions') !== 0;
+            $forum->setUsingEmoteReactions( $enable_reactions );
             $updated = true;
         }
 
@@ -135,22 +144,13 @@ class ForumEditorCommand extends Command
             $this->entityManager->persist($forum);
 
             if ($reset_perms) {
-                switch ($forum->getType()) {
-                    case Forum::ForumTypeDefault:
-                        $g = $this->entityManager->getRepository(UserGroup::class)->findOneBy(['type' => UserGroup::GroupTypeDefaultUserGroup]);
-                        break;
-                    case Forum::ForumTypeElevated:
-                        $g = $this->entityManager->getRepository(UserGroup::class)->findOneBy(['type' => UserGroup::GroupTypeDefaultElevatedGroup]);
-                        break;
-                    case Forum::ForumTypeMods:
-                        $g = $this->entityManager->getRepository(UserGroup::class)->findOneBy(['type' => UserGroup::GroupTypeDefaultModeratorGroup]);
-                        break;
-                    case Forum::ForumTypeAdmins:
-                        $g = $this->entityManager->getRepository(UserGroup::class)->findOneBy(['type' => UserGroup::GroupTypeDefaultAdminGroup]);
-                        break;
-                    default:
-                        $g = null;
-                }
+                $g = match ($forum->getType()) {
+                    ForumType::Default => $this->entityManager->getRepository(UserGroup::class)->findOneBy(['type' => UserGroup::GroupTypeDefaultUserGroup]),
+                    ForumType::Elevated => $this->entityManager->getRepository(UserGroup::class)->findOneBy(['type' => UserGroup::GroupTypeDefaultElevatedGroup]),
+                    ForumType::Mods => $this->entityManager->getRepository(UserGroup::class)->findOneBy(['type' => UserGroup::GroupTypeDefaultModeratorGroup]),
+                    ForumType::Admins => $this->entityManager->getRepository(UserGroup::class)->findOneBy(['type' => UserGroup::GroupTypeDefaultAdminGroup]),
+                    default => null,
+                };
 
                 if ($g) {
                     /** @var ForumUsagePermissions[] $pg */
@@ -171,7 +171,7 @@ class ForumEditorCommand extends Command
                         } else $output->writeln("Ignoring forum permission object for group '<info>{$perm->getPrincipalGroup()->getName()}</info>'.");
 
                     if (!$found_matching_perm) {
-                        $this->entityManager->persist($p = (new ForumUsagePermissions())
+                        $this->entityManager->persist($p = new ForumUsagePermissions()
                             ->setForum($forum)
                             ->setPrincipalGroup($g)
                             ->setPermissionsGranted(ForumUsagePermissions::PermissionWrite)

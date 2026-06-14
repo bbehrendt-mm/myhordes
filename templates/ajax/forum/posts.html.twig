@@ -67,9 +67,9 @@
                     {% if paranoid and thread.owner and thread.owner != app.user and not thread.translatable %}
                         {% set mode = (app.user.id + thread.id + thread.owner.id) % 12 %}
                         {% if mode == 0 %}
-                            {{ 'Hängt {user}!'|trans({'{user}': app.user.activeCitizen.alias ?? app.user.name},'game') }}
+                            {{ 'Hängt {user}!'|trans({'{user}': (app.user.activeCitizen.alias ?? app.user.name)},'game') }}
                         {% elseif mode == 1 %}
-                            {{ '{user} wir kriegen dich!'|trans({'{user}': app.user.activeCitizen.alias ?? app.user.name},'game') }}
+                            {{ '{user} wir kriegen dich!'|trans({'{user}': (app.user.activeCitizen.alias ?? app.user.name)},'game') }}
                         {% else %}
                             {{ title }}
                         {% endif %}
@@ -291,7 +291,7 @@
                                              src="{{ post.owner.activeIcon|singleMediaSource('icon', 16, false, post.owner.activeIcon.prototype ? asset('build/images/icons/title/' ~ post.owner.activeIcon.prototype.icon ~ '.gif') : '', true) }}"
                                              srcset="{{ post.owner.activeIcon|singleMediaSource('icon', 16, true) }}" />
                                     {% endif %}
-                                    {% if post.owner.activeTitle %}<i>{{ post.owner.activeTitle.customTitle ?? post.owner|translated_title(app.user)|raw }}</i>{% endif %}
+                                    {% if post.owner.activeTitle %}<i>{{ (post.owner.activeTitle.customTitle ?? (post.owner|translated_title(app.user)|raw)) }}</i>{% endif %}
                                 </span>
                             {% endif %}
                             {% if post.note is not null %}<div class="float-right post-note">
@@ -358,9 +358,9 @@
                         {% if not post.translate and paranoid and post.owner.name != 'Der Rabe' and post.owner != app.user %}
                             {% set mode = (app.user.id + post.id + post.owner.id) % 12 %}
                             {% if mode == 0 %}
-                                <br/>{{ 'Hängt {user}!'|trans({'{user}': app.user.activeCitizen.alias ?? app.user.name},'game') }}
+                                <br/>{{ 'Hängt {user}!'|trans({'{user}': (app.user.activeCitizen.alias ?? app.user.name)},'game') }}
                             {% elseif mode == 1 %}
-                                <br/>{{ '{user} wir kriegen dich!'|trans({'{user}': app.user.activeCitizen.alias ?? app.user.name},'game') }}
+                                <br/>{{ '{user} wir kriegen dich!'|trans({'{user}': (app.user.activeCitizen.alias ?? app.user.name)},'game') }}
                             {% endif %}
                         {% endif %}
                     </div>
@@ -397,6 +397,11 @@
                                             <li><a class="action-button" x-forum-moderator-action="delete-post" x-post-id={{ post.id }} x-to-page={{ current_page }}>{{ 'Löschen'|trans({},'global') }}</a></li>
                                             <li><a class="action-button" x-forum-moderator-action="edit-post"   x-post-id={{ post.id }} x-to-page={{ current_page }}>{{ 'Bearbeiten'|trans({},'global') }}</a></li>
                                         {% endif %}
+                                        {% if post|reactionUUID %}
+                                            <li><a class="action-button" x-forum-moderator-action="disable-reactions" x-post-id={{ post.id }} x-to-page={{ current_page }}>{{ 'Reaktionen löschen'|trans({},'global') }}</a></li>
+                                        {% else %}
+                                            <li><a class="action-button" x-forum-moderator-action="enable-reactions" x-post-id={{ post.id }} x-to-page={{ current_page }}>{{ 'Reaktionen erlauben'|trans({},'global') }}</a></li>
+                                        {% endif %}
                                     </ul>
                                 </label>
                             {% elseif (post.thread.tag and post.thread.tag.name == 'event' and post == thread.firstPost(true) and permission.post_as_animacteur()) %}
@@ -432,6 +437,7 @@
                                 </div>
                             </div>
                         </div>
+                        {% if post|reactionUUID %}<div class="clear"><hordes-reactions data-uuid="{{ post|reactionUUID }}"></hordes-reactions></div>{% endif %}
                     </div>
                 </div>
             {% endif %}
@@ -503,6 +509,16 @@
                     [ '{{ 'Abbrechen'|trans({},'global')|e('js') }}', [ ['click', (e_sub, elem_sub) => $.html.triggerPopupPop(elem_sub)] ] ]
                 ] );
             });
+
+            $.html.addEventListenerAll('[x-forum-moderator-action="enable-reactions"]', 'click', function(e,elem) {
+                if (confirm('{{ 'Bist du sicher?'|trans({},'global')|e('js') }}'))
+                    $.ajax.easySend('{{ path('forum_thread_mod_controller', {fid: fid, tid: tid, mod: 'enable-reactions'}) }}', {postId: parseInt( elem.getAttribute('x-post-id'))}, reloadPage);
+            });
+
+            $.html.addEventListenerAll('[x-forum-moderator-action="disable-reactions"]', 'click', function(e,elem) {
+                if (confirm('{{ 'Bist du sicher?'|trans({},'global')|e('js') }}'))
+                    $.ajax.easySend('{{ path('forum_thread_mod_controller', {fid: fid, tid: tid, mod: 'disable-reactions'}) }}', {postId: parseInt( elem.getAttribute('x-post-id'))}, reloadPage);
+            });
         {% endif %}
 
         function get_forum_editor() {
@@ -532,11 +548,11 @@
 
                 const selection = document.getSelection() // Getting user selection
                 const selectionRange = selection?.rangeCount === 1 ? selection?.getRangeAt(0) : null // We are allowing only one selection otherwise we quote the whole message.
-                const selectionContent = selectionRange?.cloneContents() 
+                const selectionContent = selectionRange?.cloneContents()
                 // Checking if the message element is in this range + if the selection contains anything + if the selected content is in the message element.
                 if (
-                    selectionRange?.intersectsNode(messageElement) && 
-                    selectionContent?.childNodes?.length > 0 && 
+                    selectionRange?.intersectsNode(messageElement) &&
+                    selectionContent?.childNodes?.length > 0 &&
                     (
                         selectionRange?.commonAncestorContainer === messageElement ||
                         messageElement.contains(selectionRange?.commonAncestorContainer)

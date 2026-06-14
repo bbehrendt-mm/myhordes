@@ -53,8 +53,9 @@ class UserUpdatePictoRollupCommand extends Command
             : $this->em->getRepository(PictoPrototype::class)->findAll();
     }
 
-    private function getSeasons() {
-        $criteria = new Criteria();
+    private function getSeasons(): array
+    {
+        $criteria = new Criteria(accessRawFieldValues: true);
 
         return [null, ...$this->em->getRepository(Season::class)->findAll()];
     }

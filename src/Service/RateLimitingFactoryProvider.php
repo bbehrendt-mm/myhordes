@@ -3,47 +3,27 @@
 namespace App\Service;
 
 use App\Entity\User;
+use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\RateLimiter\RateLimiterFactory;
+use Symfony\Component\RateLimiter\RateLimiterFactoryInterface;
 use Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter;
 
 class RateLimitingFactoryProvider
 {
     private CamelCaseToSnakeCaseNameConverter $normalizer;
 
-    public RateLimiterFactory $publicApi;
-    public RateLimiterFactory $anonymousApi;
-    public RateLimiterFactory $authenticatedPersonalApi;
-    public RateLimiterFactory $authenticatedApi;
-    public RateLimiterFactory $blackboardEditSlide;
-    public RateLimiterFactory $blackboardEditFixed;
-    public RateLimiterFactory $forumThreadCreation;
-    public RateLimiterFactory $reportToModeration;
-    public RateLimiterFactory $reportToModerationLimited;
-    public RateLimiterFactory $reportToGitlab;
-
     public function __construct(
-        RateLimiterFactory $publicApiLimiter,
-        RateLimiterFactory $anonymousApiLimiter,
-        RateLimiterFactory $authenticatedPersonalApiLimiter,
-        RateLimiterFactory $authenticatedApiLimiter,
-        RateLimiterFactory $blackboardEditSlideLimiter,
-        RateLimiterFactory $blackboardEditFixedLimiter,
-        RateLimiterFactory $forumThreadCreationLimiter,
-        RateLimiterFactory $reportToModerationLimiter,
-        RateLimiterFactory $reportToModerationLimitedLimiter,
-        RateLimiterFactory $reportToGitlabLimiter,
+        #[Target('public_api')] public readonly RateLimiterFactoryInterface $publicApi,
+        #[Target('anonymous_api')] public readonly RateLimiterFactoryInterface $anonymousApi,
+        #[Target('authenticated_personal_api')] public readonly RateLimiterFactoryInterface $authenticatedPersonalApi,
+        #[Target('authenticated_api')] public readonly RateLimiterFactoryInterface $authenticatedApi,
+        #[Target('blackboard_edit_slide')] public readonly RateLimiterFactoryInterface $blackboardEditSlide,
+        #[Target('blackboard_edit_fixed')] public readonly RateLimiterFactoryInterface $blackboardEditFixed,
+        #[Target('forum_thread_creation')] public readonly RateLimiterFactoryInterface $forumThreadCreation,
+        #[Target('report_to_moderation')] public readonly RateLimiterFactoryInterface $reportToModeration,
+        #[Target('report_to_moderation_limited')] public readonly RateLimiterFactoryInterface $reportToModerationLimited,
+        #[Target('report_to_gitlab')] public readonly RateLimiterFactoryInterface $reportToGitlab,
     ) {
-        $this->publicApi = $publicApiLimiter;
-        $this->anonymousApi = $anonymousApiLimiter;
-        $this->authenticatedPersonalApi = $authenticatedPersonalApiLimiter;
-        $this->authenticatedApi = $authenticatedApiLimiter;
-        $this->blackboardEditSlide = $blackboardEditSlideLimiter;
-        $this->blackboardEditFixed = $blackboardEditFixedLimiter;
-        $this->forumThreadCreation = $forumThreadCreationLimiter;
-        $this->reportToModeration = $reportToModerationLimiter;
-        $this->reportToModerationLimited = $reportToModerationLimitedLimiter;
-        $this->reportToGitlab = $reportToGitlabLimiter;
-
         $this->normalizer = new CamelCaseToSnakeCaseNameConverter();
     }
 
@@ -57,7 +37,7 @@ class RateLimitingFactoryProvider
         return $this->$camelCase ?? null;
     }
 
-    public function reportLimiter( bool|User $limited = false ): RateLimiterFactory {
+    public function reportLimiter( bool|User $limited = false ): RateLimiterFactoryInterface {
         if (is_a( $limited, User::class )) $limited = $limited->hasRoleFlag( User::USER_ROLE_LIMIT_MODERATION );
         return $limited ? $this->reportToModerationLimited : $this->reportToModeration;
     }

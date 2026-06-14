@@ -86,7 +86,7 @@ class ForecastCommand extends Command
             }
         }
 
-        foreach ($this->em->getRepository(AutomaticEventForecast::class)->matching((new Criteria())
+        foreach ($this->em->getRepository(AutomaticEventForecast::class)->matching(new Criteria(accessRawFieldValues: true)
             ->andWhere(Criteria::expr()->notIn('identifier', $whitelist))
             ->andWhere(Criteria::expr()->gt('end', new DateTimeImmutable()))
         ) as $unknownEvent) {

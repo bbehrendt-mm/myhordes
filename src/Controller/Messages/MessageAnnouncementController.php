@@ -8,6 +8,7 @@ use App\Entity\ForumPoll;
 use App\Entity\ForumPollAnswer;
 use App\Entity\ForumUsagePermissions;
 use App\Entity\GlobalPoll;
+use App\Entity\ReactionSet;
 use App\Entity\User;
 use App\Enum\Configuration\ExternalTokenPurpose;
 use App\Enum\Configuration\ExternalTokenType;
@@ -20,11 +21,13 @@ use App\Service\EventProxyService;
 use App\Service\HTMLService;
 use App\Service\JSONRequestParser;
 use App\Service\Media\MediaService;
+use App\Service\Morph\MorphService;
 use DateTime;
 use DiscordWebhooks\Client;
 use DiscordWebhooks\Embed;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Messenger\Exception\ExceptionInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -250,6 +253,7 @@ class MessageAnnouncementController extends MessageController
      * @param EventProxyService $proxy
      * @param MediaService $mediaService
      * @param GetExternalTokenWithFallbackAction $get_endpoints
+     * @param MorphService $morphService
      * @param Request $request
      * @return Response
      * @throws ExceptionInterface|Exception
@@ -263,6 +267,7 @@ class MessageAnnouncementController extends MessageController
         EventProxyService $proxy,
         MediaService $mediaService,
         GetExternalTokenWithFallbackAction $get_endpoints,
+        MorphService $morphService,
         Request $request
     ): Response {
         $title     = $parser->get('title', '');
@@ -283,6 +288,7 @@ class MessageAnnouncementController extends MessageController
         $em->persist($announcement);
         $em->flush();
 
+        $em->persist( $morphService->firstOrCreateMorph( ReactionSet::class, $announcement ) );
         if ($announcement->isValidated())
             $proxy->newAnnounceEvent( $announcement );
 
@@ -337,7 +343,7 @@ class MessageAnnouncementController extends MessageController
      * @return Response
      */
     #[Route(path: 'api/admin/com/changelogs/del_c/{id<\d+>}', name: 'admin_changelog_del_changelog')]
-    public function delete_changelog_api(Changelog $changelog, EntityManagerInterface $em): Response {
+    public function delete_changelog_api(#[MapEntity(id: 'id')] Changelog $changelog, EntityManagerInterface $em): Response {
         if (!$this->isGranted('ROLE_SUB_ADMIN') && $this->getUser() !== $changelog->getAuthor())
             return AjaxResponse::error(ErrorHelper::ErrorPermissionError);
 
@@ -353,7 +359,7 @@ class MessageAnnouncementController extends MessageController
      * @return Response
      */
     #[Route(path: 'api/admin/com/changelogs/del_a/{id<\d+>}', name: 'admin_changelog_del_announcement')]
-    public function delete_announcement_api(Announcement $announcement, EntityManagerInterface $em): Response {
+    public function delete_announcement_api(#[MapEntity(id: 'id')] Announcement $announcement, EntityManagerInterface $em): Response {
         if (!$this->isGranted('ROLE_SUB_ADMIN') && $this->getUser() !== $announcement->getSender())
             return AjaxResponse::error(ErrorHelper::ErrorPermissionError);
 
@@ -369,7 +375,7 @@ class MessageAnnouncementController extends MessageController
      * @return Response
      */
     #[Route(path: 'api/admin/com/changelogs/validate/{id<\d+>}', name: 'admin_changelog_val_announcement')]
-    public function validate_announcement_api(Announcement $announcement, EntityManagerInterface $em, EventProxyService $proxy): Response {
+    public function validate_announcement_api(#[MapEntity(id: 'id')] Announcement $announcement, EntityManagerInterface $em, EventProxyService $proxy): Response {
         if (!$this->isGranted('ROLE_ELEVATED'))
             return AjaxResponse::error(ErrorHelper::ErrorPermissionError);
 
@@ -392,7 +398,7 @@ class MessageAnnouncementController extends MessageController
      * @return Response
      */
     #[Route(path: 'api/admin/com/changelogs/render/{id<\d+>}', name: 'admin_changelog_render_announcement')]
-    public function render_announcement_api(Announcement $announcement): Response {
+    public function render_announcement_api(#[MapEntity(id: 'id')] Announcement $announcement): Response {
         return AjaxResponse::success( additional: [
             'html' => $this->html->prepareEmotes( $announcement->getText(), $announcement->getSender() )
                                                   ] );

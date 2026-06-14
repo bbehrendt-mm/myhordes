@@ -55,7 +55,7 @@ class CleanupMediaCommand extends Command
         $dry_run = $input->getOption('dry-run');
 
         /** @var Collection<Media> $affected */
-        $affected = $this->entityManager->getRepository(Media::class)->matching(Criteria::create()
+        $affected = $this->entityManager->getRepository(Media::class)->matching(Criteria::create(true)
             ->where(Criteria::expr()->isNotNull('deleteAt'))
             ->andWhere(Criteria::expr()->lte('deleteAt', Carbon::now()->toDateTimeImmutable()))
         );

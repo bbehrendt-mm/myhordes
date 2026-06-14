@@ -2,7 +2,7 @@ import * as React from "react";
 
 import {Global} from "../../defaults";
 import {ResponseTownList, TownRules} from "./api";
-import {useContext, useEffect, useRef, useState} from "react";
+import {useContext, useEffect, useLayoutEffect, useRef, useState} from "react";
 import {Globals} from "./Wrapper";
 import {OptionCoreTemplate, OptionFreeText, OptionSelect, OptionToggleMulti} from "./Input";
 import {number} from "prop-types";
@@ -170,12 +170,26 @@ export const TownCreatorSectionHead = ( {townTypes, setDefaultRules, setBlocked,
                             value={(globals.getOption( 'head.townPop' ) as string) ?? '40'} propName={TOWN_POP}
             />
 
-            { /* Number of citizens */ }
+            { /* Town seed */ }
             <OptionFreeText type="number" propTitle={head.seed} propHelp={head.seed_help}
                             value={(globals.getOption( 'head.townSeed' ) as string) ?? '-1'} propName={TOWN_SEED}
             />
 
+
+
+            { /* Town Type */ }
+            <AtLeast notForEvents={true}>
+                <OptionSelect propTitle={head.type} type="number"
+                              value={`${globals.getOption( 'head.townType' ) ?? -1}`} propName={TOWN_TYPE}
+                              options={ [
+                                  ...( globals.getOption( 'head.townType' ) == -1 ? [{value: '-1', title: globals.strings.common.need_selection}] : [] ),
+                                  ...townTypes.map( town => ({ value: `${town.id}`, title: town.name }) )
+                              ] }/>
+            </AtLeast>
+
             { /* Management Settings */ }
+            <h5>{globals.strings.head.organization.section}</h5>
+
             <OptionToggleMulti propName="features.<" options={[
                 { value: globals.getOption( 'head.townEventTag' ) as boolean, name: '<.head.townEventTag', title: head.management.event_tag, help: head.management.event_tag_help },
             ]} propTitle={head.management.section}/>
@@ -211,16 +225,7 @@ export const TownCreatorSectionHead = ( {townTypes, setDefaultRules, setBlocked,
                 />
             </AtLeast>
 
-
-            { /* Town Type */ }
-            <AtLeast notForEvents={true}>
-                <OptionSelect propTitle={head.type} type="number"
-                              value={`${globals.getOption( 'head.townType' ) ?? -1}`} propName={TOWN_TYPE}
-                              options={ [
-                                  ...( globals.getOption( 'head.townType' ) == -1 ? [{value: '-1', title: globals.strings.common.need_selection}] : [] ),
-                                  ...townTypes.map( town => ({ value: `${town.id}`, title: town.name }) )
-                              ] }/>
-            </AtLeast>
+            <OtherUserRoles/>
 
         </AtLeast>
 
@@ -236,3 +241,37 @@ export const TownCreatorSectionHead = ( {townTypes, setDefaultRules, setBlocked,
         ) }
     </div>
 };
+
+const OtherUserRoles = () => {
+    const globals = useContext(Globals)
+
+    const [users, setUsers] = useState<(UserResponse&{admin?: boolean})[]>([]);
+
+    useLayoutEffect(() => {
+        globals.setOption('head.organizers', users.map(u => [u.id, u.admin ?? false]));
+    }, [users]);
+
+    return <OptionCoreTemplate propName="head.organizers" propTitle={globals.strings.head.organization.others} propTip={globals.strings.head.organization.others_help} wide={true}>
+        { users.map( u => <div className="flex gap middle">
+            <div className="flex-none" dangerouslySetInnerHTML={{__html: u.avatarHTML}}></div>
+            <div className="flex-1">
+                <div className="flex gap middle">
+                    <div>{ u.name }</div>
+                    <i className="small">[ #{ u.id } ]</i>
+                </div>
+            </div>
+            <div className="flex-none">
+                <select value={ u.admin ? "1" : "0" } onChange={ e => {
+                    setUsers( prev => prev.map( u2 => u2.id === u.id ? {...u2, admin: (e.target as HTMLSelectElement).value === "1"} : u2 ) );
+                }}>
+                    <option value="0">{globals.strings.head.organization.others_ro}</option>
+                    <option value="1">{globals.strings.head.organization.others_rw}</option>
+                </select>
+            </div>
+            <div className="flex-none">
+                <img alt="x" src={ globals.strings.common.delete_icon } className="pointer" onClick={() => setUsers( prev => prev.filter( u2 => u2.id !== u.id ) )} />
+            </div>
+        </div> ) }
+        <UserSearchBar withSelf={true} clearOnCallback={true} exclude={users.map(u => u.id)} callback={s => setUsers( prev => [...prev, ...s] )}/>
+    </OptionCoreTemplate>
+}

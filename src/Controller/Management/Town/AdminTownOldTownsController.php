@@ -13,6 +13,7 @@ use App\Entity\TownRankingProxy;
 use App\Response\AjaxResponse;
 use App\Service\ErrorHelper;
 use App\Service\JSONRequestParser;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -26,7 +27,7 @@ class AdminTownOldTownsController extends AdminActionController
      * @return Response
      */
     #[Route(path: 'jx/manage/town/proxy/{id<\d+>}/{tab?}', name: 'admin_old_town_explorer')]
-    public function old_town_explorer(TownRankingProxy $town, ?string $tab): Response
+    public function old_town_explorer(#[MapEntity(id: 'id')] TownRankingProxy $town, ?string $tab): Response
     {
         $this->denyAccessUnlessGranted('list', Town::class);
         $pictoProtos = $this->entity_manager->getRepository(PictoPrototype::class)->findAll();
@@ -49,7 +50,7 @@ class AdminTownOldTownsController extends AdminActionController
      */
 	#[Route(path: 'api/manage/town/proxy/{id<\d+>}/get_citizen_infos', name: 'get_old_citizen_infos')]
 	#[AdminLogProfile(enabled: true)]
-	public function get_old_citizen_infos(TownRankingProxy $town, JSONRequestParser  $parser): Response{
+	public function get_old_citizen_infos(#[MapEntity(id: 'id')] TownRankingProxy $town, JSONRequestParser  $parser): Response{
         $this->denyAccessUnlessGranted('list', Town::class);
         $citizen_id = $parser->get('citizen_id', -1);
 		$citizen = $this->entity_manager->getRepository(CitizenRankingProxy::class)->find($citizen_id);

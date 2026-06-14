@@ -17,6 +17,7 @@ use App\Entity\LogEntryTemplate;
 use App\Entity\OfficialGroup;
 use App\Entity\PinnedForum;
 use App\Entity\Post;
+use App\Entity\ReactionSet;
 use App\Entity\Thread;
 use App\Entity\ThreadReadMarker;
 use App\Entity\ThreadTag;
@@ -34,12 +35,14 @@ use App\Service\Forum\PostService;
 use App\Service\HTMLService;
 use App\Service\JSONRequestParser;
 use App\Service\Locksmith;
+use App\Service\Morph\MorphService;
 use App\Service\PictoHandler;
 use App\Service\RateLimitingFactoryProvider;
 use App\Structures\HTMLParserInsight;
 use DateTime;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\QueryBuilder;
 use Exception;
 use Psr\Cache\InvalidArgumentException;
@@ -420,7 +423,7 @@ class MessageForumController extends MessageController
 
         $clearCache("forum_{$forum->getId()}_unread");
 
-        $post = (new Post())
+        $post = new Post()
             ->setOwner( isset($map_type[$type]) ? $this->entity_manager->getRepository(User::class)->find($map_type[$type]) : $user )
             ->setText( $text )
             ->setDate( new DateTime('now') )
@@ -441,7 +444,7 @@ class MessageForumController extends MessageController
         if ($type === 'GLORY') $this->userHandler->checkFeatureUnlock( $user, 'f_glory_temp', true );
 
         try {
-            if (!$user->getNoAutoFollowThreads()) $em->persist((new ForumThreadSubscription())->setThread($thread)->setUser($user));
+            if (!$user->getNoAutoFollowThreads()) $em->persist(new ForumThreadSubscription()->setThread($thread)->setUser($user));
             $em->persist($thread);
             $em->persist($forum);
 
@@ -639,7 +642,7 @@ class MessageForumController extends MessageController
 
         $clearCache("forum_{$forum->getId()}_unread");
 
-        $post = (new Post())
+        $post = new Post()
             ->setOwner( isset($map_type[$type]) ? $this->entity_manager->getRepository(User::class)->find($map_type[$type]) : $user )
             ->setText( $text )
             ->setDate( new DateTime('now') )
@@ -690,14 +693,14 @@ class MessageForumController extends MessageController
 
         if (!empty($polls)) {
             foreach ($polls as $question => $answers) {
-                $em->persist($question_assoc[$question] = (new ForumPoll())
+                $em->persist($question_assoc[$question] = new ForumPoll()
                     ->setOwner($post->getOwner())
                     ->setPost($post)
                     ->setClosed(false)
                 );
                 foreach ($answers as $answer)
                     $question_assoc[$question]->addAnswer(
-                        $answer_assoc[$answer] = (new ForumPollAnswer())->setNum(0)
+                        $answer_assoc[$answer] = new ForumPollAnswer()->setNum(0)
                     );
             }
         }
@@ -993,7 +996,7 @@ class MessageForumController extends MessageController
 
             /** @var ForumThreadSubscription[] $subscriptions */
             $subscriptions = $em->getRepository(ForumThreadSubscription::class)->matching(
-                (new Criteria())
+                new Criteria(accessRawFieldValues: true)
                     ->andWhere( Criteria::expr()->eq('user', $user) )
                     ->andWhere( Criteria::expr()->eq('thread', $thread) )
                     ->andWhere( Criteria::expr()->gt('num', 0))
@@ -1067,7 +1070,7 @@ class MessageForumController extends MessageController
      * @return Response
      */
     #[Route(path: 'jx/forum/{id<\d+>}/editor', name: 'forum_thread_editor_controller')]
-    public function editor_thread_api(Forum $forum, EntityManagerInterface $em): Response {
+    public function editor_thread_api(#[MapEntity(id: 'id')] Forum $forum, EntityManagerInterface $em): Response {
 
         $user = $this->getUser();
         $permissions = $this->perm->getEffectivePermissions( $user, $forum );
@@ -1485,10 +1488,13 @@ class MessageForumController extends MessageController
      * @param string $mod
      * @param JSONRequestParser $parser
      * @param CrowService $crow
+     * @param PostService $postService
+     * @param MorphService $morphService
      * @return Response
+     * @throws ORMException
      */
     #[Route(path: 'api/forum/{fid<\d+>}/{tid<\d+>}/moderate/{mod}', name: 'forum_thread_mod_controller')]
-    public function mod_thread_api(int $fid, int $tid, string $mod, JSONRequestParser $parser, CrowService $crow, PostService $postService): Response {
+    public function mod_thread_api(int $fid, int $tid, string $mod, JSONRequestParser $parser, CrowService $crow, PostService $postService, MorphService $morphService): Response {
         $success = false;
 
         /** @var Forum $forum */
@@ -1673,6 +1679,30 @@ class MessageForumController extends MessageController
                     $this->entity_manager->persist($forum);
                     $this->entity_manager->persist($new_forum);
                     $this->entity_manager->persist($thread);
+                    $this->entity_manager->flush();
+                    return AjaxResponse::success();
+                } catch (Exception $e) {
+                    return AjaxResponse::error( ErrorHelper::ErrorDatabaseException );
+                }
+
+            case 'enable-reactions':
+                $post = $this->entity_manager->getRepository(Post::class)->find((int)$parser->get('postId'));
+
+                try {
+                    $this->entity_manager->persist( $d = $morphService->firstOrCreateMorph( ReactionSet::class, $post) );
+                    $this->entity_manager->flush();
+                    return AjaxResponse::success();
+                } catch (Exception $e) {
+                    return AjaxResponse::error( ErrorHelper::ErrorDatabaseException );
+                }
+
+            case 'disable-reactions':
+                $post = $this->entity_manager->getRepository(Post::class)->find((int)$parser->get('postId'));
+                $reactions = $morphService->getMorphCollection( ReactionSet::class, $post );
+
+                try {
+                    foreach ($reactions as $reaction)
+                        $this->entity_manager->remove($reaction);
                     $this->entity_manager->flush();
                     return AjaxResponse::success();
                 } catch (Exception $e) {

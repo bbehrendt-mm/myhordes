@@ -15,6 +15,7 @@ import {HordesProgressBar} from "../react/progress-bar/Wrapper";
 import {HordesHxpLog} from "../react/hxp-log/Wrapper";
 import {HordesForum, HordesForumGroup} from "../react/misc/ForumGroup";
 import {HordesHeaderUI, HordesSingularAppUI} from "../react/header/Wrapper";
+import {HordesReactionsUI} from "../react/reactions/Wrapper";
 
 // Define web component <hordes-user-search />
 export class HordesUserSearchElement extends Shim<HordesUserSearchBar> {
@@ -286,6 +287,26 @@ customElements.define('hordes-singular-ext-app', class HordesSingularAppUIElemen
     protected static observedAttributeNames() {
         return [
             'data-app-id', 'data-home'
+        ];
+    }
+
+}, {  });
+
+customElements.define('hordes-reactions', class HordesReactionsUIElement extends Shim<HordesReactionsUI> {
+
+    protected generateInstance(): HordesReactionsUI {
+        return new HordesReactionsUI();
+    }
+
+    protected generateProps(): object | null {
+        return {
+            uuid: this.dataset.uuid ?? null,
+        }
+    }
+
+    protected static observedAttributeNames() {
+        return [
+            'data-uuid'
         ];
     }
 

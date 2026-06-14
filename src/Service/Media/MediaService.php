@@ -6,7 +6,9 @@ use App\Entity\User;
 use App\Structures\Media\MediaCollection;
 use App\Structures\Media\MediaVariant;
 use App\Structures\Media\MediaVariantInterface;
+use App\Traits\Entity\DoctrineExtensions;
 use App\Traits\Entity\LinksMedia;
+use ArrayHelpers\Arr;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -19,25 +21,30 @@ use Intervention\Image\Drivers\Imagick\Driver;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Interfaces\EncodedImageInterface;
 use Intervention\Image\Interfaces\ImageInterface;
+use Psr\Cache\InvalidArgumentException;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Contracts\Cache\ItemInterface;
+use Symfony\Contracts\Cache\TagAwareCacheInterface;
 
 readonly class MediaService
 {
-
     public function __construct(
         private EntityManagerInterface $entityManager,
-        private ParameterBagInterface $parameterBag
+        private ParameterBagInterface $parameterBag,
+        private TagAwareCacheInterface $gameCachePool,
     ) {}
 
     private function checkTrait(object $object): bool {
-        return in_array(LinksMedia::class, class_uses($object));
+        if (!in_array(DoctrineExtensions::class, class_uses($object))) return false;
+        /** @var DoctrineExtensions $object */
+        return $object::usesDoctrineTrait( LinksMedia::class );
     }
 
     private function getMediaCriteria(string $type, string $id, string $collection): Criteria {
-        return Criteria::create()->orderBy([
+        return Criteria::create(true)->orderBy([
                 'inCollectionSince' => Order::Descending,
                 'createdAt' => Order::Descending
             ])
@@ -409,5 +416,59 @@ readonly class MediaService
         $image_small = new ImageManager( Driver::class, strip: true )->read( $classic );
         $this->storePreConvertedImageAsConversion( $media, $image_small, $image_small->encode(), 'legacy-classic' );
         return $media;
+    }
+
+    /**
+     * @param ?object $data
+     * @param string $collection
+     * @param int|null $expected_size
+     * @param bool $include_original
+     * @return ?ImageSource
+     * @throws InvalidArgumentException
+     */
+    public function singleMediaSource(?object $data, string $collection, ?int $expected_size = null, bool $include_original = false) : ?ImageSource {
+        if ($data === null) return '';
+
+        $class = md5($this->entityManager->getClassMetadata($data::class)->getName());
+        $identifier = $data->getPrimaryKey();
+
+        $ex = explode('@', $collection);
+        $collection = $ex[0];
+        $tags = $ex[1] ?? 'default';
+
+        $key = 'media_source_' .
+            $class . '_' .
+            $identifier . '_' .
+            $collection . '_' .
+            $tags . '_' .
+            ($expected_size === null ? 'max' : $expected_size);
+
+        if ($include_original) $key .= '_with_original';
+
+        $tags = explode('|', $tags);
+
+        return $this->gameCachePool->get($key, function (ItemInterface $item) use ($class, $identifier, $collection, $tags, $data, $expected_size, $include_original) {
+            $item->expiresAfter(604800)->tag([
+                                                 'media', "media_$class", "media_{$class}_{$identifier}",
+                                                 "media_{$class}_{$identifier}!{$collection}",
+                                                 "media_{$class}!{$collection}",
+                                             ]);
+
+            $media = $this->getSingleMediaForObject($data, $collection);
+            if (!$media) return null;
+
+            foreach ($tags as $tag) {
+                $image = new ImageSource(
+                    src: $media->getSource( $expected_size, $include_original, tag: $tag ),
+                    srcset: $expected_size !== null
+                             ? $media->getSourceSetDPI( $expected_size, tag: $tag )
+                             : $media->getSource( $expected_size, $include_original, tag: $tag ),
+                );
+
+                if (!empty($image->src)) return $image;
+            }
+
+            return null;
+        });
     }
 }

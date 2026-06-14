@@ -116,7 +116,7 @@ class TownController extends InventoryAwareController
 
         $data["building_etag"] =
             $this->getActiveCitizen()->getTown()->getBuildings()
-                ->matching((new Criteria())->setMaxResults(1)->orderBy(['constructionDate' => Order::Descending]))
+                ->matching(new Criteria(accessRawFieldValues: true)->setMaxResults(1)->orderBy(['constructionDate' => Order::Descending]))
                 ->first()?->getConstructionDate()?->getTimestamp() ?? '--';
 
         $data['addons'] = $this->events->queryTownAddons( $this->getActiveCitizen()->getTown() );
@@ -363,7 +363,7 @@ class TownController extends InventoryAwareController
             ? $this->citizen_handler->getActivityLevel($c)
             : 0;
 
-        $criteria = new Criteria();
+        $criteria = new Criteria(accessRawFieldValues: true);
         $criteria->andWhere($criteria->expr()->gte('severity', Complaint::SeverityBanish));
         $criteria->andWhere($criteria->expr()->eq('culprit', $c));
 

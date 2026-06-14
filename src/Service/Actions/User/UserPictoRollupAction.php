@@ -53,7 +53,7 @@ readonly class UserPictoRollupAction
             ->select('SUM(i.count) as c', $prototype === null ? 'IDENTITY(i.prototype) as p' : null);
 
         if ($season && !$imported && !$old)
-            $qb->innerJoin(TownRankingProxy::class, 't', Join::WITH, 'i.townEntry = t.id AND t.season = :season')
+            $qb->innerJoin(TownRankingProxy::class, 't', Join::ON, 'i.townEntry = t.id AND t.season = :season')
             ->setParameter('season', $season);
         elseif ($season && ($imported || $old))
             $qb->andWhere('false = true');

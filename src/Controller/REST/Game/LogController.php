@@ -31,6 +31,7 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Order;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Asset\Packages;
@@ -119,7 +120,7 @@ class LogController extends CustomAbstractCoreController
     /**
      * @throws Exception
      */
-    protected function applyFilters(Request $request, Citizen|Zone|Town $context, ?Criteria $criteria = null, bool $limits = true, bool $allow_inline_days = false, bool $admin = false, string &$identifier = null ): Criteria {
+    protected function applyFilters(Request $request, Citizen|Zone|Town $context, ?Criteria $criteria = null, bool $limits = true, bool $allow_inline_days = false, bool $admin = false, ?string &$identifier = null ): Criteria {
         $day = $request->query->get('day', 0);
         $limit = min((int)$request->query->get('limit', -1), 1500);
         $threshold_top = $request->query->get('below', PHP_INT_MAX);
@@ -135,7 +136,7 @@ class LogController extends CustomAbstractCoreController
             default => null
         };
 
-        $criteria = ($criteria ?? Criteria::create())
+        $criteria = ($criteria ?? Criteria::create(true))
             ->andWhere( Criteria::expr()->eq('town', $town) )
             ->andWhere( Criteria::expr()->gt('id', $threshold_bottom) )
             ->andWhere( Criteria::expr()->lt('id', $threshold_top) )
@@ -273,7 +274,7 @@ class LogController extends CustomAbstractCoreController
     #[Route(path: '/beyond/{id<\d+>}', name: 'beyond', methods: ['GET'])]
     #[GateKeeperProfile(only_alive: true, only_beyond: true)]
     #[Toaster]
-    public function beyond(Zone $zone, Request $request, EntityManagerInterface $em): JsonResponse {
+    public function beyond(#[MapEntity(id: 'id')] Zone $zone, Request $request, EntityManagerInterface $em): JsonResponse {
         if ($this->getUser()->getActiveCitizen()?->getZone() !== $zone)
             return new JsonResponse([], Response::HTTP_NOT_ACCEPTABLE);
 
@@ -316,7 +317,7 @@ class LogController extends CustomAbstractCoreController
     #[Route(path: '/citizen/{id<\d+>}', name: 'town_citizen', methods: ['GET'])]
     #[GateKeeperProfile(only_with_profession: true, only_in_town: true)]
     #[Toaster]
-    public function town(Request $request, EntityManagerInterface $em, ?Citizen $citizen = null): JsonResponse {
+    public function town(Request $request, EntityManagerInterface $em, #[MapEntity(id: 'id')] ?Citizen $citizen = null): JsonResponse {
         $active_citizen = $this->getUser()->getActiveCitizen();
 
         $filter = $request->query->get('filter', '');
@@ -361,7 +362,7 @@ class LogController extends CustomAbstractCoreController
     #[GateKeeperProfile(only_alive: true, only_with_profession: true, only_in_town: true)]
     #[Semaphore('town', scope: 'town')]
     #[Toaster]
-    public function delete_log(bool $purge, TownLogEntry $entry, EntityManagerInterface $em, InvalidateLogCacheAction $invalidate): JsonResponse {
+    public function delete_log(bool $purge, #[MapEntity(id: 'id')] TownLogEntry $entry, EntityManagerInterface $em, InvalidateLogCacheAction $invalidate): JsonResponse {
         $active_citizen = $this->getUser()->getActiveCitizen();
 
         $type = $purge ? LogHiddenType::Deleted : LogHiddenType::Hidden;
@@ -400,7 +401,7 @@ class LogController extends CustomAbstractCoreController
     #[Route(path: '/admin/zone/{id<\d+>}', name: 'admin_zone', methods: ['GET'])]
     #[GateKeeperProfile('skip')]
     #[IsGranted('spy', new Expression('args["zone"].getTown()'))]
-    public function adminZone(Zone $zone, Request $request, EntityManagerInterface $em): JsonResponse {
+    public function adminZone(#[MapEntity(id: 'id')] Zone $zone, Request $request, EntityManagerInterface $em): JsonResponse {
         $criteria = $this->applyFilters( $request, $zone, allow_inline_days: true, admin: true, identifier: $cache_ident );
         return new JsonResponse([
                                     'entries' => $this->renderCachedLogEntries(
@@ -424,7 +425,7 @@ class LogController extends CustomAbstractCoreController
     #[Route(path: '/admin/town/{id<\d+>}', name: 'admin_town', methods: ['GET'])]
     #[GateKeeperProfile('skip')]
     #[IsGranted('spy', 'town')]
-    public function adminTown(Town $town, Request $request, EntityManagerInterface $em): JsonResponse {
+    public function adminTown(#[MapEntity(id: 'id')] Town $town, Request $request, EntityManagerInterface $em): JsonResponse {
 
         $filter = $request->query->get('filter', '');
         $criteria = $this->applyFilters( $request, $town, admin: true, identifier: $cache_ident );
@@ -457,7 +458,7 @@ class LogController extends CustomAbstractCoreController
     #[GateKeeperProfile(only_alive: true, only_beyond: true)]
     #[Semaphore('town', scope: 'town')]
     #[Toaster]
-    public function chat(Zone $zone, JSONRequestParser $parser, EntityManagerInterface $em, HTMLService $html, CitizenHandler $citizenHandler, LogTemplateHandler $log): JsonResponse {
+    public function chat(#[MapEntity(id: 'id')] Zone $zone, JSONRequestParser $parser, EntityManagerInterface $em, HTMLService $html, CitizenHandler $citizenHandler, LogTemplateHandler $log): JsonResponse {
         $active_citizen = $this->getUser()->getActiveCitizen();
         if ($active_citizen->getZone() !== $zone) return new JsonResponse([], Response::HTTP_NOT_ACCEPTABLE);
 

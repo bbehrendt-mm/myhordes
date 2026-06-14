@@ -1,4 +1,3 @@
----
 'Allgemeiner Fehler.': 'Common error.'
 'Das gewählte Forum existiert nicht oder dir fehlt die Zugangsberechtigung dafür.': 'The selected forum doesn''t exist or you are lacking the permission to view it.'
 'Dein Text muss mindestens 2 Zeichen lang sein.': 'Your text has to be at least 2 characters long.'
@@ -678,3 +677,11 @@ Spielhilfe: Help
 'Wenn Du Spieler basierend auf ihrer Spracheinstellung zu unterschiedlichen URLs leiten möchtest, kannst du folgende Syntax verwenden: {example}': 'If you want to redirect players to different URLs based on their language settings, you can use the following syntax: {example}'
 'Mehrere Konten': 'Multi-Account'
 Kontoteilung: Account sharing
+'Neue Reaktion hinzufügen...': 'Add reaction...'
+'Diese Reaktion hinzufügen': 'React with this emote'
+'Meine Reaktion entfernen': 'Remove my reaction'
+'Menü schließen': 'Close menu'
+Emotionen: Emotions
+Sonstige: Others
+'Reaktionen löschen': 'Delete reactions'
+'Reaktionen erlauben': 'Allow reactions'

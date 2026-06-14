@@ -11,6 +11,7 @@ use App\Service\Media\MediaService;
 use App\Service\User\UserCapabilityService;
 use ArrayHelpers\Arr;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -234,7 +235,7 @@ class NotificationManagerController extends AbstractController
     }
 
     #[Route(path: '/webpush/{id}', name: 'edit_webpush', defaults: ['type' => NotificationSubscriptionType::WebPush->value], methods: ['PATCH'])]
-    public function edit(NotificationSubscriptionType $type, NotificationSubscription $subscription, JSONRequestParser $parser, EntityManagerInterface $em): JsonResponse {
+    public function edit(NotificationSubscriptionType $type, #[MapEntity(id: 'id')] NotificationSubscription $subscription, JSONRequestParser $parser, EntityManagerInterface $em): JsonResponse {
 
         if ($subscription->getType() !== $type || $subscription->getUser() !== $this->getUser())
             return new JsonResponse(status: Response::HTTP_NOT_FOUND);
@@ -249,7 +250,7 @@ class NotificationManagerController extends AbstractController
     }
 
     #[Route(path: '/webpush/{id}', name: 'delete_webpush', defaults: ['type' => NotificationSubscriptionType::WebPush->value], methods: ['DELETE'])]
-    public function delete(NotificationSubscriptionType $type, EntityManagerInterface $em, NotificationSubscription $subscription): JsonResponse {
+    public function delete(NotificationSubscriptionType $type, EntityManagerInterface $em, #[MapEntity(id: 'id')] NotificationSubscription $subscription): JsonResponse {
 
         if ($subscription->getType() !== $type || $subscription->getUser() !== $this->getUser())
             return new JsonResponse(status: Response::HTTP_NOT_FOUND);
@@ -262,7 +263,7 @@ class NotificationManagerController extends AbstractController
     }
 
     #[Route(path: '/webpush/{id}/test', name: 'test_webpush', defaults: ['type' => NotificationSubscriptionType::WebPush->value], methods: ['POST'])]
-    public function test(NotificationSubscriptionType $type, NotificationSubscription $subscription, WebPush $sender, TranslatorInterface $trans, Packages $asset, MediaService $media): JsonResponse {
+    public function test(NotificationSubscriptionType $type, #[MapEntity(id: 'id')] NotificationSubscription $subscription, WebPush $sender, TranslatorInterface $trans, Packages $asset, MediaService $media): JsonResponse {
 
         if ($subscription->getType() !== $type || $subscription->getUser() !== $this->getUser())
             return new JsonResponse(status: Response::HTTP_NOT_FOUND);

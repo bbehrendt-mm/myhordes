@@ -11,6 +11,7 @@ use App\Enum\Configuration\TownSetting;
 use App\Service\ConfMaster;
 use ArrayHelpers\Arr;
 use Doctrine\ORM\EntityManagerInterface;
+use function Webmozart\Assert\Tests\StaticAnalysis\length;
 
 
 class SanitizeTownConfigAction
@@ -176,6 +177,12 @@ class SanitizeTownConfigAction
         if ( (($rules['times']['exploration']['normal'] ?? TownSetting::TimingExplorationDefault->default()) !== TownSetting::TimingExplorationDefault->default()) ) {
             $elevation = max($elevation, User::USER_LEVEL_CROW);
             if ($trimTo < User::USER_LEVEL_CROW) unset($rules['times']['exploration']['normal']);
+        }
+
+        // Organizers settings
+        if (!empty(Arr::get($head, 'organizers', []))) {
+            $elevation = max($elevation, User::USER_LEVEL_CROW);
+            if ($trimTo < User::USER_LEVEL_CROW) unset($head['organizers']);
         }
 
         return $elevation;
@@ -560,7 +567,7 @@ class SanitizeTownConfigAction
         if ( ($rules['explorable_ruin_params']['space']['floors'] ?? 0) * ($rules['explorable_ruin_params']['room_config']['min'] ?? 0) > ( $rules['explorable_ruin_params']['room_config']['total'] ?? 0 ) ) {
             unset($rules['explorable_ruin_params']);
         };
-        
+
         // Ensure well min/max is above 0
         if (!is_int( $rules['well']['min'] ?? 'x' )) unset( $rules['well']['min'] ); if (!is_int( $rules['well']['max'] ?? 'x' )) unset( $rules['well']['max'] );
         if ( ($rules['well']['min'] ?? 0) < 0 ) $rules['well']['min'] = 0; if ( ($rules['well']['max'] ?? 0) < 0 ) $rules['well']['max'] = 0;
@@ -581,6 +588,14 @@ class SanitizeTownConfigAction
         // Ensure all initially constructed buildings are valid (exist and are either unlockable by a blueprint or unlocked by default), and no building is doubled
         if (isset( $rules['initial_buildings'] ))
             $rules['initial_buildings'] = array_filter( array_unique( $rules['initial_buildings'] ), fn(string $building) => !in_array($building, $rules['disabled_buildings'] ?? []) && $this->building_prototype_is_selectable($this->em->getRepository(BuildingPrototype::class)->findOneBy(['name' => $building]), true ) );
+
+        // Ensure all organizers are valid
+        $encountered = [];
+        Arr::set( $head, 'organizers', array_filter( Arr::get( $head, 'organizers', [] ), function(array $a) use (&$encountered) {
+            if (in_array($a[0], $encountered)) return false;
+            $encountered[] = $a[0];
+            return count($a) === 2 && is_int($a[0]) && is_bool($a[1]);
+        } ) );
     }
 
     protected function scrub_config( array &$subject, array $reference ): void

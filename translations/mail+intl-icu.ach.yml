@@ -1,14 +1,13 @@
----
-'Account validieren': 'crwdns72022:0crwdne72022:0'
-'Passwort zurücksetzen': 'crwdns72024:0crwdne72024:0'
-'Hallo {user}! Willkommen bei MyHordes!': 'crwdns72026:0{user}crwdne72026:0'
-'Um deine Registrierung abzuschließen, benötigst du folgenden Validierungscode:': 'crwdns72028:0crwdne72028:0'
-"Du erhälst diese Mail, da du (oder jemand anderes) deine E-Mail Adresse bei der Registrierung angegeben hat.\n        Wenn du dich nicht bei MyHordes registriert hast, ignoriere diese Nachricht.": "crwdns72030:0crwdne72030:0"
-'Hallo {user}!': 'crwdns72032:0{user}crwdne72032:0'
-'Um dein Passwort zurückzusetzen, besuche bitte folgenden Link :': 'crwdns72034:0crwdne72034:0'
-"Du erhälst diese Mail, da du (oder jemand anderes) deine E-Mail Adresse in die Passwort-Zurücksetzen-Funktion eingegeben hat.\n        Wenn du dein Passwort nicht zurücksetzen willst, ignoriere diese E-Mail. Dein altes Passwort bleibt weiterhin gültig, wenn du es nicht\n        durch das Anklicken des oben genannten Links änderst.": "crwdns72036:0crwdne72036:0"
-'E-Mail Validierung': 'crwdns72038:0crwdne72038:0'
-'Jemand (hoffentlich du!) hat versucht, die mit deinem Account verknüpfte E-Mail Adresse zu ändern. Um die Änderung durchzuführen, verwende bitte folgenden Token in deinen Seelen-Einstellungen:': 'crwdns72040:0crwdne72040:0'
-'Du hast ausgewählt, dass du dich in Zukunft auch mit Benutzername/EMail und Passwort bei MyHordes einloggen möchtest. Daher stellen wir dir hiermit deine neuen Zugangsdaten zu:': 'crwdns204334:0crwdne204334:0'
-'Wir empfehlen dringend, dieses Passwort direkt nach dem ersten Login zu ändern.': 'crwdns204336:0crwdne204336:0'
-'Bitte beachte, dass sämtliche alternative Login-Möglichkeiten für deinen Account, wie beispielsweise Eternaltwin, ungeändert weiterhin funktionieren.': 'crwdns204338:0crwdne204338:0'
+'Account validieren': 'crwdns275840:0crwdne275840:0'
+'Passwort zurücksetzen': 'crwdns275842:0crwdne275842:0'
+'Hallo {user}! Willkommen bei MyHordes!': 'crwdns275844:0{user}crwdne275844:0'
+'Um deine Registrierung abzuschließen, benötigst du folgenden Validierungscode:': 'crwdns275846:0crwdne275846:0'
+"Du erhälst diese Mail, da du (oder jemand anderes) deine E-Mail Adresse bei der Registrierung angegeben hat.\n        Wenn du dich nicht bei MyHordes registriert hast, ignoriere diese Nachricht.": "crwdns275848:0crwdne275848:0"
+'Hallo {user}!': 'crwdns275850:0{user}crwdne275850:0'
+'Um dein Passwort zurückzusetzen, besuche bitte folgenden Link :': 'crwdns275852:0crwdne275852:0'
+"Du erhälst diese Mail, da du (oder jemand anderes) deine E-Mail Adresse in die Passwort-Zurücksetzen-Funktion eingegeben hat.\n        Wenn du dein Passwort nicht zurücksetzen willst, ignoriere diese E-Mail. Dein altes Passwort bleibt weiterhin gültig, wenn du es nicht\n        durch das Anklicken des oben genannten Links änderst.": "crwdns275854:0crwdne275854:0"
+'E-Mail Validierung': 'crwdns275856:0crwdne275856:0'
+'Jemand (hoffentlich du!) hat versucht, die mit deinem Account verknüpfte E-Mail Adresse zu ändern. Um die Änderung durchzuführen, verwende bitte folgenden Token in deinen Seelen-Einstellungen:': 'crwdns275858:0crwdne275858:0'
+'Du hast ausgewählt, dass du dich in Zukunft auch mit Benutzername/EMail und Passwort bei MyHordes einloggen möchtest. Daher stellen wir dir hiermit deine neuen Zugangsdaten zu:': 'crwdns275860:0crwdne275860:0'
+'Wir empfehlen dringend, dieses Passwort direkt nach dem ersten Login zu ändern.': 'crwdns275862:0crwdne275862:0'
+'Bitte beachte, dass sämtliche alternative Login-Möglichkeiten für deinen Account, wie beispielsweise Eternaltwin, ungeändert weiterhin funktionieren.': 'crwdns275864:0crwdne275864:0'

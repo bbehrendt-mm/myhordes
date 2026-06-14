@@ -344,7 +344,7 @@ class Town
      */
     public function getZone(int $x, int $y): ?Zone
     {
-        $criteria = new Criteria();
+        $criteria = new Criteria(accessRawFieldValues: true);
         $criteria->andWhere( new Comparison( 'x', Comparison::EQ, $x ) );
         $criteria->andWhere( new Comparison( 'y', Comparison::EQ, $y ) );
         return $this->zones->matching( $criteria )->first() ?: null;
@@ -358,7 +358,7 @@ class Town
      */
     public function getZoneCross(int $x, int $y, int $dist): Collection
     {
-        return $this->zones->matching( Criteria::create()
+        return $this->zones->matching( Criteria::create(true)
             ->orWhere( Criteria::expr()->andX(
                 Criteria::expr()->gte( 'x', $x - $dist ),
                 Criteria::expr()->lte( 'x', $x + $dist ),
@@ -381,7 +381,7 @@ class Town
      */
     public function getZoneRect(int $x_min, int $x_max, int $y_min, int $y_max): Collection
     {
-        return $this->zones->matching( Criteria::create()
+        return $this->zones->matching( Criteria::create(true)
             ->andWhere( Criteria::expr()->gte( 'x', $x_min ) )
             ->andWhere( Criteria::expr()->gte( 'y', $y_min ) )
             ->andWhere( Criteria::expr()->lte( 'x', $x_max ) )
@@ -450,7 +450,7 @@ class Town
 
     public function getBuilding(BuildingPrototype $prototype): ?Building
     {
-        return $this->buildings->matching( new Criteria()
+        return $this->buildings->matching( new Criteria(accessRawFieldValues: true)
             ->where( new Comparison( 'prototype', Comparison::EQ, $prototype )  )
         )->first() ?: null;
     }
@@ -885,13 +885,13 @@ class Town
     }
 
     public function getRevision( TownRevisionType $type, ?int $identifier = null ): TownAspectRevision {
-        $revision = $this->getRevisions()->matching( (new Criteria())
+        $revision = $this->getRevisions()->matching( new Criteria(accessRawFieldValues: true)
             ->andWhere( new Comparison( 'type', Comparison::EQ, $type ) )
             ->andWhere( new Comparison( 'identifier', Comparison::EQ, $identifier ) )
         )->first() ?: null;
 
         if ($revision === null)
-            $this->addRevision( $revision = (new TownAspectRevision())
+            $this->addRevision( $revision = new TownAspectRevision()
                 ->setType( $type )
                 ->setIdentifier( $identifier )
             );

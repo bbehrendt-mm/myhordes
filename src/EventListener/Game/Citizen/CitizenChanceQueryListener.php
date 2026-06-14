@@ -83,7 +83,7 @@ final class CitizenChanceQueryListener implements ServiceSubscriberInterface
 
         $minChances = $chances;
 
-        $criteria = new Criteria();
+        $criteria = new Criteria(accessRawFieldValues: true);
         $criteria->andWhere($criteria->expr()->eq('citizen', $citizen));
         $criteria->andWhere($criteria->expr()->lt('day', $citizen->getTown()->getDay() - ($event->during_attack ? 1 : 0)));
 
@@ -103,7 +103,7 @@ final class CitizenChanceQueryListener implements ServiceSubscriberInterface
         $log_info['ratio terror'] = ($terrorRatio = ($citizen->getTown()->getType()->getName() == "panda" ? 0.2 : 0.1));
         $event->woundChance = round(max(0.0, min(1 - ((1-$chances)-(1-$chances)*$woundRatio), 1.0)),2);
         $event->terrorChance = round(max(0.0, min(1 - ((1-$chances)-(1-$chances)*$terrorRatio), 1.0)),2);
-        
+
         // Good Smell status
         if ($citizen->hasStatus('good_smell')) {
             $event->woundChance = min(0.0, $event->woundChance - 0.25);

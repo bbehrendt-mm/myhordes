@@ -28,7 +28,7 @@ readonly class AntiCheatService {
 
     public function cleanseConnectionIdentifiers(): void {
         $old = $this->em->getRepository(Activity::class)->matching(
-            new Criteria()->where(Criteria::expr()->lte('dateTimeEnd', new DateTime('-7 days')))
+            new Criteria(accessRawFieldValues: true)->where(Criteria::expr()->lte('dateTimeEnd', new DateTime('-7 days')))
         );
         foreach ($old as $e) $this->em->remove($e);
     }

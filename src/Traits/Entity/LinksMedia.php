@@ -2,35 +2,29 @@
 
 namespace App\Traits\Entity;
 
+use App\Entity\Media;
+use App\Entity\Morph;
 use App\Structures\Media\MediaCollection;
 use App\Structures\Media\MediaCollectionList;
 use Exception;
 
 trait LinksMedia
 {
-    private static ?MediaCollectionList $mediaCollectionList = null;
-
-    public static string $primaryKeyName = 'id';
-
-    public function tryPrimaryKey(): ?string {
-        $key = static::$primaryKeyName;
-        $value = $this->$key ?? null;
-        return $value === null ? null : "{$value}";
+    use DoctrineExtension, LinksMorph {
+        LinksMorph::getMorphTo as private parentGetMorphTo;
     }
 
     /**
-     * @throws Exception
+     * @return array<class-string<Morph>>
      */
-    public function getPrimaryKey(): string {
-        $value = $this->tryPrimaryKey();
-
-        if ($value === null) {
-            $class = static::class;
-            throw new Exception("Cannot get primary key for $class.");
-        }
-
-        return $value;
+    public static function getMorphTo(): array {
+        return array_unique([
+            ...self::parentGetMorphTo(),
+            Media::class
+        ]);
     }
+
+    private static ?MediaCollectionList $mediaCollectionList = null;
 
     public static function mediaCollections(): MediaCollectionList {
         if (static::$mediaCollectionList === null) {

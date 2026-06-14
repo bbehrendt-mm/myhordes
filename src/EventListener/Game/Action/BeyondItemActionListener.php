@@ -125,7 +125,7 @@ final class BeyondItemActionListener implements ServiceSubscriberInterface
 
             // Flare
             case 21 :
-                $criteria = new Criteria();
+                $criteria = new Criteria(accessRawFieldValues: true);
                 $criteria->andWhere($criteria->expr()->eq('town', $event->citizen->getTown()));
                 $criteria->andWhere($criteria->expr()->neq('discoveryStatus', Zone::DiscoveryStateCurrent));
                 $zones = $this->getService(EntityManagerInterface::class)->getRepository(Zone::class)->matching($criteria)->getValues();

@@ -66,6 +66,15 @@ export type TranslationStrings = {
             event_tag: string
             event_tag_help: string
         }
+
+        organization: {
+            section: string
+
+            others: string
+            others_help: string
+            others_ro: string
+            others_rw: string
+        }
     }
 
     template: {

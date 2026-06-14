@@ -498,7 +498,7 @@ class Zone
      */
     public function getRuinZonesOnLevel(int $level): ArrayCollection|PersistentCollection
     {
-        return $this->getRuinZones()->matching( (new Criteria())->andWhere( new Comparison( 'z', Comparison::EQ, $level ) ) );
+        return $this->getRuinZones()->matching( new Criteria(accessRawFieldValues: true)->andWhere( new Comparison( 'z', Comparison::EQ, $level ) ) );
     }
 
     public function addRuinZone(RuinZone $ruinZone): self
@@ -625,7 +625,7 @@ class Zone
      */
     public function getActivityMarkersFor(?ZoneActivityMarkerType $type = null, Citizen|bool|null $citizen = null): Collection
     {
-        $criteria = new Criteria();
+        $criteria = new Criteria(accessRawFieldValues: true);
         if ($type !== null)    $criteria->andWhere( new Comparison( 'type', Comparison::EQ, $type->value ) );
         if ($citizen === false)    $criteria->andWhere( new Comparison( 'citizen', Comparison::EQ, null ) );
         elseif ($citizen === true) $criteria->andWhere( new Comparison( 'citizen', Comparison::NEQ, null ) );
@@ -640,7 +640,7 @@ class Zone
      */
     public function getActivityMarkerFor(ZoneActivityMarkerType $type, Citizen $citizen): ?ZoneActivityMarker
     {
-        return $this->getActivityMarkers()->matching( new Criteria()
+        return $this->getActivityMarkers()->matching( new Criteria(accessRawFieldValues: true)
             ->andWhere( new Comparison( 'type', Comparison::EQ, $type->value ) )
             ->andWhere( new Comparison( 'citizen', Comparison::EQ, $citizen ) )
         )->first() ?: null;

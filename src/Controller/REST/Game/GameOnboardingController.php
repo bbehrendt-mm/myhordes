@@ -10,14 +10,14 @@ use App\Entity\Citizen;
 use App\Entity\CitizenProfession;
 use App\Entity\CitizenRankingProxy;
 use App\Entity\CitizenRole;
-use App\Entity\MayorMark;
 use App\Entity\SpecialActionPrototype;
 use App\Entity\Town;
 use App\Entity\TownClass;
+use App\Entity\TownRankingProxy;
 use App\Entity\TownSlotReservation;
 use App\Entity\User;
+use App\Enum\AutomaticAccountMarkerType;
 use App\Enum\Configuration\MyHordesSetting;
-use App\Response\AjaxResponse;
 use App\Service\Actions\Ghost\ExplainTownConfigAction;
 use App\Service\Actions\Security\GenerateMercureToken;
 use App\Service\ConfMaster;
@@ -28,11 +28,11 @@ use App\Service\TownHandler;
 use App\Service\UserHandler;
 use App\Structures\EventConf;
 use App\Structures\MyHordesConf;
-use Carbon\Carbon;
 use DateTime;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -201,7 +201,7 @@ class GameOnboardingController extends AbstractController
     #[Route(path: '/list', name: 'list_towns', methods: ['GET'])]
     public function list(EntityManagerInterface $em): JsonResponse
     {
-        $towns = $em->getRepository(Town::class)->matching((new Criteria())
+        $towns = $em->getRepository(Town::class)->matching(new Criteria(accessRawFieldValues: true)
             ->where(Criteria::expr()->eq('day', 1))
             ->andWhere(Criteria::expr()->orX(
                 Criteria::expr()->isNull('scheduledFor'),
@@ -215,7 +215,10 @@ class GameOnboardingController extends AbstractController
     }
 
     #[Route(path: '/{id}/citizens', name: 'list_town_citizens', methods: ['GET'])]
-    public function citizens(Town $town): JsonResponse
+    public function citizens(
+        #[MapEntity(id: 'id')]
+        Town $town
+    ): JsonResponse
     {
         if (!$town->isOpen() || ($town->getScheduledFor() && $town->getScheduledFor() > now()))
             return new JsonResponse(status: Response::HTTP_NOT_FOUND);
@@ -238,7 +241,7 @@ class GameOnboardingController extends AbstractController
     }
 
     #[Route(path: '/{id}', name: 'town_details', methods: ['GET'])]
-    public function details(Town $town, ExplainTownConfigAction $explainTownConfigAction,
+    public function details(#[MapEntity(id: 'id')] Town $town, ExplainTownConfigAction $explainTownConfigAction,
                             EntityManagerInterface $em, ConfMaster $conf, TranslatorInterface $translator,
                             GameFactory $gameFactory,
     ): JsonResponse
@@ -255,8 +258,9 @@ class GameOnboardingController extends AbstractController
 
         $coa_members = [];
         if (empty($lock_reasons)) {
-            $this->userHandler->getConsecutiveDeathLock( $this->getUser(), $cdm_warn );
-            if ($cdm_warn) $warnings[] = $translator->trans('Du bist in mehreren deiner letzten Städte frühzeitig durch Verdursten gestorben. Sollte dies in deiner nächsten Stadt erneut geschehen, wirst du für einige Wochen vom Spiel ausgeschlossen.', [], 'ghost' );
+            $aam_locked = $this->getUser()->isActiveAutomaticAccountMarkersLimitReachedFor( AutomaticAccountMarkerType::SuspiciousDeath, $aam_count );
+            if (!$aam_locked && ($aam_count === AutomaticAccountMarkerType::SuspiciousDeath->limit() - 1)) $warnings[] =
+                $translator->trans('Du bist in mehreren deiner letzten Städte frühzeitig gestorben. Sollte dies in deiner nächsten Stadt erneut geschehen, wirst du für einige Wochen vom Spiel ausgeschlossen.', [], 'ghost' );
 
             $coa_members = $this->userHandler->getAvailableCoalitionMembers( $this->getUser() , $count, $active);
             $warnings[] = match (true) {
@@ -287,7 +291,7 @@ class GameOnboardingController extends AbstractController
 
     #[Route(path: '/{id}', name: 'town_join', methods: ['POST'])]
     #[Semaphore(scope: 'global')]
-    public function join(Town $town, JSONRequestParser $parser, GameFactory $factory, TranslatorInterface $translator,
+    public function join(#[MapEntity(id: 'id')] Town $town, JSONRequestParser $parser, GameFactory $factory, TranslatorInterface $translator,
                              EntityManagerInterface $em, ConfMaster $conf, TownHandler $townHandler): JsonResponse
     {
         $user = $this->getUser();
@@ -333,12 +337,11 @@ class GameOnboardingController extends AbstractController
         try {
             $em->persist($town);
             $em->persist($citizen);
-            if ($town->isMayor() && $town->getCreator()?->getId() !== $user->getId() && !$town->getType()->is( TownClass::EASY ))
-                $em->persist( new MayorMark()
-                    ->setUser( $this->getUser() )
-                    ->setCitizen( true )
-                    ->setExpires( new Carbon()->addDays(10) )
-                );
+            if ($town->isMayor() && $town->getCreator()?->getId() !== $user->getId() && !$town->getType()->is( TownClass::EASY )) {
+                $this->getUser()->addAutomaticAccountMarkerByType(AutomaticAccountMarkerType::Mayor, TownRankingProxy::fromTown($town));
+                $em->persist($this->getUser());
+            }
+
             $em->flush();
         } catch (Exception $e) {
             return new JsonResponse(

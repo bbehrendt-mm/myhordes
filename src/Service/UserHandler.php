@@ -7,7 +7,6 @@ use App\Entity\AntiSpamDomains;
 use App\Entity\CauseOfDeath;
 use App\Entity\Changelog;
 use App\Entity\CitizenRankingProxy;
-use App\Entity\ConsecutiveDeathMarker;
 use App\Entity\FeatureUnlock;
 use App\Entity\Season;
 use App\Entity\Shoutbox;
@@ -19,6 +18,7 @@ use App\Entity\User;
 use App\Entity\UserGroup;
 use App\Entity\UserGroupAssociation;
 use App\Entity\UserSwapPivot;
+use App\Enum\AutomaticAccountMarkerType;
 use App\Enum\Configuration\MyHordesSetting;
 use App\Enum\DomainBlacklistType;
 use App\Service\Actions\Cache\InvalidateTagsInAllPoolsAction;
@@ -294,18 +294,6 @@ class UserHandler
         return null;
     }
 
-    public function getConsecutiveDeathLock(User $user, ?bool &$warning = null): ?ConsecutiveDeathMarker {
-        /** @var ConsecutiveDeathMarker $cdm */
-        $cdm = $this->entity_manager->getRepository(ConsecutiveDeathMarker::class)->matching((new Criteria())
-            ->where(Criteria::expr()->eq('user', $user))
-            ->andWhere(Criteria::expr()->gte('number', 2))
-            ->andWhere(Criteria::expr()->gte('timestamp', (new \DateTime('today - 2week'))))
-        )->first() ?: null;
-
-        $warning = $cdm?->getDeath()?->isMarker() && $cdm?->getNumber() < 3;
-        return ($cdm?->getDeath()?->isMarker() && $cdm?->getNumber() >= 3) ? $cdm : null;
-    }
-
     /**
      * @param User $user
      * @param int|null $full_member_count
@@ -337,7 +325,7 @@ class UserHandler
                 $member->getUser()->getLastActionTimestamp() !== null &&
                 ($timeout <= 0 || $member->getUser()->getLastActionTimestamp()->getTimestamp() > (time() - $timeout)) &&
                 $member->getUser()->getActiveCitizen() === null &&
-                !$this->getConsecutiveDeathLock($member->getUser()) &&
+                $member->getUser()->isActiveAutomaticAccountMarkersLimitReachedFor( AutomaticAccountMarkerType::SuspiciousDeath ) &&
                 !$this->permissions->checkRestriction( $member->getUser(), AccountRestriction::RestrictionGameplay ) &&
                 !$this->entity_manager->getRepository(CitizenRankingProxy::class)->findNextUnconfirmedDeath($member->getUser())
             ) {

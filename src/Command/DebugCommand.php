@@ -434,7 +434,7 @@ class DebugCommand extends LanguageCommand
         }
 
         if ($tid = $input->getOption('confirm-deaths')) {
-            $criteria = new Criteria();
+            $criteria = new Criteria(accessRawFieldValues: true);
             $criteria->andWhere($criteria->expr()->contains('email', '@localhost'));
 
             $users = $this->entity_manager->getRepository(User::class)->matching($criteria);

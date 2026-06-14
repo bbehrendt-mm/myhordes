@@ -7,6 +7,7 @@ use App\Annotations\GateKeeperProfile;
 use App\Entity\AccountRestriction;
 use App\Entity\ActivityCluster;
 use App\Entity\AntiSpamDomains;
+use App\Entity\AutomaticAccountMarker;
 use App\Entity\Award;
 use App\Entity\Citizen;
 use App\Entity\CitizenRankingProxy;
@@ -32,6 +33,7 @@ use App\Entity\UserPendingValidation;
 use App\Entity\UserReferLink;
 use App\Entity\UserSponsorship;
 use App\Entity\UserSwapPivot;
+use App\Enum\AutomaticAccountMarkerType;
 use App\Enum\Configuration\MyHordesSetting;
 use App\Enum\DomainBlacklistType;
 use App\Enum\ServerSetting;
@@ -52,11 +54,15 @@ use App\Service\User\UserUnlockableService;
 use App\Service\User\UserAccountService;
 use App\Service\UserFactory;
 use App\Service\UserHandler;
+use Carbon\Carbon;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\Expr\Comparison;
 use Doctrine\Common\Collections\Order;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\Expr\Join;
 use Exception;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
@@ -100,7 +106,7 @@ class AdminUserController extends AdminActionController
                 $qb->andWhere('u.lastActionTimestamp >= :time')->setParameter('time', (new \DateTime())->modify('-' . (int)$filter['active'] . 'days'));
 
             if (isset($filter['game'])) {
-                $qb->leftJoin(Citizen::class, 'c', Join::WITH, 'c.user = u.id AND c.active = 1');
+                $qb->leftJoin(Citizen::class, 'c', Join::ON, 'c.user = u.id AND c.active = 1');
                 switch ($filter['game']) {
                     case '1': $qb->andWhere('c.id IS NOT NULL'); break;
                     case '0': $qb->andWhere('c.id IS NULL'); break;
@@ -109,7 +115,7 @@ class AdminUserController extends AdminActionController
             }
 
             if (isset($filter['main_soul'])) {
-                $qb->leftJoin(TwinoidImport::class, 't', Join::WITH, 't.user = u.id AND t.main = 1');
+                $qb->leftJoin(TwinoidImport::class, 't', Join::ON, 't.user = u.id AND t.main = 1');
                 if ($filter['main_soul'] === 'nomain') $qb->andWhere('t.id IS NULL');
                 else $qb->andWhere('t.scope = :tscope')->setParameter('tscope', $filter['main_soul']);
             }
@@ -118,17 +124,17 @@ class AdminUserController extends AdminActionController
                 switch ( $filter['any_soul'] ) {
                     case 'any':
                         $qb
-                            ->leftJoin(TwinoidImport::class, 't2', Join::WITH, 't2.user = u.id')
+                            ->leftJoin(TwinoidImport::class, 't2', Join::ON, 't2.user = u.id')
                             ->andWhere('t2.id IS NOT NULL');
                         break;
                     case 'noany':
                         $qb
-                            ->leftJoin(TwinoidImport::class, 't2', Join::WITH, 't2.user = u.id')
+                            ->leftJoin(TwinoidImport::class, 't2', Join::ON, 't2.user = u.id')
                             ->andWhere('t2.id IS NULL');
                         break;
                     default:
                         $qb
-                            ->leftJoin(TwinoidImport::class, 't2', Join::WITH, 't2.user = u.id AND t2.scope = :t2scope')->setParameter('t2scope', $filter['any_soul'])
+                            ->leftJoin(TwinoidImport::class, 't2', Join::ON, 't2.user = u.id AND t2.scope = :t2scope')->setParameter('t2scope', $filter['any_soul'])
                             ->andWhere('t2.id IS NOT NULL');
                         break;
                 }
@@ -138,23 +144,23 @@ class AdminUserController extends AdminActionController
                 switch ( $filter['restriction'] ) {
                     case 'none':
                         $qb
-                            ->leftJoin(AccountRestriction::class, 'r', Join::WITH, 'r.user = u.id')
+                            ->leftJoin(AccountRestriction::class, 'r', Join::ON, 'r.user = u.id')
                             ->andWhere('r.id IS NULL');
                         break;
                     case 'unconf':
                         $qb
-                            ->leftJoin(AccountRestriction::class, 'r', Join::WITH, 'r.user = u.id AND r.confirmed = 0')
+                            ->leftJoin(AccountRestriction::class, 'r', Join::ON, 'r.user = u.id AND r.confirmed = 0')
                             ->andWhere('r.id IS NOT NULL');
                         break;
                     case 'inactive':
                         $qb
-                            ->leftJoin(AccountRestriction::class, 'r', Join::WITH, 'r.user = u.id')
-                            ->leftJoin(AccountRestriction::class, 'r2', Join::WITH, 'r2.user = u.id AND r2.active = 1 AND r2.confirmed = 1 AND (r2.expires > :rdate OR r2.expires IS NULL)')->setParameter('rdate', new \DateTime())
+                            ->leftJoin(AccountRestriction::class, 'r', Join::ON, 'r.user = u.id')
+                            ->leftJoin(AccountRestriction::class, 'r2', Join::ON, 'r2.user = u.id AND r2.active = 1 AND r2.confirmed = 1 AND (r2.expires > :rdate OR r2.expires IS NULL)')->setParameter('rdate', new \DateTime())
                             ->andWhere('r.id IS NOT NULL')->andWhere('r2.id IS NULL');
                         break;
                     case 'active':
                         $qb
-                            ->leftJoin(AccountRestriction::class, 'r', Join::WITH, 'r.user = u.id AND r.active = 1 AND r.confirmed = 1 AND (r.expires > :rdate OR r.expires IS NULL)')->setParameter('rdate', new \DateTime())
+                            ->leftJoin(AccountRestriction::class, 'r', Join::ON, 'r.user = u.id AND r.active = 1 AND r.confirmed = 1 AND (r.expires > :rdate OR r.expires IS NULL)')->setParameter('rdate', new \DateTime())
                             ->andWhere('r.id IS NOT NULL');
                         break;
                 }
@@ -230,7 +236,7 @@ class AdminUserController extends AdminActionController
     public function users_multi_ac(): Response
     {
         $clusters = $this->entity_manager->getRepository(ActivityCluster::class)
-            ->matching( Criteria::create()->andWhere(Criteria::expr()->gt( 'lastSeen', (new \DateTime())->modify('-7days today') )) )
+            ->matching( Criteria::create(true)->andWhere(Criteria::expr()->gt( 'lastSeen', new \DateTime()->modify('-7days today') )) )
             ->getValues();
 
         usort($clusters, fn(ActivityCluster $a, ActivityCluster $b) => $b->getUsers()->count() <=> $a->getUsers()->count() );
@@ -252,12 +258,21 @@ class AdminUserController extends AdminActionController
     }
 
     /**
-     * @param int $id
+     * @param User $user
+     * @param HTMLService $html
+     * @param UserUnlockableService $unlockable
+     * @param KernelInterface $kernel
      * @return Response
      * @throws Exception
      */
     #[Route(path: 'jx/admin/users/{id}/account/view', name: 'admin_users_account_view', requirements: ['id' => '\d+'])]
-    public function users_account_view(User $user, HTMLService $html, UserUnlockableService $unlockable, KernelInterface $kernel): Response
+    public function users_account_view(
+        #[MapEntity(id: 'id')]
+        User $user,
+        HTMLService $html,
+        UserUnlockableService $unlockable,
+        KernelInterface $kernel
+    ): Response
     {
         $validations = $this->isGranted('ROLE_SUB_ADMIN') ? $this->entity_manager->getRepository(UserPendingValidation::class)->findByUser($user) : [];
         $desc = $this->entity_manager->getRepository(UserDescription::class)->findOneBy(['user' => $user]);
@@ -479,7 +494,7 @@ class AdminUserController extends AdminActionController
      */
     #[Route(path: 'api/admin/users/{id}/account/do/{action}/{param}', name: 'admin_users_account_manage', requirements: ['id' => '\d+'])]
     #[AdminLogProfile(enabled: true)]
-    public function user_account_manager(User $user, string $action, JSONRequestParser $parser, UserFactory $uf,
+    public function user_account_manager(#[MapEntity(id: 'id')] User $user, string $action, JSONRequestParser $parser, UserFactory $uf,
                                          TwinoidHandler $twin, UserHandler $userHandler, PermissionHandler $perm,
                                          CrowService $crow, KernelInterface $kernel, InvalidateTagsInAllPoolsAction $clearCache,
                                          EventProxyService $proxy, UserUnlockableService $unlockService, InvalidateLogCacheAction $logCacheAction,
@@ -1016,7 +1031,11 @@ class AdminUserController extends AdminActionController
      * @return Response
      */
     #[Route(path: 'jx/admin/users/{id}/ban/view', name: 'admin_users_ban_view')]
-    public function users_ban_view(User $user, UserAccountService $accountService): Response
+    public function users_ban_view(
+        #[MapEntity(id: 'id')]
+        User $user,
+        UserAccountService $accountService
+    ): Response
     {
         $known_ips = $accountService->getKnownIPsForUser($user);
         $blocked_ips = array_filter($known_ips, fn(string $ip) => $this->entity_manager->getRepository(AntiSpamDomains::class)
@@ -1024,6 +1043,17 @@ class AdminUserController extends AdminActionController
 
         $open_posts = $this->entity_manager->getRepository(Post::class)->count(['owner' => $user, 'hidden' => false]);
         $closed_posts = $this->entity_manager->getRepository(Post::class)->count(['owner' => $user, 'hidden' => true]);
+
+        [$active_account_marks, $inactive_account_marks] = new ArrayCollection(AutomaticAccountMarkerType::cases())
+            ->partition(fn(int $k, AutomaticAccountMarkerType $type) => $user->isActiveAutomaticAccountMarkersLimitReachedFor( $type ));
+
+        $active_account_marks = $active_account_marks
+            ->map( fn(AutomaticAccountMarkerType $type) => $user->getDecidingActiveAutomaticAccountMarkersFor( $type ) )
+            ->filter( fn(?AutomaticAccountMarker $marker) => $marker !== null );
+
+        $inactive_account_marks = $inactive_account_marks->map(
+            fn(AutomaticAccountMarkerType $type) => [$type, $user->getActiveAutomaticAccountMarkersFor($type)->count()]
+        );
 
         return $this->render( 'ajax/admin/users/ban.html.twig', $this->addDefaultTwigArgs("admin_users_ban", [
             'user' => $user,
@@ -1034,6 +1064,14 @@ class AdminUserController extends AdminActionController
 
             'open_posts' => $open_posts,
             'closed_posts' => $closed_posts,
+
+            'nonblocking_account_marks' => $inactive_account_marks,
+            'blocking_account_marks' => $active_account_marks,
+            'all_account_marks' => $user->getAutomaticAccountMarkers()->matching(
+                Criteria::create(true)
+                    ->where( new Comparison('created_at', Comparison::GTE, Carbon::now()->subYear()->toDateTimeImmutable()) )
+                    ->orderBy(['created_at' => Order::Descending->value])
+            ),
 
             'existing' => $this->entity_manager->getRepository(AccountRestriction::class)->findBy(['user' => $user], ['active' => 'ASC', 'confirmed' => 'ASC', 'created' => 'ASC'])
         ]));
@@ -1352,7 +1390,11 @@ class AdminUserController extends AdminActionController
      * @return Response
      */
     #[Route(path: 'api/admin/users/{id}/citizen/delete', name: 'admin_users_citizen_remove_aspect', requirements: ['id' => '\d+'])]
-    public function users_citizen_remove_aspect(User $user, JSONRequestParser $parser): Response {
+    public function users_citizen_remove_aspect(
+        #[MapEntity(id: 'id')]
+        User $user,
+        JSONRequestParser $parser
+    ): Response {
         $citizen = $user->getActiveCitizen();
 
         if (!$citizen) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);

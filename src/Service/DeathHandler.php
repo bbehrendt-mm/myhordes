@@ -4,10 +4,10 @@
 namespace App\Service;
 
 
+use App\Entity\AutomaticAccountMarker;
 use App\Entity\CauseOfDeath;
 use App\Entity\Citizen;
 use App\Entity\CitizenRankingProxy;
-use App\Entity\ConsecutiveDeathMarker;
 use App\Entity\EscapeTimer;
 use App\Entity\Gazette;
 use App\Entity\HomeIntrusion;
@@ -15,10 +15,13 @@ use App\Entity\PictoPrototype;
 use App\Entity\RuinZone;
 use App\Entity\TownRankingProxy;
 use App\Entity\UserGroup;
+use App\Enum\AutomaticAccountMarkerType;
 use App\Enum\Configuration\TownSetting;
 use App\Enum\Game\CitizenPersistentCache;
 use App\Service\Actions\Mercure\BroadcastViaMercureAction;
 use App\Structures\TownConf;
+use Carbon\Carbon;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -152,16 +155,18 @@ readonly class DeathHandler
         $citizen->setAlive(false);
         $this->gps->recordCitizenDied($citizen);
 
-        if ($citizen->getTown()->getDay() <= 3) {
-            $cdm = $this->entity_manager->getRepository(ConsecutiveDeathMarker::class)->findOneBy( ['user' => $citizen->getUser()] )
-                ?? (new ConsecutiveDeathMarker)->setUser($citizen->getUser())->setDeath( $cod )->setNumber(0);
-            if ($cdm->getDeath() === $cod) $cdm->setNumber($cdm->getNumber()+1);
-            else $cdm->setNumber(1)->setDeath($cod);
-
-            $this->entity_manager->persist($cdm->setTimestamp(new \DateTime()));
-        } elseif ($cdm = $this->entity_manager->getRepository(ConsecutiveDeathMarker::class)->findOneBy( ['user' => $citizen->getUser()] )) {
-            $this->entity_manager->persist($cdm->setNumber(0)->setDeath($cod));
-        }
+        if ( Carbon::createFromInterface($citizen->getRankingEntry()?->getBegin() ?? new DateTime())->isCurrentDay() )
+            // Add suspicious death marker for dying on the same day as joining
+            $citizen->getUser()->addAutomaticAccountMarkerByType(
+                         AutomaticAccountMarkerType::SuspiciousDeath,
+                forTown: $citizen->getTown()->getRankingEntry()
+            );
+        elseif ($citizen->getTown()->getDay() <= 3 && $cod->isMarker())
+            // Add suspicious death marker for dying before D3 by a suspicious cause (i.e. dehydration)
+            $citizen->getUser()->addAutomaticAccountMarkerByType(
+                AutomaticAccountMarkerType::SuspiciousDeath,
+                forTown: $citizen->getTown()->getRankingEntry()
+            );
 
         $gazetteDay ??= $citizen->getTown()->getDay() + (in_array($cod->getRef(), [CauseOfDeath::NightlyAttack,CauseOfDeath::Radiations]) ? 0 : 1);
         $gazette = $citizen->getTown()->findGazette( $gazetteDay, true );

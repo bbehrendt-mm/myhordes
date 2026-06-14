@@ -13,6 +13,7 @@ use App\Entity\User;
 use App\Enum\UserSetting;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Cache\InvalidArgumentException;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Asset\Packages;
@@ -152,7 +153,7 @@ class EditorController extends CustomAbstractCoreController
         $user = $this->getUser();
 
         $unlock_all = in_array($context, [
-            'announcement', 'changelog'
+            'announcement', 'changelog', 'reaction'
         ]) && $this->isGranted('ROLE_ELEVATED');
         $unlock_s = $unlock_all ? 'all' : 'default';
 
@@ -179,6 +180,7 @@ class EditorController extends CustomAbstractCoreController
                 /** @var $entry Emotes */
                 if ($entry === null) continue;
                 $data[$entry->getTag()] = [
+                    'id' => $entry->getId(),
                     'tag' => $entry->getTag(),
                     'path' => $entry->getI18n() ? str_replace('{lang}', $user->getLanguage() ?? 'de', $entry->getPath()) : $entry->getPath(),
                     'orderIndex' => $entry->getOrderIndex(),
