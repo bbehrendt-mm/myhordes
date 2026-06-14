@@ -74,6 +74,7 @@ class DataController extends CustomAbstractCoreController
                 'name' => $this->translator->trans( $p->getLabel(), [], 'items' ),
                 'desc' => $this->translator->trans( $p->getDescription(), [], 'items' ),
                 'icon' => $this->assets->getUrl( "build/images/item/item_{$p->getIcon()}.gif" ),
+                'brokenIcon' => $this->assets->getUrl( "build/images/item/item_" . ($p->getBrokenIcon() ?? $p->getIcon()) . ".gif" ),
                 'props' => $p->getProperties()->filter( fn(ItemProperty $p) => in_array( $p->getName(), $fe_props ) )->map( fn(ItemProperty $p) => $p->getName() )->getValues(),
                 'heavy' => $p->getHeavy(),
                 'extension' => $p->isCarrierItem(),

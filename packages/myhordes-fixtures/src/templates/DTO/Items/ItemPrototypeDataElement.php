@@ -9,6 +9,8 @@ use MyHordes\Fixtures\DTO\Element;
 use MyHordes\Fixtures\DTO\LabeledIconElementInterface;
 
 /**
+ * @property string $brokenIcon
+ * @method self brokenIcon(string $v)
  * @property string $description
  * @method self description(string $v)
  * @property string $category
@@ -55,6 +57,7 @@ class ItemPrototypeDataElement extends Element implements LabeledIconElementInte
             $entity
                 ->setLabel( $this->label )
                 ->setIcon( $this->icon )
+                ->setBrokenIcon( $this->brokenIcon ?? $this->icon )
                 ->setDeco( $this->deco ?? 0 )
                 ->setHeavy( $this->heavy ?? false )
                 ->setCategory( $category )
