@@ -51,10 +51,8 @@
     .overflowing .extend_resources {
       .overflow-gradient(@myhordes-building-voted-color);
     }
-    &:not(.locked) {
-      .defense {
-        background: @myhordes-building-voted-color;
-      }
+    .defense {
+      background: @myhordes-building-voted-color;
     }
   }
 }
@@ -107,6 +105,7 @@ div.buildings {
     &:not(.hc):not(.locked) { .b-table(@myhordes-building-row-color, @myhordes-building-row-color-odd); }
     &.hc:not(.locked) { .b-table(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.175)); }
     &.locked { background: #7b452f }
+    &.locked.voted { background: @myhordes-building-complete-header-color }
     &.root > div.cell:first-child>span { font-weight: bold }
     overflow: hidden;
 
@@ -544,7 +543,7 @@ div.buildings {
         height: @myhordes-building-height;
       }
       .building_resources {
-        height: 0px;
+        height: 0;
       }
     }
 
@@ -620,7 +619,7 @@ div.buildings {
       }
     }
 
-    &.voted:not(.complete):not(.locked) {
+    &.voted:not(.complete) {
       .defense {
         background: unset;
       }
