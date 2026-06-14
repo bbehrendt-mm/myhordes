@@ -18,7 +18,6 @@ use App\Service\InventoryHandler;
 use App\Service\ItemFactory;
 use App\Service\PermissionHandler;
 use App\Service\StatusFactory;
-use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
 use ReflectionClass;
 use Symfony\Component\Asset\Packages;
