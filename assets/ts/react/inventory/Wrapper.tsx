@@ -756,7 +756,7 @@ const SingleItem = (props: { item: Item, data: VaultItemEntry | null, mods: Inve
         >
             <span className="item-icon"><img src={ (props.item.b ? props.data?.brokenIcon : props.data?.icon) ?? '' } alt={ props.data?.name ?? '...' }/></span>
             {props.item.c > 1 && <span>{props.item.c}</span>}
-            <ItemTooltip data={props.data} addendum={props.item.b && {className: 'broken', text: globals.strings.props.broken}}>
+            <ItemTooltip data={props.data} broken={props.item.b} addendum={props.item.b && {className: 'broken', text: globals.strings.props.broken}}>
                 { props.mods.has_drunk && props.data.props.includes('is_water') && <div className="item-addendum">{ globals.strings.props["drink-done"] }</div> }
                 { props.item.e && <div className="item-tag item-tag-essential">{ globals.strings.props.essential }</div> }
                 { props.data.props.includes('single_use') && <div className="item-tag item-tag-use-1">{ globals.strings.props.single_use }</div> }
