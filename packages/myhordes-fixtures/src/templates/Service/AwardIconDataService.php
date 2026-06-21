@@ -103,6 +103,8 @@ class AwardIconDataService implements FixtureProcessorInterface {
         $container->add()->icon('r_eventwin')->unlockquantity(1)->associatedpicto('r_eventwin_#00')->commit();
         $container->add()->icon('r_eventpart')->unlockquantity(1)->associatedpicto('r_eventpart_#00')->commit();
         $container->add()->icon('r_techwin')->unlockquantity(1)->associatedpicto('r_techwin_#00')->commit();
+        $container->add()->icon('r_cburn')->unlockquantity(50)->associatedpicto('r_cburn_#00')->commit();
+        $container->add()->icon('r_decofeist')->unlockquantity(25)->associatedpicto('r_decofeist_#00')->commit();
 
         $data = $container->toArray();
     }
