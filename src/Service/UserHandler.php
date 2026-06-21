@@ -325,7 +325,7 @@ class UserHandler
                 $member->getUser()->getLastActionTimestamp() !== null &&
                 ($timeout <= 0 || $member->getUser()->getLastActionTimestamp()->getTimestamp() > (time() - $timeout)) &&
                 $member->getUser()->getActiveCitizen() === null &&
-                $member->getUser()->isActiveAutomaticAccountMarkersLimitReachedFor( AutomaticAccountMarkerType::SuspiciousDeath ) &&
+                !$member->getUser()->isActiveAutomaticAccountMarkersLimitReachedFor( AutomaticAccountMarkerType::SuspiciousDeath ) &&
                 !$this->permissions->checkRestriction( $member->getUser(), AccountRestriction::RestrictionGameplay ) &&
                 !$this->entity_manager->getRepository(CitizenRankingProxy::class)->findNextUnconfirmedDeath($member->getUser())
             ) {
