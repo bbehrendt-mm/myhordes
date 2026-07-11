@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Structures\Media\MediaCollection;
 use App\Structures\Media\MediaCollectionList;
 use App\Structures\Media\MediaVariant;
+use App\Traits\Entity\DoctrineExtensions;
 use App\Traits\Entity\LinksMedia;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Table;
@@ -19,7 +20,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 #[UniqueConstraint(name: 'external_app_name_unique', columns: ['name'])]
 class ExternalApp
 {
-    use LinksMedia;
+    use DoctrineExtensions, LinksMedia;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]

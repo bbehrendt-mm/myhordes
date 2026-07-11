@@ -37,6 +37,7 @@ class AutomaticAccountMarker
     private bool $enabled = true;
 
     #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     private ?TownRankingProxy $town = null;
 
     public function getId(): ?Uuid

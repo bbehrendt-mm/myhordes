@@ -6,6 +6,7 @@ use App\Enum\ForumType;
 use App\Structures\Media\MediaCollection;
 use App\Structures\Media\MediaCollectionList;
 use App\Structures\Media\MediaVariant;
+use App\Traits\Entity\DoctrineExtensions;
 use App\Traits\Entity\LinksMedia;
 use ArrayHelpers\Arr;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -19,7 +20,7 @@ use Exception;
 #[ORM\Entity(repositoryClass: 'App\Repository\ForumRepository')]
 class Forum
 {
-    use LinksMedia;
+    use DoctrineExtensions, LinksMedia;
 
     const int ForumTypeDefault = 0;
     const int ForumTypeElevated = 1;
