@@ -209,7 +209,7 @@ const AvatarMediaGroupCollapse = ({mediaGroup, activeElement, setActiveElement}:
                     {mediaGroup.expires <= 1 && <span className="small">{ globals.strings.common.will_delete }</span>}
                 </div> }
             </div>
-            <div className="flex-none flex middle">
+            <div className="flex-none flex middle large-gap">
                 <img className="pointer"
                      alt={ globals.strings.common.action_activate_preview }
                      title={ globals.strings.common.action_activate_preview }
@@ -228,6 +228,7 @@ const AvatarMediaGroupCollapse = ({mediaGroup, activeElement, setActiveElement}:
                      title={ globals.strings.common.action_delete_preview }
                      src={ globals.strings.common.action_icon_delete }
                      onClick={ () => {
+                         if (!confirm(globals.strings.common.confirm)) return;
                          $.html.addLoadStack();
                          globals.api.deleteMedia(mediaGroup.id).then(() => {
                              $.html.notice( globals.strings.common.success_delete );
