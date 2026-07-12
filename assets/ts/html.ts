@@ -94,6 +94,19 @@ export default class HTML {
     init(): void {
         document.getElementById('modal-backdrop')?.addEventListener('pop', () => requestAnimationFrame( () => this.nextPopup() ))
         this.setScreenWidth($?.client?.config?.forceScreenWidth?.get() ?? 0);
+
+        const nativeConfirm = window.confirm;
+        window.confirm = (message: string) => {
+            const requested = new Date();
+            const response = nativeConfirm(message);
+            const responseTime = (new Date().getTime() - requested.getTime());
+
+            if (!response && responseTime < 10) {
+                this.warning('Unable to display confirmation dialog as notifications for this page have been disabled. Please close this tab and open it again for MyHordes to work properly!');
+                return true;
+            }
+            return response;
+        }
     }
 
     setInitParams( params: HTMLInitParams ): void {
