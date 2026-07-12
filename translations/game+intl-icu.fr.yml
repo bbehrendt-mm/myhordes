@@ -210,17 +210,17 @@ Einwohner: Habitant
 'Wähle einen Beruf': 'Choisissez votre profession'
 'Alle Einträge anzeigen': 'Afficher toutes les entrées'
 Tag: Jour
-Clean: "            {ref__icu, select,\n                on {\n                    {ref__gender, select,\n                        female {Claire}\n                        other {Clair}\n                    }\n                }\n            other {Clair(e)}\n            }"
+Clean: "            {ref__icu, select,\n                on {\n                    {ref__gender, select,\n                        female {Claire}\n                        male {Clair}\n                        none {Clair(e)}\n                    }\n                }\n            other {Clair(e)}\n            }"
 Getrunken: Désaltéré
 Satt: " {ref__icu, select,\n                on {\n                    {ref__gender, select,\n                        female {Rassasiée}\n                        other {Rassasié}\n                    }\n                }\n            other {Rassasié(e)}\n            }"
 'Umsichtiger Camper': " {ref__icu, select,\n                on {\n                    {ref__gender, select,\n                        female {Campeuse avisée}\n                        other {Campeur avisé}\n                    }\n                }\n            other {Campeur/Campeuse avisé(e)}\n            }"
-Immunisiert: " {ref__icu, select,\n                on {\n                    {ref__gender, select,\n                        female {Immunisée}\n                        other {Immunisé}\n                    }\n                }\n            other Immunisé(e)}\n            }"
+Immunisiert: "{ref__icu, select,\n    on {\n        {ref__gender, select,\n            female {Immunisée}\n            other {Immunisé}\n        }\n    }\n    other {Immunisé(e)}\n}"
 'Den Tod besiegen': 'Vaincre la mort'
-Erschöpfung: Fatigué(e)
+Erschöpfung: "            {ref__icu, select,\n                on {\n                    {ref__gender, select,\n                        female {Fatiguée}\n                        male {Fatigué}\n                        none {Fatigué(e)}\n                    }\n                }\n            other {Fatigué(e)}\n            }"
 Angststarre: Terrorisé(e)
 Durst: Soif
 Dehydriert: "            {ref__icu, select,\n                on {\n                    {ref__gender, select,\n                        female {Déshydratée}\n                        other {Déshydraté}\n                    }\n                }\n            other {Déshydraté(e)}\n            }"
-Rauschzustand: " {ref__icu, select,\n                on {\n                    {ref__gender, select,\n                        female {Droguée}\n                        other {Drogué}\n                    }\n                }\n            other Drogué(e)}\n            }"
+Rauschzustand: " {ref__icu, select,\n                on {\n                    {ref__gender, select,\n                        female {Droguée}\n                        other {Drogué}\n                    }\n                }\n            other {Drogué(e)}\n            }"
 Drogenabhängig: " {ref__icu, select,\n                on {\n                    {ref__gender, select,\n                        female {Dépendante}\n                        other {Dépendant}\n                    }\n                }\n            other {Dépendant(e)}\n            }"
 Infektion: Infecté(e)
 Trunkenheit: Ivre
@@ -1076,7 +1076,7 @@ Quarantäne: Quarantaine
 'Es ist Zeit, sich seinen Mitmenschen in der Hölle anschließen!': 'Il est temps de rejoindre vos congénères en enfer !'
 "Hiermit kannst du den Namen eines zufälligen Bürgers in deinen Post anfügen.\n                                                    Bei Bedarf kannst du die Auswahl auf bestimmte Berufe, Helden oder bereits gestorbene Bürger eingrenzen.": "Vous pouvez l'utiliser pour ajouter le nom d'un citoyen aléatoire à votre message.\n                                                    Si nécessaire, vous pouvez limiter la sélection à certaines professions, héros ou citoyens déjà décédés."
 'Du bist': 'Vous êtes'
-Erschöpft: Fatigué(e)
+Erschöpft: "            {ref__icu, select,\n                on {\n                    {ref__gender, select,\n                        female {Fatiguée}\n                        male {Fatigué}\n                        none {Fatigué(e)}\n                    }\n                }\n            other {Fatigué(e)}\n            }"
 Spielzeit: Heure du jeu
 "Baupunkte können in der Werkstatt und auf Baustellen verwendet werden, wo sie wie Aktionspunkte\n                            zählen. Wenn möglich werden immer zuerst Baupunkte verbraucht, bevor Aktionspunkte eingesetzt\n                            werden. Bedenke, dass Baupunkte nicht eingesetzt werden können wenn du erschöpft bist!": "Ces points sont exclusivement destinés à la construction des chantiers dans la ville."
 Stadtrat: Conseil de Ville
@@ -2991,7 +2991,7 @@ Meister: Maître
 'Klick hier, wenn du mit deiner Heldenfähigkeit <strong>diesen Registereintrag löschen</strong> möchtest...': 'Cliquez ici si vous souhaitez <strong>supprimer cette entrée de registre</strong> avec votre capacité héroïque...'
 Sofort: Immédiatement
 'Angegebener Zeitpunkt': 'Heure spécifiée'
-'Gut hydriert': 'Hydraté'
+'Gut hydriert': "            {ref__icu, select,\n                on {\n                    {ref__gender, select,\n                        female {Hydratée}\n                        male {Hydraté}\n                        none {Hydraté(e)}\n                    }\n                }\n            other {Hydraté(e)}\n            }"
 Nüchtern: Sobre
 'Es ist wichtig, regelmäßig zu trinken!': 'Il est important de boire régulièrement !'
 'Du bist nüchtern, gut gemacht!': 'Vous êtes sobre, bravo !'

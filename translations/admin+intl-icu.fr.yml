@@ -715,13 +715,13 @@ Cheater: Tricheur
 'Gebäude anlegen:': 'Créer un bâtiment :'
 'Karte aufdecken': 'Révéler la carte'
 Administratoren: Administrateur
-'Verdächtiger Tod': 'Verdächtiger Tod'
-'Teilnehmer einer Spieler-erzeugten öffentlichen Stadt': 'Teilnehmer einer Spieler-erzeugten öffentlichen Stadt'
-'Wird gesetzt, wenn der Spieler eine öffentliche Stadt erstellt oder dieser beitritt. Blockiert das Erstellen oder Betreten fremder Spieler-erstellten öffentlichen Städte wenn aktiv.': 'Wird gesetzt, wenn der Spieler eine öffentliche Stadt erstellt oder dieser beitritt. Blockiert das Erstellen oder Betreten fremder Spieler-erstellten öffentlichen Städte wenn aktiv.'
-'Automatische Sperren und Sanktionen': 'Automatische Sperren und Sanktionen'
-'Aktive Marker': 'Aktive Marker'
-'Aktiv bis': 'Aktiv bis'
-'Alle deaktivieren': 'Alle deaktivieren'
-'Einzelnen deaktivieren': 'Einzelnen deaktivieren'
-Deaktivieren: Deaktivieren
-'Wird für Dehydration an Tag 3 oder früher gesetzt, oder wenn der Spieler an dem selben IRL-Tag stirbt, an dem er der Stadt beigetreten ist. Blockiert den Beitritt zu neuen Städten wenn aktiv.': 'Wird für Dehydration an Tag 3 oder früher gesetzt, oder wenn der Spieler an dem selben IRL-Tag stirbt, an dem er der Stadt beigetreten ist. Blockiert den Beitritt zu neuen Städten wenn aktiv.'
+'Verdächtiger Tod': 'Mort suspecte'
+'Teilnehmer einer Spieler-erzeugten öffentlichen Stadt': 'Participant d''une ville publique créée par un joueur'
+'Wird gesetzt, wenn der Spieler eine öffentliche Stadt erstellt oder dieser beitritt. Blockiert das Erstellen oder Betreten fremder Spieler-erstellten öffentlichen Städte wenn aktiv.': 'Est défini lorsque le joueur crée une ville publique ou la rejoint. Bloque la création ou l''entrée dans des villes publiques créées par d''autres joueurs lorsqu''il est actif.'
+'Automatische Sperren und Sanktionen': 'Blocages et sanctions automatiques'
+'Aktive Marker': 'Marqueurs actifs'
+'Aktiv bis': 'Actif jusqu''au'
+'Alle deaktivieren': 'Désactiver tout'
+'Einzelnen deaktivieren': 'Désactiver individuellement'
+Deaktivieren: Désactiver
+'Wird für Dehydration an Tag 3 oder früher gesetzt, oder wenn der Spieler an dem selben IRL-Tag stirbt, an dem er der Stadt beigetreten ist. Blockiert den Beitritt zu neuen Städten wenn aktiv.': 'Est défini en cas de déshydratation au jour 3 ou plus tôt, ou si le joueur meurt le même jour IRL où il a rejoint la ville. Bloque le fait de rejoindre de nouvelles villes lorsqu''il est actif.'
