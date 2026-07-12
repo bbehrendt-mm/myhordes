@@ -68,6 +68,12 @@ class Item
 
         return $this;
     }
+    public function getIcon(): ?string
+    {
+        return $this->getBroken()
+            ? $this->getPrototype()?->getBrokenIcon()
+            : $this->getPrototype()?->getIcon();
+    }
     public function getInventory(): ?Inventory
     {
         return $this->inventory;
