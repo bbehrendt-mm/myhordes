@@ -287,8 +287,10 @@ readonly class MediaService
 
         $encoded->save( $savePath );
 
-        if ($media->hasConversion($variantName))
-            unlink( "{$public}/{$media->getUrl( $variantName )}" );
+        if ($media->hasConversion($variantName)) {
+            $fileToDelete = "{$public}/{$media->getUrl( $variantName )}";
+            if (file_exists( $fileToDelete )) unlink("{$public}/{$media->getUrl( $variantName )}");
+        }
 
         $media->setConversion( $variantName, $targetUrl, $image, $encoded, $variant );
         return true;

@@ -405,7 +405,7 @@ class AvatarController extends AbstractController
         ]);
 
         $this->handleCreatedMedia( $user, $media, $mediaService, $format, $parser->get_array( 'crop.small'), $parser->get_array( 'crop.default'), $parser->get_array( 'crop.round' ) );
-        $em->persist( $media->setDeleteAt( Carbon::now()->addDay()->toDateTimeImmutable() ) );
+        $em->persist( $media->setDeleteAt( Carbon::now()->addMinutes(30)->toDateTimeImmutable() ) );
         $em->flush();
 
         return new JsonResponse(['success' => true]);
