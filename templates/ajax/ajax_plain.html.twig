@@ -6,7 +6,7 @@
             <script>
                 $.msg.jumpstart();
                 {% if block('title') is defined %}
-                    $.html.setTitleSegmentAddendum( '{{ block('title')|replace({"\n": "", "\r": "", "\t": "", "'": "", "&amp;":"&"})|raw }}' );
+                    $.html.setTitleSegmentAddendum( '{{ block('title')|replace({"\n": "", "\r": "", "\t": "", "'": "’", "&amp;":"&"})|raw }}' );
                 {% endif %}
             </script>
         {% endif %}
