@@ -208,14 +208,14 @@ class InventoryAwareController extends CustomAbstractController
                 foreach ($inventories as &$inv)
                     foreach ($inv->getItems() as &$item)
                         if ($this->action_handler->targetDefinitionApplies($item, $definition,true, $reference))
-                            $targets[] = [ $item->getId(), $this->translator->trans( $item->getPrototype()->getLabel(), [], 'items' ), "build/images/item/item_{$item->getPrototype()->getIcon()}.gif" ];
+                            $targets[] = [ $item->getId(), $this->translator->trans( $item->getPrototype()->getLabel(), [], 'items' ), "build/images/item/item_{$item->getIcon()}.gif" ];
 
                 break;
             case ItemTargetDefinition::ItemTypeChestSelectionType:
                 if ($reference)
                     foreach ($reference->getHome()->getChest()->getItems() as $item)
                         if ($this->action_handler->targetDefinitionApplies($item, $definition,true, $reference))
-                            $targets[] = [ $item->getId(), $this->translator->trans( $item->getPrototype()->getLabel(), [], 'items' ), "build/images/item/item_{$item->getPrototype()->getIcon()}.gif" ];
+                            $targets[] = [ $item->getId(), $this->translator->trans( $item->getPrototype()->getLabel(), [], 'items' ), "build/images/item/item_{$item->getIcon()}.gif" ];
                 break;
             case ItemTargetDefinition::ItemTypeSelectionType:
                 if ($definition->getTag())
