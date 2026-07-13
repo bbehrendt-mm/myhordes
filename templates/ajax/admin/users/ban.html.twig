@@ -353,8 +353,6 @@
                                             <div class="flex middle small">
                                                 {% if mark.town.town is not null %}
                                                     <a target="_blank" href="{{ path('admin_town_citizens', {id: mark.town.town.id}) }}">{{ 'Stadt'|trans({},'admin') }}</a>
-                                                {% else %}
-                                                    <a target="_blank" href="{{ path('admin_town_citizen_view', {id: mark.town.id, tab: 'citizens'}) }}">{{ 'Stadt'|trans({},'admin') }}</a>
                                                 {% endif %}
 
                                                 {% if mark.type.relatedToDeath %}
