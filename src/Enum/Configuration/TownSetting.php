@@ -13,6 +13,7 @@ enum TownSetting: string implements Configuration
 
     //<editor-fold desc="Town Start Meta Settings">
     case Section_TownStartMeta = '--section--/TownStartMeta';
+    case IncrementFillingCounterWhenEmpty = 'open_town_increment_empty';
     case CancelTownAfterDaysWithoutFilling = 'open_town_limit';
     case DoNotCancelAfterCitizensReached = 'open_town_grace';
     case SpawnStrangerAfterUnfilledDays = 'stranger_day_limit';
@@ -282,6 +283,7 @@ enum TownSetting: string implements Configuration
     public function parent(): ?TownSetting {
         return match ($this) {
             self::CancelTownAfterDaysWithoutFilling,
+            self::IncrementFillingCounterWhenEmpty,
             self::DoNotCancelAfterCitizensReached,
             self::SpawnStrangerAfterUnfilledDays,
             self::SpawnStrangerAfterCitizenCount,
@@ -480,6 +482,7 @@ enum TownSetting: string implements Configuration
             self::AllowLocalConfiguration               => false,
             self::CreateQAPost                          => true,
             self::CancelTownAfterDaysWithoutFilling     => -1,
+            self::IncrementFillingCounterWhenEmpty      => false,
             self::DoNotCancelAfterCitizensReached       => 40,
             self::SpawnStrangerAfterUnfilledDays        => -1,
             self::SpawnStrangerAfterCitizenCount        =>  0,

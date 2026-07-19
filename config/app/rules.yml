@@ -472,6 +472,7 @@ parameters:
 
     custom:
       open_town_limit: 2
+      open_town_increment_empty: true
       open_town_grace: 40
       lock_door_until_full: true
       features:

@@ -167,14 +167,16 @@ class TownAttackCommand extends Command
                 $stranger_day   = (int)$town_conf->get( TownSetting::SpawnStrangerAfterUnfilledDays );
                 $stranger_limit = (int)$town_conf->get( TownSetting::SpawnStrangerAfterCitizenCount );
 
+                $canIncrement = !$town->getCitizens()->isEmpty() || $town_conf->get( TownSetting::IncrementFillingCounterWhenEmpty );
+
                 $update_events = false;
 
-                if ($town->isOpen() && $town->getAliveCitizenCount() > 0 && !$town->getCitizens()->isEmpty() && $stranger_day >= 0 && $town->getDayWithoutAttack() > $stranger_day && $town->getCitizenCount() >= $stranger_limit && $town->getCitizenCount() < $grace) {
+                if ($town->isOpen() && $town->getAliveCitizenCount() > 0 && $canIncrement && $stranger_day >= 0 && $town->getDayWithoutAttack() > $stranger_day && $town->getCitizenCount() >= $stranger_limit && $town->getCitizenCount() < $grace) {
                     $last_op = 'strg';
                     $town->setForceStartAhead(true);
                     $update_events = true;
                     $this->entityManager->persist($town);
-                } elseif ($town->isOpen() && $town->getAliveCitizenCount() > 0 && !$town->getCitizens()->isEmpty() && $limit >= 0 && $town->getDayWithoutAttack() > $limit && $town->getCitizenCount() < $grace) {
+                } elseif ($town->isOpen() && $canIncrement && $limit >= 0 && $town->getDayWithoutAttack() > $limit && $town->getCitizenCount() < $grace) {
                     $last_op = 'del';
                     foreach ($town->getCitizens() as $citizen)
                         $this->entityManager->persist(

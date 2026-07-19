@@ -1809,7 +1809,7 @@ class NightlyHandler
         $this->log->info( "Nightly attack request received for town <info>{$town->getId()}</info> (<info>{$town->getName()}</info>)." );
         if (!$this->check_town($town)) {
             $this->log->info("Precondition failed. Attack is <info>cancelled</info>.");
-            if (!$town->getCitizens()->isEmpty())
+            if (!$town->getCitizens()->isEmpty() || $this->conf->getTownConfiguration($town)->get( TownSetting::IncrementFillingCounterWhenEmpty ))
                 $town->setDayWithoutAttack($town->getDayWithoutAttack() + 1);
             else $town->setDayWithoutAttack(0);
             return false;
