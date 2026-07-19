@@ -17,6 +17,18 @@ export interface ServerInducedSignalProps {
     type: 'fetch'|'xhr',
 }
 
+interface SessionDomain {
+    persistent: number,
+    volatile1: number,
+    volatile2: number,
+    volatile3: number
+}
+
+export interface SessionDomainChanged {
+    before: SessionDomain,
+    after: SessionDomain
+}
+
 const enhanceResponse = (r: Response): Response => {
     let json = null;
     let text = null;

@@ -1,3 +1,6 @@
+import {emitSignal} from "./v2/client-modules/Signal";
+import {ServerInducedSignalProps, SessionDomainChanged} from "./v2/fetch";
+
 interface confSetter<T> { (T): void }
 interface confGetter<T> { (): T }
 interface conf<T> { set: confSetter<T>, get: confGetter<T> }
@@ -121,8 +124,29 @@ export default class Client {
     }
 
     setSessionDomain( persistent: number, volatile1: number, volatile2: number, volatile3: number ): void {
+        const before = {
+            persistent: this.pSession ?? 0,
+            volatile1: this.vSession[0] ?? 0,
+            volatile2: this.vSession[1] ?? 0,
+            volatile3: this.vSession[2] ?? 0
+        };
+
         this.pSession = persistent;
         this.vSession = [ volatile1, volatile2, volatile3 ];
+
+        if (persistent != before.persistent ||
+            volatile1  != before.volatile1 ||
+            volatile2  != before.volatile2 ||
+            volatile3  != before.volatile3
+        ) emitSignal<SessionDomainChanged>('session-domain-changed', {
+            before,
+            after: {
+                persistent,
+                volatile1,
+                volatile2,
+                volatile3
+            },
+        })
     }
 
     set( name: string, group: string|null, value: any, session_only: boolean ): boolean {

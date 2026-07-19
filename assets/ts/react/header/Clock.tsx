@@ -6,6 +6,7 @@ import {useCountdown, useSharedWorkerMessages} from "../utils";
 import {Tooltip} from "../misc/Tooltip";
 import {Globals} from "./Wrapper";
 import {useSignal} from "../../v2/client-modules/Signal";
+import {ServerInducedSignalProps, SessionDomainChanged} from "../../v2/fetch";
 
 declare var $: Global;
 
@@ -57,6 +58,17 @@ export const HordesHeaderClockWidget = () => {
     useSharedWorkerMessages<{app: number}>('attack-completed', ({app}) => {
         refreshClock();
     }, 'live', [])
+
+    useSignal<SessionDomainChanged>(
+        'session-domain-changed',
+        e => {
+            if (
+                e.before.persistent != e.after.persistent ||
+                e.before.volatile1 != e.after.volatile1 ||
+                e.before.volatile2 != e.after.volatile2
+            ) refreshClock();
+        }
+    )
 
     useSignal(
         'web-navigation',
