@@ -1145,7 +1145,11 @@ class JSONv1Controller extends CoreController {
                     $data[$field] = $item->getId();
                     break;
                 case 'img':
-                    $data[$field] = $this->getIconPath($this->asset->getUrl("build/images/item/item_{$item->getIcon()}.gif"));
+                    $img = $item->getIcon();
+                    $img_b = $item->getBrokenIcon() ?? $item->getIcon();
+
+                    $data[$field] = $this->getIconPath($this->asset->getUrl("build/images/item/item_{$img}.gif"));
+                    if ($img_b !== $img) $data["{$field}_b"] = $this->getIconPath($this->asset->getUrl("build/images/item/item_{$img_b}.gif"));
                     break;
                 case 'uid':
                     $data[$field] = $item->getIcon();

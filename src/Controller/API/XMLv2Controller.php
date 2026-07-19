@@ -83,6 +83,34 @@ class XMLv2Controller extends CoreController {
         parent::__construct($em, $ih, $ch, $ah, $tk, $dh, $ph, $translator, $rg, $lh, $conf, $zh, $uh, $armbrust, $a, $th, $gs, $adminHandler, $urlGenerator, $doctrineCache, $events, $hookExecutor, $pictoService, $u, $version);
     }
 
+    private function renderItem(Item|ItemPrototype $item, bool $count = false, bool $meta = false): array {
+
+        $prototype = is_a($item, ItemPrototype::class) ? $item : $item->getPrototype();
+
+        $img = $prototype->getIcon();
+        $img_b = $prototype->getBrokenIcon() ?? $item->getIcon();
+
+        return [
+            ...($count && is_a($item, Item::class) ? [
+                'count' => $item->getCount() ?? 1
+            ] : []),
+            'id' => $prototype->getId(),
+            'cat' => $prototype->getCategory()?->getName(),
+            'img' => $this->getIconPath($this->asset->getUrl("build/images/item/item_{$img}.gif")),
+            ...($img !== $img_b ? [
+                'img_b' => $this->getIconPath($this->asset->getUrl("build/images/item/item_{$img_b}.gif")),
+            ] : []),
+            ...(is_a($item, Item::class) ? [
+                'broken' => (int)$item->getBroken()
+            ] : []),
+            ...($meta ? [
+                'deco' => (int)$prototype->getDeco(),
+                'heavy' => (int)$prototype->getHeavy(),
+                'guard' => (int)$prototype->getWatchpoint(),
+            ] : []),
+        ];
+    }
+
     public function on_error(ExternalAPIError $message, string $language): Response {
         $data = $this->getHeaders(null, $language);
         switch ($message) {
@@ -430,12 +458,7 @@ class XMLv2Controller extends CoreController {
 
             $itemXml = [
                 'attributes' => [
-                    'id' => $item->getId(),
-                    'cat' => $cat->getName(),
-                    'img' => $this->getIconPath($this->asset->getUrl("build/images/item/item_{$item->getIcon()}.gif")),
-                    'deco' => $item->getDeco(),
-                    'heavy' => intval($item->getHeavy()),
-                    'guard' => intval($item->getWatchpoint())
+                    ...$this->renderItem( $item, meta: true ),
                 ]
             ];
 
@@ -873,11 +896,7 @@ class XMLv2Controller extends CoreController {
 
                             $headers['headers']['owner']['myZone']['list']['items'][$str] = [
                                 'attributes' => [
-                                    'count' => 1,
-                                    'id' => $item->getPrototype()->getId(),
-                                    'cat' => $item->getPrototype()->getCategory()->getName(),
-                                    'img' => $this->getIconPath($this->asset->getUrl( "build/images/item/item_{$item->getPrototype()->getIcon()}.gif")),
-                                    'broken' => intval($item->getBroken())
+                                    ...$this->renderItem( $item, count: true )
                                 ]
                             ];
 
@@ -1132,11 +1151,7 @@ class XMLv2Controller extends CoreController {
 
                 $itemXml = [
                     'attributes' => [
-                        'count' => $bankItem->getCount(),
-                        'id' => $bankItem->getPrototype()->getId(),
-                        'cat' => $cat->getName(),
-                        'img' => $this->getIconPath($this->asset->getUrl("build/images/item/item_{$bankItem->getPrototype()->getIcon()}.gif")),
-                        'broken' => intval($bankItem->getBroken())
+                        ...$this->renderItem( $bankItem, true ),
                     ]
                 ];
                 if ($language !== 'all') {

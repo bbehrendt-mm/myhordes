@@ -1099,6 +1099,14 @@
               "attribute": true
             }
           },
+          "img_b": {
+              "type": "string",
+              "description": "Broken item icon. Only exists if the item has a dedicated broken icon.",
+              "example": "item/item_pile.gif",
+              "xml": {
+                  "attribute": true
+              }
+          },
           "broken": {
             "type": "integer",
             "minimum": 0,
@@ -1574,6 +1582,14 @@
             "xml": {
               "attribute": true
             }
+          },
+          "img_b": {
+              "type": "string",
+              "description": "Broken item icon. Only exists if the item has a dedicated broken icon.",
+              "example": "item/item_pile.gif",
+              "xml": {
+                  "attribute": true
+              }
           },
           "name": {
             "type": "string",
@@ -2303,6 +2319,11 @@
             "type": "string",
             "description": "Path to item icon",
             "example": "item/item_water.85230dbb.gif"
+          },
+          "img_b": {
+              "type": "string",
+              "description": "Path to item icon for broken item. Only exists if the item has a dedicated broken icon.",
+              "example": "item/item_lawn.b.b5d3807d.gif"
           },
           "heavy": {
             "type": "boolean",
