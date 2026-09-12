@@ -646,7 +646,7 @@ class TownCreatorController extends CustomAbstractCoreController
         if ($em->getRepository(Town::class)->count(['creator' => $this->getUser(), 'mayor' => true]) > 0)
             return new JsonResponse([], Response::HTTP_CONFLICT);
 
-        if ($em->getRepository(Town::class)->count(['mayor' => true]) > 14)
+        if ($em->getRepository(Town::class)->count(['mayor' => true]) > 20)
             return new JsonResponse(Response::HTTP_CONFLICT);
 
         if ($this->getUser()->getAllSoulPoints() < 250)
