@@ -878,6 +878,7 @@ class JSONv1Controller extends CoreController {
                     if (!isset($item_buffer[$item_uid])) {
                         $item_buffer[$item_uid] = [
                             'uid'    => $item->getPrototype()->getIcon(),
+                            'uuid'   => $item->getPrototype()->getName(),
                             'broken' => $item->getBroken(),
                             'count'  => $item->getCount()
                         ];
@@ -1153,6 +1154,7 @@ class JSONv1Controller extends CoreController {
                     break;
                 case 'uid':
                     $data[$field] = $item->getIcon();
+                    $data['uuid'] = $item->getName();
                     break;
                 case 'heavy':
                     $data[$field] = $item->getHeavy();
