@@ -793,6 +793,15 @@ const HordesPassiveInventoryWrapper = (props: passiveMountProps) => {
         [props.id]
     );
 
+    useSignal<InventoryTransferSignalProps>(
+        'item-transfer',
+        (p) => {
+            if (p.from === props.id || p.to === props.id)
+                setMayBeOutdated(true)
+        },
+        [props.id]
+    );
+
     useSharedWorkerMessages(
         'inventory-changed',
         () => { setMayBeOutdated(true) },
