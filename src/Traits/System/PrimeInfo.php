@@ -7,7 +7,7 @@ use Composer\Semver\Semver;
 trait PrimeInfo
 {
     protected static function primePackageVersion(): string {
-        return '4.0.0.0';
+        return '5.0.0.0';
     }
 
     protected static function buildPrimePackageVersionIdentifier( ?string $package = null, ?string $version = null ): string {
