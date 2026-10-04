@@ -330,7 +330,10 @@ class LogController extends CustomAbstractCoreController
 
         foreach ([$criteria,$countCriteria] as &$c) {
             if ($citizen) $c
-                ->andWhere(Criteria::expr()->eq('citizen', $citizen))
+                ->andWhere( Criteria::expr()->orX(
+                    Criteria::expr()->eq('citizen', $citizen),
+                    Criteria::expr()->eq('secondaryCitizen', $citizen),
+                ) )
                 ->andWhere(Criteria::expr()->neq('hidden', true));
             if (!empty($filter)) $c->andWhere(Criteria::expr()->in('logEntryTemplate', $templates));
         }
