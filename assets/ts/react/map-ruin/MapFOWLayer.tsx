@@ -14,7 +14,9 @@ export type MapFOWProperties = {
 
 export const MapFOWLayer = (props: MapFOWProperties) => {
 
-    const poisonLayers = 6;
+    const disableFx = document.body.classList.contains('no-fx');
+
+    const poisonLayers = disableFx ? 0 : 6;
 
     const {scaler} = useContext(ScaleHelper);
     const assets = useContext(AssetHelper);
@@ -79,9 +81,9 @@ export const MapFOWLayer = (props: MapFOWProperties) => {
                 </Group>
             ) }
         </Group>
-        <Group opacity={ props.shadowOpacity } filters={[Konva.Filters.Blur]} blurRadius={ scaler.s(props.shadowBlur) } ref={shadowGroupRef} { ...scaler.xy(-0.5, -0.5) }>
+        { !disableFx && <Group opacity={ props.shadowOpacity } filters={[Konva.Filters.Blur]} blurRadius={ scaler.s(props.shadowBlur) } ref={shadowGroupRef} { ...scaler.xy(-0.5, -0.5) }>
             <Shape {...scaler.wh(2,2)} sceneFunc={shadowShapeFunc} fill={ props.shadowColor } />
-        </Group>
+        </Group> }
     </Group>
 
 }
