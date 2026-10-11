@@ -234,6 +234,21 @@
                                         <input data-confirmation="2" type="checkbox" data-restriction="{{ constant('App\\Entity\\AccountRestriction::RestrictionGameplayLang') }}">
                                         {{ 'Das Spielen in anderen Gemeinden verbieten'|trans({},'admin') }}{% if not is_granted('ROLE_SUB_ADMIN') %} ({{ 'Admin-Bestätigung erforderlich'|trans({},'admin') }}){% endif %}
                                     </label>
+                                    <div class="row hidden" id="gp-community">
+                                        <div class="cell rw-11 ro-1">
+                                            <label>
+                                                {{ 'Team'|trans({},'admin') }}
+                                                <select id="gp-community-select">
+                                                    <option {% if user.team is null %}selected{% endif %} value="">-- select --</option>
+                                                    <option {% if user.team == 'de' %}selected{% endif %} value="de">DE</option>
+                                                    <option {% if user.team == 'en' %}selected{% endif %} value="en">EN</option>
+                                                    <option {% if user.team == 'fr' %}selected{% endif %} value="fr">FR</option>
+                                                    <option {% if user.team == 'es' %}selected{% endif %} value="es">ES</option>
+                                                </select>
+                                            </label>
+                                        </div>
+                                    </div>
+
                                 </div>
                                 <div class="cell rw-12"><label><input type="checkbox" data-restriction="{{ constant('App\\Entity\\AccountRestriction::RestrictionProfile') }}"> {{ 'Änderungen am Profil verbieten'|trans({},'admin') }}</label></div>
                                 <div class="cell ro-1 rw-11"><label><input type="checkbox" data-restriction="{{ constant('App\\Entity\\AccountRestriction::RestrictionProfileAvatar') }}"> {{ 'Ändern des Avatars verbieten'|trans({},'admin') }}</label></div>
@@ -487,6 +502,10 @@
                 $.ajax.easySend(elem.dataset.updateUrl, {duration: elem.value}, () => $.ajax.load(null,"{{ path('admin_users_ban_view', {id: user.id}) }}"));
             })
 
+            $.html.addEventListenerAll('input[type="checkbox"][data-restriction="{{ constant('App\\Entity\\AccountRestriction::RestrictionGameplayLang') }}"]', 'change', (_, elem) => {
+                document.querySelector('#gp-community').classList.toggle('hidden', !elem.checked);
+            })
+
             const get_restriction_mask = function(){
                 let rm = 0;
                 $.html.forEach('input[type="checkbox"][data-restriction]:checked', element => {
@@ -536,6 +555,14 @@
                     return;
                 }
 
+                let team = document.querySelector('#gp-community-select').value;
+                const set_team = !document.querySelector('#gp-community').classList.contains('hidden');
+
+                if (set_team && !team) {
+                    alert('Please select a team.');
+                    return;
+                }
+
                 if (document.getElementById('rest_id').value != '') {
                     if (!confirm('{{ 'Du bist im Begriff, eine bestehende Accountbeschränkung zu bearbeiten. Der Spieler wird über die Bearbeitung nicht informiert. Existierende Bestätigungen für diese Beschränkung werden entfernt. Fortsetzen?'|trans({},'admin')|e('js') }}')) return;
                 }
@@ -553,6 +580,7 @@
                     reason: document.getElementById('rest_public').value,
                     note: document.getElementById('rest_private').value,
                     existing: document.getElementById('rest_id').value,
+                    team: set_team ? team : null,
                 }, () => $.ajax.load(null,"{{ path('admin_users_ban_view', {id: user.id}) }}"));
             });
         })();

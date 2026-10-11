@@ -1287,6 +1287,7 @@ class AdminUserController extends AdminActionController
         $note      = trim($parser->get('note'));
         $duration  = $parser->get_int('duration');
         $mask      = $parser->get_int('restriction', 0);
+        $team      = $parser->get('team', from: ['de','en','fr','es']);
 
         if ($duration === 0 || $mask <= 0 || ($mask & ~(AccountRestriction::RestrictionSocial | AccountRestriction::RestrictionGameplay | AccountRestriction::RestrictionProfile | AccountRestriction::RestrictionGameplayLang | AccountRestriction::RestrictionReportToGitlab )))
             return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
@@ -1303,6 +1304,9 @@ class AdminUserController extends AdminActionController
             ->addConfirmedBy( $this->getUser() );
         $this->check_ban_confirmation($a, !$edit);
         $this->entity_manager->persist($a);
+
+        if ($team)
+            $this->entity_manager->persist( $user->setTeam( $team ) );
 
         try {
             $this->entity_manager->flush();

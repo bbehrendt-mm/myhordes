@@ -302,7 +302,7 @@ class GameOnboardingController extends AbstractController
                 Response::HTTP_NOT_ACCEPTABLE
             );
 
-        if ($this->userHandler->isRestricted( $user, AccountRestriction::RestrictionGameplayLang ))
+        if ($user->getTeam() !== $town->getLanguage() && $this->userHandler->isRestricted( $user, AccountRestriction::RestrictionGameplayLang ))
             return new JsonResponse(
                 ['error' => 'message', 'message' => $this->translateErrorCode( ErrorHelper::ErrorPermissionError, $town, $conf->getGlobalConf(), $translator )],
                 Response::HTTP_NOT_ACCEPTABLE
