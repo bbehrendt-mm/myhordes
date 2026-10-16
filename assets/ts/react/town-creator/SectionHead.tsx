@@ -166,7 +166,7 @@ export const TownCreatorSectionHead = ( {townTypes, setDefaultRules, setBlocked,
         <AtLeast elevation="crow">
             { /* Number of citizens */ }
             <OptionFreeText type="number" propTitle={head.citizens} propHelp={head.citizens_help}
-                            inputArgs={{min: 10, max: 80}}
+                            inputArgs={{min: 5, max: 80}}
                             value={(globals.getOption( 'head.townPop' ) as string) ?? '40'} propName={TOWN_POP}
             />
 

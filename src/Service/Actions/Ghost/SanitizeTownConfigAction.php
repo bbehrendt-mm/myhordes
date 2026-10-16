@@ -523,7 +523,7 @@ class SanitizeTownConfigAction
         // Town population
         if (!is_int( $head['townPop'] ?? 'x' )) unset( $head['townPop'] );
         if (isset($head['townPop'])) {
-            $head['townPop'] = max(10, min($head['townPop'], 80));
+            $head['townPop'] = max(5, min($head['townPop'], 80));
             $rules['population']['min'] = $rules['population']['max'] = $head['townPop'];
         }
 
