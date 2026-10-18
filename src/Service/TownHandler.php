@@ -510,7 +510,7 @@ class TownHandler
         if($has_counsel)
             $total_def += 15 * $count;
 
-        return $total_def;
+        return max(0, $total_def);
     }
 
     public function get_zombie_estimation(Town &$town, ?int $day = null, $watchtower_offset = null): array {
