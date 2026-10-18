@@ -2,7 +2,7 @@ import {useContext, useEffect, useLayoutEffect, useRef, useState} from "react";
 import {Globals} from "../Wrapper";
 import * as React from "react";
 import Components from "../../index";
-import {TownPreset, TownPresetData} from "../api";
+import {TownPreset, TownPresetData, TownPresetPlainData} from "../api";
 import {Flag} from "../Common";
 import {EditorGlobals} from "../Creator";
 import {Tooltip} from "../../misc/Tooltip";
@@ -184,7 +184,7 @@ export const HordesEventCreatorModuleTownPreset = ( {uuid,published,expedited,ow
 const HordesEventTownPresetEditor = ( {uuid, town, update}: {
     uuid: string,
     town: string|null,
-    update: (TownPresetData) => void,
+    update: (v: TownPresetPlainData) => void,
 } ) => {
 
     const globals = useContext(Globals)
@@ -194,8 +194,8 @@ const HordesEventTownPresetEditor = ( {uuid, town, update}: {
         Components.vitalize( wrapper.current )
         const listener = event => {
             update(event.detail.ready ? {
-                header: event.detail.options.head,
-                rules: event.detail.options.rules
+                header: event.detail.options.head as object,
+                rules: event.detail.options.rules as object,
             } : null)
         }
 

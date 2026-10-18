@@ -79,12 +79,6 @@ const TownCreatorWrapper = ( {elevation, eventMode, presetHead, presetRules}: {e
                 }
             }
         } );
-        return () => {
-            setTownTypeList(null);
-            setOptions(null);
-            setDefaultRules(null);
-            setFieldChecks(null);
-        }
     }, [] )
 
     const addFieldCheck = (check: () => boolean) => fieldChecks.push(check);
@@ -226,6 +220,11 @@ const TownCreatorWrapper = ( {elevation, eventMode, presetHead, presetRules}: {e
                 }
 
                 else if (typeof obj[dot[0]] === "undefined") obj[dot[0]] = {};
+
+                // Empty array guard - prevents object keys from being written into an empty array
+                if (dot.length === 2 && !dot[1].match(/^[0-9]+$/) && obj[dot[0]] && Object.keys(obj[dot[0]]).length === 0)
+                    obj[dot[0]] = {};
+
                 return fun(obj[dot[0]], dot.slice(1), value, default_value);
             }
         }
@@ -239,11 +238,13 @@ const TownCreatorWrapper = ( {elevation, eventMode, presetHead, presetRules}: {e
             const defaultValue = dot_p[0] === 'rules' && dot_p.findIndex(v => v === '<>' || v === '[]') > 1 ?
                 getOptionFrom( defaultRules, dot_p.slice(1, dot_p.findIndex(v => v === '<>' || v === '[]')) ) : undefined;
 
-            const obj = { ...options };
-            if ( fun(obj, dot_p, value, defaultValue) !== value) {
-                setOptions(obj);
-                if (eventMode) fun_announce(obj);
-            }
+            setOptions( options => {
+                const obj = { ...options };
+                if ( fun(obj, dot_p, value, defaultValue) !== value && eventMode)
+                    fun_announce(obj);
+
+                return obj;
+            });
         }
     }
 
@@ -257,11 +258,14 @@ const TownCreatorWrapper = ( {elevation, eventMode, presetHead, presetRules}: {e
             } else return fun(obj[dot[0]], dot.slice(1));
         }
 
-        const obj = { ...options };
-        if ( fun(obj, processDot(dot)) ) {
-            setOptions(obj);
-            if (eventMode) fun_announce(obj);
-        }
+        setOptions(options => {
+            const obj = { ...options };
+            if ( fun(obj, processDot(dot)) && eventMode ) {
+                fun_announce(obj);
+            }
+
+            return obj;
+        })
     }
 
     useLayoutEffect( () => Components.vitalize( wrapper.current ) )

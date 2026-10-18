@@ -678,6 +678,7 @@ class EventController extends CustomAbstractCoreController
     /**
      * @param CommunityEvent $event
      * @param EntityManagerInterface $em
+     * @param PermissionHandler $perm
      * @return JsonResponse
      */
     #[Route(path: '/{id}/towns', name: 'list-town-presets', methods: ['GET'])]

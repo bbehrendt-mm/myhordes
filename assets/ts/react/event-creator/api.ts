@@ -58,6 +58,11 @@ export interface TownPresetInstance  {
     day: number|null,
 }
 
+export interface TownPresetPlainData {
+    header: object
+    rules: object
+}
+
 export interface TownPresetData extends TownPresetUUID {
     header: object
     rules: object

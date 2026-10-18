@@ -5,9 +5,9 @@ import {ResponseTownList, TownRules} from "./api";
 import {useContext, useEffect, useLayoutEffect, useRef, useState} from "react";
 import {Globals} from "./Wrapper";
 import {OptionCoreTemplate, OptionFreeText, OptionSelect, OptionToggleMulti} from "./Input";
-import {number} from "prop-types";
 import {AtLeast} from "./Permissions";
 import {UserResponse, UserResponses, UserSearchBar} from "../user-search/Wrapper";
+import {Fetch} from "../../v2/fetch";
 
 declare var $: Global;
 
@@ -246,32 +246,64 @@ const OtherUserRoles = () => {
     const globals = useContext(Globals)
 
     const [users, setUsers] = useState<(UserResponse&{admin?: boolean})[]>([]);
+    const [mounted, setMounted] = useState<boolean>(false);
 
     useLayoutEffect(() => {
+        if (!mounted) return;
         globals.setOption('head.organizers', users.map(u => [u.id, u.admin ?? false]));
     }, [users]);
 
+    useEffect(() => {
+        const organizers = globals.getOption('head.organizers');
+        if (organizers?.length > 0) {
+            const api = new Fetch('user/search');
+
+            Promise.all(
+                organizers.map( ([id]) => api.from('find')
+                    .withoutLoader()
+                    .request().post({ name: `:${id}` }).then( u => u[0])
+                )
+            ).then( users => organizers.map( ([id,admin]) => {
+                return {
+                    ...users.find( u => u.id === id ),
+                    admin
+                }
+            } ).filter( (u: UserResponse) => typeof u.id !== 'undefined')
+            ).then( users => {
+                setUsers(users);
+                setMounted(true);
+            } )
+
+        }
+
+        setMounted(true);
+    }, []);
+
     return <OptionCoreTemplate propName="head.organizers" propTitle={globals.strings.head.organization.others} propTip={globals.strings.head.organization.others_help} wide={true}>
-        { users.map( u => <div className="flex gap middle">
-            <div className="flex-none" dangerouslySetInnerHTML={{__html: u.avatarHTML}}></div>
-            <div className="flex-1">
-                <div className="flex gap middle">
-                    <div>{ u.name }</div>
-                    <i className="small">[ #{ u.id } ]</i>
+        { mounted && <>
+            { users.map( u => <div key={u.id} className="flex gap middle">
+                <div className="flex-none" dangerouslySetInnerHTML={{__html: u.avatarHTML}}></div>
+                <div className="flex-1">
+                    <div className="flex gap middle">
+                        <div>{ u.name }</div>
+                        <i className="small">[ #{ u.id } ]</i>
+                    </div>
                 </div>
-            </div>
-            <div className="flex-none">
-                <select value={ u.admin ? "1" : "0" } onChange={ e => {
-                    setUsers( prev => prev.map( u2 => u2.id === u.id ? {...u2, admin: (e.target as HTMLSelectElement).value === "1"} : u2 ) );
-                }}>
-                    <option value="0">{globals.strings.head.organization.others_ro}</option>
-                    <option value="1">{globals.strings.head.organization.others_rw}</option>
-                </select>
-            </div>
-            <div className="flex-none">
-                <img alt="x" src={ globals.strings.common.delete_icon } className="pointer" onClick={() => setUsers( prev => prev.filter( u2 => u2.id !== u.id ) )} />
-            </div>
-        </div> ) }
-        <UserSearchBar withSelf={true} clearOnCallback={true} exclude={users.map(u => u.id)} callback={s => setUsers( prev => [...prev, ...s] )}/>
+                <div className="flex-none">
+                    <select value={ u.admin ? "1" : "0" } onChange={ e => {
+                        setUsers( prev => prev.map( u2 => u2.id === u.id ? {...u2, admin: (e.target as HTMLSelectElement).value === "1"} : u2 ) );
+                    }}>
+                        <option value="0">{globals.strings.head.organization.others_ro}</option>
+                        <option value="1">{globals.strings.head.organization.others_rw}</option>
+                    </select>
+                </div>
+                <div className="flex-none">
+                    <img alt="x" src={ globals.strings.common.delete_icon } className="pointer" onClick={() => setUsers( prev => prev.filter( u2 => u2.id !== u.id ) )} />
+                </div>
+            </div> ) }
+            <UserSearchBar withSelf={true} clearOnCallback={true} exclude={users.map(u => u.id)} callback={s => setUsers( prev => [...prev, ...s] )}/>
+        </> }
+        { !mounted && <div className="loading"/>}
+
     </OptionCoreTemplate>
 }

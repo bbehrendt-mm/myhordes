@@ -110,7 +110,7 @@ class TownCreatorController extends CustomAbstractCoreController
                     'code_help' => $this->translator->trans('Wenn Bürger deine Stadt betreten möchten, wird ein Zugangsdode abgefragt. Nur mit korrektem Zugangscode erhalten sie Zutritt. Verteile den Zugangscode darum an die Spieler, die du einladen möchtest. <strong>Und benutze nicht dein privates Passwort als Zugangscode!!!</strong>', [], 'global'),
 
                     'citizens' => $this->translator->trans('Einwohnerzahl', [], 'ghost'),
-                    'citizens_help' => $this->translator->trans('Muss zwischen 10 und 80 liegen.', [], 'ghost'),
+                    'citizens_help' => $this->translator->trans('Muss zwischen {min} und {max} liegen.', ['min' => 5, 'max' => 80], 'ghost'),
 
                     'seed' => $this->translator->trans('Karten-Seed', [], 'ghost'),
                     'seed_help' => $this->translator->trans('Seed, das eine kontrollierte Kartenerstellung ermöglicht. Erlaubt im Falle von Ereignissen, ähnliche Karten zu generieren. Gib eine positive ganze Zahl ein, um es zu aktivieren. DENKT DARÜBER NACH, DIESE GANZE ZAHL VON EINEM EREIGNIS ZUM ANDEREN ZU ÄNDERN!', [], 'ghost'),
