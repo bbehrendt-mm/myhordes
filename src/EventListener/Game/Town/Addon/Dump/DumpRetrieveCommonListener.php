@@ -128,7 +128,7 @@ final readonly class DumpRetrieveCommonListener implements ServiceSubscriberInte
             $event->citizen->setAp( $event->citizen->getAp() - $event->check->ap_cost );
 
         // Decrease def
-        $dump->setTempDefenseBonus( $dump->getTempDefenseBonus() - $event->quantity * $dump_def );
+        $dump->setTempDefenseBonus( max(0, $dump->getTempDefenseBonus() - $event->quantity * $dump_def) );
 
         $event->removedDefense = $event->quantity * $dump_def;
 
