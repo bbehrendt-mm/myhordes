@@ -11,11 +11,13 @@
                 <ul class="text-menu" role="menubar">
                     <li class="burger-button"><img alt="" src="{{ asset('build/images/icons/burger.gif') }}" /></li>
                     <li class="forum" x-ajax-href="{{ url('forum_town_redirect') }}">
-                    <div class="tooltip help">
-                        <p>{% trans from 'game' %}Mit den anderen Bürgern reden... {% endtrans %}</p>
-                        <p style="color: #f0d79e;"><em>{% trans from 'game' %}Lesen und Nutzen des Forums sind in 'MyHordes' überlebensnotwendig! Die wichtigen Entscheidungen der Stadt werden hier gemeinsam von der Community getroffen.{% endtrans %}</em></p>
-                    </div>
-                    <img alt="" src="{{ asset('build/images/icons/small_talk.gif') }}" /> {{ 'Forum'|trans({},'global') }}</li>
+                        <div class="tooltip help">
+                            <p>{% trans from 'game' %}Mit den anderen Bürgern reden... {% endtrans %}</p>
+                            <p style="color: #f0d79e;"><em>{% trans from 'game' %}Lesen und Nutzen des Forums sind in 'MyHordes' überlebensnotwendig! Die wichtigen Entscheidungen der Stadt werden hier gemeinsam von der Community getroffen.{% endtrans %}</em></p>
+                        </div>
+                        <img alt="" src="{{ asset('build/images/icons/small_talk.gif') }}" />
+                        <div>{{ 'Forum'|trans({},'global') }}</div>
+                    </li>
                     {% block menu_text %}
                         {% if app.user and (during_attack is not defined or not during_attack) %}
                             {% if app.user.activeCitizen %}
@@ -24,7 +26,8 @@
                     					<p>{% trans from 'game' %}Das Leichsblatt: Hier findet ihr alle Neuigkeiten, über das, was gestern in der Stadt passiert ist...{% endtrans %}</p>
                         				<p style="color: #f0d79e;"><em>{% trans from 'game' %}Schaut am besten jeden Tag einmal rein!{% endtrans %}</em></p>
                 					</div>
-                                	<img alt="" src="{{ asset('build/images/icons/news.gif') }}" /> {{ 'Zeitung'|trans({},'game') }}
+                                    <img alt="" src="{{ asset('build/images/icons/news.gif') }}" />
+                                    <div>{{ 'Zeitung'|trans({},'game') }}</div>
                                 </li>
                             {% else %}
                                 <li class="town-dash" x-ajax-href="{{ url('ghost_welcome') }}">
@@ -32,7 +35,8 @@
                     					<p>{{ 'Starten Sie eine Stadt'|trans({},'game') }}</p>
                         				<p style="color: #f0d79e;"><em>{% trans from 'game' %}Es ist Zeit, sich seinen Mitmenschen in der Hölle anschließen!{% endtrans %}</em></p>
                 					</div>
-                                	<img alt="" src="{{ asset('build/images/icons/attacked.gif') }}" /> {{ 'Spiel'|trans({},'global') }}
+                                    <img alt="" src="{{ asset('build/images/icons/attacked.gif') }}" />
+                                    <div>{{ 'Spiel'|trans({},'global') }}</div>
                                 </li>
                             {% endif %}
                             {# @var \App\Entity\GlobalPoll poll #}
@@ -55,7 +59,8 @@
                     			<p>{{ 'Deine Seele'|trans({},'global') }}</p>
                         		<p style="color: #f0d79e;"><em>{% trans from 'game' %}Deine gesamte Geschichte basiert auf deinen zuvor gespielten Städten...{% endtrans %}</em></p>
                 			</div>
-                        	<img alt="" src="{{ asset('build/images/icons/small_ghost_blue.gif') }}" /> {{ 'Deine Seele'|trans({},'global') }}
+                        	<img alt="" src="{{ asset('build/images/icons/small_ghost_blue.gif') }}" />
+                            <div>{{ 'Deine Seele'|trans({},'global') }}</div>
                         </li>
                     {% endif %}
                     <li class="help" x-ajax-href="{{ url('help') }}">
@@ -63,7 +68,8 @@
                     		<p>{{ 'Spielhilfe aufrufen.'|trans({},'game') }}</p>
                         	<p style="color: #f0d79e;"><em>{% trans from 'game' %}Hast du schon unter "Wie wird gespielt" nachgeschaut? Du findest den Link darauf unter der Karte der Stadt.{% endtrans %}</em></p>
                 		</div>
-                    	<img alt="" src="{{ asset('build/images/icons/small_help.gif') }}" /> {{ 'Hilfe'|trans({},'global') }}
+                    	<img alt="" src="{{ asset('build/images/icons/small_help.gif') }}" />
+                        <div>{{ 'Hilfe'|trans({},'global') }}</div>
                     </li>
                 </ul>
             {% endblock %}
