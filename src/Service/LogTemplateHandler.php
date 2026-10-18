@@ -791,11 +791,11 @@ class LogTemplateHandler
     public function constructionsBuildingCompleteHotAirBalloon( Building $building, array $ruins ): TownLogEntry {
         $variables = array(
             'building' => $building->getPrototype()->getId(),
-            'citizen' => $building->getTown()->getRandomCitizenInside()->getId(),
+            'citizen' => $building->getTown()->getRandomCitizenInside()?->getId() ?? -141089,
             'ruins' => array_map( fn(ZonePrototype $e) => ['id' => $e->getId()], $ruins )
         );
         $template = $this->entity_manager->getRepository(LogEntryTemplate::class)->findOneBy(['name' => 'constructionsBuildingCompleteHotAirBalloon']);
-        return (new TownLogEntry())
+        return new TownLogEntry()
             ->setLogEntryTemplate($template)
             ->setVariables($variables)
             ->setTown( $building->getTown() )
