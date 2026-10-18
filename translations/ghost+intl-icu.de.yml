@@ -400,3 +400,4 @@ Koalition: Koalition
 Vollzugriff: Vollzugriff
 'Du bist in mehreren deiner letzten Städte frühzeitig gestorben. Sollte dies in deiner nächsten Stadt erneut geschehen, wirst du für einige Wochen vom Spiel ausgeschlossen.': 'Du bist in mehreren deiner letzten Städte frühzeitig gestorben. Sollte dies in deiner nächsten Stadt erneut geschehen, wirst du für einige Wochen vom Spiel ausgeschlossen.'
 'Da du in mehreren deiner letzten Städte frühzeitig gestorben bist, bist du bis {end_date} vom Spiel ausgeschlossen. Du kannst aktuell keine neue Stadt betreten.': 'Da du in mehreren deiner letzten Städte frühzeitig gestorben bist, bist du bis {end_date} vom Spiel ausgeschlossen. Du kannst aktuell keine neue Stadt betreten.'
+'Muss zwischen {min} und {max} liegen.': 'Muss zwischen {min} und {max} liegen.'

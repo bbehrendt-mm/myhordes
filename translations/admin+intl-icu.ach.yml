@@ -715,3 +715,14 @@ Cheater: crwdns254066:0crwdne254066:0
 'Bonus-Heldenerfahrung setzen': 'crwdns254072:0crwdne254072:0'
 'Gebäude anlegen:': 'crwdns254074:0crwdne254074:0'
 'Karte aufdecken': 'crwdns254076:0crwdne254076:0'
+Administratoren: crwdns276367:0crwdne276367:0
+'Verdächtiger Tod': 'crwdns276369:0crwdne276369:0'
+'Teilnehmer einer Spieler-erzeugten öffentlichen Stadt': 'crwdns276371:0crwdne276371:0'
+'Wird gesetzt, wenn der Spieler eine öffentliche Stadt erstellt oder dieser beitritt. Blockiert das Erstellen oder Betreten fremder Spieler-erstellten öffentlichen Städte wenn aktiv.': 'crwdns276373:0crwdne276373:0'
+'Automatische Sperren und Sanktionen': 'crwdns276375:0crwdne276375:0'
+'Aktive Marker': 'crwdns276377:0crwdne276377:0'
+'Aktiv bis': 'crwdns276379:0crwdne276379:0'
+'Alle deaktivieren': 'crwdns276381:0crwdne276381:0'
+'Einzelnen deaktivieren': 'crwdns276383:0crwdne276383:0'
+Deaktivieren: crwdns276385:0crwdne276385:0
+'Wird für Dehydration an Tag 3 oder früher gesetzt, oder wenn der Spieler an dem selben IRL-Tag stirbt, an dem er der Stadt beigetreten ist. Blockiert den Beitritt zu neuen Städten wenn aktiv.': 'crwdns276387:0crwdne276387:0'

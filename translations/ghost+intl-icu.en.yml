@@ -400,3 +400,4 @@ Koalition: Coalition
 Vollzugriff: Full access
 'Du bist in mehreren deiner letzten Städte frühzeitig gestorben. Sollte dies in deiner nächsten Stadt erneut geschehen, wirst du für einige Wochen vom Spiel ausgeschlossen.': 'You have either not been active recently or died very early, essentially penalizing active players in your recent towns. This is a polite warning, that should it happen again, you will not be eligible to join a new town for several days.'
 'Da du in mehreren deiner letzten Städte frühzeitig gestorben bist, bist du bis {end_date} vom Spiel ausgeschlossen. Du kannst aktuell keine neue Stadt betreten.': 'Since you have died prematurely in several of your recent towns, you are being excluded from the game until {end_date}. You currently cannot enter a new town.'
+'Muss zwischen {min} und {max} liegen.': 'Must be between {min} and {max}.'

@@ -400,3 +400,4 @@ Koalition: Alianza
 Vollzugriff: Acceso completo
 'Du bist in mehreren deiner letzten Städte frühzeitig gestorben. Sollte dies in deiner nächsten Stadt erneut geschehen, wirst du für einige Wochen vom Spiel ausgeschlossen.': 'No has estado activo en este pueblo o has muerto de forma prematura, perjudicando así al resto de jugadores en él. Si vuelve a suceder de nuevo, serás penalizado y no podrás volver a entrar a ningún pueblo durante un tiempo.'
 'Da du in mehreren deiner letzten Städte frühzeitig gestorben bist, bist du bis {end_date} vom Spiel ausgeschlossen. Du kannst aktuell keine neue Stadt betreten.': 'Has muerto prematuramente en múltiples pueblos recientemente, por lo que has sido prohibido de unirte a cualquier pueblo hasta {end_date}. Actualmente no puedes unirte a ningún pueblo.'
+'Muss zwischen {min} und {max} liegen.': 'Valor entre {min} y {max} liegen.'
