@@ -20,16 +20,27 @@
 	{% for exploration in explorables %}
 		<div class="row">
 			<div class="cell rw-7 rw-md-12 padded">
-				<h5>{{ exploration.z.prototype.label|trans({},'game') }} - [{{ exploration.z.x }} / {{ exploration.z.y }}]</h5>
-				<ul class="tabs plain" x-tab-group="admin-town-explorable-{{ exploration.z.id }}" x-tab-control x-tab-default="f-{{ exploration.z.id }}-0">
-					{% for floornum, floor in exploration.rz %}
-						<li class="tab" x-tab-id="f-{{ exploration.z.id }}-{{ floornum }}"><div class="tab-link"><span>{{ floornum }}</span></div></li>
-					{% endfor %}
+				<h5>{{ exploration.z.prototype.label|trans({},'game') }} - [{{ exploration.z.x }} / {{ exploration.z.y }}] - [{{ 1 + exploration.d.x1 - exploration.d.x0 }} × {{ 1 + exploration.d.y1 - exploration.d.y0 }} × {{ 1 + exploration.d.z1 - exploration.d.z0 }}]</h5>
+				<ul class="tabs plain">
+                    {% for floornum in exploration.d.z0..exploration.d.z1 %}
+                        <li {{ {'tab': true, 'selected': selected_zone and exploration.z.id == selected_zone.id and floornum == selected_floor}|classes }} class="tab" x-ajax-sticky x-ajax-href="{{ url('admin_town_eruins_explorer_with_map', {id: town.id, zid: exploration.z.id, floor: floornum }) }}"><div class="tab-link"><span>{{ floornum }}</span></div></li>
+                    {% endfor %}
 				</ul>
-				{% for floornum, floor in exploration.rz %}
-					<div class="adm-exploration" x-tab-group="admin-town-explorable-{{ exploration.z.id }}" x-tab-id="f-{{ exploration.z.id }}-{{ floornum }}" x-tab-target style="height: {{ 20 * (1 + town_conf.get(constant('App\\Enum\\Configuration\\TownSetting::ERuinSpaceMaxSizeY'))) }}px">
-						{% for rz in floor %}
-							<div class="rz {% if rz.prototype and rz.prototype.level == 0 %}rz-{{ rz.locked ? 'locked' : 'unlocked' }}{% endif%} {% if rz.prototype and rz.prototype.level != 0 %}rz-{{ rz.prototype.level > 0 ? 'up' : 'down' }}{% endif%} rz-{{ rz.distance > town_conf.get(constant('App\\Enum\\Configuration\\TownSetting::ERuinRoomLockDistance')) ? 'far' : 'close' }} rz-{{ rz.corridor }} {% if rz.zombies > 0 %}rz-zeds{% endif %}" style="top:{{ rz.y * 20 }}px;left:{{ (rz.x + town_conf.get(constant('App\\Enum\\Configuration\\TownSetting::ERuinSpaceMaxSizeX'))/2) * 20 }}px;">
+
+				{% if exploration.rz is not empty %}
+					<div class="adm-exploration" style="height: {{ 20 * (1 + exploration.d.y1 - exploration.d.y0) }}px">
+						{% for rz in exploration.rz %}
+							<div {{ {
+                                0: 'rz rz-' ~ rz.corridor,
+                                'rz-zeds':     rz.zombies > 0,
+                                'rz-locked':   rz.prototype and rz.prototype.level == 0 and rz.locked,
+                                'rz-unlocked': rz.prototype and rz.prototype.level == 0 and not rz.locked,
+                                'rz-up':       rz.prototype and rz.prototype.level > 0,
+                                'rz-down':     rz.prototype and rz.prototype.level < 0,
+                                'rz-far':      rz.distance > town_conf.get(constant('App\\Enum\\Configuration\\TownSetting::ERuinRoomLockDistance')),
+                                'rz-close':    not rz.distance > town_conf.get(constant('App\\Enum\\Configuration\\TownSetting::ERuinRoomLockDistance')),
+                            }|classes }}
+                                style="top:{{ rz.y * 20 }}px;left:{{ (rz.x + town_conf.get(constant('App\\Enum\\Configuration\\TownSetting::ERuinSpaceMaxSizeX'))/2) * 20 }}px;">
 								{% if rz.corridor != 0 %}
 									<div class="tooltip ndynamic">
 										{{ _self.valuelist('ID'|trans({},'admin'), rz.id) }}
@@ -53,7 +64,7 @@
 							</div>
 						{% endfor %}
 					</div>
-				{% endfor %}
+				{% endif %}
 			</div>
 			<div class="cell rw-5 rw-md-12 padded">
 				<h5>{{ 'Aktuelle Sitzung'|trans({},'admin') }}</h5>
@@ -99,7 +110,7 @@
         $.html.addEventListenerAll('[x-ex-action][x-ex-session]', 'click', function(e,elem) {
             $.ajax.easySend( elem.getAttribute('x-ex-action'), {param: parseInt(elem.getAttribute('x-ex-session'))},
                 function () {
-                    $.ajax.load(null, '{{ path('admin_town_eruins_explorer', {id: town.id})|e('js') }}', true);
+                    $.ajax.load(null, '{{ (selected_zone ? path('admin_town_eruins_explorer_with_map', {id: town.id, zid: selected_zone.id, floor: selected_floor}) : path('admin_town_eruins_explorer', {id: town.id}))|e('js') }}', true);
                 } );
         });
 	</script>
