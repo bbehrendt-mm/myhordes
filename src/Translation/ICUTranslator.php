@@ -83,6 +83,7 @@ class ICUTranslator implements TranslatorInterface, TranslatorBagInterface, Loca
         }
 
         $pass_trough['ref__gender'] ??= static::$gender_map[(int)$u?->getPreferredPronoun() ?? 0];
+        $pass_trough['user__gender'] ??= static::$gender_map[(int)$u?->getPreferredPronoun() ?? 0];
 
         try {
             $string = $this->_decorated->trans($id,$pass_trough,$domain,$locale);
