@@ -135,7 +135,7 @@ EOF
                     str_starts_with($param, 'raw_') ||
                     in_array($param, [
                         'ap', 'sp', 'bp', 'cp', 'mp', 'pm','num', 'x', 'y', 'z', 'num', 'ration', 'points', 'deads',
-                        'kills', 'water', 'def', 'rank', 'watchpoint', 'day', 'days', 'size'
+                        'kills', 'water', 'def', 'rank', 'watchpoint', 'day', 'days', 'size', 'zombies', 'watchers',
                     ]) ||
                     str_ends_with( $param, '_num' ) ||
                     str_ends_with( $param, '_storage' )
