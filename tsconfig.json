@@ -1,6 +1,7 @@
 {
   "exclude": [
       "/workdir/vendor/**/*",
+      "vendor/**/*"
   ],
   "compilerOptions": {
     "sourceMap": true,

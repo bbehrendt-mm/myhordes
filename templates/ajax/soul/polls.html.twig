@@ -93,12 +93,29 @@
                         </div>
                         <div class="cell rw-6 rw-sm-12 padded">
                             {% if (selected.startDate > 'now'|to_date) %}
-                                <button class="inline small" data-action="{{ path('admin_changelog_poll_control', {id: selected.id, action: 'start'}) }}">{{ 'Umfrage jetzt beginnen'|trans({},'admin') }}</button>
+                                <button class="inline small"
+                                        data-fetch="{{ path('rest_admin_polls_start', {id: selected.id}) }}"
+                                        data-fetch-method="patch"
+                                        data-fetch-load="{{ path('soul_polls', {id: selected ? selected.id : 0}) }}"
+                                        data-fetch-confirm="{{ 'Bestätigen?'|trans({},'global') }}"
+                                >
+                                    {{ 'Umfrage jetzt beginnen'|trans({},'admin') }}
+                                </button>
                             {% endif %}
                             {% if (selected.startDate < 'now'|to_date and selected.endDate > 'now'|to_date)  %}
-                                <button class="inline small" data-action="{{ path('admin_changelog_poll_control', {id: selected.id, action: 'close'}) }}">{{ 'Umfrage jetzt beenden'|trans({},'admin') }}</button>
+                                <button class="inline small"
+                                        data-fetch="{{ path('rest_admin_polls_close', {id: selected.id}) }}"
+                                        data-fetch-method="patch"
+                                        data-fetch-load="{{ path('soul_polls', {id: selected ? selected.id : 0}) }}"
+                                        data-fetch-confirm="{{ 'Bestätigen?'|trans({},'global') }}"
+                                >{{ 'Umfrage jetzt beenden'|trans({},'admin') }}</button>
                             {% endif %}
-                            <button class="inline small" data-action="{{ path('admin_changelog_poll_control', {id: selected.id, action: 'delete'}) }}">{{ 'Umfrage löschen'|trans({},'admin') }}</button>
+                            <button class="inline small"
+                                    data-fetch="{{ path('rest_admin_polls_delete', {id: selected.id}) }}"
+                                    data-fetch-method="delete"
+                                    data-fetch-load="{{ path('soul_polls', {id: 0}) }}"
+                                    data-fetch-confirm="{{ 'Bestätigen?'|trans({},'global') }}"
+                            >{{ 'Umfrage löschen'|trans({},'admin') }}</button>
                         </div>
                     </div>
                 {% endif %}
@@ -174,16 +191,6 @@
         $.html.addEventListenerAll('#change_poll{% if app.user|is_granted('ROLE_SUB_ADMIN') %},#change_filter{% endif %}', 'change', function (e,elem) {
             $.ajax.load(null, elem.value, true);
         });
-
-        {% if app.user|is_granted('ROLE_SUB_ADMIN') %}
-            $.html.addEventListenerAll('[data-action]', 'click', function (e,elem) {
-                if (confirm('{{ 'Bestätigen?'|trans({},'global')|e('js') }}'))
-                    $.ajax.easySend( elem.dataset.action, {},
-                        function () {
-                            $.ajax.load( target, "{{ path('soul_polls', {id: selected ? selected.id : 0}) }}" );
-                        } );
-            });
-        {% endif  %}
 
         $.html.addEventListenerAll('[data-poll]', 'click', function (e,elem) {
             if (confirm('{{ 'Bestätigen?'|trans({},'global')|e('js') }}')) {

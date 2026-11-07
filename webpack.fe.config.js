@@ -94,6 +94,7 @@ Encore
     .addEntry('module-game-ext-catapult', ['./assets/ts/modules/ext-game-catapult.ts'])
     .addEntry('module-town-creator', './assets/ts/modules/town-creator.ts')
     .addEntry('module-event-creator', './assets/ts/modules/event-creator.ts')
+    .addEntry('module-poll-creator', './assets/ts/modules/poll-creator.ts')
     .addEntry('module-avatar-creator', './assets/ts/modules/avatar-creator.ts')
     .addEntry('module-notification-manager', './assets/ts/modules/notification-manager.ts')
     .addEntry('module-game-onboarding', './assets/ts/modules/game-onboarding.ts')
