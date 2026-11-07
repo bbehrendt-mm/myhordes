@@ -3,10 +3,7 @@
 namespace App\Controller\Messages;
 
 use App\Annotations\GateKeeperProfile;
-use App\Command\Info\ResolveCommand;
 use App\Entity\AccountRestriction;
-use App\Entity\ActionCounter;
-use App\Entity\AdminReport;
 use App\Entity\Citizen;
 use App\Entity\Complaint;
 use App\Entity\ComplaintReason;
@@ -26,7 +23,6 @@ use App\Service\ErrorHelper;
 use App\Service\Globals\ResponseGlobal;
 use App\Service\InventoryHandler;
 use App\Service\JSONRequestParser;
-use App\Service\RateLimitingFactoryProvider;
 use App\Service\UserHandler;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -55,7 +51,7 @@ class MessageTownMessageController extends MessageController
      * @return Response
      */
     #[Route(path: 'api/town/house/sendpm', name: 'town_house_send_pm_controller')]
-    #[GateKeeperProfile(allow_during_attack: false, only_alive: true, only_with_profession: true)]
+    #[GateKeeperProfile(allow_during_attack: false, only_alive: true, only_with_profession: true, only_in_town: true)]
     public function send_pm_api(EntityManagerInterface $em, JSONRequestParser $parser, TranslatorInterface $t, UserHandler $userHandler, ResponseGlobal $response): Response {
         if ($userHandler->isRestricted($this->getUser(), AccountRestriction::RestrictionTownCommunication))
             return AjaxResponse::error(ErrorHelper::ErrorPermissionError);
@@ -309,7 +305,7 @@ class MessageTownMessageController extends MessageController
      * @return Response
      */
     #[Route(path: 'api/town/house/pm/{tid<\d+>}/view', name: 'home_view_thread_controller')]
-    #[GateKeeperProfile(allow_during_attack: false, only_alive: true, only_with_profession: true)]
+    #[GateKeeperProfile(allow_during_attack: false, only_alive: true, only_with_profession: true, only_in_town: true)]
     public function pm_viewer_api(int $tid, EntityManagerInterface $em): Response {
         $user = $this->getUser();
 
@@ -472,7 +468,7 @@ class MessageTownMessageController extends MessageController
      * @return Response
      */
     #[Route(path: 'api/town/house/pm/{tid<\d+>}/archive/{action<\d+>}', name: 'home_archive_pm_controller')]
-    #[GateKeeperProfile(allow_during_attack: false, only_alive: true, only_with_profession: true)]
+    #[GateKeeperProfile(allow_during_attack: false, only_alive: true, only_with_profession: true, only_in_town: true)]
     public function pm_archive_api(int $tid, int $action, EntityManagerInterface $em): Response {
         $user = $this->getUser();
 
