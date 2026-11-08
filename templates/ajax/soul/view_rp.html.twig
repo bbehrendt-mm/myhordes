@@ -31,11 +31,13 @@
                 </div>
             </div>
         {% endif %}
-        <div class="row">
-            <div class="padded cell rw-12 right">
+        {% if rp.text.author is not null %}
+            <div class="row">
+                <div class="padded cell rw-12 right">
                     <span class="author">{{'Redakteur:'|trans({}, 'soul')}} {{rp.text.author}}</span>
                 </div>
-        </div>
+            </div>
+        {% endif %}
 
     </div>
 {% endblock %}

@@ -6463,12 +6463,14 @@ class RolePlayTextDataService implements FixtureProcessorInterface {
                 "content" => [
                     '<p><small>[Start of Transmission]</small></p>
                 <p>Q29uZ3JhdHVsYXRpb25zISBZb3UncmUgYSBsb3Qgc21hcnRlci</p>
-                <p>B0aGFuIHlvdSBsb29rIQ0KDQpCZWNvbWUgYSBmYW4gb24gRmFj</p>
-                <p>ZWJvb2sgKHd3dy5mYWNlYm9vay5jb20vZGllMm5pdGUpIHRoZW</p>
-                <p>4gc2VuZCB1cyBhIG1lc3NhZ2UgdGhyb3VnaCB0aGUgc3VwcG9y</p>
-                <p>dCBzaXRlIHRlbGxpbmcgdXMgeW91J3ZlIGZvdW5kIHRoaXh7kp</p>
-                <p>MsIHlvdXIgdXNlcm5hbWUgYW5kIHRvd24gbmFtZS4g</p>
-                <p>WW91IHdpbGwgd2luIGEgZGF5IHRvIHBsYXkgYXMgYSBIZXJvLi4uIEFyaXNlIFNpciBDaHVtcCE=</p>
+                <p>B0aGFuIHlvdSBsb29rIQoKQmVjb21lIGEgZmFuIG9uIEZhY2Vi</p>
+                <p>b29rICh3d3cuZmFjZWJvb2suY29tL2RpZTJuaXRlKSB0aGVuIH</p>
+                <p>NlbmQgdXMgYSBtZXNzYWdlIHRocm91Z2ggdGhlIHN1cHBvcnQg</p>
+                <p>c2l0ZSB0ZWxsaW5nIHVzIHlvdSd2ZSBmb3VuZCB0aGlzLCB5b3</p>
+                <p>VyIHVzZXJuYW1lIGFuZCB0b3duIG5hbWUuIFlvdSB3aWxsIHdp</p>
+                <p>biBhIGRheSB0byBwbGF5IGFzIGEgSGVyby4uLiBBcmlzZSBTaX</p>
+                <p>IgQ2h1bXAhCgpbVW5mb3J0dW5hdGVseSwgeW91IGFyZSB0b28g</p>
+                <p>bGF0ZSBmb3IgdGhpcy4gfkJyYWluYm94XQ==</p>
                 <p><small>[End of Transmission]</small></p>
                 <p><small>ETR: 07/03 12h58 - An error has occurred: corrupt data - status : <s>IGNORED</s>Base</small></p>'
                 ],
