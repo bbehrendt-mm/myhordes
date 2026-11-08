@@ -372,6 +372,9 @@ export default class HTML {
         if (to) {
             attr = parseInt(element.getAttribute('x-countdown-to')) - ((new Date()).getTime() + $.ajax.networkTimeOffset())/1000
         } else attr = parseInt(element.getAttribute('x-countdown'));
+
+        const close_ts = attr < 5;
+
         const timeout = new Date( (new Date()).getTime() + 1000 * attr );
 
         const show_secs   = !element.getAttribute('x-countdown-no-seconds');
@@ -415,7 +418,7 @@ export default class HTML {
             if ((new Date() > timeout)) {
                 if (custom_handler === 'pre' || custom_handler === 'handle') element.dispatchEvent(new CustomEvent('countdown', {detail: [-1,0,0,0]}));
                 if (!custom_handler || custom_handler === 'pre' || custom_handler === 'post') element.innerHTML = '--:--';
-                element.dispatchEvent(new Event("expire", { bubbles: true, cancelable: true }));
+                if (!close_ts) element.dispatchEvent(new Event("expire", { bubbles: true, cancelable: true }));
                 if (custom_handler === 'post') element.dispatchEvent(new CustomEvent('countdown', {detail: [-1,0,0,0]}));
             }
             else {
