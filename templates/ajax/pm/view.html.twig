@@ -105,7 +105,7 @@
 
         </div>
 
-        <div id="pm-right-plane" class="padded cell rw-8 rw-elg-9 rw-lg-6 max-height" style="overflow: auto">
+        <div id="pm-right-plane" class="padded cell rw-8 rw-elg-9 rw-lg-6 max-height" style="overflow: visible">
 
             <div class="row-flex vertical stretch full-height">
                 <div id="pm-mobile-back-button" class="forum-control hide-desktop hide-lg center pointer" style="font-size: 2em; margin-bottom: 10px;"><img src="{{ asset('build/images/icons/small_prev.gif') }}" alt="<-"></div>
@@ -576,11 +576,11 @@
 
                     const selection = document.getSelection() // Getting user selection
                     const selectionRange = selection?.rangeCount === 1 ? selection?.getRangeAt(0) : null // We are allowing only one selection otherwise we quote the whole message.
-                    const selectionContent = selectionRange?.cloneContents() 
+                    const selectionContent = selectionRange?.cloneContents()
                     // Checking if the message element is in this range + if the selection contains anything + if the selected content is in the message element.
                     if (
-                        selectionRange?.intersectsNode(messageElement) && 
-                        selectionContent?.childNodes?.length > 0 && 
+                        selectionRange?.intersectsNode(messageElement) &&
+                        selectionContent?.childNodes?.length > 0 &&
                         (
                             selectionRange?.commonAncestorContainer === messageElement ||
                             messageElement.contains(selectionRange?.commonAncestorContainer)
@@ -661,8 +661,8 @@
                 });
 
                 // Using preventDefault on copy and quote buttons' mousedown events to avoid focus switch so we can detect text selection.
-                $.html.addEventListenerAll('[data-action="copy"][data-post-id],[data-action="cite"][data-post-id]', 'mousedown', (e, elem) => e.preventDefault()) 
-                $.html.addEventListenerAll('[data-action="copy"][data-post-id],[data-action="cite"][data-post-id]', 'click', (e,elem) => answer(elem.dataset.action, elem.dataset.postId, elem.dataset.citeFrom, elem.dataset.citeName)); 
+                $.html.addEventListenerAll('[data-action="copy"][data-post-id],[data-action="cite"][data-post-id]', 'mousedown', (e, elem) => e.preventDefault())
+                $.html.addEventListenerAll('[data-action="copy"][data-post-id],[data-action="cite"][data-post-id]', 'click', (e,elem) => answer(elem.dataset.action, elem.dataset.postId, elem.dataset.citeFrom, elem.dataset.citeName));
 
                 $.html.addEventListenerAll('ul.group-conversation>li .pm-button[x-pin-url]', 'click', function(e,elem) {
                     if (confirm('{{ 'Bestätigen?'|trans({},'global')|e('js') }}'))
