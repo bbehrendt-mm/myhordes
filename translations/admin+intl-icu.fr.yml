@@ -1,3 +1,4 @@
+---
 'Diesen Bürger töten?': 'Tuer ce citoyen ?'
 Status: États
 Dauer: Durée
@@ -476,7 +477,7 @@ Infektiös: Infectieux
 'Stadt- und Zonenregister herunterladen (chronologisch)': 'Télécharger les registres des villes et des zones (chronologiquement)'
 Instanzeigenschaften: Propriétés de l’instance
 Vergiftet: Empoisonné
-Infiziert: Infecté
+Infiziert: "            {ref__icu, select,\n                on {\n                    {ref__gender, select,\n                        female {Infectée}\n                        male {Infecté}\n            other {Infecté(e)}\n                    }\n                }\n            other {Infecté(e)}\n            }"
 'Noch nicht aufgehoben': 'Pas encore ramassé'
 'Spielernamen nicht von EternalTwin übernehmen': 'Ne pas prendre le nom d’affichage d’EternalTwin'
 'Automatische Verwaltung des Spielernamens wiederherstellen': 'Restaurer la gestion automatique des noms d’affichage'

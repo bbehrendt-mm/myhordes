@@ -1,3 +1,4 @@
+---
 'Brauchst du Hilfe?': 'Need help?'
 'Besuche unsere Technische Supportseite': 'Consult the technical support site.'
 'Die Außenwelt': 'The World Beyond'
@@ -205,7 +206,7 @@ Außenweltgebäude: Outside buildings
 'Pandämonium: In Pandämoniumsstädten ist das Campen sehr schwierig.': 'Hardcore: Camping is very difficult in Hardore towns.'
 "Anzahl der Nächte, die du in einer Partie draußen verbracht hast (dein erstes Camping ist sicher, das \nzweite ist etwas unsicherer, das dritte noch unsicherer etc...).": "the number of nights you have spent in the World Beyond during this game (your first time is safe, the second less so, and the third less again, etc..."
 "<strong>ACHTUNG:</strong> Deine Überlebenschancen sind auf 90% begrenzt! Wie gut dein Versteck auch sein \nmag, ein kleines Restrisiko besteht immer!": "<strong>WARNING:</strong> your chances of survival are capped at 90%! no matter what you do, there will always be a chance (however minimal) of dying in the World Beyond."
-"Der Beruf des <strong>Einsiedlers</strong> verfügt über einen entscheidenden Vorteil: Seine Überlebenschancen \nsind <strong>nicht auf 90%</strong> beschränkt.": "The <strong>Survivalist</strong> job has one decisive advantage: its chances of survival are not limited to 90%."
+"Der Beruf des <strong>Einsiedlers</strong> verfügt über einen entscheidenden Vorteil: Seine Überlebenschancen \nsind <strong>nicht auf 90%</strong> beschränkt. Bestimmte Fähigkeiten, die mit der <strong>Heldenerfahrung</strong> zusammenhängen, ermöglichen es zudem, diese Obergrenze von 90 % Überlebensrate zu überschreiten.": "The <strong>Survivalist</strong> job has one decisive advantage: its chances of survival are not limited to 90%. Certain abilities related to <strong>Hero Experience</strong> also make it possible to exceed this 90% survival rate cap."
 'Wie läuft der Angriff um Mitternacht ab?': 'How do events unfold at 00h00 (server time)?'
 'Spätestens um Mitternacht musst du in deinem Versteck sein. Abhängig von der Qualität deines Verstecks und der Höhe deiner Überlebenschancen, wirst du von den Untoten verschont, oder aber in Stücke gerissen.': 'At 00h00 (server time) you must be in your hiding place! According to your survival chances (as explained above), you will survive or be eaten alive.'
 'Wenn du überlebst, <strong>erhältst du neue {img_ap} sowie verschiedene Auszeichnungen.</strong>': 'If you survive, <strong>you will regain your {img_ap} and be awarded various rewards.</strong>'

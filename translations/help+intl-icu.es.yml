@@ -1,3 +1,4 @@
+---
 'Brauchst du Hilfe?': '¿Necesitas ayuda?'
 'Besuche unsere Technische Supportseite': 'Contacta con el Soporte técnico'
 'Die Außenwelt': 'El Ultramundo'
@@ -205,7 +206,7 @@ Außenweltgebäude: Los edificios exteriores
 'Pandämonium: In Pandämoniumsstädten ist das Campen sehr schwierig.': 'Pandemonio: Es muy difícil acampar en un pueblo del Pandemonio.'
 "Anzahl der Nächte, die du in einer Partie draußen verbracht hast (dein erstes Camping ist sicher, das \nzweite ist etwas unsicherer, das dritte noch unsicherer etc...).": "La cantidad de noches que has pasado afuera durante esta partida (tu primer campamento es seguro, el segundo menos, el tercero aún menos, etc.)."
 "<strong>ACHTUNG:</strong> Deine Überlebenschancen sind auf 90% begrenzt! Wie gut dein Versteck auch sein \nmag, ein kleines Restrisiko besteht immer!": "<strong>CUIDADO</strong>: ¡Tus posibilidades de superviviencia están limitadas a 90%! Hagas lo que hagas, siempre tendrás un riesgo (bajo, pero existente) de morir afuera."
-"Der Beruf des <strong>Einsiedlers</strong> verfügt über einen entscheidenden Vorteil: Seine Überlebenschancen \nsind <strong>nicht auf 90%</strong> beschränkt.": "Toma en cuenta que el oficio <strong>Ermitaño</strong> goza de una ventaja al acampar:\n<strong>Sus probabilidades de supervivencia no están limitadas a 90%.</strong>"
+"Der Beruf des <strong>Einsiedlers</strong> verfügt über einen entscheidenden Vorteil: Seine Überlebenschancen \nsind <strong>nicht auf 90%</strong> beschränkt. Bestimmte Fähigkeiten, die mit der <strong>Heldenerfahrung</strong> zusammenhängen, ermöglichen es zudem, diese Obergrenze von 90 % Überlebensrate zu überschreiten.": "Toma en cuenta que el oficio <strong>Ermitaño</strong> goza de una ventaja al acampar:\n<strong>Sus probabilidades de supervivencia no están limitadas a 90%.</strong> Toma en cuenta que el oficio <strong>Ermitaño</strong> goza de una ventaja al acampar:\n<strong>Sus probabilidades de supervivencia no están limitadas a 90%.</strong>"
 'Wie läuft der Angriff um Mitternacht ab?': '¿Cómo se desarrollan los ataques de los zombies?'
 'Spätestens um Mitternacht musst du in deinem Versteck sein. Abhängig von der Qualität deines Verstecks und der Höhe deiner Überlebenschancen, wirst du von den Untoten verschont, oder aber in Stücke gerissen.': 'A la hora del ataque, ¡debes permanecer escondido! en función de tus suerte y tus acciones, sobrevivirás o morirás devorado.'
 'Wenn du überlebst, <strong>erhältst du neue {img_ap} sowie verschiedene Auszeichnungen.</strong>': 'Si sobrevives, <strong>recuperarás tus {img_ap} y ganarás diferentes recompensas.</strong>'

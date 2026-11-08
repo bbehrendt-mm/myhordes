@@ -1,3 +1,4 @@
+---
 'Diesen Bürger töten?': 'Kill this citizen?'
 Status: Status
 Dauer: Duration
@@ -511,7 +512,7 @@ Kurzbeschreibung: Short description
 Antworten: Answers
 Antwortstext: Answer text
 'Antwort hinzufügen': 'Add answer'
-'Abhängig von': 'Depends on'
+'Abhängig von': 'Depends On'
 'Keine (unabhängig)': 'None (independent)'
 'Bearbeitung abschließen': 'Finish editing'
 'Umfrage erstellen': 'Create survey'

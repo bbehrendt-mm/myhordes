@@ -206,7 +206,7 @@ Außenweltgebäude: crwdns68504:0crwdne68504:0
 'Pandämonium: In Pandämoniumsstädten ist das Campen sehr schwierig.': 'crwdns68684:0crwdne68684:0'
 "Anzahl der Nächte, die du in einer Partie draußen verbracht hast (dein erstes Camping ist sicher, das \nzweite ist etwas unsicherer, das dritte noch unsicherer etc...).": "crwdns68686:0crwdne68686:0"
 "<strong>ACHTUNG:</strong> Deine Überlebenschancen sind auf 90% begrenzt! Wie gut dein Versteck auch sein \nmag, ein kleines Restrisiko besteht immer!": "crwdns68688:0crwdne68688:0"
-"Der Beruf des <strong>Einsiedlers</strong> verfügt über einen entscheidenden Vorteil: Seine Überlebenschancen \nsind <strong>nicht auf 90%</strong> beschränkt.": "crwdns68690:0crwdne68690:0"
+"Der Beruf des <strong>Einsiedlers</strong> verfügt über einen entscheidenden Vorteil: Seine Überlebenschancen \nsind <strong>nicht auf 90%</strong> beschränkt. Bestimmte Fähigkeiten, die mit der <strong>Heldenerfahrung</strong> zusammenhängen, ermöglichen es zudem, diese Obergrenze von 90 % Überlebensrate zu überschreiten.": "crwdns276619:0crwdne276619:0"
 'Wie läuft der Angriff um Mitternacht ab?': 'crwdns68692:0crwdne68692:0'
 'Spätestens um Mitternacht musst du in deinem Versteck sein. Abhängig von der Qualität deines Verstecks und der Höhe deiner Überlebenschancen, wirst du von den Untoten verschont, oder aber in Stücke gerissen.': 'crwdns68694:0crwdne68694:0'
 'Wenn du überlebst, <strong>erhältst du neue {img_ap} sowie verschiedene Auszeichnungen.</strong>': 'crwdns68696:0{img_ap}crwdne68696:0'
