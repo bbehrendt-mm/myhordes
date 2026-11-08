@@ -102,7 +102,7 @@ class JSONv1Controller extends CoreController {
     /**
      * @return Response
      */
-    #[Route(path: '/api/x/json/status', priority: 1, name: 'ext_json_status', methods: ['GET', 'POST'])]
+    #[Route(path: '/api/x/json/status', name: 'ext_json_status', methods: ['GET', 'POST'], priority: 1)]
     #[ExternalAPI(user: false, app: false, api: ExternalAPIInterface::JSONv1)]
     public function api_json_status(): Response {
         return $this->api_json( null,'status' );
