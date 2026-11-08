@@ -95,6 +95,8 @@ class PollController extends CustomAbstractCoreController
             'confirm' => $this->translator->trans('Bestätigen?', [], 'global'),
             'missing_fields' => $this->translator->trans('Für das Feld "{field}" fehlen Eingaben in folgenden Sprachen: {langs}.', [], 'admin'),
             'min_answers_error' => $this->translator->trans('Es müssen mindestens zwei Antworten hinzugefügt werden.', [], 'admin'),
+            'depends_on' => $this->translator->trans('Abhängig von', [], 'admin'),
+            'no_dependency' => $this->translator->trans('Keine (unabhängig)', [], 'admin'),
             'success_notice' => 'OK',
         ];
 
@@ -132,11 +134,11 @@ class PollController extends CustomAbstractCoreController
             default => ForumUsagePermissions::PermissionReadWrite | ForumUsagePermissions::PermissionFormattingOracle,
         };
 
-        $format_html = function (&$data) use ($p, $html): bool {
+        $format_html = function (&$data, bool $allow_empty = false) use ($p, $html): bool {
             foreach ($this->generatedLangsCodes as $lang) {
                 $str = trim($data[$lang] ?? '');
                 if (mb_strlen($str) < 3)
-                    return false;
+                    return $allow_empty;
 
                 if (!$html->htmlPrepare($this->getUser(), $p, false, $data[$lang], null, $insight))
                     return false;
@@ -172,12 +174,40 @@ class PollController extends CustomAbstractCoreController
         if (count($answers) < 2)
             return new JsonResponse([], Response::HTTP_NOT_ACCEPTABLE);
 
+        // Validate dependencies and detect circular references
+        $dependency_map = [];
+        foreach ($answers as $i => $answer) {
+            $dep = $answer['parent'] ?? null;
+            if ($dep !== null && $dep !== '') {
+                if (!is_numeric($dep)) {
+                    return new JsonResponse([], Response::HTTP_NOT_ACCEPTABLE);
+                }
+                $dep_idx = (int)$dep;
+                if ($dep_idx < 0 || $dep_idx >= count($answers) || $dep_idx === $i) {
+                    return new JsonResponse([], Response::HTTP_NOT_ACCEPTABLE);
+                }
+                $dependency_map[$i] = $dep_idx;
+            }
+        }
+
+        foreach ($dependency_map as $begin => $target) {
+            $visited = [$begin => true];
+            $curr = $target;
+            while ($curr !== null) {
+                if (isset($visited[$curr])) {
+                    return new JsonResponse([], Response::HTTP_NOT_ACCEPTABLE);
+                }
+                $visited[$curr] = true;
+                $curr = $dependency_map[$curr] ?? null;
+            }
+        }
+
         if (!$format_html($title) || !$format_html($desc) || !$format_html($preview))
             return new JsonResponse([], Response::HTTP_NOT_ACCEPTABLE);
 
         $answer_data = [];
         foreach ($answers as &$answer) {
-            if (!$format_html($answer['title']) || !$format_html($answer['desc']))
+            if (!$format_html($answer['title']) || !$format_html($answer['desc'], true))
                 return new JsonResponse([], Response::HTTP_NOT_ACCEPTABLE);
 
             $answer_data[] = [$answer, new ForumPollAnswer()->setNum(0)];
@@ -210,6 +240,17 @@ class PollController extends CustomAbstractCoreController
                     $global_poll
                         ->setAnswerTitleByLang($entity, $lang, $answer_title[$lang])
                         ->setAnswerDescriptionByLang($entity, $lang, $answer_desc[$lang]);
+                }
+            }
+        }
+
+        foreach ($answer_data as $i => [$raw_answer, $entity]) {
+            $dep = $raw_answer['depends_on'] ?? null;
+            if (is_numeric($dep)) {
+                $parent_idx = (int)$dep;
+                if (isset($answer_data[$parent_idx])) {
+                    $parent_entity = $answer_data[$parent_idx][1];
+                    $global_poll->setAnswerParent($entity, $parent_entity);
                 }
             }
         }

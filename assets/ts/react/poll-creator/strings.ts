@@ -22,6 +22,8 @@ export type TranslationStrings = {
     confirm: string;
     missing_fields: string;
     min_answers_error: string;
+    depends_on: string;
+    no_dependency: string;
     success_notice: string;
 };
 

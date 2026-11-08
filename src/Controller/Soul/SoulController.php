@@ -634,50 +634,36 @@ class SoulController extends CustomAbstractController
     }
 
     /**
-     * @return Response
-     */
-    #[Route(path: 'jx/soul/events', name: 'soul_events')]
-    public function soul_events(): Response
-    {
-        $now = new DateTimeImmutable();
-        $cutoff = new DateTimeImmutable('today+400days');
-
-        $all_events = $this->entity_manager->getRepository(AutomaticEventForecast::class)->matching(
-            new Criteria(accessRawFieldValues: true)
-                ->where( Criteria::expr()->gte( 'end', $now ) )
-                ->andWhere( Criteria::expr()->lt( 'start', $cutoff ) )
-                ->orderBy(['start' => Criteria::ASC])
-        )->filter(fn(AutomaticEventForecast $f) => $this->conf->eventIsPublic( $f->getEvent() ));
-
-        return $this->render( 'ajax/soul/events.html.twig', $this->addDefaultTwigArgs("soul_future", [
-            'active_events' => $all_events->filter( fn(AutomaticEventForecast $f) => $f->getStart() <= $now ),
-            'future_events' => $all_events->filter( fn(AutomaticEventForecast $f) => $f->getStart() > $now ),
-        ]) );
-    }
-
-
-    /**
-     * @param JSONRequestParser $parser
-     * @param int $id
+     * @param GlobalPoll $poll
      * @param bool $multi
+     * @param JSONRequestParser $parser
      * @param int|null $answer
      * @return Response
      * @throws Exception
      */
     #[Route(path: 'api/soul/polls/{id<\d+>}/{answer<\d+>}', name: 'soul_poll_participate_single', defaults: ['multi' => false])]
     #[Route(path: 'api/soul/polls/{id<\d+>}/multi', name: 'soul_poll_participate_multi', defaults: ['multi' => true])]
-    public function soul_poll_participate(JSONRequestParser $parser, int $id, bool $multi, ?int $answer = null): Response
+    public function soul_poll_participate(
+        #[MapEntity(id: 'id')]
+        GlobalPoll $poll,
+        bool $multi,
+        JSONRequestParser $parser,
+        ?int $answer = null
+    ): Response
     {
         $user = $this->getUser();
         $now = new DateTime();
 
-        $poll = $this->entity_manager->getRepository(GlobalPoll::class)->find($id);
-        if (!$poll || $poll->getStartDate() > $now || $poll->getEndDate() < $now || $poll->getPoll()->getParticipants()->contains($user))
+        if ($poll->getStartDate() > $now || $poll->getEndDate() < $now || $poll->getPoll()->getParticipants()->contains($user))
             return AjaxResponse::error(ErrorHelper::ErrorPermissionError);
 
         if ($poll->isMultipleChoice() !== $multi) return AjaxResponse::error(ErrorHelper::ErrorInvalidRequest);
 
-        $answers = $multi ? $parser->get_array('answers') : [$answer];
+        $answers_raw = $multi ? $parser->get_array('answers') : [$answer];
+        $answers = [];
+        foreach ($answers_raw as $answer)
+            $answers = [...$answers, $answer, ...$poll->getAnswerParentsRecursive($answer)];
+        $answers = array_unique($answers);
 
         foreach ($answers as $selection)
             if ($selection > 0) {
@@ -714,6 +700,29 @@ class SoulController extends CustomAbstractController
         $this->entity_manager->flush();
 
         return AjaxResponse::success();
+    }
+
+
+    /**
+     * @return Response
+     */
+    #[Route(path: 'jx/soul/events', name: 'soul_events')]
+    public function soul_events(): Response
+    {
+        $now = new DateTimeImmutable();
+        $cutoff = new DateTimeImmutable('today+400days');
+
+        $all_events = $this->entity_manager->getRepository(AutomaticEventForecast::class)->matching(
+            new Criteria(accessRawFieldValues: true)
+                ->where( Criteria::expr()->gte( 'end', $now ) )
+                ->andWhere( Criteria::expr()->lt( 'start', $cutoff ) )
+                ->orderBy(['start' => Criteria::ASC])
+        )->filter(fn(AutomaticEventForecast $f) => $this->conf->eventIsPublic( $f->getEvent() ));
+
+        return $this->render( 'ajax/soul/events.html.twig', $this->addDefaultTwigArgs("soul_future", [
+            'active_events' => $all_events->filter( fn(AutomaticEventForecast $f) => $f->getStart() <= $now ),
+            'future_events' => $all_events->filter( fn(AutomaticEventForecast $f) => $f->getStart() > $now ),
+        ]) );
     }
 
     /**

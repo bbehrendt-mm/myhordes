@@ -4,6 +4,7 @@ import {TranslatableAPI} from "../index";
 export type PollAnswerPayload = {
     title: { [lang: string]: string };
     desc: { [lang: string]: string };
+    depends_on?: number | null;
 };
 
 export type PollPayload = {

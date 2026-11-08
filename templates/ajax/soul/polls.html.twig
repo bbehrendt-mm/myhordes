@@ -119,10 +119,11 @@
                         </div>
                     </div>
                 {% endif %}
+                {% set can_vote = selected.startDate < 'now'|to_date and selected.endDate > 'now'|to_date and not selected.poll.participants.contains( app.user ) %}
                 <ul class="poll global-poll">
                     <li class="q">{{ selected.titleByLang(app.user.language)|raw }}</li>
                     <li class="plain">{{selected.descriptionByLang(app.user.language)|raw}}</li>
-                    {% if selected.startDate < 'now'|to_date and selected.endDate > 'now'|to_date and not selected.poll.participants.contains( app.user ) %}
+                    {% if can_vote %}
                         <li class="plain"><div class="help">
                             <b>{{ 'Wichtiger Hinweis:'|trans({},'help')|raw }}</b>
                             {% if selected.multipleChoice %}
@@ -137,18 +138,31 @@
                         {% set total = total + answer.tagNumber(group,tag) %}
                     {% endfor %}
                     {% for answer in selected.poll.answers %}
+                        {% set parent_id = selected.answerParent(answer) %}
+                        {% set is_hidden = can_vote and parent_id and selected.multipleChoice %}
+                        {% set depth = parent_id ? selected.answerParentsRecursive(answer)|length : 0 %}
                         {% set desc = selected.answerDescriptionByLang( answer, app.user.language ) %}
-                        {% if desc is not empty %}
-                            <li class="desc">{{ desc|raw }}</li>
-                        {% endif %}
-                        <li>
+                        {% set is_votable = can_vote and (selected.multipleChoice or not selected.answerHasChildren(answer)) %}
+                        <li class="{% if is_hidden %}hidden{% endif %}" {% if parent_id %}data-parent-answer="{{ parent_id }}"{% endif %}>
                             <div class="row-flex wrap">
-                                <div class="cell rw-9 rw-lg-8 rw-sm-12">{{ selected.answerTitleByLang( answer, app.user.language )|raw }}</div>
-                                {% if selected.startDate < 'now'|to_date and selected.endDate > 'now'|to_date and not selected.poll.participants.contains( app.user ) %}
+                                <div class="cell rw-9 rw-lg-8 rw-sm-12 flex middle">
+                                    <div class="flex flex-none">
+                                        {% if depth > 0 %}
+                                            {% if depth > 1 %}
+                                                {% for n in 2..depth %}
+                                                    <img alt="" src="{{ asset('build/images/building/small_parent2.gif') }}" />
+                                                {% endfor %}
+                                            {% endif %}
+                                            <img alt="" src="{{ asset('build/images/building/small_parent.gif') }}" />
+                                        {% endif %}
+                                    </div>
+                                    <div class="flex-1">{{ selected.answerTitleByLang( answer, app.user.language )|raw }}</div>
+                                </div>
+                                {% if can_vote %}
                                     <div class="cell rw-3 rw-lg-4 rw-sm-12 right">
-                                        {% if selected.multipleChoice %}
-                                            <label><input type="checkbox" name="poll_answer" value="{{ answer.id }}" /></label>
-                                        {% else %}
+                                        {% if selected.multipleChoice and is_votable %}
+                                            <label><input type="checkbox" name="poll_answer" value="{{ answer.id }}" {% if parent_id %}data-depends-on="{{ parent_id }}"{% endif %} /></label>
+                                        {% elseif is_votable %}
                                             <button class="small inline" data-poll="{{ path('soul_poll_participate_single', {id: selected.id, answer: answer.id}) }}">{{ 'Abstimmen'|trans({},'game') }}</button>
                                         {% endif %}
                                     </div>
@@ -160,8 +174,24 @@
                                 {% endif %}
                             </div>
                         </li>
+                        {% if desc is not empty %}
+                            <li class="desc {% if is_hidden %}hidden{% endif %}" {% if parent_id %}data-parent-answer="{{ parent_id }}"{% endif %}>
+                                <div class="flex middle">
+                                    <div class="flex-none">
+                                        {% if depth > 0 %}
+                                            {% for n in 1..depth %}
+                                                <img alt="" src="{{ asset('build/images/building/small_parent2.gif') }}" />
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                    <div class="flex-1">
+                                        {{ desc|raw }}
+                                    </div>
+                                </div>
+                            </li>
+                        {% endif %}
                     {% endfor %}
-                    {% if selected.startDate < 'now'|to_date and selected.endDate > 'now'|to_date and not selected.poll.participants.contains( app.user ) %}
+                    {% if can_vote %}
                         <li {{ selected.multipleChoice ? 'class="plain"' : '' }}>
                             <div class="row-flex wrap">
                                 <div class="cell grow-1">
@@ -190,6 +220,33 @@
     <script>
         $.html.addEventListenerAll('#change_poll{% if app.user|is_granted('ROLE_SUB_ADMIN') %},#change_filter{% endif %}', 'change', function (e,elem) {
             $.ajax.load(null, elem.value, true);
+        });
+
+        function updateDependentAnswersVisibility(parentId, isSelected) {
+            const children = document.querySelectorAll('[data-parent-answer="' + parentId + '"]');
+            children.forEach(child => {
+                if (isSelected) {
+                    child.classList.remove('hidden');
+                } else {
+                    child.classList.add('hidden');
+                    const childCheckbox = child.querySelector('input[name="poll_answer"]');
+                    if (childCheckbox && childCheckbox.checked) {
+                        childCheckbox.checked = false;
+                        updateDependentAnswersVisibility(childCheckbox.value, false);
+                    }
+                }
+            });
+        }
+
+        $.html.addEventListenerAll('[name="poll_answer"]', 'change', function (e, elem) {
+            updateDependentAnswersVisibility(elem.value, elem.checked);
+            if (elem.checked && elem.dataset.dependsOn) {
+                const parent = document.querySelector('[name="poll_answer"][value="' + elem.dataset.dependsOn + '"]');
+                if (parent && !parent.checked) {
+                    parent.checked = true;
+                    updateDependentAnswersVisibility(parent.value, true);
+                }
+            }
         });
 
         $.html.addEventListenerAll('[data-poll]', 'click', function (e,elem) {

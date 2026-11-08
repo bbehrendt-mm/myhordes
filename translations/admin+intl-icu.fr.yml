@@ -511,6 +511,8 @@ Kurzbeschreibung: Brève description
 Antworten: Réponses
 Antwortstext: Texte de la réponse
 'Antwort hinzufügen': 'Ajouter une réponse'
+'Abhängig von': 'Dépend de'
+'Keine (unabhängig)': 'Aucune (indépendante)'
 'Bearbeitung abschließen': 'Terminer l’édition'
 'Umfrage erstellen': 'Créer un sondage'
 'Für das Feld "{field}" fehlen Eingaben in folgenden Sprachen: {langs}.': 'Le champ "{field}" est vide pour les langues suivantes : {langs}.'

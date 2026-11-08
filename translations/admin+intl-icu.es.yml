@@ -511,6 +511,8 @@ Kurzbeschreibung: Descripción breve
 Antworten: Respuestas
 Antwortstext: Texto de respuesta
 'Antwort hinzufügen': 'Añadir respuesta'
+'Abhängig von': 'Depende de'
+'Keine (unabhängig)': 'Ninguna (independiente)'
 'Bearbeitung abschließen': 'Finalizar edición'
 'Umfrage erstellen': 'Crear encuesta'
 'Für das Feld "{field}" fehlen Eingaben in folgenden Sprachen: {langs}.': 'El campo "{field}" no tiene texto para el (los) siguiente(s) idioma(s): {langs}.'

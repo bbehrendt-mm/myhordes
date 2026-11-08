@@ -512,6 +512,8 @@ Kurzbeschreibung: crwdns60400:0crwdne60400:0
 Antworten: crwdns60404:0crwdne60404:0
 Antwortstext: crwdns60406:0crwdne60406:0
 'Antwort hinzufügen': 'crwdns60408:0crwdne60408:0'
+'Abhängig von': 'crwdns60408:0crwdne60408:0'
+'Keine (unabhängig)': 'crwdns60408:0crwdne60408:0'
 'Bearbeitung abschließen': 'crwdns60410:0crwdne60410:0'
 'Umfrage erstellen': 'crwdns60412:0crwdne60412:0'
 'Für das Feld "{field}" fehlen Eingaben in folgenden Sprachen: {langs}.': 'crwdns60414:0{field}crwdnd60414:0{langs}crwdne60414:0'

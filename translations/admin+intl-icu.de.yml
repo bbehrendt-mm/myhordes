@@ -511,6 +511,8 @@ Kurzbeschreibung: Kurzbeschreibung
 Antworten: Antworten
 Antwortstext: Antwortstext
 'Antwort hinzufügen': 'Antwort hinzufügen'
+'Abhängig von': 'Abhängig von'
+'Keine (unabhängig)': 'Keine (unabhängig)'
 'Bearbeitung abschließen': 'Bearbeitung abschließen'
 'Umfrage erstellen': 'Umfrage erstellen'
 'Für das Feld "{field}" fehlen Eingaben in folgenden Sprachen: {langs}.': 'Für das Feld "{field}" fehlen Eingaben in folgenden Sprachen: {langs}.'

@@ -136,6 +136,47 @@ class GlobalPoll
         else $data[$id][$lang]['description'] = $description;
         return $this->setAnswers($data);
     }
+
+    public function answerHasChildren(ForumPollAnswer|int $answer): bool
+    {
+        $id = is_object($answer) ? $answer->getId() : $answer;
+        return array_any( $this->getAnswers(), fn(array $e) => isset($e['parent']) && $e['parent'] === $id );
+    }
+
+    public function getAnswerParent(ForumPollAnswer|int $answer): ?int
+    {
+        $id = is_object($answer) ? $answer->getId() : $answer;
+        return $this->getAnswers()[$id]['parent'] ?? null;
+    }
+
+    public function getAnswerParentsRecursive(ForumPollAnswer|int $answer): array
+    {
+        $list = [];
+        $id = is_object($answer) ? $answer->getId() : $answer;
+        do {
+            $id = $this->getAnswerParent( $id );
+            if ($id) $list[] = $id;
+        } while ($id !== null);
+
+        return $list;
+    }
+
+    public function setAnswerParent(ForumPollAnswer|int $answer, ForumPollAnswer|int|null $parent): self
+    {
+        $id = is_object($answer) ? $answer->getId() : $answer;
+        $parentId = is_object($parent) ? $parent->getId() : $parent;
+        $data = $this->getAnswers();
+        if (!array_key_exists($id, $data)) {
+            $data[$id] = [];
+        }
+        if ($parentId !== null) {
+            $data[$id]['parent'] = $parentId;
+        } else {
+            unset($data[$id]['parent']);
+        }
+        return $this->setAnswers($data);
+    }
+
     public function getStartDate(): ?\DateTimeInterface
     {
         return $this->startDate;

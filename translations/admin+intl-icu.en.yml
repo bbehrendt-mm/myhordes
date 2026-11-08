@@ -511,6 +511,8 @@ Kurzbeschreibung: Short description
 Antworten: Answers
 Antwortstext: Answer text
 'Antwort hinzufügen': 'Add answer'
+'Abhängig von': 'Depends on'
+'Keine (unabhängig)': 'None (independent)'
 'Bearbeitung abschließen': 'Finish editing'
 'Umfrage erstellen': 'Create survey'
 'Für das Feld "{field}" fehlen Eingaben in folgenden Sprachen: {langs}.': 'The field "{field}" is missing input for the following languages: {langs}.'
