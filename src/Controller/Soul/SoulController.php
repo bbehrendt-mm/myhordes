@@ -1033,7 +1033,7 @@ class SoulController extends CustomAbstractController
 
         $pageContent = $this->entity_manager->getRepository(RolePlayTextPage::class)->findOneByRpAndPageNumber($rp->getText(), $page);
 
-        preg_match('/{asset}([a-zA-Z0-9.\/]+){endasset}/', $pageContent->getContent(), $matches);
+        preg_match('/{asset}([a-zA-Z0-9.\-_\/]+){endasset}/', $pageContent->getContent(), $matches);
 
         if(count($matches) > 0) {
             $pageContent->setContent(preg_replace("={$matches[0]}=", "<img src='" . $this->asset->getUrl($matches[1]) . "' alt='' />", $pageContent->getContent()));
